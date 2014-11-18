@@ -294,12 +294,14 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         // authenticated or non existent config
         if (! Setup_Core::configFileExists() || Setup_Core::isRegistered(Setup_Core::USER)) {
+            $license = new Tinebase_License();
             $registryData = array_merge($registryData, $this->checkConfig());
             $registryData = array_merge($registryData, array(
                 'acceptedTermsVersion' => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? Setup_Controller::getInstance()->getAcceptedTerms() : 0,
                 'setupChecks'          => $this->envCheck(),
                 'configData'           => $this->loadConfig(),
                 'emailData'            => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? $this->getEmailConfig() : array(),
+                'licenseCheck'         => $license->getStatus() === Tinebase_License::STATUS_LICENSE_OK,
             ));
         }
         
@@ -362,5 +364,36 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         );
         
         return $registryData;
+    }
+
+    /**
+     * Get current license if available
+     *
+     * @return mixed
+     */
+    public function getLicense()
+    {
+        return Setup_Controller::getInstance()->getLicense();
+    }
+
+    /**
+     * Saves license configuration
+     * 
+     * @param  string $license
+     *
+     * @return array
+     */
+    public function saveLicense($license)
+    {
+        return Setup_Controller::getInstance()->saveLicense($license);
+    }
+
+    /**
+     * Uploads license and saves it
+     * @param $tempFileId
+     */
+    public function uploadLicense($tempFileId)
+    {
+        return Setup_Controller::getInstance()->uploadLicense($tempFileId);
     }
 }

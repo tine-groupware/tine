@@ -65,6 +65,7 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_Server_AllTests::class);
         $suite->addTestSuite(Tinebase_LockTest::class);
         $suite->addTestSuite(Tinebase_ScheduledImportTest::class);
+        $suite->addTestSuite(Tinebase_LicenseTest::class);
         $suite->addTestSuite(Tinebase_Delegators_DelegateTest::class);
         $suite->addTestSuite(Tinebase_DaemonTest::class);
         $suite->addTestSuite(Tinebase_FullTextTest::class);

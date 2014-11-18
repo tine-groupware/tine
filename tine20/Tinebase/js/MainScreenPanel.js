@@ -163,17 +163,42 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
      */
     afterRender: function() {
         this.supr().afterRender.apply(this, arguments);
-        
-        // check for new version
-        // TODO add helper function for fetching config ... this condition sucks.
-        if ((      ! Tine.Tinebase.registry.get("config")
-                || ! Tine.Tinebase.registry.get("config").versionCheck
-                ||   Tine.Tinebase.registry.get("config").versionCheck.value
-            ) && Tine.Tinebase.common.hasRight('check_version', 'Tinebase')
-        ) {
-            Tine.widgets.VersionCheck();
+
+        var expiredSince = Tine.Tinebase.registry.get('licenseExpiredSince');
+        if (expiredSince && expiredSince != false) {
+
+            var licensePopup = new Ext.Window({
+                title: _('Trial expired'),
+
+                layout:'fit',
+                width:500,
+                height:100,
+
+                closable: false,
+
+                items: new Ext.Panel({
+                    html: _('Your Tine 2.0 Business Edition trial expired. Please buy a license at:') + '<br/><a target="_blank" href="' + Tine.shop + '" border="0"> Tine 2.0 Shop </a></ul>'
+                }),
+
+                buttons: [{
+                    text: 'Close',
+                    disabled: true,
+                    handler: function(ev){
+                        licensePopup.hide();
+                    },
+                    listeners: {
+                        afterrender: function (btn) {
+                            setTimeout(function(){
+                                btn.setDisabled(false);
+                            }, expiredSince * 1000);
+                        }
+                    }
+                }]
+            });
+
+            licensePopup.show();
         }
-        
+
         if (Tine.Tinebase.registry.get('mustchangepw')) {
             var passwordDialog = new Tine.Tinebase.PasswordChangeDialog({
                 title: i18n._('Your password expired. Please enter a new user password:')

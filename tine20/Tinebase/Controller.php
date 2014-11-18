@@ -274,7 +274,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ActiveSync_Server_Http::REQUEST_TYPE
         ));
     }
-    
+
     /**
      * check user status
      * 
@@ -825,32 +825,36 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param Zend_Auth_Result $authResult
      * @param Tinebase_Model_AccessLog $accessLog
      * @return boolean|Tinebase_Model_FullUser
+     *
+     * @todo DRY!
      */
     protected function _validateAuthResult(Zend_Auth_Result $authResult, Tinebase_Model_AccessLog $accessLog)
     {
         // authentication failed
         if ($accessLog->result !== Tinebase_Auth::SUCCESS) {
             $this->_loginFailed($authResult, $accessLog);
-            
             return false;
         }
         
         // try to retrieve user from accounts backend
         $user = $this->_getLoginUser($authResult->getIdentity(), $accessLog);
-        
         if ($accessLog->result !== Tinebase_Auth::SUCCESS || !$user) {
 
             if ($user) {
                 $accessLog->account_id = $user->getId();
             }
             $this->_loginFailed($authResult, $accessLog);
-            
             return false;
         }
         
         // check if user is expired or blocked
         $this->_checkUserStatus($user, $accessLog);
+        if ($accessLog->result !== Tinebase_Auth::SUCCESS) {
+            $this->_loginFailed($authResult, $accessLog);
+            return false;
+        }
 
+        $this->_checkUserLicense($user, $accessLog);
         if ($accessLog->result !== Tinebase_Auth::SUCCESS) {
             $this->_loginFailed($authResult, $accessLog);
             return false;
@@ -894,6 +898,26 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             );
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function _checkUserLicense($user, $accessLog)
+    {
+        $license = new Tinebase_License();
+        if ($license->isLicenseAvailable() && ! $license->isValid()) {
+            $accessLog->result = Tinebase_Auth::LICENSE_EXPIRED;
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Account: '. $user->accountLoginName . ' login failed: license is expired');
+            return false;
+        }
+
+        if (! $license->checkUserLimit($user)) {
+            $accessLog->result = Tinebase_Auth::LICENSE_USER_LIMIT_REACHED;
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Account: '. $user->accountLoginName . ' login failed: license user limit is reached');
             return false;
         }
 
@@ -1072,7 +1096,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_INFO) || ! Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_API_KEY)) {
             return new \Zend\Diactoros\Response\EmptyResponse();
         }
-        
+
         if ($apiKey !== Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_API_KEY, false)) {
             throw new Tinebase_Exception_AccessDenied('Not authorized. Invalid API Key.');
         }

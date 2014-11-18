@@ -161,7 +161,74 @@ class Setup_Controller
         
         return $result;
     }
-    
+
+    /**
+     * Save license information
+     * 
+     * @param  string $license
+     * 
+     * @return certificate data or validation data if failing
+     */
+    public function saveLicense($licenseString)
+    {
+        $license = new Tinebase_License();
+        $license->storeLicense($licenseString);
+        
+        if ($license->isValid()) {
+            $return = $this->getLicense();
+        } else {
+            $return = array('error' => false);
+        }
+
+        return $return;
+    }
+
+    /**
+     * Upload license as file
+     *
+     * @param $license
+     */
+    public function uploadLicense($tempFileId)
+    {
+        $file = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
+
+        if ($file['type'] == 'application/x-x509-ca-cert') {
+            $licenseString = file_get_contents($file['path']);
+            return $this->saveLicense($licenseString);
+        } else {
+            return array('error' => false);
+        }
+    }
+
+    /**
+     * Get license information
+     *
+     * @return array
+     */
+    public function getLicense()
+    {
+        $default = array(
+            'policies' => null,
+            'maxUsers' => 5
+        );
+        
+        try {
+            $license = new Tinebase_License();
+        } catch (Exception $e) {
+            return $default;
+        }
+        
+        $certData = $license->getCertificateData();
+        
+        $users = array(
+            'maxUsers' => $license->getMaxUsers(),
+            'userLimitReached' => $license->checkUserLimit(Tinebase_Core::getUser()),
+            'status' => $license->getStatus()
+        );
+        
+        return array_merge($certData, $users);
+    }
+
     /**
      * check which database extensions are available
      *

@@ -221,12 +221,12 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->_checkLoginNameLength($_user);
         $this->_checkPrimaryGroupExistance($_user);
         $deactivated = false;
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            
+
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'update', $oldUser);
 
             $deactivated = $this->_checkAccountStatus($_user, $oldUser);
@@ -256,7 +256,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             // TODO send this for blocked/expired, too? allow to configure this?
             Tinebase_User::getInstance()->sendDeactivationNotification($user);
         }
-        
+
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
         $event->account = $user;
@@ -330,7 +330,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Session::getSessionNamespace()->currentAccount = $updatedUser;
         }
     }
-    
+
     /**
      * create user
      *
@@ -363,6 +363,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
+            $this->_checkMaxUsers();
             $this->_checkLoginNameExistance($_user);
             $this->_checkLoginNameLength($_user);
             $this->_checkPrimaryGroupExistance($_user);
@@ -381,7 +382,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             
             $user = $this->_userBackend->addUser($_user);
             $user->imapUser = $_user->imapUser;
-            
+
             // make sure primary groups is in the list of groupmemberships
             $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
@@ -407,6 +408,22 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         return $user;
     }
     
+    /**
+     * checks number of allowed users
+     *
+     * @throws Admin_Exception
+     */
+    protected function _checkMaxUsers()
+    {
+        $translation = Tinebase_Translation::getTranslation('Admin');
+        $license = new Tinebase_License();
+        $maxUsers = $license->getMaxUsers();
+        $currentUserCount = $this->_userBackend->countNonSystemUsers();
+        if ($currentUserCount >= $maxUsers) {
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Maximum number of users reached'));
+        }
+    }
+
     /**
      * look for user with the same login name
      * 
