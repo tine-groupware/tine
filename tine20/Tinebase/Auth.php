@@ -100,7 +100,17 @@ class Tinebase_Auth
      * database connection failure
      */
     const FAILURE_DATABASE_CONNECTION   = -103;
-        
+
+    /**
+     * license expired
+     */
+    const LICENSE_EXPIRED               = -104;
+    
+    /**
+     * license user limit reached
+     */
+    const LICENSE_USER_LIMIT_REACHED    = -105;
+    
     /**
      * Authentication success.
      */

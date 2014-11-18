@@ -161,7 +161,82 @@ class Setup_Controller
         
         return $result;
     }
-    
+
+    /**
+     * Save license information
+     *
+     * @param  string $license
+     *
+     * @return array certificate data or validation data if failing
+     */
+    public function saveLicense($licenseString)
+    {
+        if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
+            throw new Tinebase_Exception('could not create setup user');
+        }
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
+        $license = Tinebase_License::getInstance();
+        Tinebase_License::resetLicense();
+        $license->storeLicense($licenseString);
+
+        if ($license->isValid()) {
+            $return = $this->getLicense();
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' License is not valid');
+            $return = array('error' => true);
+        }
+
+        return $return;
+    }
+
+    /**
+     * Upload license as file
+     *
+     * @param $license
+     * @return array certificate data or validation data if failing
+     */
+    public function uploadLicense($tempFileId)
+    {
+        $file = Tinebase_TempFile::getInstance()->getTempFile($tempFileId, /* $skipSessionCheck */ true);
+
+        $licenseString = file_get_contents($file['path']);
+        return $this->saveLicense($licenseString);
+    }
+
+    /**
+     * Get license information
+     *
+     * @return array
+     */
+    public function getLicense()
+    {
+        $default = array(
+            'policies' => null,
+            'maxUsers' => 5
+        );
+        
+        try {
+            $license = Tinebase_License::getInstance();
+        } catch (Exception $e) {
+            return $default;
+        }
+        
+        $certData = $license->getCertificateData();
+        if (!$certData) {
+            return $default;
+        }
+        
+        $users = array(
+            'maxUsers' => $license->getMaxUsers(),
+            'userLimitReached' => $license->checkUserLimit(Tinebase_Core::getUser()),
+            'status' => $license->getStatus()
+        );
+        
+        return array_merge($certData, $users);
+    }
+
     /**
      * check which database extensions are available
      *
@@ -1649,8 +1724,9 @@ class Setup_Controller
         if ($authResult->isValid()) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Valid credentials, setting username in session and registry.');
             Tinebase_Session::regenerateId();
-            
+
             Setup_Core::set(Setup_Core::USER, $_username);
+
             Setup_Session::getSessionNamespace()->setupuser = $_username;
             return true;
             

@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  * @todo        extend Tinebase_Controller_Record_Abstract
  */
 
@@ -175,7 +175,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if ($_mustChange === null) {
             $_mustChange = $_account->password_must_change ? true : false;
         }
-        
+
         $this->_userBackend->setPassword($_account, $_password, true, $_mustChange);
         
         Tinebase_Core::getLogger()->info(
@@ -210,7 +210,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @param  string                     $_passwordRepeat  the new password again
      * @throws Tinebase_Exception_Backend_Database_LockTimeout
      * @throws Exception
-     * 
+     *
      * @return Tinebase_Model_FullUser
      */
     public function update(Tinebase_Model_FullUser $_user, $_password = null, $_passwordRepeat = null)
@@ -233,7 +233,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            
+
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'update', $oldUser);
 
             $deactivated = $this->_checkAccountStatus($_user, $oldUser);
@@ -263,7 +263,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             // TODO send this for blocked/expired, too? allow to configure this?
             Tinebase_User::getInstance()->sendDeactivationNotification($user);
         }
-        
+
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
         $event->account = $user;
@@ -335,6 +335,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {
                 return true;
             }
+
+            // check if max users are reached when a user is activated
+            if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED) {
+                $this->_checkMaxUsers();
+            }
         }
 
         return false;
@@ -354,7 +359,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Session::getSessionNamespace()->currentAccount = $updatedUser;
         }
     }
-    
+
     /**
      * create user
      *
@@ -387,6 +392,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
+            $this->_checkMaxUsers();
             $this->_checkLoginNameExistance($_user);
             $this->_checkLoginNameLength($_user);
             $this->_checkPrimaryGroupExistance($_user);
@@ -405,7 +411,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             
             $user = $this->_userBackend->addUser($_user);
             $user->imapUser = $_user->imapUser;
-            
+
             // make sure primary groups is in the list of groupmemberships
             $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
@@ -431,6 +437,30 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         return $user;
     }
     
+    /**
+     * checks number of allowed users
+     *
+     * @throws Admin_Exception
+     */
+    protected function _checkMaxUsers()
+    {
+        $translation = Tinebase_Translation::getTranslation('Admin');
+        $license = Tinebase_License::getInstance();
+
+        $licenseType = $license->getLicenseType();
+
+        if ($licenseType === Tinebase_License::LICENSE_TYPE_LIMITED_TIME || $licenseType === Tinebase_License::LICENSE_TYPE_ON_DEMAND) {
+            // no user limit
+            return;
+        }
+
+        $maxUsers = $license->getMaxUsers();
+        $currentUserCount = $this->_userBackend->countNonSystemUsers();
+        if ($currentUserCount >= $maxUsers) {
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Maximum number of users reached'));
+        }
+    }
+
     /**
      * look for user with the same login name
      * 
