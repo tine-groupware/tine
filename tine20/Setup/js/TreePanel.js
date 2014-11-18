@@ -45,7 +45,8 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var configMissing = !Tine.Setup.registry.get('configExists');
         var dbMissing     = !Tine.Setup.registry.get('checkDB');
         var setupRequired = Tine.Setup.registry.get('setupRequired');
-        
+        var licenseFailed = !Tine.Setup.registry.get('licenseCheck');
+
         this.root = {
             id: '/',
             children: [{
@@ -82,6 +83,12 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 iconCls: 'setup_application_manager',
                 disabled: termsFailed || testsFailed || configMissing || dbMissing || setupRequired,
                 id: 'ApplicationGridPanel',
+                leaf: true
+            }, {
+                text: this.app.i18n._('License'),
+                iconCls: licenseFailed ? 'setup_checks_fail' : 'setup_checks_success',
+                disabled: termsFailed || testsFailed || configMissing || dbMissing || setupRequired,
+                id: 'LicensePanel',
                 leaf: true
             }]
         };
@@ -136,17 +143,21 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
         var configExists = Tine.Setup.registry.get('configExists');
         var checkDB      = Tine.Setup.registry.get('checkDB');
         var setupRequired = Tine.Setup.registry.get('setupRequired');
-
+        var licenseCheck = Tine.Setup.registry.get('licenseCheck');
+        
         setupChecks = (setupChecks && setupChecks.success) ? setupChecks.success : false;
 
         this.setNodeIcon('TermsPanel', termsChecks);
         this.setNodeIcon('EnvCheckGridPanel', setupChecks);
+        this.setNodeIcon('LicensePanel', licenseCheck);
         
         this.getNodeById('EnvCheckGridPanel')[termsChecks ? 'enable': 'disable']();
+        this.getNodeById('LicensePanel')[termsChecks ? 'enable': 'disable']();
         this.getNodeById('ConfigManagerPanel')[termsChecks && setupChecks ? 'enable': 'disable']();
         this.getNodeById('AuthenticationPanel')[termsChecks && setupChecks && configExists && checkDB ? 'enable': 'disable']();
         this.getNodeById('ApplicationGridPanel')[termsChecks && setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
         this.getNodeById('EmailPanel')[termsChecks && setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
+        this.getNodeById('LicensePanel')[termsChecks && setupChecks && configExists && checkDB && !setupRequired ? 'enable': 'disable']();
     },
     
     setNodeIcon: function (nodeId, success) {

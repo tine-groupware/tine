@@ -297,6 +297,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Create new user ' . $_user->accountLoginName);
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->toArray(), TRUE));
         
+        $this->_checkMaxUsers();
         $this->_checkLoginNameExistance($_user);
         $this->_checkLoginNameLength($_user);
         $this->_checkPrimaryGroupExistance($_user);
@@ -326,7 +327,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-
+            
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Exception::log($e);
@@ -341,6 +342,21 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->setAccountPassword($user, $_password, $_passwordRepeat);
 
         return $user;
+    }
+    
+    /**
+     * checks number of allowed users
+     * 
+     * @throws Admin_Exception
+     */
+    protected function _checkMaxUsers()
+    {
+        $license = new Tinebase_License();
+        $maxUsers = $license->getMaxUsers();
+        $currentUserCount = $this->_userBackend->countNonSystemUsers();
+        if ($currentUserCount >= $maxUsers) {
+            throw new Tinebase_Exception_SystemGeneric('Maximum number of users reached');
+        }
     }
     
     /**

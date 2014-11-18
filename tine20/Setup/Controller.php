@@ -154,7 +154,54 @@ class Setup_Controller
         
         return $result;
     }
-    
+
+    /**
+     * Save license information
+     *
+     * @return certificate data or validation data if failing
+     */
+    public function saveLicense($licenseString)
+    {
+        $license = new Tinebase_License();
+        $license->storeLicense($licenseString);
+
+        if ($license->isValid()) {
+            $return = $this->getLicense();
+        } else {
+            $return = array('error' => false);
+        }
+
+        return $return;
+    }
+
+    /**
+     * Get license information
+     *
+     * @return array
+     */
+    public function getLicense()
+    {
+        $default = array(
+            'policies' => null,
+            'maxUsers' => 5
+        );
+        
+        try {
+            $license = new Tinebase_License();
+        } catch (Exception $e) {
+            return $default;
+        }
+        
+        $certData = $license->getCertificateData();
+        
+        $users = array(
+            'maxUsers' => $license->getMaxUsers(),
+            'userLimitReached' => $license->checkUserLimit(Tinebase_Core::getUser())
+        );
+        
+        return array_merge($certData, $users);
+    }
+
     /**
      * check which database extensions are available
      *

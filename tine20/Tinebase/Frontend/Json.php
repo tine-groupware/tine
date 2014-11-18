@@ -225,7 +225,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function clearState($name)
     {
         Tinebase_State::getInstance()->clearState($name);
-        
+
         return ['success' => true];
     }
     
@@ -250,7 +250,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
         Tinebase_State::getInstance()->setState($name, $value);
-        
+
         return ['success' => true];
     }
     
@@ -791,7 +791,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } catch (Exception $e) {
             $filesHash = Tinebase_Record_Abstract::generateUID(8);
         }
-        
+
         $registryData =  array(
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
 
@@ -830,7 +830,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
             'fulltextAvailable' => Setup_Backend_Factory::factory()->supports('mysql >= 5.6.4 | mariadb >= 10.0.5'),
         );
-
+        $licenseRegistryData = $this->_getLicenseRegistry();
+        $registryData += $licenseRegistryData;
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Anonymous registry: ' . print_r($registryData, TRUE));
         
@@ -845,7 +846,22 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $config = Tinebase_AreaLock::getInstance()->getAreaConfig(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
         return $config ? $config->toArray() : null;
     }
-    
+
+
+    /**
+     * get license registry data
+     *
+     * @return array
+     */
+    protected function _getLicenseRegistry()
+    {
+        $license = new Tinebase_License();
+        return array(
+            'licenseStatus'     => $license->getStatus(),
+            'licenseData'       => $license->getCertificateData(),
+        );
+    }
+
     /**
      * get user registry
      *
@@ -880,8 +896,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $persistentFilters = array();
         }
 
+        $license = new Tinebase_License();
         $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
-        
+
         $userRegistryData = array(
             'accountBackend'     => Tinebase_User::getConfiguredBackend(),
             'areaLocks'          => $this->_multipleRecordsToJson(Tinebase_AreaLock::getInstance()->getAllStates()),
@@ -898,6 +915,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'persistentFilters'  => $persistentFilters,
             'userAccountChanged' => Tinebase_Controller::getInstance()->userAccountChanged(),
             'sessionLifeTime'    => Tinebase_Session_Abstract::getSessionLifetime(),
+            'licenseExpiredSince'=> $license->getLicenseExpiredSince(),
             'primarydomain'      => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
             'secondarydomains'   => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
         );
@@ -936,7 +954,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
 
             $allImportDefinitions = $this->_getImportDefinitions();
-            
+
             foreach ($userApplications as $application) {
                 $appRegistry = $this->_getAppRegistry($application, $clientConfig, $allImportDefinitions);
                 $registryData[$application->name] = $appRegistry;
@@ -944,7 +962,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $registryData['Tinebase'] = $this->getRegistryData();
         }
-        
+
         return $registryData;
     }
 

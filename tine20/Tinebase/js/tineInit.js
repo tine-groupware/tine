@@ -55,6 +55,7 @@ Tine.logo = 'images/tine_logo.png';
 Tine.title = 'Tine 2.0 \u00ae';
 Tine.weburl = 'http://www.tine20.com/';
 Tine.helpUrl = 'https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki';
+Tine.shop = 'https://www.tine20.com/partner/';
 Tine.bugreportUrl = 'https://api.tine20.net/bugreport.php';
 
 /**
