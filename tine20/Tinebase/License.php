@@ -212,6 +212,7 @@ class Tinebase_License
                         'validTo'      => $validTo,
                         'serialNumber' => $serialNumber,
                         'policies'     => $policies,
+                        'contractId'   => isset($data['subject']) && isset($data['subject']['CN']) ? $data['subject']['CN'] : '',
                     );
                 } else {
                     $this->_license = null;

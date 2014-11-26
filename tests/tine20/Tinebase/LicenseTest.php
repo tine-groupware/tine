@@ -47,6 +47,7 @@ class Tinebase_LicenseTest extends TestCase
         $this->assertEquals(5, $certData['policies'][101][1], '5 users limit expected');
         $this->assertEquals(5, $license->getMaxUsers(), '5 users limit expected');
         $this->assertEquals('2015-11-07 12:54:20', $certData['validTo']->toString());
+        $this->assertEquals('V-12345', $certData['contractId'], 'contract id mismatch');
     }
 
     public function testStoreLicense()

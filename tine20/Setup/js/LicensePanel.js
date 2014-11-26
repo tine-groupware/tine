@@ -84,6 +84,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             success: function (response) {
                 var data = Ext.util.JSON.decode(response.responseText);
 
+                Ext.getCmp('contractId').setValue(data.contractId);
                 Ext.getCmp('serialNumber').setValue(data.serialNumber);
                 Ext.getCmp('maxUsers').setValue(data.maxUsers);
                 Ext.getCmp('validFrom').setValue(new Date(data.validFrom.date));
@@ -131,11 +132,13 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 if (data.hasOwnProperty('error') && data.error == false || ! data.serialNumber) {
                     Ext.Msg.alert('Status', this.app.i18n._('Your license is not valid.'));
                     Tine.Setup.registry.replace('licenseCheck', false);
-                    Ext.getCmp('serialNumber').setValue(data.serialNumber);
+                    Ext.getCmp('contractId').reset();
+                    Ext.getCmp('serialNumber').reset();
                     Ext.getCmp('maxUsers').setValue(data.maxUsers);
                     Ext.getCmp('validFrom').reset();
                     Ext.getCmp('validTo').reset();
                 } else {
+                    Ext.getCmp('contractId').setValue(data.contractId);
                     Ext.getCmp('serialNumber').setValue(data.serialNumber);
                     Ext.getCmp('maxUsers').setValue(data.maxUsers);
                     Ext.getCmp('validFrom').setValue(new Date(data.validFrom.date));
@@ -169,6 +172,12 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 defaultType: 'textfield',
                 items: [{
                     fieldLabel: this.app.i18n._('Contract ID'),
+                    name: 'contractId',
+                    id: 'contractId',
+                    width: 200,
+                    emptyText: this.app.i18n._('No valid license')
+                }, {
+                    fieldLabel: this.app.i18n._('Serial Number'),
                     name: 'serialNumber',
                     id: 'serialNumber',
                     width: 200,
