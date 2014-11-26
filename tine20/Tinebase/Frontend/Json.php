@@ -916,7 +916,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'userAccountChanged' => Tinebase_Controller::getInstance()->userAccountChanged(),
             'sessionLifeTime'    => Tinebase_Session_Abstract::getSessionLifetime(),
             'licenseExpiredSince'=> $license->getLicenseExpiredSince(),
-            'primarydomain'      => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
+            'licenseExpire'      => $license->getLicenseExpireEstimate(),            'primarydomain'      => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
             'secondarydomains'   => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
         );
         

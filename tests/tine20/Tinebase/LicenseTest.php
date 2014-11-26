@@ -152,4 +152,16 @@ class Tinebase_LicenseTest extends TestCase
         
         $this->assertEquals($diff->days, $expiredSinceDays);
     }
+    
+    public function testLicenseExpiredEstimate()
+    {
+        $license = new Tinebase_License(dirname(__FILE__) . '/License/V-12345.pem');
+        $data = $license->getCertificateData();
+        $daysLeft = $license->getLicenseExpireEstimate();
+        
+        $now = Tinebase_DateTime::now();
+        $diff = $now->diff($data['validTo']);
+        
+        $this->assertEquals($diff->days, $daysLeft, print_r($data, true));
+    }
 }

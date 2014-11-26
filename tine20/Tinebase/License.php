@@ -32,7 +32,7 @@ class Tinebase_License
         $this->_license = $this->_readLicenseFromFile($licenseFile);
         $this->_caFile = ($caFile) ? $caFile : dirname(__FILE__) . '/License/cacert.pem';
     }
-    
+
     protected function _readLicenseFromFile($licenseFile = null)
     {
         if ($licenseFile) {
@@ -65,14 +65,25 @@ class Tinebase_License
      */
     public function getLicenseExpiredSince()
     {
-        if ($this->_license) {
-            $this->getCertificateData();
-
+        $this->getCertificateData();
+        
+        if ($this->_certData) {
             return $this->_diffDatesToDays($this->_certData['validTo'], Tinebase_DateTime::now());
         }
         return false;
     }
-
+    
+    public function getLicenseExpireEstimate()
+    {
+        $this->getCertificateData();
+        
+        if ($this->_certData) {
+            return $this->_diffDatesToDays(Tinebase_DateTime::now(), $this->_certData['validTo']);
+        }
+        
+        return false;
+    }
+    
     protected function _diffDatesToDays($date1, $date2)
     {
         if ($date1 instanceof Tinebase_DateTime && $date2 instanceof Tinebase_DateTime) {
@@ -84,7 +95,7 @@ class Tinebase_License
         }
         return false;
     }
-
+    
     /**
      * stores license in vfs
      *  - if $licenseString is empty, license is deleted
@@ -92,6 +103,7 @@ class Tinebase_License
      * @param string $licenseString
      * @throws Tinebase_Exception
     */
+    
     public function storeLicense($licenseString)
     {
         $fs = Tinebase_FileSystem::getInstance();
