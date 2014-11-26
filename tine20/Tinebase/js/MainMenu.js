@@ -66,7 +66,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 items: this.getMainActions()
         }},
         '->',
-        this.actionLearnMore,
+        // removed in tine20.com
+        //this.actionLearnMore,
         // TODO add a bigger spacer here?
         { xtype: 'spacer' },
         {
