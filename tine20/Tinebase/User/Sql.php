@@ -1508,6 +1508,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function hasUserValidLicense($user, $maxUsers)
     {
+        if (! is_object($user)) {
+            // setup
+            return true;
+        }
+        
         $select = $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'login_name')
             ->where($this->_db->quoteIdentifier('login_name') . " not in ('cronuser', 'calendarscheduling')")
