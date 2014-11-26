@@ -53,7 +53,7 @@ Tine.clientVersion.releaseTime      = 'none';
  */
 Tine.logo = 'images/tine_logo.png';
 Tine.title = 'Tine 2.0 \u00ae';
-Tine.weburl = 'http://www.tine20.com/1/welcome-community/';
+Tine.weburl = 'http://www.tine20.com/';
 Tine.helpUrl = 'https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki';
 Tine.bugreportUrl = 'https://api.tine20.net/bugreport.php';
 
@@ -666,7 +666,7 @@ Tine.Tinebase.tineInit = {
         //Do we have a custom weburl for branding?
         Tine.weburl = Tine.Tinebase.registry.get('brandingWeburl') ? Tine.Tinebase.registry.get('brandingWeburl') : Tine.weburl;
         Tine.websiteUrl = Tine.Tinebase.registry.get('websiteUrl') ? Tine.Tinebase.registry.get('websiteUrl') : Tine.weburl;
-        
+
         //DO we have a custom title for branding?
         Tine.title = Tine.Tinebase.registry.get('brandingTitle') ? Tine.Tinebase.registry.get('brandingTitle') : Tine.title;
         Tine.logo = Tine.Tinebase.registry.get('brandingLogo') ? Tine.Tinebase.registry.get('brandingLogo') : Tine.logo;
