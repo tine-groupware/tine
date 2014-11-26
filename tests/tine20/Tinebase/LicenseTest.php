@@ -57,6 +57,17 @@ class Tinebase_LicenseTest extends TestCase
         $certData = $license->getCertificateData();
         $this->assertEquals('2015-11-07 12:54:20', $certData['validTo']->toString());
     }
+
+    public function testStorePrivateKey()
+    {
+        $license = new Tinebase_License();
+        $license->storePrivateKey('keykeykey');
+    
+        $fs = Tinebase_FileSystem::getInstance();
+        $appPath = $fs->getApplicationBasePath('Tinebase');
+        $filepath = $appPath . '/' . Tinebase_License::PRIVATEKEY_FILENAME;
+        $this->assertTrue($fs->fileExists($filepath));
+    }
     
     public function testInitLicense()
     {

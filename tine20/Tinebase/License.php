@@ -18,6 +18,7 @@
 class Tinebase_License
 {
     const LICENSE_FILENAME = 'license.pem';
+    const PRIVATEKEY_FILENAME = 'pk.pem';
     
     const STATUS_NO_LICENSE_AVAILABLE = 'status_no_license_available';
     const STATUS_LICENSE_INVALID = 'status_license_invalid';
@@ -113,7 +114,7 @@ class Tinebase_License
                     __METHOD__ . '::' . __LINE__ . " Deleting license at " . $licensePath);
             $fs->unlink($licensePath);
         } else {
-            $licenseFile = $fs->fopen($this->_getLicensePath(), 'w');
+            $licenseFile = $fs->fopen($licensePath, 'w');
             if ($licenseFile !== false) {
                 fwrite($licenseFile, $licenseString);
                 $fs->fclose($licenseFile);
@@ -128,15 +129,35 @@ class Tinebase_License
         }
     }
     
-    protected function _getLicensePath()
+    public function storePrivateKey($privateKey)
+    {
+        if (empty($privateKey)) {
+            return;
+        }
+        
+        $fs = Tinebase_FileSystem::getInstance();
+        $path = $this->_getLicensePath(self::PRIVATEKEY_FILENAME);
+        $pkFile = $fs->fopen($path, 'w');
+        if ($pkFile !== false) {
+            fwrite($pkFile, $privateKey);
+            $fs->fclose($pkFile);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . " Stored new private key " . $path);
+        } else {
+            throw new Tinebase_Exception('Could not store file');
+        }
+    }
+    
+    protected function _getLicensePath($filename = self::LICENSE_FILENAME)
     {
         $fs = Tinebase_FileSystem::getInstance();
         $appPath = $fs->getApplicationBasePath('Tinebase');
         if (!$fs->fileExists($appPath)) {
             $fs->mkdir($appPath);
         }
-
-        return $appPath . '/' . self::LICENSE_FILENAME;
+        
+        return $appPath . '/' . $filename;
     }
     
     /**

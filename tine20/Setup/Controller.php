@@ -157,14 +157,18 @@ class Setup_Controller
 
     /**
      * Save license information
-     *
+     * 
+     * @param  string $license
+     * @param  string $privatekey
+     * 
      * @return certificate data or validation data if failing
      */
-    public function saveLicense($licenseString)
+    public function saveLicense($licenseString, $privatekey)
     {
         $license = new Tinebase_License();
         $license->storeLicense($licenseString);
-
+        $license->storePrivateKey($privatekey);
+        
         if ($license->isValid()) {
             $return = $this->getLicense();
         } else {

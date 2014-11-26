@@ -121,7 +121,8 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         Ext.Ajax.request({
             params: {
                 method: 'Setup.saveLicense',
-                license: Ext.getCmp('license_licensekey').getValue()
+                license: Ext.getCmp('license_licensekey').getValue(),
+                privatekey: Ext.getCmp('license_privatekey').getValue()
             },
             scope: this,
             success: function (response) {
@@ -201,13 +202,18 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 defaults: {
                     width: 200,
                     anchor: '-20'
-
                 },
                 defaultType: 'textfield',
                 items: [{
                     fieldLabel: this.app.i18n._('License Key'),
                     name: 'license_licensekey',
                     id: 'license_licensekey',
+                    xtype: 'textarea',
+                    height: 250
+                }, {
+                    fieldLabel: this.app.i18n._('Installation Key'),
+                    name: 'license_privatekey',
+                    id: 'license_privatekey',
                     xtype: 'textarea',
                     height: 250
                 }]
