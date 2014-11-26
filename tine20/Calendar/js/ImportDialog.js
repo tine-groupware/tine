@@ -363,7 +363,6 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
         
         var types = [
             ['remote_ics', this.app.i18n._('Remote / ICS')],
-            ['remote_caldav', i18n._('Remote / CalDAV (BETA)')],
             ['upload', this.app.i18n._('Upload')]
         ]
         
