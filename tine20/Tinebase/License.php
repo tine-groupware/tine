@@ -234,7 +234,6 @@ class Tinebase_License
             }
         }
         
-        // TODO set to 5 during build / find a way to set this during unittests
         return 500;
     }
     
