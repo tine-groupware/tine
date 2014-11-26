@@ -521,9 +521,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     
     initLayout: function () {
         var infoPanelItems = (this.showInfoBox) ? [
-            this.getBrowserIncompatiblePanel(),
-            this.getCommunityPanel(),
-            this.getSurveyPanel()
+            this.getBrowserIncompatiblePanel()
+            // removed for Tine 2.0com version
+            //this.getCommunityPanel(),
+            //this.getSurveyPanel()
         ] : [];
         
         this.infoPanel = new Ext.Container({
