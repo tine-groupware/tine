@@ -128,9 +128,10 @@ class Tinebase_LicenseTest extends TestCase
         $registry = $tfj->getRegistryData();
         $this->assertEquals(Tinebase_License::STATUS_LICENSE_OK, $registry['licenseStatus']);
 
-        $license->storeLicense('');
-        $registry = $tfj->getRegistryData();
-        $this->assertEquals(Tinebase_License::STATUS_NO_LICENSE_AVAILABLE, $registry['licenseStatus']);
+        // TODO allow to delete license
+//         $license->storeLicense('');
+//         $registry = $tfj->getRegistryData();
+//         $this->assertEquals(Tinebase_License::STATUS_NO_LICENSE_AVAILABLE, $registry['licenseStatus']);
     }
 
     public function testFirstUserCreationTime()

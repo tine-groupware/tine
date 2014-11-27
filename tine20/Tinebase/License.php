@@ -110,9 +110,12 @@ class Tinebase_License
         $fs = Tinebase_FileSystem::getInstance();
         $licensePath = $this->_getLicensePath();
         if (empty($licenseString)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                    __METHOD__ . '::' . __LINE__ . " Deleting license at " . $licensePath);
-            $fs->unlink($licensePath);
+            // TODO do we allow to delete the license?
+//             if ($fs->fileExists($licensePath)) {
+//                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+//                         __METHOD__ . '::' . __LINE__ . " Deleting license at " . $licensePath);
+//                 $fs->unlink($licensePath);
+//             }
         } else {
             $licenseFile = $fs->fopen($licensePath, 'w');
             if ($licenseFile !== false) {
