@@ -218,12 +218,23 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             },
             scope: this
         });
-
+        
         var licenseExpiresIn = Tine.Tinebase.registry.get('licenseExpire');
-
-        if (licenseExpiresIn && licenseExpiresIn != 'status_no_license_available') {
+        var licenseExpiredSince = Tine.Tinebase.registry.get('licenseExpiredSince');
+        
+        if (licenseExpiresIn) {
             this.actionLicenseExpire = new Ext.Action({
-                text: String.format(_('Your license expires in {0} days'), licenseExpiresIn),
+                text: String.format(_('The trial expires in {0} days'), licenseExpiresIn),
+                tooltip: String.format(_('Please visit the shop at {0}'), Tine.shop),
+                iconCls: 'tine-license',
+                handler: function() {
+                    window.open(Tine.shop, '_blank');
+                },
+                scope: this
+            });
+        } else if (licenseExpiredSince) {
+            this.actionLicenseExpire = new Ext.Action({
+                text: _('Your Tine 2.0 Business Edition trial expired.'),
                 tooltip: String.format(_('Please visit the shop at {0}'), Tine.shop),
                 iconCls: 'tine-license',
                 handler: function() {
@@ -234,7 +245,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         } else {
             this.actionLicenseExpire = '';
         }
-
+        
         this.action_notificationPermissions = new Ext.Action({
             text: i18n._('Allow desktop notifications'),
             tooltip:  i18n._('Request permissions for webkit desktop notifications.'),

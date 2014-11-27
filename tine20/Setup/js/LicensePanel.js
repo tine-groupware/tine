@@ -83,15 +83,10 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             scope: this,
             success: function (response) {
                 var data = Ext.util.JSON.decode(response.responseText);
-
-                Ext.getCmp('contractId').setValue(data.contractId);
-                Ext.getCmp('serialNumber').setValue(data.serialNumber);
-                Ext.getCmp('maxUsers').setValue(data.maxUsers);
-                Ext.getCmp('validFrom').setValue(new Date(data.validFrom.date));
-                Ext.getCmp('validTo').setValue(new Date(data.validTo.date));
                 
+                this.setLicenseInformation(data);
                 Tine.Setup.registry.replace('licenseCheck', !!data.serialNumber);
-
+                
                 this.loadMask.hide();
             }
         });
@@ -138,17 +133,26 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     Ext.getCmp('validFrom').reset();
                     Ext.getCmp('validTo').reset();
                 } else {
-                    Ext.getCmp('contractId').setValue(data.contractId);
-                    Ext.getCmp('serialNumber').setValue(data.serialNumber);
-                    Ext.getCmp('maxUsers').setValue(data.maxUsers);
-                    Ext.getCmp('validFrom').setValue(new Date(data.validFrom.date));
-                    Ext.getCmp('validTo').setValue(new Date(data.validTo.date));
+                    this.setLicenseInformation(data);
                     Tine.Setup.registry.replace('licenseCheck', true);
                 }
             }
         })
         return true;
     },
+    
+    setLicenseInformation: function(data) {
+        Ext.getCmp('contractId').setValue(data.contractId);
+        Ext.getCmp('serialNumber').setValue(data.serialNumber);
+        Ext.getCmp('maxUsers').setValue(data.maxUsers);
+        if (data.validFrom) {
+            Ext.getCmp('validFrom').setValue(data.validFrom.date);
+        }
+        if (data.validTo) {
+            Ext.getCmp('validTo').setValue(data.validTo.date);
+        }
+    },
+    
 
     /**
      * @private
@@ -167,6 +171,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 collapsible: false,
                 autoHeight: true,
                 defaults: {
+                    width: 200,
                     readOnly: true
                 },
                 defaultType: 'textfield',
@@ -174,33 +179,26 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     fieldLabel: this.app.i18n._('Contract ID'),
                     name: 'contractId',
                     id: 'contractId',
-                    width: 200,
                     emptyText: this.app.i18n._('No valid license')
                 }, {
                     fieldLabel: this.app.i18n._('Serial Number'),
                     name: 'serialNumber',
                     id: 'serialNumber',
-                    width: 200,
                     emptyText: this.app.i18n._('No valid license')
                 }, {
                     fieldLabel: this.app.i18n._('Maximum Users'),
                     name: 'maxUsers',
-                    width: 200,
                     id: 'maxUsers',
                     emptyText: this.app.i18n._('No valid license')
                 },{
                     fieldLabel: this.app.i18n._('Valid from'),
                     name: 'validFrom',
                     id: 'validFrom',
-                    xtype: 'datefield',
-                    width: 200,
                     emptyText: this.app.i18n._('No valid license')
                 },{
                     fieldLabel: this.app.i18n._('Valid to'),
                     name: 'validTo',
                     id: 'validTo',
-                    xtype: 'datefield',
-                    width: 200,
                     emptyText: this.app.i18n._('No valid license')
                 }]
             }, {
@@ -209,7 +207,6 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 collapsible: false,
                 autoHeight: true,
                 defaults: {
-                    width: 200,
                     anchor: '-20'
                 },
                 defaultType: 'textfield',

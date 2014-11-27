@@ -351,11 +351,12 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      */
     protected function _checkMaxUsers()
     {
+        $translation = Tinebase_Translation::getTranslation('Admin');
         $license = new Tinebase_License();
         $maxUsers = $license->getMaxUsers();
         $currentUserCount = $this->_userBackend->countNonSystemUsers();
         if ($currentUserCount >= $maxUsers) {
-            throw new Tinebase_Exception_SystemGeneric('Maximum number of users reached');
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Maximum number of users reached'));
         }
     }
     

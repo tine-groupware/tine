@@ -76,6 +76,10 @@ class Tinebase_License
     
     public function getLicenseExpireEstimate()
     {
+        if ($this->getStatus() !== self::STATUS_NO_LICENSE_AVAILABLE){
+            return false;
+        }
+        
         $this->getCertificateData();
         
         if ($this->_certData) {

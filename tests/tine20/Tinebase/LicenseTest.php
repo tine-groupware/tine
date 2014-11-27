@@ -136,6 +136,11 @@ class Tinebase_LicenseTest extends TestCase
 
     public function testFirstUserCreationTime()
     {
+        $userCreationTime = Tinebase_Core::getUser()->creation_time;
+        if (! $userCreationTime instanceOf Tinebase_DateTime) {
+            $this->markTestSkipped('older installation');
+        }
+        
         $creationTime = Tinebase_User::getInstance()->getFirstUserCreationTime();
         $this->assertEquals($creationTime->toString(), Tinebase_Core::getUser()->creation_time->toString());
         
@@ -168,13 +173,18 @@ class Tinebase_LicenseTest extends TestCase
     
     public function testLicenseExpiredEstimate()
     {
-        $license = new Tinebase_License(dirname(__FILE__) . '/License/V-12345.pem');
-        $data = $license->getCertificateData();
-        $daysLeft = $license->getLicenseExpireEstimate();
+        $creationTime = $this->testFirstUserCreationTime();
+        if ($creationTime->isEarlier(Tinebase_DateTime::now()->setTime(0, 0))) {
+            $this->markTestSkipped('older installation');
+        }
         
+        $license = new Tinebase_License();
+        $data = $license->getCertificateData();
         $now = Tinebase_DateTime::now();
         $diff = $now->diff($data['validTo']);
         
-        $this->assertEquals($diff->days, $daysLeft, print_r($data, true));
+        $daysLeft = $license->getLicenseExpireEstimate();
+        
+        $this->assertEquals($diff->days, $daysLeft, print_r($diff, true));
     }
 }

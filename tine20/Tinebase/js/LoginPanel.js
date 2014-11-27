@@ -255,7 +255,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             if (licenseCheck == 'status_no_license_available' || licenseCheck == 'status_license_invalid') {
                 var licenseFailed = [{
                     cls: 'tb-login-big-label',
-                    html: i18n._('Tine 2.0 Business Edition Demo')
+                    html: i18n._('Tine 2.0 Business Edition trial')
                 }, {
                     html: '<p>'
                     + i18n._('Thank you for testing Tine 2.0. This version is limited to 5 users. Please visit our shop to buy a valid license.')

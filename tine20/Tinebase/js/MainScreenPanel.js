@@ -177,7 +177,7 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
                 closable: false,
 
                 items: new Ext.Panel({
-                    html: String.format(_('Your Tine 2.0 Business Edition trial expired. Please buy a license at {1}'), Tine.title, Tine.shop)
+                    html: _('Your Tine 2.0 Business Edition trial expired. Please buy a license at:') + '<br/><a target="_blank" href="' + Tine.shop + '" border="0"> Tine 2.0 Shop </a></ul>'
                 }),
 
                 buttons: [{
