@@ -59,17 +59,6 @@ class Tinebase_LicenseTest extends TestCase
         $this->assertEquals('2015-11-07 12:54:20', $certData['validTo']->toString());
     }
 
-    public function testStorePrivateKey()
-    {
-        $license = new Tinebase_License();
-        $license->storePrivateKey('keykeykey');
-    
-        $fs = Tinebase_FileSystem::getInstance();
-        $appPath = $fs->getApplicationBasePath('Tinebase');
-        $filepath = $appPath . '/' . Tinebase_License::PRIVATEKEY_FILENAME;
-        $this->assertTrue($fs->fileExists($filepath));
-    }
-    
     public function testInitLicense()
     {
         $this->testStoreLicense();
@@ -109,7 +98,7 @@ class Tinebase_LicenseTest extends TestCase
         $this->_usernamesToDelete[] = $testUser->accountLoginName;
         $this->testStoreLicense();
         $license = new Tinebase_License();
-        
+
         $this->assertFalse($license->checkUserLimit($user));
     }
 
@@ -177,14 +166,41 @@ class Tinebase_LicenseTest extends TestCase
         if ($creationTime->isEarlier(Tinebase_DateTime::now()->setTime(0, 0))) {
             $this->markTestSkipped('older installation');
         }
-        
+
         $license = new Tinebase_License();
         $data = $license->getCertificateData();
         $now = Tinebase_DateTime::now();
         $diff = $now->diff($data['validTo']);
-        
+
         $daysLeft = $license->getLicenseExpireEstimate();
-        
+
         $this->assertEquals($diff->days, $daysLeft, print_r($diff, true));
+    }
+
+    public function testLicenseUploadByFrontend()
+    {
+        $sfj = new Setup_Frontend_Json();
+
+        $tempfileName = 'testupload' . Tinebase_Record_Abstract::generateUID(10);
+        $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
+        file_put_contents($tempfilePath, file_get_contents(dirname(__FILE__) . '/License/V-12345.pem'));
+
+        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName, 'application/x-x509-ca-cert');
+
+        $licenseData = $sfj->uploadLicense($tempFile->getId());
+
+        // Clean up.
+        Tinebase_TempFile::getInstance()->delete($tempFile->getId());
+
+        $this->assertEquals($licenseData['serialNumber'], 8);
+    }
+
+    public function testGetInstallationData()
+    {
+        $license = new Tinebase_License(dirname(__FILE__) . '/License/V-12345.pem');
+        $installationData = $license->getInstallationData();
+
+        $this->assertArrayHasKey('bits', $installationData);
+        $this->assertArrayHasKey('rsa', $installationData);
     }
 }

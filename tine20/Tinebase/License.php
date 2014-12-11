@@ -18,8 +18,7 @@
 class Tinebase_License
 {
     const LICENSE_FILENAME = 'license.pem';
-    const PRIVATEKEY_FILENAME = 'pk.pem';
-    
+
     const STATUS_NO_LICENSE_AVAILABLE = 'status_no_license_available';
     const STATUS_LICENSE_INVALID = 'status_license_invalid';
     const STATUS_LICENSE_OK = 'status_license_ok';
@@ -31,6 +30,7 @@ class Tinebase_License
     public function __construct($licenseFile = null, $caFile = null)
     {
         $this->_license = $this->_readLicenseFromFile($licenseFile);
+
         $this->_caFile = ($caFile) ? $caFile : dirname(__FILE__) . '/License/cacert.pem';
     }
 
@@ -136,26 +136,6 @@ class Tinebase_License
         }
     }
     
-    public function storePrivateKey($privateKey)
-    {
-        if (empty($privateKey)) {
-            return;
-        }
-        
-        $fs = Tinebase_FileSystem::getInstance();
-        $path = $this->_getLicensePath(self::PRIVATEKEY_FILENAME);
-        $pkFile = $fs->fopen($path, 'w');
-        if ($pkFile !== false) {
-            fwrite($pkFile, $privateKey);
-            $fs->fclose($pkFile);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                    __METHOD__ . '::' . __LINE__ . " Stored new private key " . $path);
-        } else {
-            throw new Tinebase_Exception('Could not store file');
-        }
-    }
-    
     protected function _getLicensePath($filename = self::LICENSE_FILENAME)
     {
         $fs = Tinebase_FileSystem::getInstance();
@@ -228,6 +208,19 @@ class Tinebase_License
         }
         
         return $this->_certData;
+    }
+
+    /**
+     * Parses the private key inside the certificate and returns data
+     *
+     * @return array
+     */
+    public function getInstallationData() {
+        if ($this->_license) {
+            return openssl_pkey_get_details(openssl_pkey_get_private($this->_license));
+        }
+
+        return false;
     }
     
     /**

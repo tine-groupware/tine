@@ -159,15 +159,13 @@ class Setup_Controller
      * Save license information
      * 
      * @param  string $license
-     * @param  string $privatekey
      * 
      * @return certificate data or validation data if failing
      */
-    public function saveLicense($licenseString, $privatekey)
+    public function saveLicense($licenseString)
     {
         $license = new Tinebase_License();
         $license->storeLicense($licenseString);
-        $license->storePrivateKey($privatekey);
         
         if ($license->isValid()) {
             $return = $this->getLicense();
@@ -176,6 +174,23 @@ class Setup_Controller
         }
 
         return $return;
+    }
+
+    /**
+     * Upload license as file
+     *
+     * @param $license
+     */
+    public function uploadLicense($tempFileId)
+    {
+        $file = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
+
+        if ($file['type'] == 'application/x-x509-ca-cert') {
+            $licenseString = file_get_contents($file['path']);
+            return $this->saveLicense($licenseString);
+        } else {
+            return array('error' => false);
+        }
     }
 
     /**
@@ -200,7 +215,8 @@ class Setup_Controller
         
         $users = array(
             'maxUsers' => $license->getMaxUsers(),
-            'userLimitReached' => $license->checkUserLimit(Tinebase_Core::getUser())
+            'userLimitReached' => $license->checkUserLimit(Tinebase_Core::getUser()),
+            'status' => $license->getStatus()
         );
         
         return array_merge($certData, $users);

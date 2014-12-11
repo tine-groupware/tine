@@ -53,13 +53,18 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      */
     license: null,
 
+    initActions: function() {
+        this.actionToolbar = new Ext.Toolbar({
+            items: []
+        });
+    },
+
 
     /**
      * init component
      */
     initComponent: function () {
         this.initActions();
-        
         Tine.Setup.LicensePanel.superclass.initComponent.call(this);
     },
     
@@ -82,77 +87,55 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             },
             scope: this,
             success: function (response) {
-                var data = Ext.util.JSON.decode(response.responseText);
-                
-                this.setLicenseInformation(data);
-                Tine.Setup.registry.replace('licenseCheck', !!data.serialNumber);
-                
+                this.setLicenseInformation(response);
+
                 this.loadMask.hide();
             }
         });
     },
 
-    initActions: function () {
-        this.action_saveLicense = new Ext.Action({
-            text: this.app.i18n._('Save'),
-            iconCls: 'setup_action_save_config',
-            scope: this,
-            handler: this.onSaveLicense,
-            disabled: false
-        });
+    /**
+     * Sets license data to textfields
+     * @param response
+     */
+    setLicenseInformation: function (response) {
+        var data = Ext.util.JSON.decode(response.responseText);
 
-        this.actionToolbar = new Ext.Toolbar({
-            items: [
-                this.action_saveLicense
-            ]
-        });
+        if (data.hasOwnProperty('error') && data.error == false || ! data.serialNumber) {
+            if (data.status == 'status_license_invalid') {
+                Ext.Msg.alert('Status', this.app.i18n._('Your license is not valid.'));
+            }
+            Tine.Setup.registry.replace('licenseCheck', false);
+            Ext.getCmp('contractId').reset();
+            Ext.getCmp('serialNumber').reset();
+            Ext.getCmp('maxUsers').reset();
+            Ext.getCmp('validFrom').reset();
+            Ext.getCmp('validTo').reset();
+        } else {
+            Ext.getCmp('contractId').setValue(data.contractId);
+            Ext.getCmp('serialNumber').setValue(data.serialNumber);
+            Ext.getCmp('maxUsers').setValue(data.maxUsers);
+            Ext.getCmp('validFrom').setValue(new Date(data.validFrom.date));
+            Ext.getCmp('validTo').setValue(new Date(data.validTo.date));
+            Tine.Setup.registry.replace('licenseCheck', true);
+        }
     },
 
     /**
-     * Save and check license keys
-     *
-     * @returns {boolean}
+     * If license uploaded successfully ..
      */
-    onSaveLicense: function () {
+    onFileReady: function () {
         Ext.Ajax.request({
             params: {
-                method: 'Setup.saveLicense',
-                license: Ext.getCmp('license_licensekey').getValue(),
-                privatekey: Ext.getCmp('license_privatekey').getValue()
+                method: 'Setup.uploadLicense',
+                tempFileId: this.uploadLicense.getTempFileId()
             },
             scope: this,
             success: function (response) {
-                var data = Ext.util.JSON.decode(response.responseText);
-
-                if (data.hasOwnProperty('error') && data.error == false || ! data.serialNumber) {
-                    Ext.Msg.alert('Status', this.app.i18n._('Your license is not valid.'));
-                    Tine.Setup.registry.replace('licenseCheck', false);
-                    Ext.getCmp('contractId').reset();
-                    Ext.getCmp('serialNumber').reset();
-                    Ext.getCmp('maxUsers').setValue(data.maxUsers);
-                    Ext.getCmp('validFrom').reset();
-                    Ext.getCmp('validTo').reset();
-                } else {
-                    this.setLicenseInformation(data);
-                    Tine.Setup.registry.replace('licenseCheck', true);
-                }
+                this.setLicenseInformation(response);
             }
         })
-        return true;
     },
-    
-    setLicenseInformation: function(data) {
-        Ext.getCmp('contractId').setValue(data.contractId);
-        Ext.getCmp('serialNumber').setValue(data.serialNumber);
-        Ext.getCmp('maxUsers').setValue(data.maxUsers);
-        if (data.validFrom) {
-            Ext.getCmp('validFrom').setValue(data.validFrom.date);
-        }
-        if (data.validTo) {
-            Ext.getCmp('validTo').setValue(data.validTo.date);
-        }
-    },
-    
 
     /**
      * @private
@@ -194,11 +177,13 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     fieldLabel: this.app.i18n._('Valid from'),
                     name: 'validFrom',
                     id: 'validFrom',
+                    xtype: 'datefield',
                     emptyText: this.app.i18n._('No valid license')
                 },{
                     fieldLabel: this.app.i18n._('Valid to'),
                     name: 'validTo',
                     id: 'validTo',
+                    xtype: 'datefield',
                     emptyText: this.app.i18n._('No valid license')
                 }]
             }, {
@@ -207,21 +192,17 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 collapsible: false,
                 autoHeight: true,
                 defaults: {
-                    anchor: '-20'
+                    anchor: '-20',
+                    width: 200
                 },
-                defaultType: 'textfield',
                 items: [{
-                    fieldLabel: this.app.i18n._('License Key'),
-                    name: 'license_licensekey',
-                    id: 'license_licensekey',
-                    xtype: 'textarea',
-                    height: 250
-                }, {
-                    fieldLabel: this.app.i18n._('Installation Key'),
-                    name: 'license_privatekey',
-                    id: 'license_privatekey',
-                    xtype: 'textarea',
-                    height: 250
+                    xtype: 'tw.uploadbutton',
+                    fieldLabel: this.app.i18n._('Upload from disk'),
+                    ref: '../../uploadLicense',
+                    text: String.format(this.app.i18n._('Select file containing your license key')),
+                    handler: this.onFileReady,
+                    allowedTypes: null,
+                    scope: this
                 }]
             }]
         }];

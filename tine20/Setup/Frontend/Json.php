@@ -365,12 +365,20 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
      * Saves license configuration
      * 
      * @param  string $license
-     * @param  string $privatekey
-     * 
+     *
      * @return array
      */
-    public function saveLicense($license, $privatekey)
+    public function saveLicense($license)
     {
-        return Setup_Controller::getInstance()->saveLicense($license, $privatekey);
+        return Setup_Controller::getInstance()->saveLicense($license);
+    }
+
+    /**
+     * Uploads license and saves it
+     * @param $tempFileId
+     */
+    public function uploadLicense($tempFileId)
+    {
+        return Setup_Controller::getInstance()->uploadLicense($tempFileId);
     }
 }
