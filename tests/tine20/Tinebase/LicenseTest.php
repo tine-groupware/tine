@@ -50,6 +50,38 @@ class Tinebase_LicenseTest extends TestCase
         $this->assertEquals('V-12345', $certData['contractId'], 'contract id mismatch');
     }
 
+    public function testLicensePropertiesV123456()
+    {
+        $license = new Tinebase_License(dirname(__FILE__) . '/License/V-123456.pem');
+        $certData = $license->getCertificateData();
+
+        $this->assertEquals(5, $certData['policies'][101][1], '5 users limit expected');
+        $this->assertEquals(5, $license->getMaxUsers(), '5 users limit expected');
+        $this->assertEquals('2025-03-02 16:45:09', $certData['validTo']->toString());
+        $this->assertEquals('V-123456', $certData['contractId'], 'contract id mismatch');
+        $this->assertEquals(2, count($certData['policies'][101]), 'not all policies were found: ' . print_r($certData['policies'], true));
+        $this->assertTrue(isset($certData['policies'][103]), 'not all policies were found: ' . print_r($certData['policies'], true));
+        $this->assertEquals('limitedUserTime', $certData['policies'][103][1], 'license type mismatch');
+    }
+
+    public function testLicensePropertiesVonDemand()
+    {
+        $license = new Tinebase_License(dirname(__FILE__) . '/License/V-onDemand.pem');
+        $certData = $license->getCertificateData();
+
+        $this->assertEquals(0, $certData['policies'][101][1], '0 users limit expected');
+        $this->assertEquals(0, $license->getMaxUsers(), '0 users limit expected');
+        $this->assertEquals(true, $license->checkUserLimit(), 'no user limit expected');
+        $this->assertEquals('2025-03-02 16:31:28', $certData['validTo']->toString());
+        $this->assertEquals('onDemand', $certData['policies'][103][1], 'license type mismatch');
+    }
+
+    public function testLicensePropertiesLimitedTime()
+    {
+        $license = new Tinebase_License(dirname(__FILE__) . '/License/V-limitedTime.pem');
+        $this->assertEquals($license->getLicenseType(), Tinebase_License::LICENSE_TYPE_LIMITED_TIME);
+    }
+
     public function testStoreLicense()
     {
         $license = new Tinebase_License();
@@ -70,13 +102,7 @@ class Tinebase_LicenseTest extends TestCase
     public function testCreateUserWithLimitExceeded()
     {
         $this->testStoreLicense();
-        $testUser = new Tinebase_Model_FullUser(array(
-            'accountLoginName' => Tinebase_Record_Abstract::generateUID(),
-            'accountPrimaryGroup' => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
-            'accountDisplayName' => Tinebase_Record_Abstract::generateUID(),
-            'accountLastName' => Tinebase_Record_Abstract::generateUID(),
-            'accountFullName' => Tinebase_Record_Abstract::generateUID(),
-        ));
+        $testUser = $this->_getUser();
         try {
             $user = Admin_Controller_User::getInstance()->create($testUser, 'test', 'test');
             $this->fail('user creation should fail');
@@ -84,7 +110,28 @@ class Tinebase_LicenseTest extends TestCase
             $this->assertTrue($e instanceof Tinebase_Exception_SystemGeneric);
         }
     }
-    
+
+    protected function _getUser()
+    {
+        return new Tinebase_Model_FullUser(array(
+            'accountLoginName' => Tinebase_Record_Abstract::generateUID(),
+            'accountPrimaryGroup' => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+            'accountDisplayName' => Tinebase_Record_Abstract::generateUID(),
+            'accountLastName' => Tinebase_Record_Abstract::generateUID(),
+            'accountFullName' => Tinebase_Record_Abstract::generateUID(),
+        ));
+    }
+
+    public function testCreateUserWithLimitExceededWithOnDemandLicense()
+    {
+        $license = new Tinebase_License();
+        $license->storeLicense(file_get_contents(dirname(__FILE__) . '/License/V-onDemand.pem'));
+
+        $testUser = $this->_getUser();
+        $user = Admin_Controller_User::getInstance()->create($testUser, 'test', 'test');
+        $this->assertTrue(is_string($user->getId()));
+    }
+
     public function testUserLimitExceeded()
     {
         $testUser = new Tinebase_Model_FullUser(array(

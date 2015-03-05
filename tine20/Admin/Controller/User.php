@@ -353,6 +353,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         $translation = Tinebase_Translation::getTranslation('Admin');
         $license = new Tinebase_License();
+
+        $licenseType = $license->getLicenseType();
+
+        if ($licenseType === Tinebase_License::LICENSE_TYPE_LIMITED_TIME || $licenseType === Tinebase_License::LICENSE_TYPE_ON_DEMAND) {
+            // no user limit
+            return;
+        }
+
         $maxUsers = $license->getMaxUsers();
         $currentUserCount = $this->_userBackend->countNonSystemUsers();
         if ($currentUserCount >= $maxUsers) {

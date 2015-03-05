@@ -169,7 +169,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     id: 'serialNumber',
                     emptyText: this.app.i18n._('No valid license')
                 }, {
-                    fieldLabel: this.app.i18n._('Maximum Users'),
+                    fieldLabel: this.app.i18n._('Maximum Users (0=unlimited)'),
                     name: 'maxUsers',
                     id: 'maxUsers',
                     emptyText: this.app.i18n._('No valid license')

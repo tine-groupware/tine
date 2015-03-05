@@ -17,12 +17,36 @@
  */
 class Tinebase_License
 {
+    /**
+     * license type constants
+     *
+     * 'limitedUser' => limited only by user count (days => 36500 = 100 years)
+     * 'limitedTime' => limited only by time       (maxUsersExisting => 0)
+     * 'limitedUserTime' => limited by time and users
+     * 'onDemand'    => days = 365, maxUsersExisting = 0, separate way of reporting the current users
+     */
+    const LICENSE_TYPE_LIMITED_USER         = 'limitedUser';
+    const LICENSE_TYPE_LIMITED_TIME         = 'limitedTime';
+    const LICENSE_TYPE_LIMITED_USER_TIME    = 'limitedUserTime';
+    const LICENSE_TYPE_ON_DEMAND            = 'onDemand';
+
+    /**
+     * license filename
+     */
     const LICENSE_FILENAME = 'license.pem';
 
+    /**
+     * license status
+     */
     const STATUS_NO_LICENSE_AVAILABLE = 'status_no_license_available';
     const STATUS_LICENSE_INVALID = 'status_license_invalid';
     const STATUS_LICENSE_OK = 'status_license_ok';
-    
+
+    /**
+     * member vars
+     *
+     * @var array|null|string
+     */
     protected $_license = null;
     protected $_caFiles = array();
     protected $_certData = null;
@@ -58,6 +82,16 @@ class Tinebase_License
         
         return null;
     }
+
+    /**
+     * policies
+     */
+    const POLICY_MAX_USERS                      = 101;
+    const POLICY_MAX_CONCURRENT_USERS           = 102;
+    const POLICY_LICENSE_TYPE                   = 103;
+    const POLICY_DEFAULT_MAX_USERS              = 500;
+    const POLICY_DEFAULT_MAX_CONCURRENT_USERS   = 500;
+    const POLICY_DEFAULT_LICENSE_TYPE           = self::LICENSE_TYPE_LIMITED_USER_TIME;
 
     /**
      * get ca file(s)
@@ -130,7 +164,6 @@ class Tinebase_License
     
     /**
      * stores license in vfs
-     *  - if $licenseString is empty, license is deleted
      *
      * @param string $licenseString
      * @throws Tinebase_Exception
@@ -141,12 +174,7 @@ class Tinebase_License
         $fs = Tinebase_FileSystem::getInstance();
         $licensePath = $this->_getLicensePath();
         if (empty($licenseString)) {
-            // TODO do we allow to delete the license?
-//             if ($fs->fileExists($licensePath)) {
-//                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-//                         __METHOD__ . '::' . __LINE__ . " Deleting license at " . $licensePath);
-//                 $fs->unlink($licensePath);
-//             }
+            throw new Tinebase_Exception('Empty license string');
         } else {
             $licenseFile = $fs->fopen($licensePath, 'w');
             if ($licenseFile !== false) {
@@ -172,6 +200,17 @@ class Tinebase_License
         }
         
         return $appPath . '/' . $filename;
+    }
+
+    public function deleteCurrentLicense()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $licensePath = $this->_getLicensePath();
+        if ($fs->fileExists($licensePath)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . " Deleting license at " . $licensePath);
+            $fs->unlink($licensePath);
+        }
     }
     
     /**
@@ -255,22 +294,56 @@ class Tinebase_License
      */
     public function getMaxUsers()
     {
+        return $this->_getPolicy(self::POLICY_MAX_USERS, self::POLICY_DEFAULT_MAX_USERS);
+    }
+
+    /**
+     * get license type
+     *
+     * @return string
+     */
+    public function getLicenseType()
+    {
+        return $this->_getPolicy(self::POLICY_LICENSE_TYPE, self::POLICY_DEFAULT_LICENSE_TYPE);
+    }
+
+    /**
+     * fetch policy value from certificate data
+     *
+     * @param      $policyIndex number
+     * @param null $default
+     * @return number|string|null
+     */
+    protected function _getPolicy($policyIndex, $default = null)
+    {
         if ($this->_license) {
             $certData = $this->getCertificateData();
-            if (isset($certData['policies'][101][1])) {
-                return $certData['policies'][101][1];
+            if (isset($certData['policies'][$policyIndex][1])) {
+                return $certData['policies'][$policyIndex][1];
             }
         }
-        
-        return 500;
+        return $default;
     }
-    
-    public function checkUserLimit($user)
+
+    /**
+     * check user limit
+     *
+     * @param $user
+     * @return bool
+     */
+    public function checkUserLimit($user = null)
     {
         $maxUsers = $this->getMaxUsers();
+
+        if ($maxUsers === 0) {
+            // 0 means unlimited users
+            return true;
+        }
+
         $currentUserCount = Tinebase_User::getInstance()->countNonSystemUsers();
         if ($currentUserCount >= $maxUsers) {
             // check if user is in allowed users
+            $user = $user ? $user : Tinebase_Core::getUser();
             if (! Tinebase_User::getInstance()->hasUserValidLicense($user, $maxUsers)) {
                 return false;
             }

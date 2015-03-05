@@ -682,7 +682,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         echo "\ndeleted " . $deleteCount . " customfield values\n";
     }
-    
+
     /**
      * get all app tables
      * 
@@ -1423,6 +1423,21 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 . ' Set default grants for ' . $filtersWithoutGrants . ' filters'
                 . ' (checked ' . count($filters) . ' in total).');
         }
+
+        return 0;
+    }
+
+    /**
+     * removes the current license
+     */
+    public function deleteLicense()
+    {
+        if (! $this->_checkAdminRight()) {
+            return 1;
+        }
+
+        $license = new Tinebase_License();
+        $license->deleteCurrentLicense();
 
         return 0;
     }
