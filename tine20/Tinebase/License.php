@@ -24,14 +24,14 @@ class Tinebase_License
     const STATUS_LICENSE_OK = 'status_license_ok';
     
     protected $_license = null;
-    protected $_caFile = null;
+    protected $_caFiles = array();
     protected $_certData = null;
     
     public function __construct($licenseFile = null, $caFile = null)
     {
         $this->_license = $this->_readLicenseFromFile($licenseFile);
 
-        $this->_caFile = ($caFile) ? $caFile : dirname(__FILE__) . '/License/cacert.pem';
+        $this->_caFiles = $this->_getCaFiles($caFile);
     }
 
     protected function _readLicenseFromFile($licenseFile = null)
@@ -41,12 +41,12 @@ class Tinebase_License
         } else if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
             $fs = Tinebase_FileSystem::getInstance();
             if ($fs->fileExists($this->_getLicensePath())) {
-                $licenseFile = $fs->fopen($this->_getLicensePath(), 'r');
-                if ($licenseFile !== false) {
+                $licenseFileHandle = $fs->fopen($this->_getLicensePath(), 'r');
+                if ($licenseFileHandle !== false) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                            __METHOD__ . '::' . __LINE__ . " Fetching current license from vfs: " . $licenseFile);
+                            __METHOD__ . '::' . __LINE__ . " Fetching current license from vfs: " . $this->_getLicensePath());
 
-                    $result = fread($licenseFile, 8192);
+                    $result = fread($licenseFileHandle, 8192);
                     $fs->fclose($licenseFile);
 
                     if (!empty($result)) {
@@ -57,6 +57,33 @@ class Tinebase_License
         }
         
         return null;
+    }
+
+    /**
+     * get ca file(s)
+     *
+     * @param null $caFile
+     * @return array
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _getCaFiles($caFile = null)
+    {
+        $caFiles = $caFile ? array($caFile) : array(
+            dirname(__FILE__) . '/License/cacert.pem',
+            dirname(__FILE__) . '/License/cacert20150305.pem',
+        );
+
+        foreach ($caFiles as $index => $file) {
+            if (! file_exists($file)) {
+                unset($caFiles[$index]);
+            }
+        }
+
+        if (empty($caFiles)) {
+            throw new Tinebase_Exception_NotFound('No valid CA file found');
+        }
+
+        return $caFiles;
     }
 
     /**
@@ -148,11 +175,11 @@ class Tinebase_License
     }
     
     /**
-     * @return Ambigous <boolean, number>
+     * @return boolean
      */
     public function isValid()
     {
-        $isValid = $this->_license ? openssl_x509_checkpurpose($this->_license, X509_PURPOSE_SSL_CLIENT, array($this->_caFile)) : false;
+        $isValid = $this->_license ? openssl_x509_checkpurpose($this->_license, X509_PURPOSE_SSL_CLIENT, $this->_caFiles) : false;
         
         return $isValid;
     }
