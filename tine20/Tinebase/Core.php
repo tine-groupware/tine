@@ -622,11 +622,7 @@ class Tinebase_Core
     public static function getSessionId($generateUid = true)
     {
         if (! self::isRegistered(self::SESSIONID)) {
-            $sessionId = null;
-            // TODO allow to access Tinebase/Core methods with Setup session and remove this workaround
-            if (Tinebase_Session::isStarted() && ! Tinebase_Session::isSetupSession()) {
-                $sessionId = Tinebase_Session::getId();
-            }
+            $sessionId = Tinebase_Session::getId();
             if (empty($sessionId)) {
                 $sessionId = 'NOSESSION';
                 if ($generateUid) {

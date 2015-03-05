@@ -279,7 +279,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     /**
      * PHP error log level constant, like E_ALL, E_ERROR etc. E_ERROR | E_WARNING (error und warning),
      * E_ALL & ~E_NOTICE (E_ALL ohne E_NOTICE)
-     * 
+     *
      * value is an int! not a string "E_ALL"
      *
      * @var string
@@ -468,6 +468,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN = 'pwNtlmV2HashUpdateOnLogin';
+
+    /**
+     * license type
+     *
+     * @var string
+     */
+    const LICENSE_TYPE = 'licenseType';
 
     /**
      * AUTOMATIC_BUGREPORTS
@@ -1746,6 +1753,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        self::LICENSE_TYPE => array(
+                                   //_('License Type')
+            'label'                 => 'License Type',
+                                   //_('License Type')
+            'description'           => 'License Type',
+            'type'                  => 'string',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => 'BusinessEdition'
+        ),
         self::LAST_SESSIONS_CLEANUP_RUN => array(
             //_('Last sessions cleanup run')
             'label'                 => 'Last sessions cleanup run',
@@ -2478,7 +2496,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         static::_destroyBackend();
         self::$_instance = null;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::getProperties()

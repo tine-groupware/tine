@@ -168,8 +168,8 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
         if (expiredSince && expiredSince != false) {
 
             var licensePopup = new Ext.Window({
-                title: _('Trial expired'),
-
+                title: i18n._('License expired'),
+                
                 layout:'fit',
                 width:500,
                 height:100,
@@ -177,7 +177,7 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
                 closable: false,
 
                 items: new Ext.Panel({
-                    html: _('Your Tine 2.0 Business Edition trial expired. Please buy a license at:') + '<br/><a target="_blank" href="' + Tine.shop + '" border="0"> Tine 2.0 Shop </a></ul>'
+                    html: i18n._('Your Tine 2.0 Business Edition license expired. Please buy a license at:') + '<br/><a target="_blank" href="' + Tine.shop + '" border="0"> Tine 2.0 Shop </a></ul>'
                 }),
 
                 buttons: [{

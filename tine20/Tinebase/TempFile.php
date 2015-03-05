@@ -65,9 +65,10 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * get temp file description from db
      *
      * @param mixed $_fileId
+     * @param boolean $skipSessionCheck
      * @return Tinebase_Model_TempFile
      */
-    public function getTempFile($_fileId)
+    public function getTempFile($_fileId, $skipSessionCheck = false)
     {
         $fileId = is_array($_fileId) ? $_fileId['id'] : $_fileId;
         
@@ -75,8 +76,13 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
             . " Fetching temp file with id " . print_r($fileId, true));
         
         $select = $this->_getSelect('*');
-        $select->where($this->_db->quoteIdentifier('id') . ' = ?', $fileId)
-               ->where($this->_db->quoteIdentifier('session_id') . ' = ?', Tinebase_Core::getSessionId(/* $generateUid */ false));
+        $select->where($this->_db->quoteIdentifier('id') . ' = ?', $fileId);
+
+        if (! $skipSessionCheck) {
+            // TODO allow to access Tinebase/Core methods with Setup session and remove this workaround
+            $select->where($this->_db->quoteIdentifier('session_id') . ' = ?',
+                Tinebase_Core::getSessionId(/* $generateUid */ false));
+        }
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();

@@ -164,20 +164,23 @@ class Setup_Controller
 
     /**
      * Save license information
-     * 
+     *
      * @param  string $license
-     * 
-     * @return certificate data or validation data if failing
+     *
+     * @return array certificate data or validation data if failing
      */
     public function saveLicense($licenseString)
     {
-        $license = new Tinebase_License();
+        $license = Tinebase_License::getInstance();
+        Tinebase_License::resetLicense();
         $license->storeLicense($licenseString);
-        
+
         if ($license->isValid()) {
             $return = $this->getLicense();
         } else {
-            $return = array('error' => false);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' License is not valid');
+            $return = array('error' => true);
         }
 
         return $return;
@@ -187,17 +190,14 @@ class Setup_Controller
      * Upload license as file
      *
      * @param $license
+     * @return array certificate data or validation data if failing
      */
     public function uploadLicense($tempFileId)
     {
-        $file = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
+        $file = Tinebase_TempFile::getInstance()->getTempFile($tempFileId, /* $skipSessionCheck */ true);
 
-        if ($file['type'] == 'application/x-x509-ca-cert') {
-            $licenseString = file_get_contents($file['path']);
-            return $this->saveLicense($licenseString);
-        } else {
-            return array('error' => false);
-        }
+        $licenseString = file_get_contents($file['path']);
+        return $this->saveLicense($licenseString);
     }
 
     /**
@@ -213,7 +213,7 @@ class Setup_Controller
         );
         
         try {
-            $license = new Tinebase_License();
+            $license = Tinebase_License::getInstance();
         } catch (Exception $e) {
             return $default;
         }

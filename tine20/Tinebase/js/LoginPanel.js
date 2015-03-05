@@ -264,7 +264,12 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 //percentageCompleted =  stats ? Math.floor(100 * stats.translated / stats.total) : undefined;
                 percentageCompleted = undefined;
 
-            var items = [{
+
+            this.communityPanel = new Ext.Container({
+                layout: 'fit',
+                cls: 'tb-login-tinepanel',
+                border: false,
+                defaults: {xtype: 'label'}, items : [{
                 cls: 'tb-login-big-label',
                 html: String.format(i18n._('{0} is made for you'), Tine.title)
             }, {
@@ -289,7 +294,16 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 '<li><a target="_blank" href="https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki/EN%3Atranslation-Howto" border="0">' + String.format(i18n._('{0} Translation Howto'), Tine.title) + '</a></li>' +
                 '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + i18n._('Detailed Language Statistics') + '</a></li>'
                 + '</ul>'
-            }];
+            }]});
+        }
+
+        return this.communityPanel;
+    },
+
+    getLicenseInformationPanel: function () {
+        if (! this.licensePanel) {
+
+            var items = [];
 
             var licenseCheck = Tine.Tinebase.registry.get('licenseStatus');
 
@@ -313,7 +327,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 items = licenseFailed.concat(items);
             }
 
-            this.communityPanel = new Ext.Container({
+            this.licensePanel = new Ext.Container({
                 layout: 'fit',
                 cls: 'tb-login-tinepanel',
                 border: false,
@@ -322,7 +336,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             });
         }
 
-        return this.communityPanel;
+        return this.licensePanel;
     },
 
     getPoweredByPanel: function () {
@@ -545,8 +559,9 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     
     initLayout: function () {
         var infoPanelItems = (this.showInfoBox) ? [
-            this.getBrowserIncompatiblePanel()
-            // removed for Tine 2.0com version
+            this.getBrowserIncompatiblePanel(),
+            this.getLicenseInformationPanel()
+            // removed for Tine 2.0 Business Edition
             //this.getCommunityPanel(),
             //this.getSurveyPanel()
         ] : [];

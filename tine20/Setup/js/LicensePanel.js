@@ -4,7 +4,7 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <m.spahn@metaways.de>
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -49,18 +49,53 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
     border: false,
 
     /**
+     * license type switch
+     *
+     * * allowed values: BusinessEdition | Secudos
+     *
+     * TODO: read this from config
+     *
+     * @property licenseType
+     * @type String
+     */
+    licenseType: 'BusinessEdition',
+
+    /**
      * license
      */
     license: null,
 
     initActions: function() {
+        var items = (Tine.Setup.registry.get('version') && Tine.Setup.registry.get('version').buildType === 'DEVELOPMENT') ? [ new Ext.Action({
+            text: this.app.i18n._('Delete current license'),
+            iconCls: 'setup_action_uninstall',
+            scope: this,
+            handler: this.onDeleteLicense
+        })] : [];
+
         this.actionToolbar = new Ext.Toolbar({
-            items: []
+            items: items
         });
     },
 
+    onDeleteLicense: function() {
+        this.loadMask.show();
+        Ext.Ajax.request({
+            params: {
+                method: 'Setup.deleteLicense'
+            },
+            scope: this,
+            success: function (response) {
+                this.loadMask.hide();
+                this.setLicenseInformation(response);
 
-    /**
+                // TODO reset upload button (setText/Icon?)
+                //this.uploadLicense.setText('');
+            }
+        });
+    },
+
+     /**
      * init component
      */
     initComponent: function () {
@@ -68,7 +103,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         Tine.Setup.LicensePanel.superclass.initComponent.call(this);
     },
     
-       /**
+    /**
      * @private
      */
     onRender: function (ct, position) {
@@ -81,6 +116,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      * @private
      */
     initLicense: function () {
+        this.loadMask.show();
         Ext.Ajax.request({
             params: {
                 method: 'Setup.getLicense'
@@ -99,25 +135,33 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      * @param response
      */
     setLicenseInformation: function (response) {
-        var data = Ext.util.JSON.decode(response.responseText);
+        var data = (response.responseText) ? Ext.util.JSON.decode(response.responseText) : {};
+
+        if (data.status && data.status == 'status_license_invalid') {
+            Ext.Msg.alert('Status', this.app.i18n._('Your license is not valid.'));
+        }
 
         if (data.hasOwnProperty('error') && data.error == false || ! data.serialNumber) {
-            if (data.status == 'status_license_invalid') {
-                Ext.Msg.alert('Status', this.app.i18n._('Your license is not valid.'));
-            }
             Tine.Setup.registry.replace('licenseCheck', false);
-            Ext.getCmp('contractId').reset();
             Ext.getCmp('serialNumber').reset();
             Ext.getCmp('maxUsers').reset();
-            Ext.getCmp('validFrom').reset();
-            Ext.getCmp('validTo').reset();
+
+            if (this.licenseType === 'BusinessEdition') {
+                Ext.getCmp('contractId').reset();
+                Ext.getCmp('validFrom').reset();
+                Ext.getCmp('validTo').reset();
+            }
         } else {
-            Ext.getCmp('contractId').setValue(data.contractId);
             Ext.getCmp('serialNumber').setValue(data.serialNumber);
             Ext.getCmp('maxUsers').setValue(data.maxUsers);
-            Ext.getCmp('validFrom').setValue(new Date(data.validFrom.date));
-            Ext.getCmp('validTo').setValue(new Date(data.validTo.date));
-            Tine.Setup.registry.replace('licenseCheck', true);
+
+            if (this.licenseType === 'BusinessEdition') {
+                Ext.getCmp('contractId').setValue(data.contractId);
+                Ext.getCmp('validFrom').setValue(new Date(data.validFrom.date.replace(/-/g,'/')));
+                Ext.getCmp('validTo').setValue(new Date(data.validTo.date.replace(/-/g,'/')));
+            }
+
+            Tine.Setup.registry.replace('licenseCheck', data.status && data.status == 'status_license_ok');
         }
     },
 
@@ -142,51 +186,8 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      *
      */
     getFormItems: function () {
-        return [{
-            defaults: {
-                tabIndex: this.getTabIndex
-            },
-            border: false,
-            autoScroll: true,
-            items: [{
-                xtype: 'fieldset',
-                title: this.app.i18n._('License Information'),
-                collapsible: false,
-                autoHeight: true,
-                defaults: {
-                    width: 200,
-                    readOnly: true
-                },
-                defaultType: 'textfield',
-                items: [{
-                    fieldLabel: this.app.i18n._('Contract ID'),
-                    name: 'contractId',
-                    id: 'contractId',
-                    emptyText: this.app.i18n._('No valid license')
-                }, {
-                    fieldLabel: this.app.i18n._('Serial Number'),
-                    name: 'serialNumber',
-                    id: 'serialNumber',
-                    emptyText: this.app.i18n._('No valid license')
-                }, {
-                    fieldLabel: this.app.i18n._('Maximum Users'),
-                    name: 'maxUsers',
-                    id: 'maxUsers',
-                    emptyText: this.app.i18n._('No valid license')
-                },{
-                    fieldLabel: this.app.i18n._('Valid from'),
-                    name: 'validFrom',
-                    id: 'validFrom',
-                    xtype: 'datefield',
-                    emptyText: this.app.i18n._('No valid license')
-                },{
-                    fieldLabel: this.app.i18n._('Valid to'),
-                    name: 'validTo',
-                    id: 'validTo',
-                    xtype: 'datefield',
-                    emptyText: this.app.i18n._('No valid license')
-                }]
-            }, {
+        var licenseFields = [],
+            licenseConfiguration = this.licenseType === 'BusinessEdition' ? {
                 xtype: 'fieldset',
                 title: this.app.i18n._('License Configuration'),
                 collapsible: false,
@@ -204,7 +205,71 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     allowedTypes: null,
                     scope: this
                 }]
-            }]
+            } : {};
+
+        switch (this.licenseType) {
+            case 'BusinessEdition':
+                licenseFields = [{
+                    fieldLabel: this.app.i18n._('Contract ID'),
+                    name: 'contractId',
+                    id: 'contractId',
+                    emptyText: this.app.i18n._('No valid license')
+                }, {
+                    fieldLabel: this.app.i18n._('Serial Number'),
+                    name: 'serialNumber',
+                    id: 'serialNumber',
+                    emptyText: this.app.i18n._('No valid license')
+                }, {
+                    fieldLabel: this.app.i18n._('Maximum Users (0=unlimited)'),
+                    name: 'maxUsers',
+                    id: 'maxUsers',
+                    emptyText: this.app.i18n._('No valid license')
+                }, {
+                    fieldLabel: this.app.i18n._('Valid from'),
+                    name: 'validFrom',
+                    id: 'validFrom',
+                    emptyText: this.app.i18n._('No valid license')
+                }, {
+                    fieldLabel: this.app.i18n._('Valid to'),
+                    name: 'validTo',
+                    id: 'validTo',
+                    emptyText: this.app.i18n._('No valid license')
+                }];
+                break;
+            case 'Secudos':
+                licenseFields = [{
+                    fieldLabel: this.app.i18n._('Serial Number'),
+                    name: 'serialNumber',
+                    id: 'serialNumber',
+                    emptyText: this.app.i18n._('No valid license')
+                }, {
+                    fieldLabel: this.app.i18n._('Maximum Users (0=unlimited)'),
+                    name: 'maxUsers',
+                    id: 'maxUsers',
+                    emptyText: this.app.i18n._('No valid license')
+                }];
+                break;
+        }
+
+        return [{
+            defaults: {
+                tabIndex: this.getTabIndex
+            },
+            border: false,
+            autoScroll: true,
+            items: [{
+                xtype: 'fieldset',
+                title: this.app.i18n._('License Information'),
+                collapsible: false,
+                autoHeight: true,
+                defaults: {
+                    width: 200,
+                    readOnly: true
+                },
+                defaultType: 'textfield',
+                items: licenseFields
+            }, licenseConfiguration
+            ]
         }];
     }
 });

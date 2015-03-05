@@ -294,7 +294,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         // authenticated or non existent config
         if (! Setup_Core::configFileExists() || Setup_Core::isRegistered(Setup_Core::USER)) {
-            $license = new Tinebase_License();
+            $license = Tinebase_License::getInstance();
             $registryData = array_merge($registryData, $this->checkConfig());
             $registryData = array_merge($registryData, array(
                 'acceptedTermsVersion' => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? Setup_Controller::getInstance()->getAcceptedTerms() : 0,
@@ -395,5 +395,15 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     public function uploadLicense($tempFileId)
     {
         return Setup_Controller::getInstance()->uploadLicense($tempFileId);
+    }
+
+    /**
+     * removes the current license
+     */
+    public function deleteLicense()
+    {
+        Tinebase_License::getInstance()->deleteCurrentLicense();
+
+        return array();
     }
 }

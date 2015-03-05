@@ -884,6 +884,10 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
     display: none;
 }
 
+.tine-license-red {
+    background-color: red !important;
+}
+
 .tb-widgets-path-pathsblock {
     padding-top: 2px;
     padding-left: 4px;

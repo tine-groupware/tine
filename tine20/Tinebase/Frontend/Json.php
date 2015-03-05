@@ -907,7 +907,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _getLicenseRegistry()
     {
-        $license = new Tinebase_License();
+        $license = Tinebase_License::getInstance();
         return array(
             'licenseStatus'     => $license->getStatus(),
             'licenseData'       => $license->getCertificateData(),
@@ -954,7 +954,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $smtpConfig = $manageSmtpEmailUser ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
 
         // be license class for setting some license registry data
-        $license = new Tinebase_License();
+        $license = Tinebase_License::getInstance();
 
         $userRegistryData = array(
             'accountBackend' => Tinebase_User::getConfiguredBackend(),
