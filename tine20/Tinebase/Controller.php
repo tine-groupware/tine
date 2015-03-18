@@ -824,7 +824,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
     protected function _checkUserLicense($user, $accessLog)
     {
-        $license = new Tinebase_License();
+        $license = Tinebase_License::getInstance();
         if ($license->isLicenseAvailable() && ! $license->isValid()) {
             $accessLog->result = Tinebase_Auth::LICENSE_EXPIRED;
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__

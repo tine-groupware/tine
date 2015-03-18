@@ -855,7 +855,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _getLicenseRegistry()
     {
-        $license = new Tinebase_License();
+        $license = Tinebase_License::getInstance();
         return array(
             'licenseStatus'     => $license->getStatus(),
             'licenseData'       => $license->getCertificateData(),
@@ -896,7 +896,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $persistentFilters = array();
         }
 
-        $license = new Tinebase_License();
+        $license = Tinebase_License::getInstance();
         $smtpConfig = Tinebase_EmailUser::manages(Tinebase_Config::SMTP) ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
 
         $userRegistryData = array(

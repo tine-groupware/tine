@@ -164,7 +164,7 @@ class Setup_Controller
      */
     public function saveLicense($licenseString)
     {
-        $license = new Tinebase_License();
+        $license = Tinebase_License::getInstance();
         $license->storeLicense($licenseString);
         
         if ($license->isValid()) {
@@ -206,7 +206,7 @@ class Setup_Controller
         );
         
         try {
-            $license = new Tinebase_License();
+            $license = Tinebase_License::getInstance();
         } catch (Exception $e) {
             return $default;
         }

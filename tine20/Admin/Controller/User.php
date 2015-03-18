@@ -352,7 +352,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     protected function _checkMaxUsers()
     {
         $translation = Tinebase_Translation::getTranslation('Admin');
-        $license = new Tinebase_License();
+        $license = Tinebase_License::getInstance();
 
         $licenseType = $license->getLicenseType();
 
