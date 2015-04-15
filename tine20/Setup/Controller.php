@@ -157,20 +157,20 @@ class Setup_Controller
 
     /**
      * Save license information
-     * 
+     *
      * @param  string $license
-     * 
-     * @return certificate data or validation data if failing
+     *
+     * @return array certificate data or validation data if failing
      */
     public function saveLicense($licenseString)
     {
         $license = Tinebase_License::getInstance();
         $license->storeLicense($licenseString);
-        
+
         if ($license->isValid()) {
             $return = $this->getLicense();
         } else {
-            $return = array('error' => false);
+            $return = array('error' => true);
         }
 
         return $return;
@@ -180,17 +180,14 @@ class Setup_Controller
      * Upload license as file
      *
      * @param $license
+     * @return array certificate data or validation data if failing
      */
     public function uploadLicense($tempFileId)
     {
         $file = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
 
-        if ($file['type'] == 'application/x-x509-ca-cert') {
-            $licenseString = file_get_contents($file['path']);
-            return $this->saveLicense($licenseString);
-        } else {
-            return array('error' => false);
-        }
+        $licenseString = file_get_contents($file['path']);
+        return $this->saveLicense($licenseString);
     }
 
     /**
