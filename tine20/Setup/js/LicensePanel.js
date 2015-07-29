@@ -203,13 +203,11 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     fieldLabel: this.app.i18n._('Valid from'),
                     name: 'validFrom',
                     id: 'validFrom',
-                    xtype: 'datefield',
                     emptyText: this.app.i18n._('No valid license')
                 }, {
                     fieldLabel: this.app.i18n._('Valid to'),
                     name: 'validTo',
                     id: 'validTo',
-                    xtype: 'datefield',
                     emptyText: this.app.i18n._('No valid license')
                 }];
                 break;
