@@ -9,6 +9,11 @@
  */
 
 /**
+ * Test helper
+ */
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+
+/**
  * Test class for Tinebase_License_Secudos
  * 
  * @package     Tinebase
@@ -137,5 +142,47 @@ class Tinebase_License_SecudosTest extends TestCase
         $tfj = new Tinebase_Frontend_Json();
         $registry = $tfj->getRegistryData();
         $this->assertEquals(Tinebase_License::STATUS_LICENSE_OK, $registry['licenseStatus']);
+    }
+
+    /**
+     * test default/hardware appliance type
+     *
+     * @see #139806: [Hardware/Cloud] Secudos appliance image
+     */
+    public function testSecudosApplianceType()
+    {
+        $this->assertEquals(Tinebase_License_Secudos::APPLIANCE_TYPE_HARDWARE, $this->_uit->getApplianceType());
+    }
+
+    /**
+     * test cloud image appliance type
+     *
+     * @see #139806: [Hardware/Cloud] Secudos appliance image
+     */
+    public function testSecudosApplianceTypeCloudImage()
+    {
+        Tinebase_Config::getInstance()->set(Tinebase_Config::LICENSE_TYPE, 'SecudosMock');
+        Tinebase_License::resetLicense();
+        $this->_uit = Tinebase_License::getInstance();
+        $this->_uit->setLicenseFile(dirname(__FILE__) . '/lic.crt');
+
+        $this->assertEquals(Tinebase_License_Secudos::APPLIANCE_TYPE_CLOUD_IMAGE, $this->_uit->getApplianceType());
+    }
+
+    /**
+     * test cloud image appliance type expiry dates (since & estimate)
+     *
+     * @see #139806: [Hardware/Cloud] Secudos appliance image
+     */
+    public function testSecudosApplianceTypeCloudImageExpiry()
+    {
+        $this->testSecudosApplianceTypeCloudImage();
+
+        $this->assertFalse($this->_uit->getLicenseExpiredSince());
+        $expireEstimate = $this->_uit->getLicenseExpireEstimate();
+        $this->assertGreaterThan(0, $expireEstimate);
+        $expiryDate = new Tinebase_DateTime('2016-12-30 00:00:00');
+        $now = Tinebase_DateTime::now()->setTime(0,0,0);
+        $this->assertTrue($now->addDay($expireEstimate)->equals($expiryDate));
     }
 }

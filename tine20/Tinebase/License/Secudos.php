@@ -21,6 +21,12 @@ class Tinebase_License_Secudos extends Tinebase_License_Abstract implements Tine
      */
     const LICENSE_FILENAME = '/opt/secudos/DomosConf/license/lic.crt';
 
+    const APPLIANCE_TYPE_HARDWARE = 'hardware';
+    const APPLIANCE_TYPE_CLOUD_IMAGE = 'cloudimage';
+
+    protected static $applianceType = null;
+    protected $_modelFilename = '/opt/secudos/hwsupport/etc/model';
+
     /**
      * the constructor
      */
@@ -38,23 +44,49 @@ class Tinebase_License_Secudos extends Tinebase_License_Abstract implements Tine
      */
     public function getLicenseExpiredSince()
     {
-        if ($this->isValid()) {
-            // valid Secudos license never expires
+        if ($this->isValid() && $this->getApplianceType() === self::APPLIANCE_TYPE_HARDWARE) {
+            // valid Secudos hardware box license never expires
             return false;
         }
 
-        $expiryDate = $this->getDefaultExpiryDate();
-        return $this->_diffDatesToDays($expiryDate['validTo'], Tinebase_DateTime::now());
+        $expiryDate = $this->getExpiryDate();
+        return $this->_diffDatesToDays($expiryDate, Tinebase_DateTime::now());
     }
 
     public function getLicenseExpireEstimate()
     {
-        if ($this->getStatus() !== Tinebase_License::STATUS_NO_LICENSE_AVAILABLE){
+        if ($this->getStatus() !== Tinebase_License::STATUS_NO_LICENSE_AVAILABLE && $this->getApplianceType() === self::APPLIANCE_TYPE_HARDWARE){
             return false;
         }
 
-        $expiryDate = $this->getDefaultExpiryDate();
-        return $this->_diffDatesToDays(Tinebase_DateTime::now(), $expiryDate['validTo']);
+        $expiryDate = $this->getExpiryDate();
+        $result = $this->_diffDatesToDays(Tinebase_DateTime::now(), $expiryDate);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' License expires in ' . $result . ' days');
+
+        return $result;
+    }
+
+    /**
+     * license expiry date
+     *
+     * @return Tinebase_DateTime
+     */
+    public function getExpiryDate()
+    {
+        if ($this->getApplianceType() === self::APPLIANCE_TYPE_HARDWARE) {
+            $expiryDate = $this->getDefaultExpiryDate();
+            $result = $expiryDate['validTo'];
+        } else {
+            $data = $this->getCertificateData();
+            $result = new Tinebase_DateTime('@' . $data['validTo_time_t']);
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Expiry date: ' . $result->toString());
+
+        return $result;
     }
 
     /**
@@ -132,7 +164,11 @@ class Tinebase_License_Secudos extends Tinebase_License_Abstract implements Tine
     {
         $maxUsers = 25;
         
-        if (! $this->isValid()) {
+        if (! $this->isValid() ||
+            // @see #139806: [Hardware/Cloud] Secudos appliance image https://service.metaways.net/Ticket/Display.html?id=139806
+            // if cloud image expires, user limit is set to 5 again
+            ($this->getApplianceType() === self::APPLIANCE_TYPE_CLOUD_IMAGE && $this->getLicenseExpiredSince() > 0))
+        {
             return 5;
         }
 
@@ -156,8 +192,52 @@ class Tinebase_License_Secudos extends Tinebase_License_Abstract implements Tine
      */
     public function getLicenseType()
     {
-        $result = Tinebase_License::LICENSE_TYPE_LIMITED_USER;
+        $result = $this->getApplianceType() === self::APPLIANCE_TYPE_HARDWARE
+            ? Tinebase_License::LICENSE_TYPE_LIMITED_USER
+            : Tinebase_License::LICENSE_TYPE_LIMITED_USER_TIME;
 
         return $result;
+    }
+
+    /**
+     * get appliance type (one of APPLIANCE_TYPE_HARDWARE | APPLIANCE_TYPE_CLOUD_IMAGE)
+     *
+     * @return null|string
+     */
+    public function getApplianceType()
+    {
+        if (self::$applianceType === null) {
+            // hardware box is default
+            self::$applianceType = self::APPLIANCE_TYPE_HARDWARE;
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Looking for support model file at "' . dirname($this->_modelFilename) . '"');
+
+            if (file_exists($this->_modelFilename)) {
+                $model = file_get_contents($this->_modelFilename);
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Got support model ' . $model . ' from file ' . $this->_modelFilename . ' / appliance type: ' . self::$applianceType);
+
+                switch ($model) {
+                    case 'VIRTSYS':
+                        self::$applianceType = self::APPLIANCE_TYPE_CLOUD_IMAGE;
+                        break;
+                    case 'APU.1':
+                        self::$applianceType = self::APPLIANCE_TYPE_HARDWARE;
+                        break;
+                    default:
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' Got unknown support model - setting type to dafault: ' . self::$applianceType);
+                }
+
+
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' File does not exist: "' . $this->_modelFilename . '" - setting type to dafault: ' . self::$applianceType);
+            }
+        }
+
+        return self::$applianceType;
     }
 }
