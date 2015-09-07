@@ -224,7 +224,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         
         if (licenseExpiresIn) {
             this.actionLicenseExpire = new Ext.Action({
-                text: String.format(_('The trial expires in {0} days'), licenseExpiresIn),
+                text: String.format(_('The license expires in {0} days'), licenseExpiresIn),
                 tooltip: String.format(_('Please visit the shop at {0}'), Tine.shop),
                 iconCls: 'tine-license',
                 handler: function() {
@@ -234,7 +234,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             });
         } else if (licenseExpiredSince) {
             this.actionLicenseExpire = new Ext.Action({
-                text: _('Your Tine 2.0 Business Edition trial expired.'),
+                text: _('Your Tine 2.0 Business Edition expired.'),
                 tooltip: String.format(_('Please visit the shop at {0}'), Tine.shop),
                 iconCls: 'tine-license',
                 handler: function() {
