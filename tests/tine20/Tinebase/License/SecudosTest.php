@@ -183,6 +183,9 @@ class Tinebase_License_SecudosTest extends TestCase
         $this->assertGreaterThan(0, $expireEstimate);
         $expiryDate = new Tinebase_DateTime('2016-12-30 00:00:00');
         $now = Tinebase_DateTime::now()->setTime(0,0,0);
-        $this->assertTrue($now->addDay($expireEstimate)->equals($expiryDate));
+
+        // we might have a difference of 1 day depending on the time of day (license expires at 12:42:02
+        $this->assertTrue($now->addDay($expireEstimate)->equals($expiryDate) || $now->addDay(1)->equals($expiryDate),
+            'expiry date mismatch: ' . $now . '!=' . $expiryDate);
     }
 }

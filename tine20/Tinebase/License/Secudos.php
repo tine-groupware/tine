@@ -214,7 +214,7 @@ class Tinebase_License_Secudos extends Tinebase_License_Abstract implements Tine
                 . ' Looking for support model file at "' . dirname($this->_modelFilename) . '"');
 
             if (file_exists($this->_modelFilename)) {
-                $model = file_get_contents($this->_modelFilename);
+                $model = trim(file_get_contents($this->_modelFilename));
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Got support model ' . $model . ' from file ' . $this->_modelFilename . ' / appliance type: ' . self::$applianceType);
