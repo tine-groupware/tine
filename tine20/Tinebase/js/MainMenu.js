@@ -208,7 +208,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             handler: this.onLogout,
             scope: this
         });
-        
+
         this.actionLearnMore = new Ext.Action({
             text: String.format(i18n._('Learn more about {0}'), Tine.title),
             tooltip: Tine.weburl,
@@ -218,15 +218,18 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             },
             scope: this
         });
-        
-        var licenseExpiresIn = Tine.Tinebase.registry.get('licenseExpire');
-        var licenseExpiredSince = Tine.Tinebase.registry.get('licenseExpiredSince');
-        
-        if (licenseExpiresIn) {
+
+        var licenseExpiresIn = Tine.Tinebase.registry.get('licenseExpire'),
+            // TODO move this to the license definitions on the server?
+            licenseExpiresInThreshold = 90,
+            licenseExpiresInThresholdRed = 14,
+            licenseExpiredSince = Tine.Tinebase.registry.get('licenseExpiredSince');
+
+        if (licenseExpiresIn && licenseExpiresIn < licenseExpiresInThreshold) {
             this.actionLicenseExpire = new Ext.Action({
                 text: String.format(_('The license expires in {0} days'), licenseExpiresIn),
                 tooltip: String.format(_('Please visit the shop at {0}'), Tine.shop),
-                iconCls: 'tine-license',
+                iconCls: licenseExpiresIn < licenseExpiresInThresholdRed ? 'tine-license-red' : 'tine-license',
                 handler: function() {
                     window.open(Tine.shop, '_blank');
                 },

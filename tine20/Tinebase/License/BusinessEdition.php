@@ -116,22 +116,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
         }
         return false;
     }
-    
-    public function getLicenseExpireEstimate()
-    {
-        if ($this->getStatus() !== Tinebase_License::STATUS_NO_LICENSE_AVAILABLE){
-            return false;
-        }
-        
-        $this->getCertificateData();
-        
-        if ($this->_certData) {
-            return $this->_diffDatesToDays(Tinebase_DateTime::now(), $this->_certData['validTo']);
-        }
-        
-        return false;
-    }
-    
+
     /**
      * stores license in vfs
      *

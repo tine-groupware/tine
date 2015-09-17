@@ -108,6 +108,19 @@ abstract class Tinebase_License_Abstract
         return $result;
     }
 
+
+    public function getLicenseExpireEstimate()
+    {
+        $this->getCertificateData();
+
+        if ($this->_certData) {
+            $remainingDays = $this->_diffDatesToDays(Tinebase_DateTime::now(), $this->_certData['validTo']);
+            return $remainingDays;
+        }
+
+        return false;
+    }
+
     protected function _diffDatesToDays($date1, $date2)
     {
         if ($date1 instanceof Tinebase_DateTime && $date2 instanceof Tinebase_DateTime) {
