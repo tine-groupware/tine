@@ -75,12 +75,14 @@ class Tinebase_License_Secudos extends Tinebase_License_Abstract implements Tine
      */
     public function getExpiryDate()
     {
-        if ($this->getApplianceType() === self::APPLIANCE_TYPE_HARDWARE) {
-            $expiryDate = $this->getDefaultExpiryDate();
-            $result = $expiryDate['validTo'];
-        } else {
+        $expiryDate = $this->getDefaultExpiryDate();
+        $result = $expiryDate['validTo'];
+
+        if ($this->getApplianceType() === self::APPLIANCE_TYPE_CLOUD_IMAGE) {
             $data = $this->getCertificateData();
-            $result = new Tinebase_DateTime('@' . $data['validTo_time_t']);
+            if (isset($data['validTo_time_t'])) {
+                $result = new Tinebase_DateTime('@' . $data['validTo_time_t']);
+            }
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -217,7 +219,7 @@ class Tinebase_License_Secudos extends Tinebase_License_Abstract implements Tine
                 $model = trim(file_get_contents($this->_modelFilename));
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Got support model ' . $model . ' from file ' . $this->_modelFilename . ' / appliance type: ' . self::$applianceType);
+                    . ' Got support model ' . $model . ' from file ' . $this->_modelFilename);
 
                 switch ($model) {
                     case 'VIRTSYS':
