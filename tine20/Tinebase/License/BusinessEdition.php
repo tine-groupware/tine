@@ -47,7 +47,12 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
         if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
             return null;
         }
-        $fs = Tinebase_FileSystem::getInstance();
+        try {
+            $fs = Tinebase_FileSystem::getInstance();
+        } catch (Tinebase_Exception_Backend $teb) {
+            Tinebase_Exception::log($teb);
+            return null;
+        }
         if ($fs->fileExists($this->_getLicensePath())) {
             $licenseFileHandle = $fs->fopen($this->_getLicensePath(), 'r');
             if ($licenseFileHandle !== false) {
