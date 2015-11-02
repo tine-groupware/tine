@@ -132,8 +132,8 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
 
             if (this.licenseType === 'BusinessEdition') {
                 Ext.getCmp('contractId').setValue(data.contractId);
-                Ext.getCmp('validFrom').setValue(new Date(data.validFrom.date));
-                Ext.getCmp('validTo').setValue(new Date(data.validTo.date));
+                Ext.getCmp('validFrom').setValue(new Date(data.validFrom.date.replace(/-/g,'/')));
+                Ext.getCmp('validTo').setValue(new Date(data.validTo.date.replace(/-/g,'/')));
             }
 
             Tine.Setup.registry.replace('licenseCheck', true);
