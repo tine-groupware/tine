@@ -65,7 +65,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         
         $this->assertEquals(5, $certData['policies'][101][1], '5 users limit expected');
         $this->assertEquals(5, $this->_uit->getMaxUsers(), '5 users limit expected');
-        $this->assertEquals('2015-11-07 12:54:20', $certData['validTo']->toString());
+        $this->assertEquals('2025-11-08 12:12:58', $certData['validTo']->toString());
         $this->assertEquals('V-12345', $certData['contractId'], 'contract id mismatch');
     }
 
@@ -106,7 +106,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/V-12345.pem'));
         
         $certData = $this->_uit->getCertificateData();
-        $this->assertEquals('2015-11-07 12:54:20', $certData['validTo']->toString());
+        $this->assertEquals('2025-11-08 12:12:58', $certData['validTo']->toString());
     }
 
     public function testInitLicense()
@@ -114,7 +114,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $this->testStoreLicense();
         Tinebase_License::resetLicense();
         $certData = $this->_uit->getCertificateData();
-        $this->assertEquals('2015-11-07 12:54:20', $certData['validTo']->toString());
+        $this->assertEquals('2025-11-08 12:12:58', $certData['validTo']->toString());
     }
     
     public function testCreateUserWithLimitExceeded()
@@ -248,7 +248,8 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         // Clean up.
         Tinebase_TempFile::getInstance()->delete($tempFile->getId());
 
-        $this->assertEquals($licenseData['serialNumber'], 8);
+        $this->assertTrue(isset($licenseData['serialNumber']), 'serialNumber not set: ' . print_r($licenseData, true));
+        $this->assertEquals(38, $licenseData['serialNumber']);
     }
 
     public function testGetInstallationData()

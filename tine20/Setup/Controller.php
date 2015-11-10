@@ -165,11 +165,14 @@ class Setup_Controller
     public function saveLicense($licenseString)
     {
         $license = Tinebase_License::getInstance();
+        Tinebase_License::resetLicense();
         $license->storeLicense($licenseString);
 
         if ($license->isValid()) {
             $return = $this->getLicense();
         } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' License is not valid');
             $return = array('error' => true);
         }
 

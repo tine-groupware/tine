@@ -822,6 +822,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         return true;
     }
 
+    /**
+     * check user license
+     *
+     * @param $user
+     * @param $accessLog
+     * @return bool
+     * @throws Tinebase_Exception_NotFound
+     */
     protected function _checkUserLicense($user, $accessLog)
     {
         $license = Tinebase_License::getInstance();

@@ -66,13 +66,36 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
     license: null,
 
     initActions: function() {
+        var items = (Tine.Setup.registry.get('version') && Tine.Setup.registry.get('version').buildType === 'DEVELOPMENT') ? [ new Ext.Action({
+            text: this.app.i18n._('Delete current license'),
+            iconCls: 'setup_action_uninstall',
+            scope: this,
+            handler: this.onDeleteLicense
+        })] : [];
+
         this.actionToolbar = new Ext.Toolbar({
-            items: []
+            items: items
         });
     },
 
+    onDeleteLicense: function() {
+        this.loadMask.show();
+        Ext.Ajax.request({
+            params: {
+                method: 'Setup.deleteLicense'
+            },
+            scope: this,
+            success: function (response) {
+                this.loadMask.hide();
+                this.setLicenseInformation(response);
 
-    /**
+                // TODO reset upload button (setText/Icon?)
+                //this.uploadLicense.setText('');
+            }
+        });
+    },
+
+     /**
      * init component
      */
     initComponent: function () {
@@ -80,7 +103,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         Tine.Setup.LicensePanel.superclass.initComponent.call(this);
     },
     
-       /**
+    /**
      * @private
      */
     onRender: function (ct, position) {
@@ -93,6 +116,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      * @private
      */
     initLicense: function () {
+        this.loadMask.show();
         Ext.Ajax.request({
             params: {
                 method: 'Setup.getLicense'
@@ -111,12 +135,13 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      * @param response
      */
     setLicenseInformation: function (response) {
-        var data = Ext.util.JSON.decode(response.responseText);
+        var data = (response.responseText) ? Ext.util.JSON.decode(response.responseText) : {};
+
+        if (data.status && data.status == 'status_license_invalid') {
+            Ext.Msg.alert('Status', this.app.i18n._('Your license is not valid.'));
+        }
 
         if (data.hasOwnProperty('error') && data.error == false || ! data.serialNumber) {
-            if (data.status == 'status_license_invalid') {
-                Ext.Msg.alert('Status', this.app.i18n._('Your license is not valid.'));
-            }
             Tine.Setup.registry.replace('licenseCheck', false);
             Ext.getCmp('serialNumber').reset();
             Ext.getCmp('maxUsers').reset();
@@ -136,7 +161,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 Ext.getCmp('validTo').setValue(new Date(data.validTo.date.replace(/-/g,'/')));
             }
 
-            Tine.Setup.registry.replace('licenseCheck', true);
+            Tine.Setup.registry.replace('licenseCheck', data.status && data.status == 'status_license_ok');
         }
     },
 

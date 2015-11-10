@@ -381,4 +381,14 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     {
         return Setup_Controller::getInstance()->uploadLicense($tempFileId);
     }
+
+    /**
+     * removes the current license
+     */
+    public function deleteLicense()
+    {
+        Tinebase_License::getInstance()->deleteCurrentLicense();
+
+        return array();
+    }
 }
