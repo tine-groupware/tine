@@ -1,8 +1,10 @@
 <?php
 return array (
-    // this switches modules off in business edition
+    // this switches modules/features off in business edition
     'features' => array(
         'featureSplitView'                   => false,
-        'featureExtendedEventContextActions' => false,
+        'featureYearView'                    => false,
+        'featureColorBy'                     => true,
+        'featureExtendedEventContextActions' => true,
     )
 );
