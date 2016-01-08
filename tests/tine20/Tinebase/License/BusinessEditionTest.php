@@ -28,6 +28,10 @@ class Tinebase_License_BusinessEditionTest extends TestCase
      */
     protected function setUp()
     {
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::LICENSE_TYPE) !== 'BusinessEdition') {
+            $this->markTestSkipped('Only run these tests with BE license');
+        }
+
         parent::setUp();
         $this->_uit = Tinebase_License::getInstance();
     }
