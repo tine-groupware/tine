@@ -187,7 +187,7 @@ class Setup_Controller
      */
     public function uploadLicense($tempFileId)
     {
-        $file = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
+        $file = Tinebase_TempFile::getInstance()->getTempFile($tempFileId, /* $skipSessionCheck */ true);
 
         $licenseString = file_get_contents($file['path']);
         return $this->saveLicense($licenseString);
