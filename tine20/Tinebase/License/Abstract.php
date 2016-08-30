@@ -53,11 +53,25 @@ abstract class Tinebase_License_Abstract
      */
     public function checkUserLimit($user = null)
     {
-        $maxUsers = $this->getMaxUsers();
+        try {
+            $maxUsers = $this->getMaxUsers();
+        } catch (Exception $e) {
+            // we might have ldap issues (or others), so we catch this and return false
+            Tinebase_Exception::log($e);
+            return false;
+        }
 
         if ($maxUsers === 0) {
             // 0 means unlimited users
             return true;
+        }
+
+        try {
+            $currentUserCount = Tinebase_User::getInstance()->countNonSystemUsers();
+        } catch (Exception $e) {
+            // we might have ldap issues (or others), so we catch this and return false
+            Tinebase_Exception::log($e);
+            return false;
         }
 
         $currentUserCount = Tinebase_User::getInstance()->countNonSystemUsers();
@@ -95,7 +109,14 @@ abstract class Tinebase_License_Abstract
 
     public function getDefaultExpiryDate()
     {
-        $validFrom = Tinebase_User::getInstance()->getFirstUserCreationTime();
+        try {
+            $validFrom = Tinebase_User::getInstance()->getFirstUserCreationTime();
+        } catch (Exception $e) {
+            // we might have ldap issues (or others), so we catch this
+            Tinebase_Exception::log($e);
+            $validFrom = null;
+        }
+
         if (! $validFrom) {
             $validFrom = Tinebase_DateTime::now()->subMonth(1);
         }
