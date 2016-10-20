@@ -212,6 +212,9 @@ class Setup_Controller
         }
         
         $certData = $license->getCertificateData();
+        if (!$certData) {
+            return $default;
+        }
         
         $users = array(
             'maxUsers' => $license->getMaxUsers(),
