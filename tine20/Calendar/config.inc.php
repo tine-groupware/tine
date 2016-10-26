@@ -6,5 +6,6 @@ return array (
         'featureYearView'                    => false,
         'featureColorBy'                     => true,
         'featureExtendedEventContextActions' => true,
+        'featureRecurExcept'                 => false,
     )
 );
