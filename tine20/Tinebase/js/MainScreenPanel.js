@@ -199,6 +199,16 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
             licensePopup.show();
         }
 
+        // check for new version
+        // TODO add helper function for fetching config ... this condition sucks.
+        if ((      ! Tine.Tinebase.registry.get("config")
+                || ! Tine.Tinebase.registry.get("config").versionCheck
+                ||   Tine.Tinebase.registry.get("config").versionCheck.value
+            ) && Tine.Tinebase.common.hasRight('check_version', 'Tinebase')
+        ) {
+            Tine.widgets.VersionCheck();
+        }
+
         if (Tine.Tinebase.registry.get('mustchangepw')) {
             var passwordDialog = new Tine.Tinebase.PasswordChangeDialog({
                 title: i18n._('Your password expired. Please enter a new user password:')

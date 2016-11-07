@@ -8,5 +8,6 @@ return array (
         Tinebase_Config::FEATURE_SHOW_ACCOUNT_EMAIL    => false,
         // TODO reactivate when minimal size change is finished
         Tinebase_Config::FEATURE_REMEMBER_POPUP_SIZE   => false,
-    )
+    ),
+    Tinebase_Config::VERSION_CHECK => false,
 );
