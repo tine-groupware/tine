@@ -206,7 +206,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @param  string                     $_passwordRepeat  the new password again
      * @throws Tinebase_Exception_Backend_Database_LockTimeout
      * @throws Exception
-     * 
+     *
      * @return Tinebase_Model_FullUser
      */
     public function update(Tinebase_Model_FullUser $_user, $_password = null, $_passwordRepeat = null)
@@ -310,6 +310,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 
             if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {
                 return true;
+            }
+
+            // check if max users are reached when a user is activated
+            if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED) {
+                $this->_checkMaxUsers();
             }
         }
 

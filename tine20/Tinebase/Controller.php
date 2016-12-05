@@ -914,6 +914,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     protected function _checkUserLicense($user, $accessLog)
     {
+        // only check license for first request of sync session
+        if ($this->_isSyncClient($accessLog) && $accessLog->getId()) {
+            return true;
+        }
+
         $license = Tinebase_License::getInstance();
         if ($license->isLicenseAvailable() && ! $license->isValid()) {
             $accessLog->result = Tinebase_Auth::LICENSE_EXPIRED;

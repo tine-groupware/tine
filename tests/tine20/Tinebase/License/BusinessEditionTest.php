@@ -22,7 +22,6 @@ class Tinebase_License_BusinessEditionTest extends TestCase
      */
     protected $_uit = null;
 
-
     /**
      * set up tests
      */
@@ -136,7 +135,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     protected function _getUser()
     {
         return new Tinebase_Model_FullUser(array(
-            'accountLoginName' => Tinebase_Record_Abstract::generateUID(),
+            'accountLoginName' => substr(Tinebase_Record_Abstract::generateUID(), 0, 10),
             'accountPrimaryGroup' => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountDisplayName' => Tinebase_Record_Abstract::generateUID(),
             'accountLastName' => Tinebase_Record_Abstract::generateUID(),
@@ -162,6 +161,58 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         Tinebase_License::resetLicense();
 
         $this->assertFalse($this->_uit->checkUserLimit($user));
+    }
+
+    public function testUserLimitExceededWhenCreatingUser($licenseFile = 'V-12345.pem')
+    {
+        $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/' . $licenseFile));
+        $testUser = $this->_getUser();
+        try {
+            Admin_Controller_User::getInstance()->create($testUser, 'test', 'test');
+            $this->_usernamesToDelete[] = $testUser->accountLoginName;
+            $this->fail('expected user limit exception');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $translation = Tinebase_Translation::getTranslation('Admin');
+            $this->assertEquals($translation->_('Maximum number of users reached'), $tesg->getMessage());
+        }
+    }
+
+    public function testUserLimitExceededWhenActivatingUser($function = 'setAccountStatus', $licenseFile = 'V-12345.pem')
+    {
+        $testUser = $this->_getUser();
+        $testUser->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
+        $user = Admin_Controller_User::getInstance()->create($testUser, 'test', 'test');
+        $this->_usernamesToDelete[] = $user->accountLoginName;
+        $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/' . $licenseFile));
+        try {
+            if ($function === 'setAccountStatus') {
+                Admin_Controller_User::getInstance()->setAccountStatus($user->getId(), Tinebase_Model_User::ACCOUNT_STATUS_ENABLED);
+            } else if ($function === 'update') {
+                $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_ENABLED;
+                Admin_Controller_User::getInstance()->update($user, 'test7652BA', 'test7652BA');
+            } else {
+                $this->fail($function . ' not implemented');
+            }
+            $this->fail('expected user limit exception');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $translation = Tinebase_Translation::getTranslation('Admin');
+            $this->assertEquals($translation->_('Maximum number of users reached'), $tesg->getMessage());
+        }
+    }
+
+    public function testUserLimitExceededWhenActivatingUserViaUpdate()
+    {
+        $this->testUserLimitExceededWhenActivatingUser('update');
+    }
+
+    public function testUserLimitNotExceededWhenCreatingUserWithOnDemandLicense()
+    {
+        $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/V-onDemand.pem'));
+        $testUser = $this->_getUser();
+        $user = Admin_Controller_User::getInstance()->create($testUser, 'test', 'test');
+        $this->_usernamesToDelete[] = $testUser->accountLoginName;
+        $this->assertTrue($user->getId() !== null);
+        $certData = $this->_uit->getCertificateData();
     }
 
     public function testLicenseStatusInRegistry()
@@ -263,5 +314,22 @@ class Tinebase_License_BusinessEditionTest extends TestCase
 
         $this->assertArrayHasKey('bits', $installationData);
         $this->assertArrayHasKey('rsa', $installationData);
+    }
+
+    public function testSetLicenseViaCli()
+    {
+        $cli = new Tinebase_Frontend_Cli();
+        $opts = new Zend_Console_Getopt('abp:');
+        $opts->setArguments(array(
+            'file=' . __DIR__ . '/V-12345.pem'
+        ));
+
+        ob_start();
+        $cli->setLicense($opts);
+        $out = ob_get_clean();
+
+        $installationData = $this->_uit->getInstallationData();
+        $this->assertEquals('', $out);
+        $this->assertArrayHasKey('bits', $installationData);
     }
 }

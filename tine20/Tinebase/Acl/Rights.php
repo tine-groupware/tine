@@ -61,7 +61,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const REPLICATION = 'replication';
-    
+
     /**
      * account type anyone
      * @staticvar string
@@ -85,7 +85,13 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const ACCOUNT_TYPE_ROLE     = 'role';
-    
+
+    /**
+     * the right to be able to see license information (expiry, ...) in the frontend
+     * @staticvar string
+     */
+    const SHOW_LICENSE_INFO = 'show_license_info';
+
     /**
      * holds the instance of the singleton
      *
@@ -142,6 +148,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 self::MANAGE_OWN_PROFILE,
                 self::MANAGE_OWN_STATE,
                 self::MAINTENANCE,
+                self::SHOW_LICENSE_INFO,
                 self::REPLICATION,
             );
         } else {
@@ -183,6 +190,10 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MAINTENANCE        => array(
                 'text'                  => $translate->_('Maintenance'),
                 'description'           => $translate->_('The right to use the installation in maintenance mode.'),
+            ),
+            self::SHOW_LICENSE_INFO => array(
+                'text'          => $translate->_('Show License Info'),
+                'description'   => $translate->_('The right to be able to see license information (expiry, ...).'),
             ),
             self::REPLICATION        => array(
                 'text'                  => $translate->_('Replication'),

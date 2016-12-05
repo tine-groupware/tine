@@ -913,8 +913,16 @@ class Tinebase_User implements Tinebase_Controller_Interface
      */
     public static function getSystemUsernames()
     {
-        return [self::SYSTEM_USER_CRON, self::SYSTEM_USER_CALENDARSCHEDULING, self::SYSTEM_USER_SETUP,
-            self::SYSTEM_USER_REPLICATION, self::SYSTEM_USER_ANONYMOUS];
+        return [
+            self::SYSTEM_USER_CRON,
+            self::SYSTEM_USER_CALENDARSCHEDULING,
+            self::SYSTEM_USER_SETUP,
+            'metaways',
+            'support',
+            'service',
+            self::SYSTEM_USER_REPLICATION,
+            self::SYSTEM_USER_ANONYMOUS,
+        ];
     }
 
     /**

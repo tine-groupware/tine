@@ -1567,8 +1567,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $stmt = $select->query();
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-
-        $allowedAccounts = array();
+        
+        $allowedAccounts = Tinebase_User::getSystemUsernames();
         foreach ($rows as $row) {
             $allowedAccounts[] = $row['login_name'];
         }

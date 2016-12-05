@@ -155,10 +155,29 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
         $fs = Tinebase_FileSystem::getInstance();
         $appPath = $fs->getApplicationBasePath('Tinebase');
         if (!$fs->fileExists($appPath)) {
+            $this->_assertValidUser();
             $fs->mkdir($appPath);
         }
         
         return $appPath . '/' . $filename;
+    }
+
+    /**
+     * asserts valid user for filesystem modlog
+     *
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _assertValidUser()
+    {
+        if (! is_object(Tinebase_Core::getUser())) {
+            $user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+            if ($user) {
+                Tinebase_Core::set(Tinebase_Core::USER, $user);
+            } else {
+                throw new Tinebase_Exception_NotFound('could not find valid user');
+            }
+        }
     }
 
     public function deleteCurrentLicense()
@@ -168,6 +187,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
         if ($fs->fileExists($licensePath)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                     __METHOD__ . '::' . __LINE__ . " Deleting license at " . $licensePath);
+            $this->_assertValidUser();
             $fs->unlink($licensePath);
         }
 
@@ -266,7 +286,13 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
      */
     public function getLicenseType()
     {
-        return $this->_getPolicy(self::POLICY_LICENSE_TYPE, self::POLICY_DEFAULT_LICENSE_TYPE);
+        $type = $this->_getPolicy(self::POLICY_LICENSE_TYPE, self::POLICY_DEFAULT_LICENSE_TYPE);
+
+        // care for alternative type names
+        if ($type === 'ON_DEMAND') {
+            $type = Tinebase_License::LICENSE_TYPE_ON_DEMAND;
+        }
+        return $type;
     }
 
     /**

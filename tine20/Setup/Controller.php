@@ -171,6 +171,11 @@ class Setup_Controller
      */
     public function saveLicense($licenseString)
     {
+        if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
+            throw new Tinebase_Exception('could not create setup user');
+        }
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
         $license = Tinebase_License::getInstance();
         Tinebase_License::resetLicense();
         $license->storeLicense($licenseString);
@@ -1800,8 +1805,9 @@ class Setup_Controller
         if ($authResult->isValid()) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Valid credentials, setting username in session and registry.');
             Tinebase_Session::regenerateId();
-            
+
             Setup_Core::set(Setup_Core::USER, $_username);
+
             Setup_Session::getSessionNamespace()->setupuser = $_username;
             return true;
             
