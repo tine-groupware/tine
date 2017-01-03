@@ -206,7 +206,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @param  string                     $_passwordRepeat  the new password again
      * @throws Tinebase_Exception_Backend_Database_LockTimeout
      * @throws Exception
-     * 
+     *
      * @return Tinebase_Model_FullUser
      */
     public function update(Tinebase_Model_FullUser $_user, $_password = null, $_passwordRepeat = null)
@@ -220,7 +220,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         $this->_checkLoginNameLength($_user);
         $this->_checkPrimaryGroupExistance($_user);
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
         
         try {
@@ -245,6 +245,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                     Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED,
                     Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED,
                 ))) {
+
+                if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED) {
+                    $this->_checkMaxUsers();
+                }
+
                 $this->_userBackend->setStatus($_user->getId(), $_user->accountStatus);
 
                 if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {

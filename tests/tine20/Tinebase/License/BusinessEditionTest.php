@@ -164,6 +164,48 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $this->assertFalse($this->_uit->checkUserLimit($user));
     }
 
+    public function testUserLimitExceededWhenCreatingUser()
+    {
+        $this->testStoreLicense();
+        $testUser = $this->_getUser();
+        try {
+            Admin_Controller_User::getInstance()->create($testUser, 'test', 'test');
+            $this->_usernamesToDelete[] = $testUser->accountLoginName;
+            $this->fail('expected user limit exception');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $translation = Tinebase_Translation::getTranslation('Admin');
+            $this->assertEquals($translation->_('Maximum number of users reached'), $tesg->getMessage());
+        }
+    }
+
+    public function testUserLimitExceededWhenActivatingUser($function = 'setAccountStatus')
+    {
+        $testUser = $this->_getUser();
+        $testUser->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
+        $user = Admin_Controller_User::getInstance()->create($testUser, 'test', 'test');
+        $this->_usernamesToDelete[] = $user->accountLoginName;
+        $this->testStoreLicense();
+        try {
+            if ($function === 'setAccountStatus') {
+                Admin_Controller_User::getInstance()->setAccountStatus($user->getId(), Tinebase_Model_User::ACCOUNT_STATUS_ENABLED);
+            } else if ($function === 'update') {
+                $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_ENABLED;
+                Admin_Controller_User::getInstance()->update($user, 'test7652BA', 'test7652BA');
+            } else {
+                $this->fail($function . ' not implemented');
+            }
+            $this->fail('expected user limit exception');
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            $translation = Tinebase_Translation::getTranslation('Admin');
+            $this->assertEquals($translation->_('Maximum number of users reached'), $tesg->getMessage());
+        }
+    }
+
+    public function testUserLimitExceededWhenActivatingUserViaUpdate()
+    {
+        $this->testUserLimitExceededWhenActivatingUser('update');
+    }
+
     public function testLicenseStatusInRegistry()
     {
         $tfj = new Tinebase_Frontend_Json();
