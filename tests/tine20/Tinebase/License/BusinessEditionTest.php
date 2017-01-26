@@ -315,4 +315,21 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $this->assertArrayHasKey('bits', $installationData);
         $this->assertArrayHasKey('rsa', $installationData);
     }
+
+    public function testSetLicenseViaCli()
+    {
+        $cli = new Tinebase_Frontend_Cli();
+        $opts = new Zend_Console_Getopt('abp:');
+        $opts->setArguments(array(
+            'file=' . __DIR__ . '/V-12345.pem'
+        ));
+
+        ob_start();
+        $cli->setLicense($opts);
+        $out = ob_get_clean();
+
+        $installationData = $this->_uit->getInstallationData();
+        $this->assertEquals('', $out);
+        $this->assertArrayHasKey('bits', $installationData);
+    }
 }
