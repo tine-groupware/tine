@@ -22,7 +22,6 @@ class Tinebase_License_BusinessEditionTest extends TestCase
      */
     protected $_uit = null;
 
-
     /**
      * set up tests
      */
@@ -136,7 +135,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     protected function _getUser()
     {
         return new Tinebase_Model_FullUser(array(
-            'accountLoginName' => Tinebase_Record_Abstract::generateUID(),
+            'accountLoginName' => substr(Tinebase_Record_Abstract::generateUID(), 0, 10),
             'accountPrimaryGroup' => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
             'accountDisplayName' => Tinebase_Record_Abstract::generateUID(),
             'accountLastName' => Tinebase_Record_Abstract::generateUID(),
@@ -164,9 +163,9 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $this->assertFalse($this->_uit->checkUserLimit($user));
     }
 
-    public function testUserLimitExceededWhenCreatingUser()
+    public function testUserLimitExceededWhenCreatingUser($licenseFile = 'V-12345.pem')
     {
-        $this->testStoreLicense();
+        $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/' . $licenseFile));
         $testUser = $this->_getUser();
         try {
             Admin_Controller_User::getInstance()->create($testUser, 'test', 'test');
@@ -178,13 +177,13 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         }
     }
 
-    public function testUserLimitExceededWhenActivatingUser($function = 'setAccountStatus')
+    public function testUserLimitExceededWhenActivatingUser($function = 'setAccountStatus', $licenseFile = 'V-12345.pem')
     {
         $testUser = $this->_getUser();
         $testUser->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
         $user = Admin_Controller_User::getInstance()->create($testUser, 'test', 'test');
         $this->_usernamesToDelete[] = $user->accountLoginName;
-        $this->testStoreLicense();
+        $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/' . $licenseFile));
         try {
             if ($function === 'setAccountStatus') {
                 Admin_Controller_User::getInstance()->setAccountStatus($user->getId(), Tinebase_Model_User::ACCOUNT_STATUS_ENABLED);
@@ -204,6 +203,16 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     public function testUserLimitExceededWhenActivatingUserViaUpdate()
     {
         $this->testUserLimitExceededWhenActivatingUser('update');
+    }
+
+    public function testUserLimitNotExceededWhenCreatingUserWithOnDemandLicense()
+    {
+        $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/V-onDemand.pem'));
+        $testUser = $this->_getUser();
+        $user = Admin_Controller_User::getInstance()->create($testUser, 'test', 'test');
+        $this->_usernamesToDelete[] = $testUser->accountLoginName;
+        $this->assertTrue($user->getId() !== null);
+        $certData = $this->_uit->getCertificateData();
     }
 
     public function testLicenseStatusInRegistry()

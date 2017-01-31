@@ -266,7 +266,13 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
      */
     public function getLicenseType()
     {
-        return $this->_getPolicy(self::POLICY_LICENSE_TYPE, self::POLICY_DEFAULT_LICENSE_TYPE);
+        $type = $this->_getPolicy(self::POLICY_LICENSE_TYPE, self::POLICY_DEFAULT_LICENSE_TYPE);
+
+        // care for alternative type names
+        if ($type === 'ON_DEMAND') {
+            $type = Tinebase_License::LICENSE_TYPE_ON_DEMAND;
+        }
+        return $type;
     }
 
     /**
