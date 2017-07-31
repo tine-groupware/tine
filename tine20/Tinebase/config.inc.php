@@ -6,7 +6,7 @@ return array (
         // TODO reactivate when this is working consistently
         Tinebase_Config::FEATURE_CONTAINER_CUSTOM_SORT => false,
         Tinebase_Config::FEATURE_SHOW_ACCOUNT_EMAIL    => false,
-        // TODO reactivate when minimal size change is finished
-        Tinebase_Config::FEATURE_REMEMBER_POPUP_SIZE   => false,
+        Tinebase_Config::FEATURE_REMEMBER_POPUP_SIZE   => true,
+        Tinebase_Config::FEATURE_SEARCH_PATH           => true,
     ),
 );
