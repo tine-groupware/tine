@@ -294,14 +294,21 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         // authenticated or non existent config
         if (! Setup_Core::configFileExists() || Setup_Core::isRegistered(Setup_Core::USER)) {
-            $license = Tinebase_License::getInstance();
+            try {
+                $license = Tinebase_License::getInstance();
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                $license = null;
+            }
             $registryData = array_merge($registryData, $this->checkConfig());
             $registryData = array_merge($registryData, array(
                 'acceptedTermsVersion' => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? Setup_Controller::getInstance()->getAcceptedTerms() : 0,
                 'setupChecks'          => $this->envCheck(),
                 'configData'           => $this->loadConfig(),
                 'emailData'            => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? $this->getEmailConfig() : array(),
-                'licenseCheck'         => $license->getStatus() === Tinebase_License::STATUS_LICENSE_OK,
+                'licenseCheck'         => $license
+                    ? $license->getStatus() === Tinebase_License::STATUS_LICENSE_OK
+                    : Tinebase_License::STATUS_NO_LICENSE_AVAILABLE,
             ));
         }
         
