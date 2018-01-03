@@ -1,7 +1,7 @@
 Tine 2.0 Admin Schulung: Kalender
 =================
 
-Version: Egon 2016.11
+Versionen: Egon 2016.11 + Caroline 2017.11
 
 Konfiguration und Problemlösungen im Kalender-Modul von Tine 2.0
 
@@ -27,3 +27,35 @@ Adressbucheintrag des TN (wenn es ein Kontakt ist):
 Änderungshistorie des Termins:
 
     > SELECT * FROM timemachine_modlog where record_id = 'EVENTID';
+
+Frage: Was passiert mit Terminen eines gelöschten Benutzers?
+=================
+
+Es gibt in der aktuellen Version 2017.11 folgende Einstellmöglichkeiten für den "Account Löschen"-Event:
+
+/**
+* possible values:
+*
+* _deletePersonalContainers => delete personal containers
+* _keepAsContact => keep "account" as contact in the addressbook
+* _keepOrganizerEvents => keep accounts organizer events as external events in the calendar
+* _keepAsContact => keep accounts calender event attendee as external attendee
+*/
+
+Gesetzt wird das dann so (config.inc.php):
+
+'accountDeletionEventConfiguration' => array(
+  '_deletePersonalContainers' => true,
+  '_keepAsContact' => true,
+  // ...
+),
+
+Wenn die Einstellung nicht gesetzt ist, werden die Daten des Nutzers nicht gelöscht. Der Kontakt wird allerdings aus dem Adressbuch entfernt und ist damit auch nicht mehr als Teilnehmer oder Organizer sichtbar. Die Termine bleiben aber erhalten.
+
+
+Problem: Link fehlt in Termin-Erinnerungs-Mail
+=================
+
+Um den richtigen Link in die Erinnerungs-E-Mail zu bekommen, muss folgender Eintrag in die Konfiguration geschrieben werden:
+
+    'tine20URL' => 'https://my.tine20.domain'
