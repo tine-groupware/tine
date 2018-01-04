@@ -51,7 +51,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
     /**
      * license type switch
      *
-     * * allowed values: BusinessEdition | Secudos
+     * * allowed values: BusinessEdition
      *
      * TODO: read this from config
      *
@@ -233,19 +233,6 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     fieldLabel: this.app.i18n._('Valid to'),
                     name: 'validTo',
                     id: 'validTo',
-                    emptyText: this.app.i18n._('No valid license')
-                }];
-                break;
-            case 'Secudos':
-                licenseFields = [{
-                    fieldLabel: this.app.i18n._('Serial Number'),
-                    name: 'serialNumber',
-                    id: 'serialNumber',
-                    emptyText: this.app.i18n._('No valid license')
-                }, {
-                    fieldLabel: this.app.i18n._('Maximum Users (0=unlimited)'),
-                    name: 'maxUsers',
-                    id: 'maxUsers',
                     emptyText: this.app.i18n._('No valid license')
                 }];
                 break;
