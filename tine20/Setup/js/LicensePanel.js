@@ -203,6 +203,8 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     text: String.format(this.app.i18n._('Select file containing your license key')),
                     handler: this.onFileReady,
                     allowedTypes: null,
+                    uploadTempFileMethod: 'Setup.uploadTempFile',
+                    uploadUrl: 'setup.php',
                     scope: this
                 }]
             } : {};
