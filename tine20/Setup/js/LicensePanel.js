@@ -157,8 +157,8 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
 
             if (this.licenseType === 'BusinessEdition') {
                 Ext.getCmp('contractId').setValue(data.contractId);
-                Ext.getCmp('validFrom').setValue(new Date(data.validFrom.date.replace(/-/g,'/')));
-                Ext.getCmp('validTo').setValue(new Date(data.validTo.date.replace(/-/g,'/')));
+                Ext.getCmp('validFrom').setValue(new Date(Date.parse(data.validFrom.date)));
+                Ext.getCmp('validTo').setValue(new Date(Date.parse(data.validTo.date)));
             }
 
             Tine.Setup.registry.replace('licenseCheck', data.status && data.status == 'status_license_ok');
@@ -203,6 +203,8 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     text: String.format(this.app.i18n._('Select file containing your license key')),
                     handler: this.onFileReady,
                     allowedTypes: null,
+                    uploadTempFileMethod: 'Setup.uploadTempFile',
+                    uploadUrl: 'setup.php',
                     scope: this
                 }]
             } : {};

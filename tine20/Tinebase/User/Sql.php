@@ -1561,7 +1561,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $select = $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'login_name')
-            ->where($this->_db->quoteIdentifier('login_name') . " not in ('cronuser', 'calendarscheduling')")
+            ->where($this->_db->quoteIdentifier('login_name') . " not in (?)", Tinebase_User::getSystemUsernames())
             ->order('creation_time ASC')
             ->limit($maxUsers);
 
