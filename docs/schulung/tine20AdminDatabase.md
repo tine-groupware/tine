@@ -108,3 +108,12 @@ Mit "tinyint"-Feldern scheint es ein Problem zu geben, diese werden wohl nicht
         [1] => ALTER TABLE `tine20_sales_cost_centers` CHANGE `is_deleted` `is_deleted` TINYINT(1) DEFAULT '0'
         [2] => ALTER TABLE `tine20_tree_nodes` CHANGE `islink` `islink` TINYINT(1) DEFAULT '0' NOT NULL
     )
+
+Volltext-Indizierung in der Datenbank
+=================
+
+Tine 2.0 unterstützt die Volltext-Indizierung ab Mysql 5.6.4 bzw. MariaDB 10.1
+
+Wenn man von einer älteren Version (oder z.B. PGSQL) kommt, kann man das Feature so nachinstallieren:
+
+    $ php setup.php --upgradeMysql564

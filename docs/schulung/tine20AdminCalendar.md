@@ -1,7 +1,7 @@
 Tine 2.0 Admin Schulung: Kalender
 =================
 
-Version: Egon 2016.11
+Versionen: Egon 2016.11 + Caroline 2017.11
 
 Konfiguration und Problemlösungen im Kalender-Modul von Tine 2.0
 
@@ -51,3 +51,11 @@ Gesetzt wird das dann so (config.inc.php):
 ),
 
 Wenn die Einstellung nicht gesetzt ist, werden die Daten des Nutzers nicht gelöscht. Der Kontakt wird allerdings aus dem Adressbuch entfernt und ist damit auch nicht mehr als Teilnehmer oder Organizer sichtbar. Die Termine bleiben aber erhalten.
+
+
+Problem: Link fehlt in Termin-Erinnerungs-Mail
+=================
+
+Um den richtigen Link in die Erinnerungs-E-Mail zu bekommen, muss folgender Eintrag in die Konfiguration geschrieben werden:
+
+    'tine20URL' => 'https://my.tine20.domain'

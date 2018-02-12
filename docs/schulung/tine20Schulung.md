@@ -108,6 +108,8 @@ LDAP-Integration
 - sync accounts via CLI (und die Options)
 - UCS
 
+siehe tine20AdminLDAP.md
+
 Logging
 ------------
 
