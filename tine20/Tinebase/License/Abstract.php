@@ -74,8 +74,7 @@ abstract class Tinebase_License_Abstract
             return false;
         }
 
-        $currentUserCount = Tinebase_User::getInstance()->countNonSystemUsers();
-        if ($currentUserCount >= $maxUsers) {
+        if ($currentUserCount > $maxUsers) {
             // check if user is in allowed users
             $user = $user ? $user : Tinebase_Core::getUser();
             if (! Tinebase_User::getInstance()->hasUserValidLicense($user, $maxUsers)) {
