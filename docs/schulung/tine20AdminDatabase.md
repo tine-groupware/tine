@@ -1,7 +1,7 @@
 Tine 2.0 Admin Schulung: Datenbank
 =================
 
-Version: Egon 2016.11
+Version: Caroline 2017.11
 
 Konfiguration und Performance-Optimierung der Datenbank
 
@@ -75,3 +75,36 @@ Der absolute Wert wird natürlich bei ~90% bleiben, aber verglichen mit den Wert
 Sollte es auf Grund des knappen RAMs von 8GB nicht möglich sein den innodb_buffer_pool_size Wert auf RIBPS(1.1) (oder höher) zu setzen, so gibt es noch Luft für Fine Tuning (die slow logs legen nahe das es zu einzelnen Last Spitzen kommt. Eventuell können diese durch eine Erhöhung des innodb_thread_concurrency Wertes besser bewältigt werden da davon auszugehen ist das einige Threads auf IO warten und daher noch genug CPU vorhanden ist um weitere Threads, die eventuell ohne HDD IO auskommen, zu bearbeiten.
 
 Fine Tuning wird aber keine großen Sprünge schaffen, es ist nur Fine Tuning. Eine performante DB braucht zwingend RAM > Datenbankgröße (Daten+Indexe).
+
+DB-Schema Vergleich und Aktualisierung
+=================
+
+Es kann passieren, dass das Schema der Datenbank nicht mehr dem aktuellen Stand
+ entspricht. Das betrifft vor allem alte Installationen bzw. Installationen bei
+ denen ein Admin selbst Hand angelegt hat und z.B. Update-Skripte übersprungen
+ wurden. Um das Schema wieder an den normalen Stand anzugleichen, müssen folgende
+ Schritte durchgeführt werden:
+ 
+* Backup der bestehenden Datenbank
+* Installation einer parallelen Installation mit der gleichen Version
+* Der DB-Benutzer der Vergleichsinstallation muss die gleichen Zugangsdaten haben
+* Einspielen einer gepatchten tine20/vendor/doctrine/dbal/lib/Doctrine/DBAL/Schema/AbstractAsset.php
+ (siehe https://forge.tine20.org/view.php?id=13702)
+* Aufruf des Datenbankvergleichs:
+
+    $ php setup.php --compare -- otherdb=tine20comparedb
+    
+* Jetzt können die SQL-Statements ausgeführt werden, die zum aktualisieren auf
+ das Schema der Vergleichsdatenbank benötigt werden. Manchmal muss das Kommando
+ mehrmals aufgerufen werden
+ 
+Mit "tinyint"-Feldern scheint es ein Problem zu geben, diese werden wohl nicht
+ entsprechend aktualisiert:
+ 
+    root:/var/www/tine20# php setup.php --compare -- otherdb=tine20demo
+    Array
+    (
+        [0] => ALTER TABLE `tine20_preferences` CHANGE `personal_only` `personal_only` TINYINT(1) DEFAULT NULL
+        [1] => ALTER TABLE `tine20_sales_cost_centers` CHANGE `is_deleted` `is_deleted` TINYINT(1) DEFAULT '0'
+        [2] => ALTER TABLE `tine20_tree_nodes` CHANGE `islink` `islink` TINYINT(1) DEFAULT '0' NOT NULL
+    )

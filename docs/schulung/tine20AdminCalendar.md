@@ -27,3 +27,27 @@ Adressbucheintrag des TN (wenn es ein Kontakt ist):
 Änderungshistorie des Termins:
 
     > SELECT * FROM timemachine_modlog where record_id = 'EVENTID';
+
+Frage: Was passiert mit Terminen eines gelöschten Benutzers?
+=================
+
+Es gibt in der aktuellen Version 2017.11 folgende Einstellmöglichkeiten für den "Account Löschen"-Event:
+
+/**
+* possible values:
+*
+* _deletePersonalContainers => delete personal containers
+* _keepAsContact => keep "account" as contact in the addressbook
+* _keepOrganizerEvents => keep accounts organizer events as external events in the calendar
+* _keepAsContact => keep accounts calender event attendee as external attendee
+*/
+
+Gesetzt wird das dann so (config.inc.php):
+
+'accountDeletionEventConfiguration' => array(
+  '_deletePersonalContainers' => true,
+  '_keepAsContact' => true,
+  // ...
+),
+
+Wenn die Einstellung nicht gesetzt ist, werden die Daten des Nutzers nicht gelöscht. Der Kontakt wird allerdings aus dem Adressbuch entfernt und ist damit auch nicht mehr als Teilnehmer oder Organizer sichtbar. Die Termine bleiben aber erhalten.
