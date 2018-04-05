@@ -25,4 +25,6 @@ interface Tinebase_License_Interface
     public function getLicenseType();
     public function checkUserLimit($user = null);
     public function getStatus();
+    public function getCaFiles();
+    public function getLicensePath();
 }
