@@ -38,6 +38,15 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     }
 
     /**
+     * @return array
+     */
+    public function getCaFiles()
+    {
+        return $this->_caFiles;
+    }
+
+
+    /**
      * reads current license from vfs
      *
      * @return null|string
@@ -53,11 +62,11 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             Tinebase_Exception::log($teb);
             return null;
         }
-        if ($fs->fileExists($this->_getLicensePath())) {
-            $licenseFileHandle = $fs->fopen($this->_getLicensePath(), 'r');
+        if ($fs->fileExists($this->getLicensePath())) {
+            $licenseFileHandle = $fs->fopen($this->getLicensePath(), 'r');
             if ($licenseFileHandle !== false) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                        __METHOD__ . '::' . __LINE__ . " Fetching current license from vfs: " . $this->_getLicensePath());
+                        __METHOD__ . '::' . __LINE__ . " Fetching current license from vfs: " . $this->getLicensePath());
 
                 $result = fread($licenseFileHandle, 8192);
                 $fs->fclose($licenseFileHandle);
@@ -92,8 +101,8 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     protected function _getCaFiles()
     {
         $caFiles = array(
-            dirname(__FILE__) . '/cacert.pem',
-            dirname(__FILE__) . '/cacert20150305.pem',
+            __DIR__ . '/cacert.pem',
+            __DIR__ . '/cacert20150305.pem',
         );
 
         foreach ($caFiles as $index => $file) {
@@ -133,7 +142,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     public function storeLicense($licenseString)
     {
         $fs = Tinebase_FileSystem::getInstance();
-        $licensePath = $this->_getLicensePath();
+        $licensePath = $this->getLicensePath();
         if (empty($licenseString)) {
             throw new Tinebase_Exception('Empty license string');
         } else {
@@ -151,8 +160,14 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             }
         }
     }
-    
-    protected function _getLicensePath($filename = self::LICENSE_FILENAME)
+
+    /**
+     * @param string $filename
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getLicensePath($filename = self::LICENSE_FILENAME)
     {
         $fs = Tinebase_FileSystem::getInstance();
         $appPath = $fs->getApplicationBasePath('Tinebase');
@@ -185,7 +200,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     public function deleteCurrentLicense()
     {
         $fs = Tinebase_FileSystem::getInstance();
-        $licensePath = $this->_getLicensePath();
+        $licensePath = $this->getLicensePath();
         if ($fs->fileExists($licensePath)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                     __METHOD__ . '::' . __LINE__ . " Deleting license at " . $licensePath);

@@ -54,4 +54,6 @@ interface Tinebase_License_Interface
     public function getFeatures();
 
     public function getStatus();
+    public function getCaFiles();
+    public function getLicensePath();
 }
