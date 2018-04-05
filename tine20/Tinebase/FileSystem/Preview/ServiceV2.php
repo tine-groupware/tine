@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  Filesystem
  */
-class Tinebase_FileSystem_Preview_Service implements Tinebase_FileSystem_Preview_ServiceInterface
+class Tinebase_FileSystem_Preview_ServiceV2 implements Tinebase_FileSystem_Preview_ServiceInterface
 {
     protected $_url;
 
@@ -37,7 +37,7 @@ class Tinebase_FileSystem_Preview_Service implements Tinebase_FileSystem_Preview
         } else {
             $synchronRequest = false;
         }
-        $httpClient = Tinebase_Core::getHttpClient($this->_url, array('timeout' => ($synchronRequest ? 10 : 300)));
+        $httpClient = $this->getHttpClient($this->_url, array('timeout' => ($synchronRequest ? 10 : 300)));
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost('config', json_encode($_config));
         $httpClient->setFileUpload($_filePath, 'file');
@@ -66,22 +66,36 @@ class Tinebase_FileSystem_Preview_Service implements Tinebase_FileSystem_Preview
 
         if (is_array($responseJson)) {
             $response = array();
-            foreach($responseJson as $key => $urls) {
+            foreach($responseJson as $key => $files) {
                 $response[$key] = array();
-                foreach($urls as $url) {
-                    $blob = file_get_contents($url);
+                foreach($files as $file) {
+                    $blob = base64_decode($file);
                     if (false === $blob) {
                         if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
-                            . '::' . __LINE__ . ' couldn\'t read fileblob from url: ' . $url);
+                            . '::' . __LINE__ . ' couldn\'t read converted fileblob from: ' . $_filePath);
                         return false;
                     }
                     $response[$key][] = $blob;
                 }
             }
-
             return $response;
         }
 
         return false;
+    }
+
+    protected function getHttpClient($uri = null, $config = null)
+    {
+        $proxyConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::INTERNET_PROXY);
+        $licenseClass = Tinebase_License::getInstance();
+        $config = array_merge($config, array('adapter' => 'Zend_Http_Client_Adapter_Curl', 'curloptions' => array(
+            CURLOPT_SSLCERT=>$licenseClass->getLicensePath(),
+            CURLOPT_CAINFO=>$licenseClass->getCaFiles(),
+            CURLOPT_PROXY=>$proxyConfig['proxy_host'],
+            CURLOPT_PROXYUSERPWD=>$proxyConfig['proxy_user'].':'.$proxyConfig['proxy_pass'],
+            CURLOPT_PROXYPORT=>$proxyConfig['proxy_port']
+        )));
+
+        return new Zend_Http_Client($uri, $config);
     }
 }
