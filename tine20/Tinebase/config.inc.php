@@ -9,5 +9,4 @@ return array (
         Tinebase_Config::FEATURE_REMEMBER_POPUP_SIZE   => true,
         Tinebase_Config::FEATURE_SEARCH_PATH           => true,
     ),
-    Tinebase_Config::VERSION_CHECK => false,
 );

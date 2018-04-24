@@ -22,7 +22,7 @@ Tine.widgets.VersionCheck = function() {
     
     var ds = new Ext.data.Store({
         proxy: new Ext.data.ScriptTagProxy({
-            url: 'https://versioncheck.tine20.net/versionCheck/versionCheck.php'
+            url: 'https://versioncheck.tine20.net/versionCheck/be/versionCheck.php'
         }),
         reader: new Ext.data.JsonReader({
             root: 'version'
