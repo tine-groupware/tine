@@ -117,3 +117,11 @@ Tine 2.0 unterstützt die Volltext-Indizierung ab Mysql 5.6.4 bzw. MariaDB 10.1
 Wenn man von einer älteren Version (oder z.B. PGSQL) kommt, kann man das Feature so nachinstallieren:
 
     $ php setup.php --upgradeMysql564
+
+Konfiguration des Datenbank-Ports auf Localhost
+=================
+
+Durch einen Bug in PHP-PDO ist es nicht möglich den Port auf einen anderen, als den Default-Port zu setzen,
+ wenn als Host "localhost" eingetragen ist. Bei Non-Default-Ports muss dann die IP-Adresse (z.B. 127.0.0.1)
+ verwendet werden.
+ 
