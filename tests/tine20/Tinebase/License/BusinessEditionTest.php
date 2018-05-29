@@ -318,18 +318,12 @@ class Tinebase_License_BusinessEditionTest extends TestCase
 
     public function testSetLicenseViaCli()
     {
-        $cli = new Tinebase_Frontend_Cli();
-        $opts = new Zend_Console_Getopt('abp:');
-        $opts->setArguments(array(
-            'file=' . __DIR__ . '/V-12345.pem'
-        ));
+        $this->_cli = new Setup_Frontend_Cli();
+        $result = $this->_cliHelper('setLicense', array('--setLicense','--','file=' . __DIR__ . '/V-12345.pem'));
 
-        ob_start();
-        $cli->setLicense($opts);
-        $out = ob_get_clean();
-
+        self::assertEquals('', $result);
         $installationData = $this->_uit->getInstallationData();
-        $this->assertEquals('', $out);
-        $this->assertArrayHasKey('bits', $installationData);
+        self::assertTrue(is_array($installationData), 'license has not been set');
+        self::assertArrayHasKey('bits', $installationData);
     }
 }
