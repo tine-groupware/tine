@@ -1610,37 +1610,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * removes the current license
-     */
-    public function deleteLicense()
-    {
-        if (! $this->_checkAdminRight()) {
-            return 1;
-        }
-
-        $license = Tinebase_License::getInstance();
-        $license->deleteCurrentLicense();
-
-        return 0;
-    }
-
-    /**
-     * set license
-     */
-    public function setLicense($opts)
-    {
-        if (! $this->_checkAdminRight()) {
-            return 1;
-        }
-
-        $args = $this->_parseArgs($opts, array('file'));
-        $licenseString = file_get_contents($args['file']);
-        $setup = Setup_Controller::getInstance();
-        $setup->saveLicense($licenseString);
-    }
-
-
-    /**
      *
      *
      * @return int

@@ -111,6 +111,10 @@ class Setup_Frontend_Cli
             $this->_backup($_opts);
         } elseif(isset($_opts->restore)) {
             $this->_restore($_opts);
+        } elseif(isset($_opts->setLicense)) {
+            $this->_setLicense($_opts);
+        } elseif(isset($_opts->deleteLicense)) {
+            $this->_deleteLicense($_opts);
         } elseif(isset($_opts->compare)) {
             $this->_compare($_opts);
         } elseif(isset($_opts->setpassword)) {
@@ -1045,6 +1049,39 @@ class Setup_Frontend_Cli
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         Setup_Controller::getInstance()->installFromDump($options);
+
+        return 0;
+    }
+
+    /**
+     * removes the current license
+     *
+     * @return integer
+     */
+    protected function _deleteLicense()
+    {
+        $license = Tinebase_License::getInstance();
+        $license->deleteCurrentLicense();
+
+        return 0;
+    }
+
+    /**
+     * set license
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return integer
+     */
+    protected function _setLicense($opts)
+    {
+        $options = $this->_parseRemainingArgs($opts->getRemainingArgs());
+        if (! isset($options['file'])) {
+            echo '"file" must be given' . "\n";
+            return 2;
+        }
+        $licenseString = file_get_contents($options['file']);
+        $setup = Setup_Controller::getInstance();
+        $setup->saveLicense($licenseString);
 
         return 0;
     }
