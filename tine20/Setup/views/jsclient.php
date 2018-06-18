@@ -61,11 +61,11 @@
                 echo "\n    <script src='webpack-dev-server.js'></script>";
 
                 echo "\n    <!-- translations -->";
-                echo "\n    <script type=\"text/javascript\" src=\"setup.php?method=Tinebase.getJsTranslations&" . time() . "\"></script>";
+                echo "\n    <script type=\"text/javascript\" src=\"setup.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all&" . time() . "\"></script>";
                 break;
         }?>
 </head>
 <body>
-    <noscript>You need to enable javascript to use <a href="http://www.tine20.org">Tine 2.0 setup or use the CLI setup</a></noscript>
+    <noscript><p>You need to enable javascript to use <a target="_blank" href="<?php echo Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL); ?>" title="<?php echo Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_DESCRIPTION); ?>"><?php echo Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE); ?></a> or use the CLI setup</p></noscript>
 </body>
 </html>

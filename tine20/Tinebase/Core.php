@@ -244,7 +244,7 @@ class Tinebase_Core
      */
     public static function dispatchRequest()
     {
-        $request = new \Zend\Http\PhpEnvironment\Request();
+        $request = new Tinebase_Http_Request();
         self::set(self::REQUEST, $request);
         
         // check transaction header
@@ -1047,19 +1047,11 @@ class Tinebase_Core
                     }
                 }
 
-                $cacheId = md5(__METHOD__ . '::useUtf8mb4');
-                if (!isset($dbConfigArray['useUtf8mb4'])) {
-                    if (false !== ($result = static::getCache()->load($cacheId))) {
-                        $dbConfigArray['useUtf8mb4'] = $result;
-                    }
-                }
+                $dbConfigArray['charset'] = Tinebase_Backend_Sql_Adapter_Pdo_Mysql::getCharsetFromConfigOrCache($dbConfigArray);
 
-                if (isset($dbConfigArray['useUtf8mb4']) && !$dbConfigArray['useUtf8mb4']) {
-                    $dbConfigArray['charset'] = 'utf8';
-                } else {
-                    $dbConfigArray['charset'] = 'utf8mb4';
-                }
-                
+                if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Using MySQL charset: ' . $dbConfigArray['charset']);
+
                 // force some driver options
                 $dbConfigArray['driver_options'] = array(
                     PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
@@ -1071,18 +1063,15 @@ class Tinebase_Core
                 );
                 $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
 
-                if (!isset($dbConfigArray['useUtf8mb4'])) {
-                    // auto detect charset to be used
-                    // empty db => utf8mb4
-                    if (false !== $db->query('SHOW TABLES LIKE "' . SQL_TABLE_PREFIX . 'access_log"')->fetchColumn(0) &&
-                            strpos($db->query('show create table ' . SQL_TABLE_PREFIX . 'access_log')->fetchColumn(1),
-                            'utf8mb4') === false) {
+                if (! isset($dbConfigArray['useUtf8mb4'])) {
+                    if (! Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {
                         $db->closeConnection();
+
+                        if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Falling back to utf-8 charset');
+
                         $dbConfigArray['charset'] = 'utf8';
                         $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
-                        static::getCache()->save(0, $cacheId);
-                    } else {
-                        static::getCache()->save(1, $cacheId);
                     }
                 }
                 break;
@@ -1119,7 +1108,7 @@ class Tinebase_Core
         
         return $db;
     }
-    
+
     /**
      * get db profiling
      * 
@@ -1927,9 +1916,10 @@ class Tinebase_Core
 
                 if (isset($session->filesystemAvailable)) {
                     $isFileSystemAvailable = $session->filesystemAvailable;
-
-                    self::set('FILESYSTEM', $isFileSystemAvailable);
-                    return $isFileSystemAvailable;
+                    if ($isFileSystemAvailable) {
+                        self::set('FILESYSTEM', $isFileSystemAvailable);
+                        return $isFileSystemAvailable;
+                    }
                 }
             } catch (Zend_Session_Exception $zse) {
                 $session = null;
@@ -2003,6 +1993,17 @@ class Tinebase_Core
         $httpClient = new Zend_Http_Client($uri, $config);
 
         return $httpClient;
+    }
+
+    /**
+     * get Preview Services client
+     *
+     * @return Tinebase_FileSystem_Preview_ServiceInterface
+     */
+    public static function getPreviewService()
+    {
+        $class = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_CLASS};
+        return new $class;
     }
 
     /**
@@ -2178,7 +2179,8 @@ class Tinebase_Core
      * @return null|string
      * @throws FileNotFoundException
      */
-    public static function getInstallLogo() {
+    public static function getInstallLogo()
+    {
         $logo = Tinebase_Config::getInstance()->{Tinebase_Config::INSTALL_LOGO};
         
         if (!$logo) {

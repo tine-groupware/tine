@@ -55,31 +55,41 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
      */
     public function handle(\Zend\Http\Request $request = null, $body = null)
     {
-        try {$this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
-        if ($body !== null) {
-            $this->_body = $body;
-        } else {if ($this->_request instanceof \Zend\Http\Request) {
-            $this->_body = fopen('php://temp', 'r+');
-            fwrite($this->_body, $request->getContent());
-            rewind($this->_body);
-        /*
-        * JN: dirty hack for native Windows 7 & 10 webdav client (after early 2017):
-                     * client sends empty request instead empty xml-skeleton -> inject it here
-                     *(improvement: do not rely on user agent because other clients use windows stuff, too)
-                    */
-                    if (isset($_SERVER['REQUEST_METHOD']) && (
-                                $_SERVER['REQUEST_METHOD'] == 'PROPFIND') && ($request->getContent() == '')) {
-                            $broken_user_agent_body = '<?xml version="1.0" encoding="utf-8" ?><D:propfind xmlns:D="DAV:"><D:prop>';
-                            $broken_user_agent_body .= '<D:creationdate/><D:displayname/><D:getcontentlength/>';
-                        $broken_user_agent_body .= '<D:getcontenttype/><D:getetag/><D:getlastmodified/><D:resourcetype/>';
-                            $broken_user_agent_body .= '</D:prop></D:propfind>';
-                            fwrite($this->_body, $broken_user_agent_body);
-                            rewind($this->_body);
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " broken userAgent detected: " .
-                                    $_SERVER['HTTP_USER_AGENT'] . " --> inserted xml body");
+        try {
+            $this->_request = $request instanceof \Zend\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
 
-                        }
+            if ($body !== null) {
+                $this->_body = $body;
+            } else {
+                if ($this->_request instanceof Tinebase_Http_Request) {
+                    $this->_body = $this->_request->getContentStream();
+                } else if ($this->_request instanceof \Zend\Http\Request) {
+                    $this->_body = fopen('php://temp', 'r+');
+                    fwrite($this->_body, $request->getContent());
+                    rewind($this->_body);
+                }
+            }
+
+            /*
+             * JN: dirty hack for native Windows 7 & 10 webdav client (after early 2017):
+             * client sends empty request instead empty xml-skeleton -> inject it here
+             *(improvement: do not rely on user agent because other clients use windows stuff, too)
+             */
+            if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == 'PROPFIND') {
+                $content = stream_get_contents($this->_body);
+                rewind($this->_body);
+
+
+                if ($content == '') {
+                    $broken_user_agent_body = '<?xml version="1.0" encoding="utf-8" ?><D:propfind xmlns:D="DAV:"><D:prop>';
+                    $broken_user_agent_body .= '<D:creationdate/><D:displayname/><D:getcontentlength/>';
+                    $broken_user_agent_body .= '<D:getcontenttype/><D:getetag/><D:getlastmodified/><D:resourcetype/>';
+                    $broken_user_agent_body .= '</D:prop></D:propfind>';
+                    fwrite($this->_body, $broken_user_agent_body);
+                    rewind($this->_body);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " broken userAgent detected: " .
+                            (isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown user agent') . " --> inserted xml body");
                     }
                 }
             }
@@ -179,6 +189,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             }
             self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_Root());
             \Sabre\DAV\Server::$exposeVersion = false;
+            self::$_server->httpResponse = new Tinebase_WebDav_HTTP_LogResponse();
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 self::$_server->debugExceptions = true;
@@ -257,23 +268,14 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 }
             }
             self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin());
-
-            $contentType = self::$_server->httpRequest->getHeader('Content-Type');
-            $logOutput = Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && (stripos($contentType,
-                        'text') === 0 || stripos($contentType, '/xml') !== false);
-
-            if ($logOutput) {
-                ob_start();
-            }
+            self::$_server->httpResponse->startBodyLog(Tinebase_Core::isLogLevel(Zend_Log::DEBUG));
 
             self::$_server->exec();
 
-            if ($logOutput) {
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " >>> *DAV response:\n" . ob_get_contents());
-                ob_end_flush();
-            } else {
-
-                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " <<< *DAV response\n -- BINARY DATA --");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " >>> *DAV response:\n" .
+                    implode("\n", headers_list()) . "\n\n" .
+                    self::$_server->httpResponse->stopBodyLog());
             }
 
             Tinebase_Controller::getInstance()->logout($this->_request->getServer('REMOTE_ADDR'));
@@ -318,7 +320,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
      */
     public static function getResponse()
     {
-        return self::$_server ? self::$_server->httpResponse : new Sabre\HTTP\Response();
+        return self::$_server ? self::$_server->httpResponse : new Tinebase_WebDav_HTTP_LogResponse();
     }
 
     /**

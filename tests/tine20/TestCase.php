@@ -4,7 +4,7 @@
  * 
  * @package     Tests
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -131,6 +131,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             $this->_deleteGroups();
         }
         if ($this->_transactionId) {
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(false);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Rolling back test transaction');
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -324,7 +325,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param string $model
      * @return Tinebase_Model_Container
      */
-    protected function _getTestContainer($applicationName, $model = null)
+    protected function _getTestContainer($applicationName, $model)
     {
         return Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => 'PHPUnit ' . $model .' container',
@@ -511,15 +512,18 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * set grants for a persona and the current user
      * 
-     * @param integer $containerId
+     * @param Tinebase_Model_Container|string $container
      * @param string $persona
      * @param boolean $personaAdminGrant
      * @param boolean $userAdminGrant
      * @param array $additionalGrants
      */
-    protected function _setPersonaGrantsForTestContainer($containerId, $persona, $personaAdminGrant = false, $userAdminGrant = true, $additionalGrants = [])
+    protected function _setPersonaGrantsForTestContainer($container, $persona, $personaAdminGrant = false, $userAdminGrant = true, $additionalGrants = [])
     {
-        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        $container = $container instanceof Tinebase_Model_Container ? $container : Tinebase_Container::getInstance()
+            ->getContainerById($container);
+        $grantClass = $container->getGrantClass();
+        $grants = new Tinebase_Record_RecordSet($grantClass, array(array(
             'account_id'    => $this->_personas[$persona]->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
@@ -538,10 +542,13 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         )));
 
         foreach ($additionalGrants as $grant) {
+            if (is_array($grant)) {
+                $grant = new $grantClass($grant);
+            }
             $grants->addRecord($grant);
         }
 
-        Tinebase_Container::getInstance()->setGrants($containerId, $grants, TRUE);
+        Tinebase_Container::getInstance()->setGrants($container, $grants, TRUE);
     }
 
     /**
@@ -557,21 +564,22 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
     /**
      * call handle cli function with params
+     *  example usage:
+     *      $result = $this->_cliHelper('getconfig', array('--getconfig','--','configkey=allowedJsonOrigins'));
      *
      * @param string $command
-     * @param array $_params
+     * @param array $params
      * @return string
      */
-    protected function _cliHelper($command, $_params)
+    protected function _cliHelper($command, $params)
     {
         $opts = new Zend_Console_Getopt(array($command => $command));
-        $opts->setArguments($_params);
+        $opts->setArguments($params);
         ob_start();
         $this->_cli->handle($opts, false);
         $out = ob_get_clean();
         return $out;
     }
-
 
     /**
      * add an attachment to a record
@@ -799,7 +807,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::AREA_LOCKS, $locks);
         $this->_areaLocksToInvalidate[] = $config['area'];
     }
-    
+
     /**
      * @param $docx
      * @return string

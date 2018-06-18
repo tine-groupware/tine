@@ -77,6 +77,8 @@ class Setup_Frontend_Cli
             $result = $this->_listInstalled();
         } elseif(isset($_opts->sync_accounts_from_ldap)) {
             $this->_importAccounts($_opts);
+        } elseif(isset($_opts->updateAllAccountsWithAccountEmail)) {
+            $this->_updateAllAccountsWithAccountEmail($_opts);
         } elseif(isset($_opts->sync_passwords_from_ldap)) {
             $this->_syncPasswords($_opts);
         } elseif(isset($_opts->egw14import)) {
@@ -166,10 +168,11 @@ class Setup_Frontend_Cli
         // TODO ask for cleanup? make cleanup?
         // TODO check maintenance mode, its needs to be on!
         // TODO check action queue is empty
-        // TODO check admin right
         // known issues:
-        // fulltext! path!
-        // [r?]trim unique keys, if there was something trimed, remember, second+ time add _ or something
+        // path!
+        // [r?]trim unique keys, if there was something trimmed, remember, second+ time add _ or something
+
+        $noBackupTables = Setup_Controller::getInstance()->getBackupStructureOnlyTables();
 
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         if (!isset($options['mysqlConfigFile'])) {
@@ -214,9 +217,18 @@ class Setup_Frontend_Cli
         Tinebase_Config::destroyInstance();
         Tinebase_Application::getInstance()->clearCache();
         Tinebase_Application::destroyInstance();
+        Tinebase_Container::getInstance()->resetClassCache();
+        Tinebase_Container::destroyInstance();
+        Setup_Controller::destroyInstance();
+        Setup_Backend_Factory::clearCache();
+        Tinebase_User::destroyInstance();
+        Setup_Core::set(Setup_Core::USER, 'setupuser');
+        Addressbook_Backend_Factory::clearCache();
+        Addressbook_Controller_Contact::destroyInstance();
         $dbConfig['driver'] = 'pdo_mysql';
         $dbConfig['user']   = $dbConfig['username'];
         Setup_SchemaTool::setDBParams($dbConfig);
+
         $newOpts = new Zend_Console_Getopt(['install' => []], [
             '--install', '--', 'acceptedTermsVersion=1', 'adminLoginName=a', 'adminPassword=b'
         ]);
@@ -224,6 +236,8 @@ class Setup_Frontend_Cli
 
         $blackListedTables = [];
         $mysqlTables = $mysqlDB->query('SHOW TABLES')->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+        $pgsqlTables = $pgsqlDb->query('SELECT table_name FROM information_schema.tables WHERE table_schema = '
+            . '\'public\' AND table_type= \'BASE TABLE\'')->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 
         // set foreign key checks off
         $mysqlDB->query('SET foreign_key_checks = 0');
@@ -242,24 +256,34 @@ class Setup_Frontend_Cli
         $mysqlDB->query('SET autocommit = 0');
 
         foreach (array_diff($mysqlTables, $blackListedTables) as $table) {
-            if (strpos($table, 'cache') !== false) {
+            if (in_array($table, $noBackupTables)) {
                 continue;
             }
+            if (!in_array($table, $pgsqlTables)) {
+                continue;
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Migrating table ' . $table . ' ...');
+
             $start = 0;
             $limit = 50;
             $tableDscr = Tinebase_Db_Table::getTableDescriptionFromCache($table);
             $primaries = [];
             $columns = [];
+            $selectColumns = [];
             foreach ($tableDscr as $col => $desc) {
                 if ($desc['PRIMARY']) {
                     $primaries[] = $col;
                 }
                 $columns[] = $mysqlDB->quoteIdentifier($col);
+                $selectColumns[] = $col;
             }
             $insertQuery = 'INSERT INTO ' . $mysqlDB->quoteIdentifier($table) . ' (' . join(', ', $columns) .
                 ') VALUES ';
-            $select = $pgsqlDb->select()->from($table)->order($primaries);
+            $select = $pgsqlDb->select()->from($table, $selectColumns)->order($primaries);
 
+            $rowcount = 0;
             while (true) {
                 $select->limit($limit, $start);
                 if (empty($data = $select->query()->fetchAll(Zend_Db::FETCH_NUM))) {
@@ -277,17 +301,22 @@ class Setup_Frontend_Cli
                         $firstRow = false;
                     }
                     $first = false;
+                    $rowcount++;
                 }
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                    . ' ' . $query);
 
                 $mysqlDB->query($query . ')');
             }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' ... done. Migrated ' . $rowcount . ' rows.');
         }
 
         $mysqlDB->query('COMMIT');
         $mysqlDB->query('SET foreign_key_checks = 1');
         $mysqlDB->query('SET unique_checks = 1');
-
-        $this->_upgradeMysql564();
     }
 
     protected function _upgradeMysql564()
@@ -721,7 +750,44 @@ class Setup_Frontend_Cli
 
         Tinebase_User::syncUsers($options);
     }
-    
+
+    /**
+     * create/update email users with current account
+     *  USAGE: php tine20.php --method=Tinebase.updateAllAccountsWithAccountEmail -- fromInstance=master.mytine20.com
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     */
+    protected function _updateAllAccountsWithAccountEmail(Zend_Console_Getopt $_opts)
+    {
+        $data = $this->_parseRemainingArgs($_opts->getRemainingArgs());
+        if (isset($data['fromInstance'])) {
+            // fetch all accounts from fromInstance and write to configured instance
+            $imap = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+            $imap->copyFromInstance($data['fromInstance']);
+        }
+
+        $allowedDomains = Tinebase_EmailUser::getAllowedDomains();
+        $userController = Tinebase_User::getInstance();
+        $emailUser = Tinebase_EmailUser::getInstance();
+        /** @var Tinebase_Model_FullUser $user */
+        foreach ($userController->getFullUsers() as $user) {
+            $emailUser->inspectGetUserByProperty($user);
+            if (! empty($user->accountEmailAddress)) {
+                list($userPart, $domainPart) = explode('@', $user->accountEmailAddress);
+                if (count($allowedDomains) > 0 && ! in_array($domainPart, $allowedDomains)) {
+                    $newEmailAddress = $userPart . '@' . $allowedDomains[0];
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                        . ' Setting new email address for user to comply with allowed domains: ' . $newEmailAddress);
+                    $user->accountEmailAddress = $newEmailAddress;
+                }
+                $userController->updateUser($user);
+            }
+        }
+
+        return 0;
+    }
+
     /**
      * sync ldap passwords
      * 

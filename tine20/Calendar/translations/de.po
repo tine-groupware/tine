@@ -2168,8 +2168,7 @@ msgstr "Dieses Datum als definitiven Termin festlegen?"
 
 msgid "Do you want to close the poll and remove all other alternatives?"
 msgstr ""
-"Wollen sie diese Umfrage schließen und alle anderen Alternativen "
-"entfernen?"
+"Wollen sie diese Umfrage schließen und alle anderen Alternativen entfernen?"
 
 msgid "Poll"
 msgid_plural "Polls"
@@ -2238,8 +2237,8 @@ msgid ""
 "Create alternative Events and let users as well as externals vote for the "
 "best option."
 msgstr ""
-"Anlegen von alternativen Terminen bei denen die Nutzer und Externe über "
-"die beste Option abstimmen können."
+"Anlegen von alternativen Terminen bei denen die Nutzer und Externe über die "
+"beste Option abstimmen können."
 
 msgid "Mute Event Notifications for Polls"
 msgstr "Termin-Benachrichtigungen bei Umfragen unterdrücken"
@@ -2253,11 +2252,10 @@ msgid "GTCs for polls"
 msgstr "AGB’s für Umfragen"
 
 msgid ""
-"The new recurrence rule is unpredictable. Please choose a valid "
-"recurrence rule"
+"The new recurrence rule is unpredictable. Please choose a valid recurrence "
+"rule"
 msgstr ""
-"Die neue Wiederholungsregel ist nicht erfüllbar. Bitte ändern sie die "
-"Regel."
+"Die neue Wiederholungsregel ist nicht erfüllbar. Bitte ändern sie die Regel."
 
 msgid ""
 "This contact has been automatically added by the system as a poll attendee"
@@ -2291,8 +2289,8 @@ msgstr "Danke für ihre Teilnahme an der Umfrage „%1$s“"
 
 msgid "To review or edit your status please use your personal link:"
 msgstr ""
-"Zum Einsehen und Ändern ihres Status verwenden sie bitte ihren "
-"persönlichen Link:"
+"Zum Einsehen und Ändern ihres Status verwenden sie bitte ihren persönlichen "
+"Link:"
 
 msgid "Event Location"
 msgstr "Termin Ort"
@@ -2332,3 +2330,226 @@ msgstr "other"
 msgid "GENDER_Classification"
 msgstr "female"
 
+#: js/ImportDialog.js:269 js/Calendar-FAT-debug.js:12954 js/Calendar-FAT.js:6
+msgid "Calendar name (you need permissions to add events)"
+msgstr ""
+"Ein vorhandener Kalender, für den man über das Recht, neue Termine "
+"hinzuzufügen, verfügt"
+
+msgid "Resource Grant"
+msgid_plural "Resource Grants"
+msgstr[0] "Ressourcen Recht"
+msgstr[1] "Ressourcen Rechte"
+
+msgid "Invite Resource"
+msgstr "Ressource einladen"
+
+msgid "The grant to invite the resource to an event"
+msgstr "Das Recht die Ressource zu einem Termin einzuladen"
+
+msgid "Read Resource"
+msgstr "Ressource lesen"
+
+msgid "The grant to read the resource itself"
+msgstr "Das Recht die Ressource als solche zu sehen"
+
+msgid "The grant to edit the resource itself"
+msgstr "Das Recht die Ressource als solche zu bearbeiten"
+
+msgid "Export Resource"
+msgstr "Ressource exportieren"
+
+msgid "The grant to export the resource itself"
+msgstr "Das Recht die Ressource als solche zu exportieren"
+
+msgid "Sync Resource"
+msgstr "Ressource synchronisieren"
+
+msgid "The grant to synchronise the resource itself"
+msgstr "Das Recht die Ressource als solche zu synchronisieren"
+
+msgid "Resource Admin"
+msgstr "Ressource Administrieren"
+
+msgid "The grant to administrate the resource itself"
+msgstr "Das Recht die Ressource als solche zu administrieren"
+
+msgid "Add Events"
+msgstr "Termine hinzufügen"
+
+msgid "The grant to directly add events into this resource calendar"
+msgstr "Das Recht Termine direkt im Ressourcen-Kalender anzulegen"
+
+msgid "Read Events"
+msgstr "Termine lesen"
+
+msgid "The grant to read events from this resource calendar"
+msgstr "Das Recht Termine aus Ressourcen-Kalender zu lesen"
+
+msgid "The grant to export events from this resource calendar"
+msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu exportieren"
+
+msgid "Sync Events"
+msgstr "Termine synchronisieren"
+
+msgid "The grant to synchronise events from this resource calendar"
+msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu synchronisieren"
+
+msgid "Events Free Busy"
+msgstr "Termine Frei/Belegt Informationen"
+
+msgid ""
+"The grant to get free/busy information of events from this resource "
+"calendar"
+msgstr ""
+"Das Recht Frei/Belegt Informationen von Terminen aus dem Ressourcen-"
+"Kalender zu erhalten"
+
+msgid "Edit Events"
+msgstr "Termine bearbeiten"
+
+msgid ""
+"The grant to respond to event invitations of this resource and to edit "
+"events directly saved in this resource calendar"
+msgstr ""
+"Das Recht auf Termin-Einladungen dieser Ressource zu antworten und "
+"Termine aus dem Ressourcen-Kalender zu bearbeiten"
+
+msgid "Delete Events"
+msgstr "Termine löschen"
+
+msgid "The grant to delete events directly stored in this resource calendar"
+msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu löschen"
+
+msgid "Free Busy"
+msgstr "Frei Belegt"
+
+msgid "The grant to get free/busy information of events in this calendar"
+msgstr ""
+"Das Recht Frei/Belegt Informationen von Terminen diesem Kalender zu "
+"erhalten"
+
+msgid "The grant to access events marked as private in this calendar"
+msgstr ""
+"Das Recht Terminen aus diesem Kalender zu sehen die als privat markiert "
+"sind"
+
+msgid "Switch to public poll"
+msgstr "Zur öffentlichen Umfrage wechseln"
+
+msgid "Welcome {name}"
+msgstr "Willkommen {name}"
+
+msgid "This is a closed poll. No Attendee can be added."
+msgstr ""
+"Dies ist eine geschlossene Umfrage. Es können keine Teilnehmer "
+"hinzugefügt werden."
+
+msgid "This poll is closed already"
+msgstr "Diese Umfrage ist bereits abgeschlossen"
+
+msgid "I am not {name}"
+msgstr "Ich bin nicht {name}"
+
+msgid "Login"
+msgstr "Anmelden"
+
+msgid "{headerDate, date, full}"
+msgstr "{headerDate, date, full}"
+
+msgid "Cancle"
+msgstr "Abbrechen"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "By using this service you agree to our terms and conditions"
+msgstr ""
+"Indem sie diesen Service benutzen stimmen sie unseren Allgemeinen "
+"Geschäftsbedingungen zu"
+
+msgid "Use your personal link please."
+msgstr "Bitte benutzen Sie Ihren persönlichen Link."
+
+msgid "We have send it to your E-Mail account again."
+msgstr "Wir haben ihn erneut an Ihre E-Mail Adresse gesendet."
+
+msgid "If you did not receive the link, please contact the organiser."
+msgstr ""
+"Wenn Sie ihn nicht erhalten haben, wenden Sie sich bitte an den "
+"Organisator."
+
+msgid "Submit"
+msgstr "Abschicken"
+
+msgid "Wrong password!"
+msgstr "Flaschen Passwort!"
+
+msgid "Plase log in"
+msgstr "Bitte melden Sie sich an"
+
+msgid "User name"
+msgstr "Benutzername"
+
+msgid "Calendar of {name}"
+msgstr "Kalender von {name}"
+
+msgid "An unexpected error occurred."
+msgstr "Ein unerwarteter Fehler ist aufgetreten."
+
+msgid "First name, ĺast name"
+msgstr "Vorname, Nachname"
+
+msgid "E-Mail address"
+msgstr "E-Mail Adresse"
+
+msgid "General terms and conditions"
+msgstr "Allgemeine Geschäftsbedingungen"
+
+msgid "Relation"
+msgid_plural "Relations"
+msgstr[0] "Verknüpfung"
+msgstr[1] "Verknüpfungen"
+
+msgid "Event Status Available"
+msgstr "Verfügbare Termin Status"
+
+msgid ""
+"Possible event status. Please note that additional event status might "
+"impact other calendar systems on export or synchronisation."
+msgstr ""
+"Verfügbare Termin Status. Bitte beachten sie, dass zusätzliche Termin "
+"Status andere Kalender-System bei Exports oder Sync beeinträchtigen "
+"können."
+
+msgid "Event Classes Available"
+msgstr "Verfügbare Termin Klassifikationen"
+
+msgid ""
+"Possible event classes. Please note that additional event classes might "
+"impact other calendar systems on export or synchronisation."
+msgstr ""
+"Verfügbare Termin Klassifikationen. Bitte beachten sie, dass zusätzliche "
+"Termin Klassifikationen andere Kalender-System bei Exports oder Sync "
+"beeinträchtigen können."
+
+msgid "Confidential"
+msgstr "Vertraulich"
+
+msgid "Event Transparencies Available"
+msgstr "Verfügbare Termin Durchsichtigkeiten"
+
+msgid ""
+"Possible event transparencies. Please note that additional event "
+"transparencies might impact other calendar systems on export or "
+"synchronisation."
+msgstr ""
+"Verfügbare Termin Durchsichtigkeiten. Bitte beachten sie, dass "
+"zusätzliche Termin Durchsichtigkeiten andere Kalender-System bei Exports "
+"oder Sync beeinträchtigen können."
+
+msgid "The grant to access records marked as private in this container"
+msgstr "Das Recht Termine aus dem Ressourcen-Kalender zu exportieren"
+
+msgid "By using this service you agree to our"
+msgstr "Mit der Nutzung dieses Services "

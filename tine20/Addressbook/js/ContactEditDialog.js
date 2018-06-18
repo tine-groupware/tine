@@ -97,92 +97,81 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             this.contactEventPanel = null;
         }
 
-        return {
-            xtype: 'tabpanel',
+        var tabs = [{
+            title: this.app.i18n.n_('Contact', 'Contacts', 1),
             border: false,
-            plain: true,
-            activeTab: 0,
-            plugins: [{
-                ptype : 'ux.tabpanelkeyplugin'
-            }],
-            defaults: {
-                hideMode: 'offsets'
-            },
+            frame: true,
+            layout: 'border',
             items: [{
-                title: this.app.i18n.n_('Contact', 'Contacts', 1),
-                border: false,
-                frame: true,
+                region: 'center',
                 layout: 'border',
                 items: [{
-                    region: 'center',
-                    layout: 'border',
+                    xtype: 'fieldset',
+                    region: 'north',
+                    autoHeight: true,
+                    title: this.app.i18n._('Personal Information'),
                     items: [{
-                        xtype: 'fieldset',
-                        region: 'north',
-                        autoHeight: true,
-                        title: this.app.i18n._('Personal Information'),
+                        xtype: 'panel',
+                        layout: 'hbox',
+                        align: 'stretch',
+                        plugins: [{
+                            ptype: 'ux.itemregistry',
+                            key:   'Tine.Addressbook.editDialog.northPanel'
+                        }],
                         items: [{
-                            xtype: 'panel',
-                            layout: 'hbox',
-                            align: 'stretch',
-                            plugins: [{
-                                ptype: 'ux.itemregistry',
-                                key:   'Tine.Addressbook.editDialog.northPanel'
-                            }],
-                            items: [{
-                                flex: 1,
-                                xtype: 'columnform',
-                                autoHeight: true,
-                                style:'padding-right: 5px;',
-                                items: [[
-                                    new Tine.Tinebase.widgets.keyfield.ComboBox({
-                                        fieldLabel: this.app.i18n._('Salutation'),
-                                        name: 'salutation',
-                                        app: 'Addressbook',
-                                        keyFieldName: 'contactSalutation',
-                                        value: '',
-                                        columnWidth: 0.35,
-                                        listeners: {
-                                            scope: this,
-                                            'select': function (combo, record, index) {
-                                                var jpegphoto = this.getForm().findField('jpegphoto');
-                                                // set new empty photo depending on chosen salutation only if user doesn't have own image
-                                                jpegphoto.setDefaultImage(record.json.image || 'images/empty_photo_blank.png');
-                                            }
+                            flex: 1,
+                            xtype: 'columnform',
+                            autoHeight: true,
+                            style:'padding-right: 5px;',
+                            items: [[
+                                new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                    fieldLabel: this.app.i18n._('Salutation'),
+                                    name: 'salutation',
+                                    app: 'Addressbook',
+                                    keyFieldName: 'contactSalutation',
+                                    value: '',
+                                    columnWidth: 0.35,
+                                    listeners: {
+                                        scope: this,
+                                        'select': function (combo, record, index) {
+                                            var jpegphoto = this.getForm().findField('jpegphoto');
+                                            // set new empty photo depending on chosen salutation only if user doesn't have own image
+                                            jpegphoto.setDefaultImage(record.json.image || 'images/icon-set/icon_undefined_contact.svg');
                                         }
+                                    }
                                 }), {
                                     columnWidth: 0.65,
                                     fieldLabel: this.app.i18n._('Title'),
                                     name: 'n_prefix',
                                     maxLength: 64
                                 }], [{
-                                    columnWidth: 0.35,
-                                    fieldLabel: this.app.i18n._('First Name'),
-                                    name: 'n_given',
-                                    maxLength: 64
-                                }, {
-                                    columnWidth: 0.30,
-                                    fieldLabel: this.app.i18n._('Middle Name'),
-                                    name: 'n_middle',
-                                    maxLength: 64
-                                }, {
-                                    columnWidth: 0.35,
-                                    fieldLabel: this.app.i18n._('Last Name'),
-                                    name: 'n_family',
-                                    maxLength: 255
-                                }], [{
-                                    columnWidth: 0.65,
-                                    xtype: 'mirrortextfield',
-                                    fieldLabel: this.app.i18n._('Company'),
-                                    name: 'org_name',
-                                    maxLength: 255
-                                }, {
-                                    columnWidth: 0.35,
-                                    fieldLabel: this.app.i18n._('Unit'),
-                                    name: 'org_unit',
-                                    maxLength: 64
-                                }
-                                ]/* move to seperate tab, [{
+                                columnWidth: 0.35,
+                                fieldLabel: this.app.i18n._('First Name'),
+                                name: 'n_given',
+                                maxLength: 64
+                            }, {
+                                columnWidth: 0.30,
+                                fieldLabel: this.app.i18n._('Middle Name'),
+                                name: 'n_middle',
+                                maxLength: 64
+                            }, {
+                                columnWidth: 0.35,
+                                fieldLabel: this.app.i18n._('Last Name'),
+                                name: 'n_family',
+                                maxLength: 255
+                            }], [{
+                                columnWidth: 0.65,
+                                xtype: 'mirrortextfield',
+                                fieldLabel: this.app.i18n._('Company'),
+                                name: 'org_name',
+                                maxLength: 255
+                            }, {
+                                columnWidth: 0.35,
+                                fieldLabel: this.app.i18n._('Unit'),
+                                name: 'org_unit',
+                                maxLength: 64
+                            }
+                            ]/* move to seperate tab, [{
                                     columnWidth: .4,
                                     fieldLabel: this.app.i18n._('Suffix'),
                                     name:'n_suffix'
@@ -202,10 +191,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 height: 120
                             })
                         ]
-                        }, {
-                            xtype: 'columnform',
-                            items: [[
-                                !Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry') ?
+                    }, {
+                        xtype: 'columnform',
+                        items: [[
+                            !Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry') ?
                                 {
                                     columnWidth: 0.64,
                                     xtype: 'combo',
@@ -215,9 +204,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 } :
                                 (
                                     new Tine.Addressbook.IndustrySearchCombo({
-                                    fieldLabel: this.app.i18n._('Industry'),
-                                    columnWidth: 0.64,
-                                    name: 'industry'
+                                        fieldLabel: this.app.i18n._('Industry'),
+                                        columnWidth: 0.64,
+                                        name: 'industry'
                                     })
                                 ), {
                                      columnWidth: 0.36,
@@ -245,50 +234,50 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             xtype: 'columnform',
                             items: [[{
                                 fieldLabel: this.app.i18n._('Phone'),
-                                labelIcon: 'images/oxygen/16x16/apps/kcall.png',
+                                labelIcon: 'images/icon-set/icon_phone.svg',
                                 name: 'tel_work',
                                 maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Mobile'),
-                                labelIcon: 'images/oxygen/16x16/devices/phone.png',
+                                labelIcon: 'images/icon-set/icon_mobile.svg',
                                 name: 'tel_cell',
                                 maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Fax'),
-                                labelIcon: 'images/oxygen/16x16/devices/printer.png',
+                                labelIcon: 'images/icon-set/icon_print.svg',
                                 name: 'tel_fax',
                                 maxLength: 40
                             }], [{
                                 fieldLabel: this.app.i18n._('Phone (private)'),
-                                labelIcon: 'images/oxygen/16x16/apps/kcall.png',
+                                labelIcon: 'images/icon-set/icon_phone.svg',
                                 name: 'tel_home',
                                 maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Mobile (private)'),
-                                labelIcon: 'images/oxygen/16x16/devices/phone.png',
+                                labelIcon: 'images/icon-set/icon_mobile.svg',
                                 name: 'tel_cell_private',
                                 maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Fax (private)'),
-                                labelIcon: 'images/oxygen/16x16/devices/printer.png',
+                                labelIcon: 'images/icon-set/icon_print.svg',
                                 name: 'tel_fax_home',
                                 maxLength: 40
                             }], [{
                                 fieldLabel: this.app.i18n._('E-Mail'),
-                                labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
+                                labelIcon: 'images/icon-set/icon_email.svg',
                                 name: 'email',
                                 vtype: 'email',
                                 maxLength: 64
                             }, {
                                 fieldLabel: this.app.i18n._('E-Mail (private)'),
-                                labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
+                                labelIcon: 'images/icon-set/icon_email.svg',
                                 name: 'email_home',
                                 vtype: 'email',
                                 maxLength: 64
                             }, {
                                 xtype: 'mirrortextfield',
                                 fieldLabel: this.app.i18n._('Web'),
-                                labelIcon: 'images/oxygen/16x16/actions/network.png',
+                                labelIcon: 'images/icon-set/icon_globe.svg',
                                 name: 'url',
                                 maxLength: 128,
                                 listeners: {
@@ -444,13 +433,29 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     ]
                 }]
             }, this.mapPanel,
-                new Tine.widgets.activities.ActivitiesTabPanel({
-                    app: this.appName,
-                    record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
-                    record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
-                }),
-                this.contactEventPanel
-            ]
+            new Tine.widgets.activities.ActivitiesTabPanel({
+                app: this.appName,
+                record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
+                record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
+            }),
+        ];
+
+        if (this.contactEventPanel) {
+            tabs.push(this.contactEventPanel);
+        }
+
+        return {
+            xtype: 'tabpanel',
+            border: false,
+            plain: true,
+            activeTab: 0,
+            plugins: [{
+                ptype : 'ux.tabpanelkeyplugin'
+            }],
+            defaults: {
+                hideMode: 'offsets'
+            },
+            items: tabs
         };
     },
 
@@ -458,14 +463,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
      * init component
      */
     initComponent: function () {
-        var relatedRecords = {};
-
         this.initToolbar();
         this.groupsPanel = new Tine.Addressbook.contactListsGridPanel({
             initialLoadAfterRender: false,
             frame: false
         });
-        this.supr().initComponent.apply(this, arguments);
+        Tine.Addressbook.ContactEditDialog.superclass.initComponent.apply(this, arguments);
     },
 
     /**

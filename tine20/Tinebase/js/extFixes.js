@@ -786,7 +786,7 @@ Ext.util.CSS = function(){
                     // nested rules
                     if (ssRules[j].styleSheet) {
                         Ext.util.CSS.cacheStyleSheet(ssRules[j].styleSheet);
-                    } else {
+                    } else if (ssRules[j].selectorText) {
                         sel = ssRules[j].selectorText.toLowerCase();
                         rules[sel] = ssRules[j];
                         selParts = sel.split(', ');
@@ -1064,4 +1064,16 @@ Ext.override(Ext.layout.ToolbarLayout, {
         delete cfg.id;
         return cfg;
     }
+});
+
+Ext.override(Ext.LoadMask, {
+    onBeforeLoad: function() {
+        if(!this.disabled){
+            this.el.mask(this.msg, this.msgCls);
+            Ext.fly(this.el.query('.ext-el-mask-msg')[0]).appendChild(Ext.DomHelper.createDom({tag: 'div', cls: 'x-mask-wait'}));
+        }
+    },
+    onLoad : function(){
+        this.el.unmask(this.removeMask);
+    },
 });

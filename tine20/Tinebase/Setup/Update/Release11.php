@@ -168,6 +168,7 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         $this->updateSchema('Tinebase', array(Tinebase_Model_SchedulerTask::class));
 
         $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->removeTask('Tinebase_User/Group::syncUsers/Groups');
         // TODO create methods for fetching and creating all known application tasks (maybe with existence check)
         Tinebase_Scheduler_Task::addAlarmTask($scheduler);
         Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
@@ -530,4 +531,18 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.26');
     }
+
+    /**
+     * update to 11.27
+     *
+     * eventually add missing indexed_hash column to tree_nodes
+     */
+    public function update_26()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_55();
+
+        $this->setApplicationVersion('Tinebase', '11.27');
+    }
+
 }

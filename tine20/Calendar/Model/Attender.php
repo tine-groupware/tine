@@ -1004,12 +1004,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 if ($attender->user_id instanceof Tinebase_Record_Abstract) {
                     // already resolved
                     continue;
-                } elseif ((isset(self::$_resolvedAttendeesCache[$attender->user_type]) || array_key_exists($attender->user_type, self::$_resolvedAttendeesCache)) && (isset(self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id]) || array_key_exists($attender->user_id, self::$_resolvedAttendeesCache[$attender->user_type]))){
+                } elseif (isset(self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id])){
                     // already in cache
                     $attender->user_id = self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id];
                 } else {
-                    if (! (isset($typeMap[$attender->user_type]) || array_key_exists($attender->user_type, $typeMap))) {
-                        $typeMap[$attender->user_type] = array();
+                    if (!isset($typeMap[$attender->user_type])) {
+                        $typeMap[$attender->user_type] = [];
                     }
                     $typeMap[$attender->user_type][] = $attender->user_id;
                 }
@@ -1020,7 +1020,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         if ($resolveDisplayContainers) {
             $displaycontainerIds = array_diff($allAttendee->displaycontainer_id, array(''));
             if (! empty($displaycontainerIds)) {
-                Tinebase_Container::getInstance()->getGrantsOfRecords($allAttendee, Tinebase_Core::getUser(), 'displaycontainer_id');
+                $allResources = $allAttendee->filter('user_type', self::USERTYPE_RESOURCE);
+                $tmpRS = $allAttendee->getClone(true);
+                $tmpRS->removeRecords($allResources);
+                Tinebase_Container::getInstance()->getGrantsOfRecords($tmpRS, Tinebase_Core::getUser(),
+                    'displaycontainer_id');
+                Tinebase_Container::getInstance()->getGrantsOfRecords($allResources, Tinebase_Core::getUser(),
+                    'displaycontainer_id', Calendar_Model_ResourceGrants::class);
             }
         }
 
@@ -1127,8 +1133,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 }
 
                 // keep authkey if attender is a resource and user has manage_resources
-                if ($attender->user_type === static::USERTYPE_RESOURCE &&
-                    Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES)) {
+                if ($attender->user_type === self::USERTYPE_RESOURCE &&
+                        (Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES) || (
+                        isset($attender['displaycontainer_id']) && !is_scalar($attender['displaycontainer_id'])
+                        && isset($attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::EVENTS_EDIT])
+                        && $attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::EVENTS_EDIT]))) {
                     continue;
                 }
                 
@@ -1193,7 +1202,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     public static function clearCache()
     {
         foreach(self::$_resolvedAttendeesCache as $name => $entries) {
-            self::$_resolvedAttendeesCache[$name] = array();
+            self::$_resolvedAttendeesCache[$name] = [];
         }
     }
 }

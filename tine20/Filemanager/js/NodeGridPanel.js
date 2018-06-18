@@ -432,7 +432,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 enableFileDrop: false,
                 disable: true
             }],
-            iconCls: this.app.appName + 'IconCls',
+            iconCls: 'action_add',
             actionUpdater: function(action) {
                 var _ = window.lodash,
                     allowAdd = _.get(this, 'currentFolderNode.attributes.account_grants.addGrant', false),
@@ -559,6 +559,13 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
 
         this.actionUpdater.addActions(actions);
+    },
+
+    /**
+     * fm specific delete handler
+     */
+    onDeleteRecords: function(btn, e) {
+        this.action_deleteRecord.execute();
     },
 
     /**
@@ -922,17 +929,20 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     isFile: function (file) {
-        return new Promise(function (resolve, reject) {
-            var fr = new FileReader();
-            fr.onload = function () {
-                if (fr.result === null) {
-                    reject();
-                } else {
-                    resolve();
-                }
-            };
-            fr.readAsText(file);
-        });
+        return Promise.resolve();
+        // NOTE: fileReader can't cope with files ~> 1GB
+        //       with html5-file-selector we can't have directories here
+        // return new Promise(function (resolve, reject) {
+        //     var fr = new FileReader();
+        //     fr.onload = function () {
+        //         if (fr.result === null) {
+        //             reject();
+        //         } else {
+        //             resolve();
+        //         }
+        //     };
+        //     fr.readAsText(file);
+        // });
     },
 
     /**

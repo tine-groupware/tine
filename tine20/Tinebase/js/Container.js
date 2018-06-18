@@ -144,6 +144,21 @@ Tine.Tinebase.container = {
         var pathParts = Ext.isArray(path) ? path : String(path).split('/');
         
         return pathParts[1];
+    },
+
+    /**
+     * get grants model of given container
+     *
+     * @static
+     * @param container
+     * @return {Record}
+     */
+    getGrantsModel: function(container) {
+        var _ = window.lodash,
+            containerData = _.isFunction(container.beginEdit) ? container.data : container,
+            grantsModelName = _.get(containerData, 'xprops.Tinebase.Container.GrantsModel', containerData.model + 'Grants'),
+            grantsModel = Tine.Tinebase.data.RecordMgr.get(grantsModelName);
+
+        return grantsModel || Tine.Tinebase.data.RecordMgr.get(Tine.Tinebase.Model.Grant);
     }
-    
 };

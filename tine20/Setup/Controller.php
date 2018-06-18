@@ -88,14 +88,14 @@ class Setup_Controller
      */
     public static function getInstance()
     {
-        if (self::$_instance === NULL) {
+        if (self::$_instance === null) {
             self::$_instance = new Setup_Controller;
         }
         
         return self::$_instance;
     }
 
-    public static function unsetInstance()
+    public static function destroyInstance()
     {
         self::$_instance = null;
     }
@@ -334,18 +334,23 @@ class Setup_Controller
      */
     public function checkConfigCaching()
     {
-        $result = FALSE;
+        $result = false;
         
         $config = Setup_Core::get(Setup_Core::CONFIG);
         
         if (! isset($config->caching) || !$config->caching->active) {
-            $result = TRUE;
+            $result = true;
             
         } else if (! isset($config->caching->backend) || ucfirst($config->caching->backend) === 'File') {
-            $result = $this->checkDir('path', 'caching', FALSE);
+            $result = $this->checkDir('path', 'caching', false);
             
         } else if (ucfirst($config->caching->backend) === 'Redis') {
-            $result = $this->_checkRedisConnect(isset($config->caching->redis) ? $config->caching->redis->toArray() : array());
+            try {
+                $result = $this->_checkRedisConnect(isset($config->caching->redis) ? $config->caching->redis->toArray() : array());
+            } catch (RedisException $re) {
+                Tinebase_Exception::log($re);
+                $result = false;
+            }
             
         } else if (ucfirst($config->caching->backend) === 'Memcached') {
             $result = $this->_checkMemcacheConnect(isset($config->caching->memcached) ? $config->caching->memcached->toArray() : array());
@@ -620,6 +625,7 @@ class Setup_Controller
      * @param   string    $_majorVersion
      * @return  array   messages
      * @throws  Setup_Exception if current app version is too high
+     * @throws  Exception
      */
     public function updateApplication(Tinebase_Model_Application $_application, $_majorVersion)
     {
@@ -632,6 +638,8 @@ class Setup_Controller
                 
                 $messages[] = $message;
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $message);
+
+                $this->_assertApplicationStatesTable();
 
                 $version = $_application->getMajorAndMinorVersion();
                 $minor = $version['minor'];
@@ -709,6 +717,28 @@ class Setup_Controller
         return $messages;
     }
 
+    /**
+     * make sure that application_states table exists before the update
+     *
+     * @see https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues/77
+     *
+     * TODO should be removed at some point
+     */
+    protected function _assertApplicationStatesTable()
+    {
+        if ($this->_backend->tableExists('application_states')) {
+            return;
+        }
+
+        $updater = new Tinebase_Setup_Update_Release11($this->_backend);
+        $oldVersion = Setup_Update_Abstract::getAppVersion('Tinebase');
+        $updater->update_23();
+        $updater->setApplicationVersion('Tinebase', $oldVersion);
+    }
+
+    /**
+     * TODO should be removed at some point
+     */
     protected function _fixTinebase10_33()
     {
         // check and execute \Tinebase_Setup_Update_Release10::update_32 if not done yet :-/
@@ -1679,6 +1709,8 @@ class Setup_Controller
             }
         }
 
+        $this->_clearCache();
+
         Tinebase_Event::reFireForNewApplications();
     }
 
@@ -2434,7 +2466,7 @@ class Setup_Controller
 
             $backupOptions = array(
                 'backupDir'         => $backupDir,
-                'structTables'      => $this->_getBackupStructureOnlyTables(),
+                'structTables'      => $this->getBackupStructureOnlyTables(),
             );
 
             $this->_backend->backup($backupOptions);
@@ -2456,7 +2488,7 @@ class Setup_Controller
      * @return array
      * @throws Setup_Exception_NotFound
      */
-    protected function _getBackupStructureOnlyTables()
+    public function getBackupStructureOnlyTables()
     {
         $tables = array();
 

@@ -184,11 +184,13 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     //width: 300,
                                     //listWidth: 300,
                                     name: this.recordClass.getMeta('containerProperty'),
+                                    treePanelClass: Tine.Calendar.TreePanel,
                                     recordClass: this.recordClass,
                                     containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
                                     containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
                                     appName: this.app.appName,
                                     requiredGrant: 'readGrant',
+                                    requiredGrants: ['addGrant'],
                                     disabled: true
                                 }), Ext.apply(this.perspectiveCombo.getAttendeeContainerField(), {
                                     columnWidth: 1
@@ -360,7 +362,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.action_freeTimeSearch = new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Free Time Search'),
             handler: this.onFreeTimeSearch,
-            iconCls: 'action_fretimesearch',
+            iconCls: 'cal-action_fretimesearch',
             disabled: false,
             scope: this
         });
@@ -368,7 +370,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.tbarItems = [new Ext.Button(this.action_freeTimeSearch), new Ext.Button(new Ext.Action({
             text: Tine.Tinebase.appMgr.get('Calendar').i18n._('Mute Notification'),
             handler: this.onMuteNotificationOnce,
-            iconCls: 'notes_noteIcon',
+            iconCls: 'action_mute_noteification',
             disabled: false,
             scope: this,
             enableToggle: true

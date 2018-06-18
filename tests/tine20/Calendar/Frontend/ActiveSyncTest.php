@@ -988,10 +988,12 @@ Zeile 3</AirSyncBase:Data>
         $folderA = $this->testCreateFolder(); // personal of test user
         
         $sclever = Tinebase_Helper::array_value('sclever', Zend_Registry::get('personas'));
+        /** @var Tinebase_Model_Container $folderB */
         $folderB = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $sclever->getId());
+        $folderBContainer = Tinebase_Container::getInstance()->getContainerById($folderB);
 
         // have syncGerant for sclever
-        Tinebase_Container::getInstance()->setGrants($folderB, new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+        Tinebase_Container::getInstance()->setGrants($folderBContainer, new Tinebase_Record_RecordSet($folderBContainer->getGrantClass(), array(
             array(
                 'account_id'    => $sclever->getId(),
                 'account_type'  => 'user',
@@ -1398,12 +1400,14 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         static::assertEquals(2, count($exceptions), 'no exception created');
 
         $exception = $exceptions->find('summary', 'exception1');
+        static::assertNotNull($exception, 'no exception created');
         $exception = Calendar_Controller_Event::getInstance()->get($exception->getId());
         static::assertNotNull($exception, 'no exception created');
         static::assertTrue(isset($exception->customfields[$cfCfg->name]), 'copying customfield didnt work');
         static::assertEquals(__METHOD__, $exception->customfields[$cfCfg->name], 'copying customfield didnt work');
 
         $exception = $exceptions->find('summary', 'exception');
+        static::assertNotNull($exception, 'no exception created');
         $exception = Calendar_Controller_Event::getInstance()->get($exception->getId());
         static::assertNotNull($exception, 'we lost an exception');
         static::assertTrue(isset($exception->customfields[$cfCfg->name]), 'we lost a customfield');

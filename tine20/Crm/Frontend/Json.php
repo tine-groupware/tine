@@ -73,7 +73,9 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         foreach($lead['relations'] as $relation) {
             if ($relation['related_model'] == 'Tasks_Model_Task') {
-                $organizerIds[] = $relation['related_record']['organizer'];
+                if (isset($relation['related_record'])) {
+                    $organizerIds[] = $relation['related_record']['organizer'];
+                }
             }
         }
         
@@ -81,7 +83,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $organizers = $be->getMultiple($organizerIds);
 
         for ($i = 0; $i < count($lead['relations']); $i++) {
-            if ($lead['relations'][$i]['related_model'] == 'Tasks_Model_Task') {
+            if ($lead['relations'][$i]['related_model'] == 'Tasks_Model_Task' && isset($lead['relations'][$i]['related_record'])) {
                 $organizer = $organizers->getById($lead['relations'][$i]['related_record']['organizer']);
                 if ($organizer) {
                     $lead['relations'][$i]['related_record']['organizer'] = $organizer->toArray();
@@ -137,10 +139,11 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getDefaultContainer()
     {
-        $defaultContainerArray = Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Crm_Preference::DEFAULTLEADLIST)->toArray();
+        $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Crm_Preference::DEFAULTLEADLIST);
+        $defaultContainerArray = $defaultContainer->toArray();
         $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(
             Tinebase_Core::getUser(),
-            $defaultContainerArray['id']
+            $defaultContainer
         )->toArray();
         
         return $defaultContainerArray;

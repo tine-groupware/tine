@@ -954,14 +954,33 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      */
     public function testDeleteTimeaccountWitContractRelation()
     {
+        $ta = $this->_createTimeaccountWithContract();
+        $feTa = new Timetracker_Frontend_Json();
+        $feCo = new Sales_Frontend_Json();
+        
+        $jsonTa = $feTa->getTimeaccount($ta->getId());
+
+        $this->assertEquals(1, count($jsonTa['relations']));
+
+        $feTa->deleteTimeaccounts(array($ta->getId()));
+        
+        $jsonCo = $feCo->getContract($jsonTa['relations'][0]['related_id']);
+        $this->assertEquals(0, count($jsonCo['relations']));
+    }
+
+    /**
+     * @return Timetracker_Model_Timeaccount|Tinebase_Record_Interface
+     */
+    protected function _createTimeaccountWithContract()
+    {
         $taContainer = Tinebase_Container::getInstance()->getDefaultContainer('Timetracker_Model_Timeaccount');
         $cContainer  = Tinebase_Container::getInstance()->getDefaultContainer('Sales_Model_Contract');
         $ta = new Timetracker_Model_Timeaccount(array('number' => 83209, 'title' => 'unitttest', 'container_id' => $taContainer->getId()));
-        
+
         $contract = new Sales_Model_Contract(array('number' => 83209, 'title' => 'unittest', 'container_id' => $cContainer->getId()));
         $contract = Sales_Controller_Contract::getInstance()->create($contract);
         $ta = Timetracker_Controller_Timeaccount::getInstance()->create($ta);
-        
+
         $r = new Tinebase_Model_Relation(array(
             'own_model' => 'Timetracker_Model_Timeaccount',
             'own_backend' => 'Sql',
@@ -971,26 +990,30 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             'related_model' => 'Sales_Model_Contract',
             'related_backend' => 'Sql',
             'related_id' => $contract->getId(),
-            'type' => 'CONTRACT'
+            'type' => 'TIME_ACCOUNT'
         ));
-        
+
         $ta->relations = array($r);
-        
+
         $ta = Timetracker_Controller_Timeaccount::getInstance()->update($ta);
-        
-        $feTa = new Timetracker_Frontend_Json();
-        $feCo = new Sales_Frontend_Json();
-        
-        $jsonTa = $feTa->getTimeaccount($ta->getId());
-        $jsonCo = $feCo->getContract($contract->getId());
-        
-        $this->assertEquals(1, count($jsonTa['relations']));
-        $this->assertEquals(1, count($jsonCo['relations']));
-        
-        $feTa->deleteTimeaccounts(array($ta->getId()));
-        
-        $jsonCo = $feCo->getContract($contract->getId());
-        $this->assertEquals(0, count($jsonCo['relations']));
+
+        return $ta;
+    }
+
+    /**
+     * testContractResolving
+     */
+    public function testContractResolving()
+    {
+        $ta = $this->_createTimeaccountWithContract();
+        $result = $this->_json->searchTimeaccounts([
+            ['field' => 'id', 'operator' => 'equals', 'value' => $ta->getId()]
+        ], []);
+        self::assertEquals(1, $result['totalcount']);
+        $ta = $result['results'][0];
+        self::assertTrue(isset($ta['relations']), 'no relations in result: ' . print_r($ta, true));
+        self::assertEquals('TIME_ACCOUNT', $ta['relations'][0]['type']);
+        self::assertTrue(is_array($ta['relations'][0]['related_record']));
     }
     
     /**
@@ -1043,8 +1066,18 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Tinebase_Acl_Rights::ADMIN);
         
         $fe->saveRole($userRole, $roleMembers['results'], $roleRights['results']);
-        
-        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+
+        $container = new Tinebase_Model_Container(
+            array(
+                'name'           => 'shared',
+                'type'           => Tinebase_Model_Container::TYPE_SHARED,
+                'owner_id'       => $user,
+                'backend'        => 'SQL',
+                'application_id' => $app->getId(),
+                'model'          => 'Addressbook_Model_Contact',
+                'color'          => '#000000'
+            ));
+        $grants = new Tinebase_Record_RecordSet($container->getGrantClass());
         $grants->addRecord(new Tinebase_Model_Grants(array(
             'account_type' => 'user', 'account_id' => Tinebase_Core::getUser()->getId(),
             Tinebase_Model_Grants::GRANT_READ      => true,
@@ -1060,18 +1093,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             Tinebase_Model_Grants::GRANT_DELETE    => true,
         )));
         
-        $container = Tinebase_Container::getInstance()->addContainer(
-            new Tinebase_Model_Container(
-                array(
-                    'name'           => 'shared',
-                    'type'           => Tinebase_Model_Container::TYPE_SHARED,
-                    'owner_id'       => $user,
-                    'backend'        => 'SQL',
-                    'application_id' => $app->getId(),
-                    'model'          => 'Addressbook_Model_Contact',
-                    'color'          => '#000000'
-                )), $grants, TRUE
-        );
+        $container = Tinebase_Container::getInstance()->addContainer($container, $grants, true);
         
         // create timeaccount
         $ta = $this->_json->saveTimeaccount($ta);

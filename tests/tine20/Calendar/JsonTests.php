@@ -241,6 +241,52 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
         return $searchResultData;
     }
+
+    /**
+     * testSearchEvents
+     */
+    public function testSearchEventsWithResourceAttender()
+    {
+        $eventData = $this->testCreateEvent(TRUE);
+
+        $resource = Calendar_Controller_Resource::getInstance()->create($this->_getResource());
+        $attendee = $eventData['attendee'][0];
+        $attendee['user_type'] = Calendar_Model_Attender::USERTYPE_RESOURCE;
+        $attendee['user_id'] = $resource->getId();
+        unset($attendee['id']);
+        $eventData['attendee'][] = $attendee;
+        $updatedEvent = $this->_uit->saveEvent($eventData);
+
+        $found = false;
+        foreach($updatedEvent['attendee'] as $attendee) {
+            if ($resource->getId() === $attendee['user_id']['id']) {
+                $found = true;
+                break;
+            }
+        }
+        static::assertTrue($found, 'resource attender not created');
+
+        Calendar_Model_Attender::clearCache();
+        $filter = $this->_getEventFilterArray();
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+
+        $this->assertTrue(! empty($searchResultData['results']));
+        $resultEventData = $searchResultData['results'][0];
+        $found = false;
+        foreach($resultEventData['attendee'] as $attendee) {
+            if ($resource->getId() === $attendee['user_id']['id']) {
+                $found = true;
+                static::assertTrue(isset($attendee['user_id']['container_id']['account_grants']) &&
+                    is_array($attendee['user_id']['container_id']['account_grants']) &&
+                    !empty($attendee['user_id']['container_id']['account_grants']),
+                    'resource attender account grants missing');
+                static::assertTrue($attendee['user_id']['container_id']['account_grants']
+                    [Calendar_Model_ResourceGrants::RESOURCE_SYNC], 'resource_sync grant not set');
+                break;
+            }
+        }
+        static::assertTrue($found, 'resource attender not in search result');
+    }
     
     /**
      * get filter array with container and period filter
@@ -649,22 +695,24 @@ class Calendar_JsonTests extends Calendar_TestCase
         }
         
         // sclever has only READ grant
-        Tinebase_Container::getInstance()->setGrants($this->_getTestCalendar(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        $testCalendar = $this->_getTestCalendar();
+        Tinebase_Container::getInstance()->setGrants($testCalendar, new Tinebase_Record_RecordSet(
+            $testCalendar->getGrantClass(), [[
             'account_id'    => $this->_getTestUser()->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
-            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
-            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
-        ), array(
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
+        ], [
             'account_id'    => $this->_getPersona('sclever')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
-            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
-        ))), TRUE);
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
+        ]]), true);
         
         $unittestUser = Tinebase_Core::getUser();
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
@@ -1118,20 +1166,20 @@ class Calendar_JsonTests extends Calendar_TestCase
     {
         // give fb grants from sclever
         $scleverCal = Tinebase_Container::getInstance()->getContainerById($this->_getPersonasDefaultCals('sclever'));
-        Tinebase_Container::getInstance()->setGrants($scleverCal->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(array(
+        Tinebase_Container::getInstance()->setGrants($scleverCal->getId(), new Tinebase_Record_RecordSet($scleverCal->getGrantClass(), array(array(
             'account_id'    => $this->_getPersona('sclever')->getId(),
             'account_type'  => 'user',
             Tinebase_Model_Grants::GRANT_READ     => true,
             Tinebase_Model_Grants::GRANT_ADD      => true,
             Tinebase_Model_Grants::GRANT_EDIT     => true,
             Tinebase_Model_Grants::GRANT_DELETE   => true,
-            Tinebase_Model_Grants::GRANT_PRIVATE  => true,
+            Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => true,
             Tinebase_Model_Grants::GRANT_ADMIN    => true,
-            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
         ), array(
             'account_id'    => $this->_getTestUser()->getId(),
             'account_type'  => 'user',
-            Tinebase_Model_Grants::GRANT_FREEBUSY => true,
+            Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => true,
         ))), TRUE);
         
         Tinebase_Core::set(Tinebase_Core::USER, $this->_getPersona('sclever'));
@@ -1391,7 +1439,8 @@ class Calendar_JsonTests extends Calendar_TestCase
     /**
      * assert grant handling
      */
-    public function testSaveResource($grants = array('readGrant' => true,'editGrant' => true))
+    public function testSaveResource($grants = [Calendar_Model_ResourceGrants::RESOURCE_READ => true,
+         Calendar_Model_ResourceGrants::EVENTS_EDIT => true, Calendar_Model_ResourceGrants::RESOURCE_INVITE => true])
     {
         $resoureData = array(
             'name'  => Tinebase_Record_Abstract::generateUID(),
@@ -1404,6 +1453,12 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $resoureData = $this->_uit->saveResource($resoureData);
         $this->assertTrue(is_array($resoureData['grants']), 'grants are not resolved');
+        if (count($filteredGrantsInput = array_filter($grants)) > 0 ) {
+            foreach ($filteredGrantsInput as $key => $value) {
+                static::assertTrue(isset($resoureData['grants'][0][$key]) && $resoureData['grants'][0][$key],
+                    $key . ' grant missing');
+            }
+        }
         
         return $resoureData;
     }
@@ -1415,17 +1470,14 @@ class Calendar_JsonTests extends Calendar_TestCase
     {
         $resourceData = $this->testSaveResource(array());
         $this->assertEmpty($resourceData['grants']);
-        // mimic client behavior
-        $resourceData['container_id'] = array ( 'account_grants' => array ( 'readGrant' => true, 'addGrant' => true,
-            'editGrant' => true, 'deleteGrant' => true, 'syncGrant' => true, 'exportGrant' => true, 'adminGrant' => true, ), );
-        $resourceData['grants'] = array(array_merge(array(
-            'readGrant' => true,
-            'editGrant' => true,
-            'deleteGrant' => true,
-            'adminGrant' => true), array(
+
+        $resourceData['grants'] = [[
+            Calendar_Model_ResourceGrants::RESOURCE_READ => true,
+            Calendar_Model_ResourceGrants::RESOURCE_EDIT => true,
+            Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
             'account_id' => Tinebase_Core::getUser()->getId(),
-            'account_type' => 'user'
-        )));
+            'account_type' => 'user',
+        ]];
 
         $savedResource = $this->_uit->saveResource($resourceData);
         $this->assertEquals(1, count($savedResource['grants']), 'grants are not set!');
@@ -1440,26 +1492,23 @@ class Calendar_JsonTests extends Calendar_TestCase
         $readableResoureData = $this->testSaveResource();
         $nonReadableResoureData = $this->testSaveResource(array());
         
-        $filer = array(
+        $filter = array(
             array('field' => 'name', 'operator' => 'in', 'value' => array(
                 $readableResoureData['name'],
                 $nonReadableResoureData['name'],
             ))
         );
         
-        $searchResultManager = $this->_uit->searchResources($filer, array());
+        $searchResultManager = $this->_uit->searchResources($filter, array());
         $this->assertEquals(2, count($searchResultManager['results']), 'with manage grants all records should be found');
+
+        // remove manage_resource right
+        $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
+        // reset class cache
+        Calendar_Controller_Resource::destroyInstance();
+        Tinebase_Container::getInstance()->resetClassCache();
         
-        // steal manage right and reactivate container checks
-        $roleManager = Tinebase_Acl_Roles::getInstance();
-        $roleManager->deleteRoles(array(
-                $roleManager->getRoleByName('manager role')->getId(),
-                $roleManager->getRoleByName('admin role')->getId()
-                ));
-        
-        Calendar_Controller_Resource::getInstance()->doContainerACLChecks(TRUE);
-        
-        $searchResult = $this->_uit->searchResources($filer, array());
+        $searchResult = $this->_uit->searchResources($filter, array());
         $this->assertEquals(1, count($searchResult['results']), 'without manage grants only one record should be found');
     }
 
@@ -1487,7 +1536,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         // remove manage_resource right
         $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
         // reset class cache
-        Calendar_Controller_Resource::getInstance()->doContainerACLChecks(true);
+        Calendar_Controller_Resource::destroyInstance();
 
         try {
             $this->_uit->saveEvent($event->toArray());
@@ -1569,7 +1618,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         // remove manage_resource right -> resource should still be there
         $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
         // reset class cache
-        Calendar_Controller_Resource::getInstance()->doContainerACLChecks(true);
+        Calendar_Controller_Resource::destroyInstance();
 
         $persistentEventData = $this->_uit->getEvent($persistentEventData['id']);
         $this->assertEquals(2, count($persistentEventData['attendee']), 'resource without read grant must not be missing in attendee: '
@@ -1610,12 +1659,12 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testResourceAttendeeGrants()
     {
         $editableResoureData = $this->testSaveResource();
-        $nonEditableResoureData = $this->testSaveResource(array('readGrant' => true));
+        $nonEditableResoureData = $this->testSaveResource([Calendar_Model_ResourceGrants::RESOURCE_INVITE => true]);
 
         // remove manage_resource right
         $this->_removeRoleRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES);
         // reset class cache
-        Calendar_Controller_Resource::getInstance()->doContainerACLChecks(true);
+        Calendar_Controller_Resource::destroyInstance();
         
         $event = $this->_getEvent(TRUE);
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(

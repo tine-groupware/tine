@@ -791,7 +791,7 @@ class Tinebase_Application
                 // close transaction open in \Tinebase_Timemachine_ModificationLog::applyReplicationModLogs
                 Tinebase_TransactionManager::getInstance()->rollBack();
                 Setup_Core::set(Setup_Core::CHECKDB, true);
-                Setup_Controller::unsetInstance();
+                Setup_Controller::destroyInstance();
                 Setup_Controller::getInstance()->installApplications([$record->getId() => $record->name],
                     [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true]);
                 break;
@@ -799,5 +799,29 @@ class Tinebase_Application
             default:
                 throw new Tinebase_Exception('unsupported Tinebase_Model_ModificationLog->change_type: ' . $_modification->change_type);
         }
+    }
+
+    public function getAllApplicationGrantModels($_applicationId)
+    {
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+
+        try {
+            return Tinebase_Cache_PerRequest::getInstance()->load(__CLASS__, __METHOD__, $applicationId, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+
+        $grantModels = [];
+        $application = $this->getApplicationById($applicationId);
+        /** @var DirectoryIterator $file */
+        foreach (new DirectoryIterator(dirname(__DIR__) . '/' . $application->name . '/Model') as $file) {
+            if ($file->isFile() && strpos($file->getFilename(), 'Grants.php') > 0) {
+                $grantModel = $application->name . '_Model_' . substr($file->getFilename(), 0, -4);
+                if (class_exists($grantModel)) {
+                    $grantModels[] = $grantModel;
+                }
+            }
+        }
+
+        Tinebase_Cache_PerRequest::getInstance()->save(__CLASS__, __METHOD__, $applicationId, $grantModels, Tinebase_Cache_PerRequest::VISIBILITY_SHARED);
+        return $grantModels;
     }
 }
