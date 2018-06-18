@@ -9,4 +9,6 @@ return array (
         Tinebase_Config::FEATURE_REMEMBER_POPUP_SIZE   => true,
         Tinebase_Config::FEATURE_SEARCH_PATH           => true,
     ),
+    // branding / url config
+    Tinebase_Config::BRANDING_WEBURL => 'https://www.tine20.com',
 );
