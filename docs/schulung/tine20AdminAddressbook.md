@@ -30,6 +30,26 @@ Um ein LDAP-Adressbuch mit Einträgen der objectClass "mozillaAbPersonAlpha" (si
             ),
 	    ),
     ),
+    
+Weitere Infos:
+
+* gibt es eine Möglichkeit, Customfields in das Mapping aufzunehmen, so dass sie in konfigurierte LDAP-Properties geschrieben werden?
+
+-> nein, Customfields gehen nicht. Wäre aber ne Kleinigkeit das hinzuzufügen, etwa 2 Std. Zusatzaufwand 
+
+* Wie konfiguriert man den Adressbuch-Container, so dass der Inhalt ins LDAP gesynct wird? Geht das über die Container XPROPS?
+-> das muß alles zu Fuß konfiguriert werden: in der sync config:
+ 
+ 
+    'filter' => [['field'=>'container_id', 'operator' => in, 'value' => ['ID_1', 'ID_2', etc.]]
+
+* Sind mehrere Ordner/Container möglich?
+-> ja, es wird mit einem "echtem" Addressbook_Model_ContactFilter gesteuert (s.o.)
+
+* Kann ein initialer Sync der Daten durchgeführt werden?
+-> ja: Addressbook_Frontend_Cli::syncbackends -> überträgt alle Kontakte die zum Filter passen und noch nicht übertragen wurden.
+
+btw. mit dem Filter sollte man ein bischen aufpassen, am besten man ändert ihn nie! Wenn dann darf der Filter nur "größer" werden, aber er darf nie bereits übertragene Kontake ausschließen.
 
 Änderungen rückgängig machen (UNDO-Funktion)
 =================
