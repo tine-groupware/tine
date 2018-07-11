@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -48,7 +48,8 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_applicationName = 'Calendar';
         $this->_modelName       = 'Calendar_Model_Resource';
         
@@ -187,6 +188,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             // create a calendar for this resource
             $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
                 'name'              => $_record->name,
+                'hierarchy'         => $_record->hierarchy,
                 'color'             => '#333399',
                 'type'              => Tinebase_Model_Container::TYPE_SHARED,
                 'backend'           => $this->_backend->getType(),
@@ -245,8 +247,10 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
                     } catch(Tinebase_Exception_NotFound $tenf) {
                         return;
                     }
-                    if ($resource->name !== $_eventObject->observable->name) {
+                    if (!$_eventObject->observable->is_deleted && ($resource->name !== $_eventObject->observable->name
+                            || $resource->hierarchy !== $_eventObject->observable->hierarchy)) {
                         $resource->name = $_eventObject->observable->name;
+                        $resource->hierarchy = $_eventObject->observable->hierarchy;
                         $this->update($resource);
                     }
                     break;
@@ -292,8 +296,9 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
 
             $result = parent::update($_record);
 
-            if ($container->name !== $result->name) {
+            if ($container->name !== $result->name || $container->hierarchy !== $result->hierarchy) {
                 $container->name = $result->name;
+                $container->hierarchy = $result->hierarchy;
                 Tinebase_Container::getInstance()->update($container);
             }
 
@@ -386,6 +391,22 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         }
 
         return parent::_deleteLinkedObjects($_record);
+    }
+
+    /**
+     * delete one record
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _deleteRecord(Tinebase_Record_Interface $_record)
+    {
+        // event needs to be fired before the actual delete - otherwise for example the resource attender is no longer found ...
+        $event = new Calendar_Event_DeleteResource();
+        $event->resource = $_record;
+        Tinebase_Event::fireEvent($event);
+
+        parent::_deleteRecord($_record);
     }
 
     /**

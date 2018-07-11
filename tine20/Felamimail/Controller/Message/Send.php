@@ -608,8 +608,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         }
 
         // add reply-to
-        if (! empty($_account->reply_to)) {
-            $_mail->setReplyTo($_account->reply_to, $this->_getSenderName($_message, $_account));
+        $replyTo = $_message && ! empty($_message->reply_to)
+            ? $_message->reply_to
+            : (! empty($_account->reply_to) ? $_account->reply_to : null);
+        if ($replyTo && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $replyTo)) {
+            $_mail->setReplyTo($replyTo, $this->_getSenderName($_message, $_account));
         }
         
         // set message-id (we could use Zend_Mail::createMessageId() here)
@@ -780,15 +783,19 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         return $part;
     }
 
+    /**
+     * @param $attachment
+     * @param $_message
+     * @return null|string
+     */
     protected function _getAttachmentType($attachment, $_message)
     {
-        // Determine if it's a tempfile attachment or a filenode attachment
-        if (isset($attachment['attachment_type']) && $attachment['attachment_type'] === 'attachment' && $attachment['tempFile']) {
-            $attachment['attachment_type'] = 'tempfile';
-        }
-
-        if (isset($attachment['attachment_type']) && $attachment['attachment_type'] === 'attachment' && !$attachment['tempFile']) {
-            $attachment['attachment_type'] = 'filenode';
+        if (isset($attachment['attachment_type']) && $attachment['attachment_type'] === 'attachment') {
+            if (isset($attachment['tempFile']) && $attachment['tempFile']) {
+                return 'tempfile';
+            } else {
+                return 'filenode';
+            }
         }
 
         if (isset($attachment['attachment_type'])) {

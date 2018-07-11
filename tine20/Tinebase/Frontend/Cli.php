@@ -82,8 +82,59 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return $result ? true : -1;
     }
 
+    public function forceResync($_opts)
+    {
+        if (!$this->_checkAdminRight()) {
+            return false;
+        }
+
+        $args = $this->_parseArgs($_opts, array());
+        $userIds = isset($args['userIds']) ? (is_array($args['userIds']) ? $args['userIds'] : [$args['userIds']])
+            : [];
+        $contentClasses = isset($args['contentClasses']) ? (is_array($args['contentClasses'])
+            ? $args['contentClasses'] : [$args['contentClasses']]) : [];
+        $apis = isset($args['apis']) ? (is_array($args['apis']) ? $args['apis'] : [$args['apis']]) : [];
+
+        // NOTE: this needs to be adjusted in Tinebase_Controller::forceResync() too
+        $allowedContentClasses = [
+            Tinebase_Controller::SYNC_CLASS_CONTACTS,
+            Tinebase_Controller::SYNC_CLASS_EMAIL,
+            Tinebase_Controller::SYNC_CLASS_EVENTS,
+            Tinebase_Controller::SYNC_CLASS_TASKS,
+        ];
+        $allowedApis = [
+            Tinebase_Controller::SYNC_API_ACTIVESYNC,
+            Tinebase_Controller::SYNC_API_DAV,
+        ];
+
+        if (empty($apis)) {
+            $apis = $allowedApis;
+        } else {
+            $apis = array_intersect($allowedApis, $apis);
+        }
+
+        if (empty($contentClasses)) {
+            $contentClasses = $allowedContentClasses;
+        } else {
+            $contentClasses = array_intersect($allowedContentClasses, $contentClasses);
+        }
+
+        $msg = 'forcing resync for APIs: ' . join($apis, ', ') . ' with content classes: ' .
+            join($contentClasses, ', ') . (empty($userIds) ? ' for all users' : ' for users: ' . join($userIds, ', '));
+        echo $msg . PHP_EOL;
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $msg);
+
+        Tinebase_Controller::getInstance()->forceResync($contentClasses, $userIds, $apis);
+    }
+
     /**
      * forces containers that support sync token to resync via WebDAV sync tokens
+     *
+     * this will DELETE the complete content history for the affected containers
+     * this will increate the sequence for all records in all affected containers
+     * this will increate the sequence of all affected containers
      *
      * this will cause 2 BadRequest responses to sync token requests
      * the first one as soon as the client notices that something changed and sends a sync token request
@@ -97,44 +148,30 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function forceSyncTokenResync($_opts)
     {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
         $args = $this->_parseArgs($_opts, array());
-        $container = Tinebase_Container::getInstance();
 
         if (isset($args['userIds'])) {
             $args['userIds'] = !is_array($args['userIds']) ? array($args['userIds']) : $args['userIds'];
-            $args['containerIds'] = $container->search(new Tinebase_Model_ContainerFilter(array(
+            $filter = new Tinebase_Model_ContainerFilter(array(
                 array('field' => 'owner_id', 'operator' => 'in', 'value' => $args['userIds'])
-            )))->getId();
-        }
-
-        if (isset($args['containerIds'])) {
-            $resultStr = '';
-
+            ));
+        } elseif (isset($args['containerIds'])) {
             if (!is_array($args['containerIds'])) {
                 $args['containerIds'] = array($args['containerIds']);
             }
-
-            $db = Tinebase_Core::getDb();
-
-
-            $contentBackend = $container->getContentBackend();
-            foreach($args['containerIds'] as $id) {
-                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-
-                $containerData = $container->get($id);
-                $recordsBackend = Tinebase_Core::getApplicationInstance($containerData->model)->getBackend();
-                if (method_exists($recordsBackend, 'increaseSeqsForContainerId')) {
-                    $recordsBackend->increaseSeqsForContainerId($id);
-
-                    $container->increaseContentSequence($id);
-                    $resultStr .= ($resultStr !== '' ? ', ' : '') . $id . '(' . $contentBackend->deleteByProperty($id,
-                            'container_id') . ')';
-                }
-                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            }
-
-            echo "\nDeleted containers(num content history records): " . $resultStr . "\n";
+            $filter = new Tinebase_Model_ContainerFilter(array(
+                array('field' => 'id', 'operator' => 'in', 'value' => $args['containerIds'])
+            ));
+        } else {
+            echo 'userIds or containerIds need to be provided';
+            return;
         }
+
+        Tinebase_Container::getInstance()->forceSyncTokenResync($filter);
     }
 
     /**
@@ -208,12 +245,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     }
                     $record = new $model(null, true);
 
-                    $modelFilter = $model . 'Filter';
-                    $idFilter = new $modelFilter(array(), '', array('ignoreAcl' => true));
+                    $idFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [], '', ['ignoreAcl' => true]);
                     $idFilter->addFilter(new Tinebase_Model_Filter_Id(array(
                         'field' => $record->getIdProperty(), 'operator' => 'in', 'value' => array_keys($ids)
                     )));
-
 
                     $existingIds = $backend->search($idFilter, null, true);
 
@@ -1063,6 +1098,49 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return $result;
     }
 
+    /**
+     * nagios monitoring for tine 2.0 cache
+     *
+     * @return integer
+     *
+     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     */
+    public function monitoringCheckCache()
+    {
+        $result = 0;
+        $cacheConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::CACHE);
+        $active = ($cacheConfig && $cacheConfig->active);
+        if (! $active) {
+            $message = 'CACHE INACTIVE';
+        } else {
+            try {
+                $cache = Tinebase_Core::getCache();
+
+                // TODO support size / see https://redis.io/commands/dbsize
+                //$cacheSize = $cache->getSize();
+                $cacheSize = 'unknown';
+                // TODO add cache access time?
+
+                // write, read and delete to test cache
+                $cacheId = Tinebase_Helper::convertCacheId(__METHOD__);
+                $cache->save(true, $cacheId);
+                $value = $cache->load($cacheId);
+                $cache->remove($cacheId);
+
+                if ($value) {
+                    $message = 'CACHE OK | size=' . $cacheSize . ';;;;';
+                } else {
+                    $message = 'CACHE FAIL: loading value failed';
+                    $result = 1;
+                }
+            } catch (Exception $e) {
+                $message = 'CACHE FAIL: ' . $e->getMessage();
+                $result = 2;
+            }
+        }
+        echo $message . "\n";
+        return $result;
+    }
 
     /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
