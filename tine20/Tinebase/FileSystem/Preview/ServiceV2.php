@@ -18,13 +18,12 @@
  */
 class Tinebase_FileSystem_Preview_ServiceV2 implements Tinebase_FileSystem_Preview_ServiceInterface
 {
-    protected $_url;
+    protected $_networkAdapter;
 
-    public function __construct()
+    public function __construct($networkAdapter)
     {
-        $this->_url = Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_URL};
+        $this->_networkAdapter = $networkAdapter;
     }
-
     /**
      * @param $_filePath
      * @param array $_config
@@ -37,7 +36,7 @@ class Tinebase_FileSystem_Preview_ServiceV2 implements Tinebase_FileSystem_Previ
         } else {
             $synchronRequest = false;
         }
-        $httpClient = $this->getHttpClient($this->_url, array('timeout' => ($synchronRequest ? 10 : 300)));
+        $httpClient = $this->_networkAdapter->getHttpsClient(array('timeout' => ($synchronRequest ? 10 : 300)));
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost('config', json_encode($_config));
         $httpClient->setFileUpload($_filePath, 'file');
@@ -82,20 +81,5 @@ class Tinebase_FileSystem_Preview_ServiceV2 implements Tinebase_FileSystem_Previ
         }
 
         return false;
-    }
-
-    protected function getHttpClient($uri = null, $config = null)
-    {
-        $proxyConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::INTERNET_PROXY);
-        $licenseClass = Tinebase_License::getInstance();
-        $config = array_merge($config, array('adapter' => 'Zend_Http_Client_Adapter_Curl', 'curloptions' => array(
-            CURLOPT_SSLCERT=>$licenseClass->getLicensePath(),
-            CURLOPT_CAINFO=>$licenseClass->getCaFiles(),
-            CURLOPT_PROXY=>$proxyConfig['proxy_host'],
-            CURLOPT_PROXYUSERPWD=>$proxyConfig['proxy_user'].':'.$proxyConfig['proxy_pass'],
-            CURLOPT_PROXYPORT=>$proxyConfig['proxy_port']
-        )));
-
-        return new Zend_Http_Client($uri, $config);
     }
 }

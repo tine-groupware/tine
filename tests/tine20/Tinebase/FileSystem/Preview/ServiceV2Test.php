@@ -1,28 +1,32 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: milan
- * Date: 03.04.18
- * Time: 08:57
+ * Tine 2.0
+ *
+ * @package     Tinebase
+ * @subpackage  Filesystem
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Milan Mertens <m.mertens@metaways.de>
+ * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
  */
+
+require_once 'TestNetworkAdapter.php';
 
 class Tinebase_FileSystem_Preview_ServiceV2Test extends TestCase
 {
     /**
      * @dataProvider getPreviewsForFileDataprovider
      */
-    public function testGetPreviewsForFile($file_path, $config, $response, $expected) {
-        $adapter = new Zend_Http_Client_Adapter_Test();
-        $httpClient = new Zend_Http_Client('https://127.0.0.1', array('adapter' => $adapter));
-        $adapter->setResponse($response);
+    public function testGetPreviewsForFile($file_path, $config, $response, $expected)
+    {
+        $networkAdapter = new TestNetworkAdapter($response);
+        $docPre = new Tinebase_FileSystem_Preview_ServiceV2($networkAdapter);
 
-        $mock = $this->getMockBuilder(Tinebase_FileSystem_Preview_ServiceV2::class)->setMethods(['getHttpClient'])->getMock();
-        $mock->expects($this->once())->method('getHttpClient')->will($this->returnValue($httpClient));
-
-        $this->assertEquals($expected, $mock->getPreviewsForFile($file_path, $config));
+        $this->assertEquals($expected, $docPre->getPreviewsForFile($file_path, $config));
     }
 
-    public function getPreviewsForFileDataprovider() {
+    public function getPreviewsForFileDataprovider()
+    {
         return [
             [__DIR__.'/document.txt',['synchronRequest'=>true,],"HTTP/1.1 404 Not Found\r\nContent-type: text/html\r\n\r\n<html><p>Not Found</p></html>",
                 false],
@@ -34,6 +38,4 @@ class Tinebase_FileSystem_Preview_ServiceV2Test extends TestCase
                 ['key'=>['data1','data2'],'key2'=>['data3']]],
         ];
     }
-
-
 }
