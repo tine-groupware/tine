@@ -1745,4 +1745,15 @@ Photographer', $message->body);
         $this->assertContains('Sollten Sie zukünftig keine E-Mail Nachrichten empfangen wollen,'
             . ' senden sie bitte eine E-Mail mit dem Subject "OUT-MAIL" an info@', $message->body);
     }
+
+    /**
+     * @todo anonymize mail and put it into non-be/customer branch
+     */
+    public function testBrokenEncodingInBase64Body()
+    {
+        $cachedMessage = $this->messageTestHelper('hygienetag.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage, null, Zend_Mime::TYPE_TEXT);
+
+        $this->assertContains('Viren Bakterien Krankheitserreger', $message->body);
+    }
 }
