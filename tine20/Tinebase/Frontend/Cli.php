@@ -368,7 +368,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Triggering async events from CLI.');
-        
+
+        if (Tinebase_Core::inMaintenanceModeAll()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . ' maintenance mode prevents trigger async events.');
+            return false;
+        }
+
         $userController = Tinebase_User::getInstance();
 
         try {
@@ -540,73 +546,87 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         $notesController = Tinebase_Notes::getInstance();
-        $notes = $notesController->getAllNotes();
+        $limit = 1000;
+        $offset = 0;
         $controllers = array();
         $models = array();
         $deleteIds = array();
 
-        /** @var Tinebase_Model_Note $note */
-        foreach ($notes as $note) {
-            if (!isset($controllers[$note->record_model])) {
-                if (strpos($note->record_model, 'Tinebase') === 0) {
-                    continue;
-                }
-                try {
-                    $controllers[$note->record_model] = Tinebase_Core::getApplicationInstance($note->record_model);
-                } catch(Tinebase_Exception_AccessDenied $e) {
-                    // TODO log
-                    continue;
-                } catch(Tinebase_Exception_NotFound $tenf) {
-                    $deleteIds[] = $note->getId();
-                    continue;
-                }
-                $oldACLCheckValue = $controllers[$note->record_model]->doContainerACLChecks(false);
-                $models[$note->record_model] = array(
-                    0 => new $note->record_model(),
-                    1 => ($note->record_model !== 'Filemanager_Model_Node' ? class_exists($note->record_model . 'Filter') : false),
-                    2 => $note->record_model . 'Filter',
-                    3 => $oldACLCheckValue
-                );
-            }
-            $controller = $controllers[$note->record_model];
-            $model = $models[$note->record_model];
+        do {
+            $notes = $notesController->getAllNotes('id ASC', $limit, $offset);
+            $offset += $limit;
 
-            if ($model[1]) {
-                $filter = new $model[2](array(
-                    array('field' => $model[0]->getIdProperty(), 'operator' => 'equals', 'value' => $note->record_id)
-                ));
-                if ($model[0]->has('is_deleted')) {
-                    $filter->addFilter(new Tinebase_Model_Filter_Int(array('field' => 'is_deleted', 'operator' => 'notnull', 'value' => NULL)));
+            /** @var Tinebase_Model_Note $note */
+            foreach ($notes as $note) {
+                if (!isset($controllers[$note->record_model])) {
+                    if (strpos($note->record_model, 'Tinebase') === 0) {
+                        continue;
+                    }
+                    try {
+                        $controllers[$note->record_model] = Tinebase_Core::getApplicationInstance($note->record_model);
+                    } catch (Tinebase_Exception_AccessDenied $e) {
+                        // TODO log
+                        continue;
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $deleteIds[] = $note->getId();
+                        continue;
+                    }
+                    $oldACLCheckValue = $controllers[$note->record_model]->doContainerACLChecks(false);
+                    $models[$note->record_model] = array(
+                        0 => new $note->record_model(),
+                        1 => ($note->record_model !== 'Filemanager_Model_Node' ? class_exists($note->record_model . 'Filter') : false),
+                        2 => $note->record_model . 'Filter',
+                        3 => $oldACLCheckValue
+                    );
                 }
-                $result = $controller->searchCount($filter);
+                $controller = $controllers[$note->record_model];
+                $model = $models[$note->record_model];
 
-                if (is_bool($result) || (is_string($result) && $result === ((string)intval($result)))) {
-                    $result = (int)$result;
-                }
+                if ($model[1]) {
+                    $filter = new $model[2](array(
+                        array(
+                            'field' => $model[0]->getIdProperty(),
+                            'operator' => 'equals',
+                            'value' => $note->record_id
+                        )
+                    ));
+                    if ($model[0]->has('is_deleted')) {
+                        $filter->addFilter(new Tinebase_Model_Filter_Int(array(
+                            'field' => 'is_deleted',
+                            'operator' => 'notnull',
+                            'value' => null
+                        )));
+                    }
+                    $result = $controller->searchCount($filter);
 
-                if (!is_int($result)) {
-                    if (is_array($result) && isset($result['totalcount'])) {
-                        $result = (int)$result['totalcount'];
-                    } elseif(is_array($result) && isset($result['count'])) {
-                        $result = (int)$result['count'];
-                    } else {
-                        // todo log
-                        // dummy line, remove!
-                        $result = 1;
+                    if (is_bool($result) || (is_string($result) && $result === ((string)intval($result)))) {
+                        $result = (int)$result;
+                    }
+
+                    if (!is_int($result)) {
+                        if (is_array($result) && isset($result['totalcount'])) {
+                            $result = (int)$result['totalcount'];
+                        } elseif (is_array($result) && isset($result['count'])) {
+                            $result = (int)$result['count'];
+                        } else {
+                            // todo log
+                            // dummy line, remove!
+                            $result = 1;
+                        }
+                    }
+
+                    if ($result === 0) {
+                        $deleteIds[] = $note->getId();
+                    }
+                } else {
+                    try {
+                        $controller->get($note->record_id, null, false, true);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $deleteIds[] = $note->getId();
                     }
                 }
-
-                if ($result === 0) {
-                    $deleteIds[] = $note->getId();
-                }
-            } else {
-                try {
-                    $controller->get($note->record_id, null, false, true);
-                } catch(Tinebase_Exception_NotFound $tenf) {
-                    $deleteIds[] = $note->getId();
-                }
             }
-        }
+        } while ($notes->count() === $limit);
 
         if (count($deleteIds) > 0) {
             $notesController->purgeNotes($deleteIds);
@@ -841,7 +861,80 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         return TRUE;
     }
-    
+
+    /**
+     * set customfield acl
+     *
+     * example:
+     * $ php tine20.php --method Tinebase.setCustomfieldAcl -- application=Addressbook \
+     *   model=Addressbook_Model_Contact name=$CFNAME \
+     *   grants='[{"account":"$USERNAME","account_type":"user","readGrant":1,"writeGrant":1},{"account_type":"anyone","readGrant":1}]'
+     *
+     * @param $_opts
+     * @return integer
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function setCustomfieldAcl(Zend_Console_Getopt $_opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
+        // parse args
+        $args = $_opts->getRemainingArgs();
+        $data = array();
+        foreach ($args as $idx => $arg) {
+            list($key, $value) = explode('=', $arg);
+            if ($key == 'application') {
+                $key = 'application_id';
+                $value = Tinebase_Application::getInstance()->getApplicationByName($value)->getId();
+            }
+            $data[$key] = $value;
+        }
+
+        if (! isset($data['grants']) || ! isset($data['name'])) {
+            throw new Tinebase_Exception_InvalidArgument('grants and name params are required');
+        }
+
+        $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
+            $data['application_id'],
+            $data['name']);
+
+        if (! $cf) {
+            throw new Tinebase_Exception_InvalidArgument('customfield not found');
+        }
+
+        $grantsArray = Tinebase_Helper::jsonDecode($data['grants']);
+        $removeOldGrants = true;
+        foreach ($grantsArray as $grant) {
+            $accountType = isset($grant['account_type']) ? $grant['account_type'] : null;
+            if (isset($grant['account'])) {
+                if ($accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP) {
+                    $group = Tinebase_Group::getInstance()->getGroupByName($grant['account']);
+                    $accountId = $group->getId();
+                } else {
+                    $user = Tinebase_User::getInstance()->getFullUserByLoginName($grant['account']);
+                    $accountId = $user->getId();
+                    $accountType === Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+                }
+            } else {
+                $accountId = isset($grant['account_id']) ? $grant['account_id'] : null;
+            }
+            $grants = [];
+            $allGrants = Tinebase_Model_CustomField_Grant::getAllGrants();
+            foreach ($grant as $key => $value) {
+                if (in_array($key, $allGrants) && $value) {
+                    $grants[] = $key;
+                }
+            }
+            Tinebase_CustomField::getInstance()->setGrants($cf->getId(), $grants, $accountType, $accountId, $removeOldGrants);
+            // prevent overwrite
+            $removeOldGrants = false;
+        }
+
+        return 0;
+    }
+
     /**
      * nagios monitoring for tine 2.0 database connection
      * 
@@ -1016,82 +1109,86 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $result = 0;
         $queueConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::ACTIONQUEUE);
-        if (! $queueConfig->{Tinebase_Config::ACTIONQUEUE_ACTIVE} ||
-                !($actionQueue = Tinebase_ActionQueue::getInstance())->hasAsyncBackend()) {
+        if (! $queueConfig->{Tinebase_Config::ACTIONQUEUE_ACTIVE}) {
             $message = 'QUEUE INACTIVE';
         } else {
-            try {
-                if (null === ($lastDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
-                        Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION))) {
-                    throw new Tinebase_Exception('state ' . Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION .
-                        ' not set');
-                }
-                if (null === ($lastDurationUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
-                        Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE))) {
-                    throw new Tinebase_Exception('state ' .
-                        Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE . ' not set');
-                }
-                $lastDuration = floatval($lastDuration);
-                $lastDurationUpdate = intval($lastDurationUpdate);
+            $actionQueue = Tinebase_ActionQueue::getInstance();
+            if (! $actionQueue->hasAsyncBackend()) {
+                $message = 'QUEUE INACTIVE';
+            } else {
+                try {
+                    if (null === ($lastDuration = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION))) {
+                        throw new Tinebase_Exception('state ' . Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION .
+                            ' not set');
+                    }
+                    if (null === ($lastDurationUpdate = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                            Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE))) {
+                        throw new Tinebase_Exception('state ' .
+                            Tinebase_Application::STATE_ACTION_QUEUE_LAST_DURATION_UPDATE . ' not set');
+                    }
+                    $lastDuration = floatval($lastDuration);
+                    $lastDurationUpdate = intval($lastDurationUpdate);
 
-                $now = time();
-                $diff = 0;
-                $warn = null;
-                if (false !== ($currentJobId = $actionQueue->peekJobId())) {
-                    if ($currentJobId === ($lastJobId = Tinebase_Application::getInstance()->getApplicationState(
-                            'Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID))) {
-                        if (null === ($lastChange = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
-                                Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE))) {
-                            throw new Tinebase_Exception('state ' .
-                                Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE . ' not set');
-                        }
-                        if (($diff = $now - intval($lastChange)) > (15 * 60)) {
-                            throw new Tinebase_Exception('last job id change > ' . (15 * 60) . ' sec - ' . $diff);
-                        }
+                    $now = time();
+                    $diff = 0;
+                    $warn = null;
+                    if (false !== ($currentJobId = $actionQueue->peekJobId())) {
+                        if ($currentJobId === ($lastJobId = Tinebase_Application::getInstance()->getApplicationState(
+                                'Tinebase', Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID))) {
+                            if (null === ($lastChange = Tinebase_Application::getInstance()->getApplicationState('Tinebase',
+                                    Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE))) {
+                                throw new Tinebase_Exception('state ' .
+                                    Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE . ' not set');
+                            }
+                            if (($diff = $now - intval($lastChange)) > (15 * 60)) {
+                                throw new Tinebase_Exception('last job id change > ' . (15 * 60) . ' sec - ' . $diff);
+                            }
 
+                        } else {
+                            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                                Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE, (string)$now);
+                            Tinebase_Application::getInstance()->setApplicationState('Tinebase',
+                                Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID, $currentJobId);
+                        }
                     } else {
                         Tinebase_Application::getInstance()->setApplicationState('Tinebase',
-                            Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_CHANGE, (string)$now);
-                        Tinebase_Application::getInstance()->setApplicationState('Tinebase',
-                            Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID, $currentJobId);
+                            Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID, '');
                     }
-                } else {
-                    Tinebase_Application::getInstance()->setApplicationState('Tinebase',
-                        Tinebase_Application::STATE_ACTION_QUEUE_LAST_JOB_ID, '');
-                }
 
-                if ($lastDuration > 3600) {
-                    throw new Tinebase_Exception('last duration > 3600 sec - ' . $lastDuration);
-                }
-                if ($now - $lastDurationUpdate > 3600) {
-                    throw new Tinebase_Exception('last duration update > 3600 sec - ' . ($now - $lastDurationUpdate));
-                }
+                    if ($lastDuration > 3600) {
+                        throw new Tinebase_Exception('last duration > 3600 sec - ' . $lastDuration);
+                    }
+                    if ($now - $lastDurationUpdate > 3600) {
+                        throw new Tinebase_Exception('last duration update > 3600 sec - ' . ($now - $lastDurationUpdate));
+                    }
 
-                if ($diff > 60 && null === $warn) {
-                    $warn = 'last job id change > 60 sec - ' . $diff;
-                }
+                    if ($diff > 60 && null === $warn) {
+                        $warn = 'last job id change > 60 sec - ' . $diff;
+                    }
 
-                if ($lastDuration > 60  && null === $warn) {
-                    $warn = 'last duration > 60 sec - ' . $lastDuration;
-                }
+                    if ($lastDuration > 60 && null === $warn) {
+                        $warn = 'last duration > 60 sec - ' . $lastDuration;
+                    }
 
-                if ($now - $lastDurationUpdate > 60  && null === $warn) {
-                    $warn = 'last duration update > 60 sec - ' . ($now - $lastDurationUpdate);
-                }
+                    if ($now - $lastDurationUpdate > 60 && null === $warn) {
+                        $warn = 'last duration update > 60 sec - ' . ($now - $lastDurationUpdate);
+                    }
 
 
-                if (null !== $warn) {
-                    $message = 'QUEUE WARN: ' . $warn;
-                    $result = 1;
-                } else {
-                    $message = 'QUEUE OK';
+                    if (null !== $warn) {
+                        $message = 'QUEUE WARN: ' . $warn;
+                        $result = 1;
+                    } else {
+                        $message = 'QUEUE OK';
+                    }
+                    $queueSize = $actionQueue->getQueueSize();
+                    $message .= ' | size=' . $queueSize . ';lastJobId=' . $diff . ';lastDuration=' . $lastDuration .
+                        ';lastDurationUpdate=' . ($now - $lastDurationUpdate) . ';';
+                } catch (Exception $e) {
+                    $message = 'QUEUE FAIL: ' . get_class($e) . ' - ' . $e->getMessage();
+                    $result = 2;
                 }
-                $queueSize = $actionQueue->getQueueSize();
-                $message .= ' | size=' . $queueSize . ';lastJobId=' . $diff . ';lastDuration=' . $lastDuration .
-                    ';lastDurationUpdate=' . ($now - $lastDurationUpdate) . ';';
-            } catch (Exception $e) {
-                $message = 'QUEUE FAIL: ' . get_class($e) . ' - ' . $e->getMessage();
-                $result = 2;
             }
         }
         echo $message . "\n";

@@ -6,7 +6,7 @@
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -896,15 +896,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         }
 
         return $modifications;
-
-        /** old
-
-        $this->_loopModifications($diffs, $commonModLog, $modifications, $_curRecord->toArray(), $_curRecord->getModlogOmitFields());
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Logged ' . count($modifications) . ' modifications.');
-        
-        return $modifications; */
     }
     
     /**
@@ -939,7 +930,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             'record_type'          => $_model,
             'record_backend'       => $_backend,
             'modification_time'    => $currentTime,
-            'modification_account' => $currentAccountId,
+            'modification_account' => $currentAccountId ? $currentAccountId : 'unknown',
             'seq'                  => (isset($_updateMetaData['seq'])) ? $_updateMetaData['seq'] : 0,
             'client'               => $client
         ), TRUE);

@@ -526,7 +526,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $summary = $this->_protocol->fetch(array('UID', 'FLAGS'), $from, $to, $useUid);
                 
         // fetch returns a different structure when fetching one or multiple messages
-        if($to === null && ctype_digit("$from")) {
+        if ($to === null && ctype_digit("$from")) {
             $summary = array(
                 $from => $summary
             );
@@ -534,18 +534,20 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         $messages = array();
         
-        foreach($summary as $id => $data) {
+        foreach ($summary as $id => $data) {
             $flags = array();
             foreach ($data['FLAGS'] as $flag) {
                 $flags[] = isset(self::$_knownFlags[$flag]) ? self::$_knownFlags[$flag] : $flag;
             }
     
-            if($this->_useUid === true) {
+            if ($this->_useUid === true) {
+                if (! isset($data['UID'])) {
+                    continue;
+                }
                 $key = $data['UID'];
             } else {
                 $key = $id;
             }
-            
             
             $messages[$key] = array(
                 'flags'     => $flags,
@@ -553,7 +555,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             );
         }
         
-        if($to === null && ctype_digit("$from")) {
+        if ($to === null && ctype_digit("$from")) {
             // only one message requested
             return $messages[$from];
         } else {
@@ -880,7 +882,9 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     
     public function resolveMessageSequence($from, $to = null)
     {
-        $result = $this->_protocol->fetch('UID', $from, $to, false);
+        $result = array_filter($this->_protocol->fetch('UID', $from, $to, false), function ($val) {
+            return is_scalar($val);
+        });
         
         return $result;
     }
@@ -991,10 +995,21 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $this->selectFolder($globalName);
         $this->_protocol->expunge();
     }
-    
+
+    /**
+     * @param string $_header
+     * @return string
+     */
     protected function _mimeDecodeHeader($_header)
     {
-        $result = iconv_mime_decode($_header, ICONV_MIME_DECODE_CONTINUE_ON_ERROR);
+        if (is_array($_header)) {
+            // just use the first value here
+            $header = array_shift($_header);
+        } else {
+            $header = $_header;
+        }
+
+        $result = iconv_mime_decode($header, ICONV_MIME_DECODE_CONTINUE_ON_ERROR);
         
         return $result;
     }

@@ -24,6 +24,7 @@ class Tinebase_Setup_DemoData_Import
     {
         $extract = Tinebase_Application::extractAppAndModel($modelName);
         $this->_options['$modelName'] = $extract['modelName'];
+        $this->_options['dryrun'] = false;
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName($extract['appName']);
         $this->_options = array_merge($this->_options, $options);
     }
@@ -55,6 +56,10 @@ class Tinebase_Setup_DemoData_Import
             . ' Imported ' . $importedDemoDataFiles . ' demo data files');
     }
 
+    /**
+     * @param SplFileInfo $splFileInfo
+     * @return null
+     */
     protected function _importDemoDataFile(SplFileInfo $splFileInfo)
     {
         // TODO allow xls
@@ -72,7 +77,11 @@ class Tinebase_Setup_DemoData_Import
                 // create generic import definition if not found in options
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getGenericImport($this->_options['$modelName']);
             }
-            $this->_importer = Inventory_Import_Csv::createFromDefinition($definition, $this->_options);
+            $importClass = $this->_application->name . '_Import_Csv';
+            if(!class_exists($importClass)){
+                $importClass = Tinebase_Import_Csv_Generic::class;
+            }
+            $this->_importer = call_user_func_array([$importClass, 'createFromDefinition'], [$definition, $this->_options]);
 
             $result = $this->_importer->importFile($splFileInfo->getPath() . DIRECTORY_SEPARATOR . $filename);
             return $result;

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -50,9 +50,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
      * Loads the metadata for the specified class into the provided container.
      *
      * @param string        $className
-     * @param ClassMetadata $metadata
-     *
-     * @return void
+     * @param Doctrine\ORM\Mapping\ClassMetadata $metadata
      */
     public function loadMetadataForClass($className, ClassMetadata $metadata)
     {
@@ -72,9 +70,7 @@ class Tinebase_Record_DoctrineMappingDriver implements Doctrine\Common\Persisten
             if (isset($table['indexes'])) {
                 $toDelete = array();
                 foreach($table['indexes'] as $key => $index) {
-                    if (isset($index['flags']) && ($offset = array_search('fulltext', $index['flags'])) !== false &&
-                            //programmer is extra strict today
-                            $offset !== null) {
+                    if (isset($index['flags']) && array_search('fulltext', $index['flags']) !== false) {
                         $toDelete[] = $key;
                     }
                 }

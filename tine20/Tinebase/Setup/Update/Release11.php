@@ -615,4 +615,62 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tinebase', '11.29');
     }
+
+    /**
+     * update to 11.30
+     *
+     * create replication user
+     */
+    public function update_29()
+    {
+        try {
+            Tinebase_User::getInstance()->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_REPLICATION);
+            // nothing to do
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $replicationUser = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_REPLICATION,
+                Tinebase_Group::getInstance()->getDefaultReplicationGroup());
+            if (null !== $replicationUser) {
+                $replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER);
+                if (empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
+                    $password = Tinebase_Record_Abstract::generateUID(12);
+                }
+                // TODO auto create pw that is matching the policy
+                $pwPolicyActive = Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE};
+                if ($pwPolicyActive) {
+                    Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE} = false;
+                }
+                Tinebase_User::getInstance()->setPassword($replicationUser, $password);
+                if ($pwPolicyActive) {
+                    Tinebase_Config::getInstance()->{Tinebase_Config::USER_PASSWORD_POLICY}->{Tinebase_Config::PASSWORD_POLICY_ACTIVE} = true;
+                }
+            }
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.30');
+    }
+
+    /**
+     * update to 11.31
+     *
+     * removing db prefix from application_tables if present
+     */
+    public function update_30()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_56();
+        $this->setApplicationVersion('Tinebase', '11.31');
+    }
+
+    /**
+     * delete some obsolete export definitions
+     */
+    public function update_31()
+    {
+        $obsoleteNames = ['adb_default_xls', 'adb_ods', 'lead_excel5_xls'];
+        $filter = new Tinebase_Model_ImportExportDefinitionFilter([
+            ['field' => 'name', 'operator' => 'in', 'value' => $obsoleteNames]
+        ]);
+        Tinebase_ImportExportDefinition::getInstance()->deleteByFilter($filter);
+        $this->setApplicationVersion('Tinebase', '11.32');
+    }
 }

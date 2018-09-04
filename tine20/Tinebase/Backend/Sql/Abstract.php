@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        think about removing the appendForeignRecord* functions
@@ -221,12 +221,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param string|Tinebase_Record_Interface $_id
      * @param boolean $_getDeleted get deleted records
      * @return Tinebase_Record_Interface
-     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function get($_id, $_getDeleted = FALSE) 
     {
         if (empty($_id)) {
-            throw new Tinebase_Exception_NotFound('$_id can not be empty');
+            throw new Tinebase_Exception_InvalidArgument('$_id can not be empty');
         }
 
         $id = Tinebase_Record_Abstract::convertId($_id, $this->_modelName);
@@ -321,27 +321,27 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected function _rawDataToRecord(array $_rawData)
     {
+        $this->_explodeForeignValues($_rawData);
+
         /** @var Tinebase_Record_Abstract $result */
         $result = new $this->_modelName($_rawData, true);
 
         $result->runConvertToRecord();
-        
-        $this->_explodeForeignValues($result);
-        
+
         return $result;
     }
-    
+
     /**
      * explode foreign values
-     * 
-     * @param Tinebase_Record_Interface $_record
+     *
+     * @param array $_data
      */
-    protected function _explodeForeignValues(Tinebase_Record_Interface $_record)
+    protected function _explodeForeignValues(array &$_data)
     {
         foreach (array_keys($this->_foreignTables) as $field) {
             $isSingleValue = ((isset($this->_foreignTables[$field]['singleValue']) || array_key_exists('singleValue', $this->_foreignTables[$field])) && $this->_foreignTables[$field]['singleValue']);
             if (! $isSingleValue) {
-                $_record->{$field} = (! empty($_record->{$field})) ? explode(',', $_record->{$field}) : array();
+                $_data[$field] = empty($_data[$field]) ? [] : explode(',', $_data[$field]);
             }
         }
     }
@@ -390,13 +390,15 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected function _rawDataToRecordSet(array $_rawDatas)
     {
+        if (! empty($this->_foreignTables)) {
+            foreach ($_rawDatas as &$data) {
+                $this->_explodeForeignValues($data);
+            }
+        }
         $result = new Tinebase_Record_RecordSet($this->_modelName, $_rawDatas, true);
 
         /** @var Tinebase_Record_Abstract $record */
         foreach ($result as $record) {
-            if (! empty($this->_foreignTables)) {
-                $this->_explodeForeignValues($record);
-            }
             $record->runConvertToRecord();
         }
 
@@ -1181,7 +1183,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                 unset($raw[$key]);
             }
         }
-        
+        $_record->runConvertToRecord();
+
         return $raw;
     }
     

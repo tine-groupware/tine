@@ -114,7 +114,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
-     * try to get a Timeaccount
+     * try to get a Timeaccount - also checks if user and grants are resolved
      */
     public function testSearchTimeaccounts()
     {
@@ -130,14 +130,18 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // search & check
         $timeaccountFilter = $this->_getTimeaccountFilter();
         $search = $this->_json->searchTimeaccounts($timeaccountFilter, $this->_getPaging());
-        $this->assertEquals(0, $search['totalcount'], 'is_open filter not working');
+        self::assertEquals(0, $search['totalcount'], 'is_open filter not working');
 
         $search = $this->_json->searchTimeaccounts($this->_getTimeaccountFilter(TRUE), $this->_getPaging());
-        $this->assertEquals(1, $search['totalcount']);
-        $this->assertEquals($timeaccount->description, $search['results'][0]['description']);
+        self::assertEquals(1, $search['totalcount']);
+        $ta = $search['results'][0];
+        self::assertEquals($timeaccount->description, $ta['description']);
+        self::assertTrue(is_array($ta['created_by']), 'user is not resolved in ' . print_r($ta, true));
+        self::assertEquals(Tinebase_Core::getUser()->getId(), $ta['created_by']['accountId']);
+        self::assertGreaterThan(0, count($ta['account_grants']), 'account_grants not resolved in ' . print_r($ta, true));
 
-        // TODO enable this assertation and clean up the timetracker json converter to use abstract code!
-        //$this->assertEquals(Tinebase_Core::getUser()->getId(), $search['results'][0]['created_by']['accountId']);
+        // TODO do we need this?
+        //self::assertGreaterThan(0, count($ta['grants']), 'grants not resolved in ' . print_r($ta, true));
     }
 
     /**
@@ -261,8 +265,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // checks
         $this->assertEquals($timesheet->description, $timesheetData['description']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['created_by']['accountId']);
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']['accountId'], 'account is not resolved');
-        $this->assertEquals(Tinebase_DateTime::now()->toString('Y-m-d') . ' 00:00:00',  $timesheetData['start_date']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $timesheetData['account_id']['accountId'],
+            'account is not resolved');
+        $this->assertEquals(Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->toString('Y-m-d') .
+            ' 00:00:00',  $timesheetData['start_date']);
 
         // cleanup
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
@@ -564,7 +570,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('en_US'));
 
         // date is last/this sunday (1. day of week in the US)
-        $today = Tinebase_DateTime::now();
+        $today = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->setTime(12, 0, 0);
         $dayOfWeek = $today->get('w');
         $lastSunday = $today->subDay($dayOfWeek);
 

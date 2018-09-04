@@ -56,6 +56,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'rrule_constraints' },
     { name: 'originator_tz' },
     // grant helper fields
+    {name: 'addGrant'       , type: 'bool'},
     {name: 'readGrant'      , type: 'bool'},
     {name: 'editGrant'      , type: 'bool'},
     {name: 'deleteGrant'    , type: 'bool'},
@@ -1025,8 +1026,7 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
                 'resourceEditGrant': true,
                 'resourceExportGrant': true,
                 'resourceSyncGrant': true,
-                'resourceAdminGrant': true,
-
+                'resourceAdminGrant': true
             });
             _.set(this, this.grantsPath, account_grants);
         }
@@ -1040,16 +1040,29 @@ Tine.Calendar.Model.Resource = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
  * @static
  */
 Tine.Calendar.Model.Resource.getDefaultData = function() {
+    // add admin (and other) grant for resource managers
+    var grants = Tine.Tinebase.common.hasRight('manage', 'Calendar', 'resources') ? [{
+        account_id: Tine.Tinebase.registry.get('currentAccount').accountId,
+        account_type: "user",
+        account_name: Tine.Tinebase.registry.get('currentAccount').accountDisplayName,
+        'resourceInviteGrant': true,
+        'resourceReadGrant': true,
+        'resourceEditGrant': true,
+        'resourceExportGrant': true,
+        'resourceSyncGrant': true,
+        'resourceAdminGrant': true
+    }]: []
+
+    grants.push({
+        account_id: "0",
+        account_type: "anyone",
+        account_name: i18n._('Anyone'),
+        resourceInviteGrant: true,
+        eventsFreebusyGrant: true
+    });
+
     var data = {
-        grants: [{
-            account_id: "0",
-            account_type: "anyone",
-            account_name: i18n._('Anyone'),
-            resourceInviteGrant: true,
-            eventsFreebusyGrant: true
-        }
-            // don't add account/group/role with resourceAdminGrant grants here as manage_resource right is enough
-        ]
+        grants: grants
     };
 
     return data;
@@ -1061,6 +1074,7 @@ Tine.Calendar.Model.Resource.getFilterModel = function() {
     return [
         {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
         {label: app.i18n._('Name'), field: 'name'},
+        {label: app.i18n._('Calendar Hierarchy/Name'), field: 'hierarchy'},
         {label: app.i18n._('Email'), field: 'email'},
         {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
         {label: app.i18n._('Maximum number of attendee'), field: 'max_number_of_people'},

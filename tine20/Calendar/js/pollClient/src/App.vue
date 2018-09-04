@@ -43,7 +43,7 @@
               <thead>
                 <tr>
                   <th></th>
-                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{formatMessage('{headerDate, date, full}', {headerDate: new Date(date.dtstart)})}}</span></th>
+                  <th v-for="date in poll.alternative_dates" :key="date.dtstart"><span class="date">{{formatMessage('{headerDate, date, full} {headerDate, time, short}', {headerDate: new Date(date.dtstart.replace(' ', 'T'))})}}</span></th>
                 </tr>
               </thead>
               <tbody>
@@ -61,7 +61,7 @@
                       class="calendar-symbol"
                       v-if="!poll.config.is_anonymous && activeAttendee.id !== null && activeAttendee.id === attendee.key"
                     >
-                      <img :src="getCalendarIcon(datestatus)" alt='formatMessage("Calendar")' />
+                      <img :src="getCalendarIcon(datestatus)" alt="formatMessage('Calendar')" />
                     </span>
                     <img :src="getStatusIcon(datestatus.status)" :alt="statusName(datestatus.status)" />
                   </td>
@@ -117,7 +117,7 @@
       </template>
       <div>
         <b-modal ref="loadMask" :visible="transferingPoll" hide-header hide-footer no-fade no-close-on-esc no-close-on-backdrop centered>
-          <spinner size="medium" :message='formatMessage("Please wait...")'></spinner>
+          <spinner size="medium" :message="formatMessage('Please wait...')"></spinner>
         </b-modal>
       </div>
       <div>
@@ -586,7 +586,7 @@ export default {
         }
       })
 
-      return this.baseUrl + 'images/icon-set/icon_cal_' + new Date(start).getDate() + '.svg'
+      return this.baseUrl + 'images/icon-set/icon_cal_' + new Date(start.replace(' ', 'T')).getDate() + '.svg'
     },
     showChangeButtons () {
       if (_.isEmpty(this.poll)) {

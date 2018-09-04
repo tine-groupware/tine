@@ -430,8 +430,13 @@ class Tinebase_Mail extends Zend_Mail
                     restore_error_handler();
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Fallback encoding failed. Trying base64_decode().');
                     $zmp->resetStream();
-                    $body = base64_decode(stream_get_contents($zmp->getRawStream()));
-                    $body = iconv($charset, 'utf-8', $body);
+                    $decodedBody = base64_decode(stream_get_contents($zmp->getRawStream()));
+                    $body = @iconv($charset, 'utf-8', $decodedBody);
+                    if (empty($body)) {
+                        // if iconv above still fails we do mb_convert and replace all special chars ...
+                        $body = Tinebase_Helper::mbConvertTo($decodedBody);
+                        $body = Tinebase_Helper::replaceSpecialChars($body, false);
+                    }
                 }
             }
         }
@@ -492,7 +497,8 @@ class Tinebase_Mail extends Zend_Mail
             require_once 'StreamFilter/ConvertMbstring.php';
             $filter = 'convert.mbstring';
         } else {
-            $filter = "convert.iconv.$_charset/utf-8//IGNORE";
+            // //IGNORE works only as of PHP7.2 -> the code expects an error to occur, don't use //IGNORE
+            $filter = "convert.iconv.$_charset/utf-8";
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);

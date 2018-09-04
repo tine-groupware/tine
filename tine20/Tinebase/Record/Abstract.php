@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -277,6 +277,15 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
 
     /**
+     * resetConfiguration
+     */
+    public static function resetConfiguration()
+    {
+        static::$_configurationObject = null;
+        Tinebase_ModelConfiguration::resetAvailableApps();
+    }
+
+    /**
      * returns the relation config
      * 
      * @deprecated
@@ -292,7 +301,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function __clone()
     {
-        foreach ($this->_properties as $name => $value)
+        foreach ($this->_properties as $name => &$value)
         {
             if (is_object($value)) {
                 $this->_properties[$name] = clone $value;
@@ -1037,11 +1046,22 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             } elseif ($ownField instanceof Tinebase_Model_Filter_FilterGroup || $recordField instanceof Tinebase_Model_Filter_FilterGroup) {
                 // TODO add diff() to Tinebase_Model_Filter_FilterGroup?
                 // TODO ignore order of filters - currently it matters! sadly, array_diff does not work with multidimensional arrays
-                if (! empty($ownField) && ! empty($recordField)) {
-                    $arrayDiff = json_encode($ownField->toArray()) !== json_encode($recordField->toArray());
-                    if (! $arrayDiff) {
-                        continue;
-                    }
+                if (is_object($ownField)) {
+                    $ownData = json_encode($ownField->toArray());
+                } elseif (is_array($ownField)) {
+                    $ownData = json_encode($ownField);
+                } else {
+                    $ownData = $ownField;
+                }
+                if (is_object($recordField)) {
+                    $recordData = json_encode($recordField->toArray());
+                } elseif (is_array($recordField)) {
+                    $recordData = json_encode($recordField);
+                } else {
+                    $recordData = $recordField;
+                }
+                if ($ownData === $recordData) {
+                    continue;
                 }
             } elseif ($recordField instanceof Tinebase_Record_Abstract && is_scalar($ownField)) {
                 // maybe we have the id of the record -> just compare the id
@@ -1598,6 +1618,30 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function resolveConcurrencyUpdate($_property, $_diffValue, $_oldValue)
     {
         return null;
+    }
+
+    /**
+     * returns the id of a record property
+     *
+     * @param string $_property
+     * @return string|null
+     */
+    public function getIdFromProperty($_property)
+    {
+        if (!isset($this->_properties[$_property])) {
+            return null;
+        }
+
+        $value = $this->_properties[$_property];
+        if (is_object($value) && $value instanceof Tinebase_Record_Abstract) {
+            return $value->getId();
+        } elseif (is_string($value) || is_integer($value)) {
+            return (string)$value;
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+            ' ' . $_property . '\'s value is neither a record nor an id value: ' . print_r($value, true));
+        throw new Tinebase_Exception_UnexpectedValue($_property . '\'s value is neither a record nor an id value');
     }
 
     public static function getSortExternalMapping()

@@ -44,7 +44,7 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
      * @param {Object}   importOptions
      */
     doImport: function(callback, importOptions, clientRecordData) {
-        var targetContainer = this.containerField.getValue() || this.containerCombo.getValue();
+        var targetContainer = this.containerCombo.getValue();
         var type = this.typeCombo.getValue();
         
         var params = {
@@ -489,12 +489,12 @@ Tine.Calendar.ImportDialog = Ext.extend(Tine.widgets.dialog.ImportDialog, {
                 return (
                     ((this.typeCombo && (this.typeCombo.getValue() == 'remote_ics' || this.typeCombo.getValue() == 'remote_caldav'))
                     && (this.remoteLocation && this.remoteLocation.getValue())
-                    && (this.ttlCombo && (this.ttlCombo.getValue() || this.ttlCombo.getValue() === 0))))
+                    && (this.ttlCombo && (this.ttlCombo.getValue() || this.ttlCombo.getValue() === 0)))
                     && credentialsCheck
                     || ((this.typeCombo && (this.typeCombo.getValue() == 'upload'))
                     && (this.definitionCombo && this.definitionCombo.getValue())
                     && (this.uploadButton && this.uploadButton.upload))
-                    && ((this.containerField && this.containerField.getValue()) || (this.containerCombo && this.containerCombo.getValue())
+                    && (this.containerCombo && this.containerCombo.getValue())
                 );
 
             }).createDelegate(this)

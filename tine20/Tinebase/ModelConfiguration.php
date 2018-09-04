@@ -917,30 +917,25 @@ class Tinebase_ModelConfiguration {
             throw new Tinebase_Exception('The model class configuration must be submitted!');
         }
 
-        $this->_appName     = $this->_application = $this->_applicationName = $modelClassConfiguration['appName'];
-        
-        // add appName to available applications 
-        self::$_availableApplications[$this->_appName] = TRUE;
-        
-        $this->_modelName   = $modelClassConfiguration['modelName'];
-        $this->_idProperty  = $this->_identifier = isset($modelClassConfiguration['idProperty']) ? $modelClassConfiguration['idProperty'] : 'id';
-
-        $this->_table = isset($modelClassConfiguration['table']) ? $modelClassConfiguration['table'] : $this->_table;
-        $this->_version = isset($modelClassConfiguration['version']) ? $modelClassConfiguration['version'] : $this->_version;
-
-        // some crude validating
+        // some cruid validating
         foreach ($modelClassConfiguration as $propertyName => $propertyValue) {
             $this->{'_' . $propertyName} = $propertyValue;
         }
+
+        $this->_application = $this->_applicationName = $this->_appName;
+
+        // add appName to available applications
+        self::$_availableApplications[$this->_appName] = TRUE;
+
+        if (null === $this->_idProperty) {
+            $this->_idProperty = 'id';
+        }
+        $this->_identifier = $this->_idProperty;
         
         $this->_filters = array();
         $this->_fields[$this->_idProperty] = array(
             'id' => true,
-            // show id column in DEBUG + DEVELOP modes
-            // TODO add configuration option to configure this on model basis
-            'label' => defined('TINE20_BUILDTYPE') && (TINE20_BUILDTYPE === 'DEVELOPMENT' || TINE20_BUILDTYPE === 'DEBUG')
-                ? 'ID'
-                : null,
+            'label' => 'ID',
             'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             'length' => 40,
             'shy' => true,
@@ -1089,11 +1084,12 @@ class Tinebase_ModelConfiguration {
             
             // don't handle field if app is not available or feature disabled
             if ((isset($fieldDef['config']) || array_key_exists('config', $fieldDef))
-                && ($fieldDef['type'] == 'record' || $fieldDef['type'] == 'records')
-                && (! $this->_isAvailable($fieldDef['config'])))
+                && in_array($fieldDef['type'], ['record', 'records', 'virtual'])
+                && ! $this->_isAvailable($fieldDef['config']))
             {
                 $fieldDef['type'] = 'string';
                 $fieldDef['label'] = NULL;
+                unset($this->_filterModel[$fieldKey]);
                 continue;
             }
             // the property name
@@ -1245,6 +1241,14 @@ class Tinebase_ModelConfiguration {
             if (isset($this->_filterModel[$key])) {
                 return;
             }
+
+            if ((isset($fieldDef['config']) || array_key_exists('config', $fieldDef))
+                && in_array($fieldDef['type'], ['record', 'records', 'virtual'])
+                && ! $this->_isAvailable($fieldDef['config']))
+            {
+                return;
+            }
+
             $this->_filterModel[$key] = $fieldDef['filterDefinition'];
         } else {
             if (isset($this->_filterModel[$fieldKey])) {
@@ -1518,17 +1522,24 @@ class Tinebase_ModelConfiguration {
      */
     protected function _isAvailable($_fieldConfig)
     {
-        if (! (isset(self::$_availableApplications[$_fieldConfig['appName']]) || array_key_exists($_fieldConfig['appName'], self::$_availableApplications))) {
-            self::$_availableApplications[$_fieldConfig['appName']] = Tinebase_Application::getInstance()->isInstalled($_fieldConfig['appName'], TRUE);
-        }
-        $result = self::$_availableApplications[$_fieldConfig['appName']];
+        $fieldConfig = isset($_fieldConfig['config']) ? $_fieldConfig['config'] : $_fieldConfig;
 
-        if ($result && isset($_fieldConfig['feature'])) {
-            $config = Tinebase_Config_Abstract::factory($_fieldConfig['appName']);
-            $result = $config->featureEnabled($_fieldConfig['feature']);
+        $result = true;
+        if (isset($fieldConfig['appName'])) {
+            if (!(isset(self::$_availableApplications[$fieldConfig['appName']])
+                || array_key_exists($fieldConfig['appName'], self::$_availableApplications))
+            ) {
+                self::$_availableApplications[$fieldConfig['appName']] = Tinebase_Application::getInstance()->isInstalled($fieldConfig['appName'], TRUE);
+            }
+            $result = self::$_availableApplications[$fieldConfig['appName']];
+        }
+
+        if ($result && isset($fieldConfig['feature'])) {
+            $config = Tinebase_Config_Abstract::factory($fieldConfig['appName']);
+            $result = $config->featureEnabled($fieldConfig['feature']);
 
             if (! $result && Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Feature ' . $_fieldConfig['feature'] . ' disables field');
+                . ' Feature ' . $fieldConfig['feature'] . ' disables field');
         }
 
         return $result;
@@ -1847,5 +1858,13 @@ class Tinebase_ModelConfiguration {
 
     public function hasField($_field) {
         return isset($this->_fields[$_field]);
+    }
+
+    /**
+     * reset cache vars
+     */
+    public static function resetAvailableApps()
+    {
+        self::$_availableApplications = ['Tinebase' => true];
     }
 }

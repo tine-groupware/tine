@@ -22,6 +22,8 @@
  */
 class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
 {
+    use Tinebase_Controller_Record_ModlogTrait;
+
     /**************************** protected vars *********************/
     
     /**
@@ -75,6 +77,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             'modelName' => 'Tinebase_Model_CustomField_Grant', 
             'tableName' => 'customfield_acl',
         ));
+        $this->_modelName = 'Tinebase_Model_CustomField_Config';
     }
 
     /**
@@ -109,6 +112,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     {
         $result = $this->_backendConfig->create($_record);
         Tinebase_CustomField::getInstance()->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
+        $this->_writeModLog($result, null);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Created new custom field ' . $_record->name . ' for application ' . $_record->application_id);
@@ -262,7 +266,12 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function deleteCustomField($_customField)
     {
-        $cfId = ($_customField instanceof Tinebase_Model_CustomField_Config) ? $_customField->getId() : $_customField;
+        if ($_customField instanceof Tinebase_Model_CustomField_Config) {
+            $cfId = $_customField->getId();
+        } else {
+            $cfId = $_customField;
+            $_customField = $this->_backendConfig->get($cfId);
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Deleting custom field config ' . $cfId . ' and values.');
@@ -271,6 +280,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $this->_backendValue->deleteByProperty($cfId, 'customfield_id');
         $this->_backendACL->deleteByProperty($cfId, 'customfield_id');
         $this->_backendConfig->delete($cfId);
+
+        $this->_writeModLog(null, $_customField);
     }
     
     /**
@@ -662,10 +673,13 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param   array $_grants list of grants to add
      * @param   string $_accountType
      * @param   int $_accountId
+     * @param   boolean $_removeOldGrants
      * @return  void
      * @throws Tinebase_Exception_Backend
+     *
+     * @todo let this function set all grants at once (like container grants)
      */
-    public function setGrants($_customfieldId, $_grants = array(), $_accountType = NULL, $_accountId = NULL)
+    public function setGrants($_customfieldId, $_grants = array(), $_accountType = NULL, $_accountId = NULL, $_removeOldGrants = true)
     {
         $cfId = ($_customfieldId instanceof Tinebase_Model_CustomField_Config) ? $_customfieldId->getId() : $_customfieldId;
         
@@ -675,8 +689,10 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 . ($_accountType !== NULL ? $_accountType : Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) . ' (' . $_accountId . ')');
             
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-            $this->_backendACL->deleteByProperty($cfId, 'customfield_id');
-            
+            if ($_removeOldGrants) {
+                $this->_backendACL->deleteByProperty($cfId, 'customfield_id');
+            }
+
             foreach ($_grants as $grant) {
                 if (in_array($grant, Tinebase_Model_CustomField_Grant::getAllGrants())) {
                     $newGrant = new Tinebase_Model_CustomField_Grant(array(

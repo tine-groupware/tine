@@ -43,7 +43,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const STATUS_ACCEPTED      = 'ACCEPTED';
     const STATUS_DECLINED      = 'DECLINED';
     const STATUS_TENTATIVE     = 'TENTATIVE';
-    
+
+    const XPROP_REPLY_DTSTAMP  = 'replyDtstamp';
+    const XPROP_REPLY_SEQUENCE = 'replySequence';
+
     /**
      * cache for already resolved attendee
      * 
@@ -105,6 +108,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             'allowEmpty' => true,
             array('InArray', array(Calendar_Model_Event::TRANSP_TRANSP, Calendar_Model_Event::TRANSP_OPAQUE))
         ),
+        'xprops'               => array('allowEmpty' => true          ),
     );
 
     /**
@@ -1156,10 +1160,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
 
                 // keep authkey if attender is a resource and user has manage_resources
                 if ($attender->user_type === self::USERTYPE_RESOURCE &&
-                        (Tinebase_Core::getUser()->hasRight('Calendar', Calendar_Acl_Rights::MANAGE_RESOURCES) || (
                         isset($attender['displaycontainer_id']) && !is_scalar($attender['displaycontainer_id'])
                         && isset($attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::EVENTS_EDIT])
-                        && $attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::EVENTS_EDIT]))) {
+                        && $attender['displaycontainer_id']['account_grants'][Calendar_Model_ResourceGrants::EVENTS_EDIT]) {
                     continue;
                 }
                 
@@ -1225,6 +1228,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     {
         foreach(self::$_resolvedAttendeesCache as $name => $entries) {
             self::$_resolvedAttendeesCache[$name] = [];
+        }
+    }
+
+    public function runConvertToData()
+    {
+        if (isset($this->_properties['xprops']) && is_array($this->_properties['xprops'])) {
+            $this->_properties['xprops'] = json_encode($this->_properties['xprops']);
         }
     }
 }

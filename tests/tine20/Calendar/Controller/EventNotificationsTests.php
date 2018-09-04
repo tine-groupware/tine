@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -24,7 +24,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      * @var Calendar_Controller_EventNotifications controller unter test
      */
     protected $_notificationController;
-    
+
     /**
      * (non-PHPdoc)
      * @see tests/tine20/Calendar/Calendar_TestCase::setUp()
@@ -57,7 +57,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function tearDown()
     {
         parent::tearDown();
-        
+
         Calendar_Config::getInstance()->set(Calendar_Config::MAX_NOTIFICATION_PERIOD_FROM, /* last week */ 1);
     }
     
@@ -617,8 +617,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 . ' Something strange happened and the async jobs did not complete ... maybe the test system is not configured correctly for this: ' . $e);
             static::fail($e->getMessage());
         }
-
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
+        
+        $assertString = ' at ' . $event->dtstart->getClone()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
         $this->_assertMail('sclever', $assertString);
     }
     
@@ -654,7 +654,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert alarm
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
+        $assertString = ' at ' . $event->dtstart->getClone()->addDay(1)->setTimezone(Tinebase_Core::getUserTimezone())
+                ->format('M j');
         $this->_assertMail('pwulf', $assertString);
 
         // check adjusted alarm time
@@ -706,7 +707,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert one alarm only
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format('M j');
+        $assertString = ' at ' . $event->dtstart->getClone()->addDay(1)->setTimezone(Tinebase_Core::getUserTimezone())
+                ->format('M j');
         $this->_assertMail('pwulf', $assertString);
         
         // check series
@@ -756,7 +758,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         // assert one alarm only
         self::flushMailer();
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
-        $assertString = ' at ' . Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->addWeek(1)
+        $assertString = ' at ' . $event->dtstart->getClone()->setTimezone(Tinebase_Core::getUserTimezone())
                 ->format('M j');
         $this->_assertMail('pwulf', $assertString);
         
@@ -1391,7 +1393,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         if ($suppress_notification) {
             $this->assertEquals(1, count($messages), 'one mail should be send to current user (attender)');
         } else {
-            $this->assertEquals(3, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
+            $this->assertEquals(4, count($messages), 'four mails should be send to current user (resource + attender + everybody who is allowed to edit this resource)');
             $this->assertEquals(count($event->attendee), count($persistentEvent->attendee));
             $this->assertContains('Resource "' . $persistentResource->name . '" was booked', print_r($messages, true));
             $this->assertContains('Meeting Room (Required, No response)', print_r($messages, true));
@@ -1454,6 +1456,17 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     public function testResourceNotificationMuteForEditors()
     {
         Calendar_Config::getInstance()->set(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS, true);
+        $this->testResourceNotification(/* $suppress_notification = */ true);
+        $this->testResourceNotificationForGrantedUsers(/* $userIsAttendee = */ false, /* $suppress_notification = */ true);
+    }
+
+    /**
+     * testResourceNotificationMute without editors config
+     *
+     */
+    public function testResourceNotificationMute()
+    {
+        Calendar_Config::getInstance()->set(Calendar_Config::RESOURCE_MAIL_FOR_EDITORS, false);
         $this->testResourceNotification(/* $suppress_notification = */ true);
         $this->testResourceNotificationForGrantedUsers(/* $userIsAttendee = */ false, /* $suppress_notification = */ true);
     }
