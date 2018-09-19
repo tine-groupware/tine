@@ -1,11 +1,12 @@
 <?php
 return array (
-    // this switches modules/features off in business edition
+    // configure modules/features in business edition
     'features' => array(
-        'featureSplitView'                   => false,
-        'featureYearView'                    => false,
-        'featureColorBy'                     => true,
-        'featureExtendedEventContextActions' => true,
-        'featureRecurExcept'                 => false,
+        Calendar_Config::FEATURE_SPLIT_VIEW                     => true,
+        Calendar_Config::FEATURE_YEAR_VIEW                      => false,
+        Calendar_Config::FEATURE_COLOR_BY                       => true,
+        Calendar_Config::FEATURE_EXTENDED_EVENT_CONTEXT_ACTIONS => true,
+        Calendar_Config::FEATURE_RECUR_EXCEPT                   => false,
+        Calendar_Config::FEATURE_POLLS                          => true,
     )
 );
