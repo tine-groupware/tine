@@ -6,7 +6,7 @@
  * @subpackage  Filesystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -46,7 +46,15 @@ class Tinebase_FileSystem_Preview_ServiceV2 implements Tinebase_FileSystem_Previ
         $responseJson = null;
         do {
             $lastRun = time();
-            $response = $httpClient->request();
+            try {
+                $response = $httpClient->request();
+            } catch (Zend_Http_Client_Exception $zhce) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                    . __LINE__ . ' request failed: ' . $zhce->getMessage());
+                if ($synchronRequest) {
+                    return false;
+                }
+            }
             if ((int)$response->getStatus() === 200) {
                 $responseJson = json_decode($response->getBody(), true);
                 break;
@@ -61,7 +69,7 @@ class Tinebase_FileSystem_Preview_ServiceV2 implements Tinebase_FileSystem_Previ
             if ($run < 5) {
                 sleep(5 - $run);
             }
-        } while(++$tries < 4 && time() - $timeStarted < 180);
+        } while (++$tries < 4 && time() - $timeStarted < 180);
 
         if (is_array($responseJson)) {
             $response = array();
