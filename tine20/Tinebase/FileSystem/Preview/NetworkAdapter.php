@@ -6,7 +6,7 @@
  * @subpackage  Filesystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Milan Mertens <m.mertens@metaways.de>
- * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -16,6 +16,12 @@ class Tinebase_FileSystem_Preview_NetworkAdapter
     protected $_licensePath;
     protected $_caPath;
 
+    /**
+     * Tinebase_FileSystem_Preview_NetworkAdapter constructor.
+     * @param $url
+     * @param $licensePath
+     * @param $caPath
+     */
     public function __construct($url, $licensePath, $caPath)
     {
         $this->_url = $url;
@@ -25,11 +31,20 @@ class Tinebase_FileSystem_Preview_NetworkAdapter
         copy($licensePath, $this->_licensePath);
     }
 
+    /**
+     * cleanup (license temp file)
+     */
     public function __destruct()
     {
-        unlink($this->_licensePath);
+        if (file_exists($this->_licensePath)) {
+            unlink($this->_licensePath);
+        }
     }
 
+    /**
+     * @param null $config
+     * @return Zend_Http_Client
+     */
     public function getHttpsClient($config = null)
     {
         $proxyConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::INTERNET_PROXY);
