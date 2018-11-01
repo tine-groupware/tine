@@ -729,13 +729,31 @@ class Tinebase_Core
             $tmpdir = isset($config['tmpdir']) ? $config['tmpdir'] : null;
         }
 
+        // let's make the fall back dir more safe in a multi instance environment
         if (! $tmpdir || !@is_writable($tmpdir)) {
+            $append = '';
+            if ($tmpdir) {
+                // first lets try to create the configured tmpdir
+                if (@mkdir($tmpdir, 0777, true) && null == clearstatcache() && @is_writable($tmpdir)) {
+                    // yeaha, saved the day
+                    return $tmpdir;
+                }
+                // we have a configured tmpdir, but it is not writable / doesn't exist => as it is different for each
+                // instance in the environment, we use it to create a unique hash for this instance and append it to
+                // the default fall back dir (which might be the same for each instance!)
+                $append = '/' . md5($tmpdir);
+            }
             $tmpdir = sys_get_temp_dir();
             if (empty($tmpdir) || !@is_writable($tmpdir)) {
                 $tmpdir = session_save_path();
                 if (empty($tmpdir) || !@is_writable($tmpdir)) {
                     $tmpdir = '/tmp';
                 }
+            }
+
+            if ($append) {
+                $tmpdir = rtrim($tmpdir, '/') . $append;
+                @mkdir($tmpdir, 0777, true);
             }
         }
         
@@ -1050,16 +1068,17 @@ class Tinebase_Core
                 }
 
                 $dbConfigArray['charset'] = Tinebase_Backend_Sql_Adapter_Pdo_Mysql::getCharsetFromConfigOrCache($dbConfigArray);
+                $upperCaseCharset = strtoupper($dbConfigArray['charset']);
 
                 if (self::isLogLevel(Zend_Log::DEBUG)) self::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Using MySQL charset: ' . $dbConfigArray['charset']);
 
                 // force some driver options
-                $dbConfigArray['driver_options'] = array(
-                    PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE,
-                );
+                $driverOptions = isset($dbConfigArray['driver_options']) ? $dbConfigArray['driver_options'] : [];
+                // be aware of the difference of array_merge and [] + [] with numeric keys!
+                $dbConfigArray['driver_options'] = $driverOptions + [PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => FALSE];
                 $dbConfigArray['options']['init_commands'] = array(
-                    "SET NAMES UTF8MB4",
+                    "SET NAMES $upperCaseCharset",
                     "SET time_zone = '+0:00'",
                     "SET SQL_MODE = 'STRICT_ALL_TABLES'",
                     "SET SESSION group_concat_max_len = 4294967295"

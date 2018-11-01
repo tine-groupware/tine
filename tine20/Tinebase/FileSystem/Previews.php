@@ -176,7 +176,9 @@ class Tinebase_FileSystem_Previews
      */
     public function canNodeHavePreviews(Tinebase_Model_Tree_Node $node)
     {
-        if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FILE || empty($node->hash) || $node->size == 0) {
+        if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FILE || empty($node->hash) || $node->size == 0 ||
+                Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
+                ->{Tinebase_Config::FILESYSTEM_PREVIEW_MAX_FILE_SIZE} < $node->size) {
             return false;
         }
         $fileExtension = pathinfo($node->name, PATHINFO_EXTENSION);
@@ -210,12 +212,18 @@ class Tinebase_FileSystem_Previews
             return false;
         }
 
-        $config = $this->_getConfig();
+        try {
+            $config = $this->_getConfig();
 
-        if (false === ($result = $this->_previewService->getPreviewsForFile($tempPath, $config))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . ' preview creation for file ' . $node->getId() . ' ' . $node->name . ' failed');
-            return false;
+            if (false === ($result = $this->_previewService->getPreviewsForFile($tempPath, $config))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' preview creation for file ' . $node->getId() . ' ' . $node->name . ' failed');
+                }
+                return false;
+            }
+        } finally {
+            unlink($tempPath);
         }
 
         foreach($config as $key => $cnf) {
@@ -224,6 +232,10 @@ class Tinebase_FileSystem_Previews
             }
         }
 
+        // reduce deadlock risk. We fill the stat path cache outside the transaction in the hope that
+        // rmdir / mkdir will make updates on the tree structure versus the root directly, without reading first
+        $basePath = $this->_getBasePath() . '/' . substr($node->hash, 0, 3) . '/' . substr($node->hash, 3);
+        $fileSystem->isDir($basePath);
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
         try {
@@ -257,14 +269,20 @@ class Tinebase_FileSystem_Previews
                 if (false === file_put_contents($tempFile, $blob)) {
                     throw new Tinebase_Exception('could not write content to temp file');
                 }
-                $blob = null;
-                if (false === ($fh = fopen($tempFile, 'r'))) {
-                    throw new Tinebase_Exception('could not open temp file for reading');
-                }
+                try {
+                    $blob = null;
+                    if (false === ($fh = fopen($tempFile, 'r'))) {
+                        throw new Tinebase_Exception('could not open temp file for reading');
+                    }
 
-                // this means we create a file node of type preview
-                $fileSystem->setStreamOptionForNextOperation(Tinebase_FileSystem::STREAM_OPTION_CREATE_PREVIEW, true);
-                $fileSystem->copyTempfile($fh, $name);
+                    // this means we create a file node of type preview
+                    $fileSystem->setStreamOptionForNextOperation(Tinebase_FileSystem::STREAM_OPTION_CREATE_PREVIEW,
+                        true);
+                    $fileSystem->copyTempfile($fh, $name);
+                    fclose($fh);
+                } finally {
+                    unlink($tempFile);
+                }
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);

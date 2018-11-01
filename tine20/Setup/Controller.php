@@ -127,6 +127,12 @@ class Setup_Controller
             'smtp'  => Tinebase_Config::SMTP,
             'sieve' => Tinebase_Config::SIEVE,
         );
+
+        // initialize real config if Tinebase is installed
+        if ($this->isInstalled('Tinebase') && ! Tinebase_Core::getConfig() instanceof Tinebase_Config_Abstract) {
+            // we only have a Zend_Config - check if we can switch to Tinebase_Config
+            Tinebase_Core::setupConfig();
+        }
     }
 
     /**
@@ -539,6 +545,8 @@ class Setup_Controller
         }
         
         $messages = array();
+
+        // turn off create previews and index content temporarily
         $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
         if ($fsConfig && ($fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} ||
                 $fsConfig->{Tinebase_Config::FILESYSTEM_INDEX_CONTENT})) {
@@ -1098,7 +1106,12 @@ class Setup_Controller
      */
     public function getConfigData()
     {
-        $configArray = Setup_Core::get(Setup_Core::CONFIG)->toArray();
+        $config = Setup_Core::get(Setup_Core::CONFIG);
+        if ($config instanceof Tinebase_Config_Abstract) {
+            $configArray = $config->getConfigFileData();
+        } else {
+            $configArray = $config->toArray();
+        }
         
         #####################################
         # LEGACY/COMPATIBILITY:
@@ -1957,7 +1970,8 @@ class Setup_Controller
             if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(
                 __METHOD__ . '::' . __LINE__ . ' Installing application: ' . $_xml->name);
 
-            $createdTables = array();
+            // do doctrine/MCV2 then old xml
+            $createdTables = $this->_createModelConfigSchema($_xml->name);
 
             // traditional xml declaration
             if (isset($_xml->tables)) {
@@ -1968,25 +1982,6 @@ class Setup_Controller
                         continue;
                     }
                     $createdTables[] = $table;
-                }
-            }
-
-            // do modelconfig + doctrine
-            $application = Setup_Core::getApplicationInstance($_xml->name, '', true);
-            $models = $application->getModels(true /* MCv2only */);
-
-            if (count($models) > 0) {
-                // create tables using doctrine 2
-                Setup_SchemaTool::createSchema($_xml->name, $models);
-
-                // adopt to old workflow
-                /** @var Tinebase_Record_Abstract $model */
-                foreach ($models as $model) {
-                    $modelConfiguration = $model::getConfiguration();
-                    $createdTables[] = (object)array(
-                        'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
-                        'version' => $modelConfiguration->getVersion(),
-                    );
                 }
             }
 
@@ -2025,6 +2020,36 @@ class Setup_Controller
             Tinebase_Exception::log($e, /* suppress trace */ false);
             throw $e;
         }
+    }
+
+    /**
+     * @param $appName
+     * @return array
+     */
+    protected function _createModelConfigSchema($appName)
+    {
+        $application = Setup_Core::getApplicationInstance($appName, '', true);
+        $models = $application->getModels(true /* MCv2only */);
+        $createdTables = [];
+
+        if (count($models) > 0) {
+            // create tables using doctrine 2
+            // NOTE: we don't use createSchema here because some tables might already been created
+            // TODO or use createSchema, catch exception and fallback to updateSchema ?
+            Setup_SchemaTool::updateSchema($appName, $models);
+
+            // adopt to old workflow
+            /** @var Tinebase_Record_Abstract $model */
+            foreach ($models as $model) {
+                $modelConfiguration = $model::getConfiguration();
+                $createdTables[] = (object)array(
+                    'name' => Tinebase_Helper::array_value('name', $modelConfiguration->getTable()),
+                    'version' => $modelConfiguration->getVersion(),
+                );
+            }
+        }
+
+        return $createdTables;
     }
 
     protected function _createTable($table)

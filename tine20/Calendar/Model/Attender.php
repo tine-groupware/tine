@@ -138,6 +138,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         try {
             $contact = $adbController->get($this->user_id, null, false);
             return $contact->account_id ? $contact->account_id : null;
+        } catch (Tinebase_Exception_NotFound $e) {
+            return null;
         } finally {
             $adbController->doContainerACLChecks($adbAcl);
         }
@@ -1202,12 +1204,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $isAttendeeCondition = $_event && $_event->attendee instanceof Tinebase_Record_RecordSet ? self::getAttendee($_event->attendee, $_attendee) : TRUE;
         return ($isAttendeeCondition || $isOrganizerCondition) && $_attendee->status != Calendar_Model_Attender::STATUS_DECLINED;
     }
-
+    
     public function getUserId()
     {
         return $this->user_id instanceof Tinebase_Record_Abstract ? $this->user_id->getId() : $this->user_id;
     }
-
+    
     public function getKey()
     {
         return $this->user_type . '-' . $this->getUserId();

@@ -414,7 +414,19 @@ class Calendar_Frontend_iMIP
                 if (! $event->container_id) {
                     $event->container_id = Tinebase_Core::getPreference('Calendar')->{Calendar_Preference::DEFAULTCALENDAR};
                 }
-                
+
+                if (!empty($event->recurid) && empty($event->rrule)) {
+                    if ($event->recurid instanceof Tinebase_DateTime) {
+                        if (!isset($event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES])) {
+                            $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES] = [];
+                        }
+                        $event->xprops()[Calendar_Model_Event::XPROPS_IMIP_PROPERTIES]['RECURRENCE-ID'] =
+                            'RECURRENCE-ID:' . $event->recurid->setTimezone($event->originator_tz)->format('Ymd') . 'T'
+                            . $event->recurid->format('His');
+                    }
+                    $event->recurid = null;
+                }
+
                 $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
             } else {
                 if ($event->external_seq > $existingEvent->external_seq && !$_status) {
@@ -455,7 +467,7 @@ class Calendar_Frontend_iMIP
         $existingEvent = $this->getExistingEvent($_iMIP);
         if (! $existingEvent) {
             $_iMIP->addFailedPrecondition(Calendar_Model_iMIP::PRECONDITION_EVENTEXISTS, "cannot process REPLY to non existent/invisible event");
-            $result = FALSE;
+            return false;
         }
         
         $iMIPAttenderIdx = $_iMIP->getEvent()->attendee instanceof Tinebase_Record_RecordSet ? array_search($_iMIP->originator, $_iMIP->getEvent()->attendee->getEmail()) : FALSE;

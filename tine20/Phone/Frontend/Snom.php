@@ -358,10 +358,11 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         // it's a single shot request
         parent::_authenticate();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Event: $event CallId: $callId Local: $local Remote: $remote ");
-        
-        $phone = Voipmanager_Controller_Snom_Phone::getInstance()->getByMacAddress($mac);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " Event: $event CallId: $callId Local: $local Remote: $remote ");
+        }
+
         $controller = Phone_Controller::getInstance();
         
         $pos = strpos($callId, '@');
@@ -379,34 +380,20 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             $remote = substr($remote, 0 , $pos);
         };
 
-        if (empty($local)) {
-            // local/line_id might be empty (asterisk bug)
-            // fetch last call with line_id via mac
-            $call = $controller->getLastCall($mac);
-            if (!$call) {
-                throw new Tinebase_Exception_NotFound('no last call found for phone mac address');
-            }
-        } else {
-            $call = new Phone_Model_Call(array(
-                'id' => substr($callId, 0, 40),
-                'phone_id' => $phone->getId(),
-                'line_id' => $local
-            ));
-        }
-        
+        $call = $this->_getCall($callId, $local, $mac);
+
         switch ($event) {
             case 'outgoing':
-                $call->source = $local;
-                $call->destination = $remote;
-                $call->direction = Phone_Model_Call::TYPE_OUTGOING;
-                $controller->callStarted($call);
-                break;
-                
             case 'incoming':
                 $call->source = $local;
                 $call->destination = $remote;
-                $call->direction = Phone_Model_Call::TYPE_INCOMING;
-                $controller->callStarted($call);
+                $call->direction = $event === 'incoming' ? Phone_Model_Call::TYPE_INCOMING : Phone_Model_Call::TYPE_OUTGOING;
+                try {
+                    $controller->callStarted($call);
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    // might be a duplicate
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                }
                 break;
                 
             case 'connected':
@@ -416,6 +403,53 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             case 'disconnected':
                 $controller->callDisconnected($call);
                 break;
+
+            default:
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Unhandled snom event: '
+                    . $event);
         }
+    }
+
+    /**
+     * @param string $callId
+     * @param $local
+     * @param $mac
+     * @return null|Phone_Model_Call
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _getCall($callId, $local, $mac)
+    {
+        $phone = Voipmanager_Controller_Snom_Phone::getInstance()->getByMacAddress($mac);
+        $controller = Phone_Controller::getInstance();
+
+        if (empty($local)) {
+            // local/line_id might be empty (asterisk bug)
+            // fetch last call with line_id via mac
+            $call = $controller->getLastCall($mac);
+            if (! $call) {
+                throw new Tinebase_Exception_NotFound('no last call found for phone mac address');
+            }
+        } else {
+            // try to find current call
+            // TODO search with phoneId?
+            try {
+                $call = $controller->getCall($callId);
+                if ($call->phone_id === $phone->getId()) {
+                    return $call;
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $call = null;
+            }
+
+            if (! $call) {
+                $call = new Phone_Model_Call(array(
+                    'id' => substr($callId, 0, 40),
+                    'phone_id' => $phone->getId(),
+                    'line_id' => $local
+                ));
+            }
+        }
+
+        return $call;
     }
 }

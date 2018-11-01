@@ -100,7 +100,7 @@
         $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
         foreach ($attendeeMigration['toUpdate'] as $attendee) {
             $oldAttendee = Calendar_Model_Attender::getAttendee($_oldEvent->attendee, $attendee);
-            if ($attendee->status == $oldAttendee->status) {
+            if ($oldAttendee && $attendee->status == $oldAttendee->status) {
                 $attendeeMigration['toUpdate']->removeRecord($attendee);
             }
         }
@@ -127,6 +127,8 @@
      * @param String                     $_action
      * @param Tinebase_Record_Interface  $_oldEvent
      * @param Array                      $_additionalData
+     *
+     * @refactor split up this function, it's way too long
      */
     public function doSendNotifications(Calendar_Model_Event $_event, $_updater, $_action, Tinebase_Record_Interface $_oldEvent = NULL, array $_additionalData = array())
     {
@@ -176,7 +178,29 @@
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Notification action: " . $_action);
-        
+
+
+        $organizerContact = $_event->resolveOrganizer();
+        if (! $organizerContact) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' Organizer missing - using creator as organizer for notification purposes.');
+            $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_event->created_by);
+        }
+
+        $organizerIsAttender = false;
+        foreach ($_event->attendee as $attender) {
+            if ($attender->getUserId() == $_event->resolveOrganizer()->id) {
+                $organizerIsAttender = true;
+            }
+        }
+
+        $organizerIsExternal = ! $organizerContact->account_id;
+
+        $organizer = new Calendar_Model_Attender(array(
+            'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'    => $organizerContact
+        ));
+
         switch ($_action) {
             case 'alarm':
                 foreach($_event->attendee as $attender) {
@@ -188,19 +212,27 @@
             case 'booked':
             case 'created':
             case 'deleted':
-                foreach($_event->attendee as $attender) {
-                    $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_INVITE_CANCEL);
+                // skip invitations/cancle if event came from external
+                if (! $organizerIsExternal) {
+                    foreach ($_event->attendee as $attender) {
+                        $this->sendNotificationToAttender($attender, $_event, $_updater, $_action, self::NOTIFICATION_LEVEL_INVITE_CANCEL);
+                    }
+                } else {
+                    // send reply (aka status update) to external organizer
+                    $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE);
                 }
                 break;
             case 'changed':
                 $attendeeMigration = Calendar_Model_Attender::getMigration($_oldEvent->attendee, $_event->attendee);
-                
-                foreach ($attendeeMigration['toCreate'] as $attender) {
-                    $this->sendNotificationToAttender($attender, $_event, $_updater, 'created', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
-                }
-                
-                foreach ($attendeeMigration['toDelete'] as $attender) {
-                    $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
+
+                if (! $organizerIsExternal) {
+                    foreach ($attendeeMigration['toCreate'] as $attender) {
+                        $this->sendNotificationToAttender($attender, $_event, $_updater, 'created', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
+                    }
+
+                    foreach ($attendeeMigration['toDelete'] as $attender) {
+                        $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
+                    }
                 }
                 
                 // NOTE: toUpdate are all attendee to be notified
@@ -222,8 +254,20 @@
                     }
                     
                     // send notifications
-                    foreach ($attendeeMigration['toUpdate'] as $attender) {
-                        $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $notificationLevel, $updates);
+                    if (! $organizerIsExternal) {
+                        foreach ($attendeeMigration['toUpdate'] as $attender) {
+                            $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $notificationLevel, $updates);
+                        }
+                    }
+
+                    if ($organizerIsExternal || !$organizerIsAttender) {
+                        $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', $notificationLevel, $updates);
+                    }
+
+                    if ($organizerIsExternal) {
+                        // NOTE: a reply to an external reschedule is a reschedule for us, but a status update only for external!
+                        $updatesForExternalOrganizer = array('attendee' => array('toUpdate' => $_event->attendee));
+                        $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, $updatesForExternalOrganizer);
                     }
                 }
                 
@@ -242,25 +286,6 @@
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " unknown action '$_action'");
                 break;
                 
-        }
-
-        $organizerIsAttender = false;
-        
-        //Check if organizer is attender
-        foreach($_event->attendee as $attender) {
-            if ($attender->user_id  == $_event->resolveOrganizer()->id) {
-                $organizerIsAttender = true;
-            }
-        }
-        
-        // SEND REPLY/COUNTER to external organizer or organizer that is not attender
-        if ($_action == 'changed' && $_event->organizer && (! $_event->resolveOrganizer()->account_id || ! $organizerIsAttender)) {
-            $updates = array('attendee' => array('toUpdate' => $_event->attendee));
-            $organizer = new Calendar_Model_Attender(array(
-                'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
-                'user_id'    => $_event->resolveOrganizer()
-            ));
-            $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, $updates);
         }
     }
 

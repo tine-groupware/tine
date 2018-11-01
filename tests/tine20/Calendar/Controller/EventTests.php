@@ -247,7 +247,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(Calendar_Model_Attender::ROLE_OPTIONAL, $secondUpdatedEvent->attendee->getFirstRecord()->role);
         $this->assertEquals(Calendar_Model_Event::TRANSP_TRANSP, $secondUpdatedEvent->attendee->getFirstRecord()->transp);
     }
-    
+
     public function testAttendeeFilter()
     {
         $event1 = $this->_getEvent();
@@ -1519,6 +1519,46 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         )), NULL, FALSE, FALSE);
         
         $this->assertEquals(0, count($events));
+
+        // test period filter with time interval
+        $this->_controller->create($this->_getEvent(true));
+
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => 'P',
+                'until' => 'PT10M'
+            ))
+        )), NULL, FALSE, FALSE);
+        $this->assertEquals(1, count($events));
+
+        // now is now, no matter which timezone is set
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => 'P',
+                'until' => 'PT10M'
+            ))
+        ), null, ['timezone' => 'Europe/Berlin']), NULL, FALSE, FALSE);
+        $this->assertEquals(1, count($events));
+
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => 'PT-1H',
+                'until' => 'PT10M'
+            ))
+        )));
+        $this->assertEquals(1, count($events));
+
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()),
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => 'PT-1H',
+                'until' => 'PT-10M'
+            ))
+        )), NULL, FALSE, FALSE);
+        $this->assertEquals(0, count($events));
     }
     
     /**
@@ -2166,6 +2206,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedEvent = $this->_controller->update($updateEvent);
         static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $updatedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()->status);
 
+        // update the event, not the attendees
+        $updatedEvent->summary = 'event 2';
+        $updatedEvent = $this->_controller->update($updatedEvent);
+        static::assertSame('event 2', $updatedEvent->summary);
+
         $event = clone $updatedEvent;
         // delete it
         $this->_controller->delete($event->getId());
@@ -2178,7 +2223,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->seq = 0;
         $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
             Tinebase_Application::getInstance()->getApplicationById('Calendar')->getId(), $event, 10000);
-        static::assertEquals(7, $modifications->count());
+        static::assertEquals(8, $modifications->count());
 
         // undelete it
         $mod = $modifications->getLastRecord();
@@ -2196,6 +2241,17 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         static::assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $undeletedEvent->attendee->filter('user_id', $scleverContactId)->getFirstRecord()
             ->status);
         static::assertEquals(1, $undeletedEvent->alarms->count());
+        static::assertSame('event 2', $undeletedEvent->summary);
+
+        // undo the summary change
+        $mod = $modifications->getLastRecord();
+        static::assertNotContains(Calendar_Model_Attender::class, $mod->new_value);
+        $modifications->removeRecord($mod);
+        Tinebase_Timemachine_ModificationLog::getInstance()->undo(new Tinebase_Model_ModificationLogFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($mod->getId()))
+        )));
+        $undeletedEvent = $this->_controller->get($event->getId());
+        static::assertSame('event 1', $undeletedEvent->summary);
 
         // undo the reschedule
         $mod = $modifications->getLastRecord();

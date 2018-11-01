@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -289,6 +289,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Calendar_Model_AttendeeRole::class,
                 Calendar_Model_Event::class,
                 Calendar_Model_EventPersonalGrants::class,
+                Calendar_Model_ExternalInvitationGrants::class,
                 Calendar_Model_Poll::class,
                 Calendar_Model_FreeBusy::class,
                 Calendar_Model_Exdate::class,
@@ -442,6 +443,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_PersistentObserver::class,
                 Tinebase_Model_Grants::class,
                 Tinebase_Model_SchedulerTask::class,
+                Tinebase_Model_FilterSyncToken::class,
             ),
             'Voipmanager' => array(
                 Voipmanager_Model_Snom_Template::class,

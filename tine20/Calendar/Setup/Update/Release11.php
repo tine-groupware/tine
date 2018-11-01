@@ -258,4 +258,68 @@ class Calendar_Setup_Update_Release11 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Calendar', '11.11');
     }
+
+    /**
+     * update to 11.12
+     *
+     * add xprops to external invitation calendars
+     */
+    public function update_11()
+    {
+        $containerController = Tinebase_Container::getInstance();
+
+        try {
+            $oldValue = $containerController->doSearchAclFilter(false);
+
+            $containerBackend = new Tinebase_Backend_Sql(array(
+                'modelName' => 'Tinebase_Model_Container',
+                'tableName' => 'container',
+            ));
+
+            foreach ($containerBackend->search(new Tinebase_Model_ContainerFilter([
+                    ['field' => 'application_id', 'operator' => 'equals', 'value' =>
+                        Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()],
+                    ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_SHARED],
+                    ['field' => 'name', 'operator' => 'contains', 'value' => '@'],
+                    ['field' => 'is_deleted', 'operator' => 'equals', 'value' => 0],
+            ])) as $container) {
+
+                if (isset($container->xprops()[Calendar_Controller::XPROP_EXTERNAL_INVITATION_CALENDAR]) ||
+                        !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $container->name)) {
+                    continue;
+                }
+                $grants = $containerController->getGrantsOfContainer($container, true);
+                if ($grants->count() !== 1 || $grants->getFirstRecord()->account_type !==
+                        Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE ||
+                        $grants->getFirstRecord()->{Tinebase_Model_Grants::GRANT_READ}) {
+                    continue;
+                }
+                $container->xprops()[Calendar_Controller::XPROP_EXTERNAL_INVITATION_CALENDAR] = true;
+                $containerController->update($container);
+            }
+
+        } finally {
+            $containerController->doSearchAclFilter($oldValue);
+        }
+
+        $this->setApplicationVersion('Calendar', '11.12');
+    }
+
+    public function update_12()
+    {
+        if (! $this->_backend->columnExists('xprops', 'cal_events')) {
+            $this->_backend->addCol('cal_events', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>xprops</name>
+                    <type>text</type>
+                    <length>65535</length>
+                </field>'));
+        }
+
+        if ($this->getTableVersion('cal_events') < 16) {
+            $this->setTableVersion('cal_events', 16);
+        }
+
+        $this->setApplicationVersion('Calendar', '11.13');
+    }
 }

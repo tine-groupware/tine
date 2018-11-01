@@ -673,4 +673,111 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         Tinebase_ImportExportDefinition::getInstance()->deleteByFilter($filter);
         $this->setApplicationVersion('Tinebase', '11.32');
     }
+
+    /**
+     * update to 11.33
+     *
+     * increase temp_file size column to bigint
+     */
+    public function update_32()
+    {
+        $this->_backend->alterCol('temp_files', new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                    <name>size</name>
+                    <type>integer</type>
+                    <length>64</length>
+                    <unsigned>true</unsigned>
+                    <notnull>true</notnull>
+                </field>'));
+
+        if ($this->getTableVersion('temp_files') == 1) {
+            $this->setTableVersion('temp_files', 2);
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.33');
+    }
+
+    /**
+     * update to 11.34
+     *
+     * change unique key parent_id - name - deleted_time so that it really works
+     */
+    public function update_33()
+    {
+        $release10 = new Tinebase_Setup_Update_Release10($this->_backend);
+        $release10->update_57();
+        $this->setApplicationVersion('Tinebase', '11.34');
+    }
+
+    /**
+     * update to 11.35
+     *
+     * container xprops need to be [] not NULL
+     */
+    public function update_34()
+    {
+        $quotedField = $this->_db->quoteIdentifier('xprops');
+        $this->_db->update(SQL_TABLE_PREFIX . 'container', ['xprops' => '[]'],
+            $quotedField . ' IS NULL');
+
+        $this->setApplicationVersion('Tinebase', '11.35');
+    }
+
+    /**
+     * update to 11.36
+     *
+     * create filterSyncToken table and add clean up job
+     */
+    public function update_35()
+    {
+        $this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
+
+        Tinebase_Scheduler_Task::addFilterSyncTokenCleanUpTask(Tinebase_Core::getScheduler());
+
+        $this->setApplicationVersion('Tinebase', '11.36');
+    }
+
+    /**
+     * update to 11.37
+     *
+     * update temp file cleanup task
+    */
+    public function update_36()
+    {
+        $scheduler = new Tinebase_Backend_Scheduler();
+        try {
+            /** @var Tinebase_Model_SchedulerTask $task */
+            $task = $scheduler->getByProperty('Tinebase_TempFileCleanup', 'name');
+            $task->config->setCron(Tinebase_Scheduler_Task::TASK_TYPE_HOURLY);
+            $scheduler->update($task);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Scheduler_Task::addTempFileCleanupTask(Tinebase_Scheduler::getInstance());
+        }
+
+        $this->setApplicationVersion('Tinebase', '11.37');
+    }
+
+    /**
+     * update to 11.38
+     *
+     * update filterSyncToken table
+     */
+    public function update_37()
+    {
+        $this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
+
+        $this->setApplicationVersion('Tinebase', '11.38');
+    }
+
+    /**
+     * update to 11.39
+     *
+     * update filterSyncToken table
+     */
+    public function update_38()
+    {
+        $this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
+
+        $this->setApplicationVersion('Tinebase', '11.39');
+    }
 }

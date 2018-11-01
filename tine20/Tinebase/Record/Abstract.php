@@ -1070,6 +1070,9 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 } else {
                     $recordField = $recordField->getId();
                 }
+            } elseif ((($ownField === 0 || $ownField === '0') && $recordField !== 0 && $recordField !== '0') ||
+                    ($recordField === 0 || $recordField === '0') && $ownField !== 0 && $ownField !== '0') {
+                // do nothing, we want to record this diff below
             } elseif ($ownField == $recordField) {
                 continue;
             } elseif (empty($ownField) && empty($recordField)) {
@@ -1093,7 +1096,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     }
     
     /**
-     * merge given record into $this
+     * merge given record into $this, only fills so far empty properties with new values from given record
+     * note that 0, '0' are not empty, while null, '' are empty
      * 
      * @param Tinebase_Record_Interface $record
      * @param Tinebase_Record_Diff $diff
@@ -1114,7 +1118,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
         
         foreach ($diff->diff as $field => $value) {
-            if (empty($this->{$field})) {
+            if (empty($this->{$field}) && $this->{$field} !== 0 && $this->{$field} !== '0') {
                 $this->{$field} = $value;
             }
         }
@@ -1590,6 +1594,29 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public function &xprops($_property = 'xprops')
     {
+        if (!isset($this->_validators[$_property])) {
+            throw new Tinebase_Exception_UnexpectedValue($_property . ' is no property of $this->_properties');
+        }
+        if (!isset($this->_properties[$_property])) {
+            $this->_properties[$_property] = array();
+        } else if (is_string($this->_properties[$_property])) {
+            $this->_properties[$_property] = json_decode($this->_properties[$_property], true);
+        }
+
+        return $this->_properties[$_property];
+    }
+
+    /**
+     * extended json data properties getter
+     *
+     * @param string $_property
+     * @return &array
+     */
+    public function &jsonData($_property)
+    {
+        if (!isset($this->_validators[$_property])) {
+            throw new Tinebase_Exception_UnexpectedValue($_property . ' is no property of $this->_properties');
+        }
         if (!isset($this->_properties[$_property])) {
             $this->_properties[$_property] = array();
         } else if (is_string($this->_properties[$_property])) {
