@@ -33,3 +33,11 @@ Um den Index nachträglich mit den vorhandenen Dateien zu füllen, muss dieses K
     $ tine20-cli --method=Tinebase.fileSystemCheckIndexing
 
 Wenn es sofort beendet ist stimmt die Konfig nicht,  es sollte relativ lange dauern. Und auch die logs cheken, im Fehlerfall tauchen dann dort Infos auf.
+
+
+Liste mit den Benutzern mit den meisten Daten im Tine 2.0 VFS (Virtual File System) erstellen
+=====
+
+    sql> select user.login_name,fo.created_by, sum(fr.size) as filesize from tine20_tree_fileobjects as fo JOIN tine20_tree_filerevisions as fr ON fo.id = fr.id join tine20_accounts as user on user.id=fo.created_by group by fo.created_by order by filesize DESC;
+
+
