@@ -22,6 +22,9 @@
         "url": "https://github.com/tine20/timezoneconvert.git"
     }, {
         "type": "git",
+        "url": "http://gerrit.tine20.com/customers/p/tine20-usermanual.git"
+    }, {
+        "type": "git",
         "url": "https://github.com/tine20/syncroton.git"
     }, {
         "type": "git",
