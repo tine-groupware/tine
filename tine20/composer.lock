@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "351dff816843f92ee156757d42a30690",
+    "content-hash": "98f26d321fb6b298c72d7ce62afc9449",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -868,6 +868,37 @@
                 "UTC"
             ],
             "time": "2016-04-25T08:20:13+00:00"
+        },
+        {
+            "name": "metaways/tine20-usermanual",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "http://gerrit.tine20.com/customers/p/tine20-usermanual.git",
+                "reference": "7941f02bbcda8b99ce2af02554df32f7474ca4a6"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "UserManual": "lib/UserManual",
+                    "../tests/tine20/UserManual": "tests/UserManual"
+                },
+                "reverseSymlinks": {
+                    "lib/images": "images"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 UserManual Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Documenation",
+                "Help",
+                "Manual",
+                "Tine 2.0"
+            ],
+            "time": "2018-10-24T12:45:47+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -4249,7 +4280,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "syncroton/syncroton": 20,
-        "phpoffice/phpspreadsheet": 20
+        "phpoffice/phpspreadsheet": 20,
+        "metaways/tine20-usermanual": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
