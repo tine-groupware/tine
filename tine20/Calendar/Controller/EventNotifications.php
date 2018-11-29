@@ -189,7 +189,7 @@
 
         $organizerIsAttender = false;
         foreach ($_event->attendee as $attender) {
-            if ($attender->getUserId() == $_event->resolveOrganizer()->id) {
+            if ($attender->getUserId() === $organizerContact->getId()) {
                 $organizerIsAttender = true;
             }
         }
@@ -219,7 +219,11 @@
                     }
                 } else {
                     // send reply (aka status update) to external organizer
-                    $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE);
+                    $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, [
+                        'attendee' => [
+                            'toUpdate' => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [Calendar_Model_Attender::getOwnAttender($_event->attendee)])
+                        ]
+                    ]);
                 }
                 break;
             case 'changed':
@@ -233,53 +237,56 @@
                     foreach ($attendeeMigration['toDelete'] as $attender) {
                         $this->sendNotificationToAttender($attender, $_oldEvent, $_updater, 'deleted', self::NOTIFICATION_LEVEL_INVITE_CANCEL);
                     }
-                }
-                
-                // NOTE: toUpdate are all attendee to be notified
-                if (count($attendeeMigration['toUpdate']) > 0) {
-                    $updates = $this->_getUpdates($_event, $_oldEvent);
-                    
-                    if (empty($updates)) {
-                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " empty update, nothing to notify about");
-                        return;
-                    }
-                    
-                    // compute change type
-                    if (count(array_intersect(array('dtstart', 'dtend'), array_keys($updates))) > 0) {
-                        $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
-                    } else if (count(array_diff(array_keys($updates), array('attendee'))) > 0) {
-                        $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_UPDATE;
-                    } else {
-                        $notificationLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
-                    }
-                    
-                    // send notifications
-                    if (! $organizerIsExternal) {
+
+                    // NOTE: toUpdate are all attendee to be notified
+                    if (count($attendeeMigration['toUpdate']) > 0) {
+                        $updates = $this->_getUpdates($_event, $_oldEvent);
+
+                        if (empty($updates)) {
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " empty update, nothing to notify about");
+                            return;
+                        }
+
+                        // compute change type
+                        if (count(array_intersect(array('dtstart', 'dtend'), array_keys($updates))) > 0) {
+                            $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
+                        } else if (count(array_diff(array_keys($updates), array('attendee'))) > 0) {
+                            $notificationLevel = self::NOTIFICATION_LEVEL_EVENT_UPDATE;
+                        } else {
+                            $notificationLevel = self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE;
+                        }
+
+                        // send notifications
                         foreach ($attendeeMigration['toUpdate'] as $attender) {
                             $this->sendNotificationToAttender($attender, $_event, $_updater, 'changed', $notificationLevel, $updates);
                         }
                     }
 
-                    if ($organizerIsExternal || !$organizerIsAttender) {
+                    if (!$organizerIsAttender) {
                         $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', $notificationLevel, $updates);
                     }
-
-                    if ($organizerIsExternal) {
-                        // NOTE: a reply to an external reschedule is a reschedule for us, but a status update only for external!
-                        $updatesForExternalOrganizer = array('attendee' => array('toUpdate' => $_event->attendee));
-                        $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, $updatesForExternalOrganizer);
-                    }
+                } else {
+                    // NOTE: a reply to an external reschedule is a reschedule for us, but a status update only for external!
+                    $this->sendNotificationToAttender($organizer, $_event, $_updater, 'changed', self::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE, [
+                        'attendee' => [
+                            'toUpdate' => new Tinebase_Record_RecordSet(Calendar_Model_Attender::class, [Calendar_Model_Attender::getOwnAttender($_event->attendee)])
+                        ]
+                    ]);
                 }
-                
                 break;
 
             case 'tentative':
+                
+                $prefUser = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::SEND_NOTIFICATION_FOR_TENTATIVE,
+                    $organizerContact->account_id);
                 $attendee = new Calendar_Model_Attender(array(
                     'cal_event_id'      => $_event->getId(),
                     'user_type'         => Calendar_Model_Attender::USERTYPE_USER,
                     'user_id'           => $_event->organizer,
                 ), true);
-                $this->sendNotificationToAttender($attendee, $_event, $_updater, 'tentative', self::NOTIFICATION_LEVEL_NONE);
+                if($prefUser) {
+                    $this->sendNotificationToAttender($attendee, $_event, $_updater, 'tentative', self::NOTIFICATION_LEVEL_NONE);
+                }
                 break;
 
             default:

@@ -23,30 +23,34 @@ class Calendar_Frontend_iMIP
      * @TODO autodelete REFRESH mails
      * 
      * @param  Calendar_Model_iMIP $_iMIP
+     * @param  boolean               $_retry    retry in case a deadlock occured
      * @return mixed
      */
-    public function autoProcess(Calendar_Model_iMIP $_iMIP)
+    public function autoProcess(Calendar_Model_iMIP $_iMIP, $_retry = true)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-            Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . ' Incoming iMIP ics'
-                . print_r($_iMIP->toArray(), true));
-        }
-
         if ($_iMIP->method == Calendar_Model_iMIP::METHOD_COUNTER) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(
                 __METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component with COUNTER method "
                 . "-> must always be processed manually");
             return false;
         }
-        
-        if (! $this->getExistingEvent($_iMIP, TRUE) && $_iMIP->method != Calendar_Model_iMIP::METHOD_CANCEL) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(
-                __METHOD__ . '::' . __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
-            return false;
+
+        try {
+            if (! $this->getExistingEvent($_iMIP, TRUE) && $_iMIP->method != Calendar_Model_iMIP::METHOD_CANCEL) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' .
+                    __LINE__ . " skip auto processing of iMIP component whose event is not in our db yet");
+                return false;
+            }
+
+            // update existing event details _WITHOUT_ status updates
+            return $this->_process($_iMIP);
+        } catch (Zend_Db_Statement_Exception $zdbse) {
+            if ($_retry && strpos($zdbse->getMessage(), 'Deadlock') !== false) {
+                return $this->autoProcess($_iMIP, false);
+            } else {
+                throw $zdbse;
+            }
         }
-        
-        // update existing event details _WITHOUT_ status updates
-        return $this->_process($_iMIP);
     }
     
     /**
@@ -54,14 +58,23 @@ class Calendar_Frontend_iMIP
      * 
      * @param  Calendar_Model_iMIP   $_iMIP
      * @param  string                $_status
+     * @param  boolean               $_retry    retry in case a deadlock occured
      * @return boolean
      */
-    public function process($_iMIP, $_status = NULL)
+    public function process($_iMIP, $_status = NULL, $_retry = true)
     {
-        // client spoofing protection - throws exception if spoofed
-        Tinebase_EmailUser_Factory::getInstance('Controller_Message')->getiMIP($_iMIP->getId());
+        try {
+            // client spoofing protection - throws exception if spoofed
+            Tinebase_EmailUser_Factory::getInstance('Controller_Message')->getiMIP($_iMIP->getId());
 
-        return $this->_process($_iMIP, $_status);
+            return $this->_process($_iMIP, $_status);
+        } catch (Zend_Db_Statement_Exception $zdbse) {
+            if ($_retry && strpos($zdbse->getMessage(), 'Deadlock') !== false) {
+                return $this->process($_iMIP, $_status, false);
+            } else {
+                throw $zdbse;
+            }
+        }
     }
     
     /**
@@ -101,11 +114,6 @@ class Calendar_Frontend_iMIP
             } else {
                 throw new Calendar_Exception_iMIP('iMIP preconditions failed: ' . implode(', ', array_keys($_iMIP->preconditions)));
             }
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG) && $_iMIP->event instanceof Calendar_Model_Event) {
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Event: ' . print_r($_iMIP->event->toArray(), true));
         }
         
         $method = $_iMIP->method ? ucfirst(strtolower($_iMIP->method)) : 'MISSINGMETHOD';
@@ -153,10 +161,10 @@ class Calendar_Frontend_iMIP
         if (! method_exists($this, $processMethodName)) {
             throw new Tinebase_Exception_UnexpectedValue("Method {$_iMIP->method} not supported");
         }
-        
-        $this->_checkPreconditions($_iMIP, TRUE, $_status);
+
+        $this->_checkPreconditions($_iMIP, true, $_status);
         $result = $this->{$processMethodName}($_iMIP, $_status);
-        
+
         //clear existing event cache
         unset($_iMIP->existing_event);
         
@@ -429,13 +437,13 @@ class Calendar_Frontend_iMIP
 
                 $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
             } else {
-                if ($event->external_seq > $existingEvent->external_seq && !$_status) {
-                    // no buttons pressed (just reading/updating)
+                if ($event->external_seq > $existingEvent->external_seq) {
                     // updates event with .ics
                     $event->id = $existingEvent->id;
                     $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
                 } else {
-                    $event = $_iMIP->event = Calendar_Controller_MSEventFacade::getInstance()->update($existingEvent);
+                    // event is current
+                    $event = $existingEvent;
                 }
             }
             

@@ -1303,126 +1303,6 @@ class Felamimail_Frontend_JsonTest extends TestCase
     }
 
     /**
-     * @see 0012162: create new MailFiler application
-     */
-    public function testFileMessagesInMailFiler()
-    {
-        $this->testFileMessages('MailFiler');
-        $personalFilemanagerContainer = $this->_getPersonalContainerNode('MailFiler');
-        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
-            . '/' . Tinebase_Core::getUser()->accountLoginName
-            . '/' . $personalFilemanagerContainer->name;
-        $filter = array(array(
-            'field'    => 'path',
-            'operator' => 'equals',
-            'value'    => $path
-        ), array(
-            'field'    => 'subject',
-            'operator' => 'contains',
-            'value'    => 'test'
-        ));
-        $mailFilerJson = new MailFiler_Frontend_Json();
-        $emlNodes = $mailFilerJson->searchNodes($filter, array('sort' => 'subject', 'order' => 'ASC'));
-        $this->assertEquals(2, $emlNodes['totalcount'], 'could not find eml file node with subject filter');
-        $emlNode = $emlNodes['results'][1];
-
-        // check email fields
-        $this->assertTrue(isset($emlNode['message']), 'message not found in node array: ' . print_r($emlNodes['results'], true));
-        $this->assertEquals(array(Tinebase_Core::getUser()->accountEmailAddress), $emlNode['message']['to'], print_r($emlNode['message'], true));
-        $this->assertTrue(isset($emlNode['message']['structure']) && is_array($emlNode['message']['structure']), 'structure not found or not an array: ' . print_r($emlNode['message'], true));
-
-        $emlNode = $mailFilerJson->getNode($emlNode['id']);
-        $this->assertTrue(isset($emlNode['message']['body']) && is_string($emlNode['message']['body']), 'body not found or not a string: ' . print_r($emlNode['message'], true));
-        $this->assertContains('aaaaaä', $emlNode['message']['body'], print_r($emlNode['message'], true));
-
-        $emlNodesDesc = $mailFilerJson->searchNodes($filter, array('sort' => 'subject', 'order' => 'DESC'));
-        $this->assertEquals(2, $emlNodesDesc['totalcount'], 'could not find eml file node with subject filter');
-        $this->assertEquals($emlNode['id'], $emlNodesDesc['results'][1]['id'], 'sort did not work');
-    }
-
-    /**
-     * @see 0012162: create new MailFiler application
-     */
-    public function testFileMessagesInMailFilerWithAttachment()
-    {
-        $emlNode = $this->_fileMessageInMailFiler();
-        $this->assertTrue(isset($emlNode['message']['attachments']), 'attachments not found in message node: ' . print_r($emlNode, true));
-        $this->assertEquals(1, count($emlNode['message']['attachments']), 'attachment not found in message node: ' . print_r($emlNode, true));
-        $this->assertEquals('moz-screenshot-83.png', $emlNode['message']['attachments'][0]['filename'], print_r($emlNode['message']['attachments'], true));
-    }
-
-    /**
-     * @param string $messageFile
-     * @return array
-     */
-    protected function _fileMessageInMailFiler($messageFile = 'multipart_related.eml', $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag')
-    {
-        $appName = 'MailFiler';
-        $personalFilemanagerContainer = $this->_getPersonalContainerNode($appName);
-        $testFolder = $this->_getFolder($this->_testFolderName);
-        $message = fopen(dirname(__FILE__) . '/../files/' . $messageFile, 'r');
-        Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $message);
-
-        $message = $this->_searchForMessageBySubject($subject, $this->_testFolderName);
-        $path = '/' . Tinebase_Model_Container::TYPE_PERSONAL
-            . '/' . Tinebase_Core::getUser()->accountLoginName
-            . '/' . $personalFilemanagerContainer->name;
-        $filter = array(array(
-            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
-        ));
-        $this->_json->fileMessages($filter, $appName, $path);
-        $filter = array(array(
-            'field'    => 'path',
-            'operator' => 'equals',
-            'value'    => $path
-        ), array(
-            'field'    => 'subject',
-            'operator' => 'equals',
-            'value'    => $message['subject']
-        ));
-        $mailFilerJson = new MailFiler_Frontend_Json();
-        $emlNodes = $mailFilerJson->searchNodes($filter, array());
-        $this->assertGreaterThan(0, $emlNodes['totalcount'], 'could not find eml file node with subject filter');
-        $emlNode = $emlNodes['results'][0];
-
-        return $mailFilerJson->getNode($emlNode['id']);;
-    }
-
-    /**
-     * @see 0012162: create new MailFiler application
-     */
-    public function testFileMessagesInMailFilerWithSingleBodyPart()
-    {
-        $emlNode = $this->_fileMessageInMailFiler('tine20_alarm_notifictation.eml', 'Alarm for event "ss/ss" at Oct 12, 2016 4:00:00 PM');
-        $this->assertContains('Event details', $emlNode['message']['body'], print_r($emlNode['message'], true));
-        $this->assertContains('"ss/ss"', $emlNode['message']['subject'], print_r($emlNode['message'], true));
-        $this->assertContains('"ss_ss"', $emlNode['name'], print_r($emlNode, true));
-    }
-
-    /**
-     * @see 0012162: create new MailFiler application
-     */
-    public function testFileMessageWithDelete()
-    {
-        $emlNode = $this->_fileMessageInMailFiler();
-        $mailFilerJson = new MailFiler_Frontend_Json();
-        $result = $mailFilerJson->deleteNodes(array($emlNode['path']));
-        self::assertEquals('success', $result['status']);
-    }
-
-    /**
-     * @see 0012162: create new MailFiler application
-     */
-    public function testFileMessageWithMultipartAttachment()
-    {
-        $emlNode = $this->_fileMessageInMailFiler('multipart_attachments.eml', 'Testmail mit Anhang');
-        $this->assertTrue(isset($emlNode['message']['attachments']), 'attachments not found in message node: ' . print_r($emlNode, true));
-        $this->assertEquals(5, count($emlNode['message']['attachments']), 'attachment not found in message node: ' . print_r($emlNode, true));
-        $this->assertEquals('TS Lagerstände.jpg', $emlNode['message']['attachments'][0]['filename'], print_r($emlNode['message']['attachments'], true));
-        $this->assertContains('Siehe Dateien anbei', $emlNode['message']['body'], print_r($emlNode['message'], true));
-    }
-
-    /**
      * testMessageNoteForContactWithoutEditGrant
      */
     public function testMessageNoteForContactWithoutEditGrant()
@@ -1479,7 +1359,7 @@ class Felamimail_Frontend_JsonTest extends TestCase
         $message = $this->_searchForMessageBySubject('test invalid imip');
         
         $fullMessage = $this->_json->getMessage($message['id']);
-        $this->assertTrue(empty($fullMessage->preparedParts));
+        $this->assertFalse(empty($fullMessage['preparedParts']));
     }
 
     /**
@@ -2456,6 +2336,10 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertContains('wie gestern besprochen würde mich sehr freuen', $message['body']);
         self::assertTrue(isset($message['attachments']), 'no attachments found: ' . print_r($message, true));
         self::assertEquals(1, count($message['attachments']));
+        self::assertEquals(34504, $message['attachments'][0]['size']);
+        self::assertEquals(0, $message['attachments'][0]['partId']);
+        self::assertInstanceOf(GuzzleHttp\Psr7\CachingStream::class, $message['attachments'][0]['contentstream']);
         self::assertEquals('2010-05-05 16:25:40', $message['sent']);
+        self::assertEquals($result[0]['id'], $message['id']);
     }
 }

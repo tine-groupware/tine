@@ -1,7 +1,7 @@
 /*
  * Tine 2.0
  *
- * @package     MailFiler
+ * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <m.spahn@metaways.de>
  * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -181,14 +181,15 @@ Tine.Felamimail.MailDetailsPanel = Ext.extend(Ext.Panel, {
 
                 } else {
 
-                    // TODO allow download for Mime Mails
+                    // TODO allow download for attachments of imap messages
 
                     new Ext.ux.file.Download({
                         params: {
                             requestType: 'HTTP',
-                            method: this.appName + '.downloadAttachment',
-                            path: this.nodeRecord.data.path,
-                            nodeId: this.record.node_id,
+                            method: 'Felamimail.downloadNodeAttachment',
+                            // method: this.appName + '.downloadAttachment',
+                            // path: this.nodeRecord.data.path,
+                            nodeId: this.record.id,
                             partId: attachment.partId
                         }
                     }).start();

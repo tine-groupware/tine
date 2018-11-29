@@ -2474,31 +2474,8 @@ abstract class Tinebase_Controller_Record_Abstract
         $filterArray = isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [];
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($filterClassName, $filterArray, 'AND');
 
-        try {
-            $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
+        $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
 
-            // TODO fix this:
-            // bad work around. Fields of type record return ForeignId Filter, but that filter can not do equals.
-            // remove try  catch and look for
-            /*     Sales_ControllerTest.testAddDeleteProducts
-    Sales_JsonTest.testSearchContracts
-    Sales_JsonTest.testSearchContractsByProduct
-    Sales_JsonTest.testSearchEmptyDateTimeFilter
-    Sales_JsonTest.testAdvancedContractsSearch
-    Sales_InvoiceJsonTests.testCRUD
-    Sales_InvoiceJsonTests.testSanitizingProductId
-    HumanResources_JsonTests.testEmployee
-    HumanResources_JsonTests.testDateTimeConversion
-    HumanResources_JsonTests.testContractDates
-    HumanResources_JsonTests.testAddContract
-    HumanResources_JsonTests.testSavingRelatedRecord
-    HumanResources_JsonTests.testSavingRelatedRecordWithCorruptId
-    HumanResources_CliTests.testSetContractsEndDate */
-
-        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
-            $filter->addFilter(new Tinebase_Model_Filter_Id($_fieldConfig['refIdField'], 'equals', $_record->getId()));
-        }
-        
         // an empty array will remove all records on this property
         if (! empty($_record->{$_property})) {
             $filter->addFilter($filter->createFilter('id', 'notin', $existing->getId()));
@@ -2731,9 +2708,9 @@ HumanResources_CliTests.testSetContractsEndDate */
         $model = $_container->model;
         $filterName = $model . 'Filter';
 
-        // workaround to fix Filemanager/MailFiler as we don't want to delete container contents when moving folders
+        // workaround to fix Filemanager as we don't want to delete container contents when moving folders
         // TODO find a better solution here - needs Filemanager refactoring
-        if (! in_array($model, array('Filemanager_Model_Node', 'MailFiler_Model_Node')) &&
+        if (! in_array($model, array('Filemanager_Model_Node')) &&
             method_exists($this->_backend, 'search') && ($_filter !== null || class_exists($filterName))) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Delete ' . $model . ' records in container ' . $_container->getId());

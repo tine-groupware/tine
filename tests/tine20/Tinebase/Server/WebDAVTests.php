@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -23,7 +23,7 @@ class Tinebase_Server_WebDAVTests extends ServerTestCase
      */
     public function testServer($noAssert = false)
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+        $request = Tinebase_Http_Request::fromString(<<<EOS
 PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1
 Host: localhost
 Depth: 0
@@ -83,7 +83,7 @@ EOS
             Tinebase_Core::unsetUser();
         }
 
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
             "PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1\r\n"
             . "Host: localhost\r\n"
             . "Depth: 0\r\n"
@@ -166,7 +166,7 @@ EOS
         
         $hash = base64_encode($credentials['username'] . ':' . $credentials['password']);
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
 "PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1\r\n"
 . "Host: localhost\r\n"
 . "Depth: 0\r\n"
@@ -187,16 +187,13 @@ EOS
         ob_start();
         
         $server = new Tinebase_Server_WebDAV();
-        
+
         $server->handle($request, $body);
-        
+
         $result = ob_get_contents();
-        
+
         ob_end_clean();
 
-        //print_r($request->getHeader('HTTP_AUTHORIZATION'));
-        //print_r($request->getHeaders());
-        
         $this->assertEquals('PD94bWwgdmVyc2lvbj0iMS4wIiBlbm', substr(base64_encode($result),0,30), $result);
     }
     
@@ -210,7 +207,7 @@ EOS
         
         $hash = base64_encode($credentials['username'] . ':' . $credentials['password']);
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+        $request = Tinebase_Http_Request::fromString(<<<EOS
 PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1
 Host: localhost
 Depth: 0
@@ -252,7 +249,7 @@ EOS
         
         $hash = base64_encode($credentials['username'] . ':' . $credentials['password']);
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+        $request = Tinebase_Http_Request::fromString(<<<EOS
 PROPFIND /calendars/64d7fdf9202f7b1faf7467f5066d461c2e75cf2b/4/ HTTP/1.1
 Host: localhost
 Depth: 0
@@ -292,7 +289,7 @@ EOS
      */
     public function testPropfindCurrentUserPrincipal()
     {
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+        $request = Tinebase_Http_Request::fromString(<<<EOS
 PROPFIND /principals/users/ HTTP/1.1
 Host: localhost
 Depth: 0
@@ -355,7 +352,7 @@ EOS
         
         $this->assertInstanceOf('Tinebase_Model_FullUser', $account);
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
 "PROPFIND /principals/users/{$account->contact_id}/ HTTP/1.1\r\n"
 . "Host: localhost\r\n"
 . "Depth: 0\r\n"
@@ -423,7 +420,7 @@ EOS
             ->getFirstRecord()
             ->getId();
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(<<<EOS
+        $request = Tinebase_Http_Request::fromString(<<<EOS
 REPORT /calendars/{$account->contact_id}/{$containerId}/ HTTP/1.1
 Host: localhost
 Depth: 1
@@ -488,7 +485,7 @@ EOS
             ->getFirstRecord()
             ->getId();
         
-        $request = \Zend\Http\PhpEnvironment\Request::fromString(
+        $request = Tinebase_Http_Request::fromString(
 "PROPFIND /calendars/{$account->contact_id}/{$containerId}/ HTTP/1.1" . "\r\n"
 . "Host: localhost" . "\r\n"
 . "Depth: 1" . "\r\n"
