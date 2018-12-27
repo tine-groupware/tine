@@ -842,6 +842,8 @@ class Admin_JsonTest extends TestCase
     
     /**
      * try to save tag and update without rights
+     *
+     * @return array
      */
     public function testSaveTagAndUpdateWithoutRights()
     {
@@ -850,8 +852,9 @@ class Admin_JsonTest extends TestCase
         $this->assertEquals($tagData['name'], $this->objects['tag']['name']);
         
         $this->objects['tag']['rights'] = array();
-        $this->setExpectedException('Tinebase_Exception_SystemGeneric');
-        $this->objects['tag'] = $this->_json->saveTag($this->objects['tag']);
+        $result = $this->_json->saveTag($this->objects['tag']);
+        self::assertEquals(0, count($result['rights']));
+        return $result;
     }
 
     /**
@@ -867,10 +870,20 @@ class Admin_JsonTest extends TestCase
             'view_right' => false,
             'use_right' => false
         ));
-        $this->setExpectedException('Tinebase_Exception_SystemGeneric');
-        $this->objects['tag'] = $this->_json->saveTag($tagData);
+        $result = $this->_json->saveTag($tagData);
+        self::assertEquals(0, count($result['rights']));
     }
-    
+
+    /**
+     * try to save tag and update without rights
+     */
+    public function testDeleteTagWithoutRights()
+    {
+        $tag = $this->testSaveTagAndUpdateWithoutRights();
+        $result = $this->_json->deleteTags([$tag['id']]);
+        self::assertEquals('success', $result['status']);
+    }
+
     /**
      * get tag data
      * 
@@ -917,7 +930,25 @@ class Admin_JsonTest extends TestCase
         $this->assertEquals('supertag', $this->objects['tag']['name']);
         $this->assertEquals(1, count($this->objects['tag']['rights']));
     }
-    
+
+    public function testSearchTagWithoutViewRight()
+    {
+        $tagData = $this->_getTagData();
+        $tagData['rights'] = array(array(
+            'account_id' => $this->_personas['sclever']->getId(),
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'view_right' => true,
+            'use_right' => true
+        ));
+        $this->objects['tag'] = $this->_json->saveTag($tagData);
+        self::assertEquals('supertag', $this->objects['tag']['name']);
+        self::assertEquals(1, count($this->objects['tag']['rights']));
+
+        $result = $this->_json->getTags('supertag', 'name', 'ASC', 0, 10);
+        self::assertEquals(1, $result['totalcount'], print_r($result, true));
+        self::assertEquals('supertag', $result['results'][0]['name'], print_r($result, true));
+    }
+
     /**
      * test searchContainers
      */
@@ -1054,7 +1085,7 @@ class Admin_JsonTest extends TestCase
             'account_type'   => 'user',
             Tinebase_Model_Grants::GRANT_ADMIN     => true
         );
-        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
+        $this->setExpectedException(Tinebase_Exception_SystemGeneric::class);
         $this->_json->saveContainer($container);
     }
 

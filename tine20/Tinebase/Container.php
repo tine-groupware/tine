@@ -353,11 +353,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         
         $containerGrants = $this->getGrantsOfContainer($containerId, TRUE);
         $containerGrants->addIndices(array('account_type', 'account_id'));
-        $existingGrants = $containerGrants->filter('account_type', $_accountType);
-        
-        if ($_accountType !== Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE) {
-            $existingGrants = $existingGrants->filter('account_id', $_accountId)->getFirstRecord();
-        }
+        $existingGrants = $containerGrants->filter('account_type', $_accountType)->filter('account_id', $accountId)
+            ->getFirstRecord();
         
         foreach($_grants as $grant) {
             if ($existingGrants === NULL || ! $existingGrants->{$grant}) {
@@ -1610,7 +1607,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Backend
-     * @throws  Tinebase_Exception_Record_NotAllowed
+     * @throws  Tinebase_Exception_SystemGeneric
      */
     public function setGrants($_containerId, Tinebase_Record_RecordSet $_grants, $_ignoreAcl = FALSE, $_failSafe = TRUE) 
     {
@@ -1725,7 +1722,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      * only one admin is allowed for personal containers
      * 
      * @param $_container
-     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_SystemGeneric
      * @throws Tinebase_Exception_UnexpectedValue
      *
      * @deprecated: could be removed because we have an owner property and could have multiple admins for a personal container now
@@ -1745,7 +1742,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         if (count($adminGrants) > 1) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Multiple admin grants detected in container "' . $_container->name . '"');
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($adminGrants->toArray(), TRUE));
-            throw new Tinebase_Exception_Record_NotAllowed('Personal containers can have only one owner!', 403);
+            throw new Tinebase_Exception_SystemGeneric('Personal containers can have only one owner!'); // _('Personal containers can have only one owner!')
         }
     }
     

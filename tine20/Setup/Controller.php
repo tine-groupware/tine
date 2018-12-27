@@ -1184,7 +1184,10 @@ class Setup_Controller
         // merge config data and active config
         if ($_merge) {
             $activeConfig = Setup_Core::get(Setup_Core::CONFIG);
-            $config = new Zend_Config($activeConfig->toArray(), true);
+            $configArray = $activeConfig instanceof Tinebase_Config_Abstract
+                ? $activeConfig->getConfigFileData()
+                : $activeConfig->toArray();
+            $config = new Zend_Config($configArray, true);
             $config->merge(new Zend_Config($_data));
         } else {
             $config = new Zend_Config($_data);
@@ -1795,9 +1798,10 @@ class Setup_Controller
                          array('file' => 'tine20_files.tar.bz2', 'param' => 'files')
                     ) as $download) {
                 if (isset($options[$download['param']])) {
-                    $fileUrl = $options['backupUrl'] . '/' . $download['file'];
-                        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Downloading ' . $fileUrl);
                     $targetFile = $tempDir . DIRECTORY_SEPARATOR . $download['file'];
+                    $fileUrl = $options['backupUrl'] . '/' . $download['file'];
+                    Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Downloading ' . $fileUrl
+                        . ' to ' . $targetFile);
                     if ($download['param'] === 'db') {
                         $mysqlBackupFile = $targetFile;
                     }

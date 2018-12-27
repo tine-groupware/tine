@@ -227,7 +227,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         if (!isset($event->tags)) {
             $event->tags = Tinebase_Tags::getInstance()->getTagsOfRecord($event);
         }
-        if(isset($event->tags) && count($event->tags) > 0) {
+        if (count($event->tags) > 0 && $event->tags instanceof Tinebase_Record_RecordSet) {
             $vevent->add('CATEGORIES', (array) $event->tags->name);
         }
         
@@ -938,12 +938,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     
                 case 'UID':
                     // it's not possible to change the uid by spec
-                    if (!empty($event->uid)) {
-                        continue;
+                    if (empty($event->uid)) {
+                        $event->uid = $property->getValue();
                     }
-                    
-                    $event->uid = $property->getValue();
-                
                     break;
                     
                 case 'VALARM':
