@@ -67,3 +67,83 @@ dem RapidSSL-Zertifikat erstellt wird. Seitdem geht's. Jetzt kann ich auch das
 
 siehe auch https://service.metaways.net/Ticket/Display.html?id=159518
 rt159518: [Jobelmannschule] Felamimail IMAP-Zugriff und Mailserver Zertifikate
+
+Frage: Wir kann ich den Notifikations-Service einrichten?
+=================
+
+Am einfachsten kann dieser unter setup.php / Email eingerichtet werden.
+Entscheidend sind folgende Felder (Werte sind beispielhaft):
+
+Notifikationsdienst Emailadresse:
+tine20notification.example.org
+
+Benachrichtigungs-Benutzername:
+tine20notification
+
+Benachrichtigungs-Passwort:
+••••
+
+Lokaler Hostname (oder IP-Adresse) für den Notifikationsdienst:
+localhost
+
+Falls nicht direkt über "localhost" versendet werden soll, müssen noch folgende Felder ausgefüllt werden:
+
+Hostname:
+mailserver
+
+Port:
+25
+
+Sichere Verbindung:
+TLS
+
+Authentifizierung:
+Login
+
+Damit sollten dann Termineinladungen und andere Notifications verschickt werden.
+
+Falls die Einstellungen nicht korrekt sein sollten, findet man im tine20.log Informationen zur Fehlerursache.
+
+Zum Testen kann eine Notification über
+
+    php tine20.php --config=/etc/tine20/config.inc.php --method Tinebase.testNotification
+
+an den eigenen Benutzer ausgelöst werden.
+
+Frage: Wie kann ich Felamimail aus einer externen Webapplikation/Webseite aufrufen, um eine E-Mail zu versenden?
+=================
+
+* Es gibt im Tine 2.0 Menüden Punbkt "Tine 2.0 als Standard-Mailprogramm
+Verwenden" erweitert. Klickt der Nutzer diesen Punkt muss er, je nach Browser, diese Entscheidung noch
+einmal in einem Nachfragedialog vom Browser bestätigen.
+
+* Hat der Nutzer Tine 2.0 als Standard-Email-Programm festgelegt, so öffnet sich beim klicken auf
+einen Mailto-Link im Browser ein neues Tine 2.0 Fenster mit einem Email-Verfassen-Fenster. Größe und
+Position des Fensters werden dabei vom Browser automatisch gewählt und können nicht von Tine 2.0
+beeinflusst werden.
+
+* Um die Mail zu versenden, muss der Nutzer bereits vor dem klicken eines Mailto an Tine 2.0
+angemeldet sein. Andernfalls ist es nicht möglich, die Mail zu versenden.
+Der Mailto-Link muss muss standardgemäß formatiert werden. Als Referenz beziehen wir uns auf:
+de.selfhtml.org/html/verweise/email.htm
+
+* Zusätzlich zu den im Standard definierten Parametern (wie to, cc, subject, body, ...) können im mailto
+auch Anhänge per http(s)-URL übergeben werden. Hierzu wird der Parametername "attachments"
+verwendet. Der Wert kann entweder eine einzelne URL sein oder eine Komma separierte Liste von URLs.
+Der Wert mus URL-codiert übergeben werden. (siehe de.wikipedia.org/wiki/URL-Encoding)
+
+BSP:
+
+    <p>Mail mit Anhang und Betreff:<br>
+        <a href="mailto:c.weiss@metaways.de?
+        attachments=http%3A%2F%2Flocalhost%2FexternalFilesTest%2Fdevop2.jpg&subject=Hallo%20Fritz,
+        %20hallo%20Heidi">mit Anhang</a>
+    </p>
+
+* Der übergebene Anhang muss vom Browser des Benutzers ohne Authentifikation erreichbar sein. Der
+COSR header: Access-Control-Allow-Origin: "*" bzw. Access-Control-Allow-Origin: "tine20.poolwelt.de"
+muss bei der Übertragung mitgesendet werden.
+
+* Da der maximale Umfang der übergebaren Parameter in Mailto-Links durch die Browser beschränkt
+wird, können Empfänger, Texte oder Anhänge nicht in beliebiger Länge verwendet werden. Derzeit liegt
+dieses Limit bei 65000 Zeichen.

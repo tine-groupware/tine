@@ -1,7 +1,7 @@
-Tine 2.0 Admin Schulung: E-Mail / Felamimail
+Tine 2.0 Admin Schulung: Filemanager
 =================
 
-Version: Caroline 2017.11
+Version: Nele 2018.11
 
 Konfiguration und Problemlösungen des Filemanager-Moduls von Tine 2.0
 
@@ -32,12 +32,72 @@ Um den Index nachträglich mit den vorhandenen Dateien zu füllen, muss dieses K
 
     $ tine20-cli --method=Tinebase.fileSystemCheckIndexing
 
-Wenn es sofort beendet ist stimmt die Konfig nicht,  es sollte relativ lange dauern. Und auch die logs cheken, im Fehlerfall tauchen dann dort Infos auf.
+Wenn es sofort beendet ist stimmt die Konfig nicht,  es sollte relativ lange dauern. Und auch die Logs cheken,
+ im Fehlerfall tauchen dann dort Infos auf.
 
+Wenn alles klappt, sollte sowas im (DEBUG-)Log stehen:
+
+    Tinebase_Fulltext_TextExtract::fileObjectToTempFile::100 tika success!
+
+(100 ist die zeilennummer in der php datei, kann sich natürlich mit der zeit ändern ...)
 
 Liste mit den Benutzern mit den meisten Daten im Tine 2.0 VFS (Virtual File System) erstellen
 =====
 
     sql> select user.login_name,fo.created_by, sum(fr.size) as filesize from tine20_tree_fileobjects as fo JOIN tine20_tree_filerevisions as fr ON fo.id = fr.id join tine20_accounts as user on user.id=fo.created_by group by fo.created_by order by filesize DESC;
 
+Konfiguration eines Preview-Service
+=====
 
+Damit der Docservice von Tine 2.0 verwendet wird, muss folgende Konfiguration in die config.inc.php
+ hinzugefügt werden:
+
+    'filesystem' => array(
+        // [...] andere Filesystem settings
+        
+        'createPreviews' => true,
+        'previewServiceUrl' => 'http://PREVIEWSERVICE/v2/documentPreviewService',
+        'previewServiceVersion' => 2,
+        'previewMaxFileSize' => 10485760, // 10 MB
+    ),
+
+PREVIEWSERVICE = IP-Adresse oder Hostname des Docservice Hosts.
+
+'previewMaxFileSize' ist optional.
+
+Previews werden via Scheduler für alle Dokumente, die noch kein Preview haben, erzeugt
+ (läuft, glaube ich, 1x in der Nacht). Für neue Dokumente wird direkt nach dem Hochladen
+ die Preview-Generierung angestossen.
+
+Prüfen, ob der PREVIEW-SERVICE funktioniert:
+
+    PREV_URL=https://previewservice.domain
+    echo "This is a ASCII text, used to test the document-preview-service." > test.txt
+    res=$(curl -F config="{\"test\": {\"firstPage\":true,\"filetype\":\"jpg\",\"x\":100,\"y\":100,\"color\":false}}" -F "file=@test.txt" $PREV_URL/v2/documentPreviewService)
+    sha=$(echo $res  | sha256sum)
+    if [ "$sha" != "df8f8891a6d892777b010c89288841301bcc72c00779797a189ea5866becad75  -" ]; then
+      echo "FAILED"
+      exit 1
+    fi
+
+Preview-Status anzeigen:
+
+    tine20-cli --method Tinebase.reportPreviewStatus
+    
+    Array
+    (
+        [missing] => 0
+        [created] => 14
+    )
+
+Alle Previews neu erzeugen
+
+- Preview failcount zurücksetzen (soll später auch automatisch passieren: https://taiga.metaways.net/project/admin-tine20-service/us/3069)
+```
+    MariaDB [tine20]> update tine20_tree_filerevisions set preview_error_count = 0;
+```
+- Neugenerierung anstossen
+
+```
+    tine20-cli --method Tinebase.fileSystemRecreateAllPreviews
+```
