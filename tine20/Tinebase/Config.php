@@ -658,6 +658,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_PREVIEW_SERVICE_VERIFY_SSL = 'previewServiceVerifySsl';
     const FILESYSTEM_PREVIEW_MAX_FILE_SIZE = 'previewMaxFileSize';
     const FILESYSTEM_ENABLE_NOTIFICATIONS = 'enableNotifications';
+    const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
+    const FILESYSTEM_AVSCAN_URL = 'avscanURL';
 
     const ACTIONQUEUE = 'actionqueue';
     const ACTIONQUEUE_BACKEND = 'backend';
@@ -1218,7 +1220,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Redirect to this URL after logout.')
             'description'           => 'Redirect to this URL after logout.',
             'type'                  => 'string',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -1238,7 +1240,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Redirect to configured redirect URL also for login.')
             'description'           => 'Redirect to configured redirect URL also for login.',
             'type'                  => 'bool',
-            'clientRegistryInclude' => FALSE,
+            'clientRegistryInclude' => true,
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
@@ -2123,6 +2125,29 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setBySetupModule'      => FALSE,
                     'default'               => 51904512, // == 49.5 * 1024 * 1024,
                 ),
+                self::FILESYSTEM_AVSCAN_MODE => [
+                    //_('Antivirus Scan Mode')
+                    self::LABEL                 => 'Antivirus Scan Mode',
+                    //_('Antivirus Scan Mode')
+                    self::DESCRIPTION           => 'Antivirus Scan Mode',
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => true,
+                    // possible values: 'off', 'quahog'
+                    self::DEFAULT_STR           => 'off', // don't use constant here, we would just include more source
+                                                          // files in the bootstrap of everything
+                ],
+                self::FILESYSTEM_AVSCAN_URL => [
+                    //_('Antivirus Scan URL')
+                    self::LABEL                 => 'Antivirus Scan URL',
+                    //_('Antivirus Scan URL')
+                    self::DESCRIPTION           => 'Antivirus Scan URL',
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => true,
+                ],
             ),
             'default'               => array(),
         ),

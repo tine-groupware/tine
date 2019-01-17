@@ -74,7 +74,8 @@
         "symfony/config": "^3.3",
         "sentry/sentry": "^1.8",
         "zbateson/mail-mime-parser": "1.*",
-        "metaways/tine20-usermanual": "dev-master"
+        "metaways/tine20-usermanual": "dev-master",
+        "xenolope/quahog": "^2.1"
     },
     "require-dev": {
         "phpunit/phpunit": "4.6.*",

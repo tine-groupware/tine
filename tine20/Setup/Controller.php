@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        move $this->_db calls to backend class
  */
@@ -556,6 +556,9 @@ class Setup_Controller
             Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
         }
 
+        $release11 = new Tinebase_Setup_Update_Release11($this->_backend);
+        $release11->fsAVupdates();
+
         // we need to clone here because we would taint the app cache otherwise
         // update tinebase first (to biggest major version)
         $tinebase = clone (Tinebase_Application::getInstance()->getApplicationByName('Tinebase'));
@@ -579,7 +582,7 @@ class Setup_Controller
             }
         }
 
-        $this->_clearCache();
+        $this->clearCache();
         
         return array(
             'messages' => $messages,
@@ -737,7 +740,7 @@ class Setup_Controller
                 break;
         }
         
-        $this->_clearCache();
+        $this->clearCache();
 
         return $messages;
     }
@@ -1680,7 +1683,7 @@ class Setup_Controller
      */
     public function installApplications($_applications, $_options = null)
     {
-        $this->_clearCache();
+        $this->clearCache();
         
         // check requirements for initial install / add required apps to list
         if (! $this->isInstalled('Tinebase')) {
@@ -1739,7 +1742,7 @@ class Setup_Controller
             }
         }
 
-        $this->_clearCache();
+        $this->clearCache();
 
         Tinebase_Event::reFireForNewApplications();
     }
@@ -1779,7 +1782,7 @@ class Setup_Controller
      */
     public function installFromDump($options)
     {
-        $this->_clearCache();
+        $this->clearCache();
 
         if ($this->isInstalled('Tinebase')) {
             Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Tinebase is already installed.');
@@ -1886,6 +1889,7 @@ class Setup_Controller
      * delete list of applications
      *
      * @param array $_applications list of application names
+     * @throws Tinebase_Exception
      */
     public function uninstallApplications($_applications)
     {
@@ -1894,7 +1898,7 @@ class Setup_Controller
         }
         Tinebase_Core::set(Tinebase_Core::USER, $user);
 
-        $this->_clearCache();
+        $this->clearCache();
 
         //sanitize input
         $_applications = array_unique(array_filter($_applications));
@@ -2447,7 +2451,7 @@ class Setup_Controller
      *
      * @return void
      */
-    protected function _clearCache()
+    public function clearCache()
     {
         // setup cache (via tinebase because it is disabled in setup by default)
         Tinebase_Core::setupCache(TRUE);
@@ -2676,5 +2680,69 @@ class Setup_Controller
         }
 
         return Setup_SchemaTool::compareSchema($options['otherdb']);
+    }
+
+    /**
+     * @return array
+     */
+    public function upgradeMysql564()
+    {
+        $setupBackend = Setup_Backend_Factory::factory();
+        if (!$setupBackend->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
+            return ['DB backend does not support the features - upgrade to mysql >= 5.6.4 or mariadb >= 10.0.5'];
+        }
+
+        $failures = array();
+        $setupUpdate = new Setup_Update_Abstract($setupBackend);
+
+        /** @var Tinebase_Model_Application $application */
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $xml = $this->getSetupXml($application->name);
+            // should we check $xml->enabled? I don't think so, we asked Tinebase_Application for the applications...
+
+            // get all MCV2 models for all apps, you never know...
+            $controllerInstance = null;
+            try {
+                $controllerInstance = Tinebase_Core::getApplicationInstance($application->name);
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                $failures[] = 'could not get application controller for app: ' . $application->name;
+            }
+            if (null !== $controllerInstance) {
+                try {
+                    $setupUpdate->updateSchema($application->name, $controllerInstance->getModels(true));
+                } catch (Exception $e) {
+                    $failures[] = 'could not update MCV2 schema for app: ' . $application->name;
+                }
+            }
+
+            if (!empty($xml->tables)) {
+                foreach ($xml->tables->table as $table) {
+                    if (!empty($table->requirements) && !$setupBackend->tableExists((string)$table->name)) {
+                        foreach ($table->requirements->required as $requirement) {
+                            if (!$setupBackend->supports((string)$requirement)) {
+                                continue 2;
+                            }
+                        }
+                        $setupBackend->createTable(new Setup_Backend_Schema_Table_Xml($table->asXML()));
+                        continue;
+                    }
+
+                    // check for fulltext index
+                    foreach ($table->declaration->index as $index) {
+                        if (empty($index->fulltext)) {
+                            continue;
+                        }
+                        $declaration = new Setup_Backend_Schema_Index_Xml($index->asXML());
+                        try {
+                            $setupBackend->addIndex((string)$table->name, $declaration);
+                        } catch (Exception $e) {
+                            $failures[] = (string)$table->name . ': ' . (string)$index->name;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $failures;
     }
 }

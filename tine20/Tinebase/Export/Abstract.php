@@ -958,7 +958,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 foreach ($this->_expandCustomFields as $field => $label) {
                     if (!isset($validators[$field])) {
                         $validators[$field] = [];
+                    } else {
+                        unset($this->_expandCustomFields[$field]);
                     }
+                }
+                if (empty($this->_expandCustomFields)) {
+                    $validators = null;
                 }
             }
 
@@ -1379,9 +1384,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                 'weburl' => Tinebase_Config::getInstance()->{Tinebase_Config::BRANDING_WEBURL},
             ],
             'export' => [
+                'config'    => $this->_config->toArray(),
                 'timestamp' => $this->_exportTimeStamp,
-                'account' => Tinebase_Core::getUser(),
-                'contact' => $contact,
+                'account'   => Tinebase_Core::getUser(),
+                'contact'   => $contact,
                 'groupdata' => $this->_lastGroupValue,
             ],
             'additionalRecords' => $this->_additionalRecords,

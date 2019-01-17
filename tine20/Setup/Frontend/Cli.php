@@ -333,66 +333,9 @@ class Setup_Frontend_Cli
 
     protected function _upgradeMysql564()
     {
-        $setupBackend = Setup_Backend_Factory::factory();
-        if (!$setupBackend->supports('mysql >= 5.6.4 | mariadb >= 10.0.5')) {
-            echo ' DB backend does not support the features - upgrade to mysql >= 5.6.4 or mariadb >= 10.0.5' . PHP_EOL;
-            return;
-        }
-
-        $failures = array();
-        $setupController = Setup_Controller::getInstance();
-        $setupUpdate = new Setup_Update_Abstract($setupBackend);
-
         echo 'starting upgrade ...' . PHP_EOL;
 
-        /** @var Tinebase_Model_Application $application */
-        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
-            $xml = $setupController->getSetupXml($application->name);
-            // should we check $xml->enabled? I don't think so, we asked Tinebase_Application for the applications...
-
-            // get all MCV2 models for all apps, you never know...
-            $controllerInstance = null;
-            try {
-                $controllerInstance = Tinebase_Core::getApplicationInstance($application->name);
-            } catch(Tinebase_Exception_NotFound $tenf) {
-                $failures[] = 'could not get application controller for app: ' . $application->name;
-            }
-            if (null !== $controllerInstance) {
-                try {
-                    $setupUpdate->updateSchema($application->name, $controllerInstance->getModels(true));
-                } catch (Exception $e) {
-                    $failures[] = 'could not update MCV2 schema for app: ' . $application->name;
-                }
-            }
-
-            if (!empty($xml->tables)) {
-                foreach ($xml->tables->table as $table) {
-                    if (!empty($table->requirements) && !$setupBackend->tableExists((string)$table->name)) {
-                        foreach ($table->requirements->required as $requirement) {
-                            if (!$setupBackend->supports((string)$requirement)) {
-                                continue 2;
-                            }
-                        }
-                        $setupBackend->createTable(new Setup_Backend_Schema_Table_Xml($table->asXML()));
-                        continue;
-                    }
-
-                    // check for fulltext index
-                    foreach ($table->declaration->index as $index) {
-                        if (empty($index->fulltext)) {
-                            continue;
-                        }
-                        $declaration = new Setup_Backend_Schema_Index_Xml($index->asXML());
-                        try {
-                            $setupBackend->addIndex((string)$table->name, $declaration);
-                        } catch (Exception $e) {
-                            $failures[] = (string)$table->name . ': ' . (string)$index->name;
-                        }
-                    }
-                }
-            }
-        }
-
+        $failures = Setup_Controller::getInstance()->upgradeMysql564();
         if (count($failures) > 0) {
             echo PHP_EOL . 'failures:' . PHP_EOL . join(PHP_EOL, $failures);
         }
@@ -1293,19 +1236,25 @@ class Setup_Frontend_Cli
             throw new Tinebase_Exception_Backend_Database('innodb_file_per_table seems not to be turned on: ' . $ift);
         }
 
+        $dbConfig = $db->getConfig();
         try {
-            $db->query('ALTER DATABASE ' . $db->quoteIdentifier($db->getConfig()['dbname']) .
+            $db->query('ALTER DATABASE ' . $db->quoteIdentifier($dbConfig['dbname']) .
                 ' CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci');
         } catch (Zend_Db_Exception $zde) {
             Tinebase_Exception::log($zde);
         }
-
-        $tables = $db->listTables();
+        
+        $tables = $db->query('SELECT DISTINCT TABLE_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE "' .
+            SQL_TABLE_PREFIX . '%" AND CHARACTER_SET_NAME IS NOT NULL AND CHARACTER_SET_NAME NOT LIKE "utf8mb4%"' .
+            ' AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '"')->fetchAll(Zend_Db::FETCH_COLUMN);
 
         $db->query('SET foreign_key_checks = 0');
         $db->query('SET unique_checks = 0');
         foreach ($tables as $table) {
-            $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
+            if ($db->query('SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = "' . $table .
+                    '" AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '" AND ROW_FORMAT <> "Dynamic"')->fetchColumn()) {
+                $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
+            }
 
             if ($table === SQL_TABLE_PREFIX . 'tree_nodes') {
                 $setupBackend = new Setup_Backend_Mysql();

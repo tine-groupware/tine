@@ -1034,7 +1034,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     }
 
     /**
-     * @param int $size
+     * @param int|string $size
      * @param string $ext
      * @return \Zend\Diactoros\Response
      * @throws Tinebase_Exception
@@ -1043,7 +1043,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      */
     public function getFavicon($size = 16, $ext = 'png')
     {
-        if ($size == 'svg') {
+        if ($size == 'svg' || $ext == 'svg') {
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG);
 
             $response = new \Zend\Diactoros\Response();
