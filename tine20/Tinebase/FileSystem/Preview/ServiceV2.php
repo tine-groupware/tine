@@ -30,25 +30,6 @@ class Tinebase_FileSystem_Preview_ServiceV2 extends Tinebase_FileSystem_Preview_
         $this->_networkAdapter = $networkAdapter;
     }
 
-    protected function _processJsonResponse(array $responseJson)
-    {
-        $response = array();
-        foreach($responseJson as $key => $files) {
-            $response[$key] = array();
-            foreach($files as $file) {
-                $blob = base64_decode($file);
-                if (false === $blob) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__
-                        . '::' . __LINE__ . ' couldn\'t base64decode response file ' . $key);
-                    return false;
-                }
-                $response[$key][] = $blob;
-            }
-        }
-
-        return $response;
-    }
-
     /**
      * Uses the DocumentPreviewService to generate previews (images or pdf files) for multiple files of same type.
      *
