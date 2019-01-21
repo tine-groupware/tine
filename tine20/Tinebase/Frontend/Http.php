@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -801,7 +801,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $record = $recordController->get($recordId);
         
         $node = Tinebase_FileSystem::getInstance()->get($nodeId);
-        $node->grants =
+        $node->grants = null;
         $path = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX
             . Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachmentPath($record)
             . '/' . $node->name;

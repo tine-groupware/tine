@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9084ea7109c75f9c2274e3e2487daf5a",
+    "content-hash": "17ee9196d3c499af04a25c458f395aba",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -577,7 +577,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": ""
+                "shasum": "8c2aabbd66a88686eddf11e08d4a1a7e73efe14f"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -720,7 +720,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6f389f0f25b90d0b495308efcfa073981177f0fd",
                 "reference": "6f389f0f25b90d0b495308efcfa073981177f0fd",
-                "shasum": ""
+                "shasum": "0038c5991b6c56df465e1e47cbedcd8eb529d15e"
             },
             "require": {
                 "php": ">=5.2"
@@ -742,8 +742,7 @@
                 {
                     "name": "Edward Z. Yang",
                     "email": "admin@htmlpurifier.org",
-                    "homepage": "http://ezyang.com",
-                    "role": "Developer"
+                    "homepage": "http://ezyang.com"
                 }
             ],
             "description": "Standards compliant HTML filter written in PHP",
@@ -1594,7 +1593,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/dav/zipball/78b0a55ae126666b49ec9ac88582d453b971967d",
                 "reference": "78b0a55ae126666b49ec9ac88582d453b971967d",
-                "shasum": ""
+                "shasum": "6d520ac1163fc3c90c9855f763acc39a58cfd30a"
             },
             "require": {
                 "ext-ctype": "*",
@@ -2333,7 +2332,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
+                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -4360,22 +4359,10 @@
     ],
     "aliases": [
         {
-            "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0",
-            "version": "1.12.20.0-patch34",
-            "package": "zendframework/zendframework1"
-        },
-        {
-            "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0",
-            "version": "3.5.3.0-patch1",
-            "package": "sabre/vobject"
-        },
-        {
-            "alias": "v0.13.0",
-            "alias_normalized": "0.13.0.0",
-            "version": "0.14.0.0",
-            "package": "phpoffice/phpword"
+            "alias": "v2.5.13",
+            "alias_normalized": "2.5.13.0",
+            "version": "2.5.13.0-patch4",
+            "package": "doctrine/dbal"
         },
         {
             "alias": "v2.5.14",
@@ -4384,22 +4371,35 @@
             "package": "doctrine/orm"
         },
         {
-            "alias": "v2.5.13",
-            "alias_normalized": "2.5.13.0",
-            "version": "2.5.13.0-patch4",
-            "package": "doctrine/dbal"
+            "alias": "v0.13.0",
+            "alias_normalized": "0.13.0.0",
+            "version": "0.14.0.0",
+            "package": "phpoffice/phpword"
+        },
+        {
+            "alias": "2.1.0",
+            "alias_normalized": "2.1.0.0",
+            "version": "3.5.3.0-patch1",
+            "package": "sabre/vobject"
+        },
+        {
+            "alias": "1.12.20",
+            "alias_normalized": "1.12.20.0",
+            "version": "1.12.20.0-patch34",
+            "package": "zendframework/zendframework1"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "syncroton/syncroton": 20,
+        "metaways/tine20-usermanual": 20,
         "phpoffice/phpspreadsheet": 20,
-        "metaways/tine20-usermanual": 20
+        "syncroton/syncroton": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^5.6 | ^7.0",
+        "ext-spl": "*",
+        "ext-simplexml": "*",
         "ext-ctype": "*",
         "ext-date": "*",
         "ext-dom": "*",
@@ -4409,10 +4409,9 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "ext-spl": "*",
-        "ext-simplexml": "*",
         "ext-xml": "*",
-        "ext-zip": "*"
+        "ext-zip": "*",
+        "php": "^5.6 | ^7.0"
     },
     "platform-dev": [],
     "platform-overrides": {

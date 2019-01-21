@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -873,6 +873,32 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertFalse(!$node->lastavscan_time, 'expect lastavscan_time to be set');
         static::assertGreaterThanOrEqual($now->toString(), $node->lastavscan_time);
         static::assertFalse(!$node->is_quarantined, 'expect is_quarantined to be true');
+    }
+
+    public function testAVModeQuahogWithClamAVTestFiles()
+    {
+        if (!is_dir('/usr/share/clamav-testfiles/')) {
+            static::markTestSkipped('package clamav-testfiles not installed or not found');
+        }
+
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE} =
+            Tinebase_FileSystem_AVScan_Factory::MODE_QUAHOG;
+
+        $testDir  = $this->testMkdir();
+        $testFile = $testDir . '/' . 'unittestAvFile';
+        static::assertNotFalse($fh = $this->_controller->fopen($testFile, 'w'),
+            'could not open testfile');
+        $avFiles = glob('/usr/share/clamav-testfiles/*.*');
+        $avFile = $avFiles[array_rand($avFiles)];
+        static::assertNotFalse($avFh = fopen($avFile, 'r'), 'could not open clamav test file ' . $avFile);
+        static::assertNotFalse(stream_copy_to_stream($avFh, $fh), 'could not stream copy files');
+        fclose($avFh);
+        static::assertNotFalse($this->_controller->fclose($fh), 'could not close tine file handle');
+
+        $node = $this->_controller->stat($testFile);
+        static::assertTrue(true == $node->is_quarantined, 'file should be quarantined');
+        static::assertFalse(!$node->lastavscan_time, 'expect lastavscan_time to be set');
+        static::assertGreaterThanOrEqual(Tinebase_DateTime::now()->toString(), $node->lastavscan_time);
     }
 
     public function testAVModeNotOff()

@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -27,9 +27,15 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
         ) {
             throw new Sabre\DAV\Exception\Forbidden('Forbidden to download file: ' . $this->_path);
         }
+
+        $node = $pathRecord->getNode();
+        if ($node->is_quarantined) {
+            throw new Sabre\DAV\Exception\Forbidden('File is quarantined: ' . $this->_path);
+        }
+
         if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'r'))) {
             // if we have a file without content / revision yet
-            if (empty($pathRecord->getNode()->hash)) {
+            if (empty($node->hash)) {
                 return fopen('php://memory', 'r');
             }
             // possible race condition

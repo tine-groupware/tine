@@ -4,7 +4,7 @@
  *
  * @package     Filemanager
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
@@ -856,19 +856,6 @@ class Filemanager_Frontend_JsonTests extends TestCase
             }
         }
     }
-
-    /*public function testCreateFileAndQuota()
-    {
-        $quotaConfig = Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA};
-        $oldQuotaConfig = clone $quotaConfig;
-        $quotaConfig->{Tinebase_Config::QUOTA_TOTALINMB} = 1024;
-        $quotaConfig->{Tinebase_Config::QUOTA_TOTALBYUSERINMB} = 100;
-
-        try {
-        } finally {
-            Tinebase_Config::getInstance()->set(Tinebase_Config::QUOTA, $oldQuotaConfig);
-        }
-    }*/
 
     /**
     * testCreateFileNodeWithUTF8Filenames
