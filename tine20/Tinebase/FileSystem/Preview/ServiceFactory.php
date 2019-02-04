@@ -22,6 +22,7 @@ class Tinebase_FileSystem_Preview_ServiceFactory
      * get Preview Services client
      *
      * @return Tinebase_FileSystem_Preview_ServiceInterface
+     * @throws Tinebase_Exception_NotFound PreviewService version not found
      */
     public static function getPreviewService()
     {
@@ -39,5 +40,6 @@ class Tinebase_FileSystem_Preview_ServiceFactory
                 $networkAdapter = new Tinebase_FileSystem_Preview_NetworkAdapter($url, $licensePath, $caPath);
                 return new Tinebase_FileSystem_Preview_ServiceV2($networkAdapter);
         }
+        throw new Tinebase_Exception_NotFound("Preview Service Version not found", 500);
     }
 }
