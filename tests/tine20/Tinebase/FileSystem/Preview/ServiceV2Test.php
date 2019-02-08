@@ -22,7 +22,7 @@ class Tinebase_FileSystem_Preview_ServiceV2Test extends TestCase
         $networkAdapter = new TestNetworkAdapter($response);
         $docPre = new Tinebase_FileSystem_Preview_ServiceV2($networkAdapter);
 
-        $this->assertEquals($expected, $docPre->getPreviewsForFile($file_path, $config));
+        $this->assertSame($expected, $docPre->getPreviewsForFile($file_path, $config));
     }
 
     public function getPreviewsForFileDataprovider()
