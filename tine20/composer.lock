@@ -577,7 +577,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": "8c2aabbd66a88686eddf11e08d4a1a7e73efe14f"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
@@ -720,7 +720,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6f389f0f25b90d0b495308efcfa073981177f0fd",
                 "reference": "6f389f0f25b90d0b495308efcfa073981177f0fd",
-                "shasum": "0038c5991b6c56df465e1e47cbedcd8eb529d15e"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
@@ -992,7 +992,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
+                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1024,7 +1024,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1059,7 +1059,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gerrit.tine20.com/customers/p/tine20-usermanual.git",
-                "reference": "3c1588be1d281ff13792a4b0d2152dfdf2e90171"
+                "reference": "931b44aaef1b3299729e95649faa6800dc34d4a2"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1082,7 +1082,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2018-12-19T13:18:26+00:00"
+            "time": "2019-02-11T13:54:05+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -1710,7 +1710,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/sabre-io/dav/zipball/78b0a55ae126666b49ec9ac88582d453b971967d",
                 "reference": "78b0a55ae126666b49ec9ac88582d453b971967d",
-                "shasum": "6d520ac1163fc3c90c9855f763acc39a58cfd30a"
+                "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
