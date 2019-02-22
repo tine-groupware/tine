@@ -13,7 +13,5 @@ return array (
     ),
     // branding / url config
     Tinebase_Config::BRANDING_WEBURL => 'https://www.tine20.com',
-    // deactivate version check
-    // TODO activate when 2018.11.1 is released!
-    Tinebase_Config::VERSION_CHECK => false,
+    Tinebase_Config::VERSION_CHECK => true,
 );
