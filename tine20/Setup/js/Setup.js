@@ -17,4 +17,5 @@ require('./EnvCheckGridPanel');
 require('./ConfigManagerPanel');
 require('./AuthenticationPanel');
 require('./EmailPanel');
+require('./LicensePanel');
 require('../css/Setup.css');
