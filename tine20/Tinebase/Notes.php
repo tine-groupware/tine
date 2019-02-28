@@ -281,12 +281,12 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param  Tinebase_Record_RecordSet  $_records       the recordSet
      * @param  string                     $_notesProperty  the property in the record where the notes are in (defaults: 'notes')
      * @param  string                     $_backend   backend of record
-     * @return void
+     * @return Tinebase_Record_RecordSet|null
      */
     public function getMultipleNotesOfRecords($_records, $_notesProperty = 'notes', $_backend = 'Sql', $_onlyNonSystemNotes = TRUE)
     {
         if (count($_records) == 0) {
-            return;
+            return null;
         }
         
         $modelName = $_records->getRecordClassName();
@@ -302,6 +302,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             //$record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord($modelName, $record->getId(), $_backend);
             $record->{$_notesProperty} = $notesOfRecords->filter('record_id', $record->getId());
         }
+
+        return $notesOfRecords;
     }
     
     /************************** set / add / delete notes ************************/
@@ -328,7 +330,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         if ($notes instanceOf Tinebase_Record_RecordSet) {
             $notesToSet = $notes;
         } else {
-            if (count($notes) > 0 && $notes[0] instanceOf Tinebase_Record_Abstract) {
+            if (count($notes) > 0 && $notes[0] instanceOf Tinebase_Record_Interface) {
                 // array of notes records given
                 $notesToSet = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $notes);
             } else {
@@ -409,7 +411,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * add new system note
      *
-     * @param Tinebase_Record_Abstract|string $_record
+     * @param Tinebase_Record_Interface|string $_record
      * @param string|Tinebase_Mode_User $_userId
      * @param string $_type (created|changed)
      * @param Tinebase_Record_RecordSet|string $_mods (Tinebase_Model_ModificationLog)
@@ -426,8 +428,8 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             return FALSE;
         }
         
-        $id = ($_record instanceof Tinebase_Record_Abstract) ? $_record->getId() : $_record;
-        $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Abstract) ? get_class($_record) : 'unknown');
+        $id = ($_record instanceof Tinebase_Record_Interface) ? $_record->getId() : $_record;
+        $modelName = ($_modelName !== NULL) ? $_modelName : (($_record instanceof Tinebase_Record_Interface) ? get_class($_record) : 'unknown');
         if (($_userId === NULL)) {
             $_userId = Tinebase_Core::getUser();
         }
@@ -478,6 +480,11 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      */
     protected function _getSystemNoteChangeText(Tinebase_Model_ModificationLog $modification, Zend_Translate $translate = null)
     {
+        $recordProperties = [];
+        /** @var Tinebase_Record_Interface $model */
+        if (($model = $modification->record_type) && ($mc = $model::getConfiguration())) {
+            $recordProperties = $mc->recordFields;
+        }
         $modifiedAttribute = $modification->modified_attribute;
 
         // new ModificationLog implementation
@@ -495,30 +502,59 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                     $return .= ' ' . $translate->_($attribute) . ' (' . $tmpDiff->getTranslatedDiffText() . ')';
                 } else {
                     $oldData = $diff->oldData[$attribute];
-                    if(is_array($oldData)) {
-                        $oldDataString = '';
-                        foreach($oldData as $key => $val) {
-                            if (is_object($val)) {
-                                $val = $val->toArray();
+
+                    if (isset($recordProperties[$attribute]) && ($oldData || $value) &&
+                            isset($recordProperties[$attribute]['config']['controllerClassName']) && ($controller =
+                            $recordProperties[$attribute]['config']['controllerClassName']::getInstance()) &&
+                            method_exists($controller, 'get')) {
+                        if ($oldData) {
+                            try {
+                                $oldDataString = $controller->get($oldData, null, false, true)->getTitle();
+                            } catch(Tinebase_Exception_NotFound $e) {
+                                $oldDataString = $oldData;
                             }
-                            $oldDataString .= ' ' . $key .': ' . (is_array($val)?(isset($val['id'])?$val['id']:print_r($val,true)):$val);
+                        } else {
+                            $oldDataString = '';
+                        }
+                        if ($value) {
+                            try {
+                                $valueString = $controller->get($value, null, false, true)->getTitle();
+                            } catch(Tinebase_Exception_NotFound $e) {
+                                $valueString = $value;
+                            }
+                        } else {
+                            $valueString = '';
                         }
                     } else {
-                        $oldDataString = $oldData;
-                    }
-                    if(is_array($value)) {
-                        $valueString = '';
-                        foreach($value as $key => $val) {
-                            if (is_object($val)) {
-                                $val = $val->toArray();
+                        if (is_array($oldData)) {
+                            $oldDataString = '';
+                            foreach ($oldData as $key => $val) {
+                                if (is_object($val)) {
+                                    $val = $val->toArray();
+                                }
+                                $oldDataString .= ' ' . $key . ': ' . (is_array($val) ? (isset($val['id']) ? $val['id'] : print_r($val,
+                                        true)) : $val);
                             }
-                            $valueString .= ' ' . $key .': ' . (is_array($val)?(isset($val['id'])?$val['id']:print_r($val,true)):$val);
+                        } else {
+                            $oldDataString = $oldData;
                         }
-                    } else {
-                        $valueString = $value;
+                        if (is_array($value)) {
+                            $valueString = '';
+                            foreach ($value as $key => $val) {
+                                if (is_object($val)) {
+                                    $val = $val->toArray();
+                                }
+                                $valueString .= ' ' . $key . ': ' . (is_array($val) ? (isset($val['id']) ? $val['id'] : print_r($val,
+                                        true)) : $val);
+                            }
+                        } else {
+                            $valueString = $value;
+                        }
                     }
 
-                    $return .= ' ' . $translate->_($attribute) . ' (' . $oldDataString . ' -> ' . $valueString . ')';
+                    if (null !== $oldDataString || (null !== $valueString && '' !== $valueString)) {
+                        $return .= ' ' . $translate->_($attribute) . ' (' . $oldDataString . ' -> ' . $valueString . ')';
+                    }
                 }
             }
 

@@ -481,12 +481,17 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
                 </declaration>
             </table>'), 'Tinebase', 'application_states');
 
-            $appController = Tinebase_Application::getInstance();
-            /** @var Tinebase_Model_Application $application */
-            foreach ($appController->getApplications() as $application) {
-                foreach ($application->xprops('state') as $name => $value) {
-                    $appController->setApplicationState($application, $name, $value);
+            $tmpApp = new Tinebase_Model_Application([], true);
+            if ($tmpApp->has('state')) {
+                $appController = Tinebase_Application::getInstance();
+                /** @var Tinebase_Model_Application $application */
+                foreach ($appController->getApplications() as $application) {
+                    foreach ($application->xprops('state') as $name => $value) {
+                        $appController->setApplicationState($application, $name, $value);
+                    }
                 }
+            } else {
+                Setup_Core::getLogger()->err(Tinebase_Model_Application::class . ' does not have property state!');
             }
         }
 
@@ -560,19 +565,22 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
 
         foreach ($containers as $container) {
             if (!isset($models[$container['application_id']])) {
-                $models[$container['application_id']] = Tinebase_Core::getApplicationInstance(
-                    Tinebase_Application::getInstance()->getApplicationById($container['application_id'])->name, '',
-                    true)->getDefaultModel();
+                throw new Tinebase_Exception('you have to update to the max minor version of each major version. ' .
+                    'Do not make major version jumps. This is what happens. No other way than doing it right.');
             }
 
             if ($models[$container['application_id']]) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Setting model ' . $models[$container['application_id']] . ' for container ' . $container['id']);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                        . ' Setting model ' . $models[$container['application_id']] . ' for container ' . $container['id']);
+                }
                 $this->_db->update(SQL_TABLE_PREFIX . 'container', ['model' => $models[$container['application_id']]],
                     $this->_db->quoteInto('id = ?', $container['id']));
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . ' Could not find default model for app id ' . $container['application_id']);
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Could not find default model for app id ' . $container['application_id']);
+                }
             }
         }
 
@@ -761,28 +769,54 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
     /**
      * update to 11.38
      *
-     * update filterSyncToken table
+     * do nothing here
      */
     public function update_37()
     {
-        $this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
-
         $this->setApplicationVersion('Tinebase', '11.38');
     }
 
     /**
      * update to 11.39
      *
-     * update filterSyncToken table
+     * add is_system column to customfield_config
      */
     public function update_38()
     {
-        $this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
+        $this->addIsSystemToCustomFieldConfig();
 
         $this->setApplicationVersion('Tinebase', '11.39');
     }
+    public function addIsSystemToCustomFieldConfig()
+    {
+        if (!$this->_backend->columnExists('is_system', 'customfield_config')) {
+            $this->_backend->addCol('customfield_config', new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>is_system</name>
+                    <type>boolean</type>
+                    <notnull>true</notnull>
+                    <default>false</default>
+                </field>'));
+        }
 
+        if ($this->getTableVersion('customfield_config') < 6) {
+            $this->setTableVersion('customfield_config', 6);
+        }
+    }
+
+    /**
+     * update to 11.40
+     *
+     * update filterSyncToken table
+     */
     public function update_39()
+    {
+        $this->updateSchema('Tinebase', array(Tinebase_Model_FilterSyncToken::class));
+
+        $this->setApplicationVersion('Tinebase', '11.40');
+    }
+
+    public function update_40()
     {
         $note_types = array('note', 'telephone', 'email', 'created', 'changed');
         foreach ($note_types as $note_type) {
@@ -812,14 +846,6 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
         }
 
         $this->setApplicationVersion('Tinebase', '11.40');
-    }
-
-    /**
-     * empty update (was: collation fix - has been moved to 2018.11-develop / Release12)
-     */
-    public function update_40()
-    {
-        $this->setApplicationVersion('Tinebase', '11.41');
     }
 
     /**
@@ -934,5 +960,13 @@ class Tinebase_Setup_Update_Release11 extends Setup_Update_Abstract
             Tinebase_Notes::getInstance()->updateNoteType($note);
         }
         $this->setApplicationVersion('Tinebase', '11.46');
+    }
+
+    /**
+     * update to 12.0
+     */
+    public function update_46()
+    {
+        $this->setApplicationVersion('Tinebase', '12.0');
     }
 }

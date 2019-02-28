@@ -93,4 +93,14 @@ sieveFile
 
         $this->setApplicationVersion('Felamimail', '11.2');
     }
+
+    /**
+     * update to 12.0
+     *
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Felamimail', '12.0');
+    }
 }

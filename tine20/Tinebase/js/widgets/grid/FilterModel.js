@@ -129,6 +129,17 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         if (! this.operators) {
             this.operators = [];
         }
+
+        if (this.appName && ! this.app) {
+            this.app = Tine.Tinebase.appMgr.get(this.appName);
+        }
+
+        // e.g. {name = 'someApp'}
+        this.app = Tine.Tinebase.appMgr.get(this.app);
+
+        if (this.app) {
+            this.label = this.app.i18n._hidden(this.label);
+        }
         
         
         if (this.defaultOperator === null) {
@@ -144,6 +155,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 case 'number':
                 case 'percentage':
                 case 'combo':
+                case 'time':
                 case 'country':
                     this.defaultOperator = 'equals';
                     break;
@@ -280,6 +292,9 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     break;
                 case 'customfield':
                     this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not');
+                    break;
+                case 'time':
+                    this.operators.push('equals', 'before', 'after');
                     break;
                 case 'date':
                     this.operators.push('equals', 'before', 'after', 'within', 'inweek');
@@ -429,6 +444,19 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             };
         
         switch (this.valueType) {
+            case 'time':
+                value = new Ext.form.TimeField(Ext.apply(commonOptions, {
+                    listeners: {
+                        'specialkey': function(field, e) {
+                            if(e.getKey() == e.ENTER){
+                                this.onFiltertrigger();
+                            }
+                        },
+                        'select': this.onFiltertrigger,
+                        scope: this
+                    }
+                }));
+                break;
             case 'date':
                 value = this.dateValueRenderer(filter, el);
                 break;
@@ -729,7 +757,7 @@ Tine.widgets.grid.FilterRegistry = function() {
             if (! filters[key]) {
                 filters[key] = [];
             }
-            
+            Ext.applyIf(filter, {appName: appName, modelName: modelName});
             filters[key].push(filter);
         },
         

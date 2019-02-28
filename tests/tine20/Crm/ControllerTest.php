@@ -62,7 +62,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
-            'Crm', 
+            Crm_Model_Lead::class,
             Zend_Registry::get('currentAccount'), 
             Tinebase_Model_Grants::GRANT_EDIT
         );
@@ -103,7 +103,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
 
         $addressbookPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
-            'Addressbook', 
+            Addressbook_Model_Contact::class,
             Zend_Registry::get('currentAccount'), 
             Tinebase_Model_Grants::GRANT_EDIT
         );
@@ -155,7 +155,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
 
         $tasksPersonalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
-            'Tasks', 
+            Tasks_Model_Task::class,
             Zend_Registry::get('currentAccount'), 
             Tinebase_Model_Grants::GRANT_EDIT
         );
@@ -259,7 +259,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($leads), 'count mismatch');
         $this->assertEquals($count['totalcount'], count($leads), 'wrong totalcount');
         $this->assertEquals(1, $count['leadstates'][1], 'leadstates count mismatch');
-        $this->assertEquals('Tinebase_Record_RecordSet', get_class($leads), 'wrong type');
+        $this->assertTrue($leads instanceof Tinebase_Record_RecordSet, 'wrong type');
     }
     
     /**
@@ -272,7 +272,7 @@ class Crm_ControllerTest extends PHPUnit_Framework_TestCase
         $leads = Crm_Controller_Lead::getInstance()->search($filter);
         
         $this->assertEquals(0, count($leads));
-        $this->assertEquals('Tinebase_Record_RecordSet', get_class($leads), 'wrong type');
+        $this->assertTrue($leads instanceof Tinebase_Record_RecordSet, 'wrong type');
     }
     
     /**

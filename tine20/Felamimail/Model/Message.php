@@ -6,7 +6,7 @@
  * @subpackage    Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,6 +15,7 @@
  * @package     Felamimail
  * @subpackage  Model
  * @property    string  $folder_id          the folder id
+ * @property    string  $original_id        cache id of original message if replying / forwarding
  * @property    string  $subject            the subject of the email
  * @property    string  $from_email         the address of the sender (from)
  * @property    string  $from_name          the name of the sender (from)
@@ -31,6 +32,7 @@
  * @property    array   $preparedParts      prepared parts
  * @property    integer $reading_conf       true if it must send a reading confirmation
  * @property    boolean $massMailingFlag    true if message should be treated as mass mailing
+ * @property    array   $fileLocations      file locations of this message
  */
 class Felamimail_Model_Message extends Tinebase_Record_Abstract
 {
@@ -153,8 +155,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             array('InArray', array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)),
         ),
         'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    // save email as contact note
-        'note'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
     // Felamimail_Message object
         'message'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // prepared parts (iMIP invitations, contact vcards, ...)
@@ -166,6 +166,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => 0,
             array('InArray', array(0, 1)),
         ),
+        'fileLocations'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -193,7 +194,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
 
         $data = [];
         foreach (['date' => 'sent'] as $headerKey => $property) {
-            $data[$property] = new Tinebase_DateTime($message->getHeader($headerKey)->getDateTime());
+            $headerValue = $message->getHeader($headerKey);
+            if ($headerValue) {
+                $data[$property] = new Tinebase_DateTime($headerValue->getDateTime());
+            }
         }
         foreach (['subject', ] as $headerKey) {
             $data[$headerKey] = $message->getHeaderValue($headerKey);
@@ -389,10 +393,15 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 $_headers[$field] = $_headers[$field][0];
             }
         }
-        
-        // @see 0008644: error when sending mail with note (wrong charset)
-        $this->subject = (isset($_headers['subject'])) ? Tinebase_Core::filterInputForDatabase(Felamimail_Message::convertText($_headers['subject'])) : null;
-        
+
+        if (isset($_headers['subject'])) {
+            // @see 0008644: error when sending mail with note (wrong charset)
+            // @todo might be removed in the future - but check if database supports utf8mb4 first
+            $this->subject = Tinebase_Core::filterInputForDatabase(Felamimail_Message::convertText($_headers['subject']));
+        } else {
+            $this->subject = null;
+        }
+
         if ((isset($_headers['date']) || array_key_exists('date', $_headers))) {
             $this->sent = Felamimail_Message::convertDate($_headers['date']);
         } elseif ((isset($_headers['resent-date']) || array_key_exists('resent-date', $_headers))) {

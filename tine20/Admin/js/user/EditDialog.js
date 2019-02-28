@@ -38,6 +38,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Admin.Model.User,
     recordProxy: Tine.Admin.userBackend,
     evalGrants: false,
+    passwordConfirmWindow: null,
     
     /**
      * @private
@@ -719,17 +720,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }]
         ];
     },
-    
-    /**
-     * @private
-     */
-    getFormItems: function () {
-        this.displayFieldStyle = {
-            border: 'silver 1px solid',
-            padding: '3px',
-            height: '11px'
-        };
-        
+
+    initPasswordConfirmWindow: function() {
         this.passwordConfirmWindow = new Ext.Window({
             title: this.app.i18n.gettext('Password confirmation'),
             closeAction: 'hide',
@@ -781,7 +773,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     scope: this,
                     handler: function () {
                         var confirmForm = this.passwordConfirmWindow.items.first().getForm();
-                        
+
                         // check if confirm form is valid (we need this if special key called button handler)
                         if (confirmForm.isValid()) {
                             this.passwordConfirmWindow.hide();
@@ -795,14 +787,29 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 scope: this,
                 show: function (win) {
                     var confirmForm = this.passwordConfirmWindow.items.first().getForm();
-                    
+
                     confirmForm.reset();
                     confirmForm.findField('passwordRepeat').focus(true, 500);
                 }
             }
         });
         this.passwordConfirmWindow.render(document.body);
-        
+    },
+
+    /**
+     * @private
+     */
+    getFormItems: function () {
+        this.displayFieldStyle = {
+            border: 'silver 1px solid',
+            padding: '3px',
+            height: '11px'
+        };
+
+        if (Tine.Tinebase.appMgr.get('Admin').featureEnabled('featureForceRetypePassword')) {
+            this.initPasswordConfirmWindow();
+        }
+
         var config = {
             xtype: 'tabpanel',
             deferredRender: false,
@@ -862,22 +869,25 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             scope: this,
                             blur: function (field) {
                                 var fieldValue = field.getValue();
-                                if (fieldValue !== '') {
+                                if (fieldValue !== '' && this.passwordConfirmWindow) {
                                     // show password confirmation
                                     // NOTE: we can't use Ext.Msg.prompt because field has to be of inputType: 'password'
                                     this.passwordConfirmWindow.show.defer(100, this.passwordConfirmWindow);
                                 }
                             },
                             destroy: function () {
-                                // destroy password confirm window
-                                this.passwordConfirmWindow.destroy();
+                                if (this.passwordConfirmWindow) {
+                                    this.passwordConfirmWindow.destroy();
+                                }
                             },
                             keydown: function (field) {
-                                field.passwordsMatch = false;
+                                if (this.passwordConfirmWindow) {
+                                    field.passwordsMatch = false;
+                                }
                             }
                         },
                         validateValue: function (value) {
-                            return this.passwordsMatch;
+                            return (this.passwordsMatch);
                         }
                     }], [{
                         vtype: 'email',

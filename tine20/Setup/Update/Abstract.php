@@ -17,6 +17,15 @@
  */
 class Setup_Update_Abstract
 {
+    const CLASS_CONST = 'class';
+    const FUNCTION_CONST = 'function';
+
+    const PRIO_TINEBASE_BEFORE_STRUCT = 90;
+    const PRIO_TINEBASE_STRUCTURE = 100;
+    const PRIO_TINEBASE_UPDATE = 300;
+    const PRIO_NORMAL_APP_STRUCTURE = 500;
+    const PRIO_NORMAL_APP_UPDATE = 1000;
+
     /**
      * backend for databse handling and extended database queries
      *
@@ -29,7 +38,9 @@ class Setup_Update_Abstract
      */
     protected $_db;
 
-    /** 
+    protected static $_allUpdates = [];
+
+    /**
      * the constructor
      *
      * @param Setup_Backend_Interface $_backend
@@ -39,7 +50,12 @@ class Setup_Update_Abstract
         $this->_backend = $_backend;
         $this->_db = Tinebase_Core::getDb();
     }
-    
+
+    public static function getAllUpdates()
+    {
+        return static::$_allUpdates;
+    }
+
     /**
      * get version number of a given application 
      * version is stored in database table "applications"
@@ -85,6 +101,31 @@ class Setup_Update_Abstract
         $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
         $application->version = $_version;
         
+        return Tinebase_Application::getInstance()->updateApplication($application);
+    }
+
+    /**
+     * adds the update key to the application state, marking when and that it run
+     *
+     * @param string $_applicationName
+     * @param string $_version new version number
+     * @param string $_updateKey update key to add to application state
+     * @return Tinebase_Model_Application
+     */
+    public function addApplicationUpdate($_applicationName, $_version, $_updateKey)
+    {
+        $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
+        if (version_compare($application->version, $_version) < 0) {
+            $application->version = $_version;
+        }
+        if (!($state = json_decode(Tinebase_Application::getInstance()->getApplicationState($application->getId(),
+                Tinebase_Application::STATE_UPDATES, true), true))) {
+            $state = [];
+        }
+        $state[$_updateKey] = Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG);
+        Tinebase_Application::getInstance()->setApplicationState($application->getId(),
+            Tinebase_Application::STATE_UPDATES, json_encode($state));
+
         return Tinebase_Application::getInstance()->updateApplication($application);
     }
     
@@ -506,7 +547,7 @@ class Setup_Update_Abstract
 
         $updateRequired = false;
         $setNewVersions = array();
-        /** @var Tinebase_Record_Abstract $modelName */
+        /** @var Tinebase_Record_Interface $modelName */
         foreach ($modelNames as $modelName) {
             $modelConfig = $modelName::getConfiguration();
             $tableName = Tinebase_Helper::array_value('name', $modelConfig->getTable());
@@ -519,7 +560,7 @@ class Setup_Update_Abstract
         }
 
         if ($updateRequired) {
-            Setup_SchemaTool::updateSchema($appName, $modelNames);
+            Setup_SchemaTool::updateSchema($modelNames);
 
             foreach($setNewVersions as $table => $version) {
                 $this->setTableVersion($table, $version);

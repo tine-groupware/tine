@@ -294,7 +294,9 @@ msgstr[1] "Gruppen"
 
 #: js/customfield/EditDialog.js:522
 msgid "Customfield already exists. Please choose another name."
-msgstr "Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen anderen Namen."
+msgstr ""
+"Es gibt bereits ein Zusatzfeld mit diesem Namen. Bitte wählen Sie einen "
+"anderen Namen."
 
 #: js/customfield/Customfield.js:44 js/customfield/GridPanel.js:111
 msgid "Customfield"
@@ -532,7 +534,8 @@ msgstr "Konfigurationen"
 
 #: js/user/EditDialog.js:206
 msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
+msgstr ""
+"Domäne ist nicht erlaubt. Bitte prüfen Sie Ihre SMTP-Domänen-Konfiguration."
 
 #: js/user/EditDialog.js:253 js/user/EditDialog.js:256
 #: js/user/EditDialog.js:781
@@ -670,8 +673,16 @@ msgstr "Domäne nicht erlaubt"
 
 #: js/user/EditDialog.js:667
 #, python-brace-format
-msgid "The domain {0} of the alias {1} you tried to add is neither configured as primary domain nor set as a secondary domain in the setup. Please add this domain to the secondary domains in SMTP setup or use another domain which is configured already."
-msgstr "Die Domäne {0} des neuen Alias {1} ist nicht als primäre oder sekundäre Domäne im Setup eingetragen. Bitte fügen Sie diese Domain als sekundäre Domain im SMTP setup hinzu oder benutzen Sie eine Domäne welche bereits konfiguriert ist."
+msgid ""
+"The domain {0} of the alias {1} you tried to add is neither configured as "
+"primary domain nor set as a secondary domain in the setup. Please add this "
+"domain to the secondary domains in SMTP setup or use another domain which is "
+"configured already."
+msgstr ""
+"Die Domäne {0} des neuen Alias {1} ist nicht als primäre oder sekundäre "
+"Domäne im Setup eingetragen. Bitte fügen Sie diese Domain als sekundäre "
+"Domain im SMTP setup hinzu oder benutzen Sie eine Domäne welche bereits "
+"konfiguriert ist."
 
 #: js/user/EditDialog.js:676
 msgid "Email Alias"
@@ -686,8 +697,12 @@ msgid "Forwarding to self"
 msgstr "Weiterleitung zu sich selbst"
 
 #: js/user/EditDialog.js:701
-msgid "You are not allowed to set a forward email address that is identical to the users primary email or one of his aliases."
-msgstr "Sie dürfen keine Weiterleitungsadresse angeben, die identisch mit der E-Mail-Adresse oder eines Alias des Benutzers ist."
+msgid ""
+"You are not allowed to set a forward email address that is identical to the "
+"users primary email or one of his aliases."
+msgstr ""
+"Sie dürfen keine Weiterleitungsadresse angeben, die identisch mit der E-Mail-"
+"Adresse oder eines Alias des Benutzers ist."
 
 #: js/user/EditDialog.js:710
 msgid "Email Forward"
@@ -754,8 +769,13 @@ msgid "Invalid Status"
 msgstr "Ungültiger Status"
 
 #: js/user/EditDialog.js:946
-msgid "Blocked status is only valid if the user tried to login with a wrong password to often. It is not possible to set this status here."
-msgstr "Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu setzten."
+msgid ""
+"Blocked status is only valid if the user tried to login with a wrong "
+"password to often. It is not possible to set this status here."
+msgstr ""
+"Der \"gesperrt\"-Status erscheint nur, wenn der Benutzer sich zu oft mit "
+"falschem Passwort anmelden wollte. Es ist nicht möglich diesen Status zu "
+"setzten."
 
 #: js/user/EditDialog.js:968 js/user/GridPanel.js:202
 msgid "Expires"
@@ -1078,7 +1098,9 @@ msgstr "Benutzerkonten verwalten"
 
 #: Acl/Rights.php:220
 msgid "add and edit users and groups, add group members, change user passwords"
-msgstr "Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, Passwörter zurücksetzen"
+msgstr ""
+"Benutzer und Gruppen anlegen und bearbeiten, Benutzer zu Gruppen zuordnen, "
+"Passwörter zurücksetzen"
 
 #: Acl/Rights.php:223
 msgid "manage applications"
@@ -1093,8 +1115,11 @@ msgid "manage roles"
 msgstr "Rollen verwalten"
 
 #: Acl/Rights.php:228
-msgid "add and edit roles, add new members to roles, add application rights to roles"
-msgstr "Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen Anwendungs-Rechte zuweisen"
+msgid ""
+"add and edit roles, add new members to roles, add application rights to roles"
+msgstr ""
+"Rollen anlegen und bearbeiten, Benutzerkonten Rollen zuordnen, Rollen "
+"Anwendungs-Rechte zuweisen"
 
 #: Acl/Rights.php:231
 msgid "manage shared tags"
@@ -1118,7 +1143,8 @@ msgstr "Container verwalten"
 
 #: Acl/Rights.php:240
 msgid "add, delete and edit containers and manage container grants"
-msgstr "Container anlegen, löschen und ändern, sowie die Container-Rechte setzen"
+msgstr ""
+"Container anlegen, löschen und ändern, sowie die Container-Rechte setzen"
 
 #: Acl/Rights.php:243
 msgid "manage customfields"
@@ -1202,14 +1228,15 @@ msgstr "Der Benutzername darf keine Sonderzeichen enthalten."
 msgid "Please create Resources in Addressbook or CoreData."
 msgstr "Bitte Ressourcen im Addressbook oder Stammdaten erstellen."
 
-#~ msgid "IMAP Quota (MB)"
-#~ msgstr "IMAP Kontingent (MB)"
+msgid "IMAP Quota (MB)"
+msgstr "IMAP Kontingent (MB)"
 
-#~ msgid "Sieve Quota (MB)"
-#~ msgstr "Sieve Kontingent (MB)"
+msgid "Sieve Quota (MB)"
+msgstr "Sieve Kontingent (MB)"
 
-#~ msgid "Restart application to apply new customfields?"
-#~ msgstr "Wollen Sie die Anwendung zum Anwenden der neuen Zusatzfelder neu starten?"
+msgid "Restart application to apply new customfields?"
+msgstr ""
+"Wollen Sie die Anwendung zum Anwenden der neuen Zusatzfelder neu starten?"
 
-#~ msgid "Default"
-#~ msgstr "Standard"
+msgid "Default"
+msgstr "Standard"

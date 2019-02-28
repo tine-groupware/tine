@@ -787,9 +787,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $symbols = Zend_Locale::getTranslationList('symbols', $locale);
         try {
-            $filesHash = Tinebase_Frontend_Http::getAssetHash();
+            $assetHash = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
         } catch (Exception $e) {
-            $filesHash = Tinebase_Record_Abstract::generateUID(8);
+            // unittests
+            $assetHash = Tinebase_Record_Abstract::generateUID(8);
         }
 
         $registryData =  array(
@@ -809,7 +810,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'codeName'      => TINE20_CODENAME,
                 'packageString' => TINE20_PACKAGESTRING,
                 'releaseTime'   => TINE20_RELEASETIME,
-                'filesHash'     => $filesHash,
+                'assetHash'     => $assetHash,
             ),
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
@@ -1018,7 +1019,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $appController = Tinebase_Core::getApplicationInstance($application->name);
                 $models = $appController->getModels();
                 $appRegistry['models'] = Tinebase_ModelConfiguration::getFrontendConfigForModels($models);
-                $appRegistry['defaultModel'] = $appController->getDefaultModel();
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 // do not add prefs if user has no run right
             }
@@ -1099,7 +1099,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $registryData['relatableModels'][] = $relModel;
         }
         $registryData['models'] = $applicationJson->getModelsConfiguration();
-        $registryData['defaultModel'] = $applicationJson->getDefaultModel();
 
         return $registryData;
     }
@@ -1436,7 +1435,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns multiple records prepared for json transport
      *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data

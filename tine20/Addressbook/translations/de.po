@@ -46,8 +46,11 @@ msgid "All Contacts"
 msgstr "Alle Kontakte"
 
 #: Frontend/Cli.php:216
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "Dieser Kontakt wurde automatisch vom System als Termin Teilnehmer hinzugefügt."
+msgid ""
+"This contact has been automatically added by the system as an event attender"
+msgstr ""
+"Dieser Kontakt wurde automatisch vom System als Termin Teilnehmer "
+"hinzugefügt."
 
 #: Preference.php:28
 msgid "All contacts"
@@ -75,7 +78,9 @@ msgstr "Kontakt ODS-Export Konfiguration"
 
 #: Preference.php:90
 msgid "Use this configuration for the contact ODS export."
-msgstr "Hiermit können Sie die zu verwendende Kontakt ODS-Export Konfiguration einstellen."
+msgstr ""
+"Hiermit können Sie die zu verwendende Kontakt ODS-Export Konfiguration "
+"einstellen."
 
 #: Preference.php:93
 msgid "Contacts XLS export configuration"
@@ -83,7 +88,8 @@ msgstr "Kontakt XLS-Export Konfiguration"
 
 #: Preference.php:94
 msgid "Use this configuration for the contact XLS export."
-msgstr "Hiermit können Sie die zu verwendende XLS-Export Konfiguration einstellen."
+msgstr ""
+"Hiermit können Sie die zu verwendende XLS-Export Konfiguration einstellen."
 
 #: Preference.php:165
 msgid "default"
@@ -367,7 +373,9 @@ msgstr "Adresse einfügen"
 
 #: js/ContactEditDialog.js:501
 msgid "Please paste an address or a URI to a vcard that should be parsed:"
-msgstr "Bitte fügen Sie eine Adresse oder URI zu einer vcard ein, die eingelesen werden soll:"
+msgstr ""
+"Bitte fügen Sie eine Adresse oder URI zu einer vcard ein, die eingelesen "
+"werden soll:"
 
 #: js/ContactEditDialog.js:527
 msgid "Failed to parse address!"
@@ -479,12 +487,22 @@ msgid "Select record to see its details"
 msgstr "Eintrag auswählen um Details zu sehen"
 
 #: js/StructurePanel.js:67
-msgid "This module visualises hierarchically depended relations between records of different types."
-msgstr "Dieses Modul visualisiert hierarchisch abhängige Beziehungen zwischen Einträgen verschiedener Typen. "
+msgid ""
+"This module visualises hierarchically depended relations between records of "
+"different types."
+msgstr ""
+"Dieses Modul visualisiert hierarchisch abhängige Beziehungen zwischen "
+"Einträgen verschiedener Typen. "
 
 #: js/StructurePanel.js:68
-msgid "Hierarchically depended relations are created automatically for some data types like users and groups, but can also be created manually via the corresponding relation types."
-msgstr "Hierarchisch abhängige Beziehungen werden von einigen Datentypen wie z.B. Benutzern und Gruppen automatisch  erstellt. Sie können aber auch manuell mit den entsprechenden Verknüpfungstypen erzeugt werden."
+msgid ""
+"Hierarchically depended relations are created automatically for some data "
+"types like users and groups, but can also be created manually via the "
+"corresponding relation types."
+msgstr ""
+"Hierarchisch abhängige Beziehungen werden von einigen Datentypen wie z.B. "
+"Benutzern und Gruppen automatisch  erstellt. Sie können aber auch manuell "
+"mit den entsprechenden Verknüpfungstypen erzeugt werden."
 
 #: js/StructurePanel.js:488
 msgid "Loading Structure data..."
@@ -748,8 +766,13 @@ msgid "Contact duplicate check fields"
 msgstr "Kontaktfelder für den Dublettencheck"
 
 #: Config.php:139
-msgid "These fields are checked when a new contact is created. If a record with the same data in the fields is found, a duplicate exception is thrown."
-msgstr "Diese Felder werden überprüft, wenn ein neuer Kontakt erstellt wird. Falls ein Eintrag mit den gleichen Daten in diesen Feldern angelegt wird, wird eine Fehlermeldung angezeit, auf die der Benutzer reagieren kann."
+msgid ""
+"These fields are checked when a new contact is created. If a record with the "
+"same data in the fields is found, a duplicate exception is thrown."
+msgstr ""
+"Diese Felder werden überprüft, wenn ein neuer Kontakt erstellt wird. Falls "
+"ein Eintrag mit den gleichen Daten in diesen Feldern angelegt wird, wird "
+"eine Fehlermeldung angezeit, auf die der Benutzer reagieren kann."
 
 #: Config.php:156
 msgid "Contact Hidden Criteria"
@@ -757,15 +780,21 @@ msgstr "Kriterium zum ausblenden von Kontakten"
 
 #: Config.php:158
 msgid "The contact is hidden if it is ... (one of: disabled, expired or never)"
-msgstr "Der Kontakt wird ausgeblendet wenn er ... ist. (eines von: deaktiviert, abgelaufen oder niemals)"
+msgstr ""
+"Der Kontakt wird ausgeblendet wenn er ... ist. (eines von: deaktiviert, "
+"abgelaufen oder niemals)"
 
 #: Config.php:165
 msgid "Contact salutations available"
 msgstr "Verfügbare Kontaktanreden"
 
 #: Config.php:167
-msgid "Possible contact salutations. Please note that additional values might impact other Addressbook systems on export or syncronisation."
-msgstr "Mögliche Kontaktanreden. Bitte beachten Sie, dass sich zusätzliche Werte beim Export oder der Synchronisation auf andere Systeme auswirken."
+msgid ""
+"Possible contact salutations. Please note that additional values might "
+"impact other Addressbook systems on export or syncronisation."
+msgstr ""
+"Mögliche Kontaktanreden. Bitte beachten Sie, dass sich zusätzliche Werte "
+"beim Export oder der Synchronisation auf andere Systeme auswirken."
 
 #: Config.php:183
 msgid "Parsing rules for addresses"
@@ -933,7 +962,8 @@ msgstr "Excel - Telefonliste, gruppiert nach Firma"
 
 #: Import/definitions/adb_outlook_import_csv.xml:10
 msgid "Import CSV formated contacts from Exchange / Outlook address book"
-msgstr "Importiere CSV formatierte Kontakte aus einem Exchange / Outlook Adressbuch"
+msgstr ""
+"Importiere CSV formatierte Kontakte aus einem Exchange / Outlook Adressbuch"
 
 #: Import/definitions/adb_outlook_import_csv.xml:14
 msgid "Contact CSV import from Outlook address book"
@@ -941,7 +971,8 @@ msgstr "CSV-Kontaktimport aus dem Outlook-Adressbuch"
 
 #: Import/definitions/adb_outlook2007_de_import_csv.xml:10
 msgid "Import CSV formated contacts from Outlook 2007 German address book"
-msgstr "Importiere CSV formatierte Kontakte aus einem Outlook 2007 Deutsch Adressbuch"
+msgstr ""
+"Importiere CSV formatierte Kontakte aus einem Outlook 2007 Deutsch Adressbuch"
 
 #: Import/definitions/adb_outlook2007_de_import_csv.xml:15
 msgid "CSV Outlook 2007 German"
@@ -968,8 +999,12 @@ msgid "Import list (###CURRENTDATE###)"
 msgstr "Importliste (###CURRENTDATE###)"
 
 #: Import/definitions/adb_tine_import_csv.xml:21
-msgid "Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by ###USERFULLNAME###"
-msgstr "Kontakte importiert am ###CURRENTDATE### um ###CURRENTTIME### von ###USERFULLNAME###"
+msgid ""
+"Contacts imported on ###CURRENTDATE### at ###CURRENTTIME### by "
+"###USERFULLNAME###"
+msgstr ""
+"Kontakte importiert am ###CURRENTDATE### um ###CURRENTTIME### von "
+"###USERFULLNAME###"
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
 msgid "LX-Office CSV Contact import"
@@ -1021,7 +1056,8 @@ msgstr "Verwalte Gruppenfunktionen in den Stammdaten"
 
 #: Acl/Rights.php:135
 msgid "View, create, delete or update list functions in CoreData application"
-msgstr "Gruppenfunktionen in den Stammdaten ansehen, anlegen, löschen oder bearbeiten"
+msgstr ""
+"Gruppenfunktionen in den Stammdaten ansehen, anlegen, löschen oder bearbeiten"
 
 # short name feature
 msgid "Short Name"
@@ -1030,66 +1066,69 @@ msgstr "Kürzel"
 msgid "This Short Name already exists. How about {0}?"
 msgstr "Dieses Kürzel existiert bereits. Wie wäre es mit {0}?"
 
-#~ msgid "List Type"
-#~ msgstr "Gruppen Typ"
+msgid "List Type"
+msgstr "Gruppen Typ"
 
-#~ msgid "The contact is hidden if it is ... (one of: disabled, expired or never"
-#~ msgstr "Der Kontakt ausgeblendet wenn er ... ist. (eines von : deaktiviert, abgelaufen oder niemals)"
+msgid ""
+"The contact is hidden if it is ... (one of: disabled, expired or never"
+msgstr ""
+"Der Kontakt ausgeblendet wenn er ... ist. (eines von : deaktiviert, "
+"abgelaufen oder niemals)"
 
-#~ msgid "Resource"
-#~ msgid_plural "Resources"
-#~ msgstr[0] "Ressource"
-#~ msgstr[1] "Ressourcen"
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Ressource"
+msgstr[1] "Ressourcen"
 
-#~ msgid "Dear Mister"
-#~ msgstr "Sehr geehrter Herr"
+msgid "Dear Mister"
+msgstr "Sehr geehrter Herr"
 
-#~ msgid "Dear Miss"
-#~ msgstr "Sehr geehrte Dame"
+msgid "Dear Miss"
+msgstr "Sehr geehrte Dame"
 
-#~ msgid "Dear"
-#~ msgstr "Sehr geehrte Damen und Herren"
+msgid "Dear"
+msgstr "Sehr geehrte Damen und Herren"
 
-#~ msgid "Mister"
-#~ msgstr "Herr"
+msgid "Mister"
+msgstr "Herr"
 
-#~ msgid "Misses"
-#~ msgstr "Frau"
+msgid "Misses"
+msgstr "Frau"
 
-#~ msgid "Export as pdf"
-#~ msgstr "Als PDF exportieren"
+msgid "Export as pdf"
+msgstr "Als PDF exportieren"
 
-#~ msgid "Select contact"
-#~ msgstr "Kontakt auswählen"
+msgid "Select contact"
+msgstr "Kontakt auswählen"
 
-#~ msgid "Info"
-#~ msgstr "Info"
+msgid "Info"
+msgstr "Info"
 
-#~ msgid "Insecure link"
-#~ msgstr "Unsicherer Link"
+msgid "Insecure link"
+msgstr "Unsicherer Link"
 
-#~ msgid "Please review this link in edit dialog."
-#~ msgstr "Bitte überprüfen Sie den Link im Detail-Dialog."
+msgid "Please review this link in edit dialog."
+msgstr "Bitte überprüfen Sie den Link im Detail-Dialog."
 
-#~ msgid "Export {0}"
-#~ msgid_plural "Export {0}"
-#~ msgstr[0] "{0} exportieren"
-#~ msgstr[1] "{0} exportieren"
+msgid "Export {0}"
+msgid_plural "Export {0}"
+msgstr[0] "{0} exportieren"
+msgstr[1] "{0} exportieren"
 
-#~ msgid "Export as PDF"
-#~ msgstr "Als PDF exportieren"
+msgid "Export as PDF"
+msgstr "Als PDF exportieren"
 
-#~ msgid "Export as CSV"
-#~ msgstr "Als CSV exportieren"
+msgid "Export as CSV"
+msgstr "Als CSV exportieren"
 
-#~ msgid "Export as ODS"
-#~ msgstr "Als ODS exportieren"
+msgid "Export as ODS"
+msgstr "Als ODS exportieren"
 
-#~ msgid "Export as XLS"
-#~ msgstr "Als XLS exportieren"
+msgid "Export as XLS"
+msgstr "Als XLS exportieren"
 
-#~ msgid "Export as DOC"
-#~ msgstr "Exportieren als DOC"
+msgid "Export as DOC"
+msgstr "Exportieren als DOC"
 
-#~ msgid "Export as ..."
-#~ msgstr "Exportieren als ..."
+msgid "Export as ..."
+msgstr "Exportieren als ..."

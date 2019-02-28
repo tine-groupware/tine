@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -458,7 +458,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         // iterate relations, look for accountables, prepare relations
         foreach ($this->_currentBillingContract->relations as $relation) {
             if (isset($billedRelations[$relation->id]) ||
-                    !$relation->related_record instanceof Tinebase_Record_Abstract) {
+                    !$relation->related_record instanceof Tinebase_Record_Interface) {
                 continue;
             }
             // use productaggregate definition, if it has been found

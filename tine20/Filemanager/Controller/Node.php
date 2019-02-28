@@ -280,7 +280,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * 
      * @return  Tinebase_Record_RecordSet
      */
-    public function getMultiple($_ids, $_ignoreACL = false)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null)
     {
         foreach (($results = $this->_backend->getMultipleTreeNodes($_ids, $_ignoreACL)) as $node) {
             $path = Tinebase_Model_Tree_Node_Path::createFromStatPath(
@@ -582,7 +582,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      */
     protected function _getOtherUserNodes()
     {
-        $result = $this->_backend->getOtherUsers(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_READ);
+        $result = $this->_backend->getOtherUsers(Tinebase_Core::getUser(), $this->_modelName, Tinebase_Model_Grants::GRANT_READ);
         return $result;
     }
 
@@ -712,6 +712,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * @param array $_tempFileIds
      * @param boolean $_forceOverwrite
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     * @throws Filemanager_Exception_NodeExists
      */
     public function createNodes($_filenames, $_type, $_tempFileIds = array(), $_forceOverwrite = FALSE)
     {
@@ -743,6 +744,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * 
      * @param Filemanager_Exception_NodeExists $_fene
      * @param Filemanager_Exception_NodeExists|NULL $_parentNodeExistsException
+     * @return Filemanager_Exception_NodeExists
      */
     protected function _handleNodeExistsException($_fene, $_parentNodeExistsException = NULL)
     {
@@ -926,8 +928,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     {
         $ownerId = ($_type === Tinebase_FileSystem::FOLDER_TYPE_PERSONAL) ? Tinebase_Core::getUser()->getId() : NULL;
         try {
-            $existingContainer = Tinebase_Container::getInstance()->getContainerByName(
-                $this->_applicationName, $_name, $_type, $ownerId);
+            $existingContainer = Tinebase_Container::getInstance()->getContainerByName(Filemanager_Model_Node::class,
+                $_name, $_type, $ownerId);
             throw new Filemanager_Exception_NodeExists('Container ' . $_name . ' of type ' . $_type . ' already exists.');
         } catch (Tinebase_Exception_NotFound $tenf) {
             // go on
@@ -1099,7 +1101,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                     $node = $this->_copyNode($sourcePathRecord, $destinationPathRecord, $_forceOverwrite);
                 }
 
-                if ($node instanceof Tinebase_Record_Abstract) {
+                if ($node instanceof Tinebase_Record_Interface) {
                     $result->addRecord($node);
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -1456,57 +1458,61 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * file message
+     * file message and returns parent node
      *
-     * @param                          $targetPath
+     * @param Felamimail_Model_MessageFileLocation $location
      * @param Felamimail_Model_Message $message
-     * @returns Filemanager_Model_Node
-     * @throws
+     * @returns Filemanager_Model_Node|null
      * @throws Filemanager_Exception_NodeExists
      * @throws Tinebase_Exception_AccessDenied
-     * @throws null
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function fileMessage($targetPath, Felamimail_Model_Message $message)
+    public function fileMessage(Felamimail_Model_MessageFileLocation $location, Felamimail_Model_Message $message)
     {
-        // save raw message in temp file
-        $rawContent = Felamimail_Controller_Message::getInstance()->getMessageRawContent($message);
-        $tempFilename = Tinebase_TempFile::getInstance()->getTempPath();
-        file_put_contents($tempFilename, $rawContent);
-        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempFilename);
+        if ($location->type === Felamimail_Model_MessageFileLocation::TYPE_ATTACHMENT) {
+            // file message as attachment
+            return parent::fileMessage($location, $message);
+        }
+        if (isset($location['record_id']['path'])) {
+            $targetPath = $location['record_id']['path'];
+        } else {
+            if (is_array($location['record_id'])) {
+                if (! isset($location['record_id']['id'])) {
+                    throw new Tinebase_Exception_InvalidArgument('path or id required in record_id');
+                }
+                $recordId = $location['record_id']['id'];
+            } else {
+                $recordId = $location['record_id'];
+            }
+            $node = $this->get($recordId);
+            $targetPath = $node->path;
+        }
 
-        $filename = $this->_getMessageNodeFilename($message);
+        $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
+        $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
 
-        $emlNode = $this->createNodes(
-            array($targetPath . '/' . $filename),
-            Tinebase_Model_Tree_FileObject::TYPE_FILE,
-            array($tempFile->getId()),
-            /* $_forceOverwrite */ true
-        )->getFirstRecord();
+        try {
+            $emlNode = $this->createNodes(
+                array($targetPath . '/' . $filename),
+                Tinebase_Model_Tree_FileObject::TYPE_FILE,
+                array($tempFile->getId()),
+                /* $_forceOverwrite */
+                false
+            )->getFirstRecord();
+        } catch (Filemanager_Exception_NodeExists $fene) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' ' . $fene->getMessage());
+            return null;
+        }
 
         $emlNode->description = $this->_getMessageNodeDescription($message);
         $emlNode->last_modified_time = Tinebase_DateTime::now();
-        return $this->update($emlNode);
-    }
+        $this->update($emlNode);
 
-    /**
-     * create node filename from message data
-     *
-     * @param $message
-     * @return string
-     */
-    protected function _getMessageNodeFilename($message)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' ' . print_r($message->toArray(), true));
+        $parent = $this->get($emlNode->parent_id);
+        Felamimail_Controller_MessageFileLocation::getInstance()->createMessageLocationForRecord($message, $location, $parent, $emlNode);
 
-        // remove '/' and '\' from name as this might break paths
-        $subject = preg_replace('/[\/\\\]+/', '_', $message->subject);
-        // remove possible harmful utf-8 chars
-        // TODO should not be enabled by default (configurable?)
-        $subject = Tinebase_Helper::mbConvertTo($subject, 'ASCII');
-        $name = mb_substr($subject, 0, 245) . '_' . substr(md5($message->messageuid . $message->folder_id), 0, 10) . '.eml';
-
-        return $name;
+        return $parent;
     }
 
     /**

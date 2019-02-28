@@ -7,8 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * 
- * @todo        add year to 'inweek' filter?
  */
 
 /**
@@ -55,7 +53,16 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         'before_or_equals'  => array('sqlop' => ' <= ?'),
         'after_or_equals'   => array('sqlop' => ' >= ?'),
     );
-    
+
+    const DAY_THIS = 'dayThis';
+    const DAY_LAST = 'dayLast';
+    const DAY_NEXT = 'dayNext';
+    const MONTH_THIS = 'monthThis';
+    const MONTH_LAST = 'monthLast';
+    const MONTH_NEXT = 'monthNext';
+
+    // @todo add YEAR constants
+
     /**
      * date format string
      *
@@ -113,7 +120,52 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             $_select->orWhere($field . ' IS NULL');
         }
     }
-    
+
+    /**
+     * convert string in user time to UTC
+     *
+     * @param string $_string
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _convertStringToUTC($_string)
+    {
+        if (preg_match('/^(day|week|month|year)/', $_string, $matches)) {
+            if ($matches[1] === 'day') {
+                $date = Tinebase_DateTime::now();
+            } else {
+                throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_string);
+            }
+            switch ($this->getOperator()) {
+                case 'before':
+                case 'after_or_equals':
+                    $date->setTime(0, 0, 0);
+                    break;
+                case 'after':
+                case 'before_or_equals':
+                    $date->setTime(23, 59, 59);
+                    break;
+            }
+            switch ($_string) {
+                case Tinebase_Model_Filter_Date::DAY_THIS:
+                    $string = $date->toString();
+                    break;
+                case Tinebase_Model_Filter_Date::DAY_LAST:
+                    $string = $date->subDay(1)->toString();
+                    break;
+                case Tinebase_Model_Filter_Date::DAY_NEXT:
+                    $string = $date->addDay(1)->toString();
+                    break;
+                default:
+                    throw new Tinebase_Exception_InvalidArgument('date string not recognized / not supported: ' . $_string);
+            }
+        } else {
+            $string = $_string;
+        }
+
+        return parent::_convertStringToUTC($string);
+    }
+
     /**
      * calculates the date filter values
      *
@@ -146,7 +198,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             $date = $this->_getDate(NULL, TRUE);
             
             // special values like this week, ...
-            switch($_value) {
+            switch ($_value) {
 
                 /******** anytime ******/
                 case 'anytime':
@@ -170,26 +222,12 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $value = $this->_getFirstAndLastDayOfWeek($date);
                     break;
                 /******* month *********/
-                case 'monthNext':
-                    $date->add(2, Tinebase_DateTime::MODIFIER_MONTH);
-                case 'monthLast':
-                    $month = $date->get('m');
-                    if ($month > 1) {
-                        $date = $date->setDate($date->get('Y'), $month - 1, 1);
-                    } else {
-                        $date->subMonth(1);
-                    }
-                case 'monthThis':
-                    $dayOfMonth = $date->get('j');
-                    $monthDays = $date->get('t');
-                    
-                    $first = $date->toString('Y-m') . '-01';
-                    $date->add($monthDays-$dayOfMonth, Tinebase_DateTime::MODIFIER_DAY);
-                    $last = $date->toString($this->_dateFormat);
-    
+                case self::MONTH_NEXT:
+                case self::MONTH_LAST:
+                case self::MONTH_THIS:
                     $value = array(
-                        $first, 
-                        $last,
+                        self::getFirstDayOf($_value, $date)->toString($this->_dateFormat),
+                        self::getLastDayOf($_value, $date)->toString($this->_dateFormat),
                     );
                     break;
                     
@@ -252,11 +290,11 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     );
                     break;
                 /******* day *********/
-                case 'dayNext':
+                case self::DAY_NEXT:
                     $date->add(2, Tinebase_DateTime::MODIFIER_DAY);
-                case 'dayLast':
+                case self::DAY_LAST:
                     $date->sub(1, Tinebase_DateTime::MODIFIER_DAY);
-                case 'dayThis':
+                case self::DAY_THIS:
                     $value = array(
                         $date->toString($this->_dateFormat), 
                         $date->toString($this->_dateFormat), 
@@ -384,6 +422,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * 
      * @param string $date
      * @param boolean $usertimezone
+     * @return Tinebase_DateTime
      */
     protected function _getDate($date = NULL, $usertimezone = FALSE)
     {
@@ -398,5 +437,53 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         }
         
         return $date;
+    }
+
+    /**
+     * @param Tinebase_DateTime $date
+     * @param string $value
+     * @return Tinebase_DateTime
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function getFirstDayOf($value, Tinebase_DateTime $date = null)
+    {
+        if (! $date) {
+            $firstDay = Tinebase_DateTime::now();
+        } else {
+            $firstDay = clone($date);
+        }
+
+        $firstDay->setDate($firstDay->format('Y'), $firstDay->format('m'), 1)->setTime(0, 0, 0, 0);
+        switch ($value) {
+            case self::MONTH_NEXT:
+                $firstDay->add(1, Tinebase_DateTime::MODIFIER_MONTH);
+                break;
+            case self::MONTH_LAST:
+                $firstDay->add(-1, Tinebase_DateTime::MODIFIER_MONTH);
+                break;
+            case self::MONTH_THIS:
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument('not supported: ' . $value);
+        }
+
+        return $firstDay;
+    }
+
+    /**
+     * @param Tinebase_DateTime $date
+     * @param string $value
+     * @return Tinebase_DateTime
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public static function getLastDayOf($value, Tinebase_DateTime $date = null)
+    {
+        $result = static::getFirstDayOf($value, $date);
+        return $result->addDay($result->get('t') - 1)->setTime(23,59,59);
+    }
+
+    public static function getEndOfYesterday()
+    {
+        return Tinebase_DateTime::now()->subDay(1)->setTime(23,59,59);
     }
 }

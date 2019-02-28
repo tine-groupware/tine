@@ -444,59 +444,31 @@ class Setup_Frontend_Cli
      */
     protected function _update(Zend_Console_Getopt $_opts)
     {
-        $maxLoops = 50;
-        do {
-            $result = $this->_updateApplications();
-            if ($_opts->v && ! empty($result['messages'])) {
-                echo "Messages:\n";
-                foreach ($result['messages'] as $message) {
-                    echo "  " . $message . "\n";
-                }
-            }
-            $maxLoops--;
-        } while (isset($result['updated']) && $result['updated'] > 0 && $maxLoops > 0);
-        
-        return ($maxLoops > 0) ? 0 : 1;
+        return $this->_updateApplications();
     }
     
     /**
      * update all applications
      * 
-     * @return array
+     * @return int
      */
     protected function _updateApplications()
     {
+        // TODO remove this loop in Release 13
+        $ran = false;
         $controller = Setup_Controller::getInstance();
-        try {
-            $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__
-                    . ' Could not get applications');
-            Tinebase_Exception::log($e);
-            return array();
-        }
-        
-        foreach ($applications as $key => &$application) {
-            try {
-                if (! $controller->updateNeeded($application)) {
-                    unset($applications[$key]);
-                }
-            } catch (Setup_Exception_NotFound $e) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Failed to check if an application needs an update:' . $e->getMessage());
-                unset($applications[$key]);
-            }
-        }
 
-        $result = array();
-        if (count($applications) > 0) {
-            $result = $controller->updateApplications($applications);
-            echo "Updated " . $result['updated'] . " application(s).\n";
-        } else {
-            $result['updated'] = 0;
-        }
-        
-        return $result;
+        $maxLoops = 50;
+        do {
+            $result = $controller->updateApplications();
+
+            if (!$ran || $result['updated'] > 0) {
+                echo "Updated " . $result['updated'] . " application(s).\n";
+            }
+            $ran = true;
+        } while (isset($result['updated']) && $result['updated'] > 0 && --$maxLoops > 0);
+
+        return ($maxLoops > 0) ? 0 : 1;
     }
 
     /**
@@ -1219,7 +1191,7 @@ class Setup_Frontend_Cli
         return 0;
     }
 
-    protected function _migrateUtf8mb4()
+    public function _migrateUtf8mb4()
     {
         $db = Setup_Core::getDb();
         if (!$db instanceof Zend_Db_Adapter_Pdo_Mysql) {

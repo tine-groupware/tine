@@ -635,9 +635,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param   bool  $_ignoreACL don't check acl grants
      * @return  Tinebase_Record_RecordSet of $this->_modelName
      */
-    public function getMultiple($_ids, $_ignoreACL = false)
+    public function getMultiple($_ids, $_ignoreACL = false, Tinebase_Record_Expander $_expander = null)
     {
-        $events = parent::getMultiple($_ids, $_ignoreACL = false);
+        $events = parent::getMultiple($_ids, $_ignoreACL, $_expander);
         if ($_ignoreACL !== true) {
             $this->_freeBusyCleanup($events, 'get');
         }
@@ -912,7 +912,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      *
      * @param   Tinebase_Record_Interface $_record
      * @param   bool                      $_checkBusyConflicts
-     * @param   string                    $range
+     * @param   bool                      $skipEvent
      * @return  Calendar_Model_Event
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
@@ -1640,12 +1640,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
    /**
     * adopt alarm time to next occurrence for recurring events
     *
-    * @param Tinebase_Record_Abstract $_record
+    * @param Tinebase_Record_Interface $_record
     * @param Tinebase_Model_Alarm $_alarm
     * @param bool $_nextBy {instance|time} set recurr alarm to next from given instance or next by current time
     * @return void
     */
-    public function adoptAlarmTime(Tinebase_Record_Abstract $_record, Tinebase_Model_Alarm $_alarm, $_nextBy = 'time')
+    public function adoptAlarmTime(Tinebase_Record_Interface $_record, Tinebase_Model_Alarm $_alarm, $_nextBy = 'time')
     {
         if ($_record->rrule) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
@@ -2683,7 +2683,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function getDefaultCalendar()
     {
-        return Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Calendar_Preference::DEFAULTCALENDAR);
+        return Tinebase_Container::getInstance()->getDefaultContainer($this->_modelName, NULL, Calendar_Preference::DEFAULTCALENDAR);
     }
     
     /**

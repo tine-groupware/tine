@@ -9,15 +9,6 @@
  */
 Ext.namespace('Tine.Tinebase');
 
-require('AppManager');
-require('Locale');
-require('Locale/Gettext');
-require('widgets/MainScreen');
-require('widgets/tree/Loader');
-require('widgets/persistentfilter/PickerPanel');
-require('widgets/dialog/EditDialog');
-require('widgets/grid/GridPanel');
-require('data/Record');
 require('widgets/grid/AttachmentRenderer');
 require('widgets/grid/ImageRenderer');
 
@@ -299,6 +290,9 @@ Tine.Tinebase.ApplicationStarter = {
             case 'datetime_separated_date':
                 filter.valueType = 'date';
                 break;
+            case 'time':
+                filter.valueType = 'time';
+                break;
             case 'float':
             case 'integer':
             case 'money':
@@ -397,7 +391,33 @@ Tine.Tinebase.ApplicationStarter = {
             var appName = app.name;
             Tine.log.info('ApplicationStarter::createStructure for app ' + appName);
             Ext.namespace('Tine.' + appName);
-            
+
+            if (! Tine[appName].AdminPanel) {
+                Tine[appName].AdminPanel = Ext.extend(Ext.TabPanel, {
+                    border: false,
+                    activeTab: 0,
+                    appName: appName,
+                    initComponent: function () {
+                        this.app = Tine.Tinebase.appMgr.get(this.appName);
+                        this.items = [
+                            new Tine.Admin.config.GridPanel({
+                                configApp: this.app
+                            })
+                        ];
+                        this.supr().initComponent.call(this);
+                    }
+                });
+                Tine[appName].AdminPanel.openWindow = function (config) {
+                    return Tine.WindowFactory.getWindow({
+                        width: 600,
+                        height: 470,
+                        name: 'Tine.' + appName + '.AdminPanel',
+                        contentPanelConstructor: 'Tine.' + appName + '.AdminPanel',
+                        contentPanelConstructorConfig: config
+                    });
+                };
+            }
+
             var models = Tine[appName].registry ? Tine[appName].registry.get('models') : null;
             
             if (models) {

@@ -215,14 +215,14 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
-     * try to get a Timeaccount with a within date filter
+     * try to get a Timesheet with a within date filter (within)
      *
      * @see 0013648: use new periodPicker for date filters
      */
     public function testSearchTimesheetsWithWithinFilter()
     {
-        $timeaccount = $this->_getTimesheet();
-        $this->_json->saveTimesheet($timeaccount->toArray());
+        $timesheet = $this->_getTimesheet();
+        $this->_json->saveTimesheet($timesheet->toArray());
 
         $now = Tinebase_DateTime::now();
         $filter = array(
@@ -233,6 +233,53 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         );
         $searchResult = $this->_json->searchTimesheets($filter, array());
         $this->assertEquals(1, $searchResult['totalcount']);
+    }
+
+    /**
+     * try to get a Timesheet with a time filter (start_time)
+     */
+    public function testSearchTimesheetsByStartTime()
+    {
+        $now = Tinebase_DateTime::now();
+        $nowString = $now->format('H:i:s');
+        $timesheet = $this->_getTimesheet([
+            'start_time' => $nowString
+        ]);
+        $savedTimesheet = $this->_json->saveTimesheet($timesheet->toArray());
+        $date = clone($now)->subHour(1);
+
+        // skip check because this does not work at midnight
+        if (substr($nowString, 0, 2) !== '00') {
+            $filter = array(
+                array('field' => 'start_time', 'operator' => 'after', 'value' => $date->format('H:i:s')),
+            );
+            $searchResult = $this->_json->searchTimesheets($filter, array());
+            $this->assertEquals(1, $searchResult['totalcount'], 'did not find timesheet '
+                . print_r($savedTimesheet, true)
+                . ' with filter '
+                . print_r($filter, true)
+            );
+        }
+
+        $filter = array(
+            array('field' => 'start_time', 'operator' => 'before', 'value' => $date->addHour(2)->format('H:i:s')),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount'], 'did not find timesheet '
+            . print_r($savedTimesheet, true)
+            . ' with filter '
+            . print_r($filter, true)
+        );
+
+        $filter = array(
+            array('field' => 'start_time', 'operator' => 'equals', 'value' => $nowString),
+        );
+        $searchResult = $this->_json->searchTimesheets($filter, array());
+        $this->assertEquals(1, $searchResult['totalcount'], 'did not find timesheet '
+            . print_r($savedTimesheet, true)
+            . ' with filter '
+            . print_r($filter, true)
+        );
     }
 
     /**
@@ -608,7 +655,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      */
     protected function _createTsAndSearch($_startDate, $_filterType)
     {
-        //$timesheet = $this->_getTimesheet(NULL, $_startDate);
         $timesheet = $this->_getTimesheet(array('timeaccount_id' => null, 'start_date' => $_startDate));
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         $this->_deleteTimeSheets[] = $timesheetData['id'];
@@ -617,10 +663,11 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
+        $filter = $this->_getTimesheetDateFilter($_filterType);
+        $result = $this->_json->searchTimesheets($filter, $this->_getPaging());
 
-        $result = $this->_json->searchTimesheets($this->_getTimesheetDateFilter($_filterType), $this->_getPaging());
-
-        $this->assertEquals(1, $result['totalcount'], 'timesheet not found with ' . $_filterType . ' filter');
+        $this->assertEquals(1, $result['totalcount'], 'timesheet not found with '
+            . $_filterType . ' filter: ' . print_r($filter, true));
         $this->assertEquals($timesheet->description, $result['results'][0]['description']);
         $this->assertEquals('array', gettype($result['results'][0]['timeaccount_id']), 'timeaccount_id is not resolved');
         $this->assertEquals('array', gettype($result['results'][0]['account_id']), 'account_id is not resolved');
@@ -1400,5 +1447,19 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         } catch (Timetracker_Exception_ClosedTimeaccount $tect) {
             $this->assertEquals('This Timeaccount is already closed!', $tect->getMessage());
         }
+    }
+    
+    public function testUnitField()
+    {
+        $timeaccount = $this->_getTimeaccount();
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $this->assertEquals('', $timeaccount['price_unit']);
+        
+        $timeaccount->price_unit = 'days';
+        $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $this->assertEquals('days', $timeaccount['price_unit']);
+        
+
+
     }
 }

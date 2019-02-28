@@ -20,6 +20,8 @@
  */
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
+    const APP_NAME = 'Tinebase';
+    
     /**
      * access log rotation in days
      *
@@ -2402,8 +2404,18 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                         try {
                             $type = isset($definition['type']) ? $definition['type'] : null;
                             if ($type) {
+                                $val = $config->{$name};
+                                if ($val && Tinebase_Config::TYPE_RECORD === $type &&
+                                        isset($definition[Tinebase_Config::TYPE_RECORD_CONTROLLER])) {
+                                    try {
+                                        $val = $definition[Tinebase_Config::TYPE_RECORD_CONTROLLER]::getInstance()
+                                            ->get($val);
+                                    } catch(Exception $e) {
+                                        Tinebase_Exception::log($e);
+                                    }
+                                }
                                 $configRegistryItem = new Tinebase_Config_Struct(array(
-                                    'value' => $config->{$name},
+                                    'value' => $val,
                                     'definition' => new Tinebase_Config_Struct($definition),
                                 ), null, null, array(
                                     'value' => array('type' => $definition['type']),

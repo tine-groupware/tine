@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -75,18 +75,83 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * @var string
      */
     const ACCOUNT_STATUS_BLOCKED  = 'blocked';
-    
+
     /**
-     * name of fields containing datetime or or an array of datetime
-     * information
+     * key in $_validators/$_properties array for the filed which
+     * represents the identifier
      *
-     * @var array list of datetime fields
+     * @var string
      */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-    );
+    protected $_identifier = 'accountId';
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
+     */
+    protected static $_modelConfiguration = [
+        'recordName'        => 'User',
+        'recordsName'       => 'Users', // ngettext('User', 'Users', n)
+        'hasRelations'      => false,
+        'hasCustomFields'   => false,
+        'hasNotes'          => false,
+        'hasTags'           => false,
+        'hasXProps'         => true,
+        'modlogActive'      => true,
+        'hasAttachments'    => false,
+        'createModule'      => false,
+        'exposeHttpApi'     => false,
+        'exposeJsonApi'     => false,
+
+        'titleProperty'     => 'accountDisplayName',
+        'appName'           => 'Tinebase',
+        'modelName'         => 'User',
+        'idProperty'        => 'accountId',
+
+        'filterModel'       => [],
+
+        'fields'            => [
+            'accountDisplayName'            => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'accountLastName'               => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'accountFirstName'              => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'accountEmailAddress'           => [
+                'type'                          => 'string',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'inputFilters'                  => [
+                    Zend_Filter_StringTrim::class => null,
+                    Zend_Filter_StringToLower::class => null,
+                ],
+            ],
+            'accountFullName'               => [
+                'type'                          => 'string',
+                'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+            ],
+            'contact_id'                    => [
+                //'type'                          => 'record',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+        ],
+    ];
 
     /**
      * if foreign Id fields should be resolved on search and get from json
@@ -101,50 +166,6 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     protected static $_resolveForeignIdFields = array(
         'Tinebase_Model_User'        => array('created_by', 'last_modified_by')
     );
-    
-    /**
-     * list of zend inputfilter
-     * 
-     * this filter get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_filters = array(
-        'accountId'             => 'StringTrim',
-        //'accountLoginName'    => 'StringTrim',
-        'accountDisplayName'    => 'StringTrim',
-        'accountLastName'       => 'StringTrim',
-        'accountFirstName'      => 'StringTrim',
-        'accountFullName'       => 'StringTrim',
-    );
-    
-    /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        'accountId'             => array('presence' => 'required'),
-        //'accountLoginName'    => array('presence' => 'required'),
-        'accountDisplayName'    => array('presence' => 'required'),
-        'accountLastName'       => array('presence' => 'required'),
-        'accountFirstName'      => array('allowEmpty' => true),
-        'accountEmailAddress'   => array('allowEmpty' => true),
-        'accountFullName'       => array('presence' => 'required'),
-        'contact_id'            => array('allowEmpty' => true),
-        // @todo do we need this information in this model?
-        'created_by'            => array('allowEmpty' => true),
-        'creation_time'         => array('allowEmpty' => true),
-        'last_modified_by'      => array('allowEmpty' => true),
-        'last_modified_time'    => array('allowEmpty' => true),
-        'is_deleted'            => array('allowEmpty' => true),
-        'deleted_time'          => array('allowEmpty' => true),
-        'deleted_by'            => array('allowEmpty' => true),
-        'seq'                   => array('allowEmpty' => true),
-        'xprops'                => array('allowEmpty' => true),
-    );
 
     protected static $_replicable = true;
 
@@ -156,7 +177,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      * 
      * @todo need to discuss if this is the right place to do this. perhaps the client should send the fullname (and displayname), too.
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         // always update accountDisplayName and accountFullName
         if (isset($_data['accountLastName'])) {
@@ -176,13 +197,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         parent::setFromArray($_data);
     }
     
-   /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */
-    protected $_identifier = 'accountId';
+
     
     /**
      * check if current user has a given right for a given application
@@ -294,60 +309,6 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     }
     
     /**
-     * return all container, which the user has the requested right for
-     *
-     * used to get a list of all containers accesssible by the current user
-     * 
-     * @param string $_application the application name
-     * @param int $_right the required right
-     * @param   bool   $_onlyIds return only ids
-     * @return Tinebase_Record_RecordSet|array
-     * @todo write test for that
-     */
-    public function getContainerByACL($_application, $_right, $_onlyIds = FALSE)
-    {
-        $container = Tinebase_Container::getInstance();
-        
-        $result = $container->getContainerByACL($this->accountId, $_application, $_right, $_onlyIds);
-        
-        return $result;
-    }
-
-    /**
-     * return all personal container of the current user
-     *
-     * used to get a list of all personal containers accesssible by the current user
-     * 
-     * @param string $_application the application name
-     * @return Tinebase_Record_RecordSet
-     * @todo write test for that
-     */
-    public function getPersonalContainer($_application, $_owner, $_grant)
-    {
-        $container = Tinebase_Container::getInstance();
-        
-        $result = $container->getPersonalContainer($this, $_application, $_owner, $_grant);
-        
-        return $result;
-    }
-    
-    /**
-     * get shared containers
-     * 
-     * @param string|Tinebase_Model_Application $_application
-     * @param array|string $_grant
-     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
-     */
-    public function getSharedContainer($_application, $_grant)
-    {
-        $container = Tinebase_Container::getInstance();
-        
-        $result = $container->getSharedContainer($this, $_application, $_grant);
-        
-        return $result;
-    }
-    
-    /**
      * get containers of other users
      * 
      * @param string|Tinebase_Model_Application $_application
@@ -380,7 +341,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
             return true;
         }
 
-        if ($_containerId instanceof Tinebase_Record_Abstract) {
+        if ($_containerId instanceof Tinebase_Record_Interface) {
             $aclModel = get_class($_containerId);
             if (! in_array($aclModel, array('Tinebase_Model_Container', 'Tinebase_Model_Tree_Node'))) {
                 // fall back to param

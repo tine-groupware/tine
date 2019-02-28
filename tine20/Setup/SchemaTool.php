@@ -44,12 +44,12 @@ class Setup_SchemaTool
                         Tinebase_Backend_Sql_Adapter_Pdo_Mysql::supportsUTF8MB4($db)) {
                     $dbParams['defaultTableOptions'] = [
                         'charset' => 'utf8mb4',
-                        'collate' => 'utf8mb4_general_ci'
+                        'collate' => 'utf8mb4_unicode_ci'
                     ];
                 } else {
                     $dbParams['defaultTableOptions'] = [
                         'charset' => 'utf8',
-                        'collate' => 'utf8_general_ci'
+                        'collate' => 'utf8_unicode_ci'
                     ];
                 }
             }
@@ -64,41 +64,30 @@ class Setup_SchemaTool
     /**
      * get orm config
      *
-     * @param      string $appName
-     * @param null|array  $modelNames
      * @return \Doctrine\ORM\Configuration
      * @throws Setup_Exception
      */
-    public static function getConfig($appName, $modelNames = null)
+    public static function getConfig()
     {
         $mappingDriver = new Tinebase_Record_DoctrineMappingDriver();
-
-        if (! $modelNames) {
-            $modelNames = array();
-
-            /** @var Tinebase_Record_Abstract $modelName */
-            foreach($mappingDriver->getAllClassNames() as $modelName) {
-                $modelConfig = $modelName::getConfiguration();
-
-                if ($modelConfig->getAppName() == $appName) {
-                    $modelNames[] = $modelName;
-                }
-            }
-        }
-
-        $tableNames = array();
-        foreach ($modelNames as $modelName) {
-            $modelConfig = $modelName::getConfiguration();
-            if (! $mappingDriver->isTransient($modelName)) {
-                throw new Setup_Exception('Model not yet doctrine2 ready');
-            }
-            $tableNames[] = SQL_TABLE_PREFIX . Tinebase_Helper::array_value('name', $modelConfig->getTable());
-        }
+        $tableNames = [];
 
         $config = self::getBasicConfig();
         $config->setMetadataDriverImpl($mappingDriver);
 
-        $config->setFilterSchemaAssetsExpression('/'. implode('|',$tableNames) . '/');
+        try {
+            /** @var Tinebase_Record_Interface $modelName */
+            foreach ($mappingDriver->getAllClassNames() as $modelName) {
+                if (null !== ($modelConfig = $modelName::getConfiguration()) &&
+                    null !== ($tblName = $modelConfig->getTableName())) {
+                    $tableNames[] = SQL_TABLE_PREFIX . $tblName;
+                }
+            }
+
+            $config->setFilterSchemaAssetsExpression('/' . implode('|', $tableNames) . '/');
+        } catch (Zend_Db_Exception $zde) {
+            $config->setFilterSchemaAssetsExpression('/' . SQL_TABLE_PREFIX . '/');
+        }
 
         return $config;
     }
@@ -116,9 +105,9 @@ class Setup_SchemaTool
         return $config;
     }
 
-    public static function getEntityManager($appName, $modelNames=null)
+    public static function getEntityManager()
     {
-        $em = EntityManager::create(self::getDBParams(), self::getConfig($appName, $modelNames));
+        $em = EntityManager::create(self::getDBParams(), self::getConfig());
 
         // needed to prevent runtime reflection that needs private properties ...
         $em->getMetadataFactory()->setReflectionService(new StaticReflectionService());
@@ -126,9 +115,9 @@ class Setup_SchemaTool
         return $em;
     }
 
-    public static function getMetadata($appName, $modelNames=null)
+    public static function getMetadata(array $modelNames)
     {
-        $em = self::getEntityManager($appName, $modelNames);
+        $em = self::getEntityManager();
 
         $classes = array();
         foreach($modelNames as $modelName) {
@@ -138,20 +127,34 @@ class Setup_SchemaTool
         return $classes;
     }
 
-    public static function createSchema($appName, $modelNames=null)
+    public static function createSchema(array $modelNames)
     {
-        $em = self::getEntityManager($appName, $modelNames);
+        $em = self::getEntityManager();
         $tool = new SchemaTool($em);
-        $classes = self::getMetadata($appName, $modelNames);
+        $classes = self::getMetadata($modelNames);
 
         $tool->createSchema($classes);
     }
 
-    public static function updateSchema($appName, $modelNames=null)
+    public static function updateSchema(array $modelNames)
     {
-        $em = self::getEntityManager($appName, $modelNames);
+        $em = self::getEntityManager();
         $tool = new SchemaTool($em);
-        $classes = self::getMetadata($appName, $modelNames);
+        $classes = self::getMetadata($modelNames);
+
+        $tool->updateSchema($classes, true);
+    }
+
+    public static function updateAllSchema()
+    {
+        $em = self::getEntityManager();
+        $tool = new SchemaTool($em);
+        $classes = [];
+
+        $mappingDriver = new Tinebase_Record_DoctrineMappingDriver();
+        foreach($mappingDriver->getAllClassNames() as $modelName) {
+            $classes[] = $em->getClassMetadata($modelName);
+        }
 
         $tool->updateSchema($classes, true);
     }

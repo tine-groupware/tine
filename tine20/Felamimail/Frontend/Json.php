@@ -267,23 +267,27 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * file messages into Filemanager
      *
      * @param array $filterData
-     * @param string $targetApp
-     * @param string $targetPath
+     * @param array $locations
      * @return array
      */
-    public function fileMessages($filterData, $targetApp, $targetPath)
+    public function fileMessages($filterData, $locations)
     {
         $this->_longRunningRequest();
 
         $filter = $this->_decodeFilter($filterData, 'Felamimail_Model_MessageFilter');
-        $result = Felamimail_Controller_Message_File::getInstance()->fileMessages($filter, $targetApp, $targetPath);
+
+        $result = Felamimail_Controller_Message_File::getInstance()->fileMessages($filter, new Tinebase_Record_RecordSet(
+            Felamimail_Model_MessageFileLocation::class,
+            $locations,
+            true
+        ));
 
         return array(
             'totalcount' => ($result === false) ? 0 : $result,
-            'success'    => ($result !== false),
+            'success'    => ($result > 0),
         );
     }
-    
+
     /**
      * add given flags to given messages
      *
@@ -645,6 +649,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * returns eml node converted to Felamimail message
+     *
      * @param $nodeId
      * @return array
      */
@@ -652,5 +658,27 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $message = Felamimail_Controller_Message::getInstance()->getMessageFromNode($nodeId);
         return $this->_recordToJson($message);
+    }
+
+    /**
+     * fetch suggestions for filing places for given message / recipients / ...
+     *
+     * @param array $message
+     * @return array
+     */
+    public function getFileSuggestions($message)
+    {
+        $suggestions = Felamimail_Controller_Message_File::getInstance()->getFileSuggestions(
+            new Felamimail_Model_Message($message), true
+        );
+        $result = [];
+        foreach ($suggestions as $suggestion) {
+            $result[] = [
+                'type' => $suggestion->type,
+                'model' => $suggestion->model,
+                'record' => $this->_recordToJson($suggestion->record),
+            ];
+        }
+        return $result;
     }
 }

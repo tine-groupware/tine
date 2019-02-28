@@ -44,11 +44,10 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
 
     /**
      * try to add an account
-     *
      */
     public function testAddContainer()
     {
-        $container = $this->_backend->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
+        $container = $this->_backend->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL, 'Contact');
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
         $this->assertEquals('Addressbook_Model_Contact', $container['model']);
@@ -56,14 +55,20 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
 
         Tinebase_Container::getInstance()->deleteContainer($container['id']);
     }
-        
+
+    public function testGetContainer()
+    {
+        $containers = $this->_backend->getContainer('Addressbook_Model_Contact', Tinebase_Model_Container::TYPE_SHARED, false);
+        self::assertGreaterThanOrEqual(1, count($containers), 'should find at least INTERNAL CONTACTS');
+    }
+
     /**
      * try to add an account
      *
      */
     public function testDeleteContainer()
     {
-        $container = $this->_backend->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
+        $container = $this->_backend->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL, 'Contact');
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
         $this->assertEquals('Addressbook_Model_Contact', $container['model']);
@@ -81,7 +86,7 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
      */
     public function testRenameContainer()
     {
-        $container = $this->_backend->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
+        $container = $this->_backend->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL, 'Contact');
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
 
@@ -104,7 +109,7 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
      */
     public function testGetContainerGrants()
     {
-        $container = $this->_backend->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
+        $container = $this->_backend->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL, 'Contact');
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
 
@@ -128,7 +133,7 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
      */
     public function testSetContainerGrants()
     {
-        $container = $this->_backend->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL);
+        $container = $this->_backend->addContainer('Addressbook', 'Tine 2.0 Unittest', Tinebase_Model_Container::TYPE_PERSONAL, 'Contact');
 
         $this->assertEquals('Tine 2.0 Unittest', $container['name']);
         
@@ -165,7 +170,7 @@ class Tinebase_Frontend_Json_ContainerTest extends TestCase
      */
     public function testSearchContainers()
     {
-        $container = $this->_backend->addContainer('Addressbook', 'Winter', Tinebase_Model_Container::TYPE_PERSONAL);
+        $container = $this->_backend->addContainer('Addressbook', 'Winter', Tinebase_Model_Container::TYPE_PERSONAL, 'Contact');
         $this->assertEquals('Winter', $container['name']);
         
         $filter = array(array(

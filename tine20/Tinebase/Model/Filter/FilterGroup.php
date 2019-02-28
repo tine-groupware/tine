@@ -31,7 +31,7 @@
  *     protected $_applicationName = 'myapp';
  *     protected $_filterModel = array (
  *         'name'       => array('filter' => 'Tinebase_Model_Filter_Text'),
- *         'container'  => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'myApp')),
+ *         'container'  => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('modelName' => 'myModel')),
  *         'created_by' => array('filter' => 'Tinebase_Model_Filter_User'),
  *         'some_id'    => array('filter' => 'Tinebase_Model_Filter_ForeignId', 'options' => array('filtergroup' => 'Someapp_Model_SomeFilter', 'controller' => 'Myapp_Controller_Some')),
  *         'custom'     => array('custom' => true),  // will be ignored and you must handle this filter your own!
@@ -217,7 +217,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     protected function _createFromModelConfiguration()
     {
         if ($this->_configuredModel) {
-            /** @var Tinebase_Record_Abstract $m */
+            /** @var Tinebase_Record_Interface $m */
             $m = $this->_configuredModel;
             $filterConfig = $m::getConfiguration()->getFilterModel();
 
@@ -598,7 +598,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 // special handling for foreign record filtering: creates a subfilter with CONDITION_AND
                 // NOTE: maybe this should be fixed in the client / this is just sanitizing here
                 // equals is also valid (for Tinebase_Model_Filter_ForeignId)
-                if (! in_array($data['operator'], [self::CONDITION_OR, self::CONDITION_AND, 'equals', 'in'])) {
+                // TODO this needs to go away!
+                if (! in_array($data['operator'], [self::CONDITION_OR, self::CONDITION_AND, 'equals', 'in', 'not', 'notin', 'notDefinedBy:AND'])) {
                     // add a sub-query filter
                     $data['value'] = [
                         ['field' => 'query', 'operator' => $data['operator'], 'value' => $data['value']]

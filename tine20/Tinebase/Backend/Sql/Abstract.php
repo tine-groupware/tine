@@ -46,6 +46,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     const FETCH_ALL         = 'fetch_all';
 
+    const MODEL_NAME        = 'modelName';
+    const TABLE_NAME        = 'tableName';
+    const TABLE_PREFIX      = 'tablePrefix';
+    const MODLOG_ACTIVE     = 'modlogActive';
+
     /**
      * backend type
      *
@@ -150,11 +155,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_db        = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
         $this->_dbCommand = Tinebase_Backend_Sql_Command::factory($this->_db);
         
-        $this->_modelName            = (isset($_options['modelName']) || array_key_exists('modelName', $_options))            ? $_options['modelName']    : $this->_modelName;
-        $this->_tableName            = (isset($_options['tableName']) || array_key_exists('tableName', $_options))            ? $_options['tableName']    : $this->_tableName;
+        $this->_modelName    = isset($_options[self::MODEL_NAME])    ? $_options[self::MODEL_NAME]    : $this->_modelName;
+        $this->_tableName    = isset($_options[self::TABLE_NAME])    ? $_options[self::TABLE_NAME]    : $this->_tableName;
         /** @noinspection PhpUndefinedFieldInspection */
-        $this->_tablePrefix          = (isset($_options['tablePrefix']) || array_key_exists('tablePrefix', $_options))          ? $_options['tablePrefix']  : $this->_db->table_prefix;
-        $this->_modlogActive         = (isset($_options['modlogActive']) || array_key_exists('modlogActive', $_options))         ? $_options['modlogActive'] : $this->_modlogActive;
+        $this->_tablePrefix  = isset($_options[self::TABLE_PREFIX])  ? $_options[self::TABLE_PREFIX]  : $this->_db->table_prefix;
+        $this->_modlogActive = isset($_options[self::MODLOG_ACTIVE]) ? $_options[self::MODLOG_ACTIVE] : $this->_modlogActive;
         
         foreach ($this->_additionalColumns as $name => $query) {
             $this->_additionalColumns[$name] = str_replace("{prefix}", $this->_tablePrefix, $query);
@@ -317,16 +322,15 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * converts raw data from adapter into a single record
      *
      * @param  array $_rawData
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
-    protected function _rawDataToRecord(array $_rawData)
+    protected function _rawDataToRecord(array &$_rawData)
     {
         $this->_explodeForeignValues($_rawData);
 
-        /** @var Tinebase_Record_Abstract $result */
-        $result = new $this->_modelName($_rawData, true);
-
-        $result->runConvertToRecord();
+        /** @var Tinebase_Record_Interface $result */
+        $result = new $this->_modelName(null, true);
+        $result->hydrateFromBackend($_rawData);
 
         return $result;
     }
@@ -338,8 +342,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected function _explodeForeignValues(array &$_data)
     {
-        foreach (array_keys($this->_foreignTables) as $field) {
-            $isSingleValue = ((isset($this->_foreignTables[$field]['singleValue']) || array_key_exists('singleValue', $this->_foreignTables[$field])) && $this->_foreignTables[$field]['singleValue']);
+        foreach ($this->_foreignTables as $field => $table) {
+            $isSingleValue = isset($table['singleValue']) && $table['singleValue'];
             if (! $isSingleValue) {
                 $_data[$field] = empty($_data[$field]) ? [] : explode(',', $_data[$field]);
             }
@@ -374,9 +378,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $this->_checkTracing($select);
         
-        $stmt = $this->_db->query($select);
+        $rawData = $this->_db->query($select)->fetchAll();
         
-        $resultSet = $this->_rawDataToRecordSet($stmt->fetchAll());
+        $resultSet = $this->_rawDataToRecordSet($rawData);
         $resultSet->addIndices(array($_property));
         
         return $resultSet;
@@ -388,19 +392,20 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param  array $_rawDatas of arrays
      * @return Tinebase_Record_RecordSet
      */
-    protected function _rawDataToRecordSet(array $_rawDatas)
+    protected function _rawDataToRecordSet(array &$_rawDatas)
     {
         if (! empty($this->_foreignTables)) {
-            foreach ($_rawDatas as &$data) {
-                $this->_explodeForeignValues($data);
+            foreach ($this->_foreignTables as $field => $table) {
+                $isSingleValue = isset($table['singleValue']) && $table['singleValue'];
+                if (!$isSingleValue) {
+                    foreach ($_rawDatas as &$data) {
+                        $this->_explodeForeignValues($data);
+                    }
+                    break;
+                }
             }
         }
-        $result = new Tinebase_Record_RecordSet($this->_modelName, $_rawDatas, true);
-
-        /** @var Tinebase_Record_Abstract $record */
-        foreach ($result as $record) {
-            $record->runConvertToRecord();
-        }
+        $result = new Tinebase_Record_RecordSetFast($this->_modelName, $_rawDatas);
 
         return $result;
     }
@@ -1498,7 +1503,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * appends foreign record (1:1 relation) to given record
      *
-     * @param Tinebase_Record_Abstract      $_record            Record to append the foreign record to
+     * @param Tinebase_Record_Interface     $_record            Record to append the foreign record to
      * @param string                        $_appendTo          Property in the record where to append the foreign record to
      * @param string                        $_recordKey         Property in the record where the foreign key value is in
      * @param string                        $_foreignKey        Key property in foreign table of the record to append
@@ -1516,7 +1521,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * appends foreign recordSet (1:n relation) to given record
      *
-     * @param Tinebase_Record_Abstract      $_record            Record to append the foreign records to
+     * @param Tinebase_Record_Interface     $_record            Record to append the foreign records to
      * @param string                        $_appendTo          Property in the record where to append the foreign records to
      * @param string                        $_recordKey         Property in the record where the foreign key value is in
      * @param string                        $_foreignKey        Key property in foreign table of the records to append

@@ -9,6 +9,8 @@
  
 Ext.namespace('Tine.Felamimail');
 
+require('./MessageFileButton');
+
 /**
  * Message grid panel
  * 
@@ -64,7 +66,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     filterSelectionDelete: true,
     // autoRefresh is done via onUpdateFolderStore
     autoRefreshInterval: false,
-    
+
+    // needed for refresh after file messages
+    listenMessageBus: true,
+
     /**
      * @private grid cfg
      */
@@ -301,16 +306,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls: 'action_move'
         });
 
-        this.action_fileRecord = new Ext.Action({
-            requiredGrant: 'readGrant',
-            allowMultiple: true,
-            text: this.app.i18n._('File Message'),
-            handler: this.onFileRecords,
-            disabled: true,
-            hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
-            iconCls: 'action_file',
-            scope: this
-        });
+        this.action_fileRecord = new Tine.Felamimail.MessageFileButton({});
 
         this.action_addAccount = new Ext.Action({
             text: this.app.i18n._('Add Account'),
@@ -1182,24 +1178,24 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Event} e
      */
     onKeyDown: function(e) {
-        if (e.ctrlKey) {
-            switch (e.getKey()) {
-                case e.N:
-                case e.M:
-                    this.onMessageCompose();
-                    e.preventDefault();
-                    break;
-                case e.R:
-                    this.onMessageReplyTo();
-                    e.preventDefault();
-                    break;
-                case e.L:
-                    this.onMessageForward();
-                    e.preventDefault();
-                    break;
-            }
+        switch (e.getKey()) {
+            case e.N:
+            case e.M:
+                this.onMessageCompose();
+                e.preventDefault();
+                break;
+            case e.R:
+                this.onMessageReplyTo();
+                e.preventDefault();
+                break;
+            case e.L:
+                this.onMessageForward();
+                e.preventDefault();
+                break;
         }
-        
+
+        // TODO add keys to "help" message box of generic grid onKeyDown()
+
         Tine.Felamimail.GridPanel.superclass.onKeyDown.call(this, e);
     },
     

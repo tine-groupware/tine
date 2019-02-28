@@ -138,7 +138,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     public function getDefaultAddressbook()
     {
-        return Tinebase_Container::getInstance()->getDefaultContainer($this->_applicationName, NULL, Addressbook_Preference::DEFAULTADDRESSBOOK);
+        return Tinebase_Container::getInstance()->getDefaultContainer($this->_modelName, NULL, Addressbook_Preference::DEFAULTADDRESSBOOK);
     }
     
     /**
@@ -590,6 +590,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
         /** @var Addressbook_Model_Contact $_record */
         /** @var Addressbook_Model_Contact $_oldRecord */
 
@@ -997,7 +999,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * * Addressbook_Controller_List::getInstance()->get() will check for ACLs
      * * Addressbook_Controller_ListRole::getInstance()->get() will check for ACLs
      *
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      * @return Tinebase_Record_RecordSet
      */
     public function generatePathForRecord($record)
@@ -1223,5 +1225,28 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     public function inspectGetUserByProperty(Tinebase_Model_User $_user)
     {
+    }
+
+    /**
+     * @param $email
+     * @return NULL|Tinebase_Record_Interface
+     */
+    public function getContactByEmail($email)
+    {
+        $contacts = $this->search(new Addressbook_Model_ContactFilter(array(
+            array(
+                'condition' => 'OR',
+                'filters' => array(
+                    array('field' => 'email', 'operator' => 'equals', 'value' => $email),
+                    array('field' => 'email_home', 'operator' => 'equals', 'value' => $email)
+                )
+            ),
+        )), new Tinebase_Model_Pagination(array(
+            'sort' => 'type', // prefer user over contact
+            'dir' => 'DESC',
+            'limit' => 1
+        )));
+
+        return $contacts->getFirstRecord();
     }
 }

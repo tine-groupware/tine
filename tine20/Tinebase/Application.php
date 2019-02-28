@@ -40,6 +40,7 @@ class Tinebase_Application
     const STATE_FILESYSTEM_ROOT_REVISION_SIZE = 'filesystemRootRevisionSize';
     const STATE_FILESYSTEM_ROOT_SIZE = 'filesystemRootSize';
     const STATE_REPLICATION_MASTER_ID = 'replicationMasterId';
+    const STATE_UPDATES = 'updates';
 
 
     /**
@@ -729,7 +730,7 @@ class Tinebase_Application
             $controllerClass = $app->name . '_Controller';
             if (!class_exists(($controllerClass))) {
                 try {
-                    $controllerInstance = Tinebase_Core::getApplicationInstance($app->name);
+                    $controllerInstance = Tinebase_Core::getApplicationInstance($app->name, '', true);
                 } catch(Tinebase_Exception_NotFound $tenf) {
                     continue;
                 }
@@ -755,7 +756,7 @@ class Tinebase_Application
      */
     public static function extractAppAndModel($modelOrApplication, $model = null)
     {
-        if (! $modelOrApplication instanceof Tinebase_Model_Application && $modelOrApplication instanceof Tinebase_Record_Abstract) {
+        if (! $modelOrApplication instanceof Tinebase_Model_Application && $modelOrApplication instanceof Tinebase_Record_Interface) {
             $modelOrApplication = get_class($modelOrApplication);
         }
 

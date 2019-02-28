@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -128,9 +128,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if ($exception === false) {
             try {
                 Tinebase_Core::initFramework();
-            } catch (Exception $exception) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
+            } catch (Throwable $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' .
+                    get_class($e) . ' ' . $e->getMessage());
+                $exception = $e;
             }
         }
         
@@ -173,13 +174,16 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         try {
             $output = $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
             $output = (string) $output;
-        } catch (ErrorException $ee) {
+        } catch (Throwable $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' Got non-json response, last json error: ' . json_last_error_msg());
-                foreach ($response as $r) {
-                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' response: ' . print_r($r->getResult(), true));
+                    . ' Got non-json response, last json error: ' . json_last_error_msg() . ' ' . get_class($e) . ' ' .
+                    $e->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    foreach ($response as $r) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' response: ' . print_r($r->getResult(), true));
+                    }
                 }
             }
 
@@ -193,8 +197,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             try {
                 $output = $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
                 $output = (string) $output;
-            } catch (ErrorException $eee) {
-                $exception = new Zend_Server_Exception('Got error during json encode: ' . json_last_error_msg());
+            } catch (Throwable $e) {
+                $exception = new Zend_Server_Exception('Got error during json encode: ' . json_last_error_msg() . ' ' .
+                    get_class($e) . ' ' . $e->getMessage());
                 $output = $this->_handleException($this->_request, $exception);
             }
         }
@@ -360,7 +365,13 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         try {
             $method = $request->getMethod();
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' is JSON request. method: ' . $method);
-            
+
+            if ($method != 'Tinebase.login' && isset($_SERVER['HTTP_X_TINE20_CLIENTASSETHASH']) && $_SERVER['HTTP_X_TINE20_CLIENTASSETHASH'] &&
+                $_SERVER['HTTP_X_TINE20_CLIENTASSETHASH'] != Tinebase_Frontend_Http_SinglePageApplication::getAssetHash()) {
+                throw new Tinebase_Exception_ClientOutdated();
+            }
+
+
             $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
             $this->_checkJsonKey($method, $jsonKey);
             
@@ -381,7 +392,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
             return $response;
             
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             return $this->_handleException($request, $exception);
         }
     }
@@ -390,12 +401,20 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      * handle exceptions
      * 
      * @param Zend_Json_Server_Request_Http $request
-     * @param Exception $exception
+     * @param Throwable $exception
      * @return Zend_Json_Server_Response
      */
     protected function _handleException($request, $exception)
     {
-        $server = self::_getServer();
+        $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
+        if ($exception instanceof Tinebase_Exception_ProgramFlow) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' .
+                $exception->getMessage());
+        } else {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' .
+                $exception->getMessage());
+            Tinebase_Exception::log($exception, $suppressTrace);
+        }
         
         $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
         $exceptionData['message'] = htmlentities($exception->getMessage(), ENT_COMPAT, 'UTF-8');
@@ -405,16 +424,13 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             $exceptionData['appName'] = $exception->getAppName();
             $exceptionData['title'] = $exception->getTitle();
         }
-        
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . get_class($exception) . ' -> ' . $exception->getMessage());
-        
-        $suppressTrace = Tinebase_Core::getConfig()->suppressExceptionTraces;
+
         if ($suppressTrace !== TRUE) {
             $exceptionData['trace'] = Tinebase_Exception::getTraceAsArray($exception);
         }
-        
-        Tinebase_Exception::log($exception, $suppressTrace);
-        
+
+
+        $server = self::_getServer();
         $server->fault($exceptionData['message'], $exceptionData['code'], $exceptionData);
         
         $response = $server->getResponse();

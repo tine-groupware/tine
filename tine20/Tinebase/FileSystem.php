@@ -648,7 +648,7 @@ class Tinebase_FileSystem implements
     protected function _updateFileObject(Tinebase_Model_Tree_Node $_parentNode, $_id, $_hash, $_hashFile = null, $_avResult = null)
     {
         /** @var Tinebase_Model_Tree_FileObject $currentFileObject */
-        $currentFileObject = $_id instanceof Tinebase_Record_Abstract ? $_id : $this->_fileObjectBackend->get($_id);
+        $currentFileObject = $_id instanceof Tinebase_Record_Interface ? $_id : $this->_fileObjectBackend->get($_id);
 
         if (! $_hash) {
             // use existing hash from file object
@@ -1764,6 +1764,10 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                 }
             }
 
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Tinebase_Event_Observer_DeleteFileNode(array(
+               'observable' => $node
+            )));
+
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
         } finally {
@@ -2780,7 +2784,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * check if the given user user has a certain grant
      *
      * @param   string|Tinebase_Model_User   $_accountId
-     * @param   int|Tinebase_Record_Abstract $_containerId
+     * @param   int|Tinebase_Record_Interface $_containerId
      * @param   array|string                 $_grant
      * @return  boolean
      */
@@ -2877,7 +2881,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
                     /* $_condition = */ '',
                     /* $_options */ array(
                     'ignoreAcl' => $_ignoreACL,
-                    'user' => $_accountId instanceof Tinebase_Record_Abstract
+                    'user' => $_accountId instanceof Tinebase_Record_Interface
                         ? $_accountId->getId()
                         : $_accountId
                 ));
@@ -2939,7 +2943,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
             /* $_condition = */ '',
             /* $_options */ array(
                 'ignoreAcl' => $_ignoreACL,
-                'user' => $_accountId instanceof Tinebase_Record_Abstract
+                'user' => $_accountId instanceof Tinebase_Record_Interface
                     ? $_accountId->getId()
                     : $_accountId
             )
@@ -3036,7 +3040,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * @param   string|Tinebase_Record_Interface $recordClass
      * @param   string|Tinebase_Model_User       $accountId use current user if omitted
      * @param   string                           $defaultContainerPreferenceName
-     * @return  Tinebase_Record_Abstract
+     * @return  Tinebase_Record_Interface
      */
     public function getDefaultContainer($recordClass, $accountId = null, $defaultContainerPreferenceName = null)
     {
@@ -3048,7 +3052,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
      * get grants assigned to one account of one container
      *
      * @param   string|Tinebase_Model_User          $_accountId
-     * @param   int|Tinebase_Record_Abstract        $_containerId
+     * @param   int|Tinebase_Record_Interface        $_containerId
      * @param   string                              $_grantModel
      * @return Tinebase_Model_Grants
      *
@@ -3102,7 +3106,7 @@ if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debu
     /**
      * get all grants assigned to this container
      *
-     * @param   int|Tinebase_Record_Abstract $_containerId
+     * @param   int|Tinebase_Record_Interface $_containerId
      * @param   bool                         $_ignoreAcl
      * @param   string                       $_grantModel
      * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants

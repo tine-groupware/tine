@@ -80,7 +80,7 @@ class Addressbook_JsonTest extends TestCase
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'),
-            'Addressbook',
+            Addressbook_Model_Contact::class,
             Zend_Registry::get('currentAccount'),
             Tinebase_Model_Grants::GRANT_EDIT
         );
@@ -167,6 +167,43 @@ class Addressbook_JsonTest extends TestCase
         $contacts = $this->_uit->searchContacts($filter, $paging);
 
         $this->assertGreaterThan(0, $contacts['totalcount']);
+
+        /*
+        $contactsById = [];
+        foreach ($contacts['results'] as $data) {
+            $contactsById[$data['id']] = $data;
+        }
+        $records = Addressbook_Controller_Contact::getInstance()->getMultiple(array_keys($contactsById));
+
+        Addressbook_Frontend_Json::resolveImages($records);
+        if (true === Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_SEARCH_PATH)) {
+            $pathController = Tinebase_Record_Path::getInstance();
+            foreach ($records as $record) {
+                $record->paths = $pathController->getPathsForRecord($record);
+                $pathController->cutTailAfterRecord($record, $record->paths);
+            }
+        }
+        $converter = new Tinebase_Convert_Json();
+        $data = [];
+        foreach ($converter->fromTine20RecordSet($records) as $a) {
+
+            // fix legacy bugs
+            if (array_key_exists('cat_id', $a)) {
+                unset($a['cat_id']);
+            }
+            if (array_key_exists('label', $a)) {
+                unset($a['label']);
+            }
+            if (array_key_exists('private', $a)) {
+                unset($a['private']);
+            }
+            $data[$a['id']] = $a;
+        }
+
+        $id = $contacts['results'][0]['id'];
+        static::assertEquals($data[$id], $contactsById[$id]);
+        static::assertEquals($data, $contactsById);
+        */
     }
 
     /**
@@ -485,7 +522,8 @@ class Addressbook_JsonTest extends TestCase
             'sort' => array('note_type_id', 'creation_time')
         ));
         $this->assertEquals($_changedNoteNumber, $history['totalcount'], print_r($history, TRUE));
-        $changedNote = $history['results'][$_changedNoteNumber - 1];
+        $changedNote = preg_replace('/\s*GDPR_DataProvenance \([^)]+\)/', '',
+            $history['results'][$_changedNoteNumber - 1]);
         foreach ((array) $_expectedText as $text) {
             $this->assertContains($text, $changedNote['note'], print_r($changedNote, TRUE));
         }
@@ -1711,13 +1749,15 @@ class Addressbook_JsonTest extends TestCase
         $contact = $this->_addContact();
         try {
             $this->_addContact($contact['org_name'], $_duplicateCheck);
-            $this->assertFalse($_duplicateCheck, 'duplicate detection failed');
+            self::assertFalse($_duplicateCheck, 'duplicate detection failed');
         } catch (Tinebase_Exception_Duplicate $ted) {
-            $this->assertTrue($_duplicateCheck, 'force creation failed');
+            self::assertTrue($_duplicateCheck, 'force creation failed');
             $exceptionData = $ted->toArray();
-            $this->assertEquals(1, count($exceptionData['duplicates']), print_r($exceptionData['duplicates'], TRUE));
-            $this->assertEquals($contact['n_given'], $exceptionData['duplicates'][0]['n_given']);
-            $this->assertEquals($contact['org_name'], $exceptionData['duplicates'][0]['org_name']);
+            self::assertEquals(1, count($exceptionData['duplicates']), print_r($exceptionData['duplicates'], TRUE));
+            $duplicateContact = $exceptionData['duplicates'][0];
+            self::assertEquals($contact['n_given'], $duplicateContact['n_given']);
+            self::assertEquals($contact['org_name'], $duplicateContact['org_name']);
+            self::assertTrue(is_array($duplicateContact['container_id']), print_r($duplicateContact, true));
         }
     }
     

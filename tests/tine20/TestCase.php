@@ -322,11 +322,11 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
     /**
      * get personal container
      * 
-     * @param string $applicationName
+     * @param string $modelName
      * @param Tinebase_Model_User $user
      * @return Tinebase_Model_Container
      */
-    protected function _getPersonalContainer($applicationName, $user = null)
+    protected function _getPersonalContainer($modelName, $user = null)
     {
         if ($user === null) {
             $user = Tinebase_Core::getUser();
@@ -335,7 +335,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         /** @var Tinebase_Model_Container $personalContainer */
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             $user,
-            $applicationName, 
+            $modelName,
             $user,
             Tinebase_Model_Grants::GRANT_EDIT
         )->getFirstRecord();
@@ -536,7 +536,9 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
             }
             Tinebase_Acl_Roles::getInstance()->setRoleRights($roleId, $rights);
         }
-        
+
+        Tinebase_Acl_Roles::getInstance()->resetClassCache();
+
         return $roleRights;
     }
     
@@ -888,10 +890,15 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
 
         return strip_tags($zip->getFromName('word/document.xml'));
     }
-
+    
+    /**
+     * @param $app
+     * @param $model
+     *
+     * @todo coding style (-> _clear)
+     */
     protected function clear($app,$model)
     {
-
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($app . '_Model_' . $model , [
             ['field' => 'creation_time', 'operator' => 'within', 'value' => 'dayThis']
         ]);
@@ -909,5 +916,39 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
         ) {
             self::markTestSkipped('FIXME: Does not work with LDAP/AD backend');
         }
+    }
+
+    /**
+     * create node in personal container of test user
+     *
+     * @param $nodeName
+     * @param $filePath
+     * @return array
+     */
+    protected function _createTestNode($nodeName, $filePath)
+    {
+        $user = Tinebase_Core::getUser();
+        $container = Tinebase_FileSystem::getInstance()->getPersonalContainer(
+            $user,
+            Filemanager_Model_Node::class, $user
+        )->getFirstRecord();
+        $filepaths = ['/' . Tinebase_FileSystem::FOLDER_TYPE_PERSONAL
+            . '/' . $user->accountLoginName
+            . '/' . $container->name
+            . '/' . $nodeName
+        ];
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileIds = [Tinebase_TempFile::getInstance()->createTempFile($tempPath)];
+        self::assertTrue(is_int($strLen = file_put_contents(
+            $tempPath,
+            file_get_contents($filePath)
+        )));
+        $ffj = new Filemanager_Frontend_Json();
+        $result = $ffj->createNodes(
+            $filepaths,
+            Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds, true
+        );
+        self::assertEquals(1, count($result));
+        return $result;
     }
 }

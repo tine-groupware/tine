@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -72,7 +72,11 @@ class Tinebase_ApplicationTest extends TestCase
             'order'     => 99,
             'version'   => 1
         )));
-        
+
+        // make the record dirty
+        $application->version = 2;
+        $application->version = 1;
+
         $this->assertTrue($application instanceof Tinebase_Model_Application);
         
         return $application;
@@ -308,10 +312,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Crm_Model_LeadState::class,
                 Crm_Model_Lead::class,
             ),
-            'Events' => array(
-                Events_Model_Status::class,
-                Events_Model_Event::class,
-            ),
             'ExampleApplication' => array(
                 ExampleApplication_Model_ExampleRecord::class,
                 ExampleApplication_Model_Status::class,
@@ -323,6 +323,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Felamimail_Model_Sieve_ScriptPart::class,
                 Felamimail_Model_PreparedMessagePart::class,
                 Felamimail_Model_Message::class,
+                Felamimail_Model_MessageFileLocation::class,
+                Felamimail_Model_MessageFileSuggestion::class,
                 Felamimail_Model_Folder::class,
             ),
             'Filemanager' => array(
@@ -341,6 +343,8 @@ class Tinebase_ApplicationTest extends TestCase
                 HumanResources_Model_FreeDay::class,
                 HumanResources_Model_WorkingTime::class,
                 HumanResources_Model_FreeTime::class,
+                HumanResources_Model_DailyWTReport::class,
+                HumanResources_Model_Break::class,
             ),
             'Inventory' => array(
                 Inventory_Model_Status::class,
@@ -396,6 +400,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_AccessLog::class,
                 Tinebase_Model_AreaLockConfig::class,
                 Tinebase_Model_AreaLockState::class,
+                Tinebase_Model_BLConfig::class,
                 Tinebase_Model_ContainerContent::class,
                 Tinebase_Model_Application::class,
                 Tinebase_Model_Registration::class,
@@ -460,15 +465,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Voipmanager_Model_Asterisk_Context::class,
             ),
         );
-
-        // remove bogus apps
-        $remove = array('RequestTracker', 'Sipgate', 'Expressodriver', 'Expressomail');
-        foreach ($remove as $r)
-        {
-            if (($key = array_search($r, $appNames)) !== false) {
-                unset($appNames[$key]);
-            }
-        }
 
         // check all expected models are there
         foreach ($expectedData as $appName => $expectedModels) {

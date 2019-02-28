@@ -360,7 +360,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     * @param Felamimail_Model_Message $_message
     * @param string $_partId
     * @param array $_partData
-    * @return NULL|Tinebase_Record_Abstract
+    * @return NULL|Tinebase_Record_Interface
     */
     protected function _getForeignMessagePart(Felamimail_Model_Message $_message, $_partId, $_partData)
     {
@@ -397,7 +397,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * process foreign iMIP part
      * 
      * @param string $_application
-     * @param Tinebase_Record_Abstract $_iMIP
+     * @param Tinebase_Record_Interface $_iMIP
      * @return mixed
      * 
      * @todo use iMIP factory?
@@ -427,7 +427,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param string $_iMIPId
      * @throws Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
     public function getiMIP($_iMIPId)
     {
@@ -479,11 +479,49 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $part;
     }
 
+    /**
+     * @param Felamimail_Model_Message $message
+     * @return string
+     */
     public function getMessageRawContent(Felamimail_Model_Message $message)
     {
         $partId = null;
         $partStructure  = $message->getPartStructure(/* partId */ $partId, /* $_useMessageStructure */ FALSE);
         return $this->_getPartContent($message, $partId, $partStructure);
+    }
+
+    /**
+     * create node filename from message data
+     *
+     * @param $message
+     * @return string
+     */
+    public function getMessageNodeFilename($message)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' ' . print_r($message->toArray(), true));
+
+        // remove '/' and '\' from name as this might break paths
+        $subject = preg_replace('/[\/\\\]+/', '_', $message->subject);
+        // remove possible harmful utf-8 chars
+        // TODO should not be enabled by default (configurable?)
+        $subject = Tinebase_Helper::mbConvertTo($subject, 'ASCII');
+        $name = mb_substr($subject, 0, 245) . '_' . substr(md5($message->messageuid . $message->folder_id), 0, 10) . '.eml';
+
+        return $name;
+    }
+
+    /**
+     * @param Felamimail_Model_Message $message
+     * @return Tinebase_Model_TempFile
+     */
+    public function putRawMessageIntoTempfile($message)
+    {
+        $rawContent = Felamimail_Controller_Message::getInstance()->getMessageRawContent($message);
+        $tempFilename = Tinebase_TempFile::getInstance()->getTempPath();
+        file_put_contents($tempFilename, $rawContent);
+        $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempFilename);
+        return $tempFile;
     }
     
     /**
@@ -737,7 +775,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $messageId
      * @return string
      */
-    protected function _purifyBodyContent($_content, $messageId)
+    protected function _purifyBodyContent($_content, $messageId = null)
     {
         if (!defined('HTMLPURIFIER_PREFIX')) {
             define('HTMLPURIFIER_PREFIX', realpath(dirname(__FILE__) . '/../../library/HTMLPurifier'));
@@ -779,7 +817,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             'data' => true,
             'cid' => true
         ));
-        $config->set('Felamimail.messageId', $messageId);
+        if ($messageId) {
+            $config->set('Felamimail.messageId', $messageId);
+        }
         
         $this->_transformBodyTags($config);
         
@@ -830,6 +870,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get message headers
      * 
      * @param string|Felamimail_Model_Message $_messageId
+     * @param int $_partId
      * @param boolean $_readOnly
      * @return array
      * @throws Felamimail_Exception_IMAPMessageNotFound
@@ -1244,12 +1285,59 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $message = Felamimail_Model_Message::createFromMime($content);
         $message->setId($node->getId());
+        $message->body = $this->_purifyBodyContent($message->body);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Got Message: ' . print_r($message->toArray(), true));
 
-        // TODO use HTMLpurifier?
-
         return $message;
+    }
+
+    /**
+     * @param Felamimail_Model_Message $message
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getSenderContactsOfMessage($message)
+    {
+        $contactFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class,
+            [
+                ['field' => 'email_query', 'operator' => 'contains', 'value' => $message->from_email]
+            ]
+        );
+        return Addressbook_Controller_Contact::getInstance()->search($contactFilter);
+    }
+
+    /**
+     * @param Felamimail_Model_Message $message
+     * @return array|Tinebase_Record_RecordSet
+     */
+    public function getRecipientContactsOfMessage(Felamimail_Model_Message $message)
+    {
+        $emailAddresses = [];
+        // fetch and sanitize email addresses
+        foreach (['to', 'cc', 'bcc'] as $type) {
+            if (isset($message->{$type})) {
+                foreach ($message->{$type} as $recipient) {
+                    $converted = Felamimail_Message::convertAddresses($recipient);
+                    $emailAddresses = array_merge($emailAddresses, $converted);
+                }
+            }
+        }
+        $emailAddressesFiltered = array_map(function($address) {
+            return $address['email'];
+        }, $emailAddresses);
+
+        $contactFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Addressbook_Model_Contact::class, [
+            [
+                'condition' => 'OR',
+                'filters' => [
+                    ['field' => 'email', 'operator' => 'in', 'value' => $emailAddressesFiltered],
+                    ['field' => 'email_home', 'operator' => 'in', 'value' => $emailAddressesFiltered],
+                ]
+            ]
+        ]);
+        return Addressbook_Controller_Contact::getInstance()->search($contactFilter);
     }
 }

@@ -26,7 +26,7 @@ interface Tinebase_Container_Interface
      * check if the given user user has a certain grant
      *
      * @param   string|Tinebase_Model_User          $_accountId
-     * @param   int|Tinebase_Record_Abstract        $_containerId
+     * @param   int|Tinebase_Record_Interface        $_containerId
      * @param   array|string                        $_grant
      * @return  boolean
      */
@@ -48,7 +48,7 @@ interface Tinebase_Container_Interface
      * returns the shared container for a given application accessible by the current user
      *
      * @param   string|Tinebase_Model_User          $_accountId
-     * @param   string|Tinebase_Model_Application   $recordClass
+     * @param   string|Tinebase_Record_Interface    $recordClass
      * @param   array|string                        $_grant
      * @param   bool                                $_ignoreACL
      * @param   bool                                $_andGrants
@@ -93,7 +93,7 @@ interface Tinebase_Container_Interface
      * @param   string|Tinebase_Record_Interface $recordClass
      * @param   string|Tinebase_Model_User       $accountId use current user if omitted
      * @param   string                           $defaultContainerPreferenceName
-     * @return  Tinebase_Record_Abstract
+     * @return  Tinebase_Record_Interface
      */
     public function getDefaultContainer($recordClass, $accountId = NULL, $defaultContainerPreferenceName = NULL);
 }

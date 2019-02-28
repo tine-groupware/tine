@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -108,22 +108,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         return $ret;
     }
-    
-    /**
-     * returns the default model or null if it does not exist
-     *
-     * @return string
-     */
-    public function getDefaultModel()
-    {
-        if (is_string($this->_defaultModel)) {
-            return $this->_defaultModel;
-        }
-        if ($this->_configuredModels && is_array($this->_configuredModels) && count($this->_configuredModels) > 0) {
-            return $this->_configuredModels[0];
-        }
-        return NULL;
-    }
 
     /**
      * Return a single record
@@ -193,7 +177,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param string|array                        $_paging json encoded / array
      * @param Tinebase_Controller_SearchInterface $_controller the record controller
      * @param string                              $_filterModel the class name of the filter model to use
-     * @param bool|array                          $_getRelations
+     * @param bool|array|Tinebase_Record_Expander $_getRelations
      * @param string                              $_totalCountMethod
      * @return array
      */
@@ -309,7 +293,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * creates recordsets for depedent records or records instead of arrays for records on record fields
      * and sets timezone of these records to utc
      *
-     * @param Tinebase_Record_Abstract $record
+     * @param Tinebase_Record_Interface $record
      */
     protected function _dependentRecordsFromJson(&$record)
     {
@@ -390,7 +374,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $_id record id
      * @param array  $_data key/value pairs with fields to update
      * @param Tinebase_Controller_Record_Interface $_controller
-     * @return Tinebase_Record_Abstract record
+     * @return Tinebase_Record_Interface record
      */
     protected function _updateProperties($_id, $_data, Tinebase_Controller_Record_Interface $_controller)
     {
@@ -497,7 +481,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     /**
      * returns multiple records prepared for json transport
      *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data

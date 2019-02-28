@@ -153,7 +153,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     public function getEmail($event=null)
     {
         $resolvedUser = $this->getResolvedUser($event);
-        if (! $resolvedUser instanceof Tinebase_Record_Abstract) {
+        if (! $resolvedUser instanceof Tinebase_Record_Interface) {
             return '';
         }
         
@@ -193,11 +193,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
 
         if (isset ($typeMap[$this->user_type])) {
             $type = $typeMap[$this->user_type];
-            $id = $this->user_id instanceof Tinebase_Record_Abstract ? $this->user_id->getId() : $this->user_id;
+            $id = $this->user_id instanceof Tinebase_Record_Interface ? $this->user_id->getId() : $this->user_id;
 
             $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications(
                 Tinebase_Helper::array_value(0, explode('_', $type)),
-                $this->user_id instanceof Tinebase_Record_Abstract ? $this->user_id->getId() : $this->user_id,
+                $this->user_id instanceof Tinebase_Record_Interface ? $this->user_id->getId() : $this->user_id,
                 $type,
                 'Sql',
                 $this->creation_time
@@ -240,7 +240,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     public function getName()
     {
         $resolvedUser = $this->getResolvedUser(null, false);
-        if (! $resolvedUser instanceof Tinebase_Record_Abstract) {
+        if (! $resolvedUser instanceof Tinebase_Record_Interface) {
             Tinebase_Translation::getTranslation('Calendar');
             return Tinebase_Translation::getTranslation('Calendar')->_('unknown');
         }
@@ -292,7 +292,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     /**
      * returns the resolved user_id
      * 
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
      */
     public function getResolvedUser($event = null, $resolveDisplayContainer = true)
@@ -355,7 +355,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * @param array $_data            the new data to set
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         if (isset($_data['displaycontainer_id']) && is_array($_data['displaycontainer_id'])) {
             $_data['displaycontainer_id'] = $_data['displaycontainer_id']['id'];
@@ -586,7 +586,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     * @param  array $_attenderData array with email, firstname and lastname (if available)
     * @param  boolean $_implicitAddMissingContacts
     * @return Addressbook_Model_Contact
-    * 
+    * @throws Tinebase_Exception_InvalidArgument
+    *
     * @todo filter by fn if multiple matches
     */
     public static function resolveEmailToContact($_attenderData, $_implicitAddMissingContacts = TRUE, $defaultData = [])
@@ -600,27 +601,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $adbController = Addressbook_Controller_Contact::getInstance();
         $oldAdbAcl = $adbController->doContainerACLChecks(false);
         try {
-            $contacts = $adbController->search(new Addressbook_Model_ContactFilter(array(
-                array(
-                    'condition' => 'OR',
-                    'filters' => array(
-                        array('field' => 'email', 'operator' => 'equals', 'value' => $email),
-                        array('field' => 'email_home', 'operator' => 'equals', 'value' => $email)
-                    )
-                ),
-            )), new Tinebase_Model_Pagination(array(
-                'sort' => 'type', // prefer user over contact
-                'dir' => 'DESC',
-                'limit' => 1
-            )));
+            $contact = $adbController->getContactByEmail($email);
         } finally {
             $adbController->doContainerACLChecks($oldAdbAcl);
         }
         
-        if (count($contacts) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . " Found # of contacts " . count($contacts));
-            $result = $contacts->getFirstRecord();
+        if ($contact) {
+            $result = $contact;
             $result->resolveAttenderCleanUp();
         
         } else if ($_implicitAddMissingContacts === TRUE) {
@@ -669,7 +656,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         // flatten user_ids (not groups for group/list handling bellow)
         foreach($_attendee as $attendee) {
-            if ($attendee->user_type != Calendar_Model_Attender::USERTYPE_GROUP && $attendee->user_id instanceof Tinebase_Record_Abstract) {
+            if ($attendee->user_type != Calendar_Model_Attender::USERTYPE_GROUP && $attendee->user_id instanceof Tinebase_Record_Interface) {
                 $attendee->user_id = $attendee->user_id->getId();
             }
         }
@@ -763,12 +750,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             return null;
         }
         
-        $attendeeUserId = $_attendee->user_id instanceof Tinebase_Record_Abstract
+        $attendeeUserId = $_attendee->user_id instanceof Tinebase_Record_Interface
             ? $_attendee->user_id->getId()
             : $_attendee->user_id;
         
         foreach ($_attendeesSet as $attendeeFromSet) {
-            $attendeeFromSetUserId = $attendeeFromSet->user_id instanceof Tinebase_Record_Abstract 
+            $attendeeFromSetUserId = $attendeeFromSet->user_id instanceof Tinebase_Record_Interface
                 ? $attendeeFromSet->user_id->getId()
                 : $attendeeFromSet->user_id;
             
@@ -849,7 +836,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             foreach ($eventAttendee as $attendee) {
                 $user     = $attendee->user_id;
                 $userType = $attendee->user_type;
-                $userId   = $user instanceof Tinebase_Record_Abstract
+                $userId   = $user instanceof Tinebase_Record_Interface
                     ? $user->getId()
                     : $user;
                 
@@ -858,7 +845,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     continue;
                 }
                 
-                if ($user instanceof Tinebase_Record_Abstract) {
+                if ($user instanceof Tinebase_Record_Interface) {
                     // can fill cache with model from $attendee
                     self::$_resolvedAttendeesCache[$userType][$userId] = $user;
                     
@@ -968,7 +955,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                         $foundDisplayContainers = true;
                 }
                 
-                if ($attendee->user_id instanceof Tinebase_Record_Abstract) {
+                if ($attendee->user_id instanceof Tinebase_Record_Interface) {
                     // already resolved
                     $allAttendees->addRecord($attendee);
                     
@@ -1017,7 +1004,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $eventAttendee = $eventAttendees instanceof Tinebase_Record_RecordSet ? array($eventAttendees) : $eventAttendees;
 
         $events = !$_events ? array() : $_events;
-        $events = $_events instanceof Tinebase_Record_Abstract ? array($events) : $events;
+        $events = $_events instanceof Tinebase_Record_Interface ? array($events) : $events;
         $events = is_array($events) ? new Tinebase_Record_RecordSet('Calendar_Model_Event', $events) : $events;
 
         // set containing all attendee
@@ -1029,7 +1016,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             foreach ($attendee as $attender) {
                 $allAttendee->addRecord($attender);
                 
-                if ($attender->user_id instanceof Tinebase_Record_Abstract) {
+                if ($attender->user_id instanceof Tinebase_Record_Interface) {
                     // already resolved
                     continue;
                 } elseif (isset(self::$_resolvedAttendeesCache[$attender->user_type][$attender->user_id])){
@@ -1112,7 +1099,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
 
         foreach ($eventAttendee as $attendee) {
             foreach ($attendee as $attender) {
-                if ($attender->user_id instanceof Tinebase_Record_Abstract) {
+                if ($attender->user_id instanceof Tinebase_Record_Interface) {
                     // already resolved from cache
                     continue;
                 }
@@ -1156,7 +1143,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
 
                 // keep authkey if attender is a contact (no account) and user has editGrant for event
                 if ($attender->user_type == self::USERTYPE_USER
-                    && $attender->user_id instanceof Tinebase_Record_Abstract
+                    && $attender->user_id instanceof Tinebase_Record_Interface
                     && (!$attender->user_id->has('account_id') || !$attender->user_id->account_id)
                     && (!$event || $event->{Tinebase_Model_Grants::GRANT_EDIT})
                     && (!$event || !$event->hasExternalOrganizer())
@@ -1213,7 +1200,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     {
         return $this->user_id instanceof Tinebase_Record_Abstract ? $this->user_id->getId() : $this->user_id;
     }
-    
+
     public function getKey()
     {
         return $this->user_type . '-' . $this->getUserId();

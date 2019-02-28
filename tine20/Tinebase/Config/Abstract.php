@@ -58,6 +58,16 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      * @var string
      */
     const TYPE_STRING = 'string';
+
+    /**
+     * record config type
+     * behaves like a string, only when sent to the client it will be resolved to the actual record
+     *
+     * @var string
+     */
+    const TYPE_RECORD = 'record';
+
+    const TYPE_RECORD_CONTROLLER = 'recordController';
     
     /**
      * float config type
@@ -283,7 +293,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
             return;
         }
 
-        if (is_object($_value) && $_value instanceof Tinebase_Record_Abstract) {
+        if (is_object($_value) && $_value instanceof Tinebase_Record_Interface) {
             $_value = $_value->toArray(true);
         }
 
@@ -405,8 +415,14 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 $cachedConfigFile = $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
 
                 if (file_exists($cachedConfigFile)) {
-                    /** @noinspection PhpIncludeInspection */
-                    $cachedConfigData = include($cachedConfigFile);
+                    try {
+                        /** @noinspection PhpIncludeInspection */
+                        $cachedConfigData = include($cachedConfigFile);
+                    } catch (Throwable $e) {
+                        unlink($cachedConfigFile);
+                        $cachedConfigData = false;
+                        Tinebase_Exception::log($e);
+                    }
                 } else {
                     $cachedConfigData = false;
                 }
@@ -812,6 +828,7 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         switch ($definition['type']) {
             case self::TYPE_INT:        return (int) $_rawData;
             case self::TYPE_BOOL:       return $_rawData === "true" || (bool) (int) $_rawData;
+            case self::TYPE_RECORD:
             case self::TYPE_STRING:     return (string) $_rawData;
             case self::TYPE_FLOAT:      return (float) $_rawData;
             case self::TYPE_ARRAY:      return (array) $_rawData;

@@ -75,13 +75,13 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
 
         if (false === $_silentlySkipFails) {
             foreach ($_records as $record) {
-                $toAdd = $record instanceof Tinebase_Record_Abstract ? $record : new $this->_recordClass($record, $_bypassFilters, $_convertDates);
+                $toAdd = $record instanceof Tinebase_Record_Interface ? $record : new $this->_recordClass($record, $_bypassFilters, $_convertDates);
                 $this->addRecord($toAdd);
             }
         } else {
             foreach ($_records as $record) {
                 try {
-                    $toAdd = $record instanceof Tinebase_Record_Abstract ? $record : new $this->_recordClass($record, $_bypassFilters, $_convertDates);
+                    $toAdd = $record instanceof Tinebase_Record_Interface ? $record : new $this->_recordClass($record, $_bypassFilters, $_convertDates);
                     $this->addRecord($toAdd);
                 } catch (Exception $e) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -248,7 +248,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * returns record identified by its id
      * 
      * @param  string $_id id of record
-     * @return Tinebase_Record_Abstract::|bool    record or false if not in set
+     * @return Tinebase_Record_Interface|bool    record or false if not in set
      */
     public function getById($_id)
     {
@@ -261,7 +261,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * returns record identified by its id
      * 
      * @param  integer $index of record
-     * @return Tinebase_Record_Abstract::|bool    record or false if not in set
+     * @return Tinebase_Record_Interface|bool    record or false if not in set
      */
     public function getByIndex($index)
     {
@@ -482,6 +482,15 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             $this->offsetUnset(key($this->_listOfRecords));
         }
     }
+
+    public function removeLast()
+    {
+        if (count($this->_listOfRecords) > 0) {
+            end($this->_listOfRecords);
+            $this->offsetUnset(key($this->_listOfRecords));
+        }
+    }
+
     /**
      * required by ArrayAccess interface
      */
@@ -571,7 +580,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      *
      * @param string $_field
      * @param string $_value
-     * @return Tinebase_Record_Abstract
+     * @return Tinebase_Record_Interface
      */
     public function find($_field, $_value, $_valueIsRegExp = FALSE)
     {
@@ -610,14 +619,13 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * returns first record of this set
      *
-     * @return Tinebase_Record_Abstract|NULL
+     * @return Tinebase_Record_Interface|NULL
      */
     public function getFirstRecord()
     {
         if (count($this->_listOfRecords) > 0) {
-            foreach ($this->_listOfRecords as $idx => $record) {
-                return $record;
-            }
+            reset($this->_listOfRecords);
+            return current($this->_listOfRecords);
         } else {
             return NULL;
         }
@@ -626,7 +634,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * returns last record of this set
      *
-     * @return Tinebase_Record_Abstract|NULL
+     * @return Tinebase_Record_Interface|NULL
      */
     public function getLastRecord()
     {
@@ -716,7 +724,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
                 'record set model: ' . $this->getRecordClassName() . ', record set diff model: ' . $model);
         }
 
-        /** @var Tinebase_Record_Abstract $modelInstance */
+        /** @var Tinebase_Record_Interface $modelInstance */
         $modelInstance = new $model(array(), true);
         $idProperty = $modelInstance->getIdProperty();
 
@@ -895,7 +903,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
 
         } elseif (is_array($_mixed)) { // array
             foreach ($_mixed as $mixed) {
-                if ($mixed instanceof Tinebase_Record_Abstract) {
+                if ($mixed instanceof Tinebase_Record_Interface) {
                     $ids[] = $mixed->getId();
                 } else {
                     $ids[] = $mixed;
@@ -903,7 +911,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             }
 
         } else { // string
-            $ids[] = $_mixed instanceof Tinebase_Record_Abstract ? $_mixed->getId() : $_mixed;
+            $ids[] = $_mixed instanceof Tinebase_Record_Interface ? $_mixed->getId() : $_mixed;
         }
 
         return $ids;

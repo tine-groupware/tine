@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -43,7 +43,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
         $server = new Tinebase_Http_Server();
         $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
         $server->setClass('Filemanager_Frontend_Download', 'Download');
-        
+
         try {
             if (Tinebase_Session::sessionExists()) {
                 try {
@@ -69,7 +69,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.mainScreen';
                 }
-                
+
                 $applicationParts = explode('.', $this->getRequestMethod());
                 $applicationName = ucfirst($applicationParts[0]);
                 
@@ -82,6 +82,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                         }
                     } catch (Exception $e) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ ." Failed to add HTTP API for application '$applicationName' Exception: \n". $e);
+                        Tinebase_Exception::log($e, false);
                     }
                 }
                 
@@ -89,17 +90,21 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.login';
                 }
-                
+
                 // sessionId got send by client, but we don't use sessions for non authenticated users
                 if (Tinebase_Session::sessionExists()) {
                     // expire session cookie on client
                     Tinebase_Session::expireSessionCookie();
                 }
             }
-            
+
             $this->_method = $this->getRequestMethod();
             
-            $server->handle($_REQUEST);
+            $response = $server->handle($_REQUEST);
+            if ($response instanceof \Zend\Diactoros\Response) {
+                $emitter = new Zend\Diactoros\Response\SapiEmitter();
+                $emitter->emit($response);
+            }
             
         } catch (Zend_Json_Server_Exception $zjse) {
             // invalid method requested or not authenticated, etc.
@@ -108,7 +113,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
 
             header('HTTP/1.0 403 Forbidden');
 
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             Tinebase_Exception::log($exception, false);
             
             try {
@@ -122,13 +127,15 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                     exit;
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Show mainscreen with setup exception');
-                    $this->_method = 'Tinebase.exception';
+                    header('HTTP/1.0 500 Internal Server Error');
+                    exit;
                 }
                 
                 $server->handle(array('method' => $this->_method));
                 
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 header('HTTP/1.0 503 Service Unavailable');
+                Tinebase_Exception::log($e, false);
             }
         }
     }

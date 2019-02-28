@@ -247,13 +247,17 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     public function deletePersonalFolder($_accountId, $model = '', $containerModel = 'Tinebase_Model_Container')
     {
-        if ($_accountId instanceof Tinebase_Record_Abstract) {
+        if ($_accountId instanceof Tinebase_Record_Interface) {
             $_accountId = $_accountId->getId();
         }
 
         if ($containerModel === 'Tinebase_Model_Container') {
             if ('' === $model) {
-                $model = static::$_defaultModel;
+                if ($this instanceof Tinebase_Controller_Record_Abstract) {
+                    $model = $this->getModel();
+                } else {
+                    $model = static::$_defaultModel;
+                }
             }
             // attention, currently everybody who has admin rights on a personal container is the owner of it
             // even if multiple users have admin rights on that personal container! (=> multiple owners)

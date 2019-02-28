@@ -38,7 +38,6 @@ class AllTests
             'Projects',
             'HumanResources',
             'Inventory',
-            'Events',
             'ExampleApplication',
             'SimpleFAQ',
             'CoreData',

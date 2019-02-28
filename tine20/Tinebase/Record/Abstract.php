@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  Record
  */
-abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
+abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Const implements Tinebase_Record_Interface
 {
     /**
      * ISO8601LONG datetime representation
@@ -48,7 +48,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      *
      * @var bool
      */
-    public $convertDates;
+    protected $convertDates;
     
     /**
      * differnet format than iso8601 to use for conversions 
@@ -231,6 +231,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @param bool $_bypassFilters sets {@see this->bypassFilters}
      * @param mixed $_convertDates sets {@see $this->convertDates} and optionaly {@see $this->$dateConversionFormat}
      * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
     public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
     {
@@ -270,7 +271,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
         
         if (! static::$_configurationObject) {
-            static::$_configurationObject = new Tinebase_ModelConfiguration(static::$_modelConfiguration);
+            static::$_configurationObject = new Tinebase_ModelConfiguration(static::$_modelConfiguration, static::class);
         }
     
         return static::$_configurationObject;
@@ -281,6 +282,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     public static function resetConfiguration()
     {
+        static::$_inputFilters = [];
         static::$_configurationObject = null;
         Tinebase_ModelConfiguration::resetAvailableApps();
     }
@@ -376,7 +378,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * 
      * @todo remove custom fields handling (use Tinebase_Record_RecordSet for them)
      */
-    public function setFromArray(array $_data)
+    public function setFromArray(array &$_data)
     {
         if ($this->convertDates === true) {
             $this->_convertISO8601ToDateTime($_data);
@@ -422,6 +424,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                             new $modelName($_data[$fieldName], $this->bypassFilters, $this->convertDates) :
                             new Tinebase_Record_RecordSet($modelName, $_data[$fieldName], $this->bypassFilters,
                                 $this->convertDates);
+                        $this->{$fieldName}->runConvertToRecord();
                     }
                 }
             }
@@ -442,7 +445,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @param  string|array $_data json encoded data
      * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
      */
-    public function setFromJsonInUsersTimezone($_data)
+    public function setFromJsonInUsersTimezone(&$_data)
     {
         // change timezone of current php process to usertimezone to let new dates be in the users timezone
         // NOTE: this is neccessary as creating the dates in UTC and just adding/substracting the timeshift would
@@ -536,6 +539,14 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         }
         
         return $recordArray;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->_properties;
     }
     
     /**
@@ -910,7 +921,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     /**
      * converts a int, string or Tinebase_Record_Interface to a id
      *
-     * @param int|string|Tinebase_Record_Abstract $_id the id to convert
+     * @param int|string|Tinebase_Record_Interface $_id the id to convert
      * @param string $_modelName
      * @return int|string
      * @throws Tinebase_Exception_InvalidArgument
@@ -946,7 +957,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public function diff($_record, $omitFields = array())
     {
         /** this is very bad, it is because of the subdiff below... maybe it is resolved in the meantime? */
-        if (! $_record instanceof Tinebase_Record_Abstract) {
+        if (! $_record instanceof Tinebase_Record_Interface) {
             if (!empty($_record)) {
                 return $_record;
             }
@@ -1006,8 +1017,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 } 
             } elseif ($fieldName == $this->_identifier && $this->getId() == $_record->getId()) {
                 continue;
-            } elseif ($ownField instanceof Tinebase_Record_Abstract || $ownField instanceof Tinebase_Record_RecordSet) {
-                if ($ownField instanceof Tinebase_Record_Abstract && is_scalar($recordField)) {
+            } elseif ($ownField instanceof Tinebase_Record_Interface || $ownField instanceof Tinebase_Record_RecordSet) {
+                if ($ownField instanceof Tinebase_Record_Interface && is_scalar($recordField)) {
                     // maybe we have the id of the record -> just compare the id
                     if ($ownField->getId() == $recordField) {
                         continue;
@@ -1026,7 +1037,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                     }
                     continue;
                 }
-            } elseif (empty($ownField) && $recordField instanceof Tinebase_Record_Abstract) {
+            } elseif (empty($ownField) && $recordField instanceof Tinebase_Record_Interface) {
                 $model = get_class($recordField);
                 $emptyRecord = new $model(array(), true);
                 $subdiff = $emptyRecord->diff($recordField);
@@ -1063,7 +1074,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 if ($ownData === $recordData) {
                     continue;
                 }
-            } elseif ($recordField instanceof Tinebase_Record_Abstract && is_scalar($ownField)) {
+            } elseif ($recordField instanceof Tinebase_Record_Interface && is_scalar($ownField)) {
                 // maybe we have the id of the record -> just compare the id
                 if ($recordField->getId() == $ownField) {
                     continue;
@@ -1217,10 +1228,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * @todo replace this (and setFromJsonInUsersTimezone) with Tinebase_Convert_Json::toTine20Model
      * @todo move custom _setFromJson to (custom) converter
      */
-    public function setFromJson($_data)
+    public function setFromJson(&$_data)
     {
         if (is_array($_data)) {
-            $recordData = $_data;
+            $recordData = &$_data;
         } else {
             $recordData = Zend_Json::decode($_data);
         }
@@ -1370,7 +1381,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             if (isset($this->_properties[$key])) {
                 /** @var Tinebase_Model_Converter_Interface $converter */
                 foreach ($converters as $converter) {
-                    $this->_properties[$key] = $converter::convertToRecord($this->_properties[$key]);
+                    $this->_properties[$key] = $converter->convertToRecord($this, $key, $this->_properties[$key]);
                 }
             }
         }
@@ -1383,10 +1394,10 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             return;
         }
         foreach ($conf->getConverters() as $key => $converters) {
-            if (isset($this->_properties[$key])) {
-                foreach ($converters as $converter) {
+            foreach ($converters as $converter) {
+                if (isset($this->_properties[$key])) {
                     /** @var Tinebase_Model_Converter_Interface $converter */
-                    $this->_properties[$key] = $converter::convertToData($this->_properties[$key]);
+                    $this->_properties[$key] = $converter->convertToData($this, $key, $this->_properties[$key]);
                 }
             }
         }
@@ -1445,7 +1456,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                     in_array($property, ['relations', 'tags', 'alarms', 'attachments', 'notes', 'attendee'])) {
                 $model = $diff->diff[$property]['model'];
                 if ('attachments' !== $property) {
-                    /** @var Tinebase_Record_Abstract $instance */
+                    /** @var Tinebase_Record_Interface $instance */
                     $instance = new $model(array(), true);
                     $idProperty = $instance->getIdProperty();
                     foreach ($oldValue as &$value) {
@@ -1488,7 +1499,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                         is_array($this->$property)?$this->$property:array());
                 }
 
-                /** @var Tinebase_Record_Abstract $model */
+                /** @var Tinebase_Record_Interface $model */
                 $model = $recordSetDiff->model;
                 if (true !== $model::applyRecordSetDiff($this->$property, $recordSetDiff)) {
                     $this->$property->applyRecordSetDiff($recordSetDiff);
@@ -1500,6 +1511,13 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
                 $this->$property = $oldValue;
             }
         }
+    }
+
+    /**
+     * @param array $_defintiion
+     */
+    public static function inheritModelConfigHook(array &$_defintion)
+    {
     }
 
     /**
@@ -1651,17 +1669,18 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      * returns the id of a record property
      *
      * @param string $_property
+     * @param boolean $_getIdFromRecord default true, returns null if property has a record and value is false
      * @return string|null
      */
-    public function getIdFromProperty($_property)
+    public function getIdFromProperty($_property, $_getIdFromRecord = true)
     {
         if (!isset($this->_properties[$_property])) {
             return null;
         }
 
         $value = $this->_properties[$_property];
-        if (is_object($value) && $value instanceof Tinebase_Record_Abstract) {
-            return $value->getId();
+        if (is_object($value) && $value instanceof Tinebase_Record_Interface) {
+            return $_getIdFromRecord ? (string)$value->getId() : null;
         } elseif (is_string($value) || is_integer($value)) {
             return (string)$value;
         }
@@ -1698,5 +1717,22 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
     public static function generatesPaths()
     {
         return false;
+    }
+
+    /**
+     * @param boolean $_bool the new value
+     * @return boolean the old value
+     */
+    public function setConvertDates($_bool)
+    {
+        $oldValue = $this->convertDates;
+        $this->convertDates = $_bool;
+        return $oldValue;
+    }
+
+    public function hydrateFromBackend(array &$_data)
+    {
+        $this->setFromArray($_data);
+        $this->runConvertToRecord();
     }
 }

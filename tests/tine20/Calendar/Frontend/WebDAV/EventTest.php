@@ -46,13 +46,20 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
             'model'             => Calendar_Model_Event::class,
         )));
         
-        $prefs = new Calendar_Preference();
+        $prefs = Tinebase_Core::getPreference('Calendar');
         $prefs->setValue(Calendar_Preference::DEFAULTCALENDAR, $this->objects['initialContainer']->getId());
 
         // rw cal agent
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
 
         $_SERVER['REQUEST_URI'] = 'lars';
+    }
+
+    public function tearDown()
+    {
+        parent::tearDown();
+        Tinebase_Core::getPreference('Calendar')->resetAppPrefsCache();
+        Tinebase_Core::set(Tinebase_Core::PREFERENCES, null);
     }
 
     /**
@@ -93,7 +100,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         
         //Import event for sclever
         $sclever = $this->_personas['sclever'];
-        $personalContainer = $this->_getPersonalContainer('Calendar', $sclever->accountId);
+        $personalContainer = $this->_getPersonalContainer(Calendar_Model_Event::class, $sclever->accountId);
         Tinebase_Core::set(Tinebase_Core::USER, $sclever);
         $event = Calendar_Frontend_WebDAV_Event::create($personalContainer, "gotomeeting.ics", $vcalendar);
 
@@ -103,7 +110,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
 
         //Import same file for pwulf
         $pwulf = $this->_personas['pwulf'];
-        $personalContainer = $this->_getPersonalContainer('Calendar', $pwulf->accountId);
+        $personalContainer = $this->_getPersonalContainer(Calendar_Model_Event::class, $pwulf->accountId);
         Tinebase_Core::set(Tinebase_Core::USER, $pwulf);
         $event = Calendar_Frontend_WebDAV_Event::create($personalContainer, "gotomeeting.ics", $vcalendar);
 

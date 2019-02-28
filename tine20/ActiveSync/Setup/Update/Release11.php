@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2013-2018 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
 /**
@@ -24,20 +24,34 @@ class ActiveSync_Setup_Update_Release11 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $declaration = new Setup_Backend_Schema_Field_Xml('
+        if (!$this->_backend->columnExists('monitor_lastping', 'acsync_device')) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>monitor_lastping</name>
                     <type>integer</type>
                     <default>0</default>
                 </field>
-        ');
-        $this->_backend->addCol('acsync_device', $declaration);
+            ');
+            $this->_backend->addCol('acsync_device', $declaration);
 
-        $this->setTableVersion('acsync_device', '7');
+            $this->setTableVersion('acsync_device', '7');
+        }
 
         $scheduler = Tinebase_Core::getScheduler();
-        ActiveSync_Scheduler_Task::addMonitorDeviceLastPingTask($scheduler);
+        if (!$scheduler->hasTask('ActiveSync_Controller_Device::monitorDeviceLastPingTask')) {
+            ActiveSync_Scheduler_Task::addMonitorDeviceLastPingTask($scheduler);
+        }
 
         $this->setApplicationVersion('ActiveSync', '11.1');
+    }
+
+    /**
+     * update to 12.0
+     *
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('ActiveSync', '12.0');
     }
 }

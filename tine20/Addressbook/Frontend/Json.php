@@ -90,7 +90,19 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchContacts($filter, $paging)
     {
-        return $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
+        $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'container_id'  => [],
+                'tags'          => [],
+                'attachments'   => [],
+            ],
+            Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                Tinebase_Record_Expander::PROPERTY_CLASS_USER => [],
+            ],
+        ]);
+
+        return $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(),
+            Addressbook_Model_ContactFilter::class, $expander);
     }
 
     /**
@@ -328,7 +340,18 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveContact($recordData, $duplicateCheck = TRUE)
     {
-        return $this->_save($recordData, Addressbook_Controller_Contact::getInstance(), 'Contact', 'id', array($duplicateCheck));
+        $adbController = Addressbook_Controller_Contact::getInstance();
+        $context = $adbController->getRequestContext() ?: [];
+        try {
+            $context['jsonFE'] = true;
+            $adbController->setRequestContext($context);
+
+            return $this->_save($recordData, $adbController, 'Contact', 'id', array($duplicateCheck));
+
+        } finally {
+            unset($context['jsonFE']);
+            $adbController->setRequestContext($context);
+        }
     }
     
 
@@ -415,7 +438,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns multiple records prepared for json transport
      *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Interface
      * @param Tinebase_Model_Filter_FilterGroup
      * @param Tinebase_Model_Pagination $_pagination
      * @return array data

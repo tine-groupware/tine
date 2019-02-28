@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.dialog');
 
@@ -93,6 +93,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * text of save and close button
      */
     saveAndCloseButtonText: '',
+    /**
+     * @cfg {Function} saveAndCloseActionUpdater
+     * overwritable action updater
+     */
+    saveAndCloseActionUpdater: null,
     /**
      * @cfg {String} cancelButtonText
      * text of cancel button
@@ -356,7 +361,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.disableCfs !== true) {
             this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
         }
-        
+        Ext.ux.pluginRegistry.addRegisteredPlugins(this);
+
         // init actions
         this.initActions();
         // init buttons and tbar
@@ -609,6 +615,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             minWidth: 70,
             ref: '../btnSaveAndClose',
             scope: this,
+            actionUpdater: this.saveAndCloseActionUpdater,
             // TODO: remove the defer when all subpanels use the deferByTicket mechanism
             handler: function() { this.onSaveAndClose.defer(500, this); },
             iconCls: 'action_saveAndClose'
