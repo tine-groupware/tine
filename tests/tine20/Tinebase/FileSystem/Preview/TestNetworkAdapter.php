@@ -1,29 +1,36 @@
 <?php
 /**
- * Tine 2.0
+ * Tine 2.0 - http://www.tine20.org
  *
  * @package     Tinebase
- * @subpackage  Filesystem
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @license     http://www.gnu.org/licenses/agpl.html
+ * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Milan Mertens <m.mertens@metaways.de>
- * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
- *
  */
 
-class TestNetworkAdapter
-{
-    protected $_response;
 
-    public function __construct($response)
+class Tinebase_FileSystem_Preview_TestNetworkAdapter implements Tinebase_FileSystem_Preview_NetworkAdapter
+{
+    protected $adapter;
+
+    public function __construct()
     {
-        $this->_response = $response;
+        $this->adapter = new Tinebase_FileSystem_Preview_TestZendNetworkAdapter();
     }
 
-    public function getHttpsClient()
+    /**
+     * @param null $config Zend Http Client config
+     * @return Zend_Http_Client
+     */
+    public function getHttpsClient($config = null)
     {
-        $adapter = new Zend_Http_Client_Adapter_Test();
-        $httpClient = new Zend_Http_Client('https://127.0.0.1', array('adapter' => $adapter));
-        $adapter->setResponse($this->_response);
-        return $httpClient;
+        return new Zend_Http_Client('https://docservice.notld', array(
+            'adapter' => $this->adapter
+        ));
+    }
+
+    public function getAdapter()
+    {
+        return $this->adapter;
     }
 }
