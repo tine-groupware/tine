@@ -4371,6 +4371,10 @@ msgid "{gender, select, male {none of} female {none of} other {none of}}"
 msgstr ""
 "{gender, select, male {keiner von} female {keine von} other {keines von}}"
 
+msgid "The right Resource Admin must be set once."
+msgstr ""
+"Das Recht Ressourcen Administration muss mindestens einmal festgelegt werden."
+
 # LICENSE TRANSLATIONS
 msgid "License expired"
 msgstr "Lizenz abgelaufen"
