@@ -360,8 +360,6 @@ Ext.form.TimeField.prototype.getValue = function(){
     }
 
     return dtValue;
-    // always return in ISO time format
-    // return value ? this.parseDate(value).dateFormat('H:i:s') : "";
 };
 
 /**
@@ -1154,8 +1152,8 @@ Ext.form.Field.prototype.getAutoCreate = function() {
 /**
  * preserve dateformat
  */
-Ext.data.Field = Ext.data.Field.createSequence(function(config) {
-    if (config.type == 'date') {
+Ext.data.Field = Ext.apply(Ext.data.Field.createSequence(function(config) {
+    if (config && config.type == 'date') {
         var dateFormat = this.dateFormat,
              convert = this.convert;
 
@@ -1169,4 +1167,4 @@ Ext.data.Field = Ext.data.Field.createSequence(function(config) {
             return d;
         };
     }
-});
+}), {prototype: Ext.data.Field.prototype});
