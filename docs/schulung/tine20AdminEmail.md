@@ -67,3 +67,45 @@ dem RapidSSL-Zertifikat erstellt wird. Seitdem geht's. Jetzt kann ich auch das
 
 siehe auch https://service.metaways.net/Ticket/Display.html?id=159518
 rt159518: [Jobelmannschule] Felamimail IMAP-Zugriff und Mailserver Zertifikate
+
+Frage: Wir kann ich den Notifikations-Service einrichten?
+=================
+
+Am einfachsten kann dieser unter setup.php / Email eingerichtet werden.
+Entscheidend sind folgende Felder (Werte sind beispielhaft):
+
+Notifikationsdienst Emailadresse:
+tine20notification.example.org
+
+Benachrichtigungs-Benutzername:
+tine20notification
+
+Benachrichtigungs-Passwort:
+••••
+
+Lokaler Hostname (oder IP-Adresse) für den Notifikationsdienst:
+localhost
+
+Falls nicht direkt über "localhost" versendet werden soll, müssen noch folgende Felder ausgefüllt werden:
+
+Hostname:
+mailserver
+
+Port:
+25
+
+Sichere Verbindung:
+TLS
+
+Authentifizierung:
+Login
+
+Damit sollten dann Termineinladungen und andere Notifications verschickt werden.
+
+Falls die Einstellungen nicht korrekt sein sollten, findet man im tine20.log Informationen zur Fehlerursache.
+
+Zum Testen kann eine Notification über
+
+    php tine20.php --config=/etc/tine20/config.inc.php --method Tinebase.testNotification
+
+an den eigenen Benutzer ausgelöst werden.
