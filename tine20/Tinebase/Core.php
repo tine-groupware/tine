@@ -1671,7 +1671,13 @@ class Tinebase_Core
 
         return $result;
     }
-    
+
+    public static function getInstanceTimeZone()
+    {
+        $prefs = new Tinebase_Preference();
+        return $prefs->_getDefaultPreference(Tinebase_Preference::TIMEZONE)->value;
+    }
+
     /**
      * get db adapter
      *
