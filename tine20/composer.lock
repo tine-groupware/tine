@@ -1290,7 +1290,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gerrit.tine20.com/customers/p/tine20-gdpr.git",
-                "reference": "346497dd304932713c28bf8bdd1403be37489743"
+                "reference": "5745dd790e16f44e63efa7a55f4331bff2710f1d"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1307,7 +1307,7 @@
             "keywords": [
                 "Tine 2.0"
             ],
-            "time": "2019-03-28T11:23:37+00:00"
+            "time": "2019-04-25T16:38:00+00:00"
         },
         {
             "name": "metaways/tine20-usermanual",
