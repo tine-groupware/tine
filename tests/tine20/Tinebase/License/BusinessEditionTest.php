@@ -205,6 +205,40 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $this->testUserLimitExceededWhenActivatingUser('update');
     }
 
+    public function testUserLimitDeactivateThenReActivate()
+    {
+        $count = Tinebase_User::getInstance()->countNonSystemUsers();
+
+        if ($count == 6) {
+            // deactivate sclever
+            $sclever = $this->_personas['sclever'];
+            $result = Admin_Controller_User::getInstance()->setAccountStatus($sclever->getId(),
+                Tinebase_Model_User::ACCOUNT_STATUS_DISABLED);
+            self::assertEquals(1, $result);
+        } else if ($count > 6) {
+            self::markTestSkipped('skip for more than 6 users');
+        }
+
+        $count = Tinebase_User::getInstance()->countNonSystemUsers();
+        self::assertEquals(5, $count);
+
+        $userId = Tinebase_Core::getUser()->getId();
+        $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/V-12345.pem'));
+        $result = Admin_Controller_User::getInstance()->setAccountStatus($userId,
+            Tinebase_Model_User::ACCOUNT_STATUS_DISABLED);
+        self::assertEquals(1, $result);
+
+        $user = Tinebase_User::getInstance()->getFullUserById($userId);
+        self::assertEquals(Tinebase_Model_User::ACCOUNT_STATUS_DISABLED, $user->accountStatus);
+
+        $count = Tinebase_User::getInstance()->countNonSystemUsers();
+        self::assertEquals(4, $count);
+
+        $result = Admin_Controller_User::getInstance()->setAccountStatus($userId,
+            Tinebase_Model_User::ACCOUNT_STATUS_ENABLED);
+        self::assertEquals(1, $result);
+    }
+
     public function testUserLimitNotExceededWhenCreatingUserWithOnDemandLicense()
     {
         $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/V-onDemand.pem'));
