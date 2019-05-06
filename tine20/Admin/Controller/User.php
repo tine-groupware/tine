@@ -220,7 +220,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         $this->_checkLoginNameLength($_user);
         $this->_checkPrimaryGroupExistance($_user);
-
+        $deactivated = false;
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Update user ' . $_user->accountLoginName);
         
         try {
@@ -233,7 +233,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             }
             
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'update', $oldUser);
-            
+
+            $deactivated = $this->_checkAccountStatus($_user, $oldUser);
             $user = $this->_userBackend->updateUser($_user);
 
             // make sure primary groups is in the list of group memberships
@@ -242,24 +243,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 : (array) $_user->groups;
             $groups = array_unique(array_merge(array($user->accountPrimaryGroup), $currentGroups));
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
-
-            // update account status if changed to enabled/disabled
-            if ($oldUser->accountStatus !== $_user->accountStatus && in_array($_user->accountStatus, array(
-                    Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED,
-                    Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED,
-                ))) {
-
-                if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED) {
-                    $this->_checkMaxUsers();
-                }
-
-                $this->_userBackend->setStatus($_user->getId(), $_user->accountStatus);
-
-                if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {
-                    // TODO send this for blocked/expired, too? allow to configure this?
-                    Tinebase_User::getInstance()->sendDeactivationNotification($_user);
-                }
-            }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
@@ -273,7 +256,12 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             
             throw $e;
         }
-        
+
+        if ($deactivated) {
+            // TODO send this for blocked/expired, too? allow to configure this?
+            Tinebase_User::getInstance()->sendDeactivationNotification($user);
+        }
+
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
         $event->account = $user;
@@ -287,6 +275,32 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->_updateCurrentUser($user);
 
         return $user;
+    }
+
+    /**
+     * update account status if changed to enabled/disabled
+     *
+     * @param $_user
+     * @param $_oldUser
+     * @return boolean true if user is deactivated
+     */
+    protected function _checkAccountStatus($_user, $_oldUser)
+    {
+        if ($_oldUser->accountStatus !== $_user->accountStatus && in_array($_user->accountStatus, array(
+                Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED,
+                Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED,
+            ))) {
+
+            if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED) {
+                $this->_checkMaxUsers();
+            }
+
+            if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -374,7 +388,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
+
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Exception::log($e);
@@ -393,7 +407,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     
     /**
      * checks number of allowed users
-     * 
+     *
      * @throws Admin_Exception
      */
     protected function _checkMaxUsers()
@@ -414,7 +428,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             throw new Tinebase_Exception_SystemGeneric($translation->_('Maximum number of users reached'));
         }
     }
-    
+
     /**
      * look for user with the same login name
      * 
