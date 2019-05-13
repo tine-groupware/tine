@@ -347,6 +347,24 @@ class Tinebase_Frontend_CliTest extends TestCase
     }
 
     /**
+     * testMonitoringCheckLicense
+     */
+    public function testMonitoringCheckLicense()
+    {
+        ob_start();
+        $result = $this->_cli->monitoringCheckLicense();
+        $out = ob_get_clean();
+
+        self::assertContains('LICENSE ', $out);
+        $licenseStatus = Tinebase_License::getInstance()->getStatus();
+        if (in_array($licenseStatus, [Tinebase_License::STATUS_LICENSE_INVALID, Tinebase_License::STATUS_NO_LICENSE_AVAILABLE])) {
+            self::assertEquals(2, $result);
+        } else {
+            self::assertLessThanOrEqual(1, $result);
+        }
+    }
+
+    /**
      * test cleanNotes
      */
     public function testCleanNotes()
