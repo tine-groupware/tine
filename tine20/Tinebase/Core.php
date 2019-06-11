@@ -1609,7 +1609,7 @@ class Tinebase_Core
     {
         return self::get(self::LOCALE);
     }
-        
+
     /**
      * get current user account
      *
@@ -1618,6 +1618,16 @@ class Tinebase_Core
     public static function getUser()
     {
         return self::get(self::USER);
+    }
+
+    /**
+     * set current user account
+     *
+     * @param Tinebase_Model_FullUser $user the user account record
+     */
+    public static function setUser($user)
+    {
+        self::set(self::USER, $user);
     }
 
     /**
@@ -1770,7 +1780,8 @@ class Tinebase_Core
         $hostname = self::get('HOSTNAME');
         if (! $hostname) {
             if (empty($_SERVER['SERVER_NAME']) && empty($_SERVER['HTTP_HOST'])) {
-                if (empty($url = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL))) {
+                $url = Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL);
+                if (empty($url)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' neither SERVER_NAME nor HTTP_HOST are set and tine20URL config is not set too!');
                     $hostname = 'http://'; // backward compatibility. This is what used to happen if you ask zend
