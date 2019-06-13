@@ -1758,6 +1758,8 @@ class Addressbook_JsonTest extends TestCase
             self::assertEquals($contact['n_given'], $duplicateContact['n_given']);
             self::assertEquals($contact['org_name'], $duplicateContact['org_name']);
             self::assertTrue(is_array($duplicateContact['container_id']), print_r($duplicateContact, true));
+            self::assertTrue(isset($duplicateContact['container_id']['account_grants']), print_r($duplicateContact, true));
+            self::assertTrue(is_array($duplicateContact['container_id']['account_grants']), print_r($duplicateContact, true));
         }
     }
     
@@ -2238,6 +2240,11 @@ Steuernummer 33/111/32212";
 
     public function testUpdateListEmailOfSystemGroup()
     {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP ||
+            Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
+            $this->markTestSkipped('FIXME: Does not work with LDAP/AD backend');
+        }
+
         $lists = $this->_uit->searchLists([[
             'field'    => 'type',
             'operator' => 'equals',
