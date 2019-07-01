@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7eee176856f820a97e589bdaf3738895",
+    "content-hash": "f2a989d8a161fe55f68b22741e0aa61a",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1589,16 +1589,16 @@
         },
         {
             "name": "phpoffice/phpspreadsheet",
-            "version": "dev-master",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PhpSpreadsheet.git",
-                "reference": "033ed16db59a590905fdf9e7adec8ccf9bfa11de"
+                "reference": "84e09df79855ed3da84e2eab6850eb7741d8cbda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/033ed16db59a590905fdf9e7adec8ccf9bfa11de",
-                "reference": "033ed16db59a590905fdf9e7adec8ccf9bfa11de",
+                "url": "https://api.github.com/repos/PHPOffice/PhpSpreadsheet/zipball/84e09df79855ed3da84e2eab6850eb7741d8cbda",
+                "reference": "84e09df79855ed3da84e2eab6850eb7741d8cbda",
                 "shasum": ""
             },
             "require": {
@@ -1679,7 +1679,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2019-02-18T21:56:32+00:00"
+            "time": "2019-05-26T02:50:36+00:00"
         },
         {
             "name": "phpoffice/phpword",
@@ -5139,8 +5139,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "metaways/tine20-gdpr": 20,
-        "metaways/tine20-usermanual": 20,
-        "phpoffice/phpspreadsheet": 20
+        "metaways/tine20-usermanual": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
