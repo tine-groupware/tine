@@ -1752,7 +1752,7 @@ msgstr "Wählen Sie ein Land ..."
 
 #: js/widgets/mainscreen/WestPanel.js:303
 msgid "containers"
-msgstr "Container"
+msgstr "Kontainer"
 
 #: js/widgets/mainscreen/WestPanel.js:330
 msgid "Favorites"
@@ -4631,6 +4631,9 @@ msgstr "Dauer der letzten Ausführung"
 
 msgid "Next run"
 msgstr "Nächste Ausführung"
+
+msgid "The new password must be different from the old one."
+msgstr "Das neue Passwort muss sich vom alten unterscheiden."
 
 # LICENSE TRANSLATIONS
 msgid "License expired"
