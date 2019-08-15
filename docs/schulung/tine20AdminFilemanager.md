@@ -1,7 +1,7 @@
-Tine 2.0 Admin Schulung: E-Mail / Felamimail
+Tine 2.0 Admin Schulung: Filemanager
 =================
 
-Version: Caroline 2017.11
+Version: Nele 2018.11
 
 Konfiguration und Problemlösungen des Filemanager-Moduls von Tine 2.0
 
@@ -32,8 +32,14 @@ Um den Index nachträglich mit den vorhandenen Dateien zu füllen, muss dieses K
 
     $ tine20-cli --method=Tinebase.fileSystemCheckIndexing
 
-Wenn es sofort beendet ist stimmt die Konfig nicht,  es sollte relativ lange dauern. Und auch die logs cheken, im Fehlerfall tauchen dann dort Infos auf.
+Wenn es sofort beendet ist stimmt die Konfig nicht,  es sollte relativ lange dauern. Und auch die Logs cheken,
+ im Fehlerfall tauchen dann dort Infos auf.
 
+Wenn alles klappt, sollte sowas im (DEBUG-)Log stehen:
+
+    Tinebase_Fulltext_TextExtract::fileObjectToTempFile::100 tika success!
+
+(100 ist die zeilennummer in der php datei, kann sich natürlich mit der zeit ändern ...)
 
 Liste mit den Benutzern mit den meisten Daten im Tine 2.0 VFS (Virtual File System) erstellen
 =====
