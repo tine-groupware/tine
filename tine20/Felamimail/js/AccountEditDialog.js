@@ -100,7 +100,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     item.setDisabled(this.record.id);
                     break;
                 case 'password':
-                    // TODO make it work consistently
                     item.setDisabled(! (this.record.get('type') == 'shared' || this.record.get('type') == 'user'));
                     break;
                 case 'user':
@@ -205,6 +204,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }), {
                             fieldLabel: this.app.i18n._('Account Type'),
                             name: 'type',
+                            hidden: ! this.asAdminModule,
                             typeAhead: false,
                             triggerAction: 'all',
                             lazyRender: true,
