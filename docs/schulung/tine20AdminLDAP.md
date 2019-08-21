@@ -7,6 +7,14 @@ Konfiguration und Problemlösungen im Zusammenhang mit der LDAP Anbindung (Authe
 
 # Konfiguration Auth
 
+Die Konfiguration kann z.B. über die setup.php angepasst werden ("Authentifizierung/Benutzerkonten").
+
+Alternativ kann die CLI-Funktion --setconfig verwendet werden.
+
+Die aktuelle Konfiguration kann man sich (JSON-kodiert) auch über die Kommandozeile anzeigen lassen:
+
+    $ php /usr/share/tine20/setup.php --config=/etc/tine20 --getconfig -- configkey=Tinebase_Authentication_BackendConfiguration
+
 ## Benutzer-Filter
 
 Gibt an, welche Benutzer sich einloggen können, kann z.B. auch auf bestimmte Gruppen eingeschränkt werden (siehe auch Benutzer/Gruppen-Filter).
@@ -18,6 +26,14 @@ Standard-Filter:
 _TODO add more info_
 
 # Konfiguration User/Groups
+
+Die Konfiguration kann z.B. über die setup.php angepasst werden ("Authentifizierung/Benutzerkonten").
+Alternativ kann die CLI-Funktion --setconfig verwendet werden.
+
+Die aktuelle Konfiguration kann man sich (JSON-kodiert) auch über die Kommandozeile anzeigen lassen:
+
+    $ php /usr/share/tine20/setup.php --config=/etc/tine20 --getconfig -- configkey=Tinebase_User_BackendConfiguration
+    
 ## readonly
 
 Das bedeutet, dass Tine 2.0 keine Änderungen in den LDAP/AD schreibt. Der LDAP ist das führende System.
