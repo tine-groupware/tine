@@ -85,7 +85,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     if (! this.asAdminModule) {
                         item.hide();
                     } else {
-                        item.setDisabled(this.record.get('type') != 'userInternal');
+                        item.setDisabled(this.record.get('type') == 'shared');
                     }
                     break;
                 case 'signature':
@@ -100,10 +100,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     item.setDisabled(this.record.id);
                     break;
                 case 'password':
-                    item.setDisabled(! (this.record.get('type') == 'shared' || this.record.get('type') == 'user'));
+                    item.setDisabled(! (
+                        !this.record.get('type') || this.record.get('type') == 'shared' || this.record.get('type') == 'user')
+                    );
                     break;
                 case 'user':
-                    item.setDisabled(! (this.record.get('type') == 'userInternal' || this.record.get('type') == 'user'));
+                    item.setDisabled(! (
+                        !this.record.get('type') || this.record.get('type') == 'userInternal' || this.record.get('type') == 'user')
+                    );
                     break;
                 case 'host':
                 case 'port':
@@ -518,8 +522,24 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRequestFailed: function(exception) {
         this.saving = false;
-        Tine.Felamimail.handleRequestException(exception);
         this.hideLoadMask();
+
+        // TODO if code == 600 -> open new Tine.Tinebase.widgets.dialog.PasswordDialog to set imap password field
+        if (exception.code === 600) {
+            var me = this,
+                dialog = new Tine.Tinebase.widgets.dialog.PasswordDialog({
+                windowTitle: this.app.i18n._('E-Mail account needs a password')
+            });
+            dialog.openWindow();
+
+            // password entered
+            dialog.on('apply', function (password) {
+                me.getForm().findField('password').setValue(password);
+                me.onApplyChanges(true);
+            });
+        } else {
+            Tine.Felamimail.handleRequestException(exception);
+        }
     },
 
     getGrantsColumns: function() {
