@@ -65,10 +65,35 @@ _TODO add more info_
 
 # sync accounts via CLI (und die Options)
 
-_TODO add more info_
+Basis-Kommando (Users + Groups):
+
+    php setup.php --sync_accounts_from_ldap
+
+Nur Benutzer:
+
+    php setup.php --sync_accounts_from_ldap --onlyusers
+
+Benutzer, die nicht mehr im LDAP sind, löschen:
+
+    php setup.php --sync_accounts_from_ldap --syncdeletedusers
+
+Benutzer-Accountstatus synchronisieren:
+
+    php setup.php --sync_accounts_from_ldap --syncaccountstatus
+
+Benutzer-Kontaktphoto synchronisieren:
+
+    php setup.php --sync_accounts_from_ldap --syncontactphoto
 
 ## scheduler
 
-_TODO add more info_
+Der Scheduler führt den Sync-Users/Groups-Job 1x pro Stunde aus (table tine20_scheduler_task):
 
-SEE: https://wiki.tine20.org/LDAP
+             name: Tinebase_User/Group::syncUsers/Groups
+           config: {"cron":"0 * * * *","callables":[{"class":"Tinebase_User","method":"syncUsers","args":{"options":{"sync_with_config_options":true}}},{"class":"Tinebase_Group","method":"syncGroups"}]}
+         last_run: 2019-08-28 14:00:01
+    last_duration: 18
+          lock_id: NULL
+         next_run: 2019-08-28 15:00:00
+     last_failure: 2019-03-31 12:00:01
+    failure_count: 0
