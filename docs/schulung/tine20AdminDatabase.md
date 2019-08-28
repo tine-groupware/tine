@@ -13,11 +13,10 @@ siehe auch https://service.metaways.net/Ticket/Display.html?id=150469
 ## Zusammengefasst:
 
 * der MySQL Server muß entsprechend der Datenmenge und Anwendernutzung dimensioniert sein
-* der MySQL Server hat 16 Hardware Threads, innodb_thread_concurrency ist aber nur auf 8. Der Wert sollte auf 16 geändert werden und später mittels Messungen der optimale Wert irgendwo zwischen 16 und 64 gefunden werden.
+* der MySQL Server hat 16 Hardware Threads, innodb_thread_concurrency prüfen und ggf. anpassen. Der Wert sollte mindestens auf 16 gesetzt werden und später mittels Messungen der optimale Wert irgendwo zwischen 16 und 64 gefunden werden.
 * die innodb Daten und Index Größe bitte ermitteln und eventuell innodb_buffer_pool_size anpassen
 * die tmp table size effektiv auf 64MB setzen (max_heap_table_size und tmp_table_size beide auf 64 MB! Denn min(x,y) greift)
-* MySQL 5.1.73 ist völlig veraltet und insbesondere die InnoDB performance wurde stark verbessert! Eine aktuelle Version kann leicht 30% Performance gewinnt bringen
-* eventuell die andere Anwendung optimieren um Last von der DB zu nehmen
+* MySQL < 5.5 ist völlig veraltet und insbesondere die InnoDB performance wurde stark verbessert! Eine aktuelle Version kann leicht 30% Performance gewinnt bringen
 
 ## Ausführlich
 
@@ -92,6 +91,11 @@ Fine Tuning wird aber keine großen Sprünge schaffen, es ist nur Fine Tuning. E
     profiles::databases::mysql::limit_nofile_systemd: 100000
 
 Für jeden Prod-DB-Server sollte das (ab Xenial) mindestens auf 100000 gesetzt werden, wenn nicht höher. Sonst werden bestimmte Einstellungen von Mysql massiv runtergetunt. Namentlich betrifft das max_connections und table_open_cache.
+
+## MySQL-Tuner
+
+https://www.howtoforge.com/tuning-mysql-performance-with-mysqltuner
+bzw. https://raw.githubusercontent.com/major/MySQLTuner-perl/master/mysqltuner.pl
 
 
 DB-Schema Vergleich und Aktualisierung
