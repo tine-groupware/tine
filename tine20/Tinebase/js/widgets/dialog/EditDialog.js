@@ -894,7 +894,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 for (var index = 0; index < r.length; index++) {
                     Ext.each(properties,
                         function(prop) {
-                            r[index][prop] = null;
+                            r[index][prop] = prop == 'id' ?  Tine.Tinebase.data.Record.generateUID() : null;
                         }
                     );
                 }
@@ -1031,7 +1031,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }
         ]);
-        
+
         this.showLoadMask();
 
         // init change event
@@ -1359,20 +1359,29 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
     },
 
-    showLoadMask: function() {
+    showLoadMask: async function() {
         return this.afterIsRendered().then(() => {
-            if (! this.loadMask) {
-                this.loadMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Transferring {0}...'), this.i18nRecordName)});
+            if (this.loadMask !== false && this.i18nRecordName) {
+                if (!this.loadMask) {
+                    this.loadMask = new Ext.LoadMask(this.getEl(), {msg: String.format(i18n._('Transferring {0}...'), this.i18nRecordName)});
+                }
+                this.loadMask.show();
             }
-            _.defer(_.bind(this.loadMask.show, this.loadMask));
         });
     },
 
-    hideLoadMask: function() {
+    hideLoadMask: async function() {
+        let me = this;
         return this.afterIsRendered().then(() => {
             if (this.loadMask) {
-                _.defer(_.bind(this.loadMask.hide, this.loadMask));
+                return new Promise((resolve) => {
+                    _.defer(() => {
+                        me.loadMask.hide();
+                        resolve();
+                    });
+                })
             }
+            return Promise.resolve();
         });
     }
 });
