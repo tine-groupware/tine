@@ -4635,6 +4635,13 @@ msgstr "Nächste Ausführung"
 msgid "The new password must be different from the old one."
 msgstr "Das neue Passwort muss sich vom alten unterscheiden."
 
+#: js/LoginPanel.js:521 js/widgets/dialog/ExportDialog.js:144
+#: js/widgets/dialog/EditDialog.js:1127
+#: js/widgets/dialog/CredentialsDialog.js:126
+#: js/widgets/dialog/MultipleEditDialogPlugin.js:658
+msgid "Please review the fields marked red. They contain invalid values."
+msgstr "Die rot markierten Felder enthalten ungültige Werte."
+
 # LICENSE TRANSLATIONS
 msgid "License expired"
 msgstr "Lizenz abgelaufen"
