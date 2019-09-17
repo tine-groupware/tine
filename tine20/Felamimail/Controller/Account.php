@@ -195,39 +195,25 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     /**
      * Removes accounts where current user has no access to
      * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Felamimail_Model_AccountFilter $_filter
      * @param string $_action get|update
      * @throws Tinebase_Exception_AccessDenied
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
+        if (! $_filter instanceof Felamimail_Model_AccountFilter) {
+            throw new Tinebase_Exception_UnexpectedValue('expected filter of class ' .
+                Felamimail_Model_AccountFilter::class);
+        }
+        
         if (! $this->doContainerACLChecks()) {
+            $_filter->doIgnoreAcl(true);
             return;
         }
 
-        while (count($filters = $_filter->getFilterObjects()) === 1 && $filters[0] instanceof
-                Tinebase_Model_Filter_FilterGroup) $_filter = $filters[0];
+        $_filter->doIgnoreAcl(false);
 
-        $typeFilter = $_filter->getFilter('type');
-        if (null !== $typeFilter && $typeFilter->getOperator() === 'equals' && ($typeFilter->getValue() ===
-                Felamimail_Model_Account::TYPE_ADB_LIST || $typeFilter->getValue() ===
-                Felamimail_Model_Account::TYPE_SHARED)) {
-
-            // TODO fix me! check acl filter?
-
-            return;
-        }
-
-        $userFilter = $_filter->getFilter('user_id');
-
-        // force a $userFilter filter (ACL)
-        if ($userFilter === NULL || $userFilter->getOperator() !== 'equals' || $userFilter->getValue() !== Tinebase_Core::getUser()->getId()) {
-            if (! is_object(Tinebase_Core::getUser())) {
-                throw new Tinebase_Exception_AccessDenied('user object not found');
-            }
-            $userFilter = $_filter->createFilter('user_id', 'equals', Tinebase_Core::getUser()->getId());
-            $_filter->addFilter($userFilter);
-        }
+        parent::checkFilterACL($_filter, $_action);
     }
 
     /**
@@ -265,8 +251,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         } elseif ($_record->type === Felamimail_Model_Account::TYPE_SHARED || $_record->type ===
                 Felamimail_Model_Account::TYPE_ADB_LIST) {
             if (! $_record->password) {
-                // TODO invent a new exception for this?
-                throw new Tinebase_Exception_PasswordPolicyViolation($translation->_('shared / adb_list accounts need to have a password set'));
+                throw new Felamimail_Exception_PasswordMissing($translation->_('shared / adb_list accounts need to have a password set'));
             }
             if (! $_record->email) {
                 throw new Tinebase_Exception_UnexpectedValue($translation->_('shared / adb_list accounts need to have an email set'));
@@ -1538,7 +1523,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
         if (null === $user) {
             $user = Tinebase_Core::getUser();
         }
-        $filter = new Tinebase_Model_Filter_FilterGroup();
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class);
         $filter->addFilterGroup(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_Account::class, [
             ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SHARED],
