@@ -1869,10 +1869,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function duplicatePersonalContainerCheck($opts)
     {
-
         $this->_checkAdminRight();
         $args = $this->_parseArgs($opts, array('app'));
 
         Tinebase_Container::getInstance()->deleteDuplicateContainer($args['app'], $opts->d);
+    }
+
+    public function repairTreeIsDeletedState($opts)
+    {
+        $this->_checkAdminRight();
+        Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
     }
 }
