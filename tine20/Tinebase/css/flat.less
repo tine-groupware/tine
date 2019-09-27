@@ -523,12 +523,12 @@ ul.x-tab-strip-top {
 }
 
 .tw-passwordTriggerField .x-form-field-wrap .x-form-trigger:nth-child(1) {
-  background-image: url(../../images/icon-set/icon_lock_open.svg);
+  background-image: url(../../images/icon-set/icon_preview.svg);
   .x-form-trigger-flat();
 }
 
 .tw-passwordTriggerField .x-form-field-wrap .x-form-trigger.locked:nth-child(1) {
-  background-image: url(../../images/icon-set/icon_lock.svg);
+  background-image: url(../../images/icon-set/icon_preview_disabled.svg);
   .x-form-trigger-flat();
 }
 
@@ -539,12 +539,12 @@ ul.x-tab-strip-top {
 
 
 span.x-form-twin-triggers img.x-form-unlocked-trigger {
-  background-image: url('../../images/icon-set/icon_lock.svg') !important;
+  background-image: url('../../images/icon-set/icon_lock_open.svg') !important;
   .x-form-trigger-flat();
 }
 
 span.x-form-twin-triggers img.x-form-locked-trigger {
-  background-image: url('../../images/icon-set/icon_lock_open.svg') !important;
+  background-image: url('../../images/icon-set/icon_lock.svg') !important;
   .x-form-trigger-flat();
 }
 
@@ -569,6 +569,14 @@ span.x-form-twin-triggers img.x-form-clear-trigger {
     background-color: @selectionColor;
     border-color: @selectionColor !important;
   }
+}
+
+.x-form-invalid-tip .x-tip-body {
+  background-image: url('../../images/icon-set/icon_failure.svg') !important;
+  background-size: 20px 20px;
+  background-position: 0 4px;
+  color: #000 !important;
+  #transform.blacktowhite();
 }
   /* GRID */
 //.cal-daysviewpanel-header-inner,
@@ -688,19 +696,47 @@ td.x-date-mp-sel a,
   border: none !important;
 }
 
-.x-progress-wrap {
+.ext-mb-content + .x-progress-wrap {
   border: none;
+
+  .x-progress-bar {
+    background-image: none;
+    background-color: @focusColor;
+    border: none;
+  }
+
+  .x-progress-inner {
+    background-color: #fff;
+    background-image: none;
+    height: 20px;
+  }
 }
+
+.x-window-dlg .ext-mb-info {
+  background-image: url('../../images/icon-set/icon_dialog_info.svg');
+  background-size: 35px;
+}
+
+.x-window-dlg .ext-mb-question {
+  // @TODO use question once we have it
+  background-image: url('../../images/icon-set/icon_dialog_info.svg');
+  background-size: 35px;
+}
+
+.x-window-dlg .ext-mb-warning,
+.x-window-dlg .ext-mb-error {
+  background-image: url('../../images/icon-set/icon_dialog_warning.svg');
+  background-size: 35px;
+}
+
 .x-progress-bar {
   background-image: none;
-  background-color: @focusColor;
-  border: none;
+  border-top-color: #9cbfee;
+  border-bottom-color: #9cbfee;
 }
 
 .x-progress-inner {
-  background-color: #fff;
   background-image: none;
-  height: 20px;
 }
 
 .x-window {
@@ -764,7 +800,12 @@ td.x-date-mp-sel a,
     background-image: none;
     background-color: @tipColor;
   }
-
+  .x-tip-header-text {
+    text-decoration: underline;
+    font-style: italic;
+    color: #fff;
+    font-weight: bold;
+  }
   .x-tip-body {
     color: #fff;
     font-weight: bold;
