@@ -46,4 +46,25 @@ Liste mit den Benutzern mit den meisten Daten im Tine 2.0 VFS (Virtual File Syst
 
     sql> select user.login_name,fo.created_by, sum(fr.size) as filesize from tine20_tree_fileobjects as fo JOIN tine20_tree_filerevisions as fr ON fo.id = fr.id join tine20_accounts as user on user.id=fo.created_by group by fo.created_by order by filesize DESC;
 
+Konfiguration eines Preview-Service
+=====
 
+Damit der Docservice von Tine 2.0 verwendet wird, muss folgende Konfiguration in die config.inc.php
+ hinzugefügt werden:
+
+    'filesystem' => array(
+        // [...] andere Filesystem settings
+        
+        'createPreviews' => true,
+        'previewServiceUrl' => 'http://PREVIEWSERVICE/v2/documentPreviewService',
+        'previewServiceVersion' => 2,
+        'previewMaxFileSize' => 10485760, // 10 MB
+    ),
+
+PREVIEWSERVICE = IP-Adresse oder Hostname des Docservice Hosts.
+
+'previewMaxFileSize' ist optional.
+
+Previews werden via Scheduler für alle Dokumente, die noch kein Preview haben, erzeugt
+ (läuft, glaube ich, 1x in der Nacht). Für neue Dokumente wird direkt nach dem Hochladen
+ die Preview-Generierung angestossen.
