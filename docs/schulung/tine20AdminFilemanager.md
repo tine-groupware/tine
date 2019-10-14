@@ -68,3 +68,14 @@ PREVIEWSERVICE = IP-Adresse oder Hostname des Docservice Hosts.
 Previews werden via Scheduler für alle Dokumente, die noch kein Preview haben, erzeugt
  (läuft, glaube ich, 1x in der Nacht). Für neue Dokumente wird direkt nach dem Hochladen
  die Preview-Generierung angestossen.
+
+Prüfen, ob der PREVIEW-SERVICE funktioniert:
+
+    PREV_URL=https://previewservice.domain
+    echo "This is a ASCII text, used to test the document-preview-service." > test.txt
+    res=$(curl -F config="{\"test\": {\"firstPage\":true,\"filetype\":\"jpg\",\"x\":100,\"y\":100,\"color\":false}}" -F "file=@test.txt" $PREV_URL/v2/documentPreviewService)
+    sha=$(echo $res  | sha256sum)
+    if [ "$sha" != "df8f8891a6d892777b010c89288841301bcc72c00779797a189ea5866becad75  -" ]; then
+      echo "FAILED"
+      exit 1
+    fi
