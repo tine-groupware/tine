@@ -390,4 +390,34 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             self::assertEquals('User is not allowed to send a message with this account', $tead->getMessage());
         }
     }
+
+    public function testCreateUserInternalAccount()
+    {
+        $scleverExtraAccount = $this->_createUserInternalAccount($this->_personas['sclever']);
+        $json = new Felamimail_Frontend_Json();
+        $result = $json->searchAccounts([]);
+        foreach ($result['results'] as $account) {
+            if ($scleverExtraAccount->getId() === $account['id']) {
+                self::fail('should not find sclevers account! ' . print_r($account, true));
+            }
+        }
+    }
+
+    public function testCreateNewUserAccountWithINBOX()
+    {
+        $this->_testNeedsTransaction();
+
+        $user = $this->_createUserWithEmailAccount();
+        Tinebase_Core::setUser($user);
+        $json = new Felamimail_Frontend_Json();
+        $result = $json->searchAccounts([]);
+        self::assertEquals(1, $result['totalcount']);
+        $account = $result['results'][0];
+        $folders = $json->searchFolders([
+            ['field' => 'account_id', 'operator' => 'equals', 'value' => $account['id']],
+            ['field' => 'globalname', 'operator' => 'equals', 'value' => ''],
+        ]);
+        self::assertEquals(5, $folders['totalcount'], 'should find 5 initial folders. got: '
+            . print_r($folders, true));
+    }
 }
