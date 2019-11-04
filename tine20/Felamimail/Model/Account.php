@@ -27,6 +27,7 @@
  * @property  string    email
  * @property  string    user_id
  * @property  string    sieve_notification_email
+ * @property  string    migration_approved
  *
  * @package   Felamimail
  * @subpackage    Model
@@ -98,6 +99,15 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::LABEL => 'Name', // _('Name')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::QUERY_FILTER              => true,
+            ],
+            'migration_approved' => [
+                self::TYPE => self::TYPE_BOOLEAN,
+                self::NULLABLE => true,
+                self::LABEL => 'Migration Approved', // _('Migration Approved')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => false
+                ],
             ],
             'host' => [
                 self::TYPE => self::TYPE_STRING,
