@@ -1498,7 +1498,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemCheckIndexing()
     {
-
         $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->checkIndexing();
@@ -1515,7 +1514,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemCheckPreviews()
     {
-
         $this->_checkAdminRight();
 
         Tinebase_FileSystem::getInstance()->sanitizePreviews();
@@ -1530,9 +1528,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function fileSystemRecreateAllPreviews()
     {
-
         $this->_checkAdminRight();
 
+        // TODO reset preview_error_count
         Tinebase_FileSystem_Previews::getInstance()->deleteAllPreviews();
         Tinebase_FileSystem::getInstance()->sanitizePreviews();
 
