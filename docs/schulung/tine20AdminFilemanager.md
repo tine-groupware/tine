@@ -79,3 +79,25 @@ Prüfen, ob der PREVIEW-SERVICE funktioniert:
       echo "FAILED"
       exit 1
     fi
+
+Preview-Status anzeigen:
+
+    tine20-cli --method Tinebase.reportPreviewStatus
+    
+    Array
+    (
+        [missing] => 0
+        [created] => 14
+    )
+
+Alle Previews neu erzeugen
+
+- Preview failcount zurücksetzen (soll später auch automatisch passieren: https://taiga.metaways.net/project/admin-tine20-service/us/3069)
+```
+    MariaDB [tine20]> update tine20_tree_filerevisions set preview_error_count = 0;
+```
+- Neugenerierung anstossen
+
+```
+    tine20-cli --method Tinebase.fileSystemRecreateAllPreviews
+```
