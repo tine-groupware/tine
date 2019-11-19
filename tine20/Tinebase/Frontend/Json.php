@@ -25,7 +25,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var boolean
      */
     protected $_hasCaptcha = null;
-    
+
     /**
      * wait for changes
      * 
@@ -573,7 +573,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return $this->_getLoginFailedResponse();
         }
     }
-    
+
     /**
      * Returns TRUE if there is a captcha
      * @return boolean
@@ -894,21 +894,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             try {
                 $userContactArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray();
             } catch (Addressbook_Exception_NotFound $aenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) /** @noinspection PhpUndefinedMethodInspection */
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                    . ' User not found in Addressbook: ' . $user->accountDisplayName);
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) /** @noinspection PhpUndefinedMethodInspection */
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' User not found in Addressbook: ' . $user->accountDisplayName);
             }
         }
-        
+
         try {
             $persistentFilters = Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters();
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . " Failed to fetch persistent filters. Exception: \n". $tenf);
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . " Failed to fetch persistent filters. Exception: \n" . $tenf);
             $persistentFilters = array();
-        }  catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . " Failed to fetch persistent filters. Exception: \n". $e);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . " Failed to fetch persistent filters. Exception: \n" . $e);
             $persistentFilters = array();
         }
 
@@ -935,10 +935,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'licenseExpire'      => $license->getLicenseExpireEstimate(),            'primarydomain'      => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
             'secondarydomains'   => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
         );
-        
+
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' User registry: ' . print_r($userRegistryData, TRUE));
-        
+
         return $userRegistryData;
     }
 
