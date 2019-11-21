@@ -1323,5 +1323,7 @@ class Setup_Frontend_Cli
             $db->query('REPAIR TABLE ' . $db->quoteIdentifier($table));
             $db->query('OPTIMIZE TABLE ' . $db->quoteIdentifier($table));
         }
+
+        Setup_Controller::getInstance()->clearCache();
     }
 }
