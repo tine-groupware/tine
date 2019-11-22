@@ -308,6 +308,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
                 Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED,
             ))) {
 
+            if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED) {
+                $this->_checkMaxUsers();
+            }
+
             if ($_user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_DISABLED) {
                 return true;
             }

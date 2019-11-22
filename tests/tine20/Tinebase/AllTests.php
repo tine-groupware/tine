@@ -73,6 +73,7 @@ class Tinebase_AllTests
         $suite->addTestSuite(Tinebase_Export_DocTest::class);
         $suite->addTestSuite(Tinebase_Export_XlsxTest::class);
         $suite->addTestSuite(Tinebase_AreaLockTest::class);
+        $suite->addTestSuite(Tinebase_FileSystem_Preview_ServiceV2Test::class);
         $suite->addTestSuite(Tinebase_StateTest::class);
         $suite->addTestSuite(Tinebase_FilterSyncTokenTest::class);
         $suite->addTestSuite(Tinebase_Frontend_AutodiscoverTests::class);

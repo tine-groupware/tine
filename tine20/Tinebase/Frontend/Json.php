@@ -948,6 +948,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $persistentFilters = array();
         }
 
+        $license = Tinebase_License::getInstance();
+
         // manage email user settings
         $manageSmtpEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::SMTP);
         $manageImapEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::IMAP);
