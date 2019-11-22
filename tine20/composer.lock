@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55584c1406e415895565ded14a1ff376",
+    "content-hash": "117302f6310ed2511645ba0f1f69f44e",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1309,7 +1309,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
+                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1341,7 +1341,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
+                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1369,6 +1369,62 @@
                 "UTC"
             ],
             "time": "2016-04-25T08:20:13+00:00"
+        },
+        {
+            "name": "metaways/tine20-gdpr",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gerrit.tine20.com/customers/p/tine20-gdpr.git",
+                "reference": "5edc9296ad0e4c3e4d2d64a242cc250a4dcfec69"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "GDPR": "lib/GDPR",
+                    "../tests/tine20/GDPR": "tests/GDPR"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 GDPR Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Tine 2.0"
+            ],
+            "time": "2019-11-06T08:30:52+00:00"
+        },
+        {
+            "name": "metaways/tine20-usermanual",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gerrit.tine20.com/customers/p/tine20-usermanual.git",
+                "reference": "3971dceda608d4dbfda86d78b197df650d716174"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "UserManual": "lib/UserManual",
+                    "../tests/tine20/UserManual": "tests/UserManual"
+                },
+                "reverseSymlinks": {
+                    "lib/images": "images"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 UserManual Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Documenation",
+                "Help",
+                "Manual",
+                "Tine 2.0"
+            ],
+            "time": "2019-11-22T08:38:41+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -3007,7 +3063,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "c99a7b39d4dc37298c0f1ea1edfeedcf2fcb9686"
+                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -5258,7 +5314,9 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "jumbojett/openid-connect-php": 20
+        "jumbojett/openid-connect-php": 20,
+        "metaways/tine20-gdpr": 20,
+        "metaways/tine20-usermanual": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
