@@ -1125,12 +1125,6 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
         try {
             $systemUser = Tinebase_User::getInstance()->addUser($systemUser);
-            if (Tinebase_User::SYSTEM_USER_SETUP === $accountLoginName) {
-                $contact = Addressbook_Controller_Contact::getInstance()->getBackend()
-                    ->create(self::user2Contact($systemUser));
-                $systemUser->contact_id = $contact->getId();
-                Tinebase_User::getInstance()->updateUserInSqlBackend($systemUser);
-            }
             Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
         } catch(Zend_Ldap_Exception $zle) {
             Tinebase_Exception::log($zle);
@@ -1182,6 +1176,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 Tinebase_Exception::log($e);
                 $systemUser = null;
             }
+        }
+
+        if (null !== $systemUser && Tinebase_User::SYSTEM_USER_SETUP === $accountLoginName &&
+                empty($systemUser->contact_id)) {
+            $contact = Addressbook_Controller_Contact::getInstance()->getBackend()
+                ->create(self::user2Contact($systemUser));
+            $systemUser->contact_id = $contact->getId();
+            Tinebase_User::getInstance()->updateUserInSqlBackend($systemUser);
         }
 
         // re-enable modlog stuff
