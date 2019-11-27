@@ -1320,7 +1320,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             'record_type',
             'modification_time',
             'modification_account',
-            'record_id'
+            'record_id',
+            'client',
         );
         foreach ($data as $key => $value) {
             if (in_array($key, $allowedFilters)) {
