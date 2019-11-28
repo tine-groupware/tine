@@ -574,6 +574,8 @@ class Setup_Controller
         }
         Tinebase_Core::set(Tinebase_Core::USER, $user);
 
+        $this->updateAllImportExportDefinitions();
+
         $result = ['updated' => 0];
         $iterationCount = 0;
         do {
