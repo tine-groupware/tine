@@ -147,3 +147,40 @@ Durch einen Bug in PHP-PDO ist es nicht möglich den Port auf einen anderen, als
  wenn als Host "localhost" eingetragen ist. Bei Non-Default-Ports muss dann die IP-Adresse (z.B. 127.0.0.1)
  verwendet werden.
  
+Migration PostgreSQL (PGSQL) -> MySQL
+=================
+
+Ab Version 2018.11 wird PGSQL nicht mehr unterstützt.
+
+Migration ist u.a. Thema in diesem Ticket: #175111: [Phoenix] Unsere Instanz Tine 2.0 (UCS)
+Ausserdem gibt es eine (nicht besonders gute) Anleitung zur manuellen Migration von Files/Hour im github:
+https://github.com/tine20/tine20/wiki/DE%3AMigration-von-Postgres-nach-MySQL
+
+1) Installation von MySQL (empfohlen 5.7+) oder MariaDB (empfohlen 10.2+)
+
+2) Installation des php-mysql Moduls falls noch nicht vorhanden
+
+3) Anlegen von Datenbank (z.b. 'tine20') und eines Benutzers, mit dem auf DB zugegriffen werden kann
+
+4) Anlegen einer Konfigurationsdatei mysqlconf.php mit folgendem Inhalt:
+
+```php
+<?php
+return array (
+    'host' => 'TINE20_DBHOST',
+    'dbname' => 'TINE20_DBNAME',
+    'username' => 'TINE20_DBUSER',
+    'password' => 'TINE20_DBPASSWD',
+    'tableprefix' => 'tine20_',
+    'adapter' => 'pdo_mysql',
+);
+```
+
+5) Aufruf des Migrationsskriptes
+
+
+    $ php /usr/share/tine20/sezup.php --config /etc/tine20 --pgsqlMigration -- mysqlConfigFile=/path/to/mysqlconf.php
+
+6) nach der Migration der Daten dann in der Tine 2.0 config.inc.php die neue DB-Konfiguration (analog mysqlconf.php) eintragen.
+
+Anschliessend sollte das Update ohne Probleme durchlaufen.
