@@ -152,6 +152,11 @@ Migration PostgreSQL (PGSQL) -> MySQL
 
 Ab Version 2018.11 wird PGSQL nicht mehr unterstützt.
 
+Die Migration muss in 2017.11 durchgeführt werden. Am besten in Version 2017.11.13 (oder früher) wegen Änderungen 
+in Tinebase/Setup/Update/Release10.php, die nicht PGSQL-kompatibel sind...
+Die Migration muss mit der gleichen Version gemacht werden, mit der Tine 2.0 mit PGSQL gerade läuft, da
+sonst das DB-Schema möglicherweise nicht passt.
+
 Migration ist u.a. Thema in diesem Ticket: #175111: [Phoenix] Unsere Instanz Tine 2.0 (UCS)
 Ausserdem gibt es eine (nicht besonders gute) Anleitung zur manuellen Migration von Files/Hour im github:
 https://github.com/tine20/tine20/wiki/DE%3AMigration-von-Postgres-nach-MySQL
@@ -178,6 +183,7 @@ return array (
 
 5) Aufruf des Migrationsskriptes
 
+(mysqlConfigFile muss mit dem absoluten Pfad referenziert sein)
 
     $ php /usr/share/tine20/sezup.php --config /etc/tine20 --pgsqlMigration -- mysqlConfigFile=/path/to/mysqlconf.php
 
