@@ -240,7 +240,8 @@ class Tinebase_Auth
                 array($zaae->getMessage())
             );
         }
-        
+
+        $_password = Tinebase_Helper::mbConvertTo($_password);
         $this->_backend->setCredential($_password);
 
         try {
