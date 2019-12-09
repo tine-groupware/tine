@@ -1949,7 +1949,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $this->_checkAdminRight();
 
-        // convert fmail accounts
         if (Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
             Felamimail_Controller_Account::getInstance()->convertAccountsToSaveUserIdInXprops();
         }
@@ -1957,6 +1956,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         // TODO convert users
         // TODO convert lists
 
-        // TODO activate config
+        // activate config
+        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = true;
     }
 }

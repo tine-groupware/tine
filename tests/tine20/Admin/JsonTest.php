@@ -1647,9 +1647,10 @@ class Admin_JsonTest extends TestCase
         $account = $this->_testSimpleRecordApi(
             'EmailAccount', // use non-existant model to make simple api test work
             'name',
-            'email',
+            null,
             true,
-            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . TestServer::getPrimaryMailDomain()]
+            ['type' => Felamimail_Model_Account::TYPE_SHARED, 'password' => '123', 'email' => 'a@' . TestServer::getPrimaryMailDomain()],
+            false
         );
         self::assertEquals('Templates', $account['templates_folder'], print_r($account, true));
 
@@ -1934,6 +1935,21 @@ class Admin_JsonTest extends TestCase
         $fmailaccount = Felamimail_Controller_Account::getInstance()->get($updatedAccount['id']);
         $imapConfig = $fmailaccount->getImapConfig();
         self::assertNotEquals($account['user'], $imapConfig['user']);
+    }
+
+    public function testUpdateSystemAccountChangeEmail()
+    {
+        if (! TestServer::isEmailSystemAccountConfigured()) {
+            self::markTestSkipped('imap systemaccount config required');
+        }
+
+        $user = $this->_createUserWithEmailAccount();
+        $emailAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
+        $emailAccount->email = 'somenewmail' . Tinebase_Record_Abstract::generateUID(6) . '@' . TestServer::getPrimaryMailDomain();
+        $updatedAccount = $this->_json->saveEmailAccount($emailAccount->toArray());
+        self::assertEquals($emailAccount->email, $updatedAccount['email']);
+        $updatedUser = Tinebase_User::getInstance()->getFullUserById($user->getId());
+        self::assertEquals($emailAccount->email, $updatedUser->accountEmailAddress);
     }
 
     public function testConvertEmailAccount()
