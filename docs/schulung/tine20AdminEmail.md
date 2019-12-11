@@ -147,3 +147,15 @@ muss bei der Übertragung mitgesendet werden.
 * Da der maximale Umfang der übergebaren Parameter in Mailto-Links durch die Browser beschränkt
 wird, können Empfänger, Texte oder Anhänge nicht in beliebiger Länge verwendet werden. Derzeit liegt
 dieses Limit bei 65000 Zeichen.
+
+Frage: wie kann ich einstellen, dass in Felamimails in den E-Mails auch verlinkte Bilder angezeigt werden?
+===================
+
+Vorsicht: das deaktivieren des Filters kann Security-Probleme nach sich ziehen, vor allem wenn viele E-Mails
+ aus nicht-vertrauenswürdigen Quellen angezeigt werden. 
+
+Konfiguration (z.b. in config.inc.php):
+
+    'Felamimail' => [
+        Felamimail_Config::FILTER_EMAIL_URIS => true,
+    ]
