@@ -4,5 +4,6 @@ return array (
     'features' => array(
         Felamimail_Config::FEATURE_TINE20_FLAG   => true,
         Felamimail_Config::FEATURE_SHOW_REPLY_TO => false,
+        Felamimail_Config::FEATURE_AUTOSAVE_DRAFTS => false,
     ),
 );
