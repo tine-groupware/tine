@@ -832,6 +832,10 @@ msgstr "Theme Pfad"
 msgid "Use blue theme as base"
 msgstr "Verwende blaues Theme als Basis"
 
+#: js/EnvCheckGridPanel.js:162
+msgid "Message"
+msgstr "Informationen"
+
 # LICENSE TRANSLATIONS
 msgid "Upload from disk"
 msgstr "Von der Festplatte hochladen"
