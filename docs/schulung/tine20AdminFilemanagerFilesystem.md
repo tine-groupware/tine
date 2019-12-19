@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: Filemanager
+Tine 2.0 Admin Schulung: Filemanager / Filesystem
 =================
 
 Version: Nele 2018.11
@@ -101,3 +101,16 @@ Alle Previews neu erzeugen
 ```
     tine20-cli --method Tinebase.fileSystemRecreateAllPreviews
 ```
+
+Wie oft wird der TempFile-Ordner automatisch aufgeräumt?
+=====
+
+Der Cleanup-Job Tinebase_TempFileCleanup läuft stündlich und räumt alle (nicht-punkt) Dateien im Temp-Ordner weg, die
+ älter als 6 Stunden sind.
+
+Mein TempFile-Ordner ist sehr groß. Kann ich einen Cleanup von Hand anstossen?
+=====
+
+Ja, das geht so (Löscht alle Dateien, die älter als 2019-12-19 11:28:00 sind):
+
+    tine20.php --method=Tinebase.clearTable temp_files -- date='2019-12-19 11:28:00'
