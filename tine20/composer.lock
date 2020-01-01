@@ -2958,6 +2958,7 @@
                 "psr",
                 "psr-7"
             ],
+            "abandoned": "laminas/laminas-diactoros",
             "time": "2018-09-05T19:29:37+00:00"
         },
         {
@@ -3002,6 +3003,7 @@
                 "escaper",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-escaper",
             "time": "2016-06-30T19:48:38+00:00"
         },
         {
@@ -3052,6 +3054,7 @@
                 "http",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-http",
             "time": "2017-01-31T14:17:00+00:00"
         },
         {
@@ -3096,6 +3099,7 @@
                 "loader",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-loader",
             "time": "2015-06-03T14:05:47+00:00"
         },
         {
@@ -3142,6 +3146,7 @@
                 "stdlib",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-stdlib",
             "time": "2018-08-28T21:34:05+00:00"
         },
         {
@@ -3196,6 +3201,7 @@
                 "middleware",
                 "psr-7"
             ],
+            "abandoned": "laminas/laminas-stratigility",
             "time": "2017-10-10T14:08:33+00:00"
         },
         {
@@ -3243,6 +3249,7 @@
                 "uri",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-uri",
             "time": "2016-02-17T22:38:51+00:00"
         },
         {
@@ -3314,6 +3321,7 @@
                 "validator",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-validator",
             "time": "2017-08-22T14:19:23+00:00"
         },
         {
