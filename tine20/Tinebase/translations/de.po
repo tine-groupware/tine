@@ -4409,11 +4409,10 @@ msgstr "Hierarchie/Name"
 msgid "Grid Panel Key Bindings"
 msgstr "Tastenkürzel Listenansicht"
 
-msgid "User E-Mail-Address {0} not in allowed domains"
-msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains"
-
-msgid "User E-Mail-Address {0} not in allowed domains [{1}]"
-msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
+msgid "Email address {0} not in allowed domains [{1}] or invalid"
+msgstr ""
+"Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}] oder "
+"ungütig"
 
 msgid "Accesslog rotation in days"
 msgstr "Zugriffslog-Rotation in Tagen"
@@ -4639,7 +4638,7 @@ msgid "Outdated Browser"
 msgstr "Veralteter Browser"
 
 msgid "You need a current Browser to use this program."
-msgstr "Sie benötigen einen akutellen Browser um dieses Programm zu nutzen."
+msgstr "Sie benötigen einen aktuellen Browser um dieses Programm zu nutzen."
 
 msgid "A: select all visible rows"
 msgstr "A: Alle sichtbaren Zeilen selektieren"
@@ -4665,10 +4664,12 @@ msgstr "R: Liste neu laden"
 msgid "Password failed to match the following policy requirements: "
 msgstr "Das eingegebene Kennwort entspricht nicht den Mindestanforderungen: "
 
-msgid "Email address {0} not in allowed domains [{1}] or invalid"
+msgid "User E-Mail-Address {0} not in allowed domains"
+msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains"
+
+msgid "User E-Mail-Address {0} not in allowed domains [{1}]"
 msgstr ""
-"Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}] oder "
-"ungütig"
+"Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
 
 msgid "Conflict is resolved"
 msgstr "Konflikt ist aufgelöst"
