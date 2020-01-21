@@ -22,6 +22,7 @@ Diese Funktion ist in Tine 2.0 für den Asterisk-Telefonie-Server in Zusammenspi
 
 ### Anbindung an Sipgate
 
-Es gibt ein Tine 2.0 Community-Modul für die Anbindung an Sipgate (https://www.sipgate.de/). Damit sind die Funktionen 1. und 2. sowie SMS-Versand mit Sipgate möglich.
+Es gibt ein Tine 2.0 Community-Modul für die Anbindung an Sipgate (https://www.sipgate.de/): https://github.com/tine20/tine20/tree/community_apps/tine20/Sipgate
+Damit sind die Funktionen 1. und 2. sowie SMS-Versand mit Sipgate möglich.
 
 Allerdings ist das schon seit einiger Zeit nicht mehr gepflegt worden, so dass für die Inbetriebnahme hier noch Zusatzaufwand nötig wäre.
