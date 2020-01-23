@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "797d8540ca34d7991908664ae0ed9cb6",
+    "content-hash": "6f1064d79e49295e262585bf46da736b",
     "packages": [
         {
             "name": "clue/socket-raw",
