@@ -628,6 +628,8 @@ class Setup_Controller
             }
         } while (++$iterationCount < 5);
 
+        $this->clearCache();
+        
         return $result;
     }
 
