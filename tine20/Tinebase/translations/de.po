@@ -762,7 +762,6 @@ msgid "Configs"
 msgstr "Konfigurationen"
 
 #: js/Models.js:492
-#, fuzzy
 msgid "Path"
 msgstr "Pfad"
 
@@ -1664,7 +1663,6 @@ msgid "Notes"
 msgstr "Notizen"
 
 #: js/widgets/ActivitiesGridPanel.js:109 js/widgets/ActivitiesPanel.js:79
-#, fuzzy
 msgid "Note"
 msgstr "Notiz"
 
@@ -1901,7 +1899,6 @@ msgid "Time"
 msgstr "Zeit"
 
 #: js/widgets/ActivitiesPanel.js:252
-#, fuzzy
 msgid "User"
 msgstr "Benutzer"
 
@@ -3872,7 +3869,6 @@ msgid "Order"
 msgstr "Reihenfolge"
 
 #: Model/Container.php:113
-#, fuzzy
 msgid "Application"
 msgstr "Anwendung"
 
@@ -4642,7 +4638,7 @@ msgid "Outdated Browser"
 msgstr "Veralteter Browser"
 
 msgid "You need a current Browser to use this program."
-msgstr "Sie benötigen einen akutellen Browser um dieses Programm zu nutzen."
+msgstr "Sie benötigen einen aktuellen Browser um dieses Programm zu nutzen."
 
 msgid "A: select all visible rows"
 msgstr "A: Alle sichtbaren Zeilen selektieren"
@@ -4698,6 +4694,19 @@ msgstr "Ihre Tine 2.0 Business Edition Lizenz ist abgelaufen."
 
 msgid "Tine 2.0 Business Edition trial"
 msgstr "Tine 2.0 Business Edition Testversion."
+
+msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
+msgstr ""
+"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine gültige Lizenz zu "
+"erwerben."
+
+msgid ""
+"Your Tine 2.0 Business Edition license is expired! Users cannot login any "
+"more. Please contact Metaways Infosystems GmbH to buy a new license."
+msgstr ""
+"Ihre Tine 2.0 Business Edition license ist abgelaufen! Benutzer können sich "
+"nicht mehr einloggen. Bitte kontaktieren Sie Metaways Infosystems GmbH um "
+"eine neue Lizenz zu erwerben."
 
 msgid "ImportExportDefinition"
 msgid_plural "ImportExportDefinitions"

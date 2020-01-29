@@ -308,21 +308,27 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             var licenseCheck = Tine.Tinebase.registry.get('licenseStatus');
 
             if (licenseCheck == 'status_no_license_available' || licenseCheck == 'status_license_invalid') {
-                var licenseFailed = [{
-                    cls: 'tb-login-big-label',
-                    html: i18n._('Tine 2.0 Business Edition trial')
-                }, {
-                    html: '<p>'
-                    + i18n._('Thank you for testing Tine 2.0. This version is limited to 5 users. Please visit our shop to buy a valid license.')
-                }, {
-                    cls: 'tb-login-big-label-spacer',
-                    html: '&nbsp;'
-                }, {
-                    html: '<ul>' +
-                    '<li><a target="_blank" href="' + Tine.shop + '" border="0">'
-                    + String.format(i18n._('{0} Shop'), Tine.title) + '</a></li>' +
-                    '</ul><br/>'
-                }];
+
+                if (licenseCheck == 'status_license_invalid') {
+                    // EXPIRED!
+                    let licenseFailed = [{
+                        cls: 'tb-login-big-label',
+                        html: i18n._('Your Tine 2.0 Business Edition expired.')
+                    }, {
+                        html: '<p>'
+                            + i18n._('Your Tine 2.0 Business Edition license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license.')
+                    }];
+
+                } else {
+                    // TRIAL
+                    let licenseFailed = [{
+                        cls: 'tb-login-big-label',
+                        html: i18n._('Tine 2.0 Business Edition trial')
+                    }, {
+                        html: '<p>'
+                            + i18n._('Please contact Metaways Infosystems GmbH to buy a valid license.')
+                    }];
+                }
 
                 items = licenseFailed.concat(items);
             }
