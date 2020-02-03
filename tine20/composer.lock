@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "c85ea8697515a1e04e5bb7fbe8f0b6485596a186"
+                "reference": "b8462edc7bcab5dfb683748757a0d3e6c5e18d53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/c85ea8697515a1e04e5bb7fbe8f0b6485596a186",
-                "reference": "c85ea8697515a1e04e5bb7fbe8f0b6485596a186",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/b8462edc7bcab5dfb683748757a0d3e6c5e18d53",
+                "reference": "b8462edc7bcab5dfb683748757a0d3e6c5e18d53",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1139,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-01-09T13:10:09+00:00"
+            "time": "2020-01-28T14:30:50+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1404,7 +1404,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gerrit.tine20.com/customers/p/tine20-usermanual.git",
-                "reference": "3971dceda608d4dbfda86d78b197df650d716174"
+                "reference": "065b035dc3eeeac48e03e596b14bca7c43e7353b"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1427,7 +1427,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2019-11-22T08:38:41+00:00"
+            "time": "2020-02-03T15:38:00+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
