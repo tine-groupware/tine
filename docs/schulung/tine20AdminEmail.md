@@ -147,3 +147,16 @@ muss bei der Übertragung mitgesendet werden.
 * Da der maximale Umfang der übergebaren Parameter in Mailto-Links durch die Browser beschränkt
 wird, können Empfänger, Texte oder Anhänge nicht in beliebiger Länge verwendet werden. Derzeit liegt
 dieses Limit bei 65000 Zeichen.
+
+Frage: Wie kann ich mit Felamimail winmail.dat Anhänge automatisch entpacken 
+=================
+
+Dazu muss auf dem Server ein (y)tnef Binary installiert sein. Bei Debian/Ubuntu wird das über das Paket "tnef" verteilt:
+
+    apt install tnef
+    
+Unter Alpine Linux heisst das Paket ytnef:
+
+    apk add ytnef
+
+ 
