@@ -51,8 +51,10 @@ Weitere Infos:
 
 btw. mit dem Filter sollte man ein bischen aufpassen, am besten man ändert ihn nie! Wenn dann darf der Filter nur "größer" werden, aber er darf nie bereits übertragene Kontake ausschließen.
 
-Änderungen rückgängig machen (UNDO-Funktion)
+Änderungen im Adressbuch rückgängig machen (UNDO-Funktion)
 =================
+
+Es wird ein Zugriff auf die Tine 2.0 CLI vorausgesetzt.
 
 Wenn man weiss, von wem und wann Änderungen gemacht wurden, können diese einfach wiederhergestellt
  werden (-d steht für Dry Run):

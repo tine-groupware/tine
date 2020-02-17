@@ -114,3 +114,18 @@ Mein TempFile-Ordner ist sehr groß. Kann ich einen Cleanup von Hand anstossen?
 Ja, das geht so (Löscht alle Dateien, die älter als 2019-12-19 11:28:00 sind):
 
     tine20.php --method=Tinebase.clearTable temp_files -- date='2019-12-19 11:28:00'
+
+Änderungen im Dateimanager/Filesystem rückgängig machen z.b. gelöschte Datei wiederherstellen (UNDO-Funktion)
+=================
+
+ACHTUNG: damit das im Dateimanager klappt, muss das Filesystem-Modlog angeschaltet sein.
+
+Es wird ein Zugriff auf die Tine 2.0 CLI vorausgesetzt.
+
+Wenn man weiss, von wem und wann Änderungen gemacht wurden, können diese einfach wiederhergestellt
+ werden (-d steht für Dry Run):
+ 
+    $ tine20-cli --method=Tinebase.undo -d -- \
+      record_type=Tinebase_Model_Tree_Node \
+      modification_time=2020-02-17 \
+      modification_account=ACCOUNTID
