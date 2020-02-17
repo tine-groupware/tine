@@ -789,6 +789,17 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function updateAutoMoveNotificationScript($_account)
     {
+        // get account user and check forward_only - disable sieve if forward_only address
+        if ($_account->user_id) {
+            try {
+                $user = Tinebase_User::getInstance()->getFullUserById($_account->user_id);
+                if (isset($user->smtpUser) && $user->emailForwardOnly) {
+                    $_account->sieve_notification_move = false;
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+            }
+        }
+
         $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart');
         if (isset($_account->sieve_notification_move)
             && $_account->sieve_notification_move
@@ -797,11 +808,11 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $scriptParts->addRecord(new Felamimail_Model_Sieve_ScriptPart([
                 'account_id' => $_account,
                 'type' => Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION,
-                'script' => 'require ["fileinto", "mailbox"];
-if header :contains "X-Tine20-Type" "Notification" {
+                'script' => 'if header :contains "X-Tine20-Type" "Notification" {
     fileinto :create "' . $_account->sieve_notification_move_folder . '";
 }',
                 'name' => 'auto_move_notification',
+                'requires' => ['"fileinto"', '"mailbox"'],
             ]));
         }
         $this->_updateScriptParts($_account, $scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_AUTO_MOVE_NOTIFICATION);
