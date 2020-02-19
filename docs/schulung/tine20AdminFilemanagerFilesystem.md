@@ -129,3 +129,19 @@ Wenn man weiss, von wem und wann Änderungen gemacht wurden, können diese einfa
       record_type=Tinebase_Model_Tree_Node \
       modification_time=2020-02-17 \
       modification_account=ACCOUNTID
+
+Dateimanager-Verzeichnis via WebDAV unter Linux (CLI) einbinden
+=====
+
+siehe https://www.dinotools.de/2013/11/20/linux-einhaengen-einer-webdav-ressource-ins-dateisystem/
+
+    $ sudo apt-get install davfs2
+    
+Dann das Verzeichnis herausfinden (z.B. via Browser-Zugriff auf https://my.tine/webdav) und mounten:
+
+    $ sudo mount.davfs https://my.tine/webdav /mnt/
+    
+ACHTUNG: bei Verzeichnissen mit Leerzeichen oder Umlauten (urlencode) hat das so noch nicht geklappt!
+
+Man kann Username + PW auch in einer "secrets" Datei ablegen.
+Ausserdem kann der Eintrag natürlich auch in die fstab geschrieben werden.
