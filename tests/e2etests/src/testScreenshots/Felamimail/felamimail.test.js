@@ -1,10 +1,10 @@
 const expect = require('expect-puppeteer');
 const lib = require('../../lib/browser');
-const help = require('../../lib/helper');
+
 require('dotenv').config();
 
 beforeAll(async () => {
-    expect.setDefaultOptions({timeout: 1000});
+    //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('E-Mail');
     //console.log('Screenshots form MainScreen');
     await page.screenshot({path: ''});
@@ -70,7 +70,7 @@ describe('context menu', () => {
     let mail;
     test('open context menu', async () => {
         await page.waitFor(1000);
-        mail = await help.getCurrenUser(page);
+        mail = await lib.getCurrenUser(page);
         await expect(page).toClick('span', {text: mail.accountEmailAddress, button: 'right'}); // @todo currten user mail
         await page.waitFor(1000);
         await page.hover('.x-menu-item-icon.action_add');

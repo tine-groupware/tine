@@ -3,7 +3,7 @@ const lib = require('../../lib/browser');
 require('dotenv').config();
 
 beforeAll(async () => {
-    expect.setDefaultOptions({timeout: 1000});
+    //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Admin');
 });
 
@@ -109,6 +109,7 @@ describe('application', () => {
         await newPage.close();
     });
     test('crm settings', async () => {
+        await page.waitFor(1000);
         await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Crm', clickCount: 2});
         newPage = await lib.getNewWindow();
         await newPage.waitFor(2000);

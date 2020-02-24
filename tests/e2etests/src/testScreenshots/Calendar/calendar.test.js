@@ -1,10 +1,10 @@
 const expect = require('expect-puppeteer');
 const lib = require('../../lib/browser');
-const help = require('../../lib/helper');
+
 require('dotenv').config();
 
 beforeAll(async () => {
-    expect.setDefaultOptions({timeout: 1000});
+    //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Kalender');
 });
 

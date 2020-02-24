@@ -1,10 +1,10 @@
 const expect = require('expect-puppeteer');
 const lib = require('../../lib/browser');
-const help = require('../../lib/helper');
+
 require('dotenv').config();
 
 beforeAll(async () => {
-    expect.setDefaultOptions({timeout: 1000});
+    //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Crm');
     await page.screenshot({path: 'screenshots/7_crm/1_crm_leadtabellen.png'});
 });
@@ -19,7 +19,7 @@ describe('mainScreen', () => {
 
 describe('Edit Contact', () => {
     test('open EditDialog', async () => {
-        var [button] = await help.getElement('button', page, 'Lead hinzufügen');
+        var [button] = await lib.getElement('button', page, 'Lead hinzufügen');
         await button.click();
         //console.log('Klick Button');
         newPage = await lib.getNewWindow();

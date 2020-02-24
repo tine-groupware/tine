@@ -3,7 +3,7 @@ const lib = require('../../lib/browser');
 require('dotenv').config();
 
 beforeAll(async () => {
-    expect.setDefaultOptions({timeout: 1000});
+    //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Adressbuch');
 });
 

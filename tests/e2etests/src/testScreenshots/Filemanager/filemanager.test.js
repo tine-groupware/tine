@@ -1,10 +1,10 @@
 const expect = require('expect-puppeteer');
 const lib = require('../../lib/browser');
-const help = require('../../lib/helper');
+
 require('dotenv').config();
 
 beforeAll(async () => {
-    expect.setDefaultOptions({timeout: 1000});
+    //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Dateimanager');
 
 });
@@ -62,7 +62,7 @@ describe('editDialog', () => {
         await page.waitFor(2000);
         await page.screenshot({path: 'screenshots/6_dateimanager/6_dateimanager_bearbeitungsmenu.png'});
         await page.click('.x-grid3-row.x-grid3-row-first.x-grid3-row-last');
-        var [button] = await help.getElement('button', page, 'Eigenschaften bearbeiten');
+        var [button] = await lib.getElement('button', page, 'Eigenschaften bearbeiten');
         await button.click();
         var newPage = await lib.getNewWindow();
         await newPage.waitFor(2000);

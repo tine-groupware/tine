@@ -1,11 +1,11 @@
 const expect = require('expect-puppeteer');
 const lib = require('../../lib/browser');
-const help = require('../../lib/helper');
+
 require('dotenv').config();
 
 beforeAll(async () => {
 
-    expect.setDefaultOptions({timeout: 1000});
+    //expect.setDefaultOptions({timeout: 1000});
 
     await lib.getBrowser('Adressbuch');
 });
@@ -28,7 +28,7 @@ describe('Contacts', () => {
         });
 
         test('Import', async () => {
-            var [button] = await help.getElement('button', page, 'Kontakte importieren');
+            var [button] = await lib.getElement('button', page, 'Kontakte importieren');
             var newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));
             await button.click();
             newPage = await lib.getNewWindow();
@@ -73,7 +73,7 @@ describe('Contacts', () => {
             } catch (e) {
                 //console.log('Map musst enabled');
             }
-            var [button2] = await help.getElement('button', newPage, 'Abbrechen');
+            var [button2] = await lib.getElement('button', newPage, 'Abbrechen');
             //console.log('Save Kontakt');
             await button2.click();
         });
@@ -85,14 +85,14 @@ describe('Contacts', () => {
             await newPage.waitFor('.x-tab-edge');
             await expect(newPage).toClick('span', {text: new RegExp("Notizen.*")});
             await newPage.screenshot({path: 'screenshots/2_allgemeines/17_allgemein_hr_eingabemaske_neu_notiz.png'});
-            let [button] = await help.getElement('button', newPage, 'Notizen hinzufügen');
+            let [button] = await lib.getElement('button', newPage, 'Notizen hinzufügen');
             await button.click();
             await newPage.waitFor('.x-window-bwrap .x-form-trigger.x-form-arrow-trigger');
             await newPage.click('.x-window-bwrap .x-form-trigger.x-form-arrow-trigger');
             await newPage.waitFor(1000);
             await newPage.screenshot({path: 'screenshots/2_allgemeines/18_allgemein_hr_eingabemaske_neu_notiz_notiz.png'});
             await expect(newPage).toClick('.x-window-bwrap button', newPage, 'Abbrechen');
-            [button] = await help.getElement('button', newPage, 'Abbrechen');
+            [button] = await lib.getElement('button', newPage, 'Abbrechen');
             //console.log('Save Kontakt');
             await button.click();
         });
@@ -103,7 +103,7 @@ describe('Contacts', () => {
             await newPage.waitFor('.x-tab-edge');
             await expect(newPage).toClick('span', {text: new RegExp("Anhänge.*"), clickCount: 2});
             await newPage.screenshot({path: 'screenshots/2_allgemeines/22_allgemein_hr_mitarbeiter_anhang.png'});
-            [button] = await help.getElement('button', newPage, 'Abbrechen');
+            [button] = await lib.getElement('button', newPage, 'Abbrechen');
             //console.log('Save Kontakt');
             await button.click();
         });
@@ -133,7 +133,7 @@ describe('Contacts', () => {
                 }
             });
             await newPage.waitFor(3000);
-            var [button2] = await help.getElement('button', newPage, 'Abbrechen');
+            var [button2] = await lib.getElement('button', newPage, 'Abbrechen');
             await button2.click();
         });
 
@@ -143,7 +143,7 @@ describe('Contacts', () => {
             await newPage.waitFor(2000);
             await expect(newPage).toClick('span', {text: new RegExp("Historie.*")});
             await newPage.screenshot({path: 'screenshots/2_allgemeines/21_allgemein_hr_mitarbeiter_historie.png'});
-            var [button2] = await help.getElement('button', newPage, 'Abbrechen');
+            var [button2] = await lib.getElement('button', newPage, 'Abbrechen');
             //console.log('Save Kontakt');
             await button2.click();
         });
@@ -228,7 +228,7 @@ describe('Contacts', () => {
     describe('Edit Contact', () => {
         let newPage;
         test('open EditDialog', async () => {
-            var [button] = await help.getElement('button', page, 'Kontakt hinzufügen');
+            var [button] = await lib.getElement('button', page, 'Kontakt hinzufügen');
             await button.click();
             //console.log('Klick Button');
             newPage = await lib.getNewWindow();
@@ -263,7 +263,7 @@ describe('Contacts', () => {
         });
 
         test('parseAddress', async () => {
-            var [button3] = await help.getElement('button', newPage, 'Adresse einlesen');
+            var [button3] = await lib.getElement('button', newPage, 'Adresse einlesen');
             await button3.click();
             //console.log('Klich parse Button');
             await newPage.waitFor('.ext-mb-textarea');
@@ -296,7 +296,7 @@ describe('Contacts', () => {
 
 
         test('save', async () => {
-            var [button2] = await help.getElement('button', newPage, 'Ok');
+            var [button2] = await lib.getElement('button', newPage, 'Ok');
             //console.log('Save Kontakt');
             await button2.click();
         });

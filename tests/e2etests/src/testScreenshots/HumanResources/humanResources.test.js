@@ -1,10 +1,10 @@
 const expect = require('expect-puppeteer');
 const lib = require('../../lib/browser');
-const help = require('../../lib/helper');
+
 require('dotenv').config();
 
 beforeAll(async () => {
-    expect.setDefaultOptions({timeout: 1000});
+    //expect.setDefaultOptions({timeout: 1000});
     await lib.getBrowser('Human Resources');
     // modules
     await page.screenshot({
@@ -21,7 +21,7 @@ describe('employee', () => {
     let newPage;
     test('open EditDialog', async () => {
         await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Mitarbeiter'});
-        var [button] = await help.getElement('button', page, 'Mitarbeiter hinzufügen');
+        var [button] = await lib.getElement('button', page, 'Mitarbeiter hinzufügen');
         await button.click();
         //console.log('Klick Button');
         newPage = await lib.getNewWindow();
