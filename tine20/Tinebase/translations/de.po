@@ -4664,6 +4664,9 @@ msgstr "R: Liste neu laden"
 msgid "Password failed to match the following policy requirements: "
 msgstr "Das eingegebene Kennwort entspricht nicht den Mindestanforderungen: "
 
+msgid "A Message has been filed to this record. Subject: {0}"
+msgstr "Eine Nachricht wurde an diesen Datensatz angehängt. Betreff: {0}"
+
 msgid "User E-Mail-Address {0} not in allowed domains"
 msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains"
 
@@ -4697,7 +4700,14 @@ msgid "Tine 2.0 Business Edition trial"
 msgstr "Tine 2.0 Business Edition Testversion."
 
 msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
-msgstr "Bitte kontaktieren Sie Metaways Infosystems GmbH um eine gültige Lizenz zu erwerben."
+msgstr ""
+"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine gültige Lizenz "
+"zu erwerben."
 
-msgid "Your Tine 2.0 Business Edition license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license."
-msgstr "Ihre Tine 2.0 Business Edition license ist abgelaufen! Benutzer können sich nicht mehr einloggen. Bitte kontaktieren Sie Metaways Infosystems GmbH um eine neue Lizenz zu erwerben."
+msgid ""
+"Your Tine 2.0 Business Edition license is expired! Users cannot login any "
+"more. Please contact Metaways Infosystems GmbH to buy a new license."
+msgstr ""
+"Ihre Tine 2.0 Business Edition license ist abgelaufen! Benutzer können "
+"sich nicht mehr einloggen. Bitte kontaktieren Sie Metaways Infosystems "
+"GmbH um eine neue Lizenz zu erwerben."
