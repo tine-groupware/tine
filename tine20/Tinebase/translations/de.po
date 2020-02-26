@@ -4664,6 +4664,53 @@ msgstr "R: Liste neu laden"
 msgid "Password failed to match the following policy requirements: "
 msgstr "Das eingegebene Kennwort entspricht nicht den Mindestanforderungen: "
 
+msgid "A Message has been filed to this record. Subject: {0}"
+msgstr "Eine Nachricht wurde an diesen Datensatz angehängt. Betreff: {0}"
+
+msgid "User E-Mail-Address {0} not in allowed domains"
+msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains"
+
+msgid "User E-Mail-Address {0} not in allowed domains [{1}]"
+msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
+
+msgid "Conflict is resolved"
+msgstr "Konflikt ist aufgelöst"
+
+msgid "Please fix the errors noted."
+msgstr "Bitte beheben Sie die genannten Fehler."
+
+# LICENSE TRANSLATIONS
+msgid "License expired"
+msgstr "Lizenz abgelaufen"
+
+msgid ""
+"Your Tine 2.0 Business Edition license expired. Please buy a license at:"
+msgstr ""
+"Ihre Tine 2.0 Business Edition Lizenz ist abgelaufen. Bitte kaufen Sie eine "
+"Lizenz auf:"
+
+msgid "The license expires in {0} days"
+msgstr "Die Lizenz läuft in {0} Tagen ab"
+
+msgid "Your Tine 2.0 Business Edition expired."
+msgstr "Ihre Tine 2.0 Business Edition Lizenz ist abgelaufen."
+
+msgid "Tine 2.0 Business Edition trial"
+msgstr "Tine 2.0 Business Edition Testversion."
+
+msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
+msgstr ""
+"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine gültige Lizenz zu "
+"erwerben."
+
+msgid ""
+"Your Tine 2.0 Business Edition license is expired! Users cannot login any "
+"more. Please contact Metaways Infosystems GmbH to buy a new license."
+msgstr ""
+"Ihre Tine 2.0 Business Edition license ist abgelaufen! Benutzer können sich "
+"nicht mehr einloggen. Bitte kontaktieren Sie Metaways Infosystems GmbH um "
+"eine neue Lizenz zu erwerben."
+
 msgid "ImportExportDefinition"
 msgid_plural "ImportExportDefinitions"
 msgstr[0] "ImportExportDefinition"
@@ -4692,51 +4739,3 @@ msgstr "Format"
 
 msgid "Filename"
 msgstr "Dateiname"
-
-msgid "A Message has been filed to this record. Subject: {0}"
-msgstr "Eine Nachricht wurde an diesen Datensatz angehängt. Betreff: {0}"
-
-msgid "User E-Mail-Address {0} not in allowed domains"
-msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains"
-
-msgid "User E-Mail-Address {0} not in allowed domains [{1}]"
-msgstr ""
-"Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
-
-msgid "Conflict is resolved"
-msgstr "Konflikt ist aufgelöst"
-
-msgid "Please fix the errors noted."
-msgstr "Bitte beheben Sie die genannten Fehler."
-
-# LICENSE TRANSLATIONS
-msgid "License expired"
-msgstr "Lizenz abgelaufen"
-
-msgid ""
-"Your Tine 2.0 Business Edition license expired. Please buy a license at:"
-msgstr ""
-"Ihre Tine 2.0 Business Edition Lizenz ist abgelaufen. Bitte kaufen Sie "
-"eine Lizenz auf:"
-
-msgid "The license expires in {0} days"
-msgstr "Die Lizenz läuft in {0} Tagen ab"
-
-msgid "Your Tine 2.0 Business Edition expired."
-msgstr "Ihre Tine 2.0 Business Edition Lizenz ist abgelaufen."
-
-msgid "Tine 2.0 Business Edition trial"
-msgstr "Tine 2.0 Business Edition Testversion."
-
-msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
-msgstr ""
-"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine gültige Lizenz "
-"zu erwerben."
-
-msgid ""
-"Your Tine 2.0 Business Edition license is expired! Users cannot login any "
-"more. Please contact Metaways Infosystems GmbH to buy a new license."
-msgstr ""
-"Ihre Tine 2.0 Business Edition license ist abgelaufen! Benutzer können "
-"sich nicht mehr einloggen. Bitte kontaktieren Sie Metaways Infosystems "
-"GmbH um eine neue Lizenz zu erwerben."
