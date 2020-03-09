@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e689c456e82645c27e0353bf3cd9d710",
+    "content-hash": "8384d8e6c4361b6154a3a22f4fc917e0",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "b8462edc7bcab5dfb683748757a0d3e6c5e18d53"
+                "reference": "87eefea40abd9cea0290aa9b6cdb314fd0037fe2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/b8462edc7bcab5dfb683748757a0d3e6c5e18d53",
-                "reference": "b8462edc7bcab5dfb683748757a0d3e6c5e18d53",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/87eefea40abd9cea0290aa9b6cdb314fd0037fe2",
+                "reference": "87eefea40abd9cea0290aa9b6cdb314fd0037fe2",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1139,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-01-28T14:30:50+00:00"
+            "time": "2020-03-09T13:26:39+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1307,14 +1307,14 @@
         },
         {
             "name": "metaways/opendocument",
-            "version": "1.1",
+            "version": "1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
+                "reference": "fea9b9d94ab36a3c28368d69bf209d4e8b2b87ce"
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=7.0.0"
             },
             "type": "project",
             "autoload": {
@@ -1335,7 +1335,7 @@
                 "OpenDocument",
                 "Template"
             ],
-            "time": "2016-04-01T11:09:24+00:00"
+            "time": "2020-03-09T12:15:55+00:00"
         },
         {
             "name": "metaways/timezoneconvert",
