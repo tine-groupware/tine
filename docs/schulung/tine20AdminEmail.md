@@ -113,7 +113,7 @@ an den eigenen Benutzer ausgelöst werden.
 Frage: Wie kann ich Felamimail aus einer externen Webapplikation/Webseite aufrufen, um eine E-Mail zu versenden?
 =================
 
-* Es gibt im Tine 2.0 Menüden Punbkt "Tine 2.0 als Standard-Mailprogramm
+* Es gibt im Tine 2.0 Menü den Punkt "Tine 2.0 als Standard-Mailprogramm
 Verwenden" erweitert. Klickt der Nutzer diesen Punkt muss er, je nach Browser, diese Entscheidung noch
 einmal in einem Nachfragedialog vom Browser bestätigen.
 
@@ -171,3 +171,12 @@ Konfiguration (z.b. in config.inc.php):
     'Felamimail' => [
         Felamimail_Config::FILTER_EMAIL_URIS => true,
     ]
+
+Frage: welche Anforderung muss ein EMail-Server erfüllen um in Tine 2.0 vollständig integrierbar zu sein?
+===================
+
+Vollständige Unterstützung in Tine 2.0 bieten die Dovecot (IMAP + Sieve) und Postfix (SMTP) Server. Es gibt auch andere Mailserver/Systeme, die über Plugins angesteuert werden können, diese werden aber nicht im vollen Funktionsumfang unterstützt.
+
+Bei Dovecot und Postfix werden die Bewegdaten (Benutzer, Domains, Destinations, Aliases, Forwards, ...) über MySQL-Tabellen verwaltet, die von Tine 2.0 und den Mailsystemen geschrieben und gelesen werden.
+
+TODO detaillierte Anleitung erstellen.
