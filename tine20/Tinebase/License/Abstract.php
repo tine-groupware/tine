@@ -9,6 +9,8 @@
  * 
  */
 
+use Composer\Semver\Semver;
+
 /**
  * Tine 2.0 Abstract License class
  *
@@ -23,6 +25,22 @@ abstract class Tinebase_License_Abstract
      */
     protected $_license = null;
     protected $_certData = null;
+
+    /**
+     * @var array featureName => since Licence Version (semver)
+     */
+    protected $_featureNeedsPermission = [
+        'OnlyOfficeIntegrator'                          => '*',
+        'DocumentPreviewService'                        => '*',
+        'UserManual'                                    => '>=2.0',
+        'GDPR'                                          => '>=2.0',
+        'HumanResources.workingTimeAccounting'          => '>=2.0',
+        'DFCom'                                         => '>=2.0',
+        'CashBook'                                      => '*',
+        'MeetingManager'                                => '*',
+        'ContractManager'                               => '*',
+        'KeyManager'                                    => '*',
+    ];
 
     /**
      * set new license file
@@ -82,6 +100,23 @@ abstract class Tinebase_License_Abstract
             }
         }
         
+        return true;
+    }
+
+    /**
+     * @param $feature
+     * @return boolean
+     */
+    public function isPermitted($feature)
+    {
+        $needsPermission = isset($this->_featureNeedsPermission[$feature])
+            && Semver::satisfies($this->getVersion(), $this->_featureNeedsPermission[$feature]);
+
+        if ($needsPermission) {
+            return $this->hasFeature($feature);
+        }
+
+        // permit if not covered by featureNeedsPermission
         return true;
     }
 
