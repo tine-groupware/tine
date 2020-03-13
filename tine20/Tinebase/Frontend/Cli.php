@@ -1847,6 +1847,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $this->_checkAdminRight();
 
+        Tinebase_FileSystem_Previews::getInstance()->resetErrorCount();
         Tinebase_FileSystem::getInstance()->sanitizePreviews();
 
         return 0;
@@ -1861,7 +1862,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $this->_checkAdminRight();
 
-        // TODO reset preview_error_count
         Tinebase_FileSystem_Previews::getInstance()->deleteAllPreviews();
         Tinebase_FileSystem::getInstance()->sanitizePreviews();
 
