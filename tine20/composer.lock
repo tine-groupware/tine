@@ -3210,30 +3210,30 @@
         },
         {
             "name": "zbateson/mail-mime-parser",
-            "version": "1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zbateson/mail-mime-parser.git",
-                "reference": "805eaf72d7f4f5f12bbb9d8736d99b56d7ea7dd8"
+                "reference": "fd49e6f53184529a5ec4bc0b9edd98edeee53f5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zbateson/mail-mime-parser/zipball/805eaf72d7f4f5f12bbb9d8736d99b56d7ea7dd8",
-                "reference": "805eaf72d7f4f5f12bbb9d8736d99b56d7ea7dd8",
+                "url": "https://api.github.com/repos/zbateson/mail-mime-parser/zipball/fd49e6f53184529a5ec4bc0b9edd98edeee53f5a",
+                "reference": "fd49e6f53184529a5ec4bc0b9edd98edeee53f5a",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/psr7": "^1.0",
                 "php": ">=5.4",
                 "zbateson/mb-wrapper": "^1.0",
-                "zbateson/stream-decorators": "^1.0"
+                "zbateson/stream-decorators": "^1.0.2"
             },
             "require-dev": {
-                "evert/phpdoc-md": "^0.1.1",
+                "jms/serializer": "^1.1",
                 "mikey179/vfsstream": "^1.6.0",
                 "phing/phing": "^2.15.0",
-                "phpdocumentor/phpdocumentor": "^2.8.0",
-                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5"
+                "phpdocumentor/phpdocumentor": "^2.9.0",
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5"
             },
             "suggest": {
                 "ext-iconv": "For best support/performance",
@@ -3252,6 +3252,10 @@
             "authors": [
                 {
                     "name": "Zaahid Bateson"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/zbateson/mail-mime-parser/graphs/contributors"
                 }
             ],
             "description": "MIME email message parser",
@@ -3266,7 +3270,7 @@
                 "parser",
                 "php-imap"
             ],
-            "time": "2018-10-18T14:27:46+00:00"
+            "time": "2020-01-09T04:49:13+00:00"
         },
         {
             "name": "zbateson/mb-wrapper",
@@ -3328,16 +3332,16 @@
         },
         {
             "name": "zbateson/stream-decorators",
-            "version": "1.0.0",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zbateson/stream-decorators.git",
-                "reference": "300d7944b16cc1c3c6053bbc4735a178cb35073e"
+                "reference": "a1873c22d2d6189931dd145d766157c6f75cc8d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zbateson/stream-decorators/zipball/300d7944b16cc1c3c6053bbc4735a178cb35073e",
-                "reference": "300d7944b16cc1c3c6053bbc4735a178cb35073e",
+                "url": "https://api.github.com/repos/zbateson/stream-decorators/zipball/a1873c22d2d6189931dd145d766157c6f75cc8d7",
+                "reference": "a1873c22d2d6189931dd145d766157c6f75cc8d7",
                 "shasum": ""
             },
             "require": {
@@ -3346,7 +3350,7 @@
                 "zbateson/mb-wrapper": "^1.0.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5"
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5"
             },
             "type": "library",
             "autoload": {
@@ -3375,7 +3379,7 @@
                 "stream",
                 "uuencode"
             ],
-            "time": "2018-09-28T18:17:52+00:00"
+            "time": "2020-02-10T00:22:40+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",
