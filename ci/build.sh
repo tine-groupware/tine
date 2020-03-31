@@ -9,6 +9,7 @@ function build_and_push() {
     --target $NAME \
     --tag $REGISTRY/$NAME:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
     --cache-from $REGISTRY/$NAME:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
+    --cache-from $REGISTRY/$NAME:commit$CI_COMMIT_BEFORE_SHA-$PHP_IMAGE_TAG \
     --cache-from $REGISTRY/$NAME:$(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-$PHP_IMAGE_TAG \
     --cache-from $REGISTRY/$NAME:$(echo $MAJOR_COMMIT_REF_NAME | sed sI/I-Ig)-$PHP_IMAGE_TAG \
     --file ci/dockerimage/Dockerfile \
@@ -19,8 +20,10 @@ function build_and_push() {
     --build-arg SOURCE_IMAGE=$REGISTRY/source:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
     --build-arg BUILD_IMAGE=$REGISTRY/build:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
     --build-arg BUILT_IMAGE=$REGISTRY/built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
-    --build-arg NPM_ADDITIONAL_ARGS="$NPM_ADDITIONAL_ARGS" \
+    --build-arg NPM_INSTALL_COMMAND="$NPM_INSTALL_COMMAND" \
     .
+
+  echo "docker: built $1 image"
 
   # use --quiet, when docker v 20.03 is avaliable
   docker push $REGISTRY/$NAME:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG
