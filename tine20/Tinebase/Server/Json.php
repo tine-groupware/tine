@@ -500,6 +500,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 __METHOD__ . '::' . __LINE__ .' fetching app json classes');
 
             foreach ($userApplications as $application) {
+                if (! Tinebase_License::getInstance()->isPermitted($application->name)) {
+                    continue;
+                }
                 $jsonAppName = $application->name . '_Frontend_Json';
                 if (class_exists($jsonAppName)) {
                     $classes[$jsonAppName] = $application->name;
