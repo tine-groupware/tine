@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -86,6 +86,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     const POLICY_MAX_USERS                      = 101;
     const POLICY_MAX_CONCURRENT_USERS           = 102;
     const POLICY_LICENSE_TYPE                   = 103;
+    const POLICY_LICENSE_VERSION                = 104;
     const POLICY_DEFAULT_MAX_USERS              = 500;
     const POLICY_DEFAULT_MAX_CONCURRENT_USERS   = 500;
     const POLICY_DEFAULT_LICENSE_TYPE           = Tinebase_License::LICENSE_TYPE_LIMITED_USER_TIME;
@@ -237,33 +238,9 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             $this->_certData = $this->getDefaultExpiryDate();
 
             if ($this->_license !== null) {
-                $data = openssl_x509_parse($this->_license);
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-                    __METHOD__ . '::' . __LINE__ . " " . print_r($data, true));
-
-                if (is_array($data) && array_key_exists('validFrom_time_t', $data)
-                    && array_key_exists('validTo_time_t', $data)
-                    && array_key_exists('serialNumber', $data)
-                ) {
-                    $validFrom = new Tinebase_DateTime('@'. $data['validFrom_time_t']);
-                    if ($data['validTo_time_t'] > 0) {
-                        $validTo = new Tinebase_DateTime('@' . $data['validTo_time_t']);
-                    } else if (preg_match('/([0-9]{4})([0-9]{2})([0-9]{2})/', $data['validTo'], $matches)) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                            __METHOD__ . '::' . __LINE__ . " Got broken validTo_time_t, using validTo ..." . print_r($matches, true));
-                        $validTo = new Tinebase_DateTime($matches[1] . '-' . $matches[2] . '-' . $matches[3]);
-                    } else {
-                        throw Exception('Invalid License ValidTo');
-                    }
-                    $serialNumber = $data['serialNumber'];
-                    $policies = $this->_parsePolicies($data['extensions']['certificatePolicies']);
-                    $this->_certData = array(
-                        'validFrom'    => $validFrom,
-                        'validTo'      => $validTo,
-                        'serialNumber' => $serialNumber,
-                        'policies'     => $policies,
-                        'contractId'   => isset($data['subject']) && isset($data['subject']['CN']) ? $data['subject']['CN'] : '',
-                    );
+                $certData = $this->getCertDatafromLicenseString($this->_license);
+                if ($certData) {
+                    $this->_certData = $certData;
                 } else {
                     $this->_license = null;
                 }
@@ -271,6 +248,42 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
         }
         
         return $this->_certData;
+    }
+
+    /**
+     * @param string $license
+     * @return array|null
+     * @throws Tinebase_Exception
+     */
+    public function getCertDatafromLicenseString($license)
+    {
+        $data = openssl_x509_parse($license);
+        if (is_array($data) && array_key_exists('validFrom_time_t', $data)
+            && array_key_exists('validTo_time_t', $data)
+            && array_key_exists('serialNumber', $data)
+        ) {
+            $validFrom = new Tinebase_DateTime('@' . $data['validFrom_time_t']);
+            if ($data['validTo_time_t'] > 0) {
+                $validTo = new Tinebase_DateTime('@' . $data['validTo_time_t']);
+            } else if (preg_match('/([0-9]{4})([0-9]{2})([0-9]{2})/', $data['validTo'], $matches)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " Got broken validTo_time_t, using validTo ..." . print_r($matches, true));
+                $validTo = new Tinebase_DateTime($matches[1] . '-' . $matches[2] . '-' . $matches[3]);
+            } else {
+                throw Tinebase_Exception('Invalid License ValidTo');
+            }
+            $serialNumber = $data['serialNumber'];
+            $policies = $this->_parsePolicies($data['extensions']['certificatePolicies']);
+            return array(
+                'validFrom' => $validFrom,
+                'validTo' => $validTo,
+                'serialNumber' => $serialNumber,
+                'policies' => $policies,
+                'contractId' => isset($data['subject']) && isset($data['subject']['CN']) ? $data['subject']['CN'] : '',
+            );
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -339,10 +352,12 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
         $policies = array();
         $oidPrefix = '1.5.6.79.';
         $rawPolicies = explode('Policy: ' . $oidPrefix, $policiesString);
-        
+
         foreach ($rawPolicies as $idx => $rawPolicy) {
-            if (! $idx) continue;
-            
+            if (! $idx) {
+                continue;
+            }
+
             $lines = explode("\n", $rawPolicy);
             
             $id = array_shift($lines);
