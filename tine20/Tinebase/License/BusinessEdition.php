@@ -87,6 +87,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     const POLICY_MAX_CONCURRENT_USERS           = 102;
     const POLICY_LICENSE_TYPE                   = 103;
     const POLICY_LICENSE_VERSION                = 104;
+    const POLICY_LICENSE_FEATURES               = 105;
     const POLICY_DEFAULT_MAX_USERS              = 500;
     const POLICY_DEFAULT_MAX_CONCURRENT_USERS   = 500;
     const POLICY_DEFAULT_LICENSE_TYPE           = Tinebase_License::LICENSE_TYPE_LIMITED_USER_TIME;
