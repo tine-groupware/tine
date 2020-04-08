@@ -24,6 +24,30 @@ interface Tinebase_License_Interface
     public function getMaxUsers();
     public function getLicenseType();
     public function checkUserLimit($user = null);
+
+    /**
+     * checks if feature is permitted by license
+     *
+     * @param String $feature   e.g. Calendar or Calendar.someFeature
+     * @return boolean
+     */
+    public function isPermitted($feature);
+
+    /**
+     * get version of license
+     *
+     * @return string semver
+     */
+    public function getVersion();
+
+    /**
+     * return true if license has the feature
+     *
+     * @param $feature
+     * @return boolean
+     */
+    public function hasFeature($feature);
+
     public function getStatus();
     public function getCaFiles();
     public function getLicensePath();

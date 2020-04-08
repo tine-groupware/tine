@@ -217,11 +217,33 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
      */
     public function isValid()
     {
-        $isValid = $this->_license ? openssl_x509_checkpurpose($this->_license, X509_PURPOSE_SSL_CLIENT, $this->_caFiles) : false;
-        
-        return $isValid;
+        return $this->_license
+            ? openssl_x509_checkpurpose($this->_license, X509_PURPOSE_SSL_CLIENT, $this->_caFiles)
+            : false;
     }
-    
+
+    /**
+     * get version of license
+     *
+     * @return string|null semver
+     */
+    public function getVersion()
+    {
+        return $this->_getPolicy(Tinebase_License_BusinessEdition::POLICY_LICENSE_VERSION, '1.0.0');
+    }
+
+    /**
+     * return true if license has the feature
+     *
+     * @param $feature
+     * @return boolean
+     */
+    public function hasFeature($feature)
+    {
+        $features = $this->_getPolicy(Tinebase_License_BusinessEdition::POLICY_LICENSE_FEATURES, null, true);
+        return $features && in_array($feature, $features);
+    }
+
     /**
      * fetch certificate data
      * 
@@ -254,7 +276,6 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     /**
      * @param string $license
      * @return array|null
-     * @throws Tinebase_Exception
      */
     public function getCertDatafromLicenseString($license)
     {
@@ -290,7 +311,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     /**
      * Parses the private key inside the certificate and returns data
      *
-     * @return array
+     * @return array|boolean
      */
     public function getInstallationData() {
         if ($this->_license) {
@@ -327,15 +348,18 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     /**
      * fetch policy value from certificate data
      *
-     * @param      $policyIndex number
+     * @param int $policyIndex number
      * @param null $default
-     * @return number|string|null
+     * @param boolean $_getAll fetch all policy values as array (index 0 is always the policy description)
+     * @return number|string|null|array
      */
-    protected function _getPolicy($policyIndex, $default = null)
+    protected function _getPolicy($policyIndex, $default = null, $_getAll = false)
     {
         if ($this->_license) {
             $certData = $this->getCertificateData();
-            if (isset($certData['policies'][$policyIndex][1])) {
+            if ($_getAll && isset($certData['policies'][$policyIndex])) {
+                return $certData['policies'][$policyIndex];
+            } else if (isset($certData['policies'][$policyIndex][1])) {
                 return $certData['policies'][$policyIndex][1];
             }
         }

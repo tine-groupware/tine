@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -21,6 +21,11 @@ class Tinebase_License_BusinessEditionTest extends TestCase
      * @var Tinebase_License_BusinessEdition
      */
     protected $_uit = null;
+
+    /**
+     * @var Setup_Frontend_Cli
+     */
+    protected $_cli = null;
 
     /**
      * set up tests
@@ -41,14 +46,14 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        
+
         // delete license files
         Tinebase_FileSystem::getInstance()->clearStatCache();
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
 
         Tinebase_License::resetLicense();
     }
-    
+
     public function testIsValidWithValidLicense()
     {
         $this->_uit->setLicenseFile(dirname(__FILE__) . '/V-12345.pem');
@@ -65,7 +70,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     {
         $this->_uit->setLicenseFile(dirname(__FILE__) . '/V-12345.pem');
         $certData = $this->_uit->getCertificateData();
-        
+
         $this->assertEquals(5, $certData['policies'][101][1], '5 users limit expected');
         $this->assertEquals(5, $this->_uit->getMaxUsers(), '5 users limit expected');
         $this->assertEquals('2025-11-08 12:12:58', $certData['validTo']->toString());
@@ -107,7 +112,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     public function testStoreLicense()
     {
         $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/V-12345.pem'));
-        
+
         $certData = $this->_uit->getCertificateData();
         $this->assertEquals('2025-11-08 12:12:58', $certData['validTo']->toString());
     }
@@ -119,7 +124,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $certData = $this->_uit->getCertificateData();
         $this->assertEquals('2025-11-08 12:12:58', $certData['validTo']->toString());
     }
-    
+
     public function testCreateUserWithLimitExceeded()
     {
         $this->testStoreLicense();
@@ -246,7 +251,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $user = Admin_Controller_User::getInstance()->create($testUser, 'test', 'test');
         $this->_usernamesToDelete[] = $testUser->accountLoginName;
         $this->assertTrue($user->getId() !== null);
-        $certData = $this->_uit->getCertificateData();
+        $this->_uit->getCertificateData();
     }
 
     public function testLicenseStatusInRegistry()
@@ -258,7 +263,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/V-outdated.pem'));
         $registry = $tfj->getRegistryData();
         $this->assertEquals(Tinebase_License::STATUS_LICENSE_INVALID, $registry['licenseStatus']);
-        
+
         $this->_uit->storeLicense(file_get_contents(dirname(__FILE__) . '/V-12345.pem'));
         $registry = $tfj->getRegistryData();
         $this->assertEquals(Tinebase_License::STATUS_LICENSE_OK, $registry['licenseStatus']);
@@ -271,23 +276,23 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     public function testFirstUserCreationTime()
     {
         $userCreationTime = Tinebase_Core::getUser()->creation_time;
-        if (! $userCreationTime instanceOf Tinebase_DateTime) {
+        if (!$userCreationTime instanceOf Tinebase_DateTime) {
             $this->markTestSkipped('older installation');
         }
-        
+
         $creationTime = Tinebase_User::getInstance()->getFirstUserCreationTime();
         $this->assertEquals($creationTime->toString(), Tinebase_Core::getUser()->creation_time->toString());
-        
+
         return $creationTime;
     }
-    
+
     public function testNoLicenseValidTimestamps()
     {
         $firstUserCreationTime = $this->testFirstUserCreationTime();
         Tinebase_License::resetLicense();
         $this->assertEquals(Tinebase_License::STATUS_NO_LICENSE_AVAILABLE, $this->_uit->getStatus());
         $data = $this->_uit->getCertificateData();
-        
+
         $this->assertTrue($data['validFrom'] instanceof Tinebase_DateTime && $data['validTo'] instanceof Tinebase_DateTime);
         $this->assertEquals($firstUserCreationTime->toString(), $data['validFrom']->toString());
         $this->assertEquals($firstUserCreationTime->addDay(30)->toString(), $data['validTo']->toString());
@@ -297,14 +302,14 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     {
         $this->_uit->setLicenseFile(dirname(__FILE__) . '/V-outdated.pem');
         $expiredSinceDays = $this->_uit->getLicenseExpiredSince();
-        
+
         $now = Tinebase_DateTime::now();
         $validTo = new Tinebase_DateTime('2014-11-08 12:55:54');
         $diff = $now->diff($validTo);
-        
+
         $this->assertEquals($diff->days, $expiredSinceDays);
     }
-    
+
     public function testLicenseExpiredEstimate()
     {
         $creationTime = $this->testFirstUserCreationTime();
@@ -316,9 +321,9 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $data = $this->_uit->getCertificateData();
         $now = Tinebase_DateTime::now();
         $diff = $now->diff($data['validTo']);
-        
+
         $daysLeft = $this->_uit->getLicenseExpireEstimate();
-        
+
         $this->assertEquals($diff->days, $daysLeft, print_r($diff, true));
     }
 
@@ -329,7 +334,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $tempfileName = 'testupload' . Tinebase_Record_Abstract::generateUID(10);
         $tempfilePath = Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . $tempfileName;
         file_put_contents($tempfilePath, file_get_contents(dirname(__FILE__) . '/V-12345.pem'));
-        
+
         $tempFile = Tinebase_TempFile::getInstance()->createTempFile($tempfilePath, $tempfileName, 'application/x-x509-ca-cert');
 
         $licenseData = $sfj->uploadLicense($tempFile->getId());
@@ -353,11 +358,25 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     public function testSetLicenseViaCli()
     {
         $this->_cli = new Setup_Frontend_Cli();
-        $result = $this->_cliHelper('setLicense', array('--setLicense','--','file=' . __DIR__ . '/V-12345.pem'));
+        $result = $this->_cliHelper('setLicense', array('--setLicense', '--', 'file=' . __DIR__ . '/V-12345.pem'));
 
         self::assertEquals('', $result);
         $installationData = $this->_uit->getInstallationData();
         self::assertTrue(is_array($installationData), 'license has not been set');
         self::assertArrayHasKey('bits', $installationData);
+    }
+
+    public function testLicenseFeatures()
+    {
+        $this->_uit->setLicenseFile(dirname(__FILE__) . '/V-12345.pem');
+
+        self::assertTrue($this->_uit->isPermitted('UserManual'));
+        self::assertTrue($this->_uit->isPermitted('HumanResources.workingTimeAccounting'));
+
+        $this->_uit->setLicenseFile(dirname(__FILE__) . '/license_contract_MW-TEST-2.0.pem');
+
+        self::assertTrue($this->_uit->isPermitted('OnlyOfficeIntegrator'));
+        self::assertTrue($this->_uit->isPermitted('UserManual'));
+        self::assertTrue($this->_uit->isPermitted('HumanResources.workingTimeAccounting'));
     }
 }
