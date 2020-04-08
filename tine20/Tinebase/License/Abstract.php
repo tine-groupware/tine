@@ -31,7 +31,7 @@ abstract class Tinebase_License_Abstract
      */
     protected $_featureNeedsPermission = [
         'OnlyOfficeIntegrator'                          => '*',
-        'DocumentPreviewService'                        => '*',
+        'DocumentPreviewService'                        => '>=2.0',
         'UserManual'                                    => '>=2.0',
         'GDPR'                                          => '>=2.0',
         'HumanResources.workingTimeAccounting'          => '>=2.0',
