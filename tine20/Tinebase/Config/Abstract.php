@@ -969,6 +969,9 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
         }
 
         if (isset($features->{$featureName})) {
+            if (! Tinebase_License::getInstance()->isPermitted($this->_appName . '.' . $featureName)) {
+                return false;
+            }
             return $features->{$featureName};
         }
 

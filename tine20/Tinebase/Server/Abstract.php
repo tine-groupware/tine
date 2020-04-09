@@ -152,6 +152,9 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
 
         $definitions = array();
         foreach ($userApplications as $application) {
+            if (! Tinebase_License::getInstance()->isPermitted($application->name)) {
+                continue;
+            }
             try {
                 $controller = Tinebase_Core::getApplicationInstance($application->name);
                 $models = $controller->getModels();

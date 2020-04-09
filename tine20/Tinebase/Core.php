@@ -405,6 +405,10 @@ class Tinebase_Core
         $appNameString = ucfirst((string) $appName);
         $modelName = $extract['modelName'];
 
+        if (! Tinebase_License::getInstance()->isPermitted($appNameString)) {
+            throw new Tinebase_Exception_AccessDenied('License does not permit access to application ' . $appName);
+        }
+
         $controllerName = $appNameString;
         if ($appName !== 'Tinebase' || ($appName === 'Tinebase' && ! $modelName)) {
             // only app controllers are called "App_Controller_Model"

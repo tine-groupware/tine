@@ -17,7 +17,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
      * @param string        $template
      * @return \Zend\Diactoros\Response
      */
-    public static function getClientHTML($entryPoint, $template='Tinebase/views/singlePageApplication.html.twig', $context = []) {
+    public static function getClientHTML($entryPoint, $template = 'Tinebase/views/singlePageApplication.html.twig', $context = []) {
         $entryPoints = is_array($entryPoint) ? $entryPoint : [$entryPoint];
 
         $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), Tinebase_Translation::getTranslation('Tinebase'));
@@ -161,7 +161,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
 
             foreach ($map as $asset => $ressources) {
                 $appName = basename($asset);
-                if (!in_array($appName, $apps)) {
+                if (!in_array($appName, $apps) || ! Tinebase_License::getInstance()->isPermitted($appName)) {
                     unset($map[$asset]);
                 }
             }
