@@ -442,8 +442,13 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $filesToWatch = array();
 
         foreach ($orderedApplications as $application) {
-            if (! empty($apps) && $apps[0] != 'all' && ! in_array($application, $apps)) continue;
-            switch($_fileType) {
+            if (! empty($apps) && $apps[0] != 'all' && ! in_array($application, $apps)) {
+                continue;
+            }
+            if (! Tinebase_License::getInstance()->isPermitted($application)) {
+                continue;
+            }
+            switch ($_fileType) {
                 case 'js':
                     $filesToWatch[] = "{$application}/js/{$application}";
                     break;

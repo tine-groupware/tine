@@ -210,6 +210,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
 
         $this->_certData = null;
         $this->_license = null;
+        $this->_permittedFeatures = [];
     }
     
     /**

@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -30,17 +30,24 @@ abstract class Tinebase_License_Abstract
      * @var array featureName => since Licence Version (semver)
      */
     protected $_featureNeedsPermission = [
-        'OnlyOfficeIntegrator'                          => '*',
-        'DocumentPreviewService'                        => '>=2.0',
+        'Tinebase.featureCreatePreviews'                => '>=2.0',
+        'HumanResources.workingTimeAccounting'          => '>=2.0',
         'UserManual'                                    => '>=2.0',
         'GDPR'                                          => '>=2.0',
-        'HumanResources.workingTimeAccounting'          => '>=2.0',
         'DFCom'                                         => '>=2.0',
+        'OnlyOfficeIntegrator'                          => '*',
         'CashBook'                                      => '*',
         'MeetingManager'                                => '*',
         'ContractManager'                               => '*',
         'KeyManager'                                    => '*',
     ];
+
+    /**
+     * object cache for already checked features
+     *
+     * @var array
+     */
+    protected $_permittedFeatures = [];
 
     /**
      * set new license file
@@ -104,16 +111,34 @@ abstract class Tinebase_License_Abstract
     }
 
     /**
-     * @param $feature
+     * @param string $feature
      * @return boolean
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function isPermitted($feature)
     {
+        if (! is_string($feature)) {
+            throw new Tinebase_Exception_InvalidArgument('Feature/application name should be a string');
+        }
+
+        if (isset($this->_permittedFeatures[$feature])) {
+            // use class cache
+            return true;
+        }
+
         $needsPermission = isset($this->_featureNeedsPermission[$feature])
             && Semver::satisfies($this->getVersion(), $this->_featureNeedsPermission[$feature]);
 
         if ($needsPermission) {
-            return $this->hasFeature($feature);
+            $hasFeature = $this->hasFeature($feature);
+            if (! $hasFeature) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __CLASS__ . '::' . __METHOD__ . ' ' . __LINE__
+                    . ' ' . ' Feature/application not permitted by license: ' . $feature);
+            } else {
+                $this->_permittedFeatures[] = $feature;
+            }
+            return $hasFeature;
         }
 
         // permit if not covered by featureNeedsPermission
