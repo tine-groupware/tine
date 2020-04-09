@@ -38,6 +38,8 @@ class Tinebase_License_BusinessEditionTest extends TestCase
 
         parent::setUp();
         $this->_uit = Tinebase_License::getInstance();
+        // make sure no present license interferes
+        $this->_uit->deleteCurrentLicense();
     }
 
     /**
@@ -52,6 +54,16 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         Tinebase_FileSystem::getInstance()->clearDeletedFilesFromFilesystem();
 
         Tinebase_License::resetLicense();
+    }
+
+    /**
+     * tear down after test class
+     */
+    public static function tearDownAfterClass()
+    {
+        parent::tearDownAfterClass();
+        // reset BE license
+        TestServer::getInstance()->setLicense();
     }
 
     public function testIsValidWithValidLicense()
