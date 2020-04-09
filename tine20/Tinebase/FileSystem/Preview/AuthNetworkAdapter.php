@@ -66,23 +66,32 @@ class Tinebase_FileSystem_Preview_AuthNetworkAdapter implements Tinebase_FileSys
     {
         $this->_checkLicenseTempFile();
 
-        $proxyConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::INTERNET_PROXY);
         $curlOptions = array(
-            CURLOPT_SSLCERT=>
+            CURLOPT_SSLCERT =>
                 $this->_licensePath,
-            CURLOPT_PROXY=>
-                isset($proxyConfig['proxy_host']) ? $proxyConfig['proxy_host'] : '',
-            CURLOPT_PROXYUSERPWD=>
-                isset($proxyConfig['proxy_user']) && isset($proxyConfig['proxy_pass']) ? $proxyConfig['proxy_user'].':'.$proxyConfig['proxy_pass'] : '',
-            CURLOPT_PROXYPORT=>
-                isset($proxyConfig['proxy_port']) ? $proxyConfig['proxy_port'] : ''
         );
+
+        $proxyConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::INTERNET_PROXY);
+        if ((! isset($config['noProxy']) || ! $config['noProxy']) && !empty($proxyConfig)) {
+            $curlOptions = array_merge($curlOptions, [
+                CURLOPT_PROXY =>
+                    isset($proxyConfig['proxy_host']) ? $proxyConfig['proxy_host'] : '',
+                CURLOPT_PROXYUSERPWD =>
+                    isset($proxyConfig['proxy_user']) && isset($proxyConfig['proxy_pass']) ? $proxyConfig['proxy_user'].':'.$proxyConfig['proxy_pass'] : '',
+                CURLOPT_PROXYPORT =>
+                    isset($proxyConfig['proxy_port']) ? $proxyConfig['proxy_port'] : ''
+            ]);
+        }
 
         if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_PREVIEW_SERVICE_VERIFY_SSL}) {
             $curlOptions[CURLOPT_CAPATH] = $this->_caPath;
         }
         $config = array_merge($config, array('adapter' => 'Zend_Http_Client_Adapter_Curl', 'sslcert' => $this->_licensePath, 'curloptions' => $curlOptions));
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Creating Zend_Http_Client for ' . $this->_url . ' with config: '
+            . print_r($config, true));
+      
         return new Zend_Http_Client($this->_url, $config);
     }
 }
