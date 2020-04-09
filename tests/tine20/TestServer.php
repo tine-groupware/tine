@@ -123,7 +123,19 @@ class TestServer
         
         Zend_Registry::set('personas', $personas);
     }
-    
+
+    /**
+     * set BE license because some features might not work without
+     */
+    public function setLicense()
+    {
+        if (Tinebase_License::getInstance()->getStatus() !== Tinebase_License::STATUS_LICENSE_OK) {
+            $licenseFile = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Tinebase' . DIRECTORY_SEPARATOR . 'License'
+                . '/license_contract_MW-TEST-2.0.pem';
+            Tinebase_License::getInstance()->storeLicense(file_get_contents($licenseFile));
+        }
+    }
+
     /**
      * fetch persona user accounts
      * 
