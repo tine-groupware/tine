@@ -1796,7 +1796,7 @@ class Setup_Controller
         foreach ($_applications as $appId => $applicationName) {
             if ($this->isInstalled($applicationName)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " skipping installation of application {$applicationName} because it is already installed");
+                    . " Skipping installation of application {$applicationName} because it is already installed");
             } else {
                 $applications[$applicationName] = $this->getSetupXml($applicationName);
                 if (strlen($appId) === 40) {
@@ -1823,20 +1823,12 @@ class Setup_Controller
             if (! $xml) {
                 Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not install application ' . $name);
             } else {
-                try {
+                if (! Tinebase_License::getInstance()->isPermitted($name)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . " Skipping installation of application " . $name . " because it is not allowed by license");
+                } else {
                     $this->_installApplication($xml, $_options);
-                    if ($name === 'Addressbook' && isset($_options['license']) && ! empty($_options['license'])) {
-                        if (file_exists($_options['license'])) {
-                            // install license after Addressbook if filename given and file exists
-                            Tinebase_License::getInstance()->storeLicense(file_get_contents($_options['license']));
-                        } else {
-                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not find license file: '
-                                . $_options['license']);
-                        }
-                    }
                     $count++;
-                } catch (Tinebase_Exception_AccessDenied $tead) {
-                    Tinebase_Exception::log($tead);
                 }
             }
         }

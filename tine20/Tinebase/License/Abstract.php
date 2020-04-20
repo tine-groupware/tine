@@ -71,6 +71,24 @@ abstract class Tinebase_License_Abstract
     }
 
     /**
+     * can we already check the license?
+     * - returns TRUE if license might be available
+     * - license can be set during initial, but only after Addressbook is installed (see \Addressbook_Setup_Initialize::_setLicense)
+     *
+     * @return bool
+     */
+    public static function isLicenseCheckable()
+    {
+        try {
+            $result = Tinebase_Application::getInstance()->isInstalled('Addressbook');
+        } catch (Exception $e) {
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' License handling needs Addressbook');
+            return false;
+        }
+        return $result;
+    }
+
+    /**
      * check user limit
      *
      * @param $user
@@ -121,20 +139,34 @@ abstract class Tinebase_License_Abstract
             throw new Tinebase_Exception_InvalidArgument('Feature/application name should be a string');
         }
 
+        if (! self::isLicenseCheckable()) {
+            // too early for license check
+            return true;
+        }
+
         if (isset($this->_permittedFeatures[$feature])) {
             // use class cache
             return true;
         }
 
-        $needsPermission = isset($this->_featureNeedsPermission[$feature])
-            && Semver::satisfies($this->getVersion(), $this->_featureNeedsPermission[$feature]);
+        if (! isset($this->_featureNeedsPermission[$feature])) {
+            // feature does not need permission
+            return true;
+        }
 
-        if ($needsPermission) {
+        if ($this->getStatus() !== Tinebase_License::STATUS_LICENSE_OK) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __CLASS__ . '::' . __METHOD__ . ' ' . __LINE__
+                . ' Feature/application needs valid license: ' . $feature);
+            return false;
+        }
+
+        if (Semver::satisfies($this->getVersion(), $this->_featureNeedsPermission[$feature])) {
             $hasFeature = $this->hasFeature($feature);
             if (! $hasFeature) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                     __CLASS__ . '::' . __METHOD__ . ' ' . __LINE__
-                    . ' ' . ' Feature/application not permitted by license: ' . $feature);
+                    . ' Feature/application not permitted by license: ' . $feature);
             } else {
                 $this->_permittedFeatures[] = $feature;
             }
@@ -187,7 +219,6 @@ abstract class Tinebase_License_Abstract
 
         return $result;
     }
-
 
     public function getLicenseExpireEstimate()
     {

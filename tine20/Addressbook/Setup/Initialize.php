@@ -63,6 +63,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $userController->modlogActive($oldUserValue);
         
         parent::_initialize($_application, $_options);
+
+        $this->_setLicense($_options);
     }
 
     /**
@@ -282,5 +284,20 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         );
         
         return $internalAddressbook;
+    }
+
+    /**
+     * @param array $_options
+     */
+    protected function _setLicense($_options)
+    {
+        if (isset($_options['license']) && ! empty($_options['license'])) {
+            if (file_exists($_options['license'])) {
+                Tinebase_License::getInstance()->storeLicense(file_get_contents($_options['license']));
+            } else {
+                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not find license file: '
+                    . $_options['license']);
+            }
+        }
     }
 }
