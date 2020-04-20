@@ -2042,7 +2042,8 @@ class Setup_Controller
         }
         $applications = $this->sortInstallableApplications($applications);
         
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: ' . print_r(array_keys($applications), true));
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: '
+            . print_r(array_keys($applications), true));
 
         $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
         if ($fsConfig && ($fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} ||
@@ -2059,6 +2060,10 @@ class Setup_Controller
             } else {
                 try {
                     $this->_installApplication($xml, $_options);
+                    if ($name === 'Addressbook' && isset($_options['license']) && file_exists($_options['license'])) {
+                        // install license after Addressbook if filename given and file exists
+                        Tinebase_License::getInstance()->storeLicense(file_get_contents($_options['license']));
+                    }
                 } catch (Tinebase_Exception_AccessDenied $tead) {
                     Tinebase_Exception::log($tead);
                 }
