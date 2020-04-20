@@ -1806,7 +1806,8 @@ class Setup_Controller
         }
         $applications = $this->sortInstallableApplications($applications);
         
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: ' . print_r(array_keys($applications), true));
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: '
+            . print_r(array_keys($applications), true));
 
         $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
         if ($fsConfig && ($fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} ||
@@ -1822,8 +1823,21 @@ class Setup_Controller
             if (! $xml) {
                 Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not install application ' . $name);
             } else {
-                $this->_installApplication($xml, $_options);
-                $count++;
+                try {
+                    $this->_installApplication($xml, $_options);
+                    if ($name === 'Addressbook' && isset($_options['license']) && ! empty($_options['license'])) {
+                        if (file_exists($_options['license'])) {
+                            // install license after Addressbook if filename given and file exists
+                            Tinebase_License::getInstance()->storeLicense(file_get_contents($_options['license']));
+                        } else {
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not find license file: '
+                                . $_options['license']);
+                        }
+                    }
+                    $count++;
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    Tinebase_Exception::log($tead);
+                }
             }
         }
 
@@ -2640,7 +2654,7 @@ class Setup_Controller
         Tinebase_Core::setupCache(TRUE);
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache ...');
-        
+
         Setup_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
         $cachesCleared[] = 'TinebaseCache';
 
