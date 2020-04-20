@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6312fc645a3388afc7f77c73b2640f3",
+    "content-hash": "468f02b0d20cc007c3601c93a0ac8715",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1337,6 +1337,33 @@
             "time": "2016-04-25T08:20:13+00:00"
         },
         {
+            "name": "metaways/tine20-dfcom",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gerrit.tine20.com/customers/p/tine20-dfcom.git",
+                "reference": "3bd9d228b14cc0ef5e0a537b6fbf67ba809cea29"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "DFCom": "lib/DFCom",
+                    "../tests/tine20/DFCom": "tests/DFCom"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 DFCom Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Datafox",
+                "Devices",
+                "Tine 2.0"
+            ],
+            "time": "2019-07-29T13:30:03+00:00"
+        },
+        {
             "name": "metaways/tine20-gdpr",
             "version": "dev-master",
             "source": {
@@ -1360,6 +1387,36 @@
                 "Tine 2.0"
             ],
             "time": "2019-11-06T08:30:52+00:00"
+        },
+        {
+            "name": "metaways/tine20-onlyofficeintegrator",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gerrit.tine20.com/customers/p/tine20-onlyofficeintegrator.git",
+                "reference": "74702157dfe77fe1ef662ab9907cf2a4776e9796"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "OnlyOfficeIntegrator": "lib/OnlyOfficeIntegrator",
+                    "../tests/tine20/OnlyOfficeIntegrator": "tests/OnlyOfficeIntegrator"
+                },
+                "reverseSymlinks": {
+                    "lib/images": "images"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 OnlyOfficeIntegrator Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Office",
+                "OnlyOfficeIntegrator",
+                "Tine 2.0"
+            ],
+            "time": "2020-04-20T09:43:26+00:00"
         },
         {
             "name": "metaways/tine20-usermanual",
@@ -5204,7 +5261,9 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "ezyang/htmlpurifier": 20,
+        "metaways/tine20-dfcom": 20,
         "metaways/tine20-gdpr": 20,
+        "metaways/tine20-onlyofficeintegrator": 20,
         "metaways/tine20-usermanual": 20
     },
     "prefer-stable": false,
