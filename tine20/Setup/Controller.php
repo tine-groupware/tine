@@ -2060,9 +2060,14 @@ class Setup_Controller
             } else {
                 try {
                     $this->_installApplication($xml, $_options);
-                    if ($name === 'Addressbook' && isset($_options['license']) && file_exists($_options['license'])) {
-                        // install license after Addressbook if filename given and file exists
-                        Tinebase_License::getInstance()->storeLicense(file_get_contents($_options['license']));
+                    if ($name === 'Addressbook' && isset($_options['license']) && ! empty($_options['license'])) {
+                        if (file_exists($_options['license'])) {
+                            // install license after Addressbook if filename given and file exists
+                            Tinebase_License::getInstance()->storeLicense(file_get_contents($_options['license']));
+                        } else {
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not find license file: '
+                                . $_options['license']);
+                        }
                     }
                 } catch (Tinebase_Exception_AccessDenied $tead) {
                     Tinebase_Exception::log($tead);

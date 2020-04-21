@@ -428,7 +428,8 @@
                 smtp=${smtp} \
                 authentication=${authentication} \
                 accounts=${accounts} \
-                sieve=${sieve}
+                sieve=${sieve} \
+                license=${license}
 " passthru="true" returnProperty="return"/>
         <if>
         <equals arg1="${return}" arg2="0" />
