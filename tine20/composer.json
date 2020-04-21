@@ -22,7 +22,15 @@
   "repositories": [
     {
       "type": "git",
+      "url": "https://gerrit.tine20.com/customers/p/tine20-dfcom.git"
+    },
+    {
+      "type": "git",
       "url": "https://gerrit.tine20.com/customers/p/tine20-gdpr.git"
+    },
+    {
+      "type": "git",
+      "url": "https://gerrit.tine20.com/customers/p/tine20-onlyofficeintegrator.git"
     },
     {
       "type": "git",
@@ -100,7 +108,9 @@
     "jumbojett/openid-connect-php": "dev-master",
     "metaways/opendocument": "1.2",
     "metaways/timezoneconvert": "1.*",
+    "metaways/tine20-dfcom": "dev-master",
     "metaways/tine20-gdpr": "dev-master",
+    "metaways/tine20-onlyofficeintegrator": "dev-master",
     "metaways/tine20-usermanual": "dev-master",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",

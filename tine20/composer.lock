@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8384d8e6c4361b6154a3a22f4fc917e0",
+    "content-hash": "24baf30b15e10ce1bde550664d495083",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "1affa0a2accd94926705a09205111030c11c4b15"
+                "reference": "103cd522d9fb6ba5a31052b404a7cbfc578c84b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/1affa0a2accd94926705a09205111030c11c4b15",
-                "reference": "1affa0a2accd94926705a09205111030c11c4b15",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/103cd522d9fb6ba5a31052b404a7cbfc578c84b5",
+                "reference": "103cd522d9fb6ba5a31052b404a7cbfc578c84b5",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1139,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-03-11T10:52:27+00:00"
+            "time": "2020-03-25T12:41:16+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1373,6 +1373,33 @@
             "time": "2016-04-25T08:20:13+00:00"
         },
         {
+            "name": "metaways/tine20-dfcom",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gerrit.tine20.com/customers/p/tine20-dfcom.git",
+                "reference": "3bd9d228b14cc0ef5e0a537b6fbf67ba809cea29"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "DFCom": "lib/DFCom",
+                    "../tests/tine20/DFCom": "tests/DFCom"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 DFCom Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Datafox",
+                "Devices",
+                "Tine 2.0"
+            ],
+            "time": "2019-07-29T13:30:03+00:00"
+        },
+        {
             "name": "metaways/tine20-gdpr",
             "version": "dev-master",
             "source": {
@@ -1396,6 +1423,36 @@
                 "Tine 2.0"
             ],
             "time": "2019-11-06T08:30:52+00:00"
+        },
+        {
+            "name": "metaways/tine20-onlyofficeintegrator",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gerrit.tine20.com/customers/p/tine20-onlyofficeintegrator.git",
+                "reference": "74702157dfe77fe1ef662ab9907cf2a4776e9796"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "OnlyOfficeIntegrator": "lib/OnlyOfficeIntegrator",
+                    "../tests/tine20/OnlyOfficeIntegrator": "tests/OnlyOfficeIntegrator"
+                },
+                "reverseSymlinks": {
+                    "lib/images": "images"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 OnlyOfficeIntegrator Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Office",
+                "OnlyOfficeIntegrator",
+                "Tine 2.0"
+            ],
+            "time": "2020-04-20T09:43:26+00:00"
         },
         {
             "name": "metaways/tine20-usermanual",
@@ -5484,7 +5541,9 @@
     "stability-flags": {
         "ezyang/htmlpurifier": 20,
         "jumbojett/openid-connect-php": 20,
+        "metaways/tine20-dfcom": 20,
         "metaways/tine20-gdpr": 20,
+        "metaways/tine20-onlyofficeintegrator": 20,
         "metaways/tine20-usermanual": 20
     },
     "prefer-stable": false,
