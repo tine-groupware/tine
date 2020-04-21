@@ -126,15 +126,24 @@ abstract class Tinebase_License_Abstract
             return true;
         }
 
-        $needsPermission = isset($this->_featureNeedsPermission[$feature])
-            && Semver::satisfies($this->getVersion(), $this->_featureNeedsPermission[$feature]);
+        if (! isset($this->_featureNeedsPermission[$feature])) {
+            // feature does not need permission
+            return true;
+        }
 
-        if ($needsPermission) {
+        if ($this->getStatus() !== Tinebase_License::STATUS_LICENSE_OK) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __CLASS__ . '::' . __METHOD__ . ' ' . __LINE__
+                . ' Feature/application needs valid license: ' . $feature);
+            return false;
+        }
+
+        if (Semver::satisfies($this->getVersion(), $this->_featureNeedsPermission[$feature])) {
             $hasFeature = $this->hasFeature($feature);
             if (! $hasFeature) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                     __CLASS__ . '::' . __METHOD__ . ' ' . __LINE__
-                    . ' ' . ' Feature/application not permitted by license: ' . $feature);
+                    . ' Feature/application not permitted by license: ' . $feature);
             } else {
                 $this->_permittedFeatures[] = $feature;
             }
