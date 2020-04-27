@@ -216,24 +216,24 @@ class Setup_Controller
             'policies' => null,
             'maxUsers' => 5
         );
-        
+
         try {
             $license = Tinebase_License::getInstance();
         } catch (Exception $e) {
             return $default;
         }
-        
+
         $certData = $license->getCertificateData();
         if (!$certData) {
             return $default;
         }
-        
+
         $users = array(
             'maxUsers' => $license->getMaxUsers(),
             'userLimitReached' => $license->checkUserLimit(Tinebase_Core::getUser()),
             'status' => $license->getStatus()
         );
-        
+
         return array_merge($certData, $users);
     }
 
@@ -1992,6 +1992,7 @@ class Setup_Controller
      *
      * @param array $_applications list of application names
      * @param array|null $_options
+     * @return integer
      */
     public function installApplications($_applications, $_options = null)
     {
@@ -2054,6 +2055,7 @@ class Setup_Controller
             Tinebase_Config::getInstance()->setInMemory(Tinebase_Config::FILESYSTEM, $fsConfig);
         }
 
+        $count = 0;
         foreach ($applications as $name => $xml) {
             if (! $xml) {
                 Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not install application ' . $name);
@@ -2063,6 +2065,7 @@ class Setup_Controller
                         . " Skipping installation of application " . $name . " because it is not allowed by license");
                 } else {
                     $this->_installApplication($xml, $_options);
+                    $count++;
                 }
             }
         }
@@ -2070,6 +2073,8 @@ class Setup_Controller
         $this->clearCache();
 
         Tinebase_Event::reFireForNewApplications();
+
+        return $count;
     }
 
     public function setMaintenanceMode($options)
