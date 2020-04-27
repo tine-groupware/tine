@@ -71,6 +71,24 @@ abstract class Tinebase_License_Abstract
     }
 
     /**
+     * can we already check the license?
+     * - returns TRUE if license might be available
+     * - license can be set during initial, but only after Addressbook is installed (see \Addressbook_Setup_Initialize::_setLicense)
+     *
+     * @return bool
+     */
+    public static function isLicenseCheckable()
+    {
+        try {
+            $result = Tinebase_Application::getInstance()->isInstalled('Addressbook');
+        } catch (Exception $e) {
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' License handling needs Addressbook');
+            return false;
+        }
+        return $result;
+    }
+
+    /**
      * check user limit
      *
      * @param $user
@@ -119,6 +137,11 @@ abstract class Tinebase_License_Abstract
     {
         if (! is_string($feature)) {
             throw new Tinebase_Exception_InvalidArgument('Feature/application name should be a string');
+        }
+
+        if (! self::isLicenseCheckable()) {
+            // too early for license check
+            return true;
         }
 
         if (isset($this->_permittedFeatures[$feature])) {
@@ -196,7 +219,6 @@ abstract class Tinebase_License_Abstract
 
         return $result;
     }
-
 
     public function getLicenseExpireEstimate()
     {

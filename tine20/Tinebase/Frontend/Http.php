@@ -445,9 +445,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             if (! empty($apps) && $apps[0] != 'all' && ! in_array($application, $apps)) {
                 continue;
             }
-            if (! Tinebase_License::getInstance()->isPermitted($application)) {
-                continue;
-            }
             switch ($_fileType) {
                 case 'js':
                     $filesToWatch[] = "{$application}/js/{$application}";
