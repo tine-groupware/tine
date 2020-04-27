@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Michael Spahn <m.spahn@metaways.de>
@@ -102,7 +102,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         this.initActions();
         Tine.Setup.LicensePanel.superclass.initComponent.call(this);
     },
-    
+
     /**
      * @private
      */
@@ -157,8 +157,8 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
 
             if (this.licenseType === 'BusinessEdition') {
                 Ext.getCmp('contractId').setValue(data.contractId);
-                Ext.getCmp('validFrom').setValue(new Date(Date.parse(data.validFrom.date)));
-                Ext.getCmp('validTo').setValue(new Date(Date.parse(data.validTo.date)));
+                Ext.getCmp('validFrom').setValue(new Date(Date.parseDate(String(data.validFrom.date).substr(0, 19), Date.patterns.ISO8601Long)));
+                Ext.getCmp('validTo').setValue(new Date(Date.parseDate(String(data.validTo.date).substr(0, 19), Date.patterns.ISO8601Long)));
             }
 
             Tine.Setup.registry.replace('licenseCheck', data.status && data.status == 'status_license_ok');
@@ -230,11 +230,13 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     fieldLabel: this.app.i18n._('Valid from'),
                     name: 'validFrom',
                     id: 'validFrom',
+                    xtype: 'datetimefield',
                     emptyText: this.app.i18n._('No valid license')
                 }, {
                     fieldLabel: this.app.i18n._('Valid to'),
                     name: 'validTo',
                     id: 'validTo',
+                    xtype: 'datetimefield',
                     emptyText: this.app.i18n._('No valid license')
                 }];
                 break;
