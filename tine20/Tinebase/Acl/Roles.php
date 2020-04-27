@@ -202,7 +202,11 @@ class Tinebase_Acl_Roles extends Tinebase_Controller_Record_Abstract
         $stmt = $this->_getDb()->query($select);
         
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
-        
+
+        $result = $result->filter(function(Tinebase_Model_Application $app) {
+            return Tinebase_License::getInstance()->isPermitted($app->name);
+        });
+
         return $result;
     }
 

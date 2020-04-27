@@ -161,7 +161,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
 
             foreach ($map as $asset => $ressources) {
                 $appName = basename($asset);
-                if (!in_array($appName, $apps) || ! Tinebase_License::getInstance()->isPermitted($appName)) {
+                if (!in_array($appName, $apps)) {
                     unset($map[$asset]);
                 }
             }

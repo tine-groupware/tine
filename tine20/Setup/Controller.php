@@ -2060,7 +2060,7 @@ class Setup_Controller
             if (! $xml) {
                 Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not install application ' . $name);
             } else {
-                if ($this->isLicenseAvailable() && ! Tinebase_License::getInstance()->isPermitted($name)) {
+                if (! Tinebase_License::getInstance()->isPermitted($name)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                         . " Skipping installation of application " . $name . " because it is not allowed by license");
                 } else {
@@ -2887,17 +2887,6 @@ class Setup_Controller
 
         // deactivate cache again
         Tinebase_Core::setupCache(FALSE);
-    }
-
-    /**
-     * returns TRUE if license might be available
-     * - license can be set during initial, but only after Addressbook is installed (see \Addressbook_Setup_Initialize::_setLicense)
-     *
-     * @return boolean
-     */
-    public function isLicenseAvailable()
-    {
-        return $this->isInstalled('Addressbook');
     }
 
     /**
