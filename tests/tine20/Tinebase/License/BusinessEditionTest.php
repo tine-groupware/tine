@@ -380,6 +380,8 @@ class Tinebase_License_BusinessEditionTest extends TestCase
 
     public function testLicenseFeatures()
     {
+        self::assertFalse($this->_uit->isPermitted('Tinebase.featureCreatePreviews'));
+
         $this->_uit->setLicenseFile(dirname(__FILE__) . '/V-12345.pem');
 
         self::assertTrue($this->_uit->isPermitted('UserManual'));
