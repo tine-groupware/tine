@@ -18,15 +18,27 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
     {
         $this->_testNeedsTransaction();
 
-        $importContainer = $this->_importDemoData('Calendar', 'Calendar_Model_Event', [
-            'definition' => 'cal_import_event_csv',
-            'file' => 'event.csv'
-        ]);
-        $result = $this->_import();
+        $this->_importDemoData(
+            'Calendar',
+            Calendar_Model_Event::class, [
+                'definition' => 'cal_import_event_csv',
+                'file' => 'event.csv'
+            ], $this->_getTestCalendar()
+        );
+        $result = $this->_export();
 
         self::assertContains('Anforderungsanalyse', $result);
         self::assertContains('BEGIN:VCALENDAR', $result);
         self::assertContains('BEGIN:VTIMEZONE', $result);
+    }
+
+    protected function _export($params = '')
+    {
+        $cmd = realpath(__DIR__ . "/../../../../tine20/tine20.php") . ' --method Calendar.exportVCalendar';
+        $cmd = TestServer::assembleCliCommand($cmd, TRUE, 'container_id=' .
+            $this->_getTestCalendar()->getId() . ' ' . $params);
+        exec($cmd, $output);
+        return implode(',', $output);
     }
 
     public function testExportRecurEvent()
@@ -36,7 +48,7 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         $event = $this->_getRecurEvent();
         Calendar_Controller_Event::getInstance()->create($event);
 
-        $result = $this->_import();
+        $result = $this->_export();
 
         self::assertContains('hard working man needs some silence', $result);
         self::assertContains('RRULE:FREQ=DAILY', $result);
@@ -52,7 +64,7 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment(
             $event, $tempFile->name, $tempFile);
 
-        $result = $this->_import();
+        $result = $this->_export();
 
         self::assertContains('Early to bed and early to rise', $result);
         self::assertContains('ATTACH', $result);
@@ -64,9 +76,14 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
     {
         $this->_testNeedsTransaction();
 
-        $this->_importDemoData('Calendar', Calendar_Model_Event::class, ['cal_import_event_csv']);
+        $this->_importDemoData(
+            'Calendar',
+            Calendar_Model_Event::class, [
+                'definition' => 'cal_import_event_csv'
+            ], $this->_getTestCalendar()
+        );
         $filename = '/tmp/export.ics';
-        $this->_import('filename=' . $filename);
+        $this->_export('filename=' . $filename);
         $result = file_get_contents($filename);
         unlink($filename);
         self::assertContains('Anforderungsanalyse', $result);
