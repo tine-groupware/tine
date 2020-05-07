@@ -30,6 +30,9 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         self::assertContains('Anforderungsanalyse', $result);
         self::assertContains('BEGIN:VCALENDAR', $result);
         self::assertContains('BEGIN:VTIMEZONE', $result);
+        // 4 events + 1 time in header
+        self::assertEquals(5, substr_count($result, 'X-CALENDARSERVER-ACCESS:PUBLIC'),
+            'X-CALENDARSERVER-ACCESS:PUBLIC should appear once in header');
     }
 
     protected function _export($params = '')
@@ -67,9 +70,8 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         $result = $this->_export();
 
         self::assertContains('Early to bed and early to rise', $result);
-        self::assertContains('ATTACH', $result);
-        self::assertContains('FILENAME=tempfile.tmp', $result);
-        self::assertContains('ENCODING=BASE64;VALUE="BINARY:dGVzdCBmaWx, lIGNvbnRlbnQ="', $result);
+        self::assertContains('ATTACH;ENCODING=BASE64;X-FILENAME=tempfile.tmp;', $result);
+        self::assertContains('VALUE=BINARY:dGVzdCBmaWxlIGN, vbnRlbnQ=', $result);
     }
 
     public function testExportIntoFile()
@@ -84,11 +86,14 @@ class Calendar_Export_VCalendarTest extends Calendar_TestCase
         );
         $filename = '/tmp/export.ics';
         $this->_export('filename=' . $filename);
+        self::assertTrue(file_exists($filename), 'export file does not exist');
         $result = file_get_contents($filename);
         unlink($filename);
         self::assertContains('Anforderungsanalyse', $result);
+        self::assertContains('SUMMARY:Mittag', $result);
         self::assertContains('BEGIN:VCALENDAR', $result);
         self::assertContains('BEGIN:VTIMEZONE', $result);
+        self::assertContains('END:VCALENDAR', $result);
     }
 
     public function testExportAllCalendars()
