@@ -8,7 +8,24 @@ Konfiguration und Problemlösungen des E-Mail-Moduls von Tine 2.0
 Frage: Wie kann ich den E-Mail-Cache leeren?
 =================
 
-Am einfachsten durch den Aufruf einer CLI-Methode:
+> Da wir mittels Tine die Postfächer allerdings nur per IMAP
+> "integrieren", ist das cachen der E-Mails an sich und der
+> Informationen der E-Mail nicht notwendig.
+> Allein die Tabelle tine20_felamimail_cache_message besitzt 936954
+> Einträge, was die Datenbank nur unnötig füllt.
+
+Der Tine 2.0 Email-Client benötigt diese Tabellen, u.a. zur Suche und Darstellung der Ordner und E-Mails.
+ Der Cache wird neu aufgebaut, wenn er gelöscht wird. Bei der eingebauten Backup-Funktionalität
+ wird der E-Mail-Cache nicht mit gesichert.
+
+> Kann man die Tabellen ähnlich zu Tinebase.clearTable in gewissen
+> Abständen leeren?
+
+Das kann man tun. Allerdings wird sich dann die Last auf dem Server nach dem Leeren erhöhen,
+ da dieser anschliessend versucht, den Cache wieder zu füllen. Das passiert im Regelfall
+ kurz nachdem sich der entsprechende Nutzer angemeldet hat.
+ 
+Am einfachsten geht das durch den Aufruf einer CLI-Methode:
 
     $ tine20-cli --method=Felamimail.truncatecache
     
