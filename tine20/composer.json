@@ -105,7 +105,7 @@
     "metaways/timezoneconvert": "1.*",
     "metaways/tine20-dfcom": "dev-master",
     "metaways/tine20-gdpr": "dev-master",
-    "metaways/tine20-onlyofficeintegrator": "dev-master",
+    "metaways/tine20-onlyofficeintegrator": "dev-2019-11",
     "metaways/tine20-usermanual": "dev-master",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
