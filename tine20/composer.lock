@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b147fe89a69e5178e3e22430f63d1a17",
+    "content-hash": "3041898741658e8e080d9b26a7829aa0",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1390,11 +1390,11 @@
         },
         {
             "name": "metaways/tine20-onlyofficeintegrator",
-            "version": "dev-master",
+            "version": "dev-2019-11",
             "source": {
                 "type": "git",
                 "url": "https://gerrit.tine20.com/customers/p/tine20-onlyofficeintegrator.git",
-                "reference": "74702157dfe77fe1ef662ab9907cf2a4776e9796"
+                "reference": "3ff8d6c42ff18d9f05ef4c845cb4b212887c73ee"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1416,7 +1416,7 @@
                 "OnlyOfficeIntegrator",
                 "Tine 2.0"
             ],
-            "time": "2020-04-20T09:43:26+00:00"
+            "time": "2020-05-13T20:40:46+00:00"
         },
         {
             "name": "metaways/tine20-usermanual",
