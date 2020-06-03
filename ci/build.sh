@@ -19,6 +19,9 @@ function build_and_push() {
     --build-arg BUILT_IMAGE=$REGISTRY/built:commit$CI_COMMIT_SHA-$PHP_IMAGE_TAG \
     --build-arg NPM_INSTALL_COMMAND="$NPM_INSTALL_COMMAND" \
     --build-arg NODE_TLS_REJECT_UNAUTHORIZED=0 \
+    --build-arg GERRIT_URL="${GERRIT_URL}" \
+    --build-arg GERRIT_USER="${GERRIT_USER}" \
+    --build-arg GERRIT_PASSWORD="${GERRIT_PASSWORD}" \
     .
 
   echo "docker: built $1 image"
