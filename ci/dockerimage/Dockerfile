@@ -95,6 +95,9 @@ ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
 ARG NODE_TLS_REJECT_UNAUTHORIZED=1
 ARG TINE20ROOT=/usr/share
+ARG GERRIT_URL="gerrit.tine20.com"
+ARG GERRIT_USER
+ARG GERRIT_PASSWORD
 
 RUN apk add --no-cache composer git npm
 
@@ -107,6 +110,7 @@ COPY tine20/Tinebase/js/package.json ${TINE20ROOT}/tine20/Tinebase/js/package.js
 COPY tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm-shrinkwrap.json
 
 # install tine dependencies
+RUN printf "machine ${GERRIT_URL}\nlogin ${GERRIT_USER}\npassword ${GERRIT_PASSWORD}\n" > /root/.netrc
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-scripts --no-ansi --no-progress --no-suggest
 
 RUN cd ${TINE20ROOT}/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
@@ -178,6 +182,9 @@ ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ARG NPM_INSTALL_COMMAND="npm --no-optional install"
 ARG NODE_TLS_REJECT_UNAUTHORIZED=1
 ARG TINE20ROOT=/usr/share
+ARG GERRIT_URL="gerrit.tine20.com"
+ARG GERRIT_USER
+ARG GERRIT_PASSWORD
 
 RUN apk add --no-cache composer git npm mysql-client
 
@@ -186,6 +193,7 @@ COPY docs/config/ /config
 COPY --from=copy-build ${TINE20ROOT}/tests ${TINE20ROOT}/tests
 COPY --from=copy-build ${TINE20ROOT}/.git ${TINE20ROOT}/.git
 
+RUN printf "machine ${GERRIT_URL}\nlogin ${GERRIT_USER}\npassword ${GERRIT_PASSWORD}\n" > /root/.netrc
 RUN cd ${TINE20ROOT}/tine20 && composer install --no-ansi --no-progress --no-suggest
 
 RUN cd ${TINE20ROOT}/tine20/Tinebase/js && ${NPM_INSTALL_COMMAND}
