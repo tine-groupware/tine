@@ -1231,7 +1231,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gerrit.tine20.com/customers/p/tine20-usermanual.git",
-                "reference": "73e485b3035e83e2bed55ba49d035c68afc5cace"
+                "reference": "0bad8137ea2dbd085fa2798bd38653a2368515dc"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1254,7 +1254,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2020-04-22T10:21:27+00:00"
+            "time": "2020-06-03T06:38:10+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
