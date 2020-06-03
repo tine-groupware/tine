@@ -65,6 +65,7 @@
     ARG_TEST: AllTests
     ARG_FILTER: $PHPUNIT_FILTER
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/tine20/
+    TINE20_LICENSE_PATH: "/usr/share/tests/tine20/Tinebase/License/license_contract_MW-TEST-2.0.pem"
   services:
     - *abstract_jobs-db_service
     - *abstract_jobs-redis_service

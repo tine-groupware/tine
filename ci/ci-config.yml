@@ -5,7 +5,7 @@
 
 variables:
   # The major commit ref name is mainly used for ci caching. Non feature branches should be there own major. The major of feature branches should be the branch the will be merged into.
-  MAJOR_COMMIT_REF_NAME: "2021.11"
+  MAJOR_COMMIT_REF_NAME: "tine20.com/2021.11-custom"
 
   # main toggle for gitlab ci. if false the ci will do nothing
   RUN_CI_PIPELINE: "true"
@@ -72,6 +72,6 @@ variables:
 
   # test if tine20 /health api dose not return a 500
   TEST_WITH_HEALTH_CHECK: "true"
-  
+
   # Run all tests, test failures are ignored, dose not allow push
   RUN_ALL_TESTS: "false"
