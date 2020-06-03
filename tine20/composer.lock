@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "efc86d9c0e77ca37f0530c5c70d58552",
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "103cd522d9fb6ba5a31052b404a7cbfc578c84b5"
+                "reference": "f413ac4c7f7d908aee2558b25d5e939e91716208"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/103cd522d9fb6ba5a31052b404a7cbfc578c84b5",
-                "reference": "103cd522d9fb6ba5a31052b404a7cbfc578c84b5",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/f413ac4c7f7d908aee2558b25d5e939e91716208",
+                "reference": "f413ac4c7f7d908aee2558b25d5e939e91716208",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1139,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-03-25T12:41:16+00:00"
+            "time": "2020-05-13T18:23:08+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1343,7 +1343,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1460,7 +1460,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gerrit.tine20.com/customers/p/tine20-usermanual.git",
-                "reference": "73e485b3035e83e2bed55ba49d035c68afc5cace"
+                "reference": "0bad8137ea2dbd085fa2798bd38653a2368515dc"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1483,7 +1483,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2020-04-22T10:21:27+00:00"
+            "time": "2020-06-03T06:38:10+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
