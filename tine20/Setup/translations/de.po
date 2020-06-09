@@ -812,6 +812,15 @@ msgstr "Informationen"
 msgid "Updating {0} Applications."
 msgstr "Aktualisiere {0} Anwendungen."
 
+#: js/ApplicationGridPanel.js:96
+msgid "Update applications"
+msgstr "Anwendungen aktualisieren"
+
+msgid "Updating application"
+msgid_plural "Updating applications"
+msgstr[0] "Aktualisiere Anwendung"
+msgstr[1] "Aktualisiere Anwendungen"
+
 # LICENSE TRANSLATIONS
 msgid "Upload from disk"
 msgstr "Von der Festplatte hochladen"
