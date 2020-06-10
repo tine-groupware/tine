@@ -46,6 +46,7 @@
     NODE_TOTAL: "$CI_NODE_TOTAL"
     NODE_INDEX: "$CI_NODE_INDEX"
     TINE20_ACCEPTED_TERMS_VERSION: 1000
+    TINE20_LICENSE_PATH: "/usr/share/tests/tine20/Tinebase/License/license_contract_MW-TEST-2.0.pem"
   services:
     - *abstract_jobs-mariadb_service
     - *abstract_jobs-redis_service
