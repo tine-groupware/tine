@@ -403,6 +403,9 @@ class Tinebase_Frontend_CliTest extends TestCase
      * test cleanNotes
      *
      * @param bool $purge
+     *
+     * @group nogitlabci
+     * gitlabci: Tinebase_Exception_NotFound: No Application Controller found (checked class OnlyOfficeIntegrator_Controller_Node)!
      */
     public function testCleanNotes($purge = false)
     {
@@ -496,6 +499,10 @@ class Tinebase_Frontend_CliTest extends TestCase
         }
     }
 
+    /**
+     * @group nogitlabci
+     * gitlabci: Tinebase_Exception_NotFound: No Application Controller found (checked class OnlyOfficeIntegrator_Controller_Node)!
+     */
     public function testPurgeNotes()
     {
         $this->testCleanNotes(true);
@@ -519,6 +526,9 @@ class Tinebase_Frontend_CliTest extends TestCase
 
     /**
      * test cleanCustomfields
+     *
+     * @group nogitlabci
+     * gitlabci: Tinebase_Exception_NotFound: No Application Controller found (checked class OnlyOfficeIntegrator_Controller_Node)!
      */
     public function testCleanCustomfields()
     {
