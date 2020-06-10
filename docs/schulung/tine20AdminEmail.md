@@ -197,3 +197,10 @@ Vollständige Unterstützung in Tine 2.0 bieten die Dovecot (IMAP + Sieve) und P
 Bei Dovecot und Postfix werden die Bewegdaten (Benutzer, Domains, Destinations, Aliases, Forwards, ...) über MySQL-Tabellen verwaltet, die von Tine 2.0 und den Mailsystemen geschrieben und gelesen werden.
 
 TODO detaillierte Anleitung erstellen.
+
+Frage: wie kann ich weitere Templates für Abwesenheitsnotizen hinterlegen?
+===================
+
+Dazu muss nur eine geeignete .tpl Datei in dieses Verzeichnis gelegt werden:
+
+https://my.tine20.tld/webdav/Felamimail/shared/Vacation%20Templates
