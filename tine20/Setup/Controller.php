@@ -974,6 +974,8 @@ class Setup_Controller
         $updateNeeded = version_compare($_application->version, $setupXml->version);
         
         if($updateNeeded === -1) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' updates required');
             return true;
         }
         
