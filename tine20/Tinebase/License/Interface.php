@@ -48,6 +48,11 @@ interface Tinebase_License_Interface
      */
     public function hasFeature($feature);
 
+    /**
+     * @return array|null
+     */
+    public function getFeatures();
+
     public function getStatus();
     public function getCaFiles();
     public function getLicensePath();
