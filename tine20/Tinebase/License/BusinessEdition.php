@@ -226,8 +226,8 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
      */
     public function hasFeature($feature)
     {
-        $features = $this->_getPolicy(Tinebase_License_BusinessEdition::POLICY_LICENSE_FEATURES, null, true);
-        return $features && in_array($feature, $features);
+        $features = $this->getFeatures();
+        return in_array($feature, $features);
     }
 
     /**
@@ -350,6 +350,20 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             }
         }
         return $default;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFeatures()
+    {
+        $features = $this->_getPolicy(Tinebase_License_BusinessEdition::POLICY_LICENSE_FEATURES, null, true);
+        if (is_array($features)) {
+            array_shift($features);
+        } else {
+            $features = [];
+        }
+        return $features;
     }
 
     /**
