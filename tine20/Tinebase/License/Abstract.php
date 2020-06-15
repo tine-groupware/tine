@@ -25,6 +25,7 @@ abstract class Tinebase_License_Abstract
      */
     protected $_license = null;
     protected $_certData = null;
+    protected $_status = null;
 
     /**
      * @var array featureName => since Licence Version (semver)
@@ -56,6 +57,8 @@ abstract class Tinebase_License_Abstract
      */
     public function setLicenseFile($licenseFile)
     {
+        $this->reset();
+
         if (file_exists($licenseFile)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Read license from file: ' . $licenseFile);
@@ -65,9 +68,7 @@ abstract class Tinebase_License_Abstract
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' License file does not exist: ' . $licenseFile);
-            $this->_license = null;
         }
-        $this->_certData = null;
     }
 
     /**
@@ -184,18 +185,18 @@ abstract class Tinebase_License_Abstract
      */
     public function getStatus()
     {
-        if (! $this->isLicenseAvailable()) {
-            $result = Tinebase_License::STATUS_NO_LICENSE_AVAILABLE;
-        } else if (! $this->isValid()) {
-            $result = Tinebase_License::STATUS_LICENSE_INVALID;
-        } else {
-            $result = Tinebase_License::STATUS_LICENSE_OK;
+        if ($this->_status === null) {
+            if (!$this->isLicenseAvailable()) {
+                $this->_status = Tinebase_License::STATUS_NO_LICENSE_AVAILABLE;
+            } else if (!$this->isValid()) {
+                $this->_status = Tinebase_License::STATUS_LICENSE_INVALID;
+            } else {
+                $this->_status = Tinebase_License::STATUS_LICENSE_OK;
+            }
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Current license status ' . $this->_status);
         }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Current license status ' . $result);
-
-        return $result;
+        return $this->_status;
     }
 
     public function getDefaultExpiryDate()
@@ -247,5 +248,13 @@ abstract class Tinebase_License_Abstract
     public function isLicenseAvailable()
     {
         return $this->_license !== null;
+    }
+
+    public function reset()
+    {
+        $this->_certData = null;
+        $this->_license = null;
+        $this->_status = null;
+        $this->_permittedFeatures = [];
     }
 }
