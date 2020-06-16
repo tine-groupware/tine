@@ -148,11 +148,11 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
         } else {
             $licenseFile = $fs->fopen($licensePath, 'w');
             if ($licenseFile !== false) {
+                $this->reset();
                 fwrite($licenseFile, $licenseString);
                 $fs->fclose($licenseFile);
                 $this->_license = $licenseString;
-                $this->_certData = null;
-                
+
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                         __METHOD__ . '::' . __LINE__ . " Stored new license " . $licensePath);
             } else {
@@ -207,10 +207,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             $this->_assertValidUser();
             $fs->unlink($licensePath);
         }
-
-        $this->_certData = null;
-        $this->_license = null;
-        $this->_permittedFeatures = [];
+        $this->reset();
     }
     
     /**
