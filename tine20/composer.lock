@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "f413ac4c7f7d908aee2558b25d5e939e91716208"
+                "reference": "4d8a7dde31b3e39b6b76189b94aa3badbbf67da5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/f413ac4c7f7d908aee2558b25d5e939e91716208",
-                "reference": "f413ac4c7f7d908aee2558b25d5e939e91716208",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/4d8a7dde31b3e39b6b76189b94aa3badbbf67da5",
+                "reference": "4d8a7dde31b3e39b6b76189b94aa3badbbf67da5",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1139,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-05-13T18:23:08+00:00"
+            "time": "2020-06-19T13:27:02+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1378,7 +1378,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gerrit.tine20.com/customers/p/tine20-dfcom.git",
-                "reference": "3bd9d228b14cc0ef5e0a537b6fbf67ba809cea29"
+                "reference": "cafe04673293166547d69e5da728d09b86a338f4"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1397,7 +1397,7 @@
                 "Devices",
                 "Tine 2.0"
             ],
-            "time": "2019-07-29T13:30:03+00:00"
+            "time": "2020-06-10T09:54:05+00:00"
         },
         {
             "name": "metaways/tine20-gdpr",
@@ -1405,7 +1405,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gerrit.tine20.com/customers/p/tine20-gdpr.git",
-                "reference": "5edc9296ad0e4c3e4d2d64a242cc250a4dcfec69"
+                "reference": "20856bfd888c6d0222c823861934d3ded8849ed3"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1422,7 +1422,7 @@
             "keywords": [
                 "Tine 2.0"
             ],
-            "time": "2019-11-06T08:30:52+00:00"
+            "time": "2020-06-24T08:33:20+00:00"
         },
         {
             "name": "metaways/tine20-onlyofficeintegrator",
@@ -1430,7 +1430,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gerrit.tine20.com/customers/p/tine20-onlyofficeintegrator.git",
-                "reference": "3ff8d6c42ff18d9f05ef4c845cb4b212887c73ee"
+                "reference": "d315eac1de22bc5fc245da75e478d0df8cd71376"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1452,7 +1452,7 @@
                 "OnlyOfficeIntegrator",
                 "Tine 2.0"
             ],
-            "time": "2020-05-13T20:40:46+00:00"
+            "time": "2020-06-18T06:38:10+00:00"
         },
         {
             "name": "metaways/tine20-usermanual",
