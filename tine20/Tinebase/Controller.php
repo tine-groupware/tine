@@ -933,22 +933,32 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             return true;
         }
 
-        $license = Tinebase_License::getInstance();
-        if ($license->isLicenseAvailable() && ! $license->isValid()) {
-            $accessLog->result = Tinebase_Auth::LICENSE_EXPIRED;
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Account: '. $user->accountLoginName . ' login failed: license is expired');
-            return false;
-        }
+        try {
+            $oldUser = Tinebase_Core::getUser();
+            Tinebase_Core::setUser($user);
 
-        if (! $license->checkUserLimit($user)) {
-            $accessLog->result = Tinebase_Auth::LICENSE_USER_LIMIT_REACHED;
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Account: '. $user->accountLoginName . ' login failed: license user limit is reached');
-            return false;
-        }
+            $license = Tinebase_License::getInstance();
+            if ($license->isLicenseAvailable() && !$license->isValid()) {
+                $accessLog->result = Tinebase_Auth::LICENSE_EXPIRED;
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Account: ' . $user->accountLoginName . ' login failed: license is expired');
+                return false;
+            }
 
-        return true;
+            if (!$license->checkUserLimit($user)) {
+                $accessLog->result = Tinebase_Auth::LICENSE_USER_LIMIT_REACHED;
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Account: ' . $user->accountLoginName . ' login failed: license user limit is reached');
+                return false;
+            }
+
+            return true;
+        } finally {
+            if ($oldUser)
+                Tinebase_Core::setUser($oldUser);
+            else
+                Tinebase_Core::unsetUser();
+        }
     }
 
     /**
