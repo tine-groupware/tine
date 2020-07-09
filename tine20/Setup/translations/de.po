@@ -137,8 +137,8 @@ msgid "Uninstall application"
 msgstr "Anwendung deinstallieren"
 
 #: js/ApplicationGridPanel.js:96
-msgid "Update applications"
-msgstr "Anwendungen aktualisieren"
+msgid "Update application"
+msgstr "Anwendung aktualisieren"
 
 #: js/ApplicationGridPanel.js:105
 #, python-brace-format
@@ -865,15 +865,6 @@ msgstr "PLAIN"
 msgid "Message"
 msgstr "Informationen"
 
-msgid "Updating application"
-msgid_plural "Updating applications"
-msgstr[0] "Aktualisiere Anwendung"
-msgstr[1] "Aktualisiere Anwendungen"
-
-#: js/ApplicationGridPanel.js:96
-msgid "Update application"
-msgstr "Anwendung aktualisieren"
-
 #: js/EmailPanel.js:215 js/EmailPanel.js:336
 msgid "Verify peer Certificate"
 msgstr ""
@@ -881,9 +872,6 @@ msgstr ""
 #: js/init.js:75
 msgid "Setup"
 msgstr ""
-
-msgid "Updating {0} Applications."
-msgstr "Aktualisiere {0} Anwendungen."
 
 # LICENSE TRANSLATIONS
 msgid "Upload from disk"
@@ -894,3 +882,14 @@ msgstr "Wählen Sie die Datei, die Ihren Lizenzschlüssel enthält"
 
 msgid "Maximum Users (0=unlimited)"
 msgstr "Maximale Benutzerzahl (0=Unbegrenzt)"
+
+msgid "Update applications"
+msgstr "Anwendungen aktualisieren"
+
+msgid "Updating application"
+msgid_plural "Updating applications"
+msgstr[0] "Aktualisiere Anwendung"
+msgstr[1] "Aktualisiere Anwendungen"
+
+msgid "Updating {0} Applications."
+msgstr "Aktualisiere {0} Anwendungen."
