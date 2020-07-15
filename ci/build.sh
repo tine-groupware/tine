@@ -22,6 +22,10 @@ function build_and_push() {
     --build-arg GERRIT_URL="${GERRIT_URL}" \
     --build-arg GERRIT_USER="${GERRIT_USER}" \
     --build-arg GERRIT_PASSWORD="${GERRIT_PASSWORD}" \
+    --build-arg "CUSTOM_APP_VENDOR=${CUSTOM_APP_VENDOR}" \
+    --build-arg "CUSTOM_APP_NAME=${CUSTOM_APP_NAME}" \
+    --build-arg "CUSTOM_APP_GIT_URL=${CUSTOM_APP_GIT_URL}" \
+    --build-arg "CUSTOM_APP_VERSION=${CUSTOM_APP_VERSION}" \
     .
 
   echo "docker: built ${NAME} image"
