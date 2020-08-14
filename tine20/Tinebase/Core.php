@@ -2177,6 +2177,14 @@ class Tinebase_Core
     /**
      * @return bool
      */
+    public static function isReplicationSecondary()
+    {
+        return static::isReplicationSlave();
+    }
+
+    /**
+     * @return bool
+     */
     public static function isReplicationSlave()
     {
         if (null !== static::$_isReplicationSlave) {
@@ -2195,6 +2203,14 @@ class Tinebase_Core
 
         static::$_isReplicationMaster = false;
         return (static::$_isReplicationSlave = true);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isReplicationPrimary()
+    {
+        return static::isReplicationMaster();
     }
 
     /**
