@@ -1535,9 +1535,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $remainingDays = Tinebase_License::getInstance()->getLicenseExpireEstimate();
             $remainingDaysMessage = 'remainingDays=' . $remainingDays;
             $features = Tinebase_License::getInstance()->getFeatures();
-            if ($features) {
-                $featuresMessage = 'features=' . implode(',', $features);
-            }
+            $featuresMessage = $features ? 'features=' . implode(',', $features) : '';
             $infos = $maxUsersMessage . ';' . $remainingDaysMessage . ';' . $featuresMessage . ';;';
             if ($remainingDays < 7) {
                 $result = 1;
