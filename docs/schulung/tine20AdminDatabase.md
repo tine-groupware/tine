@@ -1,7 +1,7 @@
 Tine 2.0 Admin Schulung: Datenbank
 =================
 
-Version: Caroline 2017.11
+Version: ab Caroline 2017.11
 
 Konfiguration und Performance-Optimierung der Datenbank
 

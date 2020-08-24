@@ -117,6 +117,7 @@ Logging
 - Loglevel
 - Filterung
 - Tools/Techniken zum Extrahieren der benötigten Infos
+- siehe auch tine20AdminLogging.md
 
 Bugreports
 ------------
