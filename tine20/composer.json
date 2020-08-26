@@ -22,7 +22,7 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://gerrit.tine20.com/customers/p/tine20-usermanual.git"
+      "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git"
     },
     {
       "type": "git",

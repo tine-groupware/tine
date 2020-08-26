@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "42a9df117f1e312271a028f07405d7d0",
+    "content-hash": "ad20ef8ddf0562dc84a0bfc1f2579bbe",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1164,7 +1164,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
+                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1230,8 +1230,8 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://gerrit.tine20.com/customers/p/tine20-usermanual.git",
-                "reference": "c57a3a5097710b2af11e787c1c8b00edf0b51b01"
+                "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
+                "reference": "3971dceda608d4dbfda86d78b197df650d716174"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -3824,7 +3824,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2017-11-27T13:52:08+00:00"
+            "time": "2015-06-21T13:08:43+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -3914,7 +3914,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2017-02-26T11:10:40+00:00"
+            "time": "2016-05-12T18:03:57+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -3963,7 +3963,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2017-12-04T08:55:13+00:00"
+            "time": "2014-03-03T05:10:30+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -4676,7 +4676,6 @@
                 "hydrator",
                 "zf2"
             ],
-            "abandoned": "laminas/laminas-hydrator",
             "time": "2016-02-18T22:38:26+00:00"
         },
         {
@@ -4726,7 +4725,6 @@
                 "psr",
                 "psr-7"
             ],
-            "abandoned": "laminas/laminas-psr7bridge",
             "time": "2016-05-10T21:44:39+00:00"
         }
     ],
