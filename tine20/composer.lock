@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "ad20ef8ddf0562dc84a0bfc1f2579bbe",
@@ -1231,7 +1231,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "3971dceda608d4dbfda86d78b197df650d716174"
+                "reference": "c57a3a5097710b2af11e787c1c8b00edf0b51b01"
             },
             "require": {
                 "php": ">=5.5.0"
