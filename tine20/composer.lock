@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb3c20d224ed6ea2ada0be96258d3d81",
+    "content-hash": "db5ce33ca009cac107c20de72f9621ad",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1110,12 +1110,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "4d8a7dde31b3e39b6b76189b94aa3badbbf67da5"
+                "reference": "07b4fc030666d177cf43a5dc308318ac9416617b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/4d8a7dde31b3e39b6b76189b94aa3badbbf67da5",
-                "reference": "4d8a7dde31b3e39b6b76189b94aa3badbbf67da5",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/07b4fc030666d177cf43a5dc308318ac9416617b",
+                "reference": "07b4fc030666d177cf43a5dc308318ac9416617b",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1139,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-06-19T13:27:02+00:00"
+            "time": "2020-07-27T12:30:09+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1343,7 +1343,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
+                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1377,7 +1377,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://gerrit.tine20.com/customers/p/tine20-dfcom.git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
                 "reference": "c8d2467612facd761450676f97554b2fd8fd1449"
             },
             "require": {
@@ -1404,7 +1404,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://gerrit.tine20.com/customers/p/tine20-gdpr.git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
                 "reference": "8eed376b9d92a97bffa38ae144eb00a711a34fa5"
             },
             "require": {
@@ -1429,7 +1429,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://gerrit.tine20.com/customers/p/tine20-onlyofficeintegrator.git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git",
                 "reference": "aea1aea1912ed9f8d3cbb6adf78a4520ca646b1e"
             },
             "require": {
@@ -1459,7 +1459,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://gerrit.tine20.com/customers/p/tine20-usermanual.git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
                 "reference": "c57a3a5097710b2af11e787c1c8b00edf0b51b01"
             },
             "require": {

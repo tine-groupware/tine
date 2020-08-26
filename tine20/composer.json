@@ -22,19 +22,19 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://gerrit.tine20.com/customers/p/tine20-dfcom.git"
+      "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git"
     },
     {
       "type": "git",
-      "url": "https://gerrit.tine20.com/customers/p/tine20-gdpr.git"
+      "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git"
     },
     {
       "type": "git",
-      "url": "https://gerrit.tine20.com/customers/p/tine20-onlyofficeintegrator.git"
+      "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git"
     },
     {
       "type": "git",
-      "url": "https://gerrit.tine20.com/customers/p/tine20-usermanual.git"
+      "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git"
     },
     {
       "type": "git",
