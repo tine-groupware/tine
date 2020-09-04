@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "db5ce33ca009cac107c20de72f9621ad",
+    "content-hash": "1bad24a07c063162a9df4b420eb2dd14",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -3270,6 +3270,69 @@
             "time": "2020-01-21T16:04:48+00:00"
         },
         {
+            "name": "validator/livr",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:WebbyLab/php-validator-livr.git",
+                "reference": "6309697f926a20e1267cc15ee5b847b5c6ecdbcd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WebbyLab/php-validator-livr/zipball/6309697f926a20e1267cc15ee5b847b5c6ecdbcd",
+                "reference": "6309697f926a20e1267cc15ee5b847b5c6ecdbcd",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Validator": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Viktor Turskyi",
+                    "email": "koorchik@gmail.com",
+                    "homepage": "http://koorchik.blogspot.com/",
+                    "role": "Author"
+                },
+                {
+                    "name": "Danil Greben",
+                    "email": "greben.danil@gmail.com",
+                    "homepage": "http://wanderer.in.ua",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Anton Morozov",
+                    "email": "anton@webbylab.com",
+                    "homepage": "https://webbylab.com/",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Konstantin Dvornik",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Lightweight PHP validator supporting Language Independent Validation Rules Specification (LIVR) ",
+            "homepage": "https://github.com/WebbyLab/php-validator-livr",
+            "keywords": [
+                "livr",
+                "validator"
+            ],
+            "time": "2017-09-25T14:02:44+00:00"
+        },
+        {
             "name": "webimpress/composer-extra-dependency",
             "version": "0.2.2",
             "source": {
@@ -5545,7 +5608,8 @@
         "metaways/tine20-dfcom": 20,
         "metaways/tine20-gdpr": 20,
         "metaways/tine20-onlyofficeintegrator": 20,
-        "metaways/tine20-usermanual": 20
+        "metaways/tine20-usermanual": 20,
+        "validator/livr": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
