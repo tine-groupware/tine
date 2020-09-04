@@ -1,0 +1,337 @@
+[[chapter.HumanResources]]
+== HumanResources ==
+
+
+//////////
+Dr. Markus Wirtz, 2015-04-16 14:57
+bin durch, ready for GR
+//////////
+//////////
+ Gerlinde Regensburger, 2015-04-21 10:53
+bin durch / Bitte noch die Kommentare beachten/bearbeiten... Danke.
+//////////
+////
+KUK 2015-05-15: Indizierung gemacht, Freigabe
+////
+
+
+(((Personalkonten)))
+(((Mitarbeiter)))
+[[sec.humanresources.einleitung]]
+=== Einleitung ===
+
+{{{/HumanResources}}}
+Der Programmteil menu:[HumanResources] dient der Personalabteilung zur Verwaltung relevanter Mitarbeiterinformationen. Da hierzu auch vertrauliche Daten gehören, sollten Sie die Zugriffsrechte auf diesen Programmteil sehr genau im Auge behalten!
+
+Die Anwendung besteht aus drei Modulen: menu:[Mitarbeiter], die zugehörigen menu:[Personalkonten] und menu:[Daily Working Time Reports]. Die Aufgabe der ersten beiden besteht darin, Mitarbeiter-Datensätze zu erstellen – die zugehörigen Personalkonten (für jeweils das laufende und das folgende Jahr) legt {branch} selbstständig an.
+
+Beim Anlegen der Mitarbeiterdatensätze greifen Sie sinnvollerweise auf die bereits vorhandenen {branch}-Benutzer zurück, denn in den meisten Fällen werden sich diese Mengen überschneiden. 
+
+Starten Sie die Anwendung über den Reiter menu:[{branch}com] oder menu:[{branch}net], indem Sie dort menu:[HumanResources] anklicken.
+
+[[sec.humanresources.module.favoriten]]
+=== Untermodule und Favoriten ===
+
+{{{/HumanResources/MainScreen/ModulPicker}}}
+{{{/HumanResources/MainScreen/Employee/FavoritesPicker}}}
+Unter menu:[MODULE] sehen Sie auf der linken Seite die beiden Punkte menu:[Mitarbeiter] und menu:[Personalkonten
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/MainScreen/ModulPicker>
+        demodata: Favoriten
+        image: zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Module unter HumanResources
+image::HumanResources/1_humanresources_module.png[id="fig_humanmodule",width="50%"]
+
+
+//////////
+ Gerlinde Regensburger, 2015-04-21 10:25
+Nachfolgende Beschreibung der Favoriten-(alle Angestgellten und die zur Zeit Angestellten) erschließt sich mir nicht -- sollte das evtl. aus der Abbildung hervorgehen? Ist die passende Abbildung ausgewählt?
+
+KUK 2015-05-15: Beschreibung präzisiert
+//////////
+
+Die vorgefertigten menu:[FAVORITEN]-Ansichten (hier sind es menu:[Alle Angestellten] und die menu:[Zur Zeit Angestellten]) zeigen einerseits alle jemals im Unternehmen beschäftigten (also auch die bereits ausgeschiedenen) Mitarbeiter an bzw. jene Mitarbeiter, die derzeit beschäftigt sind, also einen laufenden Arbeitsvertrag haben. Welche Angaben notwendig sind, um diese Ansichten korrekt darzustellen, besprechen wir weiter unten.
+
+////
+KUK: Abteilungen sollten ebenfalls hier angelegt werden können; sie sind ein Teil von HumanResources, nicht von Sales, zumal sie dort mit nichts verknüpft sind.
+////
+
+
+//////////
+Dr. Markus Wirtz, 2015-04-16 09:25
+Habe den folgenden Hinweis ergänzt. Es bleibt mir vollkommen unverständlich, warum wirklich interessante Informationen – und dazu gehören v.a. auch Unzulänglichkeiten oder Inkonsistenzen der Software – in _dem_ Handbuch permanent unter den Teppich gekehrt werden! 
+
+KUK 2015-05-15: siehe dazu meine E-Mail von heute!
+
+/////////////
+
+[NOTE]
+========
+Aus historischen Gründen verwaltet {branch} die _Abteilungen_ des Unternehmens nicht in der Anwendung menu:[HumanResources] sondern unter menu:[Sales].
+========
+
+[[sec.humanresources.mitarbeiter]]
+=== Mitarbeiter hinzufügen ===
+
+{{{/HumanResources/MainScreen/Employee}}}
+Wenn Sie links unter menu:[MODULE] den Punkt menu:[Mitarbeiter] anklicken, erhalten Sie rechts in der Tabelle zeilenweise die angelegten Mitarbeiter. Ein Klick auf das Tabellenkopf-Symbol ganz rechts außen zeigt Ihnen, dass die Tabelle aus Platzgründen nur etwa die Hälfte aller möglichen Angaben anzeigt. Schauen wir uns diese in ihrer Gesamtheit daher jetzt über die Bearbeitungsmaske näher an.
+
+
+[[sec.humanresources.mitarbeiter.hinzufügen]]
+==== Mitarbeiter hinzufügen ====
+
+{{{/HumanResources/EditDialog/Employee}}}
+Klicken Sie im Bearbeitungsmenü links außen den Punkt menu:[Mitarbeiter hinzufügen] an.
+
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee>
+        demodata: Benuterkonto, Tags
+        image: dialog
+        comment: <neue funktion -> Bankverbindung>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Anlegen eines neuen Mitarbeiters
+image::HumanResources/2_humanresources_mitarbeiter_hinzu.png[id="fig_humanmhuman_personalkontenitarbeiterhinzu",width="100%"]
+
+////
+Bug: Fenster ist zu kurz - letzte Zeile mit neuen Bankdaten (SEPA) ist nicht zu sehen
+@Kaa: Bugreport ist erstellt.
+////
+
+Zu beachten sind hier die beiden Reiter menu:[Kostenstellen] und menu:[Verträge] – dazu später mehr. Die Personalnummer (menu:[Pers.-Nr.]) und das menu:[Benutzerkonto] sind Pflichtfelder. Vergeben Sie jetzt eine Personalnummer entsprechend der in Ihrem Unternehmen gültigen Vorschriften und klicken Sie danach das Pulldown im Feld menu:[Benutzerkonto] an, darin werden Ihnen die in {branch} angelegten Benutzer angeboten. Wählen Sie testweise einen beliebigen. Beachten Sie jetzt rechts neben diesem Feld den kleinen Button mit dem Zauberstab. Wenn Sie ihn anklicken, werden Name und Vorname des Benutzers im Mitarbeiterdatensatz übernommen.
+
+////////
+Idee: Man könnte die "Zauberstab" Funktion an dieser Stelle automatisieren. So das sobald der Benutzer ausgewählt ist, die Felder ausgefüllt werden. - Nur müsste man dann auch die Funktion hinzufügen, dass wenn man einen anderen Benutzer auswählt, die infos sich auch automatisch ändern
+///////
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee>
+        demodata: Benuterkonto, Tags
+        image: dialog
+        comment: <neue funktion -> Bankverbindung>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Mit dem Zauberstab Daten übernehmen
+image::HumanResources/3_humanresources_mitarbeiter_kontaktdaten_zauberstab.png[id="fig_humanzauberstab",width="100%"]
+
+
+Ergänzen Sie jetzt über das Pulldown das Feld menu:[Anrede] sowie gegebenenfalls im nächsten Feld einen menu:[Titel]. Im Block menu:[Persönliche Informationen] können Sie unter Berücksichtigung des Datenschutzes nützliche Informationen hinterlegen.
+
+Im Block menu:[Interne Informationen] können Sie als menu:[Vorgesetzten] nur Nutzer aus dem Kreis der bereits in dieser Anwendung angelegten Mitarbeiter auswählen. Die menu:[Abteilung] wählen Sie ebenfalls per Pulldown aus (zu Abteilungen vgl. <<sec.sales.abteilung>>).
+
+menu:[Krankenkasse], menu:[Beruf] und menu:[Position] sind freie Textfelder und optional. Ein Pflichtfeld hingegen ist menu:[Angestellt von], wo Sie das Datum des Beschäftigungsbeginns hinterlegen. Sie können es ebenso wie menu:[Angestellt bis] komfortabel über die Kalenderfunktion füllen.
+
+Im Block menu:[Bankverbindung] sind alle Eingaben fakultativ. 
+
+[[sec.humanresources.mitarbeiter.kostenstellen]]
+==== Kostenstellen ====
+
+Klicken Sie nun den Reiter menu:[Kostenstellen] an.
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee>
+        demodata: Kostenstellen
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Kostenstellen
+image::HumanResources/4_humanresources_mitarbeiter_kostenstellen.png[id="fig_humankostenstellen",width="100%"]
+
+
+Die Zuweisung eines Mitarbeiters zu einer Kostenstelle bewirkt, dass die Buchhaltungsabteilung (die Daten aus {branch} über eine individuell zu programmierende Schnittstelle erhält) die hier erfassten, gepflegten und gehaltsmäßig relevanten Daten einer Kostenstelle zuweisen und darüber abrechnen kann. Die Kosten eines Mitarbeiters laufen dann immer auf einer Kostenstelle auf. Andere Kostenstellen können aber (in anderen Anwendungen von {branch}) auch für die Erfassung von Ausgaben eines Auftrags/Vertrags/Zeitkontos definiert werden. So kann das Controlling über Daten aus {branch} abgewickelt werden.
+
+Kostenstellen sind in der Welt der Buchhalter also nichts weiter als interne Konten, die der getrennten Erfassung der innerbetrieblichen Kosten dienen. Dabei ist die Systematik der Trennung von Branche zu Branche und von Unternehmen zu Unternehmen individuell. Erkundigen Sie sich hier nach einer innerbetrieblichen Nomenklatur!
+
+Unter dem Reiter menu:[Kostenstellen] finden Sie zwei Eingabefelder: Einmal die menu:[Kostenstelle] selbst als Pulldown und dahinter das menu:[Anfangsdatum], zu dem ein Mitarbeiter über die entsprechende Kostenstelle abzurechnen beginnt bzw. ab dem er eine Kostenstelle nutzen darf.
+
+(((Arbeitsverträge)))
+[[sec.humanresources.mitarbeiter.vertraege]]
+==== Verträge ====
+
+////
+
+.Verträge
+image::HumanResources/5_humanresources_mitarbeiter_vertraege.png[id="fig_humanvertraege",width="80%"]
+
+////
+
+{{{/HumanResources/EditDialog/Employee/Contract}}}
+{{{/HumanResources/EditDialog/Contract}}}
+Arbeitsverträge legen Sie unter dem Reiter menu:[Verträge] an. Klicken Sie in dem blauen Streifen unterhalb des Tabellenfensters nun menu:[Vertrag hinzufügen].
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Contract>
+        demodata: Feiertagskalender, Arbeitszeitmodell-Vorlagen
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Mitarbeiter einen Vertrag zuweisen
+image::HumanResources/6_humanresources_mitarbeiter_vertrag.png[id="fig_humanvertraegeneu",width="100%"]
+
+
+
+menu:[Anfang] und menu:[Ende] sind Datumsfelder mit menu:[Anfang] als Pflichtfeld. Ebenfalls eine Pflichteingabe ist das Pulldown menu:[Feiertagskalender]. Hier sollten Sie, falls es in Ihrem Unternehmen einen speziellen Feiertagskalender gibt – dieser ist dann wahrscheinlich ein gemeinsamer Kalender – diesen dem Mitarbeiter zuweisen, denn ein vom System automatisch angelegter Kalender enthält keine Feiertage. Die Auswahl erfolgt über menu:[Andere Kalender wählen]. Beachten Sie, dass im darauf folgenden Menü menu:[Bitte Kalender auswählen] gemeinsame oder Kalender anderer Benutzer nur dann zur Auswahl stehen, wenn Sie über entsprechende Leserechte verfügen (vgl. dazu <<sec.admin.container>>). In <<sec.admin.anwendungen.humanresources>> erfahren Sie auch, wie Sie den Feiertagskalender zu einer Standardeinstellung für alle Mitarbeiter machen.
+
+Die Zeile menu:[Working Time] enthält unter dem Pulldown menu:[Vorlage auswählen] drei in Deutschland übliche Arbeitszeitmodelle. Wenn Sie eine Vorlage ausgewählt haben, sehen Sie in dem Feld rechts daneben (menu:[Arbeitsstunden pro Woche]) die entsprechende Wochenarbeitszeit. menu:[Urlaubstage eines Kalenderjahrs] ist ein numerisches Eingabefeld, in dem Sie eine beliebige Anzahl an Urlaubstagen eingeben. Die darunter liegende Zeile mit der Verteilung der Wochenarbeitsstunden auf die einzelnen Arbeitstage wird entsprechend Ihrer ausgewählten Vorlage bereits automatisch eingestellt. Beim 40-Stunden-Modell bedeutet das eine tägliche Arbeitszeit von 8 Stunden von Montag bis Freitag. Natürlich können Sie alle diese Standardeinstellungen individuell anpassen.
+
+Haben Sie einen Arbeitsvertrag angelegt, klicken Sie in der Übersichtstabelle rechts außen auf das Tabellenkopf-Symbol und stellen fest, dass die vier standardmäßig nicht eingeblendenden Tabellenfelder nur Informationen zum Bearbeitungsverlauf enthalten. Die wesentlichen Punkte des Arbeitsvertrages sind also in der Standard-Tabellenansicht enthalten und Sie können diese Einstellung unverändert lassen.
+
+Markieren Sie nun als Tabellenzeile den eben eingegebenen oder einen beliebigen anderen Arbeitsvertrag. Der Button menu:[Vertrag löschen] in dem blauen Streifen unterhalb des Tabellenfensters ist jetzt nicht mehr ausgegraut  – damit können Sie den Arbeitsvertrag löschen. Das Abspeichern mindestens eines Arbeitsvertrages für einen Arbeitnehmer führt auch dazu, dass die beiden Reiter menu:[Urlaub] und menu:[Krankheit] nicht mehr ausgegraut sind.
+
+(((Urlaubstage)))
+[[sec.humanresources.mitarbeiter.urlaub.krankheit]]
+==== Urlaub – Krankheit ====
+
+{{{/HumanResources/EditDialog/Employee/FreeTime}}}
+Unter dem Reiter menu:[Urlaub] finden Sie in der Tabelle die Urlaubstage des Arbeitnehmers.
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee/FreeTime>
+        demodata: Vertrag, Beispiel Urlaub/Krankheit
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Urlaub
+image::HumanResources/7_humanresources_mitarbeiter_urlaub.png[id="fig_humanurlaub",width="100%"]
+
+Die erste Tabellenspalte entspricht dem menu:[Benutzerkonto], d.h. Sie sehen das Kalenderjahr, dem die Urlaubstage zugeordnet sind. Die anderen Tabellenspalten schauen wir uns jetzt in der Bearbeitungsmaske an. Klicken Sie dazu unten in dem blauen Streifen den Button menu:[Urlaubstage hinzufügen].
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee/FreeTime>
+        demodata: Vertrag, Beispiel Urlaub/Krankheit
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Urlaubstage hinzufügen
+image::HumanResources/8_humanresources_mitarbeiter_urlaubstage.png[id="fig_humanurlaubhinzu",width="100%"]
+
+
+Über das Pulldown menu:[Status] legen Sie zunächst fest, ob es sich um einen menu:[beantragten], menu:[in Bearbeitung] befindlichen, bereits menu:[angenommenen] oder menu:[abgewiesenen] Urlaubsantrag handelt. Standardmäßig steht der Status auf menu:[angenommen], beim Abspeichern würden die Urlaubstage dann vom Urlaubskonto des Arbeitnehmers abgebucht. Belassen Sie die Einstellung jetzt auf menu:[angenommen] und schauen Sie sich das nächste Pulldown, menu:[Personalkonto], an. Per Standard steht dieses Feld auf dem laufenden Jahr; klicken Sie das Pulldown, sehen Sie, dass Ihnen das laufende und mindestens noch das folgende Jahr angeboten werden. Diese beiden Personalkonten, auf die wir weiter unten noch zu sprechen kommen, hat das System beim Abspeichern eines Mitarbeiters automatisch angelegt. Belassen Sie jetzt die Standardeinstellung, d.h. das laufende Jahr. Im nächsten Feld, menu:[Übrig], werden Ihnen zur Kontrolle die restlichen Urlaubstage des Arbeitnehmers angezeigt. Dieses Feld ist eine automatisch erzeugte Differenz aus dem (ggf. anteiligen) Urlaubsanspruch und den genehmigten/angenommenen Urlaubstagen und kann nicht überschrieben werden.
+
+////
+KUK: Wiewohl das Feld als Eingabefeld dargestellt ist und man mit der Maus hineinklicken kann -> Bug!
+////
+
+
+{{{/HumanResources/EditDialog/FreeTime}}}
+Darunter finden Sie ein Kalenderfeld, über das Sie komfortabel die einzelnen Tage des jetzt zu bearbeitenden Urlaubs eingeben. Klicken Sie auf die gewünschten Tage, summiert das System diese automatisch – und zieht sie auch wieder ab, wenn Sie noch einmal darauf klicken. Haben Sie den Urlaub richtig eingegeben, speichern Sie ihn mit menu:[Ok] ab. Nach dem Schließen dieser Bearbeitungsmaske sehen Sie, dass der eben eingegebene Urlaub in einer neuen Zeile der Tabelle registriert wurde. Wenn Sie jetzt eine Zeile markieren, lösen Sie mit den beiden Buttons menu:[Urlaubstage bearbeiten] und menu:[Urlaubstage löschen] in dem blauen Streifen unter dem Tabellenfenster die entsprechende Funktion aus. Das Ganze geht natürlich wie immer auch per rechtem Mausklick und Kontextmenü.
+
+Der Reiter menu:[Krankheit] funktioniert analog, nur dass es hier natürlich das Differenzfeld für ``übrige'' Tage nicht gibt. Das Statusfeld enthält im Pulldown die (selbsterklärenden) Werte menu:[Entschuldigt] und menu:[Unentschuldigt].
+////
+(((Krankheitstage)))
+
+.Krankheitstage
+image::HumanResources/9_humanresources_module.png[id="fig_humanurlaub2",width="80%"]
+////
+Hier gibt es noch eine Sonderfunktion: Haben Sie unentschuldigte Krankheitstage gebucht, können Sie diese, nach dem Schließen der Eingabemaske, auf der Tabellenzeile über das Kontextmenü (Rechtsklick auf die entsprechende Tabellenzeile) menu:[Als Urlaub buchen].
+
+Ein Klick auf das Tabellenkopf-Symbol rechts außen zeigt Ihnen bei beiden Tabellen, dass die nicht eingeblendeten Felder nur Bearbeitungsvermerke enthalten. Sie können also im Normalfall die Standardeinstellungen unverändert lassen.
+
+[[sec.humanresources.rest]]
+=== Weitere Funktionen des Bearbeitungsmenüs ===
+
+{{{/HumanResources/MainScreen/Employee/ActionToolbar}}}
+menu:[Mitarbeiter bearbeiten]:: öffnet nach Markierung eines vorhandenen Mitarbeiters in der Tabelle dieselbe Bearbeitungsmaske wie menu:[Mitarbeiter hinzufügen].
+
+menu:[Mitarbeiter löschen]:: löscht den ausgewählten Mitarbeiter nach einer Sicherheitsabfrage.
+
+menu:[Drucke Seite]:: öffnet Ihren systemeigenen Druckerdialog und erzeugt standardmäßig eine DIN-A4-Hochformatseite mit einer Tabelle und den auf dem Bildschirm ausgewählten Feldern.
+
+menu:[Mitarbeiter exportieren]:: bietet zwei Optionen:
+menu:[Als ODS exportieren]  für eine Tabelle im Dateiformat von Open-/LibreOffice  (Zeilen- und Spaltenanordnung entspricht derjenigen der Bildschirmtabelle) und menu:[Als XLS exportieren] für eine XLS-Datei, also das Format für die Tabellenkalkulation MS Excel in der Version 2000/XP, wobei neuere Versionen abwärtskompatibel sind.
+
+
+[[sec.humanresources.personalkonten]]
+=== Personalkonten ===
+
+{{{/HumanResources/MainScreen/Account}}}
+Wie bereits erwähnt, erzeugt das System selbständig Personalkonten, sobald Sie einen Mitarbeiter anlegen. Klicken Sie links unter menu:[MODULES] auf menu:[Personalkonten]. Wenn Sie vorhin einen Mitarbeiter angelegt haben, sehen Sie jetzt mindestens dessen zwei Personalkonten für das laufende und das folgende Jahr. Wenn alle Mitarbeiter schon vor längerer Zeit angelegt wurden, kann es sein, dass ein neues Personalkonto angelegt werden muss, weil die Zeit fortgeschritten ist. Klicken Sie dazu im Bearbeitungsmenü den Button menu:[Personalkonten anlegen]. Das System fragt Sie nach dem Jahr, für das es ein Konto anlegen soll, der Rest erfolgt automatisch.
+
+
+Gehen Sie nun mit der Maus auf die Zeile mit dem laufenden Jahr und klicken Sie die rechte Maustaste. Neben den bekannten Funktionen, die Sie auch über die Maske erreichen, ist im Kontextmenü eine Funktion versteckt, die Sie nur hier sehen: menu:[Urlaub vom letzten Jahr als Sonderurlaub buchen]. Diese Funktion dient der Übernahme von im letzten Jahr nicht genommenem Urlaub auf das aktuelle Jahr, wo er als Sonderurlaub ausgewiesen wird. Vor Anwendung dieser Funktion beachten Sie bitte arbeitsvertragliche Regelungen zur Übernahme und zum Verfall von Urlaubstagen. 
+
+{{{/HumanResources/EditDialog/Account}}}
+Klicken Sie nun menu:[Personalkonto bearbeiten] im Bearbeitungsmenü oder im Kontextmenü der rechten Maustaste.
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Account>
+        demodata: Vertrag, Mitarbeiter
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Personalkonto bearbeiten
+image::HumanResources/10_humanresources_personalkonto.png[id="fig_humanpersonalkonten",width="100%"]
+
+
+Die Zahlen, die die folgende Maske bereits enthält, stammen aus für den Arbeitnehmer im betreffenden Jahr angelegten Arbeitsverträgen. Sollten Sie jetzt nur Nullen sehen, wurde für den Arbeitnehmer kein Arbeitsvertrag im laufenden Jahr angelegt. Gehen Sie in diesem Falle bitte zurück auf menu:[Mitarbeiter] und legen Sie, wie weiter oben besprochen, zumindest probehalber einen Arbeitsvertrag an. Wir wollen zum besseren Verständnis sehen, wie sich die dort eingegebenen Zahlen auf der Personalkonto-Maske auswirken.
+
+////
+KUK: Wiewohl alle Zahlenfelder als Eingabefelder dargestellt sind und man mit der Maus hineinklicken kann, sind sie keine Eingabefelder -> Bug!
+////
+
+Dann zurück zu den Personalkonten: In der Maske unter dem Reiter menu:[Zusammenfassung] finden Sie eine ganze Reihe von Zahlen, die Sie nicht überschreiben können; sie entsprechen den oben unter den Arbeitsverträgen sowie den Urlaubs- und Krankheitstagen eingegebenen Werten. 
+////
+.Sonderurlaub
+image::HumanResources/11_humanresources_sonderurlaub.png[id="fig_humanpersonalkontosonderurlaub",width="100%"]
+////
+
+{{{/HumanResources/EditDialog/Account/ExtraFreeTime}}}
+Schauen wir uns zuletzt den Reiter menu:[Sonderurlaub] an.
+Das Fenster mit einer Tabelle zeigt den dem Arbeitnehmer zugebilligten Sonderurlaub. Klicken Sie nun im unteren Rand der Bearbeitungsmaske den Button menu:[Sonderurlaub hinzufügen]. Diese Funktion ermöglicht es, einem Personalkonto ein bestimmtes Kontingent Sonderurlaub zuzuordnen, beispielsweise als Incentive oder im Zuge von Ereignissen, für die vertraglich Sonderurlaub vereinbart ist, wie Hochzeiten, Geburten etc.
+
+(((Sonderurlaub)))
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/ExtraFreeTime>
+        demodata: Vertrag, Mitarbeiter, Tags
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Sonderurlaub hinzufügen
+image::HumanResources/12_humanresources_personalkonto_sonderurlaub.png[id="fig_humansonderurlaubhinzu",width="100%"]
+
+
+{{{/HumanResources/EditDialog/ExtraFreeTime}}}
+Es öffnet sich ein weiteres Bearbeitungsfenster, in das Sie im obersten Feld die Anzahl menu:[Tage] frei eingeben können. Den menu:[Typ], menu:[Bezahlt] oder menu:[Unbezahlt], wählen Sie per Pulldown aus. Diese beiden Eingaben sind Pflichtfelder. Ein menu:[Ablaufdatum] hingegen, bis zu welchem der Urlaub genommen werden muss, ist fakultativ, ebenso die menu:[Beschreibung]. Der hier eingegebene Sonderurlaub wird im Reiter menu:[Zusammenfassung] zu den möglichen Urlaubstagen addiert.
+
+/////////////
+
+=== Arbeitszeit Erfassung ===
+
+Admin-Modul DEF-Com
+- Bitet die Möglichkeit der Internet anbindung (Sicher da Verschlüsselt)
+- Anbindung von Terminals. Möglichkeit des Ein- und Aus-stempelns via HomeOffice (Online mit {branch}) oder im Büro durch das Terminal.
+- Wenn das Internet ausfällt, sind die Terminals weiter stabil Nutzbar. Die Terminals synchronisieren die gestempelten Zeiten sobald die Internet anbindung wieder steht.
+- Es gibt kein Zentralen Controller da {branch} direkt als Client Integriert ist. (Ähnlich wie bei IoT (Internet of Things))
+- Die Zeitstempel werden in wenigen Sec. online geladen/sichbar
+- Terminal gibt Auskunft über Namen, Ausweisnummer und dem Zeitsaldo des Mitarbeiters
+- {branch} 
+
+////////////
