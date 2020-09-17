@@ -523,8 +523,10 @@ class Tinebase_Core
                 ]
             );
             $writer = $logger->getWriter($loggerConfig);
-            $writer->setFormatter($logger->getFormatter($loggerConfig));
-            $logger->addWriter($writer);
+            if ($writer) {
+                $writer->setFormatter($logger->getFormatter($loggerConfig));
+                $logger->addWriter($writer);
+            }
         }
     }
     
