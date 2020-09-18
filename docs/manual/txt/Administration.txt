@@ -78,7 +78,7 @@ image::Administration/1_administration_benutzertabelle.png[id="fig_adminnutzerta
 
 
 {{{/Admin/MainScreen/User}}}
-In der Benutzeransicht sehen Sie in tabellarischer Form, welche Benutzer in Ihrer {branch}-Installation angelegt wurden. Außerdem werden hier ihre grundlegenden Eigenschaften angezeigt. Wenn an der Standardansicht nichts geändert worden ist, dann sehen Sie ganz links den menu:[Status] -- ein Haken signalisiert dass der Benutzer aktiv ist, ein X entsprechend einen nicht aktiven. Apropos Standardansicht: Sie können, wie Sie das ja auch schon von anderen Tabellenansichten in {branch} kennen, die anzuzeigenden Tabellenfelder auswählen. Ganz rechts im Tabellenkopf finden Sie dazu das Spaltensymbol. Wenn Sie es anklicken, werden Ihnen die für diese Ansicht gültigen Tabellenfelder als Checkbuttons zum Auswählen angezeigt. Prüfen Sie bitte, ob für die jetzt erforderliche (Standard-)Ansicht die folgenden Felder markiert sind: menu:[Status], menu:[Bildschirmname], menu:[Anmeldename], menu:[E-Mail], menu:[Zuletzt eingeloggt um], menu:[Letzter Login von], menu:[Passwort geändert] und menu:[Verfällt]
+In der Benutzeransicht sehen Sie in tabellarischer Form, welche Benutzer in Ihrer {branch}-Installation angelegt wurden. Außerdem werden hier Ihre grundlegenden Eigenschaften angezeigt. Wenn an der Standardansicht nichts geändert worden ist, dann sehen Sie ganz links den menu:[Status] -- ein Haken signalisiert, dass der Benutzer aktiv ist, ein X entsprechend einen nicht aktiven. Apropos Standardansicht: Sie können, wie Sie das ja auch schon von anderen Tabellenansichten in {branch} kennen, die anzuzeigenden Tabellenfelder auswählen. Ganz rechts im Tabellenkopf finden Sie dazu das Spaltensymbol. Wenn Sie es anklicken, werden Ihnen die für diese Ansicht gültigen Tabellenfelder als Checkbuttons zum Auswählen angezeigt. Prüfen Sie bitte, ob für die jetzt erforderliche (Standard-)Ansicht die folgenden Felder markiert sind: menu:[Status], menu:[Bildschirmname], menu:[Anmeldename], menu:[E-Mail], menu:[Zuletzt eingeloggt um], menu:[Letzter Login von], menu:[Passwort geändert] und menu:[Verfällt]
 
 //////////////////
         SCREENSHOT
@@ -94,6 +94,7 @@ image::Administration/2_administration_spaltenauswahl.png[id="fig_adminnutzerspa
 
 
 Vielleicht fällt Ihnen jetzt ein Benutzer auf, der menu:[cronuser] heißt. Dabei handelt es sich um einen Systemdienst, der immer vorhanden ist; beachten Sie ihn einfach nicht weiter.
+
 
 {{{/Admin/MainScreen/User/Grid}}}
 Machen wir weiter mit einzelnen Spalten der Tabellenansicht, und hier dem menu:[Bildschirmnamen]. Das ist die Bezeichnung, unter welcher Sie als eingeloggter Benutzer am Bildschirm angezeigt werden. Sie finden ihn immer ganz oben rechts, direkt unter der Begrenzung des Browserfensters -- oder, wenn Sie {branch} im  Vollbildmodus betreiben -- unter dem Bildschirmrand, links neben dem Knopf zum Abmelden.
@@ -134,7 +135,7 @@ image::Administration/3_administration_benutzer_neu.png[id="fig_adminneueruser",
 (((Passwort)))
 (((OpenID)))
 (((Single-Sign-On-ID)))
-Die sich öffnende Eingabemaske enthält unter dem Reiter menu:[Benutzerkonto] den Vor- und Nachnamen (aus denen dann der o.g. Bildschirmname zusammengesetzt wird) sowie natürlich den Anmeldenamen und das Passwort. Dazu können Sie optional eine E-Mail-Adresse für den Benutzer angeben sowie seine OpenID. Im Normalfall brauchen Sie keine OpenID angeben. Diese entspricht dann dem Anmeldenamen.
+Die sich öffnende Eingabemaske enthält unter dem Reiter menu:[Benutzerkonto] den Vor- und Nachnamen (aus denen dann der o.g. Bildschirmname zusammengesetzt wird) sowie natürlich den Anmeldenamen und das Passwort. Dazu können Sie optional eine E-Mail-Adresse für den Benutzer angeben sowie seine OpenID. Im Normalfall brauchen Sie keine OpenID anzugeben. Diese entspricht dann dem Anmeldenamen.
 
 Ein Wort der Erklärung zu dieser: Wenn Ihre {branch}-Installation eine sog. Stand-Alone-Installation, also nicht mit anderen Anwendungen Ihrer Systemumgebung verknüpft ist, dann entspricht die OpenID dem Benutzernamen und {branch} macht keinen Unterschied zwischen diesen beiden Bezeichnungen. Sollten Sie sich jedoch in einer sogenannten "Single-Sign-On"-Umgebung befinden, dann ist die OpenID möglicherweise eine andere und entspricht ihrer ``Single-Sign-On''-ID.
 
@@ -144,11 +145,11 @@ OpenID ist ein Protokoll, mit dem Sie sich nur einmal an {branch} anmelden müss
 =============
 
 {{{/Admin/MainScreen/Group}}}
-Zu Beginn dieses Kapitels hatten wir schon besprochen, dass Benutzer zu Gruppen zusammengefasst werden können. Welchen Gruppen ein Benutzer insgesamt angehört, können Sie mit dem Reiter menu:[Gruppen] festlegen, auf den wir weiter unten zu sprechen kommen. Hier in dieser Maske können Sie dem neu anzulegenden Benutzer innerhalb seiner Gruppen eine Stammgruppe zuweisen. Die Stammgruppe ist ein Begriff aus der LDAP-Welt: Wenn {branch} ``stand-alone'' - also ohne Kontakt zu Server-, Telefonanlagen- oder anderen Namensverzeichnissen betrieben wird, spielt die Stammgruppe keine Rolle. {branch} selbst benutzt diese Funktion nicht. Wenn es jedoch eine Verbindung zu einem LDAP-Namensverzeichnis in der Serverumgebung gibt, dann können Sie dem Benutzer von hier aus eine Stammgruppe innerhalb dieses Namenverzeichnisses zuweisen. Das Pulldown hinter diesem Menü bietet Ihnen dabei alle vorhandenen Benutzergruppen zur Auswahl an. Zur Frage welche Bedeutung eine Stammgruppe in der Welt der LDAP-Verzeichnisse hat, verweise ich auf die entsprechende Fachliteratur oder den bei Ihnen dafür verantwortlichen Administrator.
+Zu Beginn dieses Kapitels hatten wir schon besprochen, dass Benutzer zu Gruppen zusammengefasst werden können. Welchen Gruppen ein Benutzer insgesamt angehört, können Sie mit dem Reiter menu:[Gruppen] festlegen, auf den wir weiter unten zu sprechen kommen. Hier in dieser Maske können Sie dem neu anzulegenden Benutzer innerhalb seiner Gruppen eine Stammgruppe zuweisen. Die Stammgruppe ist ein Begriff aus der LDAP-Welt: Wenn {branch} ``stand-alone'' - also ohne Kontakt zu Server-, Telefonanlagen- oder anderen Namensverzeichnissen betrieben wird, spielt die Stammgruppe keine Rolle. {branch} selbst benutzt diese Funktion nicht. Wenn es jedoch eine Verbindung zu einem LDAP-Namensverzeichnis in der Serverumgebung gibt, dann können Sie dem Benutzer von hier aus eine Stammgruppe innerhalb dieses Namensverzeichnisses zuweisen. Das Pulldown hinter diesem Menü bietet Ihnen dabei alle vorhandenen Benutzergruppen zur Auswahl an. Zur Frage welche Bedeutung eine Stammgruppe in der Welt der LDAP-Verzeichnisse hat, verweise ich auf die entsprechende Fachliteratur oder den bei Ihnen dafür verantwortlichen Administrator.
 
 Als Status des Benutzers ist standardmäßig menu:[aktiviert] vorgegeben; Sie können hier jedoch per Pulldown zwischen verschiedenen Status wählen: Der Status menu:[aktiviert] ist der Normalzustand, wie er auch in der tabellarischen Ansicht mit dem Haken dargestellt wird. In den Status menu:[deaktiviert] kann man den Benutzer außer über dieses Pulldown auch über das Bearbeitungsmenü oben überführen. Damit kann sich der betreffende Benutzer nicht mehr bei {branch} anmelden und ein bereits angemeldeter Benutzer kann nicht mehr weiterarbeiten.
 
-Die Anwahl von menu:[abgelaufen] bewirkt, dass das Benutzerkonto sofort ungültig wird. Auch hier wird einem bereits angemeldeten Benutzer nicht erlaubt, weiter zu arbeiten.
+Die Anwahl von menu:[abgelaufen] bewirkt, dass das Benutzerkonto sofort ungültig wird. Auch hier wird einem bereits angemeldeten Benutzer nicht erlaubt, weiterzuarbeiten.
 
 Den Status menu:[gesperrt] kann man nicht anwählen; er erscheint nur als Statusmeldung, wenn der betreffende Benutzer durch zu häufiges Anmelden mit einem falschen Passwort seinen Zugang gesperrt hat. Dann wird es vorkommen, dass dieser Benutzer bei Ihnen als Administrator vorstellig wird, weil er sein Konto wieder entsperrt haben will. Nun wissen Sie, wo Sie das tun können!
 
@@ -162,7 +163,7 @@ Sollten Sie sich nicht sicher sein, was hier zu tun ist, erkundigen Sie sich im 
 * Welche Rollen und Gruppen sollen eingerichtet werden?
 * Welche Administratoren und Vertreterpläne für sie gibt es?
 
-Bei dieser Gelegenheit kann man auch andere Fragen, wie z.B. zur Verwendung von externen Geräten oder Datenträgern usw., als Teil der Policy festlegen. Das hat zwar zunächst mit unserem Thema Groupware nicht direkt etwas zu tun, aber spätestens wenn Sie sich mit der Integration von Smartphones und Tablets der Mitarbeiter beschäftigen müssen, kommen Sie um die Festlegung von Sicherheitsregeln nicht herum. In vielen Unternehmen gibt es keine verbindlich festgelegte Sicherheits-Policy, was weitreichende Folgen hat: Wenn die Mitarbeiter nicht wissen, was genau als Fehler in diesem Bereich gilt, kann man ihnen auch keinen Vorwurf machen, wenn sie welche begehen. Fragen Sie hierzu einschlägige IT-Sicherheitsfirmen um Rat!
+Bei dieser Gelegenheit kann man auch andere Fragen, wie z.B. zur Verwendung von externen Geräten oder Datenträgern usw., als Teil der Policy festlegen. Das hat zwar zunächst mit unserem Thema Groupware nicht direkt etwas zu tun, aber spätestens, wenn Sie sich mit der Integration von Smartphones und Tablets der Mitarbeiter beschäftigen müssen, kommen Sie um die Festlegung von Sicherheitsregeln nicht herum. In vielen Unternehmen gibt es keine verbindlich festgelegte Sicherheits-Policy, was weitreichende Folgen hat: Wenn die Mitarbeiter nicht wissen, was genau als Fehler in diesem Bereich gilt, kann man ihnen auch keinen Vorwurf machen, wenn sie welche begehen. Fragen Sie hierzu einschlägige IT-Sicherheitsfirmen um Rat!
 =============
 
 menu:[Sichtbarkeit] und menu:[Gespeichert im Adressbuch] erlauben es, per Pulldown auszuwählen, in welchem Adressbuch der Benutzer gespeichert wird und ob er für andere Benutzer dieses Adressbuches sichtbar sein soll. Benutzer sind genau so in Adressbüchern gespeichert wie andere Kontakte, unterscheiden sich von diesen in der Adressbuch-Tabellenansicht auf den ersten Blick jedoch durch das schwarze Kopf-Symbol ganz links.
@@ -171,7 +172,7 @@ Der Tatbestand, ob ein Benutzer in einem Adressbuch gespeichert ist oder nicht, 
 
 Ein Anwendungsfall könnte bspw. auch sein, dass Sie zwei (oder mehr) verschiedene interne Adressbücher anlegen wollen, deren Benutzer sich gegenseitig nicht sehen sollen. Sie legen dann zwei Gruppen an, die jeweils nur Zugriff auf eines der beiden Adressbücher haben. Damit haben Sie zwei Benutzergruppen, die sich zwar alle an {branch} anmelden, sich aber gegenseitig nicht sehen können.
 
-Die Checkbox menu:[Passwort muss geändert werden] bewirkt das der Benutzer beim nächsten Login aufgefordert wird ein neues Passwort zu setzen. Dies ist Hilfreich wenn z.B. ein neuer Mitarbeiter Angestellt wurde und sein Benutzer angelegt wird. Hier kann man dann ein vorübergehendes Passwort vergeben, mit welchem der neue Mitarbeiter sich erstmalig anmeldet, bevor er sein eigenes Passwort wählt.
+Die Checkbox menu:[Passwort muss geändert werden] bewirkt, dass der Benutzer beim nächsten Login aufgefordert wird ein neues Passwort zu setzen. Dies ist Hilfreich, wenn z.B. ein neuer Mitarbeiter angestellt wurde und sein Benutzer angelegt wird. Hier kann man dann ein vorübergehendes Passwort vergeben, mit welchem der neue Mitarbeiter sich erstmalig anmeldet, bevor er sein eigenes Passwort wählt.
 
 Unten schließlich sehen Sie, eingerahmt im Feld menu:[Informationen], die Login- und Passwortangaben (``Zeitpunkt, IP-Adresse, Passwort gesetzt'') die wir weiter oben in der Tabellenansicht schon besprochen haben. In unserem Fall sind diese Felder natürlich leer, da der Benutzer (noch) nicht existiert.
 
@@ -193,11 +194,11 @@ image::Administration/4_administration_benutzer_gruppe.png[id="fig_adminneueruse
 {{{/Admin/MainScreen/Group}}}
 Da die Bildung von Gruppen ein eigener Menüpunkt ist, wollen wir hier nur darauf eingehen, wie der Benutzer einer bereits definierten Gruppe zugewiesen werden kann: Sie sehen auf der Maske das Pulldown menu:[Suche nach Gruppen...] Wenn Sie es anklicken, dann werden Ihnen (ggf. nach kurzer Suche) die in Ihrer {branch}-Installation vorhandenen Benutzergruppen zur Auswahl angeboten. Je nachdem wie umfangreich Ihr System ist, können das wenige Einträge bis zu mehreren Seiten sein. Sie können den Benutzer hier einer oder der Reihe nach mehreren Gruppen zuweisen. Welche administratorischen Überlegungen dem zugrunde liegen besprechen wir weiter unten, wenn wir die Gruppen anlegen.
 
-Unter dem nächsten Reiter menu:[Rollen] werden die dem Benutzer zugewiesenen Rollen angezeigt. Auch das können eine oder mehrere sein. Auf die Aspekte von Rollen kommen wir ebenfalls zu sprechen wenn wir sie weiter unten definieren. Hier nur soviel: Da Rechte in Rollen ``positiv'', also einschließlich definiert werden, kann es bei der Zugehörigkeit eines Benutzers zu mehreren Rollen nicht zu Widersprüchen kommen. Achten Sie nur ggf. darauf, mit der Mehrfachzuweisung einem Benutzer nicht fälschlicherweise Rechte zuzuweisen, die er nicht haben sollte.
+Unter dem nächsten Reiter menu:[Rollen] werden die dem Benutzer zugewiesenen Rollen angezeigt. Auch das können eine oder mehrere sein. Auf die Aspekte von Rollen kommen wir ebenfalls zu sprechen, wenn wir sie weiter unten definieren. Hier nur soviel: Da Rechte in Rollen ``positiv'', also einschließlich definiert werden, kann es bei der Zugehörigkeit eines Benutzers zu mehreren Rollen nicht zu Widersprüchen kommen. Achten Sie nur ggf. darauf, mit der Mehrfachzuweisung einem Benutzer nicht fälschlicherweise Rechte zuzuweisen, die er nicht haben sollte.
 
 Fileserver, IMAP, SMTP – Diese Reiter sind bei einer ``stand-alone''-Installation von {branch} ausgegraut. Sollte Ihre {branch}-Installation jedoch mit einem File- und/oder E-Mail-Server verbunden sein, dann haben Sie über diese Reiter die Möglichkeit, bestimmte Eigenschaften dieser Server einzusehen oder zu verändern. Die Beschreibung dieser Möglichkeiten würde allerdings den Rahmen des vorliegenden Buches sprengen.
 
-Mit dem Reiter menu:[Dateisystem] können Sie dem Benutzer ein Kontingent an Datenvolumen geben das er zu verfügung hat. Außerdem bietet dieser Reiter die Übersicht wie viel Datenvolumen der Benutzer verbraucht.
+Mit dem Reiter menu:[Dateisystem] können Sie dem Benutzer ein Kontingent an Datenvolumen geben, dass er zu verfügung hat. Außerdem bietet dieser Reiter die Übersicht wie viel Datenvolumen der Benutzer verbraucht.
 
 Schließen Sie die Eingabemaske mit menu:[Abbrechen], da wir jetzt keinen Benutzer anlegen wollen!
 
@@ -337,13 +338,13 @@ Sie sehen im Fenster eine Baumstruktur, die den Anwendungen von {branch} entspri
 Die Rollendefinition ist positiv, d.h. Nutzerrechte addieren sich, wenn der Nutzer mehrere Rollen zugewiesen bekommen hat. Beachten Sie das bitte bei der Betrachtung dieser Anwendung – ein Benutzer kann über eine andere Rolle durchaus weitergehende Rechte haben, als Sie in einer Rolle sehen!
 =============
 
-Gehen wir ins Detail - klappen Sie dazu mit Klick auf das kleine menu:[+]-Zeichen vor der entsprechenden Anwendung die da drunterliegenden Checkbuttons auf:
+Gehen wir ins Detail - klappen Sie dazu mit Klick auf das kleine menu:[+]-Zeichen vor der entsprechenden Anwendung die da darunterliegenden Checkbuttons auf:
 
 . menu:[ActiveSync] - die Anwendung zum ``Andocken'' mobiler Geräte
 * menu:[ActivSync Geräte verwalten] - Darf der Benutzer gemeinsame und ActivSync Geräte anlegen, bearbeiten oder löschen?
 * menu:[Admin] - Darf der Benutzer Einstellungen verändern?
 * menu:[Ausführen] - Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
-* menu:[Persönliche Tags] - Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] - Darf der Benutzer persönliche Tags sehen und verwalten?
 * menu:[Reset ActivSync devices] - Darf der Benutzer AktivSync-Geräte per Fernzugriff auf den Werkszustand zurücksetzen? Dieser Vorgang löscht alle Daten.
 . menu:[Admin] – die Anwendung zur Administration der gesamten Groupware
 * menu:[Admin] - Darf der Benutzer alle Einstellungen verändern? Diese Funktion sollte nur bei Administratoren aktiviert sein!
@@ -356,9 +357,9 @@ Gehen wir ins Detail - klappen Sie dazu mit Klick auf das kleine menu:[+]-Zeiche
 * menu:[Computer verwalten] - Darf der Benutzer bei Verwendung der Samba-Integration die Computerkonten der Workstations anlegen, bearbeiten und löschen (siehe <<sec.admin.computer>>)?
 * menu:[Container ansehen] - Ist menu:[Container] für den Benutzer im Admin-Menü aktiviert?
 * menu:[Container verwalten] - Darf der Benutzer Container anlegen, löschen und ändern sowie deren Berechtigungen setzen?
-* menu:[E-Mail-Konten ansehen] - Darf der Benutzer gemeinsame und Persönliche E-Mail-Konten ansehen?
-* menu:[E-Mail-Konten verwalten] - Darf der Benutzer gemeinsame und Persönliche E-Mail-Konten anlegen, bearbeiten oder löschen?
-* menu:[Gemeinsame Tags ansehen] - Darf der Benutzer Gemeinsame Tags ansehen?
+* menu:[E-Mail-Konten ansehen] - Darf der Benutzer gemeinsame und persönliche E-Mail-Konten ansehen?
+* menu:[E-Mail-Konten verwalten] - Darf der Benutzer gemeinsame und persönliche E-Mail-Konten anlegen, bearbeiten oder löschen?
+* menu:[Gemeinsame Tags ansehen] - Darf der Benutzer gemeinsame Tags ansehen?
 * menu:[Gemeinsame Tags verwalten] – Darf der Benutzer gemeinsame Tags anlegen, bearbeiten oder löschen?
 * menu:[Quota Nutzung ansehen] - Erlaubt den Benutzer zu sehen was für ein Datenverbrauch er hat.
 * menu:[Rollen ansehen] – Ist menu:[Rollen] für den Benutzer im Admin-Menü aktiviert?
@@ -371,10 +372,10 @@ Gehen wir ins Detail - klappen Sie dazu mit Klick auf das kleine menu:[+]-Zeiche
 . menu:[Adressbuch]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen in der  Adressbuch-Anwendung bearbeiten?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
-* menu:[E-Mail Optionen von Listen verwalten] - 
+* menu:[E-Mail Optionen von Listen verwalten] -
 * menu:[Gemeinsame Adressbuch-Favoriten verwalten] - Darf der Benutzer gemeinsame Filter-Favoriten für Adressbücher anlegen?
 * menu:[Gemeinsame Adressbücher verwalten] - Darf der Benutzer neue gemeinsame Adressbücher anlegen?
-* menu:[Persönliche Tags] - Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] - Darf der Benutzer persönliche Tags sehen und verwalten?
 * menu:[Verwalte Gruppenfunktionen in den Stammdaten] - Darf der Benutzer die Gruppenfunktionen verwalten
 * menu:[Verwalte Listen in den Stammdaten] - Darf der Benutzer die Gruppe verwalten.
 . menu:[Aufgaben]
@@ -382,53 +383,53 @@ Gehen wir ins Detail - klappen Sie dazu mit Klick auf das kleine menu:[+]-Zeiche
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
 * menu:[Gemeinsame Aufgaben Favoriten verwalten] - Darf der Benutzer Filter-Favoriten für Aufgabenlisten anlegen und ändern sowie diese mit anderen Anwendern teilen?
 * menu:[Gemeinsame Aufgabenlisten verwalten] - Darf der Benutzer neue gemeinsame Aufgabenlisten anlegen?
-* menu:[Persönliche Tags] - Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] - Darf der Benutzer persönliche Tags sehen und verwalten?
 . menu:[CRM]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen in der CRM-Anwendung bearbeiten?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
 * menu:[Gemeinsame Lead Favoriten verwalten] - Darf der Benutzer Filter-Favoriten für Leadlisten anlegen und ändern sowie diese mit anderen Anwendern teilen?
 * menu:[Gemeinsame Leads Ordner bearbeiten] - Darf der Benutzer neue gemeinsame Leads-Ordner anlegen?
-* menu:[Persönliche Tags] - Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] - Darf der Benutzer persönliche Tags sehen und verwalten?
 . menu:[Dateimanager]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen im Dateimanager bearbeiten?
 * menu:[Anonyme Download Links verwalten] - Darf der Benutzer anonyme Downloadlinks verwalten?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
 * menu:[Gemeinsame Ordner verwalten] - Darf der Benutzer neue gemeinsame Ordner anlegen?
-* menu:[Persönliche Tags] - Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] - Darf der Benutzer persönliche Tags sehen und verwalten?
 . menu:[E-Mail]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen im E-Mail-Client bearbeiten?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
 * menu:[E-Mailkonten hinzufügen] - Darf der Benutzer neue E-Mail-Konten anlegen?
 * menu:[E-Mailkonten verwalten] - Darf der Benutzer vorhandene E-Mail-Konten bearbeiten und löschen?
-* menu:[Persönliche Tags] - Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] - Darf der Benutzer persönliche Tags sehen und verwalten?
 . menu:[HumanResources]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen in der HumanResources-Anwendung bearbeiten?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
-* menu:[Persönliche Tags] - Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] - Darf der Benutzer persönliche Tags sehen und verwalten?
 * menu:[Private Daten des Mitarbeiters bearbeiten] - Darf der Benutzer die internen und persönlichen Daten eines Mitarbeiters bearbeiten?
 . menu:[Inventarisierung]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen in der Inventarisierungs-Anwendung bearbeiten?
 * menu:[Ausführen] - Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
-* menu:[Persönliche Tags] - Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] - Darf der Benutzer persönliche Tags sehen und verwalten?
 . menu:[Kalender]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen in der Kalender-Anwendung bearbeiten?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
 * menu:[Gemeinsame Kalender Verwalten] - Darf der Benutzer neue gemeinsame Kalender anlegen?
 * menu:[Gemeinsame Kalender-Favoriten verwalten] - Darf der Benutzer Filter-Favoriten für gemeinsame Kalender anlegen und ändern sowie diese mit anderen Anwendern teilen?
-* menu:[Persönliche Tags] - Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] - Darf der Benutzer persönliche Tags sehen und verwalten?
 * menu:[Ressourcen verwalten] - Darf der Benutzer Ressourcen (Besprechungsräume, Beamer, Video...) verwalten?
 . menu:[Sales]
 * menu:[Abteilungen verwalten] – Darf der Benutzer Abteilungen hinzufügen, bearbeiten und löschen?
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen in der Sales-Anwendung bearbeiten?
 * menu:[Angebote verwalten] – Darf der Benutzer Angebote hinzufügen, bearbeiten und löschen?
-* menu:[Auftragsbestätigungen verwalten] – Darf der Benutzer Auftagsbestätigungen hinzufügen, bearbeiten und löschen?
+* menu:[Auftragsbestätigungen verwalten] – Darf der Benutzer Auftragsbestätigungen hinzufügen, bearbeiten und löschen?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
 * menu:[Eingangsrechnungen verwalten] – Darf der Benutzer Eingangsrechnungen hinzufügen, bearbeiten und löschen?
 * menu:[Kostenstellen verwalten] – Darf der Benutzer Kostenstellen hinzufügen, bearbeiten und löschen?
 * menu:[Kunden verwalten] – Darf der Benutzer Kunden hinzufügen, bearbeiten und löschen?
 * menu:[Lieferanten verwalten] – Darf der Benutzer Lieferanten hinzufügen, bearbeiten und löschen?
-* menu:[Nummer einer Auftragsbestätigung ändern] – 
-* menu:[Persönliche Tags] – Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Nummer einer Auftragsbestätigung ändern] –
+* menu:[Persönliche Tags] – Darf der Benutzer persönliche Tags sehen und verwalten?
 * menu:[Produkte verwalten] - Darf der Benutzer neue Produkte anlegen?
 * menu:[Rechnungsnummer manuell vergeben] – Erlaubt dem Benutzer Rechnungsnummern manuell zu vergeben.
 * menu:[Rechnungen verwalten] – Darf der Benutzer Rechnungen hinzufügen, bearbeiten und löschen?
@@ -436,31 +437,31 @@ Gehen wir ins Detail - klappen Sie dazu mit Klick auf das kleine menu:[+]-Zeiche
 . menu:[Stammdaten]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen in der Stammdaten bearbeiten?
 * menu:[Ausführen] - Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
-* menu:[Persönliche Tags] - Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] - Darf der Benutzer persönliche Tags sehen und verwalten?
 . menu:[Telefone]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen in der Telefon-Anwendung bearbeiten?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
-* menu:[Persönliche Tags] – Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] – Darf der Benutzer persönliche Tags sehen und verwalten?
 . menu:[Tinebase]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen in Tinebase bearbeiten?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
 * menu:[Eigenen Client-Status ändern/setzen] - Darf der Benutzer seinen eigenen Client-Status setzen und verändern (wird beim Abspeichern und Verlassen des Programms der letzte Status gespeichert und beim nächsten Start dort begonnen)?
 * menu:[Eigenes Profil bearbeiten] - Darf der Benutzer sein eigenes Profil bearbeiten?
 * menu:[Fehler melden] - Darf der Benutzer Fehlermeldungen an den Hersteller senden, wenn diese auftreten?
-* menu:[Persönliche Tags] – Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] – Darf der Benutzer persönliche Tags sehen und verwalten?
 * menu:[Replikation] – Gibt Benutzern das Recht auf Replikations Daten aller Anwendungen zuzugreifen.
 * menu:[Version prüfen] - Erhält der Benutzer Mitteilungen über Software-Updates?
 * menu:[Wartung] – Gibt Benutzern das Recht die {branch} Installation im Wartungsmodus zu verwenden.
 . menu:[Voipmanager]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen im Voipmanager bearbeiten?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
-* menu:[Persönliche Tags] – Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] – Darf der Benutzer persönliche Tags sehen und verwalten?
 . menu:[Zeiterfassung]
 * menu:[Admin] – Darf der Benutzer sämtliche Einstellungen in der Zeiterfassung bearbeiten?
 * menu:[Ausführen] – Sieht der Benutzer die Anwendung und darf er sie demzufolge auch bedienen?
 * menu:[Gemeinsame Stundenzettel-Favoriten verwalten] - Darf der Benutzer Filter-Favoriten für gemeinsame Stundenzettel anlegen und ändern sowie diese mit anderen Anwendern teilen?
 * menu:[Gemeinsame Zeitkonten-Favoriten verwalten] - Darf der Benutzer Filter-Favoriten für gemeinsame Zeitkonten anlegen und ändern sowie diese mit anderen Anwendern teilen?
-* menu:[Persönliche Tags] – Darf der Benutzer Persönliche Tags sehen und verwalten?
+* menu:[Persönliche Tags] – Darf der Benutzer persönliche Tags sehen und verwalten?
 * menu:[Zeitkonten hinzufügen] - Darf der Benutzer neue Zeitkonten anlegen?
 * menu:[Zeitkonten verwalten] - Darf der Benutzer Zeitkonten und Stundenzettel anlegen, bearbeiten oder löschen?
 
@@ -491,7 +492,7 @@ image::Administration/10_administration_anwendungen.png[id="fig_adminanwendungen
 
 
 {{{/Admin/MainScreen/Application}}}
-Das grundlegende Ziel des Moduls menu:[Anwendungen] ist sehr schnell erklärt: Die Tabelle zeigt Ihnen alle in ihrer {branch}-Installation aktiven Anwendungen, die Sie als Administrator hier einzeln und für alle Benutzer aktivieren oder deaktivieren können. Damit können Sie an dieser Stelle nicht nur rollenbezogen, sondern für die gesamte {branch}-Installation das Aussehen und die Funktion des Systems anpassen. Ausgenommen von dieser Funktion sind das menu:[Adressbuch] sowie die Anwendungen menu:[Admin] und menu:[Tinebase] (die grundlegende Datenbank), da es sich hier um die elementarsten Funktionen der Groupware handelt, die nicht ausgeschaltet werden können.
+Das grundlegende Ziel des Moduls menu:[Anwendungen] ist sehr schnell erklärt: Die Tabelle zeigt Ihnen alle in ihrer {branch}-Installation aktiven Anwendungen, die Sie als Administrator hier einzeln und für alle Benutzer aktivieren oder deaktivieren können. Damit können Sie an dieser Stelle nicht nur rollen bezogen, sondern für die gesamte {branch}-Installation das Aussehen und die Funktion des Systems anpassen. Ausgenommen von dieser Funktion sind das menu:[Adressbuch] sowie die Anwendungen menu:[Admin] und menu:[Tinebase] (die grundlegende Datenbank), da es sich hier um die elementarsten Funktionen der Groupware handelt, die nicht ausgeschaltet werden können.
 
 Bei folgenden Anwendungen gibt es darüber hinaus noch menu:[Einstellungen]; Sie erkennen das daran, dass der Button menu:[Einstellungen] aktiv wird, wenn Sie die betreffende Anwendung auswählen:
 
@@ -539,17 +540,17 @@ Paul Hartog: Bis hier - 6.11.19
 image::Administration/13_administration_kalender_ressource_neu.png[id="fig_adminanwendungenkalenderressource",width="100%"]
 
 In diesem Dialog können Sie eine neue Ressource anlegen.
-Geben Sie Ihr hierfür zunächst einen menu:[Namen] zum Beispiel „Meeting-Raum 1“ . Als nächstes benötigt die Ressource eine eindeutige menu:[E-Mail Adresse] dies ist für die Synchronisation mit anderen Kalendersystem wichtig. An Diese Adresse werden außerdem Benachrichtigungen an die Ressource versendet, wie Termineinladungen.  Für den menu:[Typ] wählen wir passend zu unserem Meeting-Raum den „Raum“ aus.
+Geben Sie Ihr hierfür zunächst einen menu:[Namen] zum Beispiel „Meeting-Raum 1“. Als nächstes benötigt die Ressource eine eindeutige menu:[E-Mail Adresse] dies ist für die Synchronisation mit anderen Kalendersystem wichtig. An diese Adresse werden außerdem Benachrichtigungen an die Ressource versendet, wie Termineinladungen.  Für den menu:[Typ] wählen wir passend zu unserem Meeting-Raum den „Raum“ aus.
 Als nächsten finden Sie den Punkt menu:[Kalender Hierarchie/Name]. Über dieses Feld können Sie festlegen unter welcher Ordnerstruktur und welchem Namen der Kalender der Ressource später zu finden ist und so Ihre Ressourcen besser kategorisieren. In unserem Beispiel befindet sich der Meeting-Raum in der Zentrale und ist dort eher unter dem Namen „Meeting-Raum Groß“ bekannt. Wir wählen also als Hierarchie:
 
 menu:[Zentrale/Meeting-Raum Groß]
 
 Nun Befindet sich der Kalender der Ressource in einem Unterordner „Zentrale“ mit dem Namen „Meeting-Raum Groß“.  Später könnten wir in diesem Verzeichnis noch andere Räume, zum Beispiel „Meeting-Raum Klein“, hinterlegen.
-Beachten Sie hierbei, dass diese Bezeichnung nur für den Kalender gilt! Die Ressource wird weiterhin nur über ihren Namen, also „Meeting-Raum 1“ gefunden und eingeladen. Unter diesem Namen erscheint sie auch in Exporten oder dem Druck.
+Beachten Sie hierbei, dass diese Bezeichnung nur für den Kalender gilt! Die Ressource wird weiterhin nur über Ihren Namen, also „Meeting-Raum 1“ gefunden und eingeladen. Unter diesem Namen erscheint sie auch in Exporten oder dem Druck.
 Über den menu:[Standard Teilnehmerstatus] lässt sich festlegen welchen Status eine Ressource bei der Einladung hat.
-Der menu:[Belegt Typ] gibt hingegen an wie sich eine Ressource in Konfliktfällen verhält. Beim der Standardauswahl „Belegt“ entspricht das Verhalten dem normaler Teilnehmer. Es wird eine Warnung angezeigt, die es jedoch erlaubt den Termin Konflikt zu ignorieren. Ist der Belegt Typ hingegen „Nicht Verfügbar“, ist es nicht möglich die Warnung zu ignorieren. Doppelte Buchungen der Ressource sind somit nicht möglich!
+Der menu:[Belegt Typ] gibt hingegen an wie sich eine Ressource in Konfliktfällen verhält. Bei der Standardauswahl „Belegt“ entspricht das Verhalten dem eines normalen Teilnehmers. Es wird eine Warnung angezeigt, die es jedoch erlaubt den Termin Konflikt zu ignorieren. Ist der Belegt-Typ hingegen „Nicht Verfügbar“, ist es nicht möglich die Warnung zu ignorieren. Doppelte Buchungen der Ressource sind somit nicht möglich!
 Nun können Sie noch eine menu:[Maximale Teilnehmerzahl] und einen menu:[Ort] festlegen. Der Ort ist ein Adressbuch Kontakt. Wenn eine Ressource ein Raum ist und über einen Ort verfügt wird dieser automatisch in das Feld „Ort“ im Termin übernommen.
-Abschließend können Sie auswählen ob Sie alle Benachrichtigungen zu dieser Ressource unterdrücken möchten.
+Abschließend können Sie auswählen, ob Sie alle Benachrichtigungen zu dieser Ressource unterdrücken möchten.
 
 
 [[sec.admin.anwendungen.ressource.rechte]]
@@ -583,7 +584,7 @@ menu:[Ressource lesen]::
 
 menu:[Ressource bearbeiten]::
 * darf die Ressource selbst bearbeiten
-* reicht nicht aus um zugriffsrechte zu vergeben
+* reicht nicht aus, um Zugriffsrechte zu vergeben
 
 menu:[Ressource Administrieren]::
 * darf die Ressource bearbeiten und administrieren
@@ -618,7 +619,7 @@ Diese Benachrichtigungen müssen in der Grundkonfiguration von {branch} aktivier
 
 menu:[Termin löschen]::
 * darf Termine die originär im Ressourcenkalender sind löschen
-* reicht nicht zum Löschen der Ressource selbst, dies ist. nur über Rollen-Recht "Ressourcen Verwalten" möglich.
+* reicht nicht zum Löschen der Ressource selbst, dies ist. Nur über Rollen-Recht "Ressourcen Verwalten" möglich.
 
 [[sec.admin.anwendungen.ressource.verwalten]]
 ===== Rollen-Recht Ressourcen Verwalten =====
@@ -632,7 +633,7 @@ ifeval::[{flag} == 1]
 (((Lead,Typen)))
 (((Lead,Quellen)))
 (((Lead,Status)))
-menu:[CRM] – Sie finden Sie in der Tabelle unter menu:[Bezeichner], menu:[Verfügbare Lead Status], menu:[Verfügbare Lead Quellen] und menu:[Verfügbare Lead Typen]. Gehen sie in der Tabelle einen nach Links unter menu:[Werte} finden Sie die jeweiligen Einstellungsmöglichkeiten.  Ich gehe hier nicht näher auf die Bedeutung dieser Einstellungen ein; arbeiten Sie dazu, wenn Sie es nicht bereits getan haben, das <<chapter.CRM>> und dort insbesondere den <<sec.crm.lead.hinzufuegen>> durch! Dort wird auch darauf hingewiesen, dass Sie, sollten Ihnen die standardmäßig angebotenen Klassifizierungskriterien für Ihre Leads nicht ausreichen oder Sie andere benötigen, dieselben hier ändern oder ergänzen können.
+menu:[CRM] – Sie finden Sie in der Tabelle unter menu:[Bezeichner], menu:[Verfügbare Lead Status], menu:[Verfügbare Lead Quellen] und menu:[Verfügbare Lead Typen]. Gehen Sie in der Tabelle einen nach Links unter menu:[Werte} finden Sie die jeweiligen Einstellungsmöglichkeiten.  Ich gehe hier nicht näher auf die Bedeutung dieser Einstellungen ein; arbeiten Sie dazu, wenn Sie es nicht bereits getan haben, das <<chapter.CRM>> und dort insbesondere den <<sec.crm.lead.hinzufuegen>> durch! Dort wird auch darauf hingewiesen, dass Sie, sollten Ihnen die standardmäßig angebotenen Klassifizierungskriterien für Ihre Leads nicht ausreichen oder Sie andere benötigen, dieselben hier ändern oder ergänzen können.
 
 
 //////////////////
@@ -647,7 +648,7 @@ menu:[CRM] – Sie finden Sie in der Tabelle unter menu:[Bezeichner], menu:[Verf
 .Die Standardeinstellungen der CRM-Anwendung: Lead-Status, -Quelle und -Typ
 image::Administration/15_administration_crm_einstellungen.png[id="fig_adminanwendungencrm",width="100%"]
 
- Dazu dienen die drei Drop-Down Menüs. Bei dem Einstellungsmöglichkeiten für menu:[Verfügbare Lead Status] können Sie, neben dem Definieren eigener Lead-Status, auch die damit verbundenen Umsatz-Wahrscheinlichkeiten (menu:[probability]) festlegen:
+ Dazu dienen die drei Drop-Down Menüs. Bei den Einstellungsmöglichkeiten für menu:[Verfügbare Lead Status] können Sie, neben dem Definieren eigener Lead-Status, auch die damit verbundenen Umsatz-Wahrscheinlichkeiten (menu:[probability]) festlegen:
 
 //////////////////
         SCREENSHOT
@@ -661,7 +662,7 @@ image::Administration/15_administration_crm_einstellungen.png[id="fig_adminanwen
 .Die Maske zum Verwalten der möglichen Lead-Status der CRM-Anwendung
 image::Administration/16_administration_crm_lead_status.png[id="fig_adminanwendungencrmlead",width="100%"]
 
-Unter den anderen beiden Drop-Down Menüs haben Sie die Möglichkeit, die Verfügbaren Lead-Typen und -Quellen neu anzulegen oder vorhandene zu löschen, wenn Sie diese in Ihrem Vertriebs-Kontext nicht benötigen.
+Unter den anderen beiden Drop-Down Menüs haben Sie die Möglichkeit, die verfügbaren Lead-Typen und -Quellen neu anzulegen oder vorhandene zu löschen, wenn Sie diese in Ihrem Vertriebs-Kontext nicht benötigen.
 endif::[]
 
 [[sec.admin.anwendungen.humanresources]]
@@ -728,7 +729,7 @@ KUK 2015-05-14: Da er das allerdings in mehr als einem Jahr nicht wurde, habe ic
 
 * menu[Produktnummern Erstellung] und menu:[Produktnummern-Validierung:] funktionieren in gleicherweise wie menu:[Vertragsnummer ...] mit dem Unterschied das hier die Produktnummern vergeben werden.
 
-* menu:[Produktnummern Präfix:] gibt an mit welchen Zeichen eine Produktnummer Starten soll. 
+* menu:[Produktnummern Präfix:] gibt an, mit welchen Zeichen eine Produktnummer Starten soll.
 
 * menu:[Product Number Zero Fill:] Gibt an wie viele Ziffern {branch} für eine Produktnummer verwendet.
 
@@ -740,18 +741,18 @@ Auch hier: Änderung nicht möglich wegen fehlender Berechtigung. Daher Fragen:
 @Kai:
 Zu 1.) Es wird von System validiert.
 Zu 2.) Ja. Machen wir. Erst mal einfach nur mit Euro. Die anderen Währungen fügen wir später hinzu.
-Hier muss dann noch ein neuer Screenshot erstellt werden, so bald das veröffentlicht ist.
+Hier muss dann noch ein neuer Screenshot erstellt werden, sobald das veröffentlicht ist.
 ////
 
 [[sec.admin.anwendungen.aufgaben]]
 ==== Aufgaben ====
 
-In der Tabelle bei menu:[Wert] versteckt sich wie auch bei CRM ein Drop-Down Menü. Hier drüber kann eingestellt werden welcher Wert als "Standart" gilt. Des Weiteren ist es hier möglich Personalisierte Werte zu definieren.
+In der Tabelle bei menu:[Wert] versteckt sich wie auch bei CRM ein Drop-Down Menü. Hier drüber kann eingestellt werden welcher Wert als "Standard" gilt. Des Weiteren ist es hier möglich personalisierte Werte zu definieren.
 
 [[sec.admin.anwendungen.zeiterfassung]]
 ==== Zeiterfassung ====
 
-Parralel zu Aufgaben kann man hier im Drop-Down Menü eingestellen welcher Wert als "Standart" gilt, und Personalisierte Werte definieren.
+Parallel zu Aufgaben kann man hier im Drop-Down Menü einstellen welcher Wert als "Standard" gilt, und personalisierte Werte definieren.
 
 
 [[sec.admin.anwendungen.Tinebase]]
@@ -781,7 +782,7 @@ menu:[Tinebase]: Unter dem einzigen Reiter, menu:[Profilinformation] finden Sie 
 (((Container)))
 {{{/Admin/MainScreen/Container}}}
 
-Kommen wir zu den Weiteren Optionen auf der Linken Seite.
+Kommen wir zu den weiteren Optionen auf der Linken Seite.
 
 ``Container'' werden die einzelnen Datenbanken genannt, die jeweils über die Anwendungen von {branch} erzeugt werden können. Zum Beispiel können das die schon allseits bekannten Adressbücher sein, aber auch Kalender, Aufgabenlisten, Zeitkonten usw.
 
@@ -831,7 +832,7 @@ image::Administration/25_administration_container_editieren.png[id="fig_admincon
 
 Sie sehen als oberste Eingabefelder den menu:[Namen] des Containers, die menu:[Anwendung], in welcher der Container läuft, das menu:[Modell] (eine weitere Unterteilung, denn manche Anwendungen, wie z.B. menu:[Sales], beinhalten mehrere Arten von Containern), den menu:[Typ] (menu:[gemeinsam] oder menu:[persönlich]) und die menu:[Farbe] des Containers.
 
-Im da drunterliegenden Pulldown können Sie Benutzergruppen (oder, rechts außen über den kleinen Schalter mit dem Kopfsymbol, auch einzelne Benutzer oder ``Jeden'') dem Container als Benutzer zuweisen. Sodann sehen Sie die Benutzer in der da drunterliegenden Tabelle als Zeile und können für sie mit den Checkbuttons einzelne Berechtigungen definieren.
+Im da darunterliegenden Pulldown können Sie Benutzergruppen (oder, rechts außen über den kleinen Schalter mit dem Kopfsymbol, auch einzelne Benutzer oder ``Jeden'') dem Container als Benutzer zuweisen. Sodann sehen Sie die Benutzer in der da darunterliegenden Tabelle als Zeile und können für sie mit den Checkbuttons einzelne Berechtigungen definieren.
 
 [NOTE]
 ===========
@@ -1021,8 +1022,8 @@ menu:[Typ] bietet eine Reihe von Angaben, die den Typ der einzugebenden Daten de
 
 * menu:[Schlüsselfeld]: Hier können Sie eine Liste von (numerischen) Schlüsseln und zugehörigen Werten hinterlegen, die der Benutzer bei Eingabe des Feldes als Pulldown abrufen kann. In der Oberfläche sieht der Benutzer immer nur die Werte. In der Datenbank werden aber nur die Schlüssel gespeichert. Damit kann man auch noch später die Werte ändern, ohne dass die Daten in der DB geändert werden müssen. Der Checkbutton menu:[Standard] bestimmt, welcher Wert als Standardwert übernommen wird, ohne dass der Benutzer eine Auswahl trifft. Bleibt er leer, bleibt in diesem Falle auch das Feld leer.
 * menu:[Datensatz]: Hier können Sie eine Anwendung und einen Datentyp auswählen. Zum Beispiel menu:[Adressbuch] und menu:[Kontakt]. In der Oberfläche kann der Benutzer dann in diesem Zusatzfeld über ein Pulldown einen Kontakt aus dem Adressbuch auswählen. Sie kennen diese Art der Bestimmung von Datenfeldinhalten schon aus {branch}, wo sie in vielen Anwendungen für die Bildung von Verknüpfungen genutzt wird.
-* menu[Datensatz] Erlaubt das Verknüpfungen von einem Datensatzt
-* menu[Datensatz Liste] Erlaubt das Verknüpfungen von mehreren Datensätzten
+* menu[Datensatz] Erlaubt das Verknüpfen von einem Datensatz
+* menu[Datensatz Liste] Erlaubt das Verknüpfen von mehreren Datensätzen
 
 Unter menu:[Name] vergeben Sie für Ihr Zusatzfeld einen eindeutigen Namen, wie er im Datenmodell sinnvoll und schlüssig ist. Dieser Name taucht auf keinem Benutzermenü auf, er ist nur die eindeutige Bezeichnung des Feldes.
 
@@ -1108,7 +1109,7 @@ Auf der Maske finden Sie einige Angaben, die nicht in jedem Falle vollständig s
 
 * Der menu:[Eigentümer] ist der Eigentümer des Gerätes. Diese Angabe ist immer vorhanden, da sie aus der Kontobezeichnung des {branch}-Benutzers übernommen wird.
 
-* Über die menu:[Richtlinie] können verschiedene Einstellungen für das Gerät festgelegt werden. Zum Beispiel ob das Gerät über ein Passwort geschützt werden muss und wie lang das Passwort sein muss. Diese Richtlinien lassen sich nur direkt in der Datenbank definieren und einem Gerät zuweisen.
+* Über die menu:[Richtlinie] können verschiedene Einstellungen für das Gerät festgelegt werden. Zum Beispiel, ob das Gerät über ein Passwort geschützt werden muss und wie lang das Passwort sein muss. Diese Richtlinien lassen sich nur direkt in der Datenbank definieren und einem Gerät zuweisen.
 
 * Die menu:[AS Version] enthält die Versionsnummer der ActiveSync-Software, wie sie das externe Gerät benutzt.
 
@@ -1170,7 +1171,7 @@ Das ``Zugriffslog'' bietet dem Administrator die Möglichkeit, sich alle Logins 
 Die Tabelle der Logins zeigt Ihnen in der Standardansicht den menu:[Benutzernamen], den vollständigen menu:[Namen], die menu:[IP-Adresse], von der aus sich der entsprechende Benutzer eingeloggt hat, die menu:[Einlogzeit] und die menu:[Auslogzeit] sowie das menu:[Ergebnis], d.h. ob der Anmeldevorgang erfolgreich war oder nicht. Dazu wird ganz rechts noch der o.g. menu:[Client-Typ] angezeigt, in unserem Fall nur die bewussten menu:[TineJson]-Logins.
 
 (((ActiveSync)))
-Was passiert, wenn wir die gesetzten Filter entfernen? Gehen Sie probehalber bitte einmal auf die beiden menu:[-]-Symbole oben links über dem Tabellenkopf und klicken sie weg – die Verfahrensweise ist Ihnen wahrscheinlich schon vom <<chap.adressverwaltung>> bekannt. Gehen Sie jetzt auf menu:[Suche starten] (d.h. aktivieren Sie eine neue Ansicht, diesmal ohne Filter): Möglicherweise sehen Sie jetzt wesentlich mehr Logins. Nicht nur weil Sie die Zeitbeschränkung (letzte Woche) aufgehoben haben, sondern auch, weil Logins von anderen Geräten angezeigt werden, sofern es welche gab. Schauen Sie ganz rechts auf die Spalte menu:[Client-Typ]! Sehen Sie Einträge mit der Bezeichnung menu:[TineActiveSync]? Damit hat es folgende Bewandnis: Wie Sie vielleicht schon wissen, ist ein großer Vorteil von {branch} gegenüber anderen im Markt befindlichen Systemen dieser Art die einfache Einbindung von Handheld-Devices, wie Smartphones und Tablets. Dabei ist es gleichgültig, welches Betriebssystem  das Gerät hat (Android, iOS, Windows Mobile/Phone, Blackberry), sofern es nur eine sog. ActiveSync-Funktion aufweist. Diese Funktion ist ursprünglich ein Microsoft-Patent (in manchen Staaten, wie z.B. USA, ist es das heute noch, hier gilt es besondere Bedingungen beim Einsatz von {branch} zu beachten!) und als solches quasi zum Industriestandard geworden. Die ActiveSync-Schnittstelle ist sehr robust und garantiert eine fehlerfreie wechselseitige Datensychronisation von E-Mail, Kontakten und Kalenderdaten zwischen {branch} und dem Handheld-Device, ohne dass auf diesem irgendwelche Apps installiert werden müssten. Ganz nebenbei: Wenn Sie auf diesem Wege Ihre sensiblen Kontakt- und Termindaten auf einem {branch}-System abspeichern, anstatt bei Google (wenn Sie ein Android-Smartphone nutzen) oder Apple (beim iPhone), entgehen Sie auch der Ausspähung und potenziellen Weiterleitung Ihrer Daten durch die genannten Unternehmen an die Geheimdienste und andere Behörden.
+Was passiert, wenn wir die gesetzten Filter entfernen? Gehen Sie probehalber bitte einmal auf die beiden menu:[-]-Symbole oben links über dem Tabellenkopf und klicken sie weg – die Verfahrensweise ist Ihnen wahrscheinlich schon vom <<chap.adressverwaltung>> bekannt. Gehen Sie jetzt auf menu:[Suche starten] (d.h. aktivieren Sie eine neue Ansicht, diesmal ohne Filter): Möglicherweise sehen Sie jetzt wesentlich mehr Logins. Nicht nur weil Sie die Zeitbeschränkung (letzte Woche) aufgehoben haben, sondern auch, weil Logins von anderen Geräten angezeigt werden, sofern es welche gab. Schauen Sie ganz rechts auf die Spalte menu:[Client-Typ]! Sehen Sie Einträge mit der Bezeichnung menu:[TineActiveSync]? Damit hat es folgende Bewandnis: Wie Sie vielleicht schon wissen, ist ein großer Vorteil von {branch} gegenüber anderen im Markt befindlichen Systemen dieser Art die einfache Einbindung von Handheld-Devices, wie Smartphones und Tablets. Dabei ist es gleichgültig, welches Betriebssystem  das Gerät hat (Android, iOS, Windows Mobile/Phone, Blackberry), sofern es nur eine sog. ActiveSync-Funktion aufweist. Diese Funktion ist ursprünglich ein Microsoft-Patent (in manchen Staaten, wie z.B. USA, ist es das heute noch, hier gilt es besondere Bedingungen beim Einsatz von {branch} zu beachten!) und als solches quasi zum Industriestandard geworden. Die ActiveSync-Schnittstelle ist sehr robust und garantiert eine fehlerfreie wechselseitige Datensynchronisation von E-Mail, Kontakten und Kalenderdaten zwischen {branch} und dem Handheld-Device, ohne dass auf diesem irgendwelche Apps installiert werden müssten. Ganz nebenbei: Wenn Sie auf diesem Wege Ihre sensiblen Kontakt- und Termindaten auf einem {branch}-System abspeichern, anstatt bei Google (wenn Sie ein Android-Smartphone nutzen) oder Apple (beim iPhone), entgehen Sie auch der Ausspähung und potenziellen Weiterleitung Ihrer Daten durch die genannten Unternehmen an die Geheimdienste und andere Behörden.
 
 [[sec.admin.server.informationen]]
 === Server-Informationen ===
@@ -1191,6 +1192,29 @@ Der Menüpunkt menu:[Server-Informationen] dient der Anzeige von Informationen f
 
 
 [[sec.admin.server.email.accounts]]
-=== E-Mail Accounts ===
+=== E-Mail Konten ===
 
-Hier können die in {branch} genutzten E-Mail Accounts bearbeiten. Die Bearbeitung wurde im E-Mail Kapitel unter dem <<sec.email.menue>> schon besprochen. Für weitere Infos navigieren Sie dort hin..
+Hier können Sie unter anderen die in {branch} genutzten E-Mail Konten bearbeiten. Dies wurde im E-Mail Kapitel unter dem <<sec.email.menue>> schon besprochen. Für weitere Information navigieren Sie dort hin.
+
+Neben der Bearbeitung von den E-Mail-Konten, haben Sie auch die Möglichkeit, verschiedene neue E-Mail-Kontotypen hinzuzufügen. Hierzu klicken Sie menu:[Konto hinzufügen].
+menü:[Kontoname] ist selbsterklärend. Darunter befindet sich die Auswahl der Kontotypen.
+Zur Auswahl steht Ihnen menu:[Gemeinsames Systemkonto], menu:[Persönliches Extra-Systemkonto], menu:[Persönliches externes E-Mail-Konto] und menu:[Persönliches Standard-Systemkonto] welche im Folgenden erläutert werden.
+
+* menu:[Gemeinsames Systemkonto]:
+Hiermit wird ein und dasselbe E-Mail-Konto denjenigen zur Verfügung gestellt, die die entsprechenden rechte besitzen.
+
+Das menu:[Lesen] Recht erlaubt das Lesen der E-Mails, wobei jegliche Bearbeitung untersagt wird. Hierzu zählt auch das Antworten auf eine E-Mail.
+
+Mit menu:[Bearbeiten] verteilen Sie das Recht, E-Mails zu bearbeiten. Hierzu zählt z.B. das Markieren oder löschen von Mails, nicht aber das schreiben. Hierfür bedarf es das menu:[E-Mails schreiben] recht.
+
+* menu:[Persönliches Extra-Systemkonto]:
+
+Mit dieser Option können Sie ein weiteres E-Mail-Konto erstellen, welches über menu:[Benutzer] einem individuellen User zugeteilt werden kann. Das neue E-Mail-Konto wird dem ausgewählten Benutzer nach einem "Refresch" von {branch} zur Verfügung stehen.
+
+* menu:[Persönliches externes E-Mail-Konto]:
+
+Mit menu:[Persönliches externes E-Mail-Konto] kann man externe E-Mail-Konten zu {branch} hinzufügen footnote:[wörtlich auch Beispielsweise Gmail, Hotmail, GMX etc.]. Auch hier definiert menu:[Benutzer] zu welchen Benutzer dieses Konto hinzugefügt werden soll.
+
+* menu:[Persönliches Standard-Systemkonto]:
+
+Diese Option kann nicht ausgewählt werden. Sie ist hier nur der vollständigkeitshalber aufgelistet. Ein persönliches Standard-Systemkonto wird beim Erstellen eines Users eingerichtet. Klicken Sie z.B. auf ein E-Mail-Konto eines bestehenden Benutzers werden Sie sehen, das hier diese Option ausgewählt ist.

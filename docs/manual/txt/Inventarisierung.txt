@@ -18,7 +18,7 @@ KUK 2015-0515: Indizierung fertig, Freigabe
 
 (((ERP)))
 {{{/Inventory}}}
-Die Anwendung menu:[Inventarisierung] gehört – wie menu:[Sales], menu:[HumanResources] und menu:[Zeiterfassung] – nicht zu den Kernfunktionalitäten einer Groupware. Diese Anwendungen sind als ``ERP-Bausteine'' im Laufe der Zeit auf Kundenwunsch entstanden und haben dann Eingang in {branch} gefunden. Es werden sicher nicht die letzten Erweiterungen sein, so dass dieses Buch möglicherweise in der nächsten Auflage bereits weitere Zusatzanwendungen beschreiben wird.
+Die Anwendung menu:[Inventarisierung] gehört – wie menu:[Sales], menu:[HumanResources] und menu:[Zeiterfassung] – nicht zu den Kernfunktionalitäten einer Groupware. Diese Anwendungen sind als ``ERP-Bausteine'' im Laufe der Zeit auf Kundenwunsch entstanden und haben dann Eingang in {branch} gefunden. Es werden sicher nicht die letzten Erweiterungen sein, sodass dieses Buch möglicherweise in der nächsten Auflage bereits weitere Zusatzanwendungen beschreiben wird.
 
 (((Inventar-,Listen)))
 [[sec.inventarisierung.favoriten]]

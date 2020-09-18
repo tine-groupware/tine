@@ -27,7 +27,7 @@ KUK 2015-05-08: Indizierung gemacht - Freigabe
 (((Empfehlung)))
 (((CRM)))
 {{{/Crm}}}
-Die Anwendung menu:[CRM] (_Customer Relationship Management_ oder  _Kundenbeziehungsmanagement_) ist in erster Linie für den Vertrieb gedacht. Alles dreht sich hier um so genannte _Leads_, also Kontakte zu potenziellen Kunden. Ein solcher Lead kann auf verschiedene Art und Weise zustande kommen: am Telefon, auf einer Messe, als Rückläufer eines Mailings, über Empfehlung von einem anderen Geschäftspartner etc. In jedem Falle ist es wünschenswert, zu Kontakten dieser Art von Anfang an verschiedene Informationen zu hinterlegen, etwa: 
+Die Anwendung menu:[CRM] (_Customer Relationship Management_ oder  _Kundenbeziehungsmanagement_) ist in erster Linie für den Vertrieb gedacht. Alles dreht sich hier um sogenannte _Leads_, also Kontakte zu potenziellen Kunden. Ein solcher Lead kann auf verschiedene Art und Weise zustande kommen: am Telefon, auf einer Messe, als Rückläufer eines Mailings, über Empfehlung von einem anderen Geschäftspartner etc. In jedem Falle ist es wünschenswert, zu Kontakten dieser Art von Anfang an verschiedene Informationen zu hinterlegen, etwa: 
 
 * Wann habe ich den potenziellen Kunden das erste Mal kontaktiert?
 
@@ -91,7 +91,7 @@ Klicken Sie oben links im Bearbeitungsmenü auf menu:[Lead hinzufügen].
 .Anlegen eines neuen Leads
 image::Crm/2_crm_lead_neu.png[id="fig_crmleadneu",width="100%"]
 
-Sie sehen, dass die Bearbeitungsmaske nur die üblichen vier Reiter enthält, so dass wir nur den ersten besprechen (zu den anderen drei vgl. <<chapter.Standard-Bedienhinweise>>).
+Sie sehen, dass die Bearbeitungsmaske nur die üblichen vier Reiter enthält, sodass wir nur den ersten besprechen (zu den anderen drei vgl. <<chapter.Standard-Bedienhinweise>>).
 
 Die Maske menu:[Lead] enthält als einziges Pflichteingabefeld oben menu:[Leadname eingeben], alle anderen Angaben sind optional. Vergeben Sie nun probehalber einen beliebigen Namen.
 

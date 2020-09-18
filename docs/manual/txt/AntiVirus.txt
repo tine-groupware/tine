@@ -7,9 +7,9 @@ Author: Paul Hartog
 [[chap.antivir]]
 == Anti-Viren Service ==
 
-Um den Antivirus Service zu nutzen muss eine ClamAV (hierbei handelt es sich um einen Standard-Opensource-Virenscanner) in {branch} konfiguriert werden.
+Um den Antivirus Service zu nutzen muss eine ClamAV (hierbei handelt es sich um einen Standard-Open-Source-Virenscanner) in {branch} konfiguriert werden.
 
-Sofern das geschehen ist werden alle Dateien (Ausgenommen von E-Mail Anhängen) die in {branch} zur Verfügung stehen, wöchentlich, auf Viren, Trojaner, Malware und andere gefahren geprüft. Sollte der Scan positiv sein, wird diese Datei entsprechend markiert.
+Sofern das geschehen ist, werden alle Dateien (Ausgenommen von E-Mail Anhängen) die in {branch} zur Verfügung stehen, wöchentlich, auf Viren, Trojaner, Malware und andere gefahren geprüft. Sollte der Scan positiv sein, wird diese Datei entsprechend markiert.
 
 //////////////////
         SCREENSHOT

@@ -74,7 +74,7 @@ Wählen Sie links unter menu:[MODULE] den Menüpunkt menu:[Produkte]. Das Bearbe
 
 Was Sie auch schon kennen, ist die Verfahrensweise mit der Tabellenansicht. Rechts außen finden Sie das Symbol zum An- und Abwählen von Tabellenspalten. Wenn Sie es aus der Standardansicht heraus anklicken, sehen Sie, dass die vier Felder menu:[Angelegt von], menu:[Angelegt am], menu:[Zuletzt geändert von] und menu:[Letztes Modifikationsdatum] nicht angezeigt werden. Dasselbe wird Ihnen auch im weiteren Verlauf der menu:[Sales]-Anwendung bei den anderen zu besprechenden Objekten begegnen, denn es handelt sich hier um vom System automatisch vergebene Einträge. Lassen Sie sie jetzt auch ausgeblendet und schließen Sie das Spaltensymbol wieder. Es genügt zu wissen, dass sie bei Bedarf einzublenden sind.
 
-Sollten im System bisher keine Produkte gespeichert sein, fügen wir jetzt eines hinzu, denn im weiteren Verlauf des Kapitels benötigen wir es für Verkettungsfunktionen mit Verträgen und Kunden. Klicken Sie darum jetzt menu:[Produkt hinzufügen].
+Sollten im System bisher keine Produkte gespeichert sein, fügen wir jetzt eines hinzu, denn im weiteren Verlauf des Kapitels benötigen wir es für Verkettungs-Funktionen mit Verträgen und Kunden. Klicken Sie darum jetzt menu:[Produkt hinzufügen].
 
 //////////////////
         SCREENSHOT
