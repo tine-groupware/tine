@@ -49,3 +49,8 @@ also könnte man z.b. diese config in die config.inc.php schreiben:
     'userAgentDenyList' => ['/^Android-Mail.*/'],
 ];
 ```
+
+Feature: Device Policies
+=================
+
+see https://github.com/tine20/tine20/wiki/EN:ActiveSync#activesync-device-policies
