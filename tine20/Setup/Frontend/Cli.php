@@ -652,6 +652,8 @@ class Setup_Frontend_Cli
     
     /**
      * list installed apps
+     *
+     * TODO add --version command, too
      */
     protected function _listInstalled()
     {
@@ -661,7 +663,8 @@ class Setup_Frontend_Cli
             echo "No applications installed\n";
             return 1;
         }
-        
+
+        echo 'Version: "' . TINE20_CODENAME . '" ' . TINE20_PACKAGESTRING . ' (Build: ' . TINE20_BUILDTYPE . ")\n";
         echo "Currently installed applications:\n";
         $applications->sort('name');
         foreach ($applications as $application) {
