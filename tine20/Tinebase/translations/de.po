@@ -4865,6 +4865,22 @@ msgstr ""
 "{recordsName} ausgewählt}}}}"
 
 msgid ""
+"This file has no contents. The Upload has failed or has not yet finished."
+msgstr ""
+"Diese Datei hat keinen Inhalt. Der Upload ist entweder fehlgeschlagen oder "
+"noch nicht fertig."
+
+msgid "quarantined"
+msgstr "quarantänisiert"
+
+msgid ""
+"This file might potentially harm your computer. Therefore it got quarantined "
+"and cannot be edited or downloaded."
+msgstr ""
+"Diese Datei kann ihren Computer potentiell schädigen. Daher wurde sie "
+"quarantänisiert und kann nicht bearbeitet oder heruntergeladen werden."
+
+msgid ""
 "A new window cannot be opened. To avoid this message please deactivate "
 "your browsers popup blocker for {0}"
 msgstr ""
