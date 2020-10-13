@@ -1378,7 +1378,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
-                "reference": "86738d8107cfb6b4933243a1ac7b4711d44d77e8"
+                "reference": "7159ef097473ba961ea895761aada7b0a4bca8bb"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1397,7 +1397,7 @@
                 "Devices",
                 "Tine 2.0"
             ],
-            "time": "2020-09-18T17:29:56+00:00"
+            "time": "2020-10-13T10:30:40+00:00"
         },
         {
             "name": "metaways/tine20-gdpr",
@@ -1405,7 +1405,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
-                "reference": "2c4837c67cc7fc597b4228669dc8b7b1fc79766f"
+                "reference": "7370af2d5fd0ea90bceeb1e432cdca3296f40721"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1422,7 +1422,7 @@
             "keywords": [
                 "Tine 2.0"
             ],
-            "time": "2020-09-18T17:26:40+00:00"
+            "time": "2020-10-13T10:30:50+00:00"
         },
         {
             "name": "metaways/tine20-onlyofficeintegrator",
@@ -1460,7 +1460,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "c57a3a5097710b2af11e787c1c8b00edf0b51b01"
+                "reference": "6a7b3b63c160c9d959ab0f02d6aea1e2e67c589a"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1483,7 +1483,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2020-08-25T10:03:01+00:00"
+            "time": "2020-10-13T10:35:12+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
