@@ -3779,7 +3779,7 @@ msgstr "Erfolg"
 
 #: js/widgets/dialog/ExportDialog.js:206
 msgid "Export created successfully."
-msgstr "Der Export wurde erfolgreich erstellt"
+msgstr "Der Export wurde erfolgreich erstellt."
 
 #: js/widgets/dialog/ExportDialog.js:216
 msgid "Export could not be created. Please try again later"
@@ -4879,6 +4879,9 @@ msgid ""
 msgstr ""
 "Diese Datei kann ihren Computer potentiell schädigen. Daher wurde sie "
 "quarantänisiert und kann nicht bearbeitet oder heruntergeladen werden."
+
+msgid "Please check your computers downloads folder!"
+msgstr "Bitte kontrollieren sie ihren Download Ordner!"
 
 msgid ""
 "A new window cannot be opened. To avoid this message please deactivate "
