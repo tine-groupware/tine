@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0469650235f8086f52518db481cc6cb7",
+    "content-hash": "e48acd4b317e0180e571b3ebbcecb96b",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -5615,7 +5615,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.0",
+        "php": "7.1 - 7.4",
         "ext-spl": "*",
         "ext-simplexml": "*",
         "ext-bcmath": "*",
@@ -5634,6 +5634,6 @@
     },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.0.8"
+        "php": "7.1"
     }
 }
