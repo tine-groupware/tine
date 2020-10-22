@@ -30,7 +30,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     /**
      * set up tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::LICENSE_TYPE) !== 'BusinessEdition') {
             $this->markTestSkipped('Only run these tests with BE license');
@@ -45,7 +45,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     /**
      * tear down tests
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -59,7 +59,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
     /**
      * tear down after test class
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         // reset BE license
