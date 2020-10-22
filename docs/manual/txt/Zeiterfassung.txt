@@ -183,15 +183,15 @@ Rechts daneben menu:[Datum] für die Eingabe des Tages, an welchem die Leistung 
 
 menu:[Beschreibung] ist hier ein Pflichtfeld. Die Abrechnung einer Zeiteinheit bedingt zwangsläufig die Bestimmung des Arbeitsgegenstandes – das legen Verordnungen zur Rechnungsstellung gesetzlich fest.
 
-In den Berreich menu:[Accounting/ Buchhaltung] kann definieren wieviel % eines Stundenzettels abrechenbar ist. Dies ist z.B. bei Projektarbeiten von relevanz. Gehen wir einmal die einzelnen Funktionen durch.
-menu:[Abrechenbar] setzt der Mitarbeiter, wenn er den Stundenzettel beim Kunden abgrechnet werden kann. menu:[Faktor] beschreibt wie viel % der oben angegebenen Zeit Abrechenbar sind. Der Faktor 1 steht hier für 100%. Egal ob man den Faktor oder menu:[Abrechenbare Zeit] definiert, das jeweils andere wird von {branch} automatisch ausgerechnet.
-Ist der Chuckbutten deaktiviert wir der Faktor auf 0 gesetzt und die restlichen Optionen ausgegraut. Hier handelt es sich dann um eine reine Zeiterfassung.
+In den Bereich menu:[Accounting/ Buchhaltung] kann definieren wie viel % eines Stundenzettels abrechenbar ist. Dies ist z.B. bei Projektarbeiten von Relevanz. Gehen wir einmal die einzelnen Funktionen durch.
+menu:[Abrechenbar] setzt der Mitarbeiter, wenn er den Stundenzettel beim Kunden abgerechnet werden kann. menu:[Faktor] beschreibt wie viel % der oben angegebenen Zeit abrechenbar sind. Der Faktor 1 steht hier für 100 %. Egal ob man den Faktor oder menu:[Abrechenbare Zeit] definiert, das jeweils andere wird von {branch} automatisch ausgerechnet.
+Ist der Chuckbutten deaktiviert, wird der Faktor auf 0 gesetzt und die restlichen Optionen ausgegraut. Hier handelt es sich dann um eine reine Zeiterfassung.
 
 menu:[Abgerechnet] dient hier wieder der Angabe einer Rechnungsnummer, in welcher der Stundenzettel abgerechnet wurde.
 
-Ist ein Stundenzettel bereits abgerechnet wird das Checkbutton menu[Arbeitszeit ist Abgerechnet] aktiviert.
+Ist ein Stundenzettel bereits abgerechnet, wird das Checkbutton menu[Arbeitszeit ist Abgerechnet] aktiviert.
 
-Der Checkbutton menu:[Klärungsbedarf]. Dieser kann vom Mitarbeiter gesetzt werden wenn es zu diesem Stundenzettel Unklarheiten gibt. Die Buchhaltung kann nur vor dem Abrechnen nach diesen Stundenzetteln Filtern.
+Der Checkbutton menu:[Klärungsbedarf]. Dieser kann vom Mitarbeiter gesetzt werden, wenn es zu diesem Stundenzettel Unklarheiten gibt. Die Buchhaltung kann nur vor dem Abrechnen nach diesen Stundenzetteln Filtern.
 
 Schließlich können Sie per Pulldown mit Auswahlmöglichkeit aus der Reihe der in {branch} angelegten Benutzer einen solchen für diesen Stundenzettel zuweisen. Für die Faktura ist das nicht nötig, deshalb ist die Eingabe hier fakultativ. Beachten Sie aber innerbetriebliche Regelungen zum Controlling.
 
