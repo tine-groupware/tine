@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "7cc0bdcfdae0cf90e99b79ef2fffc063",
@@ -1307,7 +1307,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
+                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -2991,17 +2991,17 @@
         },
         {
             "name": "tine20/composerapploader",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
+                "reference": "0a4dbb421a00788d4107e3be0af2f787bf096f61"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
             },
             "require-dev": {
-                "composer/composer": "1.*"
+                "composer/composer": "*"
             },
             "type": "composer-plugin",
             "extra": {
@@ -3012,7 +3012,7 @@
                     "Tine20\\ComposerAppLoader\\": "src/"
                 }
             },
-            "time": "2017-02-13T11:26:52+00:00"
+            "time": "2020-10-25T22:34:03+00:00"
         },
         {
             "name": "twig/extensions",
@@ -4320,7 +4320,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2015-06-21T13:08:43+00:00"
+            "time": "2017-11-27T13:52:08+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -4410,7 +4410,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2016-05-12T18:03:57+00:00"
+            "time": "2017-02-26T11:10:40+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -4460,7 +4460,7 @@
                 "tokenizer"
             ],
             "abandoned": true,
-            "time": "2014-03-03T05:10:30+00:00"
+            "time": "2017-12-04T08:55:13+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -5291,5 +5291,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.0.8"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }
