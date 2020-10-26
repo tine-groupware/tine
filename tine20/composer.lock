@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2397ff8bbf7f21bfa19bc8117117a46c",
+    "content-hash": "7a2ec5620f0c839217b31f40a6a3d0e2",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1384,7 +1384,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
+                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1415,7 +1415,7 @@
         },
         {
             "name": "metaways/tine20-dfcom",
-            "version": "dev-master",
+            "version": "dev-2020-11",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
@@ -1442,7 +1442,7 @@
         },
         {
             "name": "metaways/tine20-gdpr",
-            "version": "dev-master",
+            "version": "dev-2020-11",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
@@ -1467,7 +1467,7 @@
         },
         {
             "name": "metaways/tine20-onlyofficeintegrator",
-            "version": "dev-master",
+            "version": "dev-2020-11",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git",
@@ -1497,7 +1497,7 @@
         },
         {
             "name": "metaways/tine20-usermanual",
-            "version": "dev-master",
+            "version": "dev-2020-11",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
