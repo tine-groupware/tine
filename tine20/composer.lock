@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7cc0bdcfdae0cf90e99b79ef2fffc063",
+    "content-hash": "ed3c4a098ff912110716bc6bca965435",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1338,11 +1338,11 @@
         },
         {
             "name": "metaways/tine20-dfcom",
-            "version": "dev-master",
+            "version": "dev-2019-11",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
-                "reference": "612d1d49b21d7833efd98c3addb5df3dc7a386b4"
+                "reference": "7159ef097473ba961ea895761aada7b0a4bca8bb"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1361,15 +1361,15 @@
                 "Devices",
                 "Tine 2.0"
             ],
-            "time": "2020-10-21T09:07:02+00:00"
+            "time": "2020-10-13T10:30:40+00:00"
         },
         {
             "name": "metaways/tine20-gdpr",
-            "version": "dev-master",
+            "version": "dev-2019-11",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
-                "reference": "06d115aa28431bf79a8a888108995b87bf6bf725"
+                "reference": "7370af2d5fd0ea90bceeb1e432cdca3296f40721"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1386,7 +1386,7 @@
             "keywords": [
                 "Tine 2.0"
             ],
-            "time": "2020-10-22T11:05:16+00:00"
+            "time": "2020-10-13T10:30:50+00:00"
         },
         {
             "name": "metaways/tine20-onlyofficeintegrator",
@@ -1420,11 +1420,11 @@
         },
         {
             "name": "metaways/tine20-usermanual",
-            "version": "dev-master",
+            "version": "dev-2019-11",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "1777e1a36d443c70b0303bf77bf896d1a0ec74be"
+                "reference": "6a7b3b63c160c9d959ab0f02d6aea1e2e67c589a"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1447,7 +1447,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2020-10-21T10:04:36+00:00"
+            "time": "2020-10-13T10:35:12+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
