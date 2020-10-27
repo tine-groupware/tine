@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "06e6765cd369c4bb99f76932e3a0fe27",
@@ -1291,12 +1291,6 @@
                 "rss": "https://github.com/laminas/laminas-zendframework-bridge/releases.atom",
                 "source": "https://github.com/laminas/laminas-zendframework-bridge"
             },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-09-14T14:23:00+00:00"
         },
         {
@@ -3385,20 +3379,6 @@
                 "interfaces",
                 "interoperability",
                 "standards"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-09-07T11:33:47+00:00"
         },
@@ -6078,6 +6058,5 @@
     "platform-overrides": {
         "php": "7.2.5",
         "ext-filter": "7.2"
-    },
-    "plugin-api-version": "1.1.0"
+    }
 }
