@@ -22,6 +22,10 @@
   "repositories": [
     {
       "type": "git",
+      "url": "https://gitlab.metaways.net/tine20/tine20-bookmarks.git"
+    },
+    {
+      "type": "git",
       "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git"
     },
     {
@@ -108,6 +112,7 @@
     "jumbojett/openid-connect-php": "dev-master",
     "metaways/opendocument": "1.2",
     "metaways/timezoneconvert": "1.*",
+    "metaways/tine20-bookmarks": "dev-master",
     "metaways/tine20-dfcom": "dev-2020-11",
     "metaways/tine20-gdpr": "dev-2020-11",
     "metaways/tine20-onlyofficeintegrator": "dev-2020-11",
