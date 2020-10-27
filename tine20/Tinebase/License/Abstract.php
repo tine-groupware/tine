@@ -31,16 +31,17 @@ abstract class Tinebase_License_Abstract
      * @var array featureName => since Licence Version (semver)
      */
     protected $_featureNeedsPermission = [
-        'Tinebase.featureCreatePreviews'                => '>=2.0',
-        'HumanResources.workingTimeAccounting'          => '>=2.0',
-        'UserManual'                                    => '>=2.0',
-        'GDPR'                                          => '>=2.0',
-        'DFCom'                                         => '>=2.0',
-        'OnlyOfficeIntegrator'                          => '*',
+        'Bookmarks'                                     => '*',
         'CashBook'                                      => '*',
-        'MeetingManager'                                => '*',
         'ContractManager'                               => '*',
+        'DFCom'                                         => '>=2.0',
+        'GDPR'                                          => '>=2.0',
+        'HumanResources.workingTimeAccounting'          => '>=2.0',
         'KeyManager'                                    => '*',
+        'MeetingManager'                                => '*',
+        'OnlyOfficeIntegrator'                          => '*',
+        'Tinebase.featureCreatePreviews'                => '>=2.0',
+        'UserManual'                                    => '>=2.0',
     ];
 
     /**
