@@ -2690,17 +2690,17 @@
         },
         {
             "name": "tine20/composerapploader",
-            "version": "1.0.5",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "670453d80d25c7996d6e80bee07df3ffd6fe0869"
+                "reference": "0a4dbb421a00788d4107e3be0af2f787bf096f61"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
             },
             "require-dev": {
-                "composer/composer": "1.*"
+                "composer/composer": "*"
             },
             "type": "composer-plugin",
             "extra": {
@@ -2711,7 +2711,7 @@
                     "Tine20\\ComposerAppLoader\\": "src/"
                 }
             },
-            "time": "2017-02-13T11:26:52+00:00"
+            "time": "2020-10-25T22:34:03+00:00"
         },
         {
             "name": "twig/twig",
@@ -3963,6 +3963,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2014-03-03T05:10:30+00:00"
         },
         {
@@ -4676,6 +4677,7 @@
                 "hydrator",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-hydrator",
             "time": "2016-02-18T22:38:26+00:00"
         },
         {
@@ -4725,6 +4727,7 @@
                 "psr",
                 "psr-7"
             ],
+            "abandoned": "laminas/laminas-psr7bridge",
             "time": "2016-05-10T21:44:39+00:00"
         }
     ],
