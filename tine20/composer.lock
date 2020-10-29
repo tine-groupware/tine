@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad20ef8ddf0562dc84a0bfc1f2579bbe",
+    "content-hash": "4d374c7d4c6fa19ffbcc6b5a1736f306",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1164,7 +1164,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
+                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1196,7 +1196,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
+                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1227,11 +1227,11 @@
         },
         {
             "name": "metaways/tine20-usermanual",
-            "version": "dev-master",
+            "version": "dev-2018-11",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "1777e1a36d443c70b0303bf77bf896d1a0ec74be"
+                "reference": "6a7b3b63c160c9d959ab0f02d6aea1e2e67c589a"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1254,7 +1254,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2020-10-21T10:04:36+00:00"
+            "time": "2020-10-13T10:35:12+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -3824,7 +3824,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2015-06-21T13:08:43+00:00"
+            "time": "2017-11-27T13:52:08+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -3914,7 +3914,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2016-05-12T18:03:57+00:00"
+            "time": "2017-02-26T11:10:40+00:00"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -3964,7 +3964,7 @@
                 "tokenizer"
             ],
             "abandoned": true,
-            "time": "2014-03-03T05:10:30+00:00"
+            "time": "2017-12-04T08:55:13+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -4790,5 +4790,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "5.6"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }

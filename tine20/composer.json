@@ -87,7 +87,7 @@
     "giggsey/libphonenumber-for-php": "^8.10",
     "metaways/opendocument": "1.1",
     "metaways/timezoneconvert": "1.*",
-    "metaways/tine20-usermanual": "dev-master",
+    "metaways/tine20-usermanual": "dev-2018-11",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "phpoffice/phpexcel": "1.8.*",
