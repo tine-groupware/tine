@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "4d374c7d4c6fa19ffbcc6b5a1736f306",
@@ -1231,7 +1231,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "6a7b3b63c160c9d959ab0f02d6aea1e2e67c589a"
+                "reference": "9137b20eaefae2fecacb226aa928f4bffd7a4941"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1254,7 +1254,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2020-10-13T10:35:12+00:00"
+            "time": "2020-11-02T08:44:24+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -4790,6 +4790,5 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "5.6"
-    },
-    "plugin-api-version": "1.1.0"
+    }
 }
