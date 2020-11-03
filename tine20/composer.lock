@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "06e6765cd369c4bb99f76932e3a0fe27",
+    "content-hash": "66d2ad918fcf5d2176e2bc07c87c7485",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1637,11 +1637,11 @@
         },
         {
             "name": "metaways/tine20-usermanual",
-            "version": "dev-2020-11",
+            "version": "dev-2018-11",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "1777e1a36d443c70b0303bf77bf896d1a0ec74be"
+                "reference": "9137b20eaefae2fecacb226aa928f4bffd7a4941"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1664,7 +1664,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2020-10-21T10:04:36+00:00"
+            "time": "2020-11-02T08:44:24+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
