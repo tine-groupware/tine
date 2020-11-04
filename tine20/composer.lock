@@ -1424,7 +1424,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "6a7b3b63c160c9d959ab0f02d6aea1e2e67c589a"
+                "reference": "6c7933d3c62069be3a7d0c5d228c4d9a9cd9183e"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1447,7 +1447,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2020-10-13T10:35:12+00:00"
+            "time": "2020-11-02T11:06:27+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
