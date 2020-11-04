@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "66d2ad918fcf5d2176e2bc07c87c7485",
+    "content-hash": "06e6765cd369c4bb99f76932e3a0fe27",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1291,6 +1291,12 @@
                 "rss": "https://github.com/laminas/laminas-zendframework-bridge/releases.atom",
                 "source": "https://github.com/laminas/laminas-zendframework-bridge"
             },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
             "time": "2020-09-14T14:23:00+00:00"
         },
         {
@@ -1495,7 +1501,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1637,11 +1643,11 @@
         },
         {
             "name": "metaways/tine20-usermanual",
-            "version": "dev-2018-11",
+            "version": "dev-2020-11",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "9137b20eaefae2fecacb226aa928f4bffd7a4941"
+                "reference": "c60c822596660a744b2f5f691b5c0af1c56dd4bd"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1664,7 +1670,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2020-11-02T08:44:24+00:00"
+            "time": "2020-11-02T11:08:51+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -3379,6 +3385,20 @@
                 "interfaces",
                 "interoperability",
                 "standards"
+            ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-09-07T11:33:47+00:00"
         },
@@ -6058,5 +6078,6 @@
     "platform-overrides": {
         "php": "7.2.5",
         "ext-filter": "7.2"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }
