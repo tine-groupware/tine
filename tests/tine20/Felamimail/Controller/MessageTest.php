@@ -1753,7 +1753,7 @@ class Felamimail_Controller_MessageTest extends TestCase
     {
         $cachedMessage = $this->messageTestHelper('rt169011.eml');
         $message = $this->_controller->getCompleteMessage($cachedMessage);
-        self::assertContains('Guten Tag, Frau Dr. Seemer,', $message->body, print_r($message->toArray(), true));
+        self::assertStringContainsString('Guten Tag, Frau Dr. Seemer,', $message->body, print_r($message->toArray(), true));
     }
 
     /**
@@ -1789,7 +1789,7 @@ class Felamimail_Controller_MessageTest extends TestCase
         $cachedMessage = $this->messageTestHelper('hygienetag.eml');
         $message = $this->_controller->getCompleteMessage($cachedMessage, null, Zend_Mime::TYPE_TEXT);
 
-        $this->assertContains('Viren Bakterien Krankheitserreger', $message->body);
+        $this->assertStringContainsString('Viren Bakterien Krankheitserreger', $message->body);
     }
 
     public function testBrokenEncodingInHeader()

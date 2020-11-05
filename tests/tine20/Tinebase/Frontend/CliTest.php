@@ -392,7 +392,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $result = $this->_cli->monitoringCheckLicense();
         $out = ob_get_clean();
 
-        self::assertContains('LICENSE ', $out);
+        self::assertStringContainsString('LICENSE ', $out);
         $licenseStatus = Tinebase_License::getInstance()->getStatus();
         if (in_array($licenseStatus, [Tinebase_License::STATUS_LICENSE_INVALID, Tinebase_License::STATUS_NO_LICENSE_AVAILABLE])) {
             self::assertEquals(2, $result);
