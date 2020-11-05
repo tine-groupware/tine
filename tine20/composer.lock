@@ -1586,7 +1586,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
-                "reference": "06d115aa28431bf79a8a888108995b87bf6bf725"
+                "reference": "0e5fc70ba9ca996fb26ae492faa43cf72f31659d"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1603,7 +1603,7 @@
             "keywords": [
                 "Tine 2.0"
             ],
-            "time": "2020-10-22T11:05:16+00:00"
+            "time": "2020-11-05T11:02:29+00:00"
         },
         {
             "name": "metaways/tine20-onlyofficeintegrator",
