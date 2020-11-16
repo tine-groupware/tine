@@ -27,7 +27,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
      * @see Calendar_TestCase::setUp()
      */
     public function setUp(): void
-{
+    {
         parent::setUp();
         $this->_controller = Calendar_Controller_Event::getInstance();
         $this->_oldFileSystemConfig = clone Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
