@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a391f42e7fbe4841728fe76779294cc3",
+    "content-hash": "50ab542388f09a7d3afb4c9e9fa0df84",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -905,10 +905,6 @@
                 "request",
                 "response"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-message-util/issues",
-                "source": "https://github.com/php-fig/http-message-util/tree/1.1.4"
-            },
             "time": "2020-02-05T20:36:27+00:00"
         },
         {
@@ -1187,6 +1183,109 @@
             "time": "2020-08-27T16:47:41+00:00"
         },
         {
+            "name": "laminas/laminas-escaper",
+            "version": "2.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-escaper.git",
+                "reference": "25f2a053eadfa92ddacb609dcbbc39362610da70"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/25f2a053eadfa92ddacb609dcbbc39362610da70",
+                "reference": "25f2a053eadfa92ddacb609dcbbc39362610da70",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-zendframework-bridge": "^1.0",
+                "php": "^5.6 || ^7.0"
+            },
+            "replace": {
+                "zendframework/zend-escaper": "self.version"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6.x-dev",
+                    "dev-develop": "2.7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Escaper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Securely and safely escape HTML, HTML attributes, JavaScript, CSS, and URLs",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "escaper",
+                "laminas"
+            ],
+            "time": "2019-12-31T16:43:30+00:00"
+        },
+        {
+            "name": "laminas/laminas-zendframework-bridge",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-zendframework-bridge.git",
+                "reference": "6ede70583e101030bcace4dcddd648f760ddf642"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/6ede70583e101030bcace4dcddd648f760ddf642",
+                "reference": "6ede70583e101030bcace4dcddd648f760ddf642",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.1 || ^9.3",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "module": "Laminas\\ZendFrameworkBridge"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/autoload.php"
+                ],
+                "psr-4": {
+                    "Laminas\\ZendFrameworkBridge\\": "src//"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Alias legacy ZF class names to Laminas Project equivalents.",
+            "keywords": [
+                "ZendFramework",
+                "autoloading",
+                "laminas",
+                "zf"
+            ],
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2020-09-14T14:23:00+00:00"
+        },
+        {
             "name": "markbaker/complex",
             "version": "1.5.0",
             "source": {
@@ -1416,6 +1515,148 @@
                 "UTC"
             ],
             "time": "2016-04-25T08:20:13+00:00"
+        },
+        {
+            "name": "metaways/tine20-bookmarks",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-bookmarks.git",
+                "reference": "5f8728f583fe73cbea0fa38e6617f4b52750d8f8"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "Bookmarks": "lib/Bookmarks",
+                    "../tests/tine20/Bookmarks": "tests/Bookmarks"
+                },
+                "reverseSymlinks": {
+                    "lib/images": "images"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 Bookmarks Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Bookmarks",
+                "Tine 2.0"
+            ],
+            "time": "2020-10-19T11:06:33+00:00"
+        },
+        {
+            "name": "metaways/tine20-dfcom",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
+                "reference": "612d1d49b21d7833efd98c3addb5df3dc7a386b4"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "DFCom": "lib/DFCom",
+                    "../tests/tine20/DFCom": "tests/DFCom"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 DFCom Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Datafox",
+                "Devices",
+                "Tine 2.0"
+            ],
+            "time": "2020-10-21T09:07:02+00:00"
+        },
+        {
+            "name": "metaways/tine20-gdpr",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
+                "reference": "0e5fc70ba9ca996fb26ae492faa43cf72f31659d"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "GDPR": "lib/GDPR",
+                    "../tests/tine20/GDPR": "tests/GDPR"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 GDPR Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Tine 2.0"
+            ],
+            "time": "2020-11-05T11:02:29+00:00"
+        },
+        {
+            "name": "metaways/tine20-onlyofficeintegrator",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git",
+                "reference": "90c5269095c0b40f1adb5cecd14a588d6706dcd6"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "OnlyOfficeIntegrator": "lib/OnlyOfficeIntegrator",
+                    "../tests/tine20/OnlyOfficeIntegrator": "tests/OnlyOfficeIntegrator"
+                },
+                "reverseSymlinks": {
+                    "lib/images": "images"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 OnlyOfficeIntegrator Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Office",
+                "OnlyOfficeIntegrator",
+                "Tine 2.0"
+            ],
+            "time": "2020-11-11T10:13:57+00:00"
+        },
+        {
+            "name": "metaways/tine20-usermanual",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
+                "reference": "c60c822596660a744b2f5f691b5c0af1c56dd4bd"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "UserManual": "lib/UserManual",
+                    "../tests/tine20/UserManual": "tests/UserManual"
+                },
+                "reverseSymlinks": {
+                    "lib/images": "images"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 UserManual Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Documenation",
+                "Help",
+                "Manual",
+                "Tine 2.0"
+            ],
+            "time": "2020-11-02T11:08:51+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -2111,10 +2352,6 @@
                 "response",
                 "server"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-server-handler/issues",
-                "source": "https://github.com/php-fig/http-server-handler/tree/master"
-            },
             "time": "2018-10-30T16:46:14+00:00"
         },
         {
@@ -2168,10 +2405,6 @@
                 "request",
                 "response"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-server-middleware/issues",
-                "source": "https://github.com/php-fig/http-server-middleware/tree/master"
-            },
             "time": "2018-10-30T17:12:04+00:00"
         },
         {
@@ -3427,7 +3660,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WebbyLab/php-validator-livr.git",
+                "url": "git@github.com:WebbyLab/php-validator-livr.git",
                 "reference": "6309697f926a20e1267cc15ee5b847b5c6ecdbcd"
             },
             "dist": {
@@ -3763,52 +3996,6 @@
             "time": "2019-08-06T17:53:53+00:00"
         },
         {
-            "name": "zendframework/zend-escaper",
-            "version": "2.6.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zendframework/zend-escaper.git",
-                "reference": "3801caa21b0ca6aca57fa1c42b08d35c395ebd5f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-escaper/zipball/3801caa21b0ca6aca57fa1c42b08d35c395ebd5f",
-                "reference": "3801caa21b0ca6aca57fa1c42b08d35c395ebd5f",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.6 || ^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
-                "zendframework/zend-coding-standard": "~1.0.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.6.x-dev",
-                    "dev-develop": "2.7.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Zend\\Escaper\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Securely and safely escape HTML, HTML attributes, JavaScript, CSS, and URLs",
-            "keywords": [
-                "ZendFramework",
-                "escaper",
-                "zf"
-            ],
-            "abandoned": "laminas/laminas-escaper",
-            "time": "2019-09-05T20:03:20+00:00"
-        },
-        {
             "name": "zendframework/zend-http",
             "version": "2.5.6",
             "source": {
@@ -4016,14 +4203,6 @@
                 "psr-7",
                 "zf"
             ],
-            "support": {
-                "docs": "https://docs.zendframework.com/zend-stratigility/",
-                "forum": "https://discourse.zendframework.com/c/questions/expressive",
-                "issues": "https://github.com/zendframework/zend-stratigility/issues",
-                "rss": "https://github.com/zendframework/zend-stratigility/releases.atom",
-                "slack": "https://zendframework-slack.herokuapp.com",
-                "source": "https://github.com/zendframework/zend-stratigility"
-            },
             "abandoned": "laminas/laminas-stratigility",
             "time": "2019-06-12T15:22:39+00:00"
         },
@@ -5771,46 +5950,51 @@
     ],
     "aliases": [
         {
-            "package": "doctrine/dbal",
-            "version": "2.5.13.0-patch6",
             "alias": "v2.5.13",
-            "alias_normalized": "2.5.13.0"
+            "alias_normalized": "2.5.13.0",
+            "version": "2.5.13.0-patch6",
+            "package": "doctrine/dbal"
         },
         {
-            "package": "doctrine/orm",
-            "version": "2.5.14.0-patch1",
             "alias": "v2.5.14",
-            "alias_normalized": "2.5.14.0"
+            "alias_normalized": "2.5.14.0",
+            "version": "2.5.14.0-patch1",
+            "package": "doctrine/orm"
         },
         {
-            "package": "phpoffice/phpspreadsheet",
-            "version": "1.10.1.0-patch3",
             "alias": "1.10.1",
-            "alias_normalized": "1.10.1.0"
+            "alias_normalized": "1.10.1.0",
+            "version": "1.10.1.0-patch3",
+            "package": "phpoffice/phpspreadsheet"
         },
         {
-            "package": "phpoffice/phpword",
-            "version": "0.14.0.0",
             "alias": "v0.13.0",
-            "alias_normalized": "0.13.0.0"
+            "alias_normalized": "0.13.0.0",
+            "version": "0.14.0.0",
+            "package": "phpoffice/phpword"
         },
         {
-            "package": "sabre/vobject",
-            "version": "3.5.3.0-patch1",
             "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0"
+            "alias_normalized": "2.1.0.0",
+            "version": "3.5.3.0-patch1",
+            "package": "sabre/vobject"
         },
         {
-            "package": "zendframework/zendframework1",
-            "version": "1.12.20.0-patch39",
             "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0"
+            "alias_normalized": "1.12.20.0",
+            "version": "1.12.20.0-patch39",
+            "package": "zendframework/zendframework1"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
         "ezyang/htmlpurifier": 20,
         "jumbojett/openid-connect-php": 20,
+        "metaways/tine20-bookmarks": 20,
+        "metaways/tine20-dfcom": 20,
+        "metaways/tine20-gdpr": 20,
+        "metaways/tine20-onlyofficeintegrator": 20,
+        "metaways/tine20-usermanual": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
@@ -5838,5 +6022,5 @@
         "php": "7.2.5",
         "ext-filter": "7.2"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "1.1.0"
 }

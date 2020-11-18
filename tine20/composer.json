@@ -22,6 +22,26 @@
   "repositories": [
     {
       "type": "git",
+      "url": "https://gitlab.metaways.net/tine20/tine20-bookmarks.git"
+    },
+    {
+      "type": "git",
+      "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git"
+    },
+    {
+      "type": "git",
+      "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git"
+    },
+    {
+      "type": "git",
+      "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git"
+    },
+    {
+      "type": "git",
+      "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/paulmhh/PHPWord"
     },
     {
@@ -88,15 +108,20 @@
     "ezyang/htmlpurifier": "dev-master",
     "firebase/php-jwt": "^5",
     "giggsey/libphonenumber-for-php": "^8",
-    "psr/http-server-middleware": "^1.0",
     "jumbojett/openid-connect-php": "dev-master",
     "metaways/opendocument": "1.2",
     "metaways/timezoneconvert": "1.*",
+    "metaways/tine20-bookmarks": "dev-master",
+    "metaways/tine20-dfcom": "dev-master",
+    "metaways/tine20-gdpr": "dev-master",
+    "metaways/tine20-onlyofficeintegrator": "dev-master",
+    "metaways/tine20-usermanual": "dev-master",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "phpoffice/phpexcel": "1.8.*",
     "phpoffice/phpspreadsheet": "1.10.1pl3 as 1.10.1",
     "phpoffice/phpword": "v0.14.0 as v0.13.0",
+    "psr/http-server-middleware": "^1.0",
     "sabre/dav": "1.8.*",
     "sabre/vobject": "3.5.3pl1 as 2.1.0",
     "sentry/sentry": "^1.8",
