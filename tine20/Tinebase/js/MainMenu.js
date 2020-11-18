@@ -164,7 +164,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         this.action_userManual = new Ext.Action({
             text: String.format(i18n._('Help')),
             iconCls: 'action_userManual',
-            handler: this.onLoadUserManual,
+            handler: this.onShowHelp,
+            hidden: Tine.Tinebase.common.hasRight('run', 'UserManual'),
             scope: this
         });
 
@@ -272,7 +273,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     /**
      * open new window/tab to show help and tutorial
      */
-    onLoadUserManual: function() {
+    onShowHelp: function() {
         window.open(Tine.helpUrl,'_blank');
     },
     
