@@ -11,6 +11,5 @@ return array (
     ),
     // branding / url config
     Tinebase_Config::BRANDING_WEBURL => 'https://www.tine20.com',
-    // activate in 2019.11 (when we have all distro (centos, ...) packages)
-    Tinebase_Config::VERSION_CHECK => false,
+    Tinebase_Config::VERSION_CHECK => true,
 );
