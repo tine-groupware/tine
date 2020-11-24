@@ -101,6 +101,7 @@ docker_build_dev:
   extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-source-commit
+    ARG_COPY_SOURCE: "true"
     NODE_TOTAL: 1
     NODE_INDEX: 1
   stage: test
@@ -108,6 +109,8 @@ docker_build_dev:
     - docker_build_base_source_test-source
   timeout: 45m
   rules:
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE == "never"
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "true"
       when: never
     - if: $RUN_ALL_TESTS == "true"
@@ -120,12 +123,15 @@ docker_build_dev:
   extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-source-commit
+    ARG_COPY_SOURCE: "true"
   stage: test
   needs:
     - docker_build_base_source_test-source
   timeout: 45m
   parallel: 5
   rules:
+    - if: $PHP_UNIT_ALL_TESTS_SOURCE == "never"
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL == "false"
       when: never
     - if: $RUN_ALL_TESTS == "true"
@@ -138,12 +144,15 @@ docker_build_dev:
   extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-source-commit
+    ARG_COPY_SOURCE: "true"
     ARG_TEST: AllServerTests
   stage: test
   needs:
     - docker_build_base_source_test-source
   timeout: 30m
   rules:
+    - if: $PHP_UNIT_SERVERTESTS == "never"
+      when: never
     - if: $RUN_ALL_TESTS == "true"
       when: on_success
     - if: $PHP_UNIT_SERVERTESTS == "true"
@@ -154,23 +163,25 @@ docker_build_dev:
   extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-source-commit
+    ARG_COPY_SOURCE: "true"
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/setup/
   stage: test
   needs:
     - docker_build_base_source_test-source
   timeout: 30m
   rules:
+    - if: $PHP_UNIT_SETUP_TESTS == "never"
+      when: never
     - if: $RUN_ALL_TESTS == "true"
       when: on_success
     - if: $PHP_UNIT_SETUP_TESTS == "true"
       when: on_success
-    - if: $PHP_UNIT_SETUP_TESTS == "never"
-      when: never
     - changes:
         - tine20/Setup/**/*
     - when: never
 
 "phpstan: code analyses":
+  extends: .abstract_jobs.copy_source
   stage: test
   needs:
     - docker_build_base_source_test-source
@@ -187,6 +198,8 @@ docker_build_dev:
       - code-quality-report.json
     expire_in: 1 days
   rules:
+    - if: $PHP_STAN_ANALYSES == "never"
+      when: never
     - if: $RUN_ALL_TESTS == "true"
       when: on_success
     - if: $PHP_STAN_ANALYSES == "true"
@@ -205,6 +218,8 @@ docker_build_dev:
   parallel: 5
   timeout: 45m
   rules:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT == "never"
+      when: never
     - if: $DOCKER_BUILD_BUILD != "true"
       when: never
     - if: $RUN_ALL_TESTS == "true"
@@ -226,6 +241,8 @@ docker_build_dev:
   allow_failure: true
   timeout: 30m
   rules:
+    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "never"
+      when: never
     - if: $DOCKER_BUILD_BUILD != "true"
       when: never
     - if: $RUN_ALL_TESTS == "true"
@@ -244,6 +261,8 @@ docker_build_dev:
   parallel: 5
   timeout: 30m
   rules:
+    - if: $PHP_UNIT_ALL_TESTS_BUILT_WITH_LDAP == "never"
+      when: never
     - if: $DOCKER_BUILD_BUILD != "true"
       when: never
     - if: $RUN_ALL_TESTS == "true"
