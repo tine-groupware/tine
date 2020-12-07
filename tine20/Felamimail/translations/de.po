@@ -1277,6 +1277,9 @@ msgstr "Die Migration wurde noch nicht freigegeben"
 msgid "It is not possible to convert the account to this type yet."
 msgstr "Es ist noch nicht möglich, das Konto in diesen Typ umzuwandeln."
 
+msgid "It is not possible to convert the account to this type."
+msgstr "Es ist nicht möglich, das Konto in diesen Typ umzuwandeln."
+
 #: js/AccountEditDialog.js:599
 msgid "System accounts cannot be created manually."
 msgstr "Systemkonten können nicht manuell angelegt werden."
@@ -1886,3 +1889,30 @@ msgstr "Bei dieser Nachricht könnte es sich um SPAM handeln"
 
 msgid "GENDER_Message"
 msgstr "female"
+
+msgid "Test IMAP Connection"
+msgstr "IMAP-Verbindung testen"
+
+msgid "Test SMTP Connection"
+msgstr "SMTP-Verbindung testen"
+
+msgid "Server connection failed. Do you still want to save this setting and exit?"
+msgstr "Server-Verbindung fehlgeschlagen. Möchten Sie die Einstellungen trotzdem speichern?"
+
+msgid "Connection succeed"
+msgstr "Verbindung erfolgreich"
+
+msgid "Connection failed"
+msgstr "Verbindung fehlgeschlagen"
+
+msgid "{server} Connection Status"
+msgstr "{server} Verbindungsstatus"
+
+msgid "Credentials missing"
+msgstr "Zugangsdaten fehlen"
+
+msgid "Hostname missing"
+msgstr "Hostname fehlt"
+
+msgid "Connecting to {0} server..."
+msgstr "Verbindung zu {0} Server wird aufgebaut..."
