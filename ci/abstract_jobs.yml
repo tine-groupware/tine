@@ -130,6 +130,10 @@
       - tine20.log
     expire_in: 1 day
     when: always
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
 
 # extends .abstract_jobs.php_unit with ldap.
 .abstract_jobs.php_unit_ldap:
@@ -150,6 +154,10 @@
 .abstract_jobs.copy_source:
   before_script:
     - *abstract_jobs-copy_source
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
 
 # basic docker setup.
 .abstract_jobs.docker:
@@ -161,12 +169,16 @@
     DOCKER_TLS_CERTDIR: ""
   services:
     - docker:19.03.1-dind
-  image: $REGISTRY/docker:19.03.1
+  image: $REGISTRY/docker:19.03.1-r1
   before_script:
     - source ci/functions.sh
     - export DOCKER_BUILDKIT=0
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
     - docker_login
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
 
 
 # merge job for customapps
