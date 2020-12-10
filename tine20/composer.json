@@ -91,6 +91,7 @@
     "ext-SimpleXML": "*",
     "ext-bcmath": "*",
     "ext-ctype": "*",
+    "ext-curl": "*",
     "ext-date": "*",
     "ext-dom": "*",
     "ext-gd": "*",
