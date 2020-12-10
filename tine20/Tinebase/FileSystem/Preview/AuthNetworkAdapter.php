@@ -60,16 +60,20 @@ class Tinebase_FileSystem_Preview_AuthNetworkAdapter implements Tinebase_FileSys
     /**
      * @param null $config
      * @return Zend_Http_Client
-     * @throws Tinebase_Exception_NotFound license file not found
      */
     public function getHttpsClient($config = null)
     {
-        $this->_checkLicenseTempFile();
-
-        $curlOptions = array(
-            CURLOPT_SSLCERT =>
-                $this->_licensePath,
-        );
+        try {
+            $this->_checkLicenseTempFile();
+            $curlOptions = [
+                CURLOPT_SSLCERT =>
+                    $this->_licensePath,
+            ];
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage() . ' - skip CURLOPT_SSLCERT');
+            $curlOptions = [];
+        }
 
         $proxyConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::INTERNET_PROXY);
         if ((! isset($config['noProxy']) || ! $config['noProxy']) && !empty($proxyConfig)) {
