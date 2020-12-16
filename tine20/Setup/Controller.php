@@ -2658,6 +2658,7 @@ class Setup_Controller
             }
         }
         $cachesCleared[] = 'RoutesCache';
+        clearstatcache();
 
         if ($deactivateCache) {
             Tinebase_Core::setupCache(FALSE);
