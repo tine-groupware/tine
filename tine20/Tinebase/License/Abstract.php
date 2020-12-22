@@ -200,12 +200,16 @@ abstract class Tinebase_License_Abstract
         return $this->_status;
     }
 
+    /**
+     * @return array with validFrom + validTo datetimes
+     */
     public function getDefaultExpiryDate()
     {
         try {
-            $validFrom = Tinebase_User::getInstance()->getFirstUserCreationTime();
+            $userSql = new Tinebase_User_Sql();
+            $validFrom = $userSql->getFirstUserCreationTime();
         } catch (Exception $e) {
-            // we might have ldap issues (or others), so we catch this
+            // we might have db issues, so we catch this
             Tinebase_Exception::log($e);
             $validFrom = null;
         }
@@ -214,12 +218,10 @@ abstract class Tinebase_License_Abstract
             $validFrom = Tinebase_DateTime::now()->subMonth(1);
         }
 
-        $result = array(
+        return array(
             'validFrom'    => $validFrom,
             'validTo'      => $validFrom->getClone()->addDay(30),
         );
-
-        return $result;
     }
 
     public function getLicenseExpireEstimate()
