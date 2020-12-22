@@ -24,9 +24,9 @@ Adressbucheintrag des TN (wenn es ein Kontakt ist):
 
     > SELECT * FROM tine20_addressbook where id = 'ATTENDEE_USERID';
 
-Änderungshistorie des Termins:
+Änderungshistorie des Termins (CALENDARAPPID ist wichtig für den Index, damit die Suche schnell geht):
 
-    > SELECT * FROM timemachine_modlog where record_id = 'EVENTID';
+    > SELECT * FROM timemachine_modlog where application_id = 'CALENDARAPPID' and record_id = 'EVENTID';
 
 Frage: Was passiert mit Terminen eines gelöschten Benutzers?
 =================
