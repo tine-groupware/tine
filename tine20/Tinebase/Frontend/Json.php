@@ -960,7 +960,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         $manageSmtpEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::SMTP);
-        $smtpConfig = $manageSmtpEmailUser ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP) : $smtpConfig = array();
+        $smtpConfig = $manageSmtpEmailUser
+            ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP, true)
+            : $smtpConfig = array();
 
         // be license class for setting some license registry data
         $license = Tinebase_License::getInstance();
