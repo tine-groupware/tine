@@ -3781,6 +3781,9 @@ msgstr "Erfolg"
 msgid "Export created successfully."
 msgstr "Der Export wurde erfolgreich erstellt."
 
+msgid "Please check your computers downloads folder!"
+msgstr "Bitte kontrollieren sie ihren Download Ordner!"
+
 #: js/widgets/dialog/ExportDialog.js:216
 msgid "Export could not be created. Please try again later"
 msgstr ""
@@ -4880,8 +4883,8 @@ msgstr ""
 "Diese Datei kann ihren Computer potentiell schädigen. Daher wurde sie "
 "quarantänisiert und kann nicht bearbeitet oder heruntergeladen werden."
 
-msgid "Please check your computers downloads folder!"
-msgstr "Bitte kontrollieren sie ihren Download Ordner!"
+msgid "Email account already exists"
+msgstr "Das E-Mail-Konto existiert bereits"
 
 msgid ""
 "A new window cannot be opened. To avoid this message please deactivate "
