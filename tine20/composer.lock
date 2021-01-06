@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "f378ef767eec81a4d61cf9ee16a87aa2",
@@ -1428,7 +1428,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -1453,12 +1452,11 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
-                "reference": "612d1d49b21d7833efd98c3addb5df3dc7a386b4"
+                "reference": "7b927e0bcfe17b72a328601418aaeb09b06441e4"
             },
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -1473,7 +1471,7 @@
                 "Devices",
                 "Tine 2.0"
             ],
-            "time": "2020-10-21T09:07:02+00:00"
+            "time": "2021-01-06T12:02:29+00:00"
         },
         {
             "name": "metaways/tine20-gdpr",
@@ -1486,7 +1484,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -1499,7 +1496,7 @@
             "keywords": [
                 "Tine 2.0"
             ],
-            "time": "2020-11-05T09:28:49+00:00"
+            "time": "2020-11-05T11:02:29+00:00"
         },
         {
             "name": "metaways/tine20-onlyofficeintegrator",
@@ -1512,7 +1509,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -1543,7 +1539,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3574,7 +3569,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/WebbyLab/php-validator-livr.git",
+                "url": "git@github.com:WebbyLab/php-validator-livr.git",
                 "reference": "6309697f926a20e1267cc15ee5b847b5c6ecdbcd"
             },
             "dist": {
@@ -5918,40 +5913,40 @@
     ],
     "aliases": [
         {
-            "package": "doctrine/dbal",
-            "version": "2.5.13.0-patch6",
             "alias": "v2.5.13",
-            "alias_normalized": "2.5.13.0"
+            "alias_normalized": "2.5.13.0",
+            "version": "2.5.13.0-patch6",
+            "package": "doctrine/dbal"
         },
         {
-            "package": "doctrine/orm",
-            "version": "2.5.14.0-patch1",
             "alias": "v2.5.14",
-            "alias_normalized": "2.5.14.0"
+            "alias_normalized": "2.5.14.0",
+            "version": "2.5.14.0-patch1",
+            "package": "doctrine/orm"
         },
         {
-            "package": "phpoffice/phpspreadsheet",
-            "version": "1.10.1.0-patch3",
             "alias": "1.10.1",
-            "alias_normalized": "1.10.1.0"
+            "alias_normalized": "1.10.1.0",
+            "version": "1.10.1.0-patch3",
+            "package": "phpoffice/phpspreadsheet"
         },
         {
-            "package": "phpoffice/phpword",
-            "version": "0.14.0.0",
             "alias": "v0.13.0",
-            "alias_normalized": "0.13.0.0"
+            "alias_normalized": "0.13.0.0",
+            "version": "0.14.0.0",
+            "package": "phpoffice/phpword"
         },
         {
-            "package": "sabre/vobject",
-            "version": "3.5.3.0-patch1",
             "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0"
+            "alias_normalized": "2.1.0.0",
+            "version": "3.5.3.0-patch1",
+            "package": "sabre/vobject"
         },
         {
-            "package": "zendframework/zendframework1",
-            "version": "1.12.20.0-patch41",
             "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0"
+            "alias_normalized": "1.12.20.0",
+            "version": "1.12.20.0-patch41",
+            "package": "zendframework/zendframework1"
         }
     ],
     "minimum-stability": "stable",
@@ -5990,6 +5985,5 @@
     "platform-overrides": {
         "php": "7.2.5",
         "ext-filter": "7.2"
-    },
-    "plugin-api-version": "2.0.0"
+    }
 }
