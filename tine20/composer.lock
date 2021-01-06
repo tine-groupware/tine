@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "050ff75430bf61876c3df2774a75674c",
@@ -63,16 +63,16 @@
         },
         {
             "name": "composer/semver",
-            "version": "1.5.0",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "46d9139568ccb8d9e7cdd4539cab7347568a5e2e"
+                "reference": "c7cb9a2095a074d131b65a8a0cd294479d785573"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/46d9139568ccb8d9e7cdd4539cab7347568a5e2e",
-                "reference": "46d9139568ccb8d9e7cdd4539cab7347568a5e2e",
+                "url": "https://api.github.com/repos/composer/semver/zipball/c7cb9a2095a074d131b65a8a0cd294479d785573",
+                "reference": "c7cb9a2095a074d131b65a8a0cd294479d785573",
                 "shasum": ""
             },
             "require": {
@@ -121,7 +121,7 @@
                 "validation",
                 "versioning"
             ],
-            "time": "2019-03-19T17:25:45+00:00"
+            "time": "2016-08-30T16:08:34+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -778,12 +778,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "d15890222b6deb08fe44a57fa8e2e6ec2e25eb84"
+                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d15890222b6deb08fe44a57fa8e2e6ec2e25eb84",
-                "reference": "d15890222b6deb08fe44a57fa8e2e6ec2e25eb84",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/2512f595e0f4c5235e99ef97603a8db902b3cc5f",
+                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f",
                 "shasum": ""
             },
             "require": {
@@ -820,7 +820,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2020-01-02T11:58:15+00:00"
+            "time": "2020-10-01T00:19:10+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -1275,7 +1275,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "ccabf8e726792e0f034d097581084c459af2011e"
+                "reference": "88dc052ed0b314a7d2f4e76dcbd99306d4cd44ed"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -1307,7 +1307,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "4887f624d09dbe03f26950028e74c5f66c99ab22"
+                "reference": "1402c95d8d844000d76f510c14b4ab1e7ea2f0f3"
             },
             "require": {
                 "php": ">=5.3.0"
@@ -3268,26 +3268,26 @@
         },
         {
             "name": "zbateson/mail-mime-parser",
-            "version": "1.2.0",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zbateson/mail-mime-parser.git",
-                "reference": "fd49e6f53184529a5ec4bc0b9edd98edeee53f5a"
+                "reference": "faa065d4baeb3022054d2ce52821e019d950eeba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zbateson/mail-mime-parser/zipball/fd49e6f53184529a5ec4bc0b9edd98edeee53f5a",
-                "reference": "fd49e6f53184529a5ec4bc0b9edd98edeee53f5a",
+                "url": "https://api.github.com/repos/zbateson/mail-mime-parser/zipball/faa065d4baeb3022054d2ce52821e019d950eeba",
+                "reference": "faa065d4baeb3022054d2ce52821e019d950eeba",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/psr7": "^1.0",
                 "php": ">=5.4",
                 "zbateson/mb-wrapper": "^1.0",
-                "zbateson/stream-decorators": "^1.0.2"
+                "zbateson/stream-decorators": "^1.0"
             },
             "require-dev": {
-                "jms/serializer": "^1.1",
+                "jms/serializer": "^1.7.0",
                 "mikey179/vfsstream": "^1.6.0",
                 "phing/phing": "^2.15.0",
                 "phpdocumentor/phpdocumentor": "^2.9.0",
@@ -3328,7 +3328,7 @@
                 "parser",
                 "php-imap"
             ],
-            "time": "2020-01-09T04:49:13+00:00"
+            "time": "2019-03-08T04:28:42+00:00"
         },
         {
             "name": "zbateson/mb-wrapper",
@@ -5291,5 +5291,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.0.8"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }
