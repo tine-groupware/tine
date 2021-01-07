@@ -41,6 +41,12 @@ Wenn alles klappt, sollte sowas im (DEBUG-)Log stehen:
 
 (100 ist die zeilennummer in der php datei, kann sich natürlich mit der zeit ändern ...)
 
+## Tika Download
+
+Ab Ubuntu 20.04 gibt es einigermassen aktuelle DEB-Pakete: libtika-java
+
+Ansonsten sollte man die aktuelle Version von der Webseite (https://tika.apache.org/download.html) herunterladen (und auch die CVEs im Auge behalten: https://tika.apache.org/security.html).
+
 Liste mit den Benutzern mit den meisten Daten im Tine 2.0 VFS (Virtual File System) erstellen
 =====
 
