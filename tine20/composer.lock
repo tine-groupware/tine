@@ -1479,7 +1479,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
-                "reference": "7006dde2c02064c041f9db58948b6a0bc3a9bb6f"
+                "reference": "00a74f5ce6a66abb246ee1bdc26118e8f4e6e895"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1496,7 +1496,7 @@
             "keywords": [
                 "Tine 2.0"
             ],
-            "time": "2021-01-06T12:05:35+00:00"
+            "time": "2021-01-08T10:58:29+00:00"
         },
         {
             "name": "metaways/tine20-onlyofficeintegrator",
@@ -1504,7 +1504,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git",
-                "reference": "a46a12bc122f39c792f93315cceb0a1706515bcf"
+                "reference": "6b4b16acefa381f471a22012f77dfe04b787d8d5"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1526,7 +1526,7 @@
                 "OnlyOfficeIntegrator",
                 "Tine 2.0"
             ],
-            "time": "2021-01-06T12:10:11+00:00"
+            "time": "2021-01-07T15:33:41+00:00"
         },
         {
             "name": "metaways/tine20-usermanual",
@@ -3569,7 +3569,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:WebbyLab/php-validator-livr.git",
+                "url": "https://github.com/WebbyLab/php-validator-livr.git",
                 "reference": "6309697f926a20e1267cc15ee5b847b5c6ecdbcd"
             },
             "dist": {

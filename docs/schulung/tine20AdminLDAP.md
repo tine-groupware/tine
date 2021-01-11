@@ -51,6 +51,11 @@ Hier ein paar Beispiele:
     
 -> Erweiterung des Standardfilters, es werden nur Benutzer aus der Gruppe "mygroup" synchronisiert
 
+    &(objectClass=posixaccount)(mail=*)
+
+-> Erweiterung des Standardfilters, es werden nur Benutzer mit E-Mail-Adresse synchronisiert
+-> siehe z.B. #187382: [Phoenix] Anmeldeproblem Kunde Mestron GmbH
+
 # Sync-Konfiguration
 
 _TODO add more info_
