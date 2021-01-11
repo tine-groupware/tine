@@ -216,24 +216,24 @@ class Setup_Controller
             'policies' => null,
             'maxUsers' => 5
         );
-        
+
         try {
             $license = Tinebase_License::getInstance();
         } catch (Exception $e) {
             return $default;
         }
-        
+
         $certData = $license->getCertificateData();
         if (!$certData) {
             return $default;
         }
-        
+
         $users = array(
             'maxUsers' => $license->getMaxUsers(),
             'userLimitReached' => $license->checkUserLimit(Tinebase_Core::getUser()),
             'status' => $license->getStatus()
         );
-        
+
         return array_merge($certData, $users);
     }
 
@@ -2644,10 +2644,7 @@ class Setup_Controller
 
         // setup cache (via tinebase because it is disabled in setup by default)
         Tinebase_Core::setupCache(TRUE);
-        
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache ...');
-
-        Setup_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
+        Tinebase_Controller::getInstance()->cleanupCache(Zend_Cache::CLEANING_MODE_ALL);
         $cachesCleared[] = 'TinebaseCache';
 
         Tinebase_Application::getInstance()->resetClassCache();
