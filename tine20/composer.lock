@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "aaa14e205ae64d9850dab2d51388a0f7",
@@ -905,6 +905,10 @@
                 "request",
                 "response"
             ],
+            "support": {
+                "issues": "https://github.com/php-fig/http-message-util/issues",
+                "source": "https://github.com/php-fig/http-message-util/tree/1.1.4"
+            },
             "time": "2020-02-05T20:36:27+00:00"
         },
         {
@@ -2378,6 +2382,10 @@
                 "response",
                 "server"
             ],
+            "support": {
+                "issues": "https://github.com/php-fig/http-server-handler/issues",
+                "source": "https://github.com/php-fig/http-server-handler/tree/master"
+            },
             "time": "2018-10-30T16:46:14+00:00"
         },
         {
@@ -2431,6 +2439,10 @@
                 "request",
                 "response"
             ],
+            "support": {
+                "issues": "https://github.com/php-fig/http-server-middleware/issues",
+                "source": "https://github.com/php-fig/http-server-middleware/tree/master"
+            },
             "time": "2018-10-30T17:12:04+00:00"
         },
         {
@@ -4229,6 +4241,14 @@
                 "psr-7",
                 "zf"
             ],
+            "support": {
+                "docs": "https://docs.zendframework.com/zend-stratigility/",
+                "forum": "https://discourse.zendframework.com/c/questions/expressive",
+                "issues": "https://github.com/zendframework/zend-stratigility/issues",
+                "rss": "https://github.com/zendframework/zend-stratigility/releases.atom",
+                "slack": "https://zendframework-slack.herokuapp.com",
+                "source": "https://github.com/zendframework/zend-stratigility"
+            },
             "abandoned": "laminas/laminas-stratigility",
             "time": "2019-06-12T15:22:39+00:00"
         },
@@ -6049,6 +6069,5 @@
     "platform-overrides": {
         "php": "7.2.5",
         "ext-filter": "7.2"
-    },
-    "plugin-api-version": "1.1.0"
+    }
 }
