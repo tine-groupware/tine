@@ -152,16 +152,19 @@ Migration PostgreSQL (PGSQL) -> MySQL
 
 Ab Version 2018.11 wird PGSQL nicht mehr unterstützt.
 
-Die Migration muss in 2017.11 durchgeführt werden. Am besten in Version 2017.11.13 (oder früher) wegen Änderungen 
+Die Migration muss in 2017.11 durchgeführt werden. Am besten in Version 2017.11.13 (https://packages.tine20.com/maintenance/source/2017.11.13/) wegen Änderungen 
 in Tinebase/Setup/Update/Release10.php, die nicht PGSQL-kompatibel sind...
 Die Migration muss mit der gleichen Version gemacht werden, mit der Tine 2.0 mit PGSQL gerade läuft, da
-sonst das DB-Schema möglicherweise nicht passt.
+sonst das DB-Schema möglicherweise nicht passt. Also idealerweise erst mal auf 2017.11.13 updaten! Wenn das nicht geht, muss man ggf. selbst Hand ans Schema anlegen.
 
-Migration ist u.a. Thema in diesem Ticket: #175111: [Phoenix] Unsere Instanz Tine 2.0 (UCS)
+Migration ist u.a. Thema in diesen Tickets:
+- #175111: [Phoenix] Unsere Instanz Tine 2.0 (UCS)
+- #187410: [Phoenix][Mestron] Migration Tine 2.0 auf eigene Debian VM (mit MariaDB) und Update auf 2020.11
+
 Ausserdem gibt es eine (nicht besonders gute) Anleitung zur manuellen Migration von Files/Hour im github:
 https://github.com/tine20/tine20/wiki/DE%3AMigration-von-Postgres-nach-MySQL
 
-1) Installation von MySQL (empfohlen 5.7+) oder MariaDB (empfohlen 10.2+)
+1) Installation von MySQL (empfohlen 5.7+) oder MariaDB (empfohlen 10.2+) - kann auch auf einem anderen Host sein
 
 2) Installation des php-mysql Moduls falls noch nicht vorhanden
 
@@ -185,7 +188,9 @@ return array (
 
 (mysqlConfigFile muss mit dem absoluten Pfad referenziert sein)
 
-    $ php /usr/share/tine20/sezup.php --config /etc/tine20 --pgsqlMigration -- mysqlConfigFile=/path/to/mysqlconf.php
+    $ php /usr/share/tine20/setup.php --config /etc/tine20 --pgsqlMigration -- mysqlConfigFile=/path/to/mysqlconf.php
+
+- falls es segfaults gibt (hatten wir auf einer alten php5 installation), kann man auch tabellen skippen, wenn sie nicht unbedingt benötigt werden
 
 6) nach der Migration der Daten dann in der Tine 2.0 config.inc.php die neue DB-Konfiguration (analog mysqlconf.php) eintragen.
 
