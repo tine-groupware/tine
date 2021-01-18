@@ -1195,11 +1195,10 @@ msgstr[1] "ImportExportDefinitionen"
 
 #: Model/ImportExportDefinition.php:135 Model/Application.php:44
 #: Model/Container.php:171 js/widgets/form/ApplicationPickerCombo.js:27
-#, fuzzy
 msgid "Application"
 msgid_plural "Applications"
-msgstr[0] "Anwendung"
-msgstr[1] "Anwendung"
+msgstr[0] ""
+msgstr[1] ""
 
 #: Model/ImportExportDefinition.php:138 Model/Container.php:186
 msgid "Model"
@@ -4886,6 +4885,9 @@ msgstr ""
 
 msgid "Email account already exists"
 msgstr "Das E-Mail-Konto existiert bereits"
+
+msgid "{gender, select, male {all of} female {all of} other {all of}}"
+msgstr "{gender, select, male {alle von} female {alle von} other {alle von}}"
 
 msgid "There was an error verifying your certificate!!!"
 msgstr "Es gab einen Fehler beim verifizieren Ihres Zertifikats!"
