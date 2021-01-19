@@ -13,6 +13,16 @@ Ressourcen
 - Mantis: https://forge.tine20.org/
 - Handbuch: https://www.amazon.de/Tine-2-0-Benutzerhandbuch-Kai-Uwe-Kroll/dp/3737579385/
 
+Serveraustattung
+------------
+
+TODO: ressourcenbedarf pro anzahl user definieren
+
+- CPUS
+- RAM
+  - DB
+  - Webserver
+
 Installation / Update
 ------------
 
