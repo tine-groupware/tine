@@ -1423,7 +1423,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-bookmarks.git",
-                "reference": "c5c6c13925fbc767068da6823ca17da275177b6d"
+                "reference": "b10f1faeada1984faa531dbaa92d92b798d7ee4a"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1444,7 +1444,7 @@
                 "Bookmarks",
                 "Tine 2.0"
             ],
-            "time": "2021-01-06T11:57:09+00:00"
+            "time": "2021-01-20T16:13:12+00:00"
         },
         {
             "name": "metaways/tine20-dfcom",
