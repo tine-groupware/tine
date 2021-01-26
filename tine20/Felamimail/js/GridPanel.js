@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -87,6 +87,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * needed to apply second grid state for send folders
      */
     sendFolderGridStateId: null,
+
+    sentFolderSelected: false,
 
     /**
      * Return CSS class to apply to rows depending upon flags
@@ -753,18 +755,28 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * delete messages handler
+     * delete messages handler:
+     * delete messages from trash/drafts folder, move messages to trash from other folders
      * 
      * @return {Boolean}
      */
     onDeleteRecords: function() {
-        var account = this.app.getActiveAccount(),
-            trashId = (account) ? account.getTrashFolderId() : null,
-            trash = trashId ? this.app.getFolderStore().getById(trashId) : null,
-            trashConfigured = (account.get('trash_folder'));
-            
-        return (trash && ! trash.isCurrentSelection())
-            || (! trash && trashConfigured)
+        const account = this.app.getActiveAccount();
+        const trashId = (account) ? account.getTrashFolderId() : null;
+        const trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
+        const draftsFolderId = account.getSpecialFolderId('drafts_folder');
+        const draftsFolder = draftsFolderId ? this.app.getFolderStore().getById(draftsFolderId) : null;
+
+        let moveMessages;
+
+        if (draftsFolder && draftsFolder.isCurrentSelection()) {
+            moveMessages = false;
+        } else {
+            const trashConfigured = account.get('trash_folder');
+            moveMessages = trash && ! trash.isCurrentSelection() || ! trash && trashConfigured;
+        }
+
+        return moveMessages
                 ? this.moveSelectedMessages(trash, true, false)
                 : this.deleteSelectedMessages();
     },
@@ -1383,13 +1395,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         const isSendFolderPath = this.isSendFolderPathInFilterParams(options.params);
 
-        if (isSendFolderPath) {
+        if (isSendFolderPath && ! this.sentFolderSelected) {
             this.changeFilterInParams(options.params, 'query', 'to');
             this.changeGridState(this.sendFolderGridStateId);
+            this.sentFolderSelected = true;
 
-        } else {
+        } else if (! isSendFolderPath && this.sentFolderSelected) {
             this.changeFilterInParams(options.params, 'to', 'query');
             this.changeGridState(this.gridConfig.stateId);
+            this.sentFolderSelected = false;
         }
     },
 
