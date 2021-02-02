@@ -2313,6 +2313,9 @@ msgstr "ist nicht"
 msgid "{gender, select, male {one of} female {one of} other {one of}}"
 msgstr "{gender, select, male {einer von} female {eine von} other {eines von}}"
 
+msgid "{gender, select, male {all of} female {all of} other {all of}}"
+msgstr "{gender, select, male {alle von} female {alle von} other {alle von}}"
+
 #: js/widgets/grid/FilterModel.js:264
 msgid "{gender, select, male {none of} female {none of} other {none of}}"
 msgstr ""
@@ -4886,8 +4889,11 @@ msgstr ""
 msgid "Email account already exists"
 msgstr "Das E-Mail-Konto existiert bereits"
 
-msgid "{gender, select, male {all of} female {all of} other {all of}}"
-msgstr "{gender, select, male {alle von} female {alle von} other {alle von}}"
+msgid "Select all"
+msgstr "Alle auswählen"
+
+msgid "Deselect all"
+msgstr "Alle abwählen"
 
 msgid "There was an error verifying your certificate!!!"
 msgstr "Es gab einen Fehler beim verifizieren Ihres Zertifikats!"
