@@ -4886,6 +4886,12 @@ msgstr ""
 msgid "Email account already exists"
 msgstr "Das E-Mail-Konto existiert bereits"
 
+msgid "Select all"
+msgstr "Alle auswählen"
+
+msgid "Deselect all"
+msgstr "Alle abwählen"
+
 msgid ""
 "A new window cannot be opened. To avoid this message please deactivate "
 "your browsers popup blocker for {0}"
