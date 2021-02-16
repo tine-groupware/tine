@@ -1549,7 +1549,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
-                "reference": "151c3cd76c622aa7ed39f7aec5a5fcedbc3c8bbc"
+                "reference": "d96ba9ce88d8376ab0b5c2b0b390ade0089459e1"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1568,7 +1568,7 @@
                 "Devices",
                 "Tine 2.0"
             ],
-            "time": "2021-01-28T10:12:43+00:00"
+            "time": "2021-02-04T12:31:40+00:00"
         },
         {
             "name": "metaways/tine20-efile",
@@ -1576,7 +1576,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-efile.git",
-                "reference": "5cb62ba88e92f1973c8078573ef2eed0e18279d6"
+                "reference": "bcd3423ab7db5482d8f464bc26638b6c632fdc06"
             },
             "require": {
                 "php": ">=5.5.0",
@@ -1600,7 +1600,7 @@
                 "Office",
                 "Tine 2.0"
             ],
-            "time": "2021-01-06T12:26:34+00:00"
+            "time": "2021-02-16T12:57:07+00:00"
         },
         {
             "name": "metaways/tine20-gdpr",
