@@ -372,6 +372,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         // make sure that system account exists before copy
         if (! $emailUserBackend->userExists($systemEmailUser)) {
+            $translation = Tinebase_Translation::getTranslation($this->_applicationName);
             throw new Tinebase_Exception_UnexpectedValue($translation->_('system account for user does not exist'));
         }
 
@@ -1681,6 +1682,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             Felamimail_Controller_Sieve::getInstance()->updateAutoMoveNotificationScript($_account);
             $this->_backend->update($_account);
         } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
+        } catch (Felamimail_Exception_SieveInvalidCredentials $fesic) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
         } catch (Exception $e) {
             // skip creation at this point
