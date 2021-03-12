@@ -4031,6 +4031,10 @@ msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr Passwort "
 "eingeben"
 
+#: js/AreaLocks/TokenProvider.es6.js:15
+msgid "Token required"
+msgstr "Token erforderlich"
+
 #: js/AreaLocks/TokenProvider.es6.js:16
 msgid "This area is locked. To unlock it you need to enter your Token"
 msgstr ""
@@ -4930,9 +4934,11 @@ msgstr "Alle abwählen"
 msgid "{gender, select, male {all of} female {all of} other {all of}}"
 msgstr "{gender, select, male {alle von} female {alle von} other {alle von}}"
 
-#: js/AreaLocks/TokenProvider.es6.js:15
-msgid "Token required"
-msgstr "Token erforderlich"
+#: js/AreaLocks/PinProvider.es6.js:16
+msgid "This area is locked. To unlock it you need to provide your PIN"
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihre PIN "
+"eingeben"
 
 msgid "There was an error verifying your certificate!!!"
 msgstr "Es gab einen Fehler beim verifizieren Ihres Zertifikats!"
