@@ -4,8 +4,48 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "11734ce44d86e52c93972d9694ff2b1e",
+    "content-hash": "87477f12fb2a8d09816ebecfb1c77b4e",
     "packages": [
+        {
+            "name": "benmorel/gsm-charset-converter",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BenMorel/GsmCharsetConverter.git",
+                "reference": "21557cb5a0bc71e5b8b9eea81a9a42bc509f6fba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BenMorel/GsmCharsetConverter/zipball/21557cb5a0bc71e5b8b9eea81a9a42bc509f6fba",
+                "reference": "21557cb5a0bc71e5b8b9eea81a9a42bc509f6fba",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.4",
+                "phpunit/phpunit": "^8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BenMorel\\GsmCharsetConverter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Converts GSM 03.38 strings to and from UTF-8",
+            "keywords": [
+                "GSM 03.38",
+                "gsm",
+                "sms"
+            ],
+            "time": "2020-12-02T12:49:14+00:00"
+        },
         {
             "name": "clue/socket-raw",
             "version": "v1.4.1",

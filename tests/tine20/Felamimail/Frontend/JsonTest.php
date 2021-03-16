@@ -2321,6 +2321,13 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         ]);
     }
 
+    /**
+     * @throws Addressbook_Exception_AccessDenied
+     * @throws Addressbook_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
+     *
+     * @group nogitlabci
+     */
     public function testFileMessageOnSend()
     {
         $message = $this->_getMessageData('' , __METHOD__);
@@ -2338,6 +2345,13 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertEquals(1, count($attachments), 'attachments not found in contact: ' . print_r($contact->toArray(), true));
     }
 
+    /**
+     * @throws Addressbook_Exception_AccessDenied
+     * @throws Addressbook_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
+     *
+     * @group nogitlabci
+     */
     public function testFileMessageOnSendWithEmail()
     {
         $message = $this->_getMessageData();
@@ -2516,11 +2530,22 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->_assertPassword($account['id'], $pass);
     }
 
+    public function testDoMailsBelongToAccount()
+    {
+        $userMail = Tinebase_Core::getUser()->accountEmailAddress;
+        $mails = [
+            $userMail,
+            'someexternal@mail.test',
+        ];
+        $result = $this->_json->doMailsBelongToAccount($mails);
+        self::assertCount(1, $result);
+    }
+
     public function testImapSettingsConnection()
     {
         $account = $this->_createSharedAccount();
         $config = $account->getImapConfig();
-        
+
         $fields = [
             'host' => $config['host'],
             'port' => $config['port'],
@@ -2535,7 +2560,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             $translation = Tinebase_Translation::getTranslation('Felamimail');
             $this->assertEquals($translation->_('IMAP Credentials missing'), $e->getMessage(), $e->getMessage());
         }
-        
+
         $fields['user'] = $config['user'];
         $fields['password'] = $config['password'];
 
