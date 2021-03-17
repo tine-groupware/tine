@@ -853,7 +853,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $areaConfig = $areaLock->getLastAuthFailedAreaConfig();
 
-
         // user has no 2FA config -> currently its sort of optional -> no check
         if (count($userConfigIntersection->mfa_configs) === 0) {
             $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
@@ -867,18 +866,24 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         // check if FE send mfa or if we only have one 2FA configured anyway
         if ((!empty($mfaId) && $userConfigIntersection->getById($mfaId)) || (1 === $userConfigIntersection->count() &&
                 ($mfaId = $userConfigIntersection->getFirstRecord()->getId()))) {
+            $userCfg = $userConfigIntersection->getById($mfaId);
             // FE send provider and password -> validate it
             if (!empty($password)) {
-                $areaLock->unlock(
-                    Tinebase_Model_AreaLockConfig::AREA_LOGIN,
-                    $mfaId,
-                    $password,
-                    $user
-                );
-
+                foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN)->filter(function($rec) use($userCfg) {
+                            return in_array($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}, $rec->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
+                        }) as $areaCfg) {
+                    if (!$areaCfg->getBackend()->hasValidAuth()) {
+                        $areaLock->unlock(
+                            $areaCfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME},
+                            $mfaId,
+                            $password,
+                            $user
+                        );
+                        break;
+                    }
+                }
                 return;
             } else {
-                $userCfg = $userConfigIntersection->getById($mfaId);
                 if (!Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
                         ->sendOut($userCfg)) {
                     throw new Tinebase_Exception('mfa send out failed');
@@ -890,7 +895,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             }
         } else {
             // FE to render selection which 2FA to use
-            $this->_throwMFAException($areaConfig, $userConfigIntersection);
+            $this->_throwMFAException($areaConfig, $areaConfig->getUserMFAIntersection($user));
         }
 
         // must never reach this

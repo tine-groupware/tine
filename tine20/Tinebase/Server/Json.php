@@ -512,6 +512,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     $classes[$jsonAppName] = $application->name;
                 }
             }
+        } elseif (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+            $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_AreaLock';
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -531,26 +533,23 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $anonymnousMethods = array(
             '', //empty method
             'Tinebase.authenticate',
+            'Tinebase.getRegistryData',
+            'Tinebase.getAllRegistryData',
             'Tinebase.login',
             'Tinebase.logout',
             'Tinebase.openIDCLogin',
             'Tinebase.getAvailableTranslations',
             'Tinebase.getTranslations',
             'Tinebase.setLocale',
-            'Tinebase.checkAuthToken'
+            'Tinebase.checkAuthToken',
+            'Tinebase_AreaLock.unlock'
         );
-        // area lock magic. only if anymous user comes along, these functions are anonymous. signed in users need to area login check here too!
-        if (!Tinebase_Core::isRegistered(Tinebase_Core::USER) || !is_object(Tinebase_Core::getUser())) {
-            $anonymnousMethods[] = 'Tinebase.getRegistryData';
-            $anonymnousMethods[] = 'Tinebase.getAllRegistryData';
-        }
-        
+
         // check json key for all methods but some exceptions
         if ( !(in_array($method, $anonymnousMethods)) && ($jsonKey !== Tinebase_Core::get('jsonKey') || !self::userIsRegistered())) {
-
             $request = Tinebase_Core::getRequest();
             if (!self::userIsRegistered()) {
-                if (Tinebase_Core::isRegistered(Tinebase_Core::USER) && is_object(Tinebase_Core::getUser())) {
+                if (is_object(Tinebase_Core::getUser())) {
                     self::_checkAreaLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
                 }
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .
