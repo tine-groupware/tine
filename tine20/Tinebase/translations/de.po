@@ -4933,6 +4933,12 @@ msgstr "Ihr {{ app.branding.title }} Sicherheitscode ist {{ code }}."
 msgid "Choose MFA Deivce"
 msgstr "MFA Gerät auswählen"
 
+msgid "Invalid authentication"
+msgstr "Authentifikation fehlgeschlagen"
+
+msgid "Try again?"
+msgstr "Nochmal versuchen?"
+
 msgid "This area is locked. Which device should be used to unlock."
 msgstr ""
 "Dieser Bereich ist gesperrt. Welches Gerät soll verwendet werden um ihn zu "
@@ -4949,16 +4955,20 @@ msgstr ""
 "device_name} zum entsperren gesendet"
 
 msgid "Security code from {mfaDevice.device_name}"
-msgstr "Sicherheitscode von {mfaDevice.device_name}"
+msgstr "{mfaDevice.device_name} Sicherheitscode"
 
 msgid "{gender, select, male {all of} female {all of} other {all of}}"
 msgstr "{gender, select, male {alle von} female {alle von} other {alle von}}"
 
-msgid "Invalid authentication"
-msgstr "Authentifikation fehlgeschlagen"
+msgid "MFA device missing"
+msgstr "Fehlendes MFA Gerät"
 
-msgid "Try again?"
-msgstr "Nochmal versuchen?"
+msgid ""
+"No matching MFA device for this area found. Configure a matching device "
+"please."
+msgstr ""
+"Für diesen Bereich wurde kein passendes MFA Gerät gefunden. Bitte "
+"konfiguieren sie ein passendes MFA Gerät."
 
 msgid "There was an error verifying your certificate!!!"
 msgstr "Es gab einen Fehler beim verifizieren Ihres Zertifikats!"
