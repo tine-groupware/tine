@@ -4936,6 +4936,16 @@ msgstr "MFA Gerät auswählen"
 msgid "Invalid authentication"
 msgstr "Authentifikation fehlgeschlagen"
 
+msgid "MFA device missing"
+msgstr "Fehlendes MFA Gerät"
+
+msgid ""
+"No matching MFA device for this area found. Configure a matching device "
+"please."
+msgstr ""
+"Für diesen Bereich wurde kein passendes MFA Gerät gefunden. Bitte "
+"konfiguieren sie ein passendes MFA Gerät."
+
 msgid "Try again?"
 msgstr "Nochmal versuchen?"
 
@@ -4960,15 +4970,8 @@ msgstr "{mfaDevice.device_name} Sicherheitscode"
 msgid "{gender, select, male {all of} female {all of} other {all of}}"
 msgstr "{gender, select, male {alle von} female {alle von} other {alle von}}"
 
-msgid "MFA device missing"
-msgstr "Fehlendes MFA Gerät"
-
-msgid ""
-"No matching MFA device for this area found. Configure a matching device "
-"please."
-msgstr ""
-"Für diesen Bereich wurde kein passendes MFA Gerät gefunden. Bitte "
-"konfiguieren sie ein passendes MFA Gerät."
+msgid "Static PIN for user: ●●●●●●"
+msgstr "Statischer PIN: ●●●●●●"
 
 msgid "There was an error verifying your certificate!!!"
 msgstr "Es gab einen Fehler beim verifizieren Ihres Zertifikats!"
