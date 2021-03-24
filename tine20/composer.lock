@@ -1589,7 +1589,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
-                "reference": "c2bec37ca3e475be701e8e8e0189c80bd7cc758f"
+                "reference": "10d4691da5b7c6254ced7d000eab119b9122a332"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1608,7 +1608,7 @@
                 "Devices",
                 "Tine 2.0"
             ],
-            "time": "2021-03-12T20:02:20+00:00"
+            "time": "2021-03-17T11:48:44+00:00"
         },
         {
             "name": "metaways/tine20-efile",
