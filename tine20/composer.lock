@@ -1616,7 +1616,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-efile.git",
-                "reference": "d4b35b9768518c9f0d05328b44450337adbd16af"
+                "reference": "ff7ec5abea326df0c957b39c915681474c0b3d1f"
             },
             "require": {
                 "php": ">=5.5.0",
@@ -1640,7 +1640,7 @@
                 "Office",
                 "Tine 2.0"
             ],
-            "time": "2021-03-30T07:31:33+00:00"
+            "time": "2021-03-30T09:23:28+00:00"
         },
         {
             "name": "metaways/tine20-gdpr",
