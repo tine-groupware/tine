@@ -16,7 +16,7 @@ In diesem Kapitel beschäftigen wir uns ``nicht'' mit den systemübergreifend f�
 
 Thema dieses Kapitels sind stattdessen Systemeinstellungen, die sich auf den einzelnen Benutzer beziehen und die jeder {branch}-Benutzer auch nur für sich selbst definieren kann. Diese Parameter sind standardmäßig auf gängige Werte voreingestellt, sodass {branch} auch ohne Veränderung von hier beschriebenen Einstellungen normal lauffähig ist. Dennoch sollten Sie das Kapitel durcharbeiten, denn hiermit können Sie sich die tägliche Arbeit erleichtern und bspw. Routineprozesse so anpassen, wie Sie es möchten und vielleicht auch von anderen Systemen gewöhnt sind.
 
-Das zugehörige Programmenü erreichen Sie nicht wie gewöhnlich über den Reiter {branch}, sondern über einen Klick (aus jedem beliebigen Programmteil erreichbar) auf die Anzeige des eingeloggten Benutzers (menu:[Benutzer:] menu:[Nachname], menu:[Vorname]) rechts oben vor dem roten menu:[Abmelden]-Knopf. Beim Anklicken erhalten Sie ein Menü mit den Einträgen menu:[Profil bearbeiten], menu:[Einstellungen], menu:[Passwort ändern] und menu:[Benachrichtigungen erlauben].
+Das zugehörige Programmenü erreichen Sie nicht wie gewöhnlich über den Reiter {branch}, sondern über einen Klick (aus jedem beliebigen Programmteil erreichbar) auf die Anzeige des eingeloggten Benutzers (menu:[Benutzer:] menu:[Nachname], menu:[Vorname]) rechts oben vor dem menu:[Abmelden]-Knopf. Beim Anklicken erhalten Sie ein Menü mit den Einträgen menu:[Profil bearbeiten], menu:[Einstellungen], menu:[Passwort ändern] und menu:[Benachrichtigungen erlauben].
 
 ////
 Benachrichtigungen erlauben wirkt bei mir nur unter Safari!
@@ -267,7 +267,7 @@ Sollten Sie mehrere E-Mail-Konten über {branch} verwalten, können Sie unter me
 
 Das menu:[E-Mail Aktualisierungsintervall] bestimmt, in welchem Zeitintervall Ihr {branch}-E-Mail-Client bei den E-Mail-Servern nach Mail fragen soll. Sie können eine Abfrage zwischendurch auch durch Drücken des Buttons mit den zwei verdrehten blauen Pfeilen (über der Tabellenansicht) auslösen.
 
-Der Schalter menu:[In Adressbuch benutzen] steht standardmäßig auf menu:[ja]. Das bedeutet, dass der {branch}-interne E-Mail-Client benutzt wird, wenn Sie aus dem Adressbuch heraus die Funktion menu:[E-Mail verfassen] starten. Wenn der Schalter auf menu:[nein] steht wird der externe E-Mail-Client benutzt, der auf Ihrem Endgerät als Standard eingestellt ist.
+Der Schalter menu:[In Adressbuch benutzen] steht standardmäßig auf menu:[ja]. Das bedeutet, dass der {branch}-interne E-Mail-Client benutzt wird, wenn Sie aus dem Adressbuch heraus die Funktion menu:[E-Mail verfassen] starten. Wenn der Schalter auf menu:[nein] steht, wird der externe E-Mail-Client benutzt, der auf Ihrem Endgerät als Standard eingestellt ist.
 
 (((E-Mail-Notiz,automatisch erzeugen)))
 Die Funktion menu:[E-Mail-Notiz erzeugen] steht standardmäßig auf menu:[nein]. Wenn Sie sie auf menu:[ja] umstellen, wird beim Versenden jeder E-Mail an einen in einem Adressbuch gespeicherten Empfänger bei diesem eine sog. E-Mail-Notiz angelegt. Das heißt, wenn Sie später den Adressdatensatz dieses Empfängers aufrufen, sehen Sie unter menu:[Notizen] (an der rechten Seite des Bearbeitungsfensters, unter menu:[Beschreibung]) eine Notiz mit dem Inhalt der versendeten E-Mail. Das kann für die Nachvollziehbarkeit, insbesondere unter dem Aspekt des Kundenbeziehungsmanagements, sehr nützlich sein. Es erzeugt natürlich eine ganze Menge zusätzlicher Daten - und das auch bei den Adressaten, bei denen es vielleicht nicht nötig ist. Verwenden Sie diese Einstellung also weise und berücksichtigen Sie, dass Sie das Erzeugen einer E-Mail-Notiz auch von Fall zu Fall händisch veranlassen können, denn Sie haben dazu im E-Mail-Bearbeitungsfenster einen Extra-Button.
@@ -332,7 +332,7 @@ menu:[Standardalarmzeit]: Hier können Sie, wenn Sie den vorhergehenden Schalter
 
 Mit menu:[Standard Teilnehmer Strategie] kann man auswählen welche Teilnehmer Standardmäßig immer im Termin eingeladen sind.
 
-menu:[Feste Kalender] ist dann ein globaler default Filter. Wenn dieser eingerichtet ist, sieht in jedem Filter Ergebniss immer auch alle Termine dieses eingestellten Kalenders.
+menu:[Feste Kalender] ist dann ein globaler Default-Filter. Wenn dieser eingerichtet ist, sieht man in jedem Filter-Ergebnis immer auch alle Termine des eingestellten Kalenders.
 
 [[sec.einstellungen.telefone.dateimanager]] 
 === Telefone und Dateimanager ===
@@ -360,7 +360,7 @@ image::Benutzereinstellungen/12_benutzereinstellungen_adressbuch.png[id="fig_ben
 
 Unter menu:[Standard-Adressbuch] können Sie wieder, wie schon dargelegt, das Adressbuch auswählen, in welches neu angelegte Kontaktdatensätze gespeichert werden. Für die Anwendung menu:[Adressbuch] ist diese Einstellung allerdings besonders relevant, weil der systemseitig voreingestellte Standard hier, wie bei allen anderen weiter oben besprochenen Anwendungen, das persönliche Adressbuch des Nutzers ist. Erfahrungsgemäß ist das aber in den seltensten Fällen erwünscht, denn (vgl. <<chap.adressverwaltung>> und hier besonders den <<sec.adressbuch.einleitung>>) {branch} lebt ja von den hervorragenden Filtermechanismen, wie Tags usw., die ein Abspeichern von Adressen in verschiedenen Adressbüchern vollkommen unnötig machen! Legen Sie also, wenn nicht schon geschehen, ein allgemeines Adressbuch an, weisen Sie es hier zu und vergessen Sie auch nicht, alle anderen {branch}-Nutzern Ihres Unternehmens anzuweisen, dieses Adressbuch als Standard zu nutzen!
 
-Der zweite Schalter, menu:[Standard Favorit] betrifft die Ansicht, welche beim Aufruf der Anwendung menu:[Adressbuch] gültig sein soll - auch diese Verfahrensweise wurde weiter oben  bei den Einstellungen für andere Anwendungen bereits besprochen.
+Der zweite Schalter, menu:[Standard Favorit] betrifft die Ansicht, welche beim Aufruf der Anwendung menu:[Adressbuch] gültig sein soll - auch diese Verfahrensweise wurde weiter oben bei den Einstellungen für andere Anwendungen bereits besprochen.
 
 [[sec.einstellungen.admin]] 
 === Admin ===

@@ -96,7 +96,7 @@ Sie sehen, dass die Bearbeitungsmaske nur die üblichen vier Reiter enthält, so
 Die Maske menu:[Lead] enthält als einziges Pflichteingabefeld oben menu:[Leadname eingeben], alle anderen Angaben sind optional. Vergeben Sie nun probehalber einen beliebigen Namen.
 
 Über das Pulldown menu:[Kontakte zum Hinzufügen suchen] ordnen Sie dem Lead beliebig viele Kontakte aus Ihrer {branch}-Adressdatenbank zu, die dann in der darunter befindlichen Tabelle erscheinen. Anstelle des Pulldowns über alle verfügbaren Kontakte können Sie auch die Volltextsuche nutzen, indem Sie mindestens drei Zeichen in das Feld eingeben und so die entsprechenden Kontakte herausfiltern.
-Sie sehen in der Tabelle, dass Sie selbst als Kontakt bereits automatisch zugeordnet wurden. Diese Zuordnung ist jedoch (wie jede weitere) über den unter dem Tabellenfenster mit einem Minuszeichen gekennzeichneten Button menu:[Entferne Kontakt] lösbar. Sie können also auch Leads speichern und sie anderen Mitarbeitern oder sogar beliebigen anderen Kontakten zuordnen. Ist der gewünschte Kontakt nicht in Ihrem {branch}-Adressdatenbestand vorhanden, können Sie hier über den mit einem grünen Pluszeichen versehenen Button menu:[Neuer Kontakt] die aus der Adressverwaltung bekannte Kontakteingabemaske einblenden lassen, um einen neuen Kontakt anzulegen.
+Sie sehen in der Tabelle, dass Sie selbst als Kontakt bereits automatisch zugeordnet wurden. Diese Zuordnung ist jedoch (wie jede weitere) über den unter dem Tabellenfenster mit einem Minuszeichen gekennzeichneten Button menu:[Entferne Kontakt] lösbar. Sie können also auch Leads speichern und sie anderen Mitarbeitern oder sogar beliebigen anderen Kontakten zuordnen. Ist der gewünschte Kontakt nicht in Ihrem {branch}-Adressdatenbestand vorhanden, können Sie hier über den mit einem Pluszeichen versehenen Button menu:[Neuer Kontakt] die aus der Adressverwaltung bekannte Kontakteingabemaske einblenden lassen, um einen neuen Kontakt anzulegen.
 
 Schauen Sie sich nun den direkt darunter befindlichen Tabellenkopf an: menu:[Name], menu:[Anschrift] und menu:[Daten] sind klar – interessant ist hier die menu:[Rolle]. Dass sich in der Tabellenzeile hinter dem kleinen Symbol, image:Icon/5_icon_responsible.png[height=16], image:Icon/6_icon_client.png[height=18] oder image:Icon/7_icon_partner.png[height=16] ein Pulldown verbirgt, ist nicht sofort zu sehen – Sie müssen darauf klicken.
 
@@ -220,7 +220,7 @@ menu:[Nachricht verfassen]:: Diese Funktion (ebenfalls nur aktiv bei Markierung 
 
 menu:[Lead exportieren]:: Hier stehen zwei Datenformate zur Verfügung, menu:[ODS] und menu:[XLSX] (die Tabellenformate von OpenOffice/LibreOffice bzw. Microsoft Excel) beide erzeugen jeweils zwei Tabellen in einer Datei:  menu:[Overview] ist ein komplexes Tableau mit Auswertungen aller verfügbaren Daten, sowohl numerisch als auch grafisch. menu:[Leads] ist, genau wie in der oben beschriebenen CSV-Datei, eine Tabelle mit den 1:1 ausgelesenen Werten der Datenbank.
 
-menu:[Lead importieren]:: Sie können auch Leads von vorherigen Systemen Importieren. Diese müssen im CSV Format vorliegen.
+menu:[Lead importieren]:: Sie können auch Leads importieren, wenn die Daten im CSV Format vorliegen.
 ////
 .Statistiken eines exportierten Leads in LibreOffice.
 image::Crm/1_crm_leadtabellen.png[id="fig_crmexportods",width="40%"]

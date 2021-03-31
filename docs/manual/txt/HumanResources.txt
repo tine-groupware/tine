@@ -1,49 +1,42 @@
 [[chapter.HumanResources]]
 == HumanResources ==
 
+
 //////////
 Dr. Markus Wirtz, 2015-04-16 14:57
 bin durch, ready for GR
-
+//////////
+//////////
  Gerlinde Regensburger, 2015-04-21 10:53
 bin durch / Bitte noch die Kommentare beachten/bearbeiten... Danke.
-
+//////////
+////
 KUK 2015-05-15: Indizierung gemacht, Freigabe
-
+////
+////////
 Überarbeitet von Paul Hartog 30.04.2020
-
-Überarbeitet von Peggy Hötzel 26.11.2020
 ////////
 
 (((Personalkonten)))
 (((Mitarbeiter)))
-
-
-Die Anwendung HumanResources gehört nicht zu den Kernfunktionalitäten einer Groupware, ist auf Kundenwunsch entstanden und entspricht keinem vollständigen Personalmanagementsystem. Im Rahmen einer Groupwarelösung steht jedoch bereits ein umfangreiches Funktionspaket zur Personalverwaltung und Zeitwirtschaft zur Verfügung.
-
 [[sec.humanresources.einleitung]]
 === Einleitung ===
 
 {{{/HumanResources}}}
-Die Anwendung menu:[Human Resources] dient der Personalabteilung zur Verwaltung relevanter Mitarbeiterinformationen. Da hierzu auch vertrauliche Daten gehören, sollten Sie die Zugriffsrechte auf diesen Programmteil sehr genau überlegen.
+Der Programmteil menu:[Human Resources] dient der Personalabteilung zur Verwaltung relevanter Mitarbeiterinformationen. Da hierzu auch vertrauliche Daten gehören, sollten Sie die Zugriffsrechte auf diesen Programmteil sehr genau im Auge behalten!
 
-Die Anwendung besteht aus fünf Modulen: menu:[Mitarbeiter], die zugehörigen menu:[Personalkonten], menu:[Tägliche Arbeitszeitberichte], menu:[Monatliche Arbeitszeitberichte] und menu:[Free Time Planning].
+Die Anwendung besteht aus fünf Modulen: menu:[Mitarbeiter], die zugehörigen menu:[Personalkonten], menu:[Abteilung], menu:[Tägliche Arbeitszeitberichte] und menu:[Monatliche Arbeitszeitberichte]. Die Aufgabe der ersten beiden besteht darin, Mitarbeiter-Datensätze zu erstellen – die zugehörigen Personalkonten (für jeweils das laufende und das folgende Jahr) legt {branch} selbstständig an.
 
-///////
-Peg:
-Abteilungen noch nicht vorgesehen,
-in der Software hängt das auch noch in der Sales App, soll ja ins HR
-dann Text "fünf" auf "sechs" ändern und Menu:[Abteilungen] aufnehmen
-///////
-
-///////////
-Die Aufgabe der ersten beiden besteht darin, Mitarbeiter-Datensätze zu erstellen – die zugehörigen Personalkonten (für jeweils das laufende und das folgende Jahr) legt {branch} selbstständig an.
-
-Beim Anlegen der Mitarbeiterdatensätze greifen Sie sinnvollerweise auf die bereits vorhandenen {branch}-Benutzer zurück, denn in den meisten Fällen werden sich diese Mengen überschneiden.
-//////////
+Beim Anlegen der Mitarbeiterdatensätze greifen Sie sinnvollerweise auf die bereits vorhandenen {branch}-Benutzer zurück, denn in den meisten Fällen werden sich diese Mengen überschneiden. 
 
 Starten Sie die Anwendung über den Reiter menu:[{branch}], indem Sie dort menu:[HumanResources] anklicken.
 
+[[sec.humanresources.module.favoriten]]
+=== Untermodule und Favoriten ===
+
+{{{/HumanResources/MainScreen/ModulPicker}}}
+{{{/HumanResources/MainScreen/Employee/FavoritesPicker}}}
+Unter menu:[MODULE] sehen Sie auf der linken Seite die Punkte menu:[Mitarbeiter], menu:[Personalkonten], Abteilungen, menu:[Tägliche Arbeitszeitberichte] und menu:[Monatliche Arbeitszeitberichte].
 
 //////////////////
         SCREENSHOT
@@ -58,30 +51,19 @@ Starten Sie die Anwendung über den Reiter menu:[{branch}], indem Sie dort menu:
 image::HumanResources/1_humanresources_module.png[id="fig_humanmodule",width="50%"]
 
 
-Die vorgefertigten menu:[FAVORITEN]-Ansichten wechseln je nach Modul. So zeigen die menu:[FAVORITEN] menu:[Alle Angestellten] und menu:[Zur Zeit angestellt]) einerseits alle im Unternehmen bisher beschäftigten Mitarbeiter (inklusive der bereits ausgeschiedenen) und andererseits die derzeit beschäftigten Mitarbeiter (mit aktuell laufendem Arbeitsvertrag) an. menu:[Alle Konten] zeigt alle Personalkonten an.
-
-//////////
-Welche Angaben notwendig sind, um diese Ansichten korrekt darzustellen, erklären wir weiter unten.
-/////////
-
-///////////
-[[sec.humanresources.module.favoriten]]
-=== Untermodule und Favoriten ===
-
-{{{/HumanResources/MainScreen/ModulPicker}}}
-{{{/HumanResources/MainScreen/Employee/FavoritesPicker}}}
-Unter menu:[MODULE] sehen Sie auf der linken Seite die Punkte menu:[Mitarbeiter], menu:[Personalkonten], menu:[Tägliche Arbeitszeitberichte], menu:[Monatliche Arbeitszeitberichte] und menu:[Free Time Planning].
-//////////
+Die vorgefertigten menu:[FAVORITEN]-Ansichten (hier sind es menu:[Alle Angestellten] und die menu:[Zur Zeit angestellt]) zeigen einerseits alle jemals im Unternehmen beschäftigten (also auch die bereits ausgeschiedenen) Mitarbeiter an bzw. jene Mitarbeiter, die derzeit beschäftigt sind, also einen laufenden Arbeitsvertrag haben. Welche Angaben notwendig sind, um diese Ansichten korrekt darzustellen, besprechen wir weiter unten.
 
 ////
 KUK: Abteilungen sollten ebenfalls hier angelegt werden können; sie sind ein Teil von HumanResources, nicht von Sales, zumal sie dort mit nichts verknüpft sind.
 ////
 
+
 //////////
 Dr. Markus Wirtz, 2015-04-16 09:25
-Habe den folgenden Hinweis ergänzt. Es bleibt mir vollkommen unverständlich, warum wirklich interessante Informationen – und dazu gehören v.a. auch Unzulänglichkeiten oder Inkonsistenzen der Software – in _dem_ Handbuch permanent unter den Teppich gekehrt werden!
+Habe den folgenden Hinweis ergänzt. Es bleibt mir vollkommen unverständlich, warum wirklich interessante Informationen – und dazu gehören v.a. auch Unzulänglichkeiten oder Inkonsistenzen der Software – in _dem_ Handbuch permanent unter den Teppich gekehrt werden! 
 
 KUK 2015-05-15: siehe dazu meine E-Mail von heute!
+
 
 [NOTE]
 ========
@@ -89,158 +71,19 @@ Aus historischen Gründen verwaltet {branch} die _Abteilungen_ des Unternehmens 
 ========
 /////////////
 
-[[sec.humanresources.stammdaten]]
-=== Stammdaten ===
-
-In den Stammdaten werden Basisdaten wie menu:[Lohnarten], menu:[Abwesenheitsarten] und menu:[Arbeitszeitschemata] verwaltet, die in der Anwendung menu:[HumanResources] benötigt werden.
-Im jeweiligen Anwendungsbereich verlinken wir auf die zugehörigen Stammdaten, wenn diese relevant sind.
-
-[[sec.humanresources.stammdaten.lohnarten]]
-==== Lohnarten ====
-
-Lohnarten werden in der Lohn- und Gehaltsabrechnung zur Steuerung abzurechnender Vorgänge verwendet. Dabei sind abrechnungsrelevante Eigenschaften für Lohn-und Gehaltszahlungen pro Lohnart definiert (Steuer-, Sozialversicherungs- und Auswertungsmerkmale).
-Wir empfehlen die Lohnarten in {branch} in menu:[ID] und menu:[Abkürzungen] parallel zum bestehenden Lohnbuchhaltungssystem zu führen, speziell wenn Daten an die Lohnbuchhaltung (über eine eigene Schnittstelle) übergeben werden. Beim Datenimport aus bestehenden Systemen unterstützen wir Sie gern. Grundsätzlich sind Sie jedoch frei bei der Anlage und Benennung der Lohnarten in {branch}.
-
-Neben der Bezeichnung in menu:[Name] steuert die Angabe in menu:[System], ob es sich dabei um eine systemnotwendige Lohnart handelt (notwendig für die automatische Berechnung der abrechnungsrelevanten Mitarbeiterdaten). Der menu:[Faktor] steuert mit welchem Prozenzsatz die zu berechnenden Daten bewertet werden. menu:[Zusatzlohn] enthält die Information, ob es sich um einen zusätzlichen Lohn- bzw. Gehaltsanteil handelt.
-
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/Stammdaten/Lohnarten>
-        demodata: Stammdaten, Lohnarten
-        image: liste
-        comment:
-        status: <fail>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Lohnarten
-image::HumanResources/2_humanresources_stammdaten_lohnarten.png[id="fig_stammdaten_lohnarten",width="100%"]
-
-
-[[sec.humanresources.stammdaten.abwesenheitsarten]]
-==== Abwesenheitsarten ====
-
-Für Ihre Abwesenheitsverwaltung benötigen Sie unterschiedliche Abwesenheitsarten, wie z.B. Urlaub und Krankheit. Weisen Sie die menu:[Lohnart] zu und steuern Sie damit die Abrechnung in Abhängigkeit der Abwesenheitsart. Somit kann z.B. zwischen bezahlten und unbezahltem Urlaub unterschieden werden.
-
-Mit Hilfe der menu:[Abkürzung] steuern Sie die Eingaben in der Schnellerfassungmatrix zu An- und Abwesenheitszeiten (siehe <<sec.humanresources.freetimeplanning>>) und können letztendlich für einen schnellen Überblick in der Matrix die Abwesenheitsgründe bereits am Kürzel erkennen.
-
-Weiterhin benötigen Sie die Angabe in menu:[System] zur Steuerung, ob es sich um eine systemnotwendige Abwesenheitsart handelt (notwendig für die automatische Berechnung der An-/Abwesenheitszeiten der Mitarbeiter).
-
-Die Einstellung menu:[Buchung erlauben] steuert, ob diese Abwesenheitsart bei der Erfassung (Buchung) von Abwesenheitszeiten (über Terminal oder Anwendung) durch einen Mitarbeiter erlaubt ist.
-
-Mit menu:[Planung erlauben] legen Sie fest, ob diese Abwesenheitsart in der Matrix menu:[Free Time Planning] zur Erfassung freigegeben ist.
-
-Über menu:[Abwesenheits-Zeiterfassung aktivieren] nehmen Sie Einfluss auf die Erfassung von An-und Abwesenheitszeiten und regeln, ob nach Eingabe einer Startzeit, die Eingabe einer Endzeit aktiv erforderlich ist. So kann durch die Aktivierung von menu:[Abwesenheits-Zeiterfassung aktivieren] nach beispielsweise einem Auscheck zur Pause ein Wiedereincheck nach Beendigung erforderlich sein.
-Wählen Sie ein menu:[Zeitkonto] aus (über das Pulldown Menü), wenn Sie alle erfassten An-/Abwesenheitszeiten mit dieser Abwesenheitsart auf ein spezielles Arbeitszeitkonto wünschen. Die Anlage von Zeitkonten finden Sie im <<chap.zeiterfassung>> und dort speziell im <<sec.zeiterfassung.zeitkonten>>.
-
-[NOTE]
-============
-Um An-und Abwesenheitszeiten im HumanRessources zu erfassen und zu buchen wird ein Standard Arbeitszeitkonto in der Konfiguration zur HumanRessource Anwendung hinterlegt. Sollte dieses in der Konfiguration nicht zugeordnet sein, generiert das System ein Standard Arbeitszeitkonto und nimmt die entsprechenden Verweise automatisch vor.
-============
-//////
-Peg note:
-eigentlich sollte die config Angabe des Standard Arbeitszeitkonto per Frontend im Adminbereich erfolgen können
-dies ist aktuell noch nicht der Fall und nur per Code konfigurierbar
-//////
-
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/Stammdaten/Abwesenheitsarten>
-        demodata: Stammdaten, Abwesenheitsarten
-        image: liste
-        comment:
-        status: <fail>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Abwesenheitsarten
-image::HumanResources/3_humanresources_stammdaten_abwesenheitsarten.png[id="fig_stammdaten_abwesenheitsarten",width="100%"]
-
-[[sec.humanresources.stammdaten.arbeitszeitschemata]]
-==== Arbeitszeitschemata ====
-
-Mit Hilfe von menu:[Arbeitszeitschemata] werden unterschiedliche Arbeitszeitmodelle definiert. Je nach Branche und Unternehmen entspricht der Inhalt und Aufbau den am häufigsten vorkommenden und vertraglich vereinbarten Arbeitszeitregelungen.
-
-Diese Vorlagen werden in 3 Typen unterschieden:
-
-- menu:[Vorlage]: Bei Zuordnung dieses Arbeitszeitschema zu einem Mitarbeitervertrag wird das Schema kopiert und bei Speicherung wird für diesen Einzelvertrag ein eigenes Schema vom menu:[Typ] menu:[Individuell] gespeichert.
-- menu:[Gemeinsam]: Dieses Arbeitszeitschema kann bei diversen Arbeitsverträgen genutzt werden. Änderungen am Schema wirken sich entsprechend bei allen Mitarbeiterverträgen mit diesem Schema aus.
-- menu:[Individuell]: Bei diesem Typ handelt es sich um ein automatisch vom System angelegtes Schema (siehe menu:[Typ] menu:[Vorlage]).
-
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/Stammdaten/Arbeitszeitschemata>
-        demodata: Stammdaten, Arbeitszeitschemata Liste
-        image: liste
-        comment:
-        status: <fail>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Arbeitszeitschemata
-image::HumanResources/4_humanresources_stammdaten_arbeitsschemata_liste.png[id="fig_stammdaten_abwesenheitschemata_liste",width="100%"]
-
-
-Klicken Sie im Bearbeitungsmenü links auf menu:[Arbeitszeitschema hinzufügen] und erhalten Sie den Bearbeiten Dialog zur Erfassung eines Arbeitszeitschema.
-
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/Stammdaten/Arbeitszeitschemata>
-        demodata: Stammdaten, Arbeitszeitschemata Dialog
-        image: liste
-        comment:
-        status: <fail>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Arbeitszeitschemata hinzufügen
-image::HumanResources/5_humanresources_stammdaten_arbeitsschemata_dialog.png[id="fig_stammdaten_abwesenheitschemata_dialog",width="100%"]
-
-
-Wählen Sie den gewünschten menu:[Typ] (menu:[Vorlage] oder menu:[Gemeinsam]) wie zuvor beschrieben und vergeben einen passenden menu:[Titel].
-In den Felden der einzelnen Wochentage (menu:[Mo.] bis menu:[So.]) legen Sie jeweils die Anzahl Stunden/Minuten für dieses Arbeitsprofil fest. Dabei wird die Anzahl menu:[Arbeitsstunden pro Woche] automatisch kalkuliert.
-Im Block menu:[Arbeitszeit Regeln] wird das Regelwerk hinterlegt, wenn spezielle Anforderungen an die Berechnung von Arbeitszeiträumen und/oder festen Pausezeiten erfolgen soll. Klicken Sie dazu auf das Pulldown menu:[Typ] und wählen Sie zwischen menu:[Break Time] und menu:[Arbeitszeitlimitierung] aus. Es öffnet sich jeweils ein weiteres Fenster.
-Legen Sie bei menu:[Typ] menu:[Break Time] die menu:[Arbeitszeit] in Stunden/Minuten fest, nach welcher automatisch eine Pause abgezogen werden soll. Die Dauer der Pause geben Sie in menu:[Pausenzeit] ein und bestätigen mit OK.
-
-Legen Sie bei menu:[Typ] menu:[Arbeitszeitlimitierung] den täglich anzurechnenden Arbeitszeitrahmen in Form von menu:[Startzeit] und menu:[End time] fest und bestätigen mit OK. Nur Zeiten innerhalb dieses Zeitbereiches werden dann als Arbeitszeit angerechnet und ausgewertet.
-
-Die Übertragung der Regel erfolgt jeweils unmittelbar im Feld menu:[Konfiguration]. Nach Fertigstellung aller Angaben speichern Sie das Schema durch Bestätigung auf Button menu:[OK].
-
-/////
-Peg note: Historie ist lt. FE vorgesehen, aber gespeichert wird bei meinen Tests nichts
-[NOTE]
-============
-Änderungen am Regelwerk zu bereits festgelegten Konfigurationen werden in der Historie der menu:[Arbeitszeit Regeln] automatisch und unveränderbar in {branch} festgehalten.
-============
-/////
 
 [[sec.humanresources.mitarbeiter]]
-=== Mitarbeiter ===
+=== Mitarbeiter hinzufügen ===
 
 {{{/HumanResources/MainScreen/Employee}}}
-Wenn Sie links unter menu:[MODULE] auf menu:[Mitarbeiter] klicken, erhalten Sie rechts in der Tabelle zeilenweise die angelegten Mitarbeiter. Ein Klick auf das Tabellenkopf-Symbol ganz rechts außen zeigt Ihnen, dass die Tabelle aus Platzgründen nur etwa die Hälfte aller möglichen Angaben anzeigt.
+Wenn Sie links unter menu:[MODULE] den Punkt menu:[Mitarbeiter] anklicken, erhalten Sie rechts in der Tabelle zeilenweise die angelegten Mitarbeiter. Ein Klick auf das Tabellenkopf-Symbol ganz rechts außen zeigt Ihnen, dass die Tabelle aus Platzgründen nur etwa die Hälfte aller möglichen Angaben anzeigt. Schauen wir uns diese in ihrer Gesamtheit daher jetzt über die Bearbeitungsmaske näher an.
 
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/MainScreen/Employee>
-        demodata: Benuterkonto, Tags
-        image: liste
-        comment:
-        status: <fail>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Mitarbeiter Liste
-image::HumanResources/1_humanresources_module.png[id="fig_module",width="100%"]
-
-
-Schauen wir uns diese in ihrer Gesamtheit daher jetzt über die Bearbeitungsmaske näher an.
 
 [[sec.humanresources.mitarbeiter.hinzufügen]]
 ==== Mitarbeiter hinzufügen ====
 
 {{{/HumanResources/EditDialog/Employee}}}
-Klicken Sie im Bearbeitungsmenü links außen den Button menu:[Mitarbeiter hinzufügen] an.
+Klicken Sie im Bearbeitungsmenü links außen den Punkt menu:[Mitarbeiter hinzufügen] an.
 
 
 //////////////////
@@ -248,15 +91,15 @@ Klicken Sie im Bearbeitungsmenü links außen den Button menu:[Mitarbeiter hinzu
         path: </HumanResources/EditDialog/Employee>
         demodata: Benuterkonto, Tags
         image: dialog
-        comment:
+        comment: <neue funktion -> Bankverbindung>
         status: <fail>
         domain: <Business Edition: Metaways>
 //////////////////
 .Anlegen eines neuen Mitarbeiters
-image::HumanResources/6_humanresources_mitarbeiter_dialog.png[id="fig_humanmmitarbeiterdialog",width="100%"]
+image::HumanResources/2_humanresources_mitarbeiter_hinzu.png[id="fig_humanmhuman_personalkontenitarbeiterhinzu",width="100%"]
 
 
-Zu beachten sind hier die beiden Reiter menu:[Kostenstellen] und menu:[Verträge] – dazu später mehr. Die Personalnummer (menu:[Pers.-Nr.]) und das menu:[Benutzerkonto] sind Pflichtfelder. Vergeben Sie jetzt eine Personalnummer entsprechend der in Ihrem Unternehmen gültigen Vorschriften und klicken Sie danach das Pulldown im Feld menu:[Benutzerkonto] an. Es werden Ihnen die in {branch} angelegten Benutzer angeboten. Wählen Sie testweise einen Beliebigen aus. Beachten Sie jetzt rechts neben diesem Feld den kleinen Button mit dem Zauberstab. Wenn Sie ihn anklicken, werden Name, Vorname und weitere relevante Daten des Benutzers im Mitarbeiterdatensatz übernommen.
+Zu beachten sind hier die beiden Reiter menu:[Kostenstellen] und menu:[Verträge] – dazu später mehr. Die Personalnummer (menu:[Pers.-Nr.]) und das menu:[Benutzerkonto] sind Pflichtfelder. Vergeben Sie jetzt eine Personalnummer entsprechend der in Ihrem Unternehmen gültigen Vorschriften und klicken Sie danach das Pulldown im Feld menu:[Benutzerkonto] an, darin werden Ihnen die in {branch} angelegten Benutzer angeboten. Wählen Sie testweise einen beliebigen. Beachten Sie jetzt rechts neben diesem Feld den kleinen Button mit dem Zauberstab. Wenn Sie ihn anklicken, werden Name, Vorname und weitere relevanten Daten des Benutzers im Mitarbeiterdatensatz übernommen.
 
 
 //////////////////
@@ -269,23 +112,16 @@ Zu beachten sind hier die beiden Reiter menu:[Kostenstellen] und menu:[Verträge
         domain: <Business Edition: Metaways>
 //////////////////
 .Mit dem Zauberstab Daten übernehmen
-image::HumanResources/7_humanresources_mitarbeiter_kontaktdaten_zauberstab.png[id="fig_humanzauberstab",width="100%"]
-//////
-Peg: passt das noch?
-//////
+image::HumanResources/3_humanresources_mitarbeiter_kontaktdaten_zauberstab.png[id="fig_humanzauberstab",width="100%"]
 
 
-Ergänzen Sie nun über das Pulldown das Feld menu:[Anrede] sowie gegebenenfalls im nächsten Feld einen menu:[Titel]. Im Block menu:[Persönliche Informationen] können Sie unter Berücksichtigung des Datenschutzes nützliche Informationen hinterlegen.
+Ergänzen Sie jetzt über das Pulldown das Feld menu:[Anrede] sowie gegebenenfalls im nächsten Feld einen menu:[Titel]. Im Block menu:[Persönliche Informationen] können Sie unter Berücksichtigung des Datenschutzes nützliche Informationen hinterlegen.
 
 Im Block menu:[Interne Informationen] können Sie als menu:[Vorgesetzten] nur Nutzer aus dem Kreis der bereits in dieser Anwendung angelegten Mitarbeiter auswählen. Die menu:[Abteilung] wählen Sie ebenfalls per Pulldown aus (zu Abteilungen vgl. <<sec.sales.abteilung>>).
 
-///////
-Peg: wenn Abteilung ins HR umgezogen ist dann <<sec.sales.abteilung>> ändern in <<sec.HumanResources.abteilungen>>
-///////
-
 menu:[Krankenkasse], menu:[Beruf] und menu:[Position] sind freie Textfelder und optional. Ein Pflichtfeld hingegen ist menu:[Angestellt von], wo Sie das Datum des Beschäftigungsbeginns hinterlegen. Sie können es ebenso wie menu:[Angestellt bis] komfortabel über die Kalenderfunktion füllen.
 
-Im Block menu:[Bankverbindung] sind alle Eingaben fakultativ.
+Im Block menu:[Bankverbindung] sind alle Eingaben fakultativ. 
 
 [[sec.humanresources.mitarbeiter.kostenstellen]]
 ==== Kostenstellen ====
@@ -302,33 +138,29 @@ Klicken Sie nun den Reiter menu:[Kostenstellen] an.
         domain: <Business Edition: Metaways>
 //////////////////
 .Kostenstellen
-image::HumanResources/8_humanresources_mitarbeiter_kostenstellen.png[id="fig_humankostenstellen",width="100%"]
+image::HumanResources/4_humanresources_mitarbeiter_kostenstellen.png[id="fig_humankostenstellen",width="100%"]
 
 
-Zur innerbetrieblichen Kosten- und Leistungsverrrechnung kann ein Mitarbeiter einer Kostenstelle zugewiesen werden. Die hier erfassten, gepflegten und gehaltsmäßig relevanten Daten aus {branch} können über eine individuell zu programmierende Schnittstelle an die Buchhaltung übergeben werden und stehen entsprechend dem Controlling zur Verfügung. Somit ist gewährleistet, dass die Mitarbeiterkosten auf die gewünschte Kostenstelle laufen.
+Die Zuweisung eines Mitarbeiters zu einer Kostenstelle bewirkt, dass die Buchhaltungsabteilung (die Daten aus {branch} über eine individuell zu programmierende Schnittstelle erhält) die hier erfassten, gepflegten und gehaltsmäßig relevanten Daten einer Kostenstelle zuweisen und darüber abrechnen kann. Die Kosten eines Mitarbeiters laufen dann immer auf einer Kostenstelle auf. Andere Kostenstellen können aber (in anderen Anwendungen von {branch}) auch für die Erfassung von Ausgaben eines Auftrags/Vertrags/Zeitkontos definiert werden. So kann das Controlling über Daten aus {branch} abgewickelt werden.
 
-Unter dem Reiter menu:[Kostenstellen] finden Sie zwei Eingabefelder: Einmal die menu:[Kostenstelle] selbst als Pulldown und zusätzlich das menu:[Anfangsdatum], ab dem die Mitarbeiterkosten einer bestimmten Kostenstelle zugeordnet werden sollen.
+Kostenstellen sind in der Welt der Buchhalter also nichts weiter als interne Konten, die der getrennten Erfassung der innerbetrieblichen Kosten dienen. Dabei ist die Systematik der Trennung von Branche zu Branche und von Unternehmen zu Unternehmen individuell. Erkundigen Sie sich hier nach einer innerbetrieblichen Nomenklatur!
 
-[NOTE]
-============
-Kostenstellen sind letztendlich unternehmensweite interne Konten die dem interbetrieblichen Finanz- und Kostencontrolling dienen.
-Die Definition und Festlegung der Kostenstellenstruktur unterliegt keiner Vorgabe und ist von Branche zu Branche bzw. von Unternehmen zu Unternehmen individuell. Erkundigen Sie sich bitte nach der für Ihr Unternehmen gültigen innerbetrieblichen Nomenklatur.
-============
+Unter dem Reiter menu:[Kostenstellen] finden Sie zwei Eingabefelder: Einmal die menu:[Kostenstelle] selbst als Pulldown und dahinter das menu:[Anfangsdatum], zu dem ein Mitarbeiter über die entsprechende Kostenstelle abzurechnen beginnt bzw. ab dem er eine Kostenstelle nutzen darf.
 
 (((Arbeitsverträge)))
 [[sec.humanresources.mitarbeiter.vertraege]]
 ==== Verträge ====
 
 ////
-.Verträge
-image::HumanResources/9_humanresources_mitarbeiter_vertraege.png[id="fig_humanvertraege",width="80%"]
 
-Peg note: neues Bild Mitarbeiter_Verträge.png ist unten passend zum bereits bestehenden Text vorgesehen
+.Verträge
+image::HumanResources/5_humanresources_mitarbeiter_vertraege.png[id="fig_humanvertraege",width="80%"]
+
 ////
 
 {{{/HumanResources/EditDialog/Employee/Contract}}}
 {{{/HumanResources/EditDialog/Contract}}}
-Arbeitsverträge legen Sie unter dem Reiter menu:[Verträge] an. Klicken Sie im unteren Bereich des Tabellenfensters auf menu:[Vertrag hinzufügen].
+Arbeitsverträge legen Sie unter dem Reiter menu:[Verträge] an. Klicken Sie in dem blauen Streifen unterhalb des Tabellenfensters nun menu:[Vertrag hinzufügen].
 
 //////////////////
         SCREENSHOT
@@ -340,38 +172,17 @@ Arbeitsverträge legen Sie unter dem Reiter menu:[Verträge] an. Klicken Sie im 
         domain: <Business Edition: Metaways>
 //////////////////
 .Mitarbeiter einen Vertrag zuweisen
-image::HumanResources/10_humanresources_mitarbeiter_vertragsdialog.png[id="fig_humanvertragdialog",width="100%"]
+image::HumanResources/6_humanresources_mitarbeiter_vertrag.png[id="fig_humanvertraegeneu",width="100%"]
 
 
-menu:[Anfang] und menu:[Ende] sind Datumsfelder mit menu:[Anfang] als Pflichtfeld. Ebenfalls eine Pflichteingabe ist das Pulldown menu:[Feiertagskalender]. Sollte es in Ihrem Unternehmen einen speziellen Feiertagskalender geben, weisen Sie diesen hier dem Mitarbeiter zu.
-Wahrscheinlich handelt es sich bei einem vorhandenen Feiertagskalender um einen gemeinsamen Kalender in {branch}. Ein vom System automatisch angelegter Kalender enthält keine Feiertage. Die Auswahl erfolgt über menu:[Andere Kalender wählen]. Beachten Sie, dass im darauf folgenden Menü menu:[Bitte Kalender auswählen] gemeinsame oder Kalender anderer Benutzer nur dann zur Auswahl stehen, wenn Sie über entsprechende Leserechte verfügen (vgl. dazu <<sec.admin.container>>). In <<sec.admin.anwendungen.humanresources>> erfahren Sie auch, wie Sie den Feiertagskalender zu einer Standardeinstellung für alle Mitarbeiter machen.
 
-menu:[Urlaubstage eines Kalenderjahrs] ist ein numerisches Eingabefeld, in dem Sie den vertraglich vereinbarten Jahresurlaub in Tagen.
+menu:[Anfang] und menu:[Ende] sind Datumsfelder mit menu:[Anfang] als Pflichtfeld. Ebenfalls eine Pflichteingabe ist das Pulldown menu:[Feiertagskalender]. Hier sollten Sie, falls es in Ihrem Unternehmen einen speziellen Feiertagskalender gibt – dieser ist dann wahrscheinlich ein gemeinsamer Kalender – diesen dem Mitarbeiter zuweisen, denn ein vom System automatisch angelegter Kalender enthält keine Feiertage. Die Auswahl erfolgt über menu:[Andere Kalender wählen]. Beachten Sie, dass im darauf folgenden Menü menu:[Bitte Kalender auswählen] gemeinsame oder Kalender anderer Benutzer nur dann zur Auswahl stehen, wenn Sie über entsprechende Leserechte verfügen (vgl. dazu <<sec.admin.container>>). In <<sec.admin.anwendungen.humanresources>> erfahren Sie auch, wie Sie den Feiertagskalender zu einer Standardeinstellung für alle Mitarbeiter machen.
 
-///////
-Peg note:
-Feld "Urlaubstage eines Kalenderjahrs" müsste geändert werden in
-"Urlaubstage eines Kalenderjahres"
-///////
-
-Die Zeile menu:[Arbeitszeit] enthält unter dem Pulldown menu:[Arbeitszeit Schema] drei in Deutschland übliche Arbeitszeitmodelle. Wenn Sie eine Vorlage ausgewählt haben, sehen Sie in dem Feld rechts daneben (menu:[Arbeitsstunden pro Woche]) die entsprechende Wochenarbeitszeit. Die darunter liegende Zeile mit der Verteilung der Wochenarbeitsstunden auf die einzelnen Arbeitstage wird entsprechend Ihrer ausgewählten Vorlage automatisch eingestellt. Beim 40-Stunden-Modell bedeutet dies eine tägliche Arbeitszeit von 8 Stunden, von Montag bis Freitag. Natürlich können Sie alle diese Standardeinstellungen individuell anpassen. Weitere Informationen zur Anlage und den Inhalten von Arbeitszeitschemata entnehmen Sie <<sec.humanresources.stammdaten.arbeitszeitschemata>>.
+Die Zeile menu:[Arbeitszeit] enthält unter dem Pulldown menu:[Arbeitszeit Schema] drei in Deutschland übliche Arbeitszeitmodelle. Wenn Sie eine Vorlage ausgewählt haben, sehen Sie in dem Feld rechts daneben (menu:[Arbeitsstunden pro Woche]) die entsprechende Wochenarbeitszeit. menu:[Urlaubstage eines Kalenderjahrs] ist ein numerisches Eingabefeld, in dem Sie eine beliebige Anzahl an Urlaubstagen eingeben. Die darunter liegende Zeile mit der Verteilung der Wochenarbeitsstunden auf die einzelnen Arbeitstage wird entsprechend Ihrer ausgewählten Vorlage bereits automatisch eingestellt. Beim 40-Stunden-Modell bedeutet das eine tägliche Arbeitszeit von 8 Stunden von Montag bis Freitag. Natürlich können Sie alle diese Standardeinstellungen individuell anpassen.
 
 Haben Sie einen Arbeitsvertrag angelegt, klicken Sie in der Übersichtstabelle rechts außen auf das Tabellenkopf-Symbol und stellen fest, dass die vier standardmäßig nicht eingeblendeten Tabellenfelder nur Informationen zum Bearbeitungsverlauf enthalten. Die wesentlichen Punkte des Arbeitsvertrages sind also in der Standard-Tabellenansicht enthalten und Sie können diese Einstellung unverändert lassen.
 
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/EditDialog/Contract>
-        demodata: Feiertagskalender, Arbeitszeitmodell-Vorlagen
-        image: dialog
-        comment: <>
-        status: <check>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Liste Mitarbeiter Verträge
-image::HumanResources/11_humanresources_mitarbeiter_vertraege.png[id="fig_humanmitarbeitervertraege",width="100%"]
-
-
-Markieren Sie nun als Tabellenzeile den eben eingegebenen oder einen beliebigen anderen Arbeitsvertrag. Der Button menu:[Vertrag löschen] unterhalb des Tabellenfensters ist jetzt nicht mehr ausgegraut  – damit können Sie den Arbeitsvertrag löschen. Das Abspeichern mindestens eines Arbeitsvertrages für einen Arbeitnehmer führt ebenso dazu, dass die beiden Reiter menu:[Urlaub] und menu:[Krankheit] nicht mehr ausgegraut sind.
+Markieren Sie nun als Tabellenzeile den eben eingegebenen oder einen beliebigen anderen Arbeitsvertrag. Der Button menu:[Vertrag löschen] in dem blauen Streifen unterhalb des Tabellenfensters ist jetzt nicht mehr ausgegraut  – damit können Sie den Arbeitsvertrag löschen. Das Abspeichern mindestens eines Arbeitsvertrages für einen Arbeitnehmer führt auch dazu, dass die beiden Reiter menu:[Urlaub] und menu:[Krankheit] nicht mehr ausgegraut sind.
 
 (((Urlaubstage)))
 [[sec.humanresources.mitarbeiter.urlaub.krankheit]]
@@ -379,24 +190,31 @@ Markieren Sie nun als Tabellenzeile den eben eingegebenen oder einen beliebigen 
 
 {{{/HumanResources/EditDialog/Employee/FreeTime}}}
 Unter dem Reiter menu:[Urlaub] finden Sie in der Tabelle die Urlaubstage des Arbeitnehmers.
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee/FreeTime>
+        demodata: Vertrag, Beispiel Urlaub/Krankheit
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Urlaub
+image::HumanResources/7_humanresources_mitarbeiter_urlaub.png[id="fig_humanurlaub",width="100%"]
 
-Die erste Tabellenspalte entspricht dem menu:[Benutzerkonto], d.h. Sie sehen das Kalenderjahr, dem die Urlaubstage zugeordnet sind. Die anderen Tabellenspalten schauen wir uns jetzt in der Bearbeitungsmaske an. Klicken Sie dazu unten den Button menu:[Urlaubstage hinzufügen].
-
+Die erste Tabellenspalte entspricht dem menu:[Benutzerkonto], d.h. Sie sehen das Kalenderjahr, dem die Urlaubstage zugeordnet sind. Die anderen Tabellenspalten schauen wir uns jetzt in der Bearbeitungsmaske an. Klicken Sie dazu unten in dem blauen Streifen den Button menu:[Urlaubstage hinzufügen].
 
 //////////////////
         SCREENSHOT
         path: </HumanResources/EditDialog/Employee/FreeTime>
-        demodata: Vertrag, Beispiel Urlaub
+        demodata: Vertrag, Beispiel Urlaub/Krankheit
         image: dialog
         comment: <>
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
 .Urlaubstage hinzufügen
-image::HumanResources/12_humanresources_mitarbeiter_urlaub.png[id="fig_humanmitarbeiterurlaub",width="100%"]
-//////
-ist ein Kombibild, 2. Bild auskommentiert
-//////
+image::HumanResources/8_humanresources_mitarbeiter_urlaubstage.png[id="fig_humanurlaubhinzu",width="100%"]
 
 
 Über das Pulldown menu:[Status] legen Sie zunächst fest, ob es sich um einen beantragten, in Bearbeitung befindlichen, bereits angenommenen oder abgewiesenen Urlaubsantrag handelt. Standardmäßig steht der Status auf menu:[Angenommen]. Beim Abspeichern würden die Urlaubstage dann vom Urlaubskonto des Arbeitnehmers abgebucht. Belassen Sie die Einstellung jetzt auf menu:[Angenommen] und schauen Sie sich das nächste Pulldown, menu:[Personalkonto], an. Per Standard steht dieses Feld auf dem laufenden Jahr; klicken Sie das Pulldown, sehen Sie, dass Ihnen das laufende und mindestens noch das folgende Jahr angeboten werden. Diese beiden Personalkonten, auf die wir weiter unten noch zu sprechen kommen, hat das System beim Abspeichern eines Mitarbeiters automatisch angelegt. Belassen Sie jetzt die Standardeinstellung, d.h. das laufende Jahr. Im nächsten Feld, menu:[Übrig], werden Ihnen zur Kontrolle die restlichen Urlaubstage des Arbeitnehmers angezeigt. Dieses Feld ist eine automatisch erzeugte Differenz aus dem (ggf. anteiligen) Urlaubsanspruch und den genehmigten/angenommenen Urlaubstagen und kann nicht überschrieben werden.
@@ -405,29 +223,17 @@ ist ein Kombibild, 2. Bild auskommentiert
 KUK: Wiewohl das Feld als Eingabefeld dargestellt ist und man mit der Maus hineinklicken kann -> Bug!
 ////
 
+
 {{{/HumanResources/EditDialog/FreeTime}}}
-Darunter finden Sie ein Kalenderfeld, über das Sie komfortabel die einzelnen Tage des jetzt zu bearbeitenden Urlaubs eingeben. Klicken Sie auf die gewünschten Tage, summiert das System diese automatisch – und zieht sie auch wieder ab, wenn Sie noch einmal darauf klicken. Haben Sie den Urlaub richtig eingegeben, speichern Sie ihn mit menu:[Ok] ab. Nach dem Schließen dieser Bearbeitungsmaske sehen Sie, dass der eben eingegebene Urlaub in einer neuen Zeile der Tabelle registriert wurde. Wenn Sie jetzt eine Zeile markieren, lösen Sie mit den beiden Buttons menu:[Urlaubstage bearbeiten] und menu:[Urlaubstage löschen] unterhalb des Tabellenfensters die entsprechende Funktion aus. Das Ganze geht natürlich wie immer auch per rechtem Mausklick und Kontextmenü.
+Darunter finden Sie ein Kalenderfeld, über das Sie komfortabel die einzelnen Tage des jetzt zu bearbeitenden Urlaubs eingeben. Klicken Sie auf die gewünschten Tage, summiert das System diese automatisch – und zieht sie auch wieder ab, wenn Sie noch einmal darauf klicken. Haben Sie den Urlaub richtig eingegeben, speichern Sie ihn mit menu:[Ok] ab. Nach dem Schließen dieser Bearbeitungsmaske sehen Sie, dass der eben eingegebene Urlaub in einer neuen Zeile der Tabelle registriert wurde. Wenn Sie jetzt eine Zeile markieren, lösen Sie mit den beiden Buttons menu:[Urlaubstage bearbeiten] und menu:[Urlaubstage löschen] in dem blauen Streifen unter dem Tabellenfenster die entsprechende Funktion aus. Das Ganze geht natürlich wie immer auch per rechtem Mausklick und Kontextmenü.
 
 Der Reiter menu:[Krankheit] funktioniert analog, nur dass es hier natürlich das Differenzfeld für ``übrige'' Tage nicht gibt. Das Statusfeld enthält im Pulldown die (selbsterklärenden) Werte menu:[Entschuldigt] und menu:[Unentschuldigt].
-
+////
 (((Krankheitstage)))
 
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/EditDialog/Employee/FreeTime>
-        demodata: Vertrag, Beispiel Krankheit
-        image: dialog
-        comment: <>
-        status: <check>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Krankheit und Krankheitsstage hinzufügen
-image::HumanResources/13_humanresources_mitarbeiter_krankheit.png[id="fig_humanmitarbeiterkrankheit",width="80%"]
-///////
-ist aber ein Kombibild mit Liste und Dialog
-//////
-
-
+.Krankheitstage
+image::HumanResources/9_humanresources_module.png[id="fig_humanurlaub2",width="80%"]
+////
 Hier gibt es noch eine Sonderfunktion: Haben Sie unentschuldigte Krankheitstage gebucht, können Sie diese, nach dem Schließen der Eingabemaske, auf der Tabellenzeile über das Kontextmenü (Rechtsklick auf die entsprechende Tabellenzeile) menu:[Als Urlaub buchen].
 
 Ein Klick auf das Tabellenkopf-Symbol rechts außen zeigt Ihnen bei beiden Tabellen, dass die nicht eingeblendeten Felder nur Bearbeitungsvermerke enthalten. Sie können also im Normalfall die Standardeinstellungen unverändert lassen.
@@ -445,13 +251,15 @@ menu:[Drucke Seite]:: öffnet Ihren systemeigenen Druckerdialog und erzeugt stan
 menu:[Mitarbeiter exportieren]:: bietet zwei Optionen:
 menu:[Als ODS exportieren]  für eine Tabelle im Dateiformat von Open-/LibreOffice  (Zeilen- und Spaltenanordnung entspricht derjenigen der Bildschirmtabelle) und menu:[Als XLS exportieren] für eine XLS-Datei, also das Format für die Tabellenkalkulation MS Excel in der Version 2000/XP, wobei neuere Versionen abwärtskompatibel sind.
 
+
 [[sec.humanresources.personalkonten]]
 === Personalkonten ===
 
 {{{/HumanResources/MainScreen/Account}}}
-Wie bereits erwähnt, erzeugt das System selbständig Personalkonten, sobald Sie einen Mitarbeiter anlegen. Klicken Sie links unter menu:[MODULES] auf menu:[Personalkonten]. Wenn Sie zuvor einen Mitarbeiter angelegt haben, sehen Sie jetzt mindestens dessen zwei Personalkonten für das laufende und das folgende Jahr. Wenn alle Mitarbeiter schon vor längerer Zeit angelegt wurden, kann es sein, dass ein neues Personalkonto angelegt werden muss, weil die Zeit fortgeschritten ist. Klicken Sie dazu im Bearbeitungsmenü den Button menu:[Personalkonten anlegen]. Das System fragt Sie nach dem Jahr, für das es ein Konto anlegen soll, der Rest erfolgt automatisch.
+Wie bereits erwähnt, erzeugt das System selbständig Personalkonten, sobald Sie einen Mitarbeiter anlegen. Klicken Sie links unter menu:[MODULES] auf menu:[Personalkonten]. Wenn Sie vorhin einen Mitarbeiter angelegt haben, sehen Sie jetzt mindestens dessen zwei Personalkonten für das laufende und das folgende Jahr. Wenn alle Mitarbeiter schon vor längerer Zeit angelegt wurden, kann es sein, dass ein neues Personalkonto angelegt werden muss, weil die Zeit fortgeschritten ist. Klicken Sie dazu im Bearbeitungsmenü den Button menu:[Personalkonten anlegen]. Das System fragt Sie nach dem Jahr, für das es ein Konto anlegen soll, der Rest erfolgt automatisch.
 
-Gehen Sie nun mit der Maus auf die Zeile mit dem laufenden Jahr und klicken Sie die rechte Maustaste. Neben den bekannten Funktionen, die Sie auch über die Maske erreichen, ist im Kontextmenü eine Funktion versteckt, die Sie nur hier sehen: menu:[Urlaub vom letzten Jahr als Sonderurlaub buchen]. Diese Funktion dient der Übernahme von im letzten Jahr nicht genommenem Urlaub auf das aktuelle Jahr, wo er als Sonderurlaub ausgewiesen wird. Vor Anwendung dieser Funktion beachten Sie bitte arbeitsvertragliche Regelungen zur Übernahme und zum Verfall von Urlaubstagen.
+
+Gehen Sie nun mit der Maus auf die Zeile mit dem laufenden Jahr und klicken Sie die rechte Maustaste. Neben den bekannten Funktionen, die Sie auch über die Maske erreichen, ist im Kontextmenü eine Funktion versteckt, die Sie nur hier sehen: menu:[Urlaub vom letzten Jahr als Sonderurlaub buchen]. Diese Funktion dient der Übernahme von im letzten Jahr nicht genommenem Urlaub auf das aktuelle Jahr, wo er als Sonderurlaub ausgewiesen wird. Vor Anwendung dieser Funktion beachten Sie bitte arbeitsvertragliche Regelungen zur Übernahme und zum Verfall von Urlaubstagen. 
 
 {{{/HumanResources/EditDialog/Account}}}
 Klicken Sie nun menu:[Personalkonto bearbeiten] im Bearbeitungsmenü oder im Kontextmenü der rechten Maustaste.
@@ -459,253 +267,65 @@ Klicken Sie nun menu:[Personalkonto bearbeiten] im Bearbeitungsmenü oder im Kon
 //////////////////
         SCREENSHOT
         path: </HumanResources/EditDialog/Account>
-        demodata: Personalkonto Dialog
+        demodata: Vertrag, Mitarbeiter
         image: dialog
         comment: <>
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
 .Personalkonto bearbeiten
-image::HumanResources/14_humanresources_personalkonten_dialog.png[id="fig_humanpersonalkonten",width="100%"]
+image::HumanResources/10_humanresources_personalkonto.png[id="fig_humanpersonalkonten",width="100%"]
 
+
+Die Zahlen, die die folgende Maske bereits enthält, stammen aus für den Arbeitnehmer im betreffenden Jahr angelegten Arbeitsverträgen. Sollten Sie jetzt nur Nullen sehen, wurde für den Arbeitnehmer kein Arbeitsvertrag im laufenden Jahr angelegt. Gehen Sie in diesem Falle bitte zurück auf menu:[Mitarbeiter] und legen Sie, wie weiter oben besprochen, zumindest probehalber einen Arbeitsvertrag an. Wir wollen zum besseren Verständnis sehen, wie sich die dort eingegebenen Zahlen auf der Personalkonto-Maske auswirken.
 
 ////
-Die Zahlen, die die folgende Maske bereits enthält, stammen aus für den Arbeitnehmer im betreffenden Jahr angelegten Arbeitsverträgen. Sollten Sie jetzt nur Nullen sehen, wurde für den Arbeitnehmer kein Arbeitsvertrag im laufenden Jahr angelegt. Gehen Sie in diesem Fall bitte zurück auf menu:[Mitarbeiter] und legen Sie, wie weiter oben besprochen, zumindest probehalber einen Arbeitsvertrag an. Wir wollen zum besseren Verständnis sehen, wie sich die dort eingegebenen Zahlen auf der Personalkonto-Maske auswirken.
-
 KUK: Wiewohl alle Zahlenfelder als Eingabefelder dargestellt sind und man mit der Maus hineinklicken kann, sind sie keine Eingabefelder -> Bug!
 ////
 
-In der Maske unter dem Reiter menu:[Zusammenfassung] finden Sie eine ganze Reihe von Zahlen, die Sie nicht überschreiben können; sie entsprechen den oben unter den Arbeitsverträgen sowie den Urlaubs- und Krankheitstagen eingegebenen Werten dieses Arbeitnehmers im betreffendem Jahr. Sollten Sie jetzt nur Nullen sehen, wurde für den Arbeitnehmer kein Arbeitsvertrag im laufenden Jahr angelegt. Gehen Sie in diesem Fall bitte zurück auf menu:[Mitarbeiter] und legen Sie, wie weiter oben besprochen, zumindest probehalber einen Arbeitsvertrag an. Wir wollen zum besseren Verständnis sehen, wie sich die dort eingegebenen Zahlen auf der Personalkonto-Maske auswirken.
-
+Dann zurück zu den Personalkonten: In der Maske unter dem Reiter menu:[Zusammenfassung] finden Sie eine ganze Reihe von Zahlen, die Sie nicht überschreiben können; sie entsprechen den oben unter den Arbeitsverträgen sowie den Urlaubs- und Krankheitstagen eingegebenen Werten. 
 ////
 .Sonderurlaub
-image::HumanResources/15_humanresources_sonderurlaub.png[id="fig_humanpersonalkontosonderurlaub",width="100%"]
+image::HumanResources/11_humanresources_sonderurlaub.png[id="fig_humanpersonalkontosonderurlaub",width="100%"]
 ////
 
 {{{/HumanResources/EditDialog/Account/ExtraFreeTime}}}
 Schauen wir uns zuletzt den Reiter menu:[Sonderurlaub] an.
-Das Fenster mit einer Tabelle zeigt den zugebilligten Sonderurlaub des Arbeitnehmers. Klicken Sie nun im unteren Rand der Bearbeitungsmaske den Button menu:[Sonderurlaub hinzufügen]. Diese Funktion ermöglicht es, einem Personalkonto ein bestimmtes Kontingent Sonderurlaub zuzuordnen, beispielsweise als Anreiz oder im Zuge von Ereignissen, für die vertraglich Sonderurlaub vereinbart ist (Hochzeiten, Geburten etc.).
-
-{{{/HumanResources/EditDialog/ExtraFreeTime}}}
-Es öffnet sich ein weiteres Bearbeitungsfenster, in das Sie im obersten Feld die Anzahl menu:[Tage] frei eingeben können. Den menu:[Typ], menu:[Bezahlt] oder menu:[Unbezahlt], wählen Sie per Pulldown aus. Diese beiden Eingaben sind Pflichtfelder. Ein menu:[Ablaufdatum] hingegen, bis zu welchem Zeitpunkt der Urlaub genommen werden muss, ist fakultativ - ebenso die menu:[Beschreibung]. Der hier eingegebene Sonderurlaub wird im Reiter menu:[Zusammenfassung] zu den möglichen Urlaubstagen addiert.
+Das Fenster mit einer Tabelle zeigt den dem Arbeitnehmer zugebilligten Sonderurlaub. Klicken Sie nun im unteren Rand der Bearbeitungsmaske den Button menu:[Sonderurlaub hinzufügen]. Diese Funktion ermöglicht es, einem Personalkonto ein bestimmtes Kontingent Sonderurlaub zuzuordnen, beispielsweise als Incentive oder im Zuge von Ereignissen, für die vertraglich Sonderurlaub vereinbart ist, wie Hochzeiten, Geburten etc.
 
 (((Sonderurlaub)))
 //////////////////
         SCREENSHOT
         path: </HumanResources/EditDialog/ExtraFreeTime>
-        demodata: Personalkonto, Sonderurlaub
+        demodata: Vertrag, Mitarbeiter, Tags
         image: dialog
         comment: <>
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
 .Sonderurlaub hinzufügen
-image::HumanResources/16_humanresources_personalkonten_sonderurlaub.png[id="fig_humansonderurlaub",width="100%"]
+image::HumanResources/12_humanresources_personalkonto_sonderurlaub.png[id="fig_humansonderurlaubhinzu",width="100%"]
 
 
-[[sec.humanresources.tagesarbeitszeitberichte]]
-=== Tägliche Arbeitszeitberichte ===
+{{{/HumanResources/EditDialog/ExtraFreeTime}}}
+Es öffnet sich ein weiteres Bearbeitungsfenster, in das Sie im obersten Feld die Anzahl menu:[Tage] frei eingeben können. Den menu:[Typ], menu:[Bezahlt] oder menu:[Unbezahlt], wählen Sie per Pulldown aus. Diese beiden Eingaben sind Pflichtfelder. Ein menu:[Ablaufdatum] hingegen, bis zu welchem der Urlaub genommen werden muss, ist fakultativ, ebenso die menu:[Beschreibung]. Der hier eingegebene Sonderurlaub wird im Reiter menu:[Zusammenfassung] zu den möglichen Urlaubstagen addiert.
 
-Im Modul menu:[Tägliche Arbeitszeitberichte] werden jeweils pro Tag und Mitarbeiter alle aktuellen Daten gesammelt und verwaltet.
-{branch} kann dabei so eingerichtet werden, dass diese menu:[Tägliche Arbeitszeitberichte] automatisch generiert und aktualisiert werden (z.B. über Nacht per cronjob).
+/////////////
 
-Alternativ besteht die Möglichkeit über den Button menu:[Berechnen alle Berichte] im Bearbeitungsmenü die Erstellung und Aktualisierung der Daten auszulösen. Bitte beachten Sie dabei, dass die Berechnung in Abhängigkeit der Datenmengen einige Zeit in Anspruch nehmen kann.
-
-Bereits in der Listenansicht erhalten Sie einen guten und schnellen Überblick über die wichtigsten täglichen Arbeitszeitdaten pro Mitarbeiter, wie menu:[Auswertungsstartzeit], menu:[Auswertungsendzeit], menu:[Arbeitszeit (Soll)], menu:[Arbeitszeit (Ist)] und menu:[Gesamt Arbeitszeit].
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/MainScreen/DailyWorkingTimeReports>
-        demodata: Tägliche Arbeitszeitberichte, Liste
-        image: dialog
-        comment: <>
-        status: <check>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Übersicht Tägliche Arbeitszeitberichte
-image::HumanResources/17_humanresources_tagesarbeitszeitberichte_liste.png[id="fig_tages_arbeitszeitbericht",width="100%"]
-
-
-Schauen wir uns nun einen der generierten Datensätze unter menu:[Tägliche Arbeitszeitberichte] im Bearbeitungsdialog genauer an. Wählen Sie dazu per Klick den gewünschten Datensatz rechts in der Listenansicht aus und klicken im Bearbeitungsmenü links außen auf den Button [Täglicher Arbeitszeit Bericht bearbeiten]. Ein Doppelklick auf den gewünschten Datensatz in der Listenansicht öffnet ebenfalls den Bearbeitungsdialog.
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/EditDialog/DailyWorkingTimeReports>
-        demodata: Tägliche Arbeitszeitberichte, Dialog
-        image: dialog
-        comment: <>
-        status: <check>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Täglicher Arbeitszeitbericht bearbeiten
-image::HumanResources/18_humanresources_tagesarbeitszeitberichte_dialog.png[id="fig_tages_arbeitszeitbericht_dialog",width="100%"]
-
-
-Im Bearbeitungsdialog sind alle in {branch} vorhandenen Daten pro Tag und Mitarbeiter in aufsummierter Form gesammelt, die sich in irgend einer Form auf die Arbeitszeit auswirken. Sie haben hier die Möglichkeit die systemisch berechneten Inhalte über weitere Felder zu korrigieren. Damit ist gewährleistet, dass die automatisch kalkulierten Werte und manuelle Korrekturen nachvollziehbar sind. Kalkulierte Felder sind dabei inaktiv dargestellt. Entsprechend sind die zur manuellen Bearbeitung vorgesehenen Felder aktiv und anklickbar.
-
-Schauen wir uns nun die einzelnen Einträge genauer an.
-menu:[Mitarbeiter] enthält, wie der Titel schon verrät, den Namen des Mitarbeiters und menu:[Datum] beinhaltet das Datum des Tages zu dem die Daten berechnet wurden. In menu:[Monatliche Arbeitszeit Berichte] wird der menu:[Monat] aus dem zugehörigen menu:[Monatliche Arbeitszeit Berichte] eingetragen (siehe auch <<sec.humanresources.monatsarbeitszeitberichte>>).
-
-Die menu:[Auswertungsstartzeit] und menu:[Auswertungsendzeit] wird jeweils aus den für diesen Tag gültigen Arbeitszeit Regelungen im Vertrag des Mitarbeiters (siehe auch <<sec.humanresources.mitarbeiter.vertraege>> übernommen und enthält den maximalen Auswertungs- bzw. Arbeitszeitrahmen. Diesen täglichen Rahmen können Sie in menu:[Korrigierte Auswertungs Startzeit] und menu:[Korrigierte Auswertungs Endzeit] für diesen Tag ändern. Weiterhin wird die menu:[Arbeitszeit (Soll)], [Pausenzeit (Netto)] und menu:[Pausenzeit Abzug] aus den Mitarbeiter Vertragsdaten entnommen, wobei Sie im Bedarfsfall die Soll Arbeitszeit für diesen Tag in menu:[Soll Arbeitszeit Korrektur] korrigieren können. Die [Pausenzeit (Netto)] und menu:[Pausenzeit Abzug] sind nur berechnet, wenn tatsächlich Arbeitszeiten (Ist-Zeiten) für diesen Tag erfasst wurden.
-
-menu:[Arbeitszeiten] enthält eine Liste aller gesammelten Daten des Mitarbeiters für diesen Tag, die Grundlage für die berechneten Werte sind. Neben den Abwesenheitszeiten wie Urlaub, Krankheit und Sonderurlaub sowie den gesetzlichen Feiertagen, sind hier die Arbeitszeiten gemäß vertraglicher Vereinbarung nach den einzelnen Lohnarten aufgeschlüsselt. Dies ist wichtig für die Übergabe an die Lohnbuchhaltung.
-
-Die Summe aus allen Arbeitszeiterfassungs-Datensätzen dieses Mitarbeiters für diesen Tag ist in menu:[Arbeitszeit (Ist)] berechnet und festgehalten. Sollte es vertraglich geregelte Pausezeiten geben, sind diese bereits abgezogen. In menu:[Arbeitszeit (Berichtigt) können Sie eine Korrektur vornehmen. Dabei tragen Sie nur die Zeit ein, um welche die menu:[Arbeitszeit (Ist)] bei der Berechnung der menu:[Gesamt Arbeitszeit] angepasst werden soll (z.B. - 00:30 = abzüglich 30 Minuten, 01:45 = zuzüglich 1 Stunden und 45 Minuten).
-
-Die menu:[Gesamt Arbeitszeit] des Mitarbeiters zum jeweiligen Tag wird hier berechnet (nach Speicherung) und ergibt sich aus menu:[Arbeitszeit (Ist)] und menu:[Arbeitszeit (Berichtigt).
-
-In menu:[Anmerkung des Systems] werden u.U. Textinformationen eingetragen, wie z.B. Urlaub, Krankheit.
-Dadurch ist schnell erkennbar, warum menu:[Gesamt Arbeitszeit] z.B. 8 Stunden beträgt, es aber keinen Wert in menu:[Arbeitszeit (Ist)] gibt. In menu:[Anmerkung] können Sie eigene Informationen festhalten.
-
-{branch} kennzeichnet den Datensatz mit einem Häkchen in menu:[Fehler bei der Berechnung], sollte die Ermittlung der Daten nicht vollständig möglich gewesen sein oder es sind bei der Berechnung Unstimmigkeiten erkannt worden (z.B: Arbeitszeitüberschneidungen/doppelte Arbeitszeiterfassung bei  gleicher Zeitangbe). Sie finden dann einen Hinweis in menu:[Anmerkung des Systems].
-
-Speichern Sie Ihre Änderungen mit Klick auf den Button menu:[OK] rechts unten im Bearbeitungsdialog, damit erfolgt die Aktualisierung der menu:[Gesamtarbeitszeit]. Alternativ drücken Sie den Button menu:[Neuberechnung] und erhalten im noch geöffneten Bearbeiten Dialog den aktuellen Wert.
-
-[NOTE]
-============
-Sind keine Istwerte abrufbar (keine Arbeitszeiten erfasst), wird dennoch pro Tag für jeden Mitarbeiter ein menu:[Täglicher Arbeitszeitbericht] generiert. Enthalten sind dann nur die Abwesenheits-, Feiertags- und Soll-Werte.
-============
-
-[[sec.humanresources.monatsarbeitszeitberichte]]
-=== Monatliche Arbeitszeit Berichte ===
-
-Im Modul menu:[Monatliche Arbeitszeit Berichte] werden jeweils pro Monat und Mitarbeiter die Daten aus menu:[Tägliche Arbeitszeitberichte] kummuliert und verwaltet.
-{branch} kann dabei so eingerichtet werden, dass diese menu:[Monatliche Arbeitszeit Berichte] automatisch generiert und aktualisiert werden (z.B. über Nacht per cronjob). Somit steht immer ein aktueller monatlicher Stand pro Mitarbeiter zur Verfügung.
-
-Alternativ besteht die Möglichkeit über den Button menu:[Berechnen alle Berichte] im Bearbeitungsmenü die Erstellung und Aktualisierung der Daten auszulösen. Bitte beachten Sie dabei, dass die Berechnung in Abhängigkeit der Datenmengen einige Zeit in Anspruch nehmen kann.
-
-Bereits in der Listenansicht erhalten Sie einen guten und schnellen Überblick über die wichtigsten monatlichen Arbeitszeitdaten pro Mitarbeiter, wie menu:[Vormonats Saldo Arbeitszeit], menu:[Arbeitszeit (Ist)], menu:[Arbeitszeit (Soll)], menu:[Arbeitszeit (Berichtigt)] und menu:[Gesamt Saldo Arbeitszeit].
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/MainScreen/MonthlyWorkingTimeReports>
-        demodata: Monatliche Arbeitszeitberichte, Liste
-        image: dialog
-        comment: <>
-        status: <check>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Übersicht Monatliche Arbeitszeitberichte
-image::HumanResources/19_humanresources_montasarbeitszeitberichte_liste.png[id="fig_monat_arbeitszeitbericht_liste",width="100%"]
-
-
-Schauen wir uns nun einen der generierten Datensätze unter menu:[Monatliche Arbeitszeit Berichte] im Bearbeitungsdialog genauer an. Wählen Sie dazu per Klick den gewünschten Datensatz rechts in der Listenansicht aus und klicken im Bearbeitungsmenü links außen auf den Button menu:[Monatlicher Arbeitszeit Bericht bearbeiten]. Ein Doppelklick auf den gewünschten Datensatz in der Listenansicht öffnet ebenfalls den Bearbeitungsdialog.
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/EditDialog/MonthlyWorkingTimeReports>
-        demodata: Monatliche Arbeitszeitberichte, Dialog
-        image: dialog
-        comment: <>
-        status: <check>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Monatllicher Arbeitszeitbericht bearbeiten
-image::HumanResources/20_humanresources_montasarbeitszeitberichte_dialog.png[id="fig_monat_arbeitszeitbericht_dialog",width="100%"]
-
-
-Im Bearbeitungsdialog sehen Sie das Ergebnis der Summe aus allen täglichen Informationen aus menu:[Tägliche Arbeitszeitberichte] pro Mitarbeiter innerhalb des Monats. Im gleichnamigen Block menu:[Tägliche Arbeitszeit Berichte] werden diese einzeln aufgeführt. Korrekturen unter menu:[Tägliche Arbeitszeitberichte] wirken sich entsprechend nach einer Neuberechnung hier aus.
-
-Schauen wir uns nun die weiteren Einträge an.
-menu:[Mitarbeiter] enthält, wie der Titel schon verrät, den Namen des Mitarbeiters und menu:[Monat] beinhaltet die Periode zusammengesetzt aus Jahr und Monat.
-
-Der menu:[Vormonats Saldo Arbeitszeit] enthält den menu:[Gesamt Saldo Arbeitszeit] der vorherigen Periode. So enthält beispielsweise der menu:[Monatliche Arbeitszeit Berichte] im Januar des aktuellen Jahres den Wert aus Dezember des Vorjahres in menu:[Vormonats Saldo Arbeitszeit].
-
-Die menu:[Arbeitszeit (Ist)] entspricht der Summe des Wertes menu:[Gesamt Arbeitszeit] aller Datensätze in menu:[Tägliche Arbeitszeitberichte] zu diesem Mitarbeiter in dem Monat.
-Entsprechend enthält menu:[Arbeitszeit (Soll)] als Summe das Ergebnis aus menu:[Arbeitszeit (Soll)] + menu:[Soll Arbeitszeit Korrektur] aller Datensätze in menu:[Tägliche Arbeitszeitberichte] zu diesem Mitarbeiter in dem Monat.
-In menu:[Arbeitszeit (Berichtigt)] können Sie die monatliche Arbeitszeit bei Bedarf manuell korrigieren.
-
-Der menu:[Gesamt Saldo Arbeitszeit] entspricht dem kummulierten Ergebnis aus der Berechnung von (menu:[Arbeitszeit (Soll)], menu:[Arbeitszeit (Ist)]) mit menu:[Arbeitszeit (Berichtigt)] und dem menu:[Vormonats Saldo Arbeitszeit].
-
-Speichern Sie Ihre Änderungen mit Klick auf den Button menu:[OK] rechts unten im Bearbeitungsdialog, damit erfolgt die Aktualisierung der menu:[Gesamt Saldo Arbeitszeit]. Alternativ drücken Sie den Button menu:[Neuberechnung] und erhalten im noch geöffneten Bearbeiten Dialog den aktuellen Wert.
-
-[IMPORTANT]
-============
-Abschließend und erst wenn Sie sicher sind, dass der Monat für diesem Mitarabeiter komplett bearbeitet und alle Ergebnisse gesammelt wurden, aktivieren Sie in menu:[Ist Freigegeben] das Häkchen und Speichern. Dies bewirkt, dass für diese Monats-Periode nichts mehr an den Daten unter menu:[Tägliche Arbeitszeitberichte] und an diesem Datensatz selbst geändert werden kann. Im Hintergrund werden vom System gleichzeitig ein paar Referenzen gesetzt, z.B: werden die Daten aus der Arbeitszeiterfassung mit diesem menu:[Monatliche Arbeitszeit Berichte]
-Setzen Sie dieses Häkchen erst, wenn die Monatsdaten z.B. an die Lohnbuchhaltung übergeben werden sollen.
-============
-
-Für die monatliche Auswertung der Arbeitszeitdaten des Mitarbeiters wählen Sie den Button menu:[Exportiere Monatlicher Arbeitszeit Bericht] und wählen Sie menu:[monthlyWTReport]. Sie erhalten ein Monatsprotokoll pro Mitarbeiter im Excel Format.
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/EditDialog/ExportMonthlyWorkingTimeReports>
-        demodata: Monatlicher Arbeitszeitbericht, Exportbeispiel
-        image: dialog
-        comment: <>
-        status: <check>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Beispiel Export Monatlicher Arbeitszeitbericht
-image::HumanResources/21_humanresources_export_monatsprotokoll.png[id="fig_monat_exportprotokoll",width="100%"]
-
-
-[[sec.humanresources.freetimeplanning]]
-=== Free Time Planning ===
-
-Zur schnellen und einfachen Plannung von An- und Abwesenheitszeiten der Mitarbeiter mit Überblick über die Gesamtlage wurde das Modul menu:[Free Time Planning] in Matrixform entwickelt. Neben einer schnellen und einfachen Erfassung von Abwesenheitszeiten, welche weiter untern beschrieben wird, erhalten Sie einen Gesamtüberblick über die An- und Abwesenheitszeiten Ihrer Mitarbeiter. Dabei können Sie mit den bekannten Filterfunktionen z.B nach bestimmten Mitarbeitergruppen (wie Abteilungen) und den zu betrachtenden Zeiträumen (wie innerhalb des aktuellen Jahres) selektieren. Navigieren Sie innerhalb dieser festgelegten Selektionen durch Blättern der Seiten und vorgegebenen Perioden (wie Monat) in der Matrix.
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/MainScreen/FreeTimePlanning>
-        demodata: Free Time Planning, Matrix
-        image: dialog
-        comment: <>
-        status: <check>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Matrix Free Time Planning
-image::HumanResources/22_humanresources_free_time_planning_matrix.png[id="fig_freetimeplaning_matrix",width="100%"]
-
-Für die Schnellerfassung von Abwesenheitszeiten erkennt das System, anhand der Cursor-Position in der Matrix (Klick auf die Zelle - bestehend aus Zeile/Spalte oder auch x-/y-Koordinaten), um welche Daten es sich handelt und erleichtert Ihnen somit die Eingaben.
-Die komfortabelste Variante ist dabei die direkte Eingabe des Kürzels für die gewünschte Abwesenheit (siehe <<sec.humanresources.stammdaten.abwesenheitsarten>>) in die gwünschte Zelle der Matrix menu:[Free Time Planning] und es öffnet sich der Bearbeitungsdialog menu:[Freetime]. Dabei werden schon viele Daten vorausgefüllt wie menu:[Mitarbeiter], der menu:[Typ] der Abwesenheit, der menu:[Status], das zugehörige menu:[Personalkonto] und das Datum der gewählten Zelle. Sie können nun die Daten ändern oder ergänzen und z.B. den menu:[Status] ändern oder per Klick auf einzelne Tage im Minikalender den gewünschten Zeitraum anpassen. Markieren Sie zuvor in der Matrix mehrere Zellen mit der Maus (in Kombination mit der Hochstell/Umschalt-Taste) als Zeitraum über mehrere Tage und Sie erhalten im Bearbeitunsgdialog diesen Zeitraum im Minikalender bereits markiert.
-Eine Besonderheit gilt bei Urlaubsabwesenheit - das System berechnet in menu:[Übrig] die verbleibenden Anzahl Tage. Sobald Sie per Klick weitere Tage im Minikalender für den gewünschten Zeitraum vervollständigen, sehen Sie diese Änderung in menu:[Übrig].
-
-Ein Doppelklick auf einer Zelle öffnet ebenfalls den Bearbeitungsdialog menu:[Freetime], kennt dann aber noch nicht den gewünschten menu:[Typ] der Abwesenheit. Ergänzen Sie den menu:[Typ] der Abwesenheit und Sie erhalten weitere Daten.
-
-Haben Sie keinen Mitarbeiter (Matrixzeile) in der Matrix angeklickt, öffnet sich ein leerer Bearbeitungsdialog und Sie können die gewünschten Daten erfassen.
-
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/EditDialog/FreeTimePlanning>
-        demodata: Free Time Planning, Dialog
-        image: dialog
-        comment: <>
-        status: <check>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Free Time Planning bearbeiten
-image::HumanResources/23_humanresources_free_time_planning_dialog.png[id="fig_freetimeplaning_dialog",width="100%"]
-
-[NOTE]
-========
-Die Dialoginhalte werden flexibel in Abhängigkeit der Dateninhalte zur Laufzeit gebaut. Beispielsweise enthält der Bearbeitendialog in Abhängigkeit des menu:[Typ] der Abwesenheit unterschiedliche Informationen zum menu:[Status].
-========
-
-[[sec.humanresources.arbeitszeiterfassung]]
 === Arbeitszeit Erfassung ===
 
-Die Anwendung menu:[HumanResources] kann grundsätzlich ohne die Erfassung von Arbeitszeiten genutzt werden, wodurch einige Module bzw. Funktionalitäten wirkungslos bleiben. Für die Arbeitszeiterfassung bietet {branch} zwei Varianten an. Eine Möglichkeit ist es, die Zeiten manuell durch die Mitarbeiter in der {branch} Anwendung <<chap.zeiterfassung>> zu erfassen. Die zweite Möglichkeit setzt den Einsatz der Zusatzanwendung <<chapter.dfcom>> voraus und erfolgt über die Anbindung von Terminals.
-
-[[sec.arbeitszeiterfassung.zeiterfassung]]
-==== Arbeitszeiterfassung manuell in {branch} ====
-
-Die manuelle Arbeitszeiterfassung erfolgt durch die einzelnen Mitarbeiter in der {branch} Anwendung <<chap.zeiterfassung>>. Bitte folgen Sie der Beschreibung unter <<sec.zeiterfassung.stundenzettel>> für die Erfaasung von Arbeitszeiten.
-Bei einer reinen Arbeitszeiterfassung benötigen Sie nur einen Teil der dort geschilderten und möglichen Informationen. So können Sie z.B. auf abrechnungsrelevante Informationen verzichten, die im Wesentlichen zur Kalkulation von Projektarbeiten oder Arbeiten mit Nachweis zu bestimmten abrechnungsrelevanten Dienstleistungen notwendig sind.
-
-Die Anwendung Human Ressources greift durch die Integration der {branch} Anwendungen für die automatische Berechnung und Kalkulation von Arbeitszeiten auf diese Daten zu (siehe <<sec.humanresources.tagesarbeitszeitberichte>> und <<sec.humanresources.monatsarbeitszeitberichte>>).
+==== Admin-Modul DFCom ====
+-DFCom steht für DataFox Communicator und ist genau das. Ein Kommunikationstool zwischen {branch} und den DataFix Terminals. Hier geht es in erster Linie aber nicht ausschließlich um die Arbeitszeiterfassungs-Terminals von DataFox.
 
 [[sec.arbeitszeiterfassung.datafox]]
-==== Arbeitszeiterfassung mit DataFox ====
+=== Arbeitszeiterfassung mit DataFox ===
 
-Die Anbindung der DataFox-Arbeitszeit-Terminals über die DFCom Anwendung (siehe <<chapter.dfcom>>), bietet die Möglichkeit einer verschlüsselten Internetanbindung. Hierdurch ist das Ein- und Aus-Stempeln via HomeOffice (Online mit {branch}) oder im Büro durch das Terminal möglich. Sollte das Internet ausfallen, sind die Terminals weiter stabil Nutzbar. Die Terminals synchronisieren die gestempelten Zeiten mit {branch}, sobald die Internetanbindung wieder steht. Eine weitere Besonderheit ist, das es keinen Zentralen Controller gibt, da {branch}, mit der Hilfe der DFCom-Anwendung, sich direkt als Client integriert - ähnlich wie bei IoT (Internet of Things).
+Die Anbindung der Datafox-Arbeitszeit-Terminals mit Hilfe von der DFCom Anwendung bietet die Möglichkeit der verschlüsselten Internetanbindung. Hierdurch ist ein Ein- und Ausstempelns via HomeOffice (Online mit {branch}) oder im Büro durch das Terminal möglich. Sollte das Internet ausfallen, sind die Terminals weiter stabil nutzbar. Die Terminals synchronisieren die gestempelten Zeiten mit {branch}, sobald die Internetanbindung wieder steht. Eine weitere Besonderheit ist, dass es keinen zentralen Controller gibt, da {branch}, mit der Hilfe der DFCom-Anwendung, sich direkt als Client integriert.
 
 - Die Zeitstempel werden in wenigen Sekunden online geladen/sichtbar
 - Das Terminal gibt Auskunft über Namen, Ausweisnummer und dem Zeit-Saldo des Mitarbeiters
 - {branch} liefert eine übersichtliche Darstellung der gestempelten Zeiten im Zeiterfassungsmodul
 
+////////////
 
-////////
-==== Admin-Modul DFCom ====
-DFCom steht für DataFox Communicator und ist genau das. Ein Kommunikationstool zwischen {branch} und den DataFox Terminals. Hier geht es in erster Linie aber nicht ausschließlich um die Arbeitszeiterfassungs-Terminals von DataFox.
-////////
+

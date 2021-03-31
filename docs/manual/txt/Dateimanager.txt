@@ -145,7 +145,7 @@ Natürlich können Sie verschiedenen Benutzergruppen verschiedene Berechtigungen
 
 (((Veröffentlichen von Dokumenten)))
 An dieser Stelle wollen wir kurz noch die beiden Punkte menu:[Öffentliche Links] und menu:[Verbrauch] erwähnen.
-{brach} bietet die Möglichkeit Ordner oder Dateien zu veröffentlichen. Klicken sie dafür mit der rechten Maustaste auf die Datei oder den Ordner und wählen Sie menu:[Veröffentlichen]. Hiermit erzeugen Sie einen standardmäßig einen Monat lang gültigen öffentlichen Link, unter dem die Datei aus dem Internet aufrufbar ist. Nach Ablauf der Frist, die Sie auch über einen Klick auf das Datumsfeld rechts in der Tabelle individuell anpassen können, ist der Link nicht mehr gültig. Dieser Link ist übrigens anonym, d.h. ohne Anmeldung benutzbar!
+{branch} bietet die Möglichkeit Ordner oder Dateien zu veröffentlichen. Klicken sie dafür mit der rechten Maustaste auf die Datei oder den Ordner und wählen Sie menu:[Veröffentlichen]. Hiermit erzeugen Sie einen standardmäßig einen Monat lang gültigen öffentlichen Link, unter dem die Datei aus dem Internet aufrufbar ist. Nach Ablauf der Frist, die Sie auch über einen Klick auf das Datumsfeld rechts in der Tabelle individuell anpassen können, ist der Link nicht mehr gültig. Dieser Link ist übrigens anonym, d.h. ohne Anmeldung benutzbar!
 menu:[Öffentliche Links] dient zum Tracken dieser Veröffentlichungen
 menu:[Verbrauch] gibt Ihnen eine Übersicht über den Internet verbrauch von dem ausgewählten Ordner bzw. der Datei.
 
@@ -197,4 +197,4 @@ Natürlich stehen auch in dieser Anwendung bei vielen Dateieinträgen Suchfilter
 
 === Anit-Virus, Vorschau & Only Office ===
 
-Sollten Sie Ihre {branch}-Lizenz durch der Integration von Only Office, den Preview Service und/oder Anti-Virus erweitert haben stehen diese unter anderem auch im Dateimanager zur Verfügung. Was diese sind, und wie Sie von den Erweiterungen Gebrauch machen können, entnehmen Sie den speziellen Kapiteln <<chap.only.office.integration>>, <<chap.preview>> und <<chap.antivir>>.
+Sollten Sie Ihre {branch}-Lizenz durch den OnlyOffice-Integrator, den Preview-Service und/oder Anti-Virus erweitert haben, stehen diese unter anderem auch im Dateimanager zur Verfügung. Was diese sind und wie Sie von den Erweiterungen Gebrauch machen können, entnehmen Sie den speziellen Kapiteln <<chap.only.office.integration>>, <<chap.preview>> und <<chap.antivir>>.
