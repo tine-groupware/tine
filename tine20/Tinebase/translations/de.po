@@ -4061,8 +4061,8 @@ msgstr "Mobilfunknummer"
 msgid "Security codes are send to: {{ cellphonenumber }}."
 msgstr "Sicherheitscodes werden an {{ cellphonenumber }} gesendet."
 
-msgid "Static PIN for user: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
-msgstr "Statischer PIN: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
+msgid "Static PIN for user: ●●●●●●"
+msgstr "Statischer PIN: ●●●●●●"
 
 msgid "New PIN"
 msgstr "Neue PIN"
@@ -4970,8 +4970,73 @@ msgstr "{mfaDevice.device_name} Sicherheitscode"
 msgid "{gender, select, male {all of} female {all of} other {all of}}"
 msgstr "{gender, select, male {alle von} female {alle von} other {alle von}}"
 
-msgid "Static PIN for user: ●●●●●●"
-msgstr "Statischer PIN: ●●●●●●"
+#: js/AreaLocks/UserPasswordProvider.es6.js:16
+msgid "This area is locked. To unlock it you need to provide your password."
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr Passwort "
+"eingeben."
+
+#: js/AreaLocks/TokenProvider.es6.js:16
+msgid "This area is locked. To unlock it you need to enter your Token."
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihren Token "
+"eingeben."
+
+#: js/AreaLocks/PinProvider.es6.js:16
+msgid "This area is locked. To unlock it you need to provide your PIN."
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihre PIN "
+"eingeben."
+
+msgid "Yubico OTP required"
+msgstr "Yubico OTP erforderlich"
+
+msgid "This area is locked. To unlock it you need to provide your Yubico OTP."
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihren Yubico "
+"OTP eingeben."
+
+msgid "Yubico OTP"
+msgstr "Yubico OTP"
+
+msgid "Yubico OTP public id"
+msgstr "Yubico OTP öffentliche ID"
+
+msgid "Yubico OTP privat id"
+msgstr "Yubico OTP private ID"
+
+msgid "Yubico privat key"
+msgstr "Yubico geheimer Schlüssel"
+
+msgid "MFA Device Type"
+msgstr "MFA Gerätetyp"
+
+msgid "MFA Device Config"
+msgstr "MFA Gerätekonfiguration"
+
+msgid ""
+"This area is locked. To unlock it you need to provide your {mfaDevice."
+"device_name} secret."
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr {mfaDevice."
+"device_name} Geheimnis eingeben."
+
+msgid ""
+"This area is locked. To unlock it you need to provide your token from your "
+"device: {mfaDevice.device_name}."
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie den Token vom "
+"Gerät {mfaDevice.device_name} eingeben."
+
+msgid ""
+"This area is locked. To unlock it we send a securitycode to via {mfaDevice."
+"device_name}."
+msgstr ""
+"Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via {mfaDevice."
+"device_name} zum entsperren gesendet."
+
+msgid "Static PIN for user: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
+msgstr "Statischer PIN: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
 
 msgid "There was an error verifying your certificate!!!"
 msgstr "Es gab einen Fehler beim verifizieren Ihres Zertifikats!"
