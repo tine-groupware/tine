@@ -27,7 +27,7 @@ Der Programmteil menu:[Human Resources] dient der Personalabteilung zur Verwaltu
 
 Die Anwendung besteht aus fünf Modulen: menu:[Mitarbeiter], die zugehörigen menu:[Personalkonten], menu:[Abteilung], menu:[Tägliche Arbeitszeitberichte] und menu:[Monatliche Arbeitszeitberichte]. Die Aufgabe der ersten beiden besteht darin, Mitarbeiter-Datensätze zu erstellen – die zugehörigen Personalkonten (für jeweils das laufende und das folgende Jahr) legt {branch} selbstständig an.
 
-Beim Anlegen der Mitarbeiterdatensätze greifen Sie sinnvollerweise auf die bereits vorhandenen {branch}-Benutzer zurück, denn in den meisten Fällen werden sich diese Mengen überschneiden. 
+Beim Anlegen der Mitarbeiterdatensätze greifen Sie sinnvollerweise auf die bereits vorhandenen {branch}-Benutzer zurück, denn in den meisten Fällen werden sich diese Mengen überschneiden.
 
 Starten Sie die Anwendung über den Reiter menu:[{branch}], indem Sie dort menu:[HumanResources] anklicken.
 
@@ -60,7 +60,7 @@ KUK: Abteilungen sollten ebenfalls hier angelegt werden können; sie sind ein Te
 
 //////////
 Dr. Markus Wirtz, 2015-04-16 09:25
-Habe den folgenden Hinweis ergänzt. Es bleibt mir vollkommen unverständlich, warum wirklich interessante Informationen – und dazu gehören v.a. auch Unzulänglichkeiten oder Inkonsistenzen der Software – in _dem_ Handbuch permanent unter den Teppich gekehrt werden! 
+Habe den folgenden Hinweis ergänzt. Es bleibt mir vollkommen unverständlich, warum wirklich interessante Informationen – und dazu gehören v.a. auch Unzulänglichkeiten oder Inkonsistenzen der Software – in _dem_ Handbuch permanent unter den Teppich gekehrt werden!
 
 KUK 2015-05-15: siehe dazu meine E-Mail von heute!
 
@@ -95,8 +95,11 @@ Klicken Sie im Bearbeitungsmenü links außen den Punkt menu:[Mitarbeiter hinzuf
         status: <fail>
         domain: <Business Edition: Metaways>
 //////////////////
+//////////////////
+@TODO: Screenshot-Datei gibt es nicht. Entweder bestehende Datei entsprechend umbenennen oder mit neuer Datei ersetzen.
 .Anlegen eines neuen Mitarbeiters
 image::HumanResources/2_humanresources_mitarbeiter_hinzu.png[id="fig_humanmhuman_personalkontenitarbeiterhinzu",width="100%"]
+//////////////////
 
 
 Zu beachten sind hier die beiden Reiter menu:[Kostenstellen] und menu:[Verträge] – dazu später mehr. Die Personalnummer (menu:[Pers.-Nr.]) und das menu:[Benutzerkonto] sind Pflichtfelder. Vergeben Sie jetzt eine Personalnummer entsprechend der in Ihrem Unternehmen gültigen Vorschriften und klicken Sie danach das Pulldown im Feld menu:[Benutzerkonto] an, darin werden Ihnen die in {branch} angelegten Benutzer angeboten. Wählen Sie testweise einen beliebigen. Beachten Sie jetzt rechts neben diesem Feld den kleinen Button mit dem Zauberstab. Wenn Sie ihn anklicken, werden Name, Vorname und weitere relevanten Daten des Benutzers im Mitarbeiterdatensatz übernommen.
@@ -111,8 +114,11 @@ Zu beachten sind hier die beiden Reiter menu:[Kostenstellen] und menu:[Verträge
         status: <fail>
         domain: <Business Edition: Metaways>
 //////////////////
+//////////////////
+@TODO: Screenshot-Datei gibt es nicht. Entweder bestehende Datei entsprechend umbenennen oder mit neuer Datei ersetzen.
 .Mit dem Zauberstab Daten übernehmen
 image::HumanResources/3_humanresources_mitarbeiter_kontaktdaten_zauberstab.png[id="fig_humanzauberstab",width="100%"]
+//////////////////
 
 
 Ergänzen Sie jetzt über das Pulldown das Feld menu:[Anrede] sowie gegebenenfalls im nächsten Feld einen menu:[Titel]. Im Block menu:[Persönliche Informationen] können Sie unter Berücksichtigung des Datenschutzes nützliche Informationen hinterlegen.
@@ -121,7 +127,7 @@ Im Block menu:[Interne Informationen] können Sie als menu:[Vorgesetzten] nur Nu
 
 menu:[Krankenkasse], menu:[Beruf] und menu:[Position] sind freie Textfelder und optional. Ein Pflichtfeld hingegen ist menu:[Angestellt von], wo Sie das Datum des Beschäftigungsbeginns hinterlegen. Sie können es ebenso wie menu:[Angestellt bis] komfortabel über die Kalenderfunktion füllen.
 
-Im Block menu:[Bankverbindung] sind alle Eingaben fakultativ. 
+Im Block menu:[Bankverbindung] sind alle Eingaben fakultativ.
 
 [[sec.humanresources.mitarbeiter.kostenstellen]]
 ==== Kostenstellen ====
@@ -137,8 +143,11 @@ Klicken Sie nun den Reiter menu:[Kostenstellen] an.
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
+//////////////////
+@TODO: Screenshot-Datei gibt es nicht. Entweder bestehende Datei entsprechend umbenennen oder mit neuer Datei ersetzen.
 .Kostenstellen
 image::HumanResources/4_humanresources_mitarbeiter_kostenstellen.png[id="fig_humankostenstellen",width="100%"]
+//////////////////
 
 
 Die Zuweisung eines Mitarbeiters zu einer Kostenstelle bewirkt, dass die Buchhaltungsabteilung (die Daten aus {branch} über eine individuell zu programmierende Schnittstelle erhält) die hier erfassten, gepflegten und gehaltsmäßig relevanten Daten einer Kostenstelle zuweisen und darüber abrechnen kann. Die Kosten eines Mitarbeiters laufen dann immer auf einer Kostenstelle auf. Andere Kostenstellen können aber (in anderen Anwendungen von {branch}) auch für die Erfassung von Ausgaben eines Auftrags/Vertrags/Zeitkontos definiert werden. So kann das Controlling über Daten aus {branch} abgewickelt werden.
@@ -171,8 +180,11 @@ Arbeitsverträge legen Sie unter dem Reiter menu:[Verträge] an. Klicken Sie in 
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
+//////////////////
+@TODO: Screenshot-Datei gibt es nicht. Entweder bestehende Datei entsprechend umbenennen oder mit neuer Datei ersetzen.
 .Mitarbeiter einen Vertrag zuweisen
 image::HumanResources/6_humanresources_mitarbeiter_vertrag.png[id="fig_humanvertraegeneu",width="100%"]
+//////////////////
 
 
 
@@ -199,8 +211,11 @@ Unter dem Reiter menu:[Urlaub] finden Sie in der Tabelle die Urlaubstage des Arb
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
+//////////////////
+@TODO: Screenshot-Datei gibt es nicht. Entweder bestehende Datei entsprechend umbenennen oder mit neuer Datei ersetzen.
 .Urlaub
 image::HumanResources/7_humanresources_mitarbeiter_urlaub.png[id="fig_humanurlaub",width="100%"]
+//////////////////
 
 Die erste Tabellenspalte entspricht dem menu:[Benutzerkonto], d.h. Sie sehen das Kalenderjahr, dem die Urlaubstage zugeordnet sind. Die anderen Tabellenspalten schauen wir uns jetzt in der Bearbeitungsmaske an. Klicken Sie dazu unten in dem blauen Streifen den Button menu:[Urlaubstage hinzufügen].
 
@@ -213,8 +228,11 @@ Die erste Tabellenspalte entspricht dem menu:[Benutzerkonto], d.h. Sie sehen das
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
+//////////////////
+@TODO: Screenshot-Datei gibt es nicht. Entweder bestehende Datei entsprechend umbenennen oder mit neuer Datei ersetzen.
 .Urlaubstage hinzufügen
 image::HumanResources/8_humanresources_mitarbeiter_urlaubstage.png[id="fig_humanurlaubhinzu",width="100%"]
+//////////////////
 
 
 Über das Pulldown menu:[Status] legen Sie zunächst fest, ob es sich um einen beantragten, in Bearbeitung befindlichen, bereits angenommenen oder abgewiesenen Urlaubsantrag handelt. Standardmäßig steht der Status auf menu:[Angenommen]. Beim Abspeichern würden die Urlaubstage dann vom Urlaubskonto des Arbeitnehmers abgebucht. Belassen Sie die Einstellung jetzt auf menu:[Angenommen] und schauen Sie sich das nächste Pulldown, menu:[Personalkonto], an. Per Standard steht dieses Feld auf dem laufenden Jahr; klicken Sie das Pulldown, sehen Sie, dass Ihnen das laufende und mindestens noch das folgende Jahr angeboten werden. Diese beiden Personalkonten, auf die wir weiter unten noch zu sprechen kommen, hat das System beim Abspeichern eines Mitarbeiters automatisch angelegt. Belassen Sie jetzt die Standardeinstellung, d.h. das laufende Jahr. Im nächsten Feld, menu:[Übrig], werden Ihnen zur Kontrolle die restlichen Urlaubstage des Arbeitnehmers angezeigt. Dieses Feld ist eine automatisch erzeugte Differenz aus dem (ggf. anteiligen) Urlaubsanspruch und den genehmigten/angenommenen Urlaubstagen und kann nicht überschrieben werden.
@@ -259,7 +277,7 @@ menu:[Als ODS exportieren]  für eine Tabelle im Dateiformat von Open-/LibreOffi
 Wie bereits erwähnt, erzeugt das System selbständig Personalkonten, sobald Sie einen Mitarbeiter anlegen. Klicken Sie links unter menu:[MODULES] auf menu:[Personalkonten]. Wenn Sie vorhin einen Mitarbeiter angelegt haben, sehen Sie jetzt mindestens dessen zwei Personalkonten für das laufende und das folgende Jahr. Wenn alle Mitarbeiter schon vor längerer Zeit angelegt wurden, kann es sein, dass ein neues Personalkonto angelegt werden muss, weil die Zeit fortgeschritten ist. Klicken Sie dazu im Bearbeitungsmenü den Button menu:[Personalkonten anlegen]. Das System fragt Sie nach dem Jahr, für das es ein Konto anlegen soll, der Rest erfolgt automatisch.
 
 
-Gehen Sie nun mit der Maus auf die Zeile mit dem laufenden Jahr und klicken Sie die rechte Maustaste. Neben den bekannten Funktionen, die Sie auch über die Maske erreichen, ist im Kontextmenü eine Funktion versteckt, die Sie nur hier sehen: menu:[Urlaub vom letzten Jahr als Sonderurlaub buchen]. Diese Funktion dient der Übernahme von im letzten Jahr nicht genommenem Urlaub auf das aktuelle Jahr, wo er als Sonderurlaub ausgewiesen wird. Vor Anwendung dieser Funktion beachten Sie bitte arbeitsvertragliche Regelungen zur Übernahme und zum Verfall von Urlaubstagen. 
+Gehen Sie nun mit der Maus auf die Zeile mit dem laufenden Jahr und klicken Sie die rechte Maustaste. Neben den bekannten Funktionen, die Sie auch über die Maske erreichen, ist im Kontextmenü eine Funktion versteckt, die Sie nur hier sehen: menu:[Urlaub vom letzten Jahr als Sonderurlaub buchen]. Diese Funktion dient der Übernahme von im letzten Jahr nicht genommenem Urlaub auf das aktuelle Jahr, wo er als Sonderurlaub ausgewiesen wird. Vor Anwendung dieser Funktion beachten Sie bitte arbeitsvertragliche Regelungen zur Übernahme und zum Verfall von Urlaubstagen.
 
 {{{/HumanResources/EditDialog/Account}}}
 Klicken Sie nun menu:[Personalkonto bearbeiten] im Bearbeitungsmenü oder im Kontextmenü der rechten Maustaste.
@@ -273,8 +291,11 @@ Klicken Sie nun menu:[Personalkonto bearbeiten] im Bearbeitungsmenü oder im Kon
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
+//////////////////
+@TODO: Screenshot-Datei gibt es nicht. Entweder bestehende Datei entsprechend umbenennen oder mit neuer Datei ersetzen.
 .Personalkonto bearbeiten
 image::HumanResources/10_humanresources_personalkonto.png[id="fig_humanpersonalkonten",width="100%"]
+//////////////////
 
 
 Die Zahlen, die die folgende Maske bereits enthält, stammen aus für den Arbeitnehmer im betreffenden Jahr angelegten Arbeitsverträgen. Sollten Sie jetzt nur Nullen sehen, wurde für den Arbeitnehmer kein Arbeitsvertrag im laufenden Jahr angelegt. Gehen Sie in diesem Falle bitte zurück auf menu:[Mitarbeiter] und legen Sie, wie weiter oben besprochen, zumindest probehalber einen Arbeitsvertrag an. Wir wollen zum besseren Verständnis sehen, wie sich die dort eingegebenen Zahlen auf der Personalkonto-Maske auswirken.
@@ -283,7 +304,7 @@ Die Zahlen, die die folgende Maske bereits enthält, stammen aus für den Arbeit
 KUK: Wiewohl alle Zahlenfelder als Eingabefelder dargestellt sind und man mit der Maus hineinklicken kann, sind sie keine Eingabefelder -> Bug!
 ////
 
-Dann zurück zu den Personalkonten: In der Maske unter dem Reiter menu:[Zusammenfassung] finden Sie eine ganze Reihe von Zahlen, die Sie nicht überschreiben können; sie entsprechen den oben unter den Arbeitsverträgen sowie den Urlaubs- und Krankheitstagen eingegebenen Werten. 
+Dann zurück zu den Personalkonten: In der Maske unter dem Reiter menu:[Zusammenfassung] finden Sie eine ganze Reihe von Zahlen, die Sie nicht überschreiben können; sie entsprechen den oben unter den Arbeitsverträgen sowie den Urlaubs- und Krankheitstagen eingegebenen Werten.
 ////
 .Sonderurlaub
 image::HumanResources/11_humanresources_sonderurlaub.png[id="fig_humanpersonalkontosonderurlaub",width="100%"]
@@ -303,8 +324,11 @@ Das Fenster mit einer Tabelle zeigt den dem Arbeitnehmer zugebilligten Sonderurl
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
+//////////////////
+@TODO: Screenshot-Datei gibt es nicht. Entweder bestehende Datei entsprechend umbenennen oder mit neuer Datei ersetzen.
 .Sonderurlaub hinzufügen
 image::HumanResources/12_humanresources_personalkonto_sonderurlaub.png[id="fig_humansonderurlaubhinzu",width="100%"]
+//////////////////
 
 
 {{{/HumanResources/EditDialog/ExtraFreeTime}}}
