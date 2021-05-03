@@ -1534,7 +1534,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "66d7a21595704d4df3e43efa07809b160eaf887b"
+                "reference": "8f8d20945d0b13863aaebe9328db356ef9c0b949"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1557,7 +1557,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2021-03-02T10:54:30+00:00"
+            "time": "2021-05-03T06:53:43+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
