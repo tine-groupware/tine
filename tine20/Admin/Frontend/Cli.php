@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -307,5 +307,225 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "--DRY RUN--\n";
         }
         echo "Repaired " . $groupUpdateCount . " groups and or lists\n";
+    }
+
+    /**
+     * usage: method=Admin.getSetEmailAliasesAndForwards [-d] [-v] [aliases_forwards.csv]
+     *
+     * @param Zend_Console_Getopt $opts
+     */
+    public function getSetEmailAliasesAndForwards(Zend_Console_Getopt $opts)
+    {
+        $args = $this->_parseArgs($opts, array(), 'aliases_forwards_csv');
+
+        $tinebaseUser = Tinebase_User::getInstance();
+
+        if (! isset($args['aliases_forwards_csv'])) {
+
+            foreach ($tinebaseUser->getUsers() as $user) {
+                $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
+                $aliases = [];
+                foreach ($fullUser->emailUser->emailAliases as $alias) {
+                    $aliases[] = $alias['email'];
+                }
+                $aliases = implode($aliases, ',');
+                $forwards = implode($fullUser->emailUser->emailForwards, ',');
+                echo $fullUser->accountLoginName . ';' . $aliases . ';' . $forwards . "\n";
+            }
+        } else {
+            foreach ($args['aliases_forwards_csv'] as $csv) {
+                $users = $this->_readCsv($csv);
+                if (! $users) {
+                    echo "no users found in file";
+                    break;
+                }
+                foreach ($users as $userdata) {
+                    // 0=loginname, 1=aliases, 2=forwards
+                    if ($opts->v) {
+                        print_r($userdata);
+                    }
+                    try {
+                        $user = Tinebase_User::getInstance()->getFullUserByLoginName($userdata[0]);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        echo $tenf->getMessage() . "\n";
+                        break;
+                    }
+                    // @todo fix in 2020.11 - we now have aliases/forwards models
+                    $user->smtpUser = new Tinebase_Model_EmailUser(array(
+                        'emailAddress'     => $user->accountEmailAddress,
+                        'emailAliases'     => !empty($userdata[1]) ? explode(',', $userdata[1]) : [],
+                        'emailForwards'    => !empty($userdata[2]) ? explode(',', $userdata[2]) : [],
+                    ));
+                    if (! $opts->d) {
+                        Admin_Controller_User::getInstance()->update($user);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $filename
+     * @return false|string
+     */
+    protected function _checkSanitizeFilename($filename)
+    {
+        if (!file_exists($filename)) {
+            $filename = getcwd() . DIRECTORY_SEPARATOR . $csv;
+            if (!file_exists($filename)) {
+                echo "file not found: " . $filename . "\n";
+                return false;
+            }
+        }
+
+        return $filename;
+    }
+
+    /**
+     * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password sendmail=1 pwlist=pws.csv]
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return integer
+     *
+     * @todo allow to define separator / mapping
+     */
+    public function setPasswords(Zend_Console_Getopt $opts)
+    {
+        $args = $this->_parseArgs($opts, array(), 'userlist_csv');
+
+        // input csv/user list
+        if (! isset($args['userlist_csv'])) {
+            echo "userlist file param required or file not found. usage: method=Admin.setRandomPasswords [-d] userlist.csv\n";
+            return 2;
+        }
+
+        if (isset($args['pwlist'])) {
+            $pw = $this->_readCsv($args['pwlist'], true);
+            if ($pw && $opts->v) {
+                echo "using pwlist file " . $args['pwlist'] . "\n";
+            }
+        } else {
+            $pw = $args['pw'] ?? null;
+        }
+
+        foreach ($args['userlist_csv'] as $csv) {
+            $users = $this->_readCsv($csv);
+            if (! $users) {
+                echo "no users found in file\n";
+                break;
+            }
+
+            if ($opts->v) {
+                print_r($args);
+                print_r($users);
+            }
+
+            $sendmail = isset($args['sendmail']) && (bool) $args['sendmail'];
+            $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail);
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param string $csv filename
+     * @param boolean $firstColIsKey
+     * @return array|false
+     */
+    protected function _readCsv($csv, $firstColIsKey = false)
+    {
+        $csv = $this->_checkSanitizeFilename($csv);
+        if (! $csv) {
+            return false;
+        }
+
+        $stream = fopen($csv, 'r');
+        if (!$stream) {
+            echo "file could not be opened: " . $csv . "\n";
+            return false;
+        }
+        $users = [];
+        while ($line = fgetcsv($stream, 0, ';')) {
+            if ($firstColIsKey) {
+                $users[$line[0]] = $line[1];
+            } else {
+                $users[] = $line;
+            }
+        }
+        fclose($stream);
+        return $users;
+    }
+
+    /**
+     * set random pws for array with userdata
+     *
+     * @param Zend_Console_Getopt $opts
+     * @param array $users
+     * @param string|array $pw
+     * @param boolean $sendmail
+     *
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null, $sendmail = false)
+    {
+        $smtp = Tinebase_Notification_Factory::getBackend(Tinebase_Notification_Factory::SMTP);
+        $pwCsv = '';
+
+        foreach ($users as $userdata) {
+            if (empty($userdata[0])) {
+                continue;
+            }
+
+            // get user by email or @todo accountname
+            // @todo allow to define columns with username/email/...
+            try {
+                $user = Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $userdata[0]);
+                $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                echo $tenf->getMessage() . "\n";
+                continue;
+            }
+
+            if (is_array($pw) && isset($pw[$fullUser->accountLoginName])) {
+                // list of user pws
+                $newPw = $pw[$fullUser->accountLoginName];
+            } else {
+                $newPw = $pw ?? Tinebase_User::generateRandomPassword(8);
+            }
+
+            if (! $opts->d) {
+                Tinebase_User::getInstance()->setPassword($user, $newPw);
+                if ($sendmail && ! empty($userdata[1])) {
+                    echo "sending mail to " . $userdata[1] . "\n";
+                    $smtp->send(
+                        Tinebase_Core::getUser(),
+                        new Addressbook_Model_Contact([
+                            'email' => $userdata[1],
+                            'n_fn' => $userdata[0],
+                        ]),
+                        // @todo translate
+                        'Neues Tine 2.0/E-Mail Passwort',
+                        'Ihr neues Passwort lautet: ' . $newPw . "\r\n"
+                        . Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL)
+                    );
+                }
+            } else {
+                echo "--DRYRUN-- setting pw for user " . $userdata[0] . "\n";
+                if ($sendmail && ! empty($userdata[1])) {
+                    echo "--DRYRUN-- sending mail to " . $userdata[1] . "\n";
+                }
+            }
+
+            // @todo create csv export for this
+            if ($opts->v) {
+                // echo $user->accountEmailAddress . ';' . $newPw . "\n";
+                $pwCsv .= $fullUser->accountLoginName . ';' . $newPw . "\n";
+            }
+        }
+
+        echo "\nNEW PASSWORDS:\n\n";
+        echo $pwCsv;
     }
 }
