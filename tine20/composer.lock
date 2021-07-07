@@ -1452,7 +1452,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
-                "reference": "10d4691da5b7c6254ced7d000eab119b9122a332"
+                "reference": "7afafbe243c51da1f8c59dd13486eb8f2fafab86"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1471,7 +1471,7 @@
                 "Devices",
                 "Tine 2.0"
             ],
-            "time": "2021-03-17T11:48:44+00:00"
+            "time": "2021-07-07T12:04:23+00:00"
         },
         {
             "name": "metaways/tine20-gdpr",
