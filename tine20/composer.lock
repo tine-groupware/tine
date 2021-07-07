@@ -1342,7 +1342,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
-                "reference": "658315653b2fb30b0d6273a1635d2d980c1fc60a"
+                "reference": "111519887a2aa1fe6fdd86c7f6a3309778efcaff"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1361,7 +1361,7 @@
                 "Devices",
                 "Tine 2.0"
             ],
-            "time": "2021-03-02T10:41:34+00:00"
+            "time": "2021-07-07T11:59:25+00:00"
         },
         {
             "name": "metaways/tine20-gdpr",
@@ -1369,7 +1369,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
-                "reference": "c8c26c51e06f37ecdce7d7c39426694083fa3273"
+                "reference": "3c1c44e21f955e90630177e17ace7436bcdc7e87"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1386,7 +1386,7 @@
             "keywords": [
                 "Tine 2.0"
             ],
-            "time": "2021-04-13T12:59:39+00:00"
+            "time": "2021-07-07T11:59:25+00:00"
         },
         {
             "name": "metaways/tine20-onlyofficeintegrator",
@@ -1394,7 +1394,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git",
-                "reference": "9c32ebe2c00ac7c18c4a67710d8f1979376d612b"
+                "reference": "e7d7911a9172390566c36975d7f036cb3a0443b3"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1416,7 +1416,7 @@
                 "OnlyOfficeIntegrator",
                 "Tine 2.0"
             ],
-            "time": "2021-03-02T09:08:56+00:00"
+            "time": "2021-07-07T11:59:25+00:00"
         },
         {
             "name": "metaways/tine20-usermanual",
@@ -1424,7 +1424,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "66a6d0defd4108ca138aaac59bed7448b68c73fe"
+                "reference": "cd1db417745c919b0db364cab501d01607b238f9"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -1447,7 +1447,7 @@
                 "Manual",
                 "Tine 2.0"
             ],
-            "time": "2021-03-02T09:12:40+00:00"
+            "time": "2021-07-07T11:59:25+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
