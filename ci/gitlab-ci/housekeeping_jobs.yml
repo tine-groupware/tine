@@ -49,6 +49,7 @@ merge:
   stage: housekeeping
   variables:
     AUTO_MERGE_VAR: "${AUTO_MERGE}"
+    AUTO_MERGE_BE_VAR: "${AUTO_MERGE_BE}"
   needs: 
     - docker_build_source
   trigger:
@@ -56,5 +57,7 @@ merge:
     strategy: depend
   rules:
     - if: $AUTO_MERGE == "true"
+      when: on_success
+    - if: $AUTO_MERGE_BE == "true"
       when: on_success
     - when: never
