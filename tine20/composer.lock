@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "26eee40e345cb7b6a80863387bc5e879",
@@ -10900,5 +10900,6 @@
     "platform-overrides": {
         "php": "7.2.5",
         "ext-filter": "7.2"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }
