@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5082e5bf8fdd12f76e4aa5edc4816677",
+    "content-hash": "9542e65d414c5de1fbe8e5d3b2146e9d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -7976,11 +7976,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.4.7",
+            "version": "1.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "fcf2431f91c9c44f10ef593844c885ce4272120b"
+                "reference": "a342ea8ade7cb20af20f92a019cde57c5f6af28e"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -8004,7 +8004,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2021-08-17T10:19:09+00:00"
+            "time": "2021-08-17T12:56:50+00:00"
         },
         {
             "name": "thecodingmachine/safe",
