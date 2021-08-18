@@ -26,8 +26,6 @@ merge:
   rules:
     - if: $AUTO_MERGE_VAR == "true"
       when: on_success
-    - if: $AUTO_MERGE_BE_VAR == "true"
-      when: on_success
     - when: never
 
 merge_be:
