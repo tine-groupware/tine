@@ -2832,7 +2832,7 @@ msgstr "Klartext/Versteckt"
 
 #: js/widgets/form/PasswordTriggerField.js:43
 msgid "Copy to Clipboard"
-msgstr "In die Zwischenablage kopieren"
+msgstr "In Zwischenablage kopieren"
 
 #: js/widgets/LangChooser.js:35 Preference.php:141
 msgid "Language"
@@ -4928,11 +4928,10 @@ msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihren Yubico "
 "OTP eingeben."
 
-#, fuzzy
 msgid "Yubico OTP"
 msgid_plural "Yubico OTPs"
 msgstr[0] "Yubico OTP"
-msgstr[1] "Yubico OTP"
+msgstr[1] "Yubico OTPs"
 
 msgid "GENDER_Yubico OTP"
 msgstr "male"
@@ -5088,11 +5087,10 @@ msgstr "Importiert Gemeindeschlüssel"
 msgid "Community Identification Number Import"
 msgstr "Gemeindeschlüssel Import"
 
-#, fuzzy
 msgid "PIN"
 msgid_plural "PINs"
 msgstr[0] "PIN"
-msgstr[1] "PIN"
+msgstr[1] "PINs"
 
 msgid "GENDER_PIN"
 msgstr "female"
