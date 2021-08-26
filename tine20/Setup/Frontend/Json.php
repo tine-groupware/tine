@@ -396,10 +396,12 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     }
 
     /**
+     * @param string $tempFileId
+     * @return array
+     *
      * Uploads license and saves it
-     * @param $tempFileId
      */
-    public function uploadLicense($tempFileId)
+    public function uploadLicense(string $tempFileId)
     {
         return Setup_Controller::getInstance()->uploadLicense($tempFileId);
     }

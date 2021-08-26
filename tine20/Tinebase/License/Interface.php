@@ -23,7 +23,7 @@ interface Tinebase_License_Interface
     public function isLicenseAvailable();
     public function getMaxUsers();
     public function getLicenseType();
-    public function checkUserLimit($user = null);
+    public function checkUserLimit(Tinebase_Model_User $user = null);
 
     /**
      * checks if feature is permitted by license
@@ -43,10 +43,10 @@ interface Tinebase_License_Interface
     /**
      * return true if license has the feature
      *
-     * @param $feature
+     * @param string $feature
      * @return boolean
      */
-    public function hasFeature($feature);
+    public function hasFeature(string $feature);
 
     /**
      * @return array|null
@@ -56,4 +56,20 @@ interface Tinebase_License_Interface
     public function getStatus();
     public function getCaFiles();
     public function getLicensePath();
+
+    /**
+     * stores license in vfs
+     *
+     * @param string $licenseString
+     */
+    public function storeLicense(string $licenseString);
+
+    /**
+     * fetch certificate data
+     *
+     * @return array
+     */
+    public function getCertificateData();
+
+    public function deleteCurrentLicense();
 }
