@@ -94,10 +94,10 @@ abstract class Tinebase_License_Abstract
     /**
      * check user limit
      *
-     * @param $user
+     * @param Tinebase_Model_User|null $user
      * @return bool
      */
-    public function checkUserLimit($user = null)
+    public function checkUserLimit(Tinebase_Model_User $user = null)
     {
         try {
             $maxUsers = $this->getMaxUsers();
@@ -122,7 +122,7 @@ abstract class Tinebase_License_Abstract
 
         if ($currentUserCount > $maxUsers) {
             // check if user is in allowed users
-            $user = $user ? $user : Tinebase_Core::getUser();
+            $user = $user ?: Tinebase_Core::getUser();
             if (! Tinebase_User::getInstance()->hasUserValidLicense($user, $maxUsers)) {
                 return false;
             }
@@ -261,4 +261,10 @@ abstract class Tinebase_License_Abstract
         $this->_status = null;
         $this->_permittedFeatures = [];
     }
+
+    abstract public function getMaxUsers();
+    abstract public function getVersion();
+    abstract public function isValid();
+    abstract public function hasFeature(string $feature);
+    abstract public function getCertificateData();
 }

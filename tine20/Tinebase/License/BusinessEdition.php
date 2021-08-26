@@ -139,7 +139,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
      * @param string $licenseString
      * @throws Tinebase_Exception
     */
-    public function storeLicense($licenseString)
+    public function storeLicense(string $licenseString)
     {
         $fs = Tinebase_FileSystem::getInstance();
         $licensePath = $this->getLicensePath();
@@ -233,10 +233,10 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     /**
      * return true if license has the feature
      *
-     * @param $feature
+     * @param string $feature
      * @return boolean
      */
-    public function hasFeature($feature)
+    public function hasFeature(string $feature)
     {
         $features = $this->getFeatures();
         return in_array($feature, $features);

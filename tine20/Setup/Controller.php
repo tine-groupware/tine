@@ -165,11 +165,10 @@ class Setup_Controller
     /**
      * Save license information
      *
-     * @param  string $license
-     *
+     * @param string $licenseString
      * @return array certificate data or validation data if failing
      */
-    public function saveLicense($licenseString)
+    public function saveLicense(string $licenseString)
     {
         if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
             throw new Tinebase_Exception('could not create setup user');
@@ -194,10 +193,10 @@ class Setup_Controller
     /**
      * Upload license as file
      *
-     * @param $license
+     * @param string $tempFileId
      * @return array certificate data or validation data if failing
      */
-    public function uploadLicense($tempFileId)
+    public function uploadLicense(string $tempFileId)
     {
         $file = Tinebase_TempFile::getInstance()->getTempFile($tempFileId, /* $skipSessionCheck */ true);
 
