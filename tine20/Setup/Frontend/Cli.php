@@ -135,7 +135,7 @@ class Setup_Frontend_Cli
         } elseif(isset($_opts->setLicense)) {
             $this->_setLicense($_opts);
         } elseif(isset($_opts->deleteLicense)) {
-            $this->_deleteLicense($_opts);
+            $this->_deleteLicense();
         } elseif(isset($_opts->compare)) {
             $this->_compare($_opts);
         } elseif(isset($_opts->setpassword)) {
