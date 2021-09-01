@@ -2616,7 +2616,7 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git",
-                "reference": "d734d1b3f0adcf8bd730b914c86e9fff0176895a"
+                "reference": "73ddc67e6ac7c877d5236d909ddfc63f8ad9bacc"
             },
             "require": {
                 "php": ">=5.5.0"
@@ -2638,7 +2638,7 @@
                 "OnlyOfficeIntegrator",
                 "Tine 2.0"
             ],
-            "time": "2021-08-25T08:02:01+00:00"
+            "time": "2021-08-31T15:26:57+00:00"
         },
         {
             "name": "metaways/tine20-usermanual",

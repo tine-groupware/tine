@@ -232,37 +232,37 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 //percentageCompleted =  stats ? Math.floor(100 * stats.translated / stats.total) : undefined;
                 percentageCompleted = undefined;
 
-
             this.communityPanel = new Ext.Container({
                 layout: 'fit',
                 cls: 'tb-login-tinepanel',
                 border: false,
-                defaults: {xtype: 'label'}, items : [{
-                cls: 'tb-login-big-label',
-                html: String.format(i18n._('{0} is made for you'), Tine.title)
-            }, {
-                html: '<p>' + String.format(i18n._('{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help.'), Tine.title) + '</p>'
-            }, {
-                cls: 'tb-login-big-label-spacer',
-                html: '&nbsp;'
-            }, {
-                html: '<ul>' +
-                '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + String.format(i18n._('{0} Homepage'), Tine.title) + '</a></li>' +
-                '<li><a target="_blank" href="http://www.tine20.org/forum/" border="0">' + String.format(i18n._('{0} Forum'), Tine.title) + '</a></li>' +
-                '</ul><br/>'
-            }, {
-                cls: 'tb-login-big-label',
-                html: i18n._('Translations')
-            }, {
-                html: Ext.isDefined(percentageCompleted) ? ('<p>' + String.format(i18n._('Translation state of {0}: {1}%.'), language, percentageCompleted) + '</p>') : ''
-            }, {
-                html: '<p>' + String.format(i18n._('If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator.'), Tine.title) + '</p>'
-            }, {
-                html: '<br/><ul>' +
-                '<li><a target="_blank" href="https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki/EN%3Atranslation-Howto" border="0">' + String.format(i18n._('{0} Translation Howto'), Tine.title) + '</a></li>' +
-                '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + i18n._('Detailed Language Statistics') + '</a></li>'
-                + '</ul>'
-            }]});
+                defaults: {xtype: 'label'},
+                items: [{
+                    cls: 'tb-login-big-label',
+                    html: String.format(i18n._('{0} is made for you'), Tine.title)
+                }, {
+                    html: '<p>' + String.format(i18n._('{0} wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help.'), Tine.title) + '</p>'
+                }, {
+                    cls: 'tb-login-big-label-spacer',
+                    html: '&nbsp;'
+                }, {
+                    html: '<ul>' +
+                    '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + String.format(i18n._('{0} Homepage'), Tine.title) + '</a></li>' +
+                    '</ul><br/>'
+                }, {
+                    cls: 'tb-login-big-label',
+                    html: i18n._('Translations')
+                }, {
+                    html: Ext.isDefined(percentageCompleted) ? ('<p>' + String.format(i18n._('Translation state of {0}: {1}%.'), language, percentageCompleted) + '</p>') : ''
+                }, {
+                    html: '<p>' + String.format(i18n._('If the state of your language is not satisfying, or if you miss a language, please consider becoming a {0} translator.'), Tine.title) + '</p>'
+                }, {
+                    html: '<br/><ul>' +
+                    '<li><a target="_blank" href="https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/wiki/EN%3Atranslation-Howto" border="0">' + String.format(i18n._('{0} Translation Howto'), Tine.title) + '</a></li>' +
+                    '<li><a target="_blank" href="https://www.transifex.com/projects/p/tine20/" border="0">' + i18n._('Detailed Language Statistics') + '</a></li>'
+                    + '</ul>'
+                }]
+            });
         }
 
         return this.communityPanel;
