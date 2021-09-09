@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aa1edc4cfdd1f7adc5ef525c50065c53",
+    "content-hash": "c6a4faf4247bcdce3de44e373953083b",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -453,6 +453,17 @@
                 "url": "https://github.com/tine20/dbal.git",
                 "reference": "b7c88ab6c38407ed9c99dace55f43bc8a1833c56"
             },
+            "archive": {
+                "exclude": [
+                    "!vendor",
+                    "tests",
+                    "*phpunit.xml",
+                    ".travis.yml",
+                    "build.xml",
+                    "build.properties",
+                    "composer.phar"
+                ]
+            },
             "require": {
                 "doctrine/common": ">=2.4,<2.8-dev",
                 "php": ">=5.3.2"
@@ -477,17 +488,6 @@
                 "psr-0": {
                     "Doctrine\\DBAL\\": "lib/"
                 }
-            },
-            "archive": {
-                "exclude": [
-                    "!vendor",
-                    "tests",
-                    "*phpunit.xml",
-                    ".travis.yml",
-                    "build.xml",
-                    "build.properties",
-                    "composer.phar"
-                ]
             },
             "license": [
                 "MIT"
@@ -724,6 +724,21 @@
                 "url": "https://github.com/tine20/doctrine2.git",
                 "reference": "6132ee1694bab2e9786be8cc20c17779def75362"
             },
+            "archive": {
+                "exclude": [
+                    "!vendor",
+                    "tests",
+                    "*phpunit.xml",
+                    ".travis.yml",
+                    "build.xml",
+                    "build.properties",
+                    "composer.phar",
+                    "vendor/satooshi",
+                    "lib/vendor",
+                    "*.swp",
+                    "*coveralls.yml"
+                ]
+            },
             "require": {
                 "doctrine/cache": "~1.4",
                 "doctrine/collections": "~1.2",
@@ -761,21 +776,6 @@
                     "Doctrine\\Tests\\": "tests/"
                 }
             },
-            "archive": {
-                "exclude": [
-                    "!vendor",
-                    "tests",
-                    "*phpunit.xml",
-                    ".travis.yml",
-                    "build.xml",
-                    "build.properties",
-                    "composer.phar",
-                    "vendor/satooshi",
-                    "lib/vendor",
-                    "*.swp",
-                    "*coveralls.yml"
-                ]
-            },
             "license": [
                 "MIT"
             ],
@@ -811,12 +811,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f"
+                "reference": "c97bb9322386385a2cbfdd7aab705e3a47050581"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/2512f595e0f4c5235e99ef97603a8db902b3cc5f",
-                "reference": "2512f595e0f4c5235e99ef97603a8db902b3cc5f",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/c97bb9322386385a2cbfdd7aab705e3a47050581",
+                "reference": "c97bb9322386385a2cbfdd7aab705e3a47050581",
                 "shasum": ""
             },
             "require": {
@@ -853,7 +853,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2020-10-01T00:19:10+00:00"
+            "time": "2021-07-26T14:16:49+00:00"
         },
         {
             "name": "fig/http-message-util",
@@ -905,10 +905,6 @@
                 "request",
                 "response"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-message-util/issues",
-                "source": "https://github.com/php-fig/http-message-util/tree/1.1.4"
-            },
             "time": "2020-02-05T20:36:27+00:00"
         },
         {
@@ -1155,17 +1151,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "9f15504105640b03277d7174b62fbfc0f5e608ab"
+                "reference": "4f95102af87f86c43e8191ec6e90d9f35ed1ce5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/9f15504105640b03277d7174b62fbfc0f5e608ab",
-                "reference": "9f15504105640b03277d7174b62fbfc0f5e608ab",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/4f95102af87f86c43e8191ec6e90d9f35ed1ce5f",
+                "reference": "4f95102af87f86c43e8191ec6e90d9f35ed1ce5f",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
+                "paragonie/random_compat": ">=2",
                 "php": ">=5.4",
                 "phpseclib/phpseclib": "~2.0"
             },
@@ -1184,7 +1181,104 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "time": "2020-08-27T16:47:41+00:00"
+            "time": "2020-11-16T14:48:22+00:00"
+        },
+        {
+            "name": "laminas/laminas-escaper",
+            "version": "2.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-escaper.git",
+                "reference": "25f2a053eadfa92ddacb609dcbbc39362610da70"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-escaper/zipball/25f2a053eadfa92ddacb609dcbbc39362610da70",
+                "reference": "25f2a053eadfa92ddacb609dcbbc39362610da70",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-zendframework-bridge": "^1.0",
+                "php": "^5.6 || ^7.0"
+            },
+            "replace": {
+                "zendframework/zend-escaper": "self.version"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6.x-dev",
+                    "dev-develop": "2.7.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Escaper\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Securely and safely escape HTML, HTML attributes, JavaScript, CSS, and URLs",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "escaper",
+                "laminas"
+            ],
+            "time": "2019-12-31T16:43:30+00:00"
+        },
+        {
+            "name": "laminas/laminas-zendframework-bridge",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-zendframework-bridge.git",
+                "reference": "6ede70583e101030bcace4dcddd648f760ddf642"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-zendframework-bridge/zipball/6ede70583e101030bcace4dcddd648f760ddf642",
+                "reference": "6ede70583e101030bcace4dcddd648f760ddf642",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.1 || ^9.3",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "library",
+            "extra": {
+                "laminas": {
+                    "module": "Laminas\\ZendFrameworkBridge"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/autoload.php"
+                ],
+                "psr-4": {
+                    "Laminas\\ZendFrameworkBridge\\": "src//"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Alias legacy ZF class names to Laminas Project equivalents.",
+            "keywords": [
+                "ZendFramework",
+                "autoloading",
+                "laminas",
+                "zf"
+            ],
+            "time": "2020-09-14T14:23:00+00:00"
         },
         {
             "name": "markbaker/complex",
@@ -1418,149 +1512,6 @@
             "time": "2016-04-25T08:20:13+00:00"
         },
         {
-            "name": "metaways/tine20-bookmarks",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-bookmarks.git",
-                "reference": "f17acb10aa8da86f34c9889d2b69717a6cc45476"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "default-branch": true,
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "Bookmarks": "lib/Bookmarks",
-                    "../tests/tine20/Bookmarks": "tests/Bookmarks"
-                },
-                "reverseSymlinks": {
-                    "lib/images": "images"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 Bookmarks Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Bookmarks",
-                "Tine 2.0"
-            ],
-            "time": "2021-08-26T09:16:19+00:00"
-        },
-        {
-            "name": "metaways/tine20-dfcom",
-            "version": "dev-2020-11",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
-                "reference": "7afafbe243c51da1f8c59dd13486eb8f2fafab86"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "DFCom": "lib/DFCom",
-                    "../tests/tine20/DFCom": "tests/DFCom"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 DFCom Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Datafox",
-                "Devices",
-                "Tine 2.0"
-            ],
-            "time": "2021-07-07T12:04:23+00:00"
-        },
-        {
-            "name": "metaways/tine20-gdpr",
-            "version": "dev-2020-11",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
-                "reference": "8a7d10591e5b63ff067bf53eb5d2f4eb283cf20b"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "GDPR": "lib/GDPR",
-                    "../tests/tine20/GDPR": "tests/GDPR"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 GDPR Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Tine 2.0"
-            ],
-            "time": "2021-07-07T12:04:24+00:00"
-        },
-        {
-            "name": "metaways/tine20-onlyofficeintegrator",
-            "version": "dev-2020-11",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git",
-                "reference": "0d36dac5fcaa0771fee1a2a18fa4f4b0d5bceca6"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "OnlyOfficeIntegrator": "lib/OnlyOfficeIntegrator",
-                    "../tests/tine20/OnlyOfficeIntegrator": "tests/OnlyOfficeIntegrator"
-                },
-                "reverseSymlinks": {
-                    "lib/images": "images"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 OnlyOfficeIntegrator Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Office",
-                "OnlyOfficeIntegrator",
-                "Tine 2.0"
-            ],
-            "time": "2021-07-07T12:04:26+00:00"
-        },
-        {
-            "name": "metaways/tine20-usermanual",
-            "version": "dev-2020-11",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "2d4d5b6eefc8122890aa889bb7ea085e6c03924b"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "UserManual": "lib/UserManual",
-                    "../tests/tine20/UserManual": "tests/UserManual"
-                },
-                "reverseSymlinks": {
-                    "lib/images": "images"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 UserManual Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Documenation",
-                "Help",
-                "Manual",
-                "Tine 2.0"
-            ],
-            "time": "2021-08-11T15:54:39+00:00"
-        },
-        {
             "name": "mtdowling/cron-expression",
             "version": "v1.2.3",
             "source": {
@@ -1652,96 +1603,49 @@
             "time": "2018-02-13T20:26:39+00:00"
         },
         {
-            "name": "pclzip/pclzip",
-            "version": "2.8.2",
+            "name": "paragonie/random_compat",
+            "version": "v9.99.100",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ivanlanin/pclzip.git",
-                "reference": "19dd1de9d3f5fc4d7d70175b4c344dee329f45fd"
+                "url": "https://github.com/paragonie/random_compat.git",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ivanlanin/pclzip/zipball/19dd1de9d3f5fc4d7d70175b4c344dee329f45fd",
-                "reference": "19dd1de9d3f5fc4d7d70175b4c344dee329f45fd",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "pclzip.lib.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1"
-            ],
-            "authors": [
-                {
-                    "name": "Vincent Blavet"
-                }
-            ],
-            "description": "A PHP library that offers compression and extraction functions for Zip formatted archives",
-            "homepage": "http://www.phpconcept.net/pclzip",
-            "keywords": [
-                "php",
-                "zip"
-            ],
-            "time": "2014-06-05T11:42:24+00:00"
-        },
-        {
-            "name": "phpoffice/common",
-            "version": "0.2.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/PHPOffice/Common.git",
-                "reference": "edb5d32b1e3400a35a5c91e2539ed6f6ce925e4d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/Common/zipball/edb5d32b1e3400a35a5c91e2539ed6f6ce925e4d",
-                "reference": "edb5d32b1e3400a35a5c91e2539ed6f6ce925e4d",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/996434e5492cb4c3edcb9168db6fbb1359ef965a",
+                "reference": "996434e5492cb4c3edcb9168db6fbb1359ef965a",
                 "shasum": ""
             },
             "require": {
-                "pclzip/pclzip": "^2.8",
-                "php": ">=5.3.0"
+                "php": ">= 7"
             },
             "require-dev": {
-                "phpdocumentor/phpdocumentor": "2.*",
-                "phploc/phploc": "2.*",
-                "phpmd/phpmd": "2.*",
-                "phpunit/phpunit": "^4.8.36 || ^7.0",
-                "sebastian/phpcpd": "2.*",
-                "squizlabs/php_codesniffer": "2.*"
+                "phpunit/phpunit": "4.*|5.*",
+                "vimeo/psalm": "^1"
+            },
+            "suggest": {
+                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
             },
             "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PhpOffice\\Common\\": "src/Common/"
-                }
-            },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL"
+                "MIT"
             ],
             "authors": [
                 {
-                    "name": "Mark Baker"
-                },
-                {
-                    "name": "Franck Lefevre",
-                    "homepage": "http://rootslabs.net"
+                    "name": "Paragon Initiative Enterprises",
+                    "email": "security@paragonie.com",
+                    "homepage": "https://paragonie.com"
                 }
             ],
-            "description": "PHPOffice Common",
-            "homepage": "http://phpoffice.github.io",
+            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
             "keywords": [
-                "common",
-                "component",
-                "office",
-                "php"
+                "csprng",
+                "polyfill",
+                "pseudorandom",
+                "random"
             ],
-            "time": "2018-07-13T14:12:34+00:00"
+            "time": "2020-10-15T08:29:30+00:00"
         },
         {
             "name": "phpoffice/phpexcel",
@@ -1904,34 +1808,34 @@
         },
         {
             "name": "phpoffice/phpword",
-            "version": "v0.14.0",
+            "version": "0.18.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/paulmhh/PHPWord",
-                "reference": "b614497ae6dd44280be1c2dda56772198bcd25ae"
+                "url": "https://github.com/PHPOffice/PHPWord.git",
+                "reference": "aca10785cf68dc95d7f6fac4fe854979fef3f8db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/b614497ae6dd44280be1c2dda56772198bcd25ae",
-                "reference": "b614497ae6dd44280be1c2dda56772198bcd25ae",
+                "url": "https://api.github.com/repos/PHPOffice/PHPWord/zipball/aca10785cf68dc95d7f6fac4fe854979fef3f8db",
+                "reference": "aca10785cf68dc95d7f6fac4fe854979fef3f8db",
                 "shasum": ""
             },
             "require": {
                 "ext-xml": "*",
-                "php": "^5.3.3 || ^7.0",
-                "phpoffice/common": "^0.2",
-                "zendframework/zend-escaper": "^2.2",
-                "zendframework/zend-stdlib": "^2.2 || ^3.0"
+                "laminas/laminas-escaper": "^2.2",
+                "php": "^5.3.3 || ^7.0 || ^8.0"
             },
             "require-dev": {
-                "dompdf/dompdf": "0.8.*",
-                "friendsofphp/php-cs-fixer": "^2.0",
-                "mpdf/mpdf": "5.* || 6.* || 7.*",
-                "phpdocumentor/phpdocumentor": "2.*",
-                "phploc/phploc": "2.* || 3.* || 4.*",
+                "dompdf/dompdf": "0.8.* || 1.0.*",
+                "ext-gd": "*",
+                "ext-zip": "*",
+                "friendsofphp/php-cs-fixer": "^2.2",
+                "mpdf/mpdf": "5.7.4 || 6.* || 7.* || 8.*",
+                "php-coveralls/php-coveralls": "1.1.0 || ^2.0",
+                "phploc/phploc": "2.* || 3.* || 4.* || 5.* || 6.* || 7.*",
                 "phpmd/phpmd": "2.*",
-                "phpunit/phpunit": "^4.8.36 || ^5.0",
-                "squizlabs/php_codesniffer": "^2.7",
+                "phpunit/phpunit": "^4.8.36 || ^7.0",
+                "squizlabs/php_codesniffer": "^2.9 || ^3.5",
                 "tecnickcom/tcpdf": "6.*"
             },
             "suggest": {
@@ -1942,6 +1846,11 @@
                 "ext-zip": "Allows writing OOXML and ODF"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "0.19-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "PhpOffice\\PhpWord\\": "src/PhpWord"
@@ -1961,16 +1870,16 @@
                     "homepage": "http://gabrielbull.com/"
                 },
                 {
+                    "name": "Franck Lefevre",
+                    "homepage": "https://rootslabs.net/blog/"
+                },
+                {
                     "name": "Ivan Lanin",
                     "homepage": "http://ivan.lanin.org"
                 },
                 {
                     "name": "Roman Syroeshko",
                     "homepage": "http://ru.linkedin.com/pub/roman-syroeshko/34/a53/994/"
-                },
-                {
-                    "name": "Franck Lefevre",
-                    "homepage": "https://rootslabs.net/blog/"
                 },
                 {
                     "name": "Antoine de Troostembergh"
@@ -2003,7 +1912,11 @@
                 "word",
                 "writer"
             ],
-            "time": "2017-12-29T01:30:53+00:00"
+            "support": {
+                "issues": "https://github.com/PHPOffice/PHPWord/issues",
+                "source": "https://github.com/PHPOffice/PHPWord/tree/0.18.2"
+            },
+            "time": "2021-06-04T20:58:45+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -2246,10 +2159,6 @@
                 "response",
                 "server"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-server-handler/issues",
-                "source": "https://github.com/php-fig/http-server-handler/tree/master"
-            },
             "time": "2018-10-30T16:46:14+00:00"
         },
         {
@@ -2303,10 +2212,6 @@
                 "request",
                 "response"
             ],
-            "support": {
-                "issues": "https://github.com/php-fig/http-server-middleware/issues",
-                "source": "https://github.com/php-fig/http-server-middleware/tree/master"
-            },
             "time": "2018-10-30T17:12:04+00:00"
         },
         {
@@ -3898,52 +3803,6 @@
             "time": "2019-08-06T17:53:53+00:00"
         },
         {
-            "name": "zendframework/zend-escaper",
-            "version": "2.6.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zendframework/zend-escaper.git",
-                "reference": "3801caa21b0ca6aca57fa1c42b08d35c395ebd5f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-escaper/zipball/3801caa21b0ca6aca57fa1c42b08d35c395ebd5f",
-                "reference": "3801caa21b0ca6aca57fa1c42b08d35c395ebd5f",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.6 || ^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
-                "zendframework/zend-coding-standard": "~1.0.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.6.x-dev",
-                    "dev-develop": "2.7.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Zend\\Escaper\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Securely and safely escape HTML, HTML attributes, JavaScript, CSS, and URLs",
-            "keywords": [
-                "ZendFramework",
-                "escaper",
-                "zf"
-            ],
-            "abandoned": "laminas/laminas-escaper",
-            "time": "2019-09-05T20:03:20+00:00"
-        },
-        {
             "name": "zendframework/zend-http",
             "version": "2.5.6",
             "source": {
@@ -4151,14 +4010,6 @@
                 "psr-7",
                 "zf"
             ],
-            "support": {
-                "docs": "https://docs.zendframework.com/zend-stratigility/",
-                "forum": "https://discourse.zendframework.com/c/questions/expressive",
-                "issues": "https://github.com/zendframework/zend-stratigility/issues",
-                "rss": "https://github.com/zendframework/zend-stratigility/releases.atom",
-                "slack": "https://zendframework-slack.herokuapp.com",
-                "source": "https://github.com/zendframework/zend-stratigility"
-            },
             "abandoned": "laminas/laminas-stratigility",
             "time": "2019-06-12T15:22:39+00:00"
         },
@@ -5626,7 +5477,6 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "abandoned": true,
             "time": "2018-10-04T04:07:39+00:00"
         },
         {
@@ -5931,12 +5781,6 @@
             "alias_normalized": "1.10.1.0"
         },
         {
-            "package": "phpoffice/phpword",
-            "version": "0.14.0.0",
-            "alias": "v0.13.0",
-            "alias_normalized": "0.13.0.0"
-        },
-        {
             "package": "sabre/vobject",
             "version": "3.5.3.0-patch1",
             "alias": "2.1.0",
@@ -5953,11 +5797,6 @@
     "stability-flags": {
         "ezyang/htmlpurifier": 20,
         "jumbojett/openid-connect-php": 20,
-        "metaways/tine20-bookmarks": 20,
-        "metaways/tine20-dfcom": 20,
-        "metaways/tine20-gdpr": 20,
-        "metaways/tine20-onlyofficeintegrator": 20,
-        "metaways/tine20-usermanual": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
@@ -5968,7 +5807,6 @@
         "ext-simplexml": "*",
         "ext-bcmath": "*",
         "ext-ctype": "*",
-        "ext-curl": "*",
         "ext-date": "*",
         "ext-dom": "*",
         "ext-gd": "*",
@@ -5986,5 +5824,5 @@
         "php": "7.2.5",
         "ext-filter": "7.2"
     },
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.0.0"
 }
