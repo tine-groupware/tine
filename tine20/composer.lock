@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "18818200e4f79cbdef7f6ad7ccdcda1d",
@@ -3166,6 +3166,7 @@
             "require": {
                 "php": ">=5.5.0"
             },
+            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -11994,34 +11995,34 @@
     ],
     "aliases": [
         {
-            "alias": "1.8.2",
-            "alias_normalized": "1.8.2.0",
+            "package": "phpoffice/phpexcel",
             "version": "1.8.2.0-patch1",
-            "package": "phpoffice/phpexcel"
+            "alias": "1.8.2",
+            "alias_normalized": "1.8.2.0"
         },
         {
-            "alias": "1.18.0",
-            "alias_normalized": "1.18.0.0",
+            "package": "phpoffice/phpspreadsheet",
             "version": "1.18.0.0-patch1",
-            "package": "phpoffice/phpspreadsheet"
+            "alias": "1.18.0",
+            "alias_normalized": "1.18.0.0"
         },
         {
-            "alias": "1.8.12",
-            "alias_normalized": "1.8.12.0",
+            "package": "sabre/dav",
             "version": "1.8.12.0-patch1",
-            "package": "sabre/dav"
+            "alias": "1.8.12",
+            "alias_normalized": "1.8.12.0"
         },
         {
-            "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0",
+            "package": "sabre/vobject",
             "version": "3.5.3.0-patch1",
-            "package": "sabre/vobject"
+            "alias": "2.1.0",
+            "alias_normalized": "2.1.0.0"
         },
         {
-            "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0",
+            "package": "zendframework/zendframework1",
             "version": "1.12.20.0-patch49",
-            "package": "zendframework/zendframework1"
+            "alias": "1.12.20",
+            "alias_normalized": "1.12.20.0"
         }
     ],
     "minimum-stability": "stable",
@@ -12059,5 +12060,6 @@
     "platform-overrides": {
         "php": "7.4",
         "ext-filter": "7.4"
-    }
+    },
+    "plugin-api-version": "2.1.0"
 }
