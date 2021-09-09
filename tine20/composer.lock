@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "33ab56a96da9931966d6d0cb698ee970",
@@ -3634,6 +3634,10 @@
                 "xls",
                 "xlsx"
             ],
+            "support": {
+                "issues": "https://github.com/PHPOffice/PHPExcel/issues",
+                "source": "https://github.com/PHPOffice/PHPExcel/tree/master"
+            },
             "abandoned": "phpoffice/phpspreadsheet",
             "time": "2018-11-22T23:07:24+00:00"
         },
@@ -11497,40 +11501,40 @@
     ],
     "aliases": [
         {
-            "alias": "v2.5.13",
-            "alias_normalized": "2.5.13.0",
+            "package": "doctrine/dbal",
             "version": "2.5.13.0-patch6",
-            "package": "doctrine/dbal"
+            "alias": "v2.5.13",
+            "alias_normalized": "2.5.13.0"
         },
         {
-            "alias": "v2.5.14",
-            "alias_normalized": "2.5.14.0",
+            "package": "doctrine/orm",
             "version": "2.5.14.0-patch1",
-            "package": "doctrine/orm"
+            "alias": "v2.5.14",
+            "alias_normalized": "2.5.14.0"
         },
         {
-            "alias": "1.10.1",
-            "alias_normalized": "1.10.1.0",
+            "package": "phpoffice/phpspreadsheet",
             "version": "1.10.1.0-patch3",
-            "package": "phpoffice/phpspreadsheet"
+            "alias": "1.10.1",
+            "alias_normalized": "1.10.1.0"
         },
         {
-            "alias": "v0.13.0",
-            "alias_normalized": "0.13.0.0",
+            "package": "phpoffice/phpword",
             "version": "0.14.0.0",
-            "package": "phpoffice/phpword"
+            "alias": "v0.13.0",
+            "alias_normalized": "0.13.0.0"
         },
         {
-            "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0",
+            "package": "sabre/vobject",
             "version": "3.5.3.0-patch1",
-            "package": "sabre/vobject"
+            "alias": "2.1.0",
+            "alias_normalized": "2.1.0.0"
         },
         {
-            "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0",
+            "package": "zendframework/zendframework1",
             "version": "1.12.20.0-patch49",
-            "package": "zendframework/zendframework1"
+            "alias": "1.12.20",
+            "alias_normalized": "1.12.20.0"
         }
     ],
     "minimum-stability": "stable",
@@ -11570,5 +11574,6 @@
     "platform-overrides": {
         "php": "7.2.5",
         "ext-filter": "7.2"
-    }
+    },
+    "plugin-api-version": "2.0.0"
 }
