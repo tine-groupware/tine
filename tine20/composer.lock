@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "18818200e4f79cbdef7f6ad7ccdcda1d",
@@ -1152,6 +1152,10 @@
                 "parser",
                 "php"
             ],
+            "support": {
+                "issues": "https://github.com/doctrine/lexer/issues",
+                "source": "https://github.com/doctrine/lexer/tree/1.2.1"
+            },
             "time": "2020-05-25T17:44:05+00:00"
         },
         {
@@ -1548,6 +1552,10 @@
                 "jwt",
                 "php"
             ],
+            "support": {
+                "issues": "https://github.com/firebase/php-jwt/issues",
+                "source": "https://github.com/firebase/php-jwt/tree/master"
+            },
             "time": "2020-03-25T18:49:23+00:00"
         },
         {
@@ -1738,6 +1746,11 @@
                 "phonenumber",
                 "validation"
             ],
+            "support": {
+                "irc": "irc://irc.appliedirc.com/lobby",
+                "issues": "https://github.com/giggsey/libphonenumber-for-php/issues",
+                "source": "https://github.com/giggsey/libphonenumber-for-php"
+            },
             "time": "2020-10-09T15:01:50+00:00"
         },
         {
@@ -1787,6 +1800,10 @@
                 }
             ],
             "description": "Locale functions required by libphonenumber-for-php",
+            "support": {
+                "issues": "https://github.com/giggsey/Locale/issues",
+                "source": "https://github.com/giggsey/Locale/tree/master"
+            },
             "time": "2020-07-07T11:16:24+00:00"
         },
         {
@@ -3166,7 +3183,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3196,7 +3212,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3225,7 +3240,6 @@
                 "php": ">=5.5.0",
                 "validator/livr": "dev-master#6309697f926a20e1267cc15ee5b847b5c6ecdbcd"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3244,7 +3258,7 @@
                 "Office",
                 "Tine 2.0"
             ],
-            "time": "2021-08-11T13:57:31+00:00"
+            "time": "2021-08-13T13:44:26+00:00"
         },
         {
             "name": "metaways/tine20-gdpr",
@@ -3257,7 +3271,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3283,7 +3296,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3314,7 +3326,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3377,6 +3388,10 @@
                 "cron",
                 "schedule"
             ],
+            "support": {
+                "issues": "https://github.com/mtdowling/cron-expression/issues",
+                "source": "https://github.com/mtdowling/cron-expression/tree/v1.2.3"
+            },
             "abandoned": "dragonmantank/cron-expression",
             "time": "2019-12-28T04:23:06+00:00"
         },
@@ -3617,6 +3632,11 @@
                 "pseudorandom",
                 "random"
             ],
+            "support": {
+                "email": "info@paragonie.com",
+                "issues": "https://github.com/paragonie/random_compat/issues",
+                "source": "https://github.com/paragonie/random_compat"
+            },
             "time": "2020-10-15T08:29:30+00:00"
         },
         {
@@ -4464,6 +4484,10 @@
                 "word",
                 "writer"
             ],
+            "support": {
+                "issues": "https://github.com/PHPOffice/PHPWord/issues",
+                "source": "https://github.com/PHPOffice/PHPWord/tree/0.18.2"
+            },
             "time": "2021-06-04T20:58:45+00:00"
         },
         {
@@ -4555,6 +4579,10 @@
                 "x.509",
                 "x509"
             ],
+            "support": {
+                "issues": "https://github.com/phpseclib/phpseclib/issues",
+                "source": "https://github.com/phpseclib/phpseclib/tree/2.0"
+            },
             "time": "2020-09-08T04:24:43+00:00"
         },
         {
@@ -5095,6 +5123,10 @@
                 }
             ],
             "description": "A polyfill for getallheaders.",
+            "support": {
+                "issues": "https://github.com/ralouphie/getallheaders/issues",
+                "source": "https://github.com/ralouphie/getallheaders/tree/develop"
+            },
             "time": "2019-03-08T08:55:37+00:00"
         },
         {
@@ -9854,6 +9886,10 @@
                 "livr",
                 "validator"
             ],
+            "support": {
+                "issues": "https://github.com/WebbyLab/php-validator-livr/issues",
+                "source": "https://github.com/WebbyLab/php-validator-livr/tree/master"
+            },
             "time": "2017-09-25T14:02:44+00:00"
         },
         {
@@ -10748,6 +10784,11 @@
                 "task",
                 "tool"
             ],
+            "support": {
+                "irc": "irc://irc.freenode.net/phing",
+                "issues": "https://www.phing.info/trac/report",
+                "source": "https://github.com/phingofficial/phing/tree/oldstable"
+            },
             "time": "2020-02-03T18:50:54+00:00"
         },
         {
@@ -10797,6 +10838,10 @@
                 "reflection",
                 "static analysis"
             ],
+            "support": {
+                "issues": "https://github.com/phpDocumentor/ReflectionCommon/issues",
+                "source": "https://github.com/phpDocumentor/ReflectionCommon/tree/2.x"
+            },
             "time": "2020-06-27T09:03:43+00:00"
         },
         {
@@ -10894,6 +10939,10 @@
                 }
             ],
             "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
+            "support": {
+                "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
+                "source": "https://github.com/phpDocumentor/TypeResolver/tree/1.4.0"
+            },
             "time": "2020-09-17T18:55:26+00:00"
         },
         {
@@ -11909,6 +11958,10 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
+            "support": {
+                "issues": "https://github.com/sebastianbergmann/version/issues",
+                "source": "https://github.com/sebastianbergmann/version/tree/master"
+            },
             "time": "2016-10-03T07:35:21+00:00"
         },
         {
@@ -12000,34 +12053,34 @@
     ],
     "aliases": [
         {
-            "package": "phpoffice/phpexcel",
-            "version": "1.8.2.0-patch1",
             "alias": "1.8.2",
-            "alias_normalized": "1.8.2.0"
+            "alias_normalized": "1.8.2.0",
+            "version": "1.8.2.0-patch1",
+            "package": "phpoffice/phpexcel"
         },
         {
-            "package": "phpoffice/phpspreadsheet",
-            "version": "1.18.0.0-patch1",
             "alias": "1.18.0",
-            "alias_normalized": "1.18.0.0"
+            "alias_normalized": "1.18.0.0",
+            "version": "1.18.0.0-patch1",
+            "package": "phpoffice/phpspreadsheet"
         },
         {
-            "package": "sabre/dav",
-            "version": "1.8.12.0-patch1",
             "alias": "1.8.12",
-            "alias_normalized": "1.8.12.0"
+            "alias_normalized": "1.8.12.0",
+            "version": "1.8.12.0-patch1",
+            "package": "sabre/dav"
         },
         {
-            "package": "sabre/vobject",
-            "version": "3.5.3.0-patch1",
             "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0"
+            "alias_normalized": "2.1.0.0",
+            "version": "3.5.3.0-patch1",
+            "package": "sabre/vobject"
         },
         {
-            "package": "zendframework/zendframework1",
-            "version": "1.12.20.0-patch49",
             "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0"
+            "alias_normalized": "1.12.20.0",
+            "version": "1.12.20.0-patch49",
+            "package": "zendframework/zendframework1"
         }
     ],
     "minimum-stability": "stable",
@@ -12065,6 +12118,5 @@
     "platform-overrides": {
         "php": "7.4",
         "ext-filter": "7.4"
-    },
-    "plugin-api-version": "2.1.0"
+    }
 }
