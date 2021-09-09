@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6a4faf4247bcdce3de44e373953083b",
+    "content-hash": "2a933c7bc0472c2978928b48f83df93a",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -453,17 +453,6 @@
                 "url": "https://github.com/tine20/dbal.git",
                 "reference": "b7c88ab6c38407ed9c99dace55f43bc8a1833c56"
             },
-            "archive": {
-                "exclude": [
-                    "!vendor",
-                    "tests",
-                    "*phpunit.xml",
-                    ".travis.yml",
-                    "build.xml",
-                    "build.properties",
-                    "composer.phar"
-                ]
-            },
             "require": {
                 "doctrine/common": ">=2.4,<2.8-dev",
                 "php": ">=5.3.2"
@@ -488,6 +477,17 @@
                 "psr-0": {
                     "Doctrine\\DBAL\\": "lib/"
                 }
+            },
+            "archive": {
+                "exclude": [
+                    "!vendor",
+                    "tests",
+                    "*phpunit.xml",
+                    ".travis.yml",
+                    "build.xml",
+                    "build.properties",
+                    "composer.phar"
+                ]
             },
             "license": [
                 "MIT"
@@ -724,21 +724,6 @@
                 "url": "https://github.com/tine20/doctrine2.git",
                 "reference": "6132ee1694bab2e9786be8cc20c17779def75362"
             },
-            "archive": {
-                "exclude": [
-                    "!vendor",
-                    "tests",
-                    "*phpunit.xml",
-                    ".travis.yml",
-                    "build.xml",
-                    "build.properties",
-                    "composer.phar",
-                    "vendor/satooshi",
-                    "lib/vendor",
-                    "*.swp",
-                    "*coveralls.yml"
-                ]
-            },
             "require": {
                 "doctrine/cache": "~1.4",
                 "doctrine/collections": "~1.2",
@@ -775,6 +760,21 @@
                 "psr-0": {
                     "Doctrine\\Tests\\": "tests/"
                 }
+            },
+            "archive": {
+                "exclude": [
+                    "!vendor",
+                    "tests",
+                    "*phpunit.xml",
+                    ".travis.yml",
+                    "build.xml",
+                    "build.properties",
+                    "composer.phar",
+                    "vendor/satooshi",
+                    "lib/vendor",
+                    "*.swp",
+                    "*coveralls.yml"
+                ]
             },
             "license": [
                 "MIT"
@@ -1510,6 +1510,149 @@
                 "UTC"
             ],
             "time": "2016-04-25T08:20:13+00:00"
+        },
+        {
+            "name": "metaways/tine20-bookmarks",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-bookmarks.git",
+                "reference": "f17acb10aa8da86f34c9889d2b69717a6cc45476"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "default-branch": true,
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "Bookmarks": "lib/Bookmarks",
+                    "../tests/tine20/Bookmarks": "tests/Bookmarks"
+                },
+                "reverseSymlinks": {
+                    "lib/images": "images"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 Bookmarks Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Bookmarks",
+                "Tine 2.0"
+            ],
+            "time": "2021-08-26T09:16:19+00:00"
+        },
+        {
+            "name": "metaways/tine20-dfcom",
+            "version": "dev-2020-11",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
+                "reference": "7afafbe243c51da1f8c59dd13486eb8f2fafab86"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "DFCom": "lib/DFCom",
+                    "../tests/tine20/DFCom": "tests/DFCom"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 DFCom Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Datafox",
+                "Devices",
+                "Tine 2.0"
+            ],
+            "time": "2021-07-07T12:04:23+00:00"
+        },
+        {
+            "name": "metaways/tine20-gdpr",
+            "version": "dev-2020-11",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
+                "reference": "8a7d10591e5b63ff067bf53eb5d2f4eb283cf20b"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "GDPR": "lib/GDPR",
+                    "../tests/tine20/GDPR": "tests/GDPR"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 GDPR Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Tine 2.0"
+            ],
+            "time": "2021-07-07T12:04:24+00:00"
+        },
+        {
+            "name": "metaways/tine20-onlyofficeintegrator",
+            "version": "dev-2020-11",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git",
+                "reference": "0d36dac5fcaa0771fee1a2a18fa4f4b0d5bceca6"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "OnlyOfficeIntegrator": "lib/OnlyOfficeIntegrator",
+                    "../tests/tine20/OnlyOfficeIntegrator": "tests/OnlyOfficeIntegrator"
+                },
+                "reverseSymlinks": {
+                    "lib/images": "images"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 OnlyOfficeIntegrator Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Office",
+                "OnlyOfficeIntegrator",
+                "Tine 2.0"
+            ],
+            "time": "2021-07-07T12:04:26+00:00"
+        },
+        {
+            "name": "metaways/tine20-usermanual",
+            "version": "dev-2020-11",
+            "source": {
+                "type": "git",
+                "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
+                "reference": "2d4d5b6eefc8122890aa889bb7ea085e6c03924b"
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "type": "tine20application",
+            "extra": {
+                "symlinks": {
+                    "UserManual": "lib/UserManual",
+                    "../tests/tine20/UserManual": "tests/UserManual"
+                },
+                "reverseSymlinks": {
+                    "lib/images": "images"
+                }
+            },
+            "description": "Metaways Infosystems GmbH - Tine 2.0 UserManual Module",
+            "homepage": "http://www.tine20.com",
+            "keywords": [
+                "Documenation",
+                "Help",
+                "Manual",
+                "Tine 2.0"
+            ],
+            "time": "2021-08-11T15:54:39+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -5797,6 +5940,11 @@
     "stability-flags": {
         "ezyang/htmlpurifier": 20,
         "jumbojett/openid-connect-php": 20,
+        "metaways/tine20-bookmarks": 20,
+        "metaways/tine20-dfcom": 20,
+        "metaways/tine20-gdpr": 20,
+        "metaways/tine20-onlyofficeintegrator": 20,
+        "metaways/tine20-usermanual": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
@@ -5807,6 +5955,7 @@
         "ext-simplexml": "*",
         "ext-bcmath": "*",
         "ext-ctype": "*",
+        "ext-curl": "*",
         "ext-date": "*",
         "ext-dom": "*",
         "ext-gd": "*",
@@ -5824,5 +5973,5 @@
         "php": "7.2.5",
         "ext-filter": "7.2"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
