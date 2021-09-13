@@ -5157,11 +5157,17 @@ msgstr "Suche nach Gemeindeschlüsseln ..."
 msgid "Create Contact"
 msgstr "Kontakt erstellen"
 
-msgid "Copy Email Address"
-msgstr "E-Mail-Adresse kopieren"
-
 msgid "Compose Message To"
 msgstr "Nachricht verfassen"
+
+msgid "You are not allowed to update system tags"
+msgstr "Sie sind nicht berechtigt System Tags zu aktualisieren"
+
+msgid "You are not allowed to delete system tags"
+msgstr "Sie sind nicht berechtigt System Tags zu löschen"
+
+msgid "Copy Email Address"
+msgstr "E-Mail-Adresse kopieren"
 
 msgid "- The last filter I used -"
 msgstr "- Der letzte ausgewählte Filter -"
