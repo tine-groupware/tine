@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5176584e4e1bd399ece39b6f837e3ef6",
+    "content-hash": "7f256749c4393d01c5d97cac669714c5",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1975,11 +1975,11 @@
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.2pl1",
+            "version": "1.8.2pl2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PHPExcel.git",
-                "reference": "6bf8ac8ab6db112739d19db6e06b0da6758af80a"
+                "reference": "6afa542d46ba8745b6899b4eb8531c048579f783"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -2026,7 +2026,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2021-09-09T08:33:48+00:00"
+            "time": "2021-09-13T13:14:27+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -6555,7 +6555,7 @@
         },
         {
             "package": "phpoffice/phpexcel",
-            "version": "1.8.2.0-patch1",
+            "version": "1.8.2.0-patch2",
             "alias": "1.8.2",
             "alias_normalized": "1.8.2.0"
         },
