@@ -3213,6 +3213,7 @@
             "require": {
                 "php": ">=5.5.0"
             },
+            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
