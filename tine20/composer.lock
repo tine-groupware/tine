@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "43b98a5f70054cbfeca347a5cfa46963",
@@ -470,17 +470,6 @@
                 "url": "https://github.com/tine20/dbal.git",
                 "reference": "b7c88ab6c38407ed9c99dace55f43bc8a1833c56"
             },
-            "archive": {
-                "exclude": [
-                    "!vendor",
-                    "tests",
-                    "*phpunit.xml",
-                    ".travis.yml",
-                    "build.xml",
-                    "build.properties",
-                    "composer.phar"
-                ]
-            },
             "require": {
                 "doctrine/common": ">=2.4,<2.8-dev",
                 "php": ">=5.3.2"
@@ -505,6 +494,17 @@
                 "psr-0": {
                     "Doctrine\\DBAL\\": "lib/"
                 }
+            },
+            "archive": {
+                "exclude": [
+                    "!vendor",
+                    "tests",
+                    "*phpunit.xml",
+                    ".travis.yml",
+                    "build.xml",
+                    "build.properties",
+                    "composer.phar"
+                ]
             },
             "license": [
                 "MIT"
@@ -753,21 +753,6 @@
                 "url": "https://github.com/tine20/doctrine2.git",
                 "reference": "6132ee1694bab2e9786be8cc20c17779def75362"
             },
-            "archive": {
-                "exclude": [
-                    "!vendor",
-                    "tests",
-                    "*phpunit.xml",
-                    ".travis.yml",
-                    "build.xml",
-                    "build.properties",
-                    "composer.phar",
-                    "vendor/satooshi",
-                    "lib/vendor",
-                    "*.swp",
-                    "*coveralls.yml"
-                ]
-            },
             "require": {
                 "doctrine/cache": "~1.4",
                 "doctrine/collections": "~1.2",
@@ -804,6 +789,21 @@
                 "psr-0": {
                     "Doctrine\\Tests\\": "tests/"
                 }
+            },
+            "archive": {
+                "exclude": [
+                    "!vendor",
+                    "tests",
+                    "*phpunit.xml",
+                    ".travis.yml",
+                    "build.xml",
+                    "build.properties",
+                    "composer.phar",
+                    "vendor/satooshi",
+                    "lib/vendor",
+                    "*.swp",
+                    "*coveralls.yml"
+                ]
             },
             "license": [
                 "MIT"
@@ -6189,40 +6189,40 @@
     ],
     "aliases": [
         {
-            "alias": "v2.5.13",
-            "alias_normalized": "2.5.13.0",
+            "package": "doctrine/dbal",
             "version": "2.5.13.0-patch6",
-            "package": "doctrine/dbal"
+            "alias": "v2.5.13",
+            "alias_normalized": "2.5.13.0"
         },
         {
-            "alias": "v2.5.14",
-            "alias_normalized": "2.5.14.0",
+            "package": "doctrine/orm",
             "version": "2.5.14.0-patch1",
-            "package": "doctrine/orm"
+            "alias": "v2.5.14",
+            "alias_normalized": "2.5.14.0"
         },
         {
-            "alias": "1.8.2",
-            "alias_normalized": "1.8.2.0",
+            "package": "phpoffice/phpexcel",
             "version": "1.8.2.0-patch2",
-            "package": "phpoffice/phpexcel"
+            "alias": "1.8.2",
+            "alias_normalized": "1.8.2.0"
         },
         {
-            "alias": "1.10.1",
-            "alias_normalized": "1.10.1.0",
+            "package": "phpoffice/phpspreadsheet",
             "version": "1.10.1.0-patch3",
-            "package": "phpoffice/phpspreadsheet"
+            "alias": "1.10.1",
+            "alias_normalized": "1.10.1.0"
         },
         {
-            "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0",
+            "package": "sabre/vobject",
             "version": "3.5.3.0-patch1",
-            "package": "sabre/vobject"
+            "alias": "2.1.0",
+            "alias_normalized": "2.1.0.0"
         },
         {
-            "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0",
+            "package": "zendframework/zendframework1",
             "version": "1.12.20.0-patch53",
-            "package": "zendframework/zendframework1"
+            "alias": "1.12.20",
+            "alias_normalized": "1.12.20.0"
         }
     ],
     "minimum-stability": "stable",
@@ -6261,5 +6261,6 @@
     "platform-overrides": {
         "php": "7.2.5",
         "ext-filter": "7.2"
-    }
+    },
+    "plugin-api-version": "2.1.0"
 }
