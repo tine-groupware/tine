@@ -581,7 +581,7 @@ class Tinebase_Core
         $container = new ContainerBuilder();
 
         $container->register(RequestInterface::class)
-            ->setFactory('\Zend\Diactoros\ServerRequestFactory::fromGlobals')
+            ->setFactory('\Laminas\Diactoros\ServerRequestFactory::fromGlobals')
             ->setPublic(true);
 
         try {
