@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "1ff47a258d995ad8c10b7c50c4be8330",
@@ -2108,20 +2108,6 @@
                 "psr-17",
                 "psr-7"
             ],
-            "support": {
-                "chat": "https://laminas.dev/chat",
-                "docs": "https://docs.laminas.dev/laminas-diactoros/",
-                "forum": "https://discourse.laminas.dev",
-                "issues": "https://github.com/laminas/laminas-diactoros/issues",
-                "rss": "https://github.com/laminas/laminas-diactoros/releases.atom",
-                "source": "https://github.com/laminas/laminas-diactoros"
-            },
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2021-09-15T08:41:12+00:00"
         },
         {
@@ -3286,7 +3272,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3316,7 +3301,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3345,7 +3329,6 @@
                 "php": ">=5.5.0",
                 "validator/livr": "dev-master#6309697f926a20e1267cc15ee5b847b5c6ecdbcd"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3364,7 +3347,7 @@
                 "Office",
                 "Tine 2.0"
             ],
-            "time": "2021-08-11T13:57:31+00:00"
+            "time": "2021-08-13T13:44:26+00:00"
         },
         {
             "name": "metaways/tine20-gdpr",
@@ -3377,7 +3360,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3403,7 +3385,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -3434,7 +3415,6 @@
             "require": {
                 "php": ">=5.5.0"
             },
-            "default-branch": true,
             "type": "tine20application",
             "extra": {
                 "symlinks": {
@@ -12074,40 +12054,40 @@
     ],
     "aliases": [
         {
-            "package": "doctrine/dbal",
-            "version": "2.13.3.0-patch1",
             "alias": "2.13.3",
-            "alias_normalized": "2.13.3.0"
+            "alias_normalized": "2.13.3.0",
+            "version": "2.13.3.0-patch1",
+            "package": "doctrine/dbal"
         },
         {
-            "package": "phpoffice/phpexcel",
-            "version": "1.8.2.0-patch2",
             "alias": "1.8.2",
-            "alias_normalized": "1.8.2.0"
+            "alias_normalized": "1.8.2.0",
+            "version": "1.8.2.0-patch2",
+            "package": "phpoffice/phpexcel"
         },
         {
-            "package": "phpoffice/phpspreadsheet",
-            "version": "1.18.0.0-patch1",
             "alias": "1.18.0",
-            "alias_normalized": "1.18.0.0"
+            "alias_normalized": "1.18.0.0",
+            "version": "1.18.0.0-patch1",
+            "package": "phpoffice/phpspreadsheet"
         },
         {
-            "package": "sabre/dav",
-            "version": "1.8.12.0-patch1",
             "alias": "1.8.12",
-            "alias_normalized": "1.8.12.0"
+            "alias_normalized": "1.8.12.0",
+            "version": "1.8.12.0-patch1",
+            "package": "sabre/dav"
         },
         {
-            "package": "sabre/vobject",
-            "version": "3.5.3.0-patch1",
             "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0"
+            "alias_normalized": "2.1.0.0",
+            "version": "3.5.3.0-patch1",
+            "package": "sabre/vobject"
         },
         {
-            "package": "zendframework/zendframework1",
-            "version": "1.12.20.0-patch53",
             "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0"
+            "alias_normalized": "1.12.20.0",
+            "version": "1.12.20.0-patch53",
+            "package": "zendframework/zendframework1"
         }
     ],
     "minimum-stability": "stable",
@@ -12145,6 +12125,5 @@
     "platform-overrides": {
         "php": "7.4",
         "ext-filter": "7.4"
-    },
-    "plugin-api-version": "2.1.0"
+    }
 }
