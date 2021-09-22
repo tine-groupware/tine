@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ed14570141117f544513382d44540db9",
+    "content-hash": "7c81c5cf5178b646f5b129525496b926",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1671,36 +1671,6 @@
                 "Tine 2.0"
             ],
             "time": "2021-07-07T12:04:24+00:00"
-        },
-        {
-            "name": "metaways/tine20-onlyofficeintegrator",
-            "version": "dev-2020-11",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git",
-                "reference": "0d36dac5fcaa0771fee1a2a18fa4f4b0d5bceca6"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "OnlyOfficeIntegrator": "lib/OnlyOfficeIntegrator",
-                    "../tests/tine20/OnlyOfficeIntegrator": "tests/OnlyOfficeIntegrator"
-                },
-                "reverseSymlinks": {
-                    "lib/images": "images"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 OnlyOfficeIntegrator Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Office",
-                "OnlyOfficeIntegrator",
-                "Tine 2.0"
-            ],
-            "time": "2021-07-07T12:04:26+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -6200,7 +6170,6 @@
         "metaways/tine20-bookmarks": 20,
         "metaways/tine20-dfcom": 20,
         "metaways/tine20-gdpr": 20,
-        "metaways/tine20-onlyofficeintegrator": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,

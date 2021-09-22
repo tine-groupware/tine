@@ -115,7 +115,6 @@
     "metaways/tine20-bookmarks": "dev-master",
     "metaways/tine20-dfcom": "dev-2020-11",
     "metaways/tine20-gdpr": "dev-2020-11",
-    "metaways/tine20-onlyofficeintegrator": "dev-2020-11",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "phpoffice/phpexcel": "1.8.2pl2 as 1.8.2",
