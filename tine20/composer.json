@@ -22,26 +22,6 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://gitlab.metaways.net/tine20/tine20-bookmarks.git"
-    },
-    {
-      "type": "git",
-      "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git"
-    },
-    {
-      "type": "git",
-      "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git"
-    },
-    {
-      "type": "git",
-      "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git"
-    },
-    {
-      "type": "git",
-      "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git"
-    },
-    {
-      "type": "git",
       "url": "https://github.com/tine20/composerapploader.git"
     },
     {
