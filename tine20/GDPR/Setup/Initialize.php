@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -22,6 +22,10 @@ class GDPR_Setup_Initialize extends Setup_Initialize
 {
     protected function _initializeCustomFields()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
         $appId = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
 
         Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
@@ -129,6 +133,10 @@ class GDPR_Setup_Initialize extends Setup_Initialize
 
     protected function _initializeDefaultDataProvenance()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
         $dP = GDPR_Controller_DataProvenance::getInstance()->create(new GDPR_Model_DataProvenance([
             'name'          => 'Tine2.0',
         ]));

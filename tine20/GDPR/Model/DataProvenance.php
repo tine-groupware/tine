@@ -91,4 +91,9 @@ class GDPR_Model_DataProvenance extends Tinebase_Record_Abstract
             ],
         ]
     ];
+
+    public function isReplicable()
+    {
+        return true;
+    }
 }

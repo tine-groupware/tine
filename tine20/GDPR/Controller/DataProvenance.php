@@ -112,4 +112,14 @@ class GDPR_Controller_DataProvenance extends Tinebase_Controller_Record_Abstract
                 [Zend_Filter_Input::ALLOW_EMPTY] = true;
         }
     }
+
+    public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)
+    {
+        Tinebase_Timemachine_ModificationLog::defaultApply($_modification, $this);
+
+        if (!GDPR_Config::getInstance()->{GDPR_Config::DEFAULT_ADB_CONTACT_DATA_PROVENANCE} &&
+                Tinebase_Timemachine_ModificationLog::CREATED === $_modification->change_type) {
+            GDPR_Config::getInstance()->{GDPR_Config::DEFAULT_ADB_CONTACT_DATA_PROVENANCE} = $_modification->record_id;
+        }
+    }
 }

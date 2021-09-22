@@ -78,4 +78,9 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_Abstract
             ],
         ]
     ];
+
+    public function isReplicable()
+    {
+        return true;
+    }
 }

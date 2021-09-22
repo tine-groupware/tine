@@ -123,7 +123,6 @@
     "metaways/timezoneconvert": "1.*",
     "metaways/tine20-bookmarks": "dev-master",
     "metaways/tine20-efile": "dev-master",
-    "metaways/tine20-gdpr": "dev-master",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "nl.idaas/openid-server": "^0.1.7",
