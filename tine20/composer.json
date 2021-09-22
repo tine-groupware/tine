@@ -122,7 +122,6 @@
     "metaways/opendocument": "1.2",
     "metaways/timezoneconvert": "1.*",
     "metaways/tine20-bookmarks": "dev-master",
-    "metaways/tine20-dfcom": "dev-master",
     "metaways/tine20-efile": "dev-master",
     "metaways/tine20-gdpr": "dev-master",
     "metaways/tine20-usermanual": "dev-master",

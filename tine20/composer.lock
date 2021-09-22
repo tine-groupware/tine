@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db00df2e3caf00778f2f49ea8eba613c",
+    "content-hash": "1db30f53450479daa6768d5135fbde32",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3289,33 +3289,6 @@
                 "Tine 2.0"
             ],
             "time": "2021-08-26T09:16:19+00:00"
-        },
-        {
-            "name": "metaways/tine20-dfcom",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
-                "reference": "be68ab77cdd9ef346201768d3a21d0904f5cddbd"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "DFCom": "lib/DFCom",
-                    "../tests/tine20/DFCom": "tests/DFCom"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 DFCom Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Datafox",
-                "Devices",
-                "Tine 2.0"
-            ],
-            "time": "2021-08-11T11:03:23+00:00"
         },
         {
             "name": "metaways/tine20-efile",
@@ -12105,7 +12078,6 @@
     "stability-flags": {
         "jumbojett/openid-connect-php": 20,
         "metaways/tine20-bookmarks": 20,
-        "metaways/tine20-dfcom": 20,
         "metaways/tine20-efile": 20,
         "metaways/tine20-gdpr": 20,
         "metaways/tine20-usermanual": 20,
