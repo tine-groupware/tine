@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c81c5cf5178b646f5b129525496b926",
+    "content-hash": "7c2c306fb057a5811640e577ddf138aa",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1619,33 +1619,6 @@
                 "Tine 2.0"
             ],
             "time": "2021-08-26T09:16:19+00:00"
-        },
-        {
-            "name": "metaways/tine20-dfcom",
-            "version": "dev-2020-11",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
-                "reference": "7afafbe243c51da1f8c59dd13486eb8f2fafab86"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "DFCom": "lib/DFCom",
-                    "../tests/tine20/DFCom": "tests/DFCom"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 DFCom Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Datafox",
-                "Devices",
-                "Tine 2.0"
-            ],
-            "time": "2021-07-07T12:04:23+00:00"
         },
         {
             "name": "metaways/tine20-gdpr",
@@ -6168,7 +6141,6 @@
         "ezyang/htmlpurifier": 20,
         "jumbojett/openid-connect-php": 20,
         "metaways/tine20-bookmarks": 20,
-        "metaways/tine20-dfcom": 20,
         "metaways/tine20-gdpr": 20,
         "validator/livr": 20
     },
