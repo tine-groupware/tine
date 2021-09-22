@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7c2c306fb057a5811640e577ddf138aa",
+    "content-hash": "d6982d887012d2bd72831d51fc2f1bf8",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1619,31 +1619,6 @@
                 "Tine 2.0"
             ],
             "time": "2021-08-26T09:16:19+00:00"
-        },
-        {
-            "name": "metaways/tine20-gdpr",
-            "version": "dev-2020-11",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
-                "reference": "8a7d10591e5b63ff067bf53eb5d2f4eb283cf20b"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "GDPR": "lib/GDPR",
-                    "../tests/tine20/GDPR": "tests/GDPR"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 GDPR Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Tine 2.0"
-            ],
-            "time": "2021-07-07T12:04:24+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -6141,7 +6116,6 @@
         "ezyang/htmlpurifier": 20,
         "jumbojett/openid-connect-php": 20,
         "metaways/tine20-bookmarks": 20,
-        "metaways/tine20-gdpr": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
