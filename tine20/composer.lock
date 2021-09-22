@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d6982d887012d2bd72831d51fc2f1bf8",
+    "content-hash": "6ede71ee588b226e3c283115d8f54d22",
     "packages": [
         {
             "name": "clue/socket-raw",
@@ -1590,35 +1590,6 @@
                 "UTC"
             ],
             "time": "2016-04-25T08:20:13+00:00"
-        },
-        {
-            "name": "metaways/tine20-bookmarks",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-bookmarks.git",
-                "reference": "f17acb10aa8da86f34c9889d2b69717a6cc45476"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "Bookmarks": "lib/Bookmarks",
-                    "../tests/tine20/Bookmarks": "tests/Bookmarks"
-                },
-                "reverseSymlinks": {
-                    "lib/images": "images"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 Bookmarks Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Bookmarks",
-                "Tine 2.0"
-            ],
-            "time": "2021-08-26T09:16:19+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -6115,7 +6086,6 @@
     "stability-flags": {
         "ezyang/htmlpurifier": 20,
         "jumbojett/openid-connect-php": 20,
-        "metaways/tine20-bookmarks": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
