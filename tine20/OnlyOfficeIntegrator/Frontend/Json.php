@@ -593,21 +593,10 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         $backend = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->getBackend();
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $raii = (new Tinebase_RAII(function () use (&$transId, $backend) {
-            $backend->resetSelectHooks();
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
+        $transRaii = Tinebase_RAII::getTransactionManagerRAII();
+        $selectForUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($backend);
 
         OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->invalidateTimeouts();
-
-        $backend->addSelectHook(function(Zend_Db_Select $select) { $select->forUpdate(true); });
 
         // unsigned the session from the token
         if (null === ($token = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
@@ -633,7 +622,8 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->update($token);
         }
 
-        $raii->release();
+        $transRaii->release();
+        unset($selectForUpdateRaii);
 
         return true;
     }
@@ -650,21 +640,10 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         $backend = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->getBackend();
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $raii = (new Tinebase_RAII(function() use (&$transId, $backend) {
-            $backend->resetSelectHooks();
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
+        $transRaii = Tinebase_RAII::getTransactionManagerRAII();
+        $selectForUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($backend);
 
         OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->invalidateTimeouts();
-
-        $backend->addSelectHook(function(Zend_Db_Select $select) { $select->forUpdate(true); });
 
         $accessTokens = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
@@ -692,12 +671,13 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED, 'operator' => 'equals',
                         'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
                 ]));
-            $backend->resetSelectHooks();
+            unset($selectForUpdateRaii);
             $reactivatedTokens = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()
                 ->reactivateTokens($remainingAccessTokens);
         }
 
-        $raii->release();
+        $transRaii->release();
+        unset($selectForUpdateRaii);
 
         $result = [];
         foreach ($keys as $key) {
@@ -1054,11 +1034,11 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 ]), new Tinebase_Model_Pagination(['limit' => 1]))->getFirstRecord())) {
             if ((int)OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION === (int)$token
                     ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION}) {
-                return Tinebase_TempFile::getInstance()->get($token
-                    ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID})->toArray(true);
+                return $this->_recordToJson(Tinebase_TempFile::getInstance()->get($token
+                    ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}));
             } else {
-                return Tinebase_FileSystem::getInstance()->get($token
-                    ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID})->toArray(true);
+                return $this->_recordToJson(Tinebase_FileSystem::getInstance()->get($token
+                    ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}));
             }
         }
 

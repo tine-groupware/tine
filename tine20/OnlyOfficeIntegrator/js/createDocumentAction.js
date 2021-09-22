@@ -61,7 +61,8 @@ Promise.all([
                 enabled =_.get(recordData, 'container_id.account_grants.editGrant', false);
             } else if (recordData) {
                 const node = Tine.Tinebase.data.Record.setFromJson(recordData, Tine.Filemanager.Model.Node);
-                enabled = Tine.Filemanager.nodeActionsMgr.checkConstraints('create', node, [{type: 'file'}]);
+                enabled = Tine.Filemanager.nodeActionsMgr.checkConstraints('create', node, [{type: 'file'}])
+                    && node?.data?.path !== '/shared/';
             }
 
             action.baseAction.filteredContainers = filteredContainers;
@@ -86,10 +87,18 @@ Promise.all([
                 const grid = baseAction.initialConfig.selectionModel.grid.ownerCt.ownerCt;
                 const localDocument = new Tine.Filemanager.Model.Node(Tine.Filemanager.Model.Node.getDefaultData({
                     name: app.i18n._hidden(nameMap[type][0]) + nameMap[type][1],
-                    type: 'file'
+                    type: 'file',
+                    account_grants: {
+                        addGrant: true,
+                        editGrant: true,
+                        deleteGrant: true
+                    },
                 }));
                 grid.newInlineRecord(localDocument, 'name', async (localDocument) => {
                     const name = String(localDocument.get('name')).replace(new RegExp(nameMap[type][1] + '$'), '');
+                    const folderPath = _.get(baseAction, 'filteredContainers[0].path');
+                    localDocument.data.path = `${folderPath}${name}${nameMap[type][1]}`;
+                    
                     resolve(name);
                     
                     // we need to return a promise for gridPanel here as it needs to remove the local record!

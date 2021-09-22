@@ -166,20 +166,9 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
     {
         $ttl = Tinebase_DateTime::now()->subSecond(OnlyOfficeIntegrator_Config::getInstance()
             ->{OnlyOfficeIntegrator_Config::TOKEN_LIVE_TIME});
-        $backend = $this->_backend;
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $transRaii = (new Tinebase_RAII(function () use (&$transId, $backend) {
-            $backend->resetSelectHooks();
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
 
-        $backend->addSelectHook(function(Zend_Db_Select $select) { $select->forUpdate(true); });
+        $transRaii = Tinebase_RAII::getTransactionManagerRAII();
+        $selectForUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
 
         foreach ($this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                 OnlyOfficeIntegrator_Model_AccessToken::class, [
@@ -191,26 +180,16 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
         }
 
         $transRaii->release();
+        unset($selectForUpdateRaii);
     }
 
     public function cleanOldTokens()
     {
         $ttl = Tinebase_DateTime::now()->subSecond((int)(OnlyOfficeIntegrator_Config::getInstance()
             ->{OnlyOfficeIntegrator_Config::TOKEN_LIVE_TIME} * 1.1));
-        $backend = $this->_backend;
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $transRaii = (new Tinebase_RAII(function () use (&$transId, $backend) {
-            $backend->resetSelectHooks();
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
 
-        $backend->addSelectHook(function(Zend_Db_Select $select) { $select->forUpdate(true); });
+        $transRaii = Tinebase_RAII::getTransactionManagerRAII();
+        $selectForUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
 
         $tokenCounts = [];
         $toDelete = [];
@@ -239,6 +218,7 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
         }
 
         $transRaii->release();
+        unset($selectForUpdateRaii);
     }
 
     /**

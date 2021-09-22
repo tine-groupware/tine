@@ -23,10 +23,38 @@ class OnlyOfficeIntegrator_Setup_Initialize extends Setup_Initialize
         $this->_initializeCustomFields();
     }
 
+    protected function _initializeQuarantine()
+    {
+        // this is only done on primary and then replicated to the secondaries
+        if (!Tinebase_Core::isReplicationPrimary()) {
+            return;
+        }
+
+        $group = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group([
+            'name' => 'OnlyOfficeIntegratorQuarantine'
+        ]));
+        $grants = [
+            'account_id'                           => $group->getId(),
+            'account_type'                         => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
+            Tinebase_Model_Grants::GRANT_READ      => true,
+            Tinebase_Model_Grants::GRANT_ADD       => true,
+            Tinebase_Model_Grants::GRANT_EDIT      => true,
+            Tinebase_Model_Grants::GRANT_DELETE    => true,
+            Tinebase_Model_Grants::GRANT_EXPORT    => true,
+            Tinebase_Model_Grants::GRANT_SYNC      => true,
+            Tinebase_Model_Grants::GRANT_ADMIN     => true,
+        ];
+
+        $path = Tinebase_Model_Tree_Node_Path::createFromRealPath('/shared/OOIQuarantine',
+            Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
+        Tinebase_FileSystem::getInstance()->createAclNode($path->statpath, new Tinebase_Record_RecordSet(
+            Tinebase_Model_Grants::class, [$grants]));
+    }
+
     protected function _initializeCustomFields()
     {
         // this is only done on primary and then replicated to the secondaries
-        if (Tinebase_Core::isReplicationSlave()) {
+        if (!Tinebase_Core::isReplicationPrimary()) {
             return;
         }
         

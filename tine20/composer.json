@@ -125,7 +125,6 @@
     "metaways/tine20-dfcom": "dev-master",
     "metaways/tine20-efile": "dev-master",
     "metaways/tine20-gdpr": "dev-master",
-    "metaways/tine20-onlyofficeintegrator": "dev-master",
     "metaways/tine20-usermanual": "dev-master",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",

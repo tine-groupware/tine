@@ -236,31 +236,84 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         // maintenance mode state (all documents closed / all tokens resolved)
         OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->doRightChecks(false);
 
-        switch ((int)$requestData['status']) {
-            // case 2: ready for saving, do so, invalidate token
-            case 2:
-                return $this->processStatus2($requestData, $token);
+        try {
+            switch ((int)$requestData['status']) {
+                // case 2: ready for saving, do so, invalidate token
+                case 2:
+                    return $this->processStatus2($requestData, $token);
 
-            //case 3: document save error, treat like 4 -> invalidate token
-            case 3:
-                $e = new Tinebase_Exception_Backend('OnlyOffice send status 3: save error');
-                $e->logToSentry(true);
-                $e->setLogLevelMethod('warn');
-                Tinebase_Exception::log($e);
-            // case 4: document closed without changes -> invalidate token
-            case 4:
-                return $this->processStatus4($token);
+                //case 3: document save error, treat like 4 -> invalidate token
+                case 3:
+                    $e = new Tinebase_Exception_Backend('OnlyOffice send status 3: save error');
+                    $e->logToSentry(true);
+                    $e->setLogLevelMethod('warn');
+                    Tinebase_Exception::log($e);
+                // case 4: document closed without changes -> invalidate token
+                case 4:
+                    return $this->processStatus4($token);
 
-            // case 6: force save, just save, no token invalidation
-            case 6:
-                return $this->processStatus6($requestData, $token);
+                // case 6: force save, just save, no token invalidation
+                case 6:
+                    return $this->processStatus6($requestData, $token);
 
-            default:
-                $response = new \Zend\Diactoros\Response();
-                $response->getBody()->write('{
+                default:
+                    $response = new \Zend\Diactoros\Response();
+                    $response->getBody()->write('{
     "error": 0
 }');
-                return $response;
+                    return $response;
+            }
+        } catch (Throwable $t) {
+            if ((2 === (int)$requestData['status'] || 6 === (int)$requestData['status']) && isset($requestData['url'])) {
+                // eventually rewrite the source url depending on config
+                if ($conf->{OnlyOfficeIntegrator_Config::ONLYOFFICE_SERVER_URL} && $conf->{OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL}) {
+                    $requestData['url'] = str_replace($conf->{OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL},
+                        $conf->{OnlyOfficeIntegrator_Config::ONLYOFFICE_SERVER_URL}, $requestData['url']);
+                }
+
+                if (!Tinebase_Core::getUser()) {
+                    Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()
+                        ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
+                }
+
+                // figure out target path ... also file ending rewrite happens here
+                $srcEnding = ltrim(substr($requestData['url'], strrpos($requestData['url'], '.')), '.');
+
+                $path = Tinebase_Model_Tree_Node_Path::createFromRealPath('/shared/OOIQuarantine',
+                    Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
+                $trgtPath = $path->statpath . '/' . date('c') . '_' . uniqid() . $srcEnding;
+
+                if (!($srcStream = @fopen($requestData['url'], 'r'))) {
+                    $e = new Tinebase_Exception_Backend('could not open document to save');
+                    Tinebase_Exception::log($e);
+                    throw $t;
+                }
+                $closeSrcStreamRaii = new Tinebase_RAII(function() use(&$srcStream) {
+                    @fclose($srcStream);
+                });
+                if (!($dstStream = @fopen('tine20://' . $trgtPath, 'w'))) {
+                    $e = new Tinebase_Exception_Backend('could not open tine node for writing');
+                    Tinebase_Exception::log($e);
+                    throw $t;
+                }
+                if (false === @stream_copy_to_stream($srcStream, $dstStream)) {
+                    $e = new Tinebase_Exception_Backend('stream copy failed');
+                    Tinebase_Exception::log($e);
+                    throw $t;
+                }
+                if (false === @fclose($dstStream)) {
+                    $e = new Tinebase_Exception_Backend('tine20 fclose failed');
+                    Tinebase_Exception::log($e);
+                    throw $t;
+                }
+                // just for unused variable check
+                unset($closeSrcStreamRaii);
+
+                $node = Tinebase_FileSystem::getInstance()->stat($trgtPath);
+                $node->description = 'token: ' . $token . PHP_EOL . 'request_data: ' . print_r($requestData, true);
+                Tinebase_FileSystem::getInstance()->update($node);
+            }
+            throw $t;
         }
     }
 
@@ -494,7 +547,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         ])))->getFirstRecord();
 
         if (null === $accessToken || $accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_GRANTS} <
-            OnlyOfficeIntegrator_Model_AccessToken::GRANT_WRITE) {
+                OnlyOfficeIntegrator_Model_AccessToken::GRANT_WRITE) {
             throw new Tinebase_Exception_Expressive_HttpStatus('token not valid', 404);
         }
 

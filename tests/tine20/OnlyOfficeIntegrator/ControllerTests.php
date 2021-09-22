@@ -587,15 +587,28 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
             'url' => 'tine20:///Tinebase/folders/shared/ootest/testUpdated.txt',
         ]));
         rewind($fh);
+        file_put_contents('tine20:///Tinebase/folders/shared/ootest/testUpdated.txt', 'test');
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
 
         Tinebase_Core::getContainer()->set(RequestInterface::class, (new \Zend\Diactoros\ServerRequest())
             ->withHeader('Authorization', 'Bearer ' . JWT::encode(['payload' => $reqBody],
                     OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256'))
             ->withBody(new \Zend\Diactoros\Stream($fh)));
 
-        static::expectException(Tinebase_Exception_Expressive_HttpStatus::class);
-        static::expectExceptionMessage('token not valid');
-        $this->_uit->updateStatus($token);
+        try {
+            $this->_uit->updateStatus($token);
+        } catch (Tinebase_Exception_Expressive_HttpStatus $e) {
+            $this->assertStringContainsString('token not valid', $e->getMessage());
+            $this->assertTrue(Tinebase_FileSystem::getInstance()->fileExists('/Filemanager/folders/shared/OOIQuarantine'));
+            $node = Tinebase_FileSystem::getInstance()->stat('/Filemanager/folders/shared/OOIQuarantine');
+            $files = Tinebase_FileSystem::getInstance()->getTreeNodeChildren($node->getId());
+            $this->assertSame(1, $files->count());
+            $this->assertSame('test', file_get_contents('tine20:///Filemanager/folders/shared/OOIQuarantine/' .
+                $files->getFirstRecord()->name));
+
+            return;
+        }
+        $this->fail('expected ' . Tinebase_Exception_Expressive_HttpStatus::class . ' to be thrown');
     }
 
     public function testUpdateStatusParameterException()
