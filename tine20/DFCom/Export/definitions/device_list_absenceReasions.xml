@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>HumanResources_Model_AbsenceReason</model>
+    <name>DFCom_device_list_absenceReasons</name>
+    <deviceName>absenceReasons</deviceName>
+    <!-- _('Absence Reasons Device List') -->
+    <label>Absence Reasons Device List</label>
+    <type>export</type>
+    <plugin>Tinebase_Export_CsvNew</plugin>
+    <icon_class>tinebase-action-export-csv</icon_class>
+    <sort>
+        <field>token</field>
+        <direction>ASC</direction>
+    </sort>
+    <header>0</header>
+    <delimiter>&#x09;</delimiter>
+    <enclosure></enclosure>
+    <columns>
+        <column>
+            <identifier>token</identifier>
+            <header>Token</header>
+        </column>
+        <column>
+            <identifier>label</identifier>
+            <header>Label</header>
+        </column>
+    </columns>
+</config>

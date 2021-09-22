@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15ce520ed84078031f921a288de362fd",
+    "content-hash": "d0514770dda14e22d80f75bc26e843cd",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3262,62 +3262,6 @@
             "time": "2016-04-25T08:20:13+00:00"
         },
         {
-            "name": "metaways/tine20-bookmarks",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-bookmarks.git",
-                "reference": "f17acb10aa8da86f34c9889d2b69717a6cc45476"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "Bookmarks": "lib/Bookmarks",
-                    "../tests/tine20/Bookmarks": "tests/Bookmarks"
-                },
-                "reverseSymlinks": {
-                    "lib/images": "images"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 Bookmarks Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Bookmarks",
-                "Tine 2.0"
-            ],
-            "time": "2021-08-26T09:16:19+00:00"
-        },
-        {
-            "name": "metaways/tine20-dfcom",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-dfcom.git",
-                "reference": "be68ab77cdd9ef346201768d3a21d0904f5cddbd"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "DFCom": "lib/DFCom",
-                    "../tests/tine20/DFCom": "tests/DFCom"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 DFCom Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Datafox",
-                "Devices",
-                "Tine 2.0"
-            ],
-            "time": "2021-08-11T11:03:23+00:00"
-        },
-        {
             "name": "metaways/tine20-efile",
             "version": "dev-master",
             "source": {
@@ -3348,92 +3292,6 @@
                 "Tine 2.0"
             ],
             "time": "2021-08-13T13:44:26+00:00"
-        },
-        {
-            "name": "metaways/tine20-gdpr",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-gdpr.git",
-                "reference": "631abd057ec3149517d383ad6955ca3e110bddce"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "GDPR": "lib/GDPR",
-                    "../tests/tine20/GDPR": "tests/GDPR"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 GDPR Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Tine 2.0"
-            ],
-            "time": "2021-07-07T12:06:47+00:00"
-        },
-        {
-            "name": "metaways/tine20-onlyofficeintegrator",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-onlyofficeintegrator.git",
-                "reference": "d1d4c47a1a9189cc24bf3db56e97cfa061024583"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "OnlyOfficeIntegrator": "lib/OnlyOfficeIntegrator",
-                    "../tests/tine20/OnlyOfficeIntegrator": "tests/OnlyOfficeIntegrator"
-                },
-                "reverseSymlinks": {
-                    "lib/images": "images"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 OnlyOfficeIntegrator Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Office",
-                "OnlyOfficeIntegrator",
-                "Tine 2.0"
-            ],
-            "time": "2021-09-10T15:37:00+00:00"
-        },
-        {
-            "name": "metaways/tine20-usermanual",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "0007102271ec3e6a143ab5dec3f0bc08f8fc3c35"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "UserManual": "lib/UserManual",
-                    "../tests/tine20/UserManual": "tests/UserManual"
-                },
-                "reverseSymlinks": {
-                    "lib/images": "images"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 UserManual Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Documenation",
-                "Help",
-                "Manual",
-                "Tine 2.0"
-            ],
-            "time": "2021-08-13T07:28:27+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -12095,51 +11953,46 @@
     ],
     "aliases": [
         {
-            "alias": "2.13.3",
-            "alias_normalized": "2.13.3.0",
+            "package": "doctrine/dbal",
             "version": "2.13.3.0-patch1",
-            "package": "doctrine/dbal"
+            "alias": "2.13.3",
+            "alias_normalized": "2.13.3.0"
         },
         {
-            "alias": "1.8.2",
-            "alias_normalized": "1.8.2.0",
+            "package": "phpoffice/phpexcel",
             "version": "1.8.2.0-patch2",
-            "package": "phpoffice/phpexcel"
+            "alias": "1.8.2",
+            "alias_normalized": "1.8.2.0"
         },
         {
-            "alias": "1.18.0",
-            "alias_normalized": "1.18.0.0",
+            "package": "phpoffice/phpspreadsheet",
             "version": "1.18.0.0-patch1",
-            "package": "phpoffice/phpspreadsheet"
+            "alias": "1.18.0",
+            "alias_normalized": "1.18.0.0"
         },
         {
-            "alias": "1.8.12",
-            "alias_normalized": "1.8.12.0",
+            "package": "sabre/dav",
             "version": "1.8.12.0-patch1",
-            "package": "sabre/dav"
+            "alias": "1.8.12",
+            "alias_normalized": "1.8.12.0"
         },
         {
-            "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0",
+            "package": "sabre/vobject",
             "version": "3.5.3.0-patch1",
-            "package": "sabre/vobject"
+            "alias": "2.1.0",
+            "alias_normalized": "2.1.0.0"
         },
         {
-            "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0",
+            "package": "zendframework/zendframework1",
             "version": "1.12.20.0-patch54",
-            "package": "zendframework/zendframework1"
+            "alias": "1.12.20",
+            "alias_normalized": "1.12.20.0"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
         "jumbojett/openid-connect-php": 20,
-        "metaways/tine20-bookmarks": 20,
-        "metaways/tine20-dfcom": 20,
         "metaways/tine20-efile": 20,
-        "metaways/tine20-gdpr": 20,
-        "metaways/tine20-onlyofficeintegrator": 20,
-        "metaways/tine20-usermanual": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
@@ -12166,5 +12019,6 @@
     "platform-overrides": {
         "php": "7.4",
         "ext-filter": "7.4"
-    }
+    },
+    "plugin-api-version": "2.1.0"
 }
