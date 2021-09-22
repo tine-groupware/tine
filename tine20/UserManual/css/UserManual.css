@@ -1,0 +1,21 @@
+.UserManualIconCls {
+    background-image: url(../../images/icon-set/icon_usermanual.svg) !important;
+}
+.usermanual-action-debug {
+    background-image:url(../../images/icon-set/icon_usermanual.svg) !important;
+}
+.usermanual-action-go-next {
+    background-image:url(../../images/icon-set/icon_arrow_action_first.svg) !important;
+}
+.usermanual-action-go-previous {
+    background-image:url(../../images/icon-set/icon_arrow_action_back_first.svg) !important;
+}
+.usermanual-action-go-up {
+    background-image:url(../../images/icon-set/icon_arrow_up.svg) !important;
+}
+.usermanual-action-go-down {
+    background-image:url(../../images/icon-set/icon_arrow_down.svg) !important;
+}
+.usermanual-action-go-home {
+    background-image:url(../../images/icon-set/icon_base.svg) !important;
+}
