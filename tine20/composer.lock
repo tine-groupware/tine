@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d0514770dda14e22d80f75bc26e843cd",
+    "content-hash": "e77c90eea2489ecdc44845b53ec10caf",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3260,38 +3260,6 @@
                 "UTC"
             ],
             "time": "2016-04-25T08:20:13+00:00"
-        },
-        {
-            "name": "metaways/tine20-efile",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-efile.git",
-                "reference": "be77223ee66e63e81d6cc99b3e1ec7a4aebeb393"
-            },
-            "require": {
-                "php": ">=5.5.0",
-                "validator/livr": "dev-master#6309697f926a20e1267cc15ee5b847b5c6ecdbcd"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "EFile": "lib/EFile",
-                    "../tests/tine20/EFile": "tests/EFile"
-                },
-                "reverseSymlinks": {
-                    "lib/images": "images"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 EFile Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "EFile",
-                "Files",
-                "Office",
-                "Tine 2.0"
-            ],
-            "time": "2021-08-13T13:44:26+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -11992,7 +11960,6 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "jumbojett/openid-connect-php": 20,
-        "metaways/tine20-efile": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
