@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1db30f53450479daa6768d5135fbde32",
+    "content-hash": "42e95db989c43b1015e4237dcae4bc97",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3346,37 +3346,6 @@
                 "Tine 2.0"
             ],
             "time": "2021-07-07T12:06:47+00:00"
-        },
-        {
-            "name": "metaways/tine20-usermanual",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://gitlab.metaways.net/tine20/tine20-usermanual.git",
-                "reference": "0007102271ec3e6a143ab5dec3f0bc08f8fc3c35"
-            },
-            "require": {
-                "php": ">=5.5.0"
-            },
-            "type": "tine20application",
-            "extra": {
-                "symlinks": {
-                    "UserManual": "lib/UserManual",
-                    "../tests/tine20/UserManual": "tests/UserManual"
-                },
-                "reverseSymlinks": {
-                    "lib/images": "images"
-                }
-            },
-            "description": "Metaways Infosystems GmbH - Tine 2.0 UserManual Module",
-            "homepage": "http://www.tine20.com",
-            "keywords": [
-                "Documenation",
-                "Help",
-                "Manual",
-                "Tine 2.0"
-            ],
-            "time": "2021-08-13T07:28:27+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -12080,7 +12049,6 @@
         "metaways/tine20-bookmarks": 20,
         "metaways/tine20-efile": 20,
         "metaways/tine20-gdpr": 20,
-        "metaways/tine20-usermanual": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
