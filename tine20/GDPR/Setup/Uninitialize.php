@@ -26,6 +26,10 @@ class GDPR_Setup_Uninitialize extends Setup_Uninitialize
      */
     protected function _uninitializeCustomFields(Tinebase_Model_Application $_application, $_options = null)
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
             GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME, null, true);
