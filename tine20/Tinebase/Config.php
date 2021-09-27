@@ -770,6 +770,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
     const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
     const FILESYSTEM_AVSCAN_URL = 'avscanURL';
+    const FILESYSTEM_SHOW_CURRENT_USAGE = 'showCurrentUsage';
 
     const ACTIONQUEUE = 'actionqueue';
     const ACTIONQUEUE_ACTIVE = 'active';
@@ -830,7 +831,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const COMMUNITYIDENTNR_DUP_FIELDS = 'communityIdentNrDupFields';
-
+    
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -2626,6 +2627,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::SETBYADMINMODULE      => true,
                     self::SETBYSETUPMODULE      => true,
                 ],
+                self::FILESYSTEM_SHOW_CURRENT_USAGE => [
+                    //_('Filesystem show current usage')
+                    self::LABEL                 => 'Filesystem show current usage',
+                    //_('Show fileSystem nodes current usage in grid panel, it affects Admin and Filemanager. check Tinebase_Tree_Node for possible values.')
+                    self::DESCRIPTION           => 'Show fileSystem nodes current usage in grid panel, it affects Admin and Filemanager. check Tinebase_Tree_Node for possible values.',
+                    self::TYPE                  => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => TRUE,
+                    self::SETBYADMINMODULE      => TRUE,
+                    self::SETBYSETUPMODULE      => FALSE,
+                    self::DEFAULT_STR           => ['size', 'revision_size']
+                ]
             ),
             'default'               => array(),
         ),
@@ -2892,7 +2904,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'contents'              => 'array',
             'clientRegistryInclude' => TRUE,
             'default'               => array('arsCombined'),
-        ),
+        )
     );
 
     /**
