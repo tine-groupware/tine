@@ -45,7 +45,7 @@ class UserManual_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @deprecated use importHandbookBuild
      */
-    public function importManualPages($opts)
+    public function importManualPages(Zend_Console_Getopt $opts)
     {
         if (! $this->_checkAdminRight()) {
             return 2;
@@ -74,12 +74,12 @@ class UserManual_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * import context
      *
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * @return int
      *
      * @deprecated use importHandbookBuild
      */
-    public function importManualContext($opts)
+    public function importManualContext(Zend_Console_Getopt $opts)
     {
         if (! $this->_checkAdminRight()) {
             return 2;
@@ -108,10 +108,10 @@ class UserManual_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * USAGE:
      *
-     * @param $opts
+     * @param Zend_Console_Getopt $opts
      * @return int
      */
-    public function importHandbookBuild($opts)
+    public function importHandbookBuild(Zend_Console_Getopt $opts)
     {
         if (! $this->_checkAdminRight()) {
             return 2;
