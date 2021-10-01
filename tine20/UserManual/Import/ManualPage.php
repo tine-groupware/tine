@@ -96,10 +96,10 @@ class UserManual_Import_ManualPage
     }
 
     /**
-     * @param $content
+     * @param string $content
      * @return null
      */
-    protected function _getTitle($content)
+    protected function _getTitle(string $content)
     {
         if (preg_match('/<title[^>]*>(.*)<\/title>/is', $content, $matches)) {
             return $matches[1];

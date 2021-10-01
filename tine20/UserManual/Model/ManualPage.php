@@ -15,7 +15,6 @@
  *
  * @package     UserManual
  * @subpackage  Model
- * @property    $name
  */
 class UserManual_Model_ManualPage extends Tinebase_Record_Abstract
 {
