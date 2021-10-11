@@ -109,7 +109,13 @@ class DFCom_Model_DeviceRecord extends Tinebase_Record_Abstract
         ]
     ];
 
-    public static function createFromDeviceQuery(\Zend\Stdlib\ParametersInterface $query)
+    /**
+     * @param \Laminas\Stdlib\ParametersInterface $query
+     * @return DFCom_Model_DeviceRecord
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public static function createFromDeviceQuery(\Laminas\Stdlib\ParametersInterface $query)
     {
         $prefix = 'df_col_';
 
@@ -131,12 +137,6 @@ class DFCom_Model_DeviceRecord extends Tinebase_Record_Abstract
                 $recordData['data'][$binaryField] = base64_encode($recordData['data'][$binaryField]);
             }
         }
-
-//        $rawCellularData = explode(',', $recordData['data']['cellularData']);
-//        $recordData['data']['cellularData'] = [];
-//        foreach(self::$cellularDataProps as $num => $property) {
-//            $recordData['data']['cellularData'][$property] = bindec($rawCellularData[$num]);
-//        }
 
         return new self($recordData);
     }
