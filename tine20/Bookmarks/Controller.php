@@ -34,7 +34,11 @@ class Bookmarks_Controller extends Tinebase_Controller_Event
             ]))->toArray());
         });
     }
-    
+
+    /**
+     * @param string $id
+     * @return false|mixed|\Zend\Diactoros\Response
+     */
     public function openBookmark($id)
     {
         $bc = Bookmarks_Controller_Bookmark::getInstance();
@@ -47,7 +51,7 @@ class Bookmarks_Controller extends Tinebase_Controller_Event
             $response->getBody()->write("location: {$bookmark->url}");
             
             $hooks = Bookmarks_Config::getInstance()->get(Bookmarks_Config::OPEN_BOOKMARK_HOOKS, []);
-            foreach($hooks as $pattern => $hookClass) {
+            foreach ($hooks as $pattern => $hookClass) {
                 if (preg_match($pattern, $bookmark->url)) {
                     if (! class_exists($hookClass)) {
                         @include($hookClass . '.php');
@@ -70,9 +74,15 @@ class Bookmarks_Controller extends Tinebase_Controller_Event
                 Bookmarks_Controller_Bookmark::getInstance()->increaseAccessCount($bookmark);
             }
             return $response;
-            
-        } catch (Tasks_Exception_AccessDenied $e) {
+
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
             return new \Zend\Diactoros\Response('php://memory', 403, []);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+            return new \Zend\Diactoros\Response('php://memory', 404, []);
         }
     }
 }
