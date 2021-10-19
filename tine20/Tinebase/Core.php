@@ -1672,6 +1672,7 @@ class Tinebase_Core
      * set current user account
      *
      * @param mixed $user the user account record / string
+     * @return mixed
      */
     public static function setUser($user)
     {
@@ -1700,6 +1701,7 @@ class Tinebase_Core
         Tinebase_ModelConfiguration::resetAllCreatedModels();
         
         Zend_Registry::set(self::USER, $user);
+        return $user;
     }
 
     /**
