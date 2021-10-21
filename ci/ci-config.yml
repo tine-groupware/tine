@@ -50,7 +50,7 @@ variables:
     value: "true"
   
   PHP_STAN_ANALYSES_STRICT:
-    value: "true"
+    value: "false"
 
   CODE_ANALYSIS_PARALLEL_LINT:
     value: "true"
