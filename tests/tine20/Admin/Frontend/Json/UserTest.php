@@ -14,6 +14,18 @@
 class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 {
     /**
+     * Sets up the fixture.
+     * This method is called before a test is executed.
+     *
+     * @access protected
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
+    }
+    
+    /**
      * try to save an account
      *
      * @return array
@@ -529,6 +541,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $userArray['emailUser']['emailAliases'] = [
             ['email' => $aliasAddress, 'dispatch_address' => true],
         ];
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         $updatedUser = $this->_json->saveUser($userArray);
         self::assertIsArray($updatedUser['emailUser']['emailAliases'],
             'aliases not saved: ' . print_r($updatedUser['emailUser'], true));
@@ -570,5 +583,51 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $userArray = $this->_createTestUser();
         $result = Admin_Controller_User::getInstance()->setAccountStatus($userArray['accountId'], Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED);
         $this->assertEquals(1, $result);
+    }
+
+    /**
+     * try to save an account
+     *
+     * @return array
+     */
+    public function testSaveAccountWithConfirmation()
+    {
+        $accountData = $this->_getUserArrayWithPw();
+        $account = $this->_json->saveUser($accountData);
+
+        // FIXME make auth check work for ldap backends!
+        if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP &&
+            Tinebase_User::getConfiguredBackend() !== Tinebase_User::ACTIVEDIRECTORY
+        ) {
+            // check password
+            $authResult = Tinebase_Auth::getInstance()->authenticate($account['accountLoginName'], $accountData['accountPassword']);
+        }
+
+        $account['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] = 200;
+        $account['accountPrimaryGroup'] = $account['accountPrimaryGroup']['id'];
+        $account['groups'] = array($account['groups']['results'][0]['id']);
+
+        try {
+            Admin_Controller_User::getInstance()->setRequestContext([]);
+            $updatedAccount = $this->_json->saveUser($account);
+            self::fail('should throw Tinebase_Exception_Confirmation');
+        } catch (Tinebase_Exception_Confirmation $e) {
+            $translate = Tinebase_Translation::getTranslation('SaasInstance');
+            $translation = $translate->_("Do you want to upgrade your user limit?");
+
+            self::assertEquals($translation, $e->getMessage());
+        }
+
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
+        $updatedAccount = $this->_json->saveUser($account);
+        
+        $this->assertTrue(isset($updatedAccount['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA])
+            && $updatedAccount['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] === 200,
+            'failed to set/get account filesystem personal quota');
+        $this->assertTrue(isset($updatedAccount['effectiveAndLocalQuota']) &&
+            200 === $updatedAccount['effectiveAndLocalQuota']['localQuota']);
+
+        $account['accountPrimaryGroup'] = $accountData['accountPrimaryGroup'];
+        return $account;
     }
 }
