@@ -99,6 +99,11 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         if (!Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
             return;
         }
+        
+        $context = Admin_Controller_Quota::getInstance()->getRequestContext();
+        if ($this->_hasConfirmContextHeader($context)) {
+            return;
+        }
 
         $application = $_eventObject->application;
         $additionalData = $_eventObject->additionalData;
@@ -179,6 +184,11 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
             return;
         }
 
+        $context = Admin_Controller_User::getInstance()->getRequestContext();
+        if ($this->_hasConfirmContextHeader($context)) {
+            return;
+        }
+        
         $account = $_eventObject->account;
         $message = "Do you want to upgrade your user limit?";
         $exception = new Tinebase_Exception_Confirmation($message);
@@ -186,10 +196,16 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         $pricePerUser = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER);
         $userLimit = SaasInstance_Config::getInstance()->get(SaasInstance_Config::NUMBER_OF_INCLUDED_USERS);
         $infoTemplate = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PACKAGE_USER_INFO_TEMPLATE);
-
-        $currentUserCount = Tinebase_User::getInstance()->getUserCount();
         
-        if ($currentUserCount > $userLimit) {
+        $noneSystemUserCount = Tinebase_User::getInstance()->countNonSystemUsers();
+        $currentUserCount = Tinebase_User::getInstance()->getUsersCount();
+        
+        if ($noneSystemUserCount + 1 > $userLimit) {
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice
+            (__METHOD__ . '::' . __LINE__ . 'Current total user count : "' . $currentUserCount . 
+                ' , User limit : ' . $userLimit . PHP_EOL);
+                
             if (!empty($infoTemplate)) {
                 $info = str_replace(
                     ['{0}', '{1}'],
@@ -199,5 +215,15 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
             }
             throw $exception;
         }
+    }
+    
+    protected function _hasConfirmContextHeader($context)
+    {
+        if (!$context || !is_array($context)) {
+            return false;
+        }
+        
+        return array_key_exists('clientData', $context) && array_key_exists('confirm', $context['clientData'])
+        || array_key_exists('confirm', $context);
     }
 }
