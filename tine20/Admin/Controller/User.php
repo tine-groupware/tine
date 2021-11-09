@@ -607,7 +607,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_User::getInstance()->updateUserInSqlBackend($user);
         }
     }
-    
+
+    /**
+     * @param array|string $_accountIds
+     * @throws Tinebase_Exception_Confirmation
+     */
     protected function _checkAccountDeletionConfig($_accountIds)
     {
         $context = $this->getRequestContext();
@@ -615,6 +619,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         if ($context && is_array($context) && 
             (array_key_exists('clientData', $context) && array_key_exists('confirm', $context['clientData'])
             || array_key_exists('confirm', $context))) {
+            $this->_handleUserDeleteConfirmation($_accountIds);
             return;
         }
 
@@ -655,5 +660,15 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $exception->setInfo($userData);
         throw $exception;
+    }
+
+    /**
+     * @param array|string $_accountIds
+     */
+    protected function _handleUserDeleteConfirmation($_accountIds)
+    {
+        if (Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
+            SaasInstance_Controller_ActionLog::getInstance()->addActionLogUserDelete($_accountIds);
+        }
     }
 }

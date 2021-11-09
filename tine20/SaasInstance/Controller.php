@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tine 2.0
  *
@@ -13,9 +14,9 @@
  */
 
 /**
- * main controller for Felamimail
+ * main controller for SaasInstance
  *
- * @package     Felamimail
+ * @package     SaasInstance
  * @subpackage  Controller
  */
 class SaasInstance_Controller extends Tinebase_Controller_Event
@@ -88,13 +89,17 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
             case Admin_Event_UpdateQuota::class:
                 $this->_handleQuotaConfirmationException($_eventObject);
                 break;
+            case Tinebase_Event_Notification::class:
+                $this->_handleQuotaNotification($_eventObject);
+                break;
         }
     }
 
     /**
+     * @param Admin_Event_UpdateQuota $_eventObject
      * @throws Tinebase_Exception_Confirmation
      */
-    protected function _handleQuotaConfirmationException($_eventObject)
+    protected function _handleQuotaConfirmationException(Admin_Event_UpdateQuota $_eventObject)
     {
         if (!Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
             return;
@@ -102,6 +107,7 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         
         $context = Admin_Controller_Quota::getInstance()->getRequestContext();
         if ($this->_hasConfirmContextHeader($context)) {
+            SaasInstance_Controller_ActionLog::getInstance()->addActionLogConfirmationEvent($_eventObject);
             return;
         }
 
@@ -176,9 +182,10 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
     }
 
     /**
+     * @param Admin_Event_BeforeAddAccount $_eventObject
      * @throws Tinebase_Exception_Confirmation
      */
-    protected function _handleUserConfirmationException($_eventObject)
+    protected function _handleUserConfirmationException(Admin_Event_BeforeAddAccount $_eventObject)
     {
         if (!Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
             return;
@@ -186,9 +193,10 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
 
         $context = Admin_Controller_User::getInstance()->getRequestContext();
         if ($this->_hasConfirmContextHeader($context)) {
+            SaasInstance_Controller_ActionLog::getInstance()->addActionLogConfirmationEvent($_eventObject);
             return;
         }
-        
+
         $account = $_eventObject->account;
         $message = "Do you want to upgrade your user limit?";
         $exception = new Tinebase_Exception_Confirmation($message);
@@ -225,5 +233,27 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         
         return array_key_exists('clientData', $context) && array_key_exists('confirm', $context['clientData'])
         || array_key_exists('confirm', $context);
+    }
+
+    /**
+     * @param Tinebase_Event_Notification $_eventObject
+     */
+    protected function _handleQuotaNotification(Tinebase_Event_Notification $_eventObject)
+    {
+        if (!Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
+            return;
+        }
+
+        $updater = $_eventObject->updater ?? 'unknown updater';
+        $recipients = $_eventObject->recipients ?? 'unknown recipients';
+        $subject = $_eventObject->subject ?? 'unknown subject';
+        $messagePlain = $_eventObject->messagePlain ?? 'unknown message';
+
+        $plain = "\n\n" . 'Subject: ' . $subject;
+        $plain .= "\n" . 'Message: ' . $messagePlain;
+        $plain .= "\n" . 'Updater: ' . $updater;
+        $plain .= "\n" . 'Recipients: ' . "\n" . print_r($recipients, true);
+        
+        SaasInstance_Controller_ActionLog::getInstance()->addActionLogQuotaNotification($plain);
     }
 }
