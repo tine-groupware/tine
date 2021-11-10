@@ -44,3 +44,30 @@ merge:
     - if: $AUTO_MERGE == "true"
       when: on_success
     - when: never
+
+merge_be:
+  stage: merge2
+  extends: .abstract.merge
+  script:
+    ### 2019.11
+    - merge_merge_upwards 2019.11 tine20.com/2019.11-custom
+    - merge_merge_upwards tine20.com/2019.11-custom tine20.com/2019.11
+    ### 2020.11
+    - merge_merge_upwards 2020.11 tine20.com/2020.11-custom
+    - merge_merge_upwards tine20.com/2020.11-custom tine20.com/2020.11
+    ### 2021.11
+    - merge_merge_upwards tine20.com/2020.11-custom tine20.com/2021.11-custom
+    - merge_merge_upwards 2021.11 tine20.com/2021.11-custom
+    - merge_merge_upwards tine20.com/2021.11-custom tine20.com/2021.11
+    ### 2022.11
+    - merge_merge_upwards tine20.com/2021.11-custom tine20.com/2022.11-custom
+    - merge_merge_upwards 2022.11 tine20.com/2022.11-custom
+    - merge_merge_upwards tine20.com/2022.11-custom tine20.com/2022.11
+    ### saas
+    - merge_merge_upwards 2021.11 saas/2021.11-custom
+    - merge_merge_upwards tine20.com/2021.11-custom saas/2021.11
+    - merge_merge_upwards saas/2021.11-custom saas/2021.11
+  rules:
+    - if: $AUTO_MERGE_BE == "true"
+      when: on_success
+    - when: never
