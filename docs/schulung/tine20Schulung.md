@@ -3,8 +3,9 @@ Tine 2.0 Admin Schulung
 
 Version: Amon 2020.11
 
-Ressourcen
-------------
+[[_TOC_]]
+
+# Ressourcen
 
 - Github: https://github.com/tine20/tine20
 - Wiki: https://github.com/tine20/tine20/wiki
@@ -12,8 +13,7 @@ Ressourcen
 - Handbuch: https://www.amazon.de/Tine-2-0-Benutzerhandbuch-Kai-Uwe-Kroll/dp/3737579385/ bzw. UserManual App
 - Community Chat: https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org
 
-Serveraustattung
-------------``
+# Serveraustattung
 
 ### Ressourcenbedarf pro Anzahl User
 
@@ -40,8 +40,7 @@ Serveraustattung
 - 4G RAM
 - 2 vCPUs
 
-Installation / Update
-------------
+# Installation / Update
 
 - Standard: via DEB/RPM/Appcenter Package
 - sources.list Eintrag
@@ -69,8 +68,7 @@ Installation / Update
         # deactivate (after successful update)
         php --config=/etc/tine20/config.inc.php setup.php --maintenance_mode -- state=off
 
-Konfiguration
-------------
+# Konfiguration
 
 - via setup.php
 - via config.inc.php
@@ -82,8 +80,7 @@ Konfiguration
 - Feature Switches
 - Scheduler / Async Job
 
-Sync
-------------
+# Sync
 
 - welche Clients werden unterstützt?
     - siehe Releasenotes
@@ -93,16 +90,14 @@ Sync
 - CardDAV, CalDAV und WebDAV
 - Owncloud / Nextcloud
 
-Absicherung
-------------
+# Absicherung
 
 - https
 - config.inc.php + Bewegdaten (Logs, Tmp, Files) ausserhalb vom Docroot
 - Captcha
 - Filepermissions
 
-Performance
-------------
+# Performance
 
 - PHP 7.4 oder besser: 8
 - Webserver
@@ -112,8 +107,7 @@ Performance
 - Skalierung
 - Queue-Worker
 
-Backup/Restore
-------------
+# Backup/Restore
 
 - via CLI
 
@@ -126,8 +120,7 @@ Backup/Restore
 - DB
 - Files
 
-LDAP-Integration
-------------
+# LDAP-Integration
 
 - Konfiguration
 - Sync-Konfiguration
@@ -138,8 +131,7 @@ LDAP-Integration
 
 siehe tine20AdminLDAP.md
 
-Logging
-------------
+# Logging
 
 - Aufbau einer Log-Zeile
 - Loglevel
@@ -147,26 +139,22 @@ Logging
 - Tools/Techniken zum Extrahieren der benötigten Infos
 - siehe auch tine20AdminLogging.md
 
-Bugreports
-------------
+# Bugreports
 
 - welche Infos werden wohin versendet?
 - auto-bugreporting
 
-Benutzer und Gruppen / Rollen und Rechte
-------------
+# Benutzer und Gruppen / Rollen und Rechte
 
 - Rechtekonzept
 - welche Rechte gibt es?
 
-Ordner und Berechtigungen
-------------
+# Ordner und Berechtigungen
 
 - Konzept
 - aus Admin-Sicht
 
-mögliche weitere Themen
-------------
+# mögliche weitere Themen
 
 - CLI-API (siehe https://wiki.tine20.org/CLI_Functions)
 - JSON-RPC API
