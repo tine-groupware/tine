@@ -15,6 +15,41 @@ Version: Amon 2020.11
 
 # Serveraustattung
 
+## Beispielsetup mit OO + Docservice 2020.11
+
+tine VM webserver
+- 16GB RAM
+- 4 vcpus
+- storage
+  - system 100G
+  - tine filesystem in eigenem volume: 2TB
+- ubuntu 20.04 (LTS)
+
+tine VM DB
+- ubuntu 20.04 (LTS)
+- 24GB RAM
+- 2-4 vcpus
+- storage
+  - system 100G
+- db 0,5-1TB
+- mariadb
+- redis
+
+onlyoffice
+  - ubuntu 20.04 (LTS)
+  - docker host
+  - 2-4G RAM
+  - 2 vCPUs
+- storage 100G
+  - system 50G
+  - /data 50G
+
+docservice
+  - ubuntu 20.04 (LTS)
+  - 2-4G RAM
+  - 2 vCPUs
+  - storage: 50G
+
 ### Ressourcenbedarf pro Anzahl User
 
 - vCPUS
