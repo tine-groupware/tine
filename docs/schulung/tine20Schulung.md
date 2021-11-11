@@ -1,30 +1,81 @@
 Tine 2.0 Admin Schulung
 =================
 
-Version: Elena 2015.11
+Version: Amon 2020.11
 
-Ressourcen
-------------
+[[_TOC_]]
 
-- Github: https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM
-- Wiki: https://wiki.tine20.org
-- Slack: https://tine20.slack.com/
-- Forum: http://www.tine20.org/forum/
-- Mantis: https://forge.tine20.org/
-- Handbuch: https://www.amazon.de/Tine-2-0-Benutzerhandbuch-Kai-Uwe-Kroll/dp/3737579385/
+# Ressourcen
 
-Serveraustattung
-------------
+- Github: https://github.com/tine20/tine20
+- Wiki: https://github.com/tine20/tine20/wiki
+- Forum: https://github.com/tine20/tine20/discussions
+- Handbuch: https://www.amazon.de/Tine-2-0-Benutzerhandbuch-Kai-Uwe-Kroll/dp/3737579385/ bzw. UserManual App
+- Community Chat: https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org
 
-TODO: ressourcenbedarf pro anzahl user definieren
+# Serveraustattung
 
-- CPUS
+## Beispielsetup mit OO + Docservice 2020.11
+
+tine VM webserver
+- 16GB RAM
+- 4 vcpus
+- storage
+  - system 100G
+  - tine filesystem in eigenem volume: 2TB
+- ubuntu 20.04 (LTS)
+
+tine VM DB
+- ubuntu 20.04 (LTS)
+- 24GB RAM
+- 2-4 vcpus
+- storage
+  - system 100G
+- db 0,5-1TB
+- mariadb
+- redis
+
+onlyoffice
+  - ubuntu 20.04 (LTS)
+  - docker host
+  - 2-4G RAM
+  - 2 vCPUs
+- storage 100G
+  - system 50G
+  - /data 50G
+
+docservice
+  - ubuntu 20.04 (LTS)
+  - 2-4G RAM
+  - 2 vCPUs
+  - storage: 50G
+
+### Ressourcenbedarf pro Anzahl User
+
+- vCPUS
+  - DB
+    ~1 pro 100 User 
+  - Webserver
+    ~1 pro 100 User 
+  - Webserver mit viel Sync (WebDAV/ActiveSync)
+    ~2 pro 100 User
 - RAM
   - DB
+    ~1G pr 50 User
   - Webserver
+    ~1G pro 100 User
 
-Installation / Update
-------------
+### Docservice (50-100 Users)
+
+- 4G RAM
+- 2 vCPUs
+
+### OnlyOffice (50-100 Users)
+
+- 4G RAM
+- 2 vCPUs
+
+# Installation / Update
 
 - Standard: via DEB/RPM/Appcenter Package
 - sources.list Eintrag
@@ -41,18 +92,18 @@ Installation / Update
 
         php --config=/etc/tine20/config.inc.php setup.php --update
          
-- maintenance mode (de)aktivieren
+- Maintenance mode (de)aktivieren
 
-        # activate (before update)
-        php --config=/etc/tine20/config.inc.php setup.php --setconfig -- \
-            configkey=maintenanceMode configvalue=1
+        # activate (before update - all users)
+        php --config=/etc/tine20/config.inc.php setup.php --maintenance_mode -- state=all
+
+        # activate (all non-admin users)
+        php --config=/etc/tine20/config.inc.php setup.php --maintenance_mode -- state=normal
 
         # deactivate (after successful update)
-        php --config=/etc/tine20/config.inc.php setup.php --setconfig -- \
-            configkey=maintenanceMode configvalue=0
+        php --config=/etc/tine20/config.inc.php setup.php --maintenance_mode -- state=off
 
-Konfiguration
-------------
+# Konfiguration
 
 - via setup.php
 - via config.inc.php
@@ -64,8 +115,7 @@ Konfiguration
 - Feature Switches
 - Scheduler / Async Job
 
-Sync
-------------
+# Sync
 
 - welche Clients werden unterstützt?
     - siehe Releasenotes
@@ -75,18 +125,16 @@ Sync
 - CardDAV, CalDAV und WebDAV
 - Owncloud / Nextcloud
 
-Absicherung
-------------
+# Absicherung
 
 - https
 - config.inc.php + Bewegdaten (Logs, Tmp, Files) ausserhalb vom Docroot
 - Captcha
 - Filepermissions
 
-Performance
-------------
+# Performance
 
-- PHP 7
+- PHP 7.4 oder besser: 8
 - Webserver
 - Caching
 - Redis (auch für Sessions)
@@ -94,8 +142,7 @@ Performance
 - Skalierung
 - Queue-Worker
 
-Backup/Restore
-------------
+# Backup/Restore
 
 - via CLI
 
@@ -108,8 +155,7 @@ Backup/Restore
 - DB
 - Files
 
-LDAP-Integration
-------------
+# LDAP-Integration
 
 - Konfiguration
 - Sync-Konfiguration
@@ -120,8 +166,7 @@ LDAP-Integration
 
 siehe tine20AdminLDAP.md
 
-Logging
-------------
+# Logging
 
 - Aufbau einer Log-Zeile
 - Loglevel
@@ -129,26 +174,22 @@ Logging
 - Tools/Techniken zum Extrahieren der benötigten Infos
 - siehe auch tine20AdminLogging.md
 
-Bugreports
-------------
+# Bugreports
 
 - welche Infos werden wohin versendet?
 - auto-bugreporting
 
-Benutzer und Gruppen / Rollen und Rechte
-------------
+# Benutzer und Gruppen / Rollen und Rechte
 
 - Rechtekonzept
 - welche Rechte gibt es?
 
-Ordner und Berechtigungen
-------------
+# Ordner und Berechtigungen
 
 - Konzept
 - aus Admin-Sicht
 
-mögliche weitere Themen
-------------
+# mögliche weitere Themen
 
 - CLI-API (siehe https://wiki.tine20.org/CLI_Functions)
 - JSON-RPC API
