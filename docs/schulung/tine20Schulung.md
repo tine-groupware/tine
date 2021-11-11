@@ -1,27 +1,44 @@
 Tine 2.0 Admin Schulung
 =================
 
-Version: Elena 2015.11
+Version: Amon 2020.11
 
 Ressourcen
 ------------
 
-- Github: https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM
-- Wiki: https://wiki.tine20.org
-- Slack: https://tine20.slack.com/
-- Forum: http://www.tine20.org/forum/
-- Mantis: https://forge.tine20.org/
-- Handbuch: https://www.amazon.de/Tine-2-0-Benutzerhandbuch-Kai-Uwe-Kroll/dp/3737579385/
+- Github: https://github.com/tine20/tine20
+- Wiki: https://github.com/tine20/tine20/wiki
+- Forum: https://github.com/tine20/tine20/discussions
+- Handbuch: https://www.amazon.de/Tine-2-0-Benutzerhandbuch-Kai-Uwe-Kroll/dp/3737579385/ bzw. UserManual App
+- Community Chat: https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org
 
 Serveraustattung
-------------
+------------``
 
-TODO: ressourcenbedarf pro anzahl user definieren
+### Ressourcenbedarf pro Anzahl User
 
-- CPUS
+- vCPUS
+  - DB
+    ~1 pro 100 User 
+  - Webserver
+    ~1 pro 100 User 
+  - Webserver mit viel Sync (WebDAV/ActiveSync)
+    ~2 pro 100 User
 - RAM
   - DB
+    ~1G pr 50 User
   - Webserver
+    ~1G pro 100 User
+
+### Docservice (50-100 Users)
+
+- 4G RAM
+- 2 vCPUs
+
+### OnlyOffice (50-100 Users)
+
+- 4G RAM
+- 2 vCPUs
 
 Installation / Update
 ------------
@@ -41,15 +58,16 @@ Installation / Update
 
         php --config=/etc/tine20/config.inc.php setup.php --update
          
-- maintenance mode (de)aktivieren
+- Maintenance mode (de)aktivieren
 
-        # activate (before update)
-        php --config=/etc/tine20/config.inc.php setup.php --setconfig -- \
-            configkey=maintenanceMode configvalue=1
+        # activate (before update - all users)
+        php --config=/etc/tine20/config.inc.php setup.php --maintenance_mode -- state=all
+
+        # activate (all non-admin users)
+        php --config=/etc/tine20/config.inc.php setup.php --maintenance_mode -- state=normal
 
         # deactivate (after successful update)
-        php --config=/etc/tine20/config.inc.php setup.php --setconfig -- \
-            configkey=maintenanceMode configvalue=0
+        php --config=/etc/tine20/config.inc.php setup.php --maintenance_mode -- state=off
 
 Konfiguration
 ------------
@@ -86,7 +104,7 @@ Absicherung
 Performance
 ------------
 
-- PHP 7
+- PHP 7.4 oder besser: 8
 - Webserver
 - Caching
 - Redis (auch für Sessions)
