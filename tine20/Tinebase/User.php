@@ -459,7 +459,23 @@ class Tinebase_User implements Tinebase_Controller_Interface
             return self::$_backendConfigurationDefaults;
         }
     }
-    
+
+    /**
+     * @return Tinebase_Group_Ldap
+     */
+    protected static function _getLdapGroupController()
+    {
+        return Tinebase_Group::getInstance();
+    }
+
+    /**
+     * @return Tinebase_User_Ldap
+     */
+    protected static function _getLdapUserController()
+    {
+        return Tinebase_User::getInstance();
+    }
+
     /**
      * synchronize user from syncbackend to local sql backend
      * 
@@ -487,8 +503,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
-        /** @var Tinebase_User_Ldap $userBackend */
-        $userBackend  = Tinebase_User::getInstance();
+        $userBackend  = self::_getLdapUserController();
         if (isset($options['ldapplugins']) && is_array($options['ldapplugins'])) {
             foreach ($options['ldapplugins'] as $plugin) {
                 $userBackend->registerLdapPlugin($plugin);
@@ -505,7 +520,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             return null;
         }
 
-        $user->accountPrimaryGroup = Tinebase_Group::getInstance()->resolveGIdNumberToUUId($user->accountPrimaryGroup);
+        $user->accountPrimaryGroup = self::_getLdapGroupController()->resolveGIdNumberToUUId($user->accountPrimaryGroup);
         
         $userProperties = method_exists($userBackend, 'getLastUserProperties') ? $userBackend->getLastUserProperties() : array();
 
@@ -533,7 +548,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
             try {
 
-                // this will Tinebase_User::getInstance()->updatePluginUser
+                // this will $userBackend->updatePluginUser
                 // the addressbook is registered as a plugin
                 $syncedUser = self::_syncDataAndUpdateUser($user, $options);
 
@@ -586,8 +601,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 $contactId = $syncedUser->contact_id;
                 if (!empty($contactId) && $visibility != $syncedUser->visibility) {
                     $syncedUser->visibility = $visibility;
-                    $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($syncedUser);
-                    Tinebase_User::getInstance()->updatePluginUser($syncedUser, $user);
+                    $syncedUser = $userBackend->updateUserInSqlBackend($syncedUser);
+                    $userBackend->updatePluginUser($syncedUser, $user);
                 }
             }
 
@@ -617,13 +632,13 @@ class Tinebase_User implements Tinebase_Controller_Interface
      */
     protected static function _syncDataAndUpdateUser($user, $options)
     {
-        $currentUser = Tinebase_User::getInstance()->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
+        $currentUser = self::_getLdapUserController()->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
 
-        if (self::_recordNeedsAnUpdate($currentUser, $user, $options)) {
+        if (self::_checkAndUpdateCurrentUser($currentUser, $user, $options)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Record needs an update');
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'update');
-            $syncedUser = Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
+            $syncedUser = self::_getLdapUserController()->updateUserInSqlBackend($currentUser);
         } else {
             $syncedUser = $currentUser;
         }
@@ -632,7 +647,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         }
 
         // Addressbook is registered as plugin and will take care of the update
-        Tinebase_User::getInstance()->updatePluginUser($syncedUser, $user);
+        self::_getLdapUserController()->updatePluginUser($syncedUser, $user);
 
         return $syncedUser;
     }
@@ -646,7 +661,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected static function _recordNeedsAnUpdate(Tinebase_Model_FullUser $currentUser, Tinebase_Model_FullUser $user, array $options)
+    protected static function _checkAndUpdateCurrentUser(Tinebase_Model_FullUser $currentUser, Tinebase_Model_FullUser $user, array $options)
     {
         $fieldsToSync = ['accountLoginName', 'accountLastPasswordChange', 'accountExpires', 'accountPrimaryGroup',
             'accountDisplayName', 'accountLastName', 'accountFirstName', 'accountFullName', 'accountEmailAddress',
@@ -663,8 +678,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
         foreach ($fieldsToSync as $field) {
             if ($currentUser->{$field} !== $user->{$field} && (! empty($user->{$field}) || ! in_array($field, $nonEmptyFields))) {
                 // ldap might not have time information on datetime fields, so we ignore these, if the date matches
-                if ($user->{$field} instanceof Tinebase_DateTime && $user->{$field}->format('H:i:s') === '00:00:00'
-                    && $user->{$field}->format('Y-m-d') === $currentUser->{$field}->format('Y-m-d')
+                if ($user->{$field} instanceof Tinebase_DateTime && $currentUser->{$field} instanceof Tinebase_DateTime
+                    && $user->{$field}->hasSameDate($currentUser->{$field})
                 ) {
                     continue;
                 }
@@ -681,7 +696,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $currentUser->visibility = Tinebase_Model_FullUser::VISIBILITY_DISPLAYED;
             $currentUser->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED;
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'undelete');
-            Tinebase_User::getInstance()->updateUserInSqlBackend($currentUser);
+            self::_getLdapUserController()->updateUserInSqlBackend($currentUser);
             $recordNeedsUpdate = false;
         }
 
@@ -695,54 +710,67 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * @throws Tinebase_Exception
      * @return Tinebase_Model_Group
      */
-    protected static function getPrimaryGroupForUser($user)
+    protected static function getPrimaryGroupForUser(Tinebase_Model_FullUser $user): Tinebase_Model_Group
     {
-        $groupBackend = Tinebase_Group::getInstance();
-        
         try {
-            $group = $groupBackend->getGroupById($user->accountPrimaryGroup);
+            $group = Tinebase_Group::getInstance()->getGroupById($user->accountPrimaryGroup);
         } catch (Tinebase_Exception_Record_NotDefined $tern) {
-            if ($groupBackend->isDisabledBackend()) {
-                // groups are sql only
-                $group = $groupBackend->getDefaultGroup();
-                $user->accountPrimaryGroup = $group->getId();
-            } else {
-                try {
-                    $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
-                } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                    throw new Tinebase_Exception('Primary group ' . $user->accountPrimaryGroup . ' not found in sync backend.');
-                }
-                try {
-                    $groupBackend->getGroupByName($group->name);
-                    throw new Tinebase_Exception('Group already exists but it has a different ID: ' . $group->name);
-        
-                } catch (Tinebase_Exception_Record_NotDefined $tern) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                        . " Adding group " . $group->name);
-
-                    $transactionId = Tinebase_TransactionManager::getInstance()
-                        ->startTransaction(Tinebase_Core::getDb());
-                    try {
-                        if (Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
-                            // here it should be ok to create the list without members
-                            Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
-                        }
-                        $group = $groupBackend->addGroupInSqlBackend($group);
-
-                        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-                        $transactionId = null;
-                    } finally {
-                        if (null !== $transactionId) {
-                            Tinebase_TransactionManager::getInstance()->rollBack();
-                        }
-                    }
-                }
-            }
+            $group = self::_getPrimaryGroupFromSyncBackend($user);
         }
         
         return $group;
     }
-    
+
+    /**
+     * @param Tinebase_Model_FullUser $user
+     * @return Tinebase_Model_Group
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected static function _getPrimaryGroupFromSyncBackend(Tinebase_Model_FullUser $user): Tinebase_Model_Group
+    {
+        $groupBackend = Tinebase_Group::getInstance();
+
+        if (! $groupBackend instanceof Tinebase_Group_Ldap || $groupBackend->isDisabledBackend()) {
+            // groups are sql only
+            $group = $groupBackend->getDefaultGroup();
+            $user->accountPrimaryGroup = $group->getId();
+        } else {
+            try {
+                $group = $groupBackend->getGroupByIdFromSyncBackend($user->accountPrimaryGroup);
+            } catch (Tinebase_Exception_Record_NotDefined $ternd) {
+                throw new Tinebase_Exception('Primary group ' . $user->accountPrimaryGroup . ' not found in sync backend.');
+            }
+            try {
+                $groupBackend->getGroupByName($group->name);
+                throw new Tinebase_Exception('Group already exists but it has a different ID: ' . $group->name);
+
+            } catch (Tinebase_Exception_Record_NotDefined $tern) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " Adding group " . $group->name);
+
+                $transactionId = Tinebase_TransactionManager::getInstance()
+                    ->startTransaction(Tinebase_Core::getDb());
+                try {
+                    if (Tinebase_Application::getInstance()->isInstalled('Addressbook')) {
+                        // here it should be ok to create the list without members
+                        Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($group);
+                    }
+                    $group = $groupBackend->addGroupInSqlBackend($group);
+
+                    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                    $transactionId = null;
+                } finally {
+                    if (null !== $transactionId) {
+                        Tinebase_TransactionManager::getInstance()->rollBack();
+                    }
+                }
+            }
+        }
+
+        return $group;
+    }
+
     /**
      * call configured hooks for adjusting synced user data
      * 
@@ -844,13 +872,13 @@ class Tinebase_User implements Tinebase_Controller_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Start synchronizing users with options ' . print_r($options, true));
 
-        if (! Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
+        if (! self::_getLdapUserController() instanceof Tinebase_User_Interface_SyncAble) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' User backend is not instanceof Tinebase_User_Ldap, nothing to sync');
             return true;
         }
         
-        $users = Tinebase_User::getInstance()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
+        $users = self::_getLdapUserController()->getUsersFromSyncBackend(NULL, NULL, 'ASC', NULL, NULL, 'Tinebase_Model_FullUser');
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' About to sync ' . count($users) . ' users from sync backend ...');
@@ -871,7 +899,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             self::_syncDeletedUsers($users);
         }
 
-        Tinebase_Group::getInstance()->resetClassCache();
+        self::_getLdapGroupController()->resetClassCache();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Finished synchronizing users.');
@@ -888,7 +916,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
     {
         $oldContainerAcl = Addressbook_Controller_Contact::getInstance()->doContainerACLChecks(false);
 
-        $userIdsInSqlBackend = Tinebase_User::getInstance()->getAllUserIdsFromSqlBackend();
+        $userIdsInSqlBackend = self::_getLdapUserController()->getAllUserIdsFromSqlBackend();
         $deletedInSyncBackend = array_diff($userIdsInSqlBackend, $usersInSyncBackend->getArrayOfIds());
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -897,7 +925,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         foreach ($deletedInSyncBackend as $userToDelete) {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             try {
-                $user = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('accountId', $userToDelete, 'Tinebase_Model_FullUser');
+                $user = self::_getLdapUserController()->getUserByPropertyFromSqlBackend('accountId', $userToDelete, 'Tinebase_Model_FullUser');
 
                 if (in_array($user->accountLoginName, self::getSystemUsernames())) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -914,7 +942,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                         . ' Disable user and set expiry date of ' . $user->accountLoginName . ' to ' . $now);
                     $user->accountExpires = $now;
                     $user->accountStatus = Tinebase_Model_User::ACCOUNT_STATUS_DISABLED;
-                    Tinebase_User::getInstance()->updateUserInSqlBackend($user);
+                    self::_getLdapUserController()->updateUserInSqlBackend($user);
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' User already expired ' . print_r($user->toArray(), true));
@@ -923,7 +951,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     if ($user->accountExpires->isEarlier($now->subMonth($deleteAfterMonths))) {
                         // if he or she is already expired longer than configured expiry, we remove them!
                         // this will trigger the plugin Addressbook which will make a soft delete and especially runs the addressbook sync backends if any configured
-                        Tinebase_User::getInstance()->deleteUser($userToDelete);
+                        self::_getLdapUserController()->deleteUser($userToDelete);
 
                         // now we make the addressbook hard delete, which is ok, because we went through the addressbook_controller_contact::delete already
                         if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($user->contact_id)) {
@@ -980,7 +1008,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
      */
     public static function syncLdapPasswords()
     {
-        $userBackend = Tinebase_User::getInstance();
+        $userBackend = self::_getLdapUserController();
         if (! $userBackend instanceof Tinebase_User_Ldap) {
             throw new Tinebase_Exception_Backend('Needs LDAP accounts backend');
         }
@@ -1037,25 +1065,28 @@ class Tinebase_User implements Tinebase_Controller_Interface
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
         }
 
+        $groupsBackend = Tinebase_Group::getInstance();
+        $userBackend = Tinebase_User::getInstance();
+
         if (! $onlyAdmin) {
             // create the replication user
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new replication user.');
 
             $replicationUser = static::createSystemUser(Tinebase_User::SYSTEM_USER_REPLICATION,
-                Tinebase_Group::getInstance()->getDefaultReplicationGroup());
+                $groupsBackend->getDefaultReplicationGroup());
             if (null !== $replicationUser) {
                 $replicationMasterConf = Tinebase_Config::getInstance()->get(Tinebase_Config::REPLICATION_MASTER);
                 if (empty(($password = $replicationMasterConf->{Tinebase_Config::REPLICATION_USER_PASSWORD}))) {
                     $password = Tinebase_Record_Abstract::generateUID(12);
                 }
-                Tinebase_User::getInstance()->setPassword($replicationUser, $password);
+                $userBackend->setPassword($replicationUser, $password);
             }
 
             // create the anonymous user
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating new anonymous user.');
 
             static::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS,
-                Tinebase_Group::getInstance()->getDefaultAnonymousGroup());
+                $groupsBackend->getDefaultAnonymousGroup());
         }
 
         $oldAcl = $addressBookController->doContainerACLChecks(false);
@@ -1066,15 +1097,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
         );
         $addressBookController->setRequestContext($requestContext);
 
-
         $adminLoginName     = $_options['adminLoginName'];
         $adminPassword      = $_options['adminPassword'];
         $adminFirstName     = isset($_options['adminFirstName'])    ? $_options['adminFirstName'] : 'Tine 2.0';
         $adminLastName      = isset($_options['adminLastName'])     ? $_options['adminLastName']  : 'Admin Account';
         $adminEmailAddress  = ((isset($_options['adminEmailAddress']) || array_key_exists('adminEmailAddress', $_options))) ? $_options['adminEmailAddress'] : NULL;
-
-        $userBackend   = Tinebase_User::getInstance();
-        $groupsBackend = Tinebase_Group::getInstance();
 
         // get admin & user groupss
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
@@ -1115,15 +1142,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
             // set the password for the account
             // empty password triggers password change dialogue during first login
             if (!empty($adminPassword)) {
-                Tinebase_User::getInstance()->setPassword($user, $adminPassword);
+                $userBackend->setPassword($user, $adminPassword);
             }
             // add the admin account to all groups
-            Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
-            Tinebase_Group::getInstance()->addGroupMember($userGroup, $user);
+            $groupsBackend->addGroupMember($adminGroup, $user);
+            $groupsBackend->addGroupMember($userGroup, $user);
         } catch (Tinebase_Exception_NotFound $ten) {
             Admin_Controller_User::getInstance()->create($user, $adminPassword, $adminPassword, true);
         }
-        
 
         $addressBookController->doContainerACLChecks($oldAcl);
         $addressBookController->setRequestContext($oldRequestContext === null ? array() : $oldRequestContext);
@@ -1138,8 +1164,11 @@ class Tinebase_User implements Tinebase_Controller_Interface
      */
     static public function createSystemUser($accountLoginName, Tinebase_Model_Group $defaultGroup = null)
     {
+        $userBackend = Tinebase_User::getInstance();
+        $groupsBackend = Tinebase_Group::getInstance();
+
         try {
-            $systemUser = Tinebase_User::getInstance()->getFullUserByLoginName($accountLoginName);
+            $systemUser = $userBackend->getFullUserByLoginName($accountLoginName);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                 ' Use existing system user ' . $accountLoginName);
             return $systemUser;
@@ -1148,16 +1177,16 @@ class Tinebase_User implements Tinebase_Controller_Interface
         }
 
         // disable modlog stuff
-        $oldGroupValue = Tinebase_Group::getInstance()->modlogActive(false);
-        $oldUserValue = Tinebase_User::getInstance()->modlogActive(false);
+        $oldGroupValue = $groupsBackend->modlogActive(false);
+        $oldUserValue = $userBackend->modlogActive(false);
         if (Tinebase_User::SYSTEM_USER_SETUP === $accountLoginName) {
-            $plugin = Tinebase_User::getInstance()->removePlugin(Addressbook_Controller_Contact::getInstance());
+            $plugin = $userBackend->removePlugin(Addressbook_Controller_Contact::getInstance());
         } else {
             $plugin = null;
         }
 
         if (null === $defaultGroup) {
-            $defaultGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+            $defaultGroup = $groupsBackend->getDefaultAdminGroup();
         }
         $systemUser = new Tinebase_Model_FullUser(array(
             'accountLoginName' => $accountLoginName,
@@ -1173,13 +1202,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
             ' Creating new system user ' . print_r($systemUser->toArray(), true));
 
         try {
-            $systemUser = Tinebase_User::getInstance()->addUser($systemUser);
-            Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+            $systemUser = $userBackend->addUser($systemUser);
+            $groupsBackend->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
         } catch (Zend_Ldap_Exception $zle) {
             Tinebase_Exception::log($zle);
             if (stripos($zle->getMessage(), 'Already exists') !== false) {
                 try {
-                    $user = Tinebase_User::getInstance()->getUserByPropertyFromSyncBackend(
+                    /** @var Tinebase_User_Ldap $userBackend */
+                    $user = $userBackend->getUserByPropertyFromSyncBackend(
                         'accountLoginName',
                         $accountLoginName,
                         'Tinebase_Model_FullUser'
@@ -1188,8 +1218,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     $systemUser->merge($user);
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                         ' Creating new (sql) system user ' . print_r($systemUser->toArray(), true));
-                    $systemUser = Tinebase_User::getInstance()->addUserInSqlBackend($systemUser);
-                    Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+                    $systemUser = $userBackend->addUserInSqlBackend($systemUser);
+                    $groupsBackend->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
                 } catch(Exception $e) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
                         ' no system user could be created');
@@ -1199,8 +1229,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 }
             } else {
                 try {
-                    $systemUser = Tinebase_User::getInstance()->addUserInSqlBackend($systemUser);
-                    Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+                    $systemUser = $userBackend->addUserInSqlBackend($systemUser);
+                    $groupsBackend->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
                 } catch(Exception $e) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
                         ' no system user could be created');
@@ -1218,10 +1248,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
 
             try {
                 if ($e instanceof Zend_Db_Statement_Exception && Tinebase_Exception::isDbDuplicate($e)) {
-                    $systemUser = Tinebase_User::getInstance()->getUserByLoginName($accountLoginName);
+                    $systemUser = $userBackend->getUserByLoginName($accountLoginName);
                 } else {
-                    $systemUser = Tinebase_User::getInstance()->addUserInSqlBackend($systemUser);
-                    Tinebase_Group::getInstance()->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
+                    $systemUser = $userBackend->addUserInSqlBackend($systemUser);
+                    $groupsBackend->addGroupMember($systemUser->accountPrimaryGroup, $systemUser->getId());
                 }
             } catch (Exception $e) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
@@ -1240,14 +1270,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $contact = Addressbook_Controller_Contact::getInstance()->getBackend()
                 ->create(self::user2Contact($systemUser));
             $systemUser->contact_id = $contact->getId();
-            Tinebase_User::getInstance()->updateUserInSqlBackend($systemUser);
+            $userBackend->updateUserInSqlBackend($systemUser);
         }
 
         // re-enable modlog stuff
-        Tinebase_Group::getInstance()->modlogActive($oldGroupValue);
-        Tinebase_User::getInstance()->modlogActive($oldUserValue);
+        $groupsBackend->modlogActive($oldGroupValue);
+        $userBackend->modlogActive($oldUserValue);
         if (null !== $plugin) {
-            Tinebase_User::getInstance()->registerPlugin($plugin);
+            $userBackend->registerPlugin($plugin);
         }
 
         return $systemUser;
