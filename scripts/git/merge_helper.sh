@@ -27,16 +27,24 @@ MergeUpwards () {
         git pull $remote $dstBranch
     fi
 
+    # exit if branches are alredy merged, otherwise the composer.lock file from the previus merge request would rewritten.
+    if [ $(git merge-base $srcBranch $dstBranch) =  $(git rev-parse $srcBranch) ]; then
+        echo "$dstBranch is all ready up to date"
+        return
+    fi
+
     git merge --no-edit --rerere-autoupdate $srcBranch
     RETVAL=$?
     if [ $RETVAL -ne 0 ]; then
+        echo "git merge $srcBranch failed!"
+        return $RETVAL
+    fi
 
-        php $MYBASEPATH/repairMerge.php $srcBranch $dstBranch
-        RETVAL=$?
-        if [ $RETVAL -ne 0 ]; then
-            echo "git merge $srcBranch failed!"
-            return $RETVAL
-        fi
+    # update composer content-hashes if composer.lock changed
+    if git diff --name-only HEAD HEAD~1 | grep -x -e tine20/composer.lock -e tine20/composer.json; then
+        composer update --lock --no-install
+        git add composer.lock
+        git commit --amend --no-edit
     fi
 
     echo "press p to push / q to quit / s to skip"
