@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "086f12d1b4656bca6db2fb9a66a74fda",
+    "content-hash": "e9e847e3b5e6b59a3b63d23dad99451d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1972,12 +1972,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/jumbojett/OpenID-Connect-PHP.git",
-                "reference": "9f15504105640b03277d7174b62fbfc0f5e608ab"
+                "reference": "14991f706675b13dd1f72291bfd779f144454d64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/9f15504105640b03277d7174b62fbfc0f5e608ab",
-                "reference": "9f15504105640b03277d7174b62fbfc0f5e608ab",
+                "url": "https://api.github.com/repos/jumbojett/OpenID-Connect-PHP/zipball/14991f706675b13dd1f72291bfd779f144454d64",
+                "reference": "14991f706675b13dd1f72291bfd779f144454d64",
                 "shasum": ""
             },
             "require": {
@@ -2002,11 +2002,7 @@
                 "Apache-2.0"
             ],
             "description": "Bare-bones OpenID Connect client",
-            "support": {
-                "issues": "https://github.com/jumbojett/OpenID-Connect-PHP/issues",
-                "source": "https://github.com/jumbojett/OpenID-Connect-PHP/tree/v0.9.2"
-            },
-            "time": "2020-08-27T16:47:41+00:00"
+            "time": "2021-11-24T16:11:49+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -9389,11 +9385,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.4.10",
+            "version": "1.4.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "2b28cd9b0c8b79af1992ea524ab910e2becc7e7d"
+                "reference": "efde8a27ff092910d0e935a7465cef8391c29fd2"
             },
             "require": {
                 "php": ">=5.3.0",
@@ -9417,7 +9413,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2021-11-10T12:15:41+00:00"
+            "time": "2021-11-19T15:16:17+00:00"
         },
         {
             "name": "thecodingmachine/safe",
