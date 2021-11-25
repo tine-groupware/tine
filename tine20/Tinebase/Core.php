@@ -1700,9 +1700,12 @@ class Tinebase_Core
             $ravenClient->tags['user'] = $user->accountLoginName;
         }
 
-        Tinebase_ModelConfiguration::resetAllCreatedModels();
-        
         Zend_Registry::set(self::USER, $user);
+        
+        // now that we have the right user => proper acls => flush all acls caches
+        // MC not only flushes its cache, it recreates the already created models
+        Tinebase_ModelConfiguration::resetAllCreatedModels();
+
         return $user;
     }
 
