@@ -141,6 +141,9 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
 
         /** @var OnlyOfficeIntegrator_Model_AccessToken $token */
         foreach ($tokens as $token) {
+            if ($token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_RESOLUTION}) {
+                continue;
+            }
             if ($timeLimit->isLater($token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SEEN}) ||
                 $this->searchCount(
                     Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [

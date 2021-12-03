@@ -911,6 +911,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     (int)$node->revision) {
                 $response = OnlyOfficeIntegrator_Controller::getInstance()->callCmdServiceInfo($accessToken);
                 if ($response['error'] !== 1) {
+                    // in case we would allow to open two different revisions at the same time, make sure that only one is writeable, all others need to be RO
                     throw new Tinebase_Exception_SystemGeneric(
                         'this revision currently can\'t be opened as a different revision is already open', 647);
                 }
@@ -944,10 +945,12 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     ->{Tinebase_Model_Grants::GRANT_EDIT} ?
                     OnlyOfficeIntegrator_Model_AccessToken::GRANT_WRITE :
                     OnlyOfficeIntegrator_Model_AccessToken::GRANT_READ,
-                OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY            => Tinebase_Core::getTinebaseId() .
-                    OnlyOfficeIntegrator_Controller::KEY_SEPARATOR . $node->getId() .
-                    OnlyOfficeIntegrator_Controller::KEY_SEPARATOR . $node->revision .
-                    OnlyOfficeIntegrator_Controller::KEY_SEPARATOR . $token,
+                OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY            => $accessTokens->count() > 0 ?
+                    $accessTokens->getFirstRecord()->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY} :
+                        Tinebase_Core::getTinebaseId() .
+                        OnlyOfficeIntegrator_Controller::KEY_SEPARATOR . $node->getId() .
+                        OnlyOfficeIntegrator_Controller::KEY_SEPARATOR . $node->revision .
+                        OnlyOfficeIntegrator_Controller::KEY_SEPARATOR . $token,
                 OnlyOfficeIntegrator_Model_AccessToken::FLDS_TITLE          => $node->name,
                 OnlyOfficeIntegrator_Model_AccessToken::FLDS_MODE           => $mode,
             ]);
