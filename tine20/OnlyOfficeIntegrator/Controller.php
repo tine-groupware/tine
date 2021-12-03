@@ -310,8 +310,28 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                 unset($closeSrcStreamRaii);
 
                 $node = Tinebase_FileSystem::getInstance()->stat($trgtPath);
-                $node->description = 'token: ' . $token . PHP_EOL . 'request_data: ' . print_r($requestData, true);
-                Tinebase_FileSystem::getInstance()->update($node);
+                $node->description = 'token: ' . $token . PHP_EOL . 'request_data: ' . print_r($requestData, true) .
+                    PHP_EOL . $t->getMessage() . PHP_EOL . $t->getTraceAsString();
+                $node = Tinebase_FileSystem::getInstance()->update($node);
+
+                try {
+                    $token = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
+                        Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                            OnlyOfficeIntegrator_Model_AccessToken::class, [
+                                ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN,
+                                    'operator' => 'equals', 'value' => $token],
+                                ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED,
+                                    'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+                    ]))->getFirstRecord();
+                    if ($token) {
+                        $node->description = $node->description . PHP_EOL . print_r($token->toArray(false), true);
+                        $node = Tinebase_FileSystem::getInstance()->update($node);
+                        $path = Tinebase_FileSystem::getInstance()->getPathOfNode(
+                            $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}, true);
+                        $node->description = $path . PHP_EOL . $node->description;
+                        Tinebase_FileSystem::getInstance()->update($node);
+                    }
+                } catch (Throwable $tt) {}
             }
             throw $t;
         }
