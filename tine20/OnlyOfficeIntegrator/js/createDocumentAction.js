@@ -20,15 +20,12 @@ Promise.all([
         });
 
         const recordData = await createNewPromise;
+        
+        recordData.path = Tine.Filemanager.Model.Node.sanitize(path + '/' + recordData.name);
+        
         if (_.isFunction(action.onNewNode)) {
             action.onNewNode(recordData, baseAction);
         }
-        
-        window.postal.publish({
-            channel: "recordchange",
-            topic: (path === 'tempFile' ? 'Tinebase.TempFile' : 'Filemanager.Node') + '.create',
-            data: recordData
-        });
     };
 
     const createDocumentConfig = {
@@ -75,7 +72,7 @@ Promise.all([
     // filemanager -> path
     const fileManagerCreateDocumentAction = new Ext.Action(Ext.applyIf({
         getPath: async function (baseAction, type) {
-            return _.get(baseAction, 'filteredContainers[0].path')
+            return _.get(baseAction, 'filteredContainers[0].path');
         },
         getName: async function (baseAction, type) {
             return new Promise((resolve) => {
