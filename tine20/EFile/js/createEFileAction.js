@@ -54,7 +54,8 @@ Promise.all([
                 getEventData: function() {return {name: this.nameField.getValue()};},
                 listeners: {
                     apply: (data) => {
-                        Tine.Filemanager.nodeBackend.createFolder(path + '/' + data.name, {
+                        const folderPath = Tine.Filemanager.Model.Node.sanitize(path + '/' + data.name);
+                        Tine.Filemanager.nodeBackend.createFolder(folderPath, {
                             headers: {
                                 'X-TINE20-REQUEST-CONTEXT-efile-tier-type': tierType
                             }
@@ -88,8 +89,8 @@ Promise.all([
                         parent: recordData,
                         efile_tier_type: _.get(action, 'initialConfig.tierType')
                     });
+                    
                     enabled = enabled && _.get(recordData, 'account_grants.addGrant', false);
-
                     action.filteredContainers = filteredContainers;
                     action.setDisabled(!enabled);
                 }
