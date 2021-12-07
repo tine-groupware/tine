@@ -99,7 +99,7 @@ class DFCom_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'default'               => [
                 'timeAccounting'    => DFCom_RecordHandler_TimeAccounting::class,
-                'accessControll'    => DFCom_RecordHandler_AccessControll::class,
+                //'accessControll'    => DFCom_RecordHandler_AccessControll::class,
             ],
         ],
     ];
