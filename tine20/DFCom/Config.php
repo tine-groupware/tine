@@ -33,11 +33,21 @@ class DFCom_Config extends Tinebase_Config_Abstract
 
     const DEVICE_RECORD_HANDLERS = 'deviceRecordHandlers';
 
+    const DFCOM_ID_TYPE = 'dfcomIdType';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = [
+        self::DFCOM_ID_TYPE             => [
+            self::LABEL                     => 'Employee Transponder Id Type',
+            self::DESCRIPTION               => 'Employee Transponder Id Type',
+            self::TYPE                      => self::TYPE_STRING,
+            self::SETBYSETUPMODULE          => true,
+            self::SETBYADMINMODULE          => true,
+            self::DEFAULT_STR               => Tinebase_ModelConfiguration_Const::TYPE_INTEGER,
+        ],
         self::DEVICE_LIST_STATUS => [
             //_('Device List Status')
             'label'                 => 'Device List Status',
@@ -99,7 +109,7 @@ class DFCom_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => true,
             'default'               => [
                 'timeAccounting'    => DFCom_RecordHandler_TimeAccounting::class,
-                'accessControll'    => DFCom_RecordHandler_AccessControll::class,
+                //'accessControll'    => DFCom_RecordHandler_AccessControll::class,
             ],
         ],
     ];

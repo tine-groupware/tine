@@ -6,6 +6,8 @@
  * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Tinebase_ModelConfiguration as MC;
+
 /**
  * class for DFCom initialization
  * 
@@ -55,5 +57,30 @@ class DFCom_Setup_Initialize extends Setup_Initialize
             ['application_id' => $apps->find('name', 'HumanResources')->getId(), 'right' => Tinebase_Acl_Rights::RUN],
             ['application_id' => $apps->find('name', Timetracker_Config::APP_NAME)->getId(), 'right' => Tinebase_Acl_Rights::RUN],
         ]);
+    }
+
+    protected function _initializeSystemCFs()
+    {
+        $appId = Tinebase_Application::getInstance()->getApplicationByName(HumanResources_Config::APP_NAME)->getId();
+
+        Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+            'name' => 'dfcom_id',
+            'application_id' => $appId,
+            'model' => HumanResources_Model_Employee::class,
+            'is_system' => true,
+            'definition' => [
+                Tinebase_Model_CustomField_Config::DEF_FIELD => array_merge([
+                    MC::LABEL             => 'Transponder Id', //_('Transponder Id')
+                    MC::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                    MC::SHY               => true,
+                    MC::NULLABLE          => true,
+                ], (DFCom_Config::getInstance()->{DFCom_Config::DFCOM_ID_TYPE} === MC::TYPE_INTEGER ? [
+                    MC::TYPE              => MC::TYPE_INTEGER,
+                ] : [
+                    MC::TYPE              => MC::TYPE_STRING,
+                    MC::LENGTH            => 255,
+                ])),
+            ]
+        ], true));
     }
 }
