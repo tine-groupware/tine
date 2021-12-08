@@ -22,6 +22,9 @@ class DFCom_RecordHandler_TimeAccounting
     const FUNCTION_KEY_CLOCKOUT = 'CLOT';
     const FUNCTION_KEY_ABSENCE = 'ASCE';
 
+    const XPROP_TIMESHEET_ID = self::class . '::timesheet_id';
+    const XPROP_UNKNOWN_CARD_ID = self::class . '::unknown_card_id';
+    
     public function __construct($event)
     {
         /** @var DFCom_Model_Device $this->deviceRecord */
@@ -44,15 +47,20 @@ class DFCom_RecordHandler_TimeAccounting
 
     public function handle()
     {
+        // order of execution matters here, because of the many get/setUsers!
+        // ATTENTION do not change order of these lines unless you understand why the order matters
         $assertEmployeeAclUsage = $this->employeeController->assertPublicUsage();
         $assertAccountAclUsage = $this->accountController->assertPublicUsage();
 //        $assertWorkingTimeSchemaAclUsage = $this->workingTimeSchemaController->assertPublicUsage();
         $assertTimeaccountAclUsage = $this->timeaccountController->assertPublicUsage();
         $assertMonthlyWTReportControllerAclUsage = $this->monthlyWTReportController->assertPublicUsage();
         $assertTimesheetAclUsage = $this->timesheetController->assertPublicUsage();
+        // end attention
 
         $dateTime = new Tinebase_DateTime($this->deviceData['dateTime'], $this->device->timezone);
-        
+
+        $this->currentUser = null;
+        $result = false;
         try {
             $this->employee = $this->employeeController->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
                 ['condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR, 'filters' => [
@@ -64,12 +72,12 @@ class DFCom_RecordHandler_TimeAccounting
             if (!$this->employee) {
                 $this->deviceRecord->xprops()[self::XPROP_UNKNOWN_CARD_ID] =  $this->deviceData['cardId'];
                 Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " unknown card_id '{$this->deviceData['cardId']}'");
-                return;
+                return false;
             }
 
             // switch to current user identified by card
-            $this->user = Tinebase_User::getInstance()->getUserById($this->employee->account_id, Tinebase_Model_FullUser::class);
-            $this->currentUser = Tinebase_Core::setUser($this->user);
+            $this->currentUser = Tinebase_Core::getUser();
+            $this->user = Tinebase_Core::setUser(Tinebase_User::getInstance()->getUserById($this->employee->account_id, Tinebase_Model_FullUser::class));
 
             switch ($this->deviceData['functionKey']) {
                 case self::FUNCTION_KEY_INFO:
@@ -93,9 +101,13 @@ class DFCom_RecordHandler_TimeAccounting
                         $message = "Es liegen keine Informationen vor.";
                     }
                     $this->deviceResponse->displayMessage("{$employeeName}\n {$message}");
-                    
-                    return true;
+                    // lets just do this, hopefully the deviceRecord will not be persisted ... but if it would, we dont want it again, so lets say we processed it
+                    if (!in_array(self::class, $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED))) {
+                        $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED)[] = self::class;
+                    }
+                    $result = true;
                     break;
+
                 case self::FUNCTION_KEY_CLOCKIN:
                 case self::FUNCTION_KEY_CLOCKOUT:
                     // @TODO: do we need a field for project time here? (from terminal)
@@ -121,9 +133,16 @@ class DFCom_RecordHandler_TimeAccounting
                     } else {
                         $timesheet = $this->createTimesheet($dateTime, $this->deviceData['functionKey']);
                     }
+
+                    if (!in_array(self::class, $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED))) {
+                        $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED)[] = self::class;
+                    }
+                    $this->deviceRecord->xprops()[self::XPROP_TIMESHEET_ID] = $timesheet->getId();
                     break;
 
                 default:
+                    // think about whether we want to flag this as processed or not
+
                     // @TODO implement me
                     // check absence reason
                     // end open timesheet (like leave)
@@ -134,14 +153,20 @@ class DFCom_RecordHandler_TimeAccounting
 
             }
         } finally {
+            // order of execution matters here, because of the many get/setUsers!
+            // we need to do it in reverse order of the initalization!
+            if (null !== $this->currentUser) {
+                Tinebase_Core::setUser($this->currentUser);
+            }
             $assertTimesheetAclUsage();
             $assertMonthlyWTReportControllerAclUsage();
             $assertTimeaccountAclUsage();
-//            $assertWorkingTimeSchemaAclUsage();
+            // $assertWorkingTimeSchemaAclUsage();
             $assertAccountAclUsage();
             $assertEmployeeAclUsage();
-            Tinebase_Core::set(Tinebase_Core::USER, $this->currentUser);
         }
+
+        return $result;
     }
 
     public function createTimesheet($date, $functionKey = self::FUNCTION_KEY_CLOCKIN)

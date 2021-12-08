@@ -76,10 +76,14 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
         $deviceListController = DFCom_Controller_DeviceList::getInstance();
         $deviceRecordController = DFCom_Controller_DeviceRecord::getInstance();
 
+        // order of execution matters here, because of the many get/setUsers!
+        // ATTENTION do not change order of these lines unless you understand why the order matters
         $assertDeviceAclUsage = $this->assertPublicUsage();
         $assertListAclUsage = $deviceListController->assertPublicUsage();
         $assertRecordAclUsage = $deviceRecordController->assertPublicUsage();
+        // end attention
 
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
 
         try {
             /** @var DFCom_Model_Device $device */
@@ -186,6 +190,7 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
 //                  case ... user defined records:
                         $cancel = false;
                         $handlers = DFCom_Config::getInstance()->get(DFCom_Config::DEVICE_RECORD_HANDLERS);
+                        $deviceRecord->{DFCom_Model_DeviceRecord::FLD_PROCESSED} = [];
                         if (array_key_exists($deviceRecord->device_table, $handlers)) {
                             $handlerClass = $handlers[$deviceRecord->device_table];
                             try {
@@ -195,6 +200,7 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                                     'deviceResponse' => $response
                                 ]);
 
+                                /* once this is a loop do we want to && or || $cancle? one handler can prevent persitence? or do all handler need to agree on that? */
                                 $cancel = $handler->handle();
                             } catch(Exception $e) {
                                 Tinebase_Core::getLogger()->ERR(__METHOD__ . '::' . __LINE__ . " can't execute handler $handlerClass for record type {$deviceRecord->device_table}:\n$e");
@@ -211,7 +217,10 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
             $device->lastSeen = Tinebase_DateTime::now();
             $this->update($device);
 
+            $transaction->release();
         } finally {
+            // order of execution matters here, because of the many get/setUsers!
+            // we need to do it in reverse order of the initalization!
             $assertRecordAclUsage();
             $assertListAclUsage();
             $assertDeviceAclUsage();
