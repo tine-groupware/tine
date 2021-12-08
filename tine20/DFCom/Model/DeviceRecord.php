@@ -16,9 +16,13 @@
  * @property    $device_id
  * @property    $device_table
  * @property    $data
+ * @property    $processed
  */
 class DFCom_Model_DeviceRecord extends Tinebase_Record_Abstract
 {
+    public const TABLE_NAME = 'dfcom_device_record';
+    public const FLD_PROCESSED = 'processed';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -34,7 +38,7 @@ class DFCom_Model_DeviceRecord extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version' => 1,
+        'version' => 2,
         'recordName' => 'Device Record',
         'recordsName' => 'Device Records', // ngettext('Device Record', 'Device Records', n)
         'titleProperty' => 'device_table',
@@ -51,6 +55,7 @@ class DFCom_Model_DeviceRecord extends Tinebase_Record_Abstract
         'modlogActive' => true,
         'hasAttachments' => false,
         'isDependent'     => true,
+        self::HAS_XPROPS => true,
         'createModule' => true,
         'appName' => 'DFCom',
         'modelName' => 'DeviceRecord',
@@ -72,7 +77,7 @@ class DFCom_Model_DeviceRecord extends Tinebase_Record_Abstract
 
         // why do i have to define this -> autodefine???
         'table'             => [
-            'name'    => 'dfcom_device_record',
+            'name'    => self::TABLE_NAME,
             'indexes' => [
                 'device_id' => [
                     'columns' => ['device_id'],
@@ -105,6 +110,12 @@ class DFCom_Model_DeviceRecord extends Tinebase_Record_Abstract
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 'label' => 'Data', // _('Data')
                 'queryFilter' => true
+            ],
+            self::FLD_PROCESSED => [
+                'type' => 'json',
+                self::NULLABLE => true,
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'label' => 'Processed by', // _('Processed by')
             ],
         ]
     ];
