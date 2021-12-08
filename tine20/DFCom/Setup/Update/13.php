@@ -14,8 +14,15 @@ class DFCom_Setup_Update_13 extends Setup_Update_Abstract
 {
     const RELEASE013_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE013_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE013_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
+        self::PRIO_TINEBASE_BEFORE_STRUCT => [
+            self::RELEASE013_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
+            ],
+        ],
         self::PRIO_NORMAL_APP_STRUCTURE => [
             self::RELEASE013_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
@@ -41,5 +48,15 @@ class DFCom_Setup_Update_13 extends Setup_Update_Abstract
         $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . DFCom_Model_DeviceRecord::TABLE_NAME . ' SET `' .
             DFCom_Model_DeviceRecord::FLD_PROCESSED . '` = "[\"' . DFCom_RecordHandler_TimeAccounting::class . '\"]"');
         $this->addApplicationUpdate(DFCom_Config::APP_NAME, '1.2', self::RELEASE013_UPDATE002);
+    }
+
+    public function update003()
+    {
+        $initalize = new DFCom_Setup_Initialize();
+        $method = new ReflectionMethod(DFCom_Setup_Initialize::class, '_initializeSystemCFs');
+        $method->setAccessible(true);
+        $method->invoke($initalize);
+
+        $this->addApplicationUpdate(DFCom_Config::APP_NAME, '1.3', self::RELEASE013_UPDATE002);
     }
 }
