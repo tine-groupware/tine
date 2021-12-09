@@ -46,7 +46,7 @@ class DFCom_Config extends Tinebase_Config_Abstract
             self::TYPE                      => self::TYPE_STRING,
             self::SETBYSETUPMODULE          => true,
             self::SETBYADMINMODULE          => true,
-            self::DEFAULT_STR               => Tinebase_ModelConfiguration_Const::TYPE_INTEGER,
+            self::DEFAULT_STR               => Tinebase_ModelConfiguration_Const::TYPE_BIGINT,
         ],
         self::DEVICE_LIST_STATUS => [
             //_('Device List Status')

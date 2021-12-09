@@ -128,7 +128,7 @@ class DFCom_HTTPAPIv1Test extends TestCase
 
         // have some demo data
         $HRTest = new HumanResources_Controller_ContractTests();
-        $HRTest->testContract();
+        $HRTest->testContract(true);
 
         $request = Tinebase_Http_Request::fromString("GET /DFCom/v1/device/{$device->getId()}/list/{$list->getId()}/$device->authKey" .
             ' HTTP/1.1' . "\r\n"
@@ -195,7 +195,7 @@ class DFCom_HTTPAPIv1Test extends TestCase
     {
         // have some demo data
         $HRTest = new HumanResources_Controller_ContractTests();
-        $HRTest->testContract();
+        $HRTest->testContract(true);
 
         /** @var DFCom_Model_Device $device */
         $device = $this->testDispatchAliveRecord();
