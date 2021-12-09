@@ -18,7 +18,7 @@ class DFCom_RecordHandler_TimeAccountingTest extends TestCase
 
         // have some demo data
         $HRTest = new HumanResources_Controller_ContractTests();
-        $HRTest->testContract();
+        $HRTest->testContract(true);
     }
 
     public function testInfo()
