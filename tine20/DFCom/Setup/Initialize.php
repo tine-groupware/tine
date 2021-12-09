@@ -74,8 +74,8 @@ class DFCom_Setup_Initialize extends Setup_Initialize
                     MC::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                     MC::SHY               => true,
                     MC::NULLABLE          => true,
-                ], (DFCom_Config::getInstance()->{DFCom_Config::DFCOM_ID_TYPE} === MC::TYPE_INTEGER ? [
-                    MC::TYPE              => MC::TYPE_INTEGER,
+                ], (DFCom_Config::getInstance()->{DFCom_Config::DFCOM_ID_TYPE} === MC::TYPE_BIGINT ? [
+                    MC::TYPE              => MC::TYPE_BIGINT,
                 ] : [
                     MC::TYPE              => MC::TYPE_STRING,
                     MC::LENGTH            => 255,
