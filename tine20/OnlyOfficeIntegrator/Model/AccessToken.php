@@ -42,6 +42,8 @@ class OnlyOfficeIntegrator_Model_AccessToken extends Tinebase_Record_NewAbstract
     const FLDS_USER_ID = 'user_id';
     const FLDS_RESOLUTION = 'resolution';
     const FLDS_MODE = 'mode';
+    const FLDS_LAST_SAVE = 'last_save';
+    const FLDS_LAST_SAVE_FORCED = 'last_save_forced';
 
     const GRANT_READ = 1;
     const GRANT_WRITE = 2;
@@ -65,7 +67,7 @@ class OnlyOfficeIntegrator_Model_AccessToken extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION           => 2,
+        self::VERSION           => 3,
         self::APP_NAME          => OnlyOfficeIntegrator_Config::APP_NAME,
         self::MODEL_NAME        => self::MODEL_NAME_PART,
 
@@ -164,6 +166,18 @@ class OnlyOfficeIntegrator_Model_AccessToken extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_INTEGER,
                 self::NULLABLE                  => false,
                 self::DEFAULT_VAL               => self::MODE_READ_WRITE,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY  => true],
+            ],
+            self::FLDS_LAST_SAVE            => [
+                self::TYPE                      => self::TYPE_DATETIME,
+                self::NULLABLE                  => false,
+                self::DEFAULT_VAL               => self::CURRENT_TIMESTAMP,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY  => true],
+            ],
+            self::FLDS_LAST_SAVE_FORCED     => [
+                self::TYPE                      => self::TYPE_DATETIME,
+                self::NULLABLE                  => false,
+                self::DEFAULT_VAL               => self::CURRENT_TIMESTAMP,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY  => true],
             ],
         ],

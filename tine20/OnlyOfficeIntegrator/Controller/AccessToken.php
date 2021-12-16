@@ -157,6 +157,7 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
 
             $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED} = 0;
             $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SEEN} = Tinebase_DateTime::now();
+            $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE} = Tinebase_DateTime::now();
             $result->addRecord($this->update($token));
         }
 
@@ -222,6 +223,45 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
 
         $transRaii->release();
         unset($selectForUpdateRaii);
+    }
+
+    public function scheduleForceSaves(): bool
+    {
+        if (($forceSaveInteval = (int)(OnlyOfficeIntegrator_Config::getInstance()
+                ->{OnlyOfficeIntegrator_Config::FORCE_SAVE_INTERVAL})) < 1) {
+            return true;
+        }
+
+        $keys = [];
+        $ttl = Tinebase_DateTime::now()->subSecond($forceSaveInteval);
+
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        $selectForUpdate = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_backend);
+
+        $tokens = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            OnlyOfficeIntegrator_Model_AccessToken::class, [
+            ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE, 'operator' => 'before',
+                'value' => $ttl],
+            ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE_FORCED, 'operator' => 'before',
+                'value' => $ttl]
+        ]));
+        unset($selectForUpdate);
+
+        $now = Tinebase_DateTime::now();
+        foreach ($tokens as $toForceSave) {
+            $keys[$toForceSave->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY}] = $toForceSave;
+            $toForceSave->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE_FORCED} = $now;
+            $this->update($toForceSave);
+        }
+
+        $transaction->release();
+
+
+        foreach ($keys as $token) {
+            OnlyOfficeIntegrator_Controller::getInstance()->callCmdServiceForceSave($token);
+        }
+
+        return true;
     }
 
     /**
