@@ -17,6 +17,7 @@ class OnlyOfficeIntegrator_Setup_Update_1 extends Setup_Update_Abstract
     const RELEASE001_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE001_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE001_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE001_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -37,6 +38,10 @@ class OnlyOfficeIntegrator_Setup_Update_1 extends Setup_Update_Abstract
             self::RELEASE001_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE001_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -115,5 +120,13 @@ class OnlyOfficeIntegrator_Setup_Update_1 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(OnlyOfficeIntegrator_Config::APP_NAME, '1.6', self::RELEASE001_UPDATE006);
+    }
+
+    public function update007()
+    {
+        Setup_SchemaTool::updateSchema([OnlyOfficeIntegrator_Model_AccessToken::class]);
+        (new OnlyOfficeIntegrator_Setup_Initialize())->_initializeSchedulerTasks();
+
+        $this->addApplicationUpdate(OnlyOfficeIntegrator_Config::APP_NAME, '1.7', self::RELEASE001_UPDATE007);
     }
 }
