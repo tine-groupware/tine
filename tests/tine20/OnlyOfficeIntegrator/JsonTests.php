@@ -980,28 +980,6 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
         $this->_uit->getEditorConfigForNodeId($node->getId());
     }
 
-    public function testGetTokenForNodeIdException8()
-    {
-        if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
-            static::markTestSkipped('filesystem modlog needs to be active for this test');
-        }
-
-        Tinebase_FileSystem::getInstance()->createAclNode('/Tinebase/folders/shared/ootest');
-        file_put_contents('tine20:///Tinebase/folders/shared/ootest/test.txt', 'blub');
-        $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/test.txt');
-        $this->_uit->getEditorConfigForNodeId($node->getId());
-        file_put_contents('tine20:///Tinebase/folders/shared/ootest/test.txt', 'bla');
-
-        $httpTestClient = new Zend_Http_Client_Adapter_Test();
-        $httpTestClient->setResponse(new Zend_Http_Response(200, [], '{"error":4}'));
-        onlyOfficeIntegrator_Controller::getInstance()->setCmdServiceClientAdapter($httpTestClient);
-
-        static::expectException(Tinebase_Exception_SystemGeneric::class);
-        static::expectExceptionMessage('this revision currently can\'t be opened as a different revision is already open');
-        static::expectExceptionCode(647);
-        $this->_uit->getEditorConfigForNodeId($node->getId());
-    }
-
     public function testGetTokenForNodeId1()
     {
         if (!Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
@@ -1123,6 +1101,10 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
         $refl = new ReflectionMethod(OnlyOfficeIntegrator_Frontend_Json::class, 'waitForTokenRequired');
         $refl->setAccessible(true);
         static::assertTrue($refl->invoke($this->_uit, null, $config['document']['key']));
+
+        $httpTestClient = new Zend_Http_Client_Adapter_Test();
+        $httpTestClient->setResponse(new Zend_Http_Response(200, [], '{"error":0}'));
+        OnlyOfficeIntegrator_Controller::getInstance()->setCmdServiceClientAdapter($httpTestClient);
 
         $start = time();
         try {

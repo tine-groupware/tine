@@ -879,7 +879,12 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         return false;
     }
 
-    public function callCmdServiceInfo(OnlyOfficeIntegrator_Model_AccessToken $token)
+    public function isDocumentOpenInOOServer(OnlyOfficeIntegrator_Model_AccessToken $token): bool
+    {
+        return $this->callCmdServiceInfo($token)['error'] !== 1;
+    }
+
+    public function callCmdServiceInfo(OnlyOfficeIntegrator_Model_AccessToken $token): array
     {
         if (empty($url = OnlyOfficeIntegrator_Config::getInstance()
             ->{OnlyOfficeIntegrator_Config::ONLYOFFICE_SERVER_URL})) {
@@ -910,7 +915,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
             . __LINE__ . " onlyoffice command service response:\n"  . $response->getHeadersAsString() . "\n" . $response->getBody());
 
-        if (!in_array((int)$body['error'],[0,1,4])) {
+        if (!in_array($body['error'],[0,1])) {
             throw new Tinebase_Exception_Backend('onlyoffice cmd service returns the unacceptable error code' .
                 $response->getBody());
         }
@@ -948,6 +953,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             $users = array_unique($accessTokens->filter(OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY, $key)
                 ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_USER_ID});
             $this->callCmdServiceDrop($key, $users);
+            $this->callCmdServiceForceSave($accessTokens->find(OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY, $key));
         }
 
         $raii->release();
@@ -959,7 +965,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             $ttl = Tinebase_DateTime::now()->subSecond(OnlyOfficeIntegrator_Config::getInstance()
                 ->{OnlyOfficeIntegrator_Config::TOKEN_LIVE_TIME});
 
-            return 0 === (int)OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->searchCount(
+            $tokens = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
                     ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SEEN, 'operator' => 'after_or_equals',
                         'value' => $ttl],
@@ -968,6 +974,17 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                     ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED, 'operator' => 'equals',
                         'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET]
                 ]));
+            $keys = [];
+            foreach ($tokens as $token) {
+                if (!isset($keys[$token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY}])) {
+                    $keys[$token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY}] = $token;
+                    if ($this->isDocumentOpenInOOServer($token)) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         return false;
