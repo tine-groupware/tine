@@ -827,12 +827,12 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_getEditorConfig($nodeId, null, $revision);
     }
 
-    protected function waitForTokenRequired($nodeId, $key = null, $timeOut = null)
+    protected function waitForTokenRequired($nodeId, $key = null, $timeOut = null, &$tokenToWaitFor = null)
     {
         if (null === $timeOut) {
             $timeOut = OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::TOKEN_LIVE_TIME};
         }
-        return OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->searchCount(
+        return null !== ($tokenToWaitFor = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
                 [
                     'field' => $key ? OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY :
@@ -856,7 +856,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     'operator' => 'equals',
                     'value' => OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_WRITE,
                 ]
-            ])) > 0;
+            ]), new Tinebase_Model_Pagination(['limit' => 1]))->getFirstRecord());
     }
 
     protected function getTokenForNode(Tinebase_Model_Tree_Node $node, $usersGrants, $allowedExtensions, $mode = OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_WRITE)
@@ -909,8 +909,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
             if ((int)$accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} !==
                     (int)$node->revision) {
-                $response = OnlyOfficeIntegrator_Controller::getInstance()->callCmdServiceInfo($accessToken);
-                if ($response['error'] !== 1) {
+                if (OnlyOfficeIntegrator_Controller::getInstance()->isDocumentOpenInOOServer($accessToken)) {
                     // in case we would allow to open two different revisions at the same time, make sure that only one is writeable, all others need to be RO
                     throw new Tinebase_Exception_SystemGeneric(
                         'this revision currently can\'t be opened as a different revision is already open', 647);
@@ -918,12 +917,19 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
 
             $token = $accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN};
+            $lastSave = $accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE};
+            $lastSaveForced = $accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE_FORCED};
         } else {
-            if (OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_WRITE === $mode && $this->waitForTokenRequired($node->getId())) {
+            $waitFor = null;
+            if (OnlyOfficeIntegrator_Model_AccessToken::MODE_READ_WRITE === $mode &&
+                    $this->waitForTokenRequired($node->getId(), null, null, $waitFor) &&
+                    OnlyOfficeIntegrator_Controller::getInstance()->isDocumentOpenInOOServer($waitFor)) {
                 throw new OnlyOfficeIntegrator_Exception_WaitForOOSave();
             }
 
             $token = Tinebase_Record_Abstract::generateUID();
+            $lastSave = Tinebase_DateTime::now();
+            $lastSaveForced = Tinebase_DateTime::now();
         }
 
         /** @var OnlyOfficeIntegrator_Model_AccessToken $accessToken */
@@ -953,6 +959,8 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         OnlyOfficeIntegrator_Controller::KEY_SEPARATOR . $token,
                 OnlyOfficeIntegrator_Model_AccessToken::FLDS_TITLE          => $node->name,
                 OnlyOfficeIntegrator_Model_AccessToken::FLDS_MODE           => $mode,
+                OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE_FORCED => $lastSaveForced,
+                OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE      => $lastSave,
             ]);
             OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->create($accessToken);
 
