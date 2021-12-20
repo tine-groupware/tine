@@ -360,6 +360,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         $allTokens = $this->doSave($requestData, $token);
         $previousRevision = null;
 
+        $allTokens->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE} = Tinebase_DateTime::now();
         if ((int)$allTokens->getFirstRecord()->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} !==
                 (int)OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION) {
             $node = Tinebase_FileSystem::getInstance()->get($allTokens->getFirstRecord()
@@ -367,9 +368,9 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             $previousRevision = $allTokens->getFirstRecord()
                 ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION};
             $allTokens->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} = $node->revision;
-            foreach ($allTokens as $token) {
-                OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->update($token);
-            }
+        }
+        foreach ($allTokens as $token) {
+            OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->update($token);
         }
 
         $raii->release();
@@ -458,6 +459,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             }
             $tokenRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED} = 1;
             $tokenRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_RESOLUTION} = 2;
+            $tokenRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE} = Tinebase_DateTime::now();
 
             OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->update($tokenRecord);
         }
@@ -801,8 +803,9 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
         $url = rtrim($url, '/') . '/coauthoring/CommandService.ashx';
         $response = $this->_getCmdServiceHttpClient($url)->setRawData($body = json_encode([
-            'c'     => 'forcesave',
-            'key'   => $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY},
+            'c'         => 'forcesave',
+            'key'       => $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY},
+            'userdata'  => Tinebase_Record_Abstract::generateUID(),
         ]))->setHeaders('Authorization', 'Bearer ' . JWT::encode(['payload' => $body],
                 OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256'))
             ->request(Zend_Http_Client::POST);

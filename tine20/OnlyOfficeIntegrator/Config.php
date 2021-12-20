@@ -28,6 +28,7 @@ class OnlyOfficeIntegrator_Config extends Tinebase_Config_Abstract
     const JWT_ENABLED = 'jwtEnabled';
     const JWT_SECRET = 'jwtSecret';
     const TOKEN_LIVE_TIME = 'tokenLiveTime';
+    const FORCE_SAVE_INTERVAL = 'forceSaveInterval';
 
     const FM_NODE_EDITING_CFNAME = 'ooi_editing';
     const FM_NODE_EDITORS_CFNAME = 'ooi_editors';
@@ -92,6 +93,17 @@ class OnlyOfficeIntegrator_Config extends Tinebase_Config_Abstract
             self::TYPE                  => self::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => true,
+        ],
+        self::FORCE_SAVE_INTERVAL => [
+            //_('Interval in seconds to force save')
+            self::LABEL                 => 'Interval in seconds to force save',
+            //_('Interval in seconds to force save')
+            self::DESCRIPTION           => 'Interval in seconds to force save',
+            self::TYPE                  => self::TYPE_INT,
+            self::DEFAULT_STR           => 0,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => true,
         ],
         self::TOKEN_LIVE_TIME => [

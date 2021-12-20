@@ -134,4 +134,24 @@ class OnlyOfficeIntegrator_Setup_Initialize extends Setup_Initialize
 
         Tinebase_FileSystem::getInstance()->createAclNode(OnlyOfficeIntegrator_Controller::getRevisionsChangesPath());
     }
+
+    public function _initializeSchedulerTasks()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        if ($scheduler->hasTask('OOI_ForceSave')) {
+            return;
+        }
+
+        $scheduler->create(new Tinebase_Model_SchedulerTask([
+            'name'          => 'OOI_ForceSave',
+            'config'        => new Tinebase_Scheduler_Task([
+                'cron'      => Tinebase_Scheduler_Task::TASK_TYPE_MINUTELY,
+                'callables' => [[
+                    Tinebase_Scheduler_Task::CONTROLLER    => OnlyOfficeIntegrator_Controller_AccessToken::class,
+                    Tinebase_Scheduler_Task::METHOD_NAME   => 'scheduleForceSaves',
+                ]]
+            ]),
+            'next_run'      => new Tinebase_DateTime('2001-01-01 01:01:01')
+        ]));
+    }
 }
