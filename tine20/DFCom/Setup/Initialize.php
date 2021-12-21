@@ -76,6 +76,7 @@ class DFCom_Setup_Initialize extends Setup_Initialize
                     MC::NULLABLE          => true,
                 ], (DFCom_Config::getInstance()->{DFCom_Config::DFCOM_ID_TYPE} === MC::TYPE_BIGINT ? [
                     MC::TYPE              => MC::TYPE_BIGINT,
+                    MC::INPUT_FILTERS     => [Zend_Filter_Empty::class => null],
                 ] : [
                     MC::TYPE              => MC::TYPE_STRING,
                     MC::LENGTH            => 255,
