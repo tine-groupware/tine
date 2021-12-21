@@ -1,0 +1,11 @@
+{
+  "name": "SaasInstance",
+  "version": "0.0.1",
+  "description": "Tine 2.0 saasInstance extensions",
+  "main": "saasInstance.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ching En Cheng",
+  "license": "AGPL-3.0"
+}

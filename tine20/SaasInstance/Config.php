@@ -40,7 +40,7 @@ class SaasInstance_Config extends Tinebase_Config_Abstract
             //_('Price per user of current SaasInstance package')
             self::DESCRIPTION           => 'Price per user of current SaasInstance package',
             self::TYPE                  => Tinebase_ModelConfiguration_Const::TYPE_MONEY,
-            self::DEFAULT_STR           => 1234.56,
+            self::DEFAULT_STR           => 2.2,
         ],
         self::PRICE_PER_GIGABYTE                => [
             //_('Price per Gigabyte')
@@ -48,7 +48,7 @@ class SaasInstance_Config extends Tinebase_Config_Abstract
             //_('Price per Gigabyte of current SaasInstance package')
             self::DESCRIPTION           => 'Price per Gigabyte of current SaasInstance package',
             self::TYPE                  => Tinebase_ModelConfiguration_Const::TYPE_MONEY,
-            self::DEFAULT_STR           => 7.77,
+            self::DEFAULT_STR           => 0.5,
         ],
         self::NUMBER_OF_INCLUDED_USERS                => [
             //_('Number of included users')
