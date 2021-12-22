@@ -1093,11 +1093,6 @@ parameters:
 			path: tine20/Admin/Import/Role/Csv.php
 
 		-
-			message: "#^Method Bookmarks_Controller\\:\\:addFastRoutes\\(\\) should return null but return statement is missing\\.$#"
-			count: 1
-			path: tine20/Bookmarks/Controller.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:setReadOnlyFields\\(\\)\\.$#"
 			count: 1
 			path: tine20/Bookmarks/Controller/Bookmark.php
@@ -2323,11 +2318,6 @@ parameters:
 			path: tine20/Calendar/Import/Resource/Csv.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Log\\:\\:DEBUG\\(\\)\\.$#"
-			count: 1
-			path: tine20/Calendar/Model/Attender.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:getPreferredEmailAddress\\(\\)\\.$#"
 			count: 1
 			path: tine20/Calendar/Model/Attender.php
@@ -2808,211 +2798,6 @@ parameters:
 			path: tine20/Calendar/views/eventNotification.php
 
 		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_db$#"
-			count: 1
-			path: tine20/CashBook/Backend/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 18$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashBook.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$containerId\\)\\: Unexpected token \"\\$containerId\", expected type at offset 18$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashBook.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$filter\\)\\: Unexpected token \"\\$filter\", expected type at offset 18$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashBook.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:setReadOnlyFields\\(\\)\\.$#"
-			count: 4
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_oldRecord\\)\\: Unexpected token \"\\$_oldRecord\", expected type at offset 105$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 18$#"
-			count: 2
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 56$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 70$#"
-			count: 2
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 82$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$cashBook\\)\\: Unexpected token \"\\$cashBook\", expected type at offset 105$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$cashBook\\)\\: Unexpected token \"\\$cashBook\", expected type at offset 66$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$cashentries\\)\\: Unexpected token \"\\$cashentries\", expected type at offset 90$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$createNewValue\\)\\: Unexpected token \"\\$createNewValue\", expected type at offset 181$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$date\\)\\: Unexpected token \"\\$date\", expected type at offset 85$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$fieldDef\\)\\: Unexpected token \"\\$fieldDef\", expected type at offset 157$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$numberable\\)\\: Unexpected token \"\\$numberable\", expected type at offset 131$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$transactionId\\)\\: Unexpected token \"\\$transactionId\", expected type at offset 117$#"
-			count: 1
-			path: tine20/CashBook/Controller/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$attachmentName\\)\\: Unexpected token \"\\$attachmentName\", expected type at offset 18$#"
-			count: 1
-			path: tine20/CashBook/Export/TransferCashEntries.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$filter\\)\\: Unexpected token \"\\$filter\", expected type at offset 147$#"
-			count: 1
-			path: tine20/CashBook/Frontend/Json.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$filter\\)\\: Unexpected token \"\\$filter\", expected type at offset 18$#"
-			count: 1
-			path: tine20/CashBook/Frontend/Json.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$pagination\\)\\: Unexpected token \"\\$pagination\", expected type at offset 169$#"
-			count: 1
-			path: tine20/CashBook/Frontend/Json.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$paging\\)\\: Unexpected token \"\\$paging\", expected type at offset 40$#"
-			count: 1
-			path: tine20/CashBook/Frontend/Json.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$totalCountMethod\\)\\: Unexpected token \"\\$totalCountMethod\", expected type at offset 279$#"
-			count: 1
-			path: tine20/CashBook/Frontend/Json.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$active\\)\\: Unexpected token \"\\$active\", expected type at offset 391$#"
-			count: 1
-			path: tine20/CashBook/Model/CashBook.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$name\\)\\: Unexpected token \"\\$name\", expected type at offset 298$#"
-			count: 1
-			path: tine20/CashBook/Model/CashBook.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$number_prefix\\)\\: Unexpected token \"\\$number_prefix\", expected type at offset 317$#"
-			count: 1
-			path: tine20/CashBook/Model/CashBook.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$number_start\\)\\: Unexpected token \"\\$number_start\", expected type at offset 345$#"
-			count: 1
-			path: tine20/CashBook/Model/CashBook.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$site\\)\\: Unexpected token \"\\$site\", expected type at offset 372$#"
-			count: 1
-			path: tine20/CashBook/Model/CashBook.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string cashbook_id\\)\\: Unexpected token \"cashbook_id\", expected variable at offset 24$#"
-			count: 1
-			path: tine20/CashBook/Model/CashEntry.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$event\\)\\: Unexpected token \"\\$event\", expected type at offset 125$#"
-			count: 1
-			path: tine20/ChurchEdition/Controller/ChurchEventType.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$event\\)\\: Unexpected token \"\\$event\", expected type at offset 68$#"
-			count: 1
-			path: tine20/ChurchEdition/Controller/ChurchEventType.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$event\\)\\: Unexpected token \"\\$event\", expected type at offset 77$#"
-			count: 1
-			path: tine20/ChurchEdition/Controller/ChurchEventType.php
-
-		-
-			message: "#^Access to an undefined property ChurchEdition_Export_Gottesdienstordnung\\:\\:\\$_liturgieTypes\\.$#"
-			count: 2
-			path: tine20/ChurchEdition/Export/Gottesdienstordnung.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_name\\)\\: Unexpected token \"\\$_name\", expected type at offset 18$#"
-			count: 1
-			path: tine20/ChurchEdition/Export/Gottesdienstordnung.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_name\\)\\: Unexpected token \"\\$_name\", expected type at offset 18$#"
-			count: 2
-			path: tine20/ChurchEdition/Export/Organverzeichnis.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_data\\)\\: Unexpected token \"\\$_data\", expected type at offset 94$#"
-			count: 1
-			path: tine20/ChurchEdition/Import/Liturgiekalender.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_data_indexed\\)\\: Unexpected token \"\\$_data_indexed\", expected type at offset 65$#"
-			count: 1
-			path: tine20/ChurchEdition/Import/Liturgiekalender.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$data\\)\\: Unexpected token \"\\$data\", expected type at offset 115$#"
-			count: 1
-			path: tine20/ChurchEdition/Import/Liturgiekalender.php
-
-		-
-			message: "#^Call to an undefined static method Tinebase_Controller_Event\\:\\:_checkRight\\(\\)\\.$#"
-			count: 1
-			path: tine20/ContractManager/Controller.php
-
-		-
-			message: "#^PHPDoc tag @var has invalid value \\(\\$contact Addressbook_Model_Contact\\)\\: Unexpected token \"\\$contact\", expected type at offset 9$#"
-			count: 1
-			path: tine20/ContractManager/Controller/Contract.php
-
-		-
 			message: "#^Method CoreData_Controller\\:\\:createPersonalFolder\\(\\) should return Tinebase_Record_RecordSet but return statement is missing\\.$#"
 			count: 1
 			path: tine20/CoreData/Controller.php
@@ -3051,51 +2836,6 @@ parameters:
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$courseName$#"
 			count: 1
 			path: tine20/Courses/Frontend/Json.php
-
-		-
-			message: "#^Return typehint of method CrewScheduling_Controller_SchedulingRole\\:\\:_inspectDelete\\(\\) has invalid type RecordSet\\.$#"
-			count: 1
-			path: tine20/CrewScheduling/Controller/SchedulingRole.php
-
-		-
-			message: "#^Cannot call method getFrom\\(\\) on array\\|Tinebase_Model_Filter_Abstract\\.$#"
-			count: 1
-			path: tine20/CrewScheduling/Export/Xlsx.php
-
-		-
-			message: "#^Cannot call method getUntil\\(\\) on array\\|Tinebase_Model_Filter_Abstract\\.$#"
-			count: 1
-			path: tine20/CrewScheduling/Export/Xlsx.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(int            order\\)\\: Unexpected token \"order\", expected variable at offset 429$#"
-			count: 1
-			path: tine20/CrewScheduling/Model/SchedulingRole.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string         calendarRoleName\\)\\: Unexpected token \"calendarRoleName\", expected variable at offset 384$#"
-			count: 1
-			path: tine20/CrewScheduling/Model/SchedulingRole.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string         color\\)\\: Unexpected token \"color\", expected variable at offset 463$#"
-			count: 1
-			path: tine20/CrewScheduling/Model/SchedulingRole.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string         key\\)\\: Unexpected token \"key\", expected variable at offset 352$#"
-			count: 1
-			path: tine20/CrewScheduling/Model/SchedulingRole.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(string         name\\)\\: Unexpected token \"name\", expected variable at offset 319$#"
-			count: 1
-			path: tine20/CrewScheduling/Model/SchedulingRole.php
-
-		-
-			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
-			path: tine20/CrewScheduling/Setup/Update/Release1.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_field\\)\\: Unexpected token \"\\$_field\", expected type at offset 78$#"
@@ -3258,11 +2998,6 @@ parameters:
 			path: tine20/Crm/views/newLeadPlain.php
 
 		-
-			message: "#^Class DFCom_RecordHandler_AccessControll not found\\.$#"
-			count: 1
-			path: tine20/DFCom/Config.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:ERR\\(\\)\\.$#"
 			count: 1
 			path: tine20/DFCom/Controller/Device.php
@@ -3393,11 +3128,6 @@ parameters:
 			path: tine20/DFCom/Model/DeviceList.php
 
 		-
-			message: "#^Access to an undefined property Zend\\\\Stdlib\\\\ParametersInterface\\:\\:\\$df_table\\.$#"
-			count: 1
-			path: tine20/DFCom/Model/DeviceRecord.php
-
-		-
 			message: "#^PHPDoc tag @property has invalid value \\(\\$data\\)\\: Unexpected token \"\\$data\", expected type at offset 162$#"
 			count: 1
 			path: tine20/DFCom/Model/DeviceRecord.php
@@ -3409,6 +3139,11 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @property has invalid value \\(\\$device_table\\)\\: Unexpected token \"\\$device_table\", expected type at offset 132$#"
+			count: 1
+			path: tine20/DFCom/Model/DeviceRecord.php
+
+		-
+			message: "#^PHPDoc tag @property has invalid value \\(\\$processed\\)\\: Unexpected token \"\\$processed\", expected type at offset 184$#"
 			count: 1
 			path: tine20/DFCom/Model/DeviceRecord.php
 
@@ -3429,7 +3164,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property DFCom_RecordHandler_TimeAccounting\\:\\:\\$currentUser\\.$#"
-			count: 2
+			count: 1
 			path: tine20/DFCom/RecordHandler/TimeAccounting.php
 
 		-
@@ -3444,7 +3179,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property DFCom_RecordHandler_TimeAccounting\\:\\:\\$deviceRecord\\.$#"
-			count: 1
+			count: 6
 			path: tine20/DFCom/RecordHandler/TimeAccounting.php
 
 		-
@@ -3488,11 +3223,6 @@ parameters:
 			path: tine20/DFCom/RecordHandler/TimeAccounting.php
 
 		-
-			message: "#^Access to undefined constant DFCom_RecordHandler_TimeAccounting\\:\\:XPROP_UNKNOWN_CARD_ID\\.$#"
-			count: 1
-			path: tine20/DFCom/RecordHandler/TimeAccounting.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:WARN\\(\\)\\.$#"
 			count: 1
 			path: tine20/DFCom/RecordHandler/TimeAccounting.php
@@ -3506,6 +3236,11 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(\\$timesheet\\)\\: Unexpected token \"\\$timesheet\", expected type at offset 18$#"
 			count: 1
 			path: tine20/DFCom/RecordHandler/TimeAccounting.php
+
+		-
+			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
+			count: 1
+			path: tine20/DFCom/Setup/Update/13.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$bool\\)\\: Unexpected token \"\\$bool\", expected type at offset 18$#"
@@ -5235,191 +4970,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(mixed\\[int\\|Tinebase_Model_User\\] \\$_account   the account object\\)\\: Unexpected token \"\\[\", expected variable at offset 81$#"
 			count: 1
 			path: tine20/Inventory/Controller.php
-
-		-
-			message: "#^Result of method Tinebase_Controller_Record_Abstract\\:\\:_checkRight\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: tine20/KeyManager/Controller/Key.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$body\\)\\: Unexpected token \"\\$body\", expected type at offset 130$#"
-			count: 1
-			path: tine20/KeyManager/Controller/KeyAllocation.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$body\\)\\: Unexpected token \"\\$body\", expected type at offset 90$#"
-			count: 1
-			path: tine20/KeyManager/Controller/KeyAllocation.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$subject\\)\\: Unexpected token \"\\$subject\", expected type at offset 107$#"
-			count: 1
-			path: tine20/KeyManager/Controller/KeyAllocation.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$subject\\)\\: Unexpected token \"\\$subject\", expected type at offset 67$#"
-			count: 1
-			path: tine20/KeyManager/Controller/KeyAllocation.php
-
-		-
-			message: "#^Result of method Tinebase_Controller_Record_Abstract\\:\\:_checkRight\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: tine20/KeyManager/Controller/Lock.php
-
-		-
-			message: "#^Result of method Tinebase_Controller_Record_Abstract\\:\\:_checkRight\\(\\) \\(void\\) is used\\.$#"
-			count: 1
-			path: tine20/KeyManager/Controller/LockingGroup.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:getMsisdn\\(\\)\\.$#"
-			count: 1
-			path: tine20/MatrixSynapseIntegrator/Controller.php
-
-		-
-			message: "#^Method MatrixSynapseIntegrator_Controller\\:\\:addFastRoutes\\(\\) should return null but return statement is missing\\.$#"
-			count: 1
-			path: tine20/MatrixSynapseIntegrator/Controller.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 70$#"
-			count: 1
-			path: tine20/MeetingManager/Controller/Meeting.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$_record\\)\\: Unexpected token \"\\$_record\", expected type at offset 18$#"
-			count: 1
-			path: tine20/MeetingManager/Controller/Top.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$className\\)\\: Unexpected token \"\\$className\", expected type at offset 41$#"
-			count: 1
-			path: tine20/MeetingManager/Controller/Top.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$fieldConfig\\)\\: Unexpected token \"\\$fieldConfig\", expected type at offset 91$#"
-			count: 1
-			path: tine20/MeetingManager/Controller/Top.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$fieldName\\)\\: Unexpected token \"\\$fieldName\", expected type at offset 66$#"
-			count: 1
-			path: tine20/MeetingManager/Controller/Top.php
-
-		-
-			message: "#^Method Tinebase_Export_Doc\\:\\:write\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: tine20/MeetingManager/Export/DecisionExportPdf.php
-
-		-
-			message: "#^Method Tinebase_Export_Doc\\:\\:write\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: tine20/MeetingManager/Export/MinuteExportPdf.php
-
-		-
-			message: "#^Method Tinebase_Export_Doc\\:\\:write\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: tine20/MeetingManager/Export/Pdf.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Convert_Interface\\:\\:resolveRecords\\(\\)\\.$#"
-			count: 1
-			path: tine20/MeetingManager/Export/Xls.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$filter\\)\\: Unexpected token \"\\$filter\", expected type at offset 18$#"
-			count: 1
-			path: tine20/MeetingManager/Frontend/Http.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$options\\)\\: Unexpected token \"\\$options\", expected type at offset 40$#"
-			count: 1
-			path: tine20/MeetingManager/Frontend/Http.php
-
-		-
-			message: "#^PHPDoc tag @param has invalid value \\(\\$recordData\\)\\: Unexpected token \"\\$recordData\", expected type at offset 18$#"
-			count: 1
-			path: tine20/MeetingManager/Frontend/Json.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$initiator\\)\\: Unexpected token \"\\$initiator\", expected type at offset 138$#"
-			count: 1
-			path: tine20/MeetingManager/Model/Attendee.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$name\\)\\: Unexpected token \"\\$name\", expected type at offset 116$#"
-			count: 1
-			path: tine20/MeetingManager/Model/Attendee.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$initiator\\)\\: Unexpected token \"\\$initiator\", expected type at offset 138$#"
-			count: 1
-			path: tine20/MeetingManager/Model/Bias.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$name\\)\\: Unexpected token \"\\$name\", expected type at offset 116$#"
-			count: 1
-			path: tine20/MeetingManager/Model/Bias.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$initiator\\)\\: Unexpected token \"\\$initiator\", expected type at offset 98$#"
-			count: 1
-			path: tine20/MeetingManager/Model/Guest.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$name\\)\\: Unexpected token \"\\$name\", expected type at offset 76$#"
-			count: 1
-			path: tine20/MeetingManager/Model/Guest.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$initiator\\)\\: Unexpected token \"\\$initiator\", expected type at offset 138$#"
-			count: 1
-			path: tine20/MeetingManager/Model/Meeting.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$name\\)\\: Unexpected token \"\\$name\", expected type at offset 116$#"
-			count: 1
-			path: tine20/MeetingManager/Model/Meeting.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$initiator\\)\\: Unexpected token \"\\$initiator\", expected type at offset 138$#"
-			count: 1
-			path: tine20/MeetingManager/Model/QualifiedPerson.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$name\\)\\: Unexpected token \"\\$name\", expected type at offset 116$#"
-			count: 1
-			path: tine20/MeetingManager/Model/QualifiedPerson.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$initiator\\)\\: Unexpected token \"\\$initiator\", expected type at offset 98$#"
-			count: 1
-			path: tine20/MeetingManager/Model/TextElement.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$name\\)\\: Unexpected token \"\\$name\", expected type at offset 76$#"
-			count: 1
-			path: tine20/MeetingManager/Model/TextElement.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$initiator\\)\\: Unexpected token \"\\$initiator\", expected type at offset 138$#"
-			count: 1
-			path: tine20/MeetingManager/Model/Top.php
-
-		-
-			message: "#^PHPDoc tag @property has invalid value \\(\\$name\\)\\: Unexpected token \"\\$name\", expected type at offset 116$#"
-			count: 1
-			path: tine20/MeetingManager/Model/Top.php
-
-		-
-			message: "#^Method Tinebase_Application\\:\\:getApplicationByName\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 1
-			path: tine20/MeetingManager/Setup/Update/Release1.php
-
-		-
-			message: "#^Method OnlyOfficeIntegrator_Controller\\:\\:addFastRoutes\\(\\) should return null but return statement is missing\\.$#"
-			count: 1
-			path: tine20/OnlyOfficeIntegrator/Controller.php
 
 		-
 			message: "#^Method Tinebase_Exception\\:\\:logToSentry\\(\\) invoked with 1 parameter, 0 required\\.$#"
