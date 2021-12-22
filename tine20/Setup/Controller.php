@@ -270,7 +270,7 @@ class Setup_Controller
 
         $users = array(
             'maxUsers' => $license->getMaxUsers(),
-            'userLimitReached' => $license->checkUserLimit(Tinebase_Core::getUser()),
+            'userLimitReached' => $license->checkUserLimit(),
             'status' => $license->getStatus()
         );
 
