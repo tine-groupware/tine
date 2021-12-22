@@ -50,12 +50,6 @@ merge_be:
   stage: merge2
   extends: .abstract.merge
   script:
-    ### 2019.11
-    - merge_merge_upwards 2019.11 tine20.com/2019.11-custom
-    - merge_merge_upwards tine20.com/2019.11-custom tine20.com/2019.11
-    ### 2020.11
-    - merge_merge_upwards 2020.11 tine20.com/2020.11-custom
-    - merge_merge_upwards tine20.com/2020.11-custom tine20.com/2020.11
     ### 2021.11
     - merge_merge_upwards tine20.com/2020.11-custom tine20.com/2021.11-custom
     - merge_merge_upwards 2021.11 tine20.com/2021.11-custom
