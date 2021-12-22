@@ -136,6 +136,15 @@ class UserManual_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         if (! $result) {
             return 2;
+        } else {
+            Tinebase_Application::getInstance()->setApplicationState('UserManual', UserManual_Setup_Initialize::USERMANUAL_STATE,
+                json_encode([
+                    'url' => $filename,
+                    'date' => Tinebase_DateTime::now()->toString(),
+                    // TODO allow to pass release / version as cli params
+                    'release' => 'CLI',
+                    'version' => '',
+                ]));
         }
 
         return 0;
