@@ -52,6 +52,9 @@ class DFCom_Setup_Update_13 extends Setup_Update_Abstract
 
     public function update003()
     {
+        // convert dfcom_id empty string to NULL
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . "humanresources_employee set dfcom_id = NULL where dfcom_id = ''");
+
         $initalize = new DFCom_Setup_Initialize();
         $method = new ReflectionMethod(DFCom_Setup_Initialize::class, '_initializeSystemCFs');
         $method->setAccessible(true);
