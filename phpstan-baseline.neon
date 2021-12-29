@@ -6480,7 +6480,7 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_applicationId\\)\\: Unexpected token \"\\$_applicationId\", expected type at offset 18$#"
-			count: 2
+			count: 1
 			path: tine20/Tinebase/Application.php
 
 		-
@@ -6490,12 +6490,12 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_state\\)\\: Unexpected token \"\\$_state\", expected type at offset 74$#"
-			count: 2
+			count: 1
 			path: tine20/Tinebase/Application.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(\\$_stateName\\)\\: Unexpected token \"\\$_stateName\", expected type at offset 48$#"
-			count: 2
+			count: 1
 			path: tine20/Tinebase/Application.php
 
 		-
@@ -7134,11 +7134,6 @@ parameters:
 			path: tine20/Tinebase/Convert/Json.php
 
 		-
-			message: "#^Cannot call static method getInstance\\(\\) on int\\|string\\.$#"
-			count: 1
-			path: tine20/Tinebase/Convert/Json.php
-
-		-
 			message: "#^PHPDoc tag @param for parameter \\$_records with type Tinebase_Record_Interface\\|Tinebase_Record_RecordSet is not subtype of native type Tinebase_Record_RecordSet\\|null\\.$#"
 			count: 1
 			path: tine20/Tinebase/Convert/Json.php
@@ -7681,6 +7676,11 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_Export_Abstract\\:\\:generateToStream\\(\\)\\.$#"
 			count: 1
+			path: tine20/Tinebase/Export/Abstract.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Export_Abstract\\:\\:save\\(\\)\\.$#"
+			count: 2
 			path: tine20/Tinebase/Export/Abstract.php
 
 		-
