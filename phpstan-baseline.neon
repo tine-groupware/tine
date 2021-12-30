@@ -3222,7 +3222,7 @@ parameters:
 
 		-
 			message: "#^Constant SQL_TABLE_PREFIX not found\\.$#"
-			count: 1
+			count: 2
 			path: tine20/DFCom/Setup/Update/13.php
 
 		-
