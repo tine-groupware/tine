@@ -5169,6 +5169,12 @@ msgstr "Sie sind nicht berechtigt System Tags zu löschen"
 msgid "Confirmation is required"
 msgstr "Bestätigung ist erforderlich"
 
+msgid ""
+"Please open the following URL in your Browser for more security key options"
+msgstr ""
+"Bitte öffnen sie die folgende URL in ihrem Browser um den "
+"Sicherheitsschlüssel zu verwalten"
+
 msgid "This area is locked. To unlock it you need to provide your PIN"
 msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihre PIN "
