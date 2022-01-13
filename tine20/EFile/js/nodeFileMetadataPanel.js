@@ -213,7 +213,10 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
         this.editDialog.getToolbar().add(this.gotoFileButton);
         
         // NOTE: in case record is already loaded
-        this.onRecordLoad(this.editDialog, this.editDialog.record);
+        if (! this.setOwnerCt.initialOnRecordLoad) {
+            this.setOwnerCt.initialOnRecordLoad = true;
+            this.onRecordLoad(this.editDialog, this.editDialog.record);
+        }
         
     },
 
