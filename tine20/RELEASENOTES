@@ -2,8 +2,92 @@
 TINE 2.0 RELEASENOTES
 =====================
                     
-  Release:     Lu (2021.11)
-  Last change: 2021-10-25
+  Release:     TBA (2022.11)
+  Last change: 2022-01-20
+
+# CHANGELOG 2022.11.1~alpha5
+
+### Features
+2a8c5b0f0f feature(Sales/Customer): Update customer postal if related Contact is updated
+1f4ae1ca3e feature(Tinebase): foreignRecordFilter for denormalized fields
+79e3c7f32c feature(Felamimail/Sieve): save sieve script when save account
+361ad0ff0e feature(Tinebase): CommunityIdentNr explainer in pickers
+f8ec841428 feature(Sales): customer language & discout takeover
+3ef5f23dd4 feature(Relations): add addRelation function
+2e5192caad feature(Projects): allow task inline edit
+80ba25d049 feature(Sales): have all new docs available
+c563b7c5ec feature(Felamimail): add imap importer
+4ebc930648 feature(Sales) deliveryNote & invoice status
+3f61f1e442 feature(Sales): document status handling
+73d2c15acf feature(Initialize/Update): import be 2019.11 manual content
+a8d4000ea8 feature(Tinebase): keyField transitions UI
+42cc5ab801 feature(Sales): layouted Document_Offer dialog
+fdcc927d47 feature(OOI) add forceSaveInterval cfg/feature
+c036a8c10b feature(Felamimail/account): introduce email_account type addressbook contact
+08f51ea066 feature(Admin/Email): cleanup mail accounts
+
+### Bugfixes
+a59ac7420c fix(Calendar vevent) don't crash on empty but non-null ORGANIZER email
+3de431101c fix(docker): update quickstart.yaml
+eb4d88cbe9 fix(automerge): po merge helper needs gettext
+eb58e56349 fix(Felamimail/js): only show saveInAdbFields in admin module
+6aa128b21d fix(Tinebase): use registered record pickers in customFields
+3b5421548a fix(Tinebase): field wrap might be missing -> skip plugin
+4b3c2087d3 fix(HR): index right columns cell
+302ad8968c fix(Felamimail): init hooks before initAccountStore
+9a44c47738 fix(Sales): credit termns of new docs
+5ff827e5fc fix(TB) minor code cleanups
+e5c13f5518 fix(Tinebase): cannot pick relation
+84eaad3d22 fix(Tinebase): cannot open 2fa provider dlg
+aeb227c1a7 fix(Calendar): url from ics missing
+40a01d3f7f fix(Filemanager): prevent endless loop when using legacy system link
+4ed9e6fb11 fix(Tinebase): new record detection/handling in UI
+7d91dc42cd fix(Tinebase): keyField system is bool
+a19d835c3b fix(Sales): position readOnly handling
+a52acdeec9 fix(Felamimail): backport fix save e-mail account
+6c24e95ed8 fix(Addressbook/Lists): list email can still be empty
+659388f047 fix(Calendar) fix broken resolveRelationId
+8749232925 fix(Filemanager): uploads to wrong folder
+c5bbbfd940 fix(Tinebase): improve tags css for browser zoom
+8c00944e4d fix(Sales): boilerplate modle unique
+117d957e5c fix(automerge): checkout branch using --track
+2a63a66969 fix(automerge): po merge helper: mktemp invalied argument
+50af223ce7 fix(Tinebase): clipboard icon missing when sales not installed
+cef0038b1c fix(Felamimail/Account): user_id needs to be nullable, too
+daa0353c2d fix(TB HTTP FE) allow long model names with _ in __call
+20ea61213a fix(phpstan): update baseline
+b321409a32 fix(DFCom/Update/1.3): convert dfcom_id empty string to NULL
+f3d902684a fix(Tinebase/Config): Wrong link on login page #7348
+1b186cb402 fix(Felamimail/Message): convert structure cache id
+a91b99c227 fix(TB Export) filelocation support improved, support attachment as target
+825f8547f8 fix(Felamimail/Account): allow 'duplicate' email account contacts
+bdd099f1bd fix(Felamimail/Account): contact_id needs to be nullable, too
+372cc33f7f fix(Calendar/Attender): fix resolving of resources
+b686278f43 fix(Felamimail/Convert): $result['contact_id'] might not be an array
+a664bb6759 fix(Tinebase/Cli): fix cleanRelations command
+9bec3a4c20 fix(Felamimail/Account): set default empty value for 'visiblity'
+41248e21c9 fix(Tinebase): process async evnets ordered
+a3af2bd86f fix(Filemanager): select updated folder after rename
+a940e7b688 fix(Felamimail/Update/14.3): some more Account fields need to be nullable
+dcf61a8a6e fix(Setup): checkUserLimit wihtout Tinebase_Core::getUser()
+e45dea9c52 fix(test/Felamimail): resolve duplicated records when save email contact
+17043cd2ca fix(Tinebase/js): import record edit field in field manager
+e4b26ac803 fix(Felamimail/Update/14.3+14.4): some Account fields need to be nullable
+0dcd98b9f9 fix(Sales) offer edit dialog details
+a9e3eaaf3c fix(dfcom) dfcom_id of type int should have input filter
+508463aae7 fix(Admin/EmailAccount): move right checks back to admin
+189076b2e5 fix(phpstan): fix some issues and update baseline
+c2b43b59b7 fix(Felamimail/Message): handle deeply nested recipient arrays
+5ae2557531 fix(Tinebase/CommId): Hide internal CommunityIdentNr fields
+03656d06ff fix(Sales/Product): add default empty input filter for FLD_DEFAULT_SORTING
+fd9a86d077 fix(HumanResources/WtReport): fix getStartDate
+3f9f3e0a3d fix(TB Auth) email filter typo fixed
+31b450ab0c fix(Felamimail): save account without vacation template
+
+### Refactoring
+42ca6ca8f6 refactor(Tinebase): CommunityIdentNr -> MunicipalityKey
+57cd5d07e1 refactor(Sales): DeliveryNote -> Delivery
+
 
 # GENERAL CHANGES (Administrative)
 
