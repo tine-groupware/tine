@@ -45,10 +45,14 @@ class OnlyOfficeIntegrator_Setup_Initialize extends Setup_Initialize
             Tinebase_Model_Grants::GRANT_ADMIN     => true,
         ];
 
-        $path = Tinebase_Model_Tree_Node_Path::createFromRealPath('/shared/OOIQuarantine',
-            Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
-        Tinebase_FileSystem::getInstance()->createAclNode($path->statpath, new Tinebase_Record_RecordSet(
-            Tinebase_Model_Grants::class, [$grants]));
+        try {
+            $path = Tinebase_Model_Tree_Node_Path::createFromRealPath('/shared/OOIQuarantine',
+                Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
+            Tinebase_FileSystem::getInstance()->createAclNode($path->statpath, new Tinebase_Record_RecordSet(
+                Tinebase_Model_Grants::class, [$grants]));
+        } catch (Tinebase_Exception_SystemGeneric $e) {
+            // node already exits
+        }
     }
 
     protected function _initializeCustomFields()
@@ -105,9 +109,12 @@ class OnlyOfficeIntegrator_Setup_Initialize extends Setup_Initialize
             return;
         }
 
-        Tinebase_FileSystem::getInstance()->createAclNode(
-            $basePath = OnlyOfficeIntegrator_Controller::getNewTemplatePath());
-
+        $basePath = OnlyOfficeIntegrator_Controller::getNewTemplatePath();
+        try {
+            Tinebase_FileSystem::getInstance()->createAclNode($basePath);
+        }  catch (Tinebase_Exception_SystemGeneric $e) {
+            // node already exits
+        }
         $dir = dir(dirname(__DIR__) . '/templates');
         while (false !== ($file = $dir->read())) {
             if (strpos($file, 'new.') === 0) {
