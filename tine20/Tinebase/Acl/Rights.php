@@ -151,12 +151,18 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 self::SHOW_LICENSE_INFO,
                 self::REPLICATION,
             );
+            $removeRights = [
+                self::MAINSCREEN,
+                self::USE_PERSONAL_TAGS
+            ];
         } else {
             $addRights = array();
+            $removeRights = [];
         }
         
         $allRights = array_merge($allRights, $addRights);
-        
+        $allRights = array_values(array_diff($allRights, $removeRights));
+
         return $allRights;
     }
 
@@ -202,6 +208,8 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
+        $rightDescriptions = array_intersect_key($rightDescriptions, array_flip(Tinebase_Acl_Rights::getInstance()->getAllApplicationRights()));
+
         return $rightDescriptions;
     }
     
