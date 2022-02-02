@@ -202,8 +202,9 @@ class EFile_EFileNodeTest extends TestCase
 
         $newNodePath = $nodePath . '#';
 
-        static::expectException(Tinebase_Exception_Record_Validation::class);
-        static::expectExceptionMessage('efile node names may not contain "#"');
+        static::expectException(Tinebase_Exception_SystemGeneric::class);
+        $translation = Tinebase_Translation::getTranslation('EFile');
+        static::expectExceptionMessage($translation->_('EFile node names may not contain:') . ' ' . '#');
         $fs->rename($nodePath, $newNodePath);
     }
 
