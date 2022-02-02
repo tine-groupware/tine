@@ -456,7 +456,9 @@ class EFile_Controller extends Tinebase_Controller_Event
             strlen(self::TIER_TOKEN_SEPERATOR));
         foreach (EFile_Config::getInstance()->{EFile_Config::NODE_NAME_DENIED_SUBSTRINGS} as $denySubstr) {
             if (strpos($namePart, $denySubstr) !== false) {
-                throw new Tinebase_Exception_Record_Validation('efile node names may not contain "' . $denySubstr . '"');
+                $translation = Tinebase_Translation::getTranslation('EFile');
+                $message = $translation->_('EFile node names may not contain:') . ' ' . $denySubstr;
+                throw new Tinebase_Exception_SystemGeneric($message);
             }
         }
     }
