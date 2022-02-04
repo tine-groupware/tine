@@ -5178,6 +5178,10 @@ msgstr ""
 msgid "Create {0}"
 msgstr "{0} erstellen"
 
+#: Model/MunicipalityKey.php:214
+msgid "plz"
+msgstr "PLZ"
+
 msgid "This area is locked. To unlock it you need to provide your PIN"
 msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihre PIN "
