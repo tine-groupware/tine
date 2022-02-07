@@ -43,10 +43,18 @@ class UserManual_Setup_Initialize extends Setup_Initialize
             . ' Configured max_allowed_packet: ' . $maxPacketSize
         );
         if ($maxPacketSize < self::MIN_MAX_ALLOWED_PACKET) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' Could not import manual content: max_allowed_packet needs to be bigger than ' . self::MIN_MAX_ALLOWED_PACKET
-            );
-            return;
+            try {
+                Tinebase_Core::getDb()->query('SET SESSION max_allowed_packet=209715210;');
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage()
+                );
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not import manual content: max_allowed_packet needs to be bigger than ' . self::MIN_MAX_ALLOWED_PACKET
+                    . ' / you have: ' . $maxPacketSize
+                );
+                return;
+            }
         }
 
         try {
