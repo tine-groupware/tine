@@ -53,8 +53,11 @@ class Tinebase_ModelConfiguration_Const {
     const FILTER_GROUP = 'filtergroup';
     const FILTER_OPTIONS = 'filterOptions';
     const FLAGS = 'flags';
+    const FLD_CONTAINER_ID = 'container_id';
     const FLD_DELETED_TIME = 'deleted_time';
     const FUNCTION = 'function';
+
+    const GRANTS_MODEL = 'grantsModel';
 
     const HAS_ATTACHMENTS = 'hasAttachments';
     const HAS_CUSTOM_FIELDS = 'hasCustomFields';
@@ -113,6 +116,7 @@ class Tinebase_ModelConfiguration_Const {
     const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
     const SPECIAL_TYPE = 'specialType';
     const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
+    const SPECIAL_TYPE_PASSWORD = 'password';
     const STORAGE = 'storage';
     const SUPPORTED_FORMATS = 'supportedFormats';
     const SYSTEM = 'system';

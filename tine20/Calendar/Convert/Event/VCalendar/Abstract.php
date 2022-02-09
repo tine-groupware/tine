@@ -999,8 +999,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     } elseif (preg_match('/mailto:(?P<email>.*)/i', $property->getValue(), $matches)) {
                         $email = $matches['email'];
                     }
+                    if (($email !== null) && is_string($email)) {
+                        $email = trim($email);
+                    }
                     
-                    if ($email !== null) {
+                    if (!empty($email)) {
                         // it's not possible to change the organizer by spec
                         if (empty($event->organizer)) {
                             $name = isset($property['CN']) ? $property['CN']->getValue() : $email;
@@ -1219,7 +1222,9 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 case 'EXDATE':
                     // ignore this, we dont want it to land in default -> imipProps!
                     break;
-
+                case 'URL':
+                    $event->url = $property->getValue();
+                    break;
                 default:
                     // thunderbird saves snooze time for recurring event occurrences in properties with names like this -
                     // we just assume that the event/recur series has only one snooze time 

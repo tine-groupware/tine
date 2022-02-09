@@ -1,7 +1,11 @@
 repo_get_customer_for_branch () {
     branch=$1
 
-    cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+    if [ "${branch}" == "main" ]; then
+        echo main
+        return
+    fi
+
     if echo "${branch}" | grep -Eq '(pu/|feat/|change/)'; then
         return 1
     fi
@@ -21,4 +25,13 @@ repo_get_customer_for_branch () {
         echo "${branch}" | cut -d '/' -f1
         return
     fi
+}
+
+repo_release_notes() {
+    tag=$1
+    previous_tag=$2
+
+    echo '# Releasenotes'
+    echo '# Changelog'
+    ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/changelog.sh "$tag" "$previous_tag"
 }
