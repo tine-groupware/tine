@@ -50,6 +50,9 @@ merge_be:
   extends: .abstract.merge
   script:
     ### 2021.11
+    - merge_merge_upwards 2020.11 tine20.com/2020.11-custom
+    - merge_merge_upwards tine20.com/2020.11-custom tine20.com/2020.11
+    ### 2021.11
     - merge_merge_upwards tine20.com/2020.11-custom tine20.com/2021.11-custom
     - merge_merge_upwards 2021.11 tine20.com/2021.11-custom
     - merge_merge_upwards tine20.com/2021.11-custom tine20.com/2021.11
