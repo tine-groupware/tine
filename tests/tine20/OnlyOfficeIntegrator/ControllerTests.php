@@ -308,7 +308,7 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
                     OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256')));
 
         static::expectException(Tinebase_Exception_AccessDenied::class);
-        static::expectExceptionMessage('jwt mismatch http://unittest/shalala');
+        static::expectExceptionMessage('jwt mismatch (maybe tine20Url confing is missing?): http://unittest/uoh !== http://unittest/shalala');
         $this->_uit->getDocument('');
     }
 
