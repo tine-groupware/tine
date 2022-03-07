@@ -6,7 +6,7 @@
  * @subpackage   Controller
  * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Cornelius Weiß <c.weiss@metaways.de>
- * @copyright    Copyright (c) 2018-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -60,32 +60,17 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
     public function getChanges($token)
     {
-        /** @var \Zend\Diactoros\Request $request **/
-        $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
         // WTF! getChanges is a jwt less CORS request from the browser
-//        $jwt = $this->_getDecodedAuthToken($request, false);
-//        if (!isset($jwt['payload']['url']) ||
-//            $jwt['payload']['url'] !== preg_replace('/\?.*$/', '', $request->getUri())) {
-//            throw new Tinebase_Exception_AccessDenied('jwt mismatch ' . $request->getUri());
-//        }
-
+        // $this->_checkJwt();
+        
         if (!is_string($token) || empty($token)) {
             $e = new Tinebase_Exception_Expressive_HttpStatus('parameter token needs to be a string', 400);
-            $e->logToSentry(true);
+            $e->setLogToSentry(true);
             $e->setLogLevelMethod('notice');
             throw $e;
         }
 
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $raii = (new Tinebase_RAII(function() use (&$transId) {
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
 
         OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->invalidateTimeouts();
 
@@ -117,41 +102,24 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
         $raii->release();
 
-        $response = new \Zend\Diactoros\Response($stream, 200, [
+        return new \Zend\Diactoros\Response($stream, 200, [
             'Content-Disposition'   => 'attachment; filename="' . $name . '"',
             'Content-Type'          => $contentType,
             'Access-Control-Allow-Origin' => '*',
         ]);
-
-        return $response;
     }
 
     public function getDocument($token)
     {
-        /** @var \Zend\Diactoros\Request $request **/
-        $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
-        $jwt = $this->_getDecodedAuthToken($request, false);
-        if (!isset($jwt['payload']['url']) ||
-                $jwt['payload']['url'] !== preg_replace('/\?.*$/', '', $request->getUri())) {
-            throw new Tinebase_Exception_AccessDenied('jwt mismatch ' . $request->getUri());
-        }
+        $this->_checkJwt();
 
         if (!is_string($token) || empty($token)) {
             $e = new Tinebase_Exception_Expressive_HttpStatus('parameter token needs to be a string', 400);
-            $e->logToSentry(true);
+            $e->setLogToSentry(true);
             $e->setLogLevelMethod('notice');
             throw $e;
         }
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $raii = (new Tinebase_RAII(function() use (&$transId) {
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
 
         OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->invalidateTimeouts();
 
@@ -195,20 +163,40 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         $raii->release();
 
 
-        $response = new \Zend\Diactoros\Response($stream, 200, [
+        return new \Zend\Diactoros\Response($stream, 200, [
             'Content-Disposition'   => 'attachment; filename="' . $name . '"',
             'Content-Type'          => $contentType,
         ]);
-
-        return $response;
     }
 
-
+    /**
+     * check JWT for correct payload URL
+     *
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkJwt()
+    {
+        /** @var \Zend\Diactoros\Request $request **/
+        $request = Tinebase_Core::getContainer()->get(RequestInterface::class);
+        $jwt = $this->_getDecodedAuthToken($request, false);
+        
+        if (!isset($jwt['payload']['url'])) {
+            throw new Tinebase_Exception_AccessDenied('jwt mismatch: url missing from payload');
+        } else {
+            $requestUri = preg_replace('/\?.*$/', '', $request->getUri());
+            if ($jwt['payload']['url'] !== $requestUri) {
+                throw new Tinebase_Exception_AccessDenied('jwt mismatch (maybe tine20Url confing is missing?): '
+                    . $jwt['payload']['url'] . ' !== ' . $requestUri);
+            }
+        }
+    }
+    
     public function updateStatus($token)
     {
         if (!is_string($token) || empty($token)) {
             $e = new Tinebase_Exception_Expressive_HttpStatus('parameter token needs to be a string', 400);
-            $e->logToSentry(true);
+            $e->setLogToSentry(true);
             $e->setLogLevelMethod('notice');
             throw $e;
         }
@@ -227,7 +215,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
         if (!isset($requestData['status']) || !isset($requestData['key'])) {
             $e = new Tinebase_Exception_Expressive_HttpStatus('bad message format, status or key not set', 400);
-            $e->logToSentry(true);
+            $e->setLogToSentry(true);
             $e->setLogLevelMethod('notice');
             throw $e;
         }
@@ -245,7 +233,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                 //case 3: document save error, treat like 4 -> invalidate token
                 case 3:
                     $e = new Tinebase_Exception_Backend('OnlyOffice send status 3: save error');
-                    $e->logToSentry(true);
+                    $e->setLogToSentry(true);
                     $e->setLogLevelMethod('warn');
                     Tinebase_Exception::log($e);
                 // case 4: document closed without changes -> invalidate token
@@ -341,21 +329,12 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
     {
         if (!isset($requestData['url'])) {
             $e = new Tinebase_Exception_Expressive_HttpStatus('bad message format, url not set', 400);
-            $e->logToSentry(true);
+            $e->setLogToSentry(true);
             $e->setLogLevelMethod('notice');
             throw $e;
         }
 
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $raii = (new Tinebase_RAII(function() use (&$transId) {
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function() use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
 
         $allTokens = $this->doSave($requestData, $token);
         $previousRevision = null;
@@ -386,17 +365,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
     protected function processStatus4($token)
     {
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $raii = (new Tinebase_RAII(function() use (&$transId) {
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
-
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
         $allTokens = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
                 ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN, 'operator' => 'equals', 'value' => $token],
@@ -424,21 +393,12 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
     {
         if (!isset($requestData['url'])) {
             $e = new Tinebase_Exception_Expressive_HttpStatus('bad message format, url not set', 400);
-            $e->logToSentry(true);
+            $e->setLogToSentry(true);
             $e->setLogLevelMethod('notice');
             throw $e;
         }
 
-        $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-        $raii = (new Tinebase_RAII(function() use (&$transId) {
-            if (null !== $transId) {
-                Tinebase_TransactionManager::getInstance()->rollBack();
-            }
-        }))->setReleaseFunc(function () use (&$transId) {
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-            $transId = null;
-        });
+        $raii = Tinebase_RAII::getTransactionManagerRAII();
 
         $allTokens = $this->doSave($requestData, $token);
 
@@ -453,6 +413,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             $node = null;
         }
 
+        $tokenRecord = null;
         foreach ($allTokens as $tokenRecord) {
             if (null !== $node) {
                 $tokenRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} = $node->revision;
@@ -466,8 +427,9 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
         $raii->release();
 
-        $this->createHistory($tokenRecord, $requestData, $previousRevision);
-        
+        if ($tokenRecord) {
+            $this->createHistory($tokenRecord, $requestData, $previousRevision);
+        }
 
         $response = new \Zend\Diactoros\Response();
         $response->getBody()->write('{
@@ -483,16 +445,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
             if (isset($requestData['changesurl']) && isset($requestData['history'])) {
 
-                $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-                // if $transId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work
-                $raii = (new Tinebase_RAII(function() use (&$transId) {
-                    if (null !== $transId) {
-                        Tinebase_TransactionManager::getInstance()->rollBack();
-                    }
-                }))->setReleaseFunc(function () use (&$transId) {
-                    Tinebase_TransactionManager::getInstance()->commitTransaction($transId);
-                    $transId = null;
-                });
+                $raii = Tinebase_RAII::getTransactionManagerRAII();
 
                 // eventually rewrite the source url depending on config
                 $conf = OnlyOfficeIntegrator_Config::getInstance();
@@ -619,8 +572,9 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
         // figure out target path ... also file ending rewrite happens here
         $srcEnding = ltrim(substr($requestData['url'], strrpos($requestData['url'], '.')), '.');
-        $node = null;
         $oldName = null;
+        $newName = '';
+        $tempFile = null;
         try {
             if ((int)$accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} ===
                     (int)OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION) {
@@ -660,7 +614,8 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                     $node = Tinebase_FileSystem::getInstance()->get($accessToken
                         ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
                     $oldName = $node->name;
-                    $newName = $node->name = @end(explode('/', $trgtPath));
+                    $array = explode('/', $trgtPath);
+                    $newName = $node->name = @end($array);
                     /** do not use the return of this call! revision will be increased later! */
                     Tinebase_FileSystem::getInstance()->update($node);
                     Tinebase_FileSystem::getInstance()->clearStatCache();
@@ -669,7 +624,6 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Tinebase_Exception_Expressive_HttpStatus('node not found', 404);
         }
-
 
         if (!($srcStream = fopen($requestData['url'], 'r'))) {
             throw new Tinebase_Exception_Backend('could not open document to save');
@@ -731,7 +685,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                 $note->note = str_replace($user->accountDisplayName, $allUsers, $note->note);
                 Tinebase_Notes::getInstance()->update($note);
             }
-        } else {
+        } else if ($tempFile) {
             $tempFile->size = filesize($trgtPath);
             Tinebase_TempFile::getInstance()->update($tempFile);
         }

@@ -4741,26 +4741,6 @@ parameters:
 			path: tine20/Inventory/Controller.php
 
 		-
-			message: "#^Method Tinebase_Exception\\:\\:logToSentry\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 7
-			path: tine20/OnlyOfficeIntegrator/Controller.php
-
-		-
-			message: "#^Variable \\$newName might not be defined\\.$#"
-			count: 1
-			path: tine20/OnlyOfficeIntegrator/Controller.php
-
-		-
-			message: "#^Variable \\$tempFile might not be defined\\.$#"
-			count: 2
-			path: tine20/OnlyOfficeIntegrator/Controller.php
-
-		-
-			message: "#^Variable \\$tokenRecord might not be defined\\.$#"
-			count: 1
-			path: tine20/OnlyOfficeIntegrator/Controller.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:softDelete\\(\\)\\.$#"
 			count: 1
 			path: tine20/OnlyOfficeIntegrator/Controller/AccessToken.php
