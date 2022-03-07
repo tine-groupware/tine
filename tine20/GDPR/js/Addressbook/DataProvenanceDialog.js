@@ -12,7 +12,8 @@ require('./DataProvenancePicker');
 Tine.GDPR.Addressbook.DataProvenanceDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
     labelAlign: 'top',
     layout: 'form',
-    frame: true,
+    frame: false,
+    
 
     canonicalName: ['Addressbook',  'EditDialog', 'Contact', 'DataProvenanceDialog'].join(Tine.Tinebase.CanonicalPath.separator),
 
@@ -35,7 +36,7 @@ Tine.GDPR.Addressbook.DataProvenanceDialog = Ext.extend(Tine.Tinebase.dialog.Dia
             anchor: '100%',
             emptyText: this.app.i18n._('Please enter the reason for editing this data')
         }];
-
+        this.items = [{layout: 'form', style: 'padding: 5px;', border: false, items: this.items}]
         Tine.GDPR.Addressbook.DataProvenanceDialog.superclass.initComponent.call(this);
     },
 
