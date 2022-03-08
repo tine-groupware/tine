@@ -99,7 +99,7 @@ Im jeweiligen Anwendungsbereich verlinken wir auf die zugehörigen Stammdaten, w
 ==== Lohnarten ====
 
 Lohnarten werden in der Lohn- und Gehaltsabrechnung zur Steuerung abzurechnender Vorgänge verwendet. Dabei sind abrechnungsrelevante Eigenschaften für Lohn-und Gehaltszahlungen pro Lohnart definiert (Steuer-, Sozialversicherungs- und Auswertungsmerkmale).
-Einige gängige und systemrelevante Lohnarten werden bereits bei Installation zur Verfügung gestellt. Sie haben hier die Möglichkeit speziell in menu:[Abkürzungen] und der Bezeichnung in menu:[Name] die Lohnarten parallel zu einem bestehenden Lohnbuchhaltsungssystem zu führen. Grundsätzlich sind Sie jedoch frei bei der weiteren Anlage und Benennung der Lohnarten in {branch}.
+Einige gängige und systemrelevante Lohnarten werden bereits bei Installation zur Verfügung gestellt. Sie haben hier die Möglichkeit, speziell in menu:[Abkürzungen] und der Bezeichnung in menu:[Name], die Lohnarten parallel zu einem bestehenden Lohnbuchhaltsungssystem zu führen. Grundsätzlich sind Sie jedoch frei bei der weiteren Anlage und Benennung der Lohnarten in {branch}.
 
 Die Angabe in menu:[System] steuert, ob es sich dabei um eine systemnotwendige Lohnart handelt (notwendig für die automatische Berechnung der abrechnungsrelevanten Mitarbeiterdaten). Der menu:[Faktor] steuert mit welchem Prozenzsatz die zu berechnenden Daten bewertet werden. menu:[Zusatzlohn] enthält die Information, ob es sich um einen zusätzlichen Lohn- bzw. Gehaltsanteil handelt.
 
