@@ -24,19 +24,32 @@ class DFCom_RecordHandler_TimeAccounting
 
     const XPROP_TIMESHEET_ID = self::class . '::timesheet_id';
     const XPROP_UNKNOWN_CARD_ID = self::class . '::unknown_card_id';
+
+    protected $device;
+    protected $deviceResponse;
+    protected $deviceRecord;
+    protected $deviceData;
+    protected $employeeController;
+    protected $accountController;
+    protected $freeTimeController;
+    protected $timeaccountController;
+    protected $monthlyWTReportController;
+    protected $timesheetController;
+    protected $i18n;
+    protected $user;
+    protected $currentUser;
+    protected $employee;
+
     
     public function __construct($event)
     {
-        /** @var DFCom_Model_Device $this->deviceRecord */
         $this->device = $event['device'];
-        /** @var DFCom_Model_DeviceResponse $this->deviceRecord */
         $this->deviceResponse = $event['deviceResponse'];
-        /** @var DFCom_Model_DeviceRecord $this->deviceRecord */
         $this->deviceRecord = $event['deviceRecord'];
         $this->deviceData = $this->deviceRecord->xprops('data');
-
         $this->employeeController = HumanResources_Controller_Employee::getInstance();
         $this->accountController = HumanResources_Controller_Account::getInstance();
+        $this->freeTimeController = HumanResources_Controller_FreeTime::getInstance();
 //        $this->workingTimeSchemaController = HumanResources_Controller_WorkingTimeScheme::getInstance();
         $this->timeaccountController = Timetracker_Controller_Timeaccount::getInstance();
         $this->monthlyWTReportController = HumanResources_Controller_MonthlyWTReport::getInstance();
@@ -49,12 +62,14 @@ class DFCom_RecordHandler_TimeAccounting
     {
         // order of execution matters here, because of the many get/setUsers!
         // ATTENTION do not change order of these lines unless you understand why the order matters
-        $assertEmployeeAclUsage = $this->employeeController->assertPublicUsage();
-        $assertAccountAclUsage = $this->accountController->assertPublicUsage();
-//        $assertWorkingTimeSchemaAclUsage = $this->workingTimeSchemaController->assertPublicUsage();
-        $assertTimeaccountAclUsage = $this->timeaccountController->assertPublicUsage();
-        $assertMonthlyWTReportControllerAclUsage = $this->monthlyWTReportController->assertPublicUsage();
-        $assertTimesheetAclUsage = $this->timesheetController->assertPublicUsage();
+        $assertACLUsageCallbacks = [
+            $this->employeeController->assertPublicUsage(),
+            $this->accountController->assertPublicUsage(),
+    //        $this->workingTimeSchemaController->assertPublicUsage(),
+            $this->timeaccountController->assertPublicUsage(),
+            $this->monthlyWTReportController->assertPublicUsage(),
+            $this->timesheetController->assertPublicUsage(),
+        ];
         // end attention
 
         $dateTime = new Tinebase_DateTime($this->deviceData['dateTime'], $this->device->timezone);
@@ -82,9 +97,9 @@ class DFCom_RecordHandler_TimeAccounting
             switch ($this->deviceData['functionKey']) {
                 case self::FUNCTION_KEY_INFO:
                     $employeeName = $this->user->accountDisplayName;
+                    array_push($assertACLUsageCallbacks, HumanResources_Controller_Contract::getInstance()->assertPublicUsage());
                     try {
-                        $allRemainingVacationsDays = HumanResources_Controller_FreeTime::getInstance()
-                            ->getRemainingVacationDays($this->employee);
+                        $allRemainingVacationsDays = $this->freeTimeController->getRemainingVacationDays($this->employee);
                         $remainingVacations = "{$allRemainingVacationsDays} Tage";
                         
                         $monthlyWTR = $this->monthlyWTReportController->getByEmployeeMonth($this->employee);
@@ -158,12 +173,9 @@ class DFCom_RecordHandler_TimeAccounting
             if (null !== $this->currentUser) {
                 Tinebase_Core::setUser($this->currentUser);
             }
-            $assertTimesheetAclUsage();
-            $assertMonthlyWTReportControllerAclUsage();
-            $assertTimeaccountAclUsage();
-            // $assertWorkingTimeSchemaAclUsage();
-            $assertAccountAclUsage();
-            $assertEmployeeAclUsage();
+            foreach(array_reverse($assertACLUsageCallbacks) as $assertACLUsageCallback) {
+                $assertACLUsageCallback();
+            }
         }
 
         return $result;
