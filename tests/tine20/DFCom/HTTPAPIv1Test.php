@@ -275,7 +275,7 @@ class DFCom_HTTPAPIv1Test extends TestCase
         $this->assertTrue(!!strstr($body, "df_setup_list=employee"), $body);
 
         $device = DFCom_Controller_Device::getInstance()->get($device->id);
-        $this->assertEquals('0.3', $device->setupVersion);
+        $this->assertEquals('0.7', $device->setupVersion);
     }
 
     public static function getTestRecordRequestData($table = 'alive', $overwrites = [])
