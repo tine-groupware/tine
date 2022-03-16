@@ -99,8 +99,11 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
 
         $deviceController = DFCom_Controller_Device::getInstance();
 
-        $assertListAclUsage = $this->assertPublicUsage();
-        $assertDeviceAclUsage = $deviceController->assertPublicUsage();
+        $assertACLUsageCallbacks = [
+            $this->assertPublicUsage(),
+            $deviceController->assertPublicUsage(),
+            HumanResources_Controller_Employee::getInstance()->assertPublicUsage(),
+        ];
 
         try {
             /** @var DFCom_Model_Device $device */
@@ -149,8 +152,9 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
                 'Content-Length' => fstat($responseStream)['size'],
             ]);
         } finally {
-            $assertDeviceAclUsage();
-            $assertListAclUsage();
+            foreach(array_reverse($assertACLUsageCallbacks) as $assertACLUsageCallback) {
+                $assertACLUsageCallback();
+            }
         }
     }
 
