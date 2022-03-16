@@ -78,9 +78,11 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
 
         // order of execution matters here, because of the many get/setUsers!
         // ATTENTION do not change order of these lines unless you understand why the order matters
-        $assertDeviceAclUsage = $this->assertPublicUsage();
-        $assertListAclUsage = $deviceListController->assertPublicUsage();
-        $assertRecordAclUsage = $deviceRecordController->assertPublicUsage();
+        $assertACLUsageCallbacks = [
+            $this->assertPublicUsage(),
+            $deviceListController->assertPublicUsage(),
+            $deviceRecordController->assertPublicUsage(),
+        ];
         // end attention
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
@@ -157,6 +159,7 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                             }
                         }
 
+                        array_push($assertACLUsageCallbacks, HumanResources_Controller_Employee::getInstance()->assertPublicUsage());
                         // check if we have a list update
                         foreach($lists as $list) {
                             /** @var DFCom_Model_DeviceList $list */
@@ -221,9 +224,9 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
         } finally {
             // order of execution matters here, because of the many get/setUsers!
             // we need to do it in reverse order of the initalization!
-            $assertRecordAclUsage();
-            $assertListAclUsage();
-            $assertDeviceAclUsage();
+            foreach(array_reverse($assertACLUsageCallbacks) as $assertACLUsageCallback) {
+                $assertACLUsageCallback();
+            }
         }
 
         $response->setTime(Tinebase_DateTime::now()->setTimezone($device->timezone));
