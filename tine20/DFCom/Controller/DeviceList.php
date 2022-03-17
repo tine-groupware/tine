@@ -103,6 +103,7 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
             $this->assertPublicUsage(),
             $deviceController->assertPublicUsage(),
             HumanResources_Controller_Employee::getInstance()->assertPublicUsage(),
+            HumanResources_Controller_FreeTimeType::getInstance()->assertPublicUsage(),
         ];
 
         try {
@@ -151,6 +152,12 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
             return new \Zend\Diactoros\Response($responseStream, 200, [
                 'Content-Length' => fstat($responseStream)['size'],
             ]);
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' cannot create export ' . $e);
+            $response = new \Zend\Diactoros\Response('php://memory', 500);
+            $response->getBody()->write('DeviceList export error');
+            return $response;
         } finally {
             foreach(array_reverse($assertACLUsageCallbacks) as $assertACLUsageCallback) {
                 $assertACLUsageCallback();

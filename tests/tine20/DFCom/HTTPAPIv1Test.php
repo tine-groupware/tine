@@ -259,7 +259,7 @@ class DFCom_HTTPAPIv1Test extends TestCase
 
         $request = Tinebase_Http_Request::fromString(self::getTestRecordRequestData('alive', [
             'df_col_authKey' => $device->authKey,
-            'df_col_setupVersion' => '0.3',
+            'df_col_setupStatus' => '0000',
         ]));
 
         $this->container->set(\Psr\Http\Message\RequestInterface::class, \Zend\Psr7Bridge\Psr7ServerRequest::fromZend($request));
@@ -272,10 +272,10 @@ class DFCom_HTTPAPIv1Test extends TestCase
         $this->emitter->response->getBody()->rewind();
         $body = $this->emitter->response->getBody()->getContents();
 
-        $this->assertTrue(!!strstr($body, "df_setup_list=employee"), $body);
+        $this->assertTrue(!!strstr($body, "df_setup_list=absenceReasons"), $body);
 
         $device = DFCom_Controller_Device::getInstance()->get($device->id);
-        $this->assertEquals('0.3', $device->setupVersion);
+        $this->assertEquals('0.7', $device->setupVersion);
     }
 
     public static function getTestRecordRequestData($table = 'alive', $overwrites = [])
@@ -289,8 +289,9 @@ class DFCom_HTTPAPIv1Test extends TestCase
             'df_col_deviceString' => 'EVO-Line 4.3',
             'df_col_serialNumber' => 1111,
             'df_col_authKey' => $setupAuthKey,
-            'df_col_fwVersion' => '04.03.10.18',
-            'df_col_setupVersion' => '0.2',
+            'df_col_fwVersion' => '04.03.16.02',
+            'df_col_setupVersion' => '0.7',
+            'df_col_setupStatus' => '1000',
         ];
 
         switch ($table) {
