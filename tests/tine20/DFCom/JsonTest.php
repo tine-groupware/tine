@@ -35,6 +35,7 @@ class DFCom_JsonTest extends TestCase
                 'timezone' => Tinebase_Record_Abstract::generateUID(20),
                 'fwVersion' => Tinebase_Record_Abstract::generateUID(11),
                 'setupVersion' => Tinebase_Record_Abstract::generateUID(20),
+                'setupStatus' => '0000',
                 'authKey' => Tinebase_Record_Abstract::generateUID(20),
             ],
             false

@@ -86,6 +86,8 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
         // end attention
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        $setupAuthKey = DFCom_Config::getInstance()->get(DFCom_Config::SETUP_AUTH_KEY);
+        $setupStatus = $deviceRecord->xprops('data')['setupStatus'] ?? '1000';
 
         try {
             /** @var DFCom_Model_Device $device */
@@ -95,7 +97,6 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
             ]))->getFirstRecord();
 
             if (!$device) {
-                $setupAuthKey = DFCom_Config::getInstance()->get(DFCom_Config::SETUP_AUTH_KEY);
                 if ($setupAuthKey == $deviceRecord->xprops('data')['authKey']) {
                     // create new device
                     // @TODO: have new device in "pending" state so it can not produce
@@ -133,9 +134,14 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                     }
                 }
                 $device->controlCommands = implode("\n", $comments);
-            } else {
+            } else { // why else here???
                 // process record
                 if (!$device || $device->authKey !== $deviceRecord->xprops('data')['authKey']) {
+                    if ($device && $deviceRecord->xprops('data')['authKey'] === $setupAuthKey && $setupStatus[0] === '0') {
+                        // authKey get's lost after setup updates
+                        $deviceRecord->xprops('data')['authKey'] = $device->authKey;
+                        $response->setDeviceVariable('authKey', $device->authKey);
+                    }
                     sleep(DFCom_Controller_Device::$unAuthSleepTime);
                     $authKey = $device ? $device->authKey : ('setup authKey ' . $setupAuthKey);
                     $response = new \Zend\Diactoros\Response('php://memory', 401);
@@ -151,12 +157,16 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                         $lists = $deviceListController->getDeviceLists($device);
 
                         // writing setup deletes list on device
-                        if ($device->setupVersion != $deviceRecord->xprops('data')['setupVersion']) {
+                        if ($setupStatus[0] === '0') {
                             $lists->list_version = null;
+                            $lists->list_status = null;
                             foreach($lists as $idx => $list) {
                                 /** @var DFCom_Model_DeviceList $list */
                                 $lists[$idx] = $deviceListController->update($list);
                             }
+                            $setupStatus[0] = "1";
+                            $deviceRecord->xprops('data')['setupStatus'] = $setupStatus;
+                            $response->setDeviceVariable('setupStatus', $setupStatus);
                         }
 
                         array_push($assertACLUsageCallbacks, HumanResources_Controller_Employee::getInstance()->assertPublicUsage());
@@ -174,8 +184,6 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                                     . ' cannot evaluate export definition ' . $e);
                             }
                         }
-
-                        $device->mergeStatusData($deviceRecord);
 
                         break;
                     case 'listFeedback':
@@ -217,6 +225,7 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
             }
 
             // update dateTime and maybe more (like flush)
+            $device->mergeStatusData($deviceRecord);
             $device->lastSeen = Tinebase_DateTime::now();
             $this->update($device);
 

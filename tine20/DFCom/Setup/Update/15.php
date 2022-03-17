@@ -52,6 +52,7 @@ class DFCom_Setup_Update_15 extends Setup_Update_Abstract
             ]));
         }
 
+        Setup_SchemaTool::updateSchema([DFCom_Model_Device::class]);
         $this->addApplicationUpdate('DFCom', '15.1', self::RELEASE015_UPDATE001);
     }
 }
