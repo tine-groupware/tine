@@ -175,7 +175,7 @@ class DFCom_Controller_DeviceList extends Tinebase_Controller_Record_Abstract
     {
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(DFCom_Model_DeviceList::class);
         $filter->addFilter(new Tinebase_Model_Filter_Id('device_id', 'equals', $device->getId()));
-        return $this->search($filter);
+        return $this->search($filter, new Tinebase_Model_Pagination(['sort' => 'name']));
     }
 
     /**
