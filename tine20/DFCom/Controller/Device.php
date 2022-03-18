@@ -86,6 +86,8 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
         // end attention
 
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        $setupAuthKey = DFCom_Config::getInstance()->get(DFCom_Config::SETUP_AUTH_KEY);
+        $setupStatus = $deviceRecord->xprops('data')['setupStatus'] ?? '1000';
 
         try {
             /** @var DFCom_Model_Device $device */
@@ -95,7 +97,6 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
             ]))->getFirstRecord();
 
             if (!$device) {
-                $setupAuthKey = DFCom_Config::getInstance()->get(DFCom_Config::SETUP_AUTH_KEY);
                 if ($setupAuthKey == $deviceRecord->xprops('data')['authKey']) {
                     // create new device
                     // @TODO: have new device in "pending" state so it can not produce
@@ -111,7 +112,7 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                     $deviceRecord->xprops('data')['authKey'] = $device->authKey;
                     $response->setDeviceVariable('authKey', $device->authKey);
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . " got wrong setup authKey: " . $deviceRecord->xprops('data')['authKey']);
                 }
             }
@@ -133,50 +134,59 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                     }
                 }
                 $device->controlCommands = implode("\n", $comments);
-            } else {
+            } else { // why else here??? -> to send commands to unauthed!
                 // process record
                 if (!$device || $device->authKey !== $deviceRecord->xprops('data')['authKey']) {
-                    sleep(DFCom_Controller_Device::$unAuthSleepTime);
-                    $authKey = $device ? $device->authKey : ('setup authKey ' . $setupAuthKey);
-                    $response = new \Zend\Diactoros\Response('php://memory', 401);
-                    $response->getBody()->write("Device authentication failed expected $authKey got " . $deviceRecord->xprops('data')['authKey']);
-                    return $response;
+                    if ($device && $deviceRecord->xprops('data')['authKey'] === $setupAuthKey) {
+                        // authKey get's lost after setup updates
+                        $deviceRecord->xprops('data')['authKey'] = $device->authKey;
+                        $response->setDeviceVariable('authKey', $device->authKey);
+                    } else {
+                        sleep(DFCom_Controller_Device::$unAuthSleepTime);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . " got wrong authKey: " . $deviceRecord->xprops('data')['authKey']);
+                        $response = new \Zend\Diactoros\Response('php://memory', 401);
+                        $response->getBody()->write("Device authentication failed");
+                        return $response;
+                    }
                 }
 
                 $deviceRecord->device_id = $device->getId();
 
+                $lists = $deviceListController->getDeviceLists($device);
+
+                // writing setup deletes list on device
+                if ($setupStatus[0] === '0') {
+                    $lists->list_version = null;
+                    $lists->list_status = null;
+                    foreach($lists as $idx => $list) {
+                        /** @var DFCom_Model_DeviceList $list */
+                        $lists[$idx] = $deviceListController->update($list);
+                    }
+                    $setupStatus[0] = "1";
+                    $deviceRecord->xprops('data')['setupStatus'] = $setupStatus;
+                    $response->setDeviceVariable('setupStatus', $setupStatus);
+                }
+
+                array_push($assertACLUsageCallbacks, HumanResources_Controller_Employee::getInstance()->assertPublicUsage());
+                // check if we have a list update
+                foreach($lists as $list) {
+                    /** @var DFCom_Model_DeviceList $list */
+                    try {
+                        if ($list->list_version != $deviceListController->getSyncToken($list)) {
+                            $response->updateDeviceList($list, $device);
+                            // device supports one list per request only
+                            break;
+                        }
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' cannot evaluate export definition ' . $e);
+                    }
+                }
+
                 switch ($deviceRecord->device_table) {
                     case 'alive':
-
-                        $lists = $deviceListController->getDeviceLists($device);
-
-                        // writing setup deletes list on device
-                        if ($device->setupVersion != $deviceRecord->xprops('data')['setupVersion']) {
-                            $lists->list_version = null;
-                            foreach($lists as $idx => $list) {
-                                /** @var DFCom_Model_DeviceList $list */
-                                $lists[$idx] = $deviceListController->update($list);
-                            }
-                        }
-
-                        array_push($assertACLUsageCallbacks, HumanResources_Controller_Employee::getInstance()->assertPublicUsage());
-                        // check if we have a list update
-                        foreach($lists as $list) {
-                            /** @var DFCom_Model_DeviceList $list */
-                            try {
-                                if ($list->list_version != $deviceListController->getSyncToken($list)) {
-                                    $response->updateDeviceList($list, $device);
-                                    // device supports one list per request only
-                                    break;
-                                }
-                            } catch (Exception $e) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                    . ' cannot evaluate export definition ' . $e);
-                            }
-                        }
-
-                        $device->mergeStatusData($deviceRecord);
-
+                            // noting special to do here
                         break;
                     case 'listFeedback':
                         $lists = $deviceListController->getDeviceLists($device);
@@ -217,6 +227,7 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
             }
 
             // update dateTime and maybe more (like flush)
+            $device->mergeStatusData($deviceRecord);
             $device->lastSeen = Tinebase_DateTime::now();
             $this->update($device);
 

@@ -37,6 +37,7 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
     public static $statusFields = [
         'fwVersion',
         'setupVersion',
+        'setupStatus',
         'cellularData',
         'GPRSAliveCounter',
         'GPRSData',
@@ -56,7 +57,7 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version' => 1,
+        'version' => 2,
         'recordName' => 'Device',
         'recordsName' => 'Devices', // ngettext('Device', 'Devices', n)
         'containerProperty' => 'container_id',
@@ -150,6 +151,12 @@ class DFCom_Model_Device extends Tinebase_Record_Abstract
                 'length' => 20,
                 'validators' => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 'label' => 'Setup Version', // _('Setup Version')
+            ],
+            'setupStatus' => [
+                'type' => 'string',
+                'length' => 16,
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                'label' => 'Setup Status', // _('Setup Status')
             ],
             'lastSeen' => [
                 'type' => 'datetime',
