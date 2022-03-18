@@ -112,7 +112,7 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                     $deviceRecord->xprops('data')['authKey'] = $device->authKey;
                     $response->setDeviceVariable('authKey', $device->authKey);
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . " got wrong setup authKey: " . $deviceRecord->xprops('data')['authKey']);
                 }
             }
@@ -134,57 +134,59 @@ class DFCom_Controller_Device extends Tinebase_Controller_Record_Abstract
                     }
                 }
                 $device->controlCommands = implode("\n", $comments);
-            } else { // why else here???
+            } else { // why else here??? -> to send commands to unauthed!
                 // process record
                 if (!$device || $device->authKey !== $deviceRecord->xprops('data')['authKey']) {
-                    if ($device && $deviceRecord->xprops('data')['authKey'] === $setupAuthKey && $setupStatus[0] === '0') {
+                    if ($device && $deviceRecord->xprops('data')['authKey'] === $setupAuthKey) {
                         // authKey get's lost after setup updates
                         $deviceRecord->xprops('data')['authKey'] = $device->authKey;
                         $response->setDeviceVariable('authKey', $device->authKey);
+                    } else {
+                        sleep(DFCom_Controller_Device::$unAuthSleepTime);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . " got wrong authKey: " . $deviceRecord->xprops('data')['authKey']);
+                        $response = new \Zend\Diactoros\Response('php://memory', 401);
+                        $response->getBody()->write("Device authentication failed");
+                        return $response;
                     }
-                    sleep(DFCom_Controller_Device::$unAuthSleepTime);
-                    $authKey = $device ? $device->authKey : ('setup authKey ' . $setupAuthKey);
-                    $response = new \Zend\Diactoros\Response('php://memory', 401);
-                    $response->getBody()->write("Device authentication failed expected $authKey got " . $deviceRecord->xprops('data')['authKey']);
-                    return $response;
                 }
 
                 $deviceRecord->device_id = $device->getId();
 
+                $lists = $deviceListController->getDeviceLists($device);
+
+                // writing setup deletes list on device
+                if ($setupStatus[0] === '0') {
+                    $lists->list_version = null;
+                    $lists->list_status = null;
+                    foreach($lists as $idx => $list) {
+                        /** @var DFCom_Model_DeviceList $list */
+                        $lists[$idx] = $deviceListController->update($list);
+                    }
+                    $setupStatus[0] = "1";
+                    $deviceRecord->xprops('data')['setupStatus'] = $setupStatus;
+                    $response->setDeviceVariable('setupStatus', $setupStatus);
+                }
+
+                array_push($assertACLUsageCallbacks, HumanResources_Controller_Employee::getInstance()->assertPublicUsage());
+                // check if we have a list update
+                foreach($lists as $list) {
+                    /** @var DFCom_Model_DeviceList $list */
+                    try {
+                        if ($list->list_version != $deviceListController->getSyncToken($list)) {
+                            $response->updateDeviceList($list, $device);
+                            // device supports one list per request only
+                            break;
+                        }
+                    } catch (Exception $e) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' cannot evaluate export definition ' . $e);
+                    }
+                }
+
                 switch ($deviceRecord->device_table) {
                     case 'alive':
-
-                        $lists = $deviceListController->getDeviceLists($device);
-
-                        // writing setup deletes list on device
-                        if ($setupStatus[0] === '0') {
-                            $lists->list_version = null;
-                            $lists->list_status = null;
-                            foreach($lists as $idx => $list) {
-                                /** @var DFCom_Model_DeviceList $list */
-                                $lists[$idx] = $deviceListController->update($list);
-                            }
-                            $setupStatus[0] = "1";
-                            $deviceRecord->xprops('data')['setupStatus'] = $setupStatus;
-                            $response->setDeviceVariable('setupStatus', $setupStatus);
-                        }
-
-                        array_push($assertACLUsageCallbacks, HumanResources_Controller_Employee::getInstance()->assertPublicUsage());
-                        // check if we have a list update
-                        foreach($lists as $list) {
-                            /** @var DFCom_Model_DeviceList $list */
-                            try {
-                                if ($list->list_version != $deviceListController->getSyncToken($list)) {
-                                    $response->updateDeviceList($list, $device);
-                                    // device supports one list per request only
-                                    break;
-                                }
-                            } catch (Exception $e) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                    . ' cannot evaluate export definition ' . $e);
-                            }
-                        }
-
+                            // noting special to do here
                         break;
                     case 'listFeedback':
                         $lists = $deviceListController->getDeviceLists($device);
