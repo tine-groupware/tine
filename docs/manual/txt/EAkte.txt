@@ -203,7 +203,7 @@ Befinden Sie sich im linken Bearbeitungsmenü des menu:[Dateimanager] auf der Eb
         domain: <Business Edition>
 //////////////////
 .Ebene Dokumentenordner
-image::EAkte/7_eakte_dokumentenordner.pngid="fig_dokumentenordner",width="100%"]
+image::EAkte/7_eakte_dokumentenordner.png[id="fig_dokumentenordner",width="100%"]
 
 
 Bei Klick auf diese Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer menu:[eAkten Ebenen-Nummer].
