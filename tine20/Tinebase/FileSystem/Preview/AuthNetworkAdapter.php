@@ -53,7 +53,7 @@ class Tinebase_FileSystem_Preview_AuthNetworkAdapter implements Tinebase_FileSys
     public function __destruct()
     {
         if (file_exists($this->_licensePath)) {
-            unlink($this->_licensePath);
+            @unlink($this->_licensePath);
         }
     }
 
