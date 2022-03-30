@@ -38,6 +38,7 @@ class DFCom_RecordHandler_TimeAccounting
     protected $i18n;
     protected $user;
     protected $currentUser;
+    /** @var HumanResources_Model_Employee */
     protected $employee;
 
     
@@ -125,34 +126,34 @@ class DFCom_RecordHandler_TimeAccounting
 
                 case self::FUNCTION_KEY_CLOCKIN:
                 case self::FUNCTION_KEY_CLOCKOUT:
-                    // @TODO: do we need a field for project time here? (from terminal)
-                    $sameDateOrphaned = $this->getOrphanedTimesheets($dateTime)
-                        ->filter('start_date', $dateTime->format('Y-m-d') . ' 00:00:00')
-                        ->sort('start_time', 'DESC')
-                        ->getFirstRecord();
+                case self::FUNCTION_KEY_ABSENCE:
 
-                    if ($sameDateOrphaned) {
-                        if ($this->deviceData['functionKey'] == self::FUNCTION_KEY_CLOCKIN) {
-                            // same date orphaned can occour when leave record from other terminal is
-                            // processed before it's corresponding arive record
-
-                            $sameDateOrphaned->need_for_clarification = true;
-                            $this->timesheetController->update($sameDateOrphaned);
-
-                            $timesheet = $this->createTimesheet($dateTime, $this->deviceData['functionKey']);
-                        } else {
-                            $sameDateOrphaned->need_for_clarification = false;
-                            $timesheet = $this->endTimesheet($sameDateOrphaned, $dateTime);
-                        }
-
-                    } else {
-                        $timesheet = $this->createTimesheet($dateTime, $this->deviceData['functionKey']);
+                    /** @var HumanResources_Model_AttendanceRecorderDevice $device */
+                    $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get(
+                        HumanResources_Model_AttendanceRecorderDevice::SYSTEM_WORKING_TIME_ID);
+                    $cfg = (new HumanResources_Config_AttendanceRecorder())
+                        ->setMetaData([
+                            HumanResources_Config_AttendanceRecorder::METADATA_SOURCE => __METHOD__,
+                            Timetracker_Model_Timeaccount::class =>
+                                HumanResources_Controller_WorkingTimeScheme::getInstance()
+                                    ->getWorkingTimeAccount($this->employee)->getId(),
+                        ])
+                        ->setDevice($device)
+                        ->setEmployee($this->employee)
+                        ->setAccount(Tinebase_User::getInstance()->getFullUserById($this->employee->account_id))
+                        ->setTimeStamp($dateTime);
+                    if (self::FUNCTION_KEY_CLOCKIN === $this->deviceData['functionKey']) {
+                        HumanResources_Controller_AttendanceRecorder::getInstance()->clockIn($cfg);
+                    } elseif (self::FUNCTION_KEY_CLOCKOUT === $this->deviceData['functionKey']) {
+                        HumanResources_Controller_AttendanceRecorder::getInstance()->clockOut($cfg);
+                    } elseif (self::FUNCTION_KEY_ABSENCE === $this->deviceData['functionKey']) {
+                        HumanResources_Controller_AttendanceRecorder::getInstance()->clockPause($cfg);
                     }
 
                     if (!in_array(self::class, $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED))) {
                         $this->deviceRecord->xprops(DFCom_Model_DeviceRecord::FLD_PROCESSED)[] = self::class;
                     }
-                    $this->deviceRecord->xprops()[self::XPROP_TIMESHEET_ID] = $timesheet->getId();
+
                     break;
 
                 default:
