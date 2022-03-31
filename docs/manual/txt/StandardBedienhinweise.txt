@@ -61,7 +61,7 @@ In allen Anwendungen, außer dem Kalender, enthält er ein Eingabefeld menu:[Sei
 
 Rechts daneben befindet sich der Refresh-Button (image:Icon/icon_return.png[height=16]), mit dem Sie z.B. eine aktuelle Ansicht in die Tabelle nachladen oder E-Mails abrufen können.
 
-Das Element rechts menu:[Zeige Datensätze x – y von n] informiert Sie über die Anzahl der im Augenblick in der Tabelle angezeigten Elemente (die Standardanzahl ist 50; wie Sie diese ändern können, finden Sie in <<sec.einstellungen.generelle>>), sowie deren Gesamtzahl in der Datenbank. Der daneben befindliche Button menu:[n ausgewählt], dient der massenhaften Markierung einzelner Elemente aus der Tabelle. Das darunter vorhandene Pulldown hat drei Menüpunkte: menu:[Auswahl aufheben], menu:[Alle Seiten auswählen (n Einträge)] und menu:[Auswahl umkehren]. Auch hier sieht der Kalender wieder, entsprechend seiner spezifischen Funktion, anders aus: Er bietet mit den ersten drei Buttons den Wechsel zwischen Tages-, Wochen- und Monatsansicht an. Der vierte Button (der nach oben gerichtete Pfeil) dient dem wechsel in die Vollbild Ansicht des Kalenders.
+Das Element rechts menu:[Zeige Datensätze x – y von n] informiert Sie über die Anzahl der im Augenblick in der Tabelle angezeigten Elemente (die Standardanzahl ist 50; wie Sie diese ändern können, finden Sie in <<sec.einstellungen.generelle>>), sowie deren Gesamtzahl in der Datenbank. Der daneben befindliche Button menu:[n ausgewählt], dient der massenhaften Markierung einzelner Elemente aus der Tabelle. Das darunter vorhandene Pulldown hat drei Menüpunkte: menu:[Auswahl aufheben], menu:[Alle Seiten auswählen (n Einträge)] und menu:[Auswahl umkehren]. Auch hier sieht der Kalender wieder, entsprechend seiner spezifischen Funktion, anders aus: Er bietet mit den ersten drei Buttons den Wechsel zwischen Tages-, Wochen- und Monatsansicht an. Der vierte Button (der nach oben gerichtete Pfeil) dient dem Wechsel in die Vollbildansicht des Kalenders.
 
 [[sec.standard.hauptbildschirm.ordnerbaum]]
 ==== Der Favoriten- und Ordnerbaum ====
@@ -170,7 +170,7 @@ Um die Filterfunktionen einzublenden, klicken Sie auf menu:[Details anzeigen] au
 
 [IMPORTANT]
 ==========
-Eine ausgeblendete Filterzeile bedeutet nicht, dass keine Filter aktiv sind! Schauen Sie dazu immer rechts den Bereich des Suchfilterfensters an, dort finden Sie die Bemerkung menu:[Ihre Anzeige ist durch n Kriterien limitiert: ...] Hier wird Angegeben welche Filter aktiv sind. Blenden Sie sich dann bei Bedarf die gesetzten Filter ein!
+Eine ausgeblendete Filterzeile bedeutet nicht, dass keine Filter aktiv sind! Schauen Sie dazu immer rechts den Bereich des Suchfilterfensters an, dort finden Sie die Bemerkung menu:[Ihre Anzeige ist durch n Kriterien limitiert: ...] Hier wird angegeben welche Filter aktiv sind. Blenden Sie sich dann bei Bedarf die gesetzten Filter ein!
 ==========
 
 Wenn die Suchfilter eingeblendet sind, erkennen Sie das auf der linken Seite an mindestens einem kleinen runden menu:[+] (Plus)- und menu:[-] (Minus)-Button. Alle danach folgenden Einstellungen sind anwendungsspezifisch; im Adressbuch steht z.B. beim erstmaligen Aufruf in der Sitzung die Funktionszeile im Pulldown-Menü neben menu:[Zeige] auf menu:[Schnellsuche] und daneben auf menu:[enthält]. Das bedeutet, dass Sie einfach nach Zeichenketten suchen können. Wir haben das in <<chap.adressverwaltung>> bereits besprochen. Die Zeichenketten-Suche begegnet Ihnen aber auch in anderen Anwendungen; in unserem Screenshot-Beispiel sehen Sie die E-Mail-Anwendung und dort standardmäßig als ersten Filter menu:[Betreff/Von] und menu:[enthält]. Die Zeichenketten-Suche erkennen Sie immer am Wörtchen menu:[enthält] zwischen den Pulldown-Feldern.
@@ -379,7 +379,7 @@ Mit diesen Einstellungen können Sie nun Ihre gefilterte Ansicht im Verzeichnisb
 === Standard-Bedienalgorithmen im Dialogfenster ===
 
 (((Dialogfenster)))
-Als ``Dialogfenster'' bezeichne ich in diesem Handbuch die Eingabemaske, welche sich öffnet, wenn Sie entweder ein vorhandenes Objekt einer Anwendung zum Bearbeiten öffnen, oder ein neues Anlegen wollen, hier beispielhaft das Dialogfenster der Anwendung menu:[HumanResources]:
+``Dialogfenster'' sind in diesem Handbuch die Eingabemasken, die sich öffnen, wenn Sie entweder ein vorhandenes Objekt einer Anwendung zum Bearbeiten öffnen, oder ein neues anlegen wollen, hier beispielhaft das Dialogfenster der Anwendung menu:[HumanResources]:
 
 //////////////////
         SCREENSHOT
@@ -395,13 +395,13 @@ Als ``Dialogfenster'' bezeichne ich in diesem Handbuch die Eingabemaske, welche 
 image::StandardBedienhinweise/16_standardbedienhinweise_hr_eingabemaske_neu.png[id="fig_standardhumanmitarbeiterhinzu",width="100%"]
 
 
-Diese Eingabemaske enthält immer in dem oberen Bereich, mehrere Reiter. Darunter befinden sich, neben einem oder mehreren anwendungsspezifischen Reitern, die Reiter menu:[Notizen], menu:[Anhänge] und menu:[Verknüpfungen] und menu:[Historie]. Auf der rechten Seite befindet sich immer die Option die Tags für die geöffnete Anwendung zu verwalten. In menu:[Adressbuch], menu:[Dateisystem], menu:[Kalender] und menu:[CRM] finden sie des Weiteren das Feld menu:[Beschreibung]. Diese Elemente beschreiben wir nun jeweils in einem eigenen Unterabschnitt. Zum ende dieses Kapitels gehen wir dann, wie versprochen, auf die Tags ein
+Diese Eingabemaske enthält immer in dem oberen Bereich mehrere Reiter. Darunter befinden sich, neben einem oder mehreren anwendungsspezifischen Reitern, die Reiter menu:[Notizen], menu:[Anhänge] und menu:[Verknüpfungen] und menu:[Historie]. Auf der rechten Seite befindet sich immer die Option, die Tags für die geöffnete Anwendung zu verwalten. In menu:[Adressbuch], menu:[Dateisystem], menu:[Kalender] und menu:[CRM] finden sie des Weiteren das Feld menu:[Beschreibung]. Diese Elemente beschreiben wir nun jeweils in einem eigenen Unterabschnitt. 
 
 
 [[sec.standard.dialogfenster.beschreibung]]
 ==== Beschreibung ====
 
-Das Beschreibungsfeld dient der Eingabe von frei formuliertem Text zur Beschreibung des betreffenden Datenbankobjektes. In manchen Anwendungen, wie zum Beispiel der Adressverwaltung, hat dieses Beschreibungsfeld noch Sonderfunktionen; wenn das der Fall ist, gehe ich im betreffenden Kapitel entsprechend darauf ein.
+Das Beschreibungsfeld dient der Eingabe von frei formuliertem Text zur Beschreibung des betreffenden Datenbankobjektes. In manchen Anwendungen, wie zum Beispiel der Adressverwaltung, hat dieses Beschreibungsfeld noch Sonderfunktionen; darauf wird im betreffenden Kapitel entsprechend eingegangen.
 
 
 
@@ -409,7 +409,7 @@ Das Beschreibungsfeld dient der Eingabe von frei formuliertem Text zur Beschreib
 ==== Notizen (Notiz, Telefon Notiz, E-Mail Notiz) ====
 
 (((Notizen)))
-Wie wir schon in <<sec.kontaktmaske>>  gesehen haben kennt {branch} drei Arten von Notizen: einfache Notizen, Telefonnotizen und E-Mail-Notizen. In dem Reiter menu:[Notizen] finden sie eine Übersicht aller, für die jeweilige Anwendung spezifischen, Notizen.
+Wie wir schon in <<sec.kontaktmaske>>  gesehen haben, kennt {branch} drei Arten von Notizen: einfache Notizen, Telefonnotizen und E-Mail-Notizen. In dem Reiter menu:[Notizen] finden sie eine Übersicht aller, für die jeweilige Anwendung spezifischen, Notizen.
 
 //////////////////
         SCREENSHOT
@@ -424,7 +424,7 @@ Wie wir schon in <<sec.kontaktmaske>>  gesehen haben kennt {branch} drei Arten v
 .Übersicht- Reiter "Notizen"
 image::StandardBedienhinweise/17_standardbedienhinweise_hr_eingabemaske_neu_notiz.png[id="fig_standardhumannotiz",width="100%"]
 
-Durch den Klick auf dem Button menu:[Notizen hinzufügen] öffnet sich ein Fenster, in das Sie beliebigen freien Text hineinschreiben können, um eine neue Notizen zu erzeugen. Standardmäßig werden einfache Notizen erzeugt. Die anderen beiden Arten erreichen Sie über das Pulldown-Menü (den kleinen Pfeil neben menu:[Notiz]).
+Durch den Klick auf dem Button menu:[Notizen hinzufügen] öffnet sich ein Fenster, in das Sie beliebigen freien Text hineinschreiben können, um neue Notizen zu erzeugen. Standardmäßig werden einfache Notizen erzeugt. Die anderen beiden Arten erreichen Sie über das Pulldown-Menü (den kleinen Pfeil neben menu:[Notiz]).
 
 //////////////////
         SCREENSHOT
@@ -482,7 +482,7 @@ Der Download funktioniert ebenfalls nicht unmittelbar nach einem Upload! Sie mü
 
 [NOTE]
 =============
-Noch ein Wort zu den hier verwendeten Dateitypen: {branch} erlegt Ihnen bei der Speicherung verschiedener Dateitypen keine Einschränkungen auf. Denken Sie jedoch bitte daran, dass Benutzer eventuell plattformübergreifend auf die hier gespeicherten Dateien zugreifen können sollen. Die hier erlaubten oder nicht erlaubten Dateitypen sind also letztendlich eine Überlegung für die Firmenpolicy, von der wir schon an anderer Stelle sprachen. Um allen Eventualitäten aus dem Weg zu gehen, sollten Sie hier vorzugsweise oder ausschließlich Dokumentformate verwenden, die einen plattformübergreifenden Standard darstellen, wie z.B. PDF. Damit ist gesichert, dass sie auf allen angeschlossenen Geräten, incl. Handhelds, Smartphones und Tablets, gelesen werden können. Im Übrigen kann durch proprietäre Dateiformate, wie z.B. MS Office, über Makros auch schädlicher Code verbreitet werden. Durch konsequentes Verwenden plattformübergreifender Standardformate vermeiden Sie das.
+Noch ein Wort zu den hier verwendeten Dateitypen: {branch} erlegt Ihnen bei der Speicherung verschiedener Dateitypen keine Einschränkungen auf. Denken Sie jedoch bitte daran, dass Benutzer eventuell plattformübergreifend auf die hier gespeicherten Dateien zugreifen können sollen. Die hier erlaubten oder nicht erlaubten Dateitypen sind also letztlich eine Überlegung für die Firmenpolicy, von der wir schon an anderer Stelle sprachen. Um allen Eventualitäten aus dem Weg zu gehen, sollten Sie vorzugsweise oder ausschließlich Dokumentformate verwenden, die einen plattformübergreifenden Standard darstellen, wie z.B. PDF. Damit ist gesichert, dass sie auf allen angeschlossenen Geräten, incl. Handhelds, Smartphones und Tablets, gelesen werden können. Im Übrigen kann durch proprietäre Dateiformate, wie z.B. MS Office, über Makros auch schädlicher Code verbreitet werden. Durch konsequentes Verwenden plattformübergreifender Standardformate vermeiden Sie das.
 =============
 
 
@@ -571,7 +571,7 @@ Da die Anzahl dieser Datensätze sehr schnell eine große Zahl erreichen kann, i
 ==== Tags ====
 
 (((Tags)))
-Kommen wir nun zu den Tags. {branch} unterscheidet zwischen persönlichen und systemübergreifend gültigen, sogenannten gemeinsamen Tags. Wie Sie letztere vergeben, besprechen wir in <<chapter.administration>>, <<sec.admin.gemeinsame.tags>>. Persönliche Tags hingegen können Sie in jeder Objekt-Bearbeitungsmaske, unten rechts mit dem kleinen grünen Pluszeichen, neben dem Pulldown menu:[Tag Name], anlegen:
+Kommen wir nun zu den Tags. {branch} unterscheidet zwischen persönlichen und systemübergreifend gültigen, sogenannten gemeinsamen Tags. Wie Sie letztere vergeben, besprechen wir in <<chapter.administration>>, <<sec.admin.gemeinsame.tags>>. Persönliche Tags hingegen können Sie in jeder Objekt-Bearbeitungsmaske, unten rechts mit dem kleinen Pluszeichen, neben dem Pulldown menu:[Tag Name], anlegen:
 
 //////////////////
         SCREENSHOT

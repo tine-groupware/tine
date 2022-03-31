@@ -1,0 +1,301 @@
+[[chapter.eakte]]
+== eAkte ==
+
+////
+Author: Peggy Hötzel, last update 22.02.21
+////
+
+Mit fortschreitender Digitalisierung inklusive deren gesetzlichen Rahmenbedingungen ist die Einführung einer elektronischen Aktenführung zunehmend erforderlich.
+Dies hat uns veranlasst, in enger Zusammenarbeit mit Kunden und in Anlehnung an die rechtlichen, fachlichen sowie funktionalen Anforderungen zum „Baustein E-Akte“ des „Organisationskonzepts elektronische Verwaltungsarbeit“ vom Bundesministerium des Innern (BMI), in {branch} die Anwendung eAkte zu entwickeln.
+Die elektronische Abbildung entspricht dabei den Grundsätzen ordnungsgemäßer Aktenführung (gesetzlich nicht normiert) und der verwaltungs- bzw. behördlichen Schriftgutsammlung.
+
+Als E-Akte wird allgemein eine digitale Datensammlung bezeichnet, die nach dem Vorbild herkömmlicher Akten (auf Papier) aufgebaut ist.
+
+[[sec.eakte.aufbauundstruktur]]
+=== Aufbau und Struktur eAkte ===
+
+Die Anwendung menu:[eAkte] ist integriert in der {branch} Anwendung <<chapter.Dateimanager>> und über den Button menu:[eAkte] rechts im oberen Bearbeitungsmenue über der Tabelle aktiviert. In diesem Bereich des Handbuches konzentrieren wir uns auf die Spezifika der menu:[eAkte]. Bitte entnehmen Sie Grundlegendes im Umgang mit dem Dateimanager der {branch} Anwendung <<chapter.Dateimanager>>.
+
+Voraussetzung für die Führung einer menu:[eAkte], ist die Anlage eines Hauptordners (z.B. "Aktenplan") im menu:[Dateimanager] unter menu:[Gemeinsame Ordner].
+Dieser muss in den Konfigurationseinstellungen in der {branch} Anwendung menu:[admin] unter menu:[eAkte] hinterlegt werden. Erst dann erkennt das System diesen als menu:[eAkte].
+
+
+//////////////////
+        SCREENSHOT
+        path: <eAkte>
+        demodata:
+        image: Darstellung/Bild
+        comment: <>
+        status: <check>
+        domain: <Business Edition>
+//////////////////
+.Einbindung eAkte in Dateimanager
+image::EAkte/1_eakte_dateimanager.png[id="fig_eakte_dateimanager",width="100%"]
+
+
+Der Aufbau und die Struktur einer menu:[eAkte] besteht aus verschieden Ebenen. Diese werden über zur Verfügung stehende menu:[eAkte Ebenen-Typen] gesteuert. Die menu:[eAkte Ebenen-Typen] stehen dabei untereinander in festgelegten Abhängigkeiten und verfügen über bestimmte Merkmale und Konfigurationen. Diese Einstellungen werden dabei einmalig vor Anwendung der menu:[eAkte] zentral auf Systemebene konfiguriert (entsprechend der jeweiligen Kundenbedürfnisse) und steuern u.a. die automatische Nummerierung mit den erforderlichen Trennzeichen zum Aufbau der menu:[Aktenzeichen].
+
+Im Umgang mit der menu:[eAkte] unterstüzt Sie {branch}, neben der automatischen Nummerierung, bei der Anlage neuer Ebenen in Form von Ordnern über den Button menu:[eAkte] und zeigt nur die jeweils zulässigen menu:[eAkte Ebenen-Typen] aktiv an. Dies immer in Abhängigkeit der Ebene, unterhalb welcher, weitere Ordner und Daten angelegt werden sollen.
+Jeder menu:[eAkte Ebenen-Typen] ist mit einem eigenen Icon versehen und somit optisch hervorgehoben und leicht erkennbar.
+
+Für einen einfachen Überblick werden nachfolgend die wichtigsten Fakten und Bedingungen bei der Anlage von Ebenen in Form von Ordnern und deren Daten innerhalb der menu:[eAkte] pro menu:[eAkte Ebenen-Typen] beschrieben.
+
+[[sec.eakte.rahmenaktenplan]]
+==== Rahmenaktenplan ====
+
+Befinden Sie sich im linken Bearbeitungsmenü des menu:[Dateimanager] auf der Ebene eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Rahmenaktenplan] öffnet sich, durch Klick auf den Button menu:[eAkte] im Bearbeitungsmenü rechts oben über der Tabelle, ein Pulldown Menü mit den aktiven Optionen menu:[Rahmenaktenplan hinzufügen] und menu:[Aktengruppe hinzufügen] zur Anlage eines Unterordners.
+Befinden Sie sich im linken Bearbeitsmenü des menu:[Dateimanager] direkt auf der menu:[eAkte] (Hauptordner) erhalten Sie nur die Option menu:[Rahmenaktenplan hinzufügen] als aktive Option.
+
+
+//////////////////
+        SCREENSHOT
+        path: <eAkte>
+        demodata:
+        image: Darstellung/Bild
+        comment: <>
+        status: <check>
+        domain: <Business Edition>
+//////////////////
+.Ebene Rahmenaktenplan
+image::EAkte/2_eakte_rahmenaktenplan.png[id="fig_eakte_rahmenaktenplan",width="100%"]
+
+
+Bei Klick auf die gewünschte Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer menu:[eAkten Ebenen-Nummer].
+
+Zusammenfassend die Merkmale eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Rahmenaktenplan]:
+
+* mögliche Ebenen oberhalb: menu:[eAkte] (Hauptordner) oder ein anderer Ordner vom menu:[eAkte Ebenen-Typ] menu:[Rahmenaktenplan]
+* mögliche Ebenen unterhalb: Ordner vom menu:[eAkte Ebenen-Typ] menu:[Rahmenaktenplan] oder menu:[Aktengruppe]
+* Ablage von Dateien und Dokumente unterhalb nicht möglich
+* Vergabe einer vorangestellten menu:[eAkten Ebenen-Nummer] erfolgt automatisch
+
+[[sec.eakte.aktengruppe]]
+==== Aktengruppe ====
+
+Befinden Sie sich im linken Bearbeitungsmenü des menu:[Dateimanager] auf der Ebene eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Aktengruppe] öffnet sich, durch Klick auf den Button menu:[eAkte] im Bearbeitungsmenü rechts oben über der Tabelle, ein Pulldown Menü mit der aktiven Option menu:[Akte hinzufügen] zur Anlage eines Unterordners.
+
+
+//////////////////
+        SCREENSHOT
+        path: <eAkte>
+        demodata:
+        image: Darstellung/Bild
+        comment: <>
+        status: <check>
+        domain: <Business Edition>
+//////////////////
+.Ebene Aktengruppe
+image::EAkte/3_eakte_aktengruppe.png[id="fig_eakte_gruppen",width="100%"]
+
+
+Bei Klick auf diese Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer menu:[eAkten Ebenen-Nummer].
+
+Zusammenfassend die Merkmale eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Aktengruppe]:
+
+* mögliche Ebenen oberhalb: Ordner vom menu:[eAkte Ebenen-Typ] menu:[Rahmenaktenplan]
+* mögliche Ebenen unterhalb: Ordner vom menu:[eAkte Ebenen-Typ] menu:[Akte]
+* Ablage von Dateien und Dokumente unterhalb nicht möglich
+* Vergabe einer vorangestellten menu:[eAkten Ebenen-Nummer] erfolgt automatisch
+
+[[sec.eakte.akte]]
+==== Akte ====
+
+Befinden Sie sich im linken Bearbeitungsmenü des menu:[Dateimanager] auf der Ebene eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Akte] öffnet sich, durch Klick auf den Button menu:[eAkte] im Bearbeitungsmenü rechts oben über der Tabelle, ein Pulldown Menü mit den aktiven Optionen menu:[Teilkte hinzufügen], menu:[Vorgang hinzufügen] und menu:[Dokumentenordner hinzufügen] zur Anlage eines Unterordners.
+
+
+//////////////////
+        SCREENSHOT
+        path: <eAkte>
+        demodata:
+        image: Darstellung/Bild
+        comment: <>
+        status: <check>
+        domain: <Business Edition>
+//////////////////
+.Ebene Akte
+image::EAkte/4_eakte_akte.png[id="fig_eakte",width="100%"]
+
+
+Bei Klick auf die gewünschte Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer menu:[eAkten Ebenen-Nummer].
+
+Zusammenfassend die Merkmale eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Akte]:
+
+* mögliche Ebenen oberhalb: Ordner vom menu:[eAkte Ebenen-Typ] menu:[Aktengruppe]
+* mögliche Ebenen unterhalb: Ordner vom menu:[eAkte Ebenen-Typ] menu:[Teilakte], menu:[Vorgang] oder menu:[Dokumentenordner]
+* unterhalb Ablage von Dateien und Dokumenten möglich
+* Vergabe einer vorangestellten menu:[eAkte Ebenen-Nummer] erfolgt automatisch
+
+[[sec.eakte.teilakte]]
+==== Teilakte ====
+
+Befinden Sie sich im linken Bearbeitungsmenü des menu:[Dateimanager] auf der Ebene eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Teilakte] öffnet sich, durch Klick auf den Button menu:[eAkte] im Bearbeitungsmenü rechts oben über der Tabelle, ein Pulldown Menü mit den aktiven Optionen menu:[Teilkte hinzufügen], menu:[Vorgang hinzufügen] und menu:[Dokumentenordner hinzufügen] zur Anlage eines Unterordners.
+
+
+//////////////////
+        SCREENSHOT
+        path: <eAkte>
+        demodata:
+        image: Darstellung/Bild
+        comment: <>
+        status: <check>
+        domain: <Business Edition>
+//////////////////
+.Ebene Teilakte
+image::EAkte/5_eakte_teilakte.png[id="fig_eakte_teilakte",width="100%"]
+
+
+Bei Klick auf die gewünschte Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer menu:[eAkten Ebenen-Nummer].
+
+Zusammenfassend die Merkmale eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Teilakte]:
+
+* mögliche Ebenen oberhalb: Ordner vom menu:[eAkte Ebenen-Typ] menu:[Akte] oder menu:[Teilakte]
+* mögliche Ebenen unterhalb: Ordner vom menu:[eAkte Ebenen-Typ] menu:[Teilakte], menu:[Vorgang] oder menu:[Dokumentenordner]
+* unterhalb Ablage von Dateien und Dokumenten möglich
+* Vergabe einer vorangestellten menu:[eAkte Ebenen-Nummer] erfolgt automatisch
+
+[[sec.eakte.Vorgang]]
+==== Vorgang ====
+
+Befinden Sie sich im linken Bearbeitungsmenü des menu:[Dateimanager] auf der Ebene eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Vorgang] öffnet sich, durch Klick auf den Button menu:[eAkte] im Bearbeitungsmenü rechts oben über der Tabelle, ein Pulldown Menü mit der aktiven Option menu:[Dokumentenordner hinzufügen] zur Anlage eines Unterordners.
+
+
+//////////////////
+        SCREENSHOT
+        path: <eAkte>
+        demodata:
+        image: Darstellung/Bild
+        comment: <>
+        status: <check>
+        domain: <Business Edition>
+//////////////////
+.Ebene Vorgang
+image::EAkte/6_eakte_vorgang.png[id="fig_vorgang",width="100%"]
+
+
+Bei Klick auf diese Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer menu:[eAkten Ebenen-Nummer].
+
+Zusammenfassend die Merkmale eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Vorgang]:
+
+* mögliche Ebenen oberhalb: Ordner vom menu:[eAkte Ebenen-Typ] menu:[Akte] oder menu:[Teilakte]
+* mögliche Ebenen unterhalb: Ordner vom menu:[eAkte Ebenen-Typ] menu:[Dokumentenordner]
+* unterhalb Ablage von Dateien und Dokumenten möglich
+* Vergabe einer vorangestellten menu:[eAkte Ebenen-Nummer] erfolgt automatisch
+
+[NOTE]
+========
+Die Nummerierung der Ordner vom Ebenen-Typ menu:[Vorgang] erfolgt global im gesamten System / der Installation.
+Dies bedeutet, dass jeder Vorgang eine eigene und eindeutige Nummer erhält, unabhängig in welcher Ebene und unter welchem Ordner der jeweilige Vorgang zugehörig ist. Diese menu:[eAkten Ebenen-Nummer] (Vorgangsnummer) ist ein Teil des jeweiligen Aktenzeichens.
+========
+
+[[sec.eakte.Dokumentenordner]]
+==== Dokumentenordner ====
+
+Befinden Sie sich im linken Bearbeitungsmenü des menu:[Dateimanager] auf der Ebene eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Dokumentenordner] öffnet sich, durch Klick auf den Button menu:[eAkte] im Bearbeitungsmenü rechts oben über der Tabelle, ein Pulldown Menü mit der aktiven Option menu:[Dokumentenordner hinzufügen] zur Anlage eines Unterordners.
+
+
+//////////////////
+        SCREENSHOT
+        path: <eAkte>
+        demodata:
+        image: Darstellung/Bild
+        comment: <>
+        status: <check>
+        domain: <Business Edition>
+//////////////////
+.Ebene Dokumentenordner
+image::EAkte/7_eakte_dokumentenordner.png[id="fig_dokumentenordner",width="100%"]
+
+
+Bei Klick auf diese Option, erhalten Sie ein Eingabefenster, werden nach dem zu generierenden Ordnernamen gefragt und erhalten einen Hinweis zur automatischen Vergabe einer menu:[eAkten Ebenen-Nummer].
+
+Zusammenfassend die Merkmale eines Ordners vom menu:[eAkte Ebenen-Typ] menu:[Dokumentenordner]:
+
+* mögliche Ebenen oberhalb: Ordner vom menu:[eAkte Ebenen-Typ] menu:[Teilakte], menu:[Vorgang], menu:[Dokumentenordner]
+* mögliche Ebenen unterhalb: Ordner vom menu:[eAkte Ebenen-Typ] menu:[Dokumentenordner]
+* unterhalb Ablage von Dateien und Dokumenten möglich
+* Vergabe einer vorangestellten menu:[eAkten Ebenen-Nummer] erfolgt automatisch
+
+
+[[sec.eakte.metadaten]]
+=== Metadaten und Eigenschaften ===
+
+Die speziellen menu:[eAkte] Eigenschaften sind in die bereits bestehenden Eigenschaften der Daten in der Anwendung <<chapter.Dateimanager>> integriert. Jeder Ordner und Datei innerhalb der menu:[eAkte] verfügt über verschiedene Eigenschaften und enthält Informationen aus den übergeordneten Daten sowie Metadaten der menu:[Akte].
+Öffnen Sie die Eigenschaften über den Button menu:[Eigenschaften bearbeiten] oder mit der rechten Maustaste über das Kontextmenü auf dem jeweiligen Ordner bzw. der ausgewählten Datei.
+
+Folgendes Beispiel zeigt den Bearbeitendialog menu:[Datei bearbeiten] mit den Basis Eigenschaften im Reiter menu:[Datei].
+
+//////////////////
+        SCREENSHOT
+        path: <eAkte>
+        demodata:
+        image: Darstellung/Bild
+        comment: <>
+        status: <check>
+        domain: <Business Edition>
+//////////////////
+.Eigenschaften Reiter Datei
+image::EAkte/8_eakte_eigenschaften_datei.png[id="fig_eakte_dateieigenschaften",width="100%"]
+
+Die menu:[eAkte] betreffenden grundlegenden Felder menu:[Aktenzeichen] und menu:[eAkte Ebenen-Typ] finden Sie im mittleren Bereich menu:[eAkte] innerhalb des Reiters menu:[Datei]. Der Bereich menu:[eAkte] selbst ist für alle Datensätze unterhalb des Hauptordner aktiv und sichtbar.
+Beide Felder werden innerhalb der menu:[eAkte] automatisch bei Anlage der Daten vom System gesetzt.
+Das menu:[Aktenzeichen] wird entsprechend der Konfigurationen zur jeweiligen Ebene mit den vorgegebenen Trennzeichen gefüllt und setzt sich darüber hinaus aus den Aktenzeichen übergeordneter Daten zusammen.
+
+Beispiel Aktenzeichen: //08.08.01.04//000002/003/001-000001
+
+* (Trennzeichen + Rahmenaktenplan)      //08
+* (Trennzeichen + Rahmenaktenplan)      .08
+* (Trennzeichen + Rahmenaktenplan)      .01
+* (Trennzeichen + Aktengruppe)          .04
+* (Trennzeichen + Akte)                 //000002
+* (Trennzeichen + Teilakte)             /003
+* (Trennzeichen + Teilakte)             /001
+* (Trennzeichen + Dokumentennummer)     -000001
+
+Der menu:[eAkte Ebenen-Typ] wurde unter <<sec.eakte.aufbauundstruktur>> für die einzelnen Ebenen erklärt und wird vom System automatisch gesetzt.
+
+Eine für Sie interessante Information in den Eigenschaften ist der menu:[Pfad], welcher unabhänggig der menu:[eAkte] in der Anwendung menu:[Dateimanger], bei allen Datensätzen den exakten Namen der gesamten Ordnerstruktur bis zum aktuellen ausgewählten Datensatz enthält. Dies entspricht auch der Navigation in der Baumstruktur links im menu:[Dateimanager] und wird oberhalb der Tabelle im menu:[Dateimanger] als Filter gesetzt.
+
+In einem separaten Reiter menu:[EAKTE] im Bearbeitendialog können die Akten-spezifischen
+Metadaten erfasst und bearbeitet werden. Dieser Reiter menu:[EAKTE] ist erst ab einem menu:[eAkte Ebenen-Typ] menu:[Akte] aktiv. Auf untergeordneten Ebenen der Akte sind die Metadaten einsehbar, können jedoch nicht bearbeitet werden.
+
+Ein Klick auf den Button menu:[Zur Akte springen] im oberen Bereich des Bearbeitungsdialogs, springt (wie der Name vermuten lässt) im Dateimanager auf den zugehörigen und in der Baumstruktur höher liegenden Akten-Datensatz mit menu:[eAkte Ebenen-Typ] menu:[Akte]. Entsprechend ist der Button menu:[Zur Akte springen] nur auf Daten unterhalb der menu:[Akte] sichtbar.
+Nutzen Sie den Button, um schnell auf die richtige Ebene zur Bearbeitung der Akten-Metadaten zu springen.
+
+//////////////////
+        SCREENSHOT
+        path: <eAkte>
+        demodata:
+        image: Darstellung/Bild
+        comment: <>
+        status: <check>
+        domain: <Business Edition>
+//////////////////
+.Eigenschaften Reiter eAkte
+image::EAkte/9_eakte_eigenschaften_eakte.png[id="fig_eakte_dateimanagereigenschaften",width="100%"]
+
+
+Schauen wir uns nun die Metadaten einmal genauer an (die Daten sind informativ).
+
+Sind noch keine Metadaten zur Akte gespeichert wird in menu:[Laufzeit von] das aktuelle Tagesdatum vorgeschlagen, ändern Sie dieses bei Bedarf. Erforderlich ist bei Speicherung der Metadaten die Angabe der menu:[Aktenführende Stelle]. Das Datum für die menu:[Laufzeit bis] können Sie leer lassen und jederzeit nachtragen.
+
+Handelt es sich um eine Kombination aus elektronischer Akte und Papierakte, setzen Sie bitte ein Häkchen in menu:[Hybridakte (Es gibt eine korrespondierende Papierakte)], so dass Sie nun den menu:[Standort der Papierakte] eintragen können.
+
+Für geschlossene Akten setzen Sie bitte das Häkchen in menu:[Die Akte ist geschlossen]. Dadurch werden weitere Felder aktiv und Sie tragen das menu:[Datum Schlussverfügung] ein, wählen den Kontakt in menu:[Schlussverfügung durch] sowie die passende Option zur menu:[Aufbewahrungsfrist] (menu:[6 Jahre], menu:[10 Jahre], menu:[ewig]) über das Dropdown Menü aus und ergänzen dies ggf. um das Datum zum menu:[Ende der Aufbewahrungsfrist].
+
+Akten deren Aufbewahrungsfrist abgelaufen ist und die ausgesondert sind, kennzeichnen Sie mit einem Häkchen in menu:[Die Akte ist ausgesondert]. Es werden weitere Felder aktiv. Wählen Sie eine Option zur menu:[Aussonderungsart] (menu:[Kassiert (vernichtet)], menu:[Archiviert]) über das Dropdown Menü aus, setzen das menu:[Aussonderungsdatum] und erfassen Sie den menu:[Archivname].
+
+
+////
+Archiv (später?)
+Signatur (später?)
+Löschung (in Abhängigkeit von Rechten möglich? --> die Rechtevergabe entsprechend überlegen)
+Revisionssicherheit
+ bezieht sich hier auf verschiedene gesetzliche Vorgaben: Akten müssen unter Umständen über einen bestimmten Zeitraum aufbewahrt werden, bevor sie rückstandslos vernichtet werden sollten. Löschfristen und Zugangsberechtigungen sind bei Papierarchiven extrem arbeitsaufwendig in der Handhabung. Außerdem ist die Datensicherheit nicht immer gegeben. Bei der eAkte werden diese Implikationen von Seiten der Software gewährleistet. Daher spricht man in diesem Zusammenhang von Revisionssicherheit.
+Geschäftsvorfall: (zukünftige Idee)
+ irgendwo im Dateimanager anlegen und später in die eAkte als Akte etc. verschieben
+ ---> Ordner vom Typ "Vorgang" erhalten daher globale Nummerierung im gesamten System/der Installation
+////
+
+
+
+

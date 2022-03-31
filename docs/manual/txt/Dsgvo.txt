@@ -2,14 +2,14 @@
 
 == DSGVO ==
 
-Die Anwendung DSGVO ist im eigentlichen Sinne keine eigene Anwendung, sondern ein modularer Teil des Adressbuchs sowie der Stammdaten und gibt so die Möglichkeit die Herkunft und den Verwendungszweck von Daten zu erfassen und eine entsprechende Bearbeitungs-Historie zu diesen zu führen. Dies ermöglicht einer DSGVO konforme Erfassung Personen bezogener Daten.
+Die Anwendung DSGVO ist im eigentlichen Sinne keine eigene Anwendung, sondern ein modularer Teil des Adressbuchs sowie der Stammdaten und gibt so die Möglichkeit, die Herkunft und den Verwendungszweck von Daten zu erfassen und eine entsprechende Bearbeitungshistorie zu führen. Dies ermöglicht eine DSGVO-konforme Erfassung personenbezogener Daten.
 
 [[sec.dsgvo.stammdaten]]
 === DSGVO in den Stammdaten ===
 
 In der Applikation Stammdaten finden Sie nun das Modul DSGVO mit den beiden Unterpunkten menu:[Datenherkünfte] und menu:[Verwendungszwecke]. Hier können Sie neue Datenherkünfte und Verwendungszwecke für Ihre Daten anlegen. Per Default steht ihnen sonst die Herkunft {branch} zur Verfügung.
 
-Für die Datenherkunft ist ein Ablaufdatum auswählbar. Wenn dieses Datum überschritten ist steht die Herkunft später im Kontakt nicht mehr zur Auswahl. Es sei denn es wird explizit auch nach abgelaufenen Datenherkünften gesucht.
+Für die Datenherkunft ist ein Ablaufdatum auswählbar. Wenn dieses Datum überschritten ist, steht die Herkunft später im Kontakt nicht mehr zur Auswahl. Es sei denn, es wird explizit auch nach abgelaufenen Datenherkünften gesucht.
 
 //////////////////
         SCREENSHOT
@@ -27,7 +27,7 @@ image::Dsgvo/1_dsgvo_datenherkunft.png[id="fig_datenherkunft",width="100%"]
 [[sec.dsgvo.adressbuch]]
 === DSGVO im Adressbuch ===
 
-Im Kontakt Bearbeiten Dialog finden Sie nun den neuen Reiter menu:[DSGVO]. Hier wird die Liste der Verwendungszwecke für diesen Datensatz geführt mit entsprechenden Zustimmungen bzw. Wiederrufen. Über die Checkbox menu:[Darf nicht kontaktiert werden] können alle Einträge widerrufen werden.
+Im Kontakt-Bearbeiten-Dialog finden Sie nun den neuen Reiter menu:[DSGVO]. Hier wird die Liste der Verwendungszwecke für diesen Datensatz geführt mit entsprechenden Zustimmungen bzw. Widerrufungen. Über die Checkbox menu:[Darf nicht kontaktiert werden] können alle Einträge widerrufen werden.
 
 //////////////////
         SCREENSHOT
@@ -42,7 +42,7 @@ Im Kontakt Bearbeiten Dialog finden Sie nun den neuen Reiter menu:[DSGVO]. Hier 
 .DSGVO Reiter in Kontakten
 image::Dsgvo/2_dsgvo_koontaktreiter.png[id="fig_kontakte",width="100%"]
 
-Jedes mal wenn ein Kontakt gespeichert wird, werden Sie aufgefordert die Datenherkunft anzugeben sowie den Bearbeitungsgrund. Ob dieser Schritt optional ist oder nicht können Sie in der Admin-Anwendung unter menu:[Anwendungen ->] menu:[DSGVO ->] menu:[Einstellungen] festlegen.
+Jedesmal wenn ein Kontakt gespeichert wird, werden Sie aufgefordert die Datenherkunft anzugeben sowie den Bearbeitungsgrund. Ob dieser Schritt optional ist oder nicht, können Sie in der Admin-Anwendung unter menu:[Anwendungen ->] menu:[DSGVO ->] menu:[Einstellungen] festlegen.
 Diese Einträge sind im Kontakt unter dem Reiter Historie einsehbar.
 
 //////////////////

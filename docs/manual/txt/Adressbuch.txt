@@ -79,7 +79,7 @@ Klassische CRM-Systeme (SalesForce, SugarCRM etc.) geben häufig fest in der Dat
 
 Andere E-Mail-Programme, wie z.B. MS Outlook, Evolution, Thunderbird usw., bieten diese Unterscheidung nicht. Dort gibt es nur den Kontaktdatensatz, mit einem Feld für die Firma, aber auch mit Feldern für Name, Vorname usw. Evolution und Thunderbird bieten beispielsweise die Untergliederung in verschiedene Adressbücher, und MS Outlook kann Kontaktdatensätze hierarchisch, wie in einem Dateisystem, anordnen. Damit könnte man theoretisch Unternehmensstrukturen abbilden; das lässt sich aber nur händisch umsetzen und wird in der Praxis eher selten genutzt.
 
-Auch {branch} verzichtet auf die Unterscheidung von ``Kontakt'' und ``Firma'' – es gibt nur Kontakte. Allerdings hat jeder Kontaktdatensatz ein Datenfeld menu:[Firma]. Und da {branch} (wir kommen weiter unten noch dazu) über sehr detaillierte Filter-Einstellungen und Verkettungs-Funktionen verfügt, ist die Gruppierung und Bearbeitung mehrerer Kontakte über einen Filter ``gleiche Firma'' oder über gesetzte Verkettungen unproblematisch.
+Auch {branch} verzichtet auf die Unterscheidung von ``Kontakt'' und ``Firma'' – es gibt nur Kontakte. Allerdings hat jeder Kontaktdatensatz ein Datenfeld menu:[Firma]. Und da {branch} (wir kommen weiter unten noch dazu) über sehr detaillierte Filter-Einstellungen und Verkettungsfunktionen verfügt, ist die Gruppierung und Bearbeitung mehrerer Kontakte über einen Filter ``gleiche Firma'' oder über gesetzte Verkettungen unproblematisch.
 
 Wenn Sie jetzt bei Ihrer Quelldatei darauf achten, dass die Einträge bei ``Firma'' (je nach Quellsystem auch ``Organisation'', ``org_unit'' o.ä. genannt) bei mehreren Kontakten einer Firma wirklich identisch sind, vereinfacht das später das gemeinsame Verwalten dieser Kontakte.
 
@@ -328,7 +328,7 @@ image::Adressbuch/11_adressbuch_kontakt_neu_einlesen.png[id="fig_adressekontakei
 Dort hinein können Sie über die Zwischenablage eine beliebige Adresse per Copy & Paste aus einer beliebigen Datei einlesen, beispielsweise aus einem Brief im PDF-Format. Probieren Sie das jetzt einmal aus! Wenn Sie gerade nichts Passendes parat haben, können Sie auch – nur um die Funktion zu demonstrieren – einfach eine Adresse in das Fenster eintippen. Auf die ``genormte'' Reihenfolge (Name / Straße Nr. / PLZ Ort) kommt es dabei gar nicht an – das ist gerade das Clevere an dieser Funktion! Wenn Sie menu:[OK] drücken, liest {branch} die Teile, die es unmissverständlich versteht (i.d.R. die PLZ und den Ort) gleich selbstständig in die entsprechenden Felder Ihres neuen Kontaktes ein. Was nicht automatisch zuzuordnen ist, wird als einzelne Zeichenketten rechts im Fenster menu:[Beschreibung] zwischengeparkt. Von dort können Sie die einzelnen Teile ganz leicht mit der Maus ``anfassen'' (linke Taste gedrückt halten) und dann in das richtige Eingabefeld der Kontaktmaske ablegen. Achten Sie beim Navigieren auf den Cursor und das kleine Symbol links neben der Zeichenkette: Kreis mit einem X heißt ``Feld nicht gefunden'', Kreis mit einem Häkchen bedeutet ``Gefunden, bereit zur Ablage'' – lassen Sie dann einfach die Maustaste los! Wenn Sie fertig sind und noch einmal alles geprüft haben (es sollten sich keine Adressfragmente mehr im Feld menu:[Beschreibung] befinden), schließen Sie die Funktion mit Klick auf den Button menu:[Beende Merkmlsmodus] ab. Normalerweise müssen Sie jetzt natürlich auch noch Ihren neu angelegten Kontakt abspeichern.
 
 menu:[Kontakt drucken]::
-öffnet ohne nachfrage die Druckervorschau, von wo aus ein Druck in die Wege geleitet werden kann.
+öffnet die Druckervorschau, von wo aus ein Druck in die Wege geleitet werden kann.
 
 menu:[Exportiere Kontakt]::
 öffnet ein Dropdown Menü mit vier Optionen:
@@ -337,12 +337,12 @@ menu:[Exportiere Kontakt]::
 * menu:[Word - Brief]
 * menu:[Exportiere als ...]
 
-Die ersten zwei Optionen erzeugen ohne Nachfrage ein Übersichtsblatt im PDF oder Word-Format mit allen gespeicherten Informationen zum betreffenden Kontakt.
-Die Option menu:[Word - Brief] öffnet ein Word Dokument im Format eines Briefes. Hier wird der betreffende Kontakt im Briefkopf eingetragen.
-menu:[Exportiere als ...] bietet die Option diesen Kontakt als CVS, Exel oder OpenDocument Datei zu Exportieren.
+Die ersten beiden Optionen erzeugen ein Übersichtsblatt im PDF oder Word-Format mit allen gespeicherten Informationen zum betreffenden Kontakt.
+Die Option menu:[Word - Brief] öffnet ein Word-Dokument im Format eines Briefes. Hier wird der betreffende Kontakt im Briefkopf eingetragen.
+menu:[Exportiere als ...] bietet die Option, diesen Kontakt als CSV-, Excel- oder OpenDocument-Datei zu exportieren.
 
 [[sec.kontaktmaske.reiter]]
-Damit hätten wir alle Funktions-Buttons für Kontakte besprochen. Als nächstes beschäftigen wir uns mit den verschiedenen Ansichten, also der Reiterleiste im Kontaktmenü. Standardmäßig ist der Reiter menu:[Kontakt] geöffnet, dessen Ansicht die Kontaktdaten selbst enthält. Nun gibt es noch die Reiter menu:[Karte], menu:[Termine], menu:[Notizen], menu:[Anhänge], menu:[Verknüpfungen] und menu:[Historie]:
+Damit hätten wir alle Funktionsbuttons für Kontakte besprochen. Als nächstes beschäftigen wir uns mit den verschiedenen Ansichten, also der Reiterleiste im Kontaktmenü. Standardmäßig ist der Reiter menu:[Kontakt] geöffnet, dessen Ansicht die Kontaktdaten selbst enthält. Nun gibt es noch die Reiter menu:[Karte], menu:[Termine], menu:[Notizen], menu:[Anhänge], menu:[Verknüpfungen] und menu:[Historie]:
 
 (((OpenStreetMap)))
 Mit Klick auf menu:[Karte] können Sie sich die geografische Lage des Kontaktes auf einer Landkarte anzeigen lassen. Dabei greift {branch} auf den Internet-Kartendienst von OpenStreetMap zu.
@@ -368,28 +368,28 @@ Wenn dieser Reiter ausgegraut ist, kann das mehrere Ursachen haben:
 
 [[sec.kontaktmaske.reiter.termine]]
 {{{/Addressbook/EditDialog/Contact}}}
-Der Reiter menu:[Termine] bietet eine Verknüpfung zum Kalender von {branch}. Hier werden alle Termine vom betreffenden Kontakt angezeigt. Auch hier kann man das Filtersystem von {branch} nutzen. Die Funktionen vom Kalender werden ausführlich im <<chapter.Kalender>> erläutert.
+Der Reiter menu:[Termine] bietet eine Verknüpfung zum Kalender von {branch}. Hier werden alle Termine des jeweiligen Kontakts angezeigt. Auch hier kann man das Filtersystem von {branch} nutzen. Die Funktionen des Kalenders werden ausführlich im <<chapter.Kalender>> erläutert.
 
 [[sec.kontaktmaske.reiter.notizen]]
 {{{/Addressbook/EditDialog/Contact/NotesGrid}}}
-menu:[Notizen]: {branch} kennt drei Arten von Notizen: einfache Notizen (Klebezettel), Telefonnotizen und E-Mail-Notizen. Durch den Klick auf dem Button menu:[Notizen hinzufügen] öffnet sich ein Fenster für die Notiz. Standardmäßig werden Einfache Notizen erzeugt. Die anderen beiden Arten erreichen Sie über das Pulldown-Menü (den kleinen Pfeil neben menu:[Notiz]). Alle Notizen erhalten mit Speicherung automatisch einen Datums- und Zeiteintrag. Telefonnotizen dienen der Notierung von wichtigen Telefonaten mit diesem Kontakt. Um E-Mail-Notizen nutzen zu können muss dieses Feature aktiv eingeschaltet sein. Sofern das der Fall ist kann so beim Kontakt einem Vermerk hinterlegt werden, dass der Kontakt eine E-Mail erhalten hat. Letztere müssen Sie hier an dieser Stelle nicht händisch eingeben, wenn Sie beim Schreiben von E-Mails daran denken, dort den Button menu:[E-Mail-Notiz anlegen] zu klicken. In <<chapter.Einstellungen>> zeigen wir, wie dieser Vorgang als Automatismus angelegt wird. Das Arbeiten mit Notizen ist insbesondere bei externen Kontakten sehr bedeutsam: So kann jeder Mitarbeiter nachvollziehen, was mit diesem externen Kontakt zu welcher Zeit besprochen wurde. Hier weist {branch} eine der wichtigsten Funktionen eines CRM-Systems auf.
+menu:[Notizen]: {branch} kennt drei Arten von Notizen: einfache Notizen (Klebezettel), Telefonnotizen und E-Mail-Notizen. Durch den Klick auf dem Button menu:[Notizen hinzufügen] öffnet sich ein Fenster für die Notiz. Standardmäßig werden Einfache Notizen erzeugt. Die anderen beiden Arten erreichen Sie über das Pulldown-Menü (den kleinen Pfeil neben menu:[Notiz]). Alle Notizen erhalten mit Speicherung automatisch einen Datums- und Zeiteintrag. Telefonnotizen dienen der Notierung von wichtigen Telefonaten mit diesem Kontakt. Um E-Mail-Notizen nutzen zu können, muss dieses Feature eingeschaltet sein. Sofern das der Fall ist, kann so ein Vermerk hinterlegt werden, dass der Kontakt eine E-Mail erhalten hat. Letztere müssen Sie hier an dieser Stelle nicht händisch eingeben, wenn Sie beim Schreiben von E-Mails daran denken, dort den Button menu:[E-Mail-Notiz anlegen] zu klicken. In <<chapter.Einstellungen>> zeigen wir, wie dieser Vorgang als Automatismus angelegt wird. Das Arbeiten mit Notizen ist insbesondere bei externen Kontakten sehr bedeutsam: So kann jeder Mitarbeiter nachvollziehen, was mit diesem externen Kontakt zu welcher Zeit besprochen wurde. Hier weist {branch} eine der wichtigsten Funktionen eines CRM-Systems auf.
 
-Erwähnenswert ist noch, dass jegliche Notizen die hier angelegt werden, nicht veränderbar sind. Grund dafür ist, das dieses Feature ursprünglich aus der Historie (siehe dazu <<sec.kontaktmaske.reiter.historie>>) kommt, welche per Definition nicht bearbeitbar sind.
+Erwähnenswert ist noch, dass jegliche Notizen, die hier angelegt werden, nicht veränderbar sind. Grund dafür ist, dass dieses Feature ursprünglich aus der Historie (siehe dazu <<sec.kontaktmaske.reiter.historie>>) kommt, welche per Definition nicht bearbeitbar sind.
 
 [IMPORTANT]
 =========
-Sollten Sie E-Mail-Notizen aktiviert haben, denken Sie an den Datenschutz. Hierdurch kann jeder User der Zugang zu den Kontakt hat, den E-Mail-Verkehr mitschneiden.
+Sollten Sie E-Mail-Notizen aktiviert haben, denken Sie an den Datenschutz. Hierdurch kann jeder User, der Zugang zu dem Kontakt hat, den E-Mail-Verkehr mitschneiden.
 =========
 
 [[sec.kontaktmaske.reiter.anhaenge]]
 {{{/Addressbook/EditDialog/Contact/AttachmentsGrid}}}
-Der Reiter menu:[Anhänge] dient dem Zuordnen von beliebigen Dateien zu dem Datensatz; eine Funktion, die Ihnen im Prinzip zu allen Datenbank-Objekten in {branch} angeboten wird. Wir behandeln sie ausführlich in <<sec.standard.dialogfenster.anhaenge>>.
+Der Reiter menu:[Anhänge] dient dem Zuordnen von beliebigen Dateien zu einem Datensatz; eine Funktion, die Ihnen im Prinzip zu allen Datenbank-Objekten in {branch} angeboten wird. Wir behandeln sie ausführlich in <<sec.standard.dialogfenster.anhaenge>>.
 
 [[sec.kontaktmaske.reiter.historie]]
 {{{/Addressbook/EditDialog/Contact/HistoryGrid}}}
-An dieser stelle möchten wir kurz den Reiter menu:[Historie] der Übersichtlichkeit halber vorgreifen, da der Bereich menu:[Verknüpfungen]: sehr groß ist.
+An dieser Stelle möchten wir kurz den Reiter menu:[Historie] vorziehen, da der Bereich menu:[Verknüpfungen]: sehr umfangreich ist.
 
-In menu:[Historie] finden Sie Einträge über die Erstellung und Bearbeitung des betreffenden Kontakts. Wurde beispielsweise ein Datenfeld geändert, so sehen Sie hier, welches Feld dies war, den neuen Inhalt und welcher Benutzer zu welchen Zeitpunkt die Änderung vorgenommen hat. Verständlicherweise soll die Historie unverfälscht bleiben, weswegen eine Bearbeitung dieser hier aufzufindenden Einträge nicht möglich ist.
+In menu:[Historie] finden Sie Einträge über die Erstellung und Bearbeitung des betreffenden Kontakts. Wurde beispielsweise ein Datenfeld geändert, so können Sie nachvollziehen, was wie von welchem Benutzer zu welchem Zeitpunkt geändert wurde. Die Historie selber ist vor Änderungen geschützt, weshalb eine Bearbeitung dieser Einträge nicht möglich ist.
 
 [[sec.kontaktmaske.reiter.verknuepfung]]
 {{{/Addressbook/EditDialog/Contact/RelationsGrid}}}
@@ -498,7 +498,7 @@ image::Adressbuch/17_adressbuch_email_viele_empfaenger.png[id="fig_adresseemailv
 
 Sie wollten immer schon einmal wissen, wie Spammer arbeiten? Markieren Sie das gesamte Adressbuch (mit dem kleinen Pulldown-Menü menu:[n ausgewählt] rechts am Rand, oberhalb des Tabellenkopfes, indem Sie die Option menu:[Alle Seiten auswählen] verwenden) und drücken Sie auf menu:[E-Mail verfassen]... Aber bitte nicht abschicken! Zum E-Mail-Fenster kommen wir weiter unten noch detailliert.
 
-Ebenfalls eine wichtige und häufig verwendete Massenbearbeitungsfunktion ist das arbeiten mit Tags. Markieren Sie hierzu, noch einmal eine beliebige Anzahl von Kontaktdatensätzen in der Tabelle und rufen Sie dann, mit dem Mauszeiger auf einem der markierten Objekte, über einen Rechtsklick das Kontextmenü auf. Wählen Sie menu:[Tag hinzufügen]:
+Ebenfalls eine wichtige und häufig verwendete Massenbearbeitungsfunktion ist das Arbeiten mit Tags. Markieren Sie hierzu noch einmal eine beliebige Anzahl von Kontaktdatensätzen in der Tabelle und rufen Sie dann, mit dem Mauszeiger auf einem der markierten Objekte, über einen Rechtsklick das Kontextmenü auf. Wählen Sie menu:[Tag hinzufügen]:
 
 //////////////////
         SCREENSHOT
@@ -514,11 +514,11 @@ Ebenfalls eine wichtige und häufig verwendete Massenbearbeitungsfunktion ist da
 image::Adressbuch/18_adressbuch_kontakten_tags_zuweisen.png[id="fig_adressetagauswaehlen",width="100%"]
 
 
-Über das Pulldown werden Ihnen alle für Sie gültigen, d.h. sowohl die gemeinsamen als auch die persönlichen, Tags angeboten. Sie können nur jeweils einen Tag je Arbeitsgang zuweisen. Rückwärts funktioniert dies mit menu:[Tag(s) entfernen] analog, nur dass Sie hier, über Checkbuttons, mehrere Tags zum Entfernen auswählen können.
+Über das Pulldown werden Ihnen alle für Sie gültigen, d.h. sowohl die gemeinsamen als auch die persönlichen, Tags angeboten. Sie können nur jeweils einen Tag je Arbeitsgang zuweisen. Rückwärts funktioniert dies mit menu:[Tag(s) entfernen] analog, nur dass Sie hier über Checkbuttons mehrere Tags zum Entfernen auswählen können.
 
 [WARNING]
 ===============
-Das Bearbeitungs- wie auch das Kontextmenü bieten weitere Funktionen zum bearbeiten über mehrere Datensätze an. Wenn Sie die Mehrfachauswahl z.B. auf menu:[Kontakte bearbeiten] anwenden, erhalten Sie eine Maske, in der die Felder, die bei Ihren ausgewählten Kontakten jeweils verschiedene Inhalte haben können, leer und ockerfarbig dargestellt sind. Lassen Sie sich nicht verwirren – das ist logisch: Was sollte {branch} Ihnen sonst hier anzeigen? Das Ganze hat jedoch einen tieferen Sinn: Sie können damit Datenfelder über mehrere Datensätze mit einem gemeinsamen Inhalt füllen – eine sehr mächtige Funktion, wenn Sie diese mit Bedacht anwenden. Also denken Sie bitte daran, dass Sie ggf. alte Feldinhalte überschreiben, die Sie hier gar nicht sehen! Zur Sicherheit erhalten Sie beim Hineinklicken in ein solches Feld (korrekterweise: mehrere Felder!) noch einmal eine Warnung.
+Das Bearbeitungs- wie auch das Kontextmenü bieten weitere Funktionen zum Bearbeiten über mehrere Datensätze an. Wenn Sie die Mehrfachauswahl z.B. auf menu:[Kontakte bearbeiten] anwenden, erhalten Sie eine Maske, in der die Felder, die bei Ihren ausgewählten Kontakten jeweils verschiedene Inhalte haben können, leer und ockerfarbig dargestellt sind. Lassen Sie sich nicht verwirren – das ist logisch: Was sollte {branch} Ihnen sonst hier anzeigen? Das Ganze hat jedoch einen tieferen Sinn: Sie können damit Datenfelder über mehrere Datensätze mit einem gemeinsamen Inhalt füllen – eine sehr mächtige Funktion, wenn Sie diese mit Bedacht anwenden. Also denken Sie bitte daran, dass Sie ggf. alte Feldinhalte überschreiben, die Sie hier gar nicht sehen! Zur Sicherheit erhalten Sie beim Hineinklicken in ein solches Feld (korrekterweise: mehrere Felder!) noch einmal eine Warnung.
 ===============
 
 (((Kontaktdaten,Export)))
@@ -541,7 +541,7 @@ Oben finden Sie einige Buttons: menu:[Senden] und menu:[Abbrechen] sind klar, me
 
 menu:[Als Entwurf speichern] und menu:[Als Vorlage speichern] erzeugen in den jeweiligen Ordnern Ihres E-Mail-Servers (wenn diese dort angelegt sind) einen Eintrag. Über {branch} kommen Sie an diese Einträge heran, wenn Sie die Anwendung menu:[E-Mail] aufrufen. Voraussetzung ist natürlich, dass das betreffende E-Mail-Konto als IMAP-Konto ordnungsgemäß und mit den entsprechenden Ordnern bei Ihrem E-Mail-Provider angelegt und auch bei {branch} eingerichtet wurde (<<chapter.E-Mail>>). Ein Klick auf menu:[Lesebestätigung] bewirkt, dass Sie vom Empfänger eine Bestätigungsmail erhalten, wenn er Ihre E-Mail gelesen hat. Auch diese Funktion dürfte Ihnen bekannt sein, wenn Sie schon mit anderen E-Mail-Programmen gearbeitet haben.
 
-Interessant ist menu:[Nachricht ablegen]. Mit einem Klick auf den Menüpunkt legen sie eine E-Mail Notiz an. – Sie erinnern sich bestimmt an <<sec.kontaktmaske>> wo wir bereits von Notizen geredet haben – und hier ist nun die Funktion. Wenn Sie den Button anklicken, bevor Sie die E-Mail abschicken, wird bei allen Kontakten, an die die E-Mail versandt wird, eine Notiz dazu angelegt. Eine sehr sinnvolle Funktion, wenn Sie für sich und andere den Überblick darüber behalten wollen, wann und worüber Sie mit dem entsprechenden Kontakt kommuniziert haben. Im Nachhinein sehen Sie die E-Mail dann als Notiz in Ihrem Kontaktdatensatz:
+Interessant ist menu:[Nachricht ablegen]. Mit einem Klick auf den Menüpunkt legen sie eine E-Mail Notiz an. Sie erinnern sich bestimmt an <<sec.kontaktmaske>>, wo wir bereits von Notizen geredet haben – und hier ist nun die Funktion. Wenn Sie den Button anklicken, bevor Sie die E-Mail abschicken, wird bei allen Kontakten, an die die E-Mail versandt wird, eine Notiz dazu angelegt. Eine sehr sinnvolle Funktion, wenn Sie für sich und andere den Überblick darüber behalten wollen, wann und worüber Sie mit dem entsprechenden Kontakt kommuniziert haben. Im Nachhinein sehen Sie die E-Mail dann als Notiz in Ihrem Kontaktdatensatz:
 
 //////////////////
         SCREENSHOT
@@ -556,7 +556,7 @@ Interessant ist menu:[Nachricht ablegen]. Mit einem Klick auf den Menüpunkt leg
 .Dem Empfänger einer E-Mail diese als Notiz zuweisen
 image::Adressbuch/20_adressbuch_email_als_notiz.png[id="fig_adressemailmitnotiz",width="100%"]
 
-Mit einem Klick auf kleinen Pfeil neben menu:[Nachricht ablegen] öffnet sich ein Dropdown Menü. Die Checkbox an erster Stelle, würde ebenfalls eine E-Mail Notiz bei dem Kontakt anlegen. Die Option menu:[Dateimanager] bietet die Möglichkeit, die E-Mail an eine gewünschte stelle im Datenmanager zu sichern. Der Punkt menu:[Anhang] ist ebenfalls eine sehr mächtige Funktion. Hier kann die E-Mail z.B. mit Lieferanten oder einer Rechnung verlinkt werden.
+Mit einem Klick auf kleinen Pfeil neben menu:[Nachricht ablegen] öffnet sich ein Dropdown-Menü. Die erste Checkbox würde wiederum eine E-Mail-Notiz bei dem Kontakt anlegen. Die Option menu:[Dateimanager] bietet die Möglichkeit, die E-Mail an eine gewünschte Stelle im Datenmanager zu sichern. Mit menu:[Anhang] kann die E-Mail z.B. mit Lieferanten oder einer Rechnung verlinkt werden.
 
 
 Kommen wir zu den Versende-Daten für Ihre E-Mail: {branch} hat keinen eigenen E-Mail-Server. Stattdessen können Sie (oder Ihr Administrator) Ihr E-Mail-Konto (oder auch mehrere) in {branch} anlegen, ganz so wie Sie es vielleicht aus anderen E-Mail-Programmen, wie MS Outlook (wenn es ohne Exchange-Server installiert ist), Thunderbird oder Evolution kennen. Sie finden die Erläuterungen dazu in <<chapter.administration>>. Somit bietet das E-Mail-Fenster von {branch} zunächst oben (neben menu:[Von]) ein Pulldown-Menü an, in dem Sie aus den für Sie im System verfügbaren E-Mail-Adressen auswählen können.
@@ -581,7 +581,7 @@ Das menu:[Cc] (_Carbon Copy_) und das menu:[Bcc] zeigen dem Empfänger, dass er 
 Dass eine E-Mail einen menu:[Betreff] enthalten sollte, ist sicher nichts Neues ({branch} warnt Sie übrigens, wenn Sie eine E-Mail ohne Betreff abschicken wollen). Zur Auswahl stehen dann noch eine Reihe von Gestaltungselementen, wie Sie sie von anderen Editoren
 auch kennen. Praktisch ist der kleine Radiergummi ganz rechts außen, genannt menu:[Formatierungen entfernen]: Er dient dazu, lästige Objekte, wie Hyperlinks, Unterstreichungen, verschiedene Schriftgrößen usw. zu tilgen, wenn diese, z.B. durch Drag&Drop aus anderen Quellen, in den E-Mail-Text hineingeraten sind und dort nichts zu suchen haben.
 
-Wenn Sie oder Ihr Administrator beim Anlegen Ihrer E-Mail-Konten eine E-Mail Signatur gespeichert haben (<<chapter.E-Mail>>), so erscheint dieser im Text der E-Mail automatisch nach Auswahl jener E-Mail-Adresse, von der aus Sie die E-Mail versenden wollen. Sofern sie mehrere Signaturen verfügen können diese unter dem Punkt menu:[Signatur] geändert werden. Wichtig zu wissen ist jedoch, dass die Signatur vor dem Schreiben der Mail gewählt werden muss. Ein nachträgliches Ändern der Signatur ist nicht möglich.
+Wenn Sie oder Ihr Administrator beim Anlegen Ihrer E-Mail-Konten eine E-Mail-Signatur gespeichert haben (<<chapter.E-Mail>>), so erscheint diese im Text der E-Mail automatisch nach Auswahl der E-Mail-Adresse, von der aus Sie die E-Mail versenden wollen. Sofern Sie über mehrere Signaturen verfügen, können diese unter dem Punkt menu:[Signatur] geändert werden. Die Signatur muss vor dem Schreiben der Mail gewählt werden, ein nachträgliches Ändern der Signatur ist nicht möglich.
 
 [[sec.kontakte.filtern]]
 ==== Kontakte filtern ====
@@ -602,7 +602,7 @@ Neues Kapitel
 [[sec.kontakte.gruppen]]
 === Gruppen ===
 
-Eine Weitere kraftvolle Funktion vom Adressbuch-Modul sind Gruppen. {branch} hat zwei verschiedene Gruppen. Systemgruppen image:Icon/1_icon_group_full.png[height=16] und Gruppen image:Icon/2_icon_address_group.png[height=16], wobei beide vereinfacht in {branch} als "Gruppe" dargestellt werden und sich nur mit dem Symbol unterscheiden lassen.
+{branch} hat zwei verschiedene Arten von Gruppen. Systemgruppen image:Icon/1_icon_group_full.png[height=16] und Gruppen image:Icon/2_icon_address_group.png[height=16], wobei beide vereinfacht in {branch} als "Gruppe" dargestellt werden und sich nur anhand des Symbols unterscheiden lassen.
 
 //////////////////
         SCREENSHOT
@@ -617,11 +617,11 @@ Eine Weitere kraftvolle Funktion vom Adressbuch-Modul sind Gruppen. {branch} hat
 .Gruppen Übersicht
 image::Adressbuch/22_adressbuch_gruppen_uebersicht.png[id="fig_gruppenuebersicht",width="100%"]
 
-Systemgruppen image:Icon/1_icon_group_full.png[height=16] werden ausführlich im Kapitel <<sec.admin.gruppen>> erklärt. Es handelt sich hierbei um eine Funktion der Rechteverteilung. Einzelne User können in Systemgruppen zusammengefasst werden. Unterschiedliche Systemgruppen können nun verschiedene Rechte und Rollen zugewiesen werden.
+Systemgruppen image:Icon/1_icon_group_full.png[height=16] werden ausführlich im Kapitel <<sec.admin.gruppen>> erklärt. Es handelt sich hierbei um eine Funktion der Rechteverteilung. Einzelne User können in Systemgruppen zusammengefasst werden, unterschiedlichen Systemgruppen können verschiedene Rechte und Rollen zugewiesen werden.
 
-Bei Gruppen image:Icon/2_icon_address_group.png[height=16] geht es nicht um die Rechteverteilung. Hier können vielmehr einzelne Kontakte, egal ob diese Systembenutzer sind oder nicht, in Gruppen zusammengelegt werden.
+Bei einfachen Gruppen image:Icon/2_icon_address_group.png[height=16] geht es nicht um die Rechteverteilung. Hier können vielmehr einzelne Kontakte, egal ob diese Systembenutzer sind oder nicht, in Gruppen zusammengelegt werden.
 
-Für den restlichen Teil dieses Kapitels wird der Begriff "Gruppe" für die Gruppenart die mit image:Icon/2_icon_address_group.png[height=16]  gekennzeichnet sind verwendet.
+Für den übrigen Teil dieses Kapitels wird der Begriff "Gruppe" für die Gruppenart, die mit image:Icon/2_icon_address_group.png[height=16] gekennzeichnet ist, verwendet.
 
 Um eine Gruppe einzurichten, muss man sich innerhalb des Adressbuches im Gruppenmodul befinden.
 
@@ -640,17 +640,14 @@ image::Adressbuch/23_adressbuch_gruppen_modul.png[id="fig_gruppenmodul",width="2
 
 Klicken Sie hier oben links auf menu:[Gruppe hinzufügen]. Es öffnet sich ein neues Fenster, wo Sie die gewünschten Gruppeninformatinoen eingeben können.
 
-Das Feld menu:[Name] dient zur benennung der Gruppe
-Um menu:[E-Mail] nutzen zu können müssen aufseiten des Mailservers Sieve-Dienste eingerichtet sein.
+Das Feld menu:[Name] dient zur Benennung der Gruppe. Um menu:[E-Mail] nutzen zu können, müssen auf Seiten des Mailservers Sieve-Dienste eingerichtet sein. Sofern dies der Fall ist, kann hier eine E-Mail-Adresse für die Gruppe vergeben werden. Diese Gruppe wird so auch zu einem E-Mail-Verteiler. Es muss nur an die Gruppen-E-Mail-Adresse eine E-Mail geschrieben werden, und jeder einzelne Kontakt in dieser Gruppe bekommt eine Kopie in sein persönliches Postfach.
 
-Sofern dies der Fall ist kann hier eine E-Mail-Adresse für die Gruppe vergeben werden. Diese Gruppe wird somit zu einer Art E-Mail verteiler. Es muss nur der Gruppen-E-Mail-Adresse eine E-Mail geschrieben werden, und jeder einzelne Kontakt in dieser Gruppe bekommt eine E-Mail in seinen persönlichen Postfach.
+Sollte Sie menu:[E-Mail] leer lassen, funktioniert die Gruppe wie eine normale Guppe. Sie ist also eine Gruppierung verschiedener Kontakte und dient zur Sortierung und/oder schnellen Zuweisung von Terminen, E-Mails, etc.
 
-Sollte Sie menu:[E-Mail] leer lassen funktioniert die Gruppe wie eine "normale" Guppe. Sie ist also eine Gruppierung verschiedener Kontakte um zur sortierung und/oder schnellen zuweisung von Terminen, E-Mails, etc..
+menu:[Listen Typ] dient ausschließlich der Übersichtlichkeit. Hier kann man über das Dropdown-Menü die Gruppenart auswählen. Diese wird dann in der Übersicht der Gruppen angezeigt. Dies ist eine rein informative Einstellung und hat keinerlei Auswirkungen auf das System.
 
-menu:[Listen Typ] dient ausschließlich der Übersichtlichkeit. Hier kann man über das Dropdown-Menü die Gruppenart auswählen. Diese wird dann in der kompletten Übersicht der Gruppen mit angegeben. Dies ist eine rein informative Einstellung, und hat keinerlei Auswirkungen auf das System.
-
-Mitglieder fügt man einer Gruppe hinzu, indem man auf menu:[Suche nach Kontakten...] klickt. Hier kann nun der Namen des gewünschten Kontaktes eingetippt werden und {branch} sucht automatisch nach dem passenden Kontakt (die Suche fängt nach dem dritten Zeichen an). Alternativ kann man über das Dropdown-Menü die entsprechenden Kontakte einzelnd suchen. Jedem der Mitglieder kann eine Gruppenfunktion hinzugefügt werden. Dazu kliken sie in das leere Feld unterhalb menu:[Gruppenfunktion].
-Die definition einer Gruppenfunktion ist auch ein rein informatives Feld, und hat keinerlei auswirkung auf den rest der {branch}-Anwendungen. Gruppen funktionen werden in der Anwendung menu:[Stammdaten] angelegt ( <<chap.stammdaten>> ). Öffen sie dazu menu:[Stammdaten] und navigieren Sie zu menu:Adressbuch[Gruppenfuntionen]. Hier können Sie Gruppenfunktion hinzufügen und bestehende beareiten oder löschen.
+Mitglieder fügt man einer Gruppe hinzu, indem man auf menu:[Suche nach Kontakten...] klickt. Hier kann nun der Namen des gewünschten Kontaktes eingetippt werden und {branch} sucht automatisch nach dem passenden Kontakt (die Suche fängt, wie in allen Suchfeldern, nach dem dritten Zeichen an). Alternativ kann man über das Dropdown-Menü die entsprechenden Kontakte einzeln suchen. Jedem der Mitglieder kann eine Gruppenfunktion zugewiesen werden. Dazu klicken Sie in das leere Feld unterhalb menu:[Gruppenfunktion].
+Die Definition einer Gruppenfunktion ist auch ein rein informatives Feld und hat keinerlei Auswirkung auf andere {branch}-Anwendungen. Gruppenfunktionen werden in der Anwendung menu:[Stammdaten] angelegt ( <<chap.stammdaten>> ). Öffen sie dazu menu:[Stammdaten] und navigieren Sie zu menu:Adressbuch[Gruppenfuntionen]. Hier können Sie Gruppenfunktion hinzufügen und bestehende bearbeiten oder löschen.
 
 //////////
  Daniel Hoffmann, 2015-06-18 14:11

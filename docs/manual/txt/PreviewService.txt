@@ -6,9 +6,9 @@ Author: Paul Hartog
 [[chap.preview]]
 == Preview Service ==
 
-Die "Preview" (Vorschau) Funktion ist nicht in der Standard BE enthalten. Sollten Sie Interesse an dieser Funktion haben, muss die entsprechende Lizenz zum Freischalten gekauft werden.
+Die "Preview"-Funktion ist nicht in der Standard der Business Edition enthalten. Sollten Sie Interesse an dieser Funktion haben, muss Ihre Subscription kostenpflichtig erweitert werden.
 
-Sofern diese Funktion aktiviert ist, können Sie durch das Tippen der Leertaste eine Vorschau in einer ausgewählten Datei bekommen. Dies Dient dem Schnellen Einblick in Dateien ohne diese Herunterzuladen oder in einem neuen Fenster öffnen zu müssen.
+Sofern diese Funktion aktiviert ist, können Sie durch das Tippen der Leertaste eine Vorschau einer ausgewählten Datei sehen. Dies dient dem schnellen Einblick in Dateien, ohne diese herunterzuladen oder in einem neuen Fenster öffnen zu müssen.
 
 //////////////////
         SCREENSHOT
@@ -23,9 +23,9 @@ Sofern diese Funktion aktiviert ist, können Sie durch das Tippen der Leertaste 
 .Vorschau geöffnet
 image::PreviewService/1_previewservice_vorschau.png[id="preview",width="100%"]
 
-Unter Benutzung der Pfeiltasten ihrer Tastatur können Sie anschließen zwischen den weiteren Dateien hin und her Navigieren.
+Unter Benutzung der Pfeiltasten ihrer Tastatur können Sie anschließend zwischen den weiteren Dateien hin und her navigieren.
 
-In manchen {branch} Anwendungen, z.B. im Dateimanager, besteht auch die Option die Vorschau durch das Klicken von menu:[Vorschau] zu öffnen.
+In manchen {branch} Anwendungen, z.B. im Dateimanager, besteht auch die Option, die Vorschau durch das Klicken von menu:[Vorschau] zu öffnen.
 
 //////////////////
         SCREENSHOT

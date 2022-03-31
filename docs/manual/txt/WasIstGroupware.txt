@@ -62,10 +62,10 @@ In diesem Abschnitt wollen wir uns kurz mit den folgenden Fragen beschäftigen:
 {branch} gibt es in zwei verschiedenen Editionen:
 
 (((Community Edition {branch})))
-Zum einen gibt es die _Community Edition_ (CE), in deren Rahmen die Open Source Software {branch} entwickelt wird. Sie richtet sich vornehmlich an Entwickler oder Anwender, die sich in den Entwicklungsprozess (z.B. durch Fehlersuche) einbringen wollen. Neue Funktionen werden zuerst in der CE entwickelt und dort gemeinsam getestet. Unterstützung gibt es für CE nur in Form von freiwilligem Community Support im Forum von tine20.org.{empty}footnote:[https://www.tine20.org/forum/]
+Zum einen gibt es die _Community Edition_ (CE), in deren Rahmen die Open Source Software {branch} entwickelt wird. Sie richtet sich vornehmlich an Entwickler oder Anwender, die sich in den Entwicklungsprozess (z.B. durch Fehlersuche) einbringen wollen. Neue Funktionen werden zuerst in der CE entwickelt und dort gemeinsam getestet. Unterstützung gibt es für CE nur in Form von freiwilligem Community Support.
 
 (((Business Edition {branch})))
-Die _Business Edition_ (BE) ist eine durch die Hamburger Firma Metaways Infosystems GmbH gepflegte Version von {branch} für den Einsatz in Unternehmen. Sie erfüllt alle Anforderungen an den Einsatz von Open Source im geschäftlichen Umfeld. Für die BE gibt es professionellen Support mit festen Reaktionszeiten. Eine Version der BE wird stets zwei Jahre lang kontinuierlich mit Updates versorgt. Im Rahmen der Softwarepflege erhält die BE im Gegensatz zur CE keine neuen Leistungsmerkmale, sondern nur Fehlerkorrekturen. Die {branch} BE ist als reine Software, Hardware Appliance oder Cloud Service jeweils mit Service und Support verfügbar. Nähere Informationen hierzu erhalten Sie bei Metaways oder einem Channel-Partner.
+Die _Business Edition_ (BE) ist eine durch die Hamburger Firma Metaways Infosystems GmbH gepflegte Version von {branch} für den Einsatz in Unternehmen. Sie erfüllt alle Anforderungen an den Einsatz von Open Source im geschäftlichen Umfeld. Für die BE gibt es professionellen Support mit festen Reaktionszeiten. Eine Version der BE wird stets zwei Jahre lang kontinuierlich mit Updates versorgt. Im Rahmen der Softwarepflege erhält die BE im Gegensatz zur CE keine neuen Leistungsmerkmale, sondern nur Fehlerkorrekturen. Die {branch} BE ist als reine Software oder Cloud Service jeweils mit Service und Support verfügbar. Nähere Informationen hierzu erhalten Sie bei Metaways oder einem Channel-Partner.
 
 Dieses Buch bezieht sich auf die {branch} BE in der Version 2019.11. Es soll einen Anwender im geschäftlichen Umfeld in die Lage versetzen, seine tägliche Arbeit mit {branch} zu organisieren und zu optimieren.
 
@@ -97,12 +97,10 @@ Dieses Buch ist das offizielle Benutzerhandbuch für {branch}. In diesem Buch fi
 
 Weitere Informationen, besonders die Installation von {branch} betreffend, erhalten Sie auf http://www.tine20.com Dort finden Sie detaillierte Installationsanleitungen für alle unterstützten Betriebssysteme.
 
-Als Softwareentwickler haben Sie über http://www.tine20.org den Zugang zu einer regen Community, in der Sie sich mit anderen Entwicklern und Anwendern austauschen können.
+Als Softwareentwickler haben Sie über https://github.com/tine20/tine20 den Zugang zu einer regen Community, in der Sie sich mit anderen Entwicklern und Anwendern austauschen können.
 
 [[sec.vorwort.ueberdiesesbuch.wielesen]]
 ==== Wie Sie dieses Buch lesen sollten ====
-
-Dieses Buch ist in zwei Teile aufgegliedert. Im ersten Teil des Buches finden Sie die Standard-Elemente der Business-Edition. Im Teil zwei werden die Elemente erklärt die Zusätzlich erworben werden können.
 
 Wenn Sie noch nie mit {branch} zu tun hatten, sollten Sie zuerst das <<chap.adressverwaltung>> und danach das <<chapter.Standard-Bedienhinweise>> durcharbeiten. Die weitere Reihenfolge ist nicht vorgegeben und hängt sicher auch davon ab, mit welchen Anwendungen von {branch} Sie überhaupt arbeiten möchten – sofern Sie ein ``normaler'' Benutzer sind und keine administrativen Aufgaben, wie z.B. das Anlegen von anderen Benutzern oder Ressourcen, ausführen wollen. Beachten Sie auch, dass das Handbuch bei der Beschreibung der Funktionen i.d.R. von weitreichenden, d.h. Administratorrechten, ausgeht. Sollten Sie bestimmte beschriebene Funktionen nicht ausführen können, so liegt das wahrscheinlich an eingeschränkten Rechten - darauf weisen wir dann im Text hin.
 
