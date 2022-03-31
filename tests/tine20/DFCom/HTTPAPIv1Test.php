@@ -211,6 +211,8 @@ class DFCom_HTTPAPIv1Test extends TestCase
 
         $this->assertEquals(200, $this->emitter->response->getStatusCode());
 
+        HumanResources_Controller_AttendanceRecorder::runBLPipes();
+
         // assert deviceRecord
         // @TODO: improve me
 //        DFCom_Controller_DeviceRecord::getInstance()->search()
