@@ -27,6 +27,61 @@ class HumanResources_Controller_AttendanceRecorder
         $this->backend = HumanResources_Controller_AttendanceRecord::getInstance();
     }
 
+    protected function checkOutOfSequence(HumanResources_Config_AttendanceRecorder $config): ?Closure
+    {
+        $aheadRecords = $this->backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_AttendanceRecord::class, [
+            ['field' => HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID, 'operator' => 'equals', 'value' => $config->getAccount()->getId()],
+            ['field' => HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP,  'operator' => 'after', 'value' => $config->getTimeStamp()],
+        ]), new Tinebase_Model_Pagination(['sort' => HumanResources_Model_AttendanceRecord::FLD_SEQUENCE, 'dir' => 'ASC']));
+
+        if (0 === $aheadRecords->count()) {
+            return null;
+        }
+
+        // undo BL
+        $deviceIds = array_unique($aheadRecords->{HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID});
+        foreach ($deviceIds as $deviceId) {
+            $device = HumanResources_Controller_AttendanceRecorderDevice::getInstance()->get($deviceId);
+            if (empty($device->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE}) ||
+                    0 === $device->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE}->count()) {
+                continue;
+            }
+            $deviceRecords = $aheadRecords->filter(HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID, $deviceId);
+            foreach ($device->{HumanResources_Model_AttendanceRecorderDevice::FLD_BLPIPE} as $blpipe) {
+                $blElem = $blpipe->configRecord->getNewBLElement();
+                if ($blElem instanceof HumanResources_BL_AttendanceRecorder_UndoInterface) {
+                    $blElem->undo($deviceRecords);
+                }
+            }
+        }
+
+        // delete
+        foreach ($aheadRecords as $record) {
+            $this->backend->getBackend()->delete($record->getId());
+        }
+
+        // return and do this api call
+        // then replay deleted api calls!
+        return function() use ($aheadRecords) {
+            /** @var HumanResources_Model_AttendanceRecord $record */
+            foreach($aheadRecords->filter(HumanResources_Model_AttendanceRecord::FLD_AUTOGEN, false) as $record) {
+                $cfg = $record->getConfig();
+                $cfg->setThrowOnFaultyAction(false);
+                switch($record->{HumanResources_Model_AttendanceRecord::FLD_TYPE}) {
+                    case HumanResources_Model_AttendanceRecord::TYPE_CLOCK_IN:
+                        $this->clockIn($cfg);
+                        break;
+                    case HumanResources_Model_AttendanceRecord::TYPE_CLOCK_OUT:
+                        $this->clockOut($cfg);
+                        break;
+                    case HumanResources_Model_AttendanceRecord::TYPE_CLOCK_PAUSED:
+                        $this->clockPause($cfg);
+                        break;
+                }
+            }
+        };
+    }
+
     public function clockIn(HumanResources_Config_AttendanceRecorder $config): HumanResources_Model_AttendanceRecorderClockInOutResult
     {
         $raii = Tinebase_RAII::getTransactionManagerRAII();
@@ -39,14 +94,9 @@ class HumanResources_Controller_AttendanceRecorder
         }
 
         $this->registerAfterCommitAsyncBLPipeRun();
+        $result = $this->getClockInOutResult();
 
-        $rs = new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecord::class, []);
-        $result = new HumanResources_Model_AttendanceRecorderClockInOutResult([
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS => clone $rs,
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS => clone $rs,
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES => clone $rs,
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_FAULTY_CLOCKS => clone $rs,
-        ]);
+        $outOfSequenceClosure = $this->checkOutOfSequence($config);
 
         $lastRecord = null;
         if (null === $config->getRefId()) {
@@ -69,20 +119,26 @@ class HumanResources_Controller_AttendanceRecorder
         }
 
         if ($lastRecord && $lastRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID} !== $config->getRefId()) {
-            throw new Tinebase_Exception_UnexpectedValue('refId mismatch');
+            if ($config->getThrowOnFaultyAction()) {
+                throw new Tinebase_Exception_UnexpectedValue('refId mismatch');
+            }
         }
         if ($lastRecord && HumanResources_Model_AttendanceRecord::TYPE_CLOCK_PAUSED !==
                 $lastRecord->{HumanResources_Model_AttendanceRecord::FLD_TYPE}) {
-            // graceful close conditions?
+            // graceful close conditions
+            $graceful = isset($config->getMetaData()[HumanResources_Model_AttendanceRecord::CLOCK_OUT_GRACEFULLY]);
 
-            if ($config->getThrowOnFaultyAction()) {
+            if (!$graceful && $config->getThrowOnFaultyAction()) {
                 throw new Tinebase_Exception_UnexpectedValue('can\'t clock in, open attendance record found');
             }
 
             $subConfig = clone $config;
             $subConfig->setRefId($lastRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID});
-            $subConfig->setStatus(HumanResources_Model_AttendanceRecord::STATUS_FAULTY);
-            $subConfig->setMetaData(array_filter($subConfig->getMetaData(), function($key) {
+            if (!$graceful) {
+                $subConfig->setStatus(HumanResources_Model_AttendanceRecord::STATUS_FAULTY);
+            }
+            $subConfig->setAutogen(true);
+            $subConfig->setMetaData(array_filter($subConfig->getMetaData() ?: [], function($key) {
                 return $key === HumanResources_Config_AttendanceRecorder::METADATA_SOURCE;
             }, ARRAY_FILTER_USE_KEY));
             $subResult = $this->clockOut($subConfig);
@@ -96,7 +152,6 @@ class HumanResources_Controller_AttendanceRecorder
                 $subResult->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_FAULTY_CLOCKS});
         }
 
-
         /** @var HumanResources_Model_AttendanceRecorderDeviceRef $device */
         foreach ($config->getDevice()->{HumanResources_Model_AttendanceRecorderDevice::FLD_STARTS} as $device) {
             /** @var HumanResources_Model_AttendanceRecorderDevice $device */
@@ -108,10 +163,11 @@ class HumanResources_Controller_AttendanceRecorder
             if (!($lastRecord = $this->getOpenRecords($config->getAccount()->getId(), $device->getId())->getLastRecord()) ||
                     HumanResources_Model_AttendanceRecord::TYPE_CLOCK_PAUSED === $lastRecord->{HumanResources_Model_AttendanceRecord::FLD_TYPE}) {
                 $tmpCfg = clone $config;
-                $tmpCfg->setMetaData(array_filter($tmpCfg->getMetaData(), function($key) {
+                $tmpCfg->setMetaData(array_filter($tmpCfg->getMetaData() ?: [], function($key) {
                     return $key === HumanResources_Config_AttendanceRecorder::METADATA_SOURCE;
                 }, ARRAY_FILTER_USE_KEY));
                 $tmpCfg->setDevice($device);
+                $tmpCfg->setAutogen(true);
                 $tmpCfg->setRefId($lastRecord ? $lastRecord->{HumanResources_Model_AttendanceRecord::FLD_REFID}
                     : Tinebase_Record_Abstract::generateUID());
                 $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS}->addRecord(
@@ -122,11 +178,52 @@ class HumanResources_Controller_AttendanceRecorder
             }
         }
 
+        if ($lastRecord && HumanResources_Model_AttendanceRecord::TYPE_CLOCK_PAUSED ===
+                $lastRecord->{HumanResources_Model_AttendanceRecord::FLD_TYPE}) {
+            /** @var HumanResources_Model_AttendanceRecorderDeviceRef $device */
+            foreach ($config->getDevice()->{HumanResources_Model_AttendanceRecorderDevice::FLD_UNPAUSES} as $device) {
+                /** @var HumanResources_Model_AttendanceRecorderDevice $device */
+                $device = $device->{HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID};
+                $unpauseOpenRecords = $this->getOpenRecords($config->getAccount()->getId(), $device->getId());
+                $refIds = [];
+                /** @var HumanResources_Model_AttendanceRecord $record */
+                foreach ($unpauseOpenRecords as $record) {
+                    if (isset($refIds[$record->{HumanResources_Model_AttendanceRecord::FLD_REFID}])) {
+                        continue;
+                    }
+                    $refIds[$record->{HumanResources_Model_AttendanceRecord::FLD_REFID}] = true;
+                    $record = $unpauseOpenRecords->filter(HumanResources_Model_AttendanceRecord::FLD_REFID,
+                            $record->{HumanResources_Model_AttendanceRecord::FLD_REFID})->getLastRecord();
+                    if (HumanResources_Model_AttendanceRecord::TYPE_CLOCK_PAUSED !== $record
+                            ->{HumanResources_Model_AttendanceRecord::FLD_TYPE} ||
+                            !$record->{HumanResources_Model_AttendanceRecord::FLD_AUTOGEN}) {
+                        continue;
+                    }
+                    $tmpCfg = clone $config;
+                    $tmpCfg->setMetaData(array_filter($tmpCfg->getMetaData() ?: [], function ($key) {
+                        return $key === HumanResources_Config_AttendanceRecorder::METADATA_SOURCE;
+                    }, ARRAY_FILTER_USE_KEY));
+                    $tmpCfg->setDevice($device);
+                    $tmpCfg->setAutogen(true);
+                    $tmpCfg->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID});
+                    $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS}->addRecord(
+                        $this->backend->create(
+                            $this->createAttendanceRecord($tmpCfg, HumanResources_Model_AttendanceRecord::TYPE_CLOCK_IN)
+                        )
+                    );
+                }
+            }
+        }
+
         $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS}->addRecord(
             $this->backend->create(
                 $this->createAttendanceRecord($config, HumanResources_Model_AttendanceRecord::TYPE_CLOCK_IN)
             )
         );
+
+        if ($outOfSequenceClosure) {
+            $outOfSequenceClosure();
+        }
 
         $raii->release();
 
@@ -144,15 +241,17 @@ class HumanResources_Controller_AttendanceRecorder
             throw new Tinebase_Exception_UnexpectedValue('can\'t clockPause with other status than ' . HumanResources_Model_AttendanceRecord::STATUS_OPEN);
         }
 
+        $result = $this->getClockInOutResult();
+        if (!$config->getDevice()->{HumanResources_Model_AttendanceRecorderDevice::FLD_ALLOW_PAUSE}) {
+            if ($config->getThrowOnFaultyAction()) {
+                throw new Tinebase_Exception_UnexpectedValue('device doesn\'t allow to clock pauses');
+            }
+            return $result;
+        }
+
         $this->registerAfterCommitAsyncBLPipeRun();
 
-        $rs = new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecord::class, []);
-        $result = new HumanResources_Model_AttendanceRecorderClockInOutResult([
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS => clone $rs,
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS => clone $rs,
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES => clone $rs,
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_FAULTY_CLOCKS => clone $rs,
-        ]);
+        $outOfSequenceClosure = $this->checkOutOfSequence($config);
 
         $openRecords = $this->getOpenRecords($config->getAccount()->getId(), $config->getDevice()->getId());
         if ($config->getRefId()) {
@@ -189,7 +288,7 @@ class HumanResources_Controller_AttendanceRecorder
         }
 
         /** @var HumanResources_Model_AttendanceRecorderDeviceRef $device */
-        foreach ($config->getDevice()->{HumanResources_Model_AttendanceRecorderDevice::FLD_STOPS} as $device) {
+        foreach ($config->getDevice()->{HumanResources_Model_AttendanceRecorderDevice::FLD_PAUSES} as $device) {
             /** @var HumanResources_Model_AttendanceRecorderDevice $device */
             $device = $device->{HumanResources_Model_AttendanceRecorderDeviceRef::FLD_DEVICE_ID};
             $pauseOpenRecords = $this->getOpenRecords($config->getAccount()->getId(), $device->getId());
@@ -207,10 +306,11 @@ class HumanResources_Controller_AttendanceRecorder
                     continue;
                 }
                 $tmpCfg = clone $config;
-                $tmpCfg->setMetaData(array_filter($tmpCfg->getMetaData(), function($key) {
+                $tmpCfg->setMetaData(array_filter($tmpCfg->getMetaData() ?: [], function($key) {
                     return $key === HumanResources_Config_AttendanceRecorder::METADATA_SOURCE;
                 }, ARRAY_FILTER_USE_KEY));
                 $tmpCfg->setDevice($device);
+                $tmpCfg->setAutogen(true);
                 $tmpCfg->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID});
                 $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES}->addRecord(
                     $this->backend->create(
@@ -228,11 +328,15 @@ class HumanResources_Controller_AttendanceRecorder
             }
             $refIds[$record->{HumanResources_Model_AttendanceRecord::FLD_REFID}] = true;
             $config->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID});
-            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS}->addRecord(
+            $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES}->addRecord(
                 $this->backend->create(
                     $this->createAttendanceRecord($config, HumanResources_Model_AttendanceRecord::TYPE_CLOCK_PAUSED)
                 )
             );
+        }
+
+        if ($outOfSequenceClosure) {
+            $outOfSequenceClosure();
         }
 
         $raii->release();
@@ -255,14 +359,9 @@ class HumanResources_Controller_AttendanceRecorder
         }
 
         $this->registerAfterCommitAsyncBLPipeRun();
+        $result = $this->getClockInOutResult();
 
-        $rs = new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecord::class, []);
-        $result = new HumanResources_Model_AttendanceRecorderClockInOutResult([
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS => clone $rs,
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS => clone $rs,
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES => clone $rs,
-            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_FAULTY_CLOCKS => clone $rs,
-        ]);
+        $outOfSequenceClosure = $this->checkOutOfSequence($config);
 
         $openRecords = $this->getOpenRecords($config->getAccount()->getId(), $config->getDevice()->getId());
         if ($config->getRefId()) {
@@ -299,10 +398,11 @@ class HumanResources_Controller_AttendanceRecorder
                 }
                 $refIds[$record->{HumanResources_Model_AttendanceRecord::FLD_REFID}] = true;
                 $tmpCfg = clone $config;
-                $tmpCfg->setMetaData(array_filter($tmpCfg->getMetaData(), function($key) {
+                $tmpCfg->setMetaData(array_filter($tmpCfg->getMetaData() ?: [], function($key) {
                     return $key === HumanResources_Config_AttendanceRecorder::METADATA_SOURCE;
                 }, ARRAY_FILTER_USE_KEY));
                 $tmpCfg->setDevice($device);
+                $tmpCfg->setAutogen(true);
                 $tmpCfg->setRefId($record->{HumanResources_Model_AttendanceRecord::FLD_REFID});
                 $result->{HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS}->addRecord(
                     $this->backend->create(
@@ -329,9 +429,27 @@ class HumanResources_Controller_AttendanceRecorder
             );
         }
 
+        if ($outOfSequenceClosure) {
+            $outOfSequenceClosure();
+        }
+
         $raii->release();
 
         return $result;
+    }
+
+    protected function getClockInOutResult(): HumanResources_Model_AttendanceRecorderClockInOutResult
+    {
+        return new HumanResources_Model_AttendanceRecorderClockInOutResult([
+            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_INS =>
+                new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecord::class, []),
+            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_OUTS =>
+                new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecord::class, []),
+            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_CLOCK_PAUSES =>
+                new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecord::class, []),
+            HumanResources_Model_AttendanceRecorderClockInOutResult::FLD_FAULTY_CLOCKS =>
+                new Tinebase_Record_RecordSet(HumanResources_Model_AttendanceRecord::class, []),
+        ]);
     }
 
     protected function registerAfterCommitAsyncBLPipeRun()
@@ -351,6 +469,9 @@ class HumanResources_Controller_AttendanceRecorder
             HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID => $config->getDevice()->getId(),
             HumanResources_Model_AttendanceRecord::FLD_STATUS => $config->getStatus(),
             HumanResources_Model_AttendanceRecord::FLD_REFID => $config->getRefId() ?: Tinebase_Record_Abstract::generateUID(),
+            HumanResources_Model_AttendanceRecord::FLD_FREETIMETYPE_ID => $config->getFreetimetypeId(),
+            HumanResources_Model_AttendanceRecord::FLD_CREATION_CONFIG => serialize($config),
+            HumanResources_Model_AttendanceRecord::FLD_AUTOGEN => $config->getAutogen(),
             'xprops' => [HumanResources_Model_AttendanceRecord::META_DATA => $config->getMetaData()],
         ]);
     }
@@ -403,7 +524,7 @@ class HumanResources_Controller_AttendanceRecorder
         }
     }
 
-    public static function runBLPipes()
+    public static function runBLPipes($accountId = null): void
     {
         $transaction = Tinebase_RAII::getTransactionManagerRAII();
         $deviceCtrl = HumanResources_Controller_AttendanceRecorderDevice::getInstance();
@@ -421,10 +542,12 @@ class HumanResources_Controller_AttendanceRecorder
             $selectForUpdate = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($backend);
 
             $data = $recordCtrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                HumanResources_Model_AttendanceRecord::class, [
+                HumanResources_Model_AttendanceRecord::class, array_merge([
                 ['field' => HumanResources_Model_AttendanceRecord::FLD_DEVICE_ID, 'operator' => 'equals', 'value' => $device->getId()],
                 ['field' => HumanResources_Model_AttendanceRecord::FLD_BLPROCESSED, 'operator' => 'equals', 'value' => false],
-            ]), new Tinebase_Model_Pagination(['sort' => [HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID, HumanResources_Model_AttendanceRecord::FLD_SEQUENCE], 'dir' => 'ASC']));
+            ], $accountId ? [
+                ['field' => HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID, 'operator' => 'equals', 'value' => $accountId],
+            ] : [])), new Tinebase_Model_Pagination(['sort' => [HumanResources_Model_AttendanceRecord::FLD_ACCOUNT_ID, HumanResources_Model_AttendanceRecord::FLD_SEQUENCE], 'dir' => 'ASC']));
 
             unset($selectForUpdate);
 

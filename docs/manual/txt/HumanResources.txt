@@ -12,7 +12,7 @@ KUK 2015-05-15: Indizierung gemacht, Freigabe
 
 Überarbeitet von Paul Hartog 30.04.2020
 
-Überarbeitet von Peggy Hötzel 26.11.2020
+Überarbeitet von Peggy Hötzel 15.04.2021
 ////////
 
 (((Personalkonten)))
@@ -27,7 +27,7 @@ Die Anwendung HumanResources gehört nicht zu den Kernfunktionalitäten einer Gr
 {{{/HumanResources}}}
 Die Anwendung menu:[Human Resources] dient der Personalabteilung zur Verwaltung relevanter Mitarbeiterinformationen. Da hierzu auch vertrauliche Daten gehören, sollten Sie die Zugriffsrechte auf diesen Programmteil sehr genau überlegen.
 
-Die Anwendung besteht aus fünf Modulen: menu:[Mitarbeiter], die zugehörigen menu:[Personalkonten], menu:[Tägliche Arbeitszeitberichte], menu:[Monatliche Arbeitszeitberichte] und menu:[Free Time Planning].
+Die Anwendung besteht aus fünf Modulen: menu:[Mitarbeiter], die zugehörigen menu:[Personalkonten], menu:[Tägliche Arbeitszeitberichte], menu:[Monatliche Arbeitszeitberichte] und menu:[Abwesenheitsplanung].
 
 ///////
 Peg:
@@ -70,7 +70,7 @@ Welche Angaben notwendig sind, um diese Ansichten korrekt darzustellen, erkläre
 
 {{{/HumanResources/MainScreen/ModulPicker}}}
 {{{/HumanResources/MainScreen/Employee/FavoritesPicker}}}
-Unter menu:[MODULE] sehen Sie auf der linken Seite die Punkte menu:[Mitarbeiter], menu:[Personalkonten], menu:[Tägliche Arbeitszeitberichte], menu:[Monatliche Arbeitszeitberichte] und menu:[Free Time Planning].
+Unter menu:[MODULE] sehen Sie auf der linken Seite die Punkte menu:[Mitarbeiter], menu:[Personalkonten], menu:[Tägliche Arbeitszeitberichte], menu:[Monatliche Arbeitszeitberichte] und menu:[Abwesenheitsplanung].
 //////////
 
 ////
@@ -99,9 +99,9 @@ Im jeweiligen Anwendungsbereich verlinken wir auf die zugehörigen Stammdaten, w
 ==== Lohnarten ====
 
 Lohnarten werden in der Lohn- und Gehaltsabrechnung zur Steuerung abzurechnender Vorgänge verwendet. Dabei sind abrechnungsrelevante Eigenschaften für Lohn-und Gehaltszahlungen pro Lohnart definiert (Steuer-, Sozialversicherungs- und Auswertungsmerkmale).
-Wir empfehlen die Lohnarten in {branch} in menu:[ID] und menu:[Abkürzungen] parallel zum bestehenden Lohnbuchhaltungssystem zu führen, speziell wenn Daten an die Lohnbuchhaltung (über eine eigene Schnittstelle) übergeben werden. Beim Datenimport aus bestehenden Systemen unterstützen wir Sie gern. Grundsätzlich sind Sie jedoch frei bei der Anlage und Benennung der Lohnarten in {branch}.
+Einige gängige und systemrelevante Lohnarten werden bereits bei Installation zur Verfügung gestellt. Sie haben hier die Möglichkeit, speziell in menu:[Abkürzungen] und der Bezeichnung in menu:[Name], die Lohnarten parallel zu einem bestehenden Lohnbuchhaltsungssystem zu führen. Grundsätzlich sind Sie jedoch frei bei der weiteren Anlage und Benennung der Lohnarten in {branch}.
 
-Neben der Bezeichnung in menu:[Name] steuert die Angabe in menu:[System], ob es sich dabei um eine systemnotwendige Lohnart handelt (notwendig für die automatische Berechnung der abrechnungsrelevanten Mitarbeiterdaten). Der menu:[Faktor] steuert mit welchem Prozenzsatz die zu berechnenden Daten bewertet werden. menu:[Zusatzlohn] enthält die Information, ob es sich um einen zusätzlichen Lohn- bzw. Gehaltsanteil handelt.
+Die Angabe in menu:[System] steuert, ob es sich dabei um eine systemnotwendige Lohnart handelt (notwendig für die automatische Berechnung der abrechnungsrelevanten Mitarbeiterdaten). Der menu:[Faktor] steuert mit welchem Prozenzsatz die zu berechnenden Daten bewertet werden. menu:[Zusatzlohn] enthält die Information, ob es sich um einen zusätzlichen Lohn- bzw. Gehaltsanteil handelt.
 
 
 //////////////////
@@ -122,13 +122,13 @@ image::HumanResources/2_humanresources_stammdaten_lohnarten.png[id="fig_stammdat
 
 Für Ihre Abwesenheitsverwaltung benötigen Sie unterschiedliche Abwesenheitsarten, wie z.B. Urlaub und Krankheit. Weisen Sie die menu:[Lohnart] zu und steuern Sie damit die Abrechnung in Abhängigkeit der Abwesenheitsart. Somit kann z.B. zwischen bezahlten und unbezahltem Urlaub unterschieden werden.
 
-Mit Hilfe der menu:[Abkürzung] steuern Sie die Eingaben in der Schnellerfassungmatrix zu An- und Abwesenheitszeiten (siehe <<sec.humanresources.freetimeplanning>>) und können letztendlich für einen schnellen Überblick in der Matrix die Abwesenheitsgründe bereits am Kürzel erkennen.
+Mit Hilfe der menu:[Abkürzung] steuern Sie die Eingaben in der Schnellerfassungmatrix zu An- und Abwesenheitszeiten (siehe <<sec.humanresources.abwesenheitsplanung>>) und können letztendlich für einen schnellen Überblick in der Matrix die Abwesenheitsgründe bereits am Kürzel erkennen.
 
 Weiterhin benötigen Sie die Angabe in menu:[System] zur Steuerung, ob es sich um eine systemnotwendige Abwesenheitsart handelt (notwendig für die automatische Berechnung der An-/Abwesenheitszeiten der Mitarbeiter).
 
 Die Einstellung menu:[Buchung erlauben] steuert, ob diese Abwesenheitsart bei der Erfassung (Buchung) von Abwesenheitszeiten (über Terminal oder Anwendung) durch einen Mitarbeiter erlaubt ist.
 
-Mit menu:[Planung erlauben] legen Sie fest, ob diese Abwesenheitsart in der Matrix menu:[Free Time Planning] zur Erfassung freigegeben ist.
+Mit menu:[Planung erlauben] legen Sie fest, ob diese Abwesenheitsart in der Matrix menu:[Abwesenheitsplanung] zur Erfassung freigegeben ist.
 
 Über menu:[Abwesenheits-Zeiterfassung aktivieren] nehmen Sie Einfluss auf die Erfassung von An-und Abwesenheitszeiten und regeln, ob nach Eingabe einer Startzeit, die Eingabe einer Endzeit aktiv erforderlich ist. So kann durch die Aktivierung von menu:[Abwesenheits-Zeiterfassung aktivieren] nach beispielsweise einem Auscheck zur Pause ein Wiedereincheck nach Beendigung erforderlich sein.
 Wählen Sie ein menu:[Zeitkonto] aus (über das Pulldown Menü), wenn Sie alle erfassten An-/Abwesenheitszeiten mit dieser Abwesenheitsart auf ein spezielles Arbeitszeitkonto wünschen. Die Anlage von Zeitkonten finden Sie im <<chap.zeiterfassung>> und dort speziell im <<sec.zeiterfassung.zeitkonten>>.
@@ -137,11 +137,6 @@ Wählen Sie ein menu:[Zeitkonto] aus (über das Pulldown Menü), wenn Sie alle e
 ============
 Um An-und Abwesenheitszeiten im HumanRessources zu erfassen und zu buchen wird ein Standard Arbeitszeitkonto in der Konfiguration zur HumanRessource Anwendung hinterlegt. Sollte dieses in der Konfiguration nicht zugeordnet sein, generiert das System ein Standard Arbeitszeitkonto und nimmt die entsprechenden Verweise automatisch vor.
 ============
-//////
-Peg note:
-eigentlich sollte die config Angabe des Standard Arbeitszeitkonto per Frontend im Adminbereich erfolgen können
-dies ist aktuell noch nicht der Fall und nur per Code konfigurierbar
-//////
 
 
 //////////////////
@@ -399,7 +394,7 @@ ist ein Kombibild, 2. Bild auskommentiert
 //////
 
 
-Über das Pulldown menu:[Status] legen Sie zunächst fest, ob es sich um einen beantragten, in Bearbeitung befindlichen, bereits angenommenen oder abgewiesenen Urlaubsantrag handelt. Standardmäßig steht der Status auf menu:[Angenommen]. Beim Abspeichern würden die Urlaubstage dann vom Urlaubskonto des Arbeitnehmers abgebucht. Belassen Sie die Einstellung jetzt auf menu:[Angenommen] und schauen Sie sich das nächste Pulldown, menu:[Personalkonto], an. Per Standard steht dieses Feld auf dem laufenden Jahr; klicken Sie das Pulldown, sehen Sie, dass Ihnen das laufende und mindestens noch das folgende Jahr angeboten werden. Diese beiden Personalkonten, auf die wir weiter unten noch zu sprechen kommen, hat das System beim Abspeichern eines Mitarbeiters automatisch angelegt. Belassen Sie jetzt die Standardeinstellung, d.h. das laufende Jahr. Im nächsten Feld, menu:[Übrig], werden Ihnen zur Kontrolle die restlichen Urlaubstage des Arbeitnehmers angezeigt. Dieses Feld ist eine automatisch erzeugte Differenz aus dem (ggf. anteiligen) Urlaubsanspruch und den genehmigten/angenommenen Urlaubstagen und kann nicht überschrieben werden.
+Über das Pulldown menu:[Status] legen Sie zunächst fest, ob es sich um einen beantragten, in Bearbeitung befindlichen, bereits angenommenen oder abgewiesenen Urlaubsantrag handelt. Standardmäßig steht der Status auf menu:[Angenommen]. Beim Abspeichern würden die Urlaubstage dann vom Urlaubskonto des Arbeitnehmers abgebucht. Belassen Sie die Einstellung jetzt auf menu:[Angenommen] und schauen Sie sich das nächste Pulldown, menu:[Personalkonto], an. Per Standard steht dieses Feld auf dem laufenden Jahr; klicken Sie das Pulldown, sehen Sie, dass Ihnen das laufende und mindestens noch das folgende Jahr angeboten werden. Diese beiden Personalkonten, auf die wir weiter unten noch zu sprechen kommen, hat das System beim Abspeichern eines Mitarbeiters automatisch angelegt. Belassen Sie jetzt die Standardeinstellung, d.h. das laufende Jahr. Im nächsten Feld, menu:[Übrig], werden Ihnen zur Kontrolle die restlichen Urlaubstage des Arbeitnehmers angezeigt. Dieses Feld ist eine automatisch erzeugte Differenz aus dem (ggf. anteiligen) Urlaubsanspruch und den genehmigten/angenommenen Urlaubstagen inkl. Resturlaub aus dem Vorjahr und kann nicht überschrieben werden.
 
 ////
 KUK: Wiewohl das Feld als Eingabefeld dargestellt ist und man mit der Maus hineinklicken kann -> Bug!
@@ -428,7 +423,7 @@ ist aber ein Kombibild mit Liste und Dialog
 //////
 
 
-Hier gibt es noch eine Sonderfunktion: Haben Sie unentschuldigte Krankheitstage gebucht, können Sie diese, nach dem Schließen der Eingabemaske, auf der Tabellenzeile über das Kontextmenü (Rechtsklick auf die entsprechende Tabellenzeile) menu:[Als Urlaub buchen].
+Hier gibt es noch eine Sonderfunktion: Haben Sie unentschuldigte Krankheitstage gebucht, können Sie diese, nach dem Schließen der Eingabemaske, auf der Tabellenzeile über das Kontextmenü (Rechtsklick auf die entsprechende Tabellenzeile) menu:[als Urlaub buchen].
 
 Ein Klick auf das Tabellenkopf-Symbol rechts außen zeigt Ihnen bei beiden Tabellen, dass die nicht eingeblendeten Felder nur Bearbeitungsvermerke enthalten. Sie können also im Normalfall die Standardeinstellungen unverändert lassen.
 
@@ -451,10 +446,9 @@ menu:[Als ODS exportieren]  für eine Tabelle im Dateiformat von Open-/LibreOffi
 {{{/HumanResources/MainScreen/Account}}}
 Wie bereits erwähnt, erzeugt das System selbständig Personalkonten, sobald Sie einen Mitarbeiter anlegen. Klicken Sie links unter menu:[MODULES] auf menu:[Personalkonten]. Wenn Sie zuvor einen Mitarbeiter angelegt haben, sehen Sie jetzt mindestens dessen zwei Personalkonten für das laufende und das folgende Jahr. Wenn alle Mitarbeiter schon vor längerer Zeit angelegt wurden, kann es sein, dass ein neues Personalkonto angelegt werden muss, weil die Zeit fortgeschritten ist. Klicken Sie dazu im Bearbeitungsmenü den Button menu:[Personalkonten anlegen]. Das System fragt Sie nach dem Jahr, für das es ein Konto anlegen soll, der Rest erfolgt automatisch.
 
-Gehen Sie nun mit der Maus auf die Zeile mit dem laufenden Jahr und klicken Sie die rechte Maustaste. Neben den bekannten Funktionen, die Sie auch über die Maske erreichen, ist im Kontextmenü eine Funktion versteckt, die Sie nur hier sehen: menu:[Urlaub vom letzten Jahr als Sonderurlaub buchen]. Diese Funktion dient der Übernahme von im letzten Jahr nicht genommenem Urlaub auf das aktuelle Jahr, wo er als Sonderurlaub ausgewiesen wird. Vor Anwendung dieser Funktion beachten Sie bitte arbeitsvertragliche Regelungen zur Übernahme und zum Verfall von Urlaubstagen.
-
 {{{/HumanResources/EditDialog/Account}}}
 Klicken Sie nun menu:[Personalkonto bearbeiten] im Bearbeitungsmenü oder im Kontextmenü der rechten Maustaste.
+
 
 //////////////////
         SCREENSHOT
@@ -476,32 +470,6 @@ KUK: Wiewohl alle Zahlenfelder als Eingabefelder dargestellt sind und man mit de
 ////
 
 In der Maske unter dem Reiter menu:[Zusammenfassung] finden Sie eine ganze Reihe von Zahlen, die Sie nicht überschreiben können; sie entsprechen den oben unter den Arbeitsverträgen sowie den Urlaubs- und Krankheitstagen eingegebenen Werten dieses Arbeitnehmers im betreffendem Jahr. Sollten Sie jetzt nur Nullen sehen, wurde für den Arbeitnehmer kein Arbeitsvertrag im laufenden Jahr angelegt. Gehen Sie in diesem Fall bitte zurück auf menu:[Mitarbeiter] und legen Sie, wie weiter oben besprochen, zumindest probehalber einen Arbeitsvertrag an. Wir wollen zum besseren Verständnis sehen, wie sich die dort eingegebenen Zahlen auf der Personalkonto-Maske auswirken.
-
-////
-.Sonderurlaub
-image::HumanResources/15_humanresources_sonderurlaub.png[id="fig_humanpersonalkontosonderurlaub",width="100%"]
-////
-
-{{{/HumanResources/EditDialog/Account/ExtraFreeTime}}}
-Schauen wir uns zuletzt den Reiter menu:[Sonderurlaub] an.
-Das Fenster mit einer Tabelle zeigt den zugebilligten Sonderurlaub des Arbeitnehmers. Klicken Sie nun im unteren Rand der Bearbeitungsmaske den Button menu:[Sonderurlaub hinzufügen]. Diese Funktion ermöglicht es, einem Personalkonto ein bestimmtes Kontingent Sonderurlaub zuzuordnen, beispielsweise als Anreiz oder im Zuge von Ereignissen, für die vertraglich Sonderurlaub vereinbart ist (Hochzeiten, Geburten etc.).
-
-{{{/HumanResources/EditDialog/ExtraFreeTime}}}
-Es öffnet sich ein weiteres Bearbeitungsfenster, in das Sie im obersten Feld die Anzahl menu:[Tage] frei eingeben können. Den menu:[Typ], menu:[Bezahlt] oder menu:[Unbezahlt], wählen Sie per Pulldown aus. Diese beiden Eingaben sind Pflichtfelder. Ein menu:[Ablaufdatum] hingegen, bis zu welchem Zeitpunkt der Urlaub genommen werden muss, ist fakultativ - ebenso die menu:[Beschreibung]. Der hier eingegebene Sonderurlaub wird im Reiter menu:[Zusammenfassung] zu den möglichen Urlaubstagen addiert.
-
-(((Sonderurlaub)))
-//////////////////
-        SCREENSHOT
-        path: </HumanResources/EditDialog/ExtraFreeTime>
-        demodata: Personalkonto, Sonderurlaub
-        image: dialog
-        comment: <>
-        status: <check>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Sonderurlaub hinzufügen
-image::HumanResources/16_humanresources_personalkonten_sonderurlaub.png[id="fig_humansonderurlaub",width="100%"]
-
 
 [[sec.humanresources.tagesarbeitszeitberichte]]
 === Tägliche Arbeitszeitberichte ===
@@ -548,7 +516,7 @@ menu:[Mitarbeiter] enthält, wie der Titel schon verrät, den Namen des Mitarbei
 
 Die menu:[Auswertungsstartzeit] und menu:[Auswertungsendzeit] wird jeweils aus den für diesen Tag gültigen Arbeitszeit Regelungen im Vertrag des Mitarbeiters (siehe auch <<sec.humanresources.mitarbeiter.vertraege>> übernommen und enthält den maximalen Auswertungs- bzw. Arbeitszeitrahmen. Diesen täglichen Rahmen können Sie in menu:[Korrigierte Auswertungs Startzeit] und menu:[Korrigierte Auswertungs Endzeit] für diesen Tag ändern. Weiterhin wird die menu:[Arbeitszeit (Soll)], [Pausenzeit (Netto)] und menu:[Pausenzeit Abzug] aus den Mitarbeiter Vertragsdaten entnommen, wobei Sie im Bedarfsfall die Soll Arbeitszeit für diesen Tag in menu:[Soll Arbeitszeit Korrektur] korrigieren können. Die [Pausenzeit (Netto)] und menu:[Pausenzeit Abzug] sind nur berechnet, wenn tatsächlich Arbeitszeiten (Ist-Zeiten) für diesen Tag erfasst wurden.
 
-menu:[Arbeitszeiten] enthält eine Liste aller gesammelten Daten des Mitarbeiters für diesen Tag, die Grundlage für die berechneten Werte sind. Neben den Abwesenheitszeiten wie Urlaub, Krankheit und Sonderurlaub sowie den gesetzlichen Feiertagen, sind hier die Arbeitszeiten gemäß vertraglicher Vereinbarung nach den einzelnen Lohnarten aufgeschlüsselt. Dies ist wichtig für die Übergabe an die Lohnbuchhaltung.
+menu:[Arbeitszeiten] enthält eine Liste aller gesammelten Daten des Mitarbeiters für diesen Tag, die Grundlage für die berechneten Werte sind. Neben den Abwesenheitszeiten wie Urlaub und Krankheit sowie den gesetzlichen Feiertagen, sind hier die Arbeitszeiten gemäß vertraglicher Vereinbarung nach den einzelnen Lohnarten aufgeschlüsselt.
 
 Die Summe aus allen Arbeitszeiterfassungs-Datensätzen dieses Mitarbeiters für diesen Tag ist in menu:[Arbeitszeit (Ist)] berechnet und festgehalten. Sollte es vertraglich geregelte Pausezeiten geben, sind diese bereits abgezogen. In menu:[Arbeitszeit (Berichtigt) können Sie eine Korrektur vornehmen. Dabei tragen Sie nur die Zeit ein, um welche die menu:[Arbeitszeit (Ist)] bei der Berechnung der menu:[Gesamt Arbeitszeit] angepasst werden soll (z.B. - 00:30 = abzüglich 30 Minuten, 01:45 = zuzüglich 1 Stunden und 45 Minuten).
 
@@ -622,10 +590,11 @@ Speichern Sie Ihre Änderungen mit Klick auf den Button menu:[OK] rechts unten i
 [IMPORTANT]
 ============
 Abschließend und erst wenn Sie sicher sind, dass der Monat für diesem Mitarabeiter komplett bearbeitet und alle Ergebnisse gesammelt wurden, aktivieren Sie in menu:[Ist Freigegeben] das Häkchen und Speichern. Dies bewirkt, dass für diese Monats-Periode nichts mehr an den Daten unter menu:[Tägliche Arbeitszeitberichte] und an diesem Datensatz selbst geändert werden kann. Im Hintergrund werden vom System gleichzeitig ein paar Referenzen gesetzt, z.B: werden die Daten aus der Arbeitszeiterfassung mit diesem menu:[Monatliche Arbeitszeit Berichte]
-Setzen Sie dieses Häkchen erst, wenn die Monatsdaten z.B. an die Lohnbuchhaltung übergeben werden sollen.
+Setzen Sie dieses Häkchen erst, wenn die Monatsdaten abgeschlossen und z.B. an die Lohnbuchhaltung übergeben werden sollen.
 ============
 
 Für die monatliche Auswertung der Arbeitszeitdaten des Mitarbeiters wählen Sie den Button menu:[Exportiere Monatlicher Arbeitszeit Bericht] und wählen Sie menu:[monthlyWTReport]. Sie erhalten ein Monatsprotokoll pro Mitarbeiter im Excel Format.
+
 
 //////////////////
         SCREENSHOT
@@ -640,25 +609,33 @@ Für die monatliche Auswertung der Arbeitszeitdaten des Mitarbeiters wählen Sie
 image::HumanResources/21_humanresources_export_monatsprotokoll.png[id="fig_monat_exportprotokoll",width="100%"]
 
 
-[[sec.humanresources.freetimeplanning]]
-=== Free Time Planning ===
+[NOTE]
+============
+Bei der Ausgabe der Informationen unter Spalte Bemerkung handelt es sich um den Namen der Lohnart aus den Stammdaten (siehe <<sec.humanresources.stammdaten.lohnarten>>).
+Hier wird z.B. bei Abwesenheit immer der Name der Lohnart ausgegeben, die in den Stammdaten zugewiesen ist (siehe <<sec.humanresources.stammdaten.abwesenheitsarten>>).
+Wünschen Sie in der Berichtsausgabe den Namen des Abwesenheitsgrundes, können Sie eine weitere Lohnart mit entsprechendem Namen anlegen und diese der Abwesenheitsart zuordnen.
+Dieses Vorgehen kann u.U. von Vorteil bei der Ausgabe von Krank, KindKrank und Krank über 7 Wochen sein oder Urlaub, Unbezahlter Urlaub und Sonderurlaub sein.
+============
 
-Zur schnellen und einfachen Plannung von An- und Abwesenheitszeiten der Mitarbeiter mit Überblick über die Gesamtlage wurde das Modul menu:[Free Time Planning] in Matrixform entwickelt. Neben einer schnellen und einfachen Erfassung von Abwesenheitszeiten, welche weiter untern beschrieben wird, erhalten Sie einen Gesamtüberblick über die An- und Abwesenheitszeiten Ihrer Mitarbeiter. Dabei können Sie mit den bekannten Filterfunktionen z.B nach bestimmten Mitarbeitergruppen (wie Abteilungen) und den zu betrachtenden Zeiträumen (wie innerhalb des aktuellen Jahres) selektieren. Navigieren Sie innerhalb dieser festgelegten Selektionen durch Blättern der Seiten und vorgegebenen Perioden (wie Monat) in der Matrix.
+[[sec.humanresources.abwesenheitsplanung]]
+=== Abwesenheitsplanung ===
+
+Zur schnellen und einfachen Plannung von An- und Abwesenheitszeiten der Mitarbeiter mit Überblick über die Gesamtlage wurde das Modul menu:[Abwesenheitsplanung] in Matrixform entwickelt. Neben einer schnellen und einfachen Erfassung von Abwesenheitszeiten, welche weiter untern beschrieben wird, erhalten Sie einen Gesamtüberblick über die An- und Abwesenheitszeiten Ihrer Mitarbeiter. Dabei können Sie mit den bekannten Filterfunktionen z.B nach bestimmten Mitarbeitergruppen (wie Abteilungen) und den zu betrachtenden Zeiträumen (wie innerhalb des aktuellen Jahres) selektieren. Navigieren Sie innerhalb dieser festgelegten Selektionen durch Blättern der Seiten und vorgegebenen Perioden (wie Monat) in der Matrix.
 
 //////////////////
         SCREENSHOT
         path: </HumanResources/MainScreen/FreeTimePlanning>
-        demodata: Free Time Planning, Matrix
+        demodata: Abwesenheitsplanung, Matrix
         image: dialog
         comment: <>
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
-.Matrix Free Time Planning
+.Matrix Abwesenheitsplanung
 image::HumanResources/22_humanresources_free_time_planning_matrix.png[id="fig_freetimeplaning_matrix",width="100%"]
 
 Für die Schnellerfassung von Abwesenheitszeiten erkennt das System, anhand der Cursor-Position in der Matrix (Klick auf die Zelle - bestehend aus Zeile/Spalte oder auch x-/y-Koordinaten), um welche Daten es sich handelt und erleichtert Ihnen somit die Eingaben.
-Die komfortabelste Variante ist dabei die direkte Eingabe des Kürzels für die gewünschte Abwesenheit (siehe <<sec.humanresources.stammdaten.abwesenheitsarten>>) in die gwünschte Zelle der Matrix menu:[Free Time Planning] und es öffnet sich der Bearbeitungsdialog menu:[Freetime]. Dabei werden schon viele Daten vorausgefüllt wie menu:[Mitarbeiter], der menu:[Typ] der Abwesenheit, der menu:[Status], das zugehörige menu:[Personalkonto] und das Datum der gewählten Zelle. Sie können nun die Daten ändern oder ergänzen und z.B. den menu:[Status] ändern oder per Klick auf einzelne Tage im Minikalender den gewünschten Zeitraum anpassen. Markieren Sie zuvor in der Matrix mehrere Zellen mit der Maus (in Kombination mit der Hochstell/Umschalt-Taste) als Zeitraum über mehrere Tage und Sie erhalten im Bearbeitunsgdialog diesen Zeitraum im Minikalender bereits markiert.
+Die komfortabelste Variante ist dabei die direkte Eingabe des Kürzels für die gewünschte Abwesenheit (siehe <<sec.humanresources.stammdaten.abwesenheitsarten>>) in die gwünschte Zelle der Matrix menu:[Abwesenheitsplanung] und es öffnet sich der Bearbeitungsdialog menu:[Freetime]. Dabei werden schon viele Daten vorausgefüllt wie menu:[Mitarbeiter], der menu:[Typ] der Abwesenheit, der menu:[Status], das zugehörige menu:[Personalkonto] und das Datum der gewählten Zelle. Sie können nun die Daten ändern oder ergänzen und z.B. den menu:[Status] ändern oder per Klick auf einzelne Tage im Minikalender den gewünschten Zeitraum anpassen. Markieren Sie zuvor in der Matrix mehrere Zellen mit der Maus (in Kombination mit der Hochstell/Umschalt-Taste) als Zeitraum über mehrere Tage und Sie erhalten im Bearbeitunsgdialog diesen Zeitraum im Minikalender bereits markiert.
 Eine Besonderheit gilt bei Urlaubsabwesenheit - das System berechnet in menu:[Übrig] die verbleibenden Anzahl Tage. Sobald Sie per Klick weitere Tage im Minikalender für den gewünschten Zeitraum vervollständigen, sehen Sie diese Änderung in menu:[Übrig].
 
 Ein Doppelklick auf einer Zelle öffnet ebenfalls den Bearbeitungsdialog menu:[Freetime], kennt dann aber noch nicht den gewünschten menu:[Typ] der Abwesenheit. Ergänzen Sie den menu:[Typ] der Abwesenheit und Sie erhalten weitere Daten.
@@ -668,13 +645,13 @@ Haben Sie keinen Mitarbeiter (Matrixzeile) in der Matrix angeklickt, öffnet sic
 //////////////////
         SCREENSHOT
         path: </HumanResources/EditDialog/FreeTimePlanning>
-        demodata: Free Time Planning, Dialog
+        demodata: Abwesenheitsplanung, Dialog
         image: dialog
         comment: <>
         status: <check>
         domain: <Business Edition: Metaways>
 //////////////////
-.Free Time Planning bearbeiten
+.Abwesenheitsplanung bearbeiten
 image::HumanResources/23_humanresources_free_time_planning_dialog.png[id="fig_freetimeplaning_dialog",width="100%"]
 
 [NOTE]
