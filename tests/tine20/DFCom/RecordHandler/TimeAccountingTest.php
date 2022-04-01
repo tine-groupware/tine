@@ -124,8 +124,6 @@ class DFCom_RecordHandler_TimeAccountingTest extends TestCase
 
     public function testDeferedStop()
     {
-        $this->markTestSkipped('FIXME soon!');
-        
         $this->testConcurrentStart();
 
         $event = $this->getTestEvent([
