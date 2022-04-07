@@ -11,7 +11,7 @@ return array (
         Tinebase_Config::FEATURE_COMMUNITY_IDENT_NR => false,
     ),
     // branding / url config
-    Tinebase_Config::BRANDING_WEBURL => 'https://www.tine-groupware.de',
+    Tinebase_Config::BRANDING_WEBURL => 'https://www.tine-groupware.de/',
     // activate in 2021.11 (when we have all distro (centos, ...) packages)
     Tinebase_Config::VERSION_CHECK => false,
 );
