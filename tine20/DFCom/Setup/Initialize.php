@@ -63,12 +63,8 @@ class DFCom_Setup_Initialize extends Setup_Initialize
     {
         $appId = Tinebase_Application::getInstance()->getApplicationByName(HumanResources_Config::APP_NAME)->getId();
 
-        Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
-            'name' => 'dfcom_id',
-            'application_id' => $appId,
-            'model' => HumanResources_Model_Employee::class,
-            'is_system' => true,
-            'definition' => [
+        if ($scf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId, 'dfcom_id', null, true, true)) {
+            $scf->definition = [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => array_merge([
                     MC::LABEL             => 'Transponder Id', //_('Transponder Id')
                     MC::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -81,7 +77,29 @@ class DFCom_Setup_Initialize extends Setup_Initialize
                     MC::TYPE              => MC::TYPE_STRING,
                     MC::LENGTH            => 255,
                 ])),
-            ]
-        ], true));
+            ];
+            Tinebase_CustomField::getInstance()->updateCustomField($scf);
+        } else {
+            Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+                'name' => 'dfcom_id',
+                'application_id' => $appId,
+                'model' => HumanResources_Model_Employee::class,
+                'is_system' => true,
+                'definition' => [
+                    Tinebase_Model_CustomField_Config::DEF_FIELD => array_merge([
+                        MC::LABEL => 'Transponder Id', //_('Transponder Id')
+                        MC::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                        MC::SHY => true,
+                        MC::NULLABLE => true,
+                    ], (DFCom_Config::getInstance()->{DFCom_Config::DFCOM_ID_TYPE} === MC::TYPE_BIGINT ? [
+                        MC::TYPE => MC::TYPE_BIGINT,
+                        MC::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                    ] : [
+                        MC::TYPE => MC::TYPE_STRING,
+                        MC::LENGTH => 255,
+                    ])),
+                ]
+            ], true));
+        }
     }
 }

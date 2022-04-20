@@ -52,6 +52,8 @@ class DFCom_Setup_Update_13 extends Setup_Update_Abstract
 
     public function update003()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        
         // convert dfcom_id empty string to NULL
         $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . "humanresources_employee set dfcom_id = NULL where dfcom_id = ''");
 
@@ -60,6 +62,6 @@ class DFCom_Setup_Update_13 extends Setup_Update_Abstract
         $method->setAccessible(true);
         $method->invoke($initalize);
 
-        $this->addApplicationUpdate(DFCom_Config::APP_NAME, '1.3', self::RELEASE013_UPDATE002);
+        $this->addApplicationUpdate(DFCom_Config::APP_NAME, '1.3', self::RELEASE013_UPDATE003);
     }
 }
