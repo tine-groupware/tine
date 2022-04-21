@@ -5178,10 +5178,6 @@ msgstr ""
 msgid "Create {0}"
 msgstr "{0} erstellen"
 
-#: Model/MunicipalityKey.php:214
-msgid "plz"
-msgstr "PLZ"
-
 msgid "Cost Center"
 msgid_plural "Cost Centers"
 msgstr[0] "Kostenstelle"
@@ -5206,6 +5202,22 @@ msgstr "Alle Kostenträger"
 
 msgid "All cost unit records"
 msgstr "Alle Kostenträger Datensätze"
+
+#: Model/MunicipalityKey.php:214
+msgid "plz"
+msgstr "PLZ"
+
+msgid "Grid resizing strategy"
+msgstr "Spaltenbreiten-Anpassung in Listenansicht"
+
+msgid "How to resize grid columns"
+msgstr "Strategie zur Änderung von Spaltenbreiten"
+
+msgid "Right side columns fractional"
+msgstr "Rechts stehende Spalten anteilig anpassen"
+
+msgid "Neighbours only"
+msgstr "Nur Nachbarspalten anpassen"
 
 msgid "This area is locked. To unlock it you need to provide your PIN"
 msgstr ""
