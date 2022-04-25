@@ -14,7 +14,6 @@
 
 use Hfig\MAPI;
 use Hfig\MAPI\OLE\Pear;
-use Hfig\MAPI\Mime\Swiftmailer;
 
 /**
  * message controller for Felamimail
@@ -185,7 +184,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $this->prepareAndProcessParts($message, $account);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), true));
 
         return $message;
     }
@@ -201,8 +201,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _checkMessageAccount($message, $account = NULL)
     {
-        $account = ($account) ? $account : Felamimail_Controller_Account::getInstance()->get($message->account_id);
+        $account = $account ?: Felamimail_Controller_Account::getInstance()->get($message->account_id);
         if ($account->type !== Felamimail_Model_Account::TYPE_SHARED && $account->user_id !== Tinebase_Core::getUser()->getId()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Current user ' . Tinebase_Core::getUser()->getId()
+                . ' has no right to access account: ' . print_r($account->toArray(), true));
             throw new Tinebase_Exception_AccessDenied('You are not allowed to access this message');
         }
     }
@@ -493,9 +496,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $this->get($_id);
         }
 
-        // need to refetch part structure of RFC822 messages because message structure is used instead
+        // need to re-fetch part structure of RFC822 messages because message structure is used instead
         $partContentType = ($_partId && isset($message->structure['parts'][$_partId])) ? $message->structure['parts'][$_partId]['contentType'] : NULL;
-        $partStructure = ($_partStructure !== NULL && $partContentType !== Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? $_partStructure : $message->getPartStructure($_partId, FALSE);
+        $partStructure = ($_partStructure !== NULL
+            && $partContentType !== Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822)
+                ? $_partStructure : $message->getPartStructure($_partId, FALSE);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . print_r($partStructure, TRUE));
@@ -505,9 +510,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // try to get part structure from attachment
             $partStructure = $this->_getPartStructureFromAttachments($message, $_partId);
         }
-        $part = $this->_createMimePart($rawContent, $partStructure);
-
-        return $part;
+        return $this->_createMimePart($rawContent, $partStructure);
     }
 
     protected function _getPartStructureFromAttachments($message, $partId)
@@ -1392,7 +1395,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // @todo check if it's an email (.eml?)
         if ($node['contenttype'] === 'application/vnd.ms-outlook') {
             // message parsing and file IO are kept separate
-            $messageFactory = new MAPI\MapiMessageFactory(new Swiftmailer\Factory());
+            $messageFactory = new MAPI\MapiMessageFactory(new Felamimail_MAPI_Factory());
             $documentFactory = new Pear\DocumentFactory();
             
             $hashFile = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
@@ -1403,11 +1406,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // write it to cache
             $cacheId = sha1(self::class . $node['name']);
             Tinebase_Core::getCache()->save($content, $cacheId);
-
             $message = Felamimail_Model_Message::createFromMime($content);
             
             if ($message['body_content_type'] === 'text/html') {
-                $body = utf8_encode($parsedMessage->getBodyHTML());
+                $body = $parsedMessage->getBodyHTML();
+                $encoding = mb_detect_encoding($body);
+                if (! $encoding) {
+                    $body = utf8_encode($body);
+                }
                 $message->body = str_replace("\r", '', $body);
                 $message->body = $this->_purifyBodyContent($message->body);
             }
