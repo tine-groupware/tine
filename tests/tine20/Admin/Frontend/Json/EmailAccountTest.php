@@ -5,7 +5,7 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -35,7 +35,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         $this->_skipWithoutEmailSystemAccountConfig();
 
         parent::setUp();
@@ -44,7 +44,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     }
 
     protected function tearDown(): void
-{
+    {
         foreach ($this->_emailAccounts as $account) {
             try {
                 $this->_json->deleteEmailAccounts([is_array($account) ? $account['id'] : $account->getId()]);
@@ -61,6 +61,9 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         }
 
         parent::tearDown();
+
+        // remove instance to prevent acl pollution
+        Admin_Controller_EmailAccount::destroyInstance();
     }
     
     public function testEmailAccountApi()
@@ -751,6 +754,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     {
         $user = $this->_createUserWithEmailAccount();
         $sharedAccount = $this->testConvertUserInternalEmailAccount($user);
+        $this->_emailAccounts[] = $sharedAccount;
         $sharedAccount['user_id'] = $user->getId();
 
         try {
@@ -801,7 +805,11 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         if (! $systemaccount) {
             self::markTestSkipped('no systemaccount configured');
         }
-        $systemaccountArray = $this->_json->getEmailAccount($systemaccount->getId());
+        try {
+            $systemaccountArray = $this->_json->getEmailAccount($systemaccount->getId());
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::markTestSkipped('email account not found - maybe some test setup failure');
+        }
 
         self::assertNotNull($systemaccountArray['xprops'],  'xprops should not be null');
         self::assertArrayHasKey(Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP , $systemaccountArray['xprops'],  'imap email user id should be set');

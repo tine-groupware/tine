@@ -57,6 +57,8 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
         $this->_resetOriginalRoleRights();
 
         parent::tearDown();
+
+        Admin_Controller_EmailAccount::destroyInstance();
     }
 
     protected function _resetOriginalRoleRights()
@@ -148,7 +150,7 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
 
         $result = $this->_json->saveQuota($application, $childNode->toArray());
 
-        static::assertEquals($childNode->quota, $result->quota , true);
+        static::assertEquals($childNode->quota, $result['quota'], true);
     }
     
     /**
@@ -169,9 +171,13 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
 
         $result = $this->_json->saveQuota($application, $quotaNodeData, $additionalData);
 
+        if (! array_key_exists('email_imap_user', $result)) {
+            self::markTestSkipped('something bad happened with the email account - skipping');
+        }
+
+        self::assertArrayHasKey('emailMailQuota', $result['email_imap_user'], print_r($result, true));
         static::assertEquals($additionalData['emailMailQuota'], $result['email_imap_user']['emailMailQuota'], true);
         static::assertEquals($additionalData['emailSieveQuota'], $result['email_imap_user']['emailSieveQuota'], true);
-
 
         try {
             $account = $quotaNodeData;
@@ -216,7 +222,7 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
         $childNode->quota = 11234 * 1024 * 1024;
         $result = $this->_json->saveQuota($application, $childNode);
 
-        static::assertEquals($childNode->quota, $result->quota , true);
+        static::assertEquals($childNode->quota, $result['quota'], true);
 
         // save quota without manage share email quota right
         try {
@@ -241,7 +247,7 @@ class Admin_Frontend_Json_QuotaTest extends Admin_Frontend_TestCase
         $childNode->quota = 11234 * 1024 * 1024;
         $result = $this->_json->saveQuota($application, $childNode);
 
-        static::assertEquals($childNode->quota, $result->quota , true);
+        static::assertEquals($childNode->quota, $result['quota'], true);
 
         // save quota without manage share email quota right
         try {
