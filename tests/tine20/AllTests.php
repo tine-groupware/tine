@@ -4,13 +4,16 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
 // needed for bootstrap / autoloader
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
+if (!Tinebase_Model_Filter_FilterGroup::$beStrict) {
+    throw new Exception('unittests need to set Tinebase_Model_Filter_FilterGroup::$beStrict');
+}
 /**
  * @package     Tinebase
  */
@@ -26,6 +29,7 @@ class AllTests
         $suites = array(
             'Tinebase',
             'Addressbook',
+            'ActiveSync',
             'Admin',
             'Courses',
             'Felamimail',
@@ -34,9 +38,7 @@ class AllTests
             'Tasks',
             'Voipmanager',
             'Phone',
-            'Sales',
             'Timetracker',
-            'ActiveSync',
             'Filemanager',
             'Projects',
             'HumanResources',
@@ -44,6 +46,7 @@ class AllTests
             'ExampleApplication',
             'SimpleFAQ',
             'CoreData',
+            'Sales',
             'Zend',
         );
 
