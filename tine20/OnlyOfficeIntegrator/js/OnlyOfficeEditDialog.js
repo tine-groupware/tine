@@ -170,6 +170,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
     onRequestSaveAs: function(event) {
         const title = event.data.title;
         const url = event.data.url;
+        const path = this.record.get('path');
 
         const win = new Tine.Tinebase.widgets.file.SelectionDialog.openWindow({
             windowId: 'OnlyOfficeEditDialog.SaveAs' + this.id,
@@ -177,7 +178,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
             locationTypesEnabled: 'fm_node',
             windowTitle: this.app.i18n._('Save Copy As'),
             fileName: title,
-            initialPath: this.record.get('path').match(/.*\//)[0],
+            initialPath: path.match(/^\/records\//) ? Tine.Tinebase.container.getMyFileNodePath(): path.match(/.*\//)[0],
             constraint: new RegExp('\\.' + url.split('.').pop() + '$'),
             listeners: { apply: async (node) => {
                     const path = _.get(node, 'fm_path');
@@ -200,6 +201,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
                     
                     // switch to new document
                     this.record = Tine.Tinebase.data.Record.setFromJson(recordData, Tine.Filemanager.Model.Node);
+                    this.isAttachment = !!String(this.record.get('path')).match(/^\/records\//);
                     this.docEditor.destroyEditor();
                     this.afterRender();
             }}
