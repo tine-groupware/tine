@@ -9,8 +9,8 @@ Promise.all([
     const app = Tine.Tinebase.appMgr.get('OnlyOfficeIntegrator');
     
     const allowOpen = (fileNode) => {
-        return getType(_.get(fileNode, 'data.name'))
-            && (_.get(fileNode, 'data.type') === 'file' || _.get(fileNode, 'data.tempFile'))
+        return getType(_.get(fileNode, 'data.name') || _.get(fileNode, 'data.filename'))
+            && (_.get(fileNode, 'data.type') === 'file' || _.get(fileNode, 'data.tempFile') || _.get(fileNode, 'data.filename'))
             && !String(_.get(fileNode, 'data.contenttype')).match(/^vnd\.adobe\.partial-upload.*/)
             && !+_.get(fileNode, 'data.is_quarantined');
     };
@@ -22,15 +22,23 @@ Promise.all([
         iconCls: 'action_onlyoffice_edit',
         text: app.i18n._('Open Document'),
 
+        emailInterceptor: async function(config) {
+            const emailAttachment = Tine.Tinebase.data.Record.setFromJson(config.recordData, Tine.Felamimail.Model.Attachment);
+            const attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', emailAttachment.get('messageId'), emailAttachment.get('partId')].join(':'));
+
+            config.recordData = _.get(attachmentCache, 'attachments[0]');
+        },
+
         handler: function () {
             const record = this.selections[0];
             const tempFile = record.get('tempFile');
+            const isEmailAttachment = record.get('messageId');
             const recordData = tempFile ? JSON.stringify(tempFile) : record.toString();
-            const win = Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({ recordData: recordData, id: record.id });
+            const win = Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({ recordData: recordData, id: record.id, contentPanelConstructorInterceptor: isEmailAttachment ? this.emailInterceptor : null });
         },
 
         actionUpdater: function (action, grants, records, isFilterSelect) {
-            const fileName = _.get(records, '[0].data.name');
+            const fileName = _.get(records, '[0].data.name') || _.get(records, '[0].data.filename');
             const type = getType(fileName);
             const iconCls = isEditable(fileName)  && _.get(grants, 'editGrant') ? 'action_onlyoffice_edit' :
                 type ? 'action_onlyoffice_view' : 'action_onlyoffice';
@@ -56,6 +64,8 @@ Promise.all([
         iconAlign: 'top'
     }), 2);
 
+    // fmail
+    Ext.ux.ItemRegistry.registerItem('Tine.Felamimail.MailDetailPanel.AttachmentMenu', editDocumentAction);
 
     // upload grids
     Ext.ux.ItemRegistry.registerItem('Tinebase-FileUploadGrid-Toolbar', editDocumentAction, 5);
