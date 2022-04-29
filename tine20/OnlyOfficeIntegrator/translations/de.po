@@ -107,7 +107,10 @@ msgstr "Dokument wird exportiert…"
 
 #: js/OnlyOfficeEditDialog.js:260
 msgid "Overwrite Existing File?"
-msgstr ""
+msgstr "Bestehende Datei überschreiben?"
+
+msgid "Preparing Attachment..."
+msgstr "Anhang wir vorbereitet..."
 
 #: js/OnlyOfficeEditDialog.js:261
 #, python-brace-format
@@ -116,23 +119,23 @@ msgstr ""
 
 #: js/OnlyOfficeEditDialog.js:274
 msgid "Restoring ..."
-msgstr ""
+msgstr "Wiederherstellen..."
 
 #: js/OnlyOfficeEditDialog.js:307
 msgid "No Document Specified"
-msgstr ""
+msgstr "Kein Dokument ausgewählt"
 
 #: js/OnlyOfficeEditDialog.js:308
 msgid "Something went wrong, please try again later."
-msgstr ""
+msgstr "Es gibt Probleme, bitte versuchen sie es später noch einmal."
 
 #: js/OnlyOfficeEditDialog.js:329
 msgid "Outdated Revision"
-msgstr ""
+msgstr "Veraltete Revision"
 
 #: js/OnlyOfficeEditDialog.js:330
 msgid "This revision of the document is outdated, please open the latest revision"
-msgstr ""
+msgstr "Diese Revision ist veraltet, bitte öffnen sie die neuste Version"
 
 #: js/OnlyOfficeEditDialog.js:382
 msgid "Saving Document ..."

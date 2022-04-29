@@ -23,10 +23,13 @@ Promise.all([
         text: app.i18n._('Open Document'),
 
         emailInterceptor: async function(config) {
+            const mask = await config.setWaitText(app.i18n._('Preparing Attachment...'));
+
             const emailAttachment = Tine.Tinebase.data.Record.setFromJson(config.recordData, Tine.Felamimail.Model.Attachment);
             const attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', emailAttachment.get('messageId'), emailAttachment.get('partId')].join(':'));
 
             config.recordData = _.get(attachmentCache, 'attachments[0]');
+            mask.hide();
         },
 
         handler: function () {
