@@ -68,7 +68,7 @@ Promise.all([
     }), 2);
 
     // fmail
-    Ext.ux.ItemRegistry.registerItem('Tine.Felamimail.MailDetailPanel.AttachmentMenu', editDocumentAction);
+    Ext.ux.ItemRegistry.registerItem('Tine.Felamimail.MailDetailPanel.AttachmentMenu', editDocumentAction, 15);
 
     // upload grids
     Ext.ux.ItemRegistry.registerItem('Tinebase-FileUploadGrid-Toolbar', editDocumentAction, 5);
