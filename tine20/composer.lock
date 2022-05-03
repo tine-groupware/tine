@@ -12254,40 +12254,40 @@
     ],
     "aliases": [
         {
-            "package": "doctrine/dbal",
-            "version": "2.13.3.0-patch1",
             "alias": "2.13.3",
-            "alias_normalized": "2.13.3.0"
+            "alias_normalized": "2.13.3.0",
+            "version": "2.13.3.0-patch1",
+            "package": "doctrine/dbal"
         },
         {
-            "package": "phpoffice/phpexcel",
-            "version": "1.8.2.0-patch3",
             "alias": "1.8.2",
-            "alias_normalized": "1.8.2.0"
+            "alias_normalized": "1.8.2.0",
+            "version": "1.8.2.0-patch3",
+            "package": "phpoffice/phpexcel"
         },
         {
-            "package": "phpoffice/phpspreadsheet",
-            "version": "1.18.0.0-patch1",
             "alias": "1.18.0",
-            "alias_normalized": "1.18.0.0"
+            "alias_normalized": "1.18.0.0",
+            "version": "1.18.0.0-patch1",
+            "package": "phpoffice/phpspreadsheet"
         },
         {
-            "package": "sabre/dav",
-            "version": "1.8.12.0-patch1",
             "alias": "1.8.12",
-            "alias_normalized": "1.8.12.0"
+            "alias_normalized": "1.8.12.0",
+            "version": "1.8.12.0-patch1",
+            "package": "sabre/dav"
         },
         {
-            "package": "sabre/vobject",
-            "version": "3.5.3.0-patch1",
             "alias": "2.1.0",
-            "alias_normalized": "2.1.0.0"
+            "alias_normalized": "2.1.0.0",
+            "version": "3.5.3.0-patch1",
+            "package": "sabre/vobject"
         },
         {
-            "package": "zendframework/zendframework1",
-            "version": "1.12.20.0-patch57",
             "alias": "1.12.20",
-            "alias_normalized": "1.12.20.0"
+            "alias_normalized": "1.12.20.0",
+            "version": "1.12.20.0-patch57",
+            "package": "zendframework/zendframework1"
         }
     ],
     "minimum-stability": "RC",

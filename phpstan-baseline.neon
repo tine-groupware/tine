@@ -2776,6 +2776,16 @@ parameters:
 			path: tine20/DFCom/Controller/DeviceRecord.php
 
 		-
+			message: "#^Unsafe access to private property DFCom_Controller_DeviceList\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
+			path: tine20/DFCom/Controller/DeviceList.php
+
+		-
+			message: "#^Unsafe access to private property DFCom_Controller_DeviceRecord\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
+			path: tine20/DFCom/Controller/DeviceRecord.php
+
+		-
 			message: "#^Class DFCom_Model_DeviceResponse does not have a constructor and must be instantiated without any parameters\\.$#"
 			count: 1
 			path: tine20/DFCom/Import/DeviceRecord/Csv.php
@@ -4099,11 +4109,6 @@ parameters:
 			message: "#^Variable \\$breakBefore in PHPDoc tag @var does not exist\\.$#"
 			count: 1
 			path: tine20/HumanResources/BL/DailyWTReport/BreakTime.php
-
-		-
-			message: "#^Comparison operation \"\\>\" between \\(array\\|float\\|int\\) and 0 results in an error\\.$#"
-			count: 2
-			path: tine20/HumanResources/BL/DailyWTReport/PopulateReport.php
 
 		-
 			message: "#^PHPDoc tag @param has invalid value \\(array config\\)\\: Unexpected token \"config\", expected variable at offset 55$#"
