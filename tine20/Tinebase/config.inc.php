@@ -10,7 +10,7 @@ return array (
         Tinebase_Config::FEATURE_CREATE_PREVIEWS => true,
         Tinebase_Config::FEATURE_COMMUNITY_IDENT_NR => false,
     ),
-    // branding / url config
     Tinebase_Config::BRANDING_WEBURL => 'https://www.tine-groupware.de/',
     Tinebase_Config::VERSION_CHECK => true,
+    Tinebase_Config::MAPPANEL => false,
 );
