@@ -1800,9 +1800,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         ),
         self::USE_NOMINATIM_SERVICE => [
             //_('Use Nomintim Geocoding Services')
-            'label'                 => 'Use Nomintim Geocoding Services',
-            //_('Use of external Nomintim Geocoding service is allowed.')
-            'description'           => 'Use of external Nomintim Geocoding service is allowed.',
+            'label'                 => 'Use Nominatim Geocoding Services',
+            //_('Use of external Nominatim Geocoding service is allowed.')
+            'description'           => 'Use of external Nominatim Geocoding service is allowed.',
             'type'                  => 'bool',
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
