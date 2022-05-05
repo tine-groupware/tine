@@ -195,3 +195,14 @@ return array (
 6) nach der Migration der Daten dann in der Tine 2.0 config.inc.php die neue DB-Konfiguration (analog mysqlconf.php) eintragen.
 
 Anschliessend sollte das Update ohne Probleme durchlaufen.
+
+Probleme mit tine Update unter MariaDB (DB Row size too large)
+=================
+
+ggf muss das hier in die my.cnf ergänzt werden:
+
+```ini
+innodb_file_per_table=1
+innodb_file_format = Barracuda
+innodb_strict_mode=0
+```
