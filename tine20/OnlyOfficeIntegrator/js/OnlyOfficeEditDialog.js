@@ -45,7 +45,8 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
 
         const tokenKeepAliveInterval = Tine.Tinebase.configManager.get('tokenLiveTime', 'OnlyOfficeIntegrator') * 800;
         window.setInterval(_.bind(this.tokenKeepAlive, this), tokenKeepAliveInterval);
-        
+
+        this.initialConfig.__OOIGetRecord = () => { return this.record };
         Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.superclass.initComponent.call(this);
     },
 
@@ -364,7 +365,10 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow = function(config) {
         contentPanelConstructorConfig: config
     });
 
-    win.on('beforeclose', _.partial(Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.onEditorWindowClose, _, config.recordData));
+    win.on('beforeclose', (w) => {
+        const record = config.__OOIGetRecord();
+        Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.onEditorWindowClose(win, {... record.data});
+    });
 
     return win;
 };
@@ -374,7 +378,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.onEditorWindowClose = async funct
     const keys = _.compact(_.split(win.onlyOfficeDocumentKey, ','));
     const dirty = win.onlyOfficeDocumentDirty;
     const record = Tine.Tinebase.data.Record.setFromJson(recordData, Tine.Filemanager.Model.Node);
-    const isTempFile  = !!_.get(record, 'json.session_id');
+    const isTempFile  = !!_.get(record, 'json.session_id') || !!_.get(record, 'data.path', '').match(/^\/tempFile\/.*/);
     const isAttachment = !isTempFile && String(record.get('path')).match(/^\/records\//);
     let loadMask = false;
 
