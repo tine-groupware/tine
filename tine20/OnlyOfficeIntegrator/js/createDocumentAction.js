@@ -122,6 +122,13 @@ Promise.all([
         isUploadGrid: true,
         getPath: async function (baseAction) {
             return 'tempFile';
+        },
+        onNewNode: function (recordData) {
+            window.postal.publish({
+                channel: "recordchange",
+                topic: 'Tinebase.TempFile.create',
+                data: recordData
+            });
         }
     }, createDocumentConfig));
     Ext.ux.ItemRegistry.registerItem('Tinebase-FileUploadGrid-Toolbar', uploadGridCreateDocumentAction, 5);
