@@ -198,6 +198,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
                 ['field' => 'user_id', 'operator' => 'equals', 'value' => $account['accountId']]
             ]);
             $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
+            // remove instance to prevent acl pollution
+            Admin_Controller_EmailAccount::destroyInstance();
             self::assertCount(0, $emailAccounts, 'empty mail account created: ' . print_r($emailAccounts->toArray(), true));
 
             // add email address -> accounts should be created
@@ -207,6 +209,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
             self::assertTrue(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP]), 'imap user not found!');
             self::assertTrue(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP]), 'smtp user not found!');
             $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
+            // remove instance to prevent acl pollution
+            Admin_Controller_EmailAccount::destroyInstance();
             self::assertCount(1, $emailAccounts);
         }
     }
