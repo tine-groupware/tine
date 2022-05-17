@@ -28,6 +28,7 @@ parameters:
       analyse:
         - 'tine20/library'
         - 'tine20/vendor*'
+        - 'tests'
       analyseAndScan:
         # TODO maybe we can fix the directory recursion issue someday ...
         - 'tine20/GDPR/translations/extra'
