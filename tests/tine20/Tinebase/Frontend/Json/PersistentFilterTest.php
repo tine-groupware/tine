@@ -66,6 +66,29 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
         return $savedFilterData;
     }
 
+    public function testSaveGDPRFilter()
+    {
+        $inPurp = GDPR_Controller_DataIntendedPurpose::getInstance()->create(
+            new GDPR_Model_DataIntendedPurpose(['name' => 'unittest']));
+
+        $filterData = [
+            'name'              => 'PHPUnit testFilter',
+            'description'       => 'a test filter created by PHPUnit',
+            'account_id'        => Tinebase_Core::getUser()->getId(),
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId(),
+            'model'             => Addressbook_Model_Contact::class,
+            'filters'           => [
+                ['field' => GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME, 'operator' => 'definedBy', 'value' => [
+                    ['field' => 'intendedPurpose', 'operator' => 'equals', 'value' => $inPurp->getId()],
+                ]],
+            ],
+        ];
+
+        $savedFilterData = $this->_uit->savePersistentFilter($filterData);
+        $this->assertCount(1, $savedFilterData['filters']);
+        $this->assertCount(1, $savedFilterData['filters'][0]['value']);
+    }
+
     /**
      * test to save a persistent filter
      *
