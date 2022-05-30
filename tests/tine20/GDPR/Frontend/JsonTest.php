@@ -198,8 +198,7 @@ class GDPR_Frontend_JsonTest extends TestCase
         static::assertSame($createdContact['id'], $result['results'][0]['id']);
         static::assertTrue(isset($result['filter'][0]['filters'][0]), 'expect proper filter in result');
         static::assertSame('GDPR_DataIntendedPurposeRecord', $result['filter'][0]['filters'][0]['field']);
-        static::assertCount(2, $result['filter'][0]['filters'][0]['value']);
-        static::assertSame('withdrawDate',  $result['filter'][0]['filters'][0]['value'][1]['field']);
+        static::assertCount(1, $result['filter'][0]['filters'][0]['value']);
         static::assertTrue(is_array($result['filter'][0]['filters'][0]['value'][0]['value']));
         static::assertTrue(isset($result['filter'][0]['filters'][0]['value'][0]['value']['id']));
         static::assertSame($this->_dataIntendedPurpose1->getId(),
