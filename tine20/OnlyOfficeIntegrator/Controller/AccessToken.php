@@ -283,4 +283,26 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
             throw new Tinebase_Exception_AccessDenied('in maintenance mode');
         }
     }
+
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectAfterCreate($_createdRecord, $_record);
+
+        if ($_createdRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} !== OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION &&
+                Tinebase_BroadcastHub::getInstance()->isActive()) {
+            $node = Tinebase_FileSystem::getInstance()->get($_createdRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
+            Tinebase_BroadcastHub::getInstance()->pushAfterCommit('update', get_class($node), $node->getId(), $node->getContainerId());
+        }
+    }
+
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+
+        if ($updatedRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} !== OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION &&
+                Tinebase_BroadcastHub::getInstance()->isActive()) {
+            $node = Tinebase_FileSystem::getInstance()->get($updatedRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
+            Tinebase_BroadcastHub::getInstance()->pushAfterCommit('update', get_class($node), $node->getId(), $node->getContainerId());
+        }
+    }
 }
