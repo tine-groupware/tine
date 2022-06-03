@@ -288,7 +288,7 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
     {
         parent::_inspectAfterCreate($_createdRecord, $_record);
 
-        if ($_createdRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} !== OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION &&
+        if ($_createdRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} != OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION &&
                 Tinebase_BroadcastHub::getInstance()->isActive()) {
             $node = Tinebase_FileSystem::getInstance()->get($_createdRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
             Tinebase_BroadcastHub::getInstance()->pushAfterCommit('update', get_class($node), $node->getId(), $node->getContainerId());
@@ -299,7 +299,7 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
     {
         parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
 
-        if ($updatedRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} !== OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION &&
+        if ($updatedRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} != OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION &&
                 Tinebase_BroadcastHub::getInstance()->isActive()) {
             $node = Tinebase_FileSystem::getInstance()->get($updatedRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
             Tinebase_BroadcastHub::getInstance()->pushAfterCommit('update', get_class($node), $node->getId(), $node->getContainerId());
