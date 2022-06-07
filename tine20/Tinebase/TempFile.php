@@ -68,7 +68,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * @param boolean $skipSessionCheck
      * @return Tinebase_Model_TempFile
      */
-    public function getTempFile($_fileId, $skipSessionCheck = false)
+    public function getTempFile($_fileId, $skipSessionCheck = false) : ?Tinebase_Model_TempFile
     {
         $fileId = is_array($_fileId) ? $_fileId['id'] : $_fileId;
         
@@ -91,11 +91,10 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         if (!$queryResult) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " Could not fetch row with id $fileId from temp_files table.");
-            return NULL;
+            return null;
         }
 
-        $result = new Tinebase_Model_TempFile($queryResult);
-        return $result;
+        return new Tinebase_Model_TempFile($queryResult);
     }
     
     /**
