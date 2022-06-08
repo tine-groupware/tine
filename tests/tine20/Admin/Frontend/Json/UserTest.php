@@ -344,14 +344,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete($userArray['accountId']);
 
-        if (Tinebase_User::getInstance()->isHardDeleteEnabled()) {
-            $this->expectException('Tinebase_Exception_NotFound');
-        }
-
-        $account = Tinebase_User::getInstance()->getUserById($userArray['accountId']);
-        if (! Tinebase_User::getInstance()->isHardDeleteEnabled()) {
-            $this->assertTrue((bool)$account->is_deleted);
-        }
+        $this->expectException('Tinebase_Exception_NotFound');
+        Tinebase_User::getInstance()->getUserById($userArray['accountId']);
     }
 
     /**
@@ -365,14 +359,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
         Admin_Controller_User::getInstance()->delete($userArray['accountId']);
 
-        if (Tinebase_User::getInstance()->isHardDeleteEnabled()) {
-            $this->expectException('Tinebase_Exception_NotFound');
-        }
-
-        $account = Tinebase_User::getInstance()->getUserById($userArray['accountId']);
-        if (! Tinebase_User::getInstance()->isHardDeleteEnabled()) {
-            $this->assertTrue((bool)$account->is_deleted);
-        }
+        $this->expectException('Tinebase_Exception_NotFound');
+        Tinebase_User::getInstance()->getUserById($userArray['accountId']);
     }
     
     /**
