@@ -102,7 +102,7 @@ class OnlyOfficeIntegrator_Setup_Initialize extends Setup_Initialize
     /**
      * create new document templates path and put the templates there
      */
-    protected function _initializeNewTemplateFiles()
+    public function _initializeNewTemplateFiles()
     {
         // this is only done on primary and then replicated to the secondaries
         if (Tinebase_Core::isReplicationSlave()) {

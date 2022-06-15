@@ -55,7 +55,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
 
         this.isTempfile = !!_.get(this.record, 'json.session_id');
         this.isAttachment = !!String(this.record.get('path')).match(/^\/records\//);
-        this.enableHistory = !this.isTempfile;
+        this.enableHistory = !this.isTempfile && Tine.Tinebase.configManager.get('filesystem').modLogActive && _.get(this.record, 'data.revisionProps.keep', true);
     },
     
     injectAPI: async function() {

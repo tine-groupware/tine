@@ -722,7 +722,8 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         if ($checkBody) {
             $bodyMsg = json_decode((string)$request->getBody(), true);
 
-            if (!is_array($decoded) || !isset($decoded['payload']) || $decoded['payload'] !== $bodyMsg) {
+            // OODS > v7 sends token in body
+            if (!is_array($decoded) || !isset($decoded['payload']) || $decoded['payload'] !== array_diff_key($bodyMsg, ['token' => $token[1]])) {
                 throw new Tinebase_Exception_AccessDenied('auth token doesn\'t match body');
             }
         }
