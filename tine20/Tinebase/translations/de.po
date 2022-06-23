@@ -4981,6 +4981,12 @@ msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr Passwort "
 "eingeben."
 
+msgid "Manage MFA Devices"
+msgstr "MFA Geräte verwalten"
+
+msgid "Add new MFA Device"
+msgstr "Neues MFA Gerät zufügen"
+
 msgid "Choose MFA Deivce"
 msgstr "MFA Gerät auswählen"
 
@@ -5130,7 +5136,9 @@ msgstr "MFA Gerätetyp"
 
 #, fuzzy
 msgid "MFA Device Config"
-msgstr "MFA Gerätekonfiguration"
+msgid_plural "MFA Device Configs"
+msgstr[0] "MFA Gerätekonfiguration"
+msgstr[1] "MFA Gerätekonfiguration"
 
 msgid "Invalid authentication"
 msgstr "Authentifikation fehlgeschlagen"
@@ -5220,11 +5228,22 @@ msgstr "Alle Kostenträger Datensätze"
 msgid "plz"
 msgstr "PLZ"
 
-msgid "Manage MFA Devices"
-msgstr "MFA Geräte verwalten"
+msgid "Country"
+msgid_plural "Countries"
+msgstr[0] "Land"
+msgstr[1] "Länder"
 
-msgid "Add new MFA Device"
-msgstr "Neues MFA Gerät zufügen"
+msgid "Telephone"
+msgstr "Telefon"
+
+msgid "Created"
+msgstr "Erstellt"
+
+msgid "Changed"
+msgstr "Geändert"
+
+msgid "Avscan"
+msgstr "Avscan"
 
 msgid "This area is locked. To unlock it you need to provide your PIN"
 msgstr ""
