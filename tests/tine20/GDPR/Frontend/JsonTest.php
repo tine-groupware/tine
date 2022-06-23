@@ -112,7 +112,7 @@ class GDPR_Frontend_JsonTest extends TestCase
         static::assertSame(2, $createdDipr->count(), 'expect to find 2 data intended purpose records for this contact');
 
         $note = Tinebase_Notes::getInstance()->getNotesOfRecord(Addressbook_Model_Contact::class,
-            $createdContact['id'],'Sql', false)->filter('note_type_id', 5)->getFirstRecord();
+            $createdContact['id'],'Sql', false)->filter('note_type_id', Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED)->getFirstRecord();
         static::assertStringContainsString(GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME, $note->note,
             'expect dataprovenance in notes');
         static::assertStringContainsString(GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME, $note->note,
