@@ -680,20 +680,13 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function updateNotificationScripts(Zend_Console_Getopt $opts)
     {
-        $backend = Admin_Controller_EmailAccount::getInstance();
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-            ['field' => 'sieve_notification_email', 'operator' => 'not', 'value' => NULL],
-            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM]
-        ]);
-        $mailAccounts = $backend->search($filter);
-        
         if ($opts->d) {
             echo "--DRY RUN--\n";
         }
-        echo "Found " . count($mailAccounts) . " system email accounts to update\n";
-        
-        $updatedAccounts = Admin_Controller_EmailAccount::getInstance()->updateNotificationScripts();
-        echo "Updated notification script for " . count($updatedAccounts) . " email accounts\n";
+
+        $updated = Admin_Controller_EmailAccount::getInstance()->updateNotificationScripts(null, $opts->d);
+
+        echo "Updated notification script for " . count($updated) . " email accounts\n";
         return 0;
     }
 
