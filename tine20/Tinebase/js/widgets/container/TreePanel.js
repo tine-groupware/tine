@@ -131,6 +131,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     filtersToRemove: ['container_id', 'attender', 'path'],
 
+    /**
+     * remove all filter on filterPanel
+     */
+    removeAllFilters: false,
+
     useArrows: true,
     border: false,
     autoScroll: true,
@@ -238,6 +243,16 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         }
 
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
+    
+        this.treeSorter = new Ext.tree.TreeSorter(this, {
+            folderSort: true,
+            dir: "asc",
+            doSort : function(node){
+                if(node.ownerTree.getRootNode() !== node) {
+                    node.sort(this.sortFn);
+                }
+            },
+        });
     },
 
     /**
@@ -588,11 +603,13 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         if (appendedNode.leaf && this.hasGrant(appendedNode, this.requiredGrants)) {
             if (this.useContainerColor) {
                 appendedNode.ui.render = appendedNode.ui.render.createSequence(function () {
-                    this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {
-                        tag: 'span',
-                        html: '&nbsp;&#9673;&nbsp',
-                        style: {color: appendedNode.attributes.container.color || '#808080'}
-                    }, true);
+                    if (!this.colorNode) {
+                        this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {
+                            tag: 'span',
+                            html: '&nbsp;&#9673;&nbsp',
+                            style: {color: appendedNode.attributes.container.color || '#808080'}
+                        }, true);
+                    }
                 }, appendedNode.ui);
             }
         }
@@ -779,15 +796,16 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         // var selections = this.getSelectionModel().getSelectedNodes();
 
         this.getSelectionModel().suspendEvents();
-        node.removeAll();
         node.loaded = false;
+        node.removeAll();
 
         this.getSelectionModel().resumeEvents();
     },
 
     onFilterChange: function() {
         // get filterToolbar
-        var ftb = this.filterPlugin.getGridPanel().filterToolbar;
+        var ftb = this.filterPlugin.getGridPanel().filterToolbar,
+            removeFilter = Ext.EventObject.altKey ? !this.removeAllFilters : this.removeAllFilters;
 
         // in case of filterPanel
         ftb = ftb.activeFilterPanel ? ftb.activeFilterPanel : ftb;
@@ -796,7 +814,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         ftb.supressEvents = true;
         ftb.filterStore.each(function(filter) {
             var field = filter.get('field');
-            if (this.filtersToRemove.indexOf(field) > -1) {
+            if (removeFilter || this.filtersToRemove.indexOf(field) > -1) {
                 ftb.deleteFilter(filter, true);
             }
         }, this);

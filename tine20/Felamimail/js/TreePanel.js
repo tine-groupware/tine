@@ -205,8 +205,19 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
 
         // call parent::initComponent
         Tine.Felamimail.TreePanel.superclass.initComponent.call(this);
+        
+        this.treeSorter = new Ext.tree.TreeSorter(this, {
+            dir: "asc",
+            priorityList: ['INBOX', 'Drafts', 'Sent', 'Templates', 'Junk', 'Trash'],
+            priorityProperty: 'globalname',
+            doSort : function (node) {
+                if(node.ownerTree.getRootNode() !== node) {
+                    node.sort(this.sortFn);
+                }
+            },
+        });
     },
-
+    
     /**
      * get state
      */
@@ -340,11 +351,15 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 }
             }, this);
             ftb.supressEvents = false;
-            
+
             // set ftb filters according to tree selection
-            var filter = this.getFilterPlugin().getFilter();
+            const filter = this.getFilterPlugin().getFilter();
+            const grid = this.filterPlugin.getGridPanel();
+            const pathFilterValue =  filter?.value && _.isArray(filter?.value) ? filter.value[0] : null;
+            const isSentFolder = grid.isSendFolderPath(pathFilterValue);
+            
+            ftb.defaultFilter = isSentFolder ? 'to' : 'query';
             ftb.addFilter(new ftb.record(filter));
-        
             ftb.onFiltertrigger();
             
             // finally select the selected node, as filtertrigger clears all selections
@@ -356,7 +371,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         }
         this.saveState();
     },
-
+  
     /**
      * returns a filter plugin to be used in a grid
      * @private
@@ -504,6 +519,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     addStatusboxesToNodeUi: function(nodeUi) {
         if (nodeUi?.elNode?.lastChild) {
+            if (nodeUi.elNode.lastChild?.className === 'felamimail-node-statusbox') {
+                return;
+            }
             Ext.DomHelper.insertAfter(nodeUi.elNode.lastChild, {
                 tag: 'span', 'class': 'felamimail-node-statusbox', cn: [
                     {'tag': 'img', 'src': Ext.BLANK_IMAGE_URL, 'class': 'felamimail-node-statusbox-progress'},

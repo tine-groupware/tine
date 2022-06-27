@@ -578,15 +578,20 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     protected function _updateParentsAfterRename(Felamimail_Model_Account $_account, $_newGlobalName, $_oldGlobalName)
     {
         $parentName = $this->_getParentGlobalname($_newGlobalName);
-        $parentFolder = $this->getByBackendAndGlobalName($_account, $parentName);
-        $parentFolder->has_children = true;
-        $this->update($parentFolder);
+        
+        if ($parentName !== '') {
+            $parentFolder = $this->getByBackendAndGlobalName($_account, $parentName);
+            $parentFolder->has_children = true;
+            $this->update($parentFolder);
+        }
 
         $oldParentName = $this->_getParentGlobalname($_oldGlobalName);
-        if (count($this->getSubfolders($_account, $oldParentName)) === 0 ) {
-            $oldParentFolder = $this->getByBackendAndGlobalName($_account, $oldParentName);
-            $oldParentFolder->has_children = false;
-            $this->update($parentFolder);
+        if ($oldParentName !== '') {
+            if (count($this->getSubfolders($_account, $oldParentName)) === 0) {
+                $oldParentFolder = $this->getByBackendAndGlobalName($_account, $oldParentName);
+                $oldParentFolder->has_children = false;
+                $this->update($oldParentFolder);
+            }
         }
     }
 
@@ -699,7 +704,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
     {
         $sortedFolders = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         
-        $_folders->sort('localname', 'ASC', 'natcasesort');
+        $_folders->sort('localname', 'ASC', 'asort', SORT_STRING);
         $_folders->addIndices(array('globalname'));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__

@@ -998,12 +998,15 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $sendNotifications = $this->sendNotifications(FALSE);
 
+            $doAclChecks = $this->doContainerACLChecks(false);
             $event = $this->get($_record->getId());
+            $this->doContainerACLChecks($doAclChecks);
+
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     .' Going to update the following event. rawdata: ' . print_r($event->toArray(), true));
 
-            //NOTE we check via get(full rights) here whereas _updateACLCheck later checks limited rights from search
-            if ($this->_doContainerACLChecks === FALSE || $event->hasGrant(Tinebase_Model_Grants::GRANT_EDIT)) {
+            // NOTE we check via get(full rights) here whereas _updateACLCheck later checks limited rights from search
+            if ($doAclChecks === false || $event->hasGrant(Tinebase_Model_Grants::GRANT_EDIT)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id}");
                 
                 // we need to resolve groupmembers before free/busy checking
@@ -1051,8 +1054,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $this->sendNotifications($sendNotifications);
             throw $e;
         }
-        
+
+        $doAclChecks = $this->doContainerACLChecks(false);
         $updatedEvent = $this->get($event->getId(), null, true, true);
+        $this->doContainerACLChecks($doAclChecks);
 
         // first process resource declines, as this may alter the event again
         $updatedEvent = $this->_processDeclineResources($updatedEvent, $declineResources);
@@ -1070,7 +1075,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($this->_sendNotifications) {
             $this->doSendNotifications(clone $updatedEvent, Tinebase_Core::getUser(), 'changed', $event);
         }
-        
+
         $this->_checkGrant($updatedEvent, self::ACTION_GET, false);
 
         return $updatedEvent;
@@ -1915,6 +1920,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $_record = $this->_updateGeoLocations($_record);
         Calendar_Controller_Poll::getInstance()->inspectBeforeCreateEvent($_record);
         parent::_inspectBeforeCreate($_record);
     }
@@ -1928,6 +1934,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        $_record = $this->_updateGeoLocations($_record);
+        
         if ($this->_skipRecurAdoptions) {
             return;
         }
@@ -1991,6 +1999,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         Calendar_Controller_Poll::getInstance()->inspectBeforeUpdateEvent($_record, $_oldRecord);
+    }
+
+    protected function _updateGeoLocations(Calendar_Model_Event $_record)
+    {
+        if ($_record->location_record && is_string($_record->location_record)) {
+            $locationContact = Addressbook_Controller_Contact::getInstance()->get($_record->location_record);
+
+            if ($locationContact->preferred_address == 0) {
+                $_record->adr_lon = $locationContact->adr_one_lon ?: null;
+                $_record->adr_lat = $locationContact->adr_one_lat ?: null;
+            } else {
+                $_record->adr_lon = $locationContact->adr_two_lon ?: null;
+                $_record->adr_lat = $locationContact->adr_two_lat ?: null;
+            }
+        }
+        
+        return $_record;
     }
 
     /**
@@ -2717,7 +2742,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     public function attenderStatusUpdate(Calendar_Model_Event $_event, Calendar_Model_Attender $_attender, $_authKey)
     {
         try {
+            $doAclChecks = $this->doContainerACLChecks(false);
             $event = $this->get($_event->getId());
+            $this->doContainerACLChecks($doAclChecks);
+
             $oldEvent = clone $event;
 
             if (! $event->attendee) {
@@ -2920,7 +2948,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // check if user is allowed to set status
             if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
                 if (! $preserveStatus && !Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id,
-                            Calendar_Model_ResourceGrants::EVENTS_EDIT)) {
+                            Calendar_Model_ResourceGrants::EVENTS_EDIT) && !Tinebase_Core::getUser()->hasGrant(
+                                $attender->displaycontainer_id, Calendar_Model_ResourceGrants::RESOURCE_STATUS)) {
                     //If resource has an default status use this
                     $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
                 }
@@ -3028,7 +3057,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 !$this->_keepAttenderStatus) {
             if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
                 if (!Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id,
-                        Calendar_Model_ResourceGrants::EVENTS_EDIT)) {
+                        Calendar_Model_ResourceGrants::EVENTS_EDIT) && !Tinebase_Core::getUser()->hasGrant(
+                            $attender->displaycontainer_id, Calendar_Model_ResourceGrants::RESOURCE_STATUS)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                             . ' Wrong authkey, resetting status (' . $attender->status . ' -> ' . $currentAttender->status . ')');

@@ -204,6 +204,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Component, {
                     // switch to new document
                     this.record = Tine.Tinebase.data.Record.setFromJson(recordData, Tine.Filemanager.Model.Node);
                     this.isAttachment = !!String(this.record.get('path')).match(/^\/records\//);
+                    this.isTempfile = false;
                     this.docEditor.destroyEditor();
                     this.afterRender();
             }}
