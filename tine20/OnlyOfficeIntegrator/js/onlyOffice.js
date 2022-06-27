@@ -11,3 +11,4 @@ require('./OnlyOfficeTypes')
 require('./OnlyOfficeEditDialog')
 require('./editDocumentAction')
 require('./createDocumentAction')
+import './nodeGridPanelPlugin'
