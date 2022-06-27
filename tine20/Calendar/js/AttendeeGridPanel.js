@@ -343,17 +343,27 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     // set status authkey for contacts and recources so user can edit status directly
                     // NOTE: we can't compute if the user has editgrant to the displaycontainer of an account here!
                     //       WELL we could add the info to search attendee somehow
-                    if (   (o.record.get('user_type') == 'user' && ! o.value.account_id )
-                        || (o.record.get('user_type') == 'resource' && o.record.get('user_id') && o.record.get('user_id').container_id && o.record.get('user_id').container_id.account_grants && o.record.get('user_id').container_id.account_grants.editGrant)) {
+                    if (   (o.record.get('user_type') == 'user' && ! o.value.account_id && !o.record.get('status_authkey'))) {
                         o.record.set('status_authkey', Tine.Tinebase.data.Record.generateUID());
+                    } else if (o.record.get('user_type') == 'resource') {
+                        const grants = lodash.get(o.record, 'data.user_id.container_id.account_grants', {});
+                        if (grants.resourceStatusGrant && !o.record.get('status_authkey')) {
+                            o.record.set('status_authkey', Tine.Tinebase.data.Record.generateUID());
+                        }
                     }
                     
                     o.record.explicitlyAdded = true;
                     o.record.set('checked', true);
+
                     
                     // Set status if the resource has a specific default status
                     if (o.record.get('user_type') == 'resource' && o.record.get('user_id') && o.record.get('user_id').status) {
-                        o.record.set('status', o.record.get('user_id').status);
+                        const grants = lodash.get(o.record, 'data.user_id.container_id.account_grants', {});
+                        if (grants.resourceStatusGrant && o.record.get('user_id').status_with_grant) {
+                            o.record.set('status', o.record.get('user_id').status_with_grant);
+                        } else {
+                            o.record.set('status', o.record.get('user_id').status);
+                        }
                     }
 
                     // resolve groupmembers
@@ -551,8 +561,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 disabled: ! this.record.get('editGrant'),
                 handler: function() {
                     const locationField = this.editDialog.getForm().findField('location');
+                    const locationRecordField = this.editDialog.getForm().findField('location_record');
                     const attendeeName = this.renderAttenderName(attender?.data?.user_id,{noIcon: true}, attender);
                     locationField.setValue(attendeeName);
+                    locationRecordField.setValue(attender?.data?.user_id);
                 }
             }, '-'];
 
@@ -584,6 +596,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 Tine.log.debug('Adding resource hook for attender');
                 var resourceId = attender.get('user_id').id,
                     resource = new Tine.Calendar.Model.Resource(attender.get('user_id'), resourceId),
+                    type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(lodash.get(resource, 'data.type', {})),
                     grants = lodash.get(resource, 'data.container_id.account_grants', {});
 
                 items = items.concat(new Ext.Action({
@@ -596,6 +609,17 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         Tine.Calendar.ResourceEditDialog.openWindow({record: resource});
                     }
                 }));
+
+                if (type?.get('is_location')) {
+                    items = items.concat(new Ext.Action({
+                        text: this.app.i18n._('use as location'),
+                        iconCls: 'cal-resource',
+                        scope: this,
+                        handler: function () {
+                            this.editDialog.setLocationRecord(attender, true);
+                        }
+                    }));
+                }
 
                 var exportAction = Tine.widgets.exportAction.getExportButton(
                     Tine.Calendar.Model.Resource, {

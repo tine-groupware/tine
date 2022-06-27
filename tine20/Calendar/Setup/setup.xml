@@ -2,14 +2,14 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->
-    <version>15.0</version>
+    <version>15.1</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
         <!-- events -->
         <table>
             <name>cal_events</name>
-            <version>18</version>
+            <version>19</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -110,7 +110,13 @@
                     <type>text</type>
                     <length>1024</length>
                 </field>
-                    <field>
+                <field>
+                    <name>location_record</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
                     <name>organizer</name>
                     <type>text</type>
                     <length>40</length>
@@ -237,6 +243,12 @@
                     <name>organizer</name>
                     <field>
                         <name>organizer</name>
+                    </field>
+                </index>
+                <index>
+                    <name>location_record</name>
+                    <field>
+                        <name>location_record</name>
                     </field>
                 </index>
                 <index>
@@ -511,7 +523,7 @@
         <!-- resources -->
         <table>
             <name>cal_resources</name>
-            <version>8</version>
+            <version>9</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -599,6 +611,13 @@
                 </field>
                 <field>
                     <name>status</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>NEEDS-ACTION</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>status_with_grant</name>
                     <type>text</type>
                     <length>32</length>
                     <default>NEEDS-ACTION</default>
