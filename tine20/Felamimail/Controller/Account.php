@@ -283,6 +283,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $this->_createUserInternalEmailUser($_record);
                 // we dont need a credential cache here neither
                 return;
+            case Felamimail_Model_Account::TYPE_USER:
+                if ($_record->user_id !== Tinebase_Core::getUser()->getId()) {
+                    $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
+                        . '::' . __LINE__ . ' Can´t add additional personal external account for another user account.');
+                    throw new Tinebase_Exception_SystemGeneric($translation->_('Can´t add additional personal external account for another user account.'));
+                }
             default:
                 if (! $_record->user || ! $_record->password) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
@@ -474,6 +481,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
     /**
      * delete email account contact
      *
+     * @param array $ids array of account ids
      * @return void
      * @throws Tinebase_Exception
      * @throws Tinebase_Exception_AccessDenied
@@ -496,9 +504,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                     if (!empty($emailAccount->contact_id)) {
                         try {
                             $contact = Addressbook_Controller_Contact::getInstance()->get($emailAccount->contact_id);
-                            // hard delete contact in admin module
-                            $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-                            $contactsBackend->delete($contact->getId());
+                            if ($contact->type !== Addressbook_Model_Contact::CONTACTTYPE_USER) {
+                                // hard delete contact in admin module
+                                $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                                $contactsBackend->delete($contact->getId());
+                            }
                         } catch (Exception $e) {
                             continue;
                         }
@@ -732,6 +742,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             case Felamimail_Model_Account::TYPE_USER_INTERNAL:
                 $this->_beforeUpdateUserInternalAccount($_record, $_oldRecord);
                 break;
+            case Felamimail_Model_Account::TYPE_USER:
+                if ($_record->user_id !== Tinebase_Core::getUser()->getId()) {
+                    $translation = Tinebase_Translation::getTranslation($this->_applicationName);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__
+                        . '::' . __LINE__ . ' Can´t add additional personal external account for another user account.');
+                    throw new Tinebase_Exception_SystemGeneric($translation->_('Can´t add additional personal external account for another user account.'));
+                }
             default:
                 $this->_beforeUpdateStandardAccount($_record, $_oldRecord);
         }
@@ -1230,7 +1247,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             ) {
                 Felamimail_Controller_Sieve::getInstance()->updateAutoMoveNotificationScript($updatedRecord);
             }
-            
+
             // update sieve script too
             if (is_array($record->sieve_vacation) && is_array($record->sieve_rules)) {
                 $sieveRecord = new Felamimail_Model_Sieve_Vacation($record->sieve_vacation, TRUE);
@@ -1709,10 +1726,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             // skip all special update handling
             $account = $this->_backend->update($account);
         }
-        
+
         return $account;
     }
-    
+
     /**
      * @param Tinebase_Model_User|string|null $_accountId
      * @return Felamimail_Model_Account|null

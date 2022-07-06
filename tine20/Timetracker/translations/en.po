@@ -95,6 +95,11 @@ msgstr "Description"
 msgid "Price"
 msgstr "Price"
 
+#: js/TimeaccountEditDialog.js:114
+msgid "Budget in hours"
+msgstr "Budget in hours"
+
+#: js/TimeaccountEditDialog.js:119 Model/Timeaccount.php:189
 #: Model/Timeaccount.php:198 js/TimeaccountEditDialog.js:84
 msgid "Status"
 msgstr "Status"
