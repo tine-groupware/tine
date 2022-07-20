@@ -5134,11 +5134,10 @@ msgstr "Mobilfunknummer"
 msgid "MFA Device Type"
 msgstr "MFA Gerätetyp"
 
-#, fuzzy
 msgid "MFA Device Config"
 msgid_plural "MFA Device Configs"
 msgstr[0] "MFA Gerätekonfiguration"
-msgstr[1] "MFA Gerätekonfiguration"
+msgstr[1] "MFA Gerätekonfigurationen"
 
 msgid "Invalid authentication"
 msgstr "Authentifikation fehlgeschlagen"
@@ -5244,6 +5243,9 @@ msgstr "Geändert"
 
 msgid "Avscan"
 msgstr "Avscan"
+
+msgid "Files are still uploading."
+msgstr "Es werden gerade Dateien hochgeladen."
 
 msgid "This area is locked. To unlock it you need to provide your PIN"
 msgstr ""
