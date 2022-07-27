@@ -508,6 +508,8 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $fs = Tinebase_FileSystem::getInstance();
         $fs->mkdir('Filemanager/folders/shared/unittestdirectory');
 
+        Tinebase_Core::setUser($this->_personas['sclever']);
+
         $request = new Sabre\HTTP\Request(array(
             'REQUEST_METHOD' => 'MOVE',
             'REQUEST_URI' => '/webdav/Filemanager/shared/unittestdirectory',
@@ -527,6 +529,8 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $fs = Tinebase_FileSystem::getInstance();
         $fs->mkdir('Filemanager/folders/shared/unittestdirectory');
         $fs->createAclNode('Filemanager/folders/shared/unittestdirectory1');
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
 
         $request = new Sabre\HTTP\Request(array(
             'REQUEST_METHOD' => 'MOVE',
