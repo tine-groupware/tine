@@ -68,10 +68,10 @@ class Calendar_Import_CalDAV extends Calendar_Import_Abstract
             Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' Trigger CalDAV client with URI ' . $this->_options['url']);
         }
         
-        $this->_calDAVClient = new Calendar_Import_CalDav_Client($caldavClientOptions, 'Generic', $container->name);
+        $this->_calDAVClient = new Calendar_Import_CalDav_Client($caldavClientOptions, 'Generic');
         $this->_calDAVClient->setVerifyPeer(false);
         $this->_calDAVClient->getDecorator()->initCalendarImport();
-        $this->_calDAVClient->updateAllCalendarData();
+        $this->_calDAVClient->syncCalendarEvents($uri['path'], $container);
     }
 
     protected function _getImportEvents($_resource, $container)

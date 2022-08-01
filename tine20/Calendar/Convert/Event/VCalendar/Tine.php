@@ -18,24 +18,4 @@
 class Calendar_Convert_Event_VCalendar_Tine extends Calendar_Convert_Event_VCalendar_Abstract
 {
     const HEADER_MATCH = '/Tine20\/(?P<version>.+)/';
-    
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        'location',
-        'priority',
-        'summary',
-        'url',
-        'alarms',
-        'tags',
-        'dtstart',
-        'exdate',
-        'rrule',
-        'recurid',
-        'is_all_day_event',
-        'originator_tz'
-    );
 }

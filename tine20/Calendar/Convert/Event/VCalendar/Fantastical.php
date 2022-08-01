@@ -20,29 +20,7 @@ class Calendar_Convert_Event_VCalendar_Fantastical extends Calendar_Convert_Even
     // Fantastical 2 for Mac/2.2.4 Mac OS X/10.11.5
     // Fantastical 2 for Mac (Calendar)/3.3.4 Mac OS X/11.2.1 Darwin/20.3.0 (x86_64)
     const HEADER_MATCH = '/(?J)(Fantastical 2 for Mac( \(Calendar\))?\/(?P<version>\S+) )/';
-    
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        #'geo',
-        'location',
-        'priority',
-        'summary',
-        'url',
-        'alarms',
-        #'tags',
-        'dtstart',
-        'exdate',
-        'rrule',
-        'recurid',
-        'is_all_day_event',
-        #'rrule_until',
-        'originator_tz',
-    );
-    
+
     /**
      * get attendee array for given contact
      * 

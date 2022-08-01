@@ -16,8 +16,7 @@ class Calendar_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
-
-
+    const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -34,6 +33,10 @@ class Calendar_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE016_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];

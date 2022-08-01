@@ -22,29 +22,7 @@ class Calendar_Convert_Event_VCalendar_Thunderbird extends Calendar_Convert_Even
     // Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.1.16) Gecko/20111110 Iceowl/1.0b1 Icedove/3.0.11
     // Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Thunderbird/78.0
     const HEADER_MATCH = '/ (Thunderbird|Lightning|Iceowl)\/(?P<version>\S+)/';
-    
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        #'geo',
-        'location',
-        'priority',
-        'summary',
-        'url',
-        'alarms',
-        #'tags',
-        'dtstart',
-        'exdate',
-        'rrule',
-        'recurid',
-        'is_all_day_event',
-        #'rrule_until',
-        'originator_tz'
-    );
-    
+
     /**
      * (non-PHPdoc)
      * @see Calendar_Convert_Event_VCalendar_Abstract::_addEventAttendee()

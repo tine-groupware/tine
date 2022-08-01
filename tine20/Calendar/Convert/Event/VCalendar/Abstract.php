@@ -37,6 +37,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      */
     const OPTION_ADD_ATTACHMENTS_URL = 'addAttachmentsURL';
 
+    const OPTION_USE_EXTERNAL_ID_UID = 'useExternalIdUid';
+
     public static $cutypeMap = array(
         Calendar_Model_Attender::USERTYPE_USER          => 'INDIVIDUAL',
         Calendar_Model_Attender::USERTYPE_GROUPMEMBER   => 'INDIVIDUAL',
@@ -76,6 +78,16 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
     public function setOptions($options)
     {
         $this->_options = $options;
+    }
+
+    public function setOptionsValue(string $key, string $value): void
+    {
+        $this->_options[$key] = $value;
+    }
+
+    public function getOptionsValue(string $key)
+    {
+        return !isset($this->_options[$key]) ? null : $this->_options[$key];
     }
 
     /**
@@ -873,6 +885,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
             'userType'  => $type,
             'firstName' => $parsedName['n_given'],
             'lastName'  => $parsedName['n_family'],
+            'displayName'=> $fullName,
             'partStat'  => $status,
             'role'      => $role,
             'email'     => $email
@@ -1002,35 +1015,7 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                     break;
                     
                 case 'ORGANIZER':
-                    $email = null;
-                    
-                    if (!empty($property['EMAIL'])) {
-                        $email = $property['EMAIL'];
-                    } elseif (preg_match('/mailto:(?P<email>.*)/i', $property->getValue(), $matches)) {
-                        $email = $matches['email'];
-                    }
-                    if (($email !== null) && is_string($email)) {
-                        $email = trim($email);
-                    }
-                    
-                    if (!empty($email)) {
-                        // it's not possible to change the organizer by spec
-                        if (empty($event->organizer)) {
-                            $name = isset($property['CN']) ? $property['CN']->getValue() : $email;
-                            $contact = Calendar_Model_Attender::resolveEmailToContact(array(
-                                'email'     => $email,
-                                'lastName'  => $name,
-                            ));
-                        
-                            $event->organizer = $contact->getId();
-                        }
-                        
-                        // Lightning attaches organizer ATTENDEE properties to ORGANIZER property and does not add an ATTENDEE for the organizer
-                        if (isset($property['PARTSTAT'])) {
-                            $newAttendees[] = $this->_getAttendee($property);
-                        }
-                    }
-                    
+                    $this->_fromVEvent_Organizer($event, $newAttendees, $property);
                     break;
 
                 case 'RECURRENCE-ID':
@@ -1106,7 +1091,12 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 case 'UID':
                     // it's not possible to change the uid by spec
                     if (empty($event->uid)) {
-                        $event->uid = $property->getValue();
+                        if ($this->getOptionsValue(self::OPTION_USE_EXTERNAL_ID_UID)) {
+                            $event->external_uid = $property->getValue();
+                            $event->uid = sha1($property->getValue());
+                        } else {
+                            $event->uid = $property->getValue();
+                        }
                     }
                     break;
                     
@@ -1327,6 +1317,38 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 __METHOD__ . '::' . __LINE__ . ' Got event without dtend. Assuming 30 minutes duration');
             $event->dtend = clone $event->dtstart;
             $event->dtend->addMinute(30);
+        }
+    }
+
+    protected  function _fromVEvent_Organizer(Calendar_Model_Event $event, array &$newAttendees, \Tine20\VObject\Property $property): void
+    {
+        $email = null;
+
+        if (!empty($property['EMAIL'])) {
+        $email = $property['EMAIL'];
+        } elseif (preg_match('/mailto:(?P<email>.*)/i', $property->getValue(), $matches)) {
+        $email = $matches['email'];
+        }
+        if (($email !== null) && is_string($email)) {
+            $email = trim($email);
+        }
+
+        if (!empty($email)) {
+            // it's not possible to change the organizer by spec
+            if (empty($event->organizer)) {
+                $name = isset($property['CN']) ? $property['CN']->getValue() : $email;
+                $contact = Calendar_Model_Attender::resolveEmailToContact(array(
+                    'email'     => $email,
+                    'lastName'  => $name,
+                ));
+
+                $event->organizer = $contact->getId();
+            }
+
+            // Lightning attaches organizer ATTENDEE properties to ORGANIZER property and does not add an ATTENDEE for the organizer
+            if (isset($property['PARTSTAT']) && $property instanceof \Tine20\VObject\Property\ICalendar\CalAddress) {
+                $newAttendees[] = $this->_getAttendee($property);
+            }
         }
     }
 

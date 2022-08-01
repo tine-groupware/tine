@@ -87,6 +87,7 @@
     "ext-iconv": "*",
     "ext-intl": "*",
     "ext-json": "*",
+    "ext-libxml": "*",
     "ext-mbstring": "*",
     "ext-openssl": "*",
     "ext-xml": "*",

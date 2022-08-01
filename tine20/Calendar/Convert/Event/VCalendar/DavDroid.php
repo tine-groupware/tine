@@ -21,25 +21,6 @@ class Calendar_Convert_Event_VCalendar_DavDroid extends Calendar_Convert_Event_V
     // DAVx5/2.2.1-gplay
     // OpenSync/1.5.0.3-ose
     const HEADER_MATCH = '/(DAVdroid|DAVx5|OpenSync)\/(?P<version>.*)/';
-    
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        'location',
-        'priority',
-        'summary',
-        'url',
-        'alarms',
-        'dtstart',
-        'exdate',
-        'rrule',
-        'recurid',
-        'is_all_day_event',
-        'originator_tz'
-    );
 
     /**
      * @inheritdoc

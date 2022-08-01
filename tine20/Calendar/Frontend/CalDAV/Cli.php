@@ -5,7 +5,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -47,7 +47,7 @@ class Calendar_Frontend_CalDAV_Cli
     
     /**
      * the constructor
-     */
+     *
     public function __construct(Zend_Console_Getopt $opts, $args)
     {
         $this->_opts = $opts;
@@ -75,52 +75,52 @@ class Calendar_Frontend_CalDAV_Cli
         $this->_caldavClient->setVerifyPeer(false);
     }
     
-    /**
+
      * import all calendars
-     */
+     *
     public function importAllCalendars()
     {
         $this->_caldavClient->importAllCalendarsForUsers($this->_users);
     }
     
-    /**
+
      * import all data for users
-     */
+     *
     public function importAllCalendarDataForUsers()
     {
         $this->_caldavClient->importAllCalendarDataForUsers($this->_users);
     }
 
-    /**
+
      * import all data for single user
-     */
+     *
     public function importAllCalendarData()
     {
         $this->_caldavClient->importAllCalendarData($this->_args['run'] == 1 ? true : false);
     }
     
-    /**
+
      * update all data for users
-     */
+     *
     public function updateAllCalendarDataForUsers()
     {
         $this->_caldavClient->updateAllCalendarDataForUsers($this->_users);
     }
     
-    /**
+
      * update all data for single user
-     */
+     *
     public function updateAllCalendarData()
     {
         $this->_caldavClient->updateAllCalendarData($this->_args['run'] == 1 ? true : false);
     }
     
-    /**
+
      * run import/update with multiple processes
      * 
      * @param string $mode
      * @throws Exception
-     */
+     *
     public function runImportUpdateMultiproc($mode)
     {
         $numProc = intval($this->_args['numProc']);
@@ -144,12 +144,12 @@ class Calendar_Frontend_CalDAV_Cli
         }
     }
     
-    /**
+
      * validate num procs
      * 
      * @param string $numProc
      * @throws Exception
-     */
+     *
     protected function _validateNumProc($numProc)
     {
         if ($numProc < 1) {
@@ -160,7 +160,7 @@ class Calendar_Frontend_CalDAV_Cli
         }
     }
     
-    /**
+
      * run multi process command
      * 
      * do multiprocess part, no system resources may be used as of here, 
@@ -172,7 +172,7 @@ class Calendar_Frontend_CalDAV_Cli
      * @param integer $numProc
      * @param string $cliParams
      * @param integer $run
-     */
+     *
     protected function _runMultiProcessImportUpdate($numProc, $cliParams, $run = 1)
     {
         // $processes = array();
@@ -241,7 +241,7 @@ class Calendar_Frontend_CalDAV_Cli
         }
     }
     
-    /**
+
      * read caldav user credentials file
      * 
      * - file should have the following format (CSV):
@@ -250,7 +250,7 @@ class Calendar_Frontend_CalDAV_Cli
      * 
      * @param string $file
      * @throws Exception
-     */
+     *
     protected function _readCalDavUserFile($file, $line = 0)
     {
         if (!($fh = fopen($file, 'r'))) {
@@ -276,5 +276,5 @@ class Calendar_Frontend_CalDAV_Cli
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Line: '.$line. ' out of bounds');
             throw new Exception('No user found, line: '.$line. ' out of bounds');
         }
-    }
+    }*/
 }

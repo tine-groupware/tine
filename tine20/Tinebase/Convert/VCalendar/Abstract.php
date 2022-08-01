@@ -25,8 +25,6 @@ abstract class Tinebase_Convert_VCalendar_Abstract
      */
     const OPTION_USE_SERVER_MODLOG = 'useServerModlog';
     
-    protected $_supportedFields = array();
-    
     protected $_version;
     
     protected $_modelName = null;

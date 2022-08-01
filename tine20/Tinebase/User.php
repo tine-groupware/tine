@@ -1236,6 +1236,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $oldGroupValue = $groupsBackend->modlogActive(false);
         $oldUserValue = $userBackend->modlogActive(false);
         $oldAdbValue = Addressbook_Controller_Contact::getInstance()->modlogActive(false);
+        $oldNoteAdbValue = Addressbook_Controller_Contact::getInstance()->useNotes(false);
         if (Tinebase_User::SYSTEM_USER_SETUP === $accountLoginName) {
             $plugin = $userBackend->removePlugin(Addressbook_Controller_Contact::getInstance());
         } else {
@@ -1343,6 +1344,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $groupsBackend->modlogActive($oldGroupValue);
         $userBackend->modlogActive($oldUserValue);
         Addressbook_Controller_Contact::getInstance()->modlogActive($oldAdbValue);
+        Addressbook_Controller_Contact::getInstance()->useNotes($oldNoteAdbValue);
         if (null !== $plugin) {
             $userBackend->registerPlugin($plugin);
         }

@@ -45,27 +45,4 @@ class Calendar_Convert_Event_VCalendar_CalDAVSynchronizer extends Calendar_Conve
 {
     // "CalDavSynchronizer/1.15"
     const HEADER_MATCH = '/CalDavSynchronizer\/(?P<version>\S+)/';
-    
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        #'geo',
-        'location',
-        'priority',
-        'summary',
-        'url',
-        'alarms',
-        'tags',
-        'dtstart',
-        'exdate',
-        'rrule',
-        'recurid',
-        'is_all_day_event',
-        'rrule_until',
-        'originator_tz'
-    );
-
 }

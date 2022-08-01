@@ -19,26 +19,5 @@ class Calendar_Convert_Event_VCalendar_EMClient extends Calendar_Convert_Event_V
 {
     // eM Client/5.0.17595.0
     const HEADER_MATCH = '/e[Mm] ?Client\/(?P<version>.*)/';
-    
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        #'geo',
-        'location',
-        'priority',
-        'summary',
-        'url',
-        'alarms',
-        #'tags',
-        'dtstart',
-        'exdate',
-        'rrule',
-        'recurid',
-        'is_all_day_event',
-        #'rrule_until',
-        'originator_tz'
-    );
+
 }

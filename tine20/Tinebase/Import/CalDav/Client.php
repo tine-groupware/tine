@@ -1,5 +1,5 @@
 <?php
-
+/** DEPRECATED remove this */
 /**
  * Tine 2.0
  * 
@@ -7,7 +7,8 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @deprecated
  */
 
 /**
@@ -15,6 +16,7 @@
  * 
  * @package     Tinebase
  * @subpackage  Import
+ * @deprecated
  * 
  */
 class Tinebase_Import_CalDav_Client extends \Tine20\DAV\Client
@@ -58,9 +60,9 @@ class Tinebase_Import_CalDav_Client extends \Tine20\DAV\Client
   </d:prop>
 </d:propfind>';
     
-    public function __construct(array $a)
+    public function __construct(array $settings)
     {
-        parent::__construct($a);
+        parent::__construct($settings);
         
         //$this->requestLogFH = fopen('/var/log/tine20/requestLog', 'w');
         
@@ -218,7 +220,7 @@ class Tinebase_Import_CalDav_Client extends \Tine20\DAV\Client
      * 
      * @param string $method
      * @param string $uri
-     * @param strubg $body
+     * @param string $body
      * @param number $depth
      * @param number $tries
      * @param number $sleep

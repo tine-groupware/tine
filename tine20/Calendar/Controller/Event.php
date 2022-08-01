@@ -2351,7 +2351,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
 
         $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
-        $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
+        if (Calendar_Model_Attender::USERTYPE_EMAIL !== $_record->organizer_type) {
+            $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->contact_id;
+        }
         $_record->transp = $_record->transp ? $_record->transp : Calendar_Model_Event::TRANSP_OPAQUE;
 
         $this->_inspectOriginatorTZ($_record);
