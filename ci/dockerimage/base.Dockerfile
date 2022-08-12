@@ -50,7 +50,6 @@ RUN apk add --no-cache --simulate \
                                   ${ALPINE_PHP_PACKAGE}-xsl \
                                   ${ALPINE_PHP_PACKAGE}-zip \
                                   | sha256sum >> /cachehash
-
 RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ gnu-libiconv=1.15-r3 \
                                   | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate --repository http://dl-cdn.alpinelinux.org/alpine/edge/main nginx nginx-mod-http-brotli \
