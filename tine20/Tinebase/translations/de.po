@@ -5247,6 +5247,21 @@ msgstr "Avscan"
 msgid "Files are still uploading."
 msgstr "Es werden gerade Dateien hochgeladen."
 
+msgid "Open"
+msgstr "Öffnen"
+
+msgid "Filemanager"
+msgstr "Dateimanager"
+
+msgid "Choose Export Location"
+msgstr "Bitte wählen Sie das Export Ziel"
+
+msgid "How would you like to save your export?"
+msgstr "Wie möchten Sie Ihren Export speichern?"
+
+msgid "Export only currently shown columns"
+msgstr "Nur die angezeigten Spalten exportieren"
+
 msgid "This area is locked. To unlock it you need to provide your PIN"
 msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihre PIN "
@@ -5439,9 +5454,6 @@ msgstr "Ihre {0} Business Edition Subskription ist abgelaufen."
 
 msgid "License Type"
 msgstr "Lizenz Typ"
-
-msgid "Filemanager"
-msgstr "Dateimanager"
 
 msgid "Fileupload"
 msgstr "Datei hochladen"
