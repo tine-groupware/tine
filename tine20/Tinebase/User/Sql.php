@@ -1434,15 +1434,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function countNonSystemUsers()
     {
         $systemUsers = Tinebase_User::getSystemUsernames();
-        $select = $select = $this->_db->select()
+        $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'COUNT(id)')
             ->where($this->_db->quoteIdentifier('login_name') . ' not in (?)', $systemUsers)
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' != ?', Tinebase_Model_User::ACCOUNT_STATUS_DISABLED))
             ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
 
-        $userCount = $this->_db->fetchOne($select);
-
-        return $userCount;
+        return $this->_db->fetchOne($select);
     }
 
     /**
