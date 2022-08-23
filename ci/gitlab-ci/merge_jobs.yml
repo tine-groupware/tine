@@ -41,6 +41,8 @@ merge:
     # TODO remove main (no longer needed in new github)?
     - merge_merge_upwards 2022.11 main
     - merge_merge_upwards 2022.11 2023.11
+    # BE changes < 2023.11 (TODO remove that when 2022.11 is obsolete)
+    - merge_merge_upwards tine20.com/2022.11-custom 2023.11
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE == "never"
