@@ -57,34 +57,6 @@ Der gleiche Schritt muss dann ggf. nochmal für SMTP gemacht werden.
 
 Alternativ können die Configs auch via CLI setup.php --setconfig (vorher mit --getconfig auslesen) gesetzt werden.
 
-Falls das nicht hilft bzw. nicht erwünscht ist, könnte auch das hier das Problem beheben:
-
-> > Hier steht, wie man ein CA Zertifikat im PHP bekannt macht:
-> > https://stackoverflow.com/questions/41772340/how-do-i-add-a-certificate-authority-to-php-so-the-file-function-trusts-certif
-> > 
-> > "Edit php.ini and add the line openssl.cafile=/etc/ssl/certs/cacert.pem to the top (or bottom)."
-> > 
-> > Wenn die Einstellung greift, sollte das in Tine auch unter Admin/Server Informationen stehen.
-> > 
-> > Ansonsten könnte man auch im PHP-Code nochmal schauen, welche Cert-Locations aktiv sind: http://php.net/manual/en/function.openssl-get-cert-locations.php
-> > Das könnte man z.B. an zentraler Stelle (oder eben beim IMAP/Sieve-Zugriff) einbauen und ins Logfile schreiben.
-
-> ok, jetzt habe ich es herausgefunden. Der Trick liegt darin, dass man wissen
-muss, was PHP unter einem "correctly hashed certificate directory" mit
-Zertifikaten versteht. Das Problem war, dass das Debian-Paket "ca-certificates"
-das Zwischen-Zertifikat von RapidSSL, mit dem das Zertifikat für
-mail.jobelmannschule.de signiert ist, nicht mitbringt. Das und das Wissen um das
-"correctly hashed certificate directory", was ich mir zwischenzeitlich
-zusammengesucht hatte, haben mich dann nämlich dazu gebracht, das
-RapidSSL-Zwischen-Zertifikat auf dem Tine-Server nach
-/usr/local/share/ca-certificates zu kopieren und dann "update-ca-certificates"
-aufzurufen, woraufhin nämlich das "correctly hashed certificate directory" *mit*
-dem RapidSSL-Zertifikat erstellt wird. Seitdem geht's. Jetzt kann ich auch das
-"verifyPeer":"0" bei der IMAP-Konfig weglassen.
-
-siehe auch https://service.metaways.net/Ticket/Display.html?id=159518
-rt159518: [Jobelmannschule] Felamimail IMAP-Zugriff und Mailserver Zertifikate
-
 Frage: Wir kann ich den Notifikations-Service einrichten?
 =================
 

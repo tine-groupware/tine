@@ -8,8 +8,6 @@ Konfiguration und Performance-Optimierung der Datenbank
 MySQL Optimierung
 =================
 
-siehe auch https://service.metaways.net/Ticket/Display.html?id=150469
-
 ## Zusammengefasst:
 
 * der MySQL Server muß entsprechend der Datenmenge und Anwendernutzung dimensioniert sein
@@ -156,10 +154,6 @@ Die Migration muss in 2017.11 durchgeführt werden. Am besten in Version 2017.11
 in Tinebase/Setup/Update/Release10.php, die nicht PGSQL-kompatibel sind...
 Die Migration muss mit der gleichen Version gemacht werden, mit der Tine 2.0 mit PGSQL gerade läuft, da
 sonst das DB-Schema möglicherweise nicht passt. Also idealerweise erst mal auf 2017.11.13 updaten! Wenn das nicht geht, muss man ggf. selbst Hand ans Schema anlegen.
-
-Migration ist u.a. Thema in diesen Tickets:
-- #175111: [Phoenix] Unsere Instanz Tine 2.0 (UCS)
-- #187410: [Phoenix][Mestron] Migration Tine 2.0 auf eigene Debian VM (mit MariaDB) und Update auf 2020.11
 
 Ausserdem gibt es eine (nicht besonders gute) Anleitung zur manuellen Migration von Files/Hour im github:
 https://github.com/tine20/tine20/wiki/DE%3AMigration-von-Postgres-nach-MySQL

@@ -24,8 +24,6 @@ Wenn Sie die Zeit ändern möchten, können Sie das auf einen anderen Wert setze
 
 Mehr Informationen zu den PHP-Session-Konfigurationen finden Sie hier: http://php.net/manual/en/session.configuration.php
 
-siehe z.b. https://service.metaways.net/Ticket/Display.html?id=160376
-
 Session auf Redis-Backend umstellen
 =================
 
