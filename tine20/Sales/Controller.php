@@ -171,7 +171,7 @@ class Sales_Controller extends Tinebase_Controller_Event
                 Sales_Controller_Address::getInstance()->contactToCustomerAddress($postal, $contact);
             } else {
                 $defaultLang = $this->getContactDefaultLanguage($contact);
-                $fullName = Sales_Controller_Address::getInstance()->getContactFullName($contact);
+                $fullName = Sales_Controller_Address::getInstance()->getContactFullName($contact, $defaultLang);
                 
                 $postal = new Sales_Model_Address(array(
                     'customer_id' => $customer->related_id,
