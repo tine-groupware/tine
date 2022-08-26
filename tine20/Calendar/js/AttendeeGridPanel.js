@@ -282,7 +282,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             fbInfo = _.get(ed, 'field.selectedRecord.data.fbInfo');
 
         // attendeePickerCombo
-        if (attendeeData && type) {
+        if ((attendeeData || type === 'email') && type) {
             if (this.showMemberOfType && 'group' == type) {
                 var row = ed.row,
                     col = ed.col,
@@ -312,6 +312,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             } else {
                 value = attendeeData;
                 ed.record.set('user_type', type.replace(/^sel_/, ''));
+                ed.record.set('user_email', _.get(ed, 'field.selectedRecord.data.user_email'));
+                ed.record.set('user_displayname', _.get(ed, 'field.selectedRecord.data.user_displayname'));
                 ed.record.set('fbInfo', fbInfo);
                 ed.record.commit();
             }
@@ -323,6 +325,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onAfterAttenderEdit: function(o) {
         switch (o.field) {
             case 'user_id' :
+                const type = o.record.get('user_type');
+
                 // detect duplicate entry
                 // TODO detect duplicate emails, too 
                 var isDuplicate = false;
@@ -341,13 +345,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 if (isDuplicate) {
                     o.record.reject();
                     this.startEditing(o.row, o.column);
-                } else if (o.value) {
+                } else if (o.value || type === 'email') {
                     // set status authkey for contacts and recources so user can edit status directly
                     // NOTE: we can't compute if the user has editgrant to the displaycontainer of an account here!
                     //       WELL we could add the info to search attendee somehow
-                    if (   (o.record.get('user_type') == 'user' && ! o.value.account_id && !o.record.get('status_authkey'))) {
+                    if (   (['user', 'email'].indexOf(type) >= 0 && ! o.value?.account_id && !o.record.get('status_authkey'))) {
                         o.record.set('status_authkey', Tine.Tinebase.data.Record.generateUID());
-                    } else if (o.record.get('user_type') == 'resource') {
+                    } else if (type === 'resource') {
                         const grants = lodash.get(o.record, 'data.user_id.container_id.account_grants', {});
                         if (grants.resourceStatusGrant && !o.record.get('status_authkey')) {
                             o.record.set('status_authkey', Tine.Tinebase.data.Record.generateUID());
@@ -359,7 +363,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
                     
                     // Set status if the resource has a specific default status
-                    if (o.record.get('user_type') == 'resource' && o.record.get('user_id') && o.record.get('user_id').status) {
+                    if (type === 'resource' && o.record.get('user_id') && o.record.get('user_id').status) {
                         const grants = lodash.get(o.record, 'data.user_id.container_id.account_grants', {});
                         if (grants.resourceStatusGrant && o.record.get('user_id').status_with_grant) {
                             o.record.set('status', o.record.get('user_id').status_with_grant);
@@ -369,7 +373,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     }
 
                     // resolve groupmembers
-                    if (o.record.get('user_type') == 'group' && !this.showMemberOfType) {
+                    if (type === 'group' && !this.showMemberOfType) {
                         this.resolveListMembers(o.record.get('user_id'));
                     } else {
                         this.addNewAttendeeRow();
@@ -457,7 +461,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         // don't allow to set anything besides quantity and role for already set attendee
-        if (o.record.get('user_id')) {
+        if (o.record.get('user_id') || o.record.get('user_type') === 'email') {
             o.cancel = true;
             if (o.field == 'quantity' && o.record.get('user_type') == 'resource') {
                 o.cancel = false;
@@ -526,7 +530,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (attender && ! this.disabled) {
             // don't delete 'add' row
             var attender = this.store.getAt(row);
-            if (! attender.get('user_id')) {
+            if (! attender.get('user_id') && type !== 'email') {
                 return;
             }
             
@@ -830,18 +834,26 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     renderAttenderName: function(name, metaData, record) {
-        if (name) {
-            var type = record ? record.get('user_type') : 'user',
-                fn = this['renderAttender' + Ext.util.Format.capitalize(type) + 'Name'];
+        const type = _.get(record, 'data.user_type', 'user');
+        if (name || type === 'email') {
+            const fn = this['renderAttender' + Ext.util.Format.capitalize(type) + 'Name'];
 
             return fn ? fn.apply(this, arguments): '';
         }
-        
+
         // add new user:
         if (arguments[1]) {
             arguments[1].css = 'x-form-empty-field';
             return this.app.i18n._(this.addNewAttendeeText);
         }
+    },
+
+    renderAttenderEmailName: function(name, metadata, record) {
+        return this.renderAttenderUserName({
+            "email": record.get('user_email'),
+            "n_fileas": record.get('user_displayname'),
+            "n_fn": record.get('user_displayname')
+        });
     },
 
     /**
@@ -972,7 +984,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var i18n = Tine.Tinebase.appMgr.get('Calendar').i18n,
             renderer = Tine.widgets.grid.RendererManager.get('Calendar', 'Attender', 'status', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
         
-        if (! attender.get('user_id')) {
+        if (! attender.get('user_id') && attender.get('user_type') !== 'email') {
             return '';
         }
         
@@ -999,6 +1011,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             case 'group':
                 cssClass += 'renderer_accountGroupIcon';
                 break;
+            case 'email':
+                cssClass += 'renderer_typeEmailIcon';
+                qtipText = Tine.Tinebase.appMgr.get('Calendar').i18n._('External Attendee');
+                break;
             default:
                 cssClass += 'cal-attendee-type-' + type;
                 break;
@@ -1008,7 +1024,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         var result = '<div ' + qtip + 'style="background-position:0px;" class="' + cssClass + '">&#160</div>';
         
-        if (! attender.get('user_id')) {
+        if (! attender.get('user_id') && type !== 'email') {
             result = Tine.Tinebase.common.cellEditorHintRenderer(result);
         }
         

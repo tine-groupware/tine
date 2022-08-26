@@ -31,7 +31,10 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'adr_lat' },
     { name: 'location' },
     { name: 'location_record' },
+    { name: 'organizer_type' },
     { name: 'organizer' },
+    { name: 'organizer_email' },
+    { name: 'organizer_displayname' },
     { name: 'priority' },
     { name: 'status' },
     { name: 'summary' },
@@ -271,6 +274,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         editGrant: true,
         // needed for action updater / save and close in edit dialog
         readGrant: true,
+        organizer_type: 'contact',
         organizer: organizer,
         attendee: defaultAttendee,
         location: defaultLocationResource ? defaultLocationResource.name : null,
@@ -976,8 +980,8 @@ Tine.Calendar.Model.Attender.getAttendeeStore.getData = function(attendeeStore, 
 
     attendeeStore.each(function (attender) {
         var user_id = attender.get('user_id');
-        if (user_id/* && user_id.id*/) {
-            if (typeof user_id.get == 'function') {
+        if (user_id || attender.get('user_type') === 'email'/* && user_id.id*/) {
+            if (typeof user_id?.get == 'function') {
                 attender.data.user_id = user_id.data;
             }
 

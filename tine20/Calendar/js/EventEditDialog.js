@@ -10,6 +10,8 @@
  
 Ext.ns('Tine.Calendar');
 
+import FieldTriggerPlugin from "Tinebase/js/ux/form/FieldTriggerPlugin"
+
 require('./Printer/EventRecord');
 require('./FreeTimeSearchDialog');
 require('./PollPanel');
@@ -408,6 +410,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     initComponent: function() {
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+
         this.addEvents(
             /**
              * @event dtStartChange
@@ -457,12 +461,35 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 width: 300,
                 name: 'organizer',
                 userOnly: true,
+                noEditPlugin: true,
                 getValue: function() {
                     var id = Tine.Addressbook.SearchCombo.prototype.getValue.apply(this, arguments),
                         record = this.store.getById(id);
                         
                     return record ? record.data : id;
-                }
+                },
+                setValue(value, record) {
+                    const orgaType = record.get('organizer_type');
+                    if (orgaType === 'email') {
+                        value = {
+                            "email": record.get('organizer_email'),
+                            "n_fileas": record.get('organizer_displayname'),
+                            "n_fn": record.get('organizer_displayname')
+                        };
+                    }
+                    this.supr().setValue.call(this, value, record);
+
+                    const plugin = _.find(this.plugins, {id: 'orga-type'});
+                    plugin.setTriggerClass(`cal-organizer-type-${orgaType}`);
+                    plugin.setQtip(orgaType === 'email' ?
+                        this.app.i18n._('External organizer') :
+                        this.app.i18n._('Internal organizer')
+                    );
+                },
+                plugins: [new FieldTriggerPlugin({
+                    id: 'orga-type',
+                    triggerClass: 'cal-organizer-type-email'
+                })]
             })]
         });
         
@@ -482,16 +509,19 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.attendeeGridPanel.store.on('remove', function(store, record, idx) {
             if(_.get(record, 'data.user_id', false)){
-            //remove location if location is location from deleted ressource
-            var typeId = _.get(record, 'data.user_id.type'),
-                type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(typeId),
-                locationName = this.attendeeGridPanel.renderAttenderResourceName(record.get('user_id'), {noIcon: true}),
-                locationField = this.getForm().findField('location');
+                if (_.get(record, 'data.user_type') !== 'ressources') return;
 
-            if (type?.get('is_location') && locationName === locationField.getValue()) {
-                locationField.setValue('');
+                //remove location if location is location from deleted ressource
+                var typeId = _.get(record, 'data.user_id.type'),
+                    type = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'resourceTypes').getById(typeId),
+                    locationName = this.attendeeGridPanel.renderAttenderResourceName(record.get('user_id'), {noIcon: true}),
+                    locationField = this.getForm().findField('location');
+
+                if (type?.get('is_location') && locationName === locationField.getValue()) {
+                    locationField.setValue('');
+                }
             }
-        }}, this);
+        }, this);
         
         this.on('render', function() {this.getForm().add(organizerCombo);}, this);
 

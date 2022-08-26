@@ -82,8 +82,9 @@ Tine.Calendar.AttendeePickerCombo = Ext.extend(Tine.Tinebase.widgets.form.Record
             if (Ext.form.VTypes.email(raw)) {
                 this.value = raw;
                 this.selectedRecord = new Tine.Calendar.Model.Attender(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
-                    'user_type': 'user',
-                    'user_id': this.value
+                    'user_type': 'email',
+                    'user_displayname': this.value,
+                    'user_email': this.value
                 }));
             }
         }
