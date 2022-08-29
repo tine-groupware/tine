@@ -206,6 +206,10 @@
           "path": "js/ux/form/"
         },
         {
+          "text": "FieldMaximizePlugin.js",
+          "path": "js/ux/form/"
+        },
+        {
           "text": "MirrorTextField.js",
           "path": "js/ux/form/"
         },

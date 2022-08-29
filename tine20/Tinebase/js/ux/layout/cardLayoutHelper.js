@@ -32,6 +32,7 @@ Ext.ux.layout.CardLayout.helper = {
             cardPanel.add(item);
         }
 
+        const activeItem = cardPanel.layout.activeItem;
         if (Ext.isFunction(cardPanel.layout.setActiveItem)) {
             cardPanel.layout.setActiveItem(item.id);
         } else {
@@ -39,5 +40,6 @@ Ext.ux.layout.CardLayout.helper = {
         }
 
         cardPanel.doLayout();
+        return activeItem;
     }
 };
