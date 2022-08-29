@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>16.0</version>
+    <version>16.1</version>
     <order>30</order>
     <status>enabled</status>
     <tables>
@@ -77,6 +77,13 @@
                     <type>text</type>
                     <length>32</length>
                     <default>none</default>
+                </field>
+                <field>
+                    <name>message_sent_copy_behavior</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <default>sent</default>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>sent_folder</name>
