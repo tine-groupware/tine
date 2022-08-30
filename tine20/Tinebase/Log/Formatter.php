@@ -360,8 +360,25 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
             'request_id' => (string) self::$_requestId,
             'logdifftime' => $logdifftime,
             'logruntime' => $logruntime,
+            'tenant' => $this->_getTenant(),
             // TODO add method
             // 'method' => self::$_method
         ];
+    }
+
+    /**
+     * @return string
+     */
+    protected function _getTenant(): string
+    {
+        $tineUrlConfig =  Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL);
+        if ($tineUrlConfig) {
+            $parse = parse_url($tineUrlConfig);
+            if (is_array($parse) && array_key_exists('host', $parse)) {
+                return $parse['host'];
+            }
+        }
+
+        return '';
     }
 }
