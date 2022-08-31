@@ -7,7 +7,7 @@
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>28</version>
+            <version>29</version>
             <declaration>
                 <field>
                     <name>id</name>
