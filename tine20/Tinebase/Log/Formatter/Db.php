@@ -35,9 +35,6 @@ class Tinebase_Log_Formatter_Db extends Tinebase_Log_Formatter
         $timestamp = new Tinebase_DateTime($data['timestamp']);
         $data['timestamp'] = $timestamp->toString();
 
-        // remove unsupported fields
-        unset($data['tenant']);
-
         return $data;
     }
 }
