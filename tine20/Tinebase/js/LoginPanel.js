@@ -286,14 +286,14 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     cls: 'tb-login-big-label',
                     html: (
                         licenseCheck === 'status_license_invalid'
-                            ? i18n._('Your Tine 2.0 Business Edition expired.')
-                            : i18n._('Tine 2.0 Business Edition trial')
+                            ? String.format(i18n._('Your {0} license expired.'), Tine.title)
+                            : String.format(i18n._('{0} trial'), Tine.title)
                     )
                 }, {
                     html: '<p>'
                         +  (
                             licenseCheck === 'status_license_invalid'
-                                ? i18n._('Your Tine 2.0 Business Edition license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license.')
+                                ? String.format(i18n._('Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license.'), Tine.title)
                                 : i18n._('Please contact Metaways Infosystems GmbH to buy a valid license.')
                         )
                 }];
