@@ -37,8 +37,11 @@ Tine.UserManual.ContextItem = function(config) {
 Ext.ux.ItemRegistry.registerItem('Tinebase-MainContextMenu', Ext.menu.Separator, 10000);
 Ext.ux.ItemRegistry.registerItem('Tinebase-MainContextMenu', Tine.UserManual.ContextItem, 10100);
 
-Tine.UserManual.DebugItem = function(config) {
-    return new Ext.Action({
+Tine.Tinebase.appMgr.isInitialised('UserManual').then(() => {
+    const app = Tine.Tinebase.appMgr.get('UserManual');
+    const i18n = app.i18n;
+
+    Tine.UserManual.DebugItem = new Ext.Action({
         hidden: !Tine.Tinebase.registry || Tine.Tinebase.registry.get('version')['buildType'] != 'DEVELOPMENT',
         text: String.format(i18n._('Show Canonical Path')),
         iconCls: 'usermanual-action-debug',
@@ -63,6 +66,6 @@ Tine.UserManual.DebugItem = function(config) {
             }
         }
     });
-};
 
-Ext.ux.ItemRegistry.registerItem('Tinebase-MainContextMenu', Tine.UserManual.DebugItem, 10200)
+    Ext.ux.ItemRegistry.registerItem('Tinebase-MainContextMenu', Tine.UserManual.DebugItem, 10200);
+});
