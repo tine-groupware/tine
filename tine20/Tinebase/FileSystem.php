@@ -4214,11 +4214,7 @@ class Tinebase_FileSystem implements
             . ' updating... ');
 
         $avScanner = Tinebase_FileSystem_AVScan_Factory::getScanner();
-
         $result = true;
-        $fh = null;
-        $db = Tinebase_Core::getDb();
-        $transManager = Tinebase_TransactionManager::getInstance();
 
         if (!($baseDir = opendir($this->_basePath))) {
             Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue('can not open basedir'));
@@ -4244,73 +4240,41 @@ class Tinebase_FileSystem implements
                     continue;
                 }
                 if ($fileSize > Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}
-                        ->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE}) {
+                        ->{Tinebase_Config::FILESYSTEM_AVSCAN_MAXFSIZE} || 0 === $fileSize) {
                     continue;
                 }
 
                 $fh = null;
                 $scanResult = null;
-                $transId = $transManager->startTransaction($db);
                 try {
-                    $fileObjectRevisions = $this->_fileObjectBackend->getRevisionForHashes([$hashDir . $file], true);
-
-                    if (count($fileObjectRevisions) === 0) {
-                        $transManager->commitTransaction($transId);
-                        $transId = null;
+                    $lastScan = $this->_fileObjectBackend->getLastAvScanTimeForHash($hashDir . $file);
+                    if (!$lastScan || Tinebase_DateTime::now()->subHour(12)
+                            ->isEarlier(new Tinebase_DateTime($lastScan))) {
                         continue;
                     }
 
-                    foreach ($fileObjectRevisions as $fObjId => $revisions) {
-                        foreach ($revisions as $revision) {
-                            $this->_fileObjectBackend->setRevision($revision);
-                            /** @var \Tinebase_Model_Tree_FileObject $fObj */
-                            $fObj = $this->_fileObjectBackend->get($fObjId, true);
-                            if ($fObj->lastavscan_time && Tinebase_DateTime::now()->subHour(12)
-                                    ->isEarlier(new Tinebase_DateTime($fObj->lastavscan_time))) {
-                                continue;
-                            }
-
-                            if ($fObj->hash !== ($hashDir . $file)) {
-                                Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
-                                    'file objects hash not as expected: ' . $fObj->getId() . ' rev: ' . $fObj->revision
-                                    . ' hash: ' . $fObj->hash . ' expected hash: ' . $hashDir . $file));
-                                $result = false;
-                                continue;
-                            }
-                            if (null === $scanResult) {
-                                if (false === ($fh = fopen($path, 'r'))) {
-                                    Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
-                                        'could not open file ' . $path . ' for reading... skipping'));
-                                    $result = false;
-                                    $fh = null;
-                                    continue 3;
-                                }
-
-                                $scanResult = $avScanner->scan($fh);
-                                fclose($fh);
-                                $fh = null;
-                                if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
-                                    $result = false;
-                                }
-                            }
-
-                            $fObj->lastavscan_time = Tinebase_DateTime::now();
-                            $fObj->is_quarantined =
-                                Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $scanResult->result;
-                            $this->_fileObjectBackend->update($fObj);
-                        }
+                    if (false === ($fh = fopen($path, 'r'))) {
+                        Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
+                            'could not open file ' . $path . ' for reading... skipping'));
+                        $result = false;
+                        continue;
                     }
 
-                    $transManager->commitTransaction($transId);
-                    $transId = null;
+                    $scanResult = $avScanner->scan($fh);
+                    fclose($fh);
+                    $fh = null;
+
+                    if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
+                        $result = false;
+                    } else {
+                        $this->_fileObjectBackend->updateRevisionByHash($hashDir . $file, [
+                            'lastavscan_time' => Tinebase_DateTime::now()->toString(),
+                            'is_quarantined' => Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $scanResult->result,
+                        ]);
+                    }
                 } finally {
-                    $this->_fileObjectBackend->setRevision(null);
-                    if (null !== $transId) {
-                        $transManager->rollBack();
-                    }
-                    if (null !== $fh) {
+                    if ($fh) {
                         fclose($fh);
-                        $fh = null;
                     }
                 }
             }
@@ -4481,60 +4445,131 @@ class Tinebase_FileSystem implements
     {
         try {
             $path = $this->getPathOfNode($node, true);
-            if (null === $node || null === $node->acl_node) {
-                $accountIds = Tinebase_Group::getInstance()->getDefaultAdminGroup()->members;
-            } else {
-                $accountIds = array();
-                $acl_node = $node;
-                if ($node->acl_node !== $node->getId()) {
-                    $acl_node = $this->get($node->acl_node);
-                }
-                /** @var Tinebase_Model_Grants $grants */
-                foreach ($this->getGrantsOfContainer($acl_node, true) as $grants) {
-                    if (!$grants->{Tinebase_Model_Grants::GRANT_ADMIN}) {
-                        continue;
-                    }
-                    switch($grants->account_type) {
-                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
-                            $accountIds[] = $grants->account_id;
-                            break;
-                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
-                            $accountIds = array_merge($accountIds, Tinebase_Group::getInstance()->getGroupMembers($grants->account_id));
-                            break;
-                        case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
-                            foreach (Tinebase_Role::getInstance()->getRoleMembers($grants->account_id) as $role) {
-                                switch($role['account_type']) {
-                                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
-                                        $accountIds[] = $role['account_id'];
-                                        break;
-                                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
-                                        $accountIds = array_merge($accountIds, Tinebase_Group::getInstance()->getGroupMembers($role['account_id']));
-                                        break;
-                                }
-                            }
-                            break;
-                    }
-                }
-            }
-
-            $accountIds = array_merge($accountIds, $this->_quotaNotificationRoleMembers);
-            $accountIds = array_unique($accountIds);
-
-            /** @var Tinebase_Model_FullUser $user */
-            foreach (Tinebase_User::getInstance()->getMultiple($accountIds) as $user) {
+            $senders = $this->getNotificationSenders($node);
+            
+            /** @var Tinebase_Model_FullUser $sender */
+            foreach ($senders as $sender) {
                 $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
-                    $user->accountId));
+                    $sender->accountId));
                 $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
 
                 // _('filemanager quota notification')
                 // _('filemanager soft quota notification')
-                $translatedSubject = $translate->_('filemanager ' . ($softQuota ? 'soft ' : '') . 'quota notification');
+                $subject = 'filemanager ' . ($softQuota ? 'soft ' : '') . 'quota notification';
+                $translatedSubject = $translate->_($subject);
+                $messagePlain = $path . ' exceeded ' . ($softQuota ? 'soft ' : '') . 'quota';
 
-                Tinebase_Notification::getInstance()->send($user, array($user->contact_id), $translatedSubject, $path . ' exceeded ' . ($softQuota ? 'soft ' : '') . 'quota');
+                $recipients = $this->getQuotaNotificationRecipients($sender, $softQuota);
+                Tinebase_Notification::getInstance()->send($sender, $recipients, $translatedSubject, $messagePlain, null, null, true);
             }
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
         }
+    }
+
+    public function getNotificationSenders(Tinebase_Model_Tree_Node $node = null)
+    {
+        if (null === $node || null === $node->acl_node) {
+            $accountIds = Tinebase_Group::getInstance()->getDefaultAdminGroup()->members;
+        } else {
+            $accountIds = [];
+            $acl_node = $node;
+            if ($node->acl_node !== $node->getId()) {
+                $acl_node = $this->get($node->acl_node);
+            }
+            /** @var Tinebase_Model_Grants $grants */
+            foreach ($this->getGrantsOfContainer($acl_node, true) as $grants) {
+                if (!$grants->{Tinebase_Model_Grants::GRANT_ADMIN}) {
+                    continue;
+                }
+                switch($grants->account_type) {
+                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                        $accountIds[] = $grants->account_id;
+                        break;
+                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                        $accountIds = array_merge($accountIds, Tinebase_Group::getInstance()->getGroupMembers($grants->account_id));
+                        break;
+                    case Tinebase_Acl_Rights::ACCOUNT_TYPE_ROLE:
+                        foreach (Tinebase_Role::getInstance()->getRoleMembers($grants->account_id) as $role) {
+                            switch($role['account_type']) {
+                                case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
+                                    $accountIds[] = $role['account_id'];
+                                    break;
+                                case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
+                                    $accountIds = array_merge($accountIds, Tinebase_Group::getInstance()->getGroupMembers($role['account_id']));
+                                    break;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
+        $accountIds = array_merge($accountIds, $this->_quotaNotificationRoleMembers);
+        $accountIds = array_unique($accountIds);
+        return Tinebase_User::getInstance()->getMultiple($accountIds) ?? [];
+    }
+
+    public function getQuotaNotificationRecipients(Tinebase_Model_User $sender = null, $softQuota = true): ?array
+    {
+        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $senderContact = $sender && $sender->contact_id ? $contactsBackend->get($sender->contact_id) : null;
+        $contacts = $senderContact ? [$senderContact] : [];
+        $additionalContacts = [];
+        
+        $addresses = Tinebase_Config::getInstance()->get(Tinebase_Config::QUOTA_NOTIFICATION_ADDRESSES, []);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . 'setting additional quota notification addresses: ' . print_r($addresses, true) . PHP_EOL);
+        
+        foreach ($addresses as $address) {
+            $additionalContacts[] = new Addressbook_Model_Contact(['email' => $address], true);
+        }
+
+        if (count($additionalContacts) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . 'found additional addresses for sending quota notification: ' . print_r($addresses->toArray(), true) . PHP_EOL);
+        }
+   
+        if (! $softQuota) {
+            $userEmails = [];
+            $users = Tinebase_User::getInstance()->getUsers();
+
+            foreach ($users as $user) {
+                if (! empty($user['contact_id'])) {
+                    $userEmails[] = $contactsBackend->get($user->contact_id);
+                }
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' sending hard quota notification to all users: ' . print_r($users->accountEmailAddress, true) . PHP_EOL);
+
+            $contacts = array_merge($additionalContacts, $userEmails);
+        }
+        
+        $recipients = [];
+        $disabledRecipients = [];
+
+        foreach ($contacts as $contact) {
+            if (! isset($contact['account_id']) || empty($contact['email'])) {
+                continue;
+            }
+
+            $user = Tinebase_User::getInstance()->getFullUserById($contact->account_id);
+
+            if ($user->accountStatus === Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED) {
+                $recipients[] = $contact;
+            } else {
+                $disabledRecipients[] = $contact->email;
+            }
+        }
+
+        if (count($disabledRecipients) > 0 && $sender) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . 'skip sending notification from ' . $sender->accountEmailAddress . ' to disabled recipients ' . print_r($disabledRecipients, true) . PHP_EOL);
+        }
+
+        return array_unique($recipients) ?? null;
     }
 
     public function purgeDeletedNodes()
