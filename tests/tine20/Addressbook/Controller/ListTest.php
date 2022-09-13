@@ -278,7 +278,8 @@ class Addressbook_Controller_ListTest extends TestCase
             $this->_instance->update($list);
             self::fail('exception expected for already used email address');
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            self::assertEquals('E-Mail address is already given. Please choose another one.', $tesg->getMessage());
+            self::assertEquals(Tinebase_Translation::getTranslation(Addressbook_Config::APP_NAME)
+                ->_('E-Mail address is already given. Please choose another one.'), $tesg->getMessage());
         }
     }
     
@@ -443,7 +444,8 @@ class Addressbook_Controller_ListTest extends TestCase
         self::assertFalse(Felamimail_Sieve_AdbList::$adbListSieveAuthFailure, 'auth failure while trying to put sieve script');
 
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($updatedList)->getSieve();
-        self::assertStringContainsString('reject "Your email has been rejected"', $script);
+        self::assertStringContainsString('reject "' . Tinebase_Translation::getTranslation(Felamimail_Config::APP_NAME)
+                ->_('Your email has been rejected') . '"', $script);
         self::assertStringContainsString($this->_personas['sclever']->accountEmailAddress, $script);
     }
 
