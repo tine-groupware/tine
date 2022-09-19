@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db9911d639c97d897d92066a27ced3e1",
+    "content-hash": "5d797971bb8b3c1c55fcf9e5c13929f7",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2284,30 +2284,30 @@
         },
         {
             "name": "laminas/laminas-httphandlerrunner",
-            "version": "2.1.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-httphandlerrunner.git",
-                "reference": "4d337cde83e6b901a4443b0ab5c3b97cbaa46413"
+                "reference": "eb670c5c7167cd218c61a8b4f6ab9ce339200c16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-httphandlerrunner/zipball/4d337cde83e6b901a4443b0ab5c3b97cbaa46413",
-                "reference": "4d337cde83e6b901a4443b0ab5c3b97cbaa46413",
+                "url": "https://api.github.com/repos/laminas/laminas-httphandlerrunner/zipball/eb670c5c7167cd218c61a8b4f6ab9ce339200c16",
+                "reference": "eb670c5c7167cd218c61a8b4f6ab9ce339200c16",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3 || ~8.0.0 || ~8.1.0",
+                "php": "^7.4 || ~8.0.0 || ~8.1.0",
                 "psr/http-message": "^1.0",
                 "psr/http-message-implementation": "^1.0",
                 "psr/http-server-handler": "^1.0"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~2.3.0",
-                "laminas/laminas-diactoros": "^2.8.0",
-                "phpunit/phpunit": "^9.5.9",
-                "psalm/plugin-phpunit": "^0.16.1",
-                "vimeo/psalm": "^4.10.0"
+                "laminas/laminas-coding-standard": "~2.4.0",
+                "laminas/laminas-diactoros": "^2.13.0",
+                "phpunit/phpunit": "^9.5.21",
+                "psalm/plugin-phpunit": "^0.17.0",
+                "vimeo/psalm": "^4.24.0"
             },
             "type": "library",
             "extra": {
@@ -2333,7 +2333,7 @@
                 "psr-15",
                 "psr-7"
             ],
-            "time": "2021-09-22T09:27:36+00:00"
+            "time": "2022-09-17T16:24:51+00:00"
         },
         {
             "name": "laminas/laminas-loader",
@@ -5567,11 +5567,11 @@
         },
         {
             "name": "sabre/vobject",
-            "version": "3.5.3pl3",
+            "version": "3.5.3pl4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/vobject.git",
-                "reference": "790165d51c46e09a730fded8c82ce8a64fd5acc5"
+                "reference": "1fce67649d3b773f1becb138c017e51c0b9e938e"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -5656,7 +5656,7 @@
                 "forum": "https://groups.google.com/group/sabredav-discuss",
                 "source": "https://github.com/fruux/sabre-vobject"
             },
-            "time": "2022-09-15T07:21:45+00:00"
+            "time": "2022-09-19T07:58:48+00:00"
         },
         {
             "name": "sabre/xml",
@@ -8061,25 +8061,25 @@
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v2.5.2",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "e8b495ea28c1d97b5e0c121748d6f9b53d075c66"
+                "reference": "07f1b9cc2ffee6aaafcf4b710fbc38ff736bd918"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/e8b495ea28c1d97b5e0c121748d6f9b53d075c66",
-                "reference": "e8b495ea28c1d97b5e0c121748d6f9b53d075c66",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/07f1b9cc2ffee6aaafcf4b710fbc38ff736bd918",
+                "reference": "07f1b9cc2ffee6aaafcf4b710fbc38ff736bd918",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=8.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.5-dev"
+                    "dev-main": "3.1-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -8107,7 +8107,7 @@
             ],
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
-            "time": "2022-01-02T09:53:40+00:00"
+            "time": "2022-02-25T11:15:52+00:00"
         },
         {
             "name": "symfony/error-handler",
@@ -9622,24 +9622,23 @@
         },
         {
             "name": "symfony/var-exporter",
-            "version": "v5.4.10",
+            "version": "v6.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "8fc03ee75eeece3d9be1ef47d26d79bea1afb340"
+                "reference": "b49350f45cebbba6e5286485264b912f2bcfc9ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/8fc03ee75eeece3d9be1ef47d26d79bea1afb340",
-                "reference": "8fc03ee75eeece3d9be1ef47d26d79bea1afb340",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/b49350f45cebbba6e5286485264b912f2bcfc9ef",
+                "reference": "b49350f45cebbba6e5286485264b912f2bcfc9ef",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2.5",
-                "symfony/polyfill-php80": "^1.16"
+                "php": ">=8.1"
             },
             "require-dev": {
-                "symfony/var-dumper": "^4.4.9|^5.0.9|^6.0"
+                "symfony/var-dumper": "^5.4|^6.0"
             },
             "type": "library",
             "autoload": {
@@ -9674,7 +9673,7 @@
                 "instantiate",
                 "serialize"
             ],
-            "time": "2022-05-27T12:56:18+00:00"
+            "time": "2022-07-04T16:01:56+00:00"
         },
         {
             "name": "symfony/yaml",
@@ -9732,19 +9731,20 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.4.11",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "efde8a27ff092910d0e935a7465cef8391c29fd2"
+                "reference": "3af34056a8ca332b4c6e4d00fdcf34040124bd14"
             },
             "require": {
-                "php": ">=5.3.0",
-                "zendframework/zendframework1": "1.12.*"
+                "ext-ctype": "*",
+                "php": ">=7.4.0",
+                "zendframework/zendframework1": "1.12.20pl59 as 1.12.20"
             },
             "require-dev": {
                 "phing/phing": "2.6.1-p0",
-                "phpunit/phpunit": "3.7.*"
+                "phpunit/phpunit": "^8.5"
             },
             "type": "library",
             "autoload": {
@@ -9752,15 +9752,26 @@
                     "Syncroton": [
                         "lib/",
                         "tests/"
+                    ],
+                    "Zend_": [
+                        "vendor/zendframework/zendframework1/library"
                     ]
                 }
+            },
+            "scripts": {
+                "php8test": [
+                    "cd tests/docker; docker-compose run cli8 ash -c 'cd /src/tests; ../vendor/bin/phpunit --color Syncroton/AllTests.php'; cd ../..;"
+                ],
+                "php81test": [
+                    "cd tests/docker; docker-compose run cli81 ash -c 'cd /src/tests; ../vendor/bin/phpunit --color Syncroton/AllTests.php'; cd ../..;"
+                ]
             },
             "license": [
                 "LGPL-3"
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2021-11-19T15:16:17+00:00"
+            "time": "2022-09-19T12:06:37+00:00"
         },
         {
             "name": "thecodingmachine/safe",
@@ -9980,11 +9991,11 @@
         },
         {
             "name": "twig/twig",
-            "version": "dev-pu/pm/php81comp",
+            "version": "v1.44.6pl3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/Twig.git",
-                "reference": "0a281785b64cfa9382e2c91b4511fdd972ee60b2"
+                "reference": "acfb833e9c9b907945dc2a14a0a8d496db114ac9"
             },
             "require": {
                 "php": ">=7.4",
@@ -10038,7 +10049,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2022-09-14T15:11:51+00:00"
+            "time": "2022-09-19T13:23:28+00:00"
         },
         {
             "name": "validator/livr",
@@ -12279,13 +12290,13 @@
         {
             "alias": "2.1.0",
             "alias_normalized": "2.1.0.0",
-            "version": "3.5.3.0-patch3",
+            "version": "3.5.3.0-patch4",
             "package": "sabre/vobject"
         },
         {
             "alias": "v1.44.6",
             "alias_normalized": "1.44.6.0",
-            "version": "dev-pu/pm/php81comp",
+            "version": "1.44.6.0-patch3",
             "package": "twig/twig"
         },
         {
@@ -12298,7 +12309,6 @@
     "minimum-stability": "RC",
     "stability-flags": {
         "jumbojett/openid-connect-php": 20,
-        "twig/twig": 20,
         "validator/livr": 20
     },
     "prefer-stable": false,
