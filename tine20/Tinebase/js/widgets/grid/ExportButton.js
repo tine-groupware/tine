@@ -146,7 +146,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
             
             const visibleColumns = [];
             _.each(this.cm.columns, function(column){ 
-                if(column.hidden == false) {
+                if(column.hidden != true) {
                     visibleColumns.push({'identifier': column.dataIndex, 'header': column.header})
                 }
             });
