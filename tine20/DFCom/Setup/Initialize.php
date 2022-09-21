@@ -63,7 +63,7 @@ class DFCom_Setup_Initialize extends Setup_Initialize
     {
         $appId = Tinebase_Application::getInstance()->getApplicationByName(HumanResources_Config::APP_NAME)->getId();
 
-        if ($scf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId, 'dfcom_id', null, true, true)) {
+        if ($scf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId, 'dfcom_id', HumanResources_Model_Employee::class, true, true)) {
             $scf->definition = [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => array_merge([
                     MC::LABEL             => 'Transponder Id', //_('Transponder Id')

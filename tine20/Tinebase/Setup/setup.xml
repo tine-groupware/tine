@@ -2000,7 +2000,7 @@
         </table>
         <table>
             <name>customfield_config</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2048,6 +2048,9 @@
                     <unique>true</unique>
                     <field>
                         <name>application_id</name>
+                    </field>
+                    <field>
+                        <name>model</name>
                     </field>
                     <field>
                         <name>name</name>
