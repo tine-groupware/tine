@@ -110,6 +110,10 @@
     color: #D8A45B;
 }
 
+.is_spam_suspicions_toolbar {
+    background-color: #D8A45B;
+}
+
 .FelamimailFlagIcon {
     width: 12px;
     height: 12px;

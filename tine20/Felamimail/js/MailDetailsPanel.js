@@ -600,6 +600,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         
         if (!this.spamToolbar) {
             this.spamToolbar = new Ext.Toolbar({
+                cls: 'is_spam_suspicions_toolbar',
                 items: [{
                         xtype: 'tbtext',
                         text: this.app.i18n._('This message is probably SPAM. Please help to train your anti-SPAM system with a decision: "Yes, it is SPAM" or "No, it is not"')
@@ -613,8 +614,6 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                 Tine.Tinebase.configManager.get('spamInfoDialogContent', 'Felamimail')
                             );
                         }
-                    }, {
-                        xtype: 'tbspacer', width: 20
                     }, {
                         iconCls: 'felamimail-action-spam',
                         text: this.app.i18n._('Yes, it is SPAM'),
