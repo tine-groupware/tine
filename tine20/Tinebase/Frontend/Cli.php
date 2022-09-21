@@ -976,14 +976,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $data[$key] = $value;
         }
 
-        if (! isset($data['grants']) || ! isset($data['name'])) {
-            throw new Tinebase_Exception_InvalidArgument('grants and name params are required');
+        if (! isset($data['grants']) || ! isset($data['name']) || ! isset($data['model'])) {
+            throw new Tinebase_Exception_InvalidArgument('grants, name, model params are required');
         }
 
         $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             $data['application_id'],
             $data['name'],
-            null,
+            $data['model'],
             false,
             true
         );

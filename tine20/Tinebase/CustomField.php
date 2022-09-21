@@ -203,8 +203,11 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param bool $ignoreAcl (default false)
      * @return Tinebase_Model_CustomField_Config|null
      */
-    public function getCustomFieldByNameAndApplication($applicationId, $customFieldName, $modelName = null, $getSystemCFs = false, $ignoreAcl = false)
+    public function getCustomFieldByNameAndApplication($applicationId, $customFieldName, $modelName, $getSystemCFs = false, $ignoreAcl = false)
     {
+        if (!$modelName) {
+            throw new Tinebase_Exception_UnexpectedValue('modelName is mandatory due to uniqueness');
+        }
         $allAppCustomfields = $this->getCustomFieldsForApplication($applicationId, $modelName,
             Tinebase_Model_CustomField_Grant::GRANT_READ, $getSystemCFs, $ignoreAcl);
         return $allAppCustomfields->find('name', $customFieldName);
