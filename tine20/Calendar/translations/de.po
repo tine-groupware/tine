@@ -2858,3 +2858,6 @@ msgstr "Entferne alle Filter bei Kalenderselektion"
 
 msgid "On Calendar Change will remove all filters"
 msgstr "Beim Wechsel des Kalenders werden alle weiteren Filter entfernt"
+
+msgid "Resource notification"
+msgstr "Ressourcen Notifikation"
