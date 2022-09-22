@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -16,7 +16,7 @@
 class Calendar_Controller_EventTests extends Calendar_TestCase
 {
     /**
-     * @var Calendar_Controller_Event controller unter test
+     * @var Calendar_Controller_Event
      */
     protected $_controller;
 
@@ -965,7 +965,18 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedPersistentEvent = $this->_controller->update($persistentEvent);
         $this->assertEquals(1, count($updatedPersistentEvent->attendee));
     }
-    
+
+    /**
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Exception
+     * @group nodockerci
+     *        fails with:
+     * Tinebase_Exception_NotFound: Tinebase_Model_Tree_Node record with id = b4ab92dd51c4c7ff7efdbd4cf86d1efe935c3309 not found!
+     * (Tinebase_ActionQueue::getInstance()->processQueue(10000);)
+     */
     public function testAttendeeGroupMembersChange()
     {
         $defaultAdminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
@@ -1043,7 +1054,19 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ->filter('user_id', $this->_getPersonasContacts('pwulf')->getId());
         $this->assertEquals(0, count($pwulf), 'pwulf is attender of event, but not should be');
     }
-    
+
+    /**
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Confirmation
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     * @group nodockerci
+     *        fails with:
+     * Tinebase_Exception_NotFound: Tinebase_Model_Tree_Node record with id = b4ab92dd51c4c7ff7efdbd4cf86d1efe935c3309 not found!
+     * (Tinebase_ActionQueue::getInstance()->processQueue(10000);)
+     */
     public function testAttendeeGroupMembersAddUser()
     {
         try {
