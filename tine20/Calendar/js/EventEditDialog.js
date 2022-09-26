@@ -636,11 +636,23 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('addGrant', _.get(this.record, 'data.container_id.account_grants.addGrant', false));
 
         Tine.Calendar.EventEditDialog.superclass.doCopyRecord.call(this);
-        
-        // remove attender ids
-        Ext.each(this.record.data.attendee, function(attender) {
-            delete attender.id;
-        }, this);
+
+        const attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(this.record.data.attendee);
+        const ownAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord(attendeeStore);
+        const allAttendee = Tine.Tinebase.common.assertComparable([]);
+
+
+        attendeeStore.each(attendee => {
+            if(attendee !== ownAttendee) {
+                attendee.set('status', 'NEEDS-ACTION');
+            }
+
+            allAttendee.push(Object.assign({... attendee.data}, {id: null}));
+        });
+
+
+        this.record.set('attendee', allAttendee);
+
 
         Tine.log.debug('Tine.Calendar.EventEditDialog::doCopyRecord() -> record:');
         Tine.log.debug(this.record);
@@ -760,9 +772,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Date}
      */
     adjustTimeToUserPreference: function(dateValue, prefKey) {
-        var userPreferenceDate = dateValue;
-            prefs = this.app.getRegistry().get('preferences'),
-            hour = prefs.get(prefKey).split(':')[0];
+        let userPreferenceDate = dateValue;
+        const prefs = this.app.getRegistry().get('preferences');
+        const hour = prefs.get(prefKey).split(':')[0];
         
         // adjust date to user preference
         userPreferenceDate.setHours(hour);
