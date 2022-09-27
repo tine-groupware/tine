@@ -2903,18 +2903,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _createAttender(Calendar_Model_Attender $attender, Calendar_Model_Event $event, $preserveStatus = FALSE, Tinebase_Model_Container $calendar = NULL)
     {
         // apply defaults
-        $attender->id                = null;
-        $attender->user_type         = isset($attender->user_type) ? $attender->user_type : Calendar_Model_Attender::USERTYPE_USER;
-        $attender->cal_event_id      =  $event->getId();
+        $attender->id = null;
+        $attender->user_type = isset($attender->user_type) ? $attender->user_type : Calendar_Model_Attender::USERTYPE_USER;
+        $attender->cal_event_id = $event->getId();
         $calendar = ($calendar) ? $calendar : Tinebase_Container::getInstance()->getContainerById($event->container_id);
-        
+
         $userAccountId = $attender->getUserAccountId();
-        
+
         // generate auth key
-        if (! $attender->status_authkey) {
+        if (!$attender->status_authkey) {
             $attender->status_authkey = Tinebase_Record_Abstract::generateUID();
         }
-        
+
         // attach to display calendar if attender has/is a useraccount
         if ($userAccountId) {
             if ($calendar->type === Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($userAccountId, $calendar, Tinebase_Model_Grants::GRANT_ADMIN)) {
@@ -2924,7 +2924,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 // allow user to set his own *personal* displ. cal
                 // otherwise set default display container
             } elseif (!$attender->displaycontainer_id || $userAccountId !== Tinebase_Core::getUser()->getId() || !Tinebase_Container::getInstance()->hasGrant($userAccountId, $attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_ADMIN) ||
-                    Tinebase_Container::getInstance()->get($attender->displaycontainer_id)->type !== Tinebase_Model_Container::TYPE_PERSONAL) {
+                Tinebase_Container::getInstance()->get($attender->displaycontainer_id)->type !== Tinebase_Model_Container::TYPE_PERSONAL) {
                 $attender->displaycontainer_id = self::getDefaultDisplayContainerId($userAccountId);
             }
 
@@ -2934,8 +2934,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $oldResourceAclCheck = $resourceController->doContainerACLChecks(false);
             try {
                 $resource = $resourceController->get($attender->user_id);
-                if (! Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser(), $resource->container_id,
-                        Calendar_Model_ResourceGrants::RESOURCE_INVITE)) {
+                if (!Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser(), $resource->container_id,
+                    Calendar_Model_ResourceGrants::RESOURCE_INVITE)) {
                     throw new Tinebase_Exception_AccessDenied('you do not have permission to invite this resource');
                 }
             } finally {
@@ -2943,18 +2943,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
             $attender->displaycontainer_id = $resource->container_id;
         }
-        
-        if ($attender->displaycontainer_id && !$this->_keepAttenderStatus) {
-            // check if user is allowed to set status
-            if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
-                if (! $preserveStatus && !Tinebase_Core::getUser()->hasGrant(
-                                $attender->displaycontainer_id, Calendar_Model_ResourceGrants::RESOURCE_STATUS)) {
-                    //If resource has an default status use this
+
+        if (!$this->_keepAttenderStatus && !$preserveStatus) {
+            if ($attender->displaycontainer_id) {
+                if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE && !Tinebase_Core::getUser()->hasGrant(
+                        $attender->displaycontainer_id, Calendar_Model_ResourceGrants::RESOURCE_STATUS)) {
+                    //If resource has a default status use this
                     $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
-                }
-            } else {
-                if (! $preserveStatus && ! Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
-                    $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+                } else {
+                    if (!Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
+                        $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+                    }
                 }
             }
         }
