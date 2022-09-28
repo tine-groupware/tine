@@ -1816,7 +1816,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => FALSE,
         ),
         self::USE_NOMINATIM_SERVICE => [
-            //_('Use Nomintim Geocoding Services')
+            //_('Use Nominatim Geocoding Services')
             'label'                 => 'Use Nominatim Geocoding Services',
             //_('Use of external Nominatim Geocoding service is allowed.')
             'description'           => 'Use of external Nominatim Geocoding service is allowed.',
@@ -1824,7 +1824,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => true,
             'setByAdminModule'      => false,
             'setBySetupModule'      => true,
-            'default'               => true,
+            'default'               => false,
         ],
         self::USE_MAP_SERVICE => [
             //_('Use map service')
@@ -1835,7 +1835,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => true,
             'setByAdminModule'      => true,
             'setBySetupModule'      => true,
-            'default'               => true,
+            'default'               => false,
         ],
         self::NOMINATIM_SERVICE_URL => [
             //_('Nominatim Service URL')
