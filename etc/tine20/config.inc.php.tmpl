@@ -92,5 +92,7 @@ return array(
         'tikaJar' => '/usr/local/bin/tika.jar',
     ),
 
-    'mapPanel' => {{getv "/mappanel" "true"}},
+    {{ if exists "/url" }}
+    'tine20URL' => '{{getv "/url"}}',
+    {{ end }}
 );
