@@ -283,7 +283,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 break;
             case Felamimail_Model_Account::TYPE_USER_INTERNAL:
                 $this->_createUserInternalEmailUser($_record);
-                // we dont need a credential cache here neither
+                // we don't need a credential cache here neither
                 return;
             case Felamimail_Model_Account::TYPE_USER:
                 if ($_record->user_id !== Tinebase_Core::getUser()->getId()) {
@@ -617,8 +617,33 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception
      */
-    public function checkEmailAccountContact($_record)
+    public function checkEmailAccountContact($_record, $_oldRecord = null)
     {
+        $diff = $_oldRecord ? $_oldRecord->diff($_record)->diff : $_record;
+
+        if (!empty($_oldRecord['contact_id'])) {
+            $expander = new Tinebase_Record_Expander(Felamimail_Model_Account::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    'contact_id' => []
+                ]
+            ]);
+            $expander->expand(new Tinebase_Record_RecordSet(Felamimail_Model_Account::class, [$_oldRecord]));
+        }
+        
+        $oldContainer = $_oldRecord['contact_id']['container_id'] ?? null;
+        $updatedContainer = $_record['contact_id']['container_id'] ?? null;
+
+        $isContainerUpdated = ((!empty($updatedContainer) || !empty($oldContainer))) && $updatedContainer !== $oldContainer;
+
+        if (!isset($diff['visibility'])
+            && !isset($diff['name'])
+            && !isset($diff['accountDisplayName']) 
+            && !isset($diff['email'])
+            && !$isContainerUpdated
+        ) {
+            return $_record;
+        }
+        
         if ($_record->type === Felamimail_Model_Account::TYPE_SHARED ||
             $_record->type === Felamimail_Model_Account::TYPE_USER ||
             $_record->type === Felamimail_Model_Account::TYPE_USER_INTERNAL ||
@@ -755,7 +780,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                 $this->_beforeUpdateStandardAccount($_record, $_oldRecord);
         }
         $this->_checkSignature($_record);
-        $this->checkEmailAccountContact($_record);
+        $this->checkEmailAccountContact($_record, $_oldRecord);
     }
 
     /**
@@ -795,6 +820,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             $_record->user = $emailUserBackend->getLoginName($user->getId(), $_record->email, $_record->email);
             $this->_beforeUpdateSharedAccountCredentials($_record, $_oldRecord);
             Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP)->inspectSetPassword($user->getId(), $_record->password);
+            $this->_autoCreateSystemAccountFolders($_record);
         }
     }
 
@@ -1185,8 +1211,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             ||  (! empty($_record->user) && $_record->user !== $credentials->username)
             ||  (! empty($_record->password) && $_record->password !== $credentials->password)
         ) {
-            $newPassword = ($_record->password) ? $_record->password : $credentials->password;
-            $newUsername = ($_record->user) ? $_record->user : $credentials->username;
+            $newPassword = ($_record->password) ?: $credentials->password;
+            $newUsername = ($_record->user) ?: $credentials->username;
 
             $_record->credentials_id = $this->_createCredentials($newUsername, $newPassword);
             $imapCredentialsChanged = TRUE;
@@ -1225,6 +1251,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             case Felamimail_Model_Account::TYPE_USER_INTERNAL:
                 $this->_afterUpdateSetSieve($updatedRecord, $record, $currentRecord);
                 break;
+        }
+
+        if ($updatedRecord->type === Felamimail_Model_Account::TYPE_SHARED) {
+            $this->_autoCreateSystemAccountFolders($updatedRecord);
         }
     }
 
