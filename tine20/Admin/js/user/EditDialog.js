@@ -876,7 +876,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.MFAPanel = new MFAPanel({
             app: this.app,
-            height: 100,
+            height: 130,
             title: false,
             account: this.record,
             editDialog: this,
