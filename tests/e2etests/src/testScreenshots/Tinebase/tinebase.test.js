@@ -14,7 +14,7 @@ describe('mainScreen', () => {
         for (let i = 0; i < Apps.length; i++) {
             try {
                 await page.waitForTimeout(500);
-                await expect(page).toClick('span', {text: process.env.TEST_USER});
+                await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
                 await page.waitForTimeout(500);
                 await expect(page).toClick('span', {text: Apps[i]});
             } catch (e) {
@@ -64,7 +64,7 @@ describe('usersettings', () => {
 
     test('admin mode', async () => {
         await expect(newPage).toClick('span', {text: 'Generelle Einstellungen'});
-        await newPage.waitForTimeout(1000);
+        await newPage.waitForTimeout(2000);
         await newPage.click('.x-btn-image.action_adminMode');
         await newPage.waitForTimeout(2000);
         await newPage.screenshot({path: 'screenshots/Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus.png'});
