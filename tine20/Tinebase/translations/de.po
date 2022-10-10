@@ -1901,7 +1901,7 @@ msgid ""
 "again or contact your administrator."
 msgstr ""
 "Leider konnte der Server auf Ihre Anfrage nicht antworten. Bitte "
-"aktualisieren Sie Ihren Browser und versuchen Sie es anschliessend noch "
+"aktualisieren Sie Ihren Browser und versuchen Sie es anschließend noch "
 "einmal. Im erneuten Fehlerfall kontaktieren Sie bitte Ihren Administrator."
 
 #: js/ExceptionHandler.js:266
@@ -1937,7 +1937,7 @@ msgid ""
 "browser, try again or contact your administrator."
 msgstr ""
 "Sie haben versucht auf eine Methode zuzugreifen, die nicht existiert. Bitte "
-"aktualisieren Sie Ihren Browser und versuchen Sie es anschliessend noch "
+"aktualisieren Sie Ihren Browser und versuchen Sie es anschließend noch "
 "einmal. Im erneuten Fehlerfall kontaktieren Sie bitte Ihren Administrator."
 
 #: js/widgets/persistentfilter/PickerPanel.js:130
@@ -2832,7 +2832,7 @@ msgstr "Klartext/Versteckt"
 
 #: js/widgets/form/PasswordTriggerField.js:43
 msgid "Copy to Clipboard"
-msgstr "In Zwischenablage kopieren"
+msgstr "In die Zwischenablage kopieren"
 
 #: js/widgets/LangChooser.js:35 Preference.php:141
 msgid "Language"
@@ -5100,7 +5100,7 @@ msgid "Show the Municipality Key in the Coredata"
 msgstr "Zeigt den Amtlicher Regionalschlüssel in den Stammdaten an"
 
 msgid "Import Community identification Numbers"
-msgstr "Importiert Amtlicher Regionalschlüssel"
+msgstr "Importiert Gemeindeschlüssel"
 
 msgid "Municipality Key Import"
 msgstr "Amtlicher Regionalschlüssel Import"
@@ -5134,10 +5134,11 @@ msgstr "Mobilfunknummer"
 msgid "MFA Device Type"
 msgstr "MFA Gerätetyp"
 
+#, fuzzy
 msgid "MFA Device Config"
 msgid_plural "MFA Device Configs"
 msgstr[0] "MFA Gerätekonfiguration"
-msgstr[1] "MFA Gerätekonfigurationen"
+msgstr[1] "MFA Gerätekonfiguration"
 
 msgid "Invalid authentication"
 msgstr "Authentifikation fehlgeschlagen"
@@ -5261,6 +5262,24 @@ msgstr "Wie möchten Sie Ihren Export speichern?"
 
 msgid "Export only currently shown columns"
 msgstr "Nur die angezeigten Spalten exportieren"
+
+#, fuzzy
+msgid "Community Identification Number"
+msgid_plural "Community Identification Numbers"
+msgstr[0] "Gemeindeschlüssel"
+msgstr[1] "Gemeindeschlüssel"
+
+msgid "Show the Community Identification Number in the Coredata"
+msgstr "Zeigt den Gemeindeschlüssel in den Stammdaten an"
+
+msgid "Community Identification Number Import"
+msgstr "Gemeindeschlüssel Import"
+
+msgid "Community Identification Numbers"
+msgstr "Gemeindeschlüssel"
+
+msgid "Search for Community Identification Numbers ..."
+msgstr "Suche nach Gemeindeschlüsseln ..."
 
 msgid "This area is locked. To unlock it you need to provide your PIN"
 msgstr ""
@@ -5497,11 +5516,8 @@ msgstr "Konflikt ist aufgelöst"
 msgid "License expired"
 msgstr "Lizenz abgelaufen"
 
-msgid ""
-"Your {0} license expired. Please buy a license at:"
-msgstr ""
-"Ihre {0} Lizenz ist abgelaufen. Bitte kaufen Sie "
-"eine Lizenz auf:"
+msgid "Your {0} license expired. Please buy a license at:"
+msgstr "Ihre {0} Lizenz ist abgelaufen. Bitte kaufen Sie eine Lizenz auf:"
 
 msgid "The license expires in {0} days"
 msgstr "Die Lizenz läuft in {0} Tagen ab"
@@ -5518,12 +5534,12 @@ msgstr ""
 "zu erwerben."
 
 msgid ""
-"Your {0} license is expired! Users cannot login any "
-"more. Please contact Metaways Infosystems GmbH to buy a new license."
+"Your {0} license is expired! Users cannot login any more. Please contact "
+"Metaways Infosystems GmbH to buy a new license."
 msgstr ""
-"Ihre {0} Lizenz ist abgelaufen! Benutzer können "
-"sich nicht mehr einloggen. Bitte kontaktieren Sie Metaways Infosystems "
-"GmbH um eine neue Lizenz zu erwerben."
+"Ihre {0} Lizenz ist abgelaufen! Benutzer können sich nicht mehr "
+"einloggen. Bitte kontaktieren Sie Metaways Infosystems GmbH um eine neue "
+"Lizenz zu erwerben."
 
 msgid "Copy Email Address"
 msgstr "E-Mail-Adresse kopieren"
