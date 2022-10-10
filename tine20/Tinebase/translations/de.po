@@ -1809,9 +1809,11 @@ msgstr ""
 msgid "Authorisation Required"
 msgstr "Anmeldung erforderlich"
 
-#: js/ExceptionHandler.js:170
-msgid "Your session timed out. You need to login again."
-msgstr "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an."
+msgid "Session Timed Out"
+msgstr "Sitzung ist abgelaufen"
+
+msgid "You can close this window."
+msgstr "Sie können dieses Fenster schließen."
 
 #: js/ExceptionHandler.js:189
 msgid "Insufficient Rights"
@@ -1899,7 +1901,7 @@ msgid ""
 "again or contact your administrator."
 msgstr ""
 "Leider konnte der Server auf Ihre Anfrage nicht antworten. Bitte "
-"aktualisieren Sie Ihren Browser und versuchen Sie es anschliessend noch "
+"aktualisieren Sie Ihren Browser und versuchen Sie es anschließend noch "
 "einmal. Im erneuten Fehlerfall kontaktieren Sie bitte Ihren Administrator."
 
 #: js/ExceptionHandler.js:266
@@ -1935,7 +1937,7 @@ msgid ""
 "browser, try again or contact your administrator."
 msgstr ""
 "Sie haben versucht auf eine Methode zuzugreifen, die nicht existiert. Bitte "
-"aktualisieren Sie Ihren Browser und versuchen Sie es anschliessend noch "
+"aktualisieren Sie Ihren Browser und versuchen Sie es anschließend noch "
 "einmal. Im erneuten Fehlerfall kontaktieren Sie bitte Ihren Administrator."
 
 #: js/widgets/persistentfilter/PickerPanel.js:130
@@ -4909,14 +4911,11 @@ msgstr ""
 msgid "Email account already exists"
 msgstr "Das E-Mail-Konto existiert bereits"
 
-msgid "Session Timed Out"
-msgstr "Sitzung ist abgelaufen"
-
-msgid "You can close this window."
-msgstr "Sie können dieses Fenster schließen."
-
 msgid "A container with this name already exists."
 msgstr "Ein Container mit diesem Namen existiert bereits."
+
+msgid "Your session timed out. You need to login again."
+msgstr "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an."
 
 msgid "This area is locked. To unlock it you need to provide your PIN"
 msgstr ""
