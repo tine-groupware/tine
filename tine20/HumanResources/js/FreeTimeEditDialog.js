@@ -112,6 +112,8 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.acceptedDaysField[type.id === 'vacation' ? 'show' : 'hide']();
         this.remainingDaysField[type.id === 'vacation' ? 'show' : 'hide']();
 
+        this.datePicker.selectionStyles = {'background-color': _.get(type, 'data.color', _.get(type, 'color', type))};
+
         [this.typeStatusPicker, this.datePicker, this.getForm().findField('description'), this.attachmentsPanel, this.action_saveAndClose].forEach((item) => {
             item[item.setReadOnly ? 'setReadOnly' : 'setDisabled'](!allowUpdate);
         });
@@ -212,7 +214,7 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         
         // const days = [];
         const disabledDates = [];
-        const dateClss = {};
+        const dateStyles = {};
         _.each(_.range(0, 42), (i) => {
             const day = period.from.add(Date.DAY, i);
             const date = day.format(datePicker.format);
@@ -222,11 +224,18 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             if (!isCurrent && (isDisabled || freeTimes.length)) {
                 disabledDates.push(date);
             }
+            if (freeTimes.length) {
+                dateStyles[date] = {};
+                const colors = _.compact(_.uniq(_.map(freeTimes, 'type.color')));
+                colors.length > 1 ?
+                    dateStyles[date]['background-image'] = `linear-gradient(to right, ${colors.join(',')})` :
+                    dateStyles[date]['background-color'] = `${colors[0] || 'transparent'}`;
+            }
         });
     
 
         datePicker.setDisabledDates(disabledDates);
-        // @TODO setStyle once we have colors
+        datePicker.setDatesStyles(dateStyles);
         // @TODO qTips for details?
 
         this.datePicker.hideLoadMask();
@@ -264,11 +273,11 @@ Tine.HumanResources.FreeTimeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 let employee = _.get(me, 'employeePicker.selectedRecord.data', me.record.get('employee_id'));
                 let account = _.get(me, 'accountPicker.selectedRecord.data', me.record.get('account_id'));
 
+                this.setDisabled(!employee);
                 if (!employee) {
                     if (me.accountPicker) {
                         me.accountPicker.clearValue();
                     }
-                    this.setDisabled(true);
                     return;
                 }
                 const employeeFilter = [{

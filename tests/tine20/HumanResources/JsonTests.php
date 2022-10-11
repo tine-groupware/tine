@@ -502,7 +502,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         ));
         $myAccount = $accountInstance->search($accountFilter)->getFirstRecord();
         
-        $firstDayDate = clone $startDate;
+        $firstDayDate = clone $newContract->start_date;
         $firstDayDate->addDay(3);
         
         while ($firstDayDate->format('N') != 1) {
@@ -514,7 +514,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
             'employee_id'   => $savedEmployee['id'],
             'account_id'    => $myAccount->getId(),
             'type'          => 'vacation',
-            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_REQUESTED,
+            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             'freedays'      => array(
                 array('date' => $firstDayDate, 'duration' => 1),
                 array('date' => $firstDayDate->getClone()->addDay(1), 'duration' => 1),
@@ -1256,8 +1256,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employee->contracts = array($contract->toArray());
         $json = new HumanResources_Frontend_Json();
         $savedEmployee = $json->saveEmployee($json->saveEmployee($employee->toArray()));
-        $this->assertStringEndsWith('12:00:00', $savedEmployee['employment_begin']);
-        $this->assertStringEndsWith('12:00:00', $savedEmployee['contracts'][0]['start_date']);
+        $this->assertStringEndsWith('00:00:00', $savedEmployee['employment_begin']);
+        $this->assertStringEndsWith('00:00:00', $savedEmployee['contracts'][0]['start_date']);
     }
 
     /**
@@ -1293,8 +1293,12 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $result = $this->_json->searchFreeTimeTypes(null, null);
         $this->assertArrayHasKey('results', $result);
         $this->assertTrue(count($result['results']) > 0);
-        $this->assertArrayHasKey('wage_type', $result['results'][0]);
-        $this->assertArrayHasKey('name', $result['results'][0]['wage_type']);
+        foreach ($result['results'] as $ftt) {
+            if (isset($ftt['wage_type']['name'])) {
+                return;
+            }
+        }
+        $this->fail('not a single wage_type got resolved');
     }
 
     public function testDeleteFreeTimeTypes()
