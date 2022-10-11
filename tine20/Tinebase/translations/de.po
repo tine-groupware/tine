@@ -3718,13 +3718,6 @@ msgstr "{0} (Kopie)"
 msgid "Add New {0}"
 msgstr "Neuen {0} hinzufügen"
 
-msgid ""
-"{gender, select, male {Add New {recordName}} female {Add New {recordName}} "
-"other {Add New {recordName}}}"
-msgstr ""
-"{gender, select, male {Neuen {recordName} hinzufügen} female {Neue "
-"{recordName} hinzufügen} other {Neues {recordName} hinzufügen}}"
-
 #: js/widgets/dialog/EditDialog.js:955
 #, python-brace-format
 msgid "Edit {0} \"{1}\""
@@ -4929,6 +4922,13 @@ msgstr "Das E-Mail-Konto existiert bereits"
 msgid "A container with this name already exists."
 msgstr "Ein Container mit diesem Namen existiert bereits."
 
+msgid ""
+"{gender, select, male {Add New {recordName}} female {Add New {recordName}} "
+"other {Add New {recordName}}}"
+msgstr ""
+"{gender, select, male {Neuen {recordName} hinzufügen} female {Neue "
+"{recordName} hinzufügen} other {Neues {recordName} hinzufügen}}"
+
 msgid "Your session timed out. You need to login again."
 msgstr "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an."
 
@@ -5086,6 +5086,12 @@ msgid "FIDO2 WebAuthn authentication failed. Try again?"
 msgstr ""
 "Authentifikation des FIDO2 WebAuthn Gerätes fehlgeschlagen. Wollen sie es "
 "erneut versuchen?"
+
+msgid ""
+"Please open the following URL in your Browser for more security key options"
+msgstr ""
+"Bitte öffnen sie die folgende URL in ihrem Browser um den "
+"Sicherheitsschlüssel zu verwalten"
 
 msgid "{gender, select, male {all of} female {all of} other {all of}}"
 msgstr "{gender, select, male {alle von} female {alle von} other {alle von}}"
