@@ -1901,7 +1901,7 @@ msgid ""
 "again or contact your administrator."
 msgstr ""
 "Leider konnte der Server auf Ihre Anfrage nicht antworten. Bitte "
-"aktualisieren Sie Ihren Browser und versuchen Sie es anschließend noch "
+"aktualisieren Sie Ihren Browser und versuchen Sie es anschliessend noch "
 "einmal. Im erneuten Fehlerfall kontaktieren Sie bitte Ihren Administrator."
 
 #: js/ExceptionHandler.js:266
@@ -1937,7 +1937,7 @@ msgid ""
 "browser, try again or contact your administrator."
 msgstr ""
 "Sie haben versucht auf eine Methode zuzugreifen, die nicht existiert. Bitte "
-"aktualisieren Sie Ihren Browser und versuchen Sie es anschließend noch "
+"aktualisieren Sie Ihren Browser und versuchen Sie es anschliessend noch "
 "einmal. Im erneuten Fehlerfall kontaktieren Sie bitte Ihren Administrator."
 
 #: js/widgets/persistentfilter/PickerPanel.js:130
@@ -2832,7 +2832,7 @@ msgstr "Klartext/Versteckt"
 
 #: js/widgets/form/PasswordTriggerField.js:43
 msgid "Copy to Clipboard"
-msgstr "In die Zwischenablage kopieren"
+msgstr "In Zwischenablage kopieren"
 
 #: js/widgets/LangChooser.js:35 Preference.php:141
 msgid "Language"
@@ -4756,18 +4756,6 @@ msgstr "Lademaske"
 msgid "Show load mask in grids"
 msgstr "Zeige Lademaske in Listenansicht"
 
-msgid "Grid resizing strategy"
-msgstr "Spaltenbreiten-Anpassung in Listenansicht"
-
-msgid "How to resize grid columns"
-msgstr "Strategie zur Änderung von Spaltenbreiten"
-
-msgid "Right side columns fractional"
-msgstr "Rechts stehende Spalten anteilig anpassen"
-
-msgid "Neighbours only"
-msgstr "Nur Nachbarspalten anpassen"
-
 #: Preference.php:133
 msgid "Auto search on filter change"
 msgstr "Automatische Suche beim Filterwechsel"
@@ -4981,12 +4969,6 @@ msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihr Passwort "
 "eingeben."
 
-msgid "Manage MFA Devices"
-msgstr "MFA Geräte verwalten"
-
-msgid "Add new MFA Device"
-msgstr "Neues MFA Gerät zufügen"
-
 msgid "Choose MFA Deivce"
 msgstr "MFA Gerät auswählen"
 
@@ -5097,19 +5079,19 @@ msgid "{gender, select, male {all of} female {all of} other {all of}}"
 msgstr "{gender, select, male {alle von} female {alle von} other {alle von}}"
 
 #, fuzzy
-msgid "Municipality Key"
-msgid_plural "Municipality Keys"
-msgstr[0] "Amtlicher Regionalschlüssel"
-msgstr[1] "Amtlicher Regionalschlüssel"
+msgid "Community Identification Number"
+msgid_plural "Community Identification Numbers"
+msgstr[0] "Gemeindeschlüssel"
+msgstr[1] "Gemeindeschlüssel"
 
-msgid "Show the Municipality Key in the Coredata"
-msgstr "Zeigt den Amtlicher Regionalschlüssel in den Stammdaten an"
+msgid "Show the Community Identification Number in the Coredata"
+msgstr "Zeigt den Gemeindeschlüssel in den Stammdaten an"
 
 msgid "Import Community identification Numbers"
 msgstr "Importiert Gemeindeschlüssel"
 
-msgid "Municipality Key Import"
-msgstr "Amtlicher Regionalschlüssel Import"
+msgid "Community Identification Number Import"
+msgstr "Gemeindeschlüssel Import"
 
 msgid "PIN"
 msgid_plural "PINs"
@@ -5142,15 +5124,13 @@ msgstr "MFA Gerätetyp"
 
 #, fuzzy
 msgid "MFA Device Config"
-msgid_plural "MFA Device Configs"
-msgstr[0] "MFA Gerätekonfiguration"
-msgstr[1] "MFA Gerätekonfiguration"
+msgstr "MFA Gerätekonfiguration"
 
 msgid "Invalid authentication"
 msgstr "Authentifikation fehlgeschlagen"
 
-msgid "Municipality Keys"
-msgstr "Amtlicher Regionalschlüssel"
+msgid "Community Identification Numbers"
+msgstr "Gemeindeschlüssel"
 
 msgid "Private"
 msgstr "Privat"
@@ -5178,8 +5158,8 @@ msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie den Token vom "
 "Gerät {mfaDevice.device_name} eingeben."
 
-msgid "Search for Municipality Keys ..."
-msgstr "Suche nach Amtlichen Regionalschlüsseln ..."
+msgid "Search for Community Identification Numbers ..."
+msgstr "Suche nach Gemeindeschlüsseln ..."
 
 msgid "Create Contact"
 msgstr "Kontakt erstellen"
@@ -5196,11 +5176,41 @@ msgstr "Sie sind nicht berechtigt System Tags zu löschen"
 msgid "Confirmation is required"
 msgstr "Bestätigung ist erforderlich"
 
-msgid ""
-"Please open the following URL in your Browser for more security key options"
-msgstr ""
-"Bitte öffnen sie die folgende URL in ihrem Browser um den "
-"Sicherheitsschlüssel zu verwalten"
+msgid "Grid resizing strategy"
+msgstr "Spaltenbreiten-Anpassung in Listenansicht"
+
+msgid "How to resize grid columns"
+msgstr "Strategie zur Änderung von Spaltenbreiten"
+
+msgid "Right side columns fractional"
+msgstr "Rechts stehende Spalten anteilig anpassen"
+
+msgid "Neighbours only"
+msgstr "Nur Nachbarspalten anpassen"
+
+msgid "Manage MFA Devices"
+msgstr "MFA Geräte verwalten"
+
+msgid "Add new MFA Device"
+msgstr "Neues MFA Gerät zufügen"
+
+#, fuzzy
+msgid "Municipality Key"
+msgid_plural "Municipality Keys"
+msgstr[0] "Amtlicher Regionalschlüssel"
+msgstr[1] "Amtlicher Regionalschlüssel"
+
+msgid "Show the Municipality Key in the Coredata"
+msgstr "Zeigt den Amtlicher Regionalschlüssel in den Stammdaten an"
+
+msgid "Municipality Key Import"
+msgstr "Amtlicher Regionalschlüssel Import"
+
+msgid "Municipality Keys"
+msgstr "Amtlicher Regionalschlüssel"
+
+msgid "Search for Municipality Keys ..."
+msgstr "Suche nach Amtlichen Regionalschlüsseln ..."
 
 msgid "Create {0}"
 msgstr "{0} erstellen"
@@ -5230,7 +5240,6 @@ msgstr "Alle Kostenträger"
 msgid "All cost unit records"
 msgstr "Alle Kostenträger Datensätze"
 
-#: Model/MunicipalityKey.php:214
 msgid "plz"
 msgstr "PLZ"
 
@@ -5269,35 +5278,17 @@ msgstr "Wie möchten Sie Ihren Export speichern?"
 msgid "Export only currently shown columns"
 msgstr "Nur die angezeigten Spalten exportieren"
 
-#, fuzzy
-msgid "Community Identification Number"
-msgid_plural "Community Identification Numbers"
-msgstr[0] "Gemeindeschlüssel"
-msgstr[1] "Gemeindeschlüssel"
-
-msgid "Show the Community Identification Number in the Coredata"
-msgstr "Zeigt den Gemeindeschlüssel in den Stammdaten an"
-
-msgid "Community Identification Number Import"
-msgstr "Gemeindeschlüssel Import"
-
-msgid "Community Identification Numbers"
-msgstr "Gemeindeschlüssel"
-
-msgid "Search for Community Identification Numbers ..."
-msgstr "Suche nach Gemeindeschlüsseln ..."
-
 msgid "This area is locked. To unlock it you need to provide your PIN"
 msgstr ""
 "Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihre PIN "
 "eingeben"
 
 msgid ""
-"A new window cannot be opened. To avoid this message please deactivate "
-"your browsers popup blocker for {0}"
+"A new window cannot be opened. To avoid this message please deactivate your "
+"browsers popup blocker for {0}"
 msgstr ""
-"Ein neues Fenster konnte nicht geöffnet werden. Bitte deaktivieren Sie "
-"den Popup-Blocker Ihres Browsers für {0}"
+"Ein neues Fenster konnte nicht geöffnet werden. Bitte deaktivieren Sie den "
+"Popup-Blocker Ihres Browsers für {0}"
 
 msgid "There was an error verifying your certificate!!!"
 msgstr "Es gab einen Fehler beim verifizieren Ihres Zertifikats!"
@@ -5326,8 +5317,7 @@ msgstr[0] "Ausgewählten Tag wirklich löschen?"
 msgstr[1] "Ausgewählte Tags wirklich löschen?"
 
 msgid "the selected tag will be deleted and disapear for all entries"
-msgid_plural ""
-"The selected tags will be removed and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] ""
 "Der ausgewählte Tag wird gelöscht und verschwindet bei allen Einträgen"
 msgstr[1] ""
@@ -5365,8 +5355,8 @@ msgstr "Frei / Belegt"
 
 msgid "The grant to access free busy information of events in this calendar"
 msgstr ""
-"Das Recht, zu Termine in diesem Kalender Frei/Belegt-Informationen "
-"angezeigt zu bekommen"
+"Das Recht, zu Termine in diesem Kalender Frei/Belegt-Informationen angezeigt "
+"zu bekommen"
 
 msgid "The grant to access records marked as private in this container"
 msgstr "Das Recht, private Einträge in diesem Container zu lesen"
@@ -5383,8 +5373,7 @@ msgstr "Konfiguration der Zwei Faktor Authentifizierung"
 msgid "Container Custom Sort"
 msgstr "Benutzerdefinierte Ordnersortierung"
 
-msgid ""
-"Allows to sort containers by setting the sort order in Admin/Container"
+msgid "Allows to sort containers by setting the sort order in Admin/Container"
 msgstr "Erlaubt es die Sortierung von Ordnern im Admin/Container Modul"
 
 msgid "Name of the role to notify if soft quote is exceeded"
@@ -5494,8 +5483,7 @@ msgstr "Zweit-Passwort benötigt"
 
 msgid "The right Resource Admin must be set once."
 msgstr ""
-"Das Recht Ressourcen Administration muss mindestens einmal festgelegt "
-"werden."
+"Das Recht Ressourcen Administration muss mindestens einmal festgelegt werden."
 
 msgid "- The last filter I used -"
 msgstr "- Der letzte ausgewählte Filter -"
@@ -5504,16 +5492,14 @@ msgid ""
 "Set Tine 2.0 maintenance mode. Possible values: \"off\", \"normal\" (only "
 "users having the maintenance right can login) and \"all\""
 msgstr ""
-"Tine 2.0 in den Wartungsmodus setzten. Mögliche Werte: „off“, "
-"„normal“ (nur Nutzer mit dem Wartungsmodus Recht können sich einloggen) "
-"und „all“"
+"Tine 2.0 in den Wartungsmodus setzten. Mögliche Werte: „off“, „normal“ (nur "
+"Nutzer mit dem Wartungsmodus Recht können sich einloggen) und „all“"
 
 msgid "User E-Mail-Address {0} not in allowed domains"
 msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains"
 
 msgid "User E-Mail-Address {0} not in allowed domains [{1}]"
-msgstr ""
-"Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
+msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
 
 msgid "Conflict is resolved"
 msgstr "Konflikt ist aufgelöst"
@@ -5536,16 +5522,16 @@ msgstr "{0} Testversion."
 
 msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
 msgstr ""
-"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine gültige Lizenz "
-"zu erwerben."
+"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine gültige Lizenz zu "
+"erwerben."
 
 msgid ""
 "Your {0} license is expired! Users cannot login any more. Please contact "
 "Metaways Infosystems GmbH to buy a new license."
 msgstr ""
-"Ihre {0} Lizenz ist abgelaufen! Benutzer können sich nicht mehr "
-"einloggen. Bitte kontaktieren Sie Metaways Infosystems GmbH um eine neue "
-"Lizenz zu erwerben."
+"Ihre {0} Lizenz ist abgelaufen! Benutzer können sich nicht mehr einloggen. "
+"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine neue Lizenz zu "
+"erwerben."
 
 msgid "Copy Email Address"
 msgstr "E-Mail-Adresse kopieren"
@@ -5554,11 +5540,11 @@ msgid "Multi Factor Authentication Config"
 msgstr "Multi-Faktor-Authentifizierung"
 
 msgid ""
-"This area is locked. To unlock it we send a securitycode to via "
-"{mfaDevice.device_name}"
+"This area is locked. To unlock it we send a securitycode to via {mfaDevice."
+"device_name}"
 msgstr ""
-"Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via "
-"{mfaDevice.device_name} zum entsperren gesendet"
+"Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via {mfaDevice."
+"device_name} zum entsperren gesendet"
 
 msgid "Static PIN for user: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
 msgstr "Statischer PIN: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
