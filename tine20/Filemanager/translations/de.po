@@ -847,3 +847,9 @@ msgstr "Öffentlichen Link kopieren"
 
 msgid "Do you want to restart the failed uploads?"
 msgstr "Möchten Sie die nicht erfolgreich Datei(en) erneut hochladen?"
+
+msgid "Manage shared filemanager favorites"
+msgstr "Gemeinsame Dateimanager-Favoriten verwalten"
+
+msgid "Create or update shared filemanager favorites'"
+msgstr "Gemeinsame Dateimanager-Favoriten erstellen oder bearbeiten"

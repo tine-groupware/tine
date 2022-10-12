@@ -30,6 +30,11 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @static string
      */
     const MANAGE_DOWNLOADLINKS = 'manage_downloadlinks';
+
+    /**
+     * @static string
+     */
+    const MANAGE_SHARED_NODE_FAVORITES = 'manage_shared_node_favorites';
     
     /**
      * holds the instance of the singleton
@@ -83,7 +88,8 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $addRights = array(
             Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS,
             Tinebase_Acl_Rights::USE_PERSONAL_TAGS,
-            self::MANAGE_DOWNLOADLINKS
+            self::MANAGE_DOWNLOADLINKS,
+            self::MANAGE_SHARED_NODE_FAVORITES
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -108,7 +114,11 @@ class Filemanager_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_DOWNLOADLINKS  => array(
                 'text'          => $translate->_('Manage anonymous download links'),
                 'description'   => $translate->_('Allow viewing, adding and deleting download links'),
-            )
+            ),
+            self::MANAGE_SHARED_NODE_FAVORITES => array(
+                'text'          => $translate->_('Manage shared filemanager favorites'),
+                'description'   => $translate->_('Create or update shared filemanager favorites'),
+            ),
         );
         
         $rightDescriptions = array_merge($rightDescriptions, parent::getTranslatedRightDescriptions());
