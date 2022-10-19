@@ -309,6 +309,8 @@ Wie kommt er dennoch zu einem Eintrag und der Einladende zu seiner Antwort?
 Naheliegenderweise öffnet er dazu vielleicht die anhängende ICS-Datei. Diese Anfrage übergibt der Browser aber jetzt an das lokale Computersystem und das lässt entweder fragen, welches Programm die ICS-Datei öffnen soll (wenn diese Art von Datei dem System bisher unbekannt war) oder es öffnet sie mit der für ICS-Dateien hinterlegten Standardsoftware (bspw. MS Outlook oder Evolution). Das führt natürlich nicht zu dem gewünschten Ziel, also der Eintragung des Termins in die entsprechende {branch}-Instanz. Es lässt sich aber nicht vermeiden, da {branch} als Webanwendung natürlich auf einem Computersystem nicht "bekannt" ist. Wie Sie dennoch den Termin einlesen können, erfahren Sie am Ende dieses Kapitels unter <<sec.kalender.importiere.termine>>.
 ================
 
+{empty}
+
 //////////////////
         SCREENSHOT
         path: </Calendar/EditDialog/Event/>
