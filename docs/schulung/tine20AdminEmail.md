@@ -1,9 +1,9 @@
-Tine 2.0 Admin Schulung: E-Mail / Felamimail
+tine Admin Schulung: E-Mail / Felamimail
 =================
 
-Version: Caroline 2017.11
+Version: Lu 2021.11
 
-Konfiguration und Problemlösungen des E-Mail-Moduls von Tine 2.0
+Konfiguration und Problemlösungen des E-Mail-Moduls von tine
 
 Frage: Wie kann ich den E-Mail-Cache leeren?
 =================
@@ -14,7 +14,7 @@ Frage: Wie kann ich den E-Mail-Cache leeren?
 > Allein die Tabelle tine20_felamimail_cache_message besitzt 936954
 > Einträge, was die Datenbank nur unnötig füllt.
 
-Der Tine 2.0 Email-Client benötigt diese Tabellen, u.a. zur Suche und Darstellung der Ordner und E-Mails.
+Der tine Email-Client benötigt diese Tabellen, u.a. zur Suche und Darstellung der Ordner und E-Mails.
  Der Cache wird neu aufgebaut, wenn er gelöscht wird. Bei der eingebauten Backup-Funktionalität
  wird der E-Mail-Cache nicht mit gesichert.
 
@@ -30,6 +30,9 @@ Am einfachsten geht das durch den Aufruf einer CLI-Methode:
     $ tine20-cli --method=Felamimail.truncatecache
     
 Damit wird der Cache aller Benutzer gelöscht. Die Benutzer-Abfrage dient zur Prüfung des ADMIN-Rechts.
+
+Es gab auch schon Überlegungen, den Zugriff direkt auf den IMAP-Server zu machen, ohne den Cache dazwischen.
+ Das ist aber aktuell noch Zukunftsmusik.
 
 Problem: IMAP-Server hat selbstsigniertes Zertifikat
 =================
@@ -57,7 +60,7 @@ Der gleiche Schritt muss dann ggf. nochmal für SMTP gemacht werden.
 
 Alternativ können die Configs auch via CLI setup.php --setconfig (vorher mit --getconfig auslesen) gesetzt werden.
 
-Frage: Wir kann ich den Notifikations-Service einrichten?
+Frage: Wie kann ich den Notifikations-Service einrichten?
 =================
 
 Am einfachsten kann dieser unter setup.php / Email eingerichtet werden.
@@ -102,16 +105,16 @@ an den eigenen Benutzer ausgelöst werden.
 Frage: Wie kann ich Felamimail aus einer externen Webapplikation/Webseite aufrufen, um eine E-Mail zu versenden?
 =================
 
-* Es gibt im Tine 2.0 Menü den Punkt "Tine 2.0 als Standard-Mailprogramm
+* Es gibt im tine Menü den Punkt "tine als Standard-Mailprogramm
 Verwenden" erweitert. Klickt der Nutzer diesen Punkt muss er, je nach Browser, diese Entscheidung noch
 einmal in einem Nachfragedialog vom Browser bestätigen.
 
-* Hat der Nutzer Tine 2.0 als Standard-Email-Programm festgelegt, so öffnet sich beim klicken auf
-einen Mailto-Link im Browser ein neues Tine 2.0 Fenster mit einem Email-Verfassen-Fenster. Größe und
-Position des Fensters werden dabei vom Browser automatisch gewählt und können nicht von Tine 2.0
+* Hat der Nutzer tine als Standard-Email-Programm festgelegt, so öffnet sich beim klicken auf
+einen Mailto-Link im Browser ein neues tine Fenster mit einem Email-Verfassen-Fenster. Größe und
+Position des Fensters werden dabei vom Browser automatisch gewählt und können nicht von tine
 beeinflusst werden.
 
-* Um die Mail zu versenden, muss der Nutzer bereits vor dem klicken eines Mailto an Tine 2.0
+* Um die Mail zu versenden, muss der Nutzer bereits vor dem klicken eines Mailto an tine
 angemeldet sein. Andernfalls ist es nicht möglich, die Mail zu versenden.
 Der Mailto-Link muss muss standardgemäß formatiert werden. Als Referenz beziehen wir uns auf:
 de.selfhtml.org/html/verweise/email.htm
@@ -161,14 +164,16 @@ Unter Alpine Linux heisst das Paket ytnef:
     apk add ytnef
 
  
-Frage: welche Anforderung muss ein EMail-Server erfüllen um in Tine 2.0 vollständig integrierbar zu sein?
+Frage: welche Anforderung muss ein EMail-Server erfüllen um in tine vollständig integrierbar zu sein?
 ===================
 
-Vollständige Unterstützung in Tine 2.0 bieten die Dovecot (IMAP + Sieve) und Postfix (SMTP) Server. Es gibt auch andere Mailserver/Systeme, die über Plugins angesteuert werden können, diese werden aber nicht im vollen Funktionsumfang unterstützt.
+Vollständige Unterstützung in tine bieten die Dovecot (IMAP + Sieve) und Postfix (SMTP) Server. Es gibt auch andere Mailserver/Systeme, die über Plugins angesteuert werden können, diese werden aber nicht im vollen Funktionsumfang unterstützt.
 
-Bei Dovecot und Postfix werden die Bewegdaten (Benutzer, Domains, Destinations, Aliases, Forwards, ...) über MySQL-Tabellen verwaltet, die von Tine 2.0 und den Mailsystemen geschrieben und gelesen werden.
+Bei Dovecot und Postfix werden die Bewegdaten (Benutzer, Domains, Destinations, Aliases, Forwards, ...) über MySQL-Tabellen verwaltet, die von tine und den Mailsystemen geschrieben und gelesen werden.
 
-TODO detaillierte Anleitung erstellen.
+TODO: detaillierte Anleitung erstellen.
+
+Anleitung Github: https://github.com/tine20/tine20/wiki/EN%3AMailserver
 
 Frage: wie kann ich weitere Templates für Abwesenheitsnotizen hinterlegen?
 ===================
