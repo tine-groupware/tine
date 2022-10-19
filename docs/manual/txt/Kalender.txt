@@ -259,8 +259,8 @@ Bei dem Feld menu:[Rolle] findet man bei jeden Teilnehmer ein Pulldown Menü mit
 
 Legen Sie nun einen neuen Teilnehmer an! Gehen Sie dazu auf die Zeile unter dem zuletzt angelegten Teilnehmer (in unserem Falle sollten das jetzt nur Sie selbst sein) und klicken Sie auf das Feld menu:[Klicken Sie hier, um neue Teilnehmer einzuladen...]. Sie können jetzt direkt den Namen der Personen eintippen. Wenn Sie die ersten drei Buchstaben eingetippt haben, fängt {branch} automatisch an die Kontakte zu filtern. Als Teilnehmer werden Benutzer, Gruppen oder Ressourcen verstanden. Dazu gleich mehr.
 
- Die Option menu:[Typ] zeigt Ihnen an, um welchen Teilnehmer-Typen es sich handelt, also ob der Teilnehmer eine Gruppe, Ressource oder ein Benutzer ist.
- Sie können dieses Feld auch als "Vorab-Filter" nutzen. Klicken Sie dazu auf das leere Feld, dass sich im Reiter menu:[Typ] befindet und wählen Sie die Teilnehmer-Art aus. Nun werden in der Suche nur Teilnehmer dieses Typs angezeigt.
+Die Option menu:[Typ] zeigt Ihnen an, um welchen Teilnehmer-Typen es sich handelt, also ob der Teilnehmer eine Gruppe, Ressource oder ein Benutzer ist.
+Sie können dieses Feld auch als "Vorab-Filter" nutzen. Klicken Sie dazu auf das leere Feld, dass sich im Reiter menu:[Typ] befindet und wählen Sie die Teilnehmer-Art aus. Nun werden in der Suche nur Teilnehmer dieses Typs angezeigt.
 
 //////////////////
         SCREENSHOT
