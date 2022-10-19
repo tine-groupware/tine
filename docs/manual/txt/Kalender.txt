@@ -31,21 +31,6 @@ Der Kalender ist, neben dem Adressbuch und dem E-Mail-Client, wohl eine der drei
 (((ICS-Format)))
 Eine weitere Möglichkeit, andere Kalender anzubinden, ist _CalDAV_, ein Protokoll für den Austausch standardisierter Termindaten. Verbreitete Clients, die dieses Protokoll verarbeiten, sind z.B. Evolution (ein unter diversen Linux-Distributionen verbreiteter, aber auch für Windows verfügbarer  E-Mail- und Kalender-Client), iCal (ab Mac OS X 10.5 Leopard), iPhone (ab Version 3.0), Sunbird/Thunderbird sowie Android (mit mehreren verfügbaren Synchronisationsprogrammen). Auch für MS Outlook gibt es CalDAV-Zusatzmodule. Die Liste der CalDAV-Server ist noch weitaus länger. Wie genau diese in {branch} eingebunden werden, ist nicht Thema dieses Benutzerhandbuchs (<<sec.kalender.sync>> enthält nur einige grundlegende Hinweise), wir werden in <<sec.kalender.importiere.termine>> aber beschreiben, wie Sie externe Kalenderdateien im ICS-Format einlesen bzw. einbinden können.
 
-
-Bei der Nutzung von iCal gibt es die Einschränkung, dass gemeinsame Kalender angezeigt werden, aber von anderen freigegebenen Benutzern nicht abgeändert oder gelöscht werden können
-
-Es handelt sich hierbei um eine Besonderheit/Limitierung der Apple Implementationen, die die Bearbeitung eines Termins in einem gemeinsamen Kalender einschränkt, sobald dieser Teilnehmer hat.
-
-Vermutlich ist die Ursache hierfür tief in der Kalender-Architektur von iCal verborgen. Das Grundproblem ist:
-Apples eigener Kalender-Server kennt keine gemeinsamen Kalender mit Teilnehmern. Teilnehmer gibt es bei Apple nur in persönlichen Kalendern.
-
-[Ein ähnliches Problem gibt es auch mit dem "Privat" Flag und Apple Produkten]
-
-Die momentan einzige Lösung, die zugegebener maßen, nicht schön ist, aber funktioniert:
-* Auf gemeinsame Kalender verzichten
-* Ressourcen u. gemeinsame Kalender über einzelne Nutzer abbilden.
-
-
 [NOTE]
 ===================
 Bei der Nutzung von iCal gibt es die Einschränkung, dass gemeinsame Kalender angezeigt werden, aber von anderen freigegebenen Benutzern nicht abgeändert oder gelöscht werden können. Es handelt sich hierbei um eine Besonderheit/Limitierung der Apple-Implementationen, die die Bearbeitung eines Termins in einem gemeinsamen Kalender einschränkt, sobald dieser Teilnehmer hat.
@@ -60,7 +45,6 @@ Die momentan einzige Lösung, die zugegebenermaßen nicht schön ist, aber funkt
 
 Darüberhinaus sind gemeinsame Termine, an denen man selbst teilnimmt, auch immer im eigenen persönlichen Kalender vorhanden und können somit über diesen Weg synchronisiert werden.
 =====================
-
 
 Klicken Sie nun den Reiter menu:[Kalender] an oder aktivieren Sie ihn über den Reiter {branch}.
 
