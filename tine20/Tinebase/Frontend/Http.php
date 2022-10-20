@@ -21,6 +21,8 @@
 class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     const REQUEST_TYPE = 'HttpPost';
+
+    protected $_applicationName = Tinebase_Config::APP_NAME;
     
     /**
      * get json-api service map
