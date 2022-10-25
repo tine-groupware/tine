@@ -184,6 +184,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         this.dateField = new dateField(Ext.apply({
             lazyRender: false,
             renderTo: this.el,
+            ownerCt: this,
             readOnly: this.readOnly || this.dateFieldReadOnly,
             hideTrigger: this.hideTrigger,
             disabled: this.disabled || this.dateFieldDisabled,

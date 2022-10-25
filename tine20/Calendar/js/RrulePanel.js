@@ -296,6 +296,7 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         this.until = new Ext.form.DateField({
             requiredGrant : 'editGrant',
             width         : 100,
+            ownerCt       : this,
             emptyText     : this.app.i18n._('never'),
             onTriggerClick: Ext.form.DateField.prototype.onTriggerClick.createSequence(this.onAfterUnitTriggerClick, this),
             listeners: {
