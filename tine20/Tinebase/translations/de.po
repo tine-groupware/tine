@@ -5093,6 +5093,7 @@ msgstr "Importiert Gemeindeschlüssel"
 msgid "Community Identification Number Import"
 msgstr "Gemeindeschlüssel Import"
 
+#: js/AreaLocks/PinProvider.es6.js:17 js/PasswordChangeDialog.js:34
 msgid "PIN"
 msgid_plural "PINs"
 msgstr[0] "PIN"
@@ -5276,6 +5277,37 @@ msgstr "Wie möchten Sie Ihren Export speichern?"
 
 msgid "Export only currently shown columns"
 msgstr "Nur die angezeigten Spalten exportieren"
+
+#: js/MainScreenPanel.js:179
+msgid "Your password expired."
+msgstr "Ihr Passwort ist abgelaufen."
+
+msgid "You need to set a new password."
+msgstr "Sie müssen ein neues Passwort setzen."
+
+msgid "Multi Factor Authentication"
+msgstr "Multi Faktor Authentifikation"
+
+msgid ""
+"We strongly encourage you to enable Multi-Factor Authentication for added "
+"security."
+msgstr ""
+"Für zusätzliche Sicherheit empfehlen wir Ihnen dringend, die Multi-Faktor-"
+"Authentifizierung zu aktivieren."
+
+msgid ""
+"Multi-Factor Authentication adds an extra layer of protection to logins. "
+"Once enabled & configured, each time you sing in you will be asked to enter "
+"both your username & password as well as a second factor such as a security "
+"code."
+msgstr ""
+"Die Multi-Faktor-Authentifizierung bietet einen zusätzlichen Schutz für die "
+"Anmeldung. Sobald sie aktiviert und konfiguriert ist werden Sie jedes Mal, "
+"wenn Sie sich anmelden, aufgefordert sowohl Ihren Benutzernamen und Passwort "
+"als auch einen zweiten Faktor wie z.B. einen Sicherheitscode einzugeben."
+
+msgid "Multi Factor Authentication Device Configuration"
+msgstr "Multi Faktor Authentifikations Geräte Konfiguration"
 
 msgid "This area is locked. To unlock it you need to provide your PIN"
 msgstr ""
