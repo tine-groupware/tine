@@ -2084,4 +2084,4 @@ msgid "Save copy of sent mail on mail server"
 msgstr "Kopie von gesendeter mail auf dem Mailserver speichern"
 
 msgid "Folder of the source mail if it is not your INBOX."
-msgstr "Ordner der Ursprungsmail wenn diese nicht ihre INBOX ist."
+msgstr "Ordner der Ursprungsmail wenn dieser nicht ihr Posteingang ist."
