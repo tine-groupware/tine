@@ -461,6 +461,19 @@ var form = new Ext.form.FormPanel({
         var mt = this.getMessageHandler();
         if(mt){
             mt.mark(this, msg);
+
+            function findParentTab(fromElement) {
+                const tabpanel = fromElement.findParentByType('tabpanel');
+                if (tabpanel) {
+                    const tabpanelId = _.find(tabpanel.items.keys, (id)=>{return fromElement.el.up(`#${id}`)}) // Finde das richtige Tab
+                    const tabpanelEl = tabpanel.getTabEl(tabpanelId);
+                    Ext.fly(tabpanelEl).setStyle('background','#ff7870')
+                    tabpanelEl.dataset.invalidfield  = fromElement.id;
+                    findParentTab(tabpanel)
+                }
+            }
+            findParentTab(this);
+
         }else if(this.msgTarget){
             this.el.addClass(this.invalidClass);
             var t = Ext.getDom(this.msgTarget);
@@ -484,6 +497,21 @@ var form = new Ext.form.FormPanel({
         var mt = this.getMessageHandler();
         if(mt){
             mt.clear(this);
+
+            function findParentTab(fromElement) {
+                const tabpanel = fromElement.findParentByType('tabpanel');
+                if (tabpanel) {
+                    const tabpanelId = _.find(tabpanel.items.keys, (id)=>{return fromElement.el.up(`#${id}`)}) // Finde das richtige Tab
+                    const tabpanelEl = tabpanel.getTabEl(tabpanelId);
+                    if (tabpanelEl.dataset.invalidfield == fromElement.id) {
+                        Ext.fly(tabpanelEl).setStyle('background', null)
+                        tabpanelEl.dataset.invalidfield = '';
+                        findParentTab(tabpanel)
+                    }
+                }
+            }
+            findParentTab(this);
+
         }else if(this.msgTarget){
             this.el.removeClass(this.invalidClass);
             var t = Ext.getDom(this.msgTarget);
