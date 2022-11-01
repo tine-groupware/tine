@@ -1,7 +1,7 @@
 Tine 2.0 Admin Schulung: LDAP Integration
 =================
 
-Version: Caroline 2017.11
+Version: Lu 2021.11
 
 Konfiguration und Problemlösungen im Zusammenhang mit der LDAP Anbindung (Authentifizierung und Benutzerkonten)
 
@@ -102,3 +102,23 @@ Der Scheduler führt den Sync-Users/Groups-Job 1x pro Stunde aus (table tine20_s
          next_run: 2019-08-28 15:00:00
      last_failure: 2019-03-31 12:00:01
     failure_count: 0
+
+# Univention LDAP + E-Mail
+
+Die Anbindung an ein Univention LDAP entspricht der normalen LDAP-Konfiguration.
+
+Mit einer Ausnahme: das E-Mail-Attribut (emailAttribute) sollte auf "mailprimaryaddress" gestellt werden.
+
+Beispielkonfiguration (aus dem alten UCS tine-Paket):
+
+    LDAPHOST="$ldap_server_name\\:$ldap_server_port"
+    LDAPBASE=${ldap_base//,/\\\,}
+
+    authentication="backend:ldap,host:$LDAPHOST,username:uid=tine20\,cn=tine20\,$LDAPBASE,password:$LDAPPASSWORD,bindRequiresDn:1,baseDn:cn=users\,$LDAPBASE,accountFilterFormat:(&(objectClass=posixAccount)(uid=%s))" \
+    accounts="backend:ldap,host:$LDAPHOST,username:uid=tine20\,cn=tine20\,$LDAPBASE,password:$LDAPPASSWORD,bindRequiresDn:1,userDn:cn=users\,$LDAPBASE,groupsDn:cn=groups\,$LDAPBASE,defaultUserGroupName:Domain Users,defaultAdminGroupName:Domain Admins,readonly:1"
+
+Konfiguration E-Mail mit UCS Mailbackend:
+
+    imap="active:true,backend:ldap_univention,host:localhost,port:143,ssl:tls,useSystemAccount:1,domain:$(ucr get mail/hosteddomains)"
+    smtp="active:true,backend:ldap_univention,hostname:localhost,port:25,ssl:tls,auth:login,primarydomain:$(ucr get mail/hosteddomains)"
+    sieve="active:true,hostname:localhost,port:4190,ssl:tls"
