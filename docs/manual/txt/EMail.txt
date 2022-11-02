@@ -407,6 +407,80 @@ menu:[Ordner umbenennen]:: öffnet ein kleines Fenster, in dem Sie dem betreffen
 menu:[Ordner löschen]:: löscht nur selbst angelegte Unterordner von Standardordnern. Dazu erhalten Sie eine Sicherheitsabfrage. Beachten Sie, dass die hier gespeicherten E-Mails nach dem Löschen des Ordners unwiederbringlich verloren sind.
 
 
+[[sec.email.spam]]
+===== SPAM-Erkennung =====
+Sofern der E-Mailserver entsprechend eingerichtet ist, kann die SPAM-Funktion aktiviert werden.(Der Mailserver muss über die Fähigkeit verfügen, Spam zu markieren, d.h. das Hinzufügen von speziellem Text ins Subjekt, z.b. "SPAM?". Das kann beispielsweise durch das Programm "rspamd" gewährleistet werden.)
+
+Dann haben Sie im Kontextmenü einer E-Mail die Unterpunkte menu:[Es ist SPAM] und menu:[kein SPAM]. 
+
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/>
+        demodata: E-Mail-Konto, Demo-Mails,
+        actions:
+        image: Kontextmenü 
+        comment: <neue Funktion!>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Manuelles Markieren von SPAM, kein SPAM
+image::EMail/20_email_kontextmenue_spam_ham.png[id="fig_emailkontextspam",width="100%"] 
+
+
+Hiermit können Sie E-Mails als SPAM oder umgekehrt SPAM-markierte Mails als kein SPAM markieren. Neben dieser händischen Möglichkeit der SPAM- und HAM- (HAM sind als SPAM markierte E-Mails, die aber kein SPAM sind) Markierung hat {branch} auch eine automatische Erkennung.
+
+Beim erstmaligen Markieren von SPAM oder HAM, legt {branch} entsprechende Ordner unterhalb des Posteingangs automatisch an.
+
+Jede eingehende E-Mail wird auf SPAM-auffällige Eigenschaften untersucht und dann entsprechend mit einem Score bewertet. Je höher der Score, desto mehr SPAM-Merkmale liegen vor. Wenn ausreichend Merkmale gefunden wurden, markiert {branch} die Mail im Betreff als SPAM und gibt den Score mit an. Ab einem Wert von 15 weist {branch} die E-Mail ab.
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/>
+        demodata: E-Mail-Konto, Demo-SPAM-Mails,
+        actions:
+        image: Betreff mit SPAM Meldung 
+        comment: <neue Funktion!>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Manuelles markieren von SPAM, kein SPAM
+image::EMail/21_email_spam_message.png[id="fig_emailspammessage",width="100%"] 
+
+
+Auf der rechten Seite der SPAM-markierten E-Mail haben Sie die Möglichkeit, diese Einschätzung von {branch} zu bestätigen oder zu verneinen. Bei der Klassifizierung der Mail als „kein SPAM“ bereinigt {branch} den Betreff, so dass die Spam-Meldung verschwindet.
+
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/>
+        demodata: E-Mail-Konto, Demo-SPAM-Mails,
+        actions:
+        image: Spam, kein Spam knöpf an der Mail 
+        comment: <neue Funktion!>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Manuelles Markieren von SPAM, kein SPAM
+image::EMail/22_email_kein_spam.png[id="fig_emailnospam",width="100%"] 
+
+
+{branch} lernt über die Zeit, was wirklich Spam ist und was fälschlicherweise markiert wurde und passt Ihren Algorithmus entsprechend an. Je mehr „Futter“ {branch} bekommt, desto besser wird {branch} mit der SPAM-Einschätzung und desto unwahrscheinlicher wird es, dass fälschlicherweise eine Mail abgewiesen wird, da diese als SPAM klassifiziert wurde.
+
+Falls die E-MaIls nicht direkt in {branch} verwaltet werden, z.B. via Outlook oder Thunderbird, kann man alternativ folgendermaßen vorgehen:
+
+* Die Ordner SPAM und HAM unterhalb der INBOX (auf Deutsch "Posteingang") anlegen.
+* SPAM-Mails in den Ordner SPAM verschieben.
+* HAM-Mails in den Ordner HAM kopieren. Auf das "Bereinigen" des Betreffs muss man dann allerdings verzichten.
+
+[NOTE]
+===============
+In dem Fall, dass die Ordner SPAM/HAM bereits von {branch} angelegt wurden, kann es unter Umständen dazu kommen, dass sie in einem externen E-Mail-Programm (z.B. Thunderbird oder Outlook) nicht angezeigt werden. Hier müsste man die Ordner dann erst subscriben/abonnieren.
+===============
+
+
+
+
 [[sec.email.verfassen]]
 === Eine E-Mail verfassen ===
 
