@@ -363,7 +363,7 @@ Haben Sie einen Arbeitsvertrag angelegt, klicken Sie in der Übersichtstabelle r
         domain: <Business Edition: Metaways>
 //////////////////
 .Liste Mitarbeiter Verträge
-image::HumanResources/11_humanresources_mitarbeiter_vertraege.png[id="fig_humanmitarbeitervertraege",width="100%"]
+image::HumanResources/9_humanresources_mitarbeiter_vertraege.png[id="fig_humanmitarbeitervertraege",width="100%"]
 
 
 Markieren Sie nun als Tabellenzeile den eben eingegebenen oder einen beliebigen anderen Arbeitsvertrag. Der Button menu:[Vertrag löschen] unterhalb des Tabellenfensters ist jetzt nicht mehr ausgegraut  – damit können Sie den Arbeitsvertrag löschen. Das Abspeichern mindestens eines Arbeitsvertrages für einen Arbeitnehmer führt ebenso dazu, dass die beiden Reiter menu:[Urlaub] und menu:[Krankheit] nicht mehr ausgegraut sind.
