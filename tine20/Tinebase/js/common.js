@@ -276,7 +276,7 @@ Tine.Tinebase.common = {
                     if (tags[i].occurrence) {
                         qtipText += ' (' + i18n._('Usage:&#160;') + tags[i].occurrence + ')';
                     }
-                    result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:' + (tags[i].color ? tags[i].color : '#fff') + ';">&#160;</div>';
+                    result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags dark-reverse" style="background-color:' + (tags[i].color ? tags[i].color : '#fff') + ';">&#160;</div>';
                 }
             }
         }
@@ -292,7 +292,7 @@ Tine.Tinebase.common = {
     tagRenderer: function(tag) {
         if (! Tine.Tinebase.common.tagRenderer.tpl) {
             Tine.Tinebase.common.tagRenderer.tpl = new Ext.XTemplate(
-                '<div class="tb-grid-tags" style="background-color:{values.color};">&#160;</div>',
+                '<div class="tb-grid-tags dark-reverse" style="background-color:{values.color};">&#160;</div>',
                 '<div class="x-widget-tag-tagitem-text" ext:qtip="',
                     '{[this.encode(values.name)]}',
                     '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
@@ -396,7 +396,7 @@ Tine.Tinebase.common = {
             for (var i = 0; i < relations.length; i += 1) {
                 if (relations[i]) {
                     var qtipText = Tine.Tinebase.common.doubleEncode(relations[i].type);
-                    result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:white"' + ';">&#160;</div>';
+                    result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags dark-reverse" style="background-color:white"' + ';">&#160;</div>';
                 }
             }
         }

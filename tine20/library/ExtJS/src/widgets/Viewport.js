@@ -116,6 +116,9 @@ Ext.Viewport = Ext.extend(Ext.Container, {
         this.autoHeight = true;
         Ext.EventManager.onWindowResize(this.fireResize, this);
         this.renderTo = this.el;
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            this.el.addClass('t-dark');
+        }
     },
 
     fireResize : function(w, h){

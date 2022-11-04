@@ -126,7 +126,7 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
         this.tpl = new Ext.XTemplate(
             '<tpl for=".">', 
                 '<div class="x-combo-list-item">',
-                    '<div class="tb-grid-tags" style="background-color:{values.color};">&#160;</div>',
+                    '<div class="tb-grid-tags dark-reverse" style="background-color:{values.color};">&#160;</div>',
                     '<div class="x-widget-tag-tagitem-text" ext:qtip="', 
                         '{[this.encode(values.name)]}', 
                         '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
