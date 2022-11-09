@@ -17,6 +17,7 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE016_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -28,6 +29,10 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
             ],
+            self::RELEASE016_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
+            ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE016_UPDATE000          => [
@@ -37,7 +42,7 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
-            ],
+            ]
         ],
     ];
 
@@ -100,4 +105,23 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
         Tinebase_Setup_Initialize::addSchedulerTasks();
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '16.3', self::RELEASE016_UPDATE003);
     }
+
+
+    /**
+     * add sales schedule tasks
+     */
+    public function update004()
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_SchedulerTask::class
+        ]);
+        
+        $scheduler = Tinebase_Core::getScheduler();
+        if (Tinebase_Application::getInstance()->isInstalled('Sales')) {
+            Sales_Scheduler_Task::addCreateAutoInvoicesDailyTask($scheduler);
+            Sales_Scheduler_Task::addCreateAutoInvoicesMonthlyTask($scheduler);
+        }
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '16.4', self::RELEASE016_UPDATE004);
+    }
+
 }

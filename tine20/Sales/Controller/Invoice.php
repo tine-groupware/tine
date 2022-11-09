@@ -1237,8 +1237,25 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * @param Sales_Model_Contract $contract
      * @param boolean $merge
      */
-    public function createAutoInvoices(Tinebase_DateTime $currentDate, Sales_Model_Contract $contract = NULL, $merge = false)
+    public function createAutoInvoices(Tinebase_DateTime $currentDate = NULL, Sales_Model_Contract $contract = NULL, $merge = false, $checkUpdate = false)
     {
+        if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            return false;
+        }
+        
+        if (!$currentDate) {
+            $currentDate = Tinebase_DateTime::now();
+            $currentDate->setTimezone(Tinebase_Core::getUserTimezone());
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating invoices for ' . $currentDate->toString());
+        }
+        
+        if ($checkUpdate) {
+            Sales_Controller_Invoice::getInstance()->checkForContractOrInvoiceUpdates($contract);
+        }
+        
         $this->_autoInvoiceIterationResults  = array();
         $this->_autoInvoiceIterationDetailResults = array();
         $this->_autoInvoiceIterationFailures = array();
@@ -1270,6 +1287,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'created'        => $this->_autoInvoiceIterationResults,
             'created_count'  => count($this->_autoInvoiceIterationResults)
         );
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . print_r($result, true));
+        }
         
         return $result;
     }
@@ -1834,5 +1855,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         file_put_contents($mergedPdf, Tinebase_Core::getPreviewService()->mergePdfFiles($files, true));
 
         return $mergedPdf;
+    }
+
+    public function createAutoInvoicesTask() {
+        if ($this->createAutoInvoices(null, null, false, true)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
