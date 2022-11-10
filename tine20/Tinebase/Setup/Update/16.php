@@ -40,37 +40,37 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
 
-        $this->_backend->dropForeignKey('customfield_config', 'config_customfields::application_id--applications::id');
-        $this->_backend->dropIndex('customfield_config', 'application_id-name');
-        $this->_backend->addIndex('customfield_config', new Setup_Backend_Schema_Index_Xml(
-            '<index>
-                    <name>application_id-name</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>application_id</name>
-                    </field>
-                    <field>
-                        <name>model</name>
-                    </field>
-                    <field>
-                        <name>name</name>
-                    </field>
-                </index>'));
-        $this->_backend->addForeignKey('customfield_config', new Setup_Backend_Schema_Index_Xml(
-            '<index>
-                    <name>config_customfields::application_id--applications::id</name>
-                    <field>
-                        <name>application_id</name>
-                    </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>applications</table>
-                        <field>id</field>
-                        <ondelete>CASCADE</ondelete>
-                    </reference>
-                </index>'));
-
         if ($this->getTableVersion('customfield_config') < 7) {
+            $this->_backend->dropForeignKey('customfield_config', 'config_customfields::application_id--applications::id');
+            $this->_backend->dropIndex('customfield_config', 'application_id-name');
+            $this->_backend->addIndex('customfield_config', new Setup_Backend_Schema_Index_Xml(
+                '<index>
+                        <name>application_id-name</name>
+                        <unique>true</unique>
+                        <field>
+                            <name>application_id</name>
+                        </field>
+                        <field>
+                            <name>model</name>
+                        </field>
+                        <field>
+                            <name>name</name>
+                        </field>
+                    </index>'));
+            $this->_backend->addForeignKey('customfield_config', new Setup_Backend_Schema_Index_Xml(
+                '<index>
+                        <name>config_customfields::application_id--applications::id</name>
+                        <field>
+                            <name>application_id</name>
+                        </field>
+                        <foreign>true</foreign>
+                        <reference>
+                            <table>applications</table>
+                            <field>id</field>
+                            <ondelete>CASCADE</ondelete>
+                        </reference>
+                    </index>'));
+
             $this->setTableVersion('customfield_config', 7);
         }
 
