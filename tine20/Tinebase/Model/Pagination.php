@@ -153,17 +153,20 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
     /**
      * Appends pagination statements to a given select object
-     * 
-     * @param  Zend_Db_Select
+     *
+     * @param Zend_Db_Select $_select
+     * @param bool $_getDeleted
+     * @param array|null $_schema
      * @return void
+     * @throws Zend_Db_Select_Exception
      */
-    public function appendPaginationSql($_select, $_getDeleted = false)
+    public function appendPaginationSql(Zend_Db_Select $_select, bool $_getDeleted = false, ?array $_schema = null)
     {
         // check model for required joins etc.
         $this->appendModelConfig($_select, $_getDeleted);
 
         $this->appendLimit($_select);
-        $this->appendSort($_select);
+        $this->appendSort($_select, $_schema);
         $this->appendGroup($_select);
     }
 
@@ -442,12 +445,12 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
     }
 
     /**
-     * Appends sort statement to a given select object
-     * 
-     * @param  Zend_Db_Select $_select
+     * @param Zend_Db_Select $_select
+     * @param array|null $_schema
      * @return void
+     * @throws Zend_Db_Select_Exception
      */
-    public function appendSort($_select)
+    public function appendSort(Zend_Db_Select $_select, ?array $_schema = null)
     {
         if (!empty($this->sort) && !empty($this->dir)){
             $this->_ensureRepeatableResults();
@@ -462,20 +465,29 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                     break;
                 }
             }
-            $_select->order($this->_getSortCols($tableName, $_select->getPart(Zend_Db_Select::COLUMNS)));
+            $_select->order($this->_getSortCols($tableName, $_select->getPart(Zend_Db_Select::COLUMNS), $_schema));
         }        
     }
     
     /**
      * get columns for select order statement
-     *
-     * @param String $tableName
+     * @param string|null $tableName
+     * @param array $columns
+     * @param array|null $_schema
      * @return array
      */
-    protected function _getSortCols($tableName = null, $columns = [])
+    protected function _getSortCols(?string $tableName = null, array $columns = [], ?array $_schema = null)
     {
         $order = array();
         foreach ((array)$this->sort as $index => $sort) {
+            if ($tableName && $_schema && strpos($sort, '.') === false
+                && array_key_exists($tableName, $_schema) && !in_array($sort, array_keys($_schema[$tableName]))
+            ) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' skip invalid sort field: ' . $sort);
+                continue;
+            }
+
             if (strpos($sort, '(') === false && strpos($sort, '.') === false) {
                 $found = false;
                 foreach ($columns as $col) {
@@ -498,9 +510,9 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 }
             }
             $order[] = $sort . ' ' . (is_array($this->dir)
-                        ? $this->dir[$index]
-                        : $this->dir
-                    );
+                ? $this->dir[$index]
+                : $this->dir
+            );
         }
         return $order;
     }
