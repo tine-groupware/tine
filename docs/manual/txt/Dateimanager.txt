@@ -195,6 +195,6 @@ menu:[Lokal speichern] funktioniert nur, wenn Dateien markiert sind – die Funk
 
 Natürlich stehen auch in dieser Anwendung bei vielen Dateieinträgen Suchfilter zur Verfügung (vgl. <<sec.standard.hauptbildschirm.suchfilter>>).
 
-=== Anit-Virus, Vorschau & Only Office ===
+=== Anti-Virus, Vorschau & Only Office ===
 
 Sollten Sie Ihre {branch}-Lizenz durch den OnlyOffice-Integrator, den Preview-Service und/oder Anti-Virus erweitert haben, stehen diese unter anderem auch im Dateimanager zur Verfügung. Was diese sind und wie Sie von den Erweiterungen Gebrauch machen können, entnehmen Sie den speziellen Kapiteln <<chap.only.office.integration>>, <<chap.preview>> und <<chap.antivir>>.

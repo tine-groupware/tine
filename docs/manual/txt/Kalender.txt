@@ -560,8 +560,7 @@ Diese Änderungen sollten bis morgen durch sein. Danach werden dann die entsprec
 Eine passende URL um den Import zu testen ist folgende URL: http://fux.zuhage.de/ics/Schulferien_2014-2015_BW.ics . Diese URL wird dann nicht sofort(weil sie sehr groß sien kann), sondern zu einen späteren Zeitpunkt eingelesen. Das macht der besagte Cron Job. Da dieser nicht permanent läuft, kann es etwas dauern bis der Import gestartet wird. Abhängig von der Aktualisierungszeit wird der Import dann regelmäßig wiederholt und die Daten aktualisiert. Am Ende das Dialoges kann man einen neuen Kalender auswählen in dem die Daten importiert werden oder einen vorhandenen Kalender auswählen
 ////
 
-Die Option menu:[Remote / CalDAV (BETA)] ist wie die Aufschrift schon vermuten lässt noch als Beta eingestuft.
-Hier ist der Vorgang ähnlich wie bei der Option menu:[Entfernt/ICS]. Der Einzige Unterschied liegt darin das CalDav einen Benutzernamen und das dazugehörige Passwort braucht um auf die Termindaten zugreifen zu können.
+Die Option menu:[Remote / CalDAV (BETA)] ist noch als Beta eingestuft. Hier ist der Vorgang ähnlich wie bei der Option menu:[Entfernt/ICS]. Der einzige Unterschied liegt darin, dass CalDav einen Benutzernamen und das dazugehörige Passwort braucht, um auf die Termindaten zugreifen zu können.
 
 //////////
  Daniel Hoffmann, 2015-06-18 14:34
