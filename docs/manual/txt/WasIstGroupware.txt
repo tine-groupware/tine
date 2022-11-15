@@ -95,7 +95,7 @@ Dieses Buch ist das offizielle Benutzerhandbuch für {branch}. In diesem Buch fi
 [[sec.vorwort.ueberdiesesbuch.woweitereInformationen]]
 ==== Wo findet man weitere/andere Informationen (der Firma Metaways bzw. der Community)? ====
 
-Weitere Informationen, besonders die Installation von {branch} betreffend, erhalten Sie auf http://www.tine20.com Dort finden Sie detaillierte Installationsanleitungen für alle unterstützten Betriebssysteme.
+Weitere Informationen, besonders die Installation von {branch} betreffend, erhalten Sie auf https://www.tine-groupware.de. Dort finden Sie detaillierte Installationsanleitungen für alle unterstützten Betriebssysteme.
 
 Als Softwareentwickler haben Sie über https://github.com/tine20/tine20 den Zugang zu einer regen Community, in der Sie sich mit anderen Entwicklern und Anwendern austauschen können.
 
