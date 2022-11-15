@@ -660,7 +660,7 @@ Die Dialoginhalte werden flexibel in Abhängigkeit der Dateninhalte zur Laufzeit
 ========
 
 [[sec.humanresources.arbeitszeiterfassung]]
-=== Arbeitszeit Erfassung ===
+=== Arbeitszeiterfassung ===
 
 Die Anwendung menu:[HumanResources] kann grundsätzlich ohne die Erfassung von Arbeitszeiten genutzt werden, wodurch einige Module bzw. Funktionalitäten wirkungslos bleiben. Für die Arbeitszeiterfassung bietet {branch} zwei Varianten an. Eine Möglichkeit ist es, die Zeiten manuell durch die Mitarbeiter in der {branch} Anwendung <<chap.zeiterfassung>> zu erfassen. Die zweite Möglichkeit setzt den Einsatz der Zusatzanwendung <<chapter.dfcom>> voraus und erfolgt über die Anbindung von Terminals.
 
