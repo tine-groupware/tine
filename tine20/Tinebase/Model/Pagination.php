@@ -462,6 +462,7 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         $order = array();
         foreach ((array)$this->sort as $index => $sort) {
             if ($tableName && $_schema && strpos($sort, '.') === false
+                && ! preg_match('/foreignSortCol/', $sort)
                 && array_key_exists($tableName, $_schema) && !in_array($sort, array_keys($_schema[$tableName]))
             ) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
