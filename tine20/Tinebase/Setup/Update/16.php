@@ -15,12 +15,17 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
 {
     const RELEASE016_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE016_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE016_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -75,5 +80,13 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '16.1', self::RELEASE016_UPDATE001);
+    }
+    public function update002()
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_BankAccount::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '16.2', self::RELEASE016_UPDATE002);
     }
 }

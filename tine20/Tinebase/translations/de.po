@@ -5596,3 +5596,8 @@ msgid "This area is locked. Which device should be used to unlock?"
 msgstr ""
 "Dieser Bereich ist gesperrt. Welches Gerät soll verwendet werden um ihn "
 "zu entsperren?"
+
+msgid "Bank Account"
+msgid_plural "Bank Accounts"
+msgstr[0] "Bank Konto"
+msgstr[1] "Bank Konten"
