@@ -17,6 +17,7 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
     canonicalName: ['Addressbook',  'EditDialog', 'Contact', 'GDPRPanel'].join(Tine.Tinebase.CanonicalPath.separator),
 
     initComponent: function () {
+        var me = this;
         this.app = this.app || Tine.Tinebase.appMgr.get('GDPR');
         this.title = this.app.i18n._('GDPR');
 
@@ -24,14 +25,16 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
             hideLabel: true,
             disabled: true,
             boxLabel: this.app.i18n._('Must not be contacted'),
-            listeners: {scope: this, check: this.onBlacklistContactCheck}
+            listeners: {scope: this, check: this.onBlacklistContactCheck},
+
         });
         this.blacklistContactDescription = new Ext.form.Label({
-            text: this.app.i18n._("This Contact withdrawed usage of his data for any purpose.")
+            text: this.app.i18n._("This Contact withdrawed usage of his data for any purpose."),
         });
 
         this.expiryDatePicker = new Ext.ux.form.ClearableDateField({
             fieldLabel: this.app.i18n._('Expiry Date'),
+            width: 200,
         });
 
         this.dataIntendedPurposesGrid = new Tine.widgets.grid.QuickaddGridPanel({
@@ -52,7 +55,9 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
 
         this.items = [{
             layout: 'vbox',
-            align: 'stretch',
+            layoutConfig: {
+                align:'stretch'
+            },
             pack: 'start',
             border: false,
             items: [{
@@ -60,8 +65,8 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
                 frame: true,
                 width: '100%',
                 items: [
-                    this.blacklistContactCheckbox,
                     this.blacklistContactDescription,
+                    this.blacklistContactCheckbox,
                     this.expiryDatePicker,
                 ]},
                 this.dataIntendedPurposesGrid
