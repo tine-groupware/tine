@@ -15,9 +15,9 @@ merge_be:
     - merge_merge_upwards 2022.11 tine20.com/2022.11-custom
     - merge_merge_upwards tine20.com/2022.11-custom tine20.com/2022.11
     ### saas
-    - merge_merge_upwards 2021.11 saas/2021.11-custom
-    - merge_merge_upwards tine20.com/2021.11-custom saas/2021.11
-    - merge_merge_upwards saas/2021.11-custom saas/2021.11
+    - merge_merge_upwards 2022.11 saas/2022.11-custom
+    - merge_merge_upwards tine20.com/2022.11-custom saas/2022.11
+    - merge_merge_upwards saas/2022.11-custom saas/2022.11
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE_BE == "true"
