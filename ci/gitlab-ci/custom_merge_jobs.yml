@@ -6,9 +6,18 @@
     - if: $AUTO_MERGE == "never"
       when: never
 
-.mergecustom3:
+merge_saas:
   stage: merge3
   extends: .abstract.merge
+  variables:
+    BASEVERSION: "2022.11"
+    CUSTOMER: saas
+  script:
+    - merge_merge_upwards $BASEVERSION $CUSTOMER/$BASEVERSION-custom
+    - merge_merge_upwards $CUSTOMER/$BASEVERSION-custom $CUSTOMER/$BASEVERSION
+    - merge_merge_upwards tine20.com/$BASEVERSION-custom $CUSTOMER/$BASEVERSION
+    - merge_trigger_next
   rules:
-    - if: $AUTO_MERGE == "never"
-      when: never
+    - if: $AUTO_MERGE_CUSTOMER == "true"
+      when: on_success
+    - when: never
