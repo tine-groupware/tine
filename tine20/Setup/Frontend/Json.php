@@ -294,6 +294,12 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         // authenticated or non existent config
         if (! Setup_Core::configFileExists() || Setup_Core::isRegistered(Setup_Core::USER)) {
+            try {
+                $license = Tinebase_License::getInstance();
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+                $license = null;
+            }
             $registryData = array_merge($registryData, $this->checkConfig());
             $registryData = array_merge($registryData, array(
                 'rights'               => ['admin'],
@@ -301,6 +307,9 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                 'setupChecks'          => $this->envCheck(),
                 'configData'           => $this->loadConfig(),
                 'emailData'            => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? $this->getEmailConfig() : array(),
+                'licenseCheck'         => $license
+                    ? $license->getStatus() === Tinebase_License::STATUS_LICENSE_OK
+                    : Tinebase_License::STATUS_NO_LICENSE_AVAILABLE,
             ));
         }
         
@@ -363,5 +372,48 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         );
         
         return $registryData;
+    }
+
+    /**
+     * Get current license if available
+     *
+     * @return mixed
+     */
+    public function getLicense()
+    {
+        return Setup_Controller::getInstance()->getLicense();
+    }
+
+    /**
+     * Saves license configuration
+     * 
+     * @param  string $license
+     *
+     * @return array
+     */
+    public function saveLicense($license)
+    {
+        return Setup_Controller::getInstance()->saveLicense($license);
+    }
+
+    /**
+     * @param string $tempFileId
+     * @return array
+     *
+     * Uploads license and saves it
+     */
+    public function uploadLicense(string $tempFileId)
+    {
+        return Setup_Controller::getInstance()->uploadLicense($tempFileId);
+    }
+
+    /**
+     * removes the current license
+     */
+    public function deleteLicense()
+    {
+        Tinebase_License::getInstance()->deleteCurrentLicense();
+
+        return array();
     }
 }

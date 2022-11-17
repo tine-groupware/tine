@@ -1414,15 +1414,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function countNonSystemUsers()
     {
         $systemUsers = Tinebase_User::getSystemUsernames();
-        $select = $select = $this->_db->select()
+        $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'COUNT(id)')
             ->where($this->_db->quoteIdentifier('login_name') . ' not in (?)', $systemUsers)
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' != ?', Tinebase_Model_User::ACCOUNT_STATUS_DISABLED))
             ->where($this->_db->quoteIdentifier('is_deleted') . ' = 0');
 
-        $userCount = $this->_db->fetchOne($select);
-
-        return $userCount;
+        return $this->_db->fetchOne($select);
     }
 
     /**
@@ -1574,6 +1572,37 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             default:
                 throw new Tinebase_Exception('unknown Tinebase_Model_ModificationLog->old_value: ' . $modification->old_value);
         }
+    }
+
+    /**
+     * checks if user is in accounts allowed by license
+     *
+     * @param Tinebase_Model_User $user
+     * @param number $maxUsers
+     * @return boolean
+     */
+    public function hasUserValidLicense($user, $maxUsers)
+    {
+        if (! is_object($user)) {
+            // setup
+            return true;
+        }
+        
+        $select = $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'accounts', 'login_name')
+            ->where($this->_db->quoteIdentifier('login_name') . " not in (?)", Tinebase_User::getSystemUsernames())
+            ->order('creation_time ASC')
+            ->limit($maxUsers);
+
+        $stmt = $select->query();
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        $allowedAccounts = Tinebase_User::getSystemUsernames();
+        foreach ($rows as $row) {
+            $allowedAccounts[] = $row['login_name'];
+        }
+
+        return in_array($user->accountLoginName, $allowedAccounts);
     }
 
     /**

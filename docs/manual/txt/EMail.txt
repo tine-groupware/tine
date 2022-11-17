@@ -1,0 +1,651 @@
+[[chapter.E-Mail]]
+== E-Mail ==
+
+
+//////////
+Dr. Markus Wirtz, 2015-04-13 11:18
+bin durch; ready for GR
+//////////
+
+//////////
+ Gerlinde Regensburger, 2015-04-14 14:02
+Bin durch; @Autoren: Freigabe für Veröffentlichung?
+KUK 2015-05-06: Indizierung fertig, Freigabe
+//////////
+
+//////////
+Paul Hartog: Überarbeitung angefangen 27.05.2020
+Fertiggestellt 28.05.2020
+
+
+//////////
+
+
+[[sec.email.einleitung]]
+=== Einleitung ===
+
+{{{/Felamimail}}}
+E-Mail gehört zu den Kernfunktionen einer Groupware. {branch} erlaubt die Einbindung beliebig vieler E-Mail-Konten, d.h. Sie können über Ihre bereits vorhandenen E-Mail-Konten innerhalb von {branch} E-Mails empfangen und senden. {branch} umfasst jedoch keinen E-Mail-Server. Die E-Mail-Konten müssen also bei einem externen Dienstleister oder auf einem firmeneigenen Mailserver angelegt sein. Wenn es die Firmenpolicy erlaubt, können Sie auch Ihre privaten E-Mail-Konten in {branch} einbinden.
+
+Hier ist ein kurzer Exkurs zu E-Mail-Clients und deren Besonderheiten hilfreich:
+
+(((SMTP)))
+E-Mail ist einer der ältesten Dienste im Internet. Ein Teilnehmer dieses Dienstes versendet mit Hilfe einer Software, dem _E-Mail-Client_, eine Nachricht an einen anderen Teilnehmer. Beim Versenden übergibt der E-Mail-Client die Nachricht an den Internet-Dienst _Simple Mail Transfer Protocol_ (SMTP), der sie – wie die Post einen Brief – im ``Briefkasten'' des Empfängers deponiert. Dieser Briefkasten befindet sich auf dem E-Mail-Server, den der Empfänger der Nachricht nutzt. Das kann der Server eines öffentlichen E-Mail-Providers wie T-Online, Yahoo oder Google sein, aber auch der E-Mail-Server, der zu Ihrer Website bei einem Hosting-Dienstleister gehört oder den Ihr Unternehmen selbst betreibt. Zu einem E-Mail-Konto gehören eine Reihe von Angaben, auf die wir bei der Einrichtung von Konten in {branch} zu sprechen kommen und die Sie dann bereit haben sollten, wenn nicht Ihre benötigten Konten bereits eingerichtet wurden.
+
+Kommen wir zurück zum Vorgang der Zustellung einer E-Mail: Sie landet zunächst, wie schon gesagt, im elektronischen Briefkasten des Empfängers auf dem E-Mail-Server.
+
+Wie gelangt nun der Empfänger an die Nachricht? Hier unterscheidet man zwei Verfahren: Klassischerweise schickt der E-Mail-Client des Empfängers eine Anfrage an seinen Server (er ``geht zum Briefkasten'') und authentifiziert sich dort (er ``schließt den Briefkasten auf''). Wie oft, d.h. in welchem Zeitabstand er das tut, hängt davon ab, wie er eingestellt wurde. Früher, als Internet-Verkehr und Datenvolumen noch teuer waren und sich Computer per Modem einwählen mussten, spielten solche Einstellungen eine große Rolle – heute nicht mehr.
+
+(((Push-Mail)))
+(((IMEI)))
+Der Vollständigkeit halber seien hier auch die sog. _Push-Mail-Dienste_ erwähnt. Da läuft es genau andersherum: Der Server hat eine Liste mit den berechtigten Empfängern und meldet sich, wenn er E-Mail für sie hat. Dieses Verfahren wurde von der Firma Blackberry entwickelt und hat(te) den Vorteil, dass Smartphones eben nicht in bestimmten Zeitabständen beim Server nach Post fragen und Datenvolumen verschwenden. Dieses Verfahren punktet heute nicht mehr mit dem Einsparen von Internet-Datenvolumen, doch wird es nach wie vor von sicherheitsbewussten Anwendern geschätzt: Es ist eben nicht so einfach, an die Liste der berechtigten Empfänger eines Push-Mail-Servers zu gelangen, denn die Authentifizierung erfolgt über die sog. IMEI.{empty}footnote:[_International Mobile Station Equipment Identity_, eine für jedes Mobilfunkgerät weltweit einmalig vergebene Hardware-Identifikationsnummer.]
+
+Neben Blackberry kann man auch mit dem iPhone einen Push-Mail-Dienst nutzen. Alle diese Dienste sind proprietär, d.h. sie werden innerhalb der Hard- und Softwarelandschaft eines bestimmten Herstellers angeboten und bedingen das Vorschalten eines sog. Push-Mail-Servers vor den eigentlichen E-Mail-Server.
+
+(((POP3)))
+Was passiert nun mit der E-Mail, wenn sie beim Server abgeholt wurde? Sie landet als Eintrag im E-Mail-Client des Empfängers, damit er sie lesen kann. Auch hier unterscheidet man grundsätzlich zwei Verfahren:
+POP3-Konten (_Post-Office-Protocol Version 3_) verhalten sich wie der gute alte Briefkasten: Wenn die Mail von einem Client abgeholt wird, ist sie auf dem Server verschwunden – der Briefkasten wurde also geleert. Sollte ein weiterer berechtigter Client anfragen, findet er diese E-Mail nicht mehr vor. In den Anfangsjahren des Internets, als alle Teilnehmer in der Regel nur ein Gerät benutzten, mit dem sie im Internet unterwegs waren, war das auch vollkommen ausreichend. Außerdem konnte man so die E-Mails auf seinem Client auch offline lesen.
+
+(((IMAP)))
+Ganz anders heute: Die meisten Teilnehmer am E-Mail-Verkehr nutzen mehrere internetfähige Geräte und sind mit mindestens einem davon auch immer online: PC, Laptop, Smartphone oder Tablet. Wir stünden also mit einem POP3-E-Mail-Konto vor dem Problem, eine auf dem PC-E-Mail-Client abgerufene Mail auf dem Smartphone nicht lesen bzw. bearbeiten zu können. Abhilfe schaffen hier die sogenannten IMAP-Konten (_Internet Message Access Protocol_): Bei diesem Konto-Typ holt der E-Mail-Client die Nachricht nicht vom Server ab, sondern erzeugt bei sich nur einen Eintrag mit dem Betreff, d.h. er belässt die Originalnachricht auf dem Server. Somit haben andere E-Mail-Clients, wie zum Beispiel das Smartphone, die Chance, die Nachricht ebenfalls zu lesen. Auch das Anlegen von Unterordnern, das Abspeichern von Mails in denselben oder das Löschen von Mails geschieht immer auf dem Server. Das hat den unschätzbaren Vorteil, dass jede Aktion, die von irgendeinem berechtigten E-Mail-Client ausgeführt wird, für alle anderen Mail-Clients ebenfalls gültig ist. Natürlich kann man eine Nachricht nur dann lesen, wenn man mit dem Internet verbunden ist – auch das ist ein Unterschied zum oben genannten POP3-Konto, wo man Mails auch offline lesen kann. Darum haben sich IMAP-Konten erst durchgesetzt, seit Benutzer meist online sind. {branch} unterstützt ausschließlich IMAP-Konten für den E-Mail-Versand.
+
+Damit haben wir die wichtigsten Grundlagen geklärt und können uns nun dem E-Mail-Client von {branch} zuwenden.
+
+[[sec.favoriten.emailkonten]]
+=== Favoriten und E-Mail-Konten ===
+
+Wie immer finden Sie unter menu:[FAVORITEN] einige vorgefertigte Ansichten: So erhalten Sie unter menu:[Alle markierten Nachrichten] eine Aufstellung der E-Mails aller eingerichteten Konten, die als wichtig markiert wurden. Auch die anderen Standard-Ansichten gelten für alle Ihre gültigen E-Mail-Konten und sind damit für eine schnelle Übersicht geeignet. Natürlich können Sie sich beliebige eigene Ansichten als Favoriten schaffen und abspeichern (<<chapter.Standard-Bedienhinweise>>).
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen>
+        demodata: E-Mail Konto, eigene Favoriten, Unterordner von dem Mail Konto
+        actions:
+        image: zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die linke Seite der E-Mail-Anwendung mit Favoriten und E-Mail-Konten
+image::EMail/1_email_favoriten_und_konten.png[id="fig_emailkontenfavoriten",width="50%"]
+
+Unter menu:[E-MAIL-KONTEN] finden Sie in einer Baumstruktur die von Ihnen angelegten E-Mail-Konten sowie deren Unterordner. Beachten Sie, dass sich alle diese Ordner auf Ihrem E-Mail-Server befinden. Es gibt immer einige Standardordner, wie menu:[Mülleimer], menu:[Papierkorb], menu:[Spam] oder menu:[Gesendete Objekte]. Manchmal kommt es vor, dass unter einem E-Mail-Konto Ordner mit derselben Funktion, aber verschiedenen Namen existieren, z.B. menu:[Gesendete Objekte] und menu:[Gesendet]. Das kann verwirrend sein, jedoch gibt es dafür eine einfache Erklärung: Wie bereits erwähnt, können auf IMAP-Konten mehrere Geräte zugreifen. Dabei kommt es vor, dass Ihr {branch}-E-Mail-Client und auch Ihr Smartphone selbstständig eigene Standardordner für z.B. gesendete oder gelöschte Nachrichten anlegen und dafür verschiedene Namen verwenden. Abhilfe schafft hier nur die korrekte Einstellung der einzelnen E-Mail-Clients, d.h. das Zuweisen einheitlicher Ordnernamen auf allen beteiligten Geräten. Für {branch} werden wir das hier erklären; für andere Geräte wie Smartphones empfiehlt es sich, in den entsprechenden Bedienhinweisen oder im Internet nachzulesen. Natürlich kann es auch eine Option sein, verschiedene Ordner ganz bewusst angelegt zu belassen, um etwa später sehen zu können, welche E-Mails von welchem Gerät versendet oder gelöscht wurden. Den Durchblick können Sie sich für diese Fälle wieder über selbstdefinierte Favoriten-Ansichten herstellen.
+
+
+[[sec.email.tabelle]]
+=== Die Tabelle ===
+
+Wie üblich sehen Sie im mittleren und rechten Teil Ihres Bildschirms eine Tabelle, in diesem Falle mit den E-Mails der im linken Teil ausgewählten Favoriten-Ansicht bzw. des ausgewählten E-Mail-Kontos. Wenn Sie nichts anderes gewählt haben, werden Ihnen die E-Mails in chronologischer Reihenfolge mit der jüngsten zuoberst angezeigt.
+
+Fangen wir bei den Navigations-Optionen der Tabelle an. Mit den Symbolen image:Icon/icon_arrow_back_last.png[height=16] und image:Icon/icon_arrow_action_last.png[height=16] navigieren Sie zur ersten und zur letzten Seite der Tabelle. Mit image:Icon/icon_arrow_left.png[height=16] und image:Icon/icon_arrow_right.png[height=16] können Sie in der Tabelle vor- und zurückwandern. Alternativ können Sie in dem Eingabebereich zwischen den Pfeilen die spezifische Tabellenseite eingeben, um schnell dorthin zu navigieren. Das image:Icon/icon_return.png[height=16]-Icon dient zum Neuladen der Tabelle.
+
+Kommen wir nun kurz zu dem Balken mit der Prozentangabe im rechten Teil direkt über dem Tabellenkopf, unterhalb des Bearbeitungsmenüs; er erscheint allerdings nur, wenn Sie links keinen Favoriten (der ja über mehrere Konten definiert sein kann), sondern explizit den Ordner eines E-Mail-Kontos angewählt haben.
+
+.Auslastung des Speicherplatzes eines IMAP-Kontos
+image::EMail/3_email_posteingang_speicherplatz.png[id="fig_emailauslastung",width="100%"]
+
+(((Quota)))
+Die Prozentangabe zeigt Ihnen die Speicherauslastung Ihres IMAP-Kontos an. Wie bereits beschrieben, verbleiben bei einem IMAP-Konto alle E-Mails auf dem E-Mail-Server. Wenn Ihr externer Dienstleister oder auch der Administrator des Firmen-E-Mail-Servers zur Nutzung dieses Kontos aus Ressourcengründen eine maximale Speicherkapazität (_Quota_) festgelegt hat, entspricht die Prozentzahl der Auslastung dieses verfügbaren Speichers. Gelten für Ihr E-Mail-Konto keine solchen Beschränkungen, sehen Sie auch keinen Balken und können die folgende Bemerkung überspringen.
+
+////
+Daniel Hoffmann <d.hoffmann@metawsys.de>, 2015-11-30
+Custom page break
+Otherwise the text runs into the footnote in PDF output (FOP bug(?))
+////
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+[IMPORTANT]
+===============
+Behalten Sie diese Anzeige im Auge! Wenn Sie bei 100% steht, werden Ihnen keine weiteren E-Mails mehr zugestellt. Das ist insofern bedeutsam, als der Absender einer E-Mail an Sie darüber nicht immer informiert{empty}footnote:[Im Normalfall kommen E-Mails zum Empfänger mit einer Mitteilung wie ``user over quota'' o. ä. zurück. Gehen Sie jedoch davon aus, dass ein Nutzer das durchaus übersehen oder mit der Fehlermeldung nichts anfangen kann.] und stattdessen im Glauben gelassen wird, seine E-Mail habe Sie erreicht. Sie wiederum erhalten ebenfalls keine Benachrichtigung. Sollten Sie also übersehen, dass Ihr Speicher voll ist, sind Sie mit Ihrem Konto quasi offline, ohne es zu bemerken.
+
+Schnelle Abhilfe schafft hier nur das Löschen des Papierkorbs oder des Spamordners (und anschließend auch des Papierkorbs!). Ob und inwieweit Sie auch ältere eingegangene oder versendete E-Mails löschen dürfen, bestimmt Ihre Firmenpolicy, denn ggf. sind eingegangene und versendete E-Mails entsprechend den rechtlichen Bestimmungen zu archivieren. Erkundigen Sie sich dazu beim Systemadministrator Ihres E-Mail-Servers!
+===============
+
+Weiter geht es mit der eigentlichen Tabelle.
+Standardmäßig benennt der Tabellenkopf die wichtigsten Spalten; wie Sie mit dem kleinen Tabellenkopfsymbol rechts am äußeren Rand weitere Spalten zu- und abwählen, beschreibt <<chapter.Standard-Bedienhinweise>>.
+Beachten Sie die beiden kleinen Spalten am linken Rand: menu:[Anhänge] und menu:[Flags]. Das graue Büroklammer-Symbol unter menu:[Anhänge] signalisiert Ihnen, dass diese E-Mail einen Dateianhang besitzt. Unter menu:[Flags] finden Sie zwei Symbole.
+
+
+.Posteingang mit geflaggten E-Mails
+image::EMail/2_email_posteingang_geflaggt.png[id="fig_emailflags",width="100%"]
+
+image:Icon/3_icon_email_answer.png[height=24]: Diese Mail wurde von Ihnen an einen oder alle Absender beantwortet.
+
+image:Icon/4_icon_email_forward.png[height=24]: Sie haben diese E-Mail an andere Empfänger weitergeleitet.
+
+Wir kommen weiter unten detailliert auf diese eben beschriebenen Funktionen zu sprechen.
+
+
+[[sec.email.menue]]
+=== Das Bearbeitungsmenü ===
+
+Ganz rechts im Menü (ungefähr in der Mitte des Bildschirms) finden Sie den Button menu:[Konto hinzufügen]. Klicken Sie ihn bitte an; auch wenn für Sie bereits E-Mail-Konten vorhanden sind, werden wir hier kurz besprechen, wie man ein solches Konto anlegt.
+
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/EditDialog/Account>
+        demodata: E-Mail beispiel Server?, Signatur
+        actions:
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Neues E-Mail-Konto anlegen
+image::EMail/4_email_neues_konto.png[id="fig_emailneueskonto",width="100%"]
+
+Die Bearbeitungsmaske enthält sieben Reiter, wobei nur auf menu:[Konto], menu:[IMAP], menu:[SMTP], menu:[Sieve] und menu:[Andere Einstellungen] eingegangen wird, da wir die anderen beiden schon aus dem <<sec.standard.dialogfenster>> kennen.
+
+Beginnen wir mit dem Reiter menu:[Konto].
+Ein E-Mail-Konto hat als Pflichteingabefelder den menu:[Kontonamen] und eine menu:[E-Mail Adresse]. Dazu können Sie wahlweise einen menu:[E-Mail-Absender] (der gemäß den Angaben aus Ihrem Benutzerkonto hier schon vorgegeben wird) und eine menu:[Firma] angeben. Diese Angaben werden beim Versenden, vor der eigentlichen E-Mail-Adresse, mit an den Empfänger übertragen.
+
+Darunter finden Sie menu:[Signaturposition]. Hier haben Sie die Möglichkeit zwischen menu:[über dem Zitat] und menu:[unter dem Zitat] zu wählen. Die Bedeutung ist folgende: Bei einer neuen E-Mail erscheint die E-Mail-Signatur, durch eine Leerzeile getrennt, unterhalb der Eingabe. Wenn Sie auf eine erhaltene E-Mail antworten oder eine solche weiterleiten, haben Sie bereits einen Text in Ihrem Mail-Editor – die Ausgangs-Mail oder auch ``Zitat'' genannt. Dieser Schalter bestimmt die Position Ihrer Signatur: Bei menu:[unter dem Zitat] erscheint sie an der untersten Stelle der Antwort-Mail, also noch unter dem Zitat. Bei menu:[über dem Zitat] erscheint sie über dem bereits vorhandenen Text, sodass sie das Ende Ihrer Antwort darstellt und das Zitat darunter steht. Die meisten Benutzer verwenden die Einstellung menu:[über dem Zitat], weil damit auf einen Blick das Ende der eigenen Nachricht zu erkennen ist – wenn Sie hier also nicht wissen, was Sie einstellen sollen, wählen Sie diese Option.
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/EditDialog/Account>
+        demodata: E-Mail beispiel Server?
+        actions:
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Daten des Posteingangsservers
+image::EMail/5_email_neues_konto_imap.png[id="fig_emailneueskontoimap",width="100%"]
+
+Die letzte Funktion in diesem Reiter ist menu:[Signaturen]. Hier können Sie für Ihre zu versendenden E-Mails eine oder mehrere Signaturen festlegen und entsprechend formatieren.
+
+
+Kommen wir zum Reiter menu:[IMAP]: Die Maske enthält als Pflichteingabefeld eine Bezeichnung für den menu:[Host]. Damit ist die Bezeichnung des Post__eingangs__servers gemeint. Eine typische Angabe lautet zum Beispiel `imap.example.com`.
+
+[NOTE]
+========================
+Sollten Ihnen die Angaben zur Einrichtung des E-Mail-Kontos und insbesondere der Mailserver unbekannt sein oder nichts sagen, wenden Sie sich an den Administrator Ihres Unternehmens!
+========================
+
+(((SSL)))
+(((TLS)))
+Beim menu:[Port] gibt Ihnen die Maske schon zwei Standardeinstellungen vor: `143` als Standard-IMAP-Port und `993` als SSL-Port. SSL steht für _Secure Socket Layer_ und ist ein für E-Mails verwendetes Verschlüsselungsprotokoll. Normalerweise werden E-Mails im Klartext durch das Internet geschickt und sind somit für jeden lesbar. Im Zuge der in der letzten Zeit bekannt gewordenen behördlichen Abhöraktionen sind mehr und mehr E-Mail-Dienstleister dazu übergegangen, verschlüsselte E-Mail-Postfächer anzubieten. Informieren Sie sich bei Ihrem E-Mail-Provider bzw. bei dem für Ihren eigenen E-Mail-Server zuständigen Netzwerkadministrator, ob das anzulegende E-Mail-Konto verschlüsselt mit dem Server kommunizieren kann und welchen Port Sie dafür benutzen müssen.
+
+Unter menu:[Sichere Verbindung] wird Ihnen ein Pulldown angeboten, in dem Sie die Verschlüsselung einstellen. Neben dem schon erwähnten SSL-Protokoll bietet Ihnen {branch} auch die neuere Version TLS (_Transport Layer Security_) an.
+
+Zuletzt müssen Sie natürlich für die Kommunikation mit Ihrem Posteingangsserver einen menu:[Benutzernamen] und ein menu:[Passwort] angeben.
+
+Der Reiter menu:[SMTP] dient dazu, Einstellungen für den Post__ausgangs__server vorzunehmen.
+
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/EditDialog/Account>
+        demodata: E-Mail beispiel Server?
+        actions:
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Daten des Postausgangsservers
+image::EMail/6_email_neues_konto_smtp.png[id="fig_emailneueskontosmtp",width="100%"]
+
+Sie finden hier wieder ein Feld für den menu:[Host], z.B. `smtp.example.com`. Analog dem Posteingangsserver müssen Sie wieder einen menu:[Port] sowie die Art der Verbindung festlegen. Zudem finden Sie hier noch ein Pulldown menu:[Authentifizierung]. Die möglichen Einstellungen sind menu:[Keine], menu:[Login] oder menu:[Klartext]. Die richtige Einstellung nennt Ihnen wieder Ihr E-Mail-Provider oder Netzwerkadministrator; im Zweifelsfall stellen Sie menu:[Login] ein. In den meisten Fällen sind Benutzername und Passwort beim SMTP-Server, wenn überhaupt erforderlich, dieselben wie beim Posteingangsserver. Probieren Sie, nachdem Sie das Konto vollständig erstellt haben, in der Praxis einfach aus, ob eine E-Mail versendet wird, wenn Sie sich hier nicht ganz sicher sind.
+
+Damit haben wir alle für die reibungslose Funktion eines E-Mail-Kontos erforderlichen Einstellungen besprochen.
+Unter dem Reiter menu:[Sieve] finden Sie die Parameter für den Zugang zum E-Mail-Server Ihres Kontos, über den Sie sogenannte ``Sieve''-Befehle übermitteln. ``Sieve'' ist eine Programmiersprache für Befehle an den E-Mail-Server, etwa zum Abschicken einer Abwesenheitsnotiz oder für Filterregeln. Dazu kommen wir im nächsten Abschnitt.
+
+Der Reiter menu:[Andere Einstellungen] dient der Definition und Bezeichnung der oben angesprochenen Unterordner für Ihr IMAP-Konto.
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/EditDialog/Account>
+        demodata:
+        actions:
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Unter ``Andere Einstellungen'' werden die Unterordner des IMAP-Kontos definiert
+image::EMail/7_email_neues_konto_andere.png[id="fig_emailneueskontoandere",width="100%"]
+
+Geben Sie hier die Bezeichnungen ein, die Sie für die reibungslose Funktion Ihres Kontos – v.a. auch die Interaktion verschiedener Geräte – benötigen und stimmen Sie sie gegebenenfalls mit den Einstellungen in diesen Geräten ab.
+
+
+[[sec.email.kontextmenue]]
+=== Das Kontextmenü ===
+
+Kommen wir nun zu einigen Funktionen, die nicht zum Bearbeitungsmenü gehören. Sie erreichen sie nur über das sog. Kontextmenü, also wenn Sie mit dem Mauszeiger per _rechter_ Maustaste auf das E-Mail-Konto oder den Ordner klicken.
+
+Beginnen wir mit dem Kontextmenü des E-Mail-Kontos.
+Hier haben wir die Optionen menu:[Ordner hinzufügen], menu:[Ordnerliste aktualisieren], menu:[Abwesenheitsnotiz bearbeiten], menu:[Filterregeln bearbeiten], menu:[Benachrichtigungen], menu:[Konto bearbeiten] und menu:[Konto löschen]. Gehen wir diese nun einmal der Reihenfolge nach durch.
+
+[NOTE]
+==========
+Alternativ können Sie von der Admin-Anwendung aus E-Mail-Kontos bearbeiten. Hierzu öffnen Sie die Admin-Anwendung und Navigieren zu menu:[E-Mail-Accounts]. Dorf finden Sie eine Übersicht aller aktiven E-Mail-Konten.
+==========
+
+
+[[sec.email.kontextmenue.ordnerhinzufügen]]
+==== Ordner hinzufügen ====
+Diese Option fügt dem E-Mail-Konto einen Ordner bzw. dem Ordner einen Unterordner hinzu. Da es sich um ein IMAP-Konto handelt, befindet sich ein so angelegter Ordner auf dem E-Mail-Server und ist damit auch auf anderen Geräten sichtbar und benutzbar, auf denen dieses Konto eingerichtet wurde.
+
+
+[[sec.email.kontextmenue.ordnerlisteaktualisieren]]
+==== Ordnerliste aktualisieren ====
+Da es sich ja um ein IMAP-Konto handelt, können neue Orner auch von anderen E-Mail-Clients aus erstellt werden. Diese Funktion aktualisiert die Ordnerliste in {branch}.
+
+
+(((Sieve))) (((Abwesenheitsnotiz)))
+[[sec.email.kontextmenue.abwesenheitsnotiz]]
+==== Abwesenheitsnotiz bearbeiten ====
+Die Kommunikation des E-Mail-Clients mit seinem Server über die Skriptsprache _Sieve_ haben wir bereits erwähnt. Wenn die Kommunikationsparameter unter dem Reiter menu:[Sieve] von Ihrem Administrator in den Kontoeigenschaften korrekt eingerichtet wurden, öffnen Sie unter diesem Menüpunkt ein Fenster, in dem Sie eine automatische Abwesenheitsnotiz hinterlegen.
+
+//////////////////
+        SCREENSHOT
+        path: <?>
+        demodata: E-Mail-Konto
+        actions: dropbox klicken
+        image: dialog
+        comment: <Neue Funktionen>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Abwesenheitsnotiz setzen
+image::EMail/18_email_server_kontextmenu.png[id="fig_serverkontextmenue",width="40%"]
+
+
+Hier finden Sie unter menu:Allgemein[Status] ein Pulldown mit zwei Einstellungen: menu:[Ich bin verfügbar (Abwesenheitsnotiz inaktiv)] und menu:[Ich bin nicht verfügbar (Abwesenheitsnotiz aktiv)] vor. Stellen Sie es auf menu:[Ich bin nicht verfügbar (Abwesenheitsnotiz aktiv)], so erhält der Absender einer E-Mail an Sie von Ihrem E-Mail-Server eine Notiz. Den Text dieser Notiz geben Sie in das Freifeld ein und schließen Ihre Eingabe mit menu:[Ok] ab.
+
+//////////////////
+        SCREENSHOT
+        path: <?>
+        demodata: E-Mail-Konto
+        actions: dropbox klicken
+        image: dialog
+        comment: <Neue Funktionen>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Abwesenheitsnotiz setzen
+image::EMail/10_email_abwesenheitsnotiz.png[id="fig_emailabwesenheitstatus",width="100%"]
+
+
+Über menu:Erweitert[Nur alle X Tage an den gleichen Absender schicken], das standardmäßig mit menu:[1] ausgefüllt ist, verhindern Sie, dass derselbe Absender von Ihren automatischen Nachrichten belästigt wird. Sollte er mehrere E-Mails an einem Tag an Sie schicken, so erhält er nur auf die erste Ihre Abwesenheitsnotiz. Sie können das Intervall natürlich auch vergrößern.
+
+[NOTE]
+==========
+Wenn eine Abwesenheitsnotiz aktiviert wurde, erscheint bei jedem Start von {branch} eine kurze Benachrichtigung darüber, bevor das eigentliche Programm startet.
+
+Wenn Sie wollen, können sie eine vorgefertigte Abwesenheitsnotiz für alle {branch}-User als Template hinterlegen. Diese wird in der Konfiguration abgelegt.
+==========
+
+
+[[sec.email.kontextmenue.filterregelnbearbeiten]]
+==== Filterregeln bearbeiten ====
+
+(((E-Mail-Filterregeln)))
+Über das eben angesprochene Kontextmenü erreichen Sie mit menu:[Filterregeln bearbeiten] eine Tabelle mit den evtl. eingestellten Filterregeln für den E-Mail-Empfang. Auch diese Funktion geht vom E-Mail-Server aus und ist daher auf das korrekte Funktionieren der Sieve-Skript-Übermittlung von {branch} an den Server angewiesen.
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/EditDialog/>
+        demodata: E-Mail-Konto, Beispiel Filterregeln
+        actions:
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.E-Mail-Empfangs-Filterregeln aufstellen
+image::EMail/11_email_empfangsfilter.png[id="fig_emailfiltersieve",width="100%"]
+
+
+Wenn die Anzahl der Regeln die Größe des Tabellenfensters übersteigt, können Sie mit den Pfeilbuttons in den Tabellenzeilen blättern. Nach Markierung einer Filterregel stehen Ihnen die Funktionen menu:[Regel bearbeiten] und menu:[Regel löschen] zur Verfügung. menu:[Drucke Seite] erzeugt einen Ausdruck der gespeicherten Filterregeln.
+
+Wir wollen uns nun das Anlegen bzw. Bearbeiten von Filterregeln näher ansehen. Klicken Sie dazu ganz links im Bearbeitungsmenü des Filterregelfensters den Button menu:[Regel hinzufügen]. Es öffnet sich ein weiteres Fenster (<<fig_emailfiltersievebearbeiten>>).
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/EditDialog/>
+        demodata: E-Mail-Konto, Ordner
+        actions:
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.E-Mail-Empfangs-Filterregel editieren
+image::EMail/12_email_filterregeln_editieren.png[id="fig_emailfiltersievebearbeiten",width="100%"]
+
+Im oberen Bereich finden Sie eine Zeile menu:[Wende Filter an, wenn:] Mit dem daneben befindlichen Pulldown wählen Sie, ob der Filter anzuwenden ist, wenn menu:[alle Bedingungen erfüllt sind] oder wenn menu:[mindestens eine Bedingung erfüllt ist]. In der Zeile darunter definieren Sie die Bedingungen.
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/EditDialog/>
+        demodata: E-Mail-Konto, Ordner
+        actions: Dropbox klicken
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Bedingung zum Filtern auswählen
+image::EMail/13_email_filterregeln_auswahl.png[id="fig_emailfiltersievebedingungbearbeiten",width="100%"]
+
+////
+Daniel Hoffmann <d.hoffmann@metawsys.de>, 2015-10-30
+Custom page break
+Otherwise the text runs into the footnote in PDF output (FOP bug(?))
+////
+<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+Sie können also explizit E-Mail-Adressen und/oder Namen angeben wie auch Zeichenketten aus der Betreffzeile, die E-Mail-Größe oder Ausdrücke aus dem E-Mail-Header.{empty}footnote:[Eine E-Mail besteht immer aus _Header_ (Kopfzeile) und _Body_ (dem eigentlichen Inhalt der Nachricht). Der Header enthält als Pflichtangabe lediglich eine Absenderangabe und das Datum der Erstellung. Darüber hinaus kann der Header eine Reihe optionaler Angaben enthalten: den Weg, den die E-Mail genommen hat, Format des Inhalts, Angaben zu den Empfängern u.ä.] Je nachdem, welches Filterkriterium Sie ausgewählt haben, präsentieren sich der in der Mitte der Zeile befindliche Operator sowie das rechte Eingabefeld verschieden. Das Prinzip dieser Filter ist Ihnen bereits vom Adressbuch bekannt (<<sec.kontakte.filtern>>). Ziehen Sie ggf. vor dem Definieren von Filtern einen im Umgang mit E-Mails und insbesondere mit Spam erfahrenen Administrator zu Rate.
+
+Was soll aber nun mit den eingehenden E-Mails geschehen, auf die unsere Filterkriterien zutreffen? {branch} bietet Ihnen dazu die folgenden vier Optionen:
+
+menu:[E-Mail in Ordner verschieben]:: bietet Ihnen rechts die Möglichkeit, aus den für dieses E-Mail-Konto angelegten Unterordnern einen auszuwählen.
+
+menu:[E-Mail an folgende Adresse weiterleiten]:: Geben Sie rechts eine gültige E-Mail-Adresse an, an die weitergeleitet werden soll.
+
+menu:[E-Mail mit folgendem Text ablehnen]:: Schreiben Sie den entsprechenden Text rechts in das Feld.
+
+menu:[E-Mail verwerfen]:: verwirft die E-Mail kommentarlos, als sei sie nicht angekommen. Der Absender erhält darüber auch keine Mitteilung.
+
+menu:[Nachricht mit folgendem Text beantworten]:: beantwortet die E-Mail mit dem angegebenen Text.
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/EditDialog/>
+        demodata: E-Mail-Konto, Ordner
+        actions: Dropbox klicken
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Filter-Aktion auswählen
+image::EMail/14_email_filteraktion_auswahl.png[id="fig_emailfiltersieveaktionbearbeiten",width="100%"]
+
+[IMPORTANT]
+==========
+Die Filterregeln menu:[E-Mail mit folgendem Text ablehnen] und menu:[E-Mail verwerfen] stehen über einer Abwesenheitsbenachrichtigung: Haben Sie die Filterregel menu:[E-Mail mit folgendem Text ablehnen] und/oder menu:[E-Mail verwerfen] definiert, wird ein Absender, auf den die jeweilige Regel zutrifft, im Falle der ebenfalls definierten Abwesenheitsbenachrichtigung keine solche erhalten.
+==========
+
+
+[[sec.email.kontextmenue.kontobearbeiten]]
+==== Konto bearbeiten ====
+
+Mit dem Menüpunkt menu:[Konto bearbeiten] rufen Sie die gleiche Bearbeitungsmaske wie mit der oben besprochenen Funktion menu:[Konto hinzufügen] auf, nur dass sich hier die entsprechenden Daten des Kontos bereits in den Feldern befinden und geändert werden können.
+
+
+[[sec.email.kontextmenue.kontoloeschen]]
+==== Konto löschen ====
+
+Damit wird, nach einer Sicherheitsabfrage, das E-Mail-Konto in {branch} gelöscht. Auf dem E-Mail-Server existiert das Konto weiter, mit allen seinen Ordnern und den dort gespeicherten Nachrichten.
+
+
+==== Weitere Kontextmenüs ====
+
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/EditDialog/Account>
+        demodata: E-Mail-Konto, Favoriten, Beispiel Ordner
+        actions: rechte maustaste
+        image: zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Weitere Funktionen im Kontextmenü eines E-Mail-Ordners
+image::EMail/9_email_ordner_kontextmenu.png[id="fig_emailordnerkontextmenu",width="40%"]
+
+
+Bei den sogenannten _Standardordnern_, die fettgedruckt und unabdingbarer Bestandteil von IMAP-Konten sind (i.d.R. menu:[Posteingang] und menu:[Mülleimer]), werden die letzten beiden Menüpunkte nicht angeboten, da Sie die Berechtigungen für diese Funktionen von {branch} aus nicht haben. Stattdessen gibt es beim menu:[Mülleimer] die Funktion menu:[Ordner leeren].
+
+menu:[Ordner als gelesen markieren]:: markiert in einem Arbeitsgang alle in dem betreffenden Ordner befindlichen E-Mails als menu:[gelesen].
+
+menu:[Ordner hinzufügen]:: fügt dem E-Mail-Konto einen Ordner bzw. dem Ordner einen Unterordner hinzu. Da es sich um ein IMAP-Konto handelt, befindet sich ein so angelegter (Unter-)Ordner auf dem E-Mail-Server und ist damit auch auf anderen Geräten sichtbar und benutzbar, auf denen dieses Konto eingerichtet wurde.
+
+menu:[Ordner umbenennen]:: öffnet ein kleines Fenster, in dem Sie dem betreffenden Ordner einen neuen Namen geben können.
+
+menu:[Ordner löschen]:: löscht nur selbst angelegte Unterordner von Standardordnern. Dazu erhalten Sie eine Sicherheitsabfrage. Beachten Sie, dass die hier gespeicherten E-Mails nach dem Löschen des Ordners unwiederbringlich verloren sind.
+
+
+[[sec.email.spam]]
+===== SPAM-Erkennung =====
+Sofern der E-Mailserver entsprechend eingerichtet ist, kann die SPAM-Funktion aktiviert werden.(Der Mailserver muss über die Fähigkeit verfügen, Spam zu markieren, d.h. das Hinzufügen von speziellem Text ins Subjekt, z.b. "SPAM?". Das kann beispielsweise durch das Programm "rspamd" gewährleistet werden.)
+
+Dann haben Sie im Kontextmenü einer E-Mail die Unterpunkte menu:[Es ist SPAM] und menu:[kein SPAM]. 
+
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/>
+        demodata: E-Mail-Konto, Demo-Mails,
+        actions:
+        image: Kontextmenü 
+        comment: <neue Funktion!>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Manuelles Markieren von SPAM, kein SPAM
+image::EMail/20_email_kontextmenue_spam_ham.png[id="fig_emailkontextspam",width="100%"] 
+
+
+Hiermit können Sie E-Mails als SPAM oder umgekehrt SPAM-markierte Mails als kein SPAM markieren. Neben dieser händischen Möglichkeit der SPAM- und HAM- (HAM sind als SPAM markierte E-Mails, die aber kein SPAM sind) Markierung hat {branch} auch eine automatische Erkennung.
+
+Beim erstmaligen Markieren von SPAM oder HAM, legt {branch} entsprechende Ordner unterhalb des Posteingangs automatisch an.
+
+Jede eingehende E-Mail wird auf SPAM-auffällige Eigenschaften untersucht und dann entsprechend mit einem Score bewertet. Je höher der Score, desto mehr SPAM-Merkmale liegen vor. Wenn ausreichend Merkmale gefunden wurden, markiert {branch} die Mail im Betreff als SPAM und gibt den Score mit an. Ab einem Wert von 15 weist {branch} die E-Mail ab.
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/>
+        demodata: E-Mail-Konto, Demo-SPAM-Mails,
+        actions:
+        image: Betreff mit SPAM Meldung 
+        comment: <neue Funktion!>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Manuelles markieren von SPAM, kein SPAM
+image::EMail/21_email_spam_message.png[id="fig_emailspammessage",width="100%"] 
+
+
+Auf der rechten Seite der SPAM-markierten E-Mail haben Sie die Möglichkeit, diese Einschätzung von {branch} zu bestätigen oder zu verneinen. Bei der Klassifizierung der Mail als „kein SPAM“ bereinigt {branch} den Betreff, so dass die Spam-Meldung verschwindet.
+
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/>
+        demodata: E-Mail-Konto, Demo-SPAM-Mails,
+        actions:
+        image: Spam, kein Spam knöpf an der Mail 
+        comment: <neue Funktion!>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Manuelles Markieren von SPAM, kein SPAM
+image::EMail/22_email_kein_spam.png[id="fig_emailnospam",width="100%"] 
+
+
+{branch} lernt über die Zeit, was wirklich Spam ist und was fälschlicherweise markiert wurde und passt Ihren Algorithmus entsprechend an. Je mehr „Futter“ {branch} bekommt, desto besser wird {branch} mit der SPAM-Einschätzung und desto unwahrscheinlicher wird es, dass fälschlicherweise eine Mail abgewiesen wird, da diese als SPAM klassifiziert wurde.
+
+Falls die E-MaIls nicht direkt in {branch} verwaltet werden, z.B. via Outlook oder Thunderbird, kann man alternativ folgendermaßen vorgehen:
+
+* Die Ordner SPAM und HAM unterhalb der INBOX (auf Deutsch "Posteingang") anlegen.
+* SPAM-Mails in den Ordner SPAM verschieben.
+* HAM-Mails in den Ordner HAM kopieren. Auf das "Bereinigen" des Betreffs muss man dann allerdings verzichten.
+
+[NOTE]
+===============
+In dem Fall, dass die Ordner SPAM/HAM bereits von {branch} angelegt wurden, kann es unter Umständen dazu kommen, dass sie in einem externen E-Mail-Programm (z.B. Thunderbird oder Outlook) nicht angezeigt werden. Hier müsste man die Ordner dann erst subscriben/abonnieren.
+===============
+
+
+
+
+[[sec.email.verfassen]]
+=== Eine E-Mail verfassen ===
+
+Zum Verfassen einer E-Mail müssen Sie zunächst das Konto auswählen, von dem aus Sie die E-Mail versenden wollen. Dazu klicken Sie einfach links neben der Tabelle auf eines der angelegten E-Mail-Konten. Wenn Sie nun im Bearbeitungsmenü auf menu:[Verfassen] klicken, öffnet sich die entsprechende Maske mit dem automatisch eingestellten Absender:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/EditDialog/Message>
+        demodata: E-Mail-Konto, Kontakte, Beispiel Text.
+        actions:
+        image: dialog
+        comment: <neue Funktion!>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Eine E-Mail verfassen
+image::EMail/15_email_neue_email.png[id="fig_emailneueemail",width="100%"]
+
+Zunächst werden Sie auf das Pflichteingabefeld menu:[An] hingewiesen. Sie haben hier mehrere Möglichkeiten, E-Mail-Adressen einzugeben: Sie können einfach mit Schreiben beginnen (mindestens drei Zeichen), während {branch} für Sie nach der passenden E-Mail-Adresse in den gespeicherten Kontakten sucht und entsprechende Vorschläge macht. Wählen Sie mit Mausklick oder Pfeiltasten aus, oder – falls die gewünschte Adresse nicht unter Ihren Kontakten ist – schreiben Sie die E-Mail-Adresse vollständig. Eine andere Variante ist, die Pulldown-Funktion dieses Feldes zu nutzen. Hier werden Ihnen alle für Sie gültigen gespeicherten Kontakte in alphabetischer Reihenfolge angezeigt. Mit den Pfeiltasten können Sie vor- und zurückblättern. Wenn das Feld durch Auto-Vervollständigung eine fertige E-Mail-Adresse enthält, wird Ihnen automatisch ein zweites Feld menu:[An] darunter angeboten. Sie können so die E-Mail an beliebig viele Empfänger verschicken. Im Falle, dass Sie eine dem System bisher unbekannte E-Mail-Adresse eingegeben haben, wird Ihnen nicht von allein ein neues menu:[An]-Feld angeboten. Drücken Sie in diesem Fall einfach einmal die Enter-Taste, wenn Sie noch einen Adressaten eingeben müssen. Neben dem Hinzufügen einzelner E-Mail-Adressen, können Sie auch vorab definierte Gruppen hinzufügen. Dies empfiehlt sich, wenn Sie häufiger an die gleiche Personengruppe eine E-Mail verfassen wollen. Wie Gruppen eingerichtet werden, erfahren Sie im Abschnitt <<sec.kontakte.gruppen>>.
+
+Das nächste Feld ist der menu:[Betreff]. Er ist kein Pflichtfeld; beachten Sie jedoch, dass ein E-Mail-Betreff zum guten Ton im Internet gehört und dem Empfänger die Orientierung im E-Mail-Postfach erleichtert. Fehlt der Betreff, wird {branch} Sie beim Absenden fragen, ob Sie die Mail ohne Betreff absenden möchten.
+
+Unter der Betreffzeile finden Sie auf der rechten Seite das Feld menu:[Signatur], wo Sie, sofern Sie mehrere Signaturen angelegt haben, zwischen diesen auswählen können.
+Auf der linken Seite finden Sie eine Reihe mit typischen Texteditor-Einstellungen {empty}footnote:[Die Textgröße ist für image:Icon/icon_email_size_up.png[height=16] auf 13px und für image:Icon/icon_email_size_down.png[height=16] auf 10px festgelegt.] und darunter das eigentliche Textfeld.
+
+Mit diesen wenigen Angaben ist Ihnen das Verfassen und Empfangen von E-Mails bereits möglich. Mit dem Button menu:[Senden] oben links im Bearbeitungsmenü versenden Sie die Mail.
+
+Kommen wir jetzt zu einigen Sonderfunktionen, rechts neben dem menu:[Senden]-Button:
+
+Als Erstes wäre da das X-Icon mit menu:[Abbrechen]. Dieses ist selbsterklärend. Beim Klicken wird der Schreib-Vorgang abgebrochen und das Fenster schließt sich. Als Nächstes kommt das Plus-Icon mit menu:[Datei hinzufügen]. Klicken Sie es an, erhalten Sie den Dateiauswahldialog Ihres Betriebssystems, mit dem Sie eine oder auch mehrere beliebige Dateien an die E-Mail anhängen und versenden. Allerdings lassen sich Dateien auch über Drag&Drop an die E-Mail anhängen. Dazu müssen Sie nur den Dateimanager Ihres Betriebssystems mit dem entsprechenden Ordner öffnen und so auf dem Bildschirm arrangieren, dass er sich neben dem E-Mail-Fenster befindet. Dann ``ziehen'' Sie einfach die Datei mit gedrückter linker Maustaste auf eine beliebige Stelle im E-Mail-Fenster.
+
+Sehr effektiv ist die Funktion menu:[Suche Empfänger]: Beim Anklicken dieses Buttons wird Ihnen in einem separaten Fenster der komplette Adressbuchdialog mit den Filterfunktionen eingeblendet:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/EditDialog/Message>
+        demodata: E-Mail-Konto, Kontakte, Empfangsfilter, Adressbücher Favoriten
+        actions:
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Auswahl von E-Mail-Empfängern aus bestehenden Kontakten über Filter
+image::EMail/16_email_auswahl_empfaenger.png[id="fig_emailneueemailempfaenger",width="100%"]
+
+
+(((cc)))
+(((bcc)))
+Mit den üblichen und Ihnen bereits aus <<chap.adressverwaltung>> bekannten Filterfunktionen lassen sich nun eine beliebige Anzahl von Adressen einblenden. Rechts in der Tabelle sehen Sie dazu noch vier Spalten mit Radiobuttons: Markieren Sie eine Adresszeile mit menu:[An] wird dieser Adressat zum normalen Empfänger der E-Mail gemacht. Analog bedeutet die Markierung mit menu:[Kopie], dass der Adressat die E-Mail in Kopie erhält. Die Funktion menu:[Blindkopie] ist vom Standpunkt des Datenschutzes her sehr wichtig: Möglicherweise ist es Ihnen selbst auch schon passiert, dass Sie eine E-Mail erhalten haben, in deren Kopf Sie eine ganze Reihe von E-Mail-Adressen lesen konnten, denen diese E-Mail ebenfalls zugestellt worden ist. Wahrscheinlich hat der Absender hier in Unkenntnis der Kopie- und Blindkopie-Funktionen gehandelt. menu:[Kopie] benutzt man, wenn man den Kopie-Empfänger ganz bewusst davon in Kenntnis setzen will, an wen die E-Mail hauptsächlich gegangen ist. menu:[Blindkopie] hingegen sollten Sie benutzen, wenn Sie nicht wünschen, dass der einzelne Empfänger die Adressen der anderen Empfänger sehen kann. Das ist insbesondere beim Versenden von Massen-E-Mails bedeutsam!
+
+[TIP]
+===========
+Für eben jene Anwendungsfälle können Sie die Radiobuttons auch massenweise ``anklicken'', indem Sie mit den üblichen Funktionen (key:Ctrl[] + Klick, key:Shift[] + Klick oder menu:[Alle Seiten auswählen] im Pulldown oben rechts) mehrere E-Mails markieren und dann über die rechte Maustaste die entsprechende Funktion des Kontextmenüs anwählen.
+===========
+
+Zurück zu unserem Fenster: Im linken Teil sehen Sie unter den Adressbüchern vier sogenannte menu:[EMPFÄNGERFILTER]. Mit diesen können Sie sich, nachdem Sie gegebenenfalls eine größere Zahl von E-Mail-Adressen mit verschiedenen Radiobuttons gekennzeichnet haben, die einzelnen Empfänger-Kategorien zur Kontrolle herausfiltern, bevor Sie die E-Mail-Adressen übernehmen oder die E-Mail versenden.
+
+Schließen Sie nun das Empfängerfenster. Im Fenster menu:[E-Mail verfassen] gibt es noch weitere Funktionen: Der Button menu:[Als Entwurf speichern] versendet die E-Mail nicht, sondern speichert sie im Ordner menu:[Entwürfe] auf Ihrem E-Mail-Server. Desgleichen der Button menu:[Als Vorlage speichern]: hier wird der Ordner menu:[Vorlagen] oder auch menu:[Templates] benutzt. Für beide Ordnernamen sehen Sie in den Kontoeigenschaften unter menu:[Andere Einstellungen] nach (<<sec.email.menue>>). menu:[Nachricht speichern als] bietet eine weitere Möglichkeit die Nachricht zu speichern. Hier können Sie entweder den Ort im Dateimanager aussuchen oder Sie speichern die Nachricht als Anhang in einer anderen Anwendung.
+
+[TIP]
+===========
+Der Button menu:[Als Entwurf Speichern] ist nur einer von zwei Wegen, wie man die E-Mail als Entwurf speichern kann. {branch} verfügt auch über eine Auto-Save-Funktion. Sollten Sie also eine E-Mail anfangen zu schreiben, wird diese automatisch auch als Entwurf abgespeichert. Dieser Auto-Save-Entwurf wird nach dem E-Mail-Versand gelöscht, sofern er nicht anderweitig gespeichert wurde.
+===========
+
+Mit dem Button menu:[Lesebestätigung] erhält die versendete E-Mail eine Zusatzfunktion, die den Empfänger beim Öffnen der E-Mail fragt, ob er eine Empfangsbestätigung an den Absender senden will.
+
+Zuletzt der Punkt menu:[Massen-Mail]. Wird diese Funktion aktiviert, bekommt jeder Empfänger seine eigene einzelne Kopie der verfassten Mail.
+
+[[sec.email.verschluesseln]]
+==== E-Mail verschlüsseln ====
+
+Um diese Option zu nutzen, müssen zwei Einstellungen vorher eingerichtet sein.
+1. Sie müssen das "Mailvelope"-Plug-In installieren. Dieses steht für die Browser "Chrome" und "Firefox" auf der offiziellen Mailvelope-Webseite (https://www.mailvelope.com/de) zur Verfügung. Hier finden Sie auch die entsprechende Installationsanleitung. Mailvelope ist ein Verschlüsselungsdienst, welcher direkt in {branch} eingebunden wurde.
+2. Sie müssen Ihre Domain autorisieren. Wichtig ist das Sie "API" aktivieren.
+
+Sind beide dieser Einstellungen gegeben, können Sie Ihre ausgehenden und eingehenden E-Mails verschlüsseln.
+
+Wie Sie wahrscheinlich schon selbst entdeckt haben, haben Sie nun eine neue Funktion im oberen Bereich des menu:[Nachricht verfassen]-Fensters; menu:[Nachricht verschlüsseln].
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/Verfassen>
+        demodata:
+        actions:
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Neue Funktion Nachricht Verschlüsseln nun sichtbar
+image::EMail/19_email_nachricht_verschluesseln.png[id="fig_emailverschluesseln",width="80%"]
+
+Durch das Anklicken dieser Funktion wird Mailvelope automatisch gestartet. Um diese verschlüsselte Nachricht lesen zu können, muss der Empfänger die Verschlüsselungsfunktion ebenfalls aktiviert haben.
+
+[TIP]
+===============
+Um eine verschlüsselte E-Mail zu versenden, müssen Empfänger und Absender den jeweiligen sogenannten "public key" miteinander teilen. Bei der ersten E-Mail zu der Person wird dieser gegenseitig abgefragt. Wir empfehlen, diesen einmal per Telefon abzugleichen, damit eine sichere Verbindung gewährleistet werden kann. Eine Anleitung, wie das gegenseitige Verifizieren funktioniert, finden Sie auch auf der Internetseite von Mailvelope.
+===============
+
+[[sec.email.rest]]
+=== Weitere Funktionen des Bearbeitungsmenüs ===
+
+Diese Funktionen können Sie, bis auf menu:[Nachricht drucken], statt über das Bearbeitungsmenü auch mit einem Rechtsklick auf die betreffende E-Mail über das Kontextmenü aufrufen.
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen/Message/Grid>
+        demodata: E-Mail-Konto, Beispiel E-Mails
+        actions: rechte Maustaste
+        image: zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Kontextmenü beim Rechtsklick auf eine E-Mail
+image::EMail/17_email_kontextmenu_email.png[id="fig_emailneueemailkontext",width="100%"]
+
+
+[[sec.email.loeschen]]
+==== Löschen ====
+
+Erwartungsgemäß löschen Sie darüber markierte E-Mails einzeln oder in Gruppen. Zur Auswahl der Mails stehen Ihnen alle bereits besprochenen Funktionen zur Verfügung. Mit dem Löschen wird die E-Mail lediglich in den Ordner menu:[Papierkorb], menu:[Mülleimer] o.ä. verschoben. Um sie endgültig zu löschen (vgl. <<sec.email.tabelle>>), müssen Sie sie in diesem Ordner erneut markieren und löschen. Wollen Sie den gesamten menu:[Mülleimer] leeren, geht das über das Kontextmenü, das hier den eigens dafür eingerichteten Menüpunkt menu:[Ordner leeren] enthält.
+
+[[sec.email.antworten]]
+==== Antworten ====
+
+Die Funktion menu:[Antworten] nimmt eine geöffnete oder markierte E-Mail und beantwortet sie – im Unterschied zur Funktion menu:[Allen antworten] – nur an den eigentlichen Absender. Dabei wird, wie schon weiter oben erwähnt, der Text des Absenders als Zitat übernommen.
+
+[[sec.email.allen.antworten]]
+==== Allen antworten ====
+
+menu:[Allen antworten] versendet die Antwort-E-Mail nicht nur an den Absender, sondern auch an eventuelle weitere Empfänger der zu beantwortenden bzw. ``zitierten'' Ursprungs-E-Mail. Vom Absender in Kopie oder Blindkopie gesetzte Empfänger erhalten die Antwort-E-Mail jeweils wieder als Kopie oder Blindkopie.
+
+[[sec.email.weiterleiten]]
+==== Weiterleiten ====
+
+Diese Funktion öffnet ebenfalls ein neues E-Mail-Fenster mit dem Zitat einer bereits geöffneten oder markierten E-Mail. Hierbei bleibt jedoch der Eintrag menu:[An] frei. Sie können, wie bei einer neu zu schreibenden E-Mail, einen oder mehrere Empfänger frei wählen, an den oder die Sie die E-Mail weiterleiten.
+
+[NOTE]
+===============
+Standardmäßig wird beim Weiterleiten einer E-Mail die Original-E-Mail immer in eine .eml-Message (auch bekannt als RFC822-Attachment) verpackt. In {branch} kann man durch Klick auf den .eml-Anhang ebenfalls die weitergeleitete E-Mail inklusive ihrer Anhänge öffnen. Sofern man E-Mails in einem Standard-Mailprogramm liest, kann man durch ein erneutes Klicken auf die .eml Datei auch wieder auf die eingebetteten Anhänge zugreifen.
+
+Wenn das Verhalten unerwartet sein sollte oder ein Benutzer das gern geändert hätte, ist dies in den Benutzereinstellungen änderbar. Hierfür navigieren Sie zu menu:Benutzer[Einstellungen] dort dann auf menu:E-Mail[.eml Dateianhang in weitergeleiteten Mails] aus. Ändern Sie dort die Einstellung auf menu:[Nein]. Nun werden die Anhänge beim Weiterleiten wieder einzeln an die Mail angehängt, so als würden Sie eine neue E-Mail schreiben.
+===============
+
+
+[[sec.email.drucken]]
+==== Nachricht drucken ====
+
+menu:[Nachricht drucken] öffnet das Drucker-Auswahlmenü Ihres Betriebssystems; Sie können die Nachricht entweder auf einem Drucker, einem Faxgerät oder beispielsweise einem PDF-Simulator ausdrucken – je nachdem, welche Drucker Ihr System anbietet.
+
+[[sec.email.nachricht.ablegen]]
+==== Nachricht speichern als ====
+
+Diese Funktion bietet mehrere Möglichkeiten. {branch} erkennt, sofern der Kontakt im Adressbuch vorhanden ist, wer Ihnen die Mail geschrieben hat. So sollten Sie, wenn Sie auf menu:[Nachricht speichern als] klicken, zuerst den Namen des Kontaktes sehen. Klicken Sie auf diesen, wird die E-Mail als E-Mail-Notiz gespeichert. Mit menu:[Dateimanager] kann man die E-Mail im vorhandenen Dateimanager abspeichern. Der Punkt menu:[Anhang] bietet die Möglichkeit, eine Verknüpfung zwischen der E-Mail und einer anderen {branch}-Applikation zu erstellen. Zuletzt menu:[Herunterladen]. Dies ermöglicht das Herunterladen der E-Mail lokal auf den Computer.
+
+Besonders mächtig wird diese Funktion, wenn es sich um Gruppen-Mails handelt. Wird eine E-Mail an mehrere {branch}-Usern geschickt, muss nur einer der User diese ablegen. Die E-Mail wird mit image:Icon/icon_download.png[height=16] gekennzeichnet, so das alle anderen User sehen, dass die E-Mail bereits abgelegt ist. Bewegt man die Maus über das Symbol, wird sichtbar, wo die E-Mail abgelegt wurde. Sollte der E-Mail-Verkehr weiter gehen und eine spätere E-Mail auch abgelegt werden, schlägt {branch} den vorherigen Speicherort automatisch vor.
+
+[[sec.email.un.gelesen.markieren]]
+==== (Un)gelesen markieren ====
+
+Kommen wir zu menu:[(Un)gelesen markieren]. Dieser Button schaltet eine markierte ungelesene E-Mail auf ``gelesen'' und eine gelesene auf ``ungelesen''. Praktisch erkennen Sie das in der Tabellenzeile von {branch} als an- oder ausgeschalteten Fettdruck.
+
+[[sec.email.markierung.an.aus]]
+==== Markierung an/aus ====
+
+Mit diesem Button erhält eine ausgewählte E-Mail eine Markierung. Diese Markierung soll die E-Mail für den Empfänger als besonders wichtig hervorheben. In {branch} erscheint die Betreffzeile der E-Mail daraufhin in der Tabellenzeile als roter Text; andere E-Mail-Clients arbeiten mit anderen Markierungen.

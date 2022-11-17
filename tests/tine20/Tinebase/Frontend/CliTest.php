@@ -426,9 +426,30 @@ class Tinebase_Frontend_CliTest extends TestCase
     }
 
     /**
+     * testMonitoringCheckLicense
+     */
+    public function testMonitoringCheckLicense()
+    {
+        ob_start();
+        $result = $this->_cli->monitoringCheckLicense();
+        $out = ob_get_clean();
+
+        self::assertStringContainsString('LICENSE ', $out);
+        $licenseStatus = Tinebase_License::getInstance()->getStatus();
+        if (in_array($licenseStatus, [Tinebase_License::STATUS_LICENSE_INVALID, Tinebase_License::STATUS_NO_LICENSE_AVAILABLE])) {
+            self::assertEquals(2, $result);
+        } else {
+            self::assertLessThanOrEqual(1, $result);
+        }
+    }
+
+    /**
      * test cleanNotes
      *
      * @param bool $purge
+     *
+     * @group nogitlabci
+     * gitlabci: Tinebase_Exception_NotFound: No Application Controller found (checked class OnlyOfficeIntegrator_Controller_Node)!
      */
     public function testCleanNotes($purge = false)
     {
@@ -522,6 +543,10 @@ class Tinebase_Frontend_CliTest extends TestCase
         }
     }
 
+    /**
+     * @group nogitlabci
+     * gitlabci: Tinebase_Exception_NotFound: No Application Controller found (checked class OnlyOfficeIntegrator_Controller_Node)!
+     */
     public function testPurgeNotes()
     {
         $this->testCleanNotes(true);
@@ -545,6 +570,9 @@ class Tinebase_Frontend_CliTest extends TestCase
 
     /**
      * test cleanCustomfields
+     *
+     * @group nogitlabci
+     * gitlabci: Tinebase_Exception_NotFound: No Application Controller found (checked class OnlyOfficeIntegrator_Controller_Node)!
      */
     public function testCleanCustomfields()
     {

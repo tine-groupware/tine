@@ -187,6 +187,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $accountData['emailUser'] = $emailUser;
         $accountData['accountEmailAddress'] = null;
         $account = $this->_json->saveUser($accountData);
+
         // assert no email account has been created
         self::assertFalse(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP]), 'imap user found!');
         self::assertFalse(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP]), 'smtp user found!');

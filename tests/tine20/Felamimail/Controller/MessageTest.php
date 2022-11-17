@@ -1775,6 +1775,16 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
     }
 
     /**
+     * @see https://service.metaways.net/Ticket/Display.html?id=169011
+     */
+    public function testRT169011()
+    {
+        $cachedMessage = $this->messageTestHelper('rt169011.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        self::assertStringContainsString('Guten Tag, Frau Dr. Seemer,', $message->body, print_r($message->toArray(), true));
+    }
+
+    /**
      * @see 0013150: convert single part file content body to attachment
      */
     public function testSinglePartPdfMail()
@@ -1797,6 +1807,17 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
 
         $this->assertStringContainsString('Sollten Sie zukünftig keine E-Mail Nachrichten empfangen wollen,'
             . ' senden sie bitte eine E-Mail mit dem Subject "OUT-MAIL" an info@', $message->body);
+    }
+
+    /**
+     * @todo anonymize mail and put it into non-be/customer branch
+     */
+    public function testBrokenEncodingInBase64Body()
+    {
+        $cachedMessage = $this->messageTestHelper('hygienetag.eml');
+        $message = $this->_controller->getCompleteMessage($cachedMessage, null, Zend_Mime::TYPE_TEXT);
+
+        $this->assertStringContainsString('Viren Bakterien Krankheitserreger', $message->body);
     }
 
     public function testBrokenEncodingInHeader()

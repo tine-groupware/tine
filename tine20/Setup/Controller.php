@@ -150,7 +150,7 @@ class Setup_Controller
         
         $extCheck = new Setup_ExtCheck(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'essentials.xml');
         $extResult = $extCheck->getData();
-        
+
         $optionalBinaries = $this->checkoptionalBinaries();
 
         $result = array(
@@ -166,17 +166,17 @@ class Setup_Controller
 
     /**
      * check which optional binaries are available
-     * 
+     *
      * @return array
      */
     public function checkOptionalBinaries()
     {
-        
+
         $result = array(
             'result' => array(),
             'success' => false
         );
-        
+
         $tnef = Tinebase_Core::systemCommandExists('tnef') ? 'tnef ' : '' ;
         $ytnef = Tinebase_Core::systemCommandExists('ytnef') ? 'ytnef ' : '' ;
         $tika = Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}->{Tinebase_Config::FULLTEXT_TIKAJAR}? 'tika' : '';
@@ -187,20 +187,94 @@ class Setup_Controller
                 'value' => FALSE,
                 'message' => 'The following optional binaries are missing: ' .
                 (empty($tnef) && empty($ytnef) ? "tnef or ytnef" : "") . " " .
-                (empty($tika) ? "tika" : "")  
+                (empty($tika) ? "tika" : "")
             );
             return $result;
         }
-        
+
         $result['result'][] = array(
             'key' => 'OptionalBinaries',
             'value' => TRUE,
-            'message' => 'The following optional binaries are available: ' . 
+            'message' => 'The following optional binaries are available: ' .
             $tnef . $ytnef . $tika
         );
-        return $result;    
+        return $result;
     }
-    
+
+    /**
+     * Save license information
+     *
+     * @param string $licenseString
+     * @return array certificate data or validation data if failing
+     */
+    public function saveLicense(string $licenseString)
+    {
+        if (null === ($user = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly())) {
+            throw new Tinebase_Exception('could not create setup user');
+        }
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
+        $license = Tinebase_License::getInstance();
+        Tinebase_License::resetLicense();
+        $license->storeLicense($licenseString);
+
+        if ($license->isValid()) {
+            $return = $this->getLicense();
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' License is not valid');
+            $return = array('error' => true);
+        }
+
+        return $return;
+    }
+
+    /**
+     * Upload license as file
+     *
+     * @param string $tempFileId
+     * @return array certificate data or validation data if failing
+     */
+    public function uploadLicense(string $tempFileId)
+    {
+        $file = Tinebase_TempFile::getInstance()->getTempFile($tempFileId, /* $skipSessionCheck */ true);
+
+        $licenseString = file_get_contents($file['path']);
+        return $this->saveLicense($licenseString);
+    }
+
+    /**
+     * Get license information
+     *
+     * @return array
+     */
+    public function getLicense()
+    {
+        $default = array(
+            'policies' => null,
+            'maxUsers' => 5
+        );
+
+        try {
+            $license = Tinebase_License::getInstance();
+        } catch (Exception $e) {
+            return $default;
+        }
+
+        $certData = $license->getCertificateData();
+        if (!$certData) {
+            return $default;
+        }
+
+        $users = array(
+            'maxUsers' => $license->getMaxUsers(),
+            'userLimitReached' => $license->checkUserLimit(),
+            'status' => $license->getStatus()
+        );
+
+        return array_merge($certData, $users);
+    }
+
     /**
      * check which database extensions are available
      *
@@ -1597,8 +1671,9 @@ class Setup_Controller
         if ($authResult->isValid()) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Valid credentials, setting username in session and registry.');
             Tinebase_Session::regenerateId();
-            
+
             Setup_Core::set(Setup_Core::USER, $_username);
+
             Setup_Session::getSessionNamespace()->setupuser = $_username;
             return true;
             
@@ -1670,7 +1745,7 @@ class Setup_Controller
         foreach ($_applications as $appId => $applicationName) {
             if ($this->isInstalled($applicationName)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " skipping installation of application {$applicationName} because it is already installed");
+                    . " Skipping installation of application {$applicationName} because it is already installed");
             } else {
                 $applications[$applicationName] = $this->getSetupXml($applicationName);
                 if (strlen($appId) === 40) {
@@ -1680,7 +1755,8 @@ class Setup_Controller
         }
         $applications = $this->sortInstallableApplications($applications);
         
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: ' . print_r(array_keys($applications), true));
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: '
+            . print_r(array_keys($applications), true));
 
         $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
         if ($fsConfig && ($fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS} ||
@@ -1696,8 +1772,13 @@ class Setup_Controller
             if (! $xml) {
                 Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Could not install application ' . $name);
             } else {
-                $this->_installApplication($xml, $_options);
-                $count++;
+                if (! Tinebase_License::getInstance()->isPermitted($name)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . " Skipping installation of application " . $name . " because it is not allowed by license");
+                } else {
+                    $this->_installApplication($xml, $_options);
+                    $count++;
+                }
             }
         }
 

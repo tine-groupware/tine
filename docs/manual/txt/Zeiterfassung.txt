@@ -1,0 +1,218 @@
+[[chap.zeiterfassung]]
+== Zeiterfassung ==
+
+////
+KUK 2015-05-15: Indizierung abgeschlossen, einen für den User gefährlichen Bug als Fußnote vermerkt, Freigabe!
+////
+
+//////
+überarbeitet Paul Hartog 2020-05-05
+//////
+
+(((Zeiterfassung)))
+(((ERP)))
+(((Zeitkonten)))
+(((Stundenzettel)))
+{{{/Timetracker}}}
+Ein unabdingbarer Baustein im ERP-Bereich, den {branch} ja ebenfalls in Teilen abdeckt, ist die Anwendung menu:[Zeiterfassung].
+
+[[sec.zeiterfassung.module.favoriten]]
+=== Untermodule und Favoriten ===
+
+Die Ansicht der linken Seite ist in diesem Programmteil eine etwas andere als in denen des klassischen Groupware-Bereichs, denn menu:[Zeiterfassung] kennt z.B. keine Unterteilung in Datenbanken für ``persönliche'', ``gemeinsame'' oder Objekte ``anderer Benutzer''.
+
+//////////////////
+        SCREENSHOT
+        path: </Timetracker/MainScreen>
+        demodata: Favoriten, Beispiel Studnezettel, Zeitkonten
+        image: Zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Module der Zeiterfassung
+image::Zeiterfassung/1_zeiterfassung_module.png[id="fig_zeiterfassungmodule",width="50%"]
+
+
+{{{/Timetracker/MainScreen/ModulPicker}}}
+menu:[Zeiterfassung] hat zwei Untermodule: menu:[Stundenzettel] und menu:[Zeitkonten]. Die Stundenzettel sind immer eine Teilmenge eines Zeitkontos, d.h. Sie müssen zunächst Zeitkonten anlegen, um im zweiten Schritt Stundenzettel abspeichern zu können. Unter menu:[MODULE] finden Sie diese beiden Programmteile zum Starten.
+
+{{{/Timetracker/MainScreen/Timeaccount/FavoritesPicker}}}
+menu:[FAVORITEN] sieht hier, je nach gewähltem Modul, unterschiedlich aus. Unter menu:[Stundenzettel] finden Sie als vorangelegte Favoriten eine ganze Reihe (in der Standardvariante fünf) verschiedene Sortierkriterien, die sich alle auf Ihre eigene Person und verschiedene Zeitabschnitte beziehen. Unter dem Modul menu:[Zeitkonten] werden Ihnen in der Standardvariante drei Ansichten angeboten, die entsprechend dem Abrechnungsstatus der Zeitkonten menu:[Abgerechnete Zeitkonten], menu:[Abzurechnende Zeitkonten] und menu:[Nicht abgerechnete Zeitkonten] heißen.
+
+[[sec.zeiterfassung.zeitkonten]]
+=== Zeitkonten hinzufügen ===
+
+{{{/TimeTracker/EditDialog/TimeAccount}}}
+{{{/Timetracker/MainScreen/Timeaccount/ActionToolbar}}}
+Starten Sie das Modul durch Anklicken von menu:[Zeitkonten] unter menu:[MODULE]. Wir wollen ein neues Zeitkonto anlegen – gehen Sie dazu ins Bearbeitungsmenü und klicken Sie den Button menu:[Zeitkonto hinzufügen] an.
+
+//////////////////
+        SCREENSHOT
+        path: </Timetracker/EditDialog/Timeaccount>
+        demodata: Kostenstellen, Rechnungen, Tags
+        image: dialog
+        comment: <neue funktion -> Rechnungen>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Zeitkonto anlegen
+image::Zeiterfassung/2_zeiterfassung_zeitkonto_neu.png[id="fig_zeiterfassungzeitkonto",width="100%"]
+
+////
+@Tim: Der Screenshot muss aktualisiert werden. Der Titel(Neuen...) wurde angepasst.
+////
+
+Unter dem Reiter menu:[Zeitkonto] finden Sie in der ersten Zeile die Pflichtfelder menu:[Nummer] und menu:[Titel]. menu:[Nummer] ist ein beliebiges Eingabefeld, in dem Sie sowohl Buchstaben als auch Zahlen speichern können. Vergewissern Sie sich, ob es für Zeitkonten-Bezeichnungen in Ihrem Unternehmen eine Regel gibt, und wenden Sie diese hier ggf. an. menu:[Titel] kann ebenfalls ein beliebiger String sein. Alle weiteren Eingaben auf dieser Maske sind fakultativ.
+
+Die drei Eingabefelder menu:[Einheit], menu:[Preis einer Einheit] und menu:[Budget] werden in {branch} selbst nicht verarbeitet; sie dienen nur zur Übergabe an externe Fakturierungsprogramme.
+
+//MW bis HIER
+
+////
+KUK: Dabei kann eine menu:[Einheit] sowohl eine Stunde als auch eine Währungseinheit sein. Wie das, wenn es Preis einer Einheit gibt?
+
+Und was ist damit gemeint? Ist ``Einheit'' eine Zeiteinheit, also Stunde oder 45 Min. oder...?
+@Kai: Einheit könnte Stunde oder Euro sein. Budget würde mann dann auch in Stunden order Euro angeben.
+
+Und was bedeutet Budget? Heißt das der dort eingegebene Wert darf nicht überschritten werden? Und wenn ja, was passiert wenn doch?
+@Kai: Das Budget hat aktuell keine Auswirkung. Vorstellbar wäre ein Filter, bei dem das Budget überschritten wurde.
+
+Perspektivisch soll alles mit Währung aus der Zeiterfassung entfernt werden und in die Sales-Anwendung verschoben werden. Dann bleibt in der Zeiterfassung nur noch als das erhalten was mit Zeiten zu tun hat.
+////
+
+Der Status eines Zeitkontos kann menu:[offen] oder menu:[geschlossen] sein, d.h. in diesem Zeitkonto können entweder noch Stundenzettel erfasst werden oder nicht mehr. Diese beiden möglichen Werte werden Ihnen entsprechend im Pulldown angeboten. Wenn ein Zeitkonto geschlossen wurde, wird es in der Tabelle ausgegraut angezeigt, und man kann keine Zeiten mehr auf dieses Konto buchen.
+
+Im Feld menu:[Abgerechnet] haben Sie die drei Werte menu:[noch nicht abgerechnet], menu:[abzurechnen] und menu:[abgerechnet] zur Auswahl. Diese Angaben dienen lediglich der Sortierung in die o.g. Favoriten-Ansichten.
+
+menu:[Abgerechnet in] dient der Angabe, in welcher Rechnung die Leistungen abgerechnet wurden, d.h. hier können Sie eine Rechnungsnummer eingeben.
+
+Nach Überschreiten der menu:[Buchungsfrist] können Anwender auf dieses Zeitkonto keine Stundenzettel mehr buchen. Ausnahme hiervon stellen Bediener dar, die Administratorrechte auf dieses Zeitkonto haben.
+
+menu:[Abgerechnet am] ist ein Datumsfeld und erlaubt Ihnen, das Datum der Abrechnung des betreffenden Zeitkontos zu setzen.
+
+Im nächsten Feld können Sie dem Zeitkonto eine menu:[Kostenstelle] zuweisen. Damit werden die hier erfassten Aufwände dieser Kostenstelle zugeordnet. Wie Kostenstellen angelegt werden, lesen Sie bitte im <<chapter.Sales>> nach, und dort im <<sec.sales.kostenstellen>>.
+
+Mit dem letzten Feld auf dieser Maske weisen Sie dem Zeitkonto einen menu:[Verantwortlichen] zu. Dabei können Sie auf den gesamten Kontaktpool Ihrer {branch}-Installation zugreifen, d.h. es können auch externe Personen zu Verantwortlichen eines Zeitkontos gemacht werden, nicht nur {branch}-Benutzer.
+
+Der Checkbutton menu:[Stundenzettel sind abrechenbar] ist lediglich ein Sortierkriterium: Beim Stundenzettel-Export können Sie damit alle Stundenzettel herausfiltern, die nicht abrechenbar sind. Die abrechenbaren hingegen können Sie exportieren und danach auf menu:[abgerechnet] setzen.
+
+Der zweite Reiter, menu:[Zugang], regelt die Zugangsberechtigungen für das anzulegende Zeitkonto:
+
+////
+Screenshot Fenster "Zeitkonto hinzufügen" mit Reiter "Zugang" und einer ausgewählten Benutzergruppe mit leeren Checkbuttons
+////
+//////////////////
+        SCREENSHOT
+        path: </Timetracker/EditDialog/Timeaccount>
+        demodata: Benutzer, Benutzergruppen, Rollen
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Vergabe von Benutzerrechten für ein Zeitkonto
+image::Zeiterfassung/3_zeiterfassung_zeitkonto_rechte.png[id="fig_zeiterfassungzugang",width="100%"]
+
+
+Standardmäßig ist die Rechtevergabe auf Zuweisung von Benutzergruppen eingestellt, was Sie an dem Text menu:[Suche nach Gruppen ...] im Pulldown-Eingabefeld sehen. Sie können diese Suche jedoch über das kleine Symbol (image:Icon/1_icon_group_full.png[height=16]) vor dem Eingabefeld ändern – dahinter versteckt sich ein Pulldown mit den Werten menu:[Benutzersuche] und menu:[Gruppensuche], sodass Sie auch einzelne Benutzer mit spezifischen Berechtigungen zuweisen können.
+
+Die Berechtigungen sind zu Beginn immer leer -- auch das ist der Stellung dieser Anwendung außerhalb der normalen Groupware-Funktionen geschuldet! Weisen Sie daher jeder Gruppe bzw. jedem Benutzer die spezifischen Berechtigungen über die Checkbuttons wie folgt zu:
+
+* menu:[Eigene buchen] – Die Berechtigung, zu diesem Zeitkonto eigene Stundenzettel hinzuzufügen.
+* menu:[Alle sehen] – Die Berechtigung, Stundenzettel anderer Benutzer dieses Zeitkontos zu sehen.
+* menu:[Alle buchen] – Die Berechtigung, zu diesem Zeitkonto Stundenzettel auch für andere Benutzer hinzuzufügen.
+* menu:[Abrechenbar setzen] – Die Berechtigung, dieses Zeitkonto abzurechnen und zu schließen.
+* menu:[Export] --  Die Berechtigung, Stundenzettel dieses Zeitkontos an andere Programme zu übergeben.
+* menu:[Admin] – Alle Berechtigungen (Darf Alles)
+
+Damit haben wir alle Menüpunkte und Einstellungen für Zeitkonten besprochen; legen Sie bitte testweise ein Zeitkonto an, wenn es nicht schon welche gibt! Wir benötigen es im nächsten Unterabschnitt, wenn wir die Stundenzettel besprechen.
+
+[[sec.zeiterfassung.zeitkonten.rest]]
+=== Die restlichen Menüpunkte für Zeitkonten ===
+
+{{{/Timetracker/MainScreen/Timeaccount/ActionToolbar}}}
+Mit menu:[Zeitkonto bearbeiten] erhalten Sie nach Markierung eines vorhandenen Zeitkontos dieselbe Bearbeitungsmaske wie bei menu:[Zeitkonto hinzufügen].
+
+menu:[Zeitkonto löschen] löscht das ausgewählte Zeitkonto, nach einer Sicherheitsabfrage.{empty}footnote:[Achtung: Sie können in der derzeitigen Version von {branch} ein Zeitkonto löschen, obwohl diesem gültige Stundenzettel zugeordnet sind. Diese hängen dann unzugeordnet im System. Achten Sie daher auf vollständige Abrechnung, bevor Sie ein Zeitkonto löschen!]
+
+////
+Brutaler Bug: Ich kann ein Zeitkonto einfach löschen, obwohl zu diesem gültige Stundenzettel im System sind - die hängen dann in der Luft!
+@Kai: Ist als Bug erfasst.
+////
+
+menu:[Drucke Seite] öffnet Ihren systemeigenen Druckerdialog und erzeugt standardmäßig eine DIN-A4-Hochformatseite mit einer Tabelle und den auf dem Bildschirm ausgewählten Feldern. Dabei passt sich die Schriftgröße dem Platzangebot dynamisch an.
+
+menu:[Exportiere Zeitkonto] ist zwar ein Pulldown; momentan ist aber nur der Export in das Open-/Libre-Office-Format (ODS) implementiert.
+
+menu:[Einträge importieren] - Die Importfunktion für Inventargegenstände funktioniert analog derjenigen im Adressbuch, d.h. Sie sollten sich als ersten Schritt die CSV-Beispieldatei ansehen, die Sie im Bearbeitungsfenster menu:[Datei und Format wählen] unter dem Link menu:[Beispieldatei herunterladen] finden (vgl. <<sec.kontakte.importieren>>).
+
+[[sec.zeiterfassung.stundenzettel]]
+=== Stundenzettel hinzufügen ===
+
+{{{/Timetracker/EditDialog/Timesheet}}}
+Ein Stundenzettel ist, in Anlehnung an diesen Begriff aus der "alten" Produktionswelt, das Objekt zur Erfassung eines einzelnen Arbeitsaufwandes innerhalb eines bestimmten Zeitkontos:
+
+////
+Screenshot Fenster "Neuen Stundenzettel hinzufügen"
+////
+//////////////////
+        SCREENSHOT
+        path: </Timetracker/EditDialog/Timesheet>
+        demodata: Zeitkonten, Benutzer, Rechnungen
+        image: dialog
+        comment: <neue funktion -> Rechnungen>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Einen Stundenzettel zur Zeiterfassung erstellen
+image::Zeiterfassung/4_zeiterfassung_stundenzettel_neu.png[id="fig_zeiterfassungstundenzettel",width="100%"]
+
+
+{{{/Timetracker/MainScreen/Timesheet/ActionToolbar}}}
+Daher sehen Sie, nach Öffnung der Bearbeitungsmaske für Stundenzettel (menu:MODULE[Stundenzettel, Stundenzettel hinzufügen]) auch oben als erste Eingabe ein Pulldown menu:[Zeitkonto] zur Auswahl eines solchen. Wenn Sie im vorhergehenden Abschnitt ein Zeitkonto zum Test angelegt haben, wählen Sie es jetzt aus, denn die Angabe eines Zeitkontos ist natürlich Pflicht!
+
+[NOTE]
+============
+Neben den üblichen Schaltern zum Blättern in, ggf. vielen, Zeitkonten finden Sie hier rechts von diesen Schaltern auch noch einen Button menu:[Geschlossene anzeigen], mit denen Sie auch die bereits geschlossenen Zeitkonten in die Auswahl einbeziehen können. Die Erfassung eines Stundenzettels auf ein solches Konto ist nur noch Administratoren möglich, normale Anwender sehen diese Konten nicht.
+============
+
+Gehen wir weiter. In der nächsten Zeile finden Sie Zeitangaben: Zunächst menu:[Dauer], in dem 30 Minuten als Standard eingetragen sind. Mit den beiden Pfeilen ``rauf'' und ``runter'' können Sie diese Zeit in 15-Minuten-Intervallen ändern.
+
+Rechts daneben menu:[Datum] für die Eingabe des Tages, an welchem die Leistung erfolgte. Und schließlich menu:[Start] für das Setzen der Startzeit der Leistung. Beide Eingaben sind fakultativ.
+
+menu:[Beschreibung] ist hier ein Pflichtfeld. Die Abrechnung einer Zeiteinheit bedingt zwangsläufig die Bestimmung des Arbeitsgegenstandes – das legen Verordnungen zur Rechnungsstellung gesetzlich fest.
+
+In den Bereich menu:[Accounting/ Buchhaltung] kann definieren wie viel % eines Stundenzettels abrechenbar ist. Dies ist z.B. bei Projektarbeiten von Relevanz. Gehen wir einmal die einzelnen Funktionen durch.
+menu:[Abrechenbar] setzt der Mitarbeiter, wenn er den Stundenzettel beim Kunden abgerechnet werden kann. menu:[Faktor] beschreibt wie viel % der oben angegebenen Zeit abrechenbar sind. Der Faktor 1 steht hier für 100 %. Egal ob man den Faktor oder menu:[Abrechenbare Zeit] definiert, das jeweils andere wird von {branch} automatisch ausgerechnet.
+Ist der Chuckbutten deaktiviert, wird der Faktor auf 0 gesetzt und die restlichen Optionen ausgegraut. Hier handelt es sich dann um eine reine Zeiterfassung.
+
+menu:[Abgerechnet] dient hier wieder der Angabe einer Rechnungsnummer, in welcher der Stundenzettel abgerechnet wurde.
+
+Ist ein Stundenzettel bereits abgerechnet, wird das Checkbutton menu[Arbeitszeit ist Abgerechnet] aktiviert.
+
+Der Checkbutton menu:[Klärungsbedarf]. Dieser kann vom Mitarbeiter gesetzt werden, wenn es zu diesem Stundenzettel Unklarheiten gibt. Die Buchhaltung kann nur vor dem Abrechnen nach diesen Stundenzetteln Filtern.
+
+Schließlich können Sie per Pulldown mit Auswahlmöglichkeit aus der Reihe der in {branch} angelegten Benutzer einen solchen für diesen Stundenzettel zuweisen. Für die Faktura ist das nicht nötig, deshalb ist die Eingabe hier fakultativ. Beachten Sie aber innerbetriebliche Regelungen zum Controlling.
+
+
+[[sec.zeiterfassung.stundenzettel.rest]]
+=== Die restlichen Menüpunkte für Stundenzettel ===
+
+{{{/Timetracker/MainScreen/Timesheet/ActionToolbar}}}
+Mit menu:[Stundenzettel bearbeiten] erhalten Sie nach Markierung eines vorhandenen Stundenzettels dieselbe Bearbeitungsmaske wie bei menu:[Stundenzettel hinzufügen].
+
+menu:[ Stundenzettel löschen] löscht den ausgewählten Stundenzettel, nach einer Sicherheitsabfrage.
+
+menu:[Drucke Seite] öffnet Ihren systemeigenen Druckerdialog und erzeugt standardmäßig eine DIN-A4-Hochformatseite mit einer Tabelle und den auf dem Bildschirm ausgewählten Feldern.
+
+[[sec.zeiterfassung.stundenzettel.exportieren]]
+==== Stundenzettel exportieren ====
+
+Im rechten Teil des Bearbeitungsmenüs finden Sie ein Pulldown zum Export von Stundenzetteln aus {branch}, menu:[Stundenzettel exportieren], mit den folgenden drei Möglichkeiten:
+
+* menu:[Als ODS exportieren] - diese Funktion erzeugt eine Tabelle im Dateiformat von Open-/LibreOffice; dabei entspricht die Zeilen- und Spaltenanordnung derjenigen auf der Bildschirmtabelle.
+
+* menu:[Als CSV exportieren] erzeugt eine CSV-Textdatei (``komma-getrennte Werte''). Diese Funktion können Sie z.B. auch benutzen, wenn Sie die Tabelle in MS Excel neuerer Versionen einlesen wollen. Zeilen- und Spaltenanordnung wie oben erklärt.
+
+* menu:[Als ... exportieren] - mit diesem Menüpunkt öffnet sich ein Fenster mit einem weiteren Pulldown, das mehrere Möglichkeiten vorsieht. In der Standardausführung von {branch} finden Sie hier allerdings lediglich das ODS-Format. Der Menüpunkt ist auch zum Ausbau für kundenspezifische Sonderformate vorgesehen.

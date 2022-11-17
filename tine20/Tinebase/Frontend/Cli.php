@@ -793,7 +793,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         echo "\ndeleted " . $deleteCount . " customfield values\n";
     }
-    
+
     /**
      * get all app tables
      * 
@@ -1552,6 +1552,39 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             $this->_logMonitoringResult($result, $message);
         }
+        echo $message . "\n";
+        return $result;
+    }
+
+    /**
+     * nagios monitoring for tine 2.0 license
+     *
+     * @return integer
+     *
+     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
+     */
+    public function monitoringCheckLicense()
+    {
+        $result = 0;
+        $licenseStatus = Tinebase_License::getInstance()->getStatus();
+        if (in_array($licenseStatus, [Tinebase_License::STATUS_LICENSE_INVALID, Tinebase_License::STATUS_NO_LICENSE_AVAILABLE])) {
+            $result = 2;
+            $message = 'LICENSE FAIL | status=' . $licenseStatus . ';;;;';
+        } else {
+            $maxUsersMessage = 'maxusers=' . Tinebase_License::getInstance()->getMaxUsers();
+            $remainingDays = Tinebase_License::getInstance()->getLicenseExpireEstimate();
+            $remainingDaysMessage = 'remainingDays=' . $remainingDays;
+            $features = Tinebase_License::getInstance()->getFeatures();
+            $featuresMessage = $features ? 'features=' . implode(',', $features) : '';
+            $infos = $maxUsersMessage . ';' . $remainingDaysMessage . ';' . $featuresMessage . ';;';
+            if ($remainingDays < 7) {
+                $result = 1;
+                $message = 'LICENSE WARN: only a few days remaining | ' . $infos;
+            } else {
+                $message = 'LICENSE OK | ' . $infos;
+            }
+        }
+        $this->_logMonitoringResult($result, $message);
         echo $message . "\n";
         return $result;
     }

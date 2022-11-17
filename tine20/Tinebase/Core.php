@@ -418,6 +418,10 @@ class Tinebase_Core
         $appNameString = ucfirst((string) $appName);
         $modelName = $extract['modelName'];
 
+        if (! Tinebase_License::getInstance()->isPermitted($appNameString)) {
+            throw new Tinebase_Exception_AccessDenied('License does not permit access to application ' . $appName);
+        }
+
         $controllerName = $appNameString;
         if ($appName !== 'Tinebase' || ($appName === 'Tinebase' && ! $modelName)) {
             // app controllers are called "App_Controller_Model", most Tinebase controllers are just "Tinebase_Model"
@@ -664,11 +668,7 @@ class Tinebase_Core
     public static function getSessionId($generateUid = true)
     {
         if (! self::isRegistered(self::SESSIONID)) {
-            $sessionId = null;
-            // TODO allow to access Tinebase/Core methods with Setup session and remove this workaround
-            if (Tinebase_Session::isStarted() && ! Tinebase_Session::isSetupSession()) {
-                $sessionId = Tinebase_Session::getId();
-            }
+            $sessionId = Tinebase_Session::getId();
             if (empty($sessionId)) {
                 $sessionId = 'NOSESSION';
                 if ($generateUid) {

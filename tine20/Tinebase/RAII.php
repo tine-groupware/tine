@@ -54,7 +54,7 @@ class Tinebase_RAII
         ($this->releaseFunc)();
     }
 
-    public static function getTransactionManagerRAII()
+    public static function getTransactionManagerRAII(): Tinebase_RAII
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         // if $transactionId is not set to null, rollback. note the & pass-by-ref! otherwise it would not work

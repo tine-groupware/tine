@@ -1,0 +1,603 @@
+[[chapter.Standard-Bedienhinweise]]
+== Allgemeine Hinweise zur Bedienung ==
+////
+Lars: Fertig
+////
+////
+GR:
+--> hat eine Frage bei Zeile 168
+
+KUK 2015-05-06: Indizierung fertig!
+Paul Hartog: Überarbeitet 30.09.2019 -> neue Screenshots fehlen noch
+////
+
+[[sec.standard.einleitung]]
+=== Einleitung, Anwählen von Anwendungen ===
+
+Wenn Sie der von uns empfohlenen Reihenfolge zum Durcharbeiten dieses Handbuchs gefolgt sind, dann haben Sie sich nach der Einleitung mit der Adressverwaltung beschäftigt und somit jetzt eine {branch}-Installation vorliegen, die mindestens über einen importierten Adressbestand verfügt. In diesem Kapitel haben Sie sich bereits mit einem Teil der hier zu besprechenden Standardroutinen befasst. Sie kennen den Aufbau des Bildschirms aus den oben von links beginnenden Reitern, mit denen Sie die einzelnen Anwendungen aufrufen. Dabei werden beim Start von {branch} immer nur jene Anwendungen als Reiter angezeigt, mit denen Sie bereits gearbeitet haben. Der erste Reiter ganz links heißt {branch}.
+
+//////////////////
+        SCREENSHOT
+        path: <>
+        record: DemoData: Module
+        actions: Klicken auf den ganz linken Reiter
+        image: screen
+        comment: <Screenshot Hauptmenü mit allen verfügbaren Reitern>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Eine Übersicht über alle {branch}-Anwendungen.
+image::StandardBedienhinweise/1_standardbedienhinweise_alle_reiter.png[id="fig_standardallereiter",width="100%"]
+
+Wenn Sie diesen – immer ganz links befindlichen – Reiter anklicken, erhalten Sie alle verfügbaren Anwendungen als anwählbare Liste. {branch} ist ein modulares System das, je nach Ausstattung und Version, aus unterschiedlich vielen Einzelanwendungen besteht und ständig weiterentwickelt wird, sodass der hier besprochene Umfang nicht Ihrem tatsächlich vorliegenden entsprechen muss.
+
+[[sec.standard.hauptbildschirm]]
+=== Standard-Bedienalgorithmen im Hauptbildschirm ===
+
+[[sec.standard.hauptbildschirm.uebertabelle]]
+==== Alle Funktionen oberhalb der Tabelle ====
+
+Unterhalb der erwähnten Reiter für die einzelnen Anwendungen sich die anwendungsspezifische Bearbeitungsmenüs. In den folgenden Screenshots sehen Sie beispielhaft die Menüs des Kalenders; das Gesagte gilt jedoch analog für alle Anwendungen:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen/Message/Grid/FilterToolbar>
+        record: DemoData: Email, Kalender, Mitarbeiter,.. überall wo es filter gibt
+        actions:
+        image: zoom
+        comment: <Screenshot nur Reiter, Bearbeitungsmenü, Filterzeile und Tabellenblätter- und Refreshknopf, beispielhaft von E-Mail-Anwendung>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Leiste mit den Filtern sieht in {branch} überall gleich aus. Hier examplarisch die Anwendung ``Kalender''.
+image::StandardBedienhinweise/2_standardbedienhinweise_kalender_filterliste.png[id="fig_standardbedienleiste",width="100%"]
+
+
+Am rechten Rand dieser Zeile befindet sich das Suchfilterfenster, dem wir in diesem Kapitel einen eigenen Unterabschnitt widmen. Darunter finden Sie eine, etwas schmalere und über den gesamten Bildschirm reichende Menüleiste, die in jeder Anwendung die nahezu gleichen Bedienelemente enthält. Diese bezieht sich auf die darunter liegende Tabelle. Beachten Sie dabei, dass der Teil dieser Leiste, der sich über dem Tabellenfenster befindet, nach unten rutscht, wenn Sie mit Filtern arbeiten wollen und dazu im Suchfilterfenster den Button menu:[Details anzeigen] betätigen, um den Fenstern und Bedienelementen der Filterbearbeitung Platz zu machen.
+
+Direkt über der linken oberen Ecke des Tabellenfensters, finden Sie in jeder Anwendung einen Schalter zum Blättern durch die einzelnen Tabellenobjekte.
+
+In allen Anwendungen, außer dem Kalender, enthält er ein Eingabefeld menu:[Seite x von n], in das Sie eine Seitenzahl händisch eingeben können, sowie auf jeder Seite jeweils zwei Pfeiltasten für die Funktionen ``Seite hoch'' image:Icon/icon_arrow_right.png[height=16], ``Seite runter'' image:Icon/icon_arrow_left.png[height=16], ``Anfang'' image:Icon/icon_arrow_back_last.png[height=16] und ``Ende'' image:Icon/icon_arrow_action_last.png[height=16]. Im Kalender ist die Ansicht dieses Eingabefeldes abhängig von der Kalenderansicht (Tag, Woche oder Monat). Bei der Tages- und Monatsansicht ist es ein Pulldown mit anklickbaren Tagen oder Monaten, bei der Wochenansicht ist es ein Eingabefeld menu:[Woche]. Als Pfeiltasten gibt es im Kalender nur ``vor'' und ``zurück''.
+
+Rechts daneben befindet sich der Refresh-Button (image:Icon/icon_return.png[height=16]), mit dem Sie z.B. eine aktuelle Ansicht in die Tabelle nachladen oder E-Mails abrufen können.
+
+Das Element rechts menu:[Zeige Datensätze x – y von n] informiert Sie über die Anzahl der im Augenblick in der Tabelle angezeigten Elemente (die Standardanzahl ist 50; wie Sie diese ändern können, finden Sie in <<sec.einstellungen.generelle>>), sowie deren Gesamtzahl in der Datenbank. Der daneben befindliche Button menu:[n ausgewählt], dient der massenhaften Markierung einzelner Elemente aus der Tabelle. Das darunter vorhandene Pulldown hat drei Menüpunkte: menu:[Auswahl aufheben], menu:[Alle Seiten auswählen (n Einträge)] und menu:[Auswahl umkehren]. Auch hier sieht der Kalender wieder, entsprechend seiner spezifischen Funktion, anders aus: Er bietet mit den ersten drei Buttons den Wechsel zwischen Tages-, Wochen- und Monatsansicht an. Der vierte Button (der nach oben gerichtete Pfeil) dient dem Wechsel in die Vollbildansicht des Kalenders.
+
+[[sec.standard.hauptbildschirm.ordnerbaum]]
+==== Der Favoriten- und Ordnerbaum ====
+
+Nachdem wir uns mit allen Bedienelementen oberhalb der Tabelle beschäftigt haben, kommen wir nun zum Favoriten- und Ordnerbaum, den Sie links von der Tabelle finden. Bereits in der {branch}-Standardinstallation ist in jeder Anwendung eine Reihe von vordefinierten Favoriten enthalten, die sich für die tägliche Arbeit als nützlich erwiesen haben. Zu den speziellen Einstellungen für Favoriten kommen wir weiter unten im <<sec.standard.hauptbildschirm.favoriten>>, weil wir Ihnen zuvor noch das Setzen von Filtern beschreiben möchten, die Sie dann als Favoriten speichern können.
+
+Der sich unterhalb der Favoriten befindliche Ordnerbaum mit den typischen Ordner-Symbolen soll uns nun im Weiteren beschäftigen. In den meisten Anwendungen (außer menu:[E-Mail], menu:[Admin] und den ERP-nahen Anwendungen menu:[Sales], menu:[HumanRessources] und menu:[Zeiterfassung]) finden Sie hier die gleiche Systematik vor: Die Speicher für unsere jeweiligen Objekte, also z.B. Adressbücher, Kalender, Dateiordner, Leadlisten (in {branch} nennen wir sie allgemein ``Container'') werden unterteilt in ``Meine ...'', ``Gemeinsame ...'' und ``...  anderer Benutzer''. Dieses Ordnerprinzip ist der Festlegung von Zugriffsberechtigungen geschuldet. Am besten lässt sich das an den Adressbüchern erläutern, die wir ja im vorangegangenen Kapitel schon besprochen haben.
+
+(((Zugriffsberechtigungen)))
+Dort hatten wir festgestellt, dass das Anlegen eines speziellen Adressbuches nur aus Sicht der Zugriffsberechtigungen sinnvoll ist und dabei auch erwähnt, dass beim Anlegen eines Benutzers automatisch ein privates Adressbuch angelegt wird, in das dieser Nutzer beispielsweise die privaten Kontakte seines Mobiltelefons abspeichern kann, ohne dass diese von anderen {branch}-Anwendern eingesehen werden können. Private Container werden übrigens auch in allen anderen o.g. Anwendungen automatisch mit einem neuen Benutzer angelegt. Das bedeutet, jeder Benutzer hat neben dem Adressbuch einen eigenen Kalender, eine eigene Aufgabenliste, einen persönlichen Dateiorder und eine eigene Leadliste und wenn der Benutzer diese nicht freigibt, hat auch nur er darauf Zugriff.
+
+[IMPORTANT]
+===========
+Standardmäßig werden alle neuen Objekte, die ein Benutzer anlegt, auch in dessen privaten Containern gespeichert und sind damit, ohne explizite Freigabe, für andere Benutzer weder sicht- noch bearbeitbar! Wie Sie diese Einstellungen einzeln für jede Anwendung und für sich selbst, oder nötigenfalls auch global für alle Benutzer, ändern können, beschreiben wir in <<chapter.Einstellungen>> und hier insbesondere im <<sec.einstellungen.adminmodus>>.
+===========
+
+Wenn Sie sich im o.g. Kapitel bereits informiert haben, wissen Sie, dass Sie {branch} also generell so einrichten können, dass z.B. alle Mitarbeiter ihre Kontakte in einem allgemeinen Adressbuch und ihre Termine in einem unternehmensweiten Kalender speichern, ohne dies im Dialogfenster des entsprechenden Objekts ändern zu müssen (was üblicherweise gern übersehen wird und daher erfahrungsgemäß bei Nichtänderung dieser Einstellung fast zwangsläufig dazu führt, dass Benutzer neue Objekte im privaten Container abspeichern!). Natürlich können Sie die Zuweisung eines gemeinsamen Containers bei entsprechend strukturierten Unternehmen oder Organisationen auch für Abteilungen (statt für jeden Benutzer einzeln) einstellen, die Sie über die Gruppenfunktion (siehe <<sec.admin.gruppen>>) abbilden.
+
+Neben der Möglichkeit, Objekte in gemeinsamen Containern abzulegen, können Sie allerdings auch den anderen Mitarbeitern Zugriff auf Ihre Container gewähren. Eine Möglichkeit, die Zugriffsberechtigungen für einzelne Container zu verwalten, finden Sie in der Admin-Anwendung – lesen Sie dazu im <<sec.admin.container.bearbeiten>> nach!
+
+Allerdings geht das im einzelnen Bedarfsfall auch aus jeder Anwendung heraus: Klappen Sie sich dazu im Ordnerbaum den entsprechenden Container heraus, und klicken Sie ihn mit der rechten Maustaste (Kontextmenü) an. Navigieren Sie nun zu der Option "Adressbuch Berechtigungen verwalten".
+
+//////////////////
+        SCREENSHOT
+        path: </Addressbook/MainScreen/Contact>
+        record: DemoData: Email oder Kalender Daten, Benutzer/Gruppen, Container
+        actions: rechte Maustaste auf ein Adressbuch
+        image: zoom
+        comment: <Screenshot Adressbuch, Kontextmenü zur Containerbearbeitung, Mauszeiger auf "Adressbuch Berechtigungen verwalten">
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Aufrufen der Berechtigungsverwaltung eines Adressbuches im Kontextmenü
+image::StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen.png[id="fig_standardadressbuchrechte",width="100%"]
+
+
+Das daraufhin erscheinende Fenster zur Berechtigungsverwaltung sieht wie folgt aus:
+
+//////////////////
+        SCREENSHOT
+        path: <GrantsGrid>
+        record: DemoData: Email oder Kalender Daten, Benutzer/Gruppen, Container
+        actions:
+        image: dialog
+        comment: <Screenshot Adressbuch, Dilaogfenster "Rechte für Adressbuch .... verwalten>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Berechtigungsverwaltung eines Adressbuches
+image::StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten.png[id="fig_standardadressbuchrechteverwaltung",width="100%"]
+
+Welche Zugriffsrechte Sie hier nun mit welchen Konsequenzen vergeben, lesen Sie bitte im oben zitierten Abschnitt des Administrationskapitels nach. Wir wollen uns hier nur damit beschäftigen, wie Sie Berechtigungen sich selbst, sowie anderen Benutzern oder Benutzergruppen zuweisen können.
+
+Das Dialogfenster zur Container-Rechtevergabe steht bei Öffnung immer auf dem bearbeitenden Benutzer, also Ihnen selbst. Wenn Sie nun den entsprechenden Container zum Zugriff für andere Benutzer freigeben wollen, verfahren Sie wie folgt: Entscheiden Sie zunächst, ob die Berechtigung einzelnen Benutzern oder ganzen Benutzergruppen erteilt werden soll. Klicken Sie dazu oben links im Dialogfenster den Button mit den drei kleinen schwarzen Köpfen - image:Icon/1_icon_group_full.png[height=16] (das Symbol für eine Benutzergruppe, denn standardmäßig steht die Auswahl auf Gruppen) an! Dahinter verbirgt sich ein Pulldown mit menu:[Benutzersuche], menu:[Gruppensuche], menu:[Suche Rolle] und menu:[Jeder hinzufügen]. Treffen Sie Ihre Auswahl!
+
+Jetzt erhalten Sie (außer bei menu:[Jeder hinzufügen]) mit dem Pulldown links außen die entsprechenden Benutzer, Benutzergruppen oder Rollen Ihrer {branch}-Installation, mit den üblichen Bedienelementen, zur Auswahl angeboten. Sie können auch, anstelle des Pulldowns, eine Zeichenkette (mindestens drei Zeichen) zur Suche eingeben.
+
+Nachdem Sie einen Benutzer, eine Gruppe oder eine Rolle ausgewählt haben, wird Ihnen in der darunterliegenden Tabelle eine neue Zeile zur Rechtevergabe angeboten. Klicken Sie hier die entsprechenden Checkbuttons an und speichern Sie Ihre Einstellungen mit menu:[Ok] ab! Damit haben Sie anderen {branch}-Benutzern Zugriff auf einen Teil Ihrer Daten gewährt. Natürlich können Sie diesen Zugriff bei Bedarf auch jederzeit wieder einschränken oder ganz unterbinden.
+
+[[sec.standard.hauptbildschirm.tabelle]]
+==== Die Tabelle ====
+
+Kommen wir nun zum größten Teil des Bildschirms, der Tabelle selbst:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen/Message/Grid>
+        record: DemoData: Email oder Kalender Daten, Benutzer/Gruppen, Container, Beispiel Mails
+        actions:
+        image: screen
+        comment: <Screenshot nur Tabelle E-Mail-Anwendung>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.{branch}-Tabelle am Beispiel der E-Mail-Anwendung
+image::StandardBedienhinweise/5_standardbedienhinweise_email.png[id="fig_standardemail",width="100%"]
+
+
+Egal, welche Einzelanwendung von {branch} Sie benutzen – die Objekte (Adressen, E-Mails, Aufgaben, Leads, Mitarbeiterkonten u.a.) werden standardmäßig immer in einer Tabelle dargestellt. Dabei hat jede Tabelle einer {branch}-Anwendung ihre ganz spezifische Standard-Spalten-Ansicht. Nach jeder dieser Spalten können Sie die Objekte sortieren, indem Sie die entsprechende Spalte anklicken. Ein kleines, blaues Dreieck auf dem Spaltenkopf-Button, entweder nach oben oder nach unten gerichtet, zeigt Ihnen danach die Sortierungsrichtung an. So wie Sie das z.B. auch von einem Tabellenkalkulationsprogramm wie MS Excel kennen, können Sie mit der Maus durch Schieben auf den Trennlinien zwischen den Spaltenkopf-Buttons die Breite einer Tabellenspalte verändern.
+
+(((Tabellenkopfsymbol)))
+Am rechten äußeren Rand des Tabellenkopfes finden Sie immer einen kleinen Button (image:Icon/icon_column.png[height=12]) , den wir hier durchgehend ``Tabellenkopfsymbol'' nennen. Dieser Button begegnet Ihnen nicht nur am rechten Rand der großen Tabelle in der Hauptansicht einer Anwendung, sondern auch in Arbeitsfenstern, wenn Sie Tabellen aufweisen. Seine Funktion ist immer gleich: Nach dem Anklicken gibt er eine Liste mit Checkbuttons frei, die es Ihnen erlauben, Tabellenspalten ein- oder auszublenden:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen/Messsage/Grid>
+        record: DemoData: Email oder Kalender Daten, Benutzer/Gruppen, Container, Beispiel Mails
+        actions: Rechte Maustaste ganz links
+        image: zoom
+        comment: <Screenshot rechter Rand Tabellenkopfsymbol mit ausgeklappter Checkbuttonleiste E-Mail-Anwendung>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Alle anzeigbaren Spalten der E-Mail-Anwendung
+image::StandardBedienhinweise/6_standardbedienhinweise_email_spaltenauswahl.png[id="fig_standardemailspaltenauswahl",width="20%"]
+
+
+Aus Praktikabilitäts- und Platzgründen wurden für jede Anwendung Standard-Tabellenspalten festgelegt, die Sie in aller Regel auch nicht ändern müssen. Sollte für einen im Buch beschriebenen Arbeitsalgorithmus eine in der Standardansicht ausgeblendete Tabellenspalte sichtbar gemacht werden müssen, weisen wir Sie an der entsprechenden Stelle konkret darauf hin.
+
+
+[[sec.standard.hauptbildschirm.suchfilter]]
+==== Suchfilter für die Tabellenansicht ====
+
+(((Suchfilter)))
+Um die Filterfunktionen einzublenden, klicken Sie auf menu:[Details anzeigen] auf der rechten oberen Seite (direkt unter den Bereich des Suchfilterfensters). Standardmäßig sind die Filterfunktionen immer ausgeblendet. {branch} speichert den Zustand der Filteranzeige und stellt ihn bei der nächsten Anmeldung wieder her.
+
+[IMPORTANT]
+==========
+Eine ausgeblendete Filterzeile bedeutet nicht, dass keine Filter aktiv sind! Schauen Sie dazu immer rechts den Bereich des Suchfilterfensters an, dort finden Sie die Bemerkung menu:[Ihre Anzeige ist durch n Kriterien limitiert: ...] Hier wird angegeben welche Filter aktiv sind. Blenden Sie sich dann bei Bedarf die gesetzten Filter ein!
+==========
+
+Wenn die Suchfilter eingeblendet sind, erkennen Sie das auf der linken Seite an mindestens einem kleinen runden menu:[+] (Plus)- und menu:[-] (Minus)-Button. Alle danach folgenden Einstellungen sind anwendungsspezifisch; im Adressbuch steht z.B. beim erstmaligen Aufruf in der Sitzung die Funktionszeile im Pulldown-Menü neben menu:[Zeige] auf menu:[Schnellsuche] und daneben auf menu:[enthält]. Das bedeutet, dass Sie einfach nach Zeichenketten suchen können. Wir haben das in <<chap.adressverwaltung>> bereits besprochen. Die Zeichenketten-Suche begegnet Ihnen aber auch in anderen Anwendungen; in unserem Screenshot-Beispiel sehen Sie die E-Mail-Anwendung und dort standardmäßig als ersten Filter menu:[Betreff/Von] und menu:[enthält]. Die Zeichenketten-Suche erkennen Sie immer am Wörtchen menu:[enthält] zwischen den Pulldown-Feldern.
+
+Auch beim Klick auf das menu:[+] (Plus)-Symbol zur Erstellung eines neuen Filters wird Ihnen zunächst immer die menu:[enthält]-Funktion angeboten. Je nach Anwendung müssen Sie diesen Operator über das davor befindliche Pulldown mit einem Feld der Tabelle (also einem Datensatzelement) kombinieren:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen/Message/Grid/FilterToolbar>
+        record: DemoData: Email oder Kalender Daten, Benutzer/Gruppen, Container, Beispiel Mails evtl eigene Filter
+        actions:
+        image: zoom
+        comment: <Screenshot E-Mail-Client, Feld-Such-Pulldown ausgeklappt, nur dieser Ausschnitt>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Auswahl der möglichen Elemente, nach denen in einer Ansicht gefiltert werden kann
+image::StandardBedienhinweise/7_standardbedienhinweise_email_suchoptionen.png[id="fig_standardemailsuchoptionen",width="100%"]
+
+(((Schnellsuche)))
+Dabei wird Ihnen in allen Anwendungen (außer menu:[E-Mail]), neben den anwendungsspezifischen Datenfeldern auch die Variante menu:[Schnellsuche] angeboten, die gemeinsam über mehrere Datenfelder sucht. Im Adressbuch sind das die Felder menu:[Vorname], menu:[Nachname], menu:[Firma], menu:[Abteilung], menu:[E-Mail] und menu:[Ort], in anderen Anwendungen sind entsprechend die wichtigsten Felder zur Suche hinterlegt, meistens jene mit Text, wie Namen usw. Wir gehen hier nicht näher darauf ein – probieren Sie bei Bedarf diese Funktion einfach in verschiedenen Teilanwendungen aus.
+
+Sehen wir uns nun das Suchfilterfenster ganz rechts näher an:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen>
+        record: DemoData:
+        actions:
+        image: zoom
+        comment: <Screenshot E-Mail-Client, Suchfilterfenster nah>
+        status: <check>
+        domain: <Business Edition: Metaways>
+/////////////////
+.Das Suchfenster auf der rechten Seite über der Tabelle
+image::StandardBedienhinweise/8_standardbedienhinweise_suchfilter.png[id="fig_standardemailsuchfilter",width="70%"]
+
+
+Über dem Button menu:[Details anzeigen] finden Sie das Eingabefeld menu:[Suchfilter eingeben]. Sollten Sie eine oder mehrere Suchfilter aktiv und in den o.a. Zeilen über der Tabelle angezeigt bekommen, ist dieses Eingabefeld ausgegraut, also für Eingaben gesperrt. Sie können hier nur etwas eingeben, wenn Sie vorher den Button menu:[Details anzeigen] darunter anklicken.
+
+Welche Funktion verbirgt sich hinter menu:[Suchfilter eingeben]? Diese ist ein anderer schneller Weg, nach einer Zeichenkette zu suchen, genauso wie oben bei der Funktion menu:[Schnellsuche] beschrieben. Es gibt dabei aber einen wesentlichen Unterschied: Die oben beschriebene menu:[Schnellsuche]-Funktion können Sie mit beliebigen anderen Suchfiltern kombinieren, hier hingegen werden nach Eingabe einer zu suchenden Zeichenkette und dem Anklicken des rechts daneben befindlichen Buttons mit der Lupe alle anderen bereits gesetzten Filter ungültig! Diese Funktion stellt also den sicheren Weg dar, den gesamten Datenbestand der entsprechenden Anwendung nach nur einer Zeichenkette zu durchsuchen. Und sie funktioniert auch im E-Mail-Client bei der Zeichenkettensuche nach bestimmten Mails!
+
+////
+GR:
+Nachfolgend genanntes "Kreuz" ist m.E. ein "x" --> In Text und Bildbeschriftung korrigieren?
+ Lars Kneschke, 2015-04-06 19:52
+Hab ich angepasst. Allerdings wirkt der Text jetzt komisch.
+////
+
+Wenn Sie über diese Funktion einen Suchfilter gesetzt haben, können Sie das *X*-icon nutzen um die eingegebene Zeichenkette zu löschen.
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen>
+        record: DemoData:
+        actions: Man muss einen filter setzten
+        image: zoom
+        comment: <Screenshot E-Mail-Client, Suchfilterfenster nah mit Kreuz vor Lupe>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Der *x*-Button zum Löschen einer Such-Zeichenkette
+image::StandardBedienhinweise/9_standardbedienhinweise_suchfilter_x_button.png[id="fig_standardemailsuchfilterkreuz",width="70%"]
+
+
+Hier auch noch einmal der Vollständigkeit halber die Funktion zum Löschen von einzelnen oder allen Filtern in den Bearbeitungszeilen über der Tabelle: Links neben der Filterzeile befindet sich nicht nur ein runder menu:[+] (Plus)-Button, sondern auch ein menu:[-] (Minus). Mit Klicks auf diese menu:[-] (Minus)-Buttons vor den Filtern werden diese wieder einzeln deaktiviert. Alle Filter auf einmal löschen Sie stattdessen mit dem kleinen runden menu:[-](Minus)-Button rechts vom obersten rechten Pulldown-Feld:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen/Message/Grid/FilterToolbar>
+        record: DemoData: Filter muss gesetzt sein
+        actions:
+        image: zoom
+        comment: <Screenshot E-Mail-Client, Kreuz-Button mit Maus drüber und Kontext "Alle Filter zurücksetzen">
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Zurücksetzen aller angelegten Filter in einem Arbeitsgang
+image::StandardBedienhinweise/10_standardbedienhinweise_alle_filter_zuruecksetzen.png[id="fig_standardemailsuchfilterzuruecksetzen",width="100%"]
+
+Dieser Button zeigt sich erst, nachdem Sie mehr als einen Filter eingegeben haben.
+
+(((Suchfilter,additive)))
+Besprechen wir nun komplexe, miteinander kombinierbare Filter. Möglicherweise sind jetzt schon mehrere Filter in Ihrer aufgerufenen Anwendung aktiv; Sie sehen das an mehreren Filterzeilen über der Tabelle. Einen zusätzlichen Filter legen Sie, wie schon angesprochen, mit einem Klick auf den kleinen menu:[+] (Plus)-Button zu Beginn der Zeile an. In den meisten Anwendungen erhalten Sie jetzt menu:[Schnellsuche] und menu:[enthält] angeboten, also die oben besprochene Zeichenkettensuche. In einigen Anwendungen (E-Mail, Admin, Dateimanager, Zeiterfassung) sind die Suchalgorithmen anwendungsspezifisch andere.
+
+Klicken Sie nun das linke Pulldown (menu:[Schnellsuche] oder anderes) an und schauen sich an, welche Optionen Sie hier angeboten bekommen. Es sind die Datensatzelemente bzw. Tabellenfelder entsprechend der ausgewählten Anwendung, die Sie nun über den Operator in der Mitte mit einer Zeichenkette rechts zu einem neuen Suchfilter kombinieren können. Dabei wird der (unbearbeitbare) Operator menu:[enthält] nach Auswahl eines Datensatzelements links zu einem Pulldown:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen/Message/Grid/FilterToolbar>
+        record: DemoData: Emails, Termine, ...
+        actions: Die Dropbox bei enthält klicken
+        image: screen
+        comment: <Screenshot E-Mail-Client, ausgeklapptes Operator-Pulldown nah>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Operator-Elemente, nach denen gefiltert werden kann
+image::StandardBedienhinweise/11_standardbedienhinweise_email_suchfilter_operatoren.png[id="fig_standardemailsuchoptionenoperator",width="100%"]
+
+Die darunter angebotenen Operatoren sind wieder anwendungsspezifisch, meist lauten sie menu:[ist gleich], menu:[beginnt mit], menu:[eines von], menu:[endet mit], menu:[enthält] oder menu:[ist nicht].
+
+
+[IMPORTANT]
+==========
+{branch} nimmt hier ganz bewusst keine ``unscharfe'' Prüfung vor, so wie Sie das vielleicht von Suchmaschinen kennen, die Ihnen auch ähnliche Schreibweisen anbieten. Hier wird wirklich die exakte Zeichenkette abgeprüft – umso wichtiger ist es, dass Sie den Operator richtig setzen, damit Ihr Ergebnis korrekt ist.
+==========
+
+(((Suchfilter,alternative)))
+Die bis jetzt beschriebene Methode erzeugt sog. ``additive'' Filter – Sie sehen es an dem kleinen Wörtchen menu:[und] vor jeder Zeile. Es bedeutet, bezogen auf die eingestellten Filter, ``sowohl als auch''. Damit können Sie also ein Suchergebnis immer mehr einengen.
+
+In der praktischen Tätigkeit werden Ihnen jedoch auch Anwendungsfälle begegnen, in denen die Frage nicht menu:[und] (also ``sowohl als auch''), sondern ``oder'' lautet. D.h. Sie haben zwei oder mehr Suchkriterien, die gemeinsam, aber auch nur jeweils einzeln auf Datensätze zutreffen können, nach denen Sie suchen. Auch das ist möglich: Klappen Sie sich dazu das Menü menu:[ODER ALTERNATIV]footnote:[In den Anwendungen menu:[Admin] und menu:[Dateimanager] gibt es diese Option nicht!] am rechten Rand heraus, indem Sie auf das kleine Dreieck oder den Text klicken:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen/Message/Grid/>
+        record: DemoData:
+        actions:
+        image: zoom
+        comment: <Screenshot E-Mail-Client, "Oder Alternativ" angeklickt>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Alternative "Oder"-Filter-Möglichkeiten
+image::StandardBedienhinweise/12_standardbedienhinweise_alternative_oder_filter.png[id="fig_standardemailsuchealternativ",width="70%"]
+
+Sie sehen einen angewählten Checkbutton und daneben eine anwendungsspezifische Bezeichnung, hier im E-Mail-Client ist es menu:[Nachrichten]. In anderen Anwendungen finden Sie z.B. menu:[Kontakte] für das Adressbuch, menu:[Termine] für den Kalender oder menu:[Produkte] für das Sales-Modul. Darunter befindet sich die Option menu:[Alternativen Filter hinzufügen]. Diese Anzeige ist etwas gewöhnungsbedürftig, war aber aufgrund des beschränkten Platzangebotes für Bedienelemente auf dem Bildschirm nicht anders lösbar (denn Sie können auch bei den alternativen Filtern mehrere addieren - wir kommen gleich darauf zu sprechen). Den angewählten Checkbutton interpretieren Sie wie folgt: Es ist bereits ein (alternativer oder einziger) Filter (oder additiver Filterstrang) gespeichert, der den Namen menu:[Kontakte / Termine / Produkte] o.ä. trägt -- je nachdem in welcher Anwendung Sie gerade filtern wollen. Diesen gibt es immer, selbst wenn er leer ist. Es ist der "erste", von dem wir die ganze Zeit bis hierher gesprochen haben.
+
+Wollen Sie nun einen zweiten, alternativen, Filter erstellen, klicken Sie auf den Text menu:[Alternativen Filter hinzufügen]! Es öffnet sich nicht (wie bei den additiven Filtern) eine neue Filterzeile, sondern die erste Filterzeile wird Ihnen leer angeboten - weil ja dieser Filter nicht nur allein für sich stehen, sondern auch der Anfang eines neuen additiven Filterstranges sein kann:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen/Message/Grid>
+        record: DemoData: Alternaive Filter
+        actions:
+        image: zoom
+        comment: <Screenshot E-Mail-Client, zweites alternatives Filterfenster mit Eingabecursor, Filterzeile leer>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Weitere "Oder"-Filter hinzufügen
+image::StandardBedienhinweise/13_standardbedienhinweise_weitere_alternative_filter.png[id="fig_standardemailsuchealternativzeile",width="70%"]
+
+Gleichzeitig blinkt der Eingabecursor auf einem Feld oberhalb menu:[Alternativen Filter hinzufügen], in dem, je nach Anwendung, der Text menu:[Nachrichten 2/ Kontakte 2/ Termine 2/ Produkte 2] o.ä. schon vorgeschrieben ist. Das System fordert Sie damit auf, als erstes dem alternativen Filter einen Namen zu geben.
+
+Stellen Sie sich den alternativen Filter bitte wie einen neuen Strang vor: Sie können hier genauso mit dem menu:[+]-Button oben links einen neuen additiven Filter setzen und so kann der gesetzte Gesamtfilter aus beliebig vielen Strängen alternativer ``Oder''-Filter bestehen, die wiederum beliebig viele ``Und''-Anteile enthalten können. Jetzt verstehen Sie vielleicht, vor welcher Herausforderung die Programmierer von {branch} gestanden haben, dieses ganze System übersichtlich auf einen Bildschirm zu bringen. Dafür bekommen Sie hier ein Werkzeug geboten, mit dem Sie beliebige Suchkriterien über praktisch beliebig große Datenbankbestände erstellen können, ohne die Spezialsyntax der Datenbankabfragen (z.B. SQL) beherrschen zu müssen.
+
+Wie löschen Sie alternative Filter dauerhaft? Sie könnten das wieder mit Klicks auf die menu:[(-)]-Buttons links oben lösen und das Ergebnis ist auch korrekt, aber gewöhnen Sie sich bitte an, stattdessen mit einem Rechtsklick auf die Filterbezeichnungen das Kontextmenü menu:[Filter entfernen] zu benutzen. Sollten Sie nämlich mehrere alternative Filter gesetzt haben, bleiben die Einträge rechts im Menü erhalten, obwohl die Filter nicht mehr wirksam sind. Das kann zu Verwirrungen führen.
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen/Message/Grid>
+        record: DemoData: Oder-Filter
+        actions: Rechte Maustaste und auf filter entfernen
+        image: zoom
+        comment: <Screenshot "Filter entfernen">
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Dauerhaftes Entfernen eines kompletten "Oder"-Filters
+image::StandardBedienhinweise/14_standardbedienhinweise_alternativen_filter_entfernen.png[id="fig_standardemailsuchealternativentfernen",width="70%"]
+
+Sie können einen alternativen Filter(-strang) auch zeitweise deaktivieren, indem Sie den Checkbutton abklicken:
+
+////
+Screenshot E-Mail-Client, roter Checkbutton abgeklickt
+////
+
+[WARNING]
+===============
+Kleine Falle: Wenn keine weiteren alternativen Filter mehr vorhanden sind und Sie den ersten Filterstrang ebenfalls deaktivieren (löschen können Sie ihn nicht), reagiert das System im Folgenden auf keinen eingegebenen Filter mehr! Das kann im ersten Moment etwas verwirrend sein, ist aber völlig logisch.
+===============
+
+[[sec.standard.hauptbildschirm.favoriten]]
+==== Favoriten definieren ====
+
+(((Favoriten-Ansicht)))
+Hier noch eine ganz wesentliche Funktion: Nachdem Sie sich, vielleicht durch längeres Probieren, einen Filter über mehrere Stränge erstellt haben, den Sie nun zukünftig öfter verwenden wollen, wünschen Sie sich wahrscheinlich, diesen dauerhaft zur Verfügung zu haben. In diesen Fall klicken sie auf das Disketten-Symbol (image:Icon/icon_safe_neg.png[height=16]), welches sich bei den Filterfunktionen versteckt. Klicken Sie ihn an, und Sie erhalten das folgende Fenster:
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/MainScreen/Message/Grid/FilterToolbar>
+        record: DemoData: Mind. 2 filter gesetzt
+        actions: Klicken auf das speicher Icon
+        image: Dialog
+        comment: <Screenshot Favorit erstellen>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Häufig benutzte oder komplexe Filter können als Favorit gespeichert werden.
+image::StandardBedienhinweise/15_standardbedienhinweise_email_filter_favoriten.png[id="fig_standardemailsuchefavorit",width="100%"]
+
+Sie werden als Pflichteingabe nach einer menu:[Bezeichnung] und fakultativ nach einer menu:[Beschreibung] gefragt. Der Checkbutton menu:[Gemeinsame Favoriten (sichtbar für alle Benutzer)] dient der Festlegung, ob die Favoritenansicht nur für Sie oder auch für andere Nutzer sicht- und anwendbar sein soll. Wenn Sie diesen Checkbutton setzen, können Sie mit den darunterliegenden menu:[Zugriffsrechten] einzelne Benutzer oder Benutzergruppen sowie deren Berechtigungen zuweisen. Wie Benutzer oder Benutzergruppen ausgewählt werden, haben wir weiter oben in diesem Kapitel bereits erklärt. Die Berechtigungen sind folgende:
+
+* menu:[Lesen]: Der Benutzer darf die Favoriten-Einstellungen sehen.
+* menu:[Bearbeiten]: Der Benutzer darf die Favoriten-Einstellungen ändern.
+* menu:[Löschen]: Der Benutzer darf den Favoriten löschen.
+
+Mit diesen Einstellungen können Sie nun Ihre gefilterte Ansicht im Verzeichnisbaum unter menu:[FAVORITEN] abspeichern.
+
+////
+Übersetzen: Permissions, Read und Edit! KUK
+////
+
+[[sec.standard.dialogfenster]]
+=== Standard-Bedienalgorithmen im Dialogfenster ===
+
+(((Dialogfenster)))
+``Dialogfenster'' sind in diesem Handbuch die Eingabemasken, die sich öffnen, wenn Sie entweder ein vorhandenes Objekt einer Anwendung zum Bearbeiten öffnen, oder ein neues anlegen wollen, hier beispielhaft das Dialogfenster der Anwendung menu:[HumanResources]:
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee>
+        record:
+        actions:
+        image: Dialog
+        comment: <Screenshot Maske "Neuen Mitarbeiter hinzufügen">
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Eine typische Eingabemaske in {branch} am Beispiel "Neuen Mitarbeiter hinzufügen"
+image::StandardBedienhinweise/16_standardbedienhinweise_hr_eingabemaske_neu.png[id="fig_standardhumanmitarbeiterhinzu",width="100%"]
+
+
+Diese Eingabemaske enthält immer in dem oberen Bereich mehrere Reiter. Darunter befinden sich, neben einem oder mehreren anwendungsspezifischen Reitern, die Reiter menu:[Notizen], menu:[Anhänge] und menu:[Verknüpfungen] und menu:[Historie]. Auf der rechten Seite befindet sich immer die Option, die Tags für die geöffnete Anwendung zu verwalten. In menu:[Adressbuch], menu:[Dateisystem], menu:[Kalender] und menu:[CRM] finden sie des Weiteren das Feld menu:[Beschreibung]. Diese Elemente beschreiben wir nun jeweils in einem eigenen Unterabschnitt. 
+
+
+[[sec.standard.dialogfenster.beschreibung]]
+==== Beschreibung ====
+
+Das Beschreibungsfeld dient der Eingabe von frei formuliertem Text zur Beschreibung des betreffenden Datenbankobjektes. In manchen Anwendungen, wie zum Beispiel der Adressverwaltung, hat dieses Beschreibungsfeld noch Sonderfunktionen; darauf wird im betreffenden Kapitel entsprechend eingegangen.
+
+
+
+[[sec.standard.dialogfenster.notiz]]
+==== Notizen (Notiz, Telefon Notiz, E-Mail Notiz) ====
+
+(((Notizen)))
+Wie wir schon in <<sec.kontaktmaske>>  gesehen haben, kennt {branch} drei Arten von Notizen: einfache Notizen, Telefonnotizen und E-Mail-Notizen. In dem Reiter menu:[Notizen] finden sie eine Übersicht aller, für die jeweilige Anwendung spezifischen, Notizen.
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee>
+        record:
+        actions: Reiter Notizen
+        image: Zoom
+        comment: <funktion gibt es nichtmehr,Screenshot HumanResources, Notiz-Pulldown ausgeklappt>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Übersicht- Reiter "Notizen"
+image::StandardBedienhinweise/17_standardbedienhinweise_hr_eingabemaske_neu_notiz.png[id="fig_standardhumannotiz",width="100%"]
+
+Durch den Klick auf dem Button menu:[Notizen hinzufügen] öffnet sich ein Fenster, in das Sie beliebigen freien Text hineinschreiben können, um neue Notizen zu erzeugen. Standardmäßig werden einfache Notizen erzeugt. Die anderen beiden Arten erreichen Sie über das Pulldown-Menü (den kleinen Pfeil neben menu:[Notiz]).
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee>
+        record:
+        actions: Im Notizen Reiter, Nutiz Hinzufügen
+        image: Dialog
+        comment: <funktion gibt es nichtmehr,Screenshot HumanResources, "Neue Notiz eingeben">
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Verschiedene Arten von Notizen, die hinzugefügt werden können
+image::StandardBedienhinweise/18_standardbedienhinweise_hr_eingabemaske_neu_notiz_notiz.png[id="fig_standardhumannotizhinzu",width="100%"]
+
+Alle Notizen erhalten mit Speicherung automatisch einen Datums- und Zeiteintrag.
+
+
+(((Notizen,E-Mail-Notizen)))
+(((Notizen,Telefon-Notizen)))
+Als zunächst etwas verwirrend erscheint Ihnen vielleicht der Tatbestand, dass beim Anwählen der anderen beiden Funktionen, menu:[Telefon Notiz] und menu:[E-Mail Notiz], augenscheinlich nichts anderes passiert: Das angebotene Eingabefenster heißt ebenfalls menu:[Notiz hinzufügen] und enthält genau so nur die Möglichkeit, einfachen Text einzugeben. Jedoch werden diese beiden Arten von Notizen bei der Auflistung im rechten Teil der Eingabemaske mit den speziellen Piktogrammen für E-Mail- und Telefonnotizen gekennzeichnet, sodass Sie und andere Anwender auf den ersten Blick sehen, um welche Art von Notizen es sich handelt. Dabei werden Sie eine Telefonnotiz dann verwenden, wenn Sie mit jemandem zum betreffenden Datenbankobjekt ein Telefonat geführt haben oder es sich direkt um einen Kontaktdatensatz handelt. Desgleichen bei E-Mail-Notizen, wobei hier noch eine automatische Funktion eingebaut ist: Wenn Sie in Ihren individuellen Einstellungen (oben rechts menu:Benutzer: ....[E-Mail, E-Mail-Notiz erzeugen, ja], beschrieben im <<chapter.Einstellungen>>, <<sec.einstellungen.email>> ausgewählt haben, dass bei jeder E-Mail an einen gespeicherten Kontakt eine Notiz angelegt werden soll, dann erzeugt {branch} für Sie jeweils eine E-Mail-Notiz mit dem Inhalt der E-Mail als Anhang an den Kontaktdatensatz.
+
+
+[[sec.standard.dialogfenster.anhaenge]]
+==== Anhänge ====
+
+(((Dateianhänge)))
+Mit menu:[Anhängen] sind Dateien beliebigen Formats gemeint, demzufolge enthält die hier angebotene Tabelle auch durchgehend über alle Anwendungen die gleichen Felder: menu:[Name], menu:[Größe], menu:[Inhaltstyp], menu:[Erstelldatum] und menu:[Erstellt von]:
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee/AttachmentsGrid>
+        record:  Mitarbeiter, beispiel Anhangsdatei
+        actions:
+        image: Dialog
+        comment: <Screenshot HumanResources, Tabelle mit Anhängen>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Einem Objekt können beliebige Dateien als Anhänge zugewiesen werden.
+image::StandardBedienhinweise/22_standardbedienhinweise_hr_mitarbeiter_anhang.png[id="fig_standardhumananhaenge",width="100%"]
+
+
+Mit dem Klick auf den Button menu:[Anhang hinzufügen] öffnet sich ein Dialog für die Auswahl einer hochzuladenden Datei. Je nachdem, welches Betriebssystem Sie benutzen, sieht dieser Dialog unterschiedlich aus. Und, je nachdem, ob Ihre {branch}-Installation mit einem Server-Filesystem (z.B. über Samba) verbunden ist oder nicht, werden Ihnen jetzt entsprechende Dateiverzeichnisse angezeigt. Sollte Ihr {branch}-System ohne eine Fileserver-Verbindung, das heißt ``stand-alone'' installiert worden sein, wird Ihnen hier immer das jeweilige lokale Dateisystem des Computers, auf dem Sie eingeloggt sind, angeboten.
+
+Die Maske enthält neben menu:[Anhang hinzufügen] noch zwei weitere Buttons, menu:[Entferne Anhang] und menu:[Download], mit denen sie entweder eine anhängende Datei löschen oder sie in Ihr lokales Dateisystem herunterladen können. Auch für die letztere Funktion ist das Aussehen des angebotenen Dialogs wieder abhängig von Ihrem Betriebssystem.
+
+Speichern Sie jetzt probehalber eine beliebige Datei aus Ihrem lokalen Filesystem ab. Sie sehen, dass in der Tabelle die Angaben zu menu:[Name] und menu:[Größe] automatisch nach dem Ende des Uploads eingetragen werden. Die Angaben menu:[Inhaltstyp], menu:[Erstelldatum] sowie ggf. menu:[Erstellt von] werden erst nach Abspeichern und erneutem Aufrufen des {branch}-Datenbankobjektes, an welches Sie die Datei anhängen, sichtbar!
+
+Wenn Sie jetzt die hochgeladene Datei markieren, sehen Sie, dass die Menüpunkte menu:[Entferne Anhang] und menu:[Download] nicht mehr ausgegraut sind. Mit menu:[Entferne Anhang] löschen Sie die markierte Datei aus der {branch}-Datenbank, mit menu:[Download] können Sie sie an eine beliebige Stelle des Filesystems abspeichern oder öffnen. Sie erhalten dabei den für Ihr Betriebssystem und Ihren Browser typischen Dialog zum Download von Dateien aus dem Internet.
+
+[IMPORTANT]
+=============
+Der Download funktioniert ebenfalls nicht unmittelbar nach einem Upload! Sie müssen erst das {branch}-Datenbankobjekt (entsprechend der Anwendung, in der Sie sich gerade befinden) mit menu:[Ok] abspeichern und erneut aufrufen.
+=============
+
+[NOTE]
+=============
+Noch ein Wort zu den hier verwendeten Dateitypen: {branch} erlegt Ihnen bei der Speicherung verschiedener Dateitypen keine Einschränkungen auf. Denken Sie jedoch bitte daran, dass Benutzer eventuell plattformübergreifend auf die hier gespeicherten Dateien zugreifen können sollen. Die hier erlaubten oder nicht erlaubten Dateitypen sind also letztlich eine Überlegung für die Firmenpolicy, von der wir schon an anderer Stelle sprachen. Um allen Eventualitäten aus dem Weg zu gehen, sollten Sie vorzugsweise oder ausschließlich Dokumentformate verwenden, die einen plattformübergreifenden Standard darstellen, wie z.B. PDF. Damit ist gesichert, dass sie auf allen angeschlossenen Geräten, incl. Handhelds, Smartphones und Tablets, gelesen werden können. Im Übrigen kann durch proprietäre Dateiformate, wie z.B. MS Office, über Makros auch schädlicher Code verbreitet werden. Durch konsequentes Verwenden plattformübergreifender Standardformate vermeiden Sie das.
+=============
+
+
+
+[[sec.standard.dialogfenster.verknuepfungen]]
+==== Verknüpfungen ====
+
+(((Verknüpfungen)))
+Eine Verknüpfung stellt eine Verbindung zwischen Objekten verschiedener oder auch der gleichen Anwendung dar, wobei Sie ein Objekt mit beliebig vielen anderen Objekten verbinden können:
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee/RelationsGrid>
+        record:  Mitarbeiter, beispiel Verknüpfungen
+        actions:
+        image: Dialog
+        comment: <Screenshot HumanResources, Tabelle mit Verknüpfungen>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Mit einem Objekt verknüpfte Objekte anderer {branch}-Anwendungen
+image::StandardBedienhinweise/23_standardbedienhinweise_hr_mitarbeiter_verknuepfungen.png[id="fig_standardhumanverknuepfungen",width="100%"]
+
+
+Dabei können Sie, der Praktikabilität geschuldet, Verknüpfungen zwischen den folgenden Objekten (in Klammern die zugehörige Anwendung) herstellen:
+
+* Kontakt (Adressbuch)
+* Lead (CRM)
+* Zeitkonto (Zeiterfassung)
+* Datei (Dateimanager)
+* Aufgabe (Aufgaben)
+* Produkt (Sales)
+* Vertrag (Sales)
+* Kostenstelle (Sales)
+* Termin (Kalender)
+* Mitarbeiter (HumanResources)
+* Personalkonto (HumanResources)
+* Inventar Gegenstand (Inventarisierung)
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee/RelationsGrid>
+        record:  Mitarbeiter, beispiel Verknüpfungen -> Daten bei den Objekten Kontakt, Lead, Zeitkonto, Datei, Aufgabe, Produkt, Vertrag, Kostenstelle, Termin, Mitarbeiter, Personalkonoto, Inventar Gegenstand
+        actions:
+        image: Dialog
+        comment: <Screenshot HumanResources, ausgeklapptes Anwendungs-Verknüpfungs-Pulldown>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Auswahl der Objektgruppe einer {branch}-Anwendung zum Verknüpfen
+image::StandardBedienhinweise/24_standardbedienhinweise_hr_mitarbeiter_verknuepfungen_hinzu.png[id="fig_standardhumanverknuepfungenpulldown",width="100%"]
+
+
+Verknüpfungen sollen dem Bearbeiter eine logische Verbindung eines Objektes zu einem oder mehreren anderen aufzeigen. Bspw. könnten Sie bis Ende des Monats ein bestimmtes Personalgespräch zu führen haben und sich dazu eine Aufgabe erstellen und mit einem Mitarbeiter-Datensatz verknüpfen.
+
+[IMPORTANT]
+============
+Beachten Sie vor dem Anlegen einer Verknüpfung immer die bereits zahlreichen anderen fest eingerichteten Möglichkeiten, logische Verbindungen zwischen einzelnen Objekten herzustellen! Für die meisten Fälle von nötigen Verknüpfungen wird hier bereits eine Lösung angeboten. Die freie Verknüpfung ist sozusagen die "Ausweichmöglichkeit" für den seltenen Fall, den die Programmierer nicht bedacht haben.
+============
+
+
+[[sec.standard.dialogfenster.historie]]
+==== Historie ====
+
+(((Historie)))
+Den Reiter menu:[Historie] finden Sie immer als letzten in der Objekt-Bearbeitungsmaske. Hinter dem Reiter befindet sich eine Tabelle mit revisionssicheren, d.h. nicht änderbaren Datensätzen, welche die Bearbeitungsgeschichte des betreffenden Datenbankobjektes dokumentieren:
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee/HistoryGrid>
+        record:  Mitarbeiter, mehrer änderungsschritte für die History
+        actions:
+        image: Dialog
+        comment: <Screenshot HumanResources, Tabelle mit "Historie"-Einträgen>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Bearbeitungs-Historie eines Datenbankobjektes
+image::StandardBedienhinweise/21_standardbedienhinweise_hr_mitarbeiter_historie.png[id="fig_standardhumanhistorie",width="100%"]
+
+
+Da die Anzahl dieser Datensätze sehr schnell eine große Zahl erreichen kann, ist oberhalb dieser Tabelle eine Suchfilterfunktion eingebaut, die hier zwei Suchbegriffe enthält: menu:[Schnellsuche], für die Suche nach einer bestimmten Zeichenkette und menu:[Zeit], für die Eingrenzung eines Eintrages auf einen bestimmten Zeitabschnitt. Additiv funktioniert die Suche nach den gleichen Prinzipien, wie wir Sie weiter oben in diesem Kapitel bereits besprochen haben, d.h. Sie können Suchalgorithmen über den menu:[+]-Knopf miteinander verbinden. Und über den menu:[-]-Knopf löschen Sie einen Suchalgorithmus wieder.
+
+
+[[sec.standard.dialogfenster.tags]]
+==== Tags ====
+
+(((Tags)))
+Kommen wir nun zu den Tags. {branch} unterscheidet zwischen persönlichen und systemübergreifend gültigen, sogenannten gemeinsamen Tags. Wie Sie letztere vergeben, besprechen wir in <<chapter.administration>>, <<sec.admin.gemeinsame.tags>>. Persönliche Tags hingegen können Sie in jeder Objekt-Bearbeitungsmaske, unten rechts mit dem kleinen Pluszeichen, neben dem Pulldown menu:[Tag Name], anlegen:
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee>
+        record:  DemoData: Mitarbeiter
+        actions: auf Mitarbeiter Rechtsklick und bearbeiten oder neuen Mitarbeiter erstellen -> auf das Kreuz unten links.
+        image: Dialog
+        comment: <Screenshot HumanResources, "Neuen persönlichen Tag hinzufügen"-Maske
+KUK: der eingefügte Screenshot ist falsch>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Das Eingabefeld für einen persönlichen Tag
+image::StandardBedienhinweise/19_standardbedienhinweise_hr_eingabemaske_neu_tag.png[id="fig_standardhumantag",width="100%"]
+
+Mit dem Anlegen eines solchen persönlichen Tags ist dann automatisch das entsprechende Datenbankobjekt auch markiert; darüber hinaus steht Ihnen der angelegte Tag auch für alle anderen beliebigen Datenbankobjekte jeder Teilanwendung zur Verfügung. Vorhandene Tags (sowohl private als auch gemeinsame) ordnen Sie dem Objekt zu, indem Sie das Pulldown menu:[Tag Name] anklicken:
+
+//////////////////
+        SCREENSHOT
+        path: </HumanResources/EditDialog/Employee>
+        record:  DeomData: Tags, Mitarbeiter
+        actions:
+        image: Dialog
+        comment: <Screenshot HumanResources, Tag-Pulldown ausgeklappt>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Auswahl bestehender Tags
+image::StandardBedienhinweise/20_standardbedienhinweise_hr_eingabemaske_neu_tag_auswahl.png[id="fig_standardhumantagpulldown",width="100%"]

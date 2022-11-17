@@ -2296,6 +2296,16 @@ parameters:
 			path: tine20/DFCom/Controller/DeviceRecord.php
 
 		-
+			message: "#^Unsafe access to private property DFCom_Controller_DeviceList\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
+			path: tine20/DFCom/Controller/DeviceList.php
+
+		-
+			message: "#^Unsafe access to private property DFCom_Controller_DeviceRecord\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
+			path: tine20/DFCom/Controller/DeviceRecord.php
+
+		-
 			message: "#^Class DFCom_Model_DeviceResponse does not have a constructor and must be instantiated without any parameters\\.$#"
 			count: 1
 			path: tine20/DFCom/Import/DeviceRecord/Csv.php
@@ -2439,6 +2449,26 @@ parameters:
 			message: "#^Array has 2 duplicate keys with value 2 \\(\\\\Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadataInfo\\:\\:MANY_TO_ONE, \\\\Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadataInfo\\:\\:MANY_TO_ONE\\)\\.$#"
 			count: 1
 			path: tine20/EFile/Model/FileMetadata.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$bool\\)\\: Unexpected token \"\\$bool\", expected type at offset 18$#"
+			count: 2
+			path: tine20/EFile/Controller.php
+
+		-
+			message: "#^Static method EFile_Controller\\:\\:getApplicationNode\\(\\) invoked with 1 parameter, 0 required\\.$#"
+			count: 1
+			path: tine20/EFile/Controller.php
+
+		-
+			message: "#^Array has 2 duplicate keys with value 2 \\(\\\\Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadataInfo\\:\\:MANY_TO_ONE, \\\\Doctrine\\\\ORM\\\\Mapping\\\\ClassMetadataInfo\\:\\:MANY_TO_ONE\\)\\.$#"
+			count: 1
+			path: tine20/EFile/Model/FileMetadata.php
+
+		-
+			message: "#^Variable \\$counter in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/EFile/Setup/Update/1.php
 
 		-
 			message: "#^Variable \\$counter in empty\\(\\) always exists and is not falsy\\.$#"
@@ -4891,6 +4921,16 @@ parameters:
 			path: tine20/Tinebase/Controller.php
 
 		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$accessLog\\)\\: Unexpected token \"\\$accessLog\", expected type at offset 71$#"
+			count: 1
+			path: tine20/Tinebase/Controller.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$user\\)\\: Unexpected token \"\\$user\", expected type at offset 51$#"
+			count: 1
+			path: tine20/Tinebase/Controller.php
+
+		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$user$#"
 			count: 1
 			path: tine20/Tinebase/Controller.php
@@ -4903,6 +4943,11 @@ parameters:
 		-
 			message: "#^Variable \\$diffs might not be defined\\.$#"
 			count: 2
+			path: tine20/Tinebase/Controller.php
+
+		-
+			message: "#^Variable \\$oldUser might not be defined\\.$#"
+			count: 1
 			path: tine20/Tinebase/Controller.php
 
 		-
@@ -5776,6 +5821,71 @@ parameters:
 			path: tine20/Tinebase/FileSystem/AVScan/Quahog.php
 
 		-
+			message: "#^Class Tinebase_Core referenced with incorrect case\\: Tinebase_core\\.$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/AuthNetworkAdapter.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$caPath\\)\\: Unexpected token \"\\$caPath\", expected type at offset 127$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/AuthNetworkAdapter.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$licensePath\\)\\: Unexpected token \"\\$licensePath\", expected type at offset 100$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/AuthNetworkAdapter.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$url\\)\\: Unexpected token \"\\$url\", expected type at offset 81$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/AuthNetworkAdapter.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$caPath\\)\\: Unexpected token \"\\$caPath\", expected type at offset 127$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/DefaultNetworkAdapter.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$licensePath\\)\\: Unexpected token \"\\$licensePath\", expected type at offset 100$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/DefaultNetworkAdapter.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$url\\)\\: Unexpected token \"\\$url\", expected type at offset 81$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/DefaultNetworkAdapter.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$filePath\\)\\: Unexpected token \"\\$filePath\", expected type at offset 101$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/ServiceInterface.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$filePath\\)\\: Unexpected token \"\\$filePath\", expected type at offset 1527$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/ServiceInterface.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$filePaths array of file Paths to convert\\)\\: Unexpected token \"\\$filePaths\", expected type at offset 1700$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/ServiceInterface.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$filePaths array of file paths\\)\\: Unexpected token \"\\$filePaths\", expected type at offset 77$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/ServiceInterface.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$synchronRequest bool should the request be prioritized\\)\\: Unexpected token \"\\$synchronRequest\", expected type at offset 125$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/ServiceInterface.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$synchronousRequest\\)\\: Unexpected token \"\\$synchronousRequest\", expected type at offset 122$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem/Preview/ServiceInterface.php
+
+		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:WARN\\(\\)\\.$#"
 			count: 2
 			path: tine20/Tinebase/FileSystem/Preview/ServiceV1.php
@@ -6519,6 +6629,16 @@ parameters:
 			message: "#^Variable \\$supportedObjectClasses might not be defined\\.$#"
 			count: 1
 			path: tine20/Tinebase/LdapInfo.php
+
+		-
+			message: "#^Function Tinebase_Exception not found\\.$#"
+			count: 1
+			path: tine20/Tinebase/License/BusinessEdition.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$id\\)\\: Unexpected token \"\\$id\", expected type at offset 18$#"
+			count: 1
+			path: tine20/Tinebase/Lock.php
 
 		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$lockId$#"
@@ -7609,6 +7729,11 @@ parameters:
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:get\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Model/Tree/FileLocation.php
+
+		-
+			message: "#^Array has 2 duplicate keys with value 'inputFilters' \\('inputFilters', self\\:\\:INPUT_FILTERS\\)\\.$#"
+			count: 1
+			path: tine20/Tinebase/Model/Tree/Node.php
 
 		-
 			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_DateTime           creation_time\\)\\: Unexpected token \"creation_time\", expected variable at offset 210$#"
@@ -9374,6 +9499,26 @@ parameters:
 			message: "#^Variable \\$this might not be defined\\.$#"
 			count: 6
 			path: tine20/Tinebase/views/userInfoPage.php
+
+		-
+			message: "#^Unsafe access to private property UserManual_Controller_ManualContext\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
+			path: tine20/UserManual/Controller/ManualContext.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:clearTable\\(\\)\\.$#"
+			count: 1
+			path: tine20/UserManual/Controller/ManualPage.php
+
+		-
+			message: "#^Unsafe access to private property UserManual_Controller_ManualPage\\:\\:\\$_instance through static\\:\\:\\.$#"
+			count: 3
+			path: tine20/UserManual/Controller/ManualPage.php
+
+		-
+			message: "#^Variable \\$title in empty\\(\\) always exists and is always falsy\\.$#"
+			count: 1
+			path: tine20/UserManual/Import/ManualPage.php
 
 		-
 			message: "#^Method Voipmanager_Backend_Snom_Phone\\:\\:deleteACLs\\(\\) has invalid return type query\\.$#"

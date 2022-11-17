@@ -262,7 +262,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function clearState($name)
     {
         Tinebase_State::getInstance()->clearState($name);
-        
+
         return ['success' => true];
     }
     
@@ -296,7 +296,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 __METHOD__ . '::' . __LINE__ . ' Failed to set state: ' . $tead->getMessage());
             $success = false;
         }
-        
+
         return ['success' => $success];
     }
     
@@ -866,13 +866,28 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
             'fulltextAvailable' => Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX),
         );
-
+        $licenseRegistryData = $this->_getLicenseRegistry();
+        $registryData += $licenseRegistryData;
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Anonymous registry: ' . print_r($registryData, TRUE));
         
         return $registryData;
     }
-    
+
+    /**
+     * get license registry data
+     *
+     * @return array
+     */
+    protected function _getLicenseRegistry()
+    {
+        $license = Tinebase_License::getInstance();
+        return array(
+            'licenseStatus'     => $license->getStatus(),
+            'licenseData'       => $license->getCertificateData(),
+        );
+    }
+
     /**
      * get user registry
      *
@@ -912,6 +927,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP, true)
             : $smtpConfig = array();
 
+        // be license class for setting some license registry data
+        $license = Tinebase_License::getInstance();
+
         $userRegistryData = array(
             'accountBackend' => Tinebase_User::getConfiguredBackend(),
             'areaLocks' => $this->_multipleRecordsToJson(Tinebase_AreaLock::getInstance()->getAllStates()),
@@ -928,6 +946,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'persistentFilters' => $persistentFilters,
             'userAccountChanged' => Tinebase_Controller::getInstance()->userAccountChanged(),
             'sessionLifeTime' => Tinebase_Session_Abstract::getSessionLifetime(),
+            'licenseExpiredSince'=> $license->getLicenseExpiredSince(),
+            'licenseExpire' => $license->getLicenseExpireEstimate(),
             'primarydomain' => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
             'secondarydomains' => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
             'additionaldomains' => isset($smtpConfig['additionaldomains']) ? $smtpConfig['additionaldomains'] : '',
@@ -973,7 +993,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
 
             $allImportDefinitions = $this->_getImportDefinitions();
-            
+
             foreach ($userApplications as $application) {
                 $appRegistry = $this->_getAppRegistry($application, $clientConfig, $allImportDefinitions);
 

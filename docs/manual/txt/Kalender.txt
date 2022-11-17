@@ -1,0 +1,579 @@
+[[chapter.Kalender]]
+== Kalender ==
+
+
+////
+Dr. Markus Wirtz, 2015-03-30 16:14
+bin einmal durch
+@Autoren
+-> Kommentare bearbeiten
+-> Index-Einträge!
+
+KUK 2015-05-15: @Lars: bitte noch einmal Kommentar bei Zeile 227 checken!
+Indizierung fertig! Bis auf Zeile 227 Freigabe!
+
+Paul Hartog: überarbeitung angefangen 7.10.2019
+Screenshot hinzugefügt Zeile 117
+Screenshot hinzugefügt Zeile 447
+Kapitel "Umfrage" in Zeile 432 Hinzugefügt
+Kapitel Kalender fertig überarbeitet 15.10.2019 (Ich mach nachdem ich das ganze Handbuch fertig hab nochmal eine Prüfung auf Rechtschreibung und Grammatik)
+////
+
+[[sec.kalender.einleitung]]
+=== Einleitung ===
+
+(((ActiveSync)))
+{{{/Calendar}}}
+Der Kalender ist, neben dem Adressbuch und dem E-Mail-Client, wohl eine der drei Kernfunktionen einer Groupware. Da ein Kalender, wenn er den Ansprüchen an die Zusammenarbeit von Gruppen genügen soll, auch mit verschiedenen Geräteplattformen zurechtkommen muss, ist {branch} mit Schnittstellen ausgerüstet. Das ist zum einen _ActiveSync_ von Microsoft, das die Synchronisation mit den Kalendern mobiler Geräte zulässt, aber auch MS-Outlook-Kalender-Benutzer anbindet, z.B. externe Projektpartner, die die Microsoft-Groupware verwenden.
+
+(((CalDAV)))
+(((iCal)))
+(((ICS-Format)))
+Eine weitere Möglichkeit, andere Kalender anzubinden, ist _CalDAV_, ein Protokoll für den Austausch standardisierter Termindaten. Verbreitete Clients, die dieses Protokoll verarbeiten, sind z.B. Evolution (ein unter diversen Linux-Distributionen verbreiteter, aber auch für Windows verfügbarer  E-Mail- und Kalender-Client), iCal (ab Mac OS X 10.5 Leopard), iPhone (ab Version 3.0), Sunbird/Thunderbird sowie Android (mit mehreren verfügbaren Synchronisationsprogrammen). Auch für MS Outlook gibt es CalDAV-Zusatzmodule. Die Liste der CalDAV-Server ist noch weitaus länger. Wie genau diese in {branch} eingebunden werden, ist nicht Thema dieses Benutzerhandbuchs (<<sec.kalender.sync>> enthält nur einige grundlegende Hinweise), wir werden in <<sec.kalender.importiere.termine>> aber beschreiben, wie Sie externe Kalenderdateien im ICS-Format einlesen bzw. einbinden können.
+
+[NOTE]
+===================
+Bei der Nutzung von iCal gibt es die Einschränkung, dass gemeinsame Kalender angezeigt werden, aber von anderen freigegebenen Benutzern nicht abgeändert oder gelöscht werden können. Es handelt sich hierbei um eine Besonderheit/Limitierung der Apple-Implementationen, die die Bearbeitung eines Termins in einem gemeinsamen Kalender einschränkt, sobald dieser Teilnehmer hat.
+
+Das Grundproblem ist:
+Apples eigener Kalender-Server kennt keine gemeinsamen Kalender mit Teilnehmern, Teilnehmer gibt es bei Apple nur in persönlichen Kalendern (ein ähnliches Problem gibt es auch mit dem "Privat"-Flag und Apple-Produkten).
+
+Die momentan einzige Lösung, die zugegebenermaßen nicht schön ist, aber funktioniert:
+
+* Auf gemeinsame Kalender verzichten,
+* Ressourcen und gemeinsame Kalender über einzelne Nutzer abbilden.
+
+Darüberhinaus sind gemeinsame Termine, an denen man selbst teilnimmt, auch immer im eigenen persönlichen Kalender vorhanden und können somit über diesen Weg synchronisiert werden.
+=====================
+
+Klicken Sie nun den Reiter menu:[Kalender] an oder aktivieren Sie ihn über den Reiter {branch}.
+
+//////////////////
+        SCREENSHOT
+        path: </Calendar/MainScreen/Event>
+        demodata: Termine, Ressourcen, Gruppe
+        actions:
+        image: screen
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Monatsansicht des Kalenders
+image::Kalender/1_kalender_monatsuebersicht.png[id="fig_kalenderuebersicht",width="100%"]
+
+
+Die Ansicht ist unspektakulär, wie bei jedem Kalender. Allerdings handelt es sich hier um eine Groupware; es stehen Ihnen also neben der Eingabe eigener Termine eine ganze Reihe weiterer, Personen-übergreifender Funktionen zur Verfügung, wie zum Beispiel das Einladen anderer Teilnehmer zu Terminen, das Buchen von Ressourcen für Besprechungen, das Anzeigen von Terminen anderer Benutzer (sofern Sie über die Rechte dazu verfügen) oder das Filtern von Kalendereinträgen (auch anderer Benutzer) nach verschiedenen Kriterien in speziell dafür definierten Ansichten.
+
+
+[[sec.kalender.favoriten]]
+=== Favoriten und verschiedene Kalender ===
+
+(((Favoriten-Ansicht)))
+{{{/Calendar/MainScreen/Event/FavoritesPicker}}}
+Auch im Kalender können Sie bestimmte gefilterte Ansichten als menu:[FAVORITEN] speichern (vgl. <<sec.kontakte.filtern>>). Standardmäßig sind bereits vier praktische Favoriten-Filter angelegt. menu:[Abgelehnte Termine], menu:[Alle meine Termine], menu:[Erwartet Antwort] und menu:[Ich bin Organisator].
+//////////////////
+        SCREENSHOT
+        path: </Calendar/MainScreen/Event/FavoritesPicker>
+        demodata: Termine, Ressourcen, Eigene Favoriten, Gruppe
+        actions:
+        image: zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Favoriten des Kalenders
+image::Kalender/2_kalender_favoriten_ausschnit.png[id="fig_kalenderfavoriten",width="50%"]
+
+Probieren Sie jetzt einmal die vier Standard-Favoriten-Ansichten aus, und schauen Sie sich dabei auch die entsprechenden syntaktischen Definitionen in den Filterzeilen an. So gewinnen Sie Übung für die Definition eigener menu:[FAVORITEN]-Ansichten. Die Kalender-Anwendung ist hier ähnlich vielseitig, aber eben auch ähnlich anspruchsvoll, wie das Adressbuch.
+
+{{{/Calendar/MainScreen/Event/AttendeeFilter}}}
+{{{/Calendar/MainScreen/Event/ContainerTree}}}
+Die Besonderheit im Kalender besteht in zwei weiteren Einstellkriterien auf der linken Seite. Neben der bekannten Container-Baumstruktur unter menu:[KALENDER], über die Sie weitere im System angelegte Kalender wählen, blenden Sie unter der Rubrik menu:[TEILNEHMER] die Termine anderer Teilnehmer ein. Klicken Sie dazu das ausgegraute menu:[Teilnehmer hinzufügen] an.
+
+//////////////////
+        SCREENSHOT
+        path: </Calendar/MainScreen/Event/AttendeeFilter>
+        demodata: Termine, Ressourcen, Eigene Favoriten, Benutzer , Gruppe
+        actions: Auswählen was für eine Ressource verwendet werden soll und dann z.b ein Kontakt auswählen
+        image: zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Kalender anderer {branch}-Benutzer hinzufügen
+image::Kalender/3_kalender_teilnehmer_hinzu.png[id="fig_kalenderteilnehmerauswahl",width="100%"]
+
+
+Hier können Sie anfangen den Namen des Benutzer einzutippen und {branch} fängt automatisch an zu suchen. Alternativ können Sie auf den kleinen Pfeil klicken daraufhin öffnende Pulldown-Menü bietet Ihnen die angelegten {branch}-Benutzer, aber auch alle anderen gespeicherten Kontakte zur Auswahl an.
+Welchen Sinn hat das nun? Externe Personen, wie Kunden oder Lieferanten, haben doch sicher nur in Ausnahmefällen ein Benutzerkonto und damit einen eigenen Kalender in Ihrer {branch}-Groupware – das ist richtig, doch können auch diese von {branch}-Benutzern zu Meetings eingeladen werden. Und wenn Sie z.B. sehen wollen, zu welchen Terminen ein bestimmter externer Teilnehmer, der kein Benutzerkonto bei Ihnen hat, in einem bestimmten Zeitabschnitt eingeladen wurde, wählen Sie diese Person hier unter menu:[TEILNEHMER] als Ansicht aus und sehen all deren Termine auf einen Blick. Wie Sie externe Personen einladen, schauen wir uns in <<sec.kalender.termin.hinzufuegen.bearbeiten.teilnehmer.einladen>> an.
+
+[IMPORTANT]
+================
+Achten Sie beim Auswählen von Kalendern in der Baumstruktur oder von Teilnehmern darauf, dass eventuell vorher in menu:[FAVORITEN] eingestellte Filter (z.B. menu:[Erwartet Antwort]) erhalten bleiben, wenn sie nicht im Widerspruch zu den zuletzt gemachten Einstellungen stehen. Sie sollten also immer, wenn Sie eine spezielle Ansicht in der linken Seite definiert haben, auch ein Auge auf den Filterkriterien über dem Kalenderfenster haben.
+================
+
+{{{/Calendar/MainScreen/Event/MiniDatePicker}}}
+Letzte angebotene Einstellmöglichkeit auf der linken Seite ist der menu:[Minikalender]. Damit springen Sie schnell zu einem gewünschten Zeitabschnitt, und obwohl der Minikalender immer einen Monat anzeigt, können Sie per Mausklick auch die gewünschte Ansicht im Zielzeitraum wählen.
+
+//////////////////
+        SCREENSHOT
+        path: </Calendar/MainScreen/Event/MiniDatePicker>
+        demodata:
+        actions:
+        image: zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Minikalender mit KW-Auswahl
+image::Kalender/4_kalender_minikalender.png[id="fig_kalenderminikalender",width="50%"]
+
+
+Klicken Sie auf das Monatsfeld, geht der große Kalender in die Monatsansicht; klicken Sie links auf menu:[KW], wird Ihnen die zugehörige Wochenansicht angeboten – wenn Sie den Tag anklicken, die Tagesansicht.
+
+Das Ändern der Ansicht geht alternativ auch mit einem Klick auf die Buttons menu:[Tag], menu[Woche] und menu[Monat], welche sich auf der rechten oberen Seite befinden.
+
+//////////////////
+        SCREENSHOT
+        path: </Calendar/MainScreen/Event/CalendarView>
+        demodata:
+        actions:
+        image: zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Ändern der Kalenderansicht
+image::Kalender/14_kalender_ansicht.png[id="fig_kalenderansicht",width="50%"]
+
+[[sec.kalender.menue]]
+=== Das Bearbeitungsmenü ===
+
+{{{/Calendar/MainScreen/Event/ActionToolbar}}}
+{{{/Calendar/MainScreen/Event/List}}}
+{{{/Calendar/MainScreen/Event/Sheet}}}
+Das Bearbeitungsmenü auf der linken Seite über der Tabelle enthält die Buttons menu:[Termin hinzufügen], menu:[Termin bearbeiten], menu:[Termin löschen], menu:[Drucke Seite], menu:[Importiere Termine], menu:[Exportiere Termine]menu:[Nachricht verfassen], menu:[Split] (bisher nur in der CE), menu:[Blatt], menu:[Liste] und menu:[Farben]
+
+Mit menu:[Split], menu:[Blatt] und menu:[Liste] wählen Sie verschiedene Ansichten für den Kalender. Standard als Blatt ist die Wochenansicht; die Anzeige als Liste ist vor allem für den Ausdruck besser geeignet, denn sie enthält in Tabellenform eine Reihe weiterer Informationen über einen Termin, die im Blatt nicht sofort sichtbar sind. Sie können hier, wie in jeder Tabellenansicht von {branch}, mit dem kleinen Tabellensymbol rechts außen, Spalten nach Bedarf an- und abwählen.
+//////////////////
+        SCREENSHOT
+        path: </Calendar/MainScreen/Event/Grid/Week>
+        demodata: Termine , Benutzer, Ressourcen, Gruppe
+        actions:
+        image: screen
+        comment: <gibt eine Neue funktion -> Zeitstänge>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Der Kalender mit Terminen in der Listenansicht
+image::Kalender/5_kalender_termine_listenansicht.png[id="fig_kalenderlistenansicht",width="100%"]
+
+
+Sowohl menu:[Blatt] als auch menu:[Liste] lassen sich mit den drei kleinen Buttons am rechten Rand – direkt über dem eigentlichen Kalenderblatt – als Tages-, Wochen- oder Monatsansicht anzeigen.
+
+Die neu hinzugekommene Ansicht menu:[Split] ist nur in der Blattansicht wirksam; sie zeigt die Kalender mehrerer ausgewählter Benutzer nebeneinander.
+
+Der Button menu:[Farbe] soll der Übersichtlichkeit dienen. Hier können die angezeigten Termine farblich nach Organisator, Teilnehmer, Tag oder Rollen unterschieden werden.
+
+[[sec.kalender.termin.hinzufuegen.bearbeiten]]
+=== Termin hinzufügen/bearbeiten ===
+
+[[sec.kalender.termin.hinzufuegen.bearbeiten.teilnehmer.einladen]]
+==== Allgemeine Termindaten eingeben und Teilnehmer einladen ====
+
+{{{/Calendar/EditDialog/Event}}}
+Klicken Sie nun den ersten Button des Bearbeitungsmenüs, menu:[Termin hinzufügen].
+
+//////////////////
+        SCREENSHOT
+        path: </Calendar/EditDialog/Event>
+        demodata: Termine , Benutzer, Ressourcen, Tags, Gruppe
+        actions:
+        image: Dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Bearbeitungsmaske zum Anlegen eines Termins
+image::Kalender/6_kalender_neuer_termin.png[id="fig_kalenderterminhinzu",width="100%"]
+
+(((Termin,hinzufügen)))
+Sie erhalten die Objektmaske mit dem aus anderen Anwendungen bereits bekannten Standardreitern und einigen weiteren im unteren Teil. Beachten Sie bitte, dass ein Aufruf dieser Maske über den Button menu:[Termin hinzufügen] das Termindatum und den Zeitpunkt auf die aktuelle Systemzeit setzt. Sollten Sie hingegen einen Termin an einem beliebigen anderen Zeitpunkt eintragen wollen, tun Sie das besser über einen Rechtsklick und (menu:[Termin hinzufügen]) an der betreffenden Stelle im Kalenderblatt. Die sich öffnende Maske ist dieselbe.
+
+[TIP]
+===========
+Zum schnellen Eingeben eines Termins ohne die Eingabemaske ziehen Sie mit gedrückter linker Maustaste vom Beginn bis zum gewünschten Ende des gewünschten Termins über den Kalender. In diesem Falle müssen Sie nur noch das Thema eingeben.
+===========
+
+Das Thema ist ein Pflichtfeld – tragen Sie darum zum Test irgend etwas ein. Das Pulldown menu:[Ansicht] steht standardmäßig beim Öffnen des Fensters auf menu:[Organisator], also desjenigen, der den Termin angelegt hat und verwalten darf. In der Ansicht menu:[Teilnehmer] sind wesentliche Einstellungsoptionen ausgegraut. Das ist der Fall, wenn Sie einen Termin aufrufen, den Sie selbst nicht angelegt haben – darauf kommen wir noch zu sprechen. Belassen Sie menu:[Ansicht] also jetzt auf menu:[Organisator].
+
+Im Feld menu:[Ort] müssen Sie keine Eingabe machen. menu:[Beginn] und menu:[Ende] sind natürlich Datums- und Zeiteingaben; beachten Sie, dass Ihnen hier sowohl die direkte Eingabe über die Tastatur als auch eine komfortable Anwahl über den rechts befindlichen Kalenderbutton bzw. ein Pulldown bei der Zeit zur Verfügung steht. Der Checkbutton menu:[ganztägig] bewirkt, dass der Termin zwar als belegt von 00:00 bis 23:59 eingetragen, in der Tages- und Wochenansicht des Kalenderblatts jedoch nicht über die gesamte Tageszeit markiert wird, sondern nur als schmaler Streifen direkt unterhalb des Tabellenkopfes.
+
+In das freie Feld rechts neben der Zeitangabe für menu:[Ende] können Sie nichts eintippen. Wenn Sie den Termin speichern und wieder aufrufen, sehen Sie, dass das System dieses Feld automatisch mit der Zeitzone ausfüllt. {branch} ist damit auch in multinationalen Unternehmen zur Terminplanung einsetzbar, die Zeitzonen-übergreifend arbeiten.
+
+Das Pulldown menu:[Gespeichert in] dient zur Auswahl eines Kalenders für die Speicherung des Termins. Als Vorgabe wird der in den benutzerspezifischen Einstellungen (siehe <<chapter.Einstellungen>>) ausgewählte Kalender benutzt; standardmäßig ist das Ihr eigener. Klicken Sie jetzt dieses Pulldown an. Es werden Ihnen zunächst Ihr eigener (oder auch mehrere eigene) Kalender sowie die drei Kalender angezeigt, auf die Sie zuletzt zugegriffen haben. Sollten Sie jetzt zum ersten Mal dieses Pulldown angeklickt haben, ist die Liste noch leer; einzig der Menüpunkt menu:[Andere Kalender wählen...] wird angeboten. Klicken Sie diesen an, öffnet sich ein Fenster mit der Kalender-Baumstruktur Ihrer {branch}-Installation:
+
+
+//////////////////
+        SCREENSHOT
+        path: </Event/ContainerTree>
+        demodata: Termine , Benutzer, Ressourcen, Tags, Gruppe, Gemeinsame Kalender
+        actions:
+        image: Dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Auswahl, in welchem Kalender ein Termin gespeichert werden soll
+image::Kalender/7_kalender_neuer_termin_kalenderauswahl.png[id="fig_kalenderauswahlfenster",width="100%"]
+
+
+Je nachdem, welche Kalender angelegt sind und welche Zugriffsberechtigungen Sie darauf besitzen, können Sie hier noch weitere Kalender zum Speichern Ihres Termins auswählen. Zum Beispiel könnten Sie unter dem Ordner menu:[Gemeinsame Kalender] einen dort angelegten Team-Kalender verwenden oder auch unter menu:[Kalender anderer Benutzer] einem anderen Mitarbeiter einen Termin zuweisen, sofern Sie auf dessen Kalender Schreibrechte besitzen. In jedem Falle würde beim nächsten Aufruf des Kalenderauswahlmenüs dieser Kalender schon beim anklicken des Pulldowns menu:[Gespeichert in] zur vereinfachten Bedienung mit angeboten werden.
+
+In der Anwendung menu:[Admin] (<<chapter.administration>>) finden Sie alle Kalender als sogenannte menu:[Container] wieder. Dort können Sie Berechtigungen prüfen und gegebenenfalls ändern, sofern Sie wiederum dazu berechtigt sind.
+
+Rechts neben den Ort- und Zeitfeldern finden Sie ein Quadrat mit drei Checkbuttons: menu:[nicht-blockierend], menu:[Vorläufig] und menu:[Privat]. Die Anwahl von menu:[nicht-blockierend] führt dazu, dass ein später eingegebener und sich mit diesem zeitlich überschneidender Termin nicht zu einer Warnmeldung führt. Die Kennzeichnung eines Termins als menu:[Vorläufig] bedeutet, das Sie als Organisator einen Termin zwar geplant, aber selbst bisher noch nicht verbindlich zugesagt haben. Diese Information wird evtl. eingeladenen anderen Teilnehmern übermittelt. Zudem können Sie menu:[Vorläufig] auch als Filter setzen und sich so nur die vorläufigen Termine anzeigen lassen, unabhängig davon, ob es sich um Termine mit anderen Teilnehmern oder nur eigene handelt.
+
+Was bewirkt die Markierung von menu:[Privat]? Die "normalen" Rechte des Kalenders werden hiermit außer Kraft gesetzt und nur Teilnehmer können den Inhalt des Termins sehen. Standardmäßig wird anderen {branch}-Benutzern beim Aktivieren von menu:[Privat] nur Datum und Uhrzeit angezeigt. (Lesen Sie im <<sec.admin.anwendungen.kalender>>, wie man dies ändert oder ergänzen kann.) Man kann anderen {branch}-Benutzern aber auch die Berechtigung für seine "Privat"-markierten Termine geben. Dazu navigieren Sie zu den Berechtigungen für Ihren persönlichen Kalender (erreichbar über menu:KALENDER[Meine Kalender, <Ihr Name> persönlicher Kalender], Rechtsklick, menu:[Kalender Berechtigungen verwalten]). Hier finden Sie ebenfalls einen Checkbutton menu:[Privat] – ist er markiert, kann jeder Benutzer, der Zugriff auf Ihren Kalender hat, auch die "Privat"-markierten Termine einsehen. Mit diesen beiden Einstellungen entscheiden Sie also über Ihre Privatsphäre bei Termineingaben und darüber, ob andere Kalenderbenutzer Ihre privaten Termine in deren Zeitplanung einbeziehen sollen oder nicht.
+
+Außerdem gibt es in den Berechtigungen noch einen Checkbutton menu:[frei/belegt]; wenn Sie diesen markieren, werden andere Benutzer bei der Terminvergabe vor Überschneidungen mit Ihren Terminen gewarnt, wenn jene Sie einladen wollen.
+
+(((Termin,andere Teilnehmer)))
+{{{/Calendar/EditDialog/Event/AttendeeGrid}}}
+Im linken unteren Teil der Eingabemaske finden Sie noch drei weitere, für die Termineingabe wichtige Reiter: Im Reiter menu:[Teilnehmer] sehen Sie standardmäßig drei Spalten: menu:[Rolle], menu:[Name] und menu:[Status]. Alternativ können über dem Tabellensymbol auf der rechten Seite menu:[Gespeichert in] und menu:[Typ] hinzugefügt werden.
+Als ersten Teilnehmer sehen Sie natürlich sich selbst.
+//////////////////
+        SCREENSHOT
+        path: </Calendar/EditDialog/Event/AttendeeGrid>
+        demodata: Termine , Benutzer, Ressourcen, Gruppe
+        actions:
+        image: Dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Hinzufügen von Teilnehmern zu einem Termin
+image::Kalender/8_kalender_teilnehmer_hinzu.png[id="fig_kalenderterminteilnehmer",width="100%"]
+
+Bei dem Feld menu:[Rolle] findet man bei jeden Teilnehmer ein Pulldown Menü mit den beiden Werten menu:[Erforderlich] und menu:[Freiwillig] – hier legen Sie fest, welche eingeladenen Personen einen Termin zusagen _müssen_, damit er zustande kommt, und welche Teilnehmer anwesend sein _können_. Die Standardeinstellung ist menu:[Erforderlich] – {branch} geht also davon aus, dass alle eingeladenen Teilnehmer auch zusagen müssen, damit der Termin zustande kommt.
+
+Legen Sie nun einen neuen Teilnehmer an! Gehen Sie dazu auf die Zeile unter dem zuletzt angelegten Teilnehmer (in unserem Falle sollten das jetzt nur Sie selbst sein) und klicken Sie auf das Feld menu:[Klicken Sie hier, um neue Teilnehmer einzuladen...]. Sie können jetzt direkt den Namen der Personen eintippen. Wenn Sie die ersten drei Buchstaben eingetippt haben, fängt {branch} automatisch an die Kontakte zu filtern. Als Teilnehmer werden Benutzer, Gruppen oder Ressourcen verstanden. Dazu gleich mehr.
+
+Die Option menu:[Typ] zeigt Ihnen an, um welchen Teilnehmer-Typen es sich handelt, also ob der Teilnehmer eine Gruppe, Ressource oder ein Benutzer ist.
+Sie können dieses Feld auch als "Vorab-Filter" nutzen. Klicken Sie dazu auf das leere Feld, dass sich im Reiter menu:[Typ] befindet und wählen Sie die Teilnehmer-Art aus. Nun werden in der Suche nur Teilnehmer dieses Typs angezeigt.
+
+//////////////////
+        SCREENSHOT
+        path: </Calendar/EditDialog/Event/AttendeeGrid>
+        demodata: Termine , Benutzer, Ressourcen, Gruppe
+        actions:
+        image: Dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Typen von Teilnehmern
+image::Kalender/9_kalender_termin_teilnehmertyp.png[id="fig_kalenderterminteilnehmertyp",width="100%"]
+
+Im Feld menu:[Gespeichert in] sehen Sie bei der Neuanlage eines Termins zunächst nichts. Es zeigt, in welchen Kalender der Teilnehmer diesen Termin gespeichert hat. Bei Ihnen selbst wird das der mit dem Pulldown menu:[Gespeichert in] ausgewählte Kalender sein; bei einem anderen Teilnehmer entsprechend ein anderer – gemäß Standardeinstellungen ist es der persönliche Kalender des Teilnehmers.
+
+[TIP]
+===========
+Um einen Termin zu finden, wo mehrere Teilnehmer Zeit haben, können Sie, nachdem Sie die entsprechenden Teilnehmer ausgewählt haben, ganz oben links auf menu:[Termin finden] klicken. Das öffnet eine Kalenderansicht mit den Terminen der jeweiligen Teilnehmer.
+===========
+
+(((Ressource)))
+{{{/Calendar/EditDialog/Resource}}}
+Ein menu:[Benutzer], oder im Fall des Kalenders, ein menu:[Teilnehmer] kann ein in {branch} angelegter Benutzer sein oder eine beliebige Person aus irgendeinem {branch}-Adressbuch sein. Sie können also auch Kunden, Lieferanten oder wen auch immer einladen – insofern ist die Bezeichnung ``Benutzer'' hier etwas irreführend.
+Mit menu:[Gruppe] ist natürlich eine Ihrer gültigen {branch}-Benutzergruppen gemeint, die Sie über diese Funktion geschlossen zum Termin einladen können.
+Eine menu:[Ressource] ist ein Hilfsmittel, z.B. ein Besprechungsraum oder ein Präsentationsgerät, das Sie für den Termin reservieren wollen.
+
+Falls Ihnen das Programm jetzt keine Ressourcen anbietet: Diese können sowohl in den Stammdaten als auch der Admin-Anwendung verwaltet werden. Mehr zu Ressourcen und ihrer Konfiguration können Sie in diesem Kapitel nachlesen <<sec.admin.anwendungen.kalender>>.
+
+Ressourcen können über einen eigenen Kalender verfügen, genau wie jeder {branch}-Benutzer. Sie rufen den Kalender darum auch über die menu:[TEILNEHMER]-Ansicht links neben dem Kalenderfenster auf. Wenn Sie also eine Ressource buchen wollen, sollten Sie zuvor den entsprechenden Kalender einblenden, um deren Verfügbarkeit im Blick zu haben.
+
+Nachdem Sie eine Ressource angelegt haben, buchen Sie diese zum Termin und laden Sie sich probehalber von jedem Typ einen Teilnehmer ein – bei menu:[Benutzer] einen echten {branch}-Benutzer und einen fremden Teilnehmer aus dem Adressbestand. Bei menu:[Benutzer] werden Ihnen alle gültigen Adressen Ihrer {branch}-Adressbücher zur Auswahl angeboten, nicht nur die eigentlichen Benutzer der Anwendung. Sie können in das Fenster sogar eine beliebige E-Mail-Adresse eingeben; der Adressinhaber erhält dann eine Einladung und seine E-Mail-Adresse landet als Kontaktdatensatz in Ihrem Standardadressbuch.
+
+(((ICS-Format)))
+Sie sollten jetzt einen Organisator, mindestens noch einen Teilnehmer aus dem Kreis Ihrer {branch}-Benutzer, einen externen Teilnehmer, eine Benutzergruppe und eine Ressource – also insgesamt fünf Teilnehmer – testweise eingeladen haben. Sehen Sie sich nun das Feld menu:[Status] an. Bei Ihrem eigenen Eintrag steht ein Haken und daneben menu:[Zugesagt] – klar, es ist ja auch Ihr eigener Termin. Alle anderen Teilnehmer dürften jedoch mit dem Eintrag menu:[Keine Antwort] versehen sein. Bei dem externen Teilnehmer ist der Inhalt des Statusfeldes nicht ausgegraut, denn es handelt sich um ein Pulldown. Klicken Sie es an und Sie erhalten die Varianten menu:[Zugesagt], menu:[Abgesagt] und menu:[Vorläufig]. Diese Möglichkeit, Eingaben manuell zu machen, ist nur für den Fall vorgesehen, dass der externe Teilnehmer kein mit dem ICS{empty}footnote:[iCalendar ist ein Datenaustauschformat, das speziell für Kalenderinhalte definiert wurde und bei Öffnung des Dokuments (mit der Dateiendung `ics`) dem Empfänger automatisch einen Eintrag in seinem (ICS-kompatiblen) Kalender erzeugt (vgl. RFC 5545).]-Standard kompatibles Kalenderprogramm nutzt. {branch} versendet an diese Teilnehmer eine Einladungs-E-Mail mit einem Antwort-Menü. Wenn der Teilnehmer diese E-Mail mit einem ICS-kompatiblen Client bearbeitet, der selbst auch einen Kalender enthält, erzeugt dieses Programm eine Antwort-E-Mail, die an den {branch}-Organisator zurückgesendet und verarbeitet wird, sodass der Termin ohne weitere Bearbeitung als zu- oder abgesagt gemeldet werden kann.
+
+
+Jeder eingeladene Teilnehmer, der selbst einer Ihrer {branch}-Benutzer ist, erhält vom System ebenfalls eine automatische Benachrichtigungs-E-Mail. Im Text dieser E-Mail findet der Empfänger auch die Menüpunkte menu:[Annehmen], menu:[Vielleicht] und menu:[Ablehnen]. Wenn er eine dieser Möglichkeiten anklickt, wird dem Organisator darüber eine Bestätigungs-E-Mail zugesandt.
+
+Darüber hinaus wird, ebenfalls vollautomatisch, der Termin bereits mit Einladung des Teilnehmers in seinen eigenen Terminkalender eingetragen sowie die o.g. Entscheidung ebenfalls jederzeit upgedatet. Wenn der Teilnehmer den Termin aufruft, sieht er anhand des Eintrages in menu:[Ansicht] (hier jedoch nicht menu:[Organisator], sondern menu:[Teilnehmer]!), dass es sich um den Termin eines anderen Organisators handelt.
+
+[CAUTION]
+================
+Wenn man einen Teilnehmer einlädt, der eine andere {branch}-Instanz benutzt, erhält dieser eine E-Mail mit einer anhängenden ICS-Datei, aber keinen Kalendereintrag und auch nicht das o.g. Antwortmenü.
+Wie kommt er dennoch zu einem Eintrag und der Einladende zu seiner Antwort?
+Naheliegenderweise öffnet er dazu vielleicht die anhängende ICS-Datei. Diese Anfrage übergibt der Browser aber jetzt an das lokale Computersystem und das lässt entweder fragen, welches Programm die ICS-Datei öffnen soll (wenn diese Art von Datei dem System bisher unbekannt war) oder es öffnet sie mit der für ICS-Dateien hinterlegten Standardsoftware (bspw. MS Outlook oder Evolution). Das führt natürlich nicht zu dem gewünschten Ziel, also der Eintragung des Termins in die entsprechende {branch}-Instanz. Es lässt sich aber nicht vermeiden, da {branch} als Webanwendung natürlich auf einem Computersystem nicht "bekannt" ist. Wie Sie dennoch den Termin einlesen können, erfahren Sie am Ende dieses Kapitels unter <<sec.kalender.importiere.termine>>.
+================
+
+{empty}
+
+//////////////////
+        SCREENSHOT
+        path: </Calendar/EditDialog/Event/>
+        demodata: Termine , Benutzer, Ressourcen, Gruppe, Organisator = Benutzer?
+        actions:
+        image: Dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Termin eines anderen Organisators
+image::Kalender/10_kalender_termin_anderer_organisator.png[id="fig_kalenderterminfremdeorga",width="100%"]
+
+So funktioniert prinzipiell auch das Bestätigen der Buchung einer Ressource. In der Logik der Kalender-Anwendung ist eine Ressource ein Teilnehmer wie jeder andere. Will jemand eine Ressource buchen, die bereits ein anderer reserviert hat, zeigt das System eine entsprechende Meldung. Hier ist die Bestätigung also nicht notwendig. Die Bestätigung der Buchung durch einen Verantwortlichen kann aber durchaus gewollt und sinnvoll sein, wenn man im Unternehmen die Benutzung von Ressourcen explizit steuern möchte, z.B. bei wertvolleren Ressourcen, wie Dienstwagen.
+
+Teilnehmer, die nicht an Ihr {branch}-System angeschlossen sind, aber eine gültige E-Mail-Adresse in ihrem Adressdatensatz besitzen, erhalten ebenfalls automatisch eine E-Mail. An diese E-Mail ist ebenfalls das oben bereits erwähnte ICS-Dokument angehängt.
+
+[IMPORTANT]
+===========
+Die hier beschriebenen Benachrichtigungsvorgänge werden nicht nur beim Anlegen, sondern auch bei jeder Änderung und bei der Absage eines Termins in Gang gesetzt. Sie müssen also nicht extra dafür sorgen, dass die Teilnehmer benachrichtigt werden.
+===========
+
+Darüber hinaus haben Sie als Organisator die Möglichkeit, allen eingeladenen Personen in einem Arbeitsgang eine E-Mail zu senden – z.B. als Erinnerung oder mit ergänzenden Informationen.
+//////////////////
+        SCREENSHOT
+        path: </Calendar/MainScreen/Event/Sheet/Week>
+        demodata: Termine , Benutzer, Ressourcen, Gruppe
+        actions: Rechtsklick um ins Kontextmenü zu gelangen
+        image: Zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Kontextmenü eines Termins
+image::Kalender/11_kalender_termin_kontextmenue.png[id="fig_kalenderterminkontextmenue",width="100%"]
+
+
+Über menu:[Nachricht verfassen] im Bearbeitungsmenü oder das Kontextmenü eines Termins öffnet sich ein E-Mail-Fenster mit der Terminbezeichnung im Betreff und allen in den Adressdatensätzen hinterlegten E-Mail-Adressen der eingeladenen Teilnehmer.
+
+
+Eine E-Mail können Sie zudem auch aus dem Terminfenster heraus versenden, allerdings nur an einzelne Teilnehmer. Rufen Sie dazu den eben gespeicherten Termin noch einmal auf (Rechtsklick menu:[Termin bearbeiten]) und klicken Sie ebenfalls wieder rechts auf den entsprechenden Teilnehmer. Das Kontextmenü erlaubt Ihnen, den Teilnehmer zu löschen oder ihm eine E-Mail zuzusenden (oder, allerdings nur bei angeschlossener Telefonanlage, den Teilnehmer anzurufen). Wählen Sie jetzt menu:[Nachricht verfassen], es öffnet sich ein E-Mail-Fenster mit der E-Mail Adresse des Kontaktes.
+
+Lassen Sie das Terminfenster geöffnet – wir wollen noch die weiteren Tabellenspalten besprechen:
+Unter menu:[Gespeichert in] sehen Sie bei den internen Teilnehmern die Bezeichnungen der Kalender dieser {branch}-Benutzer, bei den externen keine Einträge, da sie ja nicht an Ihr System angeschlossen sind. Unter menu:[Status] steht wahrscheinlich jetzt immer noch menu:[Keine Antwort]. Für die externen Teilnehmer können Sie selbst den Status hier über das Pulldown verändern; das werden Sie dann tun, wenn Ihnen der Teilnehmer eine Antwort auf Ihre E-Mail geschickt hat. Mögliche Einstellungen sind, wie oben schon besprochen: zugesagt, abgesagt und vorläufig. Beachten Sie, dass bei den internen Teilnehmern das System diese Einstellungen selbst entsprechend der Antwort des Teilnehmers setzt.
+
+Als eingeladener Benutzer sehen Sie den Termin zunächst wie einen eigenen. Rufen Sie ihn auf, sehen Sie in Ihrer Zeile den menu:[Status] jetzt nicht mehr ausgegraut, sondern als Pulldown. Damit können Sie Ihre Antwort per Mausklick einstellen. Es geht aber auch schneller.
+
+//////////////////
+        SCREENSHOT
+        path: </Calendar/MainScreen/Event/Sheet/Week>
+        demodata: Termine , Benutzer, Ressourcen, Gruppe
+        actions: Rechtsklick um ins Kontextmenü zu gelangen -> Mene Antwort.
+        image: Zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Antwort des Eingeladenen
+image::Kalender/12_kalender_termin_antworten.png[id="fig_kalenderterminkontextmenuezusage",width="100%"]
+
+
+Sie müssen das Termin-Bearbeitungsfenster gar nicht erst öffnen, sondern können schon auf dem Kalenderblatt mit Rechtsklick das Kontextmenü aufrufen und über menu:[Meine Antwort setzen] dem Organisator zurückmelden, ob Sie (vorläufig oder nicht) teilnehmen. Bei menu:[Abgesagt] verschwindet der Termin nach ein paar Sekunden (wenn er gespeichert wurde) aus Ihrem Kalender – sofern Ihre Filterkriterien entsprechend eingestellt sind, was standardmäßig der Fall ist. Allerdings können Sie Ihre Kalenderfilter auch so anpassen, dass abgesagte Termine angezeigt bleiben. Wie die Filterkriterien eingestellt werden, erläutern wir in <<sec.standard.hauptbildschirm.suchfilter>>; die Ausführungen dort gelten nicht nur für die in den anderen {branch}-Anwendungen übliche Tabellenansicht, sondern auch für den Kalender.
+
+Übrigens erhalten Sie auch unterhalb des Kalenderblatts Statusinformationen zu diesem Termin, solange Sie in Ihrem Kalender auf keine andere Stelle klicken.
+
+//////////////////
+        SCREENSHOT
+        path: </Calendar/MainScreen>
+        demodata: Termine , Benutzer, Ressourcen, Gruppe
+        actions: Termin mit linker Maustaste auswählen
+        image: screen
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Alle Informationen zu einem Termin unterhalb der Kalenderansicht
+image::Kalender/13_kalender_termin_info.png[id="fig_kalenderterminstatus",width="100%"]
+
+Diese Meldungen bleiben bei abgesagten Terminen bis zum nächsten Browser-Refresh oder Mausklick auf eine andere Stelle des Kalenders stehen.
+
+
+//////////
+Dr. Markus Wirtz, 2015-03-30 16:08
+Den folgenden Absatz samt Diskussion verstehe ich nicht.
+
+KUK 2015-04-06: Genau mein Problem. Ich habe diese Funktion auch nicht verstanden. Deshalb die sehr kurz gehaltene Beschreibung und meine Frage. Allerdings verstehe ich die Antwort von Lars ebenfalls nicht.
+//////////
+
+
+Kommen wir noch schnell zum Pulldown menu:[Ansicht], dessen Besprechung wir weiter oben verschoben hatten. Die Funktion der Ansicht hat nur Sinn bei mehreren Teilnehmern. Mit dieser Funktion können Sie als Organisator sich in die Lage der anderen Teilnehmer versetzen und den Termin aus ihrer Perspektive sehen.
+
+////
+KUK: Welchen Sinn hat hierbei der Wechsel der Ansicht auf Teilnehmer bei einem Termin den ich als Organisator eingegeben habe?
+@Kai: Damit kannst Du die Perspektive ändern. Also als welcher Teilnehmer du diesen Termin gerade siehst/bearbeoitest.
+Standardmäßig ist immer deine Perspektive als Teilnehmer oder wenn Du der Organisator bist als Organisator ausgewählt.
+Aus der Teilnhemerperspektive kannst Du zum Beispiel nicht den Ort oder Titel ändern.
+Wenn Du die Perspektive eines anderen Teilnehmers einnimmst, dann kannst Du als dieser Teilnehmer zusagen. D.h. die anderen Teilnehmer bekommen eine E-Mail das der andere Teilnehmer zugesagt hat.
+Als Teilnehmer kannst Du Deine persönlich Kopie des Termin in einen anderen Ordner(Angezeigt in) verschieben.
+Als Organisator verschiebst Du den Originaltermin in einen anderen Ordner.
+Als Organisator kannst den ganzen Termin löschen/absagen. Als Teilnehmer kannst Du nur deine eigene Kopie des Termins löschen und damit dein eigene Teilnahme absagen.
+
+Was genau davon man kann, hängt immer von den Rechten ab, die man auf andere Ordner hat.
+////
+
+
+[[sec.kalender.termin.hinzufuegen.bearbeiten.wiederholungen]]
+==== Wiederholungen ====
+
+(((Termin,Wiederholungen)))
+{{{/Calendar/EditDialog/Event/RecurrenceConfig}}}
+Über den Reiter menu:[Wiederholungen] im mittleren Teil des Termineingabefensters können Sie sich wiederholende Termine definieren. Klicken Sie diesen Reiter an – die Standardeinstellung ist menu:[Keine].
+
+Klicken Sie nun den Button menu:[Täglich] an; im Feld neben menu:[Jeden] geben Sie als Zahl den Wiederholungsabstand an, d.h. ob sich ein Termin jeden, oder nur jeden 2., 3. usw. Tag wiederholen soll. Darunter gibt es die Möglichkeit, ein Ende der Terminkette zu definieren. Der Standard steht auf menu:[niemals], d.h. auf einer endlosen Kette. Sie können stattdessen ein explizites Datum oder ein Ende nach einer bestimmten Anzahl von Terminen bestimmen.
+
+Unter menu:[Wöchentlich] finden Sie wieder den Wiederholungsabstand, diesmal in Wochen, sowie sieben, den Wochentagen entsprechende Checkbuttons, an denen die Terminwiederholungen stattfinden. Die Definition des Endes der Terminkette ist analog.
+
+Die Einstellungen zu menu:[Monatlich] bieten Ihnen, neben dem schon bekannten Prinzip des Wiederholungsabstandes und des Endes der Terminkette, zwei Dropdown-Menüs an, mit denen sie die Auswahl des ersten, zweiten, dritten, vierten oder letzten Wochentages steuern können. Alternativ können Sie mit Hilfe des darunterliegenden Textfeldes eine Angabe zu einen bestimmten Monatstag als Zahl machen.
+
+Bei der Auswahl menu:[Jährlich] wird naheliegenderweise kein Wiederholungsabstand mehr angeboten. Sie können hier den Tag entweder als ersten, zweiten, dritten, vierten oder letzten Wochentag oder als über eine Ordinalzahl bestimmten Tag eines bestimmten Monats definieren. Die Festlegung des Terminketten-Endes erfolgt wieder wie oben.
+
+[[sec.kalender.termin.hinzufuegen.bearbeiten.alarm]]
+==== Alarm ====
+
+(((Termin,Alarm auslösen)))
+{{{/Calendar/EditDialog/Event/AlarmGrid}}}
+
+Standardmäßig ist festgelegt, dass keine Alarmzeit aktiviert ist. Diese Einstellung können Sie verändern; schlagen Sie dazu bitte im <<chapter.Einstellungen>> und dort im <<sec.einstellungen.kalender>> nach. Die Alarmbenachrichtigung <<sec.kalender.termin.hinzufuegen.bearbeiten.Umfrage>> erledigt das System über eine E-Mail, die es allen bestätigten Teilnehmern des Termines zusendet.
+
+Wenn Sie den Reiter menu:[Alarm] anklicken, haben sie die Möglichkeit sich über den Punkt menu:[Alarmzeit] eine der vordefinierten Alarmzeiten zu konfigurieren.
+Sollte keiner der Alarme Ihnen zusagen, wählen sie den Punkt menu:[Benutzerdefinierter Zeitpunkt]. Hier können Sie nun Datum und Uhrzeit der Alarmbenachrichtigung genau bestimmen.
+
+
+[CAUTION]
+=============
+Diese E-Mail wird, in Abhängigkeit von der Größe Ihrer {branch}-Installation und anderen Faktoren (wie z.B. Leistungsfähigkeit der Server-Hardware), mit Zeitverzögerung von einer bis zu mehreren Minuten versendet. Sie sollten also bei der Bemessung der Benachrichtigungszeiten diese Verzögerungen mit einkalkulieren.
+=============
+
+[[sec.kalender.termin.hinzufuegen.bearbeiten.Umfrage]]
+==== Umfrage ====
+(((Termin,Umfragetool)))
+{{{/Calendar/EditDialog/Event/Poll}}}
+
+Das Umfrage-Tool soll bei der Terminfindung eine Hilfestellung geben.
+Über menu:[Optionen] können Sie die Einstellungen der Umfrage bearbeiten. Zum Beispiel welchen Namen die Umfrage haben soll, ob diese Passwort geschützt ist usw… Des Weiteren finden Sie hier den Link zu der von Ihnen kreierten Termin-Umfrage. Andere zur Auswahl stehende Termine fügen Sie unter dem Reiter menu:[Alternative Termin]
+
+[CAUTION]
+=============
+Der Termin wird bei der Aktivierung der Umfrage automatisch auf "Vorläufig" gesetzt.
+=============
+
+[[sec.kalender.termin.hinzufuegen.bearbeiten.Umfrage.Link]]
+===== Umfrage Link =====
+Der Link zur Umfrage wird an alle Teilnehmer automatisch per E-Mail gesendet.
+
+//////////////////
+        SCREENSHOT
+        path: </Calendar/EditDialog/Event/Poll/Link>
+        demodata: Termine , Benutzer, Ressourcen, Gruppe
+        actions: Link der Umfrage aufrufen
+        image: screen
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Umfrage Übersicht
+image::Kalender/15_kalender_umfrage_link.png[id="fig_umfragelink",width="100%"]
+
+Mit einem Klick auf den Briefumschlag sagt man den Termin zu. Dies wird auch mit einer grünen Farbe verdeutlicht. Ein zweiter Klick färbt das Feld Rot, hier ist der Termin nun abgesagt. Ein dritter Klick auf das gleiche Feld verändert den Status auf vorläufig, dies wird durch die gelbe Farbe verdeutlicht. Diesen Prozess wiederholt man dann für jeden der Termine.
+
+Man kann den Umfrage-Link auch manuell an Teilnehmer senden, diese werden dann nicht automatisch mit Ihrem Namen in der Umfrage auftauchen. Diese Teilnehmer haben dann die Möglichkeit, ihren Namen zu der Umfrage hinzuzufügen.
+
+[IMPORTANT]
+===========
+Um Ihre Einträge zu speichern, müssen Sie am Ende auf menu:[Speichern] klicken. Hierfür gibt es keinen Automatismus.
+===========
+
+
+
+[[sec.kalender.termin.loeschen]]
+=== Termin löschen ===
+
+Wenn Sie als Organisator einen menu:[Termin löschen], ist er sowohl in Ihrem als auch in allen Kalendern der von Ihnen eingeladenen Personen gelöscht. Sowohl interne als auch externe Teilnehmer erhalten eine Mitteilung, dass der Termin abgesagt wurde. Außerdem verschwindet bei den internen Teilnehmern der Termin vom Kalender. Sollten Sie – nicht als Organisator, sondern als eingeladener Teilnehmer – einen Termin aus Ihrem Kalender löschen (das ist möglich), verschwindet er aus Ihrem Kalender, aber natürlich nicht aus dem des Organisators. Dieser erhält nur automatisch eine Absage von Ihnen.
+
+
+[[sec.kalender.drucke.seite]]
+=== Drucke Seite ===
+
+Mit dieser Funktion erhalten Sie eine Seite im Querformat, die, je nach gewählter Ansicht (Blatt, Liste, Tag, Woche, Monat) und angewählten Feldern, die Termine ausdruckt.
+
+////
+.Druckansicht der Termine eines Monats
+image::Kalender/kalender_uebersicht_termin_druckansicht.png[id="fig_kalenderdruckansicht",width="100%"]
+////
+
+
+[[sec.kalender.importiere.termine]]
+=== Termine importieren ===
+
+(((Termin,Fremdquellen einlesen)))
+(((ICS-Format)))
+(((iCal)))
+{{{/Calendar/ImportDialog/Event}}}
+
+Die Funktion menu:[Importiere Termine] ist gewissermaßen dreiteilig. Sie sehen das, wenn Sie das zugehörige Bearbeitungsmenü öffnen und dort unter menu:[Wählen Sie den Typ der Quelle aus] das Pulldown menu:[Hochladen] anklicken.
+
+////
+Screenshot Fenster "Wähle Datei und Format" einfügen
+////
+
+Sie erhalten als Auswahl menu:[Hochladen], was bedeutet, dass Sie eine Datei mit Termindaten von Ihrem Dateisystem einlesen können, und menu:[Entfernt/ICS], was Ihnen die (einmalige oder dauerhafte) Replikation mit einem externen Kalender erlaubt. Zuletzt gibt es noch die Option menu:[Remote / CalDAV (BETA)]
+
+Beschäftigen wir uns zunächst mit der Variante menu:[Hochladen]: Der Button menu:[Wählen Sie die Datei mit Ihren Termine] öffnet den browserinternen Dialog zum Datei-Upload. Damit können Sie eine entsprechende Datei mit Kalenderdaten auswählen. Die derzeitigen unterstützten Formate dafür sind iCAl und CSV. Sie erhalten dazu im unteren Bereich des Fensters ein Auswahl-Pulldown wo Sie Ihr gewähltes Format Einstellen können.
+
+In der Mitte des Fensters können Sie unter menu:[Allgemeine Einstellungen] über das Pulldown einen vorhandenen Kalender auswählen. Die Anwahl von menu:[Andere Kalender wählen] bietet Ihnen dazu in einem neuen Fenster die Baumstruktur der Kalender an, wie Sie sie von der linken Seite des {branch}-Bildschirms her kennen.
+
+Wenn Sie mit menu:[Wählen Sie die Datei mit Ihren Termine] den Browserdialog zum Hochladen aktiviert und eine Datei mit *.ICS-Endung oder *.CSV ausgewählt haben, verändert sich der Button menu:[Ende] rechts unten von "Ausgegraut" auf "Aktiv" und Sie können den Einlesevorgang mit Klicken auf diesen Button abschließen.
+
+[CAUTION]
+============
+Die Software nimmt derzeit keine vorhergehende Prüfung dieser *ICS-Datei vor! Sollte Ihre Datei nicht den Konventionen von iCal entsprechen, bringt der Einleseversuch das Fenster zum Absturz. Sie erhalten zunächst eine Meldung menu:[Programmabbruch] mit der Aufforderung, eine Fehlerbeschreibung einzuschicken. Das ist das Standardprozedere für solche Fälle und Sie können es hier getrost ignorieren, denn der Fehler ist klar. Wenn Sie also hier auf menu:[Abbrechen] klicken, bleibt der Importdialog mit der Meldung menu:[Importiere Termine] stehen. Schließen Sie einfach das Fenster mit einem Klick auf das Schließ-Symbol (je nach Browser und Betriebssystem verschieden, links oder rechts).
+Prüfen Sie sodann die Datei auf Korrektheit (z.B. indem Sie sich mit einer anderen Kalendersoftware, wie Evolution oder MS Outlook, einen Termin exportieren und die Syntax der beiden Dateien vergleichen).
+============
+
+Wenn der Einlesevorgang korrekt abgelaufen ist, erscheint eine Vollzugsmeldung, die Sie mit Klicken auf menu:[Ok] schließen. Die eingelesenen Termine sind dann (allerdings mit einer systembedingten Zeitverzögerung von einer bis zu mehreren Minuten) im ausgewählten Kalender (also auch in dessen Farbe) sichtbar.
+
+Kommen wir nun im weiteren zu der zweiten Möglichkeit, menu:[Entfernt/ICS].
+
+Das Eingabefeld mit der Inschrift `http://example.ics` dient der Eingabe einer vollständigen Quellenangabe einer *.ICS-Datei im Internet, aus der sich Ihr (analog vorhergehendem Abschnitt beschriebener) Kalender die zu importierenden Termine holen soll. Wie oft er das tut, können Sie mit dem Pulldown menu:[Aktualisierungszeit] (das besser ``Aktualisierungsintervall'' heißen sollte) einstellen: Standardmäßig steht die Auswahl auf menu:[einmalig]; zur Auswahl haben Sie noch menu:[stündlich], menu:[täglich] und menu:[wöchentlich].
+
+[CAUTION]
+====================
+Das Quellen-Eingabefeld `http://example.ics` wird derzeit keiner Plausibilitätsprüfung unterzogen! Sollten Sie hier eine falsche Quelle, und das muss nicht etwa nur eine ICS-Datei mit falscher Syntax, sondern kann sogar eine andere URL oder eine beliebige Zeichenkette sein, eingeben, wird {branch} Ihnen dennoch immer die gleiche Meldung (menu:[Definition erfolgreich importiert!] ausgeben. Allerdings werden Sie in diesem Falle natürlich keine eingelesenen Termine einer externen Quelle in Ihrem Kalender vorfinden.
+====================
+
+Beim erfolgreichen Einlesen der Quelldatei werden Ihnen die importierten Termine in Ihrem im o.g. Dialog eingestellten Kalender angezeigt. Sollten Sie nicht einmaliges Einlesen, sondern eines der o.a. Replikations-Intervalle eingestellt haben, läuft dieses ab sofort automatisch ab.
+
+[CAUTION]
+==================
+In der Systemmeldung über das erfolgreiche Einlesen ist von einem sog. "Cronjob" die Rede. Das ist eine Routine, die die hier eingegebene Webadresse abfragt und die Daten einliest. Diese Routine ist nicht ständig aktiv, sondern nur in z.T. größeren Zeitintervallen. Haben Sie also beim Warten auf Ihre einzulesenden Termine Geduld - es kann im Einzelfall durchaus mehr als eine Stunde dauern, ehe ein Ergebnis zu sehen ist.
+==================
+
+////
+ Lars Kneschke, 2015-05-07 05:27
+Bis zum Ende der Woche passen wir den Dialog an und entfernen die Felder Benutzername (nur CalDAV) und Passwort (nur CalDAV). Die werden nämlich überhaupt nicht verwendet.
+Ich werde auch noch mal die Bezeichnung von "Entfernte / ICS" und Aktualisierungszeit => Aktualisierungsintervall ändern lassen.
+Diese Änderungen sollten bis morgen durch sein. Danach werden dann die entsprechenden Screenshots erstellt und eingepflegt. Ich werde sie dann danach auch überprüfen.
+Eine passende URL um den Import zu testen ist folgende URL: http://fux.zuhage.de/ics/Schulferien_2014-2015_BW.ics . Diese URL wird dann nicht sofort(weil sie sehr groß sien kann), sondern zu einen späteren Zeitpunkt eingelesen. Das macht der besagte Cron Job. Da dieser nicht permanent läuft, kann es etwas dauern bis der Import gestartet wird. Abhängig von der Aktualisierungszeit wird der Import dann regelmäßig wiederholt und die Daten aktualisiert. Am Ende das Dialoges kann man einen neuen Kalender auswählen in dem die Daten importiert werden oder einen vorhandenen Kalender auswählen
+////
+
+Die Option menu:[Remote / CalDAV (BETA)] ist noch als Beta eingestuft. Hier ist der Vorgang ähnlich wie bei der Option menu:[Entfernt/ICS]. Der einzige Unterschied liegt darin, dass CalDav einen Benutzernamen und das dazugehörige Passwort braucht, um auf die Termindaten zugreifen zu können.
+
+//////////
+ Daniel Hoffmann, 2015-06-18 14:34
+Neues Kapitel
+//////////
+
+(((ActiveSync)))
+(((CalDAV)))
+[[sec.kalender.sync]]
+=== Termine synchronisieren ===
+
+Die Einrichtung der Synchronisation von {branch} mit Endgeräten ist zwar nicht Thema des Handbuches, dennoch wollen wir kurz beschreiben, wo Sie die hierfür notwendigen Parameter und Einstellungen in {branch} vorfinden.
+
+Die _CalDAV_ URL zur Synchronisierung Ihrer Termine können Sie über das Kontextmenü des jeweiligen Kalenders einsehen: Mit Rechtsklick das Kontextmenü öffnen und auf menu:[Kalender Eigenschaften] klicken. Dort finden Sie eine Zeile mit der Beschriftung menu:[CalDAV URL]. Diese URL müssen Sie in Ihrem Endgerät zur Synchronisierung eingeben.
+
+Mögliche Einstellungen zur Synchronisation über _ActiveSync_ schlagen Sie bitte in <<chapter.Einstellungen>>, <<sec.einstellungen.activesync>> sowie in <<chapter.administration>>, <<sec.admin.server.ActiveSync.devices>> nach.

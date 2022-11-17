@@ -400,7 +400,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     /**
      * PHP error log level constant, like E_ALL, E_ERROR etc. E_ERROR | E_WARNING (error und warning),
      * E_ALL & ~E_NOTICE (E_ALL ohne E_NOTICE)
-     * 
+     *
      * value is an int! not a string "E_ALL"
      *
      * @var string
@@ -614,6 +614,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const PASSWORD_NTLMV2_HASH_UPDATE_ON_LOGIN = 'pwNtlmV2HashUpdateOnLogin';
 
     /**
+     * license type
+     *
+     * @var string
+     */
+    const LICENSE_TYPE = 'licenseType';
+
+    /**
      * AUTOMATIC_BUGREPORTS
      *
      * @var string
@@ -819,6 +826,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_CREATE_PREVIEWS = 'createPreviews';
     const FILESYSTEM_PREVIEW_SERVICE_URL = 'previewServiceUrl';
     const FILESYSTEM_PREVIEW_SERVICE_VERSION = 'previewServiceVersion';
+    const FILESYSTEM_PREVIEW_SERVICE_VERIFY_SSL = 'previewServiceVerifySsl';
     const FILESYSTEM_PREVIEW_MAX_FILE_SIZE = 'previewMaxFileSize';
     const FILESYSTEM_PREVIEW_MAX_ERROR_COUNT = 'previewMaxErrorCount';
     const FILESYSTEM_PREVIEW_THUMBNAIL_SIZE_X = 'previewThumbnailSizeX';
@@ -2372,6 +2380,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => TRUE,
         ),
+        self::LICENSE_TYPE => array(
+                                   //_('License Type')
+            'label'                 => 'License Type',
+                                   //_('License Type')
+            'description'           => 'License Type',
+            'type'                  => 'string',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+            'default'               => 'BusinessEdition'
+        ),
         self::LAST_SESSIONS_CLEANUP_RUN => array(
             //_('Last sessions cleanup run')
             'label'                 => 'Last sessions cleanup run',
@@ -2794,6 +2813,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'setByAdminModule'      => FALSE,
                     'setBySetupModule'      => FALSE,
                     'default'               => 1,
+                ),
+                self::FILESYSTEM_PREVIEW_SERVICE_VERIFY_SSL => array(
+                    //_('Class for preview service')
+                    'label'                 => 'Verify ssl cert',
+                    //_('Class to use, to connect to preview service.')
+                    'description'           => 'Verify preview service servers ssl cert',
+                    'type'                  => 'bool',
+                    'clientRegistryInclude' => false,
+                    'setByAdminModule'      => false,
+                    'setBySetupModule'      => false,
+                    'default'               => false,
                 ),
                 self::FILESYSTEM_PREVIEW_MAX_FILE_SIZE => array(
                     //_('Max file size for preview service')
@@ -3314,7 +3344,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         static::_destroyBackend();
         self::$_instance = null;
     }
-    
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Abstract::getProperties()

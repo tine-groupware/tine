@@ -1,0 +1,144 @@
+[[chapter.Inventarisierung]]
+== Inventarisierung ==
+
+
+//////////
+Dr. Markus Wirtz, 2015-04-15 16:00
+bin druch; ready for GR
+//////////
+//////////
+ Gerlinde Regensburger, 2015-04-15 22:56
+bin durch; @Autoren: Index? Freigabe für Veröffentlichung?
+
+KUK 2015-05-05: Inventarisierung ist in der aktuellen Business Edition nicht vorhanden. @Lars: Entscheidung, ob dieses Kapitel in das Buch aufgenommen werden soll oder nicht.
+KUK 2015-0515: Indizierung fertig, Freigabe
+//////////
+
+
+
+(((ERP)))
+{{{/Inventory}}}
+Die Anwendung menu:[Inventarisierung] gehört – wie menu:[Sales], menu:[HumanResources] und menu:[Zeiterfassung] – nicht zu den Kernfunktionalitäten einer Groupware. Diese Anwendungen sind als ``ERP-Bausteine'' im Laufe der Zeit auf Kundenwunsch entstanden und haben dann Eingang in {branch} gefunden. Es werden sicher nicht die letzten Erweiterungen sein, sodass dieses Buch möglicherweise in der nächsten Auflage bereits weitere Zusatzanwendungen beschreiben wird.
+
+(((Inventar-,Listen)))
+[[sec.inventarisierung.favoriten]]
+=== Favoriten und Inventarlisten ===
+
+
+{{{/Inventory/MainScreen/InventoryItem/FavoritesPicker}}}
+Wie gewohnt finden Sie auf der linken Seite unter menu:[FAVORITEN] nützliche Standardansichten. Hier ist es nur eine: menu:[Alle Inventargegenstände].
+//////////////////
+        SCREENSHOT
+        path: </Inventory/MainScreen>
+        demodata: Gegenstände, Favoriten, Beispiel Ordner in Gemeinsame.
+        image: screen
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Inventarisierung in {branch}.
+image::Inventarisierung/1_inventarisierung_uebersicht.png[id="fig_inventaruebersicht",width="100%"]
+
+////
+INVENTORY ITEMS LISTS übersetzen!
+////
+
+{{{/Inventory/MainScreen/InventoryItem/ContainerTree}}}
+Die unter den menu:[FAVORITEN] zu findenden menu:[INVENTARLISTEN], enthalten standardmäßig die drei üblichen Ordner menu:[Meine Inventarlisten], menu:[Gemeinsame Inventarlisten] und menu:[Inventarlisten anderer Benutzer], wobei der Inhalt der letztgenannten beiden Ordner von dem Vorhandensein solcher Listen in Ihrem speziellen {branch}-System sowie von Ihren Zugriffsrechten abhängt. Im Ordner menu:[Meine Inventarlisten] finden Sie auf jeden Fall Ihre persönliche Inventarliste vor, denn diese erzeugt {branch} mit der Anlage des Benutzers automatisch.
+
+(((Inventar-,Gegenstände)))
+[[sec.inventargegenstand.hinzufügen]]
+=== Inventar Gegenstand hinzufügen ===
+
+{{{/Inventory/MainScreen/InventoryItem/ActionToolbar}}}
+{{{/Inventory/EditDialog/InventoryItem}}}
+Klicken Sie im Bearbeitungsmenü ganz links den Button menu:[Inventar Gegenstand hinzufügen].
+//////////////////
+        SCREENSHOT
+        path: </Inventory/EditDialog/InventoryItem>
+        demodata: Tags
+        image: dialog
+        comment: <neue funktion -> Bild.>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Neuen Inventargegenstand hinzufügen
+image::Inventarisierung/2_inventarisierung_gegenstand_neu.png[id="fig_inventarneu",width="100%"]
+
+
+Die Bearbeitungsmaske enthält unter dem Reiter menu:[Allgemein] zwei Pflichteingabefelder: menu:[ID] und menu:[Name]. Die Identifikationsnummer können Sie händisch vergeben oder vom System erzeugen lassen; im letzteren Fall klicken Sie den kleinen Zauberstab-Button an der rechten Seite des Feldes an, und es wird eine eindeutige ID generiert.
+
+////
+KUK: Bug - Maske zu klein definiert! Unterste Reihe Eingabefelder ist nicht sichtbar!
+////
+
+Darunter folgt das Textfeld menu:[Beschreibung]. Bevor Sie hier etwas eingeben, sehen Sie sich die anderen Felder an: Es gibt einen menu:[Standort] und drei Datumsfelder: menu:[Hinzugefügt], menu:[Garantie] und menu:[Entfernt]. Dazu finden Sie in der untersten Spalte zwei numerische Felder, menu:[Totale Anzahl] und menu:[Verfügbare Anzahl], die beide mit `1` vorbelegt sind, sowie rechts unten ein Pulldown menu:[Status]. Dieses Statusfeld dient der Beschreibung einiger definierter Zustände, die ein Inventargegenstand annehmen kann.
+
+//////////////////
+        SCREENSHOT
+        path: </Inventory/EditDialog/InventoryItem>
+        demodata: Tags, Beispiel name etc.
+        image: dialog
+        comment: <neue funktion -> Bild.>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Status zuweisen
+image::Inventarisierung/3_inventarisierung_gegenstand_status.png[id="fig_inventarneustatus",width="100%"]
+
+
+Tragen Sie also in menu:[Beschreibung] nur solche Informationen ein, die nicht bereits durch andere Felder vorgesehen sind.
+
+Im grauen Randbereich des unteren Teils der Eingabemaske finden Sie links das Pulldown menu:[Gespeichert in]. Hier wählen Sie die Inventarliste, in der der Gegenstand landen soll. Je nach Berechtigungen finden Sie hier Inventarlisten anderer Benutzer sowie gemeinsame Inventarlisten. Sollten Sie hier nicht die Inventarlisten finden, die Sie suchen, schauen Sie sich die vorhandenen Inventarlisten und die zugehörigen Rechtevergaben in der Anwendung menu:[Admin] an (<<sec.admin.container>>).
+
+Neben den bereits aus anderen Anwendungen bekannten Reitern  menu:[Historie], menu:[Anhänge] und menu:[Verknüpfungen] (<<chapter.Standard-Bedienhinweise>>) finden Sie hier noch einen Reiter menu:[Buchhaltung].
+
+//////////////////
+        SCREENSHOT
+        path: </Inventory/EditDialog/InventoryItem>
+        demodata: Kostenstelle
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Buchhaltungsinformationen
+image::Inventarisierung/4_inventarisierung_gegenstand_buchhaltung.png[id="fig_inventarneubuchhaltung",width="100%"]
+
+
+Neben dem menu:[Preis] hinterlegen Sie über ein Pulldown die menu:[Kostenstelle] des Gegenstands. Bedingung dafür ist natürlich, dass in Ihrem {branch}-System Kostenstellen angelegt wurden (<<chapter.Sales>>).
+
+In der Reihe darunter besteht die Möglichkeit, eine freie Bezeichnung der Anschaffungsrechnung für den betreffenden Gegenstand sowie das Rechnungsdatum zu hinterlegen. Alle Eingaben in der Buchhaltungsmaske sind fakultativ.
+
+[[sec.inventarisierung.rest]]
+=== Weitere Funktionen des Bearbeitungsmenüs ===
+
+
+
+{{{/Inventory/MainScreen/InventoryItem/ActionToolbar}}}
+menu:[Inventargegenstand bearbeiten]:: Der Punkt des Bearbeitungsmenüs ist nur aktiv, wenn Sie in der Tabelle einen Gegenstand markiert haben. Sie erreichen das Menü auch über einen Doppelklick auf den Tabelleneintrag oder über einen Rechtsklick und das Kontextmenü. 
+
+menu:[Inventar Gegenstand löschen]:: löscht einen in der Tabelle angewählten Inventargegenstand, immer mit Sicherheitsabfrage.
+
+menu:[Drucke Seite]:: öffnet Ihren betriebssystemeigenen Druckdialog und erzeugt standardmäßig eine Liste aller in der Tabellenansicht dargestellten Inventargegenstände im DIN-A4-Hochformat.
+
+menu:[Inventar exportieren]:: Im rechten Teil des Bearbeitungsmenüs finden Sie übereinander zwei Buttons zum Ex- und Import von Inventargegenständen. menu:[Inventar exportieren] ist ein Pulldown mit den folgenden Optionen: 
+
+menu:[Exportieren als ODS];; erzeugt eine Tabelle im Dateiformat von Open-/LibreOffice; die Zeilen- und Spaltenanordnung entspricht derjenigen der Bildschirmtabelle.
+
+menu:[Exportieren als CSV];; erzeugt eine CSV-Textdatei, um z.B. die Tabelle in neueren Versionen von MS Excel einzulesen.
+
+menu:[Exportieren als ...];; öffnet ein Fenster mit einem weiteren Pulldown. In der Standardausführung von {branch} finden Sie hier ebenfalls das ODS-Format sowie das XLS-Format (MS Excel bis Version 2000/XP). Der Menüpunkt ist auch zum Ausbau für kundenspezifische Sonderformate vorgesehen. 
+
+menu:[Gegenstände importieren]:: Die Importfunktion für Inventargegenstände funktioniert analog derjenigen im Adressbuch, d.h. Sie sollten sich als ersten Schritt die CSV-Beispieldatei ansehen, die Sie im Bearbeitungsfenster menu:[Datei und Format wählen] unter dem Link menu:[Beispieldatei herunterladen] finden (vgl. <<sec.kontakte.importieren>>).
+//////////////////
+        SCREENSHOT
+        path: </Inventory/ImportDialog/InventoryItem/ImportFileAndFormat>
+        demodata: cvs, svg...
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Inventargegenstände importieren
+image::Inventarisierung/5_inventarisierung_import.png[id="fig_inventarimportieren",width="100%"]

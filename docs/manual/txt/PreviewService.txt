@@ -1,0 +1,41 @@
+////
+Author: Paul Hartog
+17/03/2020
+////
+
+[[chap.preview]]
+== Preview Service ==
+
+Die "Preview"-Funktion ist nicht in der Standard der Business Edition enthalten. Sollten Sie Interesse an dieser Funktion haben, muss Ihre Subscription kostenpflichtig erweitert werden.
+
+Sofern diese Funktion aktiviert ist, können Sie durch das Tippen der Leertaste eine Vorschau einer ausgewählten Datei sehen. Dies dient dem schnellen Einblick in Dateien, ohne diese herunterzuladen oder in einem neuen Fenster öffnen zu müssen.
+
+//////////////////
+        SCREENSHOT
+        path: </Preview>
+        demodata:
+        actions:
+        image: screen
+        comment: <Open Preview>
+        status:
+        domain:
+//////////////////
+.Vorschau geöffnet
+image::PreviewService/1_previewservice_vorschau.png[id="preview",width="100%"]
+
+Unter Benutzung der Pfeiltasten ihrer Tastatur können Sie anschließend zwischen den weiteren Dateien hin und her navigieren.
+
+In manchen {branch} Anwendungen, z.B. im Dateimanager, besteht auch die Option, die Vorschau durch das Klicken von menu:[Vorschau] zu öffnen.
+
+//////////////////
+        SCREENSHOT
+        path: </Dateimanager>
+        demodata:
+        actions:
+        image: screen
+        comment: <Vorschau Button>
+        status:
+        domain:
+//////////////////
+.Option "Vorschau" im Dateimanager
+image::PreviewService/2_previewservice_vorschau_dateimanager.png[id="preview.filemanager",width="100%"]

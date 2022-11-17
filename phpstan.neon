@@ -34,6 +34,8 @@ parameters:
         - 'tine20/vendor*'
         - 'tests'
       analyseAndScan:
+        # TODO maybe we can fix the directory recursion issue someday ...
+        - 'tine20/GDPR/translations/extra'
         # TODO fix problems with the following classes
         - 'tine20/Tinebase/User/Typo3.php'
         - 'tine20/Setup/Backend/Oracle.php'

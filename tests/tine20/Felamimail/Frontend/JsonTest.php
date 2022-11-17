@@ -2570,6 +2570,13 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         ]);
     }
 
+    /**
+     * @throws Addressbook_Exception_AccessDenied
+     * @throws Addressbook_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
+     *
+     * @group nogitlabci
+     */
     public function testFileMessageOnSend()
     {
         $message = $this->_getMessageData('' , __METHOD__);
@@ -2587,6 +2594,13 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         self::assertEquals(1, count($attachments), 'attachments not found in contact: ' . print_r($contact->toArray(), true));
     }
 
+    /**
+     * @throws Addressbook_Exception_AccessDenied
+     * @throws Addressbook_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
+     *
+     * @group nogitlabci
+     */
     public function testFileMessageOnSendWithEmail()
     {
         $message = $this->_getMessageData();

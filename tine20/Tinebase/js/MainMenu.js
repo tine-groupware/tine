@@ -58,7 +58,9 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 items: this.getMainActions()
         }},
         '->',
-        this.actionLearnMore,
+        // removed in tine20.com
+        //this.actionLearnMore,
+        this.actionLicenseExpire,
         // TODO add a bigger spacer here?
         { xtype: 'spacer' },
         {
@@ -202,7 +204,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             handler: this.onLogout,
             scope: this
         });
-        
+
         this.actionLearnMore = new Ext.Action({
             text: String.format(i18n._('Learn more about {0}'), Tine.title),
             tooltip: Tine.weburl,
@@ -212,6 +214,37 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             },
             scope: this
         });
+
+        var licenseExpiresIn = Tine.Tinebase.registry.get('licenseExpire'),
+            // TODO move this to the license definitions on the server?
+            licenseExpiresInThreshold = 90,
+            licenseExpiresInThresholdRed = 14,
+            licenseExpiredSince = Tine.Tinebase.registry.get('licenseExpiredSince');
+
+        this.actionLicenseExpire = '';
+        if (Tine.Tinebase.common.hasRight('show_license_info', 'Tinebase')) {
+            if (licenseExpiresIn && licenseExpiresIn < licenseExpiresInThreshold) {
+                this.actionLicenseExpire = new Ext.Action({
+                    text: String.format(i18n._('The license expires in {0} days'), licenseExpiresIn),
+                    tooltip: String.format(i18n._('Please visit the shop at {0}'), Tine.shop),
+                    iconCls: licenseExpiresIn < licenseExpiresInThresholdRed ? 'tine-license-red' : 'tine-license',
+                    handler: function () {
+                        window.open(Tine.shop, '_blank');
+                    },
+                    scope: this
+                });
+            } else if (licenseExpiredSince) {
+                this.actionLicenseExpire = new Ext.Action({
+                    text: String.format(i18n._('Your {0} license expired.'), Tine.title),
+                    tooltip: String.format(i18n._('Please visit the shop at {0}'), Tine.shop),
+                    iconCls: 'tine-license',
+                    handler: function () {
+                        window.open(Tine.shop, '_blank');
+                    },
+                    scope: this
+                });
+            }
+        }
         
         this.action_notificationPermissions = new Ext.Action({
             text: i18n._('Allow desktop notifications'),
