@@ -34,7 +34,7 @@ variables:
   PHP_VERSION: "8.0"
 
   # "Codename for build"
-  CODENAME: "2023"
+  CODENAME: "Ellie"
 
   # "Try to reuse source images" 
   REUSE_IMAGES: "true"
