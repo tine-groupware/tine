@@ -2323,19 +2323,18 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $this->_checkGrant($_record, self::ACTION_DELETE);
 
-        $this->_deleteLinkedObjects($_record);
-
         if (! $this->_purgeRecords && $_record->has('created_by')) {
+            $currentRecord = clone $_record;
+            $this->_deleteLinkedObjects($_record);
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, self::ACTION_DELETE, $_record);
             $this->_backend->update($_record);
+            $this->_writeModLog($_record, $currentRecord);
         } else {
+            $this->_deleteLinkedObjects($_record);
             $this->_backend->delete($_record);
+            $this->_writeModLog(null, $_record);
         }
 
-        // needs to be done after setRecordMetaData so the sequence increase is done, though this tampers with the
-        // meta data. But better that than having two modlog entries withe the same sequence...
-        $this->_writeModLog(null, $_record);
-        
         $this->_increaseContainerContentSequence($_record, Tinebase_Model_ContainerContent::ACTION_DELETE);
     }
 

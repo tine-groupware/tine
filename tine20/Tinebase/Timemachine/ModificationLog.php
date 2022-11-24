@@ -882,7 +882,15 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 });
             $diff = $_curRecord->diff($_newRecord, $diffContext->getSubDiffOmitFields($_newRecord::getConfiguration()),
                 $diffContext);
-            $diff->purgeLonelySeq();
+            if ($_newRecord->is_deleted && !$_curRecord->is_deleted) {
+                $oldData = $_curRecord->toArray();
+                foreach (array_merge($this->_metaProperties, $_curRecord->getModlogOmitFields()) as $omit) {
+                    unset($oldData[$omit]);
+                }
+                $diff->oldData = $oldData;
+            } else {
+                $diff->purgeLonelySeq();
+            }
             $notNullRecord = $_newRecord;
         } else {
             if (null !== $_newRecord) {
@@ -906,15 +914,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             $updateMetaData = array('seq' => ($notNullRecord->has('seq')) ? $notNullRecord->seq : 0);
             $commonModLog = $this->_getCommonModlog($_model, $_backend, $updateMetaData, $_id);
             $commonModLog->new_value = json_encode($diff->toArray());
-            if (null === $_newRecord) {
-                if (!empty($notNullRecord->deleted_time)) {
-                    $commonModLog->modification_time = $notNullRecord->deleted_time;
-                }
-                if (!empty($notNullRecord->deleted_by)) {
-                    $commonModLog->modification_account = $notNullRecord->deleted_by;
-                }
-                $commonModLog->change_type = self::DELETED;
-            } elseif(null === $_curRecord) {
+            if(null === $_curRecord) {
                 if (!empty($notNullRecord->creation_time)) {
                     $commonModLog->modification_time = $notNullRecord->creation_time;
                 }
@@ -922,6 +922,14 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     $commonModLog->modification_account = $notNullRecord->created_by;
                 }
                 $commonModLog->change_type = self::CREATED;
+            } elseif (null === $_newRecord || ($_newRecord->is_deleted && !$_curRecord->is_deleted)) {
+                if (!empty($notNullRecord->deleted_time)) {
+                    $commonModLog->modification_time = $notNullRecord->deleted_time;
+                }
+                if (!empty($notNullRecord->deleted_by)) {
+                    $commonModLog->modification_account = $notNullRecord->deleted_by;
+                }
+                $commonModLog->change_type = self::DELETED;
             } else {
                 if (!empty($notNullRecord->last_modified_time)) {
                     $commonModLog->modification_time = $notNullRecord->last_modified_time;
@@ -1212,6 +1220,10 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                     $_newRecord->seq       = 1;
                 }
                 break;
+            case 'undelete':
+                $_newRecord->deleted_by   = null;
+                $_newRecord->deleted_time = null;
+                $_newRecord->is_deleted   = 0;
             case 'update':
                 $_newRecord->last_modified_by   = $currentAccountId;
                 $_newRecord->last_modified_time = $currentTime;
@@ -1221,12 +1233,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 $_newRecord->deleted_by   = $currentAccountId;
                 $_newRecord->deleted_time = $currentTime;
                 $_newRecord->is_deleted   = true;
-                self::increaseRecordSequence($_newRecord, $_curRecord);
-                break;
-            case 'undelete':
-                $_newRecord->deleted_by   = null;
-                $_newRecord->deleted_time = null;
-                $_newRecord->is_deleted   = 0;
                 self::increaseRecordSequence($_newRecord, $_curRecord);
                 break;
             default:

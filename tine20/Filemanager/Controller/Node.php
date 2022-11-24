@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add transactions to move/create/delete/copy 
  */
@@ -40,9 +40,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected $_modelName = 'Filemanager_Model_Node';
 
     /**
+     * we do modlog in Tinebase! NOT here
+     *
      * @var boolean
      */
-    protected $_omitModLog = false;
+    protected $_omitModLog = true;
     
     /**
      * holds the total count of the last recursive search
@@ -241,6 +243,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         // reset node acl value to prevent spoofing
         $_record->acl_node = $aclNode;
+        $_record->grants = null;
     }
 
     /**
