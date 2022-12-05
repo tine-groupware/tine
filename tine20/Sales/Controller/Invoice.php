@@ -799,7 +799,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' updating invoice position: ' . $oldPosition->id . ' with model: ' . $oldPosition->model . ' and accountable_id: ' . $oldPosition->accountable_id . ' in month: ' . $oldPosition->month . ' for invoice: ' . $id);
                         }
                         if ((float)$oldPosition->quantity !== (float)$position->quantity) {
-                            $oldPosition->quantity = $position->quantity;
+                            $oldPosition->quantity += $position->quantity;
                             $ipc->update($oldPosition);
                             $updated = true;
                         }
@@ -1205,7 +1205,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     while ($this->_currentMonthToBill->isLater($lab)) {
                         $lab->addMonth($productAggregate->interval);
                     }
-                    if ($lab->isLater($this->_currentMonthToBill)) {
+                    if ($lab->isLater($productAggregate->billing_point == 'end' ? $this->_currentMonthToBill->getClone()->addMonth($productAggregate->interval) : $this->_currentMonthToBill)) {
                         $lab->subMonth($productAggregate->interval);
                     }
                     
