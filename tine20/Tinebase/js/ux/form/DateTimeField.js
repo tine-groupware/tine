@@ -155,13 +155,23 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
 
     addClass: function (cls) {
-        this.dateField.addClass(cls);
-        this.timeField.addClass(cls);
+        if(this.el){
+            this.dateField.addClass(cls);
+            this.timeField.addClass(cls);
+        }else{
+            this.cls = this.cls ? this.cls + ' ' + cls : cls;
+        }
+        return this;
     },
 
     removeClass: function (cls) {
-        this.dateField.removeClass(cls);
-        this.timeField.removeClass(cls);
+        if(this.el){
+            this.dateField.removeClass(cls);
+            this.timeField.removeClass(cls);
+        }else if(this.cls){
+            this.cls = this.cls.split(' ').remove(cls).join(' ');
+        }
+        return this;
     },
     
     onRender: function (ct, position) {
