@@ -439,12 +439,8 @@ msgid "Path"
 msgstr "Pfad"
 
 #: Model/Contact.php:200
-msgid "List Member"
+msgid "Group Member"
 msgstr "Gruppenmitglied"
-
-#: Model/Contact.php:206
-msgid "List Role Member"
-msgstr "Gruppenfunktion"
 
 #: Model/Contact.php:212
 msgid "Telephone"
@@ -693,8 +689,8 @@ msgstr ""
 
 #: Model/List.php:75 js/ListGridDetailsPanel.js:86 js/Model.js:256
 #: js/Model.js:270
-msgid "List"
-msgid_plural "Lists"
+msgid "Group"
+msgid_plural "Groups"
 msgstr[0] "Gruppe"
 msgstr[1] "Gruppen"
 
@@ -834,10 +830,6 @@ msgstr "Mitglieder E-Mails"
 #: js/ListGrid.js:148
 msgid "System Group"
 msgstr "Systemgruppe"
-
-#: js/ListGrid.js:148
-msgid "Group"
-msgstr "Gruppe"
 
 #: js/MailinglistPanel.js:38
 msgid "Mailing List"
@@ -992,10 +984,6 @@ msgstr "Geschäft"
 msgid "Private"
 msgstr "Privat"
 
-#: js/ListMemberFilterModel.js:37
-msgid "Member of List"
-msgstr "Gruppenmitglied"
-
 #: js/Printer/ContactRecord.js:87 js/Printer/ListRecord.js:66
 msgid "Related to"
 msgstr "Verknüpft mit"
@@ -1005,16 +993,11 @@ msgid "Customfields"
 msgstr "Zusatzfelder"
 
 #: js/ListRoleGridPanel.js:50 js/Model.js:354 Controller.php:195
-msgid "List Functions"
+msgid "Group Functions"
 msgstr "Gruppenfunktionen"
 
-#: js/ListGridDetailsPanel.js:57 js/ListGridDetailsPanel.js:83 js/Model.js:256
-#: Controller.php:186
-msgid "Lists"
-msgstr "Gruppen"
-
 #: js/ListGridDetailsPanel.js:60
-msgid "Select list"
+msgid "Select Group"
 msgstr "Gruppe auswählen"
 
 #: js/ContactGrid.js:110
@@ -1156,8 +1139,8 @@ msgid "Quick search"
 msgstr "Schnellsuche"
 
 #: js/Model.js:354 js/ListRoleMemberFilterModel.js:37
-msgid "List Function"
-msgid_plural "List Functions"
+msgid "Group Function"
+msgid_plural "Group Functions"
 msgstr[0] "Gruppenfunktion"
 msgstr[1] "Gruppenfunktionen"
 
@@ -1174,7 +1157,7 @@ msgid "CardDAV URL"
 msgstr "CardDAV URL"
 
 #: js/ListEditDialog.js:70
-msgid "List Information"
+msgid "Group Information"
 msgstr "Gruppeninformationen"
 
 #: js/ListEditDialog.js:105
@@ -1256,10 +1239,10 @@ msgstr "Alle Kontakte"
 msgid "GENDER_Contact"
 msgstr "male"
 
-msgid "GENDER_List"
+msgid "GENDER_Group"
 msgstr "female"
 
-msgid "GENDER_List Function"
+msgid "GENDER_Group Function"
 msgstr "female"
 
 msgid "Addressbooks to export"
@@ -1287,11 +1270,8 @@ msgstr "Suche nach Mitgliedern ..."
 msgid "Maximum Members"
 msgstr "Max. Funktionsbeisitzer"
 
-msgid "Mailing List Member"
+msgid "Mailing Group Member"
 msgstr "E-Mail-Verteiler Mitglieder"
-
-msgid "Group Member"
-msgstr "Gruppenmitglied"
 
 msgid "You do not have the required private grant to view history."
 msgstr "Sie verfügen nicht über das benötigte Privat-Recht um die Historie anzuzeigen."
