@@ -7,6 +7,7 @@
  */
 
 require('../../../css/widgets/PickerGridPanel.css');
+const { getLocalizedLangPicker } = require("../form/LocalizedLangPicker");
 
 Ext.ns('Tine.widgets.grid');
 
@@ -346,6 +347,17 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     this.actionRemove
                 ].concat(this.contextMenuItems || [])
             });
+            if (_.isFunction(this.recordClass?.getModelConfiguration)) {
+                this.localizedLangPicker = getLocalizedLangPicker(this.recordClass)
+                if (this.localizedLangPicker) {
+                    this.store.localizedLang = this.localizedLangPicker.getValue()
+                    this.localizedLangPicker.on('change', (picker, lang) => {
+                        this.store.localizedLang = lang
+                        this.getView().refresh()
+                    })
+                    this.bbar.add('->', this.localizedLangPicker);
+                }
+            }
         }
 
         if (this.enableTbar) {
@@ -522,16 +534,27 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         if (this.isMetadataModelFor !== null) {
             var recordData = this.getRecordDefaults();
-            recordData[this.isMetadataModelFor] = recordToAdd;
+            recordData[this.isMetadataModelFor] = recordToAdd.data;
             var record = new this.recordClass(recordData);
+
+            // check if already in
+            const existingRecord = this.store.findBy(function (r) {
+                const metaData = r.get(this.isMetadataModelFor) ?? '';
+                if (metaData && metaData.id === record.get(this.isMetadataModelFor).id) {
+                    return true;
+                }
+            }, this);
+            if (existingRecord === -1) {
+                this.store.add([record]);
+                this.fireEvent('add', this, [record]);
+            }
         } else {
             var record = new this.recordClass(Ext.applyIf(recordToAdd.data, this.getRecordDefaults()), recordToAdd.id);
-        }
-
-        // check if already in
-        if (! this.store.getById(record.id)) {
-            this.store.add([record]);
-            this.fireEvent('add', this, [record]);
+            // check if already in
+            if (! this.store.getById(record.id)) {
+                this.store.add([record]);
+                this.fireEvent('add', this, [record]);
+            }
         }
 
         picker.reset();
