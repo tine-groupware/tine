@@ -387,8 +387,7 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     };
     f.getModuleName = function () {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n : window.i18n,
-            moduleName;
+            i18n = app && app.i18n ? app.i18n : window.i18n;
 
         if (p.modelConfiguration && p.modelConfiguration.moduleName) {
             return i18n._(p.modelConfiguration.moduleName);
