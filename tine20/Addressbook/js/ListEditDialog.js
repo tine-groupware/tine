@@ -50,7 +50,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     getFormItems: function () {
         var tabpanelItems = [{
-            title: this.app.i18n.n_('List', 'Lists', 1),
+            title: this.app.i18n.n_('Group', 'Groups', 1),
             border: false,
             frame: true,
             layout: 'border',
@@ -67,7 +67,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'fieldset',
                     region: 'north',
                     autoHeight: true,
-                    title: this.app.i18n._('List Information'),
+                    title: this.app.i18n._('Group Information'),
                     items: [{
                         xtype: 'panel',
                         layout: 'hbox',
