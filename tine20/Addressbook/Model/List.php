@@ -101,6 +101,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
         'titleProperty'     => 'name',//array('%s - %s', array('number', 'title')),
         'appName'           => 'Addressbook',
         'modelName'         => 'List',
+        'moduleName'        => 'Groups',  // ngettext('Group', 'Groups', n)
 
         'filterModel'       => array(
             'path'              => array(
