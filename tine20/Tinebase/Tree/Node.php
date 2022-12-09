@@ -236,6 +236,11 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         return $createdRecord;
     }
 
+    public function writeModLog(?Tinebase_Model_Tree_Node $_newRecord, ?Tinebase_Model_Tree_Node $_oldRecord): ?Tinebase_Record_RecordSet
+    {
+        return $this->_writeModLog($_newRecord, $_oldRecord);
+    }
+
     /**
      * Updates existing entry
      *
@@ -256,6 +261,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $newRecord = parent::update($_record);
 
         if (true === $_doModLog) {
+            if (isset($_record->grants)) {
+                $newRecord->grants = $_record->grants;
+                Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($oldRecord);
+            }
             Tinebase_Timemachine_ModificationLog::getInstance()
                 ->setRecordMetaData($newRecord, (bool)$newRecord->is_deleted === (bool)$oldRecord->is_deleted ?
                     Tinebase_Controller_Record_Abstract::ACTION_UPDATE : ($newRecord->is_deleted ?
