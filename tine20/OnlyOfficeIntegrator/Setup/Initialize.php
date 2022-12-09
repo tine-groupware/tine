@@ -74,6 +74,7 @@ class OnlyOfficeIntegrator_Setup_Initialize extends Setup_Initialize
                     TMCC::LABEL             => 'Editing', // _('Editing')
                     TMCC::TYPE              => TMCC::TYPE_BOOLEAN,
                     TMCC::IS_VIRTUAL        => true,
+                    TMCC::OMIT_MOD_LOG      => true,
                     TMCC::CONVERTERS        => [
                         OnlyOfficeIntegrator_Model_Converter_FMNodeEditing::class,
                     ],
@@ -91,6 +92,7 @@ class OnlyOfficeIntegrator_Setup_Initialize extends Setup_Initialize
                     TMCC::LABEL             => 'Current Editors', // _('Current Editors')
                     TMCC::TYPE              => TMCC::TYPE_VIRTUAL,
                     TMCC::IS_VIRTUAL        => true,
+                    TMCC::OMIT_MOD_LOG      => true,
                     TMCC::CONFIG            => [
                         TMCC::FUNCTION          => [OnlyOfficeIntegrator_Model_Node::class, 'resolveTBTreeNode'],
                     ]
