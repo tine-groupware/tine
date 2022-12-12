@@ -1747,9 +1747,9 @@ class Tinebase_FileSystem implements
                 $this->_fileObjectBackend->softDelete($node->object_id);
             }
 
-            try {
+            if ($this->_modLogActive) {
                 $this->_treeNodeBackend->updated($this->_treeNodeBackend->get($node->getId(), true), $node);
-            } catch (Tinebase_Exception_NotFound $tenf) {} // if modlog is off we have a hard delete -> fail
+            }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
