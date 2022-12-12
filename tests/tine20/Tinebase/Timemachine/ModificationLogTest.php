@@ -1241,6 +1241,18 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         $modifications->removeRecord($mod);
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
         $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+        $mod = $modifications->getFirstRecord();
+        $modifications->removeRecord($mod);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array($mod)));
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
         $notFound = false;
         try {
             $filesystem->stat(Tinebase_Model_Tree_Node_Path::createFromPath($fmController->addBasePath($testPath . '/subfolder'))->statpath);

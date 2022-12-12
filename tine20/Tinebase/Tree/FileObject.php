@@ -409,7 +409,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                     $a = $diff->diff;
                     unset($a['hash']);
                     $diff->diff = $a;
-                    if (count($a) === 0) {
+                    if (count($a) === 0 || (count($a) === 1 && isset($a['seq']))) {
                         $currentMods->removeRecord($mod);
                     } else {
                         $mod->new_value = json_encode($diff->toArray());
