@@ -5,13 +5,15 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * sql backend class for tree nodes
  *
  * @package     Tinebase
+ *             //string|Tinebase_Record_Interface
+ * @method get(mixed $_id, boolean $_getDeleted = false): Tinebase_Model_Tree_Node
  *
  * TODO refactor to Tinebase_Tree_Backend_Node
  */

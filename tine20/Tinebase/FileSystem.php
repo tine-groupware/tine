@@ -300,7 +300,7 @@ class Tinebase_FileSystem implements
         return $node;
     }
 
-    public function _getTreeNodeBackend()
+    public function _getTreeNodeBackend(): Tinebase_Tree_Node
     {
         if ($this->_treeNodeBackend === null) {
             $this->_treeNodeBackend    = new Tinebase_Tree_Node(null, /* options */ array(
@@ -1598,8 +1598,7 @@ class Tinebase_FileSystem implements
 
             $node = $this->_getTreeNodeBackend()->update($node, true);
 
-            $fObj = $this->_fileObjectBackend->get($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER ?
-                $newParent->object_id : $node->object_id);
+            $fObj = $this->_fileObjectBackend->get($node->object_id);
             if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
                 $fObj->hash = Tinebase_Record_Abstract::generateUID();
             }
@@ -1747,6 +1746,10 @@ class Tinebase_FileSystem implements
             if ($this->_treeNodeBackend->getObjectCount($node->object_id) == 0) {
                 $this->_fileObjectBackend->softDelete($node->object_id);
             }
+
+            try {
+                $this->_treeNodeBackend->updated($this->_treeNodeBackend->get($node->getId(), true), $node);
+            } catch (Tinebase_Exception_NotFound $tenf) {} // if modlog is off we have a hard delete -> fail
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
