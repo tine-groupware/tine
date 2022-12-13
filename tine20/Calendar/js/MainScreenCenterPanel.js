@@ -1408,6 +1408,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             record.set('id', '');
             record.view = sourceView;
 
+            if (record.get('status') == 'CANCELED') {
+                record.set('status', 'CONFIRMED')
+            }
+
             // remove attender ids
             Ext.each(record.data.attendee, function(attender) {
                 delete attender.id;

@@ -635,6 +635,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // BUT: add Grant is container based!
         this.record.set('addGrant', _.get(this.record, 'data.container_id.account_grants.addGrant', false));
 
+        if (this.record.get('status') == 'CANCELED') {
+            this.record.set('status', 'CONFIRMED')
+        }
+
         Tine.Calendar.EventEditDialog.superclass.doCopyRecord.call(this);
 
         const attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(this.record.data.attendee);
