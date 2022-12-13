@@ -222,6 +222,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const SYNCOPTIONS = 'syncOptions';
 
     /**
+     * user backend writes user pw to sql
+     *
+     * @var string
+     */
+    const USERBACKEND_WRITE_PW_TO_SQL = 'writePwToSql';
+
+    /**
      * user backend type config
      * 
      * @var string
@@ -1582,6 +1589,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'type'                      => Tinebase_Config::TYPE_STRING,
                     'default'                   => 'mail',
                 ),
+                self::USERBACKEND_WRITE_PW_TO_SQL => [
+                    self::TYPE                  => Tinebase_Config::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
                 self::SYNCOPTIONS           => array(
                     'type'                      => 'object',
                     'class'                     => 'Tinebase_Config_Struct',
