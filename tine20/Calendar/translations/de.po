@@ -1902,7 +1902,7 @@ msgstr "Erforderlich"
 
 #: Config.php:413
 msgid "Optional"
-msgstr "Freiwillig"
+msgstr "Optional"
 
 #: Config.php:419
 msgid "Organizer has implicit edit grant"
