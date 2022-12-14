@@ -77,6 +77,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'compare'                   => 'compare schemas with another database
                         Examples:
                            setup.php --compare -- otherdb=tine20other',
+                'mysql'                   => 'run mysql client
+                        Examples:
+                           setup.php --mysql -- platform=docker',
                 'setLicense'                => 'set a new license file
                         Examples:
                            setup.php --setLicense -- file=/path/to/license.pem',
@@ -132,6 +135,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->backup) &&
             empty($opts->restore) &&
             empty($opts->compare) &&
+            empty($opts->mysql) &&
             empty($opts->setLicense) &&
             empty($opts->deleteLicense) &&
             empty($opts->setpassword) &&
