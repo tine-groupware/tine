@@ -90,7 +90,7 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
 
         Ext.each(records, function (item, idx) {
             var convertedData = {};
-            convertedData['___rowCls'] = grid.getView().getRowClass(item, idx);
+            convertedData['___rowCls'] = grid ? grid.getView().getRowClass(item, idx): '';
 
             Ext.each(columns, function (column) {
                 var key = column.dataIndex,
