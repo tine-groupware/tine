@@ -9,7 +9,7 @@ class ChunkNamePlugin {
         compiler.hooks.compilation.tap(
             "ChunkNamePlugin",
             (compilation, { normalModuleFactory }) => {
-                compilation.chunkTemplate.hooks.renderManifest.tap(
+                compilation.hooks.renderManifest.tap(
                     "ChunkNamePlugin",
                     (result, options) => {
                         const chunk = options.chunk;

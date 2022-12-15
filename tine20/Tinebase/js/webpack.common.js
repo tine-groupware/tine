@@ -10,7 +10,7 @@ var assetsPluginInstance = new AssetsPlugin({
     filename: 'webpack-assets-FAT.json',
     prettyPrint: true
 });
-var VueLoaderPlugin = require('vue-loader/lib/plugin');
+var {VueLoaderPlugin} = require('vue-loader');
 var ChunkNamePlugin = require('./webpack.ChunkNamePlugin');
 
 var definePlugin = new webpack.DefinePlugin({
@@ -65,9 +65,12 @@ module.exports = {
         path: baseDir + '/',
         // avoid public path, see #13430.
         // publicPath: '/',
-        filename: '[name]-[hash]-FAT.js',
+        filename: '[name]-[fullhash]-FAT.js',
         chunkFilename: "[name]-[chunkhash]-FAT.js",
-        libraryTarget: "umd"
+        libraryTarget: "umd",
+        clean: {
+            keep: /webpack-assets-FAT\.json/
+        }
     },
     plugins: [
         definePlugin,
@@ -77,15 +80,15 @@ module.exports = {
     ],
     module: {
         rules: [
-            {
-                test: /\.(mjs|es6\.js|vue)$/,
-                loader: 'eslint-loader',
-                enforce: "pre",
-                exclude: /node_modules/,
-                options: {
-                    formatter: require('eslint-friendly-formatter')
-                }
-            },
+            // {
+            //     test: /\.(mjs|es6\.js|vue)$/,
+            //     loader: 'eslint-loader',
+            //     enforce: "pre",
+            //     exclude: /node_modules/,
+            //     options: {
+            //         formatter: require('eslint-friendly-formatter')
+            //     }
+            // },
             {
                 test: /\.vue$/,
                 loader: 'vue-loader'
@@ -139,7 +142,7 @@ module.exports = {
             {test: /\.jsb2$/, use: [{loader: "./jsb2-loader"}]},
             {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader"}]},
             {test: /\.scss$/, use: ['vue-style-loader','css-loader','sass-loader']},
-            {test: /\.less$/, use: [{loader: "style-loader"}, {loader: "css-loader"}, {loader: "less-loader", options: {noIeCompat: true,}}]},
+            {test: /\.less$/, use: [{loader: "style-loader"}, {loader: "css-loader"}, {loader: "less-loader", options: {lessOptions: {noIeCompat: true,}}}]},
             {test: /\.png/, use: [{loader: "url-loader", options: {limit: 100000}}]},
             {test: /\.gif/, use: [{loader: "url-loader", options: {limit: 100000}}]},
             {test: /\.svg/, use: [{loader: "svg-url-loader"},{loader: "./svg-fix-size-loader"}]},
@@ -161,6 +164,12 @@ module.exports = {
             path.resolve(__dirname, "../.."),
             __dirname,
             path.resolve(__dirname, "node_modules")
-        ]
+        ],
+        fallback: {
+            'crypto': require.resolve("crypto-browserify"),
+            'path': require.resolve("path-browserify"),
+            'util': require.resolve("util/"),
+            'stream': require.resolve("stream-browserify"),
+        }
     }
 };
