@@ -568,9 +568,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
 
             foreach ($event->attendee as $attender) {
-                // skip declined/transp events
+                // skip declined/transp and canceled events
                 if ($attender->status == Calendar_Model_Attender::STATUS_DECLINED ||
-                    $attender->transp == Calendar_Model_Event::TRANSP_TRANSP) {
+                    $attender->transp == Calendar_Model_Event::TRANSP_TRANSP ||
+                    $event->status == Calendar_Model_Event::STATUS_CANCELED) {
                     continue;
                 }
 
