@@ -158,6 +158,57 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
         $this->expectException('Calendar_Exception_AttendeeBusy');
         $conflictingEvent = Calendar_Controller_Event::getInstance()->create($event, TRUE);
     }
+
+    public function testResourceConflictWithCanceledEvent()
+    {
+        $resource = $this->testCreateResource([
+            Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            Calendar_Model_ResourceGrants::EVENTS_READ => true,
+        ]);
+
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'   => $resource->id
+            ),
+        ));
+        $persistentEvent = Calendar_Controller_Event::getInstance()->create($event);
+
+        // we need to adopt conainer through backend, to bypass rights control and cancel it!
+        $persistentEvent->container_id = $this->_getPersonasDefaultCals('rwright')->getId();
+        $persistentEvent->organizer = $this->_getPersonasContacts('rwright')->getId();
+        $persistentEvent->status = Calendar_Model_Event::STATUS_CANCELED;
+
+        $this->_backend->update($persistentEvent);
+
+
+        // try to search
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'attender', 'operator' => 'in', 'value' => array(
+                array(
+                    'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                    'user_id'   => $resource->getId()
+                )
+            ))
+        )), NULL, FALSE, FALSE);
+
+        $this->assertEquals(1, count($events));
+        $this->assertEquals($resource->getId(), $events[0]->attendee[0]->user_id);
+        $this->assertEquals(Calendar_Model_Event::STATUS_CANCELED, $events[0]->status);
+
+        // now let's provoke a resource conflict with the canceled event
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_RESOURCE,
+                'user_id'   => $resource->id
+            ),
+        ));
+
+        $conflictingEvent = Calendar_Controller_Event::getInstance()->create($event, TRUE);
+        // 'Calendar_Exception_AttendeeBusy' should NOT be thrown, so if nothing happens here everything works!
+    }
     
     /**
      * testDeleteResource
