@@ -39,6 +39,5 @@ module.exports = merge(common, {
         //         next();
         //     });
         // }
-    },
-    target: ['web', 'es6'],
+    }
 });

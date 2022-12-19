@@ -6,6 +6,7 @@ var AssetsPlugin = require('assets-webpack-plugin');
 var assetsPluginInstance = new AssetsPlugin({
     // path: 'Tinebase/js',
     // fullPath: false,
+    removeFullPathAutoPrefix: true,
     keepInMemory: true,
     filename: 'webpack-assets-FAT.json',
     prettyPrint: true
@@ -41,6 +42,7 @@ fs.readdirSync(baseDir).forEach(function(baseName) {
 });
 
 module.exports = {
+    target: ['web', 'es6'],
     entry: entryPoints,
     optimization:{
         /**
@@ -76,7 +78,7 @@ module.exports = {
         definePlugin,
         assetsPluginInstance,
         new VueLoaderPlugin(),
-        new ChunkNamePlugin()
+        // new ChunkNamePlugin()
     ],
     module: {
         rules: [
@@ -143,12 +145,9 @@ module.exports = {
             {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader"}]},
             {test: /\.scss$/, use: ['vue-style-loader','css-loader','sass-loader']},
             {test: /\.less$/, use: [{loader: "style-loader"}, {loader: "css-loader"}, {loader: "less-loader", options: {lessOptions: {noIeCompat: true,}}}]},
-            {test: /\.png/, use: [{loader: "url-loader", options: {limit: 100000}}]},
-            {test: /\.gif/, use: [{loader: "url-loader", options: {limit: 100000}}]},
-            {test: /\.svg/, use: [{loader: "svg-url-loader"},{loader: "./svg-fix-size-loader"}]},
             {
-                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                use: [{loader: "url-loader", options: {limit: 100000}}]
+                test: /\.(woff2?|eot|ttf|otf|png|gif|svg)(\?.*)?$/,
+                type: 'asset/inline'
             },
         ]
     },
@@ -168,7 +167,9 @@ module.exports = {
         fallback: {
             'crypto': require.resolve("crypto-browserify"),
             'path': require.resolve("path-browserify"),
+            'buffer': require.resolve('buffer'),
             'util': require.resolve("util/"),
+            'process': require.resolve('process/browser'),
             'stream': require.resolve("stream-browserify"),
         }
     }

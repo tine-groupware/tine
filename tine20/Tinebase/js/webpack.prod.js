@@ -10,7 +10,7 @@ module.exports = merge(common, {
     mode: 'production',
     optimization:{
         minimizer: [new TerserPlugin({
-            sourceMap: true,
+            // sourceMap: true,
             extractComments: true,
             terserOptions: {
                 // twing problem @see https://github.com/ericmorand/twing/issues/314,

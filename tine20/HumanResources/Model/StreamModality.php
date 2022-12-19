@@ -65,7 +65,7 @@ class HumanResources_Model_StreamModality extends Tinebase_Record_NewAbstract
         self::APP_NAME              => HumanResources_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
 
-        self::TITLE_PROPERTY=> "{# {{start - sorting! #}{{ start |localizeddate('short', 'none', app.request.locale ) }} - {% if end %}{{ end | localizeddate('short', 'none', app.request.locale ) }}{% else %}...{% endif %} {{ interval }} {{ num_interval }}× á {{ hours_interval }}h",
+        self::TITLE_PROPERTY=> "{# {{start - sorting! #}{{ start |localizeddate('short', 'none', app.user.locale ) }} - {% if end %}{{ end | localizeddate('short', 'none', app.request.locale ) }}{% else %}...{% endif %} {{ interval }} {{ num_interval }}× á {{ hours_interval }}h",
 
         self::ASSOCIATIONS          => [
             ClassMetadataInfo::MANY_TO_ONE => [
