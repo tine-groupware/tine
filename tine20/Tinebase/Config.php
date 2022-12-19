@@ -807,6 +807,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const STATUS_API_KEY = 'statusApiKey';
 
     /**
+     * var string
+     */
+    const METRICS_API_KEY = 'metricsApiKey';
+
+    /**
      * @var string
      */
     const ERROR_NOTIFICATION_LIST = 'errorNotificationList';
@@ -1982,6 +1987,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'label'                 => 'API key to access status URI',
             //_('API key to access status URI')
             'description'           => 'API key to access status URIs',
+            'type'                  => 'string',
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => false,
+            'setBySetupModule'      => true,
+        ),
+        self::METRICS_API_KEY => array(
+            //_('API key to access status metrics URI')
+            'label'                 => 'API key to access status metrics URI',
+            //_('API key to access status metrics URI')
+            'description'           => 'API key to access status metrics URIs',
             'type'                  => 'string',
             'clientRegistryInclude' => false,
             'setByAdminModule'      => false,
