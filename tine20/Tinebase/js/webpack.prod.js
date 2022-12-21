@@ -1,4 +1,5 @@
-const merge = require('webpack-merge');
+global.mode = 'production';
+const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 const UnminifiedWebpackPlugin = require('unminified-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin')

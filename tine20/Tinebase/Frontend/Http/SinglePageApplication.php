@@ -34,7 +34,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL_USEFORJSCLIENT)
             );
 
-            if (TINE20_BUILDTYPE == 'DEBUG') {
+            if (TINE20_BUILDTYPE === 'DEBUG') {
                 $file = preg_replace('/\.js$/', '.debug.js', $file);
             }
 

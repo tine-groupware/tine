@@ -2,12 +2,14 @@ var fs = require('fs');
 var _ = require('lodash');
 var path = require('path');
 var webpack = require('webpack');
+
+// @TODO: replace by https://github.com/shellscape/webpack-manifest-plugin ?
 var AssetsPlugin = require('assets-webpack-plugin');
 var assetsPluginInstance = new AssetsPlugin({
     // path: 'Tinebase/js',
     // fullPath: false,
     removeFullPathAutoPrefix: true,
-    keepInMemory: true,
+    keepInMemory: global.mode !== 'production',
     filename: 'webpack-assets-FAT.json',
     prettyPrint: true
 });
@@ -65,13 +67,14 @@ module.exports = {
     },
     output: {
         path: baseDir + '/',
-        // avoid public path, see #13430.
-        // publicPath: '/',
+        publicPath: 'auto',
         filename: '[name]-[fullhash]-FAT.js',
         chunkFilename: "[name]-[chunkhash]-FAT.js",
         libraryTarget: "umd",
         clean: {
-            keep: /webpack-assets-FAT\.json/
+            keep(asset) {
+                return !asset.includes('-FAT.') || asset.includes('webpack-assets-FAT.json');
+            },
         }
     },
     plugins: [
