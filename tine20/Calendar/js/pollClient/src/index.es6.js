@@ -7,13 +7,16 @@
  */
 
 import _ from 'lodash'
-import Vue from 'vue'
+// import Vue from 'vue'
+import { createApp } from 'vue'
+import BootstrapVue3 from 'bootstrap-vue-3'
 import Tine20 from './plugin/tine20-rpc'
 import App from './App.vue'
 
 // FUCK - why isn't the bootstrap css loaded by the components itself???
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+// import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 
 // import router from 'vue-router'
 
@@ -41,19 +44,35 @@ FormatMessage.setup({
   missingTranslation: 'ignore'
 })
 
-// auto template selection with gettext
-Vue.prototype.formatMessage = function (template) {
+const app = createApp(App);
+app.config.globalProperties.formatMessage = function (template) {
   arguments[0] = gettext._hidden(template)
   return FormatMessage.apply(FormatMessage, arguments)
 }
-_.assign(Vue.prototype.formatMessage, FormatMessage)
-// to translate strings which should not go into po files
-Vue.prototype.fmHidden = Vue.prototype.formatMessage
 
-Vue.config.productionTip = false
+_.assign(app.config.globalProperties.formatMessage, FormatMessage)
+app.config.globalProperties.fmHidden = app.config.globalProperties.formatMessage
 
-Vue.use(Tine20, {})
+
+
+
+// // auto template selection with gettext
+// Vue.prototype.formatMessage = function (template) {
+//   arguments[0] = gettext._hidden(template)
+//   return FormatMessage.apply(FormatMessage, arguments)
+// }
+// _.assign(Vue.prototype.formatMessage, FormatMessage)
+// // to translate strings which should not go into po files
+// Vue.prototype.fmHidden = Vue.prototype.formatMessage
+
+// Vue.config.productionTip = false
+
+// Vue.use(Tine20, {})
 
 /* eslint-disable no-new */
-new Vue(App).$mount('#tine-viewport-app')
+// new Vue(App).$mount('#tine-viewport-app')
 // router.replace('/')
+
+app.use(BootstrapVue3);
+app.use(Tine20, {});
+app.mount('#tine-viewport-app')
