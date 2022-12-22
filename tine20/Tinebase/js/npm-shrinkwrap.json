@@ -113,7 +113,7 @@
         "sinon": "^15.0.0",
         "style-loader": "^3.3.1",
         "terser-webpack-plugin": "^5.3.6",
-        "unminified-webpack-plugin": "github:tine-groupware/unminified-webpack-plugin.git#eff4f1970dbf8251754eddc2b9ded647ba66f980",
+        "unminified-webpack-plugin": "github:tine-groupware/unminified-webpack-plugin.git#fa938c537ac60a5e960be70e7ffd46ed5972bca9",
         "url-loader": "^4.1.1",
         "vue-loader": "^17.0.1",
         "vue-simple-spinner": "^1.2.10",
@@ -16233,8 +16233,8 @@
     },
     "node_modules/unminified-webpack-plugin": {
       "version": "3.0.0",
-      "resolved": "git+ssh://git@github.com/tine-groupware/unminified-webpack-plugin.git#eff4f1970dbf8251754eddc2b9ded647ba66f980",
-      "integrity": "sha512-0hm2783idJpJ4WX50emJEaRVHu842sAVaiZRbY2DV2yMslNOXAsSghuw2WPw+kKZxaoEsB2nrcOrAAIWbmIx0w==",
+      "resolved": "git+ssh://git@github.com/tine-groupware/unminified-webpack-plugin.git#fa938c537ac60a5e960be70e7ffd46ed5972bca9",
+      "integrity": "sha512-+Q+MJ3SCWiN5/j9y3VE8zc3Gi4LpvGShSfqUizrFC/8+cq1O02G30+ZSUwTfg1puY0XAwKIYM6/RmKnjn/Zs5g==",
       "dev": true,
       "license": "MIT",
       "engines": {
@@ -29540,10 +29540,10 @@
       "integrity": "sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg=="
     },
     "unminified-webpack-plugin": {
-      "version": "git+ssh://git@github.com/tine-groupware/unminified-webpack-plugin.git#eff4f1970dbf8251754eddc2b9ded647ba66f980",
-      "integrity": "sha512-0hm2783idJpJ4WX50emJEaRVHu842sAVaiZRbY2DV2yMslNOXAsSghuw2WPw+kKZxaoEsB2nrcOrAAIWbmIx0w==",
+      "version": "git+ssh://git@github.com/tine-groupware/unminified-webpack-plugin.git#fa938c537ac60a5e960be70e7ffd46ed5972bca9",
+      "integrity": "sha512-+Q+MJ3SCWiN5/j9y3VE8zc3Gi4LpvGShSfqUizrFC/8+cq1O02G30+ZSUwTfg1puY0XAwKIYM6/RmKnjn/Zs5g==",
       "dev": true,
-      "from": "unminified-webpack-plugin@github:tine-groupware/unminified-webpack-plugin.git#eff4f1970dbf8251754eddc2b9ded647ba66f980",
+      "from": "unminified-webpack-plugin@github:tine-groupware/unminified-webpack-plugin.git#fa938c537ac60a5e960be70e7ffd46ed5972bca9",
       "requires": {}
     },
     "unpipe": {

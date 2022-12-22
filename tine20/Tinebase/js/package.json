@@ -123,7 +123,7 @@
     "sinon": "^15.0.0",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.6",
-    "unminified-webpack-plugin": "github:tine-groupware/unminified-webpack-plugin.git#eff4f1970dbf8251754eddc2b9ded647ba66f980",
+    "unminified-webpack-plugin": "github:tine-groupware/unminified-webpack-plugin.git#fa938c537ac60a5e960be70e7ffd46ed5972bca9",
     "url-loader": "^4.1.1",
     "vue-loader": "^17.0.1",
     "vue-simple-spinner": "^1.2.10",
