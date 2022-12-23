@@ -11,13 +11,8 @@ module.exports = merge(common, {
     mode: 'production',
     optimization:{
         minimizer: [new TerserPlugin({
-            // sourceMap: true,
-            extractComments: true,
-            terserOptions: {
-                // twing problem @see https://github.com/ericmorand/twing/issues/314,
-                // this can be removed when https://github.com/ericmorand/twing/issues/336 is solved
-                keep_classnames: true,
-            },
+            extractComments: 'all',
+            terserOptions: {},
         })],
     },
     plugins: [
@@ -31,4 +26,3 @@ module.exports = merge(common, {
         new BrotliPlugin({})
     ],
 });
-
