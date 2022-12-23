@@ -81,7 +81,7 @@ module.exports = {
         definePlugin,
         assetsPluginInstance,
         new VueLoaderPlugin(),
-        // new ChunkNamePlugin()
+        new ChunkNamePlugin()
     ],
     module: {
         rules: [
