@@ -134,13 +134,13 @@ module.exports = {
                     ]
                 }
             },
-            {
-                test: /\.js$/,
-                include: [
-                    require.resolve("bootstrap-vue"), // white-list bootstrap-vue
-                ],
-                loader: "babel-loader"
-            },
+            // {
+            //     test: /\.js$/,
+            //     include: [
+            //         require.resolve("bootstrap-vue"), // white-list bootstrap-vue
+            //     ],
+            //     loader: "babel-loader"
+            // },
 
             // use script loader for old library classes as some of them the need to be included in window context
             {test: /\.js$/, include: [baseDir + '/library'], exclude: [baseDir + '/library/ExtJS'],  enforce: "pre", use: [{loader: "script-loader"}]},

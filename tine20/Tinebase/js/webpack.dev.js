@@ -12,12 +12,11 @@ module.exports = merge(common, {
     ],
     mode: 'development',
     devServer: {
-        hot: true,
-        // inline: false, // unavailable in webpack 5
+        hot: false,
+        liveReload: false,
         host: '0.0.0.0',
         port: 10443,
 
-        // disableHostCheck: true, // unavailable in webpack 5
         allowedHosts: 'all',
         headers: {
             "Access-Control-Allow-Origin": "*",
@@ -26,11 +25,14 @@ module.exports = merge(common, {
         },
         proxy: [
             {
-                context: ['**', '!/webpack-dev-server*/**'],
-                target: 'http://localhost/',
+                context: ['**', '!/webpack-dev-server*/**', '!**.json', '!/ws'],
+                target: 'http://localhost:4000/',
                 secure: false
             }
         ],
+        client: {
+            overlay: true,
+        },
         // onBeforeSetupMiddleware: function(app, server) {
         //     app.use(function(req, res, next) {
         //         // check for langfile chunk requests
