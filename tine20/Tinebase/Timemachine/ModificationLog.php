@@ -1087,8 +1087,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         $failCount = 0;
         $undoneModlogs = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         $currentRecordType = NULL;
-        /** @var Tinebase_Controller_Record_Abstract $controller */
-        $controller = NULL;
+        $controller = null;
         $controllerCache = array();
 
         /** @var Tinebase_Model_ModificationLog $modlog */
@@ -1096,6 +1095,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             if ($currentRecordType !== $modlog->record_type || ! isset($controller)) {
                 $currentRecordType = $modlog->record_type;
                 if (!isset($controllerCache[$modlog->record_type])) {
+                    /** @var Tinebase_Controller_Record_Abstract $controller */
                     $controller = Tinebase_Core::getApplicationInstance($modlog->record_type);
                     $controllerCache[$modlog->record_type] = $controller;
                 } else {
@@ -1115,7 +1115,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
                 if (empty($modifiedAttribute)) {
                     // new handling using diff!
-
                     $updateCount++;
 
                     if (method_exists($controller, 'undoReplicationModificationLog')) {
