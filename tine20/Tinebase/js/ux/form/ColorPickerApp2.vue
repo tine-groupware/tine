@@ -18,7 +18,6 @@ initialColor: { type: String}
 
 const color = ref();
 onBeforeMount(() => {
-    console.log('mounted');
     if(props.initialColor){
       color.value = "#"+props.initialColor
     } else {

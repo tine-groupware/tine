@@ -13,8 +13,8 @@ require('broadcastchannel-polyfill');
 
 // @TODO should be imported/required in twing
 // use https://github.com/Richienb/node-polyfill-webpack-plugin ?
-window.process = require('process/browser');
-window.Buffer = require('buffer').Buffer;
+// window.process = require('process/browser');
+// window.Buffer = require('buffer').Buffer;
 
 // message bus
 var postal = require('postal');

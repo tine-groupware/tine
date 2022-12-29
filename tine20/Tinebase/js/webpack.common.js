@@ -16,25 +16,36 @@ var assetsPluginInstance = new AssetsPlugin({
 var {VueLoaderPlugin} = require('vue-loader');
 var ChunkNamePlugin = require('./webpack.ChunkNamePlugin');
 
+// use https://github.com/Richienb/node-polyfill-webpack-plugin ?
+// the plugin just does the following.
+// it's better to do this ourselves, instead of relying on the plugin
+// to prevent possible lib conflicts later on.
+var providePlugin = new webpack.ProvidePlugin({
+    Buffer: [require.resolve('buffer/'), 'Buffer'],
+    process: require.resolve('process/browser')
+})
+
 var definePlugin = new webpack.DefinePlugin({
     BUILD_DATE:     JSON.stringify(process.env.BUILD_DATE),
     BUILD_REVISION: JSON.stringify(process.env.BUILD_REVISION),
     CODE_NAME:      JSON.stringify(process.env.CODE_NAME),
     PACKAGE_STRING: JSON.stringify(process.env.PACKAGE_STRING),
-    RELEASE_TIME:   JSON.stringify(process.env.RELEASE_TIME)
+    RELEASE_TIME: JSON.stringify(process.env.RELEASE_TIME),
+    __VUE_OPTIONS_API__: true,
+    __VUE_PROD_DEVTOOLS__: true
 });
 
-var baseDir  = path.resolve(__dirname , '../../'),
+var baseDir = path.resolve(__dirname, '../../'),
     entryPoints = {};
 
 // find all entry points
-fs.readdirSync(baseDir).forEach(function(baseName) {
+fs.readdirSync(baseDir).forEach(function (baseName) {
     // if (baseName !== 'Filemanager') return;
     try {
         // try npm package.json
         var pkgDef = JSON.parse(fs.readFileSync(baseDir + '/' + baseName + '/js/package.json').toString());
 
-        _.each(_.get(pkgDef, 'tine20.entryPoints', []), function(entryPoint) {
+        _.each(_.get(pkgDef, 'tine20.entryPoints', []), function (entryPoint) {
             entryPoints[baseName + '/js/' + entryPoint] = baseDir + '/' + baseName + '/js/' + entryPoint;
         });
 
@@ -46,7 +57,7 @@ fs.readdirSync(baseDir).forEach(function(baseName) {
 module.exports = {
     target: ['web', 'es6'],
     entry: entryPoints,
-    optimization:{
+    optimization: {
         /**
          * NOTE: there are some problems with auto/common chunk splitting atm
          *    i) common chunks might be placed in an application dir and the application might not be installed
@@ -81,7 +92,8 @@ module.exports = {
         definePlugin,
         assetsPluginInstance,
         new VueLoaderPlugin(),
-        new ChunkNamePlugin()
+        new ChunkNamePlugin(),
+        providePlugin
     ],
     module: {
         rules: [
@@ -107,12 +119,10 @@ module.exports = {
                 options: {
                     plugins: [
                         "@babel/plugin-transform-runtime",
-                        "@babel/plugin-syntax-dynamic-import",
                         ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": false }],
-                        "@babel/plugin-proposal-class-properties"
                     ],
                     presets: [
-                        ["@babel/preset-env", { "modules": true }]
+                        "@babel/preset-env"
                     ]
                 }
             },
@@ -125,12 +135,10 @@ module.exports = {
                 options: {
                     plugins: [
                         "@babel/plugin-transform-runtime",
-                        "@babel/plugin-syntax-dynamic-import",
                         ["@babel/plugin-proposal-decorators", { "legacy": true }],
-                        "@babel/plugin-proposal-class-properties"
                     ],
                     presets: [
-                        ["@babel/preset-env"/*, { "modules": false }*/]
+                        "@babel/preset-env"
                     ]
                 }
             },
@@ -143,11 +151,11 @@ module.exports = {
             // },
 
             // use script loader for old library classes as some of them the need to be included in window context
-            {test: /\.js$/, include: [baseDir + '/library'], exclude: [baseDir + '/library/ExtJS'],  enforce: "pre", use: [{loader: "script-loader"}]},
-            {test: /\.jsb2$/, use: [{loader: "./jsb2-loader"}]},
-            {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader"}]},
-            {test: /\.scss$/, use: ['vue-style-loader','css-loader','sass-loader']},
-            {test: /\.less$/, use: [{loader: "style-loader"}, {loader: "css-loader"}, {loader: "less-loader", options: {lessOptions: {noIeCompat: true,}}}]},
+            { test: /\.js$/, include: [baseDir + '/library'], exclude: [baseDir + '/library/ExtJS'], enforce: "pre", use: [{ loader: "script-loader" }] },
+            { test: /\.jsb2$/, use: [{ loader: "./jsb2-loader" }] },
+            { test: /\.css$/, use: [{ loader: "style-loader" }, { loader: "css-loader" }] },
+            { test: /\.scss$/, use: ['css-loader', 'sass-loader'] },
+            { test: /\.less$/, use: [{ loader: "style-loader" }, { loader: "css-loader" }, { loader: "less-loader", options: { lessOptions: { noIeCompat: true, } } }] },
             {
                 test: /\.(woff2?|eot|ttf|otf|png|gif|svg)(\?.*)?$/,
                 type: 'asset/inline'

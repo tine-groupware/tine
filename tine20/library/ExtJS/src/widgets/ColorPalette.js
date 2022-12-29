@@ -218,7 +218,6 @@ cp.colors = ['000000', '993300', '333300'];
         const me = this;
 
         const {createApp, h} = await import(/* webpackChunkName: "Tinebase/js/Vue" */ 'vue');
-        console.log('changed');
         const {default: ColorPickerApp} = await import(/* webpackChunkName: "Tinebase/js/ColorPickerApp" */ 'ux/form/ColorPickerApp2.vue');
 
         const colorPickerApp = new Ext.Component({
@@ -264,6 +263,7 @@ cp.colors = ['000000', '993300', '333300'];
         this.fireEvent('pickerShow', picker);
 
         const mountPoint = `#ColorPickerApp-${this.id}`;
+
         const vm = createApp({
             render: () => {
                 return h(ColorPickerApp, {ref: 'colorPickerApp'})
