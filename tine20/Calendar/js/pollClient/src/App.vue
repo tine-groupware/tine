@@ -631,6 +631,9 @@ export default {
 </script>
 
 <style scoped>
+@import 'bootstrap/dist/css/bootstrap.css';
+@import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
+
 #root {
   padding: 10px;
   color: #555;

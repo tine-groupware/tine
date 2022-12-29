@@ -13,11 +13,6 @@ import BootstrapVue3 from 'bootstrap-vue-3'
 import Tine20 from './plugin/tine20-rpc'
 import App from './App.vue'
 
-// FUCK - why isn't the bootstrap css loaded by the components itself???
-import 'bootstrap/dist/css/bootstrap.css'
-// import 'bootstrap-vue/dist/bootstrap-vue.css'
-import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
-
 // import router from 'vue-router'
 
 // import GetTextPlugin from 'vue-gettext'
