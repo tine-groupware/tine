@@ -2094,3 +2094,6 @@ msgid ""
 msgstr ""
 "Sie sind im Begriff, das Passwort anzeigen. Diese Aktion wird protokolliert. "
 "Wollen sie fortfahren?"
+
+msgid "Save To All Recipients"
+msgstr "An allen Empfängern speichern"
