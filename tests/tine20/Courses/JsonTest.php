@@ -81,6 +81,13 @@ class Courses_JsonTest extends TestCase
      */
     protected function setUp(): void
     {
+        $twigConf = Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG};
+        if ($twigConf->{Tinebase_Config::ACCOUNT_TWIG_LOGIN} !==
+            '{{ account.accountFirstName|transliterate|removeSpace|trim[0:1]|lower }}{{ account.accountLastName|transliterate|removeSpace|lower }}'
+        ) {
+            self::markTestSkipped('test only works with a certain ACCOUNT_TWIG_LOGIN config');
+        }
+
         parent::setUp();
 
         Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
