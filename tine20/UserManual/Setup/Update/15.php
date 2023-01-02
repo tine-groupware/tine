@@ -36,7 +36,7 @@ class UserManual_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update001()
     {
-        UserManual_Setup_Initialize::importManualContent();
+        UserManual_Setup_Initialize::importManualContent(true);
         $this->addApplicationUpdate('UserManual', '15.1', self::RELEASE015_UPDATE001);
     }
 }
