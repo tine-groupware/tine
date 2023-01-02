@@ -15,6 +15,21 @@ var assetsPluginInstance = new AssetsPlugin({
 });
 var {VueLoaderPlugin} = require('vue-loader');
 var ChunkNamePlugin = require('./webpack.ChunkNamePlugin');
+var ESLintPlugin = require('eslint-webpack-plugin');
+
+var eslintPluginInstance = new ESLintPlugin({
+    formatter: require('eslint-friendly-formatter'),
+    extensions: ['mjs', 'es6.js', 'vue'],
+    quiet: true,
+    overrideConfig: {
+        extends: ["standard", "plugin:vue/essential"],
+        plugins: ["notice", "vue"],
+        parserOptions: {
+            parser: "@babel/eslint-parser",
+            requireConfigFile: false
+        }
+    },
+})
 
 // use https://github.com/Richienb/node-polyfill-webpack-plugin ?
 // the plugin just does the following.
@@ -93,7 +108,8 @@ module.exports = {
         assetsPluginInstance,
         new VueLoaderPlugin(),
         new ChunkNamePlugin(),
-        providePlugin
+        providePlugin,
+        eslintPluginInstance
     ],
     module: {
         rules: [
