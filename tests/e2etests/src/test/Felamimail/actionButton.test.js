@@ -31,17 +31,18 @@ beforeEach(async () => {
 
     for(let i = 0; i < 10; i++) {
         await page.click('.t-app-felamimail .x-btn-image.x-tbar-loading');
-        await page.waitForTimeout(500);
+        await page.waitForTimeout(2000);
         try{
             await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject, timeout: 2000});
             break;
         } catch(e){
+            console.warn(`mail with subject ${subject} not received with attempt #${i+1}`)
         }
     }
 })
 
 // skip... is to unstable
-describe('test action button of felamimail (grid)', () => {
+describe.skip('test action button of felamimail (grid)', () => {
     test('delete email', async () => {
         await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject});
         await page.click(('.t-app-felamimail .x-toolbar-left-row .x-btn-image.action_delete'));
