@@ -2653,7 +2653,6 @@ class Setup_Controller
         $cachesCleared[] = 'ConfigCache';
 
         $this->clearCacheDir();
-        
         $cachesCleared[] = 'RoutesCache';
     
         if ($deactivateCache) {
