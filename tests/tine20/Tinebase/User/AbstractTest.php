@@ -106,9 +106,19 @@ class Tinebase_User_AbstractTest extends TestCase
         $user2->accountFullName = $this->_uit->generateAccountFullName($user2);
         $this->_uit->addUser($user2);
         
-        $this->assertEquals('lweiss', $user1->accountLoginName);
-        $this->assertEquals('lweiss00', $user2->accountLoginName);
-        
+        $twigConf = Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG};
+        if ($twigConf->{Tinebase_Config::ACCOUNT_TWIG_LOGIN} ===
+            '{{ account.accountFirstName|transliterate|removeSpace|trim[0:1]|lower }}{{ account.accountLastName|transliterate|removeSpace|lower }}'
+        ) {
+            $this->assertEquals('lweiss', $user1->accountLoginName);
+            $this->assertEquals('lweiss00', $user2->accountLoginName);
+        } else if ($twigConf->{Tinebase_Config::ACCOUNT_TWIG_LOGIN} ===
+            '{{ account.accountFirstName|transliterate|removeSpace|lower }}.{{ account.accountLastName|transliterate|removeSpace|lower }}'
+        ) {
+            $this->assertEquals('leonie.weiss', $user1->accountLoginName);
+            $this->assertEquals('leonie.weiss00', $user2->accountLoginName);
+        }
+
         $this->assertEquals('Leonie Weiss', $user1->accountFullName);
         $this->assertEquals('Leonie Weiss00', $user2->accountFullName);
         
