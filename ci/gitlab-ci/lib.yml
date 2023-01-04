@@ -740,10 +740,6 @@
         
         touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_php_deps_installed
         
-        # install js deps
-        npm --prefix $TINE20ROOT/tine20/Tinebase/js/ install;
-        touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_js_deps_installed
-        
         # setup configs
         /usr/sbin/confd -onetime -backend env;
         
@@ -792,14 +788,13 @@
         # lib/entry_points/tine_as_a_service_webpack.sh
         #!/bin/sh
         apk add git;
-        echo "wait for mount";
-        date;
-        while [ ! -f /${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine_as_service.env ]; do 
-            echo "Waiting for tine20...";
-            sleep 1;
-        done;
-        sleep 10;
-        echo "tine20 dir available";
-        npm --prefix ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20/Tinebase/js/ install;
-        npm --prefix ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20/Tinebase/js/ start'
+        
+        echo -n 'wait for signal_node_modules_copied ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_node_modules_copied ]; do sleep 1; done; echo ' done'
+        
+        npm --prefix $TINE20ROOT/tine20/Tinebase/js/ install;
+        touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_js_deps_installed
+        
+        echo -n 'wait for signal_php_deps_installed ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_php_deps_installed ]; do sleep 1; done; echo ' done'
+        npm --prefix $TINE20ROOT/tine20/Tinebase/js/ start
+
 
