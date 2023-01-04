@@ -230,26 +230,26 @@ Tine.Felamimail.setTreeContextMenus = function() {
         text: this.app.i18n._('Approve Migration'),
         iconCls: 'action_approve_migration',
         scope: this,
-        handler: function() {
+        qtip: this.app.i18n._('Agree that this account can be transferred to other users'),
+        handler: async function() {
             if (this.ctxNode) {
-                let accountId = this.ctxNode.attributes.account_id;
-                let account = this.app.getAccountStore().getById(accountId);
-                this.ctxNode.getUI().addClass("x-tree-node-loading");
-                Ext.Ajax.request({
-                    params: {
-                        method: 'Felamimail.approveAccountMigration',
-                        accountId: accountId
-                    },
-                    scope: this,
-                    success: function(result, request){
-                        this.ctxNode.getUI().removeClass("x-tree-node-loading");
+                if (await Ext.MessageBox.show({
+                        title: this.app.i18n._('Approve Migration'),
+                        msg: this.app.i18n._('I hereby agree that this mailbox may be converted to a shared mailbox or transferred to another user.'),
+                        buttons: Ext.MessageBox.YESNO,
+                        icon: Ext.MessageBox.QUESTION
+                    }) === 'yes') {
+
+                    let accountId = this.ctxNode.attributes.account_id;
+                    let account = this.app.getAccountStore().getById(accountId);
+                    this.ctxNode.getUI().addClass("x-tree-node-loading");
+                    try {
+                        await Tine.Felamimail.approveAccountMigration(accountId);
                         account.set('migration_approved', 1);
-                    },
-                    failure: function(exception) {
+                    } finally {
                         this.ctxNode.getUI().removeClass("x-tree-node-loading");
-                        Tine.Felamimail.folderBackend.handleRequestException(exception);
                     }
-                });
+                }
             }
         }
     };
