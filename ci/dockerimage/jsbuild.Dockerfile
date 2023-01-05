@@ -5,7 +5,7 @@ FROM ${SOURCE_IMAGE} AS source-copy
 FROM ${JSDEPENDENCY_IMAGE} AS jsdependency-copy 
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
-FROM node:12.22-alpine as jsbuild
+FROM node:18.9.0-alpine as jsbuild
 ARG TINE20ROOT=/usr/share
 WORKDIR ${TINE20ROOT}/tine20/Tinebase/js
 

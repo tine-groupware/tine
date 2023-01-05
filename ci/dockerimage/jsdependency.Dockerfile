@@ -1,5 +1,5 @@
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
-FROM node:12.22-alpine as jsdependency
+FROM node:18.9.0-alpine as jsdependency
 ARG TINE20ROOT=/usr/share
 
 RUN apk add git
