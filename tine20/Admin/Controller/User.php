@@ -667,8 +667,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      */
     protected function _handleUserDeleteConfirmation($_accountIds)
     {
-        if (Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
-            SaasInstance_Controller_ActionLog::getInstance()->addActionLogUserDelete($_accountIds);
-        }
+        Tinebase_Controller_ActionLog::getInstance()->addActionLogUserDelete($_accountIds);
     }
 }
