@@ -218,7 +218,7 @@ cp.colors = ['000000', '993300', '333300'];
         const me = this;
 
         const {createApp, h} = await import(/* webpackChunkName: "Tinebase/js/Vue" */ 'vue');
-        const {default: ColorPickerApp} = await import(/* webpackChunkName: "Tinebase/js/ColorPickerApp" */ 'ux/form/ColorPickerApp2.vue');
+        const {default: ColorPickerApp} = await import(/* webpackChunkName: "Tinebase/js/ColorPickerApp" */ 'ux/form/ColorPickerApp.vue');
 
         const colorPickerApp = new Ext.Component({
             border: false,

@@ -26,7 +26,7 @@ module.exports = merge(common, {
         proxy: [
             {
                 context: ['**', '!/webpack-dev-server*/**', '!**.json', '!/ws'],
-                target: 'http://localhost:4000/',
+                target: 'http://localhost/',
                 secure: false
             }
         ],

@@ -11,44 +11,44 @@ import { TwingExtensionIntl } from 'twing-intl'
 import transliterate from 'util/transliterate'
 
 let twingEnv
-let proxyId = 0;
+let proxyId = 0
 
 class Expression extends String {
-  constructor(s) {
-    super(s);
-    this.isExpression = true;
+  constructor (s) {
+    super(s)
+    this.isExpression = true
   }
 }
 
-let proxyDocuments = [
+const proxyDocuments = [
   document
-];
+]
 
 const addProxyDocument = function (doc) {
   proxyDocuments.unshift(doc)
 }
 
-const removeProxyDocument = function(doc) {
-  const idx = proxyDocuments.indexOf(doc);
+const removeProxyDocument = function (doc) {
+  const idx = proxyDocuments.indexOf(doc)
   if (idx >= 0) {
     proxyDocuments.splice(idx, 1)
   }
 }
 
-let proxyPromisesCollections = [];
+const proxyPromisesCollections = []
 
 const addProxyPromisesCollection = function (collection) {
   proxyPromisesCollections.push(collection)
 }
 
-const removeProxyPromisesCollection = function(collection) {
-  const idx = proxyPromisesCollections.indexOf(collection);
+const removeProxyPromisesCollection = function (collection) {
+  const idx = proxyPromisesCollections.indexOf(collection)
   if (idx >= 0) {
     proxyPromisesCollections.splice(idx, 1)
   }
 }
 
-const replaceProxy = function(id, content) {
+const replaceProxy = function (id, content) {
   proxyDocuments.forEach((doc) => {
     const el = doc.getElementById(id)
     if (el) {
@@ -59,11 +59,9 @@ const replaceProxy = function(id, content) {
   })
 }
 
-
-
-const getTwingEnv = function() {
+const getTwingEnv = function () {
   if (!twingEnv) {
-    let loader = new TwingLoaderArray([])
+    const loader = new TwingLoaderArray([])
 
     twingEnv = new TwingEnvironment(loader, {
       autoescape: false
@@ -103,7 +101,7 @@ const getTwingEnv = function() {
 
       proxyPromise.then((output) => {
         replaceProxy(id, output)
-      });
+      })
 
       return new Expression(`<em id="${id}"></em>`)
     }
@@ -112,4 +110,4 @@ const getTwingEnv = function() {
   return twingEnv
 }
 
-export { getTwingEnv as default, Expression, addProxyDocument, removeProxyDocument, addProxyPromisesCollection, removeProxyPromisesCollection };
+export { getTwingEnv as default, Expression, addProxyDocument, removeProxyDocument, addProxyPromisesCollection, removeProxyPromisesCollection }
