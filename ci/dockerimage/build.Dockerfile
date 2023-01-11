@@ -8,7 +8,6 @@
 #
 # ARGS:
 #   SOURCE_IMAGE=source
-#   TINE20ROOT=/usr/share
 #   todo comment vars
 #   RELEASE=local -
 #   CODENAME=local -
@@ -21,7 +20,6 @@ FROM ${JSBUILD_IMAGE} as jsbuild-copy
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${SOURCE_IMAGE} as build
-ARG TINE20ROOT=/usr/share
 ARG RELEASE=local
 ARG CODENAME=local
 ARG REVISION=local
