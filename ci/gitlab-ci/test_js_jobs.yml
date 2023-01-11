@@ -114,12 +114,14 @@ js-e2e-tests-source-php-version-matrix:
     - 'docker_build_source_matrix: [7.4]'
     - 'docker_build_source_matrix: [8.0]'
     - 'docker_build_source_matrix: [8.1]'
+    - 'docker_build_source_matrix: [8.2]'
   parallel:
     matrix:
       - PHP_VERSION:
           - "7.4"
           - "8.0"
           - "8.1"
+          - "8.2"
   rules:
     - if: $JS_E2E_TESTS_SOURCE_TYPE != "matrix"
       when: never

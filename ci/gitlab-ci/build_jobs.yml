@@ -150,6 +150,7 @@ docker_build_source_matrix:
           - "7.4"
           - "8.0"
           - "8.1"
+          - "8.2"
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "matrix"
       when: never
