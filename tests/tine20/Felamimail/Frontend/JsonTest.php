@@ -2094,6 +2094,20 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         }
     }
 
+    public function testSieveEmailNotificationMultiple()
+    {
+        $this->_setTestScriptname();
+
+        $this->_account->sieve_notification_email = 'test@test.de,test2@test.de';
+        $this->_account->sieve_notification_move = false;
+        Felamimail_Controller_Account::getInstance()->update($this->_account);
+
+        $script = new Felamimail_Sieve_Backend_Sql($this->_account->getId());
+        
+        static::assertStringContainsString('test@test.de', $script->getSieve());
+        static::assertStringContainsString('test2@test.de', $script->getSieve());
+    }
+
     /**
      * use another name for test sieve script
      */

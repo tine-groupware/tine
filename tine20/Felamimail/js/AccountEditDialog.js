@@ -115,7 +115,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.action_saveAndClose.setDisabled(!hasRight);
         
         this.record.set('grants', this.grantsGrid.getValue());
-
+        
         this.updateContactAddressbook();
         this.updateEmailQuotas();
         this.updateEmailAliasesAndForwards();
@@ -320,29 +320,21 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.emailImapUser = [];
         this.aliasesGrid = [];
         this.forwardsGrid = [];
+    
+        const additionConfig = {
+            scope: this,
+            record: this.record,
+        };
         
         if (this.asAdminModule) {
             this.saveInAdbFields = Tine.Admin.UserEditDialog.prototype.getSaveInAddessbookFields(this, this.record.get('type') === 'system');
             this.emailImapUser = this.record.data?.email_imap_user || [];
-    
-            const commonConfig = {
-                autoExpandColumn: 'email',
-                quickaddMandatory: 'email',
-                frame: false,
-                useBBar: true,
-                height: 200,
-                columnWidth: 0.5,
-                recordClass: Ext.data.Record.create([
-                    { name: 'email' }
-                ]),
-                scope: this,
-                record: this.record,
-            };
-            
-            this.aliasesGrid = Tine.Admin.UserEditDialog.prototype.initAliasesGrid(commonConfig);
-            this.forwardsGrid = Tine.Admin.UserEditDialog.prototype.initForwardsGrid(commonConfig);
+            this.aliasesGrid = Tine.Admin.UserEditDialog.prototype.initAliasesGrid(additionConfig);
+            this.forwardsGrid = Tine.Admin.UserEditDialog.prototype.initForwardsGrid(additionConfig);
         }
-
+    
+        this.sieveNotifyGrid = Tine.Felamimail.sieve.NotificationDialog.prototype.initSieveEmailNotifyGrid(additionConfig);
+    
         var commonFormDefaults = {
             xtype: 'textfield',
             anchor: '100%',
@@ -722,14 +714,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     checkState: function() {
                         this.setDisabled(me.isSystemAccount());
                     }
-                }], [{
-                    fieldLabel: this.app.i18n._('Notification Email'),
-                    name: 'sieve_notification_email',
-                    vtype: 'email',
-                    checkState: function() {
-                        this.setDisabled(! me.isSystemAccount());
-                    }
-                }], [{
+                }], [
+                    this.sieveNotifyGrid
+                ], [{
                     fieldLabel: this.app.i18n._('Auto-move notifications'),
                     name: 'sieve_notification_move',
                     xtype: 'widget-keyfieldcombo',
@@ -1225,6 +1212,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         me.getForm().loadRecord(me.ruleRecords);
+        
+        // load sieve notification emails
+        const data = this.record.data.sieve_notification_email.split(',');
+        this.sieveNotifyGrid.setStoreFromArray(data.map((e) => {return {'email': e}}));
     },
 
     /**
@@ -1316,6 +1307,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.record.set('sieve_rules', rules);
         this.record.set('sieve_vacation', this.vacationRecord);
+    
+        // update sieve notification emails
+        const notifyEmails = this.sieveNotifyGrid.getFromStoreAsArray();
+        this.record.set('sieve_notification_email', notifyEmails.filter(e => e?.email).map(e => e?.email).join());
     },
 
     /**

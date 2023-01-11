@@ -161,7 +161,7 @@ if header :contains "Return-Path" "<>" {
               "mailto:ADMIN_BOUNCE_EMAIL";
     }
 } elsif header :contains "X-Tine20-Type" "Notification" {
-    redirect :copy "USER_EXTERNAL_EMAIL"; 
+    REDIRECT_EMAILS_SCRIPT
 } else {
     if header :matches "Subject" "*" {
         set "subject" "${1}";
@@ -170,9 +170,8 @@ if header :contains "Return-Path" "<>" {
         set "from" "${1}";
     }
     set :encodeurl "message" "TRANSLATE_SUBJECT${from}: ${subject}";
-    
-    notify :message "TRANSLATE_SUBJECT${from}: ${subject}"
-              "mailto:USER_EXTERNAL_EMAIL?body=${message}";
+
+    NOTIFY_EMAILS_SCRIPT
 }
 sieveFile
             );
