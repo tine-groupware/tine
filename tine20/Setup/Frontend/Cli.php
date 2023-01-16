@@ -1552,21 +1552,11 @@ class Setup_Frontend_Cli
      * @param Zend_Console_Getopt $_opts
      * @return int
      *
-     * TODO add more platforms?
      * TODO use .my.cnf file? needs to be deleted afterwards (like in backup/restore)
      * TODO use better process control library? i.e. https://symfony.com/doc/current/components/process.html
      */
     protected function _mysqlClient(Zend_Console_Getopt $_opts)
     {
-        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
-        if (! empty($options['platform'])) {
-            switch ($options['platform']) {
-                case 'docker': // maybe add "alpine"?
-                    // install mysql client if not available
-                    system('apk add mysql-client');
-            }
-        }
-
         $dbConf = Tinebase_Core::getConfig()->database;
         $command ='mysql -h ' . $dbConf->host . ' -p' . $dbConf->password . ' -u ' . $dbConf->username
             . ' ' . $dbConf->dbname;
