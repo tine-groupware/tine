@@ -77,6 +77,9 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                 'compare'                   => 'compare schemas with another database
                         Examples:
                            setup.php --compare -- otherdb=tine20other',
+                'createmissingtables'       => 'create missing tine tables
+                        Examples:
+                           setup.php --createmissingtables',
                 'mysql'                   => 'run mysql client
                         Examples:
                            setup.php --mysql -- platform=docker',
@@ -135,6 +138,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->backup) &&
             empty($opts->restore) &&
             empty($opts->compare) &&
+            empty($opts->createmissingtables) &&
             empty($opts->mysql) &&
             empty($opts->setLicense) &&
             empty($opts->deleteLicense) &&

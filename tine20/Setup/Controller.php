@@ -2104,16 +2104,7 @@ class Setup_Controller
             $createdTables = $this->_createModelConfigSchema($_xml->name);
 
             // traditional xml declaration
-            if (isset($_xml->tables)) {
-                foreach ($_xml->tables[0] as $tableXML) {
-                    $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
-                    if ($this->_createTable($table) !== true) {
-                        // table was gracefully not created, maybe due to missing requirements, just continue
-                        continue;
-                    }
-                    $createdTables[] = $table;
-                }
-            }
+            $createdTables = array_merge($this->createXmlTables($_xml), $createdTables);
 
             if ('Tinebase' === $application->name) {
                 $application = Tinebase_Application::getInstance()->addApplication($application);
@@ -2185,7 +2176,29 @@ class Setup_Controller
     }
 
     /**
-     * @param $appName
+     * @param SimpleXMLElement $xml
+     * @return array
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    public function createXmlTables(SimpleXMLElement $xml): array
+    {
+        $createdTables = [];
+        if (isset($xml->tables)) {
+            foreach ($xml->tables[0] as $tableXML) {
+                $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
+                if ($this->_backend->tableExists($table->name) || $this->_createTable($table) !== true) {
+                    Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Table exists or was gracefully not created, maybe due to missing requirements.');
+                    continue;
+                }
+                $createdTables[] = $table;
+            }
+        }
+        return $createdTables;
+    }
+
+    /**
+     * @param string $appName
      * @return array
      */
     protected function _createModelConfigSchema($appName)
@@ -2204,7 +2217,7 @@ class Setup_Controller
                 Setup_SchemaTool::updateAllSchema();
             }
 
-            // adopt to old workflow
+            // adapt to old workflow
             /** @var Tinebase_Record_Abstract $model */
             foreach ($models as $model) {
                 $modelConfiguration = $model::getConfiguration();
@@ -2218,9 +2231,15 @@ class Setup_Controller
         return $createdTables;
     }
 
-    protected function _createTable($table)
+    /**
+     * @param Setup_Backend_Schema_Table_Xml $table
+     * @return bool return true on success, false in case of graceful failure, due to missing requirements for example
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    protected function _createTable(Setup_Backend_Schema_Table_Xml $table): bool
     {
-        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating table: ' . $table->name);
+        if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Creating table: ' . $table->name);
 
         try {
             $result = $this->_backend->createTable($table);

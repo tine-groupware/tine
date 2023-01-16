@@ -138,6 +138,8 @@ class Setup_Frontend_Cli
             $this->_deleteLicense();
         } elseif(isset($_opts->compare)) {
             $this->_compare($_opts);
+        } elseif(isset($_opts->createmissingtables)) {
+            $this->_createmissingtables($_opts);
         } elseif(isset($_opts->mysql)) {
             $this->_mysqlClient($_opts);
         } elseif(isset($_opts->setpassword)) {
@@ -1586,5 +1588,33 @@ class Setup_Frontend_Cli
         fclose($pipes[1]);
         fclose($pipes[2]);
         return proc_close($process);
+    }
+
+    /**
+     * create missing tables (for example cache tables that weren't restored from a dump)
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     * @throws Setup_Exception_NotFound
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    protected function _createmissingtables(Zend_Console_Getopt $_opts)
+    {
+        // run Schema tool -> should already create tables that might be missing
+        Setup_SchemaTool::updateAllSchema();
+
+        $setup = Setup_Controller::getInstance();
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $xml = $setup->getSetupXml($application->name);
+            $tables = $setup->createXmlTables($xml);
+            if (count($tables) > 0) {
+                echo "Re-created tables for app " . $application->name . ":\n";
+                foreach ($tables as $table) {
+                    echo "- " . $table->name ."\n";
+                }
+            }
+        }
+
+        return 0;
     }
 }
