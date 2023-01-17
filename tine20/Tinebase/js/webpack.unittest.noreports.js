@@ -1,9 +1,9 @@
 let path = require('path')
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const prod = require('./webpack.prod.js');
 
 module.exports = merge(prod, {
-    entry: null,
+    // entry: null,
     devtool: 'inline-source-map',
     module: {
         rules: [

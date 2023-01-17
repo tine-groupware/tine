@@ -217,7 +217,7 @@ cp.colors = ['000000', '993300', '333300'];
     renderColorPicker: async function () {
         const me = this;
 
-        const {default: Vue} = await import(/* webpackChunkName: "Tinebase/js/Vue" */ 'vue/dist/vue.js');
+        const {createApp, h} = await import(/* webpackChunkName: "Tinebase/js/Vue" */ 'vue');
         const {default: ColorPickerApp} = await import(/* webpackChunkName: "Tinebase/js/ColorPickerApp" */ 'ux/form/ColorPickerApp.vue');
 
         const colorPickerApp = new Ext.Component({
@@ -262,12 +262,13 @@ cp.colors = ['000000', '993300', '333300'];
         this.colorPicker = picker;
         this.fireEvent('pickerShow', picker);
 
-        const vm = new Vue({
-            el: '#ColorPickerApp-' + this.id,
-            render: (createElement) => {
-                return createElement (ColorPickerApp, {props:{initialColor: me.value}, ref: 'colorPickerApp'});
+        const mountPoint = `#ColorPickerApp-${this.id}`;
+
+        const vm = createApp({
+            render: () => {
+                return h(ColorPickerApp, {ref: 'colorPickerApp'})
             }
-        });
+        },{initialColor: me.value}).mount(mountPoint);
     }
 
     /**

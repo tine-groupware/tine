@@ -9,10 +9,10 @@
 export default function (condition, timeout, interval) {
   return new Promise(function (resolve, reject) {
     interval = interval || 50
-    let until = timeout ? new Date().getTime() + timeout : Infinity
+    const until = timeout ? new Date().getTime() + timeout : Infinity
 
-    let fn = function () {
-      let result = condition()
+    const fn = function () {
+      const result = condition()
       if (!result) {
         if (new Date().getTime() > until) {
           return reject(new Error('did not succeed in given time interval'))

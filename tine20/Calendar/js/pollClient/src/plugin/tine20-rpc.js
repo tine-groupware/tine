@@ -1,12 +1,12 @@
 var axios = require('axios')
 
 var Tine20Rpc = {
-  install (Vue, options) {
+  install (app, options) {
     if (typeof options.baseUrl === 'undefined') {
       options.baseUrl = window.location.protocol + '//' + window.location.host + '/'
     }
 
-    Vue.prototype.$tine20 = {
+    app.config.globalProperties.$tine20 = {
       baseUrl: options.baseUrl,
       rpcCounter: 0,
 

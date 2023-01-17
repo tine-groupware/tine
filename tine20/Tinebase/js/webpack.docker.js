@@ -1,4 +1,4 @@
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const prod = require('./webpack.prod.js');
 
 var AssetsPlugin = require('assets-webpack-plugin');

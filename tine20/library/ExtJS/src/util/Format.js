@@ -65,6 +65,9 @@ Ext.util.Format = function(){
          * @return {String} The encoded text
          */
         htmlEncode : function(value){
+            if (_.get(value, 'isExpression')) {
+                return value;
+            }
             return !value ? value : String(value).replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
         },
 

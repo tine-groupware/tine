@@ -8,7 +8,7 @@
 
 // @see https://github.com/ericmorand/twing/issues/332
 // #if process.env.NODE_ENV !== 'unittest'
-import getTwingEnv from "twingEnv";
+import {default as getTwingEnv, Expression } from "twingEnv";
 // #endif
 
 Ext.ns('Tine.Calendar', 'Tine.Calendar.Model');
@@ -212,7 +212,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
             this.constructor.titleTwing = twingEnv;
         }
 
-        return this.constructor.titleTwing.render(this.constructor.getPhpClassName() + 'Title', this.data) + (this.hasPoll() ? '\u00A0\uFFFD' : '');
+        return new Expression(this.constructor.titleTwing.renderProxy(this.constructor.getPhpClassName() + 'Title', this.data) + (this.hasPoll() ? '\u00A0\uFFFD' : ''));
     },
 
     isRescheduled: function (event) {
