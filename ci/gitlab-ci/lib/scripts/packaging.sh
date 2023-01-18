@@ -18,6 +18,8 @@ packaging_build_packages() {
     export BASE_IMAGE="${REGISTRY}/base-commit:${IMAGE_TAG}"
     export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${IMAGE_TAG}"
     export SOURCE_IMAGE="${REGISTRY}/source-commit:${IMAGE_TAG}"
+    export JSDEPENDENCY_IMAGE="${REGISTRY}/jsdependency-commit:${IMAGE_TAG}"
+    export JSBUILD_IMAGE="${REGISTRY}/jsbuild-commit:${IMAGE_TAG}"
     export BUILD_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
     export BUILT_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
     export REVISION=0
