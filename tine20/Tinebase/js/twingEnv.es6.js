@@ -13,10 +13,17 @@ import transliterate from 'util/transliterate'
 let twingEnv
 let proxyId = 0
 
+const replaceProxyFns = {}
+
 class Expression extends String {
-  constructor (s) {
+  constructor (s, id) {
     super(s)
+    this.id = id
     this.isExpression = true
+  }
+
+  replaceProxyBy (fn) {
+    replaceProxyFns[this.id] = fn
   }
 }
 
@@ -100,10 +107,15 @@ const getTwingEnv = function () {
       })
 
       proxyPromise.then((output) => {
-        replaceProxy(id, output)
+        if (replaceProxyFns[id]) {
+          replaceProxyFns[id](output, id)
+          delete replaceProxyFns[id]
+        } else {
+          replaceProxy(id, output)
+        }
       })
 
-      return new Expression(`<em id="${id}"></em>`)
+      return new Expression(`<em id="${id}" class="twing-proxy"></em>`, id)
     }
   }
 
