@@ -9,4 +9,4 @@ COPY tine20/Tinebase/js/npm-shrinkwrap.json ${TINE20ROOT}/tine20/Tinebase/js/npm
 
 WORKDIR ${TINE20ROOT}/tine20/Tinebase/js
 
-RUN npm --prefix ${TINE20ROOT}/tine20/Tinebase/js/ install --no-optional
+RUN npm --prefix ${TINE20ROOT}/tine20/Tinebase/js/ install --no-optional --ignore-scripts

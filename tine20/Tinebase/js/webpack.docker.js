@@ -4,7 +4,7 @@ const prod = require('./webpack.prod.js');
 var AssetsPlugin = require('assets-webpack-plugin');
 var assetsPluginInstance = new AssetsPlugin({
     path: '/out/tine20/Tinebase/js',
-    keepInMemory: true,
+    keepInMemory: false,
     filename: 'webpack-assets-FAT.json',
     prettyPrint: true
 });
