@@ -6,12 +6,6 @@ repo_get_customer_for_branch () {
         return
     fi
 
-    # TODO make this work for all branches 20XX.11
-    if [ "${branch}" == "2023.11" ]; then
-        echo tine20.com
-        return
-    fi
-
     if echo "${branch}" | grep -Eq '(pu/|feat/|change/)'; then
         return 1
     fi
@@ -21,7 +15,12 @@ repo_get_customer_for_branch () {
                 return 1
         fi
 
-        echo tine20.org
+        if [ "$(echo "${branch}" | cut -d. -f1)" -lt 2023 ]; then
+            echo tine20.org
+            return
+        fi
+
+        echo tine20.com
         return
     else
         if [ $(echo "${branch}" | awk -F"/" '{print NF-1}') != 1 ]; then
