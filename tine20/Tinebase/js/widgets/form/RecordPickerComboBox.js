@@ -393,7 +393,10 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
         const setValue = _.bind(Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue, this);
         if (text && text.replaceProxyBy) {
-            text.replaceProxyBy(setValue);
+            text.replaceProxyBy((text) => {
+                setValue(text);
+                this.value = value;
+            });
         } else {
             setValue(text);
         }
