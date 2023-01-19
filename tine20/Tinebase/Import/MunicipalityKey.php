@@ -104,8 +104,7 @@ class Tinebase_Import_MunicipalityKey extends Tinebase_Import_Xls_Abstract
                 $_record->{Tinebase_Model_MunicipalityKey::FLD_ARS_COMBINED}
             );
             if (null !== ($existingRecord = Tinebase_Controller_MunicipalityKey::getInstance()->search($filter)->getFirstRecord())) {
-                $existingRecord->merge($_record);
-                $_record = $existingRecord;
+                $_record->merge($existingRecord);
             }
 
             return parent::_importRecord($_record);
