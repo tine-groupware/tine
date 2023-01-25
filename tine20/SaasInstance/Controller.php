@@ -107,7 +107,7 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         
         $context = Admin_Controller_Quota::getInstance()->getRequestContext();
         if ($this->_hasConfirmContextHeader($context)) {
-            SaasInstance_Controller_ActionLog::getInstance()->addActionLogConfirmationEvent($_eventObject);
+            Tinebase_Controller_ActionLog::getInstance()->addActionLogConfirmationEvent($_eventObject);
             return;
         }
 
@@ -193,7 +193,7 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
 
         $context = Admin_Controller_User::getInstance()->getRequestContext();
         if ($this->_hasConfirmContextHeader($context)) {
-            SaasInstance_Controller_ActionLog::getInstance()->addActionLogConfirmationEvent($_eventObject);
+            Tinebase_Controller_ActionLog::getInstance()->addActionLogConfirmationEvent($_eventObject);
             return;
         }
 
@@ -254,6 +254,6 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         $plain .= "\n" . 'Updater: ' . $updater;
         $plain .= "\n" . 'Recipients: ' . "\n" . print_r($recipients, true);
         
-        SaasInstance_Controller_ActionLog::getInstance()->addActionLogQuotaNotification($plain);
+        Tinebase_Controller_ActionLog::getInstance()->addActionLogQuotaNotification($plain);
     }
 }

@@ -23,12 +23,7 @@ class SaasInstance_Config extends Tinebase_Config_Abstract
     public const NUMBER_OF_INCLUDED_USERS = 'numberOfIncludedUsers';
     public const PACKAGE_STORAGE_INFO_TEMPLATE = 'packageStorageInfoTemplate';
     public const PACKAGE_USER_INFO_TEMPLATE = 'packageUserInfoTemplate';
-
-    public const ACTION_TYPE = 'actionType';
-    public const ACTION_TYPE_CONFIRMATION = 'confirmation';
-    public const ACTION_TYPE_DELETION = 'deletion';
-    public const ACTION_TYPE_EMAIL_NOTIFICATION = 'emailNotification';
-    public const ACTION_TYPE_SUPPORT_REQUEST = 'supportRequest';
+    
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -78,23 +73,6 @@ class SaasInstance_Config extends Tinebase_Config_Abstract
             self::DEFAULT_STR           =>  '<br /> Your current user account limit is : {0} 
                 <br />Do you want to upgrade your subscription?<br />
                 <br />Package Price : {1} Euro / Customer'
-        ],
-        self::ACTION_TYPE => [
-            //_('Action type')
-            self::LABEL              => 'Action type',
-            self::DESCRIPTION        => 'Action type',
-            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
-            self::CLIENTREGISTRYINCLUDE => true,
-            self::SETBYADMINMODULE      => false,
-            self::SETBYSETUPMODULE      => false,
-            self::DEFAULT_STR           => [
-                self::RECORDS => [
-                    ['id' => self::ACTION_TYPE_CONFIRMATION,            'value' => 'Confirmation',          'icon' => null, 'system' => true], //_('Confirmation')
-                    ['id' => self::ACTION_TYPE_DELETION,                'value' => 'Deletion',              'icon' => null, 'system' => true], //_('Deletion')
-                    ['id' => self::ACTION_TYPE_EMAIL_NOTIFICATION,      'value' => 'Email Notification',    'icon' => null, 'system' => true], //_('Email Notification')
-                    ['id' => self::ACTION_TYPE_SUPPORT_REQUEST,         'value' => 'Support request',       'icon' => null, 'system' => true], //_('Support request')
-                ]
-            ],
         ],
     ];
 
