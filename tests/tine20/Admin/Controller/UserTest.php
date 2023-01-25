@@ -204,7 +204,7 @@ class Admin_Controller_UserTest extends TestCase
         $userInBackend = $emailUserBackend->getRawUserById($xpropsUser);
         self::assertFalse($userInBackend, 'email user should be deleted: '
             . print_r($userInBackend, true));
-        SaasInstance_ControllerTest::assertActionLogEntry(SaasInstance_Config::ACTION_TYPE_DELETION);
+        Tinebase_ControllerTest::assertActionLogEntry(Tinebase_Model_ActionLog::TYPE_DELETION);
     }
 
     public function testAddUserAdbContainer()
