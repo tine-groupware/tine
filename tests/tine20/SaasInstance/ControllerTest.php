@@ -41,8 +41,8 @@ class SaasInstance_ControllerTest extends TestCase
 
         $this->_json = new Admin_Frontend_Json();
         
-        if (count($result = SaasInstance_Controller_ActionLog::getInstance()->search()) > 0) {
-            SaasInstance_Controller_ActionLog::getInstance()->delete($result->getArrayOfIds());
+        if (count($result = Tinebase_Controller_ActionLog::getInstance()->search()) > 0) {
+            Tinebase_Controller_ActionLog::getInstance()->delete($result->getArrayOfIds());
         }
 
         $this->_oldFileSystemConfig = clone Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM};
@@ -107,27 +107,7 @@ class SaasInstance_ControllerTest extends TestCase
         self::assertIsArray($result);
         self::assertEquals(1234, $result['totalInMB']);
 
-        $this->assertActionLogEntry();
-    }
-
-    public static function assertActionLogEntry($type = SaasInstance_Config::ACTION_TYPE_CONFIRMATION, $count = 1)
-    {
-        $actionLogs = SaasInstance_Controller_ActionLog::getInstance()->search(
-            Tinebase_Model_Filter_FilterGroup::getFilterForModel(SaasInstance_Model_ActionLog::class, [
-                [
-                    'field' => SaasInstance_Model_ActionLog::FLD_ACTION_TYPE,
-                    'operator' => 'equals',
-                    'value' => $type
-                ]
-            ]), new Tinebase_Model_Pagination([
-                'sort' => SaasInstance_Model_ActionLog::FLD_DATETIME,
-                'dir' => 'DESC'
-            ])
-        );
-        self::assertEquals($count, $actionLogs->count(), 'should find ' . $count .' action log');
-        self::assertEquals(Tinebase_Core::getUser()->getId(), $actionLogs->getFirstRecord()->{SaasInstance_Model_ActionLog::FLD_USER});
-        
-        return $actionLogs;
+        Tinebase_ControllerTest::assertActionLogEntry();
     }
 
     /**
@@ -157,7 +137,7 @@ class SaasInstance_ControllerTest extends TestCase
         $accountData = $this->_createTestUser();
         self::assertInstanceOf(Tinebase_Model_FullUser::class, $accountData);
 
-        $this->assertActionLogEntry();
+        Tinebase_ControllerTest::assertActionLogEntry();
     }
 
     /**
@@ -231,6 +211,7 @@ class SaasInstance_ControllerTest extends TestCase
                 'accountEmailAddress'   => 'saastine20phpunit@' . TestServer::getPrimaryMailDomain(),
             ));
             $user = Admin_Controller_User::getInstance()->create($user, 'pw5823H132', 'pw5823H132');
+            $this->_usernamesToDelete[] = $user->accountLoginName;
             
             Tinebase_Acl_Roles::getInstance()->addRoleMember($role->getId(), array(
                 'type'     => 'user',
@@ -259,7 +240,7 @@ class SaasInstance_ControllerTest extends TestCase
         
         static::assertEquals($totalCount, count($messages));
 
-        $actionLogs = $this->assertActionLogEntry(SaasInstance_Config::ACTION_TYPE_EMAIL_NOTIFICATION, count($senders));
+        $actionLogs = Tinebase_ControllerTest::assertActionLogEntry(Tinebase_Model_ActionLog::TYPE_EMAIL_NOTIFICATION, count($senders));
 
         foreach ($actionLogs as $actionLog) {
             $recipients = Tinebase_FileSystem::getInstance()->getQuotaNotificationRecipients(null, $softQuota);
