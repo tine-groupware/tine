@@ -197,7 +197,6 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
             return;
         }
 
-        $account = $_eventObject->account;
         $message = "Do you want to upgrade your user limit?";
         $exception = new Tinebase_Exception_Confirmation($message);
 
