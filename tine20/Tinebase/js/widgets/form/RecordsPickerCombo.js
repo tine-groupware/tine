@@ -87,19 +87,28 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
      * @return {Ext.form.Field} this
      */
     setValue: function (value) {
-        var _ = window.lodash;
-
         value = value || [];
         this.setStoreFromArray(value);
         if (this.rendered) {
-            var text = _.reduce(this.store.data.items, function(result, record) {
-                return result.concat(record.getTitle());
-            }, []).join(', ');
-            this.setRawValue(text || this.emptyText);
-            this.el[(text ? 'remove' : 'add') + 'Class'](this.emptyClass);
+            Promise.all(_.map(this.store.data.items, function(record) {
+                return new Promise(resolve => {
+                    const text = record.getTitle();
+                    if (text && text.replaceProxyBy) {
+                        text.replaceProxyBy((text) => {
+                            resolve(text);
+                        });
+                    } else {
+                        resolve(text);
+                    }
+                });
+            })).then(texts => {
+                const text = texts.join(', ');
+                this.setRawValue(text || this.emptyText);
+                this.el[(text ? 'remove' : 'add') + 'Class'](this.emptyClass);
+            });
         }
 
-        var oldValue = this.currentValue;
+        const oldValue = this.currentValue;
         this.currentValue = value;
         this.value = value;
         Tine.Tinebase.common.assertComparable(this.currentValue);
