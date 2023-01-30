@@ -25,6 +25,12 @@ class Expression extends String {
   replaceProxyBy (fn) {
     replaceProxyFns[this.id] = fn
   }
+
+  asString () {
+    return new Promise(resolve => {
+      this.replaceProxyBy(resolve)
+    })
+  }
 }
 
 const proxyDocuments = [
