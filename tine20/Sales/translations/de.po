@@ -1887,6 +1887,12 @@ msgstr "nicht genehmigt"
 msgid "without contract"
 msgstr "ohne Vertrag"
 
+msgid "Excel all data"
+msgstr "Excel - Alle Daten"
+
+msgid "Excel current columns"
+msgstr "Excel - Aktuelle Spalten"
+
 #~ msgid "Manage Divisions"
 #~ msgstr "Abteilungen Verwalten"
 
