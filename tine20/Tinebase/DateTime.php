@@ -350,7 +350,6 @@ class Tinebase_DateTime extends DateTime
         $currValue = $this->_hasTime;
         if (func_num_args() === 1) {
             $paramValue = (bool) func_get_arg(0);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting _hasTime to ' . (int) $paramValue);
             $this->_hasTime = $paramValue;
             
             if ($this->_hasTime === FALSE) {

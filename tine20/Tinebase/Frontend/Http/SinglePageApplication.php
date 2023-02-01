@@ -16,7 +16,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
      * @param string        $template
      * @return \Laminas\Diactoros\Response
      */
-    public static function getClientHTML($entryPoint, $template='Tinebase/views/singlePageApplication.html.twig', $context = [])
+    public static function getClientHTML($entryPoint, $template = 'Tinebase/views/singlePageApplication.html.twig', $context = [])
     {
         $entryPoints = is_array($entryPoint) ? $entryPoint : [$entryPoint];
 
@@ -34,7 +34,7 @@ class Tinebase_Frontend_Http_SinglePageApplication {
                 Tinebase_Config::getInstance()->get(Tinebase_Config::TINE20_URL_USEFORJSCLIENT)
             );
 
-            if (TINE20_BUILDTYPE == 'DEBUG') {
+            if (TINE20_BUILDTYPE === 'DEBUG') {
                 $file = preg_replace('/\.js$/', '.debug.js', $file);
             }
 

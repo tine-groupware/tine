@@ -323,7 +323,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             ActiveSync_Server_Http::REQUEST_TYPE
         ));
     }
-    
+
     /**
      * check user status
      * 
@@ -815,32 +815,36 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param Zend_Auth_Result $authResult
      * @param Tinebase_Model_AccessLog $accessLog
      * @return boolean|Tinebase_Model_FullUser
+     *
+     * @todo DRY!
      */
     protected function _validateAuthResult(Zend_Auth_Result $authResult, Tinebase_Model_AccessLog $accessLog)
     {
         // authentication failed
         if ($accessLog->result !== Tinebase_Auth::SUCCESS) {
             $this->_loginFailed($authResult, $accessLog);
-            
             return false;
         }
         
         // try to retrieve user from accounts backend
         $user = $this->_getLoginUser($authResult->getIdentity(), $accessLog);
-        
         if ($accessLog->result !== Tinebase_Auth::SUCCESS || !$user) {
 
             if ($user) {
                 $accessLog->account_id = $user->getId();
             }
             $this->_loginFailed($authResult, $accessLog);
-            
             return false;
         }
         
         // check if user is expired or blocked
         $this->_checkUserStatus($user, $accessLog);
+        if ($accessLog->result !== Tinebase_Auth::SUCCESS) {
+            $this->_loginFailed($authResult, $accessLog);
+            return false;
+        }
 
+        $this->_checkUserLicense($user, $accessLog);
         if ($accessLog->result !== Tinebase_Auth::SUCCESS) {
             $this->_loginFailed($authResult, $accessLog);
             return false;
@@ -930,6 +934,49 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         // must never reach this
         assert(false, 'should return true or throw, line must not be reached');
+    }
+
+    /**
+     * check user license
+     *
+     * @param $user
+     * @param $accessLog
+     * @return bool
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _checkUserLicense($user, $accessLog)
+    {
+        // only check license for first request of sync session
+        if ($this->_isSyncClient($accessLog) && $accessLog->getId()) {
+            return true;
+        }
+
+        try {
+            $oldUser = Tinebase_Core::getUser();
+            Tinebase_Core::setUser($user);
+
+            $license = Tinebase_License::getInstance();
+            if ($license->isLicenseAvailable() && !$license->isValid()) {
+                $accessLog->result = Tinebase_Auth::LICENSE_EXPIRED;
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Account: ' . $user->accountLoginName . ' login failed: license is expired');
+                return false;
+            }
+
+            if (!$license->checkUserLimit($user)) {
+                $accessLog->result = Tinebase_Auth::LICENSE_USER_LIMIT_REACHED;
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Account: ' . $user->accountLoginName . ' login failed: license user limit is reached');
+                return false;
+            }
+
+            return true;
+        } finally {
+            if ($oldUser)
+                Tinebase_Core::setUser($oldUser);
+            else
+                Tinebase_Core::unsetUser();
+        }
     }
 
     /**
@@ -1252,7 +1299,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             return new \Laminas\Diactoros\Response\EmptyResponse();
         }
-        
+
         if ($apiKey !== Tinebase_Config::getInstance()->get(Tinebase_Config::STATUS_API_KEY, false)) {
             throw new Tinebase_Exception_AccessDenied('Not authorized. Invalid API Key.');
         }
@@ -1934,6 +1981,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             'application_id' => $application,
             'model' => Tinebase_Model_CostUnit::class,
 //            'label' => 'Cost Center' // _('Cost Center')
+        )));
+
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => Tinebase_Model_BankAccount::class,
+            'application_id' => $application,
+            'model' => Tinebase_Model_BankAccount::class,
         )));
 
         return $result;

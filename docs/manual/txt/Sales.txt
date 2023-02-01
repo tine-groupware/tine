@@ -1,0 +1,412 @@
+[[chapter.Sales]]
+== Sales ==
+
+
+//////////
+Dr. Markus Wirtz, 2015-04-15 12:53
+bin durch; ready for GR
+//////////
+//////////
+ Gerlinde Regensburger, 2015-04-15 17:20
+bin durch; @Autoren: Indexeinträge? Freigabe für Veröffentlichung?
+//////////
+////
+KUK 2015-05-15: Indizierung fertig, allerdings noch einige ungeklärte Bemerkungen für Metaways, aus meiner Sicht ansonsten Freigabe
+////
+
+{{{/Sales}}}
+Die {branch}-Anwendung menu:[Sales] (_Verkauf_) ist kein typischer Teil einer Groupware, sondern später als ERP-Baustein auf Kundenwunsch hinzugekommen. Sie dient dem Erfassen von Produkten (auch Dienstleistungen fallen darunter), Verträgen und Kundendatensätzen sowie einigen zugehörigen buchhalterischen Daten. Diese können durch Verknüpfungen miteinander und auch mit anderen Einträgen, wie z.B. einem extra für einen Verkaufsvorgang angelegten Zeitkonto samt Stundenzetteln, verbunden werden. Damit ist es möglich, Produktions-, Verkaufs- und Liefervorgänge insoweit vollständig zu erfassen, als dem Rechnungswesen alle Daten zur Rechnungslegung zur Verfügung stehen.
+
+Zu Beginn dieses Buches haben wir die Aufgabe einer Groupware in Abgrenzung vom reinen Kundenbeziehungsmanagementsystem (CRM) beschrieben: Im Vordergrund steht die Kommunikation in Unternehmen mit vergleichsweise längeren Wertschöpfungsprozessen, die zudem die Zusammenarbeit mehrerer Mitarbeiter erfordern. Bei solch komplexen Prozessen kann der Gesamtaufwand, der zur Lieferung eines Produktes und/oder einer Dienstleistung aufgewendet wurde, leicht aus dem Blick geraten. Damit das nicht geschieht, verfügt {branch} über die Anwendungen menu:[Sales], menu:[Zeiterfassung] und menu:[HumanResources].
+
+(((Rechnungswesen)))
+Das Rechnungswesen selbst ist (noch) nicht Bestandteil von {branch}. Aber es lassen sich, da wir es ja mit einer quelloffenen Software zu tun haben, bei Bedarf entsprechende Schnittstellen einrichten, welche die hier gespeicherten Daten an ein Fakturierungsprogramm übergeben.
+
+Im Folgenden werden Sie feststellen, dass menu:[Sales] unter den o.g. Programmteilen mit ERP-Funktion eine Sonderstellung einnimmt, da es auch die Untermodule menu:[Kostenstellen] und menu:[Abteilung] enthält, die nicht unmittelbar dem Verkaufsprozess zuzuordnen sind.{empty}footnote:[Die Anordnung hier hat historische Gründe und wird in einer der nächsten Versionen von {branch} korrigiert werden.]
+
+
+////
+Soll das so bleiben? Es ist logisch nicht nachvollziehbar...
+////
+
+Rufen Sie über den Reiter menu:[{branch}net] oder menu:[{branch}com] die Anwendung menu:[Sales] auf (wenn sie nicht schon als Reiter angezeigt wird – in diesem Falle klicken Sie den Reiter an). 
+
+[[sec.sales.module.favoriten]]
+=== Untermodule und Favoriten ===
+
+Die Ansicht der linken Seite dieses Programmteils unterscheidet sich von den klassischen Groupware-Anwendungen, denn menu:[Sales] kennt z.B. keine Unterteilung in Datenbanken für ``persönliche'', ``gemeinsame'' oder Objekte ``anderer Benutzer''. 
+//////////////////
+        SCREENSHOT
+        path: </Sales/MainScreen/Product>
+        demodata:
+        image: screen
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Sales-Anwendung als Gesamtansicht
+image::Sales/1_sales_uebersicht.png[id="fig_salesuebersicht",width="100%"]
+(((ERP)))
+Auch daran erkennen Sie, dass es sich hier eigentlich um ein Tool zur Ressourcenplanung und -erfassung (ERP) handelt. Im oberen Teil der linken Seite unter menu:[MODULE] finden Sie dafür mehrere Unterprogramme.
+//////////////////
+        SCREENSHOT
+        path: </Sales/MainScreen/Product>
+        demodata:
+        image: zoom
+        comment: <es gibt viel mehr neue Module>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Module der Sales-Anwendung
+image::Sales/2_sales_module.png[id="fig_salesmodules",width="50%"]
+
+
+Die Einträge unter menu:[FAVORITEN] wechseln je nach Modul. In menu:[Produkte] und menu:[Verträge] gibt es in der Standardvariante nur eine Ansicht, nämlich menu:[Meine Produkte] (also jene, die Sie selbst angelegt haben) bzw. menu:[Meine Verträge] (analog). menu:[Kunden], menu:[Kostenstellen] und menu:[Abteilung] haben gar keine Favoriten-Ansichten, da sie der Eingabe zentral verwalteter Daten (Kunden) bzw. Parameter für die Aufwandserfassung dienen.
+
+(((Produkt)))
+[[sec.sales.produkte]]
+=== Produkte ===
+
+[[sec.sales.produkte.hinzufuegen]]
+==== Produkt hinzufügen ====
+
+Wählen Sie links unter menu:[MODULE] den Menüpunkt menu:[Produkte]. Das Bearbeitungsmenü enthält die Einträge menu:[Produkt hinzufügen], menu:[Produkt bearbeiten], menu:[Produkt löschen] und menu:[Drucke Seite]. Dass menu:[Produkt bearbeiten] und menu:[Produkt löschen] ausgegraut sind, wenn in der Tabelle kein Produkt angewählt ist, wird Ihnen schon geläufig sein. 
+
+Was Sie auch schon kennen, ist die Verfahrensweise mit der Tabellenansicht. Rechts außen finden Sie das Symbol zum An- und Abwählen von Tabellenspalten. Wenn Sie es aus der Standardansicht heraus anklicken, sehen Sie, dass die vier Felder menu:[Angelegt von], menu:[Angelegt am], menu:[Zuletzt geändert von] und menu:[Letztes Modifikationsdatum] nicht angezeigt werden. Dasselbe wird Ihnen auch im weiteren Verlauf der menu:[Sales]-Anwendung bei den anderen zu besprechenden Objekten begegnen, denn es handelt sich hier um vom System automatisch vergebene Einträge. Lassen Sie sie jetzt auch ausgeblendet und schließen Sie das Spaltensymbol wieder. Es genügt zu wissen, dass sie bei Bedarf einzublenden sind.
+
+Sollten im System bisher keine Produkte gespeichert sein, fügen wir jetzt eines hinzu, denn im weiteren Verlauf des Kapitels benötigen wir es für Verkettungs-Funktionen mit Verträgen und Kunden. Klicken Sie darum jetzt menu:[Produkt hinzufügen].
+
+//////////////////
+        SCREENSHOT
+        path: </Sales/EditDialog/Product>
+        demodata: Kategorien, mit was abrechnen?, Tags, Kontakt
+        image: dialog
+        comment: <neue Funktionen und Layout anders>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Neues Produkt anlegen
+image::Sales/3_sales_produkt_neu.png[id="fig_salesprodukthinzu",width="100%"]
+
+
+In der Bearbeitungsmaske unter dem geöffneten Reiter menu:[Produkt] finden Sie die in der Standardansicht der Tabelle angezeigten Felder wieder. Die oben erwähnten Daten zum Bearbeitungsverlauf finden Sie nicht, da sie, wie schon erwähnt, automatisch erstellt werden.
+
+
+Kommen wir zu den Feldern zur Charakterisierung eines Produktes: Sie müssen sie nicht alle ausfüllen – nur menu:[Name] und menu:[Preis] sind Pflichtfelder. Beachten Sie bei Eingabe eines Preises, dass dieser in englischer Notation, also mit einem Dezimal__punkt__ anstelle eines Kommas, eingegeben werden muss. Wenn Sie das Produkt zukaufen, d.h. der Hersteller ein anderes Unternehmen ist, können Sie das hier vermerken.
+
+//Das Feld menu:[Rechnet ab] dient ...
+
+////
+(Erklärung der Pulldown-Einträge "SalesProduct" und "TimeTracker Timeaccount"!
+@Kai: Das machen wir weg. Macht so keinen Sinn. Dazu gibt es bei uns internen Code der noch nicht veröffentlicht werden kann.
+
+KUK 2015-05-05: Pulldown "Rechnet ab" ist noch drin... 
+////
+
+
+Ist der Hersteller des Produktes als Kontaktdatensatz in Ihrer {branch}-Adressdatenbank erfasst, können Sie ihn mit dem Produktdatensatz verknüpfen. Da diese Verknüpfung nicht als Programmfunktion in menu:[Sales] vorgesehen ist, nutzen Sie dazu die allgemeine Verknüpfungsfunktion.
+
+
+[IMPORTANT]
+==========
+Die Vergabe von Produktnamen und -kategorien kann in Ihrem Unternehmen verbindlich definiert sein – klären Sie dies ggf. mit Ihrer Produktionsabteilung.
+==========
+
+Legen Sie nun ein Testprodukt an, um später die entsprechenden Verknüpfungsfunktionen nachzuvollziehen.
+
+[[sec.sales.produkte.bearbeiten]]
+==== Produkt bearbeiten ====
+
+Beim Klick auf menu:[Produkt bearbeiten] öffnet sich die gleiche Maske, wie Sie sie schon vom Anlegen eines Produktes kennen. Der Punkt des Bearbeitungsmenüs ist nur aktiv, wenn Sie in der Tabelle ein Produkt markiert haben. Sie erreichen das Menü auch über einen Doppelklick auf den Tabelleneintrag oder über einen Rechtsklick und das Kontextmenü. 
+
+[[sec.sales.produkte.loeschen]]
+==== Produkt löschen ====
+
+Der Menüpunkt löscht ein in der Tabelle angewähltes Produkt, immer mit Sicherheitsabfrage.{empty}footnote:[Beachten Sie, dass Produkte auch dann gelöscht werden, wenn Sie z.B. mit Verträgen verknüpft sind, was natürlich zu unerwünschten Inkonsistenzen führen kann. Diese Unzulänglichkeit wird in einer künftigen Version von {branch} sicher behoben.]
+
+////
+Fataler Datenbank-Bug! Produkte lassen sich löschen obwohl sie Verträgen zugeordnet sind! Dort erscheint dann "undefined". Geht gar nicht!
+@Kai: In der Tat, das ist schlecht.
+////
+
+
+////
+Dr. Markus Wirtz, 2015-04-15 11:26
+Habe dazu mal eine Fußnote ergänzt, denn _das_ ist endlich mal eine wertvolle Information...
+
+KUK 2015-05-05: Wie so viele Informationen, die ich als "Beta-Tester" beigesteuert habe, die aber keinen Niederschlag gefunden haben. Das Problem der durch Löschen von verknüpften Datensätzen verursachten Inkonsistenzen zieht sich durch alle Programmteile und wurde von mir auch überall bemängelt. Es gibt aber m.E. bisher nirgendwo Lösungen.
+////
+
+
+
+[[sec..sales.produkte.drucke.seite]]
+==== Drucke Seite ====
+
+Der Menüpunkt öffnet Ihren browserinternen Druckdialog und erzeugt standardmäßig eine Liste aller in der Tabellenansicht dargestellten Produkte im DIN-A4-Hochformat. Dabei werden exakt die Felder ausgedruckt, die auch in der Tabellenansicht ausgewählt wurden. Die Zeichengröße im Druckbild passt sich entsprechend dynamisch an.
+
+(((Kunden)))
+[[sec.sales.Kunden]]
+=== Kunden ===
+
+In der Menü-Reihenfolge der menu:[MODULE] wäre der nächste Punkt unter menu:[Produkte] eigentlich das Modul menu:[Verträge]; dass wir hier davon abweichen und zunächst das menu:[Kunden]-Modul behandeln, hat seinen Grund: Die Verknüpfung der drei Objekte ``Produkt'', ``Kunde'' und ``Vertrag'' hat im ``Vertrag'' seinen Ausgangspunkt. Um das Procedere nachzuvollziehen, müssen also bereits Produkte und Kunden vorhanden sein.
+
+Unter menu:[Kunden] finden Sie im Bearbeitungsmenü analog zu menu:[Produkte] die Einträge menu:[Kunde hinzufügen], menu:[Kunde bearbeiten], menu:[Kunde löschen] und menu:[Drucke Seite], dazu noch den Menüpunkt menu:[Export]. Die Tabellenansicht enthält bereits in der Standardvariante eine Vielzahl von Datenfeldern, zu denen (klicken Sie zur Probe einmal rechts außen das Tabellenkopfsymbol an) noch, analog zu menu:[Produkte], vier weitere kommen, die vom System gemäß dem Bearbeitungsverlauf automatisch vergebene Werte enthalten. Schauen wir uns die anderen Felder und ihre Bedeutung nun über die Bearbeitungsmaske näher an.
+
+[[sec.sales.kunden.hinzufuegen]]
+==== Kunde hinzufügen ====
+
+Klicken Sie im Bearbeitungsmenü menu:[Kunde hinzufügen] an. Unter dem Reiter menu:[Kunde] finden Sie eine Maske mit den Feldern, die auch in der Tabellenansicht zu sehen waren. Beachten Sie, dass jetzt die Felder menu:[Währung], menu:[Zahlungsziel in Tagen], menu:[Wechselkurs] und menu:[Rabatt in Prozent] bereits mit Standardwerten gefüllt sind.
+
+//////////////////
+        SCREENSHOT
+        path: </Sales/EditDialog/Customer>
+        demodata: Kontakte, Tags
+        image: dialog
+        comment: <neue Funktionen und Layout anders>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Kunden hinzufügen
+image::Sales/4_sales_kunden_neu.png[id="fig_salesneuerkunde",width="100%"]
+
+Zuerst weisen Sie, als Pflichteingabe und mit zwei Pfeilen zum Hoch- und Herunterzählen versehen, die menu:[Kundennummer] zu. Sie können zwar beliebige Einträge vornehmen, im Hochzählen über den Pfeil wird aber die nächste Ganzzahl (ohne evtl. vorangestellte Nullen oder Buchstaben) eingetragen. 
+
+Bei menu:[Name] tragen Sie die Firmenbezeichnung Ihres Kunden ein.
+
+Das Auswählen einer menu:[Kontaktperson (extern)] über das Pulldown aus allen gespeicherten Kontaktdatensätzen ergänzt im Sektor menu:[Postanschrift] automatisch die Felder menu:[Straße], menu:[Postleitzahl], menu:[Ort], menu:[Region] und menu:[Land] gemäß den dortigen Eintragungen. In diesem Block stehen Ihnen noch zwei Felder menu:[Zusatz] und menu:[Zusatz 2] zur Verfügung. Rechts daneben finden Sie einen kleinen rechteckigen Button, hinter dem sich die praktische Funktion menu:[Adresse in die Zwischenablage kopieren] befindet, die Sie z.B. zum schnellen Ausfüllen einer Adresse in einem Musterbrief-Formular verwenden können.
+
+////
+KUK: Warum wird über den Datensatz der Kontaktperson (extern) alles Mögliche übernommen, aber nicht die Firmenbezeichnung, wenn eine da ist – ist für mich nicht logisch. Es müsste nur die Reihenfolge der Felder geändert werden (Kontaktperson (extern) zuerst), dann (evtl. mit Zauberstab?) übernehmen und den Rest überschreiben lassen oder nicht. Irgendein Suchalgorithmus läuft auch ab, wenn man in das Namensfeld etwas einträgt. Was passiert da?
+@Kai: Firmenname übernehmen lassen ist kein Problem.
+////
+
+menu:[Kontaktperson intern] ist ein Pulldown, mit dem Sie aus dem gesamten Adressdatenbestand Ihrer {branch}-Installation eine interne Kontaktperson für diesen Kunden auswählen.
+
+////
+Warum taucht hier ein Postfach auf, das es im Kontaktdatensatz nicht gibt?
+@Kai: Die Postwanschrift bezieht sich auf die Firmenanschrift.
+////
+
+Damit haben Sie einen Großteil der Maske schon ausgefüllt. Sie sollten, wenn aus diesen Daten die Rechnungserstellung geplant ist, noch unter menu:[Abrechnung] die menu:[USt.-ID] sowie menu:[IBAN] und menu:[BIC] eingeben sowie die Standardeinstellungen für menu:[Zahlungsziel in Tagen], menu:[Wechselkurs] und menu:[Rabatt in Prozent] prüfen und bei Bedarf ändern.
+
+Unter menu:[Sonstiges] tragen Sie im Feld menu:[Internet] ggf. die Webadresse des Kunden ein.
+
+////
+KUK: Das war in der alten Version schon mal übersetzt! Jetzt taucht wieder eine "Billing Address" und eine "Delivery Address" auf.
+@Kai: Problem ist bekannt. Arbeiten wir dran.
+////
+
+
+
+Der Reiter menu:[Rechnungsanschrift] dient dem Anlegen einer oder mehrerer, ggf. von der Kundenadresse abweichender, Rechnungsadressen. Im unteren Rand des Fensters finden Sie die drei Buttons menu:[Rechnungsanschrift bearbeiten], menu:[Rechnungsanschrift hinzufügen] und menu:[Rechnungsanschrift löschen]. Klicken Sie jetzt menu:[Rechnungsanschrift hinzufügen], erhalten Sie eine weitere, kleinere Eingabemaske, in die Sie entweder, mit dem kleinen Zauberstab-Button links oben, die Adressdaten von der Kundenmaske übernehmen oder selbst händisch eine andere Adresse eintragen. Beachten Sie auch das Feld menu:[Debitorennummer]; hier können Sie der Rechnungsadresse eine von der Kundennummer abweichende Debitorennummer zuweisen und so dem Kunden bei Bedarf über getrennte Wege Rechnungen stellen. Das ist insbesondere dann notwendig, wenn Sie mit Großunternehmen Geschäfte machen. Legen Sie jetzt unter Zuhilfenahme des Zauberstab-Buttons testweise eine Rechnungsanschrift an.
+
+menu:[Lieferanschrift] funktioniert analog zu menu:[Rechnungsanschrift], nur dass hier die Debitorennummer in der Maske fehlt.
+
+[[sec.sales.kunden.bearbeiten]]
+==== Kunden bearbeiten ====
+
+Beim Klick auf menu:[Kunde bearbeiten] öffnet sich die gleiche Maske, die Sie schon vom Anlegen eines Kunden kennen, nur dass hier natürlich bereits Daten in den Feldern stehen. Der Punkt des Bearbeitungsmenüs ist nur aktiv, wenn Sie in der Tabelle einen Kunden markiert haben. Sie erreichen das Menü auch über einen Doppelklick auf den Tabelleneintrag oder über einen Rechtsklick und das Kontextmenü. 
+
+[[sec.sales.kunden.loeschen]]
+==== Kunden löschen ====
+
+Der Menüpunkt löscht einen in der Tabelle angewählten Kunden, immer mit Sicherheitsabfrage.{empty}footnote:[Auch hier erfolgt die Löschung trotz eventuell vorhandener Verknüpfungen (vgl. Fußnote in <<sec.sales.produkte.loeschen>>).]
+
+
+////
+Bug: Genau wie bei Produkten lässt sich auch der Kunde löschen, obwohl er unter "Verträge" zugewiesen worden ist. Dort erscheint dann das Kundenfeld leer und bei der Rechnungsanschrift ein String, der wie eine Datenbank-ID aussieht.
+Außerdem bleiben die Buttons ``Kunde bearbeiten'' und ``Kunde löschen'' nach Löschung des letzten Kunden aktiv und grauen nicht aus (auch nach Anwendungswechsel nicht, erst nach Abmelden und Neustart!); eventuell ein Fehler der mit der Zuweisung des Kunden unter ``Verträge'' zu tun hat? Habe ich nicht im einzelnen geprüft – nur gehe ich davon aus dass diese generelle Nicht-Lösch-Sperrung von verknüpften Elementen wahrscheinlich dauerhaft zu heillosen Inkonsistenzen führen wird – abgesehen von den Nutzern, die daran absterben. Sind Datensätze bei allgemeinen Verknüpfungen auch nicht vor dem Löschen geschützt? Habe ich nicht geprüft...
+@Kai: Ohje. Kläre ich.
+////
+
+
+//////////
+Dr. Markus Wirtz, 2015-04-15 12:02
+Auch hier habe ich eine entsprechende Fußnote ergänzt.
+//////////
+
+
+
+[[sec..sales.kunden.drucke.seite]]
+==== Drucke Seite ====
+
+Der Menüpunkt öffnet Ihren browserinternen Druckdialog und erzeugt standardmäßig eine Liste aller in der Tabellenansicht dargestellten Kunden im DIN-A4-Hochformat. Dabei werden exakt die Felder ausgedruckt, die auch in der Tabellenansicht ausgewählt wurden. Die Zeichengröße im Druckbild passt sich entsprechend dynamisch an.
+
+[[sec..sales.kunden.export]]
+==== Export ====
+
+Über die menu:[Export]-Funktion können Sie eine Tabellenkalkulationsdatei im ODS-Format (Open/LibreOffice) erstellen, die alle Felder der Kundendatenbank enthält, nicht nur die in der Tabellenansicht eingeblendeten. Nur die letzten vier Felder zum Bearbeitungsstatus werden nicht mit übertragen.
+
+(((Kostenstellen)))
+[[sec.sales.kostenstellen]]
+=== Kostenstellen ===
+
+Wir gehen weiter in den Menüpunkten unterhalb von menu:[Kunden], denn auch menu:[Kostenstellen] sollten wir vor menu:[Verträgen] angelegt haben, damit wir dort dann die Verknüpfung vornehmen können.
+
+[IMPORTANT]
+===========
+Die Nomenklatur von Kostenstellen wird branchen- und/oder unternehmensspezifisch nach verschiedenen Kriterien definiert und gilt i.d.R. für das ganze Unternehmen verbindlich. Das entsprechende Verzeichnis sollte Ihnen also bei der Anlage in {branch} vorliegen.
+===========
+
+[[sec.sales.kostenstellen.hinzufuegen]]
+==== Kostenstelle hinzufügen ====
+
+////
+Screenshot Fenster "Kostenstelle hinzufügen"
+////
+
+////
+Rechtschreibfehler: "Neuen Kostenstelle..."
+////
+
+
+Klicken Sie im Bearbeitungsmenü ganz links menu:[Kostenstelle hinzufügen]. Die Bearbeitungsmaske enthält nur zwei Werte: menu:[Nummer] und menu:[Anmerkung]. Beide Felder sind alphanumerische Pflichteingaben. Tragen Sie hier einfach die Werte Ihres Kostenstellenverzeichnisses ein. 
+
+[[sec.sales.kostenstellen.bearbeiten]]
+==== Kostenstelle bearbeiten ====
+
+Beim Klick auf menu:[Kostenstelle bearbeiten] öffnet sich die gleiche Maske, nur dass hier natürlich bereits Daten in den Feldern stehen. Der Punkt des Bearbeitungsmenüs ist nur aktiv, wenn Sie in der Tabelle eine Kostenstelle markiert haben. Sie erreichen das Menü auch über einen Doppelklick auf den Tabelleneintrag oder über einen Rechtsklick und das Kontextmenü. 
+
+[[sec.sales.kostenstellen.loeschen]]
+==== Kostenstelle löschen ====
+
+Der Menüpunkt löscht eine in der Tabelle angewählte Kostenstelle, immer mit Sicherheitsabfrage – und ebenfalls ohne Prüfung von Verknüpfungen.
+
+////
+Bug: Genau wie bei Produkten lässt sich auch die Kostenstelle löschen, obwohl sie unter "Verträge" zugewiesen worden ist. Dort erscheint dann das Kostenstellenfeld leer.
+////
+
+[[sec..sales.kostenstellen.drucke.seite]]
+==== Drucke Seite ====
+
+Der Menüpunkt öffnet Ihren browserinternen Druckdialog und erzeugt standardmäßig eine Liste aller in der Tabellenansicht dargestellten Kunden im DIN-A4-Hochformat. Es werden exakt die Felder ausgedruckt, die auch in der Tabellenansicht ausgewählt wurden – in diesem Fall sind es standardmäßig nur zwei. Sie können jedoch auch die vier Felder zur Dokumentation der Bearbeitung mit anwählen und ausdrucken.
+
+(((Verträge)))
+[[sec.sales.vertraege]]
+=== Verträge ===
+
+Unter menu:[Verträge] finden Sie im Bearbeitungsmenü analog zu menu:[Produkte] die Einträge menu:[Vertrag hinzufügen], menu:[Vertrag bearbeiten], menu:[Vertrag löschen] und menu:[Drucke Seite]. Auch diese Tabellenansicht umfasst eine Vielzahl von Feldern, zu denen (analog zu den eben besprochenen Kunden) vier weitere kommen, die den Bearbeitungsverlauf automatisch dokumentieren.
+
+[[sec.sales.vertrag.hinzufuegen]]
+==== Vertrag hinzufügen ====
+
+Klicken Sie menu:[Vertrag hinzufügen], finden Sie unter dem Reiter menu:[Vertrag] eine Maske mit den Feldern, die auch in der Tabellenansicht zu sehen waren. Die vier ausgeblendeten Felder sind hier auch nicht in der Maske zu finden, denn sie enthalten vom System automatisch ausgefüllte Daten. 
+
+//////////////////
+        SCREENSHOT
+        path: </Sales/EditDialog/Contract>
+        demodata: Kunde, Tags, Kontakte
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Neuen Vertrag hinzufügen
+image::Sales/5_sales_vertrag_neu.png[id="fig_salesneuervertrag",width="100%"]
+
+
+menu:[Nummer] ist ein Pflichtfeld und zur manuellen Eingabe oder automatischen Vergabe einer Vertragsnummer vorgesehen, d.h. Sie können (wenn Sie über die entsprechende Berechtigung verfügen) einstellen, ob hier eine Vertragsnummer frei eingegeben oder vom System automatisch hochgezählt werden soll. Die dazu erforderlichen Einstellungsmöglichkeiten finden Sie in der Anwendung menu:[Admin] unter menu:Anwendungen[Sales, Settings] (vgl. <<sec.admin.anwendungen.sales>>). Außerdem wird dort auch festgelegt, welche Formen einer Vertragsnummer (nur Ziffern oder auch Text) erlaubt sein sollen.
+
+[IMPORTANT]
+===========
+Diese Vorgaben sollten vor der Anlage erster Verträge erfolgen und danach nicht mehr verändert werden können.
+===========
+
+////
+KUK: Diese Einstellung ist bei mir bereits gesichert, d.h. ich kann trotz Admin-Rechten nichts ändern. Das hat die o.g. Ursache wie ich ahne, aber wie kann ich es einstellen?
+////
+
+menu:[Titel] ist ebenfalls ein Pflichtfeld und kann eine beliebige Buchstaben/Zahlen-Kombination aufnehmen.
+
+Unter menu:[Kunde] erhalten Sie ein Pulldown, das Ihnen die im System bereits angelegten Kunden anbietet. Probieren Sie das jetzt einmal aus – Sie sollten mindestens den weiter oben angelegten Testkunden zur Auswahl haben. Weisen Sie ihn jetzt diesem Vertrag zu. Wenn Sie für den Kunden eine Rechnungsanschrift hinterlegt haben, wird diese nun automatisch im nächsten Feld übernommen. Bei mehreren Adressen bietet Ihnen ein Pulldown die Auswahl. Es erscheint eine eventuell vergebene Debitorennummer in Klammern dahinter (menu:[Rechnung – XX]).
+
+////
+KUK: hier ebenfalls ein Rückschritt bei der Übersetzung: Jetzt heißt es wieder "billing -"
+////
+
+menu:[Anfang] und menu:[Ende] sind Datumsfelder, die für Vertragsanfang und -ende stehen.
+
+////
+KUK: Früher war menu:[Anfang] ein Pflichteingabefeld - jetzt nicht mehr...
+////
+
+Über menu:[Kontaktperson (extern)] und menu:[Kontaktperson (intern)] weisen Sie per Pulldown einen beliebigen in {branch} gespeicherten Kontakt zu. In beiden Fällen ist es möglich, sowohl einen Kontakt aus einem beliebigen Adressbuch als auch einen Benutzer von {branch} auszuwählen.
+
+Über menu:[Hauptkostenstelle] weisen Sie dem Vertrag eine Kostenstelle zu. Das funktioniert natürlich ebenfalls nur, wenn im System bereits Kostenstellen angelegt wurden (vgl. <<sec.sales.kostenstellen>>).
+
+Im Feld menu:[Beschreibung] speichern Sie beliebige Informationen über den Vertrag.
+
+Klicken Sie nun den Reiter menu:[Produkte] an. 
+
+//////////////////
+        SCREENSHOT
+        path: </Sales/EditDialog/Contract>
+        demodata: Produkt
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Neuen Vertrag hinzufügen – hier für Produkte
+image::Sales/6_sales_vertrag_neu_produkte.png[id="fig_salesneuervertragprodukte",width="100%"]
+
+
+Sie sehen, dass Sie per Pulldown dem Vertrag beliebig viele Produkte in beliebiger menu:[Anzahl] zuweisen können. 
+
+[[sec.sales.vertrag.bearbeiten]]
+==== Vertrag bearbeiten ====
+
+Beim Klick auf menu:[Vertrag bearbeiten] öffnet sich die gleiche Maske, wie beim Anlegen eines Vertrages. Der Punkt des Bearbeitungsmenüs ist nur aktiv, wenn Sie in der Tabelle einen Vertrag markiert haben. Sie erreichen das Menü auch über einen Doppelklick auf den Tabelleneintrag oder über einen Rechtsklick und das Kontextmenü. 
+
+[[sec.sales.vertrag.loeschen]]
+==== Vertrag löschen ====
+
+Der Menüpunkt löscht einen in der Tabelle angewählten Vertrag, immer mit Sicherheitsabfrage.
+
+[[sec..sales.vertrag.drucke.seite]]
+==== Drucke Seite ====
+
+Dieser Menüpunkt öffnet Ihren browserinternen Druckdialog und erzeugt standardmäßig eine Liste aller in der Tabellenansicht dargestellten Verträge im DIN-A4-Hochformat. Es werden exakt die Felder ausgedruckt, die auch in der Tabellenansicht ausgewählt wurden.
+
+[[sec.sales.abteilung]]
+=== Abteilungen ===
+
+Mit menu:[Abteilungen] ist eine Einheit in der Unternehmensstruktur gemeint. 
+
+[[sec.sales.abteilung.hinzufuegen]]
+==== Abteilung hinzufügen ====
+
+////
+Screenshot Fenster "Neuen Abteilung hinzufügen", Reiter "Division"
+////
+
+////
+KUK:
+- Das Ganze muss m.E. in HumanResources als Modul, hat hier bei Sales nichts zu suchen.
+@Kai: Da hast Du Recht. Das werden wir demnächst mal umziehen.
+- "Division" übersetzen!
+@Kai: Ticket ist erstellt
+- Fensterüberschrift "Neuen Abteilung hinzufügen" korrigieren
+@Kai: Ticket ist erstellt
+////
+
+Das Anlegen einer Abteilung funktioniert über den Button menu:[Abteilung hinzufügen]. Die Bearbeitungsmaske enthält unter dem Reiter menu:[Division] nur den Wert menu:[Titel]. Tragen Sie dort die Bezeichnung Ihrer Abteilung ein. Die Abteilung wird in der menu:[Sales]-Anwendung nicht mit anderen Objekten verknüpft, stattdessen in menu:[HumanResources] mit dem Mitarbeiter.
+
+[[sec.sales.abteilung.bearbeiten]]
+==== Abteilung bearbeiten ====
+
+Beim Klick auf menu:[Abteilung bearbeiten] öffnet sich die gleiche Maske, wie Sie sie schon vom Anlegen einer Abteilung her kennen. Der Punkt des Bearbeitungsmenüs ist nur aktiv, wenn Sie in der Tabelle eine Abteilung markiert haben. Sie erreichen das Menü auch über einen Doppelklick auf den Tabelleneintrag oder über einen Rechtsklick und das Kontextmenü. 
+
+[[sec.sales.abteilung.loeschen]]
+==== Abteilung löschen ====
+
+Der Menüpunkt löscht eine in der Tabelle angewählte Abteilung, immer mit Sicherheitsabfrage.
+
+////
+KUK: Bug: Genau wie bei Produkten lässt sich auch die Abteilung löschen, obwohl sie unter "HumanRessources" einem Mitarbeiter zugewiesen worden ist. Dort erscheint dann im Feld für Abteilung wieder die schon bekannte kryptische ID.
+////
+
+[[sec..sales.abteilung.drucke.seite]]
+==== Drucke Seite ====
+
+Dieser Menüpunkt öffnet Ihren browserinternen Druckdialog und erzeugt standardmäßig eine Liste aller in der Tabellenansicht dargestellten Abteilungen im DIN-A4-Hochformat. Es werden exakt die Felder ausgedruckt, die auch in der Tabellenansicht ausgewählt wurden – in diesem Falle ist es standardmäßig nur eines. Sie können jedoch auch die vier Felder zur Dokumentation der Bearbeitung mit anwählen und ausdrucken.

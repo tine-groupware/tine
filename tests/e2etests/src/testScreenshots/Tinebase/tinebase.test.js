@@ -64,7 +64,7 @@ describe('usersettings', () => {
 
     test('admin mode', async () => {
         await expect(newPage).toClick('span', {text: 'Generelle Einstellungen'});
-        await newPage.waitForTimeout(1000);
+        await newPage.waitForTimeout(2000);
         await newPage.click('.x-btn-image.action_adminMode');
         await newPage.waitForTimeout(2000);
         await newPage.screenshot({path: 'screenshots/Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus.png'});

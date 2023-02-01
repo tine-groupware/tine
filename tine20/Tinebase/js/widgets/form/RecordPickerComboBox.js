@@ -390,7 +390,16 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         if (this.hiddenField){
             this.hiddenField.value = Ext.value(value, '');
         }
-        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue.call(this, text);
+
+        const setValue = _.bind(Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue, this);
+        if (text && text.replaceProxyBy) {
+            text.replaceProxyBy((text) => {
+                setValue(text);
+                this.value = value;
+            });
+        } else {
+            setValue(text);
+        }
 
         var el = this.getEl();
         if (el) {

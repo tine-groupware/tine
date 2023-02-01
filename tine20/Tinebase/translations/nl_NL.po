@@ -760,7 +760,7 @@ msgid "Choose MFA Deivce"
 msgstr ""
 
 #: js/AreaLocks.js:113
-msgid "This area is locked. Which device should be used to unlock."
+msgid "This area is locked. Which device should be used to unlock?"
 msgstr ""
 
 #: js/AreaLocks.js:215

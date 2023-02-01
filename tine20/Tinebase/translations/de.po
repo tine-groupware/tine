@@ -1070,9 +1070,6 @@ msgstr ""
 msgid "Skip Imap Quota Notfication"
 msgstr "IMAP Kontingents-Benachrichtigungen unterdrücken"
 
-msgid "Skip Upstream Updates"
-msgstr "Upstream-Aktualisierungen unterdrücken"
-
 #: Config.php:2582 Config.php:2584
 msgid "SSO client settings"
 msgstr ""
@@ -1209,7 +1206,7 @@ msgstr "Modell"
 
 #: Model/ImportExportDefinition.php:151
 msgid "Label"
-msgstr "Bezeichner"
+msgstr "Label"
 
 #: Model/ImportExportDefinition.php:156 Model/Role.php:64
 #: js/widgets/persistentfilter/EditPersistentFilterPanel.js:198
@@ -4093,11 +4090,23 @@ msgstr "Ihr {{ app.branding.title }} Sicherheitscode ist {{ code }}."
 msgid "Multi Factor Authentication"
 msgstr "Multi Faktor Authentifikation"
 
-msgid "We strongly encourage you to enable Multi-Factor Authentication for added security."
-msgstr "Für zusätzliche Sicherheit empfehlen wir Ihnen dringend, die Multi-Faktor-Authentifizierung zu aktivieren."
+msgid ""
+"We strongly encourage you to enable Multi-Factor Authentication for added "
+"security."
+msgstr ""
+"Für zusätzliche Sicherheit empfehlen wir Ihnen dringend, die Multi-Faktor-"
+"Authentifizierung zu aktivieren."
 
-msgid "Multi-Factor Authentication adds an extra layer of protection to logins. Once enabled & configured, each time you sing in you will be asked to enter both your username & password as well as a second factor such as a security code."
-msgstr "Die Multi-Faktor-Authentifizierung bietet einen zusätzlichen Schutz für die Anmeldung. Sobald sie aktiviert und konfiguriert ist werden Sie jedes Mal, wenn Sie sich anmelden, aufgefordert sowohl Ihren Benutzernamen und Passwort als auch einen zweiten Faktor wie z.B. einen Sicherheitscode einzugeben."
+msgid ""
+"Multi-Factor Authentication adds an extra layer of protection to logins. "
+"Once enabled & configured, each time you sing in you will be asked to enter "
+"both your username & password as well as a second factor such as a security "
+"code."
+msgstr ""
+"Die Multi-Faktor-Authentifizierung bietet einen zusätzlichen Schutz für die "
+"Anmeldung. Sobald sie aktiviert und konfiguriert ist werden Sie jedes Mal, "
+"wenn Sie sich anmelden, aufgefordert sowohl Ihren Benutzernamen und Passwort "
+"als auch einen zweiten Faktor wie z.B. einen Sicherheitscode einzugeben."
 
 msgid "Multi Factor Authentication Device Configuration"
 msgstr "Multi Faktor Authentifikations Geräte Konfiguration"
@@ -5098,8 +5107,14 @@ msgstr "FIDO2 WebAuthn Gerät ist konfiguriert."
 msgid "Unsupported Configuration"
 msgstr "Nicht unterstützte Konfiguration"
 
-msgid "This installation requires user verification for FIDO2 devices. Firefox for {OS} does not support user verification ({details}). You need to use a different browser to use FIDO2."
-msgstr "Diese Installation erfordert Nutzer-Verifikation für FIDO2 Geräte. Firefox für {OS} unterstützt Nutzer-Verifikation nicht ({details}). Benutzen sie einen anderen Browser um FIDO2 zu verwenden."
+msgid ""
+"This installation requires user verification for FIDO2 devices. Firefox for "
+"{OS} does not support user verification ({details}). You need to use a "
+"different browser to use FIDO2."
+msgstr ""
+"Diese Installation erfordert Nutzer-Verifikation für FIDO2 Geräte. Firefox "
+"für {OS} unterstützt Nutzer-Verifikation nicht ({details}). Benutzen sie "
+"einen anderen Browser um FIDO2 zu verwenden."
 
 msgid "see {url} for details"
 msgstr "für Details siehe {url}"
@@ -5139,11 +5154,10 @@ msgid "Community Identification Number Import"
 msgstr "Gemeindeschlüssel Import"
 
 #: js/AreaLocks/PinProvider.es6.js:17 js/PasswordChangeDialog.js:34
-#, fuzzy
 msgid "PIN"
 msgid_plural "PINs"
 msgstr[0] "PIN"
-msgstr[1] "PIN"
+msgstr[1] "PINs"
 
 msgid "GENDER_PIN"
 msgstr "female"
@@ -5326,3 +5340,291 @@ msgstr "Wie möchten Sie Ihren Export speichern?"
 
 msgid "Export only currently shown columns"
 msgstr "Nur die angezeigten Spalten exportieren"
+
+msgid "Skip Upstream Updates"
+msgstr "Upstream-Aktualisierungen unterdrücken"
+
+msgid "Your password expired. Please enter a new user password:"
+msgstr ""
+"Ihr Passwort ist abgelaufen. Bitte setzen Sie ein neues Benutzer-Passwort:"
+
+msgid "This area is locked. To unlock it you need to provide your PIN"
+msgstr ""
+"Dieser Bereich ist gesperrt. Um ihn zu entsperren, müssen Sie Ihre PIN "
+"eingeben"
+
+msgid ""
+"A new window cannot be opened. To avoid this message please deactivate your "
+"browsers popup blocker for {0}"
+msgstr ""
+"Ein neues Fenster konnte nicht geöffnet werden. Bitte deaktivieren Sie den "
+"Popup-Blocker Ihres Browsers für {0}"
+
+msgid "There was an error verifying your certificate!!!"
+msgstr "Es gab einen Fehler beim verifizieren Ihres Zertifikats!"
+
+msgid "Your username and/or your password are wrong!!!"
+msgstr "Ihr Benutzername und/oder Ihr Passwort ist falsch!"
+
+msgid "Please Wait!"
+msgstr "Bitte warten!"
+
+msgid "Export {0} {1}"
+msgstr "Exportiere {0} {1}"
+
+msgid "Export definition"
+msgstr "Exportdefinition"
+
+msgid "Links"
+msgstr "Verknüpfungen"
+
+msgid "Search for record ..."
+msgstr "Suche nach Einträgen ..."
+
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] "Ausgewählten Tag wirklich löschen?"
+msgstr[1] "Ausgewählte Tags wirklich löschen?"
+
+msgid "the selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] ""
+"Der ausgewählte Tag wird gelöscht und verschwindet bei allen Einträgen"
+msgstr[1] ""
+"Die ausgewählten Tags werden gelöscht und verschwinden bei allen Einträgen"
+
+msgid "one of"
+msgstr "eines von"
+
+msgid "none of"
+msgstr "keines von"
+
+msgid "Add {0} from Filemanager"
+msgstr "{0} vom Dateimanager hinzufügen"
+
+msgid "Select a file"
+msgstr "Wähle eine Datei"
+
+msgid "Attention: There are more filters active!"
+msgstr "Achtung: Es sind noch weitere Filter gesetzt!"
+
+msgid "Advanced search"
+msgstr "Erweiterte Suche"
+
+msgid "Search in related records as well."
+msgstr "Auch in verknüpften Datensätzen suchen."
+
+msgid "Criteria {0}"
+msgstr "Kriterium {0}"
+
+msgid "Shared Favorite (visible by all users)"
+msgstr "Gemeinsame Favoriten (sichtbar für alle Benutzer)"
+
+msgid "Free Busy"
+msgstr "Frei / Belegt"
+
+msgid "The grant to access free busy information of events in this calendar"
+msgstr ""
+"Das Recht, zu Termine in diesem Kalender Frei/Belegt-Informationen angezeigt "
+"zu bekommen"
+
+msgid "The grant to access records marked as private in this container"
+msgstr "Das Recht, private Einträge in diesem Container zu lesen"
+
+msgid "%s's personal "
+msgstr "%s's persönliche"
+
+msgid "Your session is not valid. You need to login again."
+msgstr "Ihre Sitzung ist ungültig. Bitte melden Sie sich erneut an."
+
+msgid "Second Factor Authentication Configuration"
+msgstr "Konfiguration der Zwei Faktor Authentifizierung"
+
+msgid "Container Custom Sort"
+msgstr "Benutzerdefinierte Ordnersortierung"
+
+msgid "Allows to sort containers by setting the sort order in Admin/Container"
+msgstr "Erlaubt es die Sortierung von Ordnern im Admin/Container Modul"
+
+msgid "Name of the role to notify if soft quote is exceeded"
+msgstr ""
+"Name der Rolle, die eine Benachrichtigung erhält, sobald die soft Quota "
+"erreicht ist"
+
+msgid "Without company assigned"
+msgstr "Keinem Unternehmen zugewiesen"
+
+msgid "Tables"
+msgstr "Tabellen"
+
+msgid "State"
+msgstr "Status"
+
+msgid "Change Password For \"{0}\""
+msgstr "Passwort für \"{0}\" ändern"
+
+msgid "Old Password"
+msgstr "Altes Passwort"
+
+msgid "New Password"
+msgstr "Neues Passwort"
+
+msgid "Repeat new Password"
+msgstr "Wiederhole das neue Passwort"
+
+msgid "changing password..."
+msgstr "Passwort wird geändert ..."
+
+msgid "Your password has been changed."
+msgstr "Ihr Passwort wurde geändert."
+
+msgid "The new passwords mismatch, please correct them."
+msgstr ""
+"Die neuen Passwörter stimmen nicht überein. Bitte korrigieren Sie die "
+"Eingabe."
+
+msgid "Edit Properties"
+msgstr "Eigenschaften bearbeiten"
+
+msgid "Recently used {0}:"
+msgstr "Kürzlich genutzte {0}:"
+
+msgid "Value already exists"
+msgstr "Wert bereits vorhanden"
+
+msgid "General"
+msgstr "Generell"
+
+msgid "Dialog buttons order style"
+msgstr "Reihenfolge der Dialogknöpfe"
+
+msgid "Dialog buttons order style (Windows / Mac)"
+msgstr "Reihenfolge der Dialogknöpfe (Windows / Mac)"
+
+msgid "Maximum login failures"
+msgstr "Maximum fehlerhafte Anmeldungen"
+
+msgid "Maximum allowed login failures before blocking account"
+msgstr "Maximum fehlerhafte Anmeldungen bevor das Konto gesperrt wird"
+
+msgid "setting new timezone..."
+msgstr "Neue Zeitzone setzen..."
+
+msgid "setting new language..."
+msgstr "neue Sprache wird eingestellt..."
+
+# LICENSE TRANSLATIONS
+msgid "{0} Business Edition trial"
+msgstr "{0} Business Edition Testversion."
+
+msgid ""
+"Thank you for testing {0} Business Edition. This version is limited to 5 "
+"users."
+msgstr ""
+"Danke, dass sie die {0} Business Edition testen. Diese Version ist auf 5 "
+"Benutzer limitiert."
+
+msgid "Buy subscription now."
+msgstr "Subskription jetzt kaufen."
+
+msgid "Your {0} Business Edition subscription expires in {1} days"
+msgstr "Ihre {0} Business Edition Subskription läuft in {1} Tagen ab"
+
+msgid "Subscription expired"
+msgstr "Subskription abgelaufen"
+
+msgid "Your {0} Business Edition subscription expired."
+msgstr "Ihre {0} Business Edition Subskription ist abgelaufen."
+
+msgid "License Type"
+msgstr "Lizenz Typ"
+
+msgid "Fileupload"
+msgstr "Datei hochladen"
+
+msgid "Second Factor Protected Applications"
+msgstr "Zweit-Passwort geschützte Applikationen"
+
+msgid "Second Factor Authentication is needed to access these applications"
+msgstr "Das Zweit-Passwort wird benötigt um diese Applikationen zu nutzen"
+
+msgid "Second Factor Required"
+msgstr "Zweit-Passwort benötigt"
+
+msgid "The right Resource Admin must be set once."
+msgstr ""
+"Das Recht Ressourcen Administration muss mindestens einmal festgelegt werden."
+
+msgid "- The last filter I used -"
+msgstr "- Der letzte ausgewählte Filter -"
+
+msgid ""
+"Set Tine 2.0 maintenance mode. Possible values: \"off\", \"normal\" (only "
+"users having the maintenance right can login) and \"all\""
+msgstr ""
+"Tine 2.0 in den Wartungsmodus setzten. Mögliche Werte: „off“, „normal“ (nur "
+"Nutzer mit dem Wartungsmodus Recht können sich einloggen) und „all“"
+
+msgid "User E-Mail-Address {0} not in allowed domains"
+msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains"
+
+msgid "User E-Mail-Address {0} not in allowed domains [{1}]"
+msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
+
+msgid "Conflict is resolved"
+msgstr "Konflikt ist aufgelöst"
+
+# LICENSE TRANSLATIONS
+msgid "License expired"
+msgstr "Lizenz abgelaufen"
+
+msgid "Your {0} license expired. Please buy a license at:"
+msgstr "Ihre {0} Lizenz ist abgelaufen. Bitte kaufen Sie eine Lizenz auf:"
+
+msgid "The license expires in {0} days"
+msgstr "Die Lizenz läuft in {0} Tagen ab"
+
+msgid "Your {0} license expired."
+msgstr "Ihre {0} Lizenz ist abgelaufen."
+
+msgid "{0} trial"
+msgstr "{0} Testversion."
+
+msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
+msgstr ""
+"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine gültige Lizenz zu "
+"erwerben."
+
+msgid ""
+"Your {0} license is expired! Users cannot login any more. Please contact "
+"Metaways Infosystems GmbH to buy a new license."
+msgstr ""
+"Ihre {0} Lizenz ist abgelaufen! Benutzer können sich nicht mehr einloggen. "
+"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine neue Lizenz zu "
+"erwerben."
+
+msgid "Copy Email Address"
+msgstr "E-Mail-Adresse kopieren"
+
+msgid "Multi Factor Authentication Config"
+msgstr "Multi-Faktor-Authentifizierung"
+
+msgid ""
+"This area is locked. To unlock it we send a securitycode to via {mfaDevice."
+"device_name}"
+msgstr ""
+"Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via {mfaDevice."
+"device_name} zum entsperren gesendet"
+
+msgid "Static PIN for user: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
+msgstr "Statischer PIN: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
+
+msgid "This area is locked. Which device should be used to unlock?"
+msgstr ""
+"Dieser Bereich ist gesperrt. Welches Gerät soll verwendet werden um ihn "
+"zu entsperren?"
+
+msgid "Bank Account"
+msgid_plural "Bank Accounts"
+msgstr[0] "Bank Konto"
+msgstr[1] "Bank Konten"

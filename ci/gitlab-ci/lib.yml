@@ -123,14 +123,21 @@
       
       _dependency_image_hash() {
           cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-          local fh=$(file_hashes ci/dockerimage/dependency.Dockerfile tine20/library tine20/composer.json tine20/composer.lock tine20/Tinebase/js/package.json tine20/Tinebase/js/npm-shrinkwrap.json scripts/packaging/composer/composerLockRewrite.php);
+          local fh=$(file_hashes ci/dockerimage/dependency.Dockerfile tine20/library tine20/composer.json tine20/composer.lock scripts/packaging/composer/composerLockRewrite.php);
       
           echo $fh $TINE20ROOT $(_base_image_hash) | sha256sum | head -c 32;
       }
       
+      _jsdependency_image_hash() {
+          cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
+          local fh=$(file_hashes ci/dockerimage/jsdependency.Dockerfile tine20/Tinebase/js/package.json tine20/Tinebase/js/npm-shrinkwrap.json);
+      
+          echo $fh $TINE20ROOT | sha256sum | head -c 32;
+      }
+      
       _test_dependency_image_hash() {
           cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-          local fh=$(file_hashes ci/dockerimage/test-dependency.Dockerfile ci/dockerimage/supervisor.d/webpack.ini etc phpstan.neon phpstan-baseline.neon);
+          local fh=$(file_hashes ci/dockerimage/test-dependency.Dockerfile etc phpstan.neon phpstan-baseline.neon);
       
           echo $fh $TINE20ROOT $(_dependency_image_hash) | sha256sum | head -c 32;
       }
@@ -143,6 +150,9 @@
               dependency)
                   _dependency_image_hash;
                   ;;
+              jsdependency)
+                  _jsdependency_image_hash;
+                  ;;  
               test-dependency)
                   _test_dependency_image_hash;
                   ;;
@@ -402,6 +412,8 @@
           export BASE_IMAGE="${REGISTRY}/base-commit:${IMAGE_TAG}"
           export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${IMAGE_TAG}"
           export SOURCE_IMAGE="${REGISTRY}/source-commit:${IMAGE_TAG}"
+          export JSDEPENDENCY_IMAGE="${REGISTRY}/jsdependency-commit:${IMAGE_TAG}"
+          export JSBUILD_IMAGE="${REGISTRY}/jsbuild-commit:${IMAGE_TAG}"
           export BUILD_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
           export BUILT_IMAGE="${REGISTRY}/built-commit:${IMAGE_TAG}"
           export REVISION=0
@@ -463,7 +475,7 @@
       }
       
       packaging_gitlab_get_version_for_pipeline_id() {
-          customer=$1
+          customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
       
           if ! curl \
               --fail \
@@ -521,7 +533,7 @@
       
       packaging_push_to_vpackages() {
           customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
-          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
           release=$(echo ${version} | sed sI-I~Ig)
       
           echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
@@ -701,12 +713,6 @@
               return
           fi
       
-          # TODO make this work for all branches 20XX.11
-          if [ "${branch}" == "2023.11" ]; then
-              echo tine20.com
-              return
-          fi
-      
           if echo "${branch}" | grep -Eq '(pu/|feat/|change/)'; then
               return 1
           fi
@@ -716,7 +722,12 @@
                       return 1
               fi
       
-              echo tine20.org
+              if [ "$(echo "${branch}" | cut -d. -f1)" -lt 2023 ]; then
+                  echo tine20.org
+                  return
+              fi
+      
+              echo tine20.com
               return
           else
               if [ $(echo "${branch}" | awk -F"/" '{print NF-1}') != 1 ]; then
@@ -739,7 +750,7 @@
 
   entry_points:
     tine_as_a_service:
-      - bash
+      - /bin/bash
       - -c
       - |
         # lib/entry_points/tine_as_a_service.sh
@@ -756,10 +767,6 @@
         $TINE20ROOT/ci/scripts/install_custom_app.sh
         
         touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_php_deps_installed
-        
-        # install js deps
-        npm --prefix $TINE20ROOT/tine20/Tinebase/js/ install;
-        touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_js_deps_installed
         
         # setup configs
         /usr/sbin/confd -onetime -backend env;
@@ -801,4 +808,21 @@
         
         # start tine
         supervisord --nodaemon
+
+    tine_as_a_service_webpack:
+      - /bin/sh
+      - -c
+      - |
+        # lib/entry_points/tine_as_a_service_webpack.sh
+        #!/bin/sh
+        apk add git;
+        
+        echo -n 'wait for signal_node_modules_copied ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_node_modules_copied ]; do sleep 1; done; echo ' done'
+        
+        npm --prefix $TINE20ROOT/tine20/Tinebase/js/ install --ignore-scripts;
+        touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_js_deps_installed
+        
+        echo -n 'wait for signal_php_deps_installed ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_php_deps_installed ]; do sleep 1; done; echo ' done'
+        npm --prefix $TINE20ROOT/tine20/Tinebase/js/ start
+
 

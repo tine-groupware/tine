@@ -183,6 +183,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 self::LENGTH                    => 255,
                 self::QUERY_FILTER              => true,
                 'validators'                    => ['presence' => 'required'],
+                'inputFilters'                  => ['Zend_Filter_StringTrim' => NULL],
                 self::OPTIONS                   => [
                     'collation'                     => 'utf8mb4_bin',
                 ],
@@ -422,7 +423,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 ]
             ],
             'account_grants'                => [
-                self::OMIT_MOD_LOG              => false,
+                self::OMIT_MOD_LOG              => true,
                 self::DOCTRINE_IGNORE           => true,
                 self::TYPE                      => self::TYPE_VIRTUAL,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],

@@ -170,9 +170,7 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
                     }
                 }),
                 resetAllOnNew: false,
-                getContextMenuItems: function() {
-                    return [me.action_setDefiniteEvent];
-                },
+                contextMenuItems: [me.action_setDefiniteEvent],
                 listeners: {
                     scope: this,
                     afteredit: this.onAfterEventEdit,

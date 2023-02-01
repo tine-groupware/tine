@@ -1294,7 +1294,32 @@ msgid "Group Member"
 msgstr "Gruppenmitglied"
 
 msgid "You do not have the required private grant to view history."
-msgstr "Sie verfügen nicht über das benötigte Privat-Recht um die Historie anzuzeigen."
+msgstr ""
+"Sie verfügen nicht über das benötigte Privat-Recht um die Historie "
+"anzuzeigen."
 
 msgid "E-Mail (all)"
 msgstr "E-Mail (alle)"
+
+msgid "Group Functions"
+msgstr "Gruppenfunktionen"
+
+msgid "Select Group"
+msgstr "Gruppe auswählen"
+
+msgid "Group Function"
+msgid_plural "Group Functions"
+msgstr[0] "Gruppenfunktion"
+msgstr[1] "Gruppenfunktionen"
+
+msgid "Group Information"
+msgstr "Gruppeninformationen"
+
+msgid "GENDER_Group"
+msgstr "female"
+
+msgid "GENDER_Group Function"
+msgstr "female"
+
+msgid "Mailing Group Member"
+msgstr "E-Mail-Verteiler Mitglieder"

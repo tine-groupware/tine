@@ -642,6 +642,12 @@ msgstr "Ordnerliste aktualisieren"
 msgid "Approve Migration"
 msgstr "Migration freigeben"
 
+msgid "Agree that this account can be transferred to other users"
+msgstr "Zustimmen, dass dieses Konto zu anderen Benutzern übertragen werden darf"
+
+msgid "I hereby agree that this mailbox may be converted to a shared mailbox or transferred to another user."
+msgstr "Hiermit willige ich ein, dass dieses Postfach zu einem gemeinsamen Postfach umgewandelt oder einem anderen Benutzer übertragen werden darf."
+
 msgid "Move Folder"
 msgstr "Ordner verschieben"
 
@@ -2089,8 +2095,11 @@ msgstr "Ordner der Ursprungsmail wenn diese nicht ihre INBOX ist."
 msgid "Reveal Password?"
 msgstr "Passwort anzeigen?"
 
-msgid "You are about to reveal the password. This action will be logged. Proceed?"
-msgstr "Sie sind im Begriff, das Passwort anzeigen. Diese Aktion wird protokolliert. Wollen sie fortfahren?"
+msgid ""
+"You are about to reveal the password. This action will be logged. Proceed?"
+msgstr ""
+"Sie sind im Begriff, das Passwort anzeigen. Diese Aktion wird protokolliert. "
+"Wollen sie fortfahren?"
 
 msgid "Save To All Recipients"
 msgstr "An allen Empfängern speichern"

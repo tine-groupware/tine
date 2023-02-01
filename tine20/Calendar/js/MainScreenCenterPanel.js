@@ -299,7 +299,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         });
         this.showYearView = new Ext.Toolbar.Button({
             pressed: String(this.activeView).match(/^year/i),
-            hidden: !this.app.featureEnabled('featureYearView'),
+            hidden: !this.activeView.match(/grid/i) || !this.app.featureEnabled('featureYearView'),
             text: this.app.i18n._('Year'),
             iconCls: 'cal-year-view',
             xtype: 'tbbtnlockedtoggle',
@@ -307,7 +307,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             enableToggle: true,
             toggleGroup: 'Calendar_Toolbar_tgViews',
             checkState: (mainScreen, btn) => {
-                _.defer(() => {btn.setVisible(this.app.featureEnabled('featureYearView'));});
+                _.defer(() => {btn.setVisible(this.activeView.match(/grid/i) || this.app.featureEnabled('featureYearView'));});
             }
         });
         this.showCustomView = new Ext.Toolbar.Button({
@@ -1407,6 +1407,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             record.set('editGrant', true);
             record.set('id', '');
             record.view = sourceView;
+
+            if (record.get('status') == 'CANCELED') {
+                record.set('status', 'CONFIRMED')
+            }
 
             // remove attender ids
             Ext.each(record.data.attendee, function(attender) {

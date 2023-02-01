@@ -191,7 +191,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
                 this.constructor.titleTwing = twingEnv;
             }
 
-            return this.constructor.titleTwing.render(this.constructor.getPhpClassName() + 'Title', this.data);
+            return this.constructor.titleTwing.renderProxy(this.constructor.getPhpClassName() + 'Title', this.data);
         } else if (_.get(this.fields.get(this.titleProperty), 'fieldDefinition.config.specialType') === 'localizedString') {
             // const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(this.constructor, this.titleProperty);
             const languagesAvailableDef = _.get(this.constructor.getModelConfiguration(), 'languagesAvailable')
@@ -387,8 +387,7 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     };
     f.getModuleName = function () {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n : window.i18n,
-            moduleName;
+            i18n = app && app.i18n ? app.i18n : window.i18n;
 
         if (p.modelConfiguration && p.modelConfiguration.moduleName) {
             return i18n._(p.modelConfiguration.moduleName);

@@ -300,7 +300,7 @@ class Tinebase_FileSystem implements
         return $node;
     }
 
-    public function _getTreeNodeBackend()
+    public function _getTreeNodeBackend(): Tinebase_Tree_Node
     {
         if ($this->_treeNodeBackend === null) {
             $this->_treeNodeBackend    = new Tinebase_Tree_Node(null, /* options */ array(
@@ -453,9 +453,9 @@ class Tinebase_FileSystem implements
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
             $node->grants = $grants;
-            $this->_nodeAclController->setGrants($node);
             $node->acl_node = $node->getId();
             $this->update($node);
+            $this->_nodeAclController->setGrants($node);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
@@ -480,6 +480,8 @@ class Tinebase_FileSystem implements
         try {
             $parentNode = $this->get($node->parent_id);
             $node->acl_node = $parentNode->acl_node;
+            // to create good modlogs
+            $node->grants = new Tinebase_Record_RecordSet(Tinebase_Model_Grants::class);
             $this->update($node);
             $this->_nodeAclController->deleteGrantsOfRecord($node->getId());
 
@@ -1596,8 +1598,7 @@ class Tinebase_FileSystem implements
 
             $node = $this->_getTreeNodeBackend()->update($node, true);
 
-            $fObj = $this->_fileObjectBackend->get($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER ?
-                $newParent->object_id : $node->object_id);
+            $fObj = $this->_fileObjectBackend->get($node->object_id);
             if ($node->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
                 $fObj->hash = Tinebase_Record_Abstract::generateUID();
             }
@@ -1744,6 +1745,10 @@ class Tinebase_FileSystem implements
             // we can use treeNodeBackend property because getTreeNodeBackend was called just above
             if ($this->_treeNodeBackend->getObjectCount($node->object_id) == 0) {
                 $this->_fileObjectBackend->softDelete($node->object_id);
+            }
+
+            if ($this->_modLogActive) {
+                $this->_treeNodeBackend->updated($this->_treeNodeBackend->get($node->getId(), true), $node);
             }
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -2009,13 +2014,14 @@ class Tinebase_FileSystem implements
         try {
             $this->acquireWriteLock();
 
+            $node = $this->get($node->getId());
             if (true === $updateDirectoryNodesHash) {
                 $this->_checkQuotaAndRegisterRefLog($node, 0 - (int)$node->size, 0 - (int)$node->revision_size);
             }
 
             $this->_getTreeNodeBackend()->softDelete($node->getId());
 
-            if (false === $this->_modLogActive && $this->isPreviewActive()) {
+            if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_PREVIEW && false === $this->_modLogActive && $this->isPreviewActive()) {
                 $hashes = $this->_fileObjectBackend->getHashes(array($node->object_id));
             } else {
                 $hashes = array();
@@ -2035,6 +2041,13 @@ class Tinebase_FileSystem implements
             Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Tinebase_Event_Observer_DeleteFileNode(array(
                'observable' => $node
             )));
+
+            $deletedNode = null;
+            try {
+                $deletedNode = $this->get($node->getId(), true);
+            } catch (Tinebase_Exception_NotFound $tenf) {}
+            $modLogs = $this->_treeNodeBackend->writeModLog($deletedNode, $node);
+            Tinebase_Notes::getInstance()->addSystemNote($deletedNode ?? $node, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $modLogs);
 
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             $transactionId = null;
@@ -2147,11 +2160,17 @@ class Tinebase_FileSystem implements
 
             if (null !== ($deletedNode = $this->_getTreeNodeBackend()->getChild($parentId, $_name, true, false)) &&
                     $deletedNode->is_deleted) {
-                $deletedNode->is_deleted = 0;
-                $deletedNode->deleted_by = null;
-                $deletedNode->deleted_time = null;
                 /** @var Tinebase_Model_Tree_FileObject $object */
                 $object = $this->_fileObjectBackend->get($deletedNode->object_id, true);
+                $object->hash = Tinebase_Record_Abstract::generateUID();
+                $object->size = 0;
+                $object->type = $_fileType;
+                $object->preview_count = 0;
+                $object->contenttype = $_mimeType;
+
+                Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($object,
+                    Tinebase_Controller_Record_Abstract::ACTION_UNDELETE, $object);
+
                 if (isset($_SERVER['HTTP_X_OC_MTIME'])) {
                     $object->creation_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
                     $object->last_modified_time = new Tinebase_DateTime($_SERVER['HTTP_X_OC_MTIME']);
@@ -2160,16 +2179,11 @@ class Tinebase_FileSystem implements
                         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " using X-OC-MTIME: {$object->last_modified_time->format(Tinebase_Record_Abstract::ISO8601LONG)} for {$_name}");
                     }
                 }
-                $object->hash = Tinebase_Record_Abstract::generateUID();
-                $object->size = 0;
-                $object->is_deleted = 0;
-                $object->deleted_by = null;
-                $object->deleted_time = null;
-                $object->type = $_fileType;
-                $object->preview_count = 0;
-                $object->contenttype = $_mimeType;
+
                 $this->_fileObjectBackend->update($object);
-                //we can use _treeNodeBackend as we called get further up
+
+                Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($deletedNode,
+                    Tinebase_Controller_Record_Abstract::ACTION_UNDELETE, $deletedNode);
                 $treeNode = $this->_treeNodeBackend->update($deletedNode);
             } else {
 
@@ -2496,6 +2510,14 @@ class Tinebase_FileSystem implements
 
         try {
             $currentNodeObject = $this->get($_node->getId());
+            if (isset($_node->grants)) {
+                if ($currentNodeObject->getId() !== $currentNodeObject->acl_node) {
+                    $currentNodeObject->grants = new Tinebase_Record_RecordSet($this->_nodeAclController->getGrantsModel());
+                } else {
+                    $this->_nodeAclController->getGrantsForRecord($currentNodeObject);
+                }
+            }
+
             /** @var Tinebase_Model_Tree_FileObject $fileObject */
             $fileObject = $this->_fileObjectBackend->get($currentNodeObject->object_id);
 
@@ -2955,6 +2977,7 @@ class Tinebase_FileSystem implements
         $parent = $this->get($node->parent_id);
         if (!$ifNotNull || !empty($parent->acl_node)) {
             $node->acl_node = $parent->acl_node;
+            $node->grants = new Tinebase_Record_RecordSet($this->_nodeAclController->getGrantsModel());
             $this->update($node);
         }
 

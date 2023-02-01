@@ -1,0 +1,376 @@
+[[chapter.Einstellungen]]
+== Benutzerspezifische Einstellungen ==
+////
+Lars: Fertig, bis auf Kleinigkeiten
+
+KUK 2015-05-07: Nicht fertig! Bitte meine Bemerkung zu Benachrichtigungen am Ende des Kapitels beachten! Hier ist noch nichts beschrieben, es fehlt eine Zuarbeit.
+KUK 2015-05-14:  Siehe Bemerkungen von mir zu ActiveSync- hier ist ebenfalls eine Funktion falsch beschrieben oder sie ist buggy. 
+
+KUK 2015-05-14: Indizierung fertig!
+////
+
+[[sec.einstellungen.einleitung]] 
+=== Einleitung ===
+
+In diesem Kapitel beschäftigen wir uns ``nicht'' mit den systemübergreifend für einzelne Anwendungen zu definierenden Parametern, wie z.B. Anwendungsverfügbarkeit oder Zugriffsrechten - diese werden im <<chapter.administration>> behandelt!
+
+Thema dieses Kapitels sind stattdessen Systemeinstellungen, die sich auf den einzelnen Benutzer beziehen und die jeder {branch}-Benutzer auch nur für sich selbst definieren kann. Diese Parameter sind standardmäßig auf gängige Werte voreingestellt, sodass {branch} auch ohne Veränderung von hier beschriebenen Einstellungen normal lauffähig ist. Dennoch sollten Sie das Kapitel durcharbeiten, denn hiermit können Sie sich die tägliche Arbeit erleichtern und bspw. Routineprozesse so anpassen, wie Sie es möchten und vielleicht auch von anderen Systemen gewöhnt sind.
+
+Das zugehörige Programmenü erreichen Sie nicht wie gewöhnlich über den Reiter {branch}, sondern über einen Klick (aus jedem beliebigen Programmteil erreichbar) auf die Anzeige des eingeloggten Benutzers (menu:[Benutzer:] menu:[Nachname], menu:[Vorname]) rechts oben vor dem menu:[Abmelden]-Knopf. Beim Anklicken erhalten Sie ein Menü mit den Einträgen menu:[Profil bearbeiten], menu:[Einstellungen], menu:[Passwort ändern] und menu:[Benachrichtigungen erlauben].
+
+////
+Benachrichtigungen erlauben wirkt bei mir nur unter Safari!
+@Kai: Benachrichtigungen prüfen wir
+////
+
+////
+Screenshot rechtes oberes Bildschirmviertel mit Mauszeiger auf Link "Benutzer" und ausgeklapptem Menü
+@Tim: Neuer Screenhsot
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer
+        image: zoom
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die benutzerspezifischen Einstellungen erreicht man über einen Link rechts oben im Bildschirm.
+image::Benutzereinstellungen/1_benutzereinstellungen_link.png[id="fig_benutzerlink",width="70%"]
+
+
+menu:[Profil bearbeiten] bewirkt dabei nur einen schnelleren Zugriff auf den Programmteil mit Ihren persönlichen Profildaten, welchen Sie, mit einem Klick mehr, auch über menu:[Einstellungen] erreichen können. Wählen Sie daher jetzt im Menü den Punkt menu:[Einstellungen]! Links in dem sich öffnenden Fenster sehen Sie eine Menüleiste mit den Ihnen bereits bekannten Anwendungen:
+
+////
+Screenshot mit Fenster "Einstellungen bearbeiten" auf "generelle Einstellungen"
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer
+        image: dialog
+        comment: <mehr moldule ?>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Generelle Benutzereinstellungen, wie z.B. die Sprache, werden hier festgelegt.
+image::Benutzereinstellungen/2_benutzereinstellungen_generelle_einstellungen.png[id="fig_benutzergenerelleeinstellungen",width="100%"]
+
+
+Bevor wir uns mit den menu:[generellen Einstellungen] beschäftigen, schauen wir uns den Button menu:[Admin-Modus] links oben an.
+
+[[sec.einstellungen.adminmodus]] 
+=== Admin-Modus ===
+
+Wenn Sie den Button menu:[Admin-Modus] anklicken, werden zur Kontrolle alle verfügbaren Menübezeichnungen rot dargestellt und Sie erhalten hinter dem Pulldown-Button noch einen weiteren Button mit einem kleinen Schloss angezeigt:
+
+////
+Screenshot mit Fenster "Einstellungen bearbeiten" auf "generelle Einstellungen" im Admin-Modus
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer, Admin
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die rote Schrift und das Schloss signalisieren den Admin-Modus.
+image::Benutzereinstellungen/3_benutzereinstellungen_generelle_einstellungen_adminmodus.png[id="fig_benutzergenerelladmin",width="100%"]
+
+
+Das funktioniert bei allen nachfolgend erklärten Einstellungen außer menu:[Mein Profil] - und natürlich nur, wenn Sie auch tatsächlich über Administratorrechte verfügen. 
+
+Mit dem menu:[Admin-Modus] ist es Ihnen möglich, getroffene Einstellungen für alle Benutzer Ihrer {branch}-Installation als gültig zu definieren. Die Betätigung des Buttons mit dem Schloss führt dann dazu, dass andere Mitarbeiter diese Einstellungen für sich persönlich nicht mehr ändern können. Diese Funktion ist insbesondere dafür hilfreich, für alle Mitarbeiter gültige Standard-Adressbücher, -Kalender, -Aufgabenlisten o.ä. zu definieren und damit zu verhindern, dass Mitarbeiter ungewollt Daten in den falschen, meistens den standardmäßig voreingestellten privaten Containern ablegen. Aber auch andere global gültige Einstellungen können Sie damit definieren und fixieren -- wir gehen im Folgenden bei den einzelnen Einstellungen darauf ein. Schalten Sie jetzt den menu:[Admin-Modus], durch erneutes Anklicken des entsprechenden Buttons, wieder aus!
+
+[[sec.einstellungen.generelle]] 
+=== Generelle Einstellungen ===
+
+(((Zeitzonen)))
+menu:[Zeitzone] und menu:[Sprache] dürften selbsterklärend sein. Klicken Sie probehalber einmal die verfügbaren Sprachen durch - es sind mehr als dreißig - wobei die Übersetzungen nicht überall so vollständig sind wie im Deutschen!
+
+Das Einstellen einer menu:[Standardanwendung] hat die Auswirkung, dass bei einem Neustart von {branch} bzw. nach einem neuen Login diese Anwendung als die aktive eingeschaltet ist. Sie sollten hier also die {branch}-Anwendung auswählen, die Sie am häufigsten benutzen. Standardmäßig ist das Adressbuch eingestellt.
+
+Den folgenden Schalter, menu:[Fenstertyp] lassen Sie bitte unbeachtet!
+
+////
+Dennoch Klärung! Ich kann nicht eine Funktion anbieten und dem Nutzer sagen: "April, April - hier haben wir mal was gemacht, weil wir als Programmierer grad'' Lust drauf hatten, aber eigentlich brauchst du als Nutzer das nicht." - Irgendwie nerdy...
+@Kai: Da hast Du Recht. Allerdings ist es gerade kompliziert das zu entfernen.
+////
+
+Das Umstellen von menu:[Ausloggen bestätigen] auf menu:[Nein] wird zu dem Ergebnis führen, dass Ihnen beim Abmelden von {branch} kein Bestätigungsdialog mehr angeboten wird. Für Leute, die es eilig haben, aber genau wissen was sie tun, sicher eine sinnvolle Einstellung.
+
+menu:[Seitengröße] ist eine Einstellung für die Listenansichten. Der hier eingestellte Wert (zwischen 15 und 100, Standard ist 50) bestimmt, wie viele Zeilen eine Listenansicht auf dem Bildschirm hat. Bei kleineren Werten müssen Sie entsprechend häufiger umblättern (mit dem angebotenen Pfeilbutton-Menü). 
+
+menu:[Gestreifte Zeilen] ist ebenfalls eine Einstellung für die Listenansicht und dient der besseren Lesbarkeit der Zeilen, da hier immer jede zweite Zeile in etwas dunklerem Grau hinterlegt ist.
+
+////
+Diese Funktion geht z.B. bei der Kalenderansicht nicht! Ansonsten habe ich sie beim Adressbuch geprüft - dort geht''s. Andere Prüfungen waren mir wegen fehlender Daten nicht möglich.
+@Kai: Habs geprüft. Geht nur im Kalender nicht.
+////
+
+Wenn der Schalter in menu:[Lademaske] auf menu:[ja] steht, wird während des Nachladens von Daten für eine gewählte Ansicht ein Hinweis angezeigt. Diese Funktion ist sinnvoll, wenn Ihre {branch}-Instanz mit einer eher langsamen Datenverbindung arbeitet. So wird der Benutzer während längerer Wartezeiten nicht irritiert.
+
+(((Macintosh-Modus)))
+(((Windows-Modus)))
+Die Einstellung menu:[Reihenfolge der Dialogknöpfe] bestimmt, in welcher Reihenfolge die beiden Knöpfe menu:[Abbrechen] und menu:[Ok] unten rechts in jedem Bearbeitungsfenster angezeigt werden. In der Einstellung menu:[Standard (Macintosh)] steht der menu:[Ok]-Knopf ganz rechts und der menu:[Abbrechen]-Knopf davor, in der Einstellung menu:[Windows] ist es genau andersherum.
+
+Der Schalter menu:[Automatische Suche beim Filterwechsel] bewirkt in der Standardeinstellung (menu:[ja]), dass das Aktivieren eines neuen Filters (entweder im menu:[FAVORITEN]-Menü auf der linken Seite oder über die Filtereinstellungen über dem Tabellenfenster) das Tabellenfenster automatisch auf den neu gefilterten Inhalt updatet. In der Einstellung menu:[nein] müssen Sie nach dem Wechsel eines Filters erst einen Browser-Refresh durchführen, um die Inhalte gemäß dem neuen Filter korrekt angezeigt zu erhalten.
+
+[[sec.einstellungen.mein.profil]] 
+=== Mein Profil ===
+
+In Ihren persönlichen Profileinstellungen (die Sie auch über den ``kurzen Weg'', wie oben angesprochen, erreichen können) speichern Sie nur informative Daten über sich selbst. Auf das Programmverhalten haben sie keinen Einfluss, daher können wir uns hier mit der Erklärung kurz fassen:
+
+////
+Screenshot mit Fenster "Einstellungen bearbeiten" auf "Mein Profil"
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Unter ``Mein Profil'' können persönliche Adressdaten gespeichert werden.
+image::Benutzereinstellungen/4_benutzereinstellungen_profil.png[id="fig_benutzergenerellmeinprofil",width="100%"]
+
+
+Sollten Sie Ihre {branch}-Installation selbst angelegt haben und damit deren oberster Administrator sein, dann sind Vorname und Nachname hier bereits vom System vergeben worden, sie lauten menu:[{branch}] als menu:[Vorname] und menu:[Admin-Account] als menu:[Nachname]. Natürlich können Sie diese Namensbezeichnungen ändern, Ihrem Administratorstatus wird das keinen Abbruch tun. Nach dem nächsten Anmelden sehen Sie Ihren neuen Namen dann auch oben rechts als Benutzerbezeichnung. Übrigens kommen Sie auch in der Admin-Anwendung über die Ansicht menu:[Benutzer] in Ihr eigenes Profil und können dort den Namen ändern. Und da Ihr Profil (wie auch alle anderen {branch}-Benutzer) in einem Adressbuch gespeichert ist, könnten Sie auch über dieses an Ihre Daten herankommen.
+
+Gehen wir nun weiter. Links im Bearbeitungsfenster sehen Sie unter menu:[Anwendungen] alle für Sie freigegebenen {branch}-Programmteile und können dort entsprechende, für Sie persönlich geltende, Einstellungen vornehmen.
+
+(((ActiveSync)))
+[[sec.einstellungen.activesync]] 
+=== ActiveSync ===
+
+////
+Screenshot mit Fenster "Einstellungen bearbeiten" auf "ActiveSync"
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Einstellungen zur Synchronisation mobiler Geräte
+image::Benutzereinstellungen/5_benutzereinstellungen_activesync.png[id="fig_benutzergenerellactivesync",width="100%"]
+
+
+{{{/ActiveSync/EditDialog/SyncDevice}}}
+Die hier vorgenommenen Einstellungen gelten für das Synchronisieren Ihres {branch}-Datenbestandes mit Ihrem Mobilfunkgerät. Sie können ein menu:[Standard-Adressbuch], einen menu:[Standard-Kalender] sowie eine menu:[Standard-Aufgabenliste] einstellen, mit denen sich {branch} mit Ihrem Mobilfunkgerät über die ActiveSync-Schnittstelle synchronisiert, d.h. Ihr Mobilfunkgerät überträgt dort eingegebene Daten an die hier angegebenen Standardanwendungen.
+
+Über sogenannte menu:[ActiveSync Filter] können Sie auch beliebige Kontakte, Termine und Aufgaben aus verschiedenen Adressbüchern, Kalendern und Aufgabenlisten mit Ihrem Gerät synchronisieren. Erstellen Sie dazu in der jeweiligen Anwendung einen Favoriten, der die gewünschten und zu synchronisierenden Datensätze in der Tabellenansicht filtert (siehe <<sec.standard.hauptbildschirm.favoriten>>). Im Kontextmenü des selbsterstellten Favoriten können sie über den Eintrag menu:[Als ActiveSync Filter setzen] ein bei {branch} angemeldetes ActiveSync-Gerät auswählen. {branch} synchronisiert nun die durch den Favoriten definierten Datensätze mit dem Gerät.
+
+////
+KUK 2015-05-15: Ist das richtig so? Ich habe diese Einstellungen am Kalender und am Adressbuch getestet und sowohl mein iPhone als auch mein Samsung-Android-Tablet bieten nur das an was unter Einstellungen in der betreffenden Anwendung als Standard eingestellt ist und übertragen auch nur dorthin, egal was hier unter ActiveSync steht. Es sieht so aus als ob dieser Schalter keine Funktion hat - bitte dringend klären!
+////
+
+[[sec.einstellungen.zeiterfassung]] 
+=== Zeiterfassung ===
+
+////
+Screenshot mit Fenster "Einstellungen bearbeiten" auf "Zeiterfassung"
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer
+        image: dialog
+        comment: <neue funktion -> A Tag which ... >
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die einzige Einstellung für die ``Zeiterfassung'' - zum Stundenzettel-Export
+image::Benutzereinstellungen/6_benutzereinstellungen_zeiterfassung.png[id="fig_benutzergenerellzeiterfassung",width="100%"]
+
+Die hier angebotene Einstellung (menu:[Standard (ts_default_ods)]) dient der Zuweisung einer Export-Konfiguration für Stundenzettel. Diese Funktion ist nur für kundenspezifisch veränderte {branch}-Installationen wichtig. Da in einer normalen {branch}-Installation nur diese eine Konfiguration gültig ist, lassen Sie diese Einstellung unbeachtet.
+
+[[sec.einstellungen.inventarisierung]] 
+=== Inventarisierung ===
+
+////
+Screenshot mit Fenster "Einstellungen bearbeiten" auf "Inventarisierung"
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Nutzereinstellung für die ``Inventarisierung'' - welche Inventarliste soll benutzt werden?
+image::Benutzereinstellungen/7_benutzereinstellungen_inventar.png[id="fig_benutzergenerellinventar",width="100%"]
+
+
+Auch für die Anwendung menu:[Inventarisierung] gibt es nur eine Einstellung, die Zuweisung der menu:[Standardinventarliste]. Das ist die Liste, in die neu angelegte Inventargegenstände standardmäßig abgespeichert werden. Über das angebotene Pulldown werden Ihnen alle Inventarlisten angeboten, auf welche Sie Zugriffsrechte haben.
+
+[[sec.einstellungen.humanresources.sales.voipmanager]] 
+=== HumanResources, Sales und VoIP-Manager ===
+
+In diesen Programmteilen können derzeit keine nutzerspezifischen Einstellungen vorgenommen werden.
+
+[[sec.einstellungen.aufgaben]] 
+=== Aufgaben ===
+
+////
+Screenshot mit Fenster "Einstellungen bearbeiten" auf "Aufgaben"
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+////////////////// 
+.Die Nutzereinstellungen für die ``Aufgaben''-Anwendung
+image::Benutzereinstellungen/8_benutzereinstellungen_aufgaben.png[id="fig_benutzergenerellaufgaben",width="100%"]
+
+
+Im ersten Pulldown menu:[Standard Favorit] geht es um die Favoriten-Ansicht, die beim Start der Anwendung aktiv sein soll und damit die Aufgaben, die in der Tabelle angezeigt werden.
+Sie können die Einstellung per Pulldown aus den vordefinierten Favoriten der Aufgaben-Anwendung auswählen. Beachten Sie besonders die Einstellung menu:[- Der zuletzt benutzte Filter -], sie bewirkt, dass bei jedem Neuaufruf einer Anwendung der zuletzt gültige Filter wieder aktiviert wird.
+
+
+Unter menu:[Standard-Aufgabenliste] ist die Aufgabenliste eingestellt, in welche neu angelegte Aufgaben standardmäßig gespeichert werden, i.d.R. Ihre eigene. Ändern können Sie sie nur dann, wenn es andere (entweder fremde oder gemeinsame) Aufgabenlisten gibt, auf welche Sie Zugriffsrechte haben (analog der oben bei menu:[Inventarlisten] beschriebenen Funktion).
+
+[[sec.einstellungen.email]] 
+=== E-Mail ===
+
+////
+Screenshot mit Fenster "Einstellungen bearbeiten" auf "E-Mail"
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer
+        image: dialog
+        comment: <neue Funktion -> eml>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Nutzereinstellungen für den E-Mail-Client.
+image::Benutzereinstellungen/9_benutzereinstellungen_email.png[id="fig_benutzergenerellemail",width="100%"]
+
+
+Sollten Sie mehrere E-Mail-Konten über {branch} verwalten, können Sie unter menu:[Standard E-Mailkonto] einstellen, welches Ihr Standardkonto sein soll. Das bedeutet, dass dieses Konto beim Aufruf des E-Mail-Programms in der Tabellenansicht mit seinen einzelnen E-Mails angezeigt wird.
+
+Das menu:[E-Mail Aktualisierungsintervall] bestimmt, in welchem Zeitintervall Ihr {branch}-E-Mail-Client bei den E-Mail-Servern nach Mail fragen soll. Sie können eine Abfrage zwischendurch auch durch Drücken des Buttons mit den zwei verdrehten blauen Pfeilen (über der Tabellenansicht) auslösen.
+
+Der Schalter menu:[In Adressbuch benutzen] steht standardmäßig auf menu:[ja]. Das bedeutet, dass der {branch}-interne E-Mail-Client benutzt wird, wenn Sie aus dem Adressbuch heraus die Funktion menu:[E-Mail verfassen] starten. Wenn der Schalter auf menu:[nein] steht, wird der externe E-Mail-Client benutzt, der auf Ihrem Endgerät als Standard eingestellt ist.
+
+(((E-Mail-Notiz,automatisch erzeugen)))
+Die Funktion menu:[E-Mail-Notiz erzeugen] steht standardmäßig auf menu:[nein]. Wenn Sie sie auf menu:[ja] umstellen, wird beim Versenden jeder E-Mail an einen in einem Adressbuch gespeicherten Empfänger bei diesem eine sog. E-Mail-Notiz angelegt. Das heißt, wenn Sie später den Adressdatensatz dieses Empfängers aufrufen, sehen Sie unter menu:[Notizen] (an der rechten Seite des Bearbeitungsfensters, unter menu:[Beschreibung]) eine Notiz mit dem Inhalt der versendeten E-Mail. Das kann für die Nachvollziehbarkeit, insbesondere unter dem Aspekt des Kundenbeziehungsmanagements, sehr nützlich sein. Es erzeugt natürlich eine ganze Menge zusätzlicher Daten - und das auch bei den Adressaten, bei denen es vielleicht nicht nötig ist. Verwenden Sie diese Einstellung also weise und berücksichtigen Sie, dass Sie das Erzeugen einer E-Mail-Notiz auch von Fall zu Fall händisch veranlassen können, denn Sie haben dazu im E-Mail-Bearbeitungsfenster einen Extra-Button.
+
+menu:[Löschen bestätigen] steht standardmäßig auf menu:[ja] und das bedeutet, dass Ihnen vor dem Löschen einer E-Mail eine Sicherheitsabfrage gestellt wird. Bei menu:[nein] entfällt diese Abfrage und die Mail wird sofort gelöscht. Unter dem Aspekt betrachtet, dass E-Mails durch das Löschen zunächst nur in den Ordner für gelöschte E-Mails verschoben und nicht wirklich physisch gelöscht werden, ist das Umstellen auf menu:[nein] zum Zwecke der Zeitersparnis sicher keine große Gefahr. Es ist wie überall in der IT: Die Programmierer haben einfach zur Sicherheit mehrere ``rote Ampeln'' aufgestellt.
+
+[[sec.einstellungen.crm]] 
+=== Crm ===
+
+////
+Screenshot mit Fenster "Einstellungen bearbeiten" auf "Crm"
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Nutzereinstellungen für die ``CRM''-Anwendung.
+image::Benutzereinstellungen/10_benutzereinstellungen_crm.png[id="fig_benutzergenerellcrm",width="100%"]
+
+
+Das Prinzip des ersten Schalters hier haben wir schon weiter oben bei anderen Anwendungen besprochen: Die menu:[Standard-Leadliste] ist die Leadliste, in die neu angelegte Leads gespeichert werden, wenn Sie nicht händisch eine andere Liste zuweisen. Und wie üblich können Sie über das angebotene Pulldown nur die Leadlisten als Standard einstellen, auf welche Sie Zugriffsrechte haben.
+
+menu:[Sende Benachrichtigungen über eigene Änderungen] steht standardmäßig auf menu:[ja]; das bedeutet, dass bei Änderungen an Leads eine E-Mail-Benachrichtigung an die eigene Person gesendet wird - im anderen Falle nicht.
+
+[[sec.einstellungen.kalender]]
+=== Kalender ===
+
+////
+Screenshot mit Fenster "Einstellungen bearbeiten" auf "Kalender"
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer
+        image: dialog
+        comment: <neue funktionen!>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Nutzereinstellungen für den ``Kalender''.
+image::Benutzereinstellungen/11_benutzereinstellungen_kalender.png[id="fig_benutzergenerellkalender",width="100%"]
+
+
+Mit menu:[Beginn] legen Sie die Uhrzeit fest, mit der beim Aufruf in der Kalenderblattansicht der Tag beginnen soll. Stellen Sie diesen Schalter auf die Zeit ein, mit der üblicherweise Ihr Arbeitstag beginnt, dann sparen Sie sich viel lästiges Scrollen bei der Eingabe und Suche von Terminen. Der systemseitig vorgegebene Wert ist 8:00 Uhr.
+
+menu:[Standard Kalender] legt den Kalender fest, in den Sie standardmäßig Ihre Termine eingeben. Auswählen können Sie auch hier wieder nur aus den Kalendern, auf die Sie Zugriffsrechte haben.
+
+Die Einstellung menu:[Standard Favorit] legt fest, welche der definierten Favoriten-Ansichten Sie zur Anzeige erhalten, wenn Sie die Kalender-Anwendung starten. Auch hier wird Ihnen wieder, neben den gespeicherten Filtern, die weiter oben schon erklärte Funktion menu:[The last filter I used] angeboten.
+
+Die Funktion menu:[Empfangen von Benachrichtigungs-E-Mails] regelt, in welchen Fällen einer Reaktion oder Bearbeitung eines von Ihnen erstellten Termins durch einen anderen Teilnehmer Sie eine E-Mail-Benachrichtigung erhalten wollen. Die Standardeinstellung steht auf menu:[Bei Zeitänderungen]; damit sehen Sie alle anderen Reaktionen nur im Termin selbst.
+
+menu:[Sende Benachrichtigungen über eigene Änderungen] steht standardmäßig auf menu:[nein]; das bedeutet, dass bei (im Unterschied zum letzten Schalter!) durch Sie selbst vorgenommene Änderungen an Terminen keine E-Mail-Benachrichtigung an den Sie gesendet wird - im anderen Falle ja. Letztere Einstellung bietet sich z.B. an, wenn Sie häufig Gruppentermine über das (etwas unübersichtlichere) Mobiltelefon verändern und für sich selbst dazu eine E-Mail-Notiz erzeugen möchten, um so die Übersicht zu behalten. 
+
+Der Schalter menu:[Standardalarm] legt fest, ob Sie, zu einem wählbaren Zeitpunkt vor dem Termin, vom {branch}-Kalender alarmiert werden wollen oder nicht. 
+
+menu:[Standardalarmzeit]: Hier können Sie, wenn Sie den vorhergehenden Schalter auf menu:[ja] gestellt haben, eine Zeit in Minuten angeben, zu der Sie bei einem Termin im Voraus alarmiert werden.
+
+Mit menu:[Standard Teilnehmer Strategie] kann man auswählen welche Teilnehmer Standardmäßig immer im Termin eingeladen sind.
+
+menu:[Feste Kalender] ist dann ein globaler Default-Filter. Wenn dieser eingerichtet ist, sieht man in jedem Filter-Ergebnis immer auch alle Termine des eingestellten Kalenders.
+
+[[sec.einstellungen.telefone.dateimanager]] 
+=== Telefone und Dateimanager ===
+
+In diesen Programmteilen können derzeit keine nutzerspezifischen Einstellungen vorgenommen werden.
+
+[[sec.einstellungen.adressbuch]] 
+=== Adressbuch ===
+
+////
+Screenshot mit Fenster "Einstellungen bearbeiten" auf "Adressbuch"
+////
+//////////////////
+        SCREENSHOT
+        path: <>
+        demodata: Benutzer
+        image: dialog
+        comment: <neue funktionen!>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Die Nutzereinstellungen für das ``Adressbuch''.
+image::Benutzereinstellungen/12_benutzereinstellungen_adressbuch.png[id="fig_benutzergenerelladressbuch",width="100%"]
+
+
+Unter menu:[Standard-Adressbuch] können Sie wieder, wie schon dargelegt, das Adressbuch auswählen, in welches neu angelegte Kontaktdatensätze gespeichert werden. Für die Anwendung menu:[Adressbuch] ist diese Einstellung allerdings besonders relevant, weil der systemseitig voreingestellte Standard hier, wie bei allen anderen weiter oben besprochenen Anwendungen, das persönliche Adressbuch des Nutzers ist. Erfahrungsgemäß ist das aber in den seltensten Fällen erwünscht, denn (vgl. <<chap.adressverwaltung>> und hier besonders den <<sec.adressbuch.einleitung>>) {branch} lebt ja von den hervorragenden Filtermechanismen, wie Tags usw., die ein Abspeichern von Adressen in verschiedenen Adressbüchern vollkommen unnötig machen! Legen Sie also, wenn nicht schon geschehen, ein allgemeines Adressbuch an, weisen Sie es hier zu und vergessen Sie auch nicht, alle anderen {branch}-Nutzern Ihres Unternehmens anzuweisen, dieses Adressbuch als Standard zu nutzen!
+
+Der zweite Schalter, menu:[Standard Favorit] betrifft die Ansicht, welche beim Aufruf der Anwendung menu:[Adressbuch] gültig sein soll - auch diese Verfahrensweise wurde weiter oben bei den Einstellungen für andere Anwendungen bereits besprochen.
+
+[[sec.einstellungen.admin]] 
+=== Admin ===
+
+In diesem Programmteil gibt es derzeit keine nutzerspezifischen Einstellungen vorzunehmen.
+
+Damit haben wir alle zur Personalisierung von {branch} nötigen Schalter und Einstellungen besprochen.
+
+[[sec.einstellungen.passwort.aendern]] 
+=== Passwort ändern ===
+
+Hier können Sie Ihr Login-Passwort ändern; zur Sicherheit vor Tippfehlern müssen Sie das neue Passwort zweimal eingeben. Nach der Systemmeldung menu:[Ihr Passwort wurde geändert] bleiben Sie angemeldet. Das neue Passwort müssen Sie erst bei der nächsten Anmeldung verwenden.
+

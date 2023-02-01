@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<paths xmlns="http://www.w3.org/1999/xhtml">
+  <path id="Addressbook/Contact/EditDialog">
+    <link>
+      <url>ch02s02.html#idp7637568</url>
+      <chapterNumber>2.2.1</chapterNumber>
+      <title>Alle Funktionen oberhalb der Tabelle</title>
+    </link>
+    <link>
+      <url>ch02s02.html#idp6193472</url>
+      <chapterNumber>2.2.2</chapterNumber>
+      <title>Der Favoriten- und Ordnerbaum</title>
+    </link>
+  </path>
+  <path id="Addressbook/Contact/Import/Step1">
+    <link>
+      <url>ch01s02.html#idp5776256</url>
+      <chapterNumber>1.2</chapterNumber>
+      <title>Kontakte importieren</title>
+    </link>
+    <link>
+      <url>ch01s02.html#idp204512</url>
+      <chapterNumber>1.2</chapterNumber>
+      <title>Kontakte importieren</title>
+    </link>
+  </path>
+</paths>

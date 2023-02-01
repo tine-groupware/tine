@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Addressbook_Model_ListRole</model>
+    <name>adb_list_role_xls</name>
+    <!-- _('Excel all data') -->
+    <label>Excel all data</label>
+    <type>export</type>
+    <plugin>Addressbook_Export_Xls</plugin>
+    <icon_class>tinebase-action-export-xls</icon_class>
+    <scope>multi</scope>
+    <favorite>true</favorite>
+    <order>300</order>
+</config>

@@ -1,0 +1,141 @@
+[[chapter.Aufgaben]]
+== Aufgaben ==
+
+
+//////////
+Dr. Markus Wirtz, 2015-04-13 12:29
+bin durch; ready for GR
+//////////
+//////////
+ Gerlinde Regensburger, 2015-04-14 14:13
+bin durch; @Autoren: Indexeinträge? Freigabe für Veröffentlichgung?
+//////////
+////
+KUK 2015-05-07: Index erstellt, Freigabe
+////
+
+////////
+Paul Hartog: Überarbeitung de Kapitels gestartet 23.10.19
+Überarbeitung beendet 24.10.19
+///////
+
+
+[[sec.aufgaben.einleitung]] 
+=== Einleitung ===
+
+{{{/Tasks}}}
+Mit der Anwendung menu:[Aufgaben] weisen Sie sich selbst oder einem beliebigen anderen Benutzer eine Aufgabe zu. Die vorhandenen Aufgaben werden, wie gewohnt, als Tabelle dargestellt:
+//////////////////
+        SCREENSHOT
+        path: </Tasks/MainScreen>
+        demodata: Aufgaben, Favoriten, Aufgabenlisten
+        actions: 
+        image: screen
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Tabelle mit Aufgaben
+image::Aufgaben/1_aufgaben_uebersicht.png[id="fig_aufgabetabelle",width="100%"]
+
+(((ActiveSync)))
+Eine menu:[Aufgabe] beschreibt, was ein bestimmter Mitarbeiter bis zu einem bestimmten Datum erledigt haben sollte. Dazu bietet {branch} ein paar nützliche Eigenschaften an, die der besseren Übersicht als Filter dienen. Darauf kommen wir gleich zu sprechen. Außerdem ist die Übermittlung von Aufgaben auch Bestandteil des in {branch} implementierten Übertragungsprotokolls für mobile Endgeräte. Beachten Sie hier allerdings, dass nicht alle mobilen Geräte, die mit dem von {branch} benutzten ActiveSync-Übertragungsprotokoll arbeiten, auch von Haus aus das Synchronisieren von Aufgaben unterstützen. Abhilfe kann hier im Einzelfall die Installation von Zusatz-Applikationen schaffen. Konsultieren Sie dazu den Dienstleister, der Ihre {branch}-Installation betreut. <<sec.aufgaben.sync>> enthält weitere Hinweise zur Synchronisation.
+
+
+[[sec.aufgaben.favoriten]]
+=== Favoriten und Aufgabenlisten ===
+
+{{{/Tasks/MainScreen/Task/FavoritesPicker}}}
+Wie gewohnt, finden Sie auf der linken Seite unter menu:[FAVORITEN] eine Reihe nützlicher Standardansichten bereits vorbereitet: 
+
+
+menu:[Alle Aufgaben für mich]:: Die Aufgaben, bei denen Sie Verantwortlicher sind.
+
+menu:[Alle meine Aufgaben]:: Aufgaben, die in Ihren Aufgabenlisten stehen und weder ``abgeschlossen'' noch ``abgebrochen'' sind.
+
+menu:[Aufgaben ohne Verantwortlichen]:: Alle Aufgaben im System, die nicht explizit einem Benutzer zugeordnet sind.
+
+menu:[Offene Aufgaben für mich]:: Wie menu:[Alle Aufgaben für mich], jedoch ohne die bereits abgeschlossenen oder abgebrochenen.
+
+menu:[Offene Aufgaben für mich (diese Woche)]:: Wie menu:[Offene Aufgaben für mich], aber zusätzlich mit Fälligkeitstermin innerhalb der laufenden Woche.
+
+menu:[Zuletzt von mir bearbeitet]:: Alle Aufgaben, an denen Sie zuletzt gearbeitet haben.
+
+Wenn Sie beim Wechseln der Favoriten-Ansichten die Filterzeilen über der Tabelle im Blick haben, sehen Sie, dass die Favoriten durch Filter definierte Ansichten sind (vgl. <<sec.standard.hauptbildschirm.suchfilter>>).
+
+{{{/Tasks/MainScreen/Task/ContainerTree}}}
+Die unter den menu:[FAVORITEN] zu findenden menu:[AUFGABENLISTEN] enthalten standardmäßig die drei üblichen Ordner menu:[Meine Aufgabenlisten], menu:[Gemeinsame Aufgabenlisten] und menu:[Aufgabenlisten anderer Benutzer], wobei der Inhalt der beiden letztgenannten von dem Vorhandensein solcher Listen in Ihrem speziellen {branch}-System sowie von Ihren Zugriffsrechten abhängt. Im Ordner menu:[Meine Aufgabenlisten] finden Sie auf jeden Fall Ihre persönliche Aufgabenliste vor, denn diese erzeugt {branch} mit der Anlage des Benutzers automatisch.
+
+[[sec.aufgaben.hinzufügen]]
+=== Aufgabe hinzufügen ===
+
+{{{/Tasks/EditDialog/Task}}}
+{{{/Tasks/MainScreen/Task/ActionToolbar}}}
+Klicken Sie im Bearbeitungsmenü ganz links den Button menu:[Aufgabe hinzufügen] an:
+
+//////////////////
+        SCREENSHOT
+        path: </Tasks/EditDialog/Task>
+        demodata: Tags, Kontakte
+        actions: 
+        image: dialog
+        comment: <neue funktionen>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Anlegen einer neuen Aufgabe
+image::Aufgaben/2_aufgaben_neue_aufgabe.png[id="fig_aufgabeneu",width="100%"]
+
+Die Bearbeitungsmaske enthält unter dem Reiter menu:[Aufgabe] zunächst ein Feld menu:[Beschreibung]. Dieses ist ein Pflichtfeld. Darunter folgt menu:[Fälligkeitsdatum] (mit Kalenderfunktion) sowie rechts daneben die Uhrzeit als Pulldown. Daneben finden Sie eine ebenfalls als Pulldown unter vier verschiedenen Eskalationsstufen wählbare menu:[Priorität]: menu:[niedrig], menu:[normal], menu:[hoch] und menu:[dringend]. Beachten Sie bei der Vergabe der Priorität, dass diese nicht nur als Hinweis, sondern vor allem als Filterkriterium für zu definierende Ansichten dient. Standardpriorität ist menu:[normal]. Schließlich ist rechts noch das Feld für den menu:[Organisator] der Aufgabe zu finden, als Pulldown mit einer Auswahl aus allen angelegten {branch}-Benutzern. 
+
+[IMPORTANT] 
+===============
+Das Einstellen eines anderen Benutzers als Organisator bedeutet nicht automatisch, dass Sie dem anderen Benutzer eine Aufgabe in dessen Aufgabenliste schreiben. Dies geschieht erst durch Auswahl der richtigen Aufgabenliste. Sie finden das entsprechende Pulldown im unteren, grauen Bereich der Maske, rechts neben menu:[Gespeichert in]. Andere Aufgabenlisten erhalten Sie dort allerdings nur angeboten, wenn Sie über entsprechende Berechtigungen verfügen. Im eigentlichen Wortsinn ist das menu:[Organisator]-Feld dann zu nutzen, wenn es sich bei der Aufgabe um eine Gruppenaufgabe handelt – darum auch ``Organisator'' und nicht ``Ausführender''. Aber auch das bedeutet nicht, dass dem Organisator einer Aufgabe diese automatisch in dessen Aufgabenliste eingetragen wird. Auch hier müssen Sie dazu die Aufgabenliste explizit anwählen – in diesem Falle wahrscheinlich eine menu:[gemeinsame Aufgabenliste], auf die der Organisator dieser Aufgabe ebenfalls Zugriff hat.
+===============
+
+Im Feld menu:[Anmerkungen] versehen Sie die Aufgabe mit einer beliebigen Beschreibung. Schließlich finden Sie unter menu:[Anmerkungen] noch eine Zeile für weitere Angaben: Ganz links unter menu:[Prozent] besteht die Möglichkeit, als Pulldown in 10%-Schritten den Erfüllungsgrad abzuspeichern. Rechts daneben befindet sich das Pulldown menu:[Status], das Ihnen die vier Möglichkeiten menu:[Keine Antwort], menu:[Abgeschlossen], menu:[Abgebrochen] und menu:[Laufend] anbietet. menu:[Keine Antwort] werden Sie dann verwenden, wenn Sie einem anderen Benutzer oder einer Gruppe eine Aufgabe zuweisen. Der Organisator erhält damit den Hinweis, dass er den Status entsprechend ändern muss. menu:[Status] ist ebenfalls ein Pflichteingabefeld. Und ganz rechts steht unter menu:[Abgeschlossen] wieder ein Datums- und Uhrzeitfeld.
+
+Im grauen Randbereich des unteren Teils der Eingabemaske finden Sie links das Pulldown menu:[Gespeichert in]. Hier können Sie nun, wie oben erwähnt, die Aufgabenliste auswählen, in der Sie die Aufgabe speichern wollen. Je nachdem, welche Berechtigungen für Sie gelten, finden Sie hier Aufgabenlisten anderer Benutzer sowie gemeinsame Aufgabenlisten. Sollten Sie hier nicht die Aufgabenlisten finden, die Sie suchen, schauen Sie sich die vorhandenen Aufgabenlisten und die zugehörigen Rechtevergaben an (menu:Admin[Container]). Lesen Sie für genaue Informationen in <<sec.admin.container>> nach.
+
+{{{/Tasks/EditDialog/Task/AlarmGrid}}}
+Neben den bereits von anderen Anwendungen bekannten und in <<chapter.Standard-Bedienhinweise>> beschriebenen Reitern menu:[Notizen], menu:[Anhänge], menu:[Verknüpfungen] und menu:[Historie] finden Sie hier noch einen menu:[Alarm]. Öffnen Sie den entsprechenden Reiter.
+
+//////////////////
+        SCREENSHOT
+        path: </Tasks/EditDialog/Task>
+        demodata: 
+        actions: auf die dropboxen klicken
+        image: dialog
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Alarm zur Erfüllung einer Aufgabe
+image::Aufgaben/3_aufgaben_alarm.png[id="fig_aufgabeneualarm",width="100%"]
+
+Das Pulldown menu:[Alarmzeit] bestimmt, zu welchem Zeitpunkt vor der gespeicherten Fälligkeit Ihr Computer und/oder Mobilfunkgerät Alarm geben soll. Achtung: Die Fälligkeit ist keine Pflichteingabe! Gibt es also, aus welchen Gründen auch immer, für die Aufgabe keinen definierten Fälligkeitszeitpunkt und möchten Sie dennoch einen Alarm eintragen, nutzen Sie im Pulldown menu:[Alarmzeit] den untersten Eintrag menu:[Benutzerdefinierter Zeitpunkt]. Nach Anwahl dieses Menüpunkts werden das Datums- und Uhrzeitfeld rechts daneben aktiv, und Sie können hier Ihren Alarmzeitpunkt eingeben.
+
+Wenn der Alarmierungszeitpunkt erreicht ist, löst der System-E-Mail-Dienst das Versenden einer E-Mail an den Benutzer aus, die entsprechende Angaben zur Aufgabe enthält. 
+
+[IMPORTANT]
+================
+Legen Sie die Zeitspanne für die Alarmierung nicht zu knapp aus! Der Systemdienst kann u.U., je nach Auslastung, ein bis mehrere Minuten zur Zustellung der Alarm-E-Mail benötigen.
+================
+
+
+
+//////////
+ Daniel Hoffmann, 2015-06-18 14:42
+Neues Kapitel
+//////////
+
+(((ActiveSync)))
+(((CalDAV)))
+[[sec.aufgaben.sync]]
+=== Aufgaben synchronisieren ===
+
+Die Einrichtung der Synchronisation von {branch} mit Endgeräten ist zwar nicht Thema des Handbuches, dennoch wollen wir kurz beschreiben, wo Sie die hierfür notwendigen Parameter und Einstellungen in {branch} vorfinden.
+
+Die _CalDAV_ URL zur Synchronisierung Ihrer Aufgaben können Sie über das Kontextmenü der jeweiligen Aufgabenliste einsehen: Mit Rechtsklick das Kontextmenü öffnen und auf menu:[Aufgabenliste Eigenschaften] klicken. Dort finden Sie eine Zeile mit der Beschriftung menu:[CalDAV URL]. Diese URL müssen Sie in Ihrem Endgerät zur Synchronisierung eingeben.
+
+Mögliche Einstellungen zur Synchronisation über _ActiveSync_ schlagen Sie bitte in <<chapter.Einstellungen>>, <<sec.einstellungen.activesync>> sowie in <<chapter.administration>>, <<sec.admin.server.ActiveSync.devices>> nach.

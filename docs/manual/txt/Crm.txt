@@ -1,0 +1,227 @@
+[[chapter.CRM]]
+== Kundenbeziehungsmanagement (CRM) ==
+
+
+
+//////////
+Dr. Markus Wirtz, 2015-04-14 17:01
+bin durch; ready for GR
+//////////
+
+//////////
+ Gerlinde Regensburger, 2015-04-14 18:54
+bin durch; 
+- unklar ist, ob die Kommentare von KUK noch offen sind?
+- falls nicht: @Autoren, Freigabe für Veröffentlichung?
+
+KUK 2015-05-02: Bis jetzt ist davon noch nichts im Programm umgesetzt worden (siehe einzelne ergänzende Kommentare von mir). Kommentare sollten also drin bleiben. Lars Kneschke muss entscheiden ob das Buch jetzt so herauskommen soll oder die Änderungen im Programm vorher gemacht werden.
+
+KUK 2015-05-08: Indizierung gemacht - Freigabe
+//////////
+
+
+[[sec.crm.einleitung]] 
+=== Einleitung ===
+
+(((Lead)))
+(((Empfehlung)))
+(((CRM)))
+{{{/Crm}}}
+Die Anwendung menu:[CRM] (_Customer Relationship Management_ oder  _Kundenbeziehungsmanagement_) ist in erster Linie für den Vertrieb gedacht. Alles dreht sich hier um sogenannte _Leads_, also Kontakte zu potenziellen Kunden. Ein solcher Lead kann auf verschiedene Art und Weise zustande kommen: am Telefon, auf einer Messe, als Rückläufer eines Mailings, über Empfehlung von einem anderen Geschäftspartner etc. In jedem Falle ist es wünschenswert, zu Kontakten dieser Art von Anfang an verschiedene Informationen zu hinterlegen, etwa: 
+
+* Wann habe ich den potenziellen Kunden das erste Mal kontaktiert?
+
+* Von wem habe ich die Empfehlung wann erhalten?
+
+* Um welchen ungefähren Umsatz geht es?
+
+* In welchem Bearbeitungsstatus befindet sich der Lead?
+
+Jeder Mitarbeiter im Vertrieb hat durch die Hinterlegung dieser Informationen zu jeder Zeit die Möglichkeit, einen potenziellen Kundenkontakt fortzusetzen. Eine weitere wichtige Funktion eines CRM-Systems sind statistische Auswertungen – schließlich geht es um unternehmensrelevante Zahlen.
+
+Starten Sie nun das CRM im Reiter menu:[{branch}.com] über menu:[Crm].
+
+////
+KUK: Da ``CRM'' eine häufig genutzte Abkürzung ist und immer alle drei Buchstaben groß geschrieben werden, sollten wir nicht etwas Anderes erfinden ("Crm"). Das sieht unprofessionell aus.
+////
+
+[[sec.crm.favoriten]]
+=== Favoriten und Leadlisten ===
+
+{{{/Crm/MainScreen/Lead/FavoritesPicker}}}
+Oben links sehen Sie, wie gewohnt, mehrere Favoritenansichten. Als Standard bringt {branch} hier menu:[Alle Leads], menu:[Leads mit überfälligen Aufgaben], menu:[Meine Leads] und menu:[Zuletzt von mir bearbeitet] mit. menu:[Alle Leads] listet Ihnen alle derzeit aktiven Leads des Unternehmens auf, also nicht die ``akzeptierten'' oder ``verlorenen''. Unter menu:[Leads mit überfälligen Aufgaben] finden sie die Leads wo das Fälligkeitsdatum einer Aufgaben erreicht ist, und die Aufgabe noch offen ist. menu:[Meine Leads] zeigt jene, für die Sie selbst als Kontakt vermerkt sind (wir kommen gleich darauf). Wie immer können Sie sich hier eigene Favoriten erstellen und abspeichern (vgl. <<chapter.Standard-Bedienhinweise>>).
+
+{{{/Crm/MainScreen/Lead/ContainerTree}}}
+Unter den menu:[FAVORITEN] befindet sich der Verzeichnisbaum für menu:[LEADLISTEN] mit Ihren eigenen, den gemeinsamen und den Leadlisten anderer Benutzer. Unter menu:[Meine Leadlisten] werden Sie auf jeden Fall Ihre persönliche Leadliste finden, die bei der Erzeugung Ihres {branch}-Benutzerkontos automatisch angelegt wurde. Ob Sie unter den anderen beiden Ordnern Leadlisten sehen, hängt von Ihren persönlichen Zugriffsrechten ab. Sollten Sie im Vertrieb tätig sein, werden Sie vermutlich mindestens eine gemeinsame Leadliste im Zugriff haben.
+
+[[sec.crm.menue]]
+=== Das Bearbeitungsmenü ===
+
+Die Punkte im Bearbeitungsmenü besprechen wir im Folgenden ausführlich.
+//////////////////
+        SCREENSHOT
+        path: </Crm/MainScreen/Lead>
+        demodata: beispiel Leads, Favoriten, 
+        image: screen
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.CRM mit Lead-Tabelle und Diagrammen
+image::Crm/1_crm_leadtabellen.png[id="fig_crmtorten",width="100%"]
+
+
+Die Tabelle umfasst – neben den wichtigsten Datenfeldern – im unteren Bereich die drei Felder menu:[Lead-Status], menu:[Lead-Quellen] und menu:[Lead-Typen]. Sie dienen der grafischen Auswertung; sollten Sie dort keine Tortendiagramme sehen, liegt das daran, dass Sie noch keine Leads gespeichert haben.
+
+[[sec.crm.lead.hinzufuegen]]
+==== Lead hinzufügen ====
+
+{{{/Crm/EditDialog/Lead}}}
+{{{/Crm/MainScreen/Lead/ActionToolbar}}}
+Klicken Sie oben links im Bearbeitungsmenü auf menu:[Lead hinzufügen].
+//////////////////
+        SCREENSHOT
+        path: </Crm/EditDialog/Lead>
+        demodata: Kontakte, Aufgaben, Produkte, Tags, Ordner in Gemeinsamen Leadliste
+        image: dialog
+        comment: <das feld Notizen ist nach oben zu den reitern gewandert>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Anlegen eines neuen Leads
+image::Crm/2_crm_lead_neu.png[id="fig_crmleadneu",width="100%"]
+
+Sie sehen, dass die Bearbeitungsmaske nur die üblichen vier Reiter enthält, sodass wir nur den ersten besprechen (zu den anderen drei vgl. <<chapter.Standard-Bedienhinweise>>).
+
+Die Maske menu:[Lead] enthält als einziges Pflichteingabefeld oben menu:[Leadname eingeben], alle anderen Angaben sind optional. Vergeben Sie nun probehalber einen beliebigen Namen.
+
+Über das Pulldown menu:[Kontakte zum Hinzufügen suchen] ordnen Sie dem Lead beliebig viele Kontakte aus Ihrer {branch}-Adressdatenbank zu, die dann in der darunter befindlichen Tabelle erscheinen. Anstelle des Pulldowns über alle verfügbaren Kontakte können Sie auch die Volltextsuche nutzen, indem Sie mindestens drei Zeichen in das Feld eingeben und so die entsprechenden Kontakte herausfiltern.
+Sie sehen in der Tabelle, dass Sie selbst als Kontakt bereits automatisch zugeordnet wurden. Diese Zuordnung ist jedoch (wie jede weitere) über den unter dem Tabellenfenster mit einem Minuszeichen gekennzeichneten Button menu:[Entferne Kontakt] lösbar. Sie können also auch Leads speichern und sie anderen Mitarbeitern oder sogar beliebigen anderen Kontakten zuordnen. Ist der gewünschte Kontakt nicht in Ihrem {branch}-Adressdatenbestand vorhanden, können Sie hier über den mit einem Pluszeichen versehenen Button menu:[Neuer Kontakt] die aus der Adressverwaltung bekannte Kontakteingabemaske einblenden lassen, um einen neuen Kontakt anzulegen.
+
+Schauen Sie sich nun den direkt darunter befindlichen Tabellenkopf an: menu:[Name], menu:[Anschrift] und menu:[Daten] sind klar – interessant ist hier die menu:[Rolle]. Dass sich in der Tabellenzeile hinter dem kleinen Symbol, image:Icon/5_icon_responsible.png[height=16], image:Icon/6_icon_client.png[height=18] oder image:Icon/7_icon_partner.png[height=16] ein Pulldown verbirgt, ist nicht sofort zu sehen – Sie müssen darauf klicken.
+
+////
+KUK: ungünstig gelöst - das Vorhandensein eines Pulldowns sollte mit einem Pfeilsymbol gekennzeichnet werden.
+KUK 2015-05-05: Problem ist auch in der neuen Business-Version nicht gelöst... Warum habe ich mir eigentlich solche Mühe als Beta-Tester gemacht?
+////
+//////////////////
+        SCREENSHOT
+        path: </Crm/EditDialog/Lead>
+        demodata: Kontakte, Aufgaben, Produkte, Tags, Ordner in Gemeinsamen Leadliste, Rollen
+        image: dialog
+        comment: <das feld Notizen ist nach oben zu den reitern gewandert>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Rolle in einem Lead zuweisen
+image::Crm/3_crm_lead_rolle.png[id="fig_crmleadneurolle",width="100%"]
+
+
+Das Pulldown bietet die drei Rollen menu:[Verantwortlicher], menu:[Kunde] und menu:[Partner] an. {branch} geht standardmäßig davon aus, dass Sie selbst als erster Kontakt der Verantwortliche sind. Alle weiteren Kontakte erhalten die Rolle menu:[Kunde], die Sie aber beliebig ändern können.
+
+Bleiben Sie in unserem Beispiel Verantwortlicher und weisen Sie nun testweise je einen weiteren Kontakt als Kunden und als Partner zu. Wir wollen uns später in der Lead-Tabelle anschauen, wo diese Kontakte erscheinen.
+
+Kommen wir nun zu einigen charakteristischen Eigenschaften eines Leads. Die drei Pulldowns menu:[Status], menu:[Typ] und menu:[Quelle] im linken Teil bezeichnen spezielle Parameter Ihrer Leads, die die oben erwähnten drei Tortendiagramme visualisieren. Klicken Sie das Pulldown menu:[Status] an, erhalten Sie standardmäßig die Werte menu:[offen], menu:[kontaktiert], menu:[wartet auf Feedback], menu:[Quote gesendet], menu:[akzeptiert] und menu:[verloren].
+
+//////////////////
+        SCREENSHOT
+        path: </Crm/EditDialog/Lead>
+        demodata: Kontakte, Aufgaben, Produkte, Tags, Ordner in Gemeinsamen Leadliste, Rollen, Status
+        image: dialog
+        comment: <das feld Notizen ist nach oben zu den reitern gewandert>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Status eines Leads
+image::Crm/4_crm_lead_status.png[id="fig_crmleadneustatus",width="100%"]
+
+
+Beim Typ bietet {branch} drei Varianten: menu:[Kunde], menu:[Partner] und menu:[Reseller], d.h. Sie können hier noch einmal markieren, ob es sich um einen direkten Kundenkontakt handelt.
+
+Als standardmäßige Quellen eines Leads gibt {branch} die Werte menu:[Markt], menu:[E-Mail], menu:[Telefon] und menu:[Webseite] vor.
+
+Wenn diese drei Parameter nicht oder nur teilweise den Anforderungen im Vertrieb Ihres Unternehmens entsprechen, lesen Sie im <<sec.admin.anwendungen.crm>>, wie man sie ändert oder ergänzt.
+
+Im optionalen Feld menu:[Erwarteter Umsatz] tragen Sie einen geschätzten Umsatz ein, über das Pulldown darunter eine geschätzte (Verkaufs-)menu:[Wahrscheinlichkeit] in 10-Prozent-Schritten. 
+Als menu:[Start] wird Ihnen das Tagesdatum vorgegeben; als menu:[Geplantes Ende] geben Sie ebenfalls ein geschätztes Datum ein. Mit dem Feld menu:[Ende] darunter ist das tatsächliche Ende gemeint, das Sie folglich jetzt noch freilassen. 
+
+menu:[Wiedervorlagedatum] erinnert Sie per E-Mail zu dem hier eingetragenen Datum an den Vorgang. Ein Lead, bei dem dieses Datum oder das Datum menu:[Geplantes Ende] überschritten wurde, erscheint in der Übersichtstabelle rot.
+
+Sollten Sie nicht im Vertrieb tätig sein, fragen Sie sich jetzt vielleicht, warum ein Lead so viele statistische Eigenschaften haben muss. Vertriebstätigkeit ist oft mit großen Einsatz von Manpower und anderer Ressourcen verbunden. Diese Angaben dienen dem Controlling bei der Analyse, mit welchen Kunden, Geschäftspartnern oder Resellern gute Geschäfte möglich sind und mit welchen die Beziehungen eher hohen Aufwand bedeuten. So kann man sich gezielt auf die wirklich lukrativen Kanäle konzentrieren und seinen Verkauf effizienter gestalten.
+
+Kommen wir nun zu den beiden Reitern im unteren Teil der Bearbeitungsmaske, menu:[Aufgaben] und menu:[Produkte]. 
+
+Wiewohl das Vergeben von Aufgaben in {branch} in einer eigenen Anwendung geschieht (<<chapter.Aufgaben>>), ist dies auch hier in menu:[CRM] möglich. Das ist auch sinnvoll, weil sich ein Verkaufsprozess über einen längeren Zeitraum hinziehen und das Delegieren von Aufgaben, z.B. zur Erreichung von Zwischenzielen, erforderlich sein kann. Diese Aufgaben erscheinen automatisch auch in der Aufgabenverwaltung von {branch}, denn wir wollen sie ja in unserer To-Do-Liste sehen. Dort sind sie jedoch dem hier angelegten Lead zugeordnet. Wenn Sie <<chapter.Aufgaben>> schon gelesen haben, sind Ihnen die Felder der hier gezeigten Tabelle bekannt.
+Eine Aufgabe legen Sie an, indem Sie links unter der Spalte menu:[Zusammenfassung] in das Feld menu:[Aufgabe hinzufügen] hineinklicken und Ihre Aufgabe formulieren. menu:[Fälligkeitsdatum], menu:[Priorität], menu:[Prozent] und menu:[Status] geben Sie an, wie in <<chapter.Aufgaben>> beschrieben.
+
+Auch hier können Sie übrigens Aufgaben einem anderen {branch}-Benutzer zuweisen, die entsprechenden Berechtigungen vorausgesetzt. Das ist allerdings in der Standardansicht dieser Tabelle aus Platzgründen nicht zu sehen. Klicken Sie einmal rechts außen das Tabellenkopf-Symbol an und aktivieren Sie den Checkbutton menu:[Organisator]. Das daraufhin eingeblendete Tabellenfeld ist mit einem Pulldown hinterlegt, über das Sie die Aufgabe ggf. einem anderen Bearbeiter zuweisen. Sie müssen dazu nur das Tabellenfeld mit der Maus anklicken.
+
+Außerdem kann man einem Lead mit dem Reiter menu:[Produkte] auch Produkte oder Dienstleistungen zuweisen.
+
+
+//////////////////
+        SCREENSHOT
+        path: </Crm/EditDialog/Lead>
+        demodata: Kontakte, Aufgaben, Produkte, Tags, Ordner in Gemeinsamen Leadliste, Rollen, Status, Produkte
+        image: dialog
+        comment: <das feld Notizen ist nach oben zu den reitern gewandert>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Mit einem Lead verknüpfte Produkte
+image::Crm/5_crm_lead_produkte_zugewiesen.png[id="fig_crmleadneuprodukte",width="100%"]
+
+
+Die Produkte müssen in der Produktverwaltung angelegt sein, ehe Sie sie hier über das Pulldown zuordnen können.
+
+//////////////////
+        SCREENSHOT
+        path: </Crm/EditDialog/Lead>
+        demodata: Kontakte, Aufgaben, Produkte, Tags, Ordner in Gemeinsamen Leadliste, Rollen, Status, Produkte
+        image: dialog
+        comment: <das feld Notizen ist nach oben zu den reitern gewandert>
+        status: <fail>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Lead mit Produkten verknüpfen
+image::Crm/6_crm_lead_produkte_zuweisen.png[id="fig_crmleadneuproduktepulldown",width="100%"]
+
+
+Die Produktverwaltung erreichen Sie über die Anwendung menu:[Sales] (<<chapter.Sales>>).
+
+Wenn Sie den Lead so ausgefüllt haben und speichern (unten rechts mit menu:[Ok]), verändern sich im unteren Teil die Tortendiagramme. Eventuell sind es noch unsegmentierte Kreise, weil nur Daten für einen einzigen Lead vorliegen. Die Ansicht wird sich mit dem Erfassen weiterer Leads schnell ändern. Sollte sich nichts geändert haben, sollten Sie den Browser-Inhalt neu laden (_Refresh_), z.B. mit der Funktionstaste F5.
+
+[NOTE]
+=================
+Die Tortendiagramme beziehen sich immer auf alle Leads der gesamten Ansicht. Ein praktischer Anwendungsfall: Wenn Sie unter menu:[Lead-Status] sehen, dass viele Leads offen sind, dürfte eine neue Maßnahme zur Kaltakquisition per Telefon z.B. durch ein Callcenter wenig sinnvoll sein. Naheliegend scheint es dann eher, die angefangenen Leads zunächst abzuschließen. Für einen Überblick dieser Art ist die CRM-Anwendung konzipiert.
+=================
+
+Nach dem Schließen der Maske menu:[Neuen Lead hinzufügen] steht der Lead in der Übersichtstabelle. Dazu einige Bemerkungen: Die Tabelle zeigt jeweils nur ein Feld für menu:[Verantwortlicher], menu:[Partner] und menu:[Kunde], obwohl Sie jedem Lead beliebig viele Kontakte in verschiedenen Rollen zuordnen können. In der Tabelle erscheint immer der zuletzt angelegte Kontakt einer Rolle.
+Wollen Sie weitere mit dem Lead verbundene Kontakte sehen, rufen Sie die Leadmaske auf (mittels Doppelklick auf den Lead oder Markierung und Button menu:[Lead bearbeiten]).
+
+menu:[Status], menu:[Wahrscheinlichkeit] und menu:[Umsatz] haben wir bereits behandelt; erklärungsbedürftig an dieser Stelle ist nur die Spalte menu:[Voraussichtlicher Umsatz]: Die dort aufgeführte Summe ergibt sich als Produkt aus dem von Ihnen angegebenen Umsatz und der Wahrscheinlichkeit – sie hat rein statistische Aussagekraft.
+
+////
+KUK: 2014 in Chemnitz haben wir über die generelle Sinnhaftigkeit dieser Produktbildung gesprochen - ich halte sie ebenfalls für verwirrend - hier brauchen wir noch eine andere Lösung!
+KUK 2015-05-05: Auch dieses Problem wurde nicht gelöst...
+////
+
+[[sec.crm.rest]]
+=== Die übrigen Funktionen des Bearbeitungsmenüs ===
+
+{{{/Crm/MainScreen/Lead/ActionToolbar}}}
+menu:[Lead bearbeiten]:: Dieser sowie der folgende Menüpunkt ist nur aktiv, wenn ein Lead in der Tabelle ausgewählt wurde. Er öffnet die gleiche Maske, die Sie schon von menu:[Lead hinzufügen] kennen.
+
+menu:[Lead löschen]:: entfernt einen markierten Lead, allerdings erst nach Bestätigung.
+
+menu:[Drucke Seite]:: öffnet Ihren browserinternen Druckdialog und erzeugt eine Tabelle wie auf dem Bildschirm, standardmäßig im DIN-A4-Querformat.
+
+menu:[Nachricht verfassen]:: Diese Funktion (ebenfalls nur aktiv bei Markierung eines Leads) öffnet den Dialog Ihres E-Mail-Clients zum Verfassen einer E-Mail. Dabei wird als Absender die E-Mail-Adresse vorgegeben, die als Ihr Standard-E-Mail-Konto im System eingestellt ist (siehe <<chapter.Einstellungen>>); Sie können sie jedoch per Pulldown ändern. Als Adressaten der E-Mail werden alle im Lead erfassten Kontaktadressen vorgegeben, und im Betreff erscheint die Bezeichnung des Leads.
+
+menu:[Lead exportieren]:: Hier stehen zwei Datenformate zur Verfügung, menu:[ODS] und menu:[XLSX] (die Tabellenformate von OpenOffice/LibreOffice bzw. Microsoft Excel) beide erzeugen jeweils zwei Tabellen in einer Datei:  menu:[Overview] ist ein komplexes Tableau mit Auswertungen aller verfügbaren Daten, sowohl numerisch als auch grafisch. menu:[Leads] ist, genau wie in der oben beschriebenen CSV-Datei, eine Tabelle mit den 1:1 ausgelesenen Werten der Datenbank.
+
+menu:[Lead importieren]:: Sie können auch Leads importieren, wenn die Daten im CSV Format vorliegen.
+////
+.Statistiken eines exportierten Leads in LibreOffice.
+image::Crm/1_crm_leadtabellen.png[id="fig_crmexportods",width="40%"]
+////

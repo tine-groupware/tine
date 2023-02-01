@@ -1,0 +1,23 @@
+[[chap.stammdaten]]
+== Stammdaten == 
+////
+Author: Paul Hartog
+////
+
+//////////////////
+        SCREENSHOT
+        path: </CoreData/MainScreen>
+        demodata: 
+        image: SCREENSHOT
+        comment: <>
+        status: <check>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Appliaktion: Stammdaten
+image::Stammdaten/1_Stammdaten.png[id="fig_stammdaten",width="50%"]
+
+Die Anwendung menu:[Stammdaten] wurde entwickelt, weil man vor der Herausforderung stand, nicht allen Benutzern das Recht geben zu wollen, bestimmte Bereiche einer Anwendung zu kontrollieren (z.b. Arbeitszeitmodelle in der HumanResources-Anwendung). Somit hat man diese Bereiche in eine separaten Anwendung (Stammdaten) ausgelagert. 
+
+Bei der Anwendung menu:[Stammdaten] handelt es sich also um eine Anwendung, die als zentrale Anlaufstelle für die Anwendungspflege dienen soll, ohne jedem User das Recht zu geben, gewisse Bereiche in dieser Anwendung zu bearbeiten.
+
+Sofern in der Anwendungsbenutzung auf Stammdaten zurückgegriffen wird, finden Sie in dem entsprechenden Kapitel die erforderlichen Erklärungen.

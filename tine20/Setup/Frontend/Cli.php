@@ -132,8 +132,14 @@ class Setup_Frontend_Cli
             $this->_backup($_opts);
         } elseif(isset($_opts->restore)) {
             $this->_restore($_opts);
+        } elseif(isset($_opts->setLicense)) {
+            $this->_setLicense($_opts);
+        } elseif(isset($_opts->deleteLicense)) {
+            $this->_deleteLicense();
         } elseif(isset($_opts->compare)) {
             $this->_compare($_opts);
+        } elseif(isset($_opts->createmissingtables)) {
+            $this->_createmissingtables($_opts);
         } elseif(isset($_opts->mysql)) {
             $this->_mysqlClient($_opts);
         } elseif(isset($_opts->setpassword)) {
@@ -1180,6 +1186,39 @@ class Setup_Frontend_Cli
     }
 
     /**
+     * removes the current license
+     *
+     * @return integer
+     */
+    protected function _deleteLicense()
+    {
+        $license = Tinebase_License::getInstance();
+        $license->deleteCurrentLicense();
+
+        return 0;
+    }
+
+    /**
+     * set license
+     *
+     * @param Zend_Console_Getopt $opts
+     * @return integer
+     */
+    protected function _setLicense($opts)
+    {
+        $options = $this->_parseRemainingArgs($opts->getRemainingArgs());
+        if (! isset($options['file'])) {
+            echo '"file" must be given' . "\n";
+            return 2;
+        }
+        $licenseString = file_get_contents($options['file']);
+        $setup = Setup_Controller::getInstance();
+        $setup->saveLicense($licenseString);
+
+        return 0;
+    }
+
+    /**
      * parse options
      * 
      * @param string $_value
@@ -1515,21 +1554,11 @@ class Setup_Frontend_Cli
      * @param Zend_Console_Getopt $_opts
      * @return int
      *
-     * TODO add more platforms?
      * TODO use .my.cnf file? needs to be deleted afterwards (like in backup/restore)
      * TODO use better process control library? i.e. https://symfony.com/doc/current/components/process.html
      */
     protected function _mysqlClient(Zend_Console_Getopt $_opts)
     {
-        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
-        if (! empty($options['platform'])) {
-            switch ($options['platform']) {
-                case 'docker': // maybe add "alpine"?
-                    // install mysql client if not available
-                    system('apk add mysql-client');
-            }
-        }
-
         $dbConf = Tinebase_Core::getConfig()->database;
         $command ='mysql -h ' . $dbConf->host . ' -p' . $dbConf->password . ' -u ' . $dbConf->username
             . ' ' . $dbConf->dbname;
@@ -1559,5 +1588,33 @@ class Setup_Frontend_Cli
         fclose($pipes[1]);
         fclose($pipes[2]);
         return proc_close($process);
+    }
+
+    /**
+     * create missing tables (for example cache tables that weren't restored from a dump)
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     * @throws Setup_Exception_NotFound
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    protected function _createmissingtables(Zend_Console_Getopt $_opts)
+    {
+        // run Schema tool -> should already create tables that might be missing
+        Setup_SchemaTool::updateAllSchema();
+
+        $setup = Setup_Controller::getInstance();
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $xml = $setup->getSetupXml($application->name);
+            $tables = $setup->createXmlTables($xml);
+            if (count($tables) > 0) {
+                echo "Re-created tables for app " . $application->name . ":\n";
+                foreach ($tables as $table) {
+                    echo "- " . $table->name ."\n";
+                }
+            }
+        }
+
+        return 0;
     }
 }

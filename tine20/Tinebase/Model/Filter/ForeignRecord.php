@@ -130,7 +130,8 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         }
         $this->_foreignIds = NULL;
         $this->_valueIsNull = empty($_value) || (is_array($_value) && count($_value) === 1 && isset($_value[0]) &&
-                is_array($_value[0]) && array_key_exists('value', $_value[0]) && empty($_value[0]['value']));
+                is_array($_value[0]) && array_key_exists('value', $_value[0]) && empty($_value[0]['value']) &&
+                'query' !== $_value[0]['field']);
 
         // id(s) is/are to be provided directly as value
         if ($this->_operator === 'equals' || $this->_operator === 'in' || $this->_operator === 'not' ||

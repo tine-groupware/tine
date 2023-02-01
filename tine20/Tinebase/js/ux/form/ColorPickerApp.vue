@@ -10,48 +10,39 @@
 
 <template>
   <div>
-    <color-picker theme="light" :color="color" @changeColor="changeColor" :colors-default="[]" />
+    <ColorPicker
+      theme="light"
+      :color="color"
+      @changeColor="(value) => {color = value.hex}"
+    />
   </div>
 </template>
 
-<script>
-// Make available for translation in ColorPalette
-// _('Select Color')
+<script setup>
+import { ref, onBeforeMount } from 'vue'
+import { ColorPicker } from 'vue-color-kit'
 
-import colorPicker from '@caohenghu/vue-colorpicker'
+const props = defineProps({
+  initialColor: { type: String }
+})
 
-export default {
-  name: 'ColorPickerApp',
-  components: {
-    colorPicker
-  },
-  props: ['initialColor'],
-  data () {
-    return {
-      color: '#90C0FF'
-    }
-  },
-  methods: {
-    changeColor (color) {
-      this.color = color.hex
-    },
-    getColor () {
-      return this.color
-    }
-  },
-  beforeMount () {
-    if (this.initialColor) {
-      this.color = '#' + this.initialColor
-    }
+const color = ref()
+onBeforeMount(() => {
+  if (props.initialColor) {
+    color.value = '#' + props.initialColor
+  } else {
+    color.value = '#90C0FF'
   }
+})
+
+function getColor () {
+  return color.value
 }
+defineExpose({
+  getColor
+})
 </script>
 
 <style>
-  div.color-alpha {
-    display: none;
-  }
-  ul.colors {
-    display: none;
-  }
+@import url('vue-color-kit/dist/vue-color-kit.css');
 </style>

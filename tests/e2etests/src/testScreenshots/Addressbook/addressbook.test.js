@@ -190,12 +190,16 @@ describe('Contacts', () => {
             await page.screenshot({path: 'screenshots/StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen.png'});
         });
 
-        test.skip('permissions dialog', async () => {
-            // NOTE: in debug mode screenshot removes focus so menu closes
-            await expect(page).toClick('#Addressbook_Contact_Tree span', {
-                text: process.env.TEST_USER + 's persönliches Adressbuch',
-                button: 'right'
-            });
+        test('permissions dialog', async () => {
+            try {
+                await page.waitForSelector('.x-menu-item-icon.action_managePermissions', {timeout: 100});
+            } catch (e) {
+                // NOTE: in debug mode screenshot removes focus so menu closes
+                await expect(page).toClick('#Addressbook_Contact_Tree span', {
+                    text: process.env.TEST_USER + 's persönliches Adressbuch',
+                    button: 'right'
+                });
+            }
             await page.click('.x-menu-item-icon.action_managePermissions');
             await page.screenshot({path: 'screenshots/StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten.png'});
             await page.keyboard.press('Escape');

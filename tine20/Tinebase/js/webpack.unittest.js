@@ -1,9 +1,11 @@
 let path = require('path')
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const prod = require('./webpack.prod.js');
+const webpack = require('webpack');
 
 module.exports = merge(prod, {
-    entry: null,
+    // devtool: 'inline-source-map',
+    // entry: null,
     module: {
         rules: [
             {
@@ -19,26 +21,10 @@ module.exports = merge(prod, {
                         '@babel/plugin-transform-modules-commonjs'
                     ],
                     presets: [
-                        ["@babel/env"/*, { "modules": false }*/]
+                    ["@babel/env", {/* "debug": true/*, "module": false*/}]
 
                     ]
                 }
-            },
-            {
-                // instrument only testing sources with Istanbul
-                // https://github.com/webpack-contrib/istanbul-instrumenter-loader/issues/73
-                // disable this loader to have correct traces in you code :-(
-                test: /\.js$/,
-                use: {
-                    loader: 'istanbul-instrumenter-loader',
-                    options: {
-                        esModules: true,
-                        produceSourceMap: true
-                    }
-                },
-                enforce: 'post',
-                exclude: /(node_modules|ux)/,
-                include: path.resolve(__dirname, '../../')
             },
             {
                 test: /\.js$/,

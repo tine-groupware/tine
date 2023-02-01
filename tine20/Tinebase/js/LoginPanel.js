@@ -230,7 +230,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         if (! this.communityPanel) {
             var translationPanel = [],
                 stats = Tine.__translationData.translationStats,
-                version = Tine.clientVersion.packageString.match(/\d+\.\d+\.\d+/),
+                version = String(Tine.clientVersion.packageString).match(/\d+\.\d+\.\d+/),
                 language = Tine.Tinebase.registry.get('locale').language,
                 // TODO make stats work again (currently displays 100% for all langs)
                 //percentageCompleted =  stats ? Math.floor(100 * stats.translated / stats.total) : undefined;
@@ -270,6 +270,47 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         }
 
         return this.communityPanel;
+    },
+
+    getLicenseInformationPanel: function () {
+        if (! this.licensePanel) {
+
+            var items = [];
+
+            var licenseCheck = Tine.Tinebase.registry.get('licenseStatus');
+
+            if (licenseCheck === 'status_no_license_available' || licenseCheck === 'status_license_invalid') {
+
+                // EXPIRED!
+                let licenseFailed = [{
+                    cls: 'tb-login-big-label',
+                    html: (
+                        licenseCheck === 'status_license_invalid'
+                            ? String.format(i18n._('Your {0} license expired.'), Tine.title)
+                            : String.format(i18n._('{0} trial'), Tine.title)
+                    )
+                }, {
+                    html: '<p>'
+                        +  (
+                            licenseCheck === 'status_license_invalid'
+                                ? String.format(i18n._('Your {0} license is expired! Users cannot login any more. Please contact Metaways Infosystems GmbH to buy a new license.'), Tine.title)
+                                : i18n._('Please contact Metaways Infosystems GmbH to buy a valid license.')
+                        )
+                }];
+
+                items = licenseFailed.concat(items);
+            }
+
+            this.licensePanel = new Ext.Container({
+                layout: 'fit',
+                cls: 'tb-login-tinepanel',
+                border: false,
+                defaults: {xtype: 'label'},
+                items: items
+            });
+        }
+
+        return this.licensePanel;
     },
 
     getPoweredByPanel: function () {
@@ -525,8 +566,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     initLayout: function () {
         var infoPanelItems = (this.showInfoBox) ? [
             this.getBrowserIncompatiblePanel(),
-            this.getCommunityPanel(),
-            this.getSurveyPanel()
+            this.getLicenseInformationPanel()
+            // removed for Tine 2.0 Business Edition
+            //this.getCommunityPanel(),
+            //this.getSurveyPanel()
         ] : [];
         
         this.infoPanel = new Ext.Container({

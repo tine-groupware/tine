@@ -619,7 +619,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * call checkState for every field
      */
     checkStates: function() {
-        if (this.isDestroyed) return;
+        if (this.isDestroyed || !this.record) return;
 
         if(this.loadRequest){
             return _.delay(_.bind(this.checkStates, this), 250);

@@ -17,6 +17,7 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
     canonicalName: ['Addressbook',  'EditDialog', 'Contact', 'GDPRPanel'].join(Tine.Tinebase.CanonicalPath.separator),
 
     initComponent: function () {
+        var me = this;
         this.app = this.app || Tine.Tinebase.appMgr.get('GDPR');
         this.title = this.app.i18n._('GDPR');
 
@@ -63,7 +64,6 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
             items: [{
                 layout: 'form',
                 frame: true,
-                //height: 300,
                 width: '100%',
                 labelAlign: 'top',
                 items: [

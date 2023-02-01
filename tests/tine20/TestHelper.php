@@ -18,6 +18,7 @@ if (! Tinebase_Core::isRegistered('frameworkInitialized') || Tinebase_Core::get(
     TestServer::getInstance()->login();
 
     // do this after login because we need the current user
+    TestServer::getInstance()->setLicense();
     TestServer::getInstance()->initTestUsers();
     TestServer::getInstance()->setTestUserEmail();
 

@@ -84,4 +84,6 @@ interface Tinebase_User_Interface
      * @return  Tinebase_Model_User the user object
      */
     public function getUserByPropertyFromBackend($_property, $_value, $_accountClass = 'Tinebase_Model_User');
+
+    public function hasUserValidLicense($user, $maxUsers);
 }

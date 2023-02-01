@@ -508,8 +508,7 @@ msgid "Budget in hours"
 msgstr "Budget in hours"
 
 msgid "Timeaccounts are still in use! Are you sure you want to delete them?"
-msgstr ""
-"Timeaccounts are still in use! Are you sure you want to delete them?"
+msgstr "Timeaccounts are still in use! Are you sure you want to delete them?"
 
 msgid "Read Own"
 msgstr "Read Own"

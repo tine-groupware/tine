@@ -11,10 +11,70 @@ import { TwingExtensionIntl } from 'twing-intl'
 import transliterate from 'util/transliterate'
 
 let twingEnv
+let proxyId = 0
 
-export default function getTwingEnv () {
+const replaceProxyFns = {}
+
+class Expression extends String {
+  constructor (s, id) {
+    super(s)
+    this.id = id
+    this.isExpression = true
+  }
+
+  replaceProxyBy (fn) {
+    replaceProxyFns[this.id] = fn
+  }
+
+  asString () {
+    return new Promise(resolve => {
+      this.replaceProxyBy(resolve)
+    })
+  }
+}
+
+const proxyDocuments = [
+  document
+]
+
+const addProxyDocument = function (doc) {
+  proxyDocuments.unshift(doc)
+}
+
+const removeProxyDocument = function (doc) {
+  const idx = proxyDocuments.indexOf(doc)
+  if (idx >= 0) {
+    proxyDocuments.splice(idx, 1)
+  }
+}
+
+const proxyPromisesCollections = []
+
+const addProxyPromisesCollection = function (collection) {
+  proxyPromisesCollections.push(collection)
+}
+
+const removeProxyPromisesCollection = function (collection) {
+  const idx = proxyPromisesCollections.indexOf(collection)
+  if (idx >= 0) {
+    proxyPromisesCollections.splice(idx, 1)
+  }
+}
+
+const replaceProxy = function (id, content) {
+  proxyDocuments.forEach((doc) => {
+    const el = doc.getElementById(id)
+    if (el) {
+      el.outerHTML = content
+    } else {
+      // try again later?
+    }
+  })
+}
+
+const getTwingEnv = function () {
   if (!twingEnv) {
-    let loader = new TwingLoaderArray([])
+    const loader = new TwingLoaderArray([])
 
     twingEnv = new TwingEnvironment(loader, {
       autoescape: false
@@ -31,13 +91,41 @@ export default function getTwingEnv () {
     twingEnv.addExtension(new TwingExtensionIntl())
 
     twingEnv.addFilter(new TwingFilter('removeSpace', function (string) {
-      return string.replaceAll(' ', '')
+      return Promise.resolve(string.replaceAll(' ', ''))
     }))
 
     twingEnv.addFilter(new TwingFilter('transliterate', function (string) {
-      return transliterate(string)
+      return Promise.resolve(transliterate(string))
     }))
+
+    /**
+     * render proxy which gets replaced after with rendered content
+     *
+     * @param context
+     * @param buffer
+     * @returns {Expression}
+     */
+    twingEnv.renderProxy = (context, buffer) => {
+      const id = `twing-proxy-${++proxyId}`
+      const proxyPromise = twingEnv.render(context, buffer)
+      proxyPromisesCollections.forEach((proxyPromisesCollection) => {
+        proxyPromisesCollection.push(proxyPromise)
+      })
+
+      proxyPromise.then((output) => {
+        if (replaceProxyFns[id]) {
+          replaceProxyFns[id](output, id)
+          delete replaceProxyFns[id]
+        } else {
+          replaceProxy(id, output)
+        }
+      })
+
+      return new Expression(`<em id="${id}" class="twing-proxy"></em>`, id)
+    }
   }
 
   return twingEnv
 }
+
+export { getTwingEnv as default, Expression, addProxyDocument, removeProxyDocument, addProxyPromisesCollection, removeProxyPromisesCollection }

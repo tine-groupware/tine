@@ -18,7 +18,7 @@
     - git config merge.pofile.driver "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge-po-files %A %O %B"
     - git config merge.pofile.recursive "binary"
     - git remote add customers https://gitlab.metaways.net/tine20/tine20.git
-    - git remote add github https://github.com/tine20/tine20.git
+    - git remote add github https://github.com/tine-groupware/tine.git
     - cd ${CI_BUILDS_DIR}/merge/tine20
     
 .abstract.merge_on_source_image:
@@ -34,31 +34,18 @@ merge:
   stage: merge1
   extends: .abstract.merge
   script:
-    - merge_merge_upwards 2020.11 2021.11
     - merge_merge_upwards 2021.11 2022.11
-    # TODO remove main (no longer needed in new github)?
-    - merge_merge_upwards 2022.11 main
     - merge_merge_upwards 2022.11 2023.11
     # BE changes < 2023.11 (TODO remove that when 2022.11 is obsolete)
     - merge_merge_upwards tine20.com/2022.11-custom 2023.11
+    - merge_merge_mirror origin 2023.11 github main
+    - merge_merge_mirror github main origin 2023.11
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE == "never"
       when: never
-    - if: $CI_COMMIT_REF_NAME == "2020.11" || $CI_COMMIT_REF_NAME == "2021.11" || $CI_COMMIT_REF_NAME == "2022.11" || $CI_COMMIT_REF_NAME == "tine20.com/2022.11-custom"
+    - if: $CI_COMMIT_REF_NAME == "2021.11" || $CI_COMMIT_REF_NAME == "2022.11" || $CI_COMMIT_REF_NAME == "tine20.com/2022.11-custom" || $CI_COMMIT_REF_NAME == "2023.11"
       variables:
         AUTO_MERGE_VAR: "true"
     - if: $AUTO_MERGE == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /auto_merge/
-
-mergemain:
-  stage: merge2
-  extends: .abstract.merge
-  script:
-    - merge_merge_mirror origin main github main
-    - merge_merge_mirror github main origin main
-    - release_tag_main_if_needed
-    - merge_trigger_next
-  rules:
-    - if: $AUTO_MERGE_MAIN == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /auto_merge_main/

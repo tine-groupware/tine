@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>GDPR_Model_DataProvenance</model>
+    <plugin>Tinebase_Export_Xls</plugin>
+    <name>gdpr_export_provenance_xls</name>
+    <!-- _('Excel all data') -->
+    <label>Excel all data</label>
+    <type>export</type>
+    <icon_class>tinebase-action-export-xls</icon_class>
+    <scope>multi</scope>
+    <favorite>true</favorite>
+    <order>300</order>
+</config>

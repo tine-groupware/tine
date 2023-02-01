@@ -14,7 +14,6 @@ FROM ${SOURCE_IMAGE} as test-source
 
 RUN apk add mysql-client jq rsync coreutils
 
-COPY ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/webpack.ini
 COPY etc /config
 COPY phpstan.neon ${TINE20ROOT}/phpstan.neon
 COPY phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon

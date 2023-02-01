@@ -198,25 +198,25 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'path'              => [
                 'filter'            => Tinebase_Model_Filter_Path::class,
-                'title'             => 'Path', // _('Path') // TODO is this right?
+                'title'             => 'Path', // _('Path')
                 'options'           => [],
                 'jsConfig'          => ['filtertype' => 'addressbook.contactpath'] // TODO later with FE fix it
             ],
             'list'              => [
                 'filter'            => Addressbook_Model_ListMemberFilter::class,
-                'title'             => 'List Member', // _('List Member') // TODO is this right?
+                'title'             => 'Group Member', // _('Group Member')
                 'options'           => [],
                 'jsConfig'          => ['filtertype' => 'addressbook.contactlist'] // TODO later with FE fix it
             ],
             'list_role_id'      => [
                 'filter'            => Addressbook_Model_ListRoleMemberFilter::class,
-                'title'             => 'List Role Member', // _('List Role Member') // TODO is this right?
+                'title'             => 'Group Function', // _('Group Function')
                 'options'           => [],
                 'jsConfig'          => ['filtertype' => 'addressbook.contactlistroleid'] // TODO later with FE fix it
             ],
             'telephone'         => [
                 'filter'            => Tinebase_Model_Filter_Query::class,
-                'title'             => 'Telephone', // _('Telephone') // TODO is this right?
+                'title'             => 'Telephone', // _('Telephone')
                 'options'           => [
                     'fields'            => [
                         'tel_assistent',
@@ -236,7 +236,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
             'telephone_normalized' => [
                 'filter'            => Tinebase_Model_Filter_Query::class,
-                'title'             => 'Telephone Normalized', // _('Telephone Normalized') // TODO is this right?
+                'title'             => 'Telephone Normalized', // _('Telephone Normalized')
                 'options'           => [
                     'fields'            => [
                         'tel_assistent_normalized',

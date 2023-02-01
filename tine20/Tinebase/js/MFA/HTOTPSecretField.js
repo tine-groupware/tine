@@ -55,7 +55,7 @@ const HTOTOPSecretField = Ext.extend(Ext.form.FieldSet, {
         if (!value && [0, "0"].indexOf(record.id) >= 0) {
             supr(i18n._('Generating secret key ...'));
             this.secretField.setDisabled(true);
-            import(/* webpackChunkName: "Tinebase/js/rfc4648" */ 'rfc4648').then((module) => {
+            import('rfc4648').then((module) => {
                 const bytes = new Uint8Array(35);
                 window.crypto.getRandomValues(bytes);
                 supr(module.base32.stringify(bytes));

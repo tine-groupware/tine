@@ -18,6 +18,8 @@ packaging_build_packages() {
     export BASE_IMAGE="${REGISTRY}/base-commit:${IMAGE_TAG}"
     export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${IMAGE_TAG}"
     export SOURCE_IMAGE="${REGISTRY}/source-commit:${IMAGE_TAG}"
+    export JSDEPENDENCY_IMAGE="${REGISTRY}/jsdependency-commit:${IMAGE_TAG}"
+    export JSBUILD_IMAGE="${REGISTRY}/jsbuild-commit:${IMAGE_TAG}"
     export BUILD_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
     export BUILT_IMAGE="${REGISTRY}/built-commit:${IMAGE_TAG}"
     export REVISION=0
@@ -79,7 +81,7 @@ packaging_gitlab_set_ci_id_link() {
 }
 
 packaging_gitlab_get_version_for_pipeline_id() {
-    customer=$1
+    customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
 
     if ! curl \
         --fail \
@@ -137,7 +139,7 @@ packaging_push_package_to_github() {
 
 packaging_push_to_vpackages() {
     customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
-    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id)}
     release=$(echo ${version} | sed sI-I~Ig)
 
     echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
