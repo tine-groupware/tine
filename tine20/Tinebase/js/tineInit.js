@@ -219,16 +219,19 @@ Tine.Tinebase.tineInit = {
             }
             
             if (target && href && href !== '#') {
+                target.set({
+                    href: decodeURI(href),
+                    rel: "noreferrer",
+                    target: "_blank"
+                });
+
                 // open internal links in same window (use router)
                 if (window.isMainWindow === true) {
-                    if (target.getAttribute('target') === '_blank') {
-
-                        if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
-                            target.set({
-                                href: decodeURI(href),
-                                target: "_self"
-                            });
-                        }
+                    if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
+                        target.set({
+                            href: decodeURI(href),
+                            target: "_self"
+                        });
                     }
                 } else {
                     e.preventDefault();
