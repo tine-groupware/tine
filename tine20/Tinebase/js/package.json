@@ -55,7 +55,7 @@
     "rfc4648": "^1.5.2",
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",
-    "storage-based-queue": "github:tine20/storage-based-queue.git#28c60cf7d8bf7dbbdfae74c6c195cda8e24973ed",
+    "storage-based-queue": "github:tine20/storage-based-queue#28c60cf7d8bf7dbbdfae74c6c195cda8e24973ed",
     "store2": "^2.14.2",
     "stream-browserify": "^3.0.0",
     "twing": "^5.1.2",
