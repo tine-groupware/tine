@@ -2305,6 +2305,9 @@ msgstr "Word - Details"
 msgid "Excel all data"
 msgstr "Excel - Alle Daten"
 
+msgid "Excel current columns"
+msgstr "Excel - Aktuelle Spalten"
+
 #: Export/definitions/cal_shared_calendar_csv.xml:5
 msgid "Shared Calendar CSV"
 msgstr ""
