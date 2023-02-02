@@ -184,6 +184,7 @@ class Sales_Controller extends Tinebase_Controller_Event
                     'prefix2' => $contact->org_unit,
                     'prefix3' =>  $fullName,
                     'language' => $defaultLang,
+                    'email' => $contact->email,
                 ));
 
                 Sales_Controller_Address::getInstance()->create($postal);
