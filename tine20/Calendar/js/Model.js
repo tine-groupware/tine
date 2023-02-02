@@ -200,7 +200,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     getTitle: function() {
         if (! this.constructor.titleTwing) {
             const app = Tine.Tinebase.appMgr.get(this.appName);
-            const template = app.getRegistry().get('preferences').get('webEventTitleTemplate');
+            const template = app.getRegistry().get('preferences').get('webEventTitleTemplate') + '{% if poll_id and not poll_id.closed %}\uFFFD{% endif %}';
             const twingEnv = getTwingEnv();
             const loader = twingEnv.getLoader();
 
@@ -212,7 +212,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
             this.constructor.titleTwing = twingEnv;
         }
 
-        return new Expression(this.constructor.titleTwing.renderProxy(this.constructor.getPhpClassName() + 'Title', this.data) + (this.hasPoll() ? '\u00A0\uFFFD' : ''));
+        return this.constructor.titleTwing.renderProxy(this.constructor.getPhpClassName() + 'Title', this.data);
     },
 
     isRescheduled: function (event) {

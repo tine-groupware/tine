@@ -1,4 +1,4 @@
-import { addProxyDocument, removeProxyDocument, addProxyPromisesCollection, removeProxyPromisesCollection } from "twingEnv";
+import { HTMLProxy } from "twingEnv";
 
 /**
  * @class Ext.ux.Printer.BaseRenderer
@@ -77,9 +77,9 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
              : "print";
 
         var win = window.open('', name);
-        addProxyDocument(win.document);
+        HTMLProxy.addProxyDocument(win.document);
         const proxyPromisesCollection = [];
-        addProxyPromisesCollection(proxyPromisesCollection);
+        HTMLProxy.addProxyPromisesCollection(proxyPromisesCollection);
 
         var me = this;
         return me.generateHTML(component).then(async function(html) {
@@ -87,8 +87,8 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
             win.document.close();
 
             await Promise.allSettled(proxyPromisesCollection);
-            removeProxyDocument(win.document);
-            removeProxyPromisesCollection(proxyPromisesCollection);
+            HTMLProxy.removeProxyDocument(win.document);
+            HTMLProxy.removeProxyPromisesCollection(proxyPromisesCollection);
 
             // gecko looses its document after document.close(). but fortunally waits with printing till css is loaded itself
             me.doPrint(win);
@@ -135,17 +135,17 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
         var doc = frame.contentWindow.document || frame.contentDocument || WINDOW.frames[id].document;
 
         doc.open();
-        addProxyDocument(doc);
+        HTMLProxy.addProxyDocument(doc);
         const proxyPromisesCollection = [];
-        addProxyPromisesCollection(proxyPromisesCollection);
+        HTMLProxy.addProxyPromisesCollection(proxyPromisesCollection);
         return me.generateHTML(component).then(async function(html) {
             doc.write(html);
             doc.close();
             // resize to full height as browser might print only the visible area
 
             await Promise.allSettled(proxyPromisesCollection);
-            removeProxyDocument(doc);
-            removeProxyPromisesCollection(proxyPromisesCollection);
+            HTMLProxy.removeProxyDocument(doc);
+            HTMLProxy.removeProxyPromisesCollection(proxyPromisesCollection);
 
             var totalHeight = Ext.fly(doc.body).getHeight();
             Ext.fly(frame).setStyle('height', totalHeight+'px');

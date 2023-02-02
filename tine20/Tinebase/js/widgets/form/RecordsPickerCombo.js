@@ -93,8 +93,8 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
             Promise.all(_.map(this.store.data.items, function(record) {
                 return new Promise(resolve => {
                     const text = record.getTitle();
-                    if (text && text.replaceProxyBy) {
-                        text.replaceProxyBy((text) => {
+                    if (text && text.registerReplacer) {
+                        text.registerReplacer((text) => {
                             resolve(text);
                         });
                     } else {

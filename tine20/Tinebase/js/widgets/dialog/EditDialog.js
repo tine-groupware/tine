@@ -1039,8 +1039,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     recordName: this.i18nRecordName
                 }));
             } else {
-                this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
-                
+                (async () => {
+                    let title = this.record.getTitle();
+                    if (title && title.asString) {
+                        title = await title.asString();
+                    }
+                    this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, title));
+                })();
+
                 if (! this.el.findParent('.x-window')) {
                     if (_.get(Tine.Tinebase.router.routes, `${this.appName}.${this.recordClass.getMeta('recordName')}`)) {
                         Tine.Tinebase.router.setRoute(`${this.appName}/${this.recordClass.getMeta('recordName')}/${this.record.get(this.recordClass.getMeta('idProperty'))}`);
