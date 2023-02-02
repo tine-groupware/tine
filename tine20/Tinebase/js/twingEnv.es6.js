@@ -11,66 +11,139 @@ import { TwingExtensionIntl } from 'twing-intl'
 import transliterate from 'util/transliterate'
 
 let twingEnv
-let proxyId = 0
 
-const replaceProxyFns = {}
-
+/**
+ * Expression is a string that does not get quoted in htmlEncode (@see Ext.util.Format.htmlEncode)
+ */
 class Expression extends String {
   constructor (s, id) {
     super(s)
-    this.id = id
     this.isExpression = true
   }
+}
 
-  replaceProxyBy (fn) {
+let proxyId = 0
+const replaceProxyFns = {}
+const proxyDocuments = [
+  document
+]
+const proxyPromisesCollections = []
+
+/**
+ * HTMLProxy - html proxy snipped that will be replaced with the real content later
+ *
+ * useful in situations where you need to return html directly which gets produces async
+ */
+class HTMLProxy extends Expression {
+  constructor (renderPromise, config = {}) {
+    const id = config.id || `html-proxy-${++proxyId}`
+    const cls = config.cls || 'html-proxy'
+    const tag = config.tag || 'em'
+    super(`<${tag} id="${id}" className="${cls}"></${tag}>`)
+    this.id = id
+    this.cls = cls
+    this.tag = tag
+    Object.assign(this, config)
+    if (renderPromise) {
+      this.setRenderer(renderPromise)
+    }
+    this.isHTMLProxy = true
+  }
+
+  /**
+   * set the render/producer function this HTMLProxy proxies
+   *
+   * @param renderPromise
+   * @returns {Promise}
+   */
+  setRenderer (renderPromise) {
+    this.renderPromise = renderPromise
+
+    proxyPromisesCollections.forEach((proxyPromisesCollection) => {
+      proxyPromisesCollection.push(renderPromise)
+    })
+
+    return renderPromise.then((output) => {
+      return this.replaceProxy(output)
+    })
+  }
+
+  /**
+   * default implementation to replace proxy in dom
+   *
+   * @param html
+   * @private
+   */
+  replaceDomProxy (html) {
+    proxyDocuments.forEach((doc) => {
+      const el = doc.getElementById(this.id)
+      if (el) {
+        el.outerHTML = html
+        return true
+      }
+    })
+  }
+
+  /**
+   * replace proxy by given html
+   * @param html
+   * @returns {Promise<boolean|void>}
+   */
+  async replaceProxy (html) {
+    // @TODO retry n times, replaceProxy might be registered late!
+    if (replaceProxyFns[this.id]) {
+      if (replaceProxyFns[this.id](html, this.id)) {
+        delete replaceProxyFns[this.id]
+        return true
+      }
+    } else {
+      return this.replaceDomProxy(html)
+    }
+  }
+
+  /**
+   * register a custom replacer method for this proxy
+   * @param {Function} fn
+   */
+  registerReplacer (fn) {
     replaceProxyFns[this.id] = fn
   }
 
+  /**
+   * get a Promise which resolves with the final content
+   * @returns {Promise<String>}
+   */
   asString () {
     return new Promise(resolve => {
-      this.replaceProxyBy(resolve)
+      this.registerReplacer(resolve)
     })
   }
 }
 
-const proxyDocuments = [
-  document
-]
+// add static functions
+Object.assign(HTMLProxy, {
+  addProxyDocument: function (doc) {
+    proxyDocuments.unshift(doc)
+  },
 
-const addProxyDocument = function (doc) {
-  proxyDocuments.unshift(doc)
-}
-
-const removeProxyDocument = function (doc) {
-  const idx = proxyDocuments.indexOf(doc)
-  if (idx >= 0) {
-    proxyDocuments.splice(idx, 1)
-  }
-}
-
-const proxyPromisesCollections = []
-
-const addProxyPromisesCollection = function (collection) {
-  proxyPromisesCollections.push(collection)
-}
-
-const removeProxyPromisesCollection = function (collection) {
-  const idx = proxyPromisesCollections.indexOf(collection)
-  if (idx >= 0) {
-    proxyPromisesCollections.splice(idx, 1)
-  }
-}
-
-const replaceProxy = function (id, content) {
-  proxyDocuments.forEach((doc) => {
-    const el = doc.getElementById(id)
-    if (el) {
-      el.outerHTML = content
-    } else {
-      // try again later?
+  removeProxyDocument: function (doc) {
+    const idx = proxyDocuments.indexOf(doc)
+    if (idx >= 0) {
+      proxyDocuments.splice(idx, 1)
     }
-  })
-}
+  },
+
+  addProxyPromisesCollection: function (collection) {
+    proxyPromisesCollections.push(collection)
+  },
+
+  removeProxyPromisesCollection: function (collection) {
+    const idx = proxyPromisesCollections.indexOf(collection)
+    if (idx >= 0) {
+      proxyPromisesCollections.splice(idx, 1)
+    }
+  }
+})
 
 const getTwingEnv = function () {
   if (!twingEnv) {
@@ -103,29 +176,14 @@ const getTwingEnv = function () {
      *
      * @param context
      * @param buffer
-     * @returns {Expression}
+     * @returns {HTMLProxy}
      */
     twingEnv.renderProxy = (context, buffer) => {
-      const id = `twing-proxy-${++proxyId}`
-      const proxyPromise = twingEnv.render(context, buffer)
-      proxyPromisesCollections.forEach((proxyPromisesCollection) => {
-        proxyPromisesCollection.push(proxyPromise)
-      })
-
-      proxyPromise.then((output) => {
-        if (replaceProxyFns[id]) {
-          replaceProxyFns[id](output, id)
-          delete replaceProxyFns[id]
-        } else {
-          replaceProxy(id, output)
-        }
-      })
-
-      return new Expression(`<em id="${id}" class="twing-proxy"></em>`, id)
+      return new HTMLProxy(twingEnv.render(context, buffer))
     }
   }
 
   return twingEnv
 }
 
-export { getTwingEnv as default, Expression, addProxyDocument, removeProxyDocument, addProxyPromisesCollection, removeProxyPromisesCollection }
+export { getTwingEnv as default, Expression, HTMLProxy }

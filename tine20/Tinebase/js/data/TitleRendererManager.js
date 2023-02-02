@@ -44,6 +44,7 @@ Tine.Tinebase.data.TitleRendererManager = function() {
          * @param {Object} scope to call renderer in, optional.
          */
         register: function(appName, modelName, renderer) {
+            console.error('DEPRECATED use titleTwig instead');
             renderers[appName+modelName] = renderer;
         },
         
