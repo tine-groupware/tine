@@ -244,6 +244,7 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $address->prefix2 = $contact->org_unit;
         $address->prefix3 = $fullName;
         $address->language = $language;
+        $address->email = $contact->email;
 
         return Sales_Controller_Address::getInstance()->update($address);
     }
