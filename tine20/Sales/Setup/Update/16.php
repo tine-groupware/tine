@@ -6,7 +6,7 @@
  * @package     Sales
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * this is 2023.11 (ONLY!)
@@ -36,22 +36,7 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
 
     public function update001()
     {
-        $adbController = Addressbook_Controller_Contact::getInstance();
-        $filter = new Tinebase_Model_RelationFilter(array(
-            array('field' => 'related_model', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::class),
-            array('field' => 'own_model', 'operator' => 'equals', 'value' => Sales_Model_Address::class),
-            array('field' => 'type', 'operator' => 'equals', 'value' => 'CONTACTADDRESS'),
-        ), 'AND');
-
-        $existingRelations = Tinebase_Relations::getInstance()->search($filter);
-
-        foreach ($existingRelations as $relation) {
-            $contact = $adbController->get($relation->related_id);
-            if ($contact->email) {
-                $adbController->update($contact);
-            }
-        }
-
+        // moved to \Sales_Frontend_Cli::addEmailToSalesAddress
         $this->addApplicationUpdate('Sales', '16.1', self::RELEASE016_UPDATE001);
     }
 }
