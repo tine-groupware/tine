@@ -403,4 +403,29 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $this->_createImportDemoDataFromSet('Sales.yml');
     }
+
+    /**
+     * addEmailToSalesAddress
+     */
+    public function addEmailToSalesAddress()
+    {
+        $adbController = Addressbook_Controller_Contact::getInstance();
+        $filter = new Tinebase_Model_RelationFilter(array(
+            array('field' => 'related_model', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::class),
+            array('field' => 'own_model', 'operator' => 'equals', 'value' => Sales_Model_Address::class),
+            array('field' => 'type', 'operator' => 'equals', 'value' => 'CONTACTADDRESS'),
+        ), 'AND');
+
+        // TODO no need to fetch complete records here - we should only get the related_id + record_id (via $_cols)
+        // TODO use backend here (Tinebase_Relation_Backend_Sql)
+        // TODO only update if email is is not set in Address
+        $existingRelations = Tinebase_Relations::getInstance()->search($filter);
+
+        foreach ($existingRelations as $relation) {
+            $contact = $adbController->get($relation->related_id);
+            if ($contact->email) {
+                $adbController->update($contact);
+            }
+        }
+    }
 }
