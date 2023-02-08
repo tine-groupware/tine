@@ -367,7 +367,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * set passwords for given user accounts (csv with email addresses or username) - random pw is generated if not in csv
      *
-     * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password sendmail=1 pwlist=pws.csv updateaccount=1]
+     * usage: method=Admin.setPasswords [-d] [-v] [userlist1.csv] [userlist2.csv] [-- pw=password sendmail=1 pwlist=pws.csv updateaccount=1]
      *
      * - sendmail=1 -> sends mail to user with pw
      * - pwlist=pws.csv -> creates csv file with the users and their new pws
@@ -385,12 +385,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $args = $this->_parseArgs($opts, array(), 'userlist_csv');
 
-        // input csv/user list
-        if (! isset($args['userlist_csv'])) {
-            echo "userlist file param required or file not found. usage: method=Admin.setPasswords [-d] userlist.csv\n";
-            return 2;
-        }
-
         if (isset($args['pwlist'])) {
             $pw = $this->_readCsv($args['pwlist'], true);
             if ($pw && $opts->v) {
@@ -400,21 +394,24 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $pw = $args['pw'] ?? null;
         }
 
-        foreach ($args['userlist_csv'] as $csv) {
-            $users = $this->_readCsv($csv);
-            if (! $users) {
-                echo "no users found in file\n";
-                break;
-            }
+        $sendmail = isset($args['sendmail']) && (bool) $args['sendmail'];
+        $updateaccount = isset($args['updateaccount']) && (bool) $args['updateaccount'];
 
-            if ($opts->v) {
-                print_r($args);
-                print_r($users);
-            }
-
-            $sendmail = isset($args['sendmail']) && (bool) $args['sendmail'];
-            $updateaccount = isset($args['updateaccount']) && (bool) $args['updateaccount'];
+        // input csv/user list
+        if (! isset($args['userlist_csv']) && ! Tinebase_User::getInstance() instanceof Tinebase_User_Ldap) {
+            echo "Userlist file param not found. Setting PW for all users that do not have one.\n";
+            $users = Tinebase_User::getInstance()->getUsersWithoutPw();
             $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount);
+        } else {
+            foreach ($args['userlist_csv'] as $csv) {
+                $users = $this->_readCsv($csv);
+                if (! $users) {
+                    echo "no users found in file\n";
+                    break;
+                }
+
+                $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount);
+            }
         }
 
         return 0;
@@ -464,6 +461,11 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null, bool $sendmail = false, bool $updateaccount = false)
     {
+        if ($opts->v) {
+            echo "Setting PW for users:\n";
+            print_r($users);
+        }
+
         $pwCsv = '';
 
         foreach ($users as $userdata) {
@@ -525,8 +527,10 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
         }
 
-        echo "\nNEW PASSWORDS:\n\n";
-        echo $pwCsv;
+        if ($opts->v) {
+            echo "\nNEW PASSWORDS:\n\n";
+            echo $pwCsv;
+        }
     }
 
     /**
