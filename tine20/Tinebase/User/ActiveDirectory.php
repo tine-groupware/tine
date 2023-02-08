@@ -213,18 +213,21 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      * @param   string  $_password
      * @param   bool    $_encrypt encrypt password
      * @param   bool    $_mustChange
+     * @param   bool $ignorePwPolicy
      * @return  void
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
+    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false)
     {
         if ($this->_isReadOnlyBackend) {
             return;
         }
         
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
-        
-        Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
+
+        if (! $ignorePwPolicy) {
+            Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
+        }
         
         $metaData = $this->_getMetaData($user);
 

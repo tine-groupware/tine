@@ -382,6 +382,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * @param   string  $_password
      * @param   bool    $_encrypt encrypt password
      * @param   bool    $_mustChange
+     * @param   bool $ignorePwPolicy
      * @return void
      * @throws Tinebase_Exception_Backend
      * @throws Tinebase_Exception_NotFound
@@ -389,7 +390,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * @throws Zend_Db_Adapter_Exception
      * @throws Zend_Ldap_Exception
      */
-    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
+    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false)
     {
         if ($this->_isReadOnlyBackend) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -398,8 +399,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
         
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
-        
-        Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
+
+        if (! $ignorePwPolicy) {
+            Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
+        }
         
         $metaData = $this->_getMetaData($user);
 
