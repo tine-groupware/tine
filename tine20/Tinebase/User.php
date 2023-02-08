@@ -1331,16 +1331,20 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * generate random password
      *
      * @param int $length
-     * @param boolean $useSpecialChar
+     * @param int $numSpecialChar
+     * @param int $upperCase
      * @return string
+     *
+     * TODO should have a param "usePWPolicy"
      */
-    public static function generateRandomPassword($length = 10, $useSpecialChar = true)
+    public static function generateRandomPassword($length = 12, $numSpecialChar = 1, $upperCase = 1)
     {
         $symbolsGeneral = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $symbolsUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $symbolsSpecialChars = '!?~@#-_+<>[]{}';
 
         $used_symbols = $symbolsGeneral;
-        $symbols_length = strlen($used_symbols) - 1; //strlen starts from 0 so to get number of characters deduct 1
+        $symbols_length = strlen($used_symbols) - 1; // strlen starts from 0 so to get number of characters deduct 1
 
         $pass = '';
 
@@ -1348,10 +1352,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $pass .= $used_symbols[rand(0, $symbols_length)];
         }
 
-        if ($useSpecialChar) {
+        for ($i = 0; $i < $upperCase; $i++) {
+            $pass = substr($pass, 1) ;
+            $pass .= $symbolsUpper[rand(0, strlen($symbolsUpper) - 1)];
+        }
+
+        for ($i = 0; $i < $numSpecialChar; $i++) {
             $pass = substr($pass, 1) ;
             $pass .= $symbolsSpecialChars[rand(0, strlen($symbolsSpecialChars) - 1)];
-
         }
 
         return str_shuffle($pass);

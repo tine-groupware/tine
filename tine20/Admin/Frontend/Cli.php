@@ -494,11 +494,20 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 }
             }
 
+            $pwPolicyConf = Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY);
             if (is_array($pw) && isset($pw[$fullUser->accountLoginName])) {
                 // list of user pws
                 $newPw = $pw[$fullUser->accountLoginName];
+            } else if ($pw) {
+                $newPw = $pw;
+            } else if ($pwPolicyConf->{Tinebase_Config::PASSWORD_POLICY_ACTIVE}) {
+                $newPw = Tinebase_User::generateRandomPassword(
+                    $pwPolicyConf->{Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH},
+                    $pwPolicyConf->{Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS},
+                    $pwPolicyConf->{Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS}
+                );
             } else {
-                $newPw = $pw ?? Tinebase_User::generateRandomPassword(8);
+                $newPw = Tinebase_User::generateRandomPassword();
             }
 
             if ($updateaccount) {
