@@ -413,8 +413,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         
         $ldapData = array(
             'userpassword'     => $userpassword,
-            'shadowlastchange' => floor(Tinebase_DateTime::now()->getTimestamp() / 86400)
         );
+
+        if (! in_array('sambaSamAccount', $metaData['objectclass'])) {
+            $ldapData['shadowlastchange'] = floor(Tinebase_DateTime::now()->getTimestamp() / 86400);
+        }
 
         foreach ($this->_ldapPlugins as $plugin) {
             $plugin->inspectSetPassword($user, $_password, $_encrypt, $_mustChange, $ldapData);
