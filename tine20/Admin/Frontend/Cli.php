@@ -367,7 +367,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * set passwords for given user accounts (csv with email addresses or username) - random pw is generated if not in csv
      *
-     * usage: method=Admin.setPasswords [-d] [-v] [userlist1.csv] [userlist2.csv] [-- pw=password sendmail=1 pwlist=pws.csv updateaccount=1]
+     * usage: method=Admin.setPasswords [-d] [-v] [userlist1.csv] [userlist2.csv] [-- pw=password sendmail=1 pwlist=pws.csv updateaccount=1 ignorepolicy=1]
      *
      * - sendmail=1 -> sends mail to user with pw
      * - pwlist=pws.csv -> creates csv file with the users and their new pws
@@ -394,14 +394,15 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $pw = $args['pw'] ?? null;
         }
 
-        $sendmail = isset($args['sendmail']) && (bool) $args['sendmail'];
-        $updateaccount = isset($args['updateaccount']) && (bool) $args['updateaccount'];
+        $sendmail = isset($args['sendmail']) && $args['sendmail'];
+        $updateaccount = isset($args['updateaccount']) && $args['updateaccount'];
+        $ignorepolicy = isset($args['ignorepolicy']) && $args['ignorepolicy'];
 
         // input csv/user list
         if (! isset($args['userlist_csv']) && ! Tinebase_User::getInstance() instanceof Tinebase_User_Ldap) {
             echo "Userlist file param not found. Setting PW for all users that do not have one.\n";
             $users = Tinebase_User::getInstance()->getUsersWithoutPw();
-            $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount);
+            $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount, $ignorepolicy);
         } else {
             foreach ($args['userlist_csv'] as $csv) {
                 $users = $this->_readCsv($csv);
@@ -410,7 +411,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     break;
                 }
 
-                $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount);
+                $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount, $ignorepolicy);
             }
         }
 
@@ -454,12 +455,13 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @param string|array $pw
      * @param boolean $sendmail
      * @param boolean $updateaccount
+     * @param boolean $ignorepolicy
      *
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null, bool $sendmail = false, bool $updateaccount = false)
+    protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null, bool $sendmail = false, bool $updateaccount = false, $ignorepolicy = false)
     {
         if ($opts->v) {
             echo "Setting PW for users:\n";
@@ -502,7 +504,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 }
             } else {
                 if (! $opts->d) {
-                    Tinebase_User::getInstance()->setPassword($fullUser, $newPw);
+                    Tinebase_User::getInstance()->setPassword($fullUser, $newPw, true, true, $ignorepolicy);
                 } else {
                     echo "--DRYRUN-- setting pw for user " . $username . "\n";
                 }
@@ -570,14 +572,16 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 // copy pw from email backend
                 $systemEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
                 $userInBackend = $emailUserBackend->getRawUserById($systemEmailUser);
-                if ($opts->d) {
-                    echo "--DRY RUN-- copy pw of user " . $userInBackend['loginname'] . ": " . $userInBackend['password'] ."\n";
-                } else {
-                    $db->update(SQL_TABLE_PREFIX . 'accounts', [
-                        'password' => $userInBackend['password'],
-                    ], $db->quoteInto('id = ?', $account->user_id));
+                if ($userInBackend) {
+                    if ($opts->d) {
+                        echo "--DRY RUN-- copy pw of user " . $userInBackend['loginname'] . ": " . $userInBackend['password'] . "\n";
+                    } else {
+                        $db->update(SQL_TABLE_PREFIX . 'accounts', [
+                            'password' => $userInBackend['password'],
+                        ], $db->quoteInto('id = ?', $account->user_id));
+                    }
+                    $updateCount++;
                 }
-                $updateCount++;
 
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // not found - ignore

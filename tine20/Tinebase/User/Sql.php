@@ -495,14 +495,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @param   string|Tinebase_Model_User|Tinebase_Model_FullUser $_userId
      * @param   string $_password
      * @param   bool $_encrypt encrypt password
-     * @param   bool $_mustChange
+     * @param   bool|null $_mustChange
+     * @param   bool $ignorePwPolicy
      * @throws Tinebase_Exception_NotFound
      */
-    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
+    public function setPassword($_userId, $_password, $_encrypt = true, $_mustChange = null, $ignorePwPolicy = false)
     {
         $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($userId);
-        Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
+        if (! $ignorePwPolicy) {
+            Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
+        }
 
         $accountData = $this->_updatePasswordProperties($userId, $_password, $_encrypt, $_mustChange);
         $this->_setPluginsPassword($user, $_password, $_encrypt);
