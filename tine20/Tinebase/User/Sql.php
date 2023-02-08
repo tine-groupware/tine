@@ -1600,7 +1600,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             return true;
         }
         
-        $select = $select = $this->_db->select()
+        $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'login_name')
             ->where($this->_db->quoteIdentifier('login_name') . " not in (?)", Tinebase_User::getSystemUsernames())
             ->order('creation_time ASC')
@@ -1631,5 +1631,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         list($userPart, /*$domainPart*/) = explode('@', $user->accountEmailAddress);
         $user->accountEmailAddress = $userPart . '@' . $config['primarydomain'];
+    }
+
+    public function getUsersWithoutPw(): array
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'accounts', 'login_name')
+            ->where($this->_db->quoteIdentifier('password') . " = '' OR " . $this->_db->quoteIdentifier('password') . " IS NULL")
+            ->order('creation_time ASC');
+
+        $stmt = $select->query();
+        return $stmt->fetchAll(Zend_Db::FETCH_NUM);
     }
 }
