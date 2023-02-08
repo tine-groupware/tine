@@ -399,10 +399,15 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $ignorepolicy = isset($args['ignorepolicy']) && $args['ignorepolicy'];
 
         // input csv/user list
-        if (! isset($args['userlist_csv']) && ! Tinebase_User::getInstance() instanceof Tinebase_User_Ldap) {
-            echo "Userlist file param not found. Setting PW for all users that do not have one.\n";
-            $users = Tinebase_User::getInstance()->getUsersWithoutPw();
-            $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount, $ignorepolicy);
+        if (! isset($args['userlist_csv'])) {
+            echo "Userlist file param not found.\n";
+            if ( ! Tinebase_User::getInstance() instanceof Tinebase_User_Ldap
+                || Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)
+                    ->{Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL}) {
+                echo "Setting PW for all users that do not have one.\n";
+                $users = Tinebase_User::getInstance()->getUsersWithoutPw();
+                $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount, $ignorepolicy);
+            }
         } else {
             foreach ($args['userlist_csv'] as $csv) {
                 $users = $this->_readCsv($csv);

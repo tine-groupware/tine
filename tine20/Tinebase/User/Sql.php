@@ -1641,6 +1641,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'login_name')
             ->where($this->_db->quoteIdentifier('password') . " = '' OR " . $this->_db->quoteIdentifier('password') . " IS NULL")
+            ->where($this->_db->quoteIdentifier('status') . " = 'enabled'")
             ->order('creation_time ASC');
 
         $stmt = $select->query();
