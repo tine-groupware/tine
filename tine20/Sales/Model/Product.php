@@ -34,8 +34,11 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
     public const FLD_NAME = 'name';
     public const FLD_NUMBER = 'number';
     public const FLD_PURCHASEPRICE = 'purchaseprice';
+    public const FLD_SALESPRICE_TYPE = 'salesprice_type';
     public const FLD_SALESPRICE = 'salesprice';
     public const FLD_SALESTAXRATE = 'salestaxrate';
+    public const FLD_SALES_TAX = 'sales_tax'; // Mehrwertssteuer
+    public const FLD_GROSS_PRICE= 'gross_price'; // Bruttopreis - berechnen
     public const FLD_SHORTCUT = 'shortcut';
     public const FLD_SUBPRODUCTS = 'subproducts'; // -> recordset of Sales_Model_SubProduct dependent records
     public const FLD_UNFOLD_TYPE = 'unfold_type'; // -> keyfield (Bundle, Set, leer)
@@ -217,6 +220,13 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 ],
                 self::DEFAULT_VAL => 0,
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => 0]
+            ],
+            self::FLD_SALESPRICE_TYPE     => [
+                self::LABEL                         => 'Salesprice Type', //_('Salesprice Type')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::PRICE_TYPE,
+                self::NULLABLE                      => false,
+                self::DEFAULT_VAL                   => Sales_Config::PRICE_TYPE_NET
             ],
             self::FLD_SALESPRICE => [
                 self::TYPE => self::TYPE_MONEY,

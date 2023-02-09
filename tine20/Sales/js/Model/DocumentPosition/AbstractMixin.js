@@ -38,6 +38,7 @@ const AbstractMixin = {
         this.set('position_discount_type', 'SUM');
         this.set('position_discount_percentage', 0);
         this.set('position_discount_sum', 0);
+        this.set('unit_price_type', productData.salesprice_type || 'net');
         this.set('unit_price', productData.salesprice||0);
         this.set('sales_tax_rate', productData.salestaxrate||0);
         this.set('grouping', productData.default_grouping);
@@ -48,6 +49,7 @@ const AbstractMixin = {
     },
 
     clearPrice() {
+        this.set('unit_price_type', null);
         this.set('unit_price', null);
         this.set('position_price', null);
         this.set('position_discount_type', null);
@@ -65,11 +67,19 @@ const AbstractMixin = {
             this.set('position_price', price);
             const discount = this.get('position_discount_type') === 'SUM' ? this.get('position_discount_sum') :
                 (price / 100 * this.get('position_discount_percentage'));
-            const net = price - discount;
-            this.set('net_price', net);
-            const tax = net / 100 * (this.get('sales_tax_rate') || 0);
+            const total = price - discount;
+            let tax = 0
+            const taxRate = this.get('sales_tax_rate') || 0;
+            if (this.get('unit_price_type') === 'gross') {
+                this.set('gross_price', total);
+                tax = total - total * 100/(100+taxRate);
+                this.set('net_price', total - tax);
+            } else {
+                this.set('net_price', total);
+                tax = total / 100 * taxRate;
+                this.set('gross_price', total + tax);
+            }
             this.set('sales_tax', tax);
-            this.set('gross_price', net + tax);
         }
     },
 

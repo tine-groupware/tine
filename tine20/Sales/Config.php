@@ -83,6 +83,10 @@ class Sales_Config extends Tinebase_Config_Abstract
      */
     const INVOICE_TYPE = 'invoiceType';
 
+    const PRICE_TYPE = 'priceType';
+    const PRICE_TYPE_NET = 'net';
+    const PRICE_TYPE_GROSS = 'gross';
+
     const INVOICE_DISCOUNT_TYPE = 'invoiceDiscountType';
     const INVOICE_DISCOUNT_PERCENTAGE = 'PERCENTAGE';
     const INVOICE_DISCOUNT_SUM = 'SUM';
@@ -689,6 +693,19 @@ class Sales_Config extends Tinebase_Config_Abstract
                 'default' => 'INVOICE'
             )
         ),
+        self::PRICE_TYPE => [
+            self::LABEL                 => 'Price Type', //_('Price Type')
+            self::DESCRIPTION           => 'Price is net or gross. Calculation is based on net or gross.', //_('Price is net or gross. Calculation is based on net or gross.')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => self::PRICE_TYPE_NET,   'value' => 'Net',   'system' => true], // _('Net')
+                    ['id' => self::PRICE_TYPE_GROSS, 'value' => 'Gross', 'system' => true], // _('Gross')
+                ],
+                self::DEFAULT_STR => self::PRICE_TYPE_NET,
+            ],
+        ],
         self::INVOICE_DISCOUNT_TYPE => [
             self::LABEL                 => 'Invoice Discount Type', //_('Invoice Discount Type')
             self::DESCRIPTION           => 'Invoice Discount Type', //_('Invoice Discount Type')
