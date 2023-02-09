@@ -1073,6 +1073,21 @@ msgstr "Alle Auftragsbestätigungen"
 msgid "All order confirmation records"
 msgstr "Alle Auftragsbestätigungsdatensätze"
 
+msgid "Price Type"
+msgstr "Preistyp"
+
+msgid "Salesprice Type"
+msgstr "Verkaufspreistyp"
+
+msgid "Price is net or gross. Calculation is based on net or gross."
+msgstr "Preis gilt netto oder brutto. Berechnung basiert auf Netto oder Brutto."
+
+msgid "Net"
+msgstr "Netto"
+
+msgid "Gross"
+msgstr "Brutto"
+
 #: Config.php:206
 msgid "Auto Invoice Contract Interval"
 msgstr "Vertragsintervall automatisch abrechnen"
