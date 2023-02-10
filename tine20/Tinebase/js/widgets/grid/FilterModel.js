@@ -540,8 +540,13 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     });
                 }
                 value = new Ext.ux.form.NumberField(Ext.apply(commonOptions, {
-                    decimalPrecision: 2,
-                    decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator')
+                    decimalPrecision: this.decimalPrecision ?? 2,
+                    decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator'),
+                    setValue: function (value) {
+                        if (['', null, undefined].indexOf(value) < 0) {
+                            this.supr().setValue.call(this, value);
+                        }
+                    }
                 }));
                 break;
             case 'money':

@@ -205,8 +205,12 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 filter.valueType = 'money';
                 break;
             case 'float':
+                filter.valueType = 'number';
+                filter.decimalPrecision = 2;
+                break;
             case 'integer':
                 filter.valueType = 'number';
+                filter.decimalPrecision = 0;
                 break;
         }
         return filter;
