@@ -39,7 +39,7 @@ class HTMLProxy extends Expression {
     const id = config.id || `html-proxy-${++proxyId}`
     const cls = config.cls || 'html-proxy'
     const tag = config.tag || 'em'
-    super(`<${tag} id="${id}" className="${cls}"></${tag}>`)
+    super(`<${tag} id="${id}" class="${cls}"></${tag}>`)
     this.id = id
     this.cls = cls
     this.tag = tag
