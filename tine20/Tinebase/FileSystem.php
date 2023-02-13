@@ -891,7 +891,7 @@ class Tinebase_FileSystem implements
                     $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA]) ?
                     $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] :
                     $totalByUser;
-                if ($quota > 0) {
+                if ($quota >= 0) {
                     if (null === $localQuota) {
                         $localQuota = $quota;
                         $localSize = $size;
@@ -1134,16 +1134,17 @@ class Tinebase_FileSystem implements
                 . ' root revision size should not become smaller than 0: ' . $rootRevisionSize);
             $rootRevisionSize = 0;
         }
+        $translation = Tinebase_Translation::getTranslation('Tinebase');
 
         if ($sizeIncrease && $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} > 0) {
             $total = $quotaConfig->{Tinebase_Config::QUOTA_FILESYSTEM_TOTALINMB} * 1024 * 1024;
             if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
                 if ($rootRevisionSize > $total) {
-                    throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
+                    throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
                 }
             } else {
                 if ($rootSize > $total) {
-                    throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
+                    throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
                 }
             }
         }
@@ -1175,7 +1176,7 @@ class Tinebase_FileSystem implements
 
             // folder quota
             if (null !== $parentNode->quota && $size > $parentNode->quota) {
-                throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
+                throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
             }
 
             //personal quota
@@ -1186,7 +1187,7 @@ class Tinebase_FileSystem implements
                     $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] :
                     $totalByUser;
                 if ($quota > 0 && $size > $quota) {
-                    throw new Tinebase_Exception_Record_NotAllowed('quota exceeded');
+                    throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
                 }
             }
         }
