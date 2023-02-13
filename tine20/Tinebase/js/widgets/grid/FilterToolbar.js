@@ -503,11 +503,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 'tw-ftb-frow-field': Math.floor(aw*0.45),
                 'tw-ftb-frow-operator': Math.floor(aw*0.17),
                 'tw-ftb-frow-value': Math.floor(aw*0.38)
-            };
-
-        for (var cls in dim) {
-            this.el.select('.' + cls).setWidth(dim[cls]);
-            this.el.select('.' + cls + ' div[class^=x-form-field-wrap] *').each(function(el) {
+            },
+            fw = function(el) {
                 var cmp = Ext.getCmp(el.id);
                 if (cmp && !cmp.isInnerFTBCmp) {
                     var width = dim[cls] + (cmp.FTBWidthCorrection || 0);
@@ -516,7 +513,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     }
                     cmp.setWidth(width);
                 }
-            });
+            };
+
+        for (var cls in dim) {
+            this.el.select('.' + cls).setWidth(dim[cls]);
+            this.el.select('.' + cls + ' div[class^=x-form-field-wrap] *').each(fw);
+            this.el.select('.' + cls + ' *[id^=ext-comp-]').each(fw);
         }
     },
 
@@ -564,7 +566,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         var opEl = fRow.child('td[class^=tw-ftb-frow-operator]');
         var valEl = fRow.child('td[class^=tw-ftb-frow-value]');
-        
+        opEl.update('');
+        valEl.update('');
+
         filter.set('field', newField);
         filter.set('operator', '');
         filter.set('value', '');
