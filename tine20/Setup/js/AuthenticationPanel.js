@@ -4,7 +4,7 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -662,6 +662,12 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 fieldLabel: this.app.i18n._('E-Mail Attribute'),
                 value: 'mail'
             },
+            Ext.applyIf({
+                name: 'accounts_' + type + '_writePwToSql',
+                fieldLabel: this.app.i18n._('Write Password to SQL backend'),
+                store: [['0', this.app.i18n._('No')], ['1', this.app.i18n._('Yes')]],
+                value: '0'
+            }, commonComboConfig),
             Ext.applyIf({
                 name: 'accounts_' + type + '_userSearchScope',
                 fieldLabel: this.app.i18n._('User Search Scope'),

@@ -148,6 +148,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             'groupFilter' => 'objectclass=posixgroup',
             'groupSearchScope' => Zend_Ldap::SEARCH_SCOPE_SUB,
             'pwEncType' => 'SSHA',
+            'writePwToSql' => false,
             'minUserId' => '10000',
             'maxUserId' => '29999',
             'minGroupId' => '11000',
@@ -181,6 +182,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             self::DEFAULT_USER_GROUP_NAME_KEY  => 'Domain Users',
             self::DEFAULT_ADMIN_GROUP_NAME_KEY => 'Domain Admins',
             'readonly' => false,
+            'writePwToSql' => false,
          )
     );
     

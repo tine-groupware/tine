@@ -1281,18 +1281,21 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         return $user;
     }
 
-    protected function _softDelete($user)
+    protected function _softDelete(Tinebase_Model_FullUser $user)
     {
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId()),
         );
-        $accountsTable->update(array('deleted_by' => Tinebase_Core::getUser()->getId(),
+        $deleteUser = is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : Tinebase_Core::getUser();
+        $accountsTable->update([
+            'deleted_by' => $deleteUser,
             'deleted_time' => Tinebase_DateTime::now()->toString(),
             'is_deleted' => 1,
             'seq' => $user->seq + 1,
             'status' => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
-            'visibility' => Tinebase_Model_User::VISIBILITY_HIDDEN), $where);
+            'visibility' => Tinebase_Model_User::VISIBILITY_HIDDEN
+        ], $where);
         $user->seq = $user->seq + 1;
         $this->_writeModLog(null, $user);
     }
