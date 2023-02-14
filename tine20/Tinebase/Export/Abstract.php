@@ -1126,15 +1126,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             };
             if (!empty($this->_expandCustomFields)) {
                 $validators = $_records->getFirstRecord()->getValidators();
-                $validatorsChanged = false;
                 foreach ($this->_expandCustomFields as $field => $label) {
                     if (!isset($validators[$field])) {
-                        $validatorsChanged = true;
                         $validators[$field] = [];
                     }
-                }
-                if (!$validatorsChanged) {
-                    $validators = null;
                 }
             }
 
@@ -1176,7 +1171,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $record->setValidators($validators);
                 }
                 foreach ($this->_expandCustomFields as $field => $label) {
-                    if (isset($cfs[$field])) {
+                    if (isset($cfs[$field]) && $record->has($field)) {
                         $record->{$field} = $cfs[$field];
                     }
                 }
