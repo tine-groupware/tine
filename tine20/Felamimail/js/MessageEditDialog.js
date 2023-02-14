@@ -366,26 +366,20 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     /**
-     * handle attachments: attaches message when forwarding mails or
-     *  keeps attachments as they are (if preference is set or draft/template)
-     *
+     * handle attachments: attaches message attachments depends on emailForward preference
+     * - keeps attachments as they are (emailForward -> message or when the message is draft or Template)
+     * - keeps original message/attachments and attach original email as .eml attachment(messageAndAsAttachment)
+     * - only attach original email as .eml attachment (onlyAsAttachment)
+     * 
      * @param {Tine.Felamimail.Model.Message} message
      */
     handleAttachmentsOfExistingMessage: function (message) {
-        if (message.get('attachments').length == 0) {
-            return;
-        }
-
-        var attachments = [];
-        // FIXME should be changed when we fix the saving of yes/no user preferences as boolean/int values
-        if ((Tine[this.app.appName].registry.get('preferences').get('emlForward')
-                && (! Tine[this.app.appName].registry.get('preferences').get('emlForward') ||
-                    Tine[this.app.appName].registry.get('preferences').get('emlForward') === '0'
-                )
-            )
-            || this.draftOrTemplate
-        ) {
-
+        if (!this.isForwardedMessage() && !this.draftOrTemplate) return;
+        
+        const attachments = [];
+        const forwardMode = !this.isForwardedMessage() ? '' : Tine[this.app.appName].registry.get('preferences').get('emlForward');
+        
+        if (forwardMode === 'message' || this.draftOrTemplate) {
             Ext.each(message.get('attachments'), function (attachment) {
                 attachment = {
                     name: attachment['filename'],
@@ -395,23 +389,26 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 };
                 attachments.push(attachment);
             }, this);
-
-        } else {
-            var rfc822Attachment = {
+        }
+    
+        if (forwardMode === 'onlyAsAttachment' || forwardMode === 'messageAndAsAttachment') {
+            const node = message.get('from_node');
+            let rfc822Attachment = {
                 name: message.get('subject'),
                 type: 'message/rfc822',
                 size: message.get('size'),
                 id: message.id
-            }, node = message.get('from_node');
+            };
             if (node) {
-                // @refactor use Ext.apply / lodash
-                rfc822Attachment.type = 'file';
-                rfc822Attachment.size = node.size;
-                rfc822Attachment.attachment_type = 'attachment';
-                rfc822Attachment.path = node.path;
-                rfc822Attachment.name = node.name;
+                rfc822Attachment = _.assign(rfc822Attachment, {
+                    type: 'file',
+                    size: node.size,
+                    path: node.path,
+                    name: node.name,
+                    attachment_type: 'attachment',
+                });
             }
-            attachments = [rfc822Attachment];
+            attachments.push(rfc822Attachment);
         }
 
         this.record.set('attachments', attachments);
@@ -448,10 +445,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
 
                     this.setMessageBody(message, account, format);
-
-                    if (this.isForwardedMessage() || this.draftOrTemplate) {
-                        this.handleAttachmentsOfExistingMessage(message);
-                    }
+                    this.handleAttachmentsOfExistingMessage(message);
 
                     let folder = this.app.getFolderStore().getById(message.get('folder_id'));
                     if (folder) {
@@ -542,7 +536,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
             }
         }
+
         this.msgBody = this.getQuotedMailHeader(format) + this.msgBody;
+        
+        if (this.isForwardedMessage()) {
+            const forwardMode = Tine[this.app.appName].registry.get('preferences').get('emlForward');
+            if (forwardMode === 'onlyAsAttachment') {
+                this.msgBody = '';
+            }
+        }
     },
 
     /**
@@ -1162,11 +1164,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 Ext.util.Format.htmlEncode(this.replyTo.get('from_name'))
             ) + ':\n';
         } else if (this.isForwardedMessage()) {
-            return String.format('{0}-----' + this.app.i18n._('Original message') + '-----{1}',
-                format == 'text/plain' ? '' : '<br /><b>',
-                format == 'text/plain' ? '\n' : '</b><br />')
-                + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true, format == 'text/plain')
-                + (format == 'text/plain' ? '' : '<br /><br />');
+            const forwardMode = Tine[this.app.appName].registry.get('preferences').get('emlForward');
+    
+            if (forwardMode !== 'onlyAsAttachment') {
+                return String.format('{0}-----' + this.app.i18n._('Original message') + '-----{1}',
+                        format === 'text/plain' ? '' : '<br /><b>',
+                        format === 'text/plain' ? '\n' : '</b><br />')
+                    + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true, format === 'text/plain')
+                    + (format === 'text/plain' ? '' : '<br /><br />');
+            }
         }
 
         return '';
