@@ -335,7 +335,49 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->_instance->saveDocument_Offer($document->toArray(true));
     }
 
-    public function testOfferToOrderTransition()
+    public function testOfferReversalTransition()
+    {
+        $customer = $this->_createCustomer();
+        $product = $this->_createProduct();
+
+        $document = new Sales_Model_Document_Offer([
+            Sales_Model_Document_Offer::FLD_POSITIONS => [
+                [
+                    Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'ipsum',
+                    Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray(),
+                    Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX_RATE => 19,
+                    Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX => 100 * 19 / 100,
+                    Sales_Model_DocumentPosition_Offer::FLD_NET_PRICE => 100,
+                ]
+            ],
+            Sales_Model_Document_Offer::FLD_OFFER_STATUS => Sales_Model_Document_Offer::STATUS_DRAFT,
+            Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customer->toArray(),
+            Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customer->postal->toArray(),
+        ]);
+
+        $savedDocument = $this->_instance->saveDocument_Offer($document->toArray(true));
+        $this->assertSame(Sales_Config::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED, $savedDocument[Sales_Model_Document_Offer::FLD_REVERSAL_STATUS]);
+        $savedDocument[Sales_Model_Document_Offer::FLD_OFFER_STATUS] = Sales_Model_Document_Offer::STATUS_RELEASED;
+        $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);
+        $this->assertSame(Sales_Config::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED, $savedDocument[Sales_Model_Document_Offer::FLD_REVERSAL_STATUS]);
+
+        /*$result =*/ $this->_instance->createFollowupDocument((new Sales_Model_Document_Transition([
+            Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
+                new Sales_Model_Document_TransitionSource([
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL => Sales_Model_Document_Offer::class,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $savedDocument,
+                    Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL => true,
+                ]),
+            ],
+            Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE =>
+                Sales_Model_Document_Offer::class,
+        ]))->toArray());
+
+        $updatedDocument = $this->_instance->getDocument_Offer($savedDocument['id']);
+        $this->assertSame(Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED, $updatedDocument[Sales_Model_Document_Offer::FLD_REVERSAL_STATUS]);
+    }
+
+    public function testOfferToOrderToInvoiceTransition()
     {
         $customer = $this->_createCustomer();
         $subProduct = $this->_createProduct();
@@ -392,10 +434,44 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $updatedOffer[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS]);
 
         $result[Sales_Model_Document_Order::FLD_ORDER_STATUS] = Sales_Model_Document_Order::STATUS_ACCEPTED;
-        $this->_instance->saveDocument_Order($result);
+        $order = $this->_instance->saveDocument_Order($result);
         $updatedOffer = $this->_instance->getDocument_Offer($savedDocument['id']);
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $updatedOffer[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_CREATED_STATUS]);
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $updatedOffer[Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS]);
+
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order[Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order[Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order[Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order[Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS]);
+        $result = $this->_instance->createFollowupDocument((new Sales_Model_Document_Transition([
+            Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
+                new Sales_Model_Document_TransitionSource([
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL => Sales_Model_Document_Order::class,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $order,
+                ]),
+            ],
+            Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE =>
+                Sales_Model_Document_Invoice::class,
+        ]))->toArray());
+
+        $updatedOrder = $this->_instance->getDocument_Order($order['id']);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $updatedOrder[Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $updatedOrder[Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $updatedOrder[Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $updatedOrder[Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS]);
+
+        // important to test the resolving in the next saveDocument_Invoice call!
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
+        $result[Sales_Model_Document_Invoice::FLD_RECIPIENT_ID] = $customer->postal->toArray();
+        $result[Sales_Model_Document_Invoice::FLD_INVOICE_STATUS] = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        $this->_instance->saveDocument_Invoice($result);
+
+        $updatedOrder = $this->_instance->getDocument_Order($order['id']);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $updatedOrder[Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $updatedOrder[Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $updatedOrder[Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS]);
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $updatedOrder[Sales_Model_Document_Order::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS]);
     }
 
     public function testOrderDocument()
@@ -409,7 +485,9 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                 $offer
             ]
         ]);
-        $this->_instance->saveDocument_Order($order->toArray());
+        $order = $this->_instance->saveDocument_Order($order->toArray());
+
+        $this->assertEmpty($order[Sales_Model_Document_Order::FLD_PRECURSOR_DOCUMENTS]);
     }
 
     protected function getTrackingTestData()
