@@ -4261,6 +4261,7 @@ class Tinebase_FileSystem implements
         $raii = new Tinebase_RAII(function() use($lockId) {
             Tinebase_Core::releaseMultiServerLock($lockId);
         });
+        $lastKeepAlive = time();
 
         $avScanner = Tinebase_FileSystem_AVScan_Factory::getScanner();
         $result = true;
@@ -4290,6 +4291,10 @@ class Tinebase_FileSystem implements
                 continue;
             }
             while (false !== ($file = readdir($fileDir))) {
+                if (time() - $lastKeepAlive > 10) {
+                    Tinebase_Core::getMultiServerLock($lockId)->keepAlive();
+                    $lastKeepAlive = time();
+                }
                 $path = $hashDirPath . DIRECTORY_SEPARATOR . $file;
                 if (!is_file($path)) {
                     continue;
