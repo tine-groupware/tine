@@ -128,9 +128,6 @@ msgstr "Word - Details"
 msgid "Excel all data"
 msgstr "Excel - Alle Daten"
 
-msgid "Excel current columns"
-msgstr "Excel - Aktuelle Spalten"
-
 #: Export/definitions/adb_csv.xml:5
 msgid "CSV all data"
 msgstr "CSV - Alle Daten"
@@ -1303,6 +1300,16 @@ msgstr ""
 
 msgid "E-Mail (all)"
 msgstr "E-Mail (alle)"
+
+msgid ""
+"This field is automatically taken from the email account and therefore "
+"cannot be edited here."
+msgstr ""
+"Dieses Feld wird automatisch aus dem Email konto übernommen und kann daher "
+"hier nicht bearbeitet werden."
+
+msgid "Excel current columns"
+msgstr "Excel - Aktuelle Spalten"
 
 msgid "Group Functions"
 msgstr "Gruppenfunktionen"
