@@ -1076,18 +1076,34 @@ td.x-date-mp-sel a,
 
 ///* TOOLS */
 // problems with trees yet
-.x-tool {
+.x-tool-close {
   background-size: 13px 13px;
   background-position: 1px 1px !important;
-  background-image: url(../../images/icon-set/icon_arrow_up.svg);
+  background-image: url(../../images/icon-set/icon_clear.svg);
 
   &:hover {
     background-size: 15px 15px !important;
     background-position: 0 0 !important;
   }
   .x-panel-collapsed & {
-    background-image:url(../../images/icon-set/icon_arrow_down.svg);
+    background-image:url(../../images/icon-set/icon_clear.svg);
   }
+
+}
+
+.x-tool-toggle {
+  background-size: 13px 13px;
+  background-position: 1px 1px !important;
+  background-image: url(../../images/icon-set/icon_arrow_down.svg);
+
+  &:hover {
+    background-size: 15px 15px !important;
+    background-position: 0 0 !important;
+  }
+  .x-panel-collapsed & {
+    background-image:url(../../images/icon-set/icon_arrow_up.svg);
+  }
+
 }
 //
 //.x-tool-close {
