@@ -626,7 +626,14 @@ class Tinebase_Tags
      * @param Tinebase_Model_Tag $tag
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function addSystemTag(Tinebase_Record_Interface $record, Tinebase_Model_Tag $tag)
+    public function attachSystemTag(Tinebase_Record_Interface $record, Tinebase_Model_Tag $tag)
+    {
+        $this->_checkSystemTag($tag);
+        $appId = $this->_getApplicationForModel(get_class($record))->getId();
+        $this->_attachTag($tag->getId(), $record->getId(), $appId);
+    }
+
+    protected function _checkSystemTag($tag)
     {
         if (!$tag->system_tag) {
             throw new Tinebase_Exception_InvalidArgument('no system tag');
@@ -634,8 +641,20 @@ class Tinebase_Tags
         if (!$tag->getId()) {
             throw new Tinebase_Exception_InvalidArgument('system tag must be created first');
         }
-        $appId = $this->_getApplicationForModel(get_class($record))->getId();
-        $this->_attachTag($tag->getId(), $record->getId(), $appId);
+    }
+
+    /**
+     * @param Tinebase_Record_Interface $record
+     * @param Tinebase_Model_Tag $tag
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function detachSystemTag(Tinebase_Record_Interface $record, Tinebase_Model_Tag $tag)
+    {
+        $this->_checkSystemTag($tag);
+        $recordClass = get_class($record);
+        $appId = $this->_getApplicationForModel($recordClass)->getId();
+        $controller = Tinebase_Core::getApplicationInstance($recordClass);
+        $this->_detachSingleTag([$record->getId()], $tag->getId(), $appId, $controller);
     }
 
     /**
