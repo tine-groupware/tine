@@ -10,6 +10,11 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
+ */
+
+use Addressbook_Model_ContactProperties_Definition as AMCPD;
+
+/**
  * @property    string $account_id                 id of associated user
  * @property    string $adr_one_countryname        name of the country the contact lives in
  * @property    string $adr_one_locality           locality of the contact
@@ -323,6 +328,24 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::DEFAULT_VALUE    => null
+                ],
+            ],
+            'business_address'              => [
+                self::TYPE                      => self::TYPE_RECORD,
+                self::DOCTRINE_IGNORE           => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME                => Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
+                    self::JSON_FACADE               => 'adr_one_',
+                ],
+            ],
+            'private_address'               => [
+                self::TYPE                      => self::TYPE_RECORD,
+                self::DOCTRINE_IGNORE           => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME                => Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
+                    self::JSON_FACADE               => 'adr_two_',
                 ],
             ],
             'adr_one_countryname'           => [
@@ -950,6 +973,27 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         return self::$_manageAccountsFields;
     }
 
+    static public function modelConfigHook(array &$_definition)
+    {
+        parent::modelConfigHook($_definition);
+
+        try {
+            Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . AMCPD::TABLE_NAME);
+        } catch (Zend_Db_Statement_Exception $e) {
+            return;
+        }
+
+        foreach (Addressbook_Controller_ContactProperties_Definition::getInstance()->getAll()
+                     ->filter(AMCPD::FLD_IS_SYSTEM, true) as $cpDef) {
+
+            $cpDef->{AMCPD::FLD_MODEL}::applyJsonFacadeMC($_definition, $cpDef);
+
+            if (is_array($cpDef->{AMCPD::FLD_GRANT_MATRIX})) {
+                $_definition[$cpDef->{AMCPD::FLD_NAME}][self::REQUIRED_GRANTS] = $cpDef->{AMCPD::FLD_GRANT_MATRIX};
+            }
+        }
+    }
+
     /**
      * returns preferred email address of given contact
      * 
@@ -1132,12 +1176,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
     protected function _setFromJson(array &$_data)
     {
         $this->_setContactImage($_data);
-        
-        // unset if empty
-        // @todo is this still needed?
-        if (empty($_data['id'])) {
-            unset($_data['id']);
-        }
     }
     
     /**

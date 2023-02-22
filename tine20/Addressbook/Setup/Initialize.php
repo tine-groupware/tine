@@ -253,6 +253,122 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
     {
         Tinebase_ImportExportDefinition::getDefaultImportExportContainer();
     }
+
+    protected function _initializeContactProperties()
+    {
+        $ctrl = Addressbook_Controller_ContactProperties_Definition::getInstance();
+        $oldAcl = $ctrl->doContainerACLChecks(false);
+        $raii = new Tinebase_RAII(function() use($oldAcl, $ctrl) {
+            $ctrl->doContainerACLChecks($oldAcl);
+        });
+
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'business_address',
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'record',
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'WORK'],
+            Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP => [
+                'businessAddressCity' => 'business_address.locality',
+                'businessAddressCountry' => 'business_address.countryname',
+                'businessAddressPostalCode' => 'business_address.postalcode',
+                'businessAddressState' => 'business_address.region',
+                'businessAddressStreet' => 'business_address.street',
+            ],
+        ]));
+
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'private_address',
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'record',
+            Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'HOME'],
+            Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP => [
+                'homeAddressCity' => 'business_address.locality',
+                'homeAddressCountry' => 'business_address.countryname',
+                'homeAddressPostalCode' => 'business_address.postalcode',
+                'homeAddressState' => 'business_address.region',
+                'homeAddressStreet' => 'business_address.street',
+            ],
+        ]));
+
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'email',
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Email::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'WORK'],
+            Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP => [
+                'email1Address' => 'email',
+            ],
+        ]));
+
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'email_home',
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Email::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'HOME'],
+            Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP => [
+                'email2Address' => 'email_home',
+            ],
+        ]));
+
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_work',
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'WORK'],
+        ]));
+
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_home',
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'HOME'],
+        ]));
+
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_cell',
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['CELL', 'WORK']],
+        ]));
+
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_cell_private',
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['CELL', 'HOME']],
+        ]));
+
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_fax',
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['FAX', 'WORK']],
+        ]));
+
+        $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
+            Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_fax_home',
+            Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
+            Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
+            Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
+            Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['FAX', 'HOME']],
+        ]));
+
+        unset($raii);
+    }
     
     /**
      * set default internal addressbook

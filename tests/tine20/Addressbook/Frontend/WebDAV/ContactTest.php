@@ -127,8 +127,9 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
         $backend = new Addressbook_Frontend_WebDAV_Contact($this->objects['initialContainer'], $contact->getName());
         
         $vcard = \Sabre\VObject\Reader::read($backend->get());
-        
-        $this->assertEquals('+49 BUSINESS', $vcard->TEL->getValue());
+
+        $data = $vcard->serialize();
+        $this->assertStringContainsString('TEL;TYPE=WORK:+49 BUSINESS', $data);
         $this->assertContains('CATEGORY 1', $vcard->CATEGORIES->getParts());
         $this->assertContains('CATEGORY 2', $vcard->CATEGORIES->getParts());
     }

@@ -138,6 +138,7 @@ class Tinebase_ModelConfiguration_Const {
 
     const JOIN_COLUMNS = 'joinColumns';
     const JSON_EXPANDER = 'jsonExpander';
+    const JSON_FACADE = 'jsonFacade';
 
     const LABEL = 'label';
     const LANGUAGES_AVAILABLE = 'languagesAvailable';

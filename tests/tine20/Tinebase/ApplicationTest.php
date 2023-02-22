@@ -278,6 +278,10 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'Addressbook' => array(
                 Addressbook_Model_Contact::class,
+                Addressbook_Model_ContactProperties_Address::class,
+                Addressbook_Model_ContactProperties_Definition::class,
+                Addressbook_Model_ContactProperties_Email::class,
+                Addressbook_Model_ContactProperties_Phone::class,
                 Addressbook_Model_Industry::class,
                 Addressbook_Model_List::class,
                 Addressbook_Model_ListGrants::class,

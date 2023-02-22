@@ -97,6 +97,7 @@
  * @property string     $delegateAclField
  * @property array|null $grantProtectedFields
  * @property array      $languagesAvailable
+ * @property bool       $runConvertToRecordFromJson
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -383,6 +384,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var array
      */
     protected $_controllerHookBeforeUpdate = [];
+
+    protected $_jsonFacadeFields = [];
 
     /**
      * Holds the field definitions in an associative array where the key
@@ -1927,6 +1930,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 if ($deNormOf) {
                     $this->_denormalizedFields[$fieldKey] = $fieldDef;
                 }
+                if (isset($fieldDef[self::CONFIG][self::JSON_FACADE])) {
+                    $this->_jsonFacadeFields[$fieldKey] = $fieldDef;
+                }
                 break;
             case self::TYPE_DYNAMIC_RECORD:
                 if (!isset($this->_converters[$fieldKey])) {
@@ -2161,6 +2167,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     public function setJsonExpander(?array $expander)
     { // used by crewscheduling gdpr should be refaactored to use it too
         $this->_jsonExpander = $expander;
+    }
+
+    public function getJsonFacadeFields(): array
+    {
+        return $this->_jsonFacadeFields;
     }
 
     /**

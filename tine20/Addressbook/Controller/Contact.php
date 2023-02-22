@@ -1565,22 +1565,29 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     private function removePersonalData(Addressbook_Model_Contact $contact) {
         unset($contact->bday);
-        unset($contact->adr_two_countryname);
-        unset($contact->adr_two_locality);
-        unset($contact->adr_two_postalcode);
-        unset($contact->adr_two_region);
-        unset($contact->adr_two_street);
-        unset($contact->adr_two_street2);
-        unset($contact->adr_two_lon);
-        unset($contact->adr_two_lat);
-        unset($contact->email_home);
-        unset($contact->tel_home);
-        unset($contact->tel_cell_private);
-        unset($contact->tel_fax_home);
+
+        // TODO FIXME remove these
         unset($contact->tel_home_normalized);
         unset($contact->tel_cell_private_normalized);
         unset($contact->tel_fax_home_normalized);
 
         return $contact;
+    }
+
+    /**
+     * @param Addressbook_Model_Contact $_record
+     * @param string $_action
+     * @param bool $_throw
+     * @param string $_errorMessage
+     * @param ?Addressbook_Model_Contact $_oldRecord
+     * @return bool
+     */
+    public function checkGrant($_record, $_action, $_throw = true, $_errorMessage = 'No Permission.', $_oldRecord = null)
+    {
+        if (Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA === $_action && $_record->account_id &&
+                is_object(Tinebase_Core::getUser()) && $_record->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId()) {
+            return true;
+        }
+        return parent::checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
     }
 }
