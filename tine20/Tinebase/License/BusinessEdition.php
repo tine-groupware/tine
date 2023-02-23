@@ -19,7 +19,9 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     /**
      * license filename
      */
-    const LICENSE_FILENAME = 'license.pem';
+    public const LICENSE_FILENAME = 'license.pem';
+
+    protected const LICENSE_CACHE_ID = 'license';
 
     /**
      * ca files
@@ -33,7 +35,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
      */
     public function __construct()
     {
-        $this->_license = $this->_readLicenseFromVFS();
+        $this->_license = $this->_getLicense();
         $this->_caFiles = $this->_getCaFiles();
     }
 
@@ -45,17 +47,46 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
         return $this->_caFiles;
     }
 
-
     /**
-     * reads current license from vfs
+     * fetch current license string
      *
-     * @return null|string
+     * @return string|null
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
-    protected function _readLicenseFromVFS()
+    protected function _getLicense(): ?string
     {
         if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
             return null;
         }
+
+        $cache = Tinebase_Core::getCache();
+        if ($cache) {
+            if ($cache->test(self::LICENSE_CACHE_ID)) {
+                return $cache->load(self::LICENSE_CACHE_ID);
+            }
+        }
+        $license = $this->_readLicenseFromVFS();
+        if ($cache) {
+            try {
+                $cache->save($license, self::LICENSE_CACHE_ID);
+            } catch (Zend_Cache_Exception $zce) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $zce->getMessage());
+            }
+        }
+        return $license;
+    }
+
+    /**
+     * reads current license from vfs
+     *
+     * @return string|null
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _readLicenseFromVFS(): ?string
+    {
         try {
             $fs = Tinebase_FileSystem::getInstance();
         } catch (Tinebase_Exception_Backend $teb) {
@@ -158,6 +189,15 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             } else {
                 throw new Tinebase_Exception('Could not store file');
             }
+        }
+    }
+
+    public function reset()
+    {
+        parent::reset();
+        $cache = Tinebase_Core::getCache();
+        if ($cache) {
+            $cache->remove(self::LICENSE_CACHE_ID);
         }
     }
 
