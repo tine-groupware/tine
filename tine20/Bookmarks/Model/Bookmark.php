@@ -79,19 +79,19 @@ class Bookmarks_Model_Bookmark extends Tinebase_Record_Abstract
         ],
 
         self::FIELDS => [
-            self::FLDS_URL => [
-                self::TYPE          => self::TYPE_TEXT,
-                self::NULLABLE      => false,
-                self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
-                self::LABEL         => 'Url', // _('Url')
-                self::QUERY_FILTER  => true
-            ],
             self::FLDS_NAME => [
                 self::TYPE          => self::TYPE_STRING,
                 self::LENGTH        => 255,
                 self::NULLABLE      => false,
                 self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL         => 'Name', // _('Name')
+                self::QUERY_FILTER  => true
+            ],
+            self::FLDS_URL => [
+                self::TYPE          => self::TYPE_TEXT,
+                self::NULLABLE      => false,
+                self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+                self::LABEL         => 'Url', // _('Url')
                 self::QUERY_FILTER  => true
             ],
             self::FLDS_DESCRIPTION => [
