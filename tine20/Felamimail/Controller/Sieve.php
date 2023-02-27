@@ -749,11 +749,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $this->setNotificationScripts($_accountId, $scriptParts);
             return;
         }
-
-        if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
-            throw new Tinebase_Exception_UnexpectedValue($_email . ' is not a valid email address');
-        }
-
+        
         $fileSystem = Tinebase_FileSystem::getInstance();
         $translate = Tinebase_Translation::getTranslation('Felamimail');
         $locale = Tinebase_Core::getLocale();
@@ -775,9 +771,22 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             }
             $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($fileSystem->getPathOfNode($sieveNode, true));
             $sieveScript = file_get_contents($path->streamwrapperpath);
-            $sieveScript = str_replace('USER_EXTERNAL_EMAIL', $_email, $sieveScript);
+            $notifyScript = '';
+            $redirectScript = '';
+            $emails = explode(',', $_email);
+            
+            foreach ($emails as $email) {
+                if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $email)) {
+                    throw new Tinebase_Exception_UnexpectedValue($email . ' is not a valid email address');
+                }
+                $notifyScript .= "\n\t" . 'notify :message "' . $subject. '${from}: ${subject}"' . "\n\t\t" . '"mailto:' . $email .'?body=${message}";' . "\n";
+                $redirectScript .= "\n\t" . 'redirect :copy "' . $email . '";';
+            }
+
             $sieveScript = str_replace('TRANSLATE_SUBJECT', $subject, $sieveScript);
             $sieveScript = str_replace('ADMIN_BOUNCE_EMAIL', $adminBounceEmail, $sieveScript);
+            $sieveScript = str_replace('REDIRECT_EMAILS_SCRIPT', $redirectScript, $sieveScript);
+            $sieveScript = str_replace('NOTIFY_EMAILS_SCRIPT', $notifyScript, $sieveScript);
             $scriptParts->addRecord(Felamimail_Model_Sieve_ScriptPart::createFromString(
                 Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION, $sieveNode->name, $sieveScript));
         }
