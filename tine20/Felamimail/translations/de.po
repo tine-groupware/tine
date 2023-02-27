@@ -1816,8 +1816,11 @@ msgid "Show confirmation dialog when deleting mails."
 msgstr "Beim löschen von Nachrichten einen Bestätigungsdialog anzeigen."
 
 #: Preference.php:143
-msgid ".eml file Attachment in forwarded mails"
-msgstr ".eml Dateianhang in weitergeleiteten Mails"
+msgid "Forward and forwarded email as .eml in attachment"
+msgstr "Weiterleitung und weitergeleitete eMail als .eml im Anhang"
+
+msgid "Only forwarded email as .eml in attachment"
+msgstr "Nur weitergeleitete email als .eml im Anhang"
 
 #: Preference.php:144
 msgid ""
