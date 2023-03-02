@@ -201,6 +201,7 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
             });
 
             this.filePickerDialog.on('apply', async (node) => {
+                node = node[0] ?? node;
                 const config = await Tine.OnlyOfficeIntegrator.getEmbedUrlForNodeId(node.id);
 
                 this.docEditor.insertImage(_.assign(config, {
