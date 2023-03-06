@@ -66,18 +66,24 @@ trait Tinebase_Controller_Record_ModlogTrait
 
         $bchub = Tinebase_BroadcastHub::getInstance();
         if ($bchub->isActive()) {
-            if (null === $_oldRecord) {
+            $verb = null;
+            if (null === $_newRecord && $_oldRecord->notifyBroadcastHub()) {
+                $verb = 'delete';
+                $cId = $notNullRecord->getContainerId();
+            } elseif (null === $_oldRecord && $_newRecord->notifyBroadcastHub()) {
                 $verb = 'create';
                 $cId = $notNullRecord->getContainerId();
             } elseif (null === $_newRecord || ($_newRecord->is_deleted && !$_oldRecord->is_deleted)) {
                 $verb = 'delete';
                 $cId = $notNullRecord->getContainerId();
-            } else {
+            } elseif ($_newRecord->notifyBroadcastHub() || $_oldRecord->notifyBroadcastHub()) {
                 $verb = 'update';
                 $cId = $_oldRecord->getContainerId();
             }
             $id = $notNullRecord->getId();
-            $bchub->pushAfterCommit($verb, get_class($notNullRecord), $id, $cId);
+            if (null !== $verb) {
+                $bchub->pushAfterCommit($verb, get_class($notNullRecord), $id, $cId);
+            }
         }
 
         if (! $notNullRecord->has('created_by') || $this->_omitModLog === TRUE) {
