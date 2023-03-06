@@ -1298,15 +1298,18 @@ msgstr ""
 "Sie verfügen nicht über das benötigte Privat-Recht um die Historie "
 "anzuzeigen."
 
-msgid "E-Mail (all)"
-msgstr "E-Mail (alle)"
-
 msgid ""
 "This field is automatically taken from the email account and therefore "
 "cannot be edited here."
 msgstr ""
 "Dieses Feld wird automatisch aus dem Email konto übernommen und kann daher "
 "hier nicht bearbeitet werden."
+
+msgid "E-Mail (all)"
+msgstr "E-Mail (alle)"
+
+msgid "Company / Organisation"
+msgstr "Firma / Organisation"
 
 msgid "Excel current columns"
 msgstr "Excel - Aktuelle Spalten"
