@@ -67,15 +67,21 @@ trait Tinebase_Controller_Record_ModlogTrait
         $bchub = Tinebase_BroadcastHub::getInstance();
         if ($bchub->isActive()) {
             $verb = null;
-            if (null === $_newRecord && $_oldRecord->notifyBroadcastHub()) {
+            $cId = null;
+            if (null === $_newRecord && $_oldRecord && $_oldRecord->notifyBroadcastHub()) {
                 $verb = 'delete';
                 $cId = $notNullRecord->getContainerId();
-            } elseif (null === $_oldRecord && $_newRecord->notifyBroadcastHub()) {
-                $verb = 'create';
-                $cId = $notNullRecord->getContainerId();
-            } elseif ($_newRecord->notifyBroadcastHub() || $_oldRecord->notifyBroadcastHub()) {
-                $verb = 'update';
-                $cId = $_oldRecord->getContainerId();
+            } elseif ($_newRecord) {
+                if (null === $_oldRecord && $_newRecord->notifyBroadcastHub()) {
+                    $verb = 'create';
+                    $cId = $notNullRecord->getContainerId();
+                } elseif ($_newRecord->is_deleted && $_oldRecord && !$_oldRecord->is_deleted) {
+                    $verb = 'delete';
+                    $cId = $notNullRecord->getContainerId();
+                } elseif ($_newRecord->notifyBroadcastHub() || $_oldRecord && $_oldRecord->notifyBroadcastHub()) {
+                    $verb = 'update';
+                    $cId = $_oldRecord->getContainerId();
+                }
             }
             $id = $notNullRecord->getId();
             if (null !== $verb) {
