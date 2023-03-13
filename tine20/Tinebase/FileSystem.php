@@ -1024,6 +1024,10 @@ class Tinebase_FileSystem implements
 
             $transMgr->commitTransaction($transId);
             $transId = null;
+        } catch (Throwable $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                . ' exception: ' . $e->getMessage());
+            Tinebase_Exception::log($e);
         } finally {
             if (null !== $transId) {
                 $transMgr->rollBack();
@@ -3875,7 +3879,11 @@ class Tinebase_FileSystem implements
                 ], '', ['ignoreAcl' => true])
                 , null, true) as $id) {
             /** @var Tinebase_Model_Tree_Node $fileNode */
-            $fileNode = $treeNodeBackend->get($id, true);
+            try {
+                $fileNode = $treeNodeBackend->get($id, true);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                continue;
+            }
             if (Tinebase_Model_Tree_FileObject::TYPE_PREVIEW !== $fileNode->type) {
                 continue;
             }
@@ -3904,12 +3912,15 @@ class Tinebase_FileSystem implements
             Tinebase_Lock::keepLocksAlive();
         }
 
+        $transactionRAII = Tinebase_RAII::getTransactionManagerRAII();
         $validHashes = $this->_fileObjectBackend->checkRevisions($invalidHashes);
         $hashesToDelete = array_diff($invalidHashes, $validHashes);
         if (count($hashesToDelete) > 0) {
             $deleted = count($hashesToDelete);
             $previewController->deletePreviews($hashesToDelete);
         }
+        $transactionRAII->release();
+        unset($transactionRAII);
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' created ' . $created . ' new previews, deleted ' . $deleted . ' previews.');
