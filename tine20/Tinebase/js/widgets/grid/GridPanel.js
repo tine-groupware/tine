@@ -82,6 +82,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     gridConfig: null,
     /**
+     * @cfg {Object} detailsPanelRegionConfig
+     * Config object for the Ext.grid.GridPanel
+     */
+    detailsPanelRegion: 'south',
+
+    /**
      * @cfg {Array} customColumnData
      * Config Array for customizing column model columns
      */
@@ -781,20 +787,37 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             // just in case it's a config only
             this.detailsPanel = Ext.ComponentMgr.create(this.detailsPanel);
 
-            this.items.push({
-                ref: 'southPanel',
-                region: 'south',
+            const regionCfg = {
                 border: false,
                 collapsible: true,
                 collapseMode: 'mini',
                 header: false,
                 split: true,
                 layout: 'fit',
-                height: this.detailsPanel.defaultHeight ? this.detailsPanel.defaultHeight : 125,
-                items: this.detailsPanel,
                 canonicalName: 'DetailsPanel'
-
-            });
+            }
+            this.items.push(Object.assign({
+                ref: 'southPanel',
+                region: 'south',
+                items: new Ext.Panel({
+                    items: this.detailsPanelRegion === 'south' ? this.detailsPanel : [],
+                    layout: 'fit',
+                    border: false
+                }),
+                height: this.detailsPanel.defaultHeight ? this.detailsPanel.defaultHeight : 125,
+                hidden: this.detailsPanelRegion !== 'south'
+            }, regionCfg));
+            this.items.push(Object.assign({
+                ref: 'eastPanel',
+                region: 'east',
+                items: new Ext.Panel({
+                    items: this.detailsPanelRegion === 'east' ? this.detailsPanel : [],
+                    layout: 'fit',
+                    border: false
+                }),
+                width: this.detailsPanel.defaultWidth ? this.detailsPanel.defaultWidth : 300,
+                hidden: this.detailsPanelRegion !== 'east'
+            }, regionCfg));
             this.detailsPanel.doBind(this.grid);
         }
 
@@ -827,6 +850,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
         }
 
+    },
+
+    switchDetailsPanelRegion: function() {
+        const source = this.detailsPanelRegion;
+        const target = this.detailsPanelRegion === 'east' ? 'south' : 'east';
+        this.detailsPanel.ownerCt.remove(0, false);
+        this.layout[target].panel.setVisible(true);
+        this.layout[target].items.add(this.detailsPanel);
+        this.layout[target].panel.expand();
+        this.detailsPanelRegion = target;
+        this.layout[source].panel.setVisible(false);
+        this.layout[source].panel.collapse();
     },
 
     gridPrintRenderer: function() {
@@ -948,6 +983,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
         });
 
+        // TODO use toggle button?
+        this.action_switchDetailsPanelRegion = new Ext.Action({
+            requiredGrant: null,
+            text: i18n._('Switch Layout'),
+            iconCls: 'action_switch',
+            scope: this,
+            handler: this.switchDetailsPanelRegion,
+            disabled: false,
+        });
+
         this.initExports();
         this.initImports();
 
@@ -960,6 +1005,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.action_deleteRecord,
             this.action_tagsMassAttach,
             this.action_tagsMassDetach,
+            this.action_switchDetailsPanelRegion,
             this.action_resolveDuplicates
         ]);
 

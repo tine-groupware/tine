@@ -45,7 +45,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @property detailsPanel
      */
     detailsPanel: null,
-    
+
+    // TODO allow to switch between 2 layouts + save in state
+    // TODO switch grid state / columns
+    // TODO east should be default?
+    // detailsPanelRegion: 'east',
+
     /**
      * transaction id of current delete message request
      * @type Number
@@ -587,7 +592,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                 this.action_flag,
                                 this.action_importRecords
                             ]
-                        }
+                        },
+                        Ext.apply(new Ext.Button(this.action_switchDetailsPanelRegion), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
                     ]
                 }, this.getActionToolbarItems()]
             });
