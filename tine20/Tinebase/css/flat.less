@@ -1,5 +1,10 @@
-@focusColor: #0062a7;
-@selectionColor: #dbecf4;
+:root {
+  --focus-color: #0062a7;
+  --selection-color: #dbecf4;
+  --tab-color: #8cb8d7;
+}
+//@focusColor: #0062a7;
+
 @tbColor: darken(#ffffff, 5%);
 
 @datePickerHd: #2196f3;
@@ -28,8 +33,70 @@
 @sidebarBg: @tbColor;
 
 
+@media (prefers-color-scheme: dark) {
+  body {
+    // note: we can't use brightness or contrast as we can't reverse it!
+    filter: invert(1) hue-rotate(180deg);
+    background-color: black;
+  }
 
-@tabColor: #8cb8d7;
+  .hu-color-picker .saturation,
+  .hu-color-picker .hue,
+  .hu-color-picker .color-show,
+  .dark-reverse {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  .x-color-palette a {
+    border-color: initial;
+  }
+
+  .tine-mainscreen-centerpanel-north .x-toolbar {
+    filter: brightness(0.8);
+  }
+
+  .tine-mainscreen-apptabs ul.x-tab-strip li.x-tab-strip-active,
+  .tine-mainscreen-apptabs ul.x-tab-strip li:hover {
+    background-color: #ffffff !important;
+    filter: brightness(0.8);
+  }
+
+  .x-tab-strip span.x-tab-strip-text:hover,
+  .x-tab-strip-active span.x-tab-strip-text,
+  .x-tab-strip-active .x-tab-strip-close,
+  .tine-mainscreen-mainmenu .x-btn,
+  .tine-mainscreen-apptabs ul.x-tab-strip span.x-tab-strip-text,
+  .tine-mainscreen-apptabs ul.x-tab-strip a.x-tab-strip-close {
+    filter: invert(0) !important;
+  }
+
+  ul.x-tab-strip li {
+    background-color: initial !important;
+  }
+
+  .x-tab-panel-header-plain .x-tab-strip-spacer,
+  ul.x-tab-strip li.x-tab-strip-active,
+  ul.x-tab-strip li:hover {
+    background-color: #bcbcbc !important;
+  }
+
+  .tine-mainscreen-centerpanel-north .x-panel-bwrap,
+  .x-panel-body,
+  .x-grid3,
+  .x-grid3-scroller,
+  .x-combo-list-inner {
+    background-color: #ddd;
+  }
+
+  .x-form-text, textarea.x-form-field {
+    background-color: #eee;
+  }
+  :root {
+    --focus-color: #dedede;
+    --selection-color: #abcdf0;
+    --tab-color: white;
+  }
+}
 
 //.x-shadow {
 //  display: none !important;
@@ -70,14 +137,15 @@
 
 .x-tab-panel-header, .x-tab-panel-footer, .x-tab-panel-header, .x-tab-panel-footer,
 .x-tab-panel-header-plain .x-tab-strip-spacer, .x-tab-panel-footer-plain .x-tab-strip-spacer {
-  border-color: @focusColor;
-  background-color: @focusColor;
+  border-color: var(--focus-color);
+  background-color: var(--focus-color);
+  border: none;
 }
 
 /* AppTabs */
 .tine-mainscreen-apptabs {
   & .x-tab-strip-wrap ul.x-tab-strip-top {
-    background-color: @focusColor;
+    background-color: var(--focus-color);
     background-image: none;
   }
 
@@ -85,7 +153,7 @@
     & li {
       // height of AppTabs
       height: 30px;
-      background-color: @focusColor;
+      background-color: var(--focus-color);
 
     }
     & span.x-tab-strip-text,
@@ -110,7 +178,7 @@
 }
 
 ul.x-tab-strip li {
-  background-color: @tabColor;
+  background-color: var(--tab-color);
   margin-left: 0px;
 
  //&:first-child {
@@ -124,11 +192,12 @@ li.x-item-disabled span.x-tab-strip-text:hover{
 }
 
 ul.x-tab-strip li.x-tab-strip-active {
-  background-color: @focusColor;
+  background-color: var(--focus-color);
 }
 
 ul.x-tab-strip-top {
-  border-color: @focusColor;
+  border-color: var(--focus-color);
+  border-bottom: none;
 }
 
 .x-tab-strip-top .x-tab-right, .x-tab-strip-top .x-tab-left, .x-tab-strip-top .x-tab-strip-inner {
@@ -276,7 +345,7 @@ span.x-tab-strip-text.tine-favicon {
 .tine-mainscreen-mainmenu {
   & .x-toolbar {
     background-image: none;
-    background-color: @focusColor;
+    background-color: var(--focus-color);
     & .renderer_accountUserChangedIcon{
       background-color: white !important;
     }
@@ -545,6 +614,10 @@ span.x-tab-strip-text.tine-favicon {
   .x-panel-bwrap {
     background-image: none;
     background-color: @dialogBg;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: #ddd;
+    }
   }
 
   ul.x-tab-strip-top {
@@ -667,7 +740,7 @@ span.x-tab-strip-text.tine-favicon {
 }
 
 .x-form-focus, textarea.x-form-focus {
-  border-color: @focusColor;
+  border-color: var(--focus-color);
 }
 
 // till all triggers are updated...
@@ -688,7 +761,7 @@ span.x-tab-strip-text.tine-favicon {
 }
 
 .x-trigger-wrap-focus .x-form-trigger {
-  border-bottom: 1px solid @focusColor !important;
+  border-bottom: 1px solid var(--focus-color) !important;
   box-sizing: border-box;
 }
 
@@ -798,8 +871,8 @@ span.x-form-twin-triggers img.x-form-clear-trigger {
   border: none;
 
   .x-combo-selected {
-    background-color: @selectionColor;
-    border-color: @selectionColor !important;
+    background-color: var(--selection-color);
+    border-color: var(--selection-color) !important;
   }
 }
 
@@ -905,9 +978,14 @@ a.x-grid3-hd-btn:hover {
   background-image: url('../../images/icon-set/icon_sort_z-to-a.svg');
 }
 
+.x-grid3-row {
+  border-color: transparent;
+  border-top-color: transparent;
+}
+
 .x-grid3-row-selected {
-  background-color: @selectionColor !important;
-  border-color: @selectionColor;
+  background-color: var(--selection-color) !important;
+  border-color: var(--selection-color);
 }
 
 .x-gird-drag-sort-above {
@@ -1016,7 +1094,7 @@ td.x-date-mp-sel a,
 
   .x-progress-bar {
     background-image: none;
-    background-color: @focusColor;
+    background-color: var(--focus-color);
     border: none;
   }
 
@@ -1206,7 +1284,7 @@ td.x-date-mp-sel a,
 /* TREE */
 
 .x-tree-node .x-tree-selected {
-  background-color: @selectionColor;
+  background-color: var(--selection-color);
 }
 
 .x-tree-arrows {

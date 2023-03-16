@@ -31,7 +31,7 @@ Ext.ColorPalette = Ext.extend(Ext.Component, {
      * @cfg {String} itemCls
      * The CSS class to apply to the containing element (defaults to 'x-color-palette')
      */
-    itemCls : 'x-color-palette',
+    itemCls : 'x-color-palette dark-reverse',
     /**
      * @cfg {String} value
      * The initial color to highlight (should be a valid 6-digit color hex code without the # symbol).  Note that

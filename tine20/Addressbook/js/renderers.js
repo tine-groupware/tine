@@ -149,7 +149,7 @@ const imageRenderer = function (jpegphoto, metadata, record) {
 
     var url = getImageUrl(jpegphoto, 90, 113, record);
 
-    return '<img src="' + url + '" />';
+    return '<img src="' + url + '" class="'+ (String(url).match(/\.svg/) ? '' : 'dark-reverse') +'" />';
 };
 
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'image', imageRenderer, 'displayPanel');

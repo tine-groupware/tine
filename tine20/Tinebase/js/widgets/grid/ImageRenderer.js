@@ -20,7 +20,7 @@ Tine.widgets.grid.imageRenderer = function(value, metadata, record) {
             Ext.util.Format.htmlEncode('<div style="width:300px; height:300px;"><img src="' + String(value)
                 .replace(/width=\d+/, 'width=290')
                 .replace(/height=\d+/, 'height=300') +
-            '" /></div>') +
+            '" class="'+ (String(value).match(/\.svg/) ? '' : 'dark-reverse') + '"/></div>') +
         '"/>';
     }
 

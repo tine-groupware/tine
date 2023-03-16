@@ -136,6 +136,7 @@ Tine.Filemanager.DocumentPreview = Ext.extend(Ext.Panel, {
                 me.previewContainer.add({
                     html: '<img style="width: 100%;" src="' + url + '" /><div class="filemanager-quicklook-protect" />',
                     xtype: 'panel',
+                    cls: 'dark-reverse',
                     frame: true,
                     border: true,
                     // NOTE: some browsers do not load the img event though the img tag is rendered into the dom
