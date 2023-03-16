@@ -149,6 +149,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         const recordId = record.id.split('_');
                         attachment.cache = Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', recordId[0], attachment.partId].join(':'), true).then(cache => {
                             attachment.cache = new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);
+                            return attachment.cache;
                         });
                     }
                 })
@@ -359,6 +360,24 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     // this.refetchBody(this.record, this.onClick.createDelegate(this, [e]));
                     return;
                 }
+                
+                const promises = [];
+                // make sure we get the attachment caches
+                if (attachments) {
+                    attachments.forEach((attachment) => {
+                        if (!this.record.get('from_node')) {
+                            if (!attachment?.cache) {
+                                const promise = Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', attachment.messageId, attachment.partId].join(':'), false).then(cache => {
+                                    return new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);
+                                });
+                                promises.push(promise);
+                            } else {
+                                promises.push(attachment.cache);
+                            }
+                        }
+                    })
+                }
+                const attachmentCaches = await Promise.all(promises);
 
                 // remove part id if set (that is the case in message/rfc822 attachments)
                 const messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
@@ -424,6 +443,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         }, {
                             record: this.record,
                             attachments: attachments,
+                            attachmentCachesData: _.map(attachmentCaches, 'data'),
                         })
                     ]
                 });
