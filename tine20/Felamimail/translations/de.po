@@ -2106,3 +2106,6 @@ msgstr ""
 
 msgid "Save To All Recipients"
 msgstr "An allen Empfängern speichern"
+
+msgid "E-mail usage"
+msgstr "E-Mail-Nutzung"
