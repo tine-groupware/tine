@@ -65,6 +65,68 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'cpintern_id'   => [],
             ],
         ],
+        self::FILTER_MODEL => [
+            'document_offer' => [
+                self::LABEL => 'Has Offers', // _('Has Offers')
+                self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => Sales_Model_Document_Offer::MODEL_NAME_PART,
+
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Document_Offer::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+            'document_order' => [
+                self::LABEL => 'Has Orders', // _('Has Orders')
+                self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => Sales_Model_Document_Order::MODEL_NAME_PART,
+
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Document_Order::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+            'document_invoice' => [
+                self::LABEL => 'Has Invoices', // _('Has Invoices')
+                self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => Sales_Model_Document_Invoice::MODEL_NAME_PART,
+
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Document_Invoice::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+            'document_delivery' => [
+                self::LABEL => 'Has Deliveries', // _('Has Deliveries')
+                self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => Sales_Model_Document_Delivery::MODEL_NAME_PART,
+
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Document_Delivery::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+        ],
 
         'fields'            => array(
             'number' => array(
