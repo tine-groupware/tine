@@ -5347,6 +5347,9 @@ msgstr "Nur die angezeigten Spalten exportieren"
 msgid "Quota is exceeded"
 msgstr "Quota ist überschritten"
 
+msgid "MFA password wrong"
+msgstr "MFA-Passwort falsch"
+
 msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 "Ihr Passwort ist abgelaufen. Bitte setzen Sie ein neues Benutzer-Passwort:"
