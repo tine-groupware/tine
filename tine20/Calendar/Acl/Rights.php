@@ -22,7 +22,13 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_RESOURCES = 'manage_resources';
-    
+
+    /**
+     * the right to manage resources
+     * @staticvar string
+     */
+    const MANAGE_EVENT_TYPES = 'manage_event_types';
+
     /**
      * the right to manage shared event favorites
      * 
@@ -84,6 +90,7 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             Tinebase_Acl_Rights::USE_PERSONAL_TAGS,
             self::MANAGE_SHARED_EVENT_FAVORITES,
             self::MANAGE_RESOURCES,
+            self::MANAGE_EVENT_TYPES,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -111,6 +118,10 @@ class Calendar_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_RESOURCES => array(
                 'text'          => $translate->_('manage resources'),
                 'description'   => $translate->_('All Rights to administrate resources')
+            ),
+            self::MANAGE_EVENT_TYPES => array(
+                'text'          => $translate->_('manage event types'),
+                'description'   => $translate->_('The Right to manage event types')
             ),
         );
         
