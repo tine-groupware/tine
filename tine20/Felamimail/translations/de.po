@@ -2089,11 +2089,14 @@ msgstr "Sieve Filterregelen wurden aktualisiert"
 msgid "Select other IMAP folder"
 msgstr "Anderen IMAP Ordner auswählen"
 
-msgid "Save copy of sent mail on mail server"
-msgstr "Kopie von gesendeter mail auf dem Mailserver speichern"
+msgid "Save copy of sent mail on mail server."
+msgstr "Kopie von gesendeter Mail auf dem Mailserver speichern."
 
 msgid "Folder of the source mail if it is not your INBOX."
-msgstr "Ordner der Ursprungsmail wenn diese nicht ihre INBOX ist."
+msgstr "Den Ordner der Ursprungsmail nehmen, wenn dieser nicht ihre Posteingang(INBOX) ist."
+
+msgid "Behavior of sent mails"
+msgstr "Ablageort für gesendete Mails"
 
 msgid "Reveal Password?"
 msgstr "Passwort anzeigen?"
