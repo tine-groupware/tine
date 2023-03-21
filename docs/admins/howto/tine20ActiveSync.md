@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: ActiveSync
+Tine Admin HowTo: ActiveSync
 =================
 
 Version: Anton 2019.11

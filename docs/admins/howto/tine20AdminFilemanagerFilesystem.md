@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: Filemanager / Filesystem
+Tine Admin HowTo: Filemanager / Filesystem
 =================
 
 Version: Nele 2018.11

@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: Adressbuch
+Tine Admin HowTo: Adressbuch
 =================
 
 Version: Caroline 2017.11

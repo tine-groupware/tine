@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: ActionQueue + Worker
+Tine Admin HowTo: ActionQueue + Worker
 =================
 
 Version: Nele 2018.11

@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: Phone/Voipmanager/Telefonie
+Tine Admin HowTo: Phone/Voipmanager/Telefonie
 =================
 
 Version: Nele 2018.11

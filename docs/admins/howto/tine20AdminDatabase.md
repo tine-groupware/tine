@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: Datenbank
+Tine Admin HowTo: Datenbank
 =================
 
 Version: ab Caroline 2017.11

@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: Kalender
+Tine Admin HowTo: Kalender
 =================
 
 Versionen: Egon 2016.11 + Caroline 2017.11

@@ -1,9 +1,7 @@
-Tine 2.0 Admin Schulung
+Tine Admin HowTo
 =================
 
 Version: Amon 2020.11
-
-[[_TOC_]]
 
 # Ressourcen
 
