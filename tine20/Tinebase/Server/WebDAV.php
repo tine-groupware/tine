@@ -140,7 +140,17 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
             if (!$hasIdentity) {
                 try {
-                    list($loginName, $password) = $this->_getAuthData($this->_request);
+                    $authData = $this->_getAuthData($this->_request);
+                    if (count($authData) === 2) {
+                        list($loginName, $password) = $authData;
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                . ' Login name or password missing from auth data');
+                        }
+                        $this->_sendUnauthorizedHeader();
+                        return;
+                    }
                     Tinebase_Core::startCoreSession();
                     Tinebase_Core::initFramework();
                 } catch (Zend_Session_Exception $zse) {
@@ -151,9 +161,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     header('HTTP/1.1 503 Service Unavailable');
                     return;
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
-                    header('HTTP/1.1 401 Unauthorized');
-
+                    $this->_sendUnauthorizedHeader();
                     return;
                 }
             }
@@ -186,9 +194,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                         $this->_request,
                         self::REQUEST_TYPE
                     ) !== true) {
-                    header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
-                    header('HTTP/1.1 401 Unauthorized');
-
+                    $this->_sendUnauthorizedHeader();
                     return;
                 }
             } catch (Tinebase_Exception_MaintenanceMode $temm) {
@@ -311,6 +317,17 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');
         }
+    }
+
+    protected function _sendUnauthorizedHeader()
+    {
+        header('WWW-Authenticate: Basic realm="' . $this->_getRealm() .  '"');
+        header('HTTP/1.1 401 Unauthorized');
+    }
+
+    protected function _getRealm(): string
+    {
+        return Tinebase_Core::getTineUserAgent('WebDAV Service');
     }
 
     /**
