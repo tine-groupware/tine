@@ -642,12 +642,6 @@ msgstr "Ordnerliste aktualisieren"
 msgid "Approve Migration"
 msgstr "Migration freigeben"
 
-msgid "Agree that this account can be transferred to other users"
-msgstr "Zustimmen, dass dieses Konto zu anderen Benutzern übertragen werden darf"
-
-msgid "I hereby agree that this mailbox may be converted to a shared mailbox or transferred to another user."
-msgstr "Hiermit willige ich ein, dass dieses Postfach zu einem gemeinsamen Postfach umgewandelt oder einem anderen Benutzer übertragen werden darf."
-
 msgid "Move Folder"
 msgstr "Ordner verschieben"
 
@@ -1421,7 +1415,7 @@ msgstr "Umfrage Link: {0}"
 #: js/Felamimail.js:262
 #, python-brace-format
 msgid "{0} as default mailer"
-msgstr "{0} als default Mailer"
+msgstr "{0} als Standard-E-Mailprogramm"
 
 #: js/Felamimail.js:692
 msgid "New mails"
@@ -1816,11 +1810,8 @@ msgid "Show confirmation dialog when deleting mails."
 msgstr "Beim löschen von Nachrichten einen Bestätigungsdialog anzeigen."
 
 #: Preference.php:143
-msgid "Forward and forwarded email as .eml in attachment"
-msgstr "Weiterleitung und weitergeleitete eMail als .eml im Anhang"
-
-msgid "Only forwarded email as .eml in attachment"
-msgstr "Nur weitergeleitete email als .eml im Anhang"
+msgid ".eml file Attachment in forwarded mails"
+msgstr ".eml Dateianhang in weitergeleiteten Mails"
 
 #: Preference.php:144
 msgid ""
@@ -2089,14 +2080,11 @@ msgstr "Sieve Filterregelen wurden aktualisiert"
 msgid "Select other IMAP folder"
 msgstr "Anderen IMAP Ordner auswählen"
 
-msgid "Save copy of sent mail on mail server."
-msgstr "Kopie von gesendeter Mail auf dem Mailserver speichern."
+msgid "Save copy of sent mail on mail server"
+msgstr "Kopie von gesendeter mail auf dem Mailserver speichern"
 
 msgid "Folder of the source mail if it is not your INBOX."
-msgstr "Den Ordner der Ursprungsmail nehmen, wenn dieser nicht ihre Posteingang(INBOX) ist."
-
-msgid "Behavior of sent mails"
-msgstr "Ablageort für gesendete Mails"
+msgstr "Ordner der Ursprungsmail wenn diese nicht ihre INBOX ist."
 
 msgid "Reveal Password?"
 msgstr "Passwort anzeigen?"
@@ -2109,6 +2097,29 @@ msgstr ""
 
 msgid "Save To All Recipients"
 msgstr "An allen Empfängern speichern"
+
+msgid "Agree that this account can be transferred to other users"
+msgstr ""
+"Zustimmen, dass dieses Konto zu anderen Benutzern übertragen werden darf"
+
+msgid ""
+"I hereby agree that this mailbox may be converted to a shared mailbox or "
+"transferred to another user."
+msgstr ""
+"Hiermit willige ich ein, dass dieses Postfach zu einem gemeinsamen "
+"Postfach umgewandelt oder einem anderen Benutzer übertragen werden darf."
+
+msgid "Forward and forwarded email as .eml in attachment"
+msgstr "Weiterleitung und weitergeleitete eMail als .eml im Anhang"
+
+msgid "Only forwarded email as .eml in attachment"
+msgstr "Nur weitergeleitete email als .eml im Anhang"
+
+msgid "Save copy of sent mail on mail server."
+msgstr "Kopie von gesendeter Mail auf dem Mailserver speichern."
+
+msgid "Behavior of sent mails"
+msgstr "Ablageort für gesendete Mails"
 
 msgid "E-mail usage"
 msgstr "E-Mail-Nutzung"
