@@ -486,7 +486,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {Ext.Element} element to render to 
      */
     operatorRenderer: function (filter, el) {
-        var operator;
+        var operator,
+            me = this;
         
         // init operator value
         filter.set('operator', filter.get('operator') ? filter.get('operator') : this.defaultOperator);
@@ -545,6 +546,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     allOf: 'definedBy?condition=and&setOperator=allOf'
                 };
 
+            if (_.isFunction(me.getCustomOperators)) {
+                me.getCustomOperators().map((def) => {
+                    opMap[def.operator] = def.opValue || def.operator;
+                })
+            }
             return opMap[op] || 'definedBy?condition=and&setOperator=oneOf';
         };
         
