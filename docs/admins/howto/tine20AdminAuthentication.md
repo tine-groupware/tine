@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: Authentication
+Tine Admin HowTo: Authentication
 =================
 
 Version: Nele 2018.11

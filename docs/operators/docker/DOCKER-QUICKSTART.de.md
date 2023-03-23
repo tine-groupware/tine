@@ -2,8 +2,6 @@ tine Business Edition Docker Image
 ---
 [www.tine-groupware.de](https://www.tine-groupware.de/) | [GitHub](https://github.com/tine20/tine20) | [Dockerfile](https://github.com/tine20/tine20/blob/main/ci/dockerimage/built.Dockerfile)
 
-[[_TOC_]]
-
 ## Schnellstart
 
 Dies ist eine schnelle und leichte Möglichkeit, tine auszuprobieren. Hierfür benötigen Sie Docker und Docker Compose (https://docs.docker.com/compose/).

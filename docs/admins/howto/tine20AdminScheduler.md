@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: Scheduler / Hintergrunddienste
+Tine Admin HowTo: Scheduler / Hintergrunddienste
 =================
 
 Version: Caroline 2017.11

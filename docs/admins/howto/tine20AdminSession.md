@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: Session-Settings
+Tine Admin HowTo: Session-Settings
 =================
 
 Version: Egon 2016.11

@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: Logging
+Tine Admin HowTo: Logging
 =================
 
 Version: Amon 2020.11

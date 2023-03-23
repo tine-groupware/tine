@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: LDAP Integration
+Tine Admin HowTo: LDAP Integration
 =================
 
 Version: Lu 2021.11

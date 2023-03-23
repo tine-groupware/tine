@@ -1,4 +1,4 @@
-Tine 2.0 Admin Schulung: Caching-Settings
+Tine Admin HowTo: Caching-Settings
 =================
 
 Version: Caroline 2017.11
