@@ -43,6 +43,7 @@ require('./widgets/CountryFilter');
 require('node-waves');
 require('node-waves/src/less/waves.less');
 require('../css/flat.less');
+require('../css/darkmode.less');
 
 // other libs
 var lodash = require('lodash');

@@ -1,20 +1,38 @@
+/**
+ * @class Ext.util.Format
+ * Reusable data formatting functions
+ * @singleton
+ */
+var trimRe = /^\s+|\s+$/g,
+    stripTagsRE = /<\/?[^>]+>/gi,
+    stripScriptsRe = /(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)/ig,
+    nl2brRe = /\r?\n/g,
+    // NOTE: we want to flag colorful emojis only, therefore we can't use the emoji-regex lib
+    emojiRE = new RegExp('([' +
+        '\u{23E9}-\u{23EF}\u{23F0}\u{23f3}' + // https://www.sql-und-xml.de/unicode-database/miscellaneous-technical.html
+        // '\u{2600}-\u{26ff}' + // https://www.sql-und-xml.de/unicode-database/miscellaneous-symbols.html -> most of them are monochrome, exceptions next line
+        '\u{2614}-\u{2615}\u{267F}\u{26A1}\u{26AA}\u{26AB}\u{26C4}\u{26C5}\u{26CE}\u{26D4}\u{26EA}\u{26F2}\u{26F3}\u{26F5}\u{26FA}\u{26FD}' +
+        // '\u{2700}-\u{27bf}' + // https://www.sql-und-xml.de/unicode-database/dingbats.html -> most of them are monochrome
+        '\u{2705}\u{270A}-\u{270B}\u{2728}\u{274C}\u{274E}\u{2753}-\u{2755}\u{2757}' +
+        '\u{2b50}-\u{2b50}\u{2b55}' + // https://www.sql-und-xml.de/unicode-database/miscellaneous-symbols-and-arrows.html > partly as other of them are monochrome
+        '\u{1f004}\u{1f0cf}\u{1F030}\u{1f170}\u{1F062}-\u{1F062}' + // cards, mahjong and domino
+        '\u{1F18A}-\u{1F1AC}' + // https://www.sql-und-xml.de/unicode-database/enclosed-alphanumeric-supplement.html -> partly as other of them are monochrome
+        '\u{1F201}\u{1F21A}\u{1F22F}\u{1F232}-\u{1F23A}\u{1F250}\u{1F251}' + // https://www.sql-und-xml.de/unicode-database/enclosed-ideographic-supplement.html -> partly as other of them are monochrome
+        '\u{1f300}-\u{1f5ff}' + // https://www.sql-und-xml.de/unicode-database/miscellaneous-symbols-and-pictographs.html
+        '\u{1f600}-\u{1f64f}' + // https://www.sql-und-xml.de/unicode-database/emoticons.html
+        '\u{1f680}-\u{1f6ff}' + // https://www.sql-und-xml.de/unicode-database/transport-and-map-symbols.html
+        '\u{1f900}-\u{1f9ff}' + // https://www.sql-und-xml.de/unicode-database/supplemental-symbols-and-pictographs.html
+    '])[\u{1F3FB}-\u{1F3FF}]{0,1}', 'ug'); // skintone modifier
+
 /*!
  * Ext JS Library 3.1.1
  * Copyright(c) 2006-2010 Ext JS, LLC
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
-/**
- * @class Ext.util.Format
- * Reusable data formatting functions
- * @singleton
- */
+
+// import emojiRegex from 'emoji-regex';
 Ext.util.Format = function(){
-    var trimRe = /^\s+|\s+$/g,
-        stripTagsRE = /<\/?[^>]+>/gi,
-        stripScriptsRe = /(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)/ig,
-        nl2brRe = /\r?\n/g;
-        
     return {
         /**
          * Truncate a string and add an ellipsis ('...') to the end if it exceeds the specified length
@@ -68,7 +86,8 @@ Ext.util.Format = function(){
             if (_.get(value, 'isExpression')) {
                 return value;
             }
-            return !value ? value : String(value).replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+            return !value ? value : String(value).replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;")
+                .replace(emojiRE, '<em class="emoji">$1</em>');
         },
 
         /**

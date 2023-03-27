@@ -1,0 +1,92 @@
+@media (prefers-color-scheme: dark) {
+  body {
+    // note: we can't use brightness or contrast as we can't reverse it!
+    filter: invert(1) hue-rotate(180deg);
+    background-color: black;
+  }
+
+  .hu-color-picker .saturation,
+  .hu-color-picker .hue,
+  .hu-color-picker .color-show,
+  .dark-reverse {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  .x-color-palette a {
+    border-color: initial;
+  }
+
+  .tine-mainscreen-centerpanel-north .x-toolbar {
+    filter: brightness(0.8);
+  }
+
+  .tine-mainscreen-apptabs ul.x-tab-strip li.x-tab-strip-active,
+  .tine-mainscreen-apptabs ul.x-tab-strip li:hover {
+    background-color: #ffffff !important;
+    filter: brightness(0.8);
+  }
+
+  .x-tab-strip span.x-tab-strip-text:hover,
+  .x-tab-strip-active span.x-tab-strip-text,
+  .x-tab-strip-active .x-tab-strip-close,
+  .tine-mainscreen-mainmenu .x-btn,
+  .tine-mainscreen-apptabs ul.x-tab-strip span.x-tab-strip-text,
+  .tine-mainscreen-apptabs ul.x-tab-strip a.x-tab-strip-close {
+    filter: invert(0) !important;
+  }
+
+  ul.x-tab-strip li {
+    background-color: initial !important;
+  }
+
+  .x-tab-panel-header-plain .x-tab-strip-spacer,
+  ul.x-tab-strip li.x-tab-strip-active,
+  ul.x-tab-strip li:hover {
+    background-color: #bcbcbc !important;
+  }
+
+  .tine-mainscreen-centerpanel-north .x-panel-bwrap,
+  .x-panel-body,
+  .x-grid3,
+  .x-grid3-scroller,
+  .x-combo-list-inner {
+    background-color: #ddd;
+    .x-combo-selected {
+      background-color: #aaaaaa;
+    }
+  }
+  .x-grid3-row {
+    border-bottom: 0.5px solid white;
+  }
+  //.x-form-checkbox {
+  //  filter: invert(1) hue-rotate(180deg);
+  //  accent-color: #222222;
+  //  :checked::before {
+  //    background-color: #222222;
+  //  }
+  //}
+  .x-form-text, textarea.x-form-field {
+    filter: invert(1) hue-rotate(180deg);
+    background-color: #222222;
+    border-color: black;
+    color: #ffffff;
+  }
+  .attendance-clock-menu-button-clock_in .attendance-clock {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  .attendance-clock-menu-button-clock_out .attendance-clock {
+    background-color: red !important;
+  }
+  ::selection {
+    //color: red;
+    background: #2196f3;
+  }
+  :root {
+    --focus-color: #dedede;
+    --selection-color: #abcdf0;
+    --tab-color: white;
+  }
+  .emoji {
+    filter: invert(1) hue-rotate(180deg);
+  }
+}
