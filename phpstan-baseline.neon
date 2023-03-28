@@ -5521,51 +5521,6 @@ parameters:
 			path: tine20/Tinebase/Export/Richtext/Doc.php
 
 		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$application\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$currency\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$field\\.$#"
-			count: 3
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$identifier\\.$#"
-			count: 29
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$isMatrixField\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$keyfield\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$separateColumns\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$type\\.$#"
-			count: 7
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\|Zend_Config\\:\\:\\$identifier\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
 			message: "#^Call to an undefined method DateTime\\:\\:toString\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
