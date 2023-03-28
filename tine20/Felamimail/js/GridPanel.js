@@ -767,8 +767,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             icons.push({src: 'images/icon-set/icon_lock.svg', qtip: i18n._('Encrypted Message')});
         }
 
+        if (! record.hasFlag('\\Seen')) {
+            icons.push({src: 'images/icon-set/empty.svg', qtip: i18n._('Unread Message'), cls: 'unread-flag'});
+        }
+
         Ext.each(icons, function(icon) {
-            result += '<img class="FelamimailFlagIcon" src="' + icon.src + '" ext:qtip="' + Ext.util.Format.htmlEncode(icon.qtip) + '">';
+            result += '<img class="FelamimailFlagIcon ' + (icon.cls || "") + '" src="' + icon.src + '" ext:qtip="' + Ext.util.Format.htmlEncode(icon.qtip) + '">';
         }, this);
 
         let fileLocations = record.get('fileLocations');
