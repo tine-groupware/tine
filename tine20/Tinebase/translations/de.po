@@ -34,6 +34,15 @@ msgstr "Die folgenden Felder wurden nicht importiert: %s"
 msgid "N/A"
 msgstr "n.v."
 
+msgid "Follow System"
+msgstr "System folgen"
+
+msgid "Dark Mode"
+msgstr "Dunkler Modus"
+
+msgid "Light Mode"
+msgstr "Heller Modus"
+
 #: User/Abstract.php:347 User/Abstract.php:348 User/Abstract.php:349
 #: User/Abstract.php:350 User/Abstract.php:351 User/Abstract.php:352
 #: Group/Abstract.php:261 Acl/Roles.php:1020 js/ux/ConnectionStatus.js:60

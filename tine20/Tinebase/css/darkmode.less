@@ -1,10 +1,16 @@
-@media (prefers-color-scheme: dark) {
-  body {
-    // note: we can't use brightness or contrast as we can't reverse it!
-    filter: invert(1) hue-rotate(180deg);
-    background-color: black;
-  }
+body.dark-mode {
+  // note: we can't use brightness or contrast as we can't reverse it!
+  filter: invert(1) hue-rotate(180deg);
+  background-color: black;
+}
 
+.color-scheme-dark {
+  background-image: url('../../images/icon-set/icon_moon_light.svg');
+}
+.color-scheme-light {
+  background-image: url('../../images/icon-set/icon_sun_light.svg');
+}
+.dark-mode {
   .hu-color-picker .saturation,
   .hu-color-picker .hue,
   .hu-color-picker .color-show,
@@ -16,6 +22,10 @@
     border-color: initial;
   }
 
+  .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top,
+  .tine-mainscreen-mainmenu .x-toolbar {
+    background-color: #ddd;
+  }
   .tine-mainscreen-centerpanel-north .x-toolbar {
     filter: brightness(0.8);
   }
@@ -89,9 +99,22 @@
   .emoji {
     filter: invert(1) hue-rotate(180deg);
   }
-
   // Felamimail
   .is_spam_suspicions td {
     color: #7a5010;
+  }
+  .x-form {
+    .x-panel-tr,
+    .x-panel-tc,
+    .x-panel-tl,
+    .x-panel-mr,
+    .x-panel-mc,
+    .x-panel-ml,
+    .x-panel-br,
+    .x-panel-bc,
+    .x-panel-bl,
+    .x-panel-bwrap {
+      background-color: #ddd;
+    }
   }
 }
