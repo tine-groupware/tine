@@ -121,10 +121,15 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
         if ($_field->isMatrixField) {
             return $this->_getMatrixCellValue($_field, $_record);
         }
-        
+
         // Shorten this field?
-        if (isset($_field->maxcharacters) || isset($_field->maxlines)) {
+        if (isset($_field->maxcharacters) || isset($_field->maxlines) || isset($_field->removeEmptyLines)) {
             $result = $_record->{$_field->identifier};
+
+            if (isset($_field->removeEmptyLines)) {
+                $result = implode("\n", array_filter(explode("\n", $result), 'trim'));
+            }
+
             if (isset($_field->maxcharacters)) {
                 $result = $this->_getShortenedField($result, $_field->maxcharacters, 'maxcharacters');
                 
@@ -132,7 +137,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
             if (isset($_field->maxlines)) {
                 $result = $this->_getShortenedField($result, $_field->maxlines, 'maxlines');
             }
-        return $result;
+            return $result;
         }
 
         
