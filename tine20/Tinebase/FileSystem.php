@@ -2520,6 +2520,11 @@ class Tinebase_FileSystem implements
 
         try {
             $currentNodeObject = $this->get($_node->getId());
+
+            if ($_node->name !== $currentNodeObject->name) {
+                throw new Tinebase_Exception_Record_Validation('name may not be changed in update');
+
+            }
             if (isset($_node->grants)) {
                 if ($currentNodeObject->getId() !== $currentNodeObject->acl_node) {
                     $currentNodeObject->grants = new Tinebase_Record_RecordSet($this->_nodeAclController->getGrantsModel());
