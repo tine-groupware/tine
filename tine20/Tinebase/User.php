@@ -1289,10 +1289,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 if ($e instanceof Zend_Db_Statement_Exception && Tinebase_Exception::isDbDuplicate($e)) {
                     // user might have been deleted -> undelete
                     try {
-                        $systemUser = $userBackend->getUserByLoginName($accountLoginName);
+                        $systemUser = $userBackend->getUserByLoginName($accountLoginName, Tinebase_Model_FullUser::class);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         $userBackend->undelete($accountLoginName);
-                        $systemUser = $userBackend->getUserByLoginName($accountLoginName);
+                        $systemUser = $userBackend->getUserByLoginName($accountLoginName, Tinebase_Model_FullUser::class);
                     }
                 } else {
                     $systemUser = $userBackend->addUserInSqlBackend($systemUser);
