@@ -52,9 +52,12 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
                     + 'padding-left: 10px;'
                     + 'border-left: 2px solid #000088;'
                 + '} '
+                + '.dark-mode img {'
+                + '   filter: invert(1) hue-rotate(180deg);'
+                + '} '
             + '</style>'
             + '</head>'
-            + '<body style="padding: 5px 0px 0px 5px; margin: 0px">'
+            + '<body style="padding: 5px 0px 0px 5px; margin: 0px" class="' + String(Ext.getBody().dom.classList.value).trim() + '">'
             + '</body></html>';
 
         return markup;

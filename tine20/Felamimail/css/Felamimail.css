@@ -379,3 +379,11 @@
     display: inline-block;
     vertical-align: middle;
 }
+
+.dark-mode .is_spam_suspicions td {
+    color: #7a5010;
+}
+
+.dark-mode .preview-panel-felamimail-body img {
+    filter: invert(1) hue-rotate(180deg);
+}
