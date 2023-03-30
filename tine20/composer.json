@@ -87,6 +87,7 @@
     "ext-xml": "*",
     "ext-zip": "*",
     "benmorel/gsm-charset-converter": "^0.2",
+    "clean/phpdoc-md": "^0.19.3",
     "composer/semver": "*",
     "doctrine/dbal": "2.13.3pl1 as 2.13.3",
     "doctrine/orm": "^2",
