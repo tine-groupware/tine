@@ -38,11 +38,12 @@ class SSO_Controller extends Tinebase_Controller_Event
         /** @noinspection PhpUnusedParameterInspection */
         \FastRoute\RouteCollector $r
     ) {
+        $r->get('/.well-known/openid-configuration', (new Tinebase_Expressive_RouteHandler(
+            self::class, 'publicGetWellKnownOpenIdConfiguration', [
+            Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+        ]))->toArray());
+
         $r->addGroup('/sso', function (\FastRoute\RouteCollector $routeCollector) {
-            $routeCollector->get('/.well-known/openid-configuration', (new Tinebase_Expressive_RouteHandler(
-                self::class, 'publicGetWellKnownOpenIdConfiguration', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
-            ]))->toArray());
             $routeCollector->addRoute(['GET', 'POST'], '/oauth2/authorize', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicAuthorize', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true

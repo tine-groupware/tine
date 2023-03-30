@@ -49,6 +49,7 @@ services:
       # TINE20_APPLICATION_TO_INSTALL: "Addressbook,Felamimail,Calendar,Filemanager"
     volumes:
       - "/data/tine_files:/var/lib/tine20/files"
+      - "/conf.d:/etc/tine20/conf.d"
     ### OR
 #      - "tine_files:/var/lib/tine20/files"
     networks:
