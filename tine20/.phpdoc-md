@@ -1,0 +1,64 @@
+<?php
+/**
+ * tine phpdoc-md configuration
+ *
+ * @package     docs
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @link        https://github.com/clean/phpdoc-md
+ */
+
+$list = [
+    'ActiveSync',
+    'Addressbook',
+    'Admin',
+    'Calendar',
+    'Courses',
+    'Crm',
+    'DFCom',
+    'EFile',
+    'Felamimail',
+    'Filemanager',
+    'GDPR',
+    'HumanResources',
+    'Inventory',
+    'OnlyOfficeIntegrator',
+    'Phone',
+    'Projects',
+    'Sales',
+    'Setup',
+    'SimpleFAQ',
+    'Tasks',
+    'Timetracker',
+    'Tinebase',
+    'UserManual',
+    'Voipmanager'
+];
+
+$frontends = [
+    '_Frontend_Json',
+    '_Frontend_Cli',
+    '_Frontend_Http'
+];
+
+$classes = [];
+foreach ($list as $entry) {
+    foreach ($frontends as $frontend) {
+        $class = $entry . $frontend;
+        $filename = dirname(__FILE__) . '/' . str_replace('_', '/', $class) . '.php';
+        // echo 'check if file exists: ' . $filename . "\n";
+        if (file_exists($filename)) {
+            $classes[] = $class;
+        }
+    }
+}
+
+// print_r($classes);
+
+return (object)[
+    'rootNamespace' => '',
+    'destDirectory' => '../docs/developers/api',
+    'format' => 'github',
+    'classes' => $classes,
+];
