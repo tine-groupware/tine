@@ -1,7 +1,15 @@
-body.dark-mode {
-  // note: we can't use brightness or contrast as we can't reverse it!
-  filter: invert(1) hue-rotate(180deg);
-  background-color: black;
+// NOTE: we need to use native prefers-color-scheme to prevent white/black flickering on new window
+//       as *-mode cls is appended after js bootstrap which needs some time
+@media (prefers-color-scheme: dark) {
+  body {
+    // note: we can't use brightness or contrast as we can't reverse it!
+    filter: invert(1) hue-rotate(180deg);
+    background-color: black;
+  }
+  .light-mode {
+    filter: none;
+    background-color: white;
+  }
 }
 
 .color-scheme-dark {
@@ -75,12 +83,23 @@ body.dark-mode {
   //    background-color: #222222;
   //  }
   //}
-  .x-form-text, textarea.x-form-field {
-    filter: invert(1) hue-rotate(180deg);
-    background-color: #222222;
-    border-color: black;
-    color: #ffffff;
-  }
+  // NOTE: does not work due to trigger (or needs more work)
+  //.x-form-text, textarea.x-form-field {
+  //  filter: invert(1) hue-rotate(180deg);
+  //  background-color: #222222;
+  //  border-color: black;
+  //  color: #ffffff;
+  //}
+  //.x-form-invalid {
+  //  filter: none;
+  //  //background-color: #000000 !important;
+  //  //border-bottom: 1px solid #ff7870 !important;
+  //}
+  //.x-form-invalid + span img.x-form-trigger {
+  //  filter: invert(1) hue-rotate(180deg);
+  //  background-color: #000000 !important;
+  //  border-bottom: 1px solid #ff7870 !important;
+  //}
   .x-form {
     .x-panel-tr,
     .x-panel-tc,
