@@ -15,6 +15,8 @@
  */
 class Calendar_Config extends Tinebase_Config_Abstract
 {
+
+    const APP_NAME = 'Calendar';
     /**
      * Fixed Calendars
      * 
