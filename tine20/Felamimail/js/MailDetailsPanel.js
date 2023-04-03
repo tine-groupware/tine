@@ -295,7 +295,9 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     for (var i=0, id, cls; i < attachments.length; i++) {
                         result += `<span id="${idPrefix}:${i}" class="tinebase-download-link">`
                             + '<i>' + attachments[i].filename + '</i>'
-                            + ' (' + Ext.util.Format.fileSize(attachments[i].size) + ')<div class="tinebase-download-link-wait"></div></span> ';
+                            // NOTE: size is 'transfer size' (base64 encoded) here.
+                            // @TODO replace size from message cache size when it's loaded?
+                            + ' (' + Ext.util.Format.fileSize(Math.round(attachments[i].size / 1.333)) + ')<div class="tinebase-download-link-wait"></div></span> ';
                     }
 
                     return result;

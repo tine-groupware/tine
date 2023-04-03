@@ -253,13 +253,7 @@ Ext.util.Format = function(){
          * @return {String} The formatted file size
          */
         fileSize : function(size){
-            if(size < 1024) {
-                return size + " bytes";
-            } else if(size < 1048576) {
-                return (Math.round(((size*10) / 1024))/10) + " KB";
-            } else {
-                return (Math.round(((size*10) / 1048576))/10) + " MB";
-            }
+            return Tine.Tinebase.common.byteFormatter(size);
         },
 
         /**
