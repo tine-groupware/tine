@@ -1022,6 +1022,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             self::SYSTEM_USER_SETUP,
             'metaways',
             'support',
+            'tine20_support',
             'service',
             self::SYSTEM_USER_REPLICATION,
             self::SYSTEM_USER_ANONYMOUS,
