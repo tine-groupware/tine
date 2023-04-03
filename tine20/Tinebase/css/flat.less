@@ -177,7 +177,9 @@ span.x-tab-strip-text.tine-favicon {
   font-size: 12px;
   text-transform: lowercase;
 }
-
+.x-tab-panel-body {
+  border: none;
+}
 
 /* BUTTON */
 
@@ -681,6 +683,7 @@ span.x-tab-strip-text.tine-favicon {
   background-color: white;
   border-bottom: 1px solid @tbColor;
   box-sizing: border-box;
+  height: 100%;
 
   &:hover {
     background-size: 15px 15px !important;
@@ -796,15 +799,6 @@ span.x-form-twin-triggers img.x-form-clear-trigger {
 
 .x-html-editor-wrap {
   border: none;
-}
-
-.x-combo-list {
-  border: none;
-
-  .x-combo-selected {
-    background-color: var(--selection-color);
-    border-color: var(--selection-color) !important;
-  }
 }
 
 .x-form-invalid-tip .x-tip-body {
@@ -1196,8 +1190,10 @@ td.x-date-mp-sel a,
 
 .x-combo-list {
   background-color: @tbColor;
+  border: none;
   & .x-combo-selected {
-    background-color: @filterTbColor;
+    background-color: var(--selection-color);
+    border-color: var(--selection-color) !important;
   }
   & .x-combo-list-inner {
     border-color: black;
