@@ -770,6 +770,10 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                 continue;
             }
             $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($fileSystem->getPathOfNode($sieveNode, true));
+            if (strpos($path->name, '.') === 0) {
+                // do nothing with dotfiles
+                continue;
+            }
             $sieveScript = file_get_contents($path->streamwrapperpath);
             $notifyScript = '';
             $redirectScript = '';

@@ -686,29 +686,14 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM]
         ]);
         $mailAccounts = $backend->search($filter);
-
-        if (count($mailAccounts) === 0) {
-            return 0;
-        }
+        
         if ($opts->d) {
             echo "--DRY RUN--\n";
         }
         echo "Found " . count($mailAccounts) . " system email accounts to update\n";
-
-        $updated = 0;
-        foreach ($mailAccounts as $record) {
-            if (!$opts->d && Tinebase_EmailUser::sieveBackendSupportsMasterPassword($record)) {
-                $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($record->getId());
-                Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($record->getId(),
-                    $record->sieve_notification_email);
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                    . __LINE__ . 'Sieve script updated from record: ' . $record->getId());
-                Tinebase_EmailUser::removeSieveAdminAccess();
-                unset($raii);
-            }
-            $updated++;
-        }
-        echo "Updated notification script for " . $updated . " email accounts\n";
+        
+        $updatedAccounts = Admin_Controller_EmailAccount::getInstance()->updateNotificationScripts();
+        echo "Updated notification script for " . count($updatedAccounts) . " email accounts\n";
         return 0;
     }
 
