@@ -81,18 +81,6 @@
     margin-bottom: 5px;
 }
 
-.x-form-field-wrap .x-form-trigger {
-    height: 18px;
-}
-
-.ext-webkit .x-form-field-wrap .x-form-trigger {
-    height: 18px;
-}
-
-.ext-webkit .x-small-editor .x-form-trigger {
-    height: 17px;
-}
-
 .ext-webkit .x-small-editor .x-form-text {
     padding-top: 0px;
     padding-bottom: 0px;

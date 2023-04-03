@@ -19,6 +19,14 @@
   background-image: url('../../images/icon-set/icon_sun_light.svg');
 }
 .dark-mode {
+  ::selection {
+    //color: red;
+    background: #2196f3;
+  }
+  //  --focus-color: #dedede;
+  --selection-color: #8bb1ee;
+  --tab-color: white;
+
   .hu-color-picker .saturation,
   .hu-color-picker .hue,
   .hu-color-picker .color-show,
@@ -34,14 +42,35 @@
   .tine-mainscreen-mainmenu .x-toolbar {
     background-color: #ddd;
   }
-  .tine-mainscreen-centerpanel-north .x-toolbar {
-    filter: brightness(0.8);
+  .tine-mainscreen-centerpanel-north {
+    .x-toolbar {
+      filter: brightness(0.8);
+    }
+    .x-panel-bwrap,
+    input {
+      background-color: transparent;
+    }
   }
 
-  .tine-mainscreen-apptabs ul.x-tab-strip li.x-tab-strip-active,
-  .tine-mainscreen-apptabs ul.x-tab-strip li:hover {
-    background-color: #ffffff !important;
-    filter: brightness(0.8);
+  .tine-mainscreen-apptabs {
+    ul.x-tab-strip {
+      border-bottom: 1px solid var(--selection-color);
+      height: 25px;
+      .x-tab-strip li.x-tab-strip-active {
+        border: 1px solid var(--selection-color);
+      }
+
+      li {
+        &.x-tab-strip-active {
+          border: 1px solid var(--selection-color);
+        }
+        &.x-tab-strip-active,
+        &:hover {
+          background-color: #ffffff !important;
+          filter: brightness(0.8);
+        }
+      }
+    }
   }
 
   .x-tab-strip span.x-tab-strip-text:hover,
@@ -57,21 +86,18 @@
     background-color: initial !important;
   }
 
+  .x-border-panel .x-tab-panel-header,
   .x-tab-panel-header-plain .x-tab-strip-spacer,
   ul.x-tab-strip li.x-tab-strip-active,
   ul.x-tab-strip li:hover {
-    background-color: #bcbcbc !important;
+    background-color: var(--selection-color) !important;
   }
 
-  .tine-mainscreen-centerpanel-north .x-panel-bwrap,
   .x-panel-body,
   .x-grid3,
   .x-grid3-scroller,
   .x-combo-list-inner {
     background-color: #ddd;
-    .x-combo-selected {
-      background-color: #aaaaaa;
-    }
   }
   .x-grid3-row {
     border-bottom: 0.5px solid white;
@@ -83,13 +109,18 @@
   //    background-color: #222222;
   //  }
   //}
-  // NOTE: does not work due to trigger (or needs more work)
-  //.x-form-text, textarea.x-form-field {
+  .x-form-text, textarea.x-form-field {
   //  filter: invert(1) hue-rotate(180deg);
-  //  background-color: #222222;
+    background-color: #d2d2d2;
   //  border-color: black;
   //  color: #ffffff;
-  //}
+  }
+  .x-form-field-wrap .x-form-trigger,
+  .x-form-trigger.x-form-arrow-trigger,
+  .x-form-trigger {
+    background-color: #d2d2d2;
+  }
+
   //.x-form-invalid {
   //  filter: none;
   //  //background-color: #000000 !important;
@@ -126,14 +157,8 @@
   a {
     color: #3e4f55;
   }
-  ::selection {
-    //color: red;
-    background: #2196f3;
-  }
-  :root {
-    --focus-color: #dedede;
-    --selection-color: #abcdf0;
-    --tab-color: white;
+  video {
+    filter: invert(1) hue-rotate(180deg);
   }
   .emoji {
     filter: invert(1) hue-rotate(180deg);
