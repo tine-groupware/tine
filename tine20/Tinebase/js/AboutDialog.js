@@ -89,12 +89,11 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
     
             var el = this.getEl().select('div.tb-about-dlg div.tb-about-subscription a.subscription');
             el.insertHtml('beforeEnd', i18n._('Subscription'));
-            el.on('click', function() {
+            el.on('click', function(e) {
                 var cs = new Tine.Tinebase.SubscriptionScreen();
                 cs.show();
+                e.stopEvent();
             });
-            
-            
         }, this);
 
         Tine.Tinebase.AboutDialog.superclass.initComponent.call(this);
