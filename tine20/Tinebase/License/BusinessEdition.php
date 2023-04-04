@@ -334,12 +334,20 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             }
             $serialNumber = $data['serialNumber'];
             $policies = $this->_parsePolicies($data['extensions']['certificatePolicies']);
+            $organization = $data['subject']['O'] ?? '';
+            $numberOfMaxUsers = $policies[Tinebase_License_BusinessEdition::POLICY_MAX_USERS][1] ?? 0;
+            $features = $policies[Tinebase_License_BusinessEdition::POLICY_LICENSE_FEATURES] ?? [];
+            array_shift($features);
+            
             return array(
                 'validFrom' => $validFrom,
                 'validTo' => $validTo,
                 'serialNumber' => $serialNumber,
                 'policies' => $policies,
                 'contractId' => isset($data['subject']) && isset($data['subject']['CN']) ? $data['subject']['CN'] : '',
+                'organization' => $organization,
+                'maxUsers' => $numberOfMaxUsers,
+                'features' => $features
             );
         } else {
             return null;

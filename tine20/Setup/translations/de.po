@@ -885,11 +885,20 @@ msgstr[1] "Aktualisiere Anwendungen"
 msgid "Upload from disk"
 msgstr "Von der Festplatte hochladen"
 
-msgid "Select file containing your license key"
-msgstr "Wählen Sie die Datei, die Ihren Lizenzschlüssel enthält"
-
-msgid "Maximum Users (0=unlimited)"
-msgstr "Maximale Benutzerzahl (0=Unbegrenzt)"
+msgid "Select file containing your Subscription key"
+msgstr "Wählen Sie die Datei, die Ihren Subskription enthält"
 
 msgid "Updating {0} Applications."
 msgstr "Aktualisiere {0} Anwendungen."
+
+msgid "Your Subscription is not valid."
+msgstr "Sie haben keine gültige Subskription."
+
+msgid "Subscription Configuration"
+msgstr "Subskription Konfiguration"
+
+msgid "Subscription Information"
+msgstr "Subskription Informationen"
+
+msgid "Delete current Subscription"
+msgstr "Aktuelle Subskription löschen"

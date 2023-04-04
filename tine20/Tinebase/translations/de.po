@@ -1818,6 +1818,39 @@ msgstr "mit der Hilfe von unseren"
 msgid "Contributors"
 msgstr " Mitwirkenden"
 
+msgid "Contract ID"
+msgstr "Vertrag ID"
+
+msgid "Maximum Users (0=unlimited)"
+msgstr "Maximale Benutzerzahl (0=Unbegrenzt)"
+
+msgid "Organization"
+msgstr "Lizenznehmer"
+
+msgid "Subscription"
+msgstr "Subskription"
+
+msgid "Valid from"
+msgstr "Gültig vom"
+
+msgid "Valid to"
+msgstr "Gültig bis"
+
+msgid "Activation Key"
+msgstr "Aktivierungsschlüssel"
+
+msgid "No valid Subscription"
+msgstr "Keine gültige Subskription"
+
+msgid "Activated Features"
+msgstr "Aktivierte Features"
+
+msgid "Your Subscription is unavailable"
+msgstr "Ihr Subskription ist nicht verfügbar"
+
+msgid "Your Subscription is not valid"
+msgstr "Ihr Subskription ist ungültig"
+
 #: js/MainScreenPanel.js:179
 msgid "Your password expired."
 msgstr "Ihr Passwort ist abgelaufen."

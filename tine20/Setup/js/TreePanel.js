@@ -85,7 +85,7 @@ Tine.Setup.TreePanel = Ext.extend(Ext.tree.TreePanel, {
                 id: 'ApplicationGridPanel',
                 leaf: true
             }, {
-                text: this.app.i18n._('License'),
+                text: i18n._('Subscription'),
                 iconCls: licenseFailed ? 'setup_checks_fail' : 'setup_checks_success',
                 disabled: termsFailed || testsFailed || configMissing || dbMissing || setupRequired,
                 id: 'LicensePanel',
