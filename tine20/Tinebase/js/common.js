@@ -240,7 +240,9 @@ Tine.Tinebase.common = {
         value = parseInt(value, 10);
         decimals = Ext.isNumber(decimals) ? decimals : 2;
         var decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator'),
-            suffix = ['Bytes', 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+            suffix = useDecimalValues ?
+                ['Bytes', 'Bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] :
+                ['Bytes', 'Bytes', 'kiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'] ,
             divisor = useDecimalValues ? 1000 : 1024;
 
         if (forceUnit) {
