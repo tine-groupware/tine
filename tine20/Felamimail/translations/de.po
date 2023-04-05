@@ -2098,6 +2098,10 @@ msgstr ""
 msgid "Save To All Recipients"
 msgstr "An allen Empfängern speichern"
 
+#: js/Model.js:218
+msgid "Subject/From/To"
+msgstr "Betreff/Von/An"
+
 msgid "Agree that this account can be transferred to other users"
 msgstr ""
 "Zustimmen, dass dieses Konto zu anderen Benutzern übertragen werden darf"
