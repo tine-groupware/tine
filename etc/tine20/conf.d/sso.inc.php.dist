@@ -19,8 +19,8 @@ return [
             'tineLogout' => true,
             'keys' => [
                 [
-                    'privatekey' => '/etc/tine20/sso_key.pem',
-                    'certificate' => '/etc/tine20/sso_cert.pem',
+                    'privatekey' => '/etc/tine20/conf.d/sso_key.pem',
+                    'certificate' => '/etc/tine20/conf.d/sso_cert.pem',
                 ]
             ]
         ],
