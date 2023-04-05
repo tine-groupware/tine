@@ -123,7 +123,9 @@ sieveFile
 
     public function update004()
     {
-        Admin_Controller_EmailAccount::getInstance()->updateNotificationScripts();
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            Admin_Controller_EmailAccount::getInstance()->updateNotificationScripts();
+        }
         
         $this->addApplicationUpdate('Felamimail', '16.4', self::RELEASE016_UPDATE004);
     }
