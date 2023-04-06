@@ -11,8 +11,6 @@ theme:
   features:
     - content.code.copy
 
-
-
 #nav:
 #  - 'User Guide': 'user-guide.md'
 #  - 'tine Admins': 'user-guide.md'
@@ -35,13 +33,12 @@ markdown_extensions:
       custom_inline:
         - name: math
           class: arithmatex
-          format: !!python/object/apply:pymdownx.arithmatex.arithmatex_inline_format {kwds: {mode: generic}}
+          format: "!!python/object/apply:pymdownx.arithmatex.arithmatex_inline_format {kwds: {mode: generic}}"
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
   - admonition
   - pymdownx.details
-
 
 extra:
   social:
