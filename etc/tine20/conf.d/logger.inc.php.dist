@@ -1,0 +1,31 @@
+<?php
+
+return [
+    'suppressExceptionTraces' => false,
+    'logger' => [
+        'filename' => 'php://stdout',
+        'priority' => 5,
+        'active' => 1,
+        'colorize' => true,
+        'logruntime' => true,
+        'logdifftime' => true,
+        'traceQueryOrigins' => true,
+        'additionalWriters' => [
+            [
+                'filename' => '/var/log/tine20/cronuser.debug.log',
+                'priority' => '7',
+                'active' => 1,
+                'filter'   => [
+                    'user'    => 'cronuser'
+                ]
+            ], [
+                'filename' => '/var/log/tine20/x-dav.debug.log',
+                'priority' => '7',
+                'active' => 1,
+                'filter'   => [
+                    'message' => '/Tinebase_Server_WebDAV::handle/'
+                ]
+            ],
+        ],
+    ],
+];
