@@ -805,7 +805,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 $this->_getUit()->createNodes($filepaths, Tinebase_Model_Tree_FileObject::TYPE_FILE, $tempFileIds,
                     true);
                 static::fail('quota should be exceeded, but createNodes succeeded');
-            } catch (Tinebase_Exception_SystemGeneric $tes) {}
+            } catch (Tinebase_Exception_QuotaExceeded $tes) {}
 
             // check file is there but empty and deleted!
             $node = Tinebase_Filesystem::getInstance()->get($result[0]['id'], true);
@@ -912,10 +912,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
             try {
                 $this->_getUit()->moveNodes($secondFolderJson['path'] . '/' . basename($file0Path), $targetPath, false);
                 static::fail('Quota exceed did not work');
-            } catch (Tinebase_Exception_SystemGeneric $e) {
-                $translation = Tinebase_Translation::getTranslation('Tinebase');
-                static::assertEquals($translation->_('Quota is exceeded'), $e->getMessage());
-            }
+            } catch (Tinebase_Exception_QuotaExceeded $e) {}
             // TODO add assertions!
 
             // otherwise we get issues later during clean up...
@@ -935,10 +932,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
                 $this->_getUit()->createNode([$targetFile], Tinebase_Model_Tree_FileObject::TYPE_FILE, [$tempFileId],
                     true);
                 static::fail('Quota exceed did not work');
-            } catch (Tinebase_Exception_SystemGeneric $e) {
-                $translation = Tinebase_Translation::getTranslation('Tinebase');
-                static::assertEquals($translation->_('Quota is exceeded'), $e->getMessage());
-            }
+            } catch (Tinebase_Exception_QuotaExceeded $e) {}
+            
             try {
                 $this->_fsController->stat(Tinebase_Model_Tree_Node_Path::createFromPath(
                     Filemanager_Controller_Node::getInstance()->addBasePath($targetFile))->statpath);
@@ -1743,7 +1738,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
      * @see 0006736: Create File (Edit)InfoDialog
      * @return array
      */
-    public function testGetUpdate()
+    public function testGetUpdate($doUpdateMove = true)
     {
         $this->testCreateFileNodes();
         $filter = array(array(
@@ -1758,6 +1753,9 @@ class Filemanager_Frontend_JsonTests extends TestCase
         
         $node = $this->_getUit()->getNode($initialNode['id']);
         $this->assertEquals('file', $node['type']);
+        if (!$doUpdateMove) {
+            return $node;
+        }
         
         $node['description'] = 'UNITTEST';
         $node = $this->_getUit()->saveNode($node);
@@ -1765,6 +1763,12 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $this->assertEquals('UNITTEST', $node['description']);
         $this->assertEquals($initialNode['contenttype'], $node['contenttype'], 'contenttype  not preserved');
 
+        $newName = $node['name'] . 'new';
+        $node['name'] = $newName;
+        $node['description'] = 'unittest';
+        $node = $this->_getUit()->saveNode($node);
+        $this->assertSame($newName, $node['name']);
+        $this->assertSame('unittest', $node['description']);
         
         return $node;
     }
@@ -1797,7 +1801,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testSetRelation()
     {
-        $node = $this->testGetUpdate();
+        $node = $this->testGetUpdate(false);
         $node['relations'] = array($this->_getRelationData($node));
         $node = $this->_getUit()->saveNode($node);
         

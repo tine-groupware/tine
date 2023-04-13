@@ -1,0 +1,176 @@
+// NOTE: we need to use native prefers-color-scheme to prevent white/black flickering on new window
+//       as *-mode cls is appended after js bootstrap which needs some time
+@media (prefers-color-scheme: dark) {
+  body {
+    // note: we can't use brightness or contrast as we can't reverse it!
+    filter: invert(1) hue-rotate(180deg);
+    background-color: black;
+  }
+  .light-mode {
+    filter: none;
+    background-color: white;
+  }
+}
+
+body.dark-mode {
+  filter: invert(1) hue-rotate(180deg);
+  background-color: black;
+}
+
+.color-scheme-dark {
+  background-image: url('../../images/icon-set/icon_moon_light.svg');
+}
+.color-scheme-light {
+  background-image: url('../../images/icon-set/icon_sun_light.svg');
+}
+.dark-mode {
+  ::selection {
+    //color: red;
+    background: #2196f3;
+  }
+  //  --focus-color: #dedede;
+  --selection-color: #8bb1ee;
+  --tab-color: white;
+
+  .hu-color-picker .saturation,
+  .hu-color-picker .hue,
+  .hu-color-picker .color-show,
+  .dark-reverse {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  .x-color-palette a {
+    border-color: initial;
+  }
+
+  .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top,
+  .tine-mainscreen-mainmenu .x-toolbar {
+    background-color: #ddd;
+  }
+  .tine-mainscreen-centerpanel-north {
+    .x-toolbar {
+      filter: brightness(0.8);
+    }
+    .x-panel-bwrap,
+    input {
+      background-color: transparent;
+    }
+  }
+
+  .tine-mainscreen-apptabs {
+    ul.x-tab-strip {
+      border-bottom: 1px solid var(--selection-color);
+      height: 25px;
+      .x-tab-strip li.x-tab-strip-active {
+        border: 1px solid var(--selection-color);
+      }
+
+      li {
+        &.x-tab-strip-active {
+          border: 1px solid var(--selection-color);
+        }
+        &.x-tab-strip-active,
+        &:hover {
+          background-color: #ffffff !important;
+          filter: brightness(0.8);
+        }
+      }
+    }
+  }
+
+  .x-tab-strip span.x-tab-strip-text:hover,
+  .x-tab-strip-active span.x-tab-strip-text,
+  .x-tab-strip-active .x-tab-strip-close,
+  .tine-mainscreen-mainmenu .x-btn,
+  .tine-mainscreen-apptabs ul.x-tab-strip span.x-tab-strip-text,
+  .tine-mainscreen-apptabs ul.x-tab-strip a.x-tab-strip-close {
+    filter: invert(0) !important;
+  }
+
+  ul.x-tab-strip li {
+    background-color: initial !important;
+  }
+
+  .x-border-panel .x-tab-panel-header,
+  .x-tab-panel-header-plain .x-tab-strip-spacer,
+  ul.x-tab-strip li.x-tab-strip-active,
+  ul.x-tab-strip li:hover {
+    background-color: var(--selection-color) !important;
+  }
+
+  .x-panel-body,
+  .x-grid3,
+  .x-grid3-scroller,
+  .x-combo-list-inner {
+    background-color: #ddd;
+  }
+  .x-grid3-row {
+    border-bottom: 0.5px solid white;
+  }
+  //.x-form-checkbox {
+  //  filter: invert(1) hue-rotate(180deg);
+  //  accent-color: #222222;
+  //  :checked::before {
+  //    background-color: #222222;
+  //  }
+  //}
+  .x-form-text, textarea.x-form-field {
+  //  filter: invert(1) hue-rotate(180deg);
+    background-color: #d2d2d2;
+  //  border-color: black;
+  //  color: #ffffff;
+  }
+  .x-form-field-wrap .x-form-trigger,
+  .x-form-trigger.x-form-arrow-trigger,
+  .x-form-trigger {
+    background-color: #d2d2d2;
+  }
+
+  //.x-form-invalid {
+  //  filter: none;
+  //  //background-color: #000000 !important;
+  //  //border-bottom: 1px solid #ff7870 !important;
+  //}
+  //.x-form-invalid + span img.x-form-trigger {
+  //  filter: invert(1) hue-rotate(180deg);
+  //  background-color: #000000 !important;
+  //  border-bottom: 1px solid #ff7870 !important;
+  //}
+  .x-form {
+    .x-panel-tr,
+    .x-panel-tc,
+    .x-panel-tl,
+    .x-panel-mr,
+    .x-panel-mc,
+    .x-panel-ml,
+    .x-panel-br,
+    .x-panel-bc,
+    .x-panel-bl,
+    .x-panel-bwrap {
+      background-color: #ddd;
+    }
+  }
+  .tb-login-panel .x-panel-body.x-form {
+    background-color: #c0ced8;
+  }
+  .attendance-clock-menu-button-clock_in .attendance-clock {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  .attendance-clock-menu-button-clock_out .attendance-clock {
+    background-color: red !important;
+  }
+  a {
+    color: #3e4f55;
+  }
+  video {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  .emoji {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  // Felamimail
+  .is_spam_suspicions td {
+    color: #7a5010;
+  }
+
+}

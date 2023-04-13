@@ -397,4 +397,35 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             }
         }
     }
+
+    /**
+     * update notificationScript for all system accounts
+     *
+     */
+    public function updateNotificationScripts($mailAccounts = null)
+    {
+        if (!$mailAccounts) {
+            $backend = Admin_Controller_EmailAccount::getInstance();
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'sieve_notification_email', 'operator' => 'not', 'value' => NULL],
+                ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM]
+            ]);
+            $mailAccounts = $backend->search($filter);
+        }
+        
+        $updatedAccount = [];
+        foreach ($mailAccounts as $record) {
+            if (Tinebase_EmailUser::sieveBackendSupportsMasterPassword($record)) {
+                $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($record->getId());
+                Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($record->getId(),
+                    $record->sieve_notification_email);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                    . __LINE__ . 'Sieve script updated from record: ' . $record->getId());
+                Tinebase_EmailUser::removeSieveAdminAccess();
+                unset($raii);
+                $updatedAccount[] = $record;
+            }
+        }
+        return $updatedAccount;
+    }
 }

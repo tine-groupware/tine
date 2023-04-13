@@ -97,6 +97,18 @@
     font-weight: bold;
 }
 
+.FelamimailFlagIcon.unread-flag {
+    mask-image:url(../../images/icon-set/icon_sticky_dot.svg) !important;
+    mask-size: 10px 10px;
+    mask-repeat: no-repeat;
+    mask-position: 3px 1px;
+    -webkit-mask-image:url(../../images/icon-set/icon_sticky_dot.svg) !important;
+    -webkit-mask-size: 10px 10px;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: 3px 1px;
+    background-color: #4e79b2;
+}
+
 .flag_flagged {
     color: #ff0000;
 }
@@ -366,4 +378,12 @@
     background-repeat: no-repeat;
     display: inline-block;
     vertical-align: middle;
+}
+
+.dark-mode .is_spam_suspicions td {
+    color: #7a5010;
+}
+
+.dark-mode .preview-panel-felamimail-body img {
+    filter: invert(1) hue-rotate(180deg);
 }

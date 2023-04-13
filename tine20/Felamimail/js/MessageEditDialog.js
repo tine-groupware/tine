@@ -371,15 +371,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * - keeps attachments as they are (emailForward -> message or when the message is draft or Template)
      * - keeps original message/attachments and attach original email as .eml attachment(messageAndAsAttachment)
      * - only attach original email as .eml attachment (onlyAsAttachment)
-     * 
+     *
      * @param {Tine.Felamimail.Model.Message} message
      */
     handleAttachmentsOfExistingMessage: function (message) {
         if (!this.isForwardedMessage() && !this.draftOrTemplate) return;
-        
+
         const attachments = [];
         const forwardMode = !this.isForwardedMessage() ? '' : Tine[this.app.appName].registry.get('preferences').get('emlForward');
-        
+
         if (forwardMode === 'message' || this.draftOrTemplate) {
             Ext.each(message.get('attachments'), function (attachment) {
                 attachment = {
@@ -391,7 +391,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 attachments.push(attachment);
             }, this);
         }
-    
+
         if (forwardMode === 'onlyAsAttachment' || forwardMode === 'messageAndAsAttachment') {
             const node = message.get('from_node');
             let rfc822Attachment = {
@@ -423,9 +423,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initContent: function (message) {
         if (!this.record.get('body')) {
             const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
-            let format = message === undefined
-                    ? account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 'text/html'
-                    : message.getBodyType();
+            // we follow the account compose_format when fetch msg failed
+            let format =  account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 
+                    message.getBodyType();
 
             if (!this.msgBody) {
                 message = this.getMessageFromConfig();
@@ -434,7 +434,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         // format of the received message. this is the format to preserve
                         format = message.get('body_content_type');
                     }
-                    if (!message.bodyIsFetched() || format !== message.getBodyType()) {
+                    if (!message.bodyIsFetched()) {
                         // self callback when body needs to be (re) fetched
                         return this.recordProxy.fetchBody(message, format, {
                             success: this.initContent.createDelegate(this),
@@ -531,13 +531,15 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (format === 'text/plain') {
                 this.msgBody = String('> ' + this.msgBody).replace(/\r?\n/g, '\n> ');
             } else {
-                this.msgBody = '<br/>'
-                    + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
+                const blockquote = document.createElement('blockquote');
+                blockquote.className = 'felamimail-body-blockquote';
+                blockquote.innerHTML = this.msgBody;
+                this.msgBody = '<br/>' + blockquote.outerHTML;
             }
         }
 
         this.msgBody = this.getQuotedMailHeader(format) + this.msgBody;
-        
+
         if (this.isForwardedMessage()) {
             const forwardMode = Tine[this.app.appName].registry.get('preferences').get('emlForward');
             if (forwardMode === 'onlyAsAttachment') {
@@ -570,7 +572,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const bodyContent = this.record.get('body');
         const format = this.record.get('content_type');
         const ch = format === 'text/html' ? '<br>' : '\n';
-        if (bodyContent !== '' && !bodyContent.startsWith(ch)) {
+        if (bodyContent && bodyContent !== '' && !bodyContent.startsWith(ch)) {
             this.record.set('body', `${ch}${ch}${bodyContent}`);
             this.msgBody = this.record.get('body');
             this.bodyCards.layout.activeItem.setValue(this.msgBody);
@@ -1146,28 +1148,34 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @returns {String}
      */
     getQuotedMailHeader: function (format) {
+        let header = '';
         if (this.replyTo) {
-            var date = (this.replyTo.get('sent'))
+            const date = (this.replyTo.get('sent'))
                 ? this.replyTo.get('sent')
                 : ((this.replyTo.get('received')) ? this.replyTo.get('received') : new Date());
 
-            return String.format(this.app.i18n._('On {0}, {1} wrote'),
+            header = String.format(this.app.i18n._('On {0}, {1} wrote'),
                 Tine.Tinebase.common.dateTimeRenderer(date),
                 Ext.util.Format.htmlEncode(this.replyTo.get('from_name'))
             ) + ':\n';
         } else if (this.isForwardedMessage()) {
             const forwardMode = Tine[this.app.appName].registry.get('preferences').get('emlForward');
-    
+
             if (forwardMode !== 'onlyAsAttachment') {
-                return String.format('{0}-----' + this.app.i18n._('Original message') + '-----{1}',
-                        format === 'text/plain' ? '' : '<br /><b>',
-                        format === 'text/plain' ? '\n' : '</b><br />')
-                    + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true, format === 'text/plain')
-                    + (format === 'text/plain' ? '' : '<br /><br />');
+                header = String.format('{0}-----' + this.app.i18n._('Original message') + '-----{1}',
+                        format == 'text/plain' ? '' : '<br /><b>',
+                        format == 'text/plain' ? '\n' : '</b><br />')
+                    + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true, format == 'text/plain')
+                    + (format == 'text/plain' ? '' : '<br /><br />');
             }
         }
-
-        return '';
+        if (format === 'text/html' && header !== '') {
+            const span = document.createElement('span');
+            span.className = 'felamimail-body-quoted-header';
+            span.innerHTML = header;
+            return span.outerHTML;
+        }
+        return header;
     },
 
     /**
@@ -1193,7 +1201,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordLoad: function () {
         // interrupt process flow till dialog is rendered
-        if (!this.rendered) {
+        if (!this.rendered || (this.record.get('content_type') === 'text/html' && !this.htmlEditor?.initialized)) {
             this.onRecordLoad.defer(250, this);
             return;
         }
@@ -1506,13 +1514,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 // if the existing signature is unchanged, it should be removed here
                 matches[0].outerHTML = matches[0].innerHTML.replace(`--<br>${oldSignature}`, '');
             }
-
-            const span = document.createElement('span');
-            span.className = 'felamimail-body-signature-current';
-            span.innerHTML = newSignature === '' ? '' : `--<br>${newSignature}`;
-            // always append new signature depends on new position
-            bodyContent = this.bodyCards.layout.activeItem.getValue() || '';
-            bodyContent = this.appendSignatureText(bodyContent, format, newPosition, span.outerHTML);
+            const resolvedSignature = newSignature === '' ? '' : `--<br>${newSignature}`;
+            bodyContent = this.appendSignatureHTML(format, newPosition, resolvedSignature);
         }
 
         this.record.set('body', bodyContent);
@@ -1520,12 +1523,46 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.bodyCards.layout.activeItem.setValue(bodyContent);
     },
 
-    appendSignatureText(bodyContent, format, position, signature) {
-        const ch = format === 'text/html' ? '<br>' : '\n';
+    appendSignatureText(bodyContent, format, position, signatureText) {
+        const ch = '\n';
         if (position === 'below' && !bodyContent.endsWith(ch)) bodyContent = `${bodyContent}${ch}${ch}`;
         if (position === 'above' && !bodyContent.startsWith(ch)) bodyContent = `${ch}${ch}${bodyContent}`;
+        return position === 'above' ? `${ch}${ch}${signatureText}${bodyContent}` : `${bodyContent}${signatureText}`;
+    },
 
-        return position === 'above' ? `${signature}${bodyContent}` : `${bodyContent}${signature}`;
+    appendSignatureHTML(format, position, signature) {
+        const quotedHeader = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-quoted-header')[0];
+        const blockquote = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-blockquote')[0];
+        const targetElement = position === 'above' ? quotedHeader : (blockquote || quotedHeader);
+        const signatureElement = document.createElement('span');
+        signatureElement.className = 'felamimail-body-signature-current';
+        signatureElement.innerHTML = signature;
+
+        if (!targetElement || position === 'below') {
+            this.htmlEditor.getDoc().getElementsByTagName('body')[0].appendChild(signatureElement);
+        } else {
+            if (position === 'above') {
+                let el = quotedHeader;
+                for (let i = 0; i < 2; i++) {
+                    if (!el.previousSibling || el.previousSibling?.nodeName !== 'BR') {
+                        el.insertAdjacentHTML("beforebegin", '<br>');
+                    }
+                    el = el.previousSibling;
+                }
+                targetElement.previousSibling.previousSibling.insertAdjacentElement("beforebegin", signatureElement);
+            }
+        }
+        // append newline above signature
+        let el = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-signature-current')[0];
+        if (el.innerHTML !== '') {
+            for (let i = 0; i<2 ; i++) {
+                if (!el.previousSibling || el.previousSibling?.nodeName !== 'BR') {
+                    el.insertAdjacentHTML("beforebegin", '<br>');
+                }
+                el = el.previousSibling;
+            }
+        }
+        return this.htmlEditor.getDoc().getElementsByTagName('body')[0].innerHTML;
     },
 
     /**

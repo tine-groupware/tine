@@ -4,7 +4,7 @@
  *
  * @package     SSO
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -51,6 +51,7 @@ class SSO_PublicAPITest extends TestCase
             copy(__DIR__ . '/keys/private.key', $path);
             chmod($path, 0600);
             $keys[0]['privatekey'] = $path;
+            $keys[0]['kid'] = 'unittestkey';
         }
         if (!isset($keys[0]['publickey']) || !is_file($keys[0]['publickey'])) {
             $keys[0]['publickey'] = __DIR__ . '/keys/public.key';
@@ -91,7 +92,7 @@ class SSO_PublicAPITest extends TestCase
      * @throws Tinebase_Exception
      * @throws Zend_Session_Exception
      *
-     * @group nojenkins
+     * @group needsbuild
      */
     public function testSaml2LoginPage()
     {
@@ -101,15 +102,7 @@ class SSO_PublicAPITest extends TestCase
         Tinebase_Core::unsetUser();
         Tinebase_Session::getSessionNamespace()->unsetAll();
 
-        try {
-            $response = SSO_Controller::publicSaml2RedirectRequest();
-        } catch (Exception $e) {
-            if (preg_match('/You need to run webpack-dev-server in dev mode/', $e->getMessage())) {
-                self::markTestSkipped('only working with frontend available');
-            } else {
-                throw $e;
-            }
-        }
+        $response = SSO_Controller::publicSaml2RedirectRequest();
         $response->getBody()->rewind();
 
         $this->assertSame(200, $response->getStatusCode());
@@ -164,10 +157,16 @@ class SSO_PublicAPITest extends TestCase
             $xml);
     }
 
+    /**
+     * testOAuthGetLoginMask
+     *
+     * @group needsbuild
+     */
     public function testOAuthGetLoginMask()
     {
         $relyingParty = SSO_Controller_RelyingParty::getInstance()->create(new SSO_Model_RelyingParty([
             SSO_Model_RelyingParty::FLD_NAME => 'unittest',
+            SSO_Model_RelyingParty::FLD_LABEL => 'unittest label',
             SSO_Model_RelyingParty::FLD_CONFIG_CLASS => SSO_Model_OAuthOIdRPConfig::class,
             SSO_Model_RelyingParty::FLD_CONFIG => new SSO_Model_OAuthOIdRPConfig([
                 SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS   => ['https://unittest.test/uri'],
@@ -179,14 +178,14 @@ class SSO_PublicAPITest extends TestCase
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
                 '&scope=openid%20profile%20email' .
-                '&client_id=' . urlencode($relyingParty->getId()) .
+                '&client_id=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_NAME}) .
                 '&state=af0ifjsldkj' .
                 '&nonce=nonce' .
                 '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]), 'GET'))
             ->withQueryParams([
                 'response_type' => 'code',
                 'scope' => 'openid profile email',
-                'client_id' => $relyingParty->getId(),
+                'client_id' => $relyingParty->{SSO_Model_RelyingParty::FLD_NAME},
                 'state' => 'af0ifjsldkj',
                 'nonce' => 'nonce',
                 'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]
@@ -203,7 +202,7 @@ class SSO_PublicAPITest extends TestCase
         $response->getBody()->rewind();
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertStringContainsString('<input type="hidden" name="nonce" value="nonce"/>', $response->getBody()->getContents());
+        $this->assertStringContainsString('"label":"'. $relyingParty->{SSO_Model_RelyingParty::FLD_LABEL}, $response->getBody()->getContents());
     }
 
     public function testOAuthPostLoginMask()
@@ -221,14 +220,14 @@ class SSO_PublicAPITest extends TestCase
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
                 '&scope=openid%20profile%20email' .
-                '&client_id=' . urlencode($relyingParty->getId()) .
+                '&client_id=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_NAME}) .
                 '&state=af0ifjsldkj' .
                 '&nonce=nonce' .
                 '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]), 'POST'))
                 ->withQueryParams([
                     'response_type' => 'code',
                     'scope' => 'openid profile email',
-                    'client_id' => $relyingParty->getId(),
+                    'client_id' => $relyingParty->{SSO_Model_RelyingParty::FLD_NAME},
                     'state' => 'af0ifjsldkj',
                     'nonce' => 'nonce',
                     'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0],
@@ -264,14 +263,14 @@ class SSO_PublicAPITest extends TestCase
         Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
             (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala?response_type=code' .
                 '&scope=openid%20profile%20email' .
-                '&client_id=' . urlencode($relyingParty->getId()) .
+                '&client_id=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_NAME}) .
                 '&state=af0ifjsldkj' .
                 '&nonce=nonce' .
                 '&redirect_uri=' . urlencode($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]), 'GET'))
                 ->withQueryParams([
                     'response_type' => 'code',
                     'scope' => 'openid profile email',
-                    'client_id' => $relyingParty->getId(),
+                    'client_id' => $relyingParty->{SSO_Model_RelyingParty::FLD_NAME},
                     'state' => 'af0ifjsldkj',
                     'nonce' => 'nonce',
                     'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0]

@@ -8,6 +8,7 @@
 
  Ext.ns('Tine', 'Tine.Tinebase');
 
+import "./SubscriptionScreen";
  /**
   * @namespace  Tine.Tinebase
   * @class      Tine.Tinebase.AboutDialog
@@ -31,6 +32,7 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
                 '<div class="tb-link-home"><a href="{logoLink}" target="_blank">{linkText}</a></div>',
                 '<div class="tb-about-version">Version: {codeName}</div>',
                 '<div class="tb-about-build">({packageString})</div>',
+                '<div class="tb-about-subscription"><a href="javascript:void()" class="subscription" /></div>',
                 '<div class="tb-about-copyright">Copyright: 2007-{[new Date().getFullYear()]}&nbsp;<a href="http://www.metaways.de/" target="_blank">Metaways Infosystems GmbH</a></div>',
                 '<div class="tb-about-credits-license"><p><a href="javascript:void()" class="license" /><a href="javascript:void()" class="credits" /></p></div>',
             '</div>'
@@ -46,7 +48,7 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
             codeName: 'unknown',
             packageString: 'unknown'
         };
-
+        
         this.items = {
             layout: 'fit',
             border: false,
@@ -84,8 +86,14 @@ Tine.Tinebase.AboutDialog = Ext.extend(Ext.Window, {
                 cs.show();
                 e.stopEvent();
             });
-            
-            
+    
+            var el = this.getEl().select('div.tb-about-dlg div.tb-about-subscription a.subscription');
+            el.insertHtml('beforeEnd', i18n._('Subscription'));
+            el.on('click', function(e) {
+                var cs = new Tine.Tinebase.SubscriptionScreen();
+                cs.show();
+                e.stopEvent();
+            });
         }, this);
 
         Tine.Tinebase.AboutDialog.superclass.initComponent.call(this);

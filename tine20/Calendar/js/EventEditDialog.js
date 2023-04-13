@@ -626,7 +626,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             var dtEndField = this.getForm().findField('dtend'),
                 dtEnd = dtEndField.getValue();
                 
-            if (Ext.isDate(dtEnd) && dtEnd.format('H:i') != '23:59') {
+            if (Ext.isDate(dtEnd)) {
                 var duration = dtEnd.getTime() - oldValue.getTime(),
                     newDtEnd = newValue.add(Date.MILLI, duration);
                 dtEndField.setValue(newDtEnd);

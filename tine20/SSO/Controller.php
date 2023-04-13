@@ -6,10 +6,11 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
+use League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator;
 use SAML2\AuthnRequest;
 use SAML2\Binding;
 use SAML2\Constants;
@@ -37,11 +38,12 @@ class SSO_Controller extends Tinebase_Controller_Event
         /** @noinspection PhpUnusedParameterInspection */
         \FastRoute\RouteCollector $r
     ) {
+        $r->get('/.well-known/openid-configuration', (new Tinebase_Expressive_RouteHandler(
+            self::class, 'publicGetWellKnownOpenIdConfiguration', [
+            Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+        ]))->toArray());
+
         $r->addGroup('/sso', function (\FastRoute\RouteCollector $routeCollector) {
-            $routeCollector->get('/.well-known/openid-configuration', (new Tinebase_Expressive_RouteHandler(
-                self::class, 'publicGetWellKnownOpenIdConfiguration', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
-            ]))->toArray());
             $routeCollector->addRoute(['GET', 'POST'], '/oauth2/authorize', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicAuthorize', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
@@ -56,6 +58,10 @@ class SSO_Controller extends Tinebase_Controller_Event
             ]))->toArray());
             $routeCollector->get('/oauth2/certs', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicCerts', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
+            $routeCollector->get('/openidconnect/userinfo', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicOIUserInfo', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
             ]))->toArray());
             $routeCollector->get('/saml2/idpmetadata', (new Tinebase_Expressive_RouteHandler(
@@ -84,7 +90,23 @@ class SSO_Controller extends Tinebase_Controller_Event
             return self::serviceNotEnabled();
         }
 
-        $keys = [
+        $keys = [];
+
+        foreach (SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS} as $key) {
+            if (!isset($key['use']) || !isset($key['kty']) || !isset($key['alg']) || !isset($key['kid']) || !isset($key['e']) || !isset($key['n'])) {
+                continue;
+            }
+            $keys[] = [
+                'use' => $key['use'],
+                'kty' => $key['kty'],
+                'alg' => $key['alg'],
+                'kid' => $key['kid'],
+                'e'   => $key['e'],
+                'n'   => $key['n'],
+            ];
+        }
+
+        /*$keys = [
             'keys' => [
                 [
                     'use' => 'sig',
@@ -95,11 +117,11 @@ class SSO_Controller extends Tinebase_Controller_Event
                     'n'   => 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArXkViV0Cz0cwmGAcnP1U9z2K5utziToHUBHnWanV1HvLym8xsvlpjXVtqPXdnBQuHIXxDcDUfL7SWlKrrdkZTDZn21YJQvar3nS0Hwl1fpKd/CK1uWukmkfiOnuew6cwgskAbr4Oc3QVREEGBNTnpqiB0rLwlUqB4Pey/nGXCe2h8bm9NwNp/T9IlZhrwhfzMDhUSLo7FA6v9ShWVSLBDwvwXodLbq9DVX9OomZCPAapFjljxveCcSoKy1oQNUMDKdE7t1MEh5V4FAP2Ezhvexrq3cyLZtImypL15wgWujY2CXlDi9NkKAL7LyeevrQ2SbRAmKzTmCiZ7OKH4OpZWwIDAQAB',
                 ]
             ]
-        ];
+        ];*/
         $response = (new \Laminas\Diactoros\Response())
             // the jwks_uri SHOULD include a Cache-Control header in the response that contains a max-age directive
             ->withHeader('cache-control', 'public, max-age=20683, must-revalidate, no-transform');
-        $response->getBody()->write(json_encode($keys));
+        $response->getBody()->write(json_encode(['keys' => $keys]));
 
         return $response;
     }
@@ -110,6 +132,28 @@ class SSO_Controller extends Tinebase_Controller_Event
         //if (! SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
             return self::serviceNotEnabled();
         //}
+    }
+
+    public static function publicOIUserInfo(): \Psr\Http\Message\ResponseInterface
+    {
+        if (!SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::ENABLED}) {
+            return self::serviceNotEnabled();
+        }
+
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+        (new Idaas\OpenID\UserInfo(
+            new SSO_Facade_OpenIdConnect_UserRepository(),
+            $tokenRepo = new SSO_Facade_OAuth2_AccessTokenRepository(),
+            new \League\OAuth2\Server\ResourceServer(
+                $tokenRepo,
+                SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['publickey'],
+                new BearerTokenValidator($tokenRepo)
+            ),
+            new SSO_Facade_OpenIdConnect_ClaimRepository()
+        ))->respondToUserInfoRequest($request, $response = new \Laminas\Diactoros\Response());
+
+        return $response;
     }
 
     // TODO FIX ME
@@ -147,78 +191,43 @@ class SSO_Controller extends Tinebase_Controller_Event
         // The Authentication Request contains the prompt parameter with the value login. In this case, the Authorization Server MUST reauthenticate the End-User even if the End-User is already authenticated.
 
         if ($user = Tinebase_Core::getUser()) {
-            $areaLock = Tinebase_AreaLock::getInstance();
-            $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
-            if ($areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) &&
-                    $areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
-                foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
-                    $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
-                }
 
-                // user has no 2FA config -> currently its sort of optional -> no check
-                if ($userConfigIntersection->count() === 0) {
-                    $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
-                } else {
-
-                    if (isset($request->getQueryParams()['mfaid'])) {
-                        $mfaId = $request->getQueryParams()['mfaid'];
-                        $userCfg = $userConfigIntersection->getById($mfaId);
-
-                        if (isset($request->getQueryParams()['mfa'])) {
-                            foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN)->filter(function($rec) use($userCfg) {
-                                return in_array($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID}, $rec->{Tinebase_Model_AreaLockConfig::FLD_MFAS});
-                            }) as $areaCfg) {
-                                if (!$areaCfg->getBackend()->hasValidAuth()) {
-                                    $areaLock->unlock(
-                                        $areaCfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME},
-                                        $mfaId,
-                                        $request->getQueryParams()['mfa'],
-                                        $user
-                                    );
-                                    break;
-                                }
-                            }
-                        } else {
-                            if (!Tinebase_Auth_MFA::getInstance($userCfg
-                                    ->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})->sendOut($userCfg)) {
-                                throw new Tinebase_Exception('mfa send out failed');
-                            } //else {
-                                // success, FE to render input field
-                            //}
-                        }
-                    }
-
-                    if ($areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
-                        // render mfa mask
-                        $response = new \Laminas\Diactoros\Response();
-                        $response->getBody()->write('mfa mask');
-                        return $response;
-                    }
-                }
+            $accessLog = new Tinebase_Model_AccessLog(['clienttype' => Tinebase_Frontend_Json::REQUEST_TYPE], true);
+            Tinebase_Controller::getInstance()->forceUnlockLoginArea();
+            Tinebase_Controller::getInstance()->setRequestContext(array(
+                'MFAPassword' => isset($request->getParsedBody()['MFAPassword']) ? $request->getParsedBody()['MFAPassword'] : null,
+                'MFAId'       => isset($request->getParsedBody()['MFAUserConfigId']) ? $request->getParsedBody()['MFAUserConfigId'] : null,
+            ));
+            try {
+                Tinebase_Controller::getInstance()->_validateSecondFactor($accessLog, $user);
+            } catch (Tinebase_Exception_AreaUnlockFailed | Tinebase_Exception_AreaLocked $tea) { // 630 + 631
+                $response = (new \Laminas\Diactoros\Response())->withHeader('content-type', 'application/json');
+                $response->getBody()->write(json_encode([
+                    'jsonrpc' => '2.0',
+                    'id' => 'fakeid',
+                    'error' => [
+                        'code' => -32000,
+                        'message' => $tea->getMessage(),
+                        'data' => $tea->toArray(),
+                    ],
+                ]));
+                return $response;
             }
 
             $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($user));
             $authRequest->setAuthorizationApproved(true);
-            return $server->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
+            $response = $server->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
+            if ($request->hasHeader('x-requested-with') && $request->getHeader('x-requested-With')[0] === 'XMLHttpRequest') {
+                // our login client
+                $response->getBody()->write('{ "Location": "' . $response->getHeader('Location')[0] . '" }');
+                return $response->withoutHeader('Location');
+            } else {
+                return $response;
+            }
+
         }
 
-        // render login mask
-        $response = new \Laminas\Diactoros\Response();
-        $response->getBody()->write('<html>
-<body>
-<form method="post">');
-        foreach ($request->getQueryParams() as $name => $value) {
-            $response->getBody()->write('<input type="hidden" name="' . htmlspecialchars($name, ENT_HTML5 | ENT_COMPAT)
-                . '" value="' . htmlspecialchars($value, ENT_HTML5 | ENT_COMPAT) . '"/>');
-        }
-        $response->getBody()->write('<input type="text" name="username"/><br/>
-<input type="password" name="password"/><br/>
-<input type="submit" value="Login"/>
-</form>
-</body>
-</html>');
-
-        return $response;
+        return static::renderLoginPage($authRequest->getClient()->getRelyingPart(), ['url' => $request->getUri()]);
     }
 
     public static function publicToken(): \Psr\Http\Message\ResponseInterface
@@ -231,10 +240,17 @@ class SSO_Controller extends Tinebase_Controller_Event
             ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
         $server = static::getOpenIdConnectServer();
 
-        return $server->respondToAccessTokenRequest(
+        $response = $server->respondToAccessTokenRequest(
             Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class),
             new \Laminas\Diactoros\Response()
         );
+
+        return $response;
+    }
+
+    protected static function getOAuthIssuer(): string
+    {
+        return Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NOPATH);
     }
 
     public static function publicGetWellKnownOpenIdConfiguration(): \Psr\Http\Message\ResponseInterface
@@ -248,7 +264,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         $serverUrl = rtrim(Tinebase_Core::getUrl(), '/');
 
         $config = [
-            'issuer'                                            => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NOPATH),
+            'issuer'                                            => static::getOAuthIssuer(),
             'authorization_endpoint'                            => $serverUrl . '/sso/oauth2/authorize',
             'token_endpoint'                                    => $serverUrl . '/sso/oauth2/token',
             'registration_endpoint'                             => $serverUrl . '/sso/oauth2/register',
@@ -262,8 +278,14 @@ class SSO_Controller extends Tinebase_Controller_Event
             'grant_types_supported'                             => [
                 'authorization_code',
             ],
-            //'token_endpoint_auth_methods_supported'             => ['client_secret_basic', 'private_key_jwt'],
-            //'token_endpoint_auth_signing_alg_values_supported'  => ["RS256", "ES256"],
+            'token_endpoint_auth_methods_supported'             => ['client_secret_basic', 'private_key_jwt'],
+            'token_endpoint_auth_signing_alg_values_supported'  => ['RS256'],
+            'subject_types_supported' => [
+                'public',
+            ],
+            'id_token_signing_alg_values_supported' => [
+                'RS256',
+            ],
         ];
         /**
         {
@@ -443,14 +465,31 @@ class SSO_Controller extends Tinebase_Controller_Event
             $idp = \SimpleSAML\IdP::getById('saml2:tine20');
 
             // @phpstan-ignore-next-line
-            if ($logoutRequests = \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6))) {
-                $redirect = new \SAML2\HTTPRedirect();
+            if ($logoutMessages = \SimpleSAML\Session::getSessionFromRequest()->doLogout(substr($idp->getId(), 6))) {
                 $urls = [];
-                foreach ($logoutRequests as $request) {
-                    try {
-                        $redirect->send($request);
-                    } catch (SSO_Facade_SAML_RedirectException $e) {
-                        $urls[] = $e->redirectUrl;
+                foreach ($logoutMessages as $binding => $messages) {
+                    switch ($binding) {
+                        case SSO_Config::SAML2_BINDINGS_POST:
+                            $redirect = new \SAML2\HTTPPost();
+                            break;
+                        case SSO_Config::SAML2_BINDINGS_REDIRECT:
+                            $redirect = new \SAML2\HTTPRedirect();
+                            break;
+                        default:
+                            throw new Tinebase_Exception_NotImplemented($binding);
+                    }
+                    foreach ($messages as $message) {
+                        try {
+                            $redirect->send($message);
+                        } catch (SSO_Facade_SAML_RedirectException $e) {
+                            if (!isset($urls[$e->binding])) {
+                                $urls[$e->binding] = [];
+                            }
+                            $urls[$e->binding][] = [
+                                'url' => $e->redirectUrl,
+                                'data' => $e->data,
+                            ];
+                        }
                     }
                 }
 
@@ -544,7 +583,10 @@ class SSO_Controller extends Tinebase_Controller_Event
                 ]);
             }
             $response = new \Laminas\Diactoros\Response('php://memory', 302, [
-                'Location' => $spMetadata->getValue('SingleLogoutService')['Location']
+                // @TODO: when logging out from tine the final redirect should be our login-page
+                //        but with the test-sp we created a redirect loop here (but saml-test-sp might be borke)
+                //'Location' => $spMetadata->getValue('SingleLogoutService')['Location']
+                'Location' => Tinebase_Core::getUrl()
             ]);
             return $response;
 
@@ -687,14 +729,20 @@ class SSO_Controller extends Tinebase_Controller_Event
     {
         $binding = Binding::getCurrentBinding();
         $samlRequest = $binding->receive();
+        /** @var SSO_Model_RelyingParty $rp */
         $rp = SSO_Controller_RelyingParty::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             SSO_Model_RelyingParty::class, [
-                ['field' => 'name', 'operator' => 'equals', 'value' => $samlRequest->getIssuer()->getValue()]
-            ]))->getFirstRecord();
+            ['field' => 'name', 'operator' => 'equals', 'value' => $samlRequest->getIssuer()->getValue()]
+        ]))->getFirstRecord();
 
         $data = $request->getQueryParams();
         $data['SAMLRequest'] = base64_encode(gzinflate(base64_decode($data['SAMLRequest'])));
 
+        return static::renderLoginPage($rp, $data);
+    }
+
+    protected static function renderLoginPage(SSO_Model_RelyingParty $rp, array $data)
+    {
         $locale = Tinebase_Core::getLocale();
 
         $jsFiles = ['SSO/js/login.js'];
@@ -721,12 +769,13 @@ class SSO_Controller extends Tinebase_Controller_Event
             new SSO_Facade_OAuth2_ClientRepository(),
             new SSO_Facade_OAuth2_AccessTokenRepository(),
             new SSO_Facade_OAuth2_ScopeRepository(),
-            SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['privatekey'],
+            new SSO_Facade_OAuth2_CryptKey(SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['privatekey'],
+                SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['kid']),
             SSO_Config::getInstance()->{SSO_Config::OAUTH2}->{SSO_Config::OAUTH2_KEYS}[0]['publickey'],
             new \Idaas\OpenID\ResponseTypes\BearerTokenResponse
         );
 
-        $grant = new \Idaas\OpenID\Grant\AuthCodeGrant(
+        $grant = new SSO_Facade_OpenIdConnect_AuthCodeGrant(
             new SSO_Facade_OAuth2_AuthCodeRepository(),
             new SSO_Facade_OAuth2_RefreshTokenRepository(),
             new SSO_Facade_OpenIdConnect_ClaimRepository(),
@@ -735,6 +784,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             new \DateInterval('PT1H') // id tokens will expire after 1 hour
         );
 
+        $grant->setIssuer(static::getOAuthIssuer());
         $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
 
         // Enable the authentication code grant on the server

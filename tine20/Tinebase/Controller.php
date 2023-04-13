@@ -1057,6 +1057,9 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             }
         }
 
+        Tinebase_TransactionManager::getInstance()->resetTransactions();
+        /** @phpstan-ignore-next-line */
+        Tinebase_Record_Path::getInstance()->getBackend()->executeDelayed();
         Tinebase_Path_Backend_Sql::optimizePathsTable();
 
         return true;
@@ -1363,7 +1366,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 // there are tine instances without felamimail that still have system mailaccounts
                 // we need to get the number of mail accounts from the users
                 $usersWithSystemAccount = 0;
-                foreach (Admin_Controller_User::getInstance()->searchFullUsers('') as $user) {
+                foreach (Tinebase_User::getInstance()->getUsers() as $user) {
                     $systemEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
                     if ($imapBackend->userExists($systemEmailUser)) {
                         $usersWithSystemAccount ++;
@@ -1375,7 +1378,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             if (Tinebase_Application::getInstance()->isInstalled('Felamimail')
                 && Tinebase_EmailUser::isEmailSystemAccountConfigured()) 
             {
-                $backend = Admin_Controller_EmailAccount::getInstance();
+                $backend = Felamimail_Controller_Account::getInstance();
                 $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
                     ['field' => 'type', 'operator' => 'in', 'value' => [
                         Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,

@@ -1146,11 +1146,11 @@ class Tinebase_FileSystem implements
         if ($sizeIncrease && $fsTotalQuotaInByte > 0) {
             if ($quotaConfig->{Tinebase_Config::QUOTA_INCLUDE_REVISION}) {
                 if ($rootRevisionSize > $fsTotalQuotaInByte) {
-                    throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
+                    throw new Tinebase_Exception_QuotaExceeded();
                 }
             } else {
                 if ($rootSize > $fsTotalQuotaInByte) {
-                    throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
+                    throw new Tinebase_Exception_QuotaExceeded();
                 }
             }
         }
@@ -1183,7 +1183,7 @@ class Tinebase_FileSystem implements
 
             // folder quota
             if (null !== $parentNode->quota && $size > $parentNode->quota) {
-                throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
+                throw new Tinebase_Exception_QuotaExceeded();
             }
 
             //personal quota
@@ -1194,7 +1194,7 @@ class Tinebase_FileSystem implements
                     $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] :
                     $totalByUser;
                 if ($quota > 0 && $size > $quota) {
-                    throw new Tinebase_Exception_SystemGeneric($translation->_('Quota is exceeded'));
+                    throw new Tinebase_Exception_QuotaExceeded();
                 }
             }
         }
@@ -2520,6 +2520,11 @@ class Tinebase_FileSystem implements
 
         try {
             $currentNodeObject = $this->get($_node->getId());
+
+            if ($_node->name !== $currentNodeObject->name) {
+                throw new Tinebase_Exception_Record_Validation('name may not be changed in update');
+
+            }
             if (isset($_node->grants)) {
                 if ($currentNodeObject->getId() !== $currentNodeObject->acl_node) {
                     $currentNodeObject->grants = new Tinebase_Record_RecordSet($this->_nodeAclController->getGrantsModel());
@@ -4355,6 +4360,9 @@ class Tinebase_FileSystem implements
                     $fh = null;
 
                     if (Tinebase_FileSystem_AVScan_Result::RESULT_ERROR === $scanResult->result) {
+                        // TODO is it ok to return FALSE if a single file fails? the scheduler job will run again in 1 hour and scan everything again!
+                        Tinebase_Exception::log(new Tinebase_Exception_UnexpectedValue(
+                            'got RESULT_ERROR from scanner'));
                         $result = false;
                     } else {
                         $this->_updateAvScanOfFileHash($hashDir . $file, $scanResult->result);

@@ -26,11 +26,11 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
      *
      * @param array &$state Information about the current logout operation.
      * @return void
-     */
+     *
     public function logout(&$state)
     {
         throw new SSO_Facade_SAML_RedirectException('https://localhost:8443/auth/saml2/sp/saml2-logout.php/localhost', null);
-    }
+    }*/
 
     /**
      * Reauthenticate an user.
@@ -77,10 +77,8 @@ class SSO_Facade_SAML_AuthSource extends \SimpleSAML\Auth\Source
             ));
             try {
                 Tinebase_Controller::getInstance()->_validateSecondFactor($accessLog, $user);
-            } catch (Tinebase_Exception_AreaUnlockFailed $teauf) { // 631
-                throw new SSO_Facade_SAML_MFAMaskException($teauf);
-            } catch (Tinebase_Exception_AreaLocked $teal) { // 630
-                throw new SSO_Facade_SAML_MFAMaskException($teal);
+            } catch (Tinebase_Exception_AreaUnlockFailed | Tinebase_Exception_AreaLocked $tea) { // 630 + 631
+                throw new SSO_Facade_SAML_MFAMaskException($tea);
             }
         } else {
             // should never happen, but just in case, lets throw a login mask, that'll be just fine

@@ -67,7 +67,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
 
     initActions: function() {
         var items = (Tine.Setup.registry.get('version') && Tine.Setup.registry.get('version').buildType === 'DEVELOPMENT') ? [ new Ext.Action({
-            text: this.app.i18n._('Delete current license'),
+            text: this.app.i18n._('Delete current Subscription'),
             iconCls: 'setup_action_uninstall',
             scope: this,
             handler: this.onDeleteLicense
@@ -138,14 +138,15 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         var data = (response.responseText) ? Ext.util.JSON.decode(response.responseText) : {};
 
         if (data.status && data.status == 'status_license_invalid') {
-            Ext.Msg.alert('Status', this.app.i18n._('Your license is not valid.'));
+            Ext.Msg.alert('Status', this.app.i18n._('Your Subscription is not valid.'));
         }
 
         if (data.hasOwnProperty('error') && data.error == false || ! data.serialNumber) {
             Tine.Setup.registry.replace('licenseCheck', false);
             Ext.getCmp('serialNumber').reset();
             Ext.getCmp('maxUsers').reset();
-
+            Ext.getCmp('organization').reset();
+            
             if (this.licenseType === 'BusinessEdition') {
                 Ext.getCmp('contractId').reset();
                 Ext.getCmp('validFrom').reset();
@@ -154,14 +155,15 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         } else {
             Ext.getCmp('serialNumber').setValue(data.serialNumber);
             Ext.getCmp('maxUsers').setValue(data.maxUsers);
-
+            Ext.getCmp('organization').setValue(data.organization);
+    
             if (this.licenseType === 'BusinessEdition') {
                 Ext.getCmp('contractId').setValue(data.contractId);
                 Ext.getCmp('validFrom').setValue(new Date(Date.parseDate(String(data.validFrom.date).substr(0, 19), Date.patterns.ISO8601Long)));
                 Ext.getCmp('validTo').setValue(new Date(Date.parseDate(String(data.validTo.date).substr(0, 19), Date.patterns.ISO8601Long)));
             }
 
-            Tine.Setup.registry.replace('licenseCheck', data.status && data.status == 'status_license_ok');
+            Tine.Setup.registry.replace('licenseCheck', data.status && data.status === 'status_license_ok');
         }
     },
 
@@ -189,7 +191,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         var licenseFields = [],
             licenseConfiguration = this.licenseType === 'BusinessEdition' ? {
                 xtype: 'fieldset',
-                title: this.app.i18n._('License Configuration'),
+                title: this.app.i18n._('Subscription Configuration'),
                 collapsible: false,
                 autoHeight: true,
                 defaults: {
@@ -200,7 +202,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                     xtype: 'tw.uploadbutton',
                     fieldLabel: this.app.i18n._('Upload from disk'),
                     ref: '../../uploadLicense',
-                    text: String.format(this.app.i18n._('Select file containing your license key')),
+                    text: String.format(this.app.i18n._('Select file containing your Subscription key')),
                     handler: this.onFileReady,
                     allowedTypes: null,
                     uploadTempFileMethod: 'Setup.uploadTempFile',
@@ -211,33 +213,39 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
 
         switch (this.licenseType) {
             case 'BusinessEdition':
+                const emptyText = i18n._('No valid Subscription');
                 licenseFields = [{
-                    fieldLabel: this.app.i18n._('Contract ID'),
+                    fieldLabel: i18n._('Contract ID'),
                     name: 'contractId',
                     id: 'contractId',
-                    emptyText: this.app.i18n._('No valid license')
+                    emptyText: emptyText
                 }, {
-                    fieldLabel: this.app.i18n._('Serial Number'),
+                    fieldLabel: i18n._('Organization'),
+                    name: 'organization',
+                    id: 'organization',
+                    emptyText: emptyText
+                }, {
+                    fieldLabel: i18n._('Activation Key'),
                     name: 'serialNumber',
                     id: 'serialNumber',
-                    emptyText: this.app.i18n._('No valid license')
+                    emptyText: emptyText
                 }, {
-                    fieldLabel: this.app.i18n._('Maximum Users (0=unlimited)'),
+                    fieldLabel: i18n._('Maximum Users (0=unlimited)'),
                     name: 'maxUsers',
                     id: 'maxUsers',
-                    emptyText: this.app.i18n._('No valid license')
+                    emptyText: emptyText
                 }, {
-                    fieldLabel: this.app.i18n._('Valid from'),
+                    fieldLabel: i18n._('Valid from'),
                     name: 'validFrom',
                     id: 'validFrom',
                     xtype: 'datetimefield',
-                    emptyText: this.app.i18n._('No valid license')
+                    emptyText: emptyText
                 }, {
-                    fieldLabel: this.app.i18n._('Valid to'),
+                    fieldLabel: i18n._('Valid to'),
                     name: 'validTo',
                     id: 'validTo',
                     xtype: 'datetimefield',
-                    emptyText: this.app.i18n._('No valid license')
+                    emptyText: emptyText
                 }];
                 break;
         }
@@ -250,7 +258,7 @@ Tine.Setup.LicensePanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             autoScroll: true,
             items: [{
                 xtype: 'fieldset',
-                title: this.app.i18n._('License Information'),
+                title: this.app.i18n._('Subscription Information'),
                 collapsible: false,
                 autoHeight: true,
                 defaults: {

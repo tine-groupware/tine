@@ -69,6 +69,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             menuAlign: 'tr-br',
             iconCls: 'tine-grid-row-action-icon ' + (Tine.Tinebase.registry.get('userAccountChanged') ? 'renderer_accountUserChangedIcon' : 'renderer_accountUserIcon')
         },
+        Tine.Tinebase.viewport.colorSchemeAction,
         this.onlineStatus, 
         this.action_logout];
     },
