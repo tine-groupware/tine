@@ -50,7 +50,8 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     
     layout: 'border',
     border: false,
-    stateful: true, 
+    stateful: true,
+    xtype: 'Tine.widgets.MainScreen',
 
     initComponent: function() {
         var registeredContentTypes = _.get(Tine.widgets.MainScreen.registerContentType, 'registry.' + this.app.appName, []);

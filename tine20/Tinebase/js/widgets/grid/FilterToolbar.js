@@ -210,6 +210,12 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         });
     },
 
+    getMainScreen: function() {
+        return this.findParentBy((c) => {
+            return c.xtype === 'Tine.widgets.MainScreen'
+        });
+    },
+    
     /**
      * @private
      */
@@ -222,7 +228,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             this.app = Tine.Tinebase.appMgr.get(this.store.proxy.recordClass.getMeta('appName'));
         }
         // automatically enable saving
-        if (! this.neverAllowSaving && this.app && this.app.getMainScreen() && typeof this.app.getMainScreen().getWestPanel == 'function' && this.app.getMainScreen().getWestPanel().hasFavoritesPanel) {
+        if (! this.neverAllowSaving && this.app && this.getMainScreen() && typeof this.getMainScreen().getWestPanel == 'function' && this.getMainScreen().getWestPanel().hasFavoritesPanel) {
             this.allowSaving = true;
         }
         
@@ -317,7 +323,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * save filterset as persisten filter
      */
     onSaveFilter: function() {
-        this.app.getMainScreen().getWestPanel().getFavoritesPanel().saveFilter();
+        this.getMainScreen().getWestPanel().getFavoritesPanel().saveFilter();
     },
     
     onLoadFilter: function() {
