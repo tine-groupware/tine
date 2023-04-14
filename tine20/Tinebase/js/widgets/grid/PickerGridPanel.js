@@ -177,18 +177,24 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         this.autoExpandColumn = this.autoExpandColumn? this.autoExpandColumn : this.labelField;
 
+        this.on('afterrender', this.onAfterRender, this);
+        this.initComponentMixin();
+        Tine.widgets.grid.PickerGridPanel.superclass.initComponent.call(this);
+    },
+
+    // NOTE: shared with Tine.widgets.grid.QuickaddGridPanel
+    initComponentMixin: function () {
         this.initStore();
         this.initGrid();
         this.initActionsAndToolbars();
 
-        this.on('afterrender', this.onAfterRender, this);
+
         this.on('rowdblclick', this.onRowDblClick, this);
 
         if (! this.editDialogConfig?.mode) {
             this.editDialogConfig = this.editDialogConfig || {};
             this.editDialogConfig.mode = (!this.refIdField || !this.recordClass.getModelConfiguration().fields[this.refIdField]?.config?.dependentRecords) ? 'remote' : 'local';
         }
-        Tine.widgets.grid.PickerGridPanel.superclass.initComponent.call(this);
     },
 
     onAfterRender: function() {

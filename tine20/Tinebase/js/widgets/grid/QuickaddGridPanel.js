@@ -87,37 +87,16 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             'onRemove',
             'actionRemoveUpdater',
             'onRowDblClick',
-            'onEditDialogRecordUpdate'
+            'onEditDialogRecordUpdate',
+            'initComponentMixin'
             // 'setReadOnly' // see setReadOnly above
         ]);
 
         this.modelConfig = this.modelConfig ||
             _.get(this, 'recordClass.getModelConfiguration') ? this.recordClass.getModelConfiguration() : null;
-
         this.recordName = this.recordName ? this.recordName : (this.recordClass && this.recordClass.getRecordName ? this.recordClass.getRecordName() || i18n._('Record') : i18n._('Record'));
-
         this.defaultSortInfo = this.defaultSortInfo || {};
-
-        this.initGrid();
-
         this.enableBbar = Ext.isBoolean(this.enableBbar) ? this.enableBbar : this.useBBar;
-        this.initActionsAndToolbars();
-
-        this.on('rowcontextmenu', this.onRowContextMenu, this);
-        this.on('rowdblclick', this.onRowDblClick, this);
-
-        if (! this.store) {
-            // create basic store
-            this.store = new Ext.data.Store({
-                // explicitly create reader
-                sortInfo: this.defaultSortInfo,
-                reader: new Ext.data.ArrayReader({
-                        idIndex: 0  // id for each record will be the first element
-                    },
-                    this.recordClass
-                )
-            });
-        }
 
         const parent = this.findParentBy(function(c){return !!c.record})
             || this.findParentBy(function(c) {return c.editDialog});
@@ -130,9 +109,26 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
         }
 
-        Tine.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
+        this.initComponentMixin();
 
+        Tine.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
+        this.on('rowcontextmenu', this.onRowContextMenu, this);
         this.on('newentry', this.onNewentry, this);
+    },
+
+    initStore: function() {
+        if (! this.store) {
+            // create basic store
+            this.store = new Ext.data.Store({
+                // explicitly create reader
+                sortInfo: this.defaultSortInfo,
+                reader: new Ext.data.ArrayReader({
+                        idIndex: 0  // id for each record will be the first element
+                    },
+                    this.recordClass
+                )
+            });
+        }
     },
 
     setReadOnly: function(readOnly) {
