@@ -23,7 +23,7 @@
         "format-message": "^6.2.4",
         "graphlib": "^2.1.8",
         "hammerjs": "^2.0.8",
-        "html2canvas": "^1.4.1",
+        "html2canvas": "github:tine-groupware/html2canvas#4a0f97bcfb7a7fb2f843094179a37a1862946bd7",
         "html5-file-selector": "github:tine20/html5-file-selector#953db2257ad748a9764c9cbb627827b80315a38a",
         "jquery": "^3.6.3",
         "keydown": "github:tine20/keydown",
@@ -108,6 +108,8 @@
         "sinon": "^15.0.1",
         "style-loader": "^3.3.1",
         "terser-webpack-plugin": "^5.3.6",
+        "ts-loader": "^9.4.2",
+        "typescript": "^5.0.4",
         "vue-loader": "^17.0.1",
         "vue-style-loader": "^4.1.3",
         "vue-template-compiler": "^2.7.14",
@@ -7381,8 +7383,9 @@
     },
     "node_modules/html2canvas": {
       "version": "1.4.1",
-      "resolved": "https://registry.npmjs.org/html2canvas/-/html2canvas-1.4.1.tgz",
-      "integrity": "sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==",
+      "resolved": "git+ssh://git@github.com/tine-groupware/html2canvas.git#4a0f97bcfb7a7fb2f843094179a37a1862946bd7",
+      "integrity": "sha512-R6tbWeRmzzhnmMqqt1GzLzDqq6A6VQrQnheAdel6vHeYHQap2F3iDbxF/mwBvhnbkBiTERDFl8ghbNr4WjfilA==",
+      "license": "MIT",
       "dependencies": {
         "css-line-break": "^2.1.0",
         "text-segmentation": "^1.0.3"
@@ -15183,6 +15186,40 @@
       "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==",
       "dev": true
     },
+    "node_modules/ts-loader": {
+      "version": "9.4.2",
+      "resolved": "https://registry.npmjs.org/ts-loader/-/ts-loader-9.4.2.tgz",
+      "integrity": "sha512-OmlC4WVmFv5I0PpaxYb+qGeGOdm5giHU7HwDDUjw59emP2UYMHy9fFSDcYgSNoH8sXcj4hGCSEhlDZ9ULeDraA==",
+      "dev": true,
+      "dependencies": {
+        "chalk": "^4.1.0",
+        "enhanced-resolve": "^5.0.0",
+        "micromatch": "^4.0.0",
+        "semver": "^7.3.4"
+      },
+      "engines": {
+        "node": ">=12.0.0"
+      },
+      "peerDependencies": {
+        "typescript": "*",
+        "webpack": "^5.0.0"
+      }
+    },
+    "node_modules/ts-loader/node_modules/semver": {
+      "version": "7.4.0",
+      "resolved": "https://registry.npmjs.org/semver/-/semver-7.4.0.tgz",
+      "integrity": "sha512-RgOxM8Mw+7Zus0+zcLEUn8+JfoLpj/huFTItQy2hsM4khuC1HYRDp0cU482Ewn/Fcy6bCjufD8vAj7voC66KQw==",
+      "dev": true,
+      "dependencies": {
+        "lru-cache": "^6.0.0"
+      },
+      "bin": {
+        "semver": "bin/semver.js"
+      },
+      "engines": {
+        "node": ">=10"
+      }
+    },
     "node_modules/tsconfig-paths": {
       "version": "3.14.1",
       "resolved": "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.14.1.tgz",
@@ -15311,6 +15348,19 @@
       },
       "engines": {
         "node": ">= 0.6"
+      }
+    },
+    "node_modules/typescript": {
+      "version": "5.0.4",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.0.4.tgz",
+      "integrity": "sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==",
+      "dev": true,
+      "bin": {
+        "tsc": "bin/tsc",
+        "tsserver": "bin/tsserver"
+      },
+      "engines": {
+        "node": ">=12.20"
       }
     },
     "node_modules/ua-parser-js": {
@@ -21993,9 +22043,9 @@
       "dev": true
     },
     "html2canvas": {
-      "version": "1.4.1",
-      "resolved": "https://registry.npmjs.org/html2canvas/-/html2canvas-1.4.1.tgz",
-      "integrity": "sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==",
+      "version": "git+ssh://git@github.com/tine-groupware/html2canvas.git#4a0f97bcfb7a7fb2f843094179a37a1862946bd7",
+      "integrity": "sha512-R6tbWeRmzzhnmMqqt1GzLzDqq6A6VQrQnheAdel6vHeYHQap2F3iDbxF/mwBvhnbkBiTERDFl8ghbNr4WjfilA==",
+      "from": "html2canvas@github:tine-groupware/html2canvas#4a0f97bcfb7a7fb2f843094179a37a1862946bd7",
       "requires": {
         "css-line-break": "^2.1.0",
         "text-segmentation": "^1.0.3"
@@ -22004,7 +22054,7 @@
     "html5-file-selector": {
       "version": "git+ssh://git@github.com/tine20/html5-file-selector.git#953db2257ad748a9764c9cbb627827b80315a38a",
       "integrity": "sha512-YEhzA8TMR7ZLagKFhID06xbS9Rh+6ghBic6F19RLB2UEVSbCScQjZR4SbbaXFPV5/sZRjf6a7POEikP1iQtuqg==",
-      "from": "html5-file-selector@tine20/html5-file-selector.git#953db2257ad748a9764c9cbb627827b80315a38a"
+      "from": "html5-file-selector@github:tine20/html5-file-selector#953db2257ad748a9764c9cbb627827b80315a38a"
     },
     "htmlparser2": {
       "version": "8.0.1",
@@ -22990,7 +23040,7 @@
     },
     "keydown": {
       "version": "git+ssh://git@github.com/tine20/keydown.git#9b5b2ee477011706f421edb3a4161f062fa0efdb",
-      "from": "keydown@tine20/keydown.git",
+      "from": "keydown@github:tine20/keydown",
       "requires": {
         "core-js": "^3.1.2"
       }
@@ -25990,7 +26040,7 @@
     "postal.federation": {
       "version": "git+ssh://git@github.com/tine20/postal.federation.git#21f3d0b2b3755b48a999655c6312fcd5801367e0",
       "integrity": "sha512-UNTakVN+5Z/EjsDOzkPjCZA6l9vTEivrE6s3QlLq0aoZcKk1g+UUi45jMf4yuLBz6HObC68VfSmbYQ+Hln6ltQ==",
-      "from": "postal.federation@tine20/postal.federation#21f3d0b2b3755b48a999655c6312fcd5801367e0",
+      "from": "postal.federation@github:tine20/postal.federation#21f3d0b2b3755b48a999655c6312fcd5801367e0",
       "requires": {
         "lodash": "^4.12.0"
       }
@@ -25998,7 +26048,7 @@
     "postal.request-response": {
       "version": "git+ssh://git@github.com/tine20/postal.request-response.git#a5b6a1b4842b0a20f54a8266f255005f3a70a8a8",
       "integrity": "sha512-9zdrMB/PVc+RQgpIbvX/ypZDsFvqwJ4zA5N9V5RUjQRnTwE2eEnWFFuFUglqYzhkPFlv6h2poiTyXZQnVLGkuw==",
-      "from": "postal.request-response@tine20/postal.request-response#a5b6a1b4842b0a20f54a8266f255005f3a70a8a8",
+      "from": "postal.request-response@github:tine20/postal.request-response#a5b6a1b4842b0a20f54a8266f255005f3a70a8a8",
       "requires": {
         "lodash": "^4.12.0"
       }
@@ -26006,7 +26056,7 @@
     "postal.xwindow": {
       "version": "git+ssh://git@github.com/tine20/postal.xwindow.git#20f915298e7a177949255938cbf5ebecb70fbf7d",
       "integrity": "sha512-QkKE/7yxL4FxKUssDkqcwzoLSRYWKUDHszhUN6ydwzeFcZAlufoIAIToScwz9VhfWnw+4MxwxY2foBNbb3yUYg==",
-      "from": "postal.xwindow@tine20/postal.xwindow#20f915298e7a177949255938cbf5ebecb70fbf7d",
+      "from": "postal.xwindow@github:tine20/postal.xwindow#20f915298e7a177949255938cbf5ebecb70fbf7d",
       "requires": {
         "lodash": "^4.12.0",
         "postal": "^2.0.5",
@@ -27637,6 +27687,29 @@
       "integrity": "sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==",
       "dev": true
     },
+    "ts-loader": {
+      "version": "9.4.2",
+      "resolved": "https://registry.npmjs.org/ts-loader/-/ts-loader-9.4.2.tgz",
+      "integrity": "sha512-OmlC4WVmFv5I0PpaxYb+qGeGOdm5giHU7HwDDUjw59emP2UYMHy9fFSDcYgSNoH8sXcj4hGCSEhlDZ9ULeDraA==",
+      "dev": true,
+      "requires": {
+        "chalk": "^4.1.0",
+        "enhanced-resolve": "^5.0.0",
+        "micromatch": "^4.0.0",
+        "semver": "^7.3.4"
+      },
+      "dependencies": {
+        "semver": {
+          "version": "7.4.0",
+          "resolved": "https://registry.npmjs.org/semver/-/semver-7.4.0.tgz",
+          "integrity": "sha512-RgOxM8Mw+7Zus0+zcLEUn8+JfoLpj/huFTItQy2hsM4khuC1HYRDp0cU482Ewn/Fcy6bCjufD8vAj7voC66KQw==",
+          "dev": true,
+          "requires": {
+            "lru-cache": "^6.0.0"
+          }
+        }
+      }
+    },
     "tsconfig-paths": {
       "version": "3.14.1",
       "resolved": "https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-3.14.1.tgz",
@@ -27747,6 +27820,12 @@
         "media-typer": "0.3.0",
         "mime-types": "~2.1.24"
       }
+    },
+    "typescript": {
+      "version": "5.0.4",
+      "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.0.4.tgz",
+      "integrity": "sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==",
+      "dev": true
     },
     "ua-parser-js": {
       "version": "0.7.32",
@@ -27876,7 +27955,7 @@
     "unminified-webpack-plugin": {
       "version": "git+ssh://git@github.com/tine-groupware/unminified-webpack-plugin.git#8ec9fa80157c4a943aa69b8c5631aaffa349a33c",
       "integrity": "sha512-GEipZn1AVRI6o6V9DCd0aZpA5VgUTuyVLAkVFUk2eYvGVp4+I/UJXghLT2GL46GH1UsKj4MMa8B8UPZChvqRcQ==",
-      "from": "unminified-webpack-plugin@tine-groupware/unminified-webpack-plugin.git#8ec9fa80157c4a943aa69b8c5631aaffa349a33c",
+      "from": "unminified-webpack-plugin@github:tine-groupware/unminified-webpack-plugin#8ec9fa80157c4a943aa69b8c5631aaffa349a33c",
       "requires": {}
     },
     "unpipe": {

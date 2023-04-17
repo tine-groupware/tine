@@ -187,7 +187,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
         return new Promise(function (fulfill, reject) {
             if (me.useHtml2Canvas) {
                 require.ensure(["html2canvas"], function() {
-                    var html2canvas = require ("html2canvas");
+                    var html2canvas = require ("html2canvas").default;
 
                     html2canvas(win.document.body, {
                         grabMouse: false,
