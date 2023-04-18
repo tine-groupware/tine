@@ -30,7 +30,8 @@ body.dark-mode {
   }
   //  --focus-color: #dedede;
   --selection-color: #8bb1ee;
-  --tab-color: white;
+  --tab-color: #ffffff;
+  --field-bg-color: #d2d2d2;
 
   .hu-color-picker .saturation,
   .hu-color-picker .hue,
@@ -116,14 +117,14 @@ body.dark-mode {
   //}
   .x-form-text, textarea.x-form-field {
   //  filter: invert(1) hue-rotate(180deg);
-    background-color: #d2d2d2;
+    background-color: var(--field-bg-color);
   //  border-color: black;
   //  color: #ffffff;
   }
   .x-form-field-wrap .x-form-trigger,
   .x-form-trigger.x-form-arrow-trigger,
   .x-form-trigger {
-    background-color: #d2d2d2;
+    background-color: var(--field-bg-color);
   }
 
   //.x-form-invalid {
