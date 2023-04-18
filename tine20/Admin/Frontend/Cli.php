@@ -424,6 +424,36 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * @return int
+     * @throws Zend_Db_Adapter_Exception
+     */
+    public function repairOccurenceTag(Zend_Console_Getopt $_opts)
+    {
+        $db = Tinebase_Core::getDb();
+        $filter = new Tinebase_Model_TagFilter([]);
+        $tags = Tinebase_Tags::getInstance()->searchTags($filter, null, true);
+        echo "Found " . count($tags) . " tags\n";
+        foreach ($tags as $tag) {
+            $select = $db->select()
+                ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'count(*)')
+                ->where($db->quoteIdentifier('tag_id') . ' = ?', $tag->getId());
+            $count = $db->fetchCol($select)[0];
+            if ($count !== $tag->occurrence)
+            {
+                echo "Found wrong occurrence for the tag " . $tag->getId() . "\n";
+                if (!$_opts->d) {
+                    $db->update(SQL_TABLE_PREFIX . 'tags', ['occurrence' => $count],
+                        $db->quoteInto($db->quoteIdentifier('id') . ' = ?', $tag->getId()));
+                    echo "Update occurrence from " . $tag->occurrence . " to " . $count . "\n";
+                } else {
+                    echo "--DRYRUN-- will updating occurrence from " . $tag->occurrence . " to " . $count . "\n";
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
      * @param string $csv filename
      * @param boolean $firstColIsKey
      * @return array|false
