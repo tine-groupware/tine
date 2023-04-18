@@ -5,6 +5,7 @@
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import {colorLegend} from "../FreeTimePlanningWestPanel";
 
 Tine.Tinebase.ApplicationStarter.isInitialised().then(() => {
     const app = Tine.Tinebase.appMgr.get('HumanResources');
@@ -45,4 +46,5 @@ Tine.Tinebase.ApplicationStarter.isInitialised().then(() => {
         xtype: 'humanresources.freetimeplanning',
     }, defaults));
 
+    Ext.ux.ItemRegistry.registerItem('Tine.Timetracker.FreeTimePlanning.WestPanelPortalColumn', colorLegend);
 });
