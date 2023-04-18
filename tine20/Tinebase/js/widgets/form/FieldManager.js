@@ -7,8 +7,7 @@
  */
 Ext.ns('Tine.widgets.form');
 
-import 'widgets/form/JsonField';
-import 'widgets/form/XmlField';
+import 'widgets/form/AceField';
 import 'widgets/form/ModelPicker';
 import 'widgets/form/LanguagePicker';
 import 'widgets/form/RecordEditField';
@@ -322,11 +321,13 @@ Tine.widgets.form.FieldManager = function() {
                     field.disabled = true;
                     break;
                 case 'json':
-                    field.xtype = 'tw-jsonfield';
+                    field.xtype = 'tw-acefield';
+                    field.mode = 'json';
                     field.height = 150; // 12 lines
                     break;
                 case 'xml':
-                    field.xtype = 'tw-xmlfield';
+                    field.xtype = 'tw-acefield';
+                    field.mode = 'xml';
                     field.height = 150; // 12 lines
                     break;
                 case 'container':

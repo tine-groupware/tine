@@ -1044,6 +1044,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'sieve_notification_email',
             'sieve_notification_move',
             'sieve_notification_move_folder',
+            'sieve_custom',
             'sieve_vacation',
             'sieve_rules',
             'sent_folder',
