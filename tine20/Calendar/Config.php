@@ -193,6 +193,13 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FEATURE_POLLS = 'featurePolls';
 
     /**
+     * FEATURE_EVENT_TYPE
+     *
+     * @var string
+     */
+    const FEATURE_EVENT_TYPE = 'featureEventType';
+
+    /**
      * EVENT_VIEW
      *
      * @var string
@@ -613,6 +620,15 @@ class Calendar_Config extends Tinebase_Config_Abstract
                     //_('Create alternative Events and let users as well as externals vote for the best option.')
                     self::TYPE              => self::TYPE_BOOL,
                     self::DEFAULT_STR       => true,
+                ),
+                self::FEATURE_EVENT_TYPE => array(
+                    self::LABEL             => 'Activate Event Types for Events',
+                    //_('Activate Event Types for Events')
+                    self::DESCRIPTION       =>
+                        'Activate Event Types for Events.',
+                    //_('Activate Event Types for Events.')
+                    self::TYPE              => self::TYPE_BOOL,
+                    self::DEFAULT_STR       => false,
                 ),
                 self::FEATURE_EVENT_NOTIFICATION_CONFIRMATION   => [
                     self::LABEL         => 'Event Notification Confirmation', //_('Lead Notification Confirmation')

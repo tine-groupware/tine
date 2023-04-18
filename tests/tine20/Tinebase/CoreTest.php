@@ -287,7 +287,7 @@ class Tinebase_CoreTest extends TestCase
                 'name',
                 'seq',
             ],
-            SQL_TABLE_PREFIX . 'calendar_event_type' => [
+            SQL_TABLE_PREFIX . 'cal_event_type' => [
                 'deleted_time',
             ],
         ];

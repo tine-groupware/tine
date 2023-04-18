@@ -101,23 +101,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             requiredGrant: 'editGrant',
                             maxLength: 1024
                         }]
-                    }, {
-                        layout: 'hbox',
-                        items: [
-                            {
-                                margins: '5',
-                                width: 100,
-                                xtype: 'label',
-                                text: this.app.i18n._('Event Type')
-                            }, {
-                                flex: 1,
-                                xtype:'tinerecordspickercombobox',
-                                name: 'event_type',
-                                allowBlank: true,
-                                requiredGrant: 'editGrant',
-                            }
-                        ]
-                    }, {
+                    },
+                        //Todo add a Records Picker fpr Event Types
+                    , {
                         layout: 'hbox',
                         items: [{
                             margins: '5',
