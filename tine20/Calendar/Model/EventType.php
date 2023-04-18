@@ -38,12 +38,12 @@ class Calendar_Model_EventType extends Tinebase_Record_Abstract
         'hasRelations'      => false,
         'hasCustomFields'   => true,
         'hasSystemCustomFields' => true,
-        'hasNotes'          => FALSE,
-        'hasTags'           => TRUE,
-        'modlogActive'      => TRUE,
-        'hasAttachments'    => FALSE,
+        'hasNotes'          => false,
+        'hasTags'           => true,
+        'modlogActive'      => true,
+        'hasAttachments'    => false,
 
-        'createModule'      => FALSE,
+        'createModule'      => false,
 
         'exposeHttpApi'     => true,
         'exposeJsonApi'     => true,
