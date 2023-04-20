@@ -438,10 +438,6 @@ span.x-tab-strip-text.tine-favicon {
     border-bottom: 1px solid black !important;
   }
 
-  .x-trigger-wrap-focus .x-form-trigger {
-    border-bottom: 1px solid black !important;
-  }
-
   // ebbh button size
   .x-btn-medium.x-btn-icon-medium-top .x-btn-image {
     background-size: 27px 29px;
@@ -613,13 +609,6 @@ span.x-tab-strip-text.tine-favicon {
     font-weight: normal;
     font-style: normal;
   }
-
-  .status-fields {
-    input {
-      background-color: @dialogBg;
-      border-bottom: 1px solid darken(@dialogBg, 10%);
-    }
-  }
 }
 
 .x-form-text, textarea.x-form-field {
@@ -681,8 +670,6 @@ span.x-tab-strip-text.tine-favicon {
 .x-form-trigger-flat {
   background-position: center;
   background-size: 13px;
-  background-color: var(--field-bg-color);
-  border-bottom: 1px solid @tbColor;
   box-sizing: border-box;
   height: 100%;
 
@@ -696,8 +683,12 @@ span.x-tab-strip-text.tine-favicon {
 }
 
 .x-trigger-wrap-focus .x-form-trigger {
-  border-bottom: 1px solid var(--focus-color) !important;
   box-sizing: border-box;
+}
+
+.x-form-invalid + span img.x-form-trigger {
+  background-color: transparent;
+  border: none;
 }
 
 // trigger image via mask instead of background-image
@@ -810,15 +801,51 @@ span.x-form-twin-triggers img.x-form-clear-trigger {
   #transform.blacktowhite();
 }
 
+.x-form-text, textarea.x-form-field {
+  background-color: transparent;
+  border: none;
+}
+
+textarea.x-form-field, // wrap-less
+.x-form-element > .x-form-field, // wrap-less
+.x-box-inner > .x-form-field, // wrap-less
+.x-small-editor > .x-form-field, // wrap-less
+.ext-webkit .x-form-field-wrap,
+.x-form-field-wrap {
+  background-color: var(--field-bg-color);
+  border-bottom: 1px solid var(--field-bg-color);
+  &.x-form-focus,
+  &.x-trigger-wrap-focus {
+    border-color: var(--focus-color) !important;
+  }
+  &.x-form-invalid {
+    border-bottom: 1px solid #ff7870 !important;
+    background-color: #fee !important;
+  }
+}
+
+.status-fields {
+  textarea.x-form-field, // wrap-less
+  .x-form-element > .x-form-field, // wrap-less
+  .x-box-inner > .x-form-field, // wrap-less
+  .x-small-editor > .x-form-field, // wrap-less
+  .ext-webkit .x-form-field-wrap,
+  .x-form-field-wrap {
+    background-color: @dialogBg;
+    border-color: darken(@dialogBg, 10%) !important;
+  }
+}
+.ext-webkit .x-form-invalid,
 .x-form-invalid {
-  background-color: #fee !important;
-  border-bottom: 1px solid #ff7870 !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none;
 }
 
 .x-form-invalid + span {
   img.x-form-trigger {
-    background-color: #fee !important;
-    border-bottom: 1px solid #ff7870 !important;
+    background-color: transparent !important;
+    border: none;
   }
 }
 
