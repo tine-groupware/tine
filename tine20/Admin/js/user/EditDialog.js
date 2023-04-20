@@ -947,7 +947,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         allowBlank: false,
                         columnWidth: 0.5
                     }, {
-                        fieldLabel: this.app.i18n.gettext('Full name'),
+                        fieldLabel: this.app.i18n.gettext('Full Name'),
                         name: 'accountFullName',
                         allowBlank: false,
                         columnWidth: 0.5,
@@ -1107,7 +1107,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n.gettext('Password set'),
                             name: 'accountLastPasswordChange',
                             emptyText: this.app.i18n.gettext('never')
-                        }]]
+                        }, {
+                            fieldLabel: this.app.i18n.gettext('Account ID'),
+                            name: 'accountId',
+                        },]]
                     }]
                 }]
             }, {
