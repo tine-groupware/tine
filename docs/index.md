@@ -13,7 +13,6 @@ For full documentation visit [mkdocs.org](https://www.mkdocs.org).
 * visit http://localhost:8000
 
 ## when changing docker image
-* `docker image tag tine/mkdocs:latest dockerregistry.metaways.net/tine20/tine20/mkdocs:latest$(if uname -a | grep -q arm64; then echo "-arm64"; fi)`
 * `docker push dockerregistry.metaways.net/tine20/tine20/mkdocs:latest$(if uname -a | grep -q arm64; then echo "-arm64"; fi)`
 
 ## generate php api docs

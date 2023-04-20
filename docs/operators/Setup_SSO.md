@@ -23,6 +23,7 @@ openssl req -x509 -newkey rsa:4096 -keyout ./conf.d/sso_key.pem -out ./conf.d/ss
 openssl pkey -in ./conf.d/sso_key.pem -out ./conf.d/sso_cert.crt -pubout
 pem-jwk ./conf.d/sso_cert.crt > ./conf.d/sso_cert.jwk
 sudo chown $(docker-compose exec  web sh -c "id tine20 -u"):$(docker-compose exec  web sh -c "id tine20 -g") ./conf.d/sso_*
+sudo chmod 660 ./conf.d/sso_cert.* ./conf.d/sso_key.*
 ~~~
 
 ## 3) Create config
