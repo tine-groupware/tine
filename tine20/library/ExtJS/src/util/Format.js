@@ -91,6 +91,16 @@ Ext.util.Format = function(){
         },
 
         /**
+         * wrap emojis like 😊 in value with <em class="emoji">😊</em>
+         * usefull for dark mode
+         * @param value
+         * @returns {*|string}
+         */
+        wrapEmojis : function(value){
+            return !value ? value :  String(value).replace(emojiRE, '<em class="emoji">$1</em>');
+        },
+
+        /**
          * Convert certain characters (&, <, >, and ') to their HTML character equivalents but modify them with wit a space and @@@ to separate them from links 
          * so we can linkify these links without including characters that are not actual part of them (for example a tailing >) 
          * as they are found in Teams Invitations, in the second step we replace these strings by the proper Characters

@@ -462,6 +462,7 @@ var form = new Ext.form.FormPanel({
         }
         msg = msg || this.invalidText;
 
+        this.wrap?.addClass(this.invalidClass);
         var mt = this.getMessageHandler();
         if(mt){
             mt.mark(this, msg);
@@ -497,6 +498,7 @@ var form = new Ext.form.FormPanel({
         if(!this.rendered || this.preventMark){ // not rendered
             return;
         }
+        this.wrap?.removeClass(this.invalidClass);
         this.el.removeClass(this.invalidClass);
         var mt = this.getMessageHandler();
         if(mt){
