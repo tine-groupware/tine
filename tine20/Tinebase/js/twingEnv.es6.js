@@ -59,13 +59,19 @@ class HTMLProxy extends Expression {
   setRenderer (renderPromise) {
     this.renderPromise = renderPromise
 
-    proxyPromisesCollections.forEach((proxyPromisesCollection) => {
-      proxyPromisesCollection.push(renderPromise)
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+    const proxiedPromise = renderPromise.then(async (output) => {
+      for (let i = 0; i < 10; i++) {
+        await sleep(i * 100)
+        if (await this.replaceProxy(output)) break
+      }
     })
 
-    return renderPromise.then((output) => {
-      return this.replaceProxy(output)
+    proxyPromisesCollections.forEach((proxyPromisesCollection) => {
+      proxyPromisesCollection.push(proxiedPromise)
     })
+
+    return proxiedPromise
   }
 
   /**
@@ -75,13 +81,16 @@ class HTMLProxy extends Expression {
    * @private
    */
   replaceDomProxy (html) {
+    let isReplaced = false
     proxyDocuments.forEach((doc) => {
       const el = doc.getElementById(this.id)
       if (el) {
         el.outerHTML = html
+        isReplaced = true
         return true
       }
     })
+    return isReplaced
   }
 
   /**
