@@ -136,7 +136,7 @@ Ext.form.FieldSet = Ext.extend(Ext.Panel, {
         if(this.checkbox){
             this.checkbox.dom.checked = false;
         }
-        const numValues = this.el.select('input').elements.reduce((num, input) => { return num + (Ext.getCmp(input.id).getValue() ? 1 : 0) }, 0);
+        const numValues = this.el.select('input').elements.reduce((num, input) => { return num + (Ext.getCmp(input.id)?.getValue?.() ? 1 : 0) }, 0);
         this.expandedTitle = this.title;
         this.setTitle(`${this.expandedTitle} (${numValues})`);
 
