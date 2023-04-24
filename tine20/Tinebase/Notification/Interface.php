@@ -17,6 +17,8 @@
  */
 interface Tinebase_Notification_Interface
 {
+
+    public static function getNotificationAddress();
    /**
      * send a notification
      *

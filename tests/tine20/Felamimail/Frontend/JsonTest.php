@@ -2188,6 +2188,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         
         static::assertStringContainsString('test@test.de', $script->getSieve());
         static::assertStringContainsString('test2@test.de', $script->getSieve());
+        static::assertStringContainsString(':from "noreply@mail.test"', $script->getSieve());
     }
 
     /**
