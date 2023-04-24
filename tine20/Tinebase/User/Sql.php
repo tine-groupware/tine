@@ -511,6 +511,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = $this->_updatePasswordProperties($userId, $_password, $_encrypt, $_mustChange);
         $this->_setPluginsPassword($user, $_password, $_encrypt);
 
+        // fire needed events
+        $event = new Tinebase_Event_User_ChangePassword();
+        $event->userId = $userId;
+        $event->password = $_password;
+        Tinebase_Event::fireEvent($event);
+
         $accountData['id'] = $userId;
         $oldPassword = new Tinebase_Model_UserPassword(array('id' => $userId), true);
         $newPassword = new Tinebase_Model_UserPassword($accountData, true);
