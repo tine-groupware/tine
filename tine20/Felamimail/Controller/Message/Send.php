@@ -491,14 +491,17 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     /**
      * append mail to send folder
      *
-     * @param Felamimail_Transport $_transport
+     * @param Felamimail_Transport_Interface $_transport
      * @param Felamimail_Model_Account $_account
-     * @param Felamimail_Model_Message $_message
-     * @throws Felamimail_Exception_IMAPInvalidCredentials
-     * @throws Zend_Mail_Transport_Exception
+     * @param array $_additionalHeaders
+     * @param array $_imapFolderIds
      * @return Tinebase_Record_RecordSet
+     * @throws Felamimail_Exception_IMAPInvalidCredentials
      */
-    protected function _saveMessageCopyToImapFolders(Felamimail_Transport_Interface $_transport, Felamimail_Model_Account $_account, $_additionalHeaders, $_imapFolderIds)
+    protected function _saveMessageCopyToImapFolders(Felamimail_Transport_Interface $_transport,
+                                                     Felamimail_Model_Account $_account,
+                                                     $_additionalHeaders,
+                                                     $_imapFolderIds): Tinebase_Record_RecordSet
     {
         $mailAsString = $_transport->getRawMessage(NULL, $_additionalHeaders);
         $folders = Felamimail_Controller_Folder::getInstance()->getMultiple($_imapFolderIds);
