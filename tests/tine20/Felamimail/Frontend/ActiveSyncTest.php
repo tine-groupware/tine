@@ -864,6 +864,21 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
 
         // echo $completeMessage->body;
         $this->assertStringContainsString($stringToCheck, $completeMessage->body);
+
+        $emailAccount = TestServer::getInstance()->getTestEmailAccount();
+
+        if ($emailAccount->message_sent_copy_behavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SOURCE) {
+            $sent = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
+        }
+        if ($emailAccount->message_sent_copy_behavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SENT) {
+            $sent = $this->_emailTestClass->getFolder($emailAccount->sent_folder);
+        }
+
+        $message = $this->_emailTestClass->searchAndCacheMessage($messageId, $sent, TRUE, 'Message-ID');
+        $this->_createdMessages->addRecord($message);
+        $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
+        $this->assertStringContainsString($stringToCheck, $completeMessage->body);
+        
         return $completeMessage;
     }
     
@@ -918,10 +933,44 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         $messageId = '<1F7C3F2D-B920-404F-97FE-27FE721A9E08@tine20.org>';
         
         $stringToCheck = 'Lars löscht nix...';
-        
+
         $this->_sendMailTestHelper($xml, $messageId, $stringToCheck, 'Syncroton_Command_SmartForward', Syncroton_Model_Device::TYPE_IPHONE);
     }
+
+    /**
+     * test Forward SaveInSentItems Source Mode
+     *
+     */
+    public function testForwardSaveInSentItemsSourceMode()
+    {
+        // check if mail is in sent folder
+        $emailAccount = TestServer::getInstance()->getTestEmailAccount();
+        $emailAccount->message_sent_copy_behavior = Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SOURCE;
+        $emailAccount = Felamimail_Controller_Account::getInstance()->update($emailAccount);
+        
+        $this->testForwardEmailiPhone();
+        
+        $emailAccount->message_sent_copy_behavior = Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SENT;
+        Felamimail_Controller_Account::getInstance()->update($emailAccount);
+    }
     
+    /**
+     * test Reply SaveInSentItems Source Mode
+     *
+     */
+    public function testReplySaveInSentItemsSourceMode()
+    {
+        // check if mail is in sent folder
+        $emailAccount = TestServer::getInstance()->getTestEmailAccount();
+        $emailAccount->message_sent_copy_behavior = Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SOURCE;
+        $emailAccount = Felamimail_Controller_Account::getInstance()->update($emailAccount);
+
+        $this->testReplyEmailNexus1();
+
+        $emailAccount->message_sent_copy_behavior = Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SENT;
+        Felamimail_Controller_Account::getInstance()->update($emailAccount);
+    }
+
     /**
      * validate getAllFolders
      * 
