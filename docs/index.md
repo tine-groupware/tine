@@ -1,20 +1,24 @@
-# Welcome to MkDocs
+# Welcome to tine docs
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+As of version 2023.11 tine groupware documentation is centralised here. We encourage everyone to improve this documentation
+by creating simple merge-requests at our github repo.
 
-## create tine/mkdocs image
+This documentation is based on the beautiful [mkdocs.org](https://www.mkdocs.org) system. You can find the full documentation 
+how to use and write docs there. Our workflows and adoptions can be found [here.](developers/mkdocs)
 
-* `cd tine.git/docs`
-* `docker build -t dockerregistry.metaways.net/tine20/tine20/mkdocs:latest$(if uname -a | grep -q arm64; then echo "-arm64"; fi) .`
+# Layout
 
-## quickstart
-* `cd tine.git` - change to main src dir (containing mkdocs.yml)
-* `docker run --rm -it -p 8000:8000 -v ${PWD}:/docs dockerregistry.metaways.net/tine20/tine20/mkdocs:latest$(if uname -a | grep -q arm64; then echo "-arm64"; fi)` - Serve docs using docker
-* visit http://localhost:8000
+tine Groupware is a large system and there are multiple different roles/personas looking for help and documentation.
+Therefore, we created the following entry points
 
-## when changing docker image
-* `docker push dockerregistry.metaways.net/tine20/tine20/mkdocs:latest$(if uname -a | grep -q arm64; then echo "-arm64"; fi)`
+## [Users - End Users](./users/)
+End users who are just using the software using their browsers. 
 
-## generate php api docs
-* `cd tine.git/tine20`
-* `vendor/bin/phpdoc-md`
+## [Admins - Professional Administration](./admins/)
+Professional administrators who have the right to run the admin application and some of its modules.
+
+## [Operators - Technical Administration](./operators/)
+Technical administrators who have root access to the server systems tine groupware runs on. 
+
+## [Developers](./developers/)
+Developers, Translators and other fearless people creating tine groupware.
