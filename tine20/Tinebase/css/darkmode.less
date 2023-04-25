@@ -30,6 +30,9 @@ body.dark-mode {
   --selection-color: #8bb1ee;
   --tab-color: #ffffff;
   --field-bg-color: #333333;
+  --tip-bg-color: #e0ebf9;
+  --tip-color: #000000;
+  --shadow-color: #e0ebf9;
 
   .hu-color-picker .saturation,
   .hu-color-picker .hue,
@@ -117,9 +120,13 @@ body.dark-mode {
   .x-form-element > .x-form-field, // wrap-less
   .x-box-inner > .x-form-field, // wrap-less
   .x-small-editor > .x-form-field, // wrap-less
+  .ext-webkit .x-form-field-wrap,
   .x-form-field-wrap {
     filter: invert(1) hue-rotate(180deg);
     border-bottom: 1px solid #1b1b1b;
+    &.x-form-invalid {
+      background-color: #1c0c0c !important;
+    }
   }
   .x-form-text, textarea.x-form-field {
     color: #ffffff;
@@ -152,14 +159,6 @@ body.dark-mode {
     filter: none;
   }
 
-  textarea.x-form-field,
-  .ext-webkit .x-form-field-wrap,
-  .x-form-field-wrap {
-    &.x-form-invalid {
-      background-color: #1c0c0c !important;
-    }
-  }
-
   .ux-pp-field {
     filter: invert(1) hue-rotate(180deg);
   }
@@ -176,6 +175,9 @@ body.dark-mode {
     background-image:none!important;
   }
 
+  .x-ux-display-background-border {
+    background-color: transparent;
+  }
   .x-form {
     .x-panel-tr,
     .x-panel-tc,
