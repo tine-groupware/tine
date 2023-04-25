@@ -2683,6 +2683,25 @@ fi';
         echo 'done' . PHP_EOL;
         return 0;
     }
+
+    /**
+     * Generates new js Translation List files for given locale and path
+     * If no locales is given all available locales are generated
+     *
+     * @param $opts
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function generateTranslationLists($opts)
+    {
+        $this->_checkAdminRight();
+        $args = $this->_parseArgs($opts);
+        $locale = isset($args['locale']) ? $args['locale'] : null;
+        $path = isset($args['path']) ? $args['path'] : null;
+
+        $translations = new Tinebase_Translation();
+        $translations->generateTranslationLists($locale, $path);
+    }
 }
 
 
