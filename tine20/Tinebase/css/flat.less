@@ -3,6 +3,9 @@
   --selection-color: #dbecf4;
   --tab-color: #8cb8d7;
   --field-bg-color: #ffffff;
+  --tip-bg-color: #163047;
+  --tip-color: #ffffff;
+  --shadow-color: silver;
 }
 //@focusColor: #0062a7;
 
@@ -13,8 +16,6 @@
 @filterTbColor: darken(@tbColor, 10%);
 @gridHd: #c0ced8;
 @gridHdActive: darken(@gridHd, 10%);
-
-@tipColor: #163047;
 
 @fontColor: #ffffff;
 
@@ -59,7 +60,7 @@
 }
 
 #shadow() {
-  box-shadow: 10px 10px 15px silver;
+  box-shadow: 5px 10px 10px var(--shadow-color);
 }
 
 /* TABPANEL */
@@ -1166,16 +1167,16 @@ td.x-date-mp-sel a,
   .x-tip-ml,
   .x-tip-mr {
     background-image: none;
-    background-color: @tipColor;
+    background-color: var(--tip-bg-color);
   }
   .x-tip-header-text {
     text-decoration: underline;
     font-style: italic;
-    color: #fff;
+    color: var(--tip-color);
     font-weight: bold;
   }
   .x-tip-body {
-    color: #fff;
+    color: var(--tip-color);
     font-weight: bold;
 
     b {
