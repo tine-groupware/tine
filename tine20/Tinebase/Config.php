@@ -1940,7 +1940,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Map Service URL',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
+            'setByAdminModule'      => true,
             'setBySetupModule'      => true,
             'default'               => 'https://tile.openstreetmap.org/',
         ],
