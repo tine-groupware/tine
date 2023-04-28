@@ -117,6 +117,9 @@ msgstr "Dateimanager"
 msgid "Save locally"
 msgstr "Lokal speichern"
 
+msgid "Show in Filemanager"
+msgstr "Im Dateimanager anzeigen"
+
 #: js/QuickLookPanel.js:62
 msgid "Close"
 msgstr "Schließen"

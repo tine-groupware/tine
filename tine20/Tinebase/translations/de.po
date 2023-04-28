@@ -2671,6 +2671,9 @@ msgstr "Eltern"
 msgid "Child"
 msgstr "Kind"
 
+msgid "Contents of Related Folder"
+msgstr "Inhalt des verknüpften Ordners"
+
 #: js/widgets/relation/GenericPickerGridPanel.js:288
 #, python-brace-format
 msgid ""

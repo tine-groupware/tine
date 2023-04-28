@@ -717,7 +717,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @private
      */
     onFilterRowsChange: function() {
-        if (! this.supressEvents && Ext.isFunction(this.ownerCt.layout.layout)) {
+        if (! this.supressEvents && this.ownerCt.rendered && Ext.isFunction(this.ownerCt.layout.layout)) {
             this.ownerCt.layout.layout();
         }
         this.doLayout();

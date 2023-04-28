@@ -82,6 +82,26 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
  * register additional action for genericpickergridpanel
  */
 Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
+    text: 'Show in Filemanager',   // i18n._('Show in Filemanager')
+    iconCls: 'FilemanagerIconCls',
+    requiredGrant: 'readGrant',
+    allowMultiple: false,
+    handler: function(action) {
+        const nodeData = action.grid.store.getAt(action.gridIndex).get('related_record');
+        const node = Tine.Tinebase.data.Record.setFromJson(nodeData, Tine.Filemanager.Model.Node);
+        const url = node.getSystemLink();
+        const  mainWindow = Ext.ux.PopupWindowMgr.getMainWindow()
+        mainWindow.location = url;
+        mainWindow.focus();
+
+
+    },
+    actionUpdater: function(action, grants, records) {
+
+    }
+});
+
+Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
     text: 'Save locally',   // i18n._('Save locally')
     iconCls: 'action_filemanager_save_all',
     requiredGrant: 'readGrant',
@@ -90,6 +110,9 @@ Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
     handler: function(action) {
         var node = action.grid.store.getAt(action.gridIndex).get('related_record');
         Tine.Filemanager.downloadFile(node);
+    },
+    actionUpdater: function(action, grants, records) {
+        action.setDisabled(_.get(records, '[0].data.related_record.type') !== 'file');
     }
 });
 
