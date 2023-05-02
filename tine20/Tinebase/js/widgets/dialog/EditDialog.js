@@ -487,7 +487,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 ptype: 'ux.itemregistry',
                 key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
             }],
-            items:[
+            items:_.concat([
                 {
                     title: this.i18nRecordName,
                     autoScroll: true,
@@ -506,12 +506,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             columnWidth: 1/2
                         },
                     })].concat(this.getEastPanel())
-                }, this.activitiesTabPanel = new Tine.widgets.activities.ActivitiesTabPanel({
+                }, _.get(this.recordClass.getModelConfiguration(), 'modlogActive') ? this.activitiesTabPanel = new Tine.widgets.activities.ActivitiesTabPanel({
                     app: this.appName,
                     record_id: this.record.id,
                     record_model: this.modelName
-                })
-            ]
+                }) : []
+            ])
         };
     },
 
