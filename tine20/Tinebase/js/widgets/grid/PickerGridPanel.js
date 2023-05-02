@@ -52,7 +52,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @cfg {bool}
      * enable top toolbar (with search combo)
      */
-    enableTbar: true,
+    enableTbar: null,
 
     /**
      * store to hold records
@@ -87,6 +87,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     searchRecordClass: null,
 
     isMetadataModelFor: null,
+
+    metaDataFields: null,
     
     /**
      * search combo config
@@ -162,6 +164,18 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.disabled = false;
             this.readOnly = true;
         }
+
+        // Autodetect if our record has additional metadata for the refId Record or is only a cross table
+        if (this.refIdField) {
+            const systemFields = _.map(Tine.Tinebase.Model.genericFields, 'name').concat(this.recordClass.getMeta('idProperty'), this.refIdField);
+            const dataFields = _.difference(this.recordClass.getModelConfiguration().fieldKeys, systemFields);
+
+            this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 ? dataFields[0] : null;
+            this.metaDataFields = _.difference(dataFields, [this.isMetadataModelFor]);
+            this.columns = this.columns || this.isMetadataModelFor ? [this.isMetadataModelFor] : null;
+        }
+
+
 
         this.contextMenuItems = (this.contextMenuItems !== null) ? this.contextMenuItems : [];
         this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
@@ -276,10 +290,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * init actions and toolbars
      */
     initActionsAndToolbars: function() {
+        const hasEditDialog = !this.recordClass || !(this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass));
+        const useEditDialog = !this.metaDataFields || _.isArray(this.metaDataFields) && this.metaDataFields.length;
 
         this.actionCreate = new Ext.Action({
             text: String.format(i18n._('Create {0}'), this.recordName),
-            hidden: !this.recordClass || !this.allowCreateNew,
+            hidden: !hasEditDialog || !this.allowCreateNew || !useEditDialog,
             scope: this,
             handler: this.onCreate,
             iconCls: 'action_add'
@@ -287,7 +303,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.actionEdit = new Ext.Action({
             text: String.format(i18n._('Edit {0}'), this.recordName),
-            hidden: !this.recordClass || !(this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass)),
+            hidden: !hasEditDialog || !useEditDialog,
             scope: this,
             disabled: true,
             actionUpdater: function(action, grants, records) {
@@ -365,6 +381,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 }
             }
         }
+
+        this.enableTbar = _.isBoolean(this.enableTbar) ? this.enableTbar : (!this.refIdField || this.isMetadataModelFor);
 
         if (this.enableTbar) {
             this.initTbar();
@@ -541,7 +559,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (this.isMetadataModelFor !== null) {
             var recordData = this.getRecordDefaults();
             recordData[this.isMetadataModelFor] = recordToAdd.data;
-            var record = new this.recordClass(recordData);
+            var record =  Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
 
             // check if already in
             const existingRecord = this.store.findBy(function (r) {
