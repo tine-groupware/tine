@@ -137,7 +137,7 @@ describe('Contacts', () => {
 
         test('test Tags', async () => {
             await page.waitForTimeout(1000);
-            await expect(page).toClick('.x-grid3-row.x-grid3-row-last', {button: 'right'});
+            await expect(page).toClick('.x-grid3-row.x-grid3-row-first', {button: 'right'});
             await expect(page).toClick('.action_tag.x-menu-item-icon');
             await expect(page).toClick('.x-window .x-form-arrow-trigger');
             await page.waitForSelector('.x-widget-tag-tagitem-text');

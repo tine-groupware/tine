@@ -175,7 +175,7 @@ module.exports = {
             { test: /\.js$/, include: [baseDir + '/library'], exclude: [baseDir + '/library/ExtJS'], enforce: "pre", use: [{ loader: "script-loader" }] },
             { test: /\.jsb2$/, use: [{ loader: "./jsb2-loader" }] },
             { test: /\.css$/, use: [{ loader: "style-loader" }, { loader: "css-loader" }] },
-            { test: /\.scss$/, use: ['css-loader', 'sass-loader'] },
+            { test: /\.scss$/, use: ['style-loader','css-loader', 'sass-loader'] },
             { test: /\.less$/, use: [{ loader: "style-loader" }, { loader: "css-loader" }, { loader: "less-loader", options: { lessOptions: { noIeCompat: true, } } }] },
             {
                 test: /\.(woff2?|eot|ttf|otf|png|gif|svg)(\?.*)?$/,
