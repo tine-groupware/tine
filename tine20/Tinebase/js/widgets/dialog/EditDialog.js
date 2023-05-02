@@ -526,6 +526,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 layout: 'form',
                 labelAlign: 'top',
                 border: false,
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-editDialog-eastPanel'
+                }],
                 items: [Object.assign({
                     style: 'margin-top: -4px; border 0px;',
                     labelSeparator: '',
