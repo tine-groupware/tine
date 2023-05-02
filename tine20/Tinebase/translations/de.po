@@ -5007,7 +5007,7 @@ msgid ""
 "device_name}."
 msgstr ""
 "Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via {mfaDevice."
-"device_name} zum entsperren gesendet."
+"device_name} zum Entsperren gesendet."
 
 msgid "Security code from {mfaDevice.device_name}"
 msgstr "{mfaDevice.device_name} Sicherheitscode"
@@ -5019,6 +5019,9 @@ msgstr ""
 
 msgid "Choose MFA Deivce"
 msgstr "MFA Gerät auswählen"
+
+msgid "MFA password wrong"
+msgstr "MFA-Passwort falsch"
 
 msgid "This area is locked. Which device should be used to unlock."
 msgstr ""
@@ -5346,9 +5349,6 @@ msgstr "Nur die angezeigten Spalten exportieren"
 
 msgid "Quota is exceeded"
 msgstr "Quota ist überschritten"
-
-msgid "MFA password wrong"
-msgstr "MFA-Passwort falsch"
 
 msgid "Your password expired. Please enter a new user password:"
 msgstr ""
