@@ -34,15 +34,6 @@ msgstr "Die folgenden Felder wurden nicht importiert: %s"
 msgid "N/A"
 msgstr "n.v."
 
-msgid "Follow System"
-msgstr "System folgen"
-
-msgid "Dark Mode"
-msgstr "Dunkler Modus"
-
-msgid "Light Mode"
-msgstr "Heller Modus"
-
 #: User/Abstract.php:347 User/Abstract.php:348 User/Abstract.php:349
 #: User/Abstract.php:350 User/Abstract.php:351 User/Abstract.php:352
 #: Group/Abstract.php:261 Acl/Roles.php:1020 js/ux/ConnectionStatus.js:60
@@ -1817,39 +1808,6 @@ msgstr "mit der Hilfe von unseren"
 #: js/AboutDialog.js:80
 msgid "Contributors"
 msgstr " Mitwirkenden"
-
-msgid "Contract ID"
-msgstr "Vertrag ID"
-
-msgid "Maximum Users (0=unlimited)"
-msgstr "Maximale Benutzerzahl (0=Unbegrenzt)"
-
-msgid "Organization"
-msgstr "Lizenznehmer"
-
-msgid "Subscription"
-msgstr "Subskription"
-
-msgid "Valid from"
-msgstr "Gültig vom"
-
-msgid "Valid to"
-msgstr "Gültig bis"
-
-msgid "Activation Key"
-msgstr "Aktivierungsschlüssel"
-
-msgid "No valid Subscription"
-msgstr "Keine gültige Subskription"
-
-msgid "Activated Features"
-msgstr "Aktivierte Features"
-
-msgid "Your Subscription is unavailable"
-msgstr "Ihr Subskription ist nicht verfügbar"
-
-msgid "Your Subscription is not valid"
-msgstr "Ihr Subskription ist ungültig"
 
 #: js/MainScreenPanel.js:179
 msgid "Your password expired."
@@ -5049,7 +5007,7 @@ msgid ""
 "device_name}."
 msgstr ""
 "Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via {mfaDevice."
-"device_name} zum entsperren gesendet."
+"device_name} zum Entsperren gesendet."
 
 msgid "Security code from {mfaDevice.device_name}"
 msgstr "{mfaDevice.device_name} Sicherheitscode"
@@ -5061,6 +5019,9 @@ msgstr ""
 
 msgid "Choose MFA Deivce"
 msgstr "MFA Gerät auswählen"
+
+msgid "MFA password wrong"
+msgstr "MFA-Passwort falsch"
 
 msgid "This area is locked. Which device should be used to unlock."
 msgstr ""
@@ -5389,8 +5350,47 @@ msgstr "Nur die angezeigten Spalten exportieren"
 msgid "Quota is exceeded"
 msgstr "Quota ist überschritten"
 
-msgid "MFA password wrong"
-msgstr "MFA-Passwort falsch"
+msgid "Follow System"
+msgstr "System folgen"
+
+msgid "Dark Mode"
+msgstr "Dunkler Modus"
+
+msgid "Light Mode"
+msgstr "Heller Modus"
+
+msgid "Contract ID"
+msgstr "Vertrag ID"
+
+msgid "Maximum Users (0=unlimited)"
+msgstr "Maximale Benutzerzahl (0=Unbegrenzt)"
+
+msgid "Organization"
+msgstr "Lizenznehmer"
+
+msgid "Subscription"
+msgstr "Subskription"
+
+msgid "Valid from"
+msgstr "Gültig vom"
+
+msgid "Valid to"
+msgstr "Gültig bis"
+
+msgid "Activation Key"
+msgstr "Aktivierungsschlüssel"
+
+msgid "No valid Subscription"
+msgstr "Keine gültige Subskription"
+
+msgid "Activated Features"
+msgstr "Aktivierte Features"
+
+msgid "Your Subscription is unavailable"
+msgstr "Ihr Subskription ist nicht verfügbar"
+
+msgid "Your Subscription is not valid"
+msgstr "Ihr Subskription ist ungültig"
 
 msgid "Your password expired. Please enter a new user password:"
 msgstr ""
@@ -5402,11 +5402,11 @@ msgstr ""
 "eingeben"
 
 msgid ""
-"A new window cannot be opened. To avoid this message please deactivate your "
-"browsers popup blocker for {0}"
+"A new window cannot be opened. To avoid this message please deactivate "
+"your browsers popup blocker for {0}"
 msgstr ""
-"Ein neues Fenster konnte nicht geöffnet werden. Bitte deaktivieren Sie den "
-"Popup-Blocker Ihres Browsers für {0}"
+"Ein neues Fenster konnte nicht geöffnet werden. Bitte deaktivieren Sie "
+"den Popup-Blocker Ihres Browsers für {0}"
 
 msgid "There was an error verifying your certificate!!!"
 msgstr "Es gab einen Fehler beim verifizieren Ihres Zertifikats!"
@@ -5435,7 +5435,8 @@ msgstr[0] "Ausgewählten Tag wirklich löschen?"
 msgstr[1] "Ausgewählte Tags wirklich löschen?"
 
 msgid "the selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
+msgid_plural ""
+"The selected tags will be removed and disapear for all entries"
 msgstr[0] ""
 "Der ausgewählte Tag wird gelöscht und verschwindet bei allen Einträgen"
 msgstr[1] ""
@@ -5473,8 +5474,8 @@ msgstr "Frei / Belegt"
 
 msgid "The grant to access free busy information of events in this calendar"
 msgstr ""
-"Das Recht, zu Termine in diesem Kalender Frei/Belegt-Informationen angezeigt "
-"zu bekommen"
+"Das Recht, zu Termine in diesem Kalender Frei/Belegt-Informationen "
+"angezeigt zu bekommen"
 
 msgid "The grant to access records marked as private in this container"
 msgstr "Das Recht, private Einträge in diesem Container zu lesen"
@@ -5491,7 +5492,8 @@ msgstr "Konfiguration der Zwei Faktor Authentifizierung"
 msgid "Container Custom Sort"
 msgstr "Benutzerdefinierte Ordnersortierung"
 
-msgid "Allows to sort containers by setting the sort order in Admin/Container"
+msgid ""
+"Allows to sort containers by setting the sort order in Admin/Container"
 msgstr "Erlaubt es die Sortierung von Ordnern im Admin/Container Modul"
 
 msgid "Name of the role to notify if soft quote is exceeded"
@@ -5601,7 +5603,8 @@ msgstr "Zweit-Passwort benötigt"
 
 msgid "The right Resource Admin must be set once."
 msgstr ""
-"Das Recht Ressourcen Administration muss mindestens einmal festgelegt werden."
+"Das Recht Ressourcen Administration muss mindestens einmal festgelegt "
+"werden."
 
 msgid "- The last filter I used -"
 msgstr "- Der letzte ausgewählte Filter -"
@@ -5610,14 +5613,16 @@ msgid ""
 "Set Tine 2.0 maintenance mode. Possible values: \"off\", \"normal\" (only "
 "users having the maintenance right can login) and \"all\""
 msgstr ""
-"Tine 2.0 in den Wartungsmodus setzten. Mögliche Werte: „off“, „normal“ (nur "
-"Nutzer mit dem Wartungsmodus Recht können sich einloggen) und „all“"
+"Tine 2.0 in den Wartungsmodus setzten. Mögliche Werte: „off“, "
+"„normal“ (nur Nutzer mit dem Wartungsmodus Recht können sich einloggen) "
+"und „all“"
 
 msgid "User E-Mail-Address {0} not in allowed domains"
 msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains"
 
 msgid "User E-Mail-Address {0} not in allowed domains [{1}]"
-msgstr "Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
+msgstr ""
+"Die E-Mail-Adresse {0} ist nicht innerhalb der erlaubten Domains [{1}]"
 
 msgid "Conflict is resolved"
 msgstr "Konflikt ist aufgelöst"
@@ -5640,16 +5645,16 @@ msgstr "{0} Testversion."
 
 msgid "Please contact Metaways Infosystems GmbH to buy a valid license."
 msgstr ""
-"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine gültige Lizenz zu "
-"erwerben."
+"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine gültige Lizenz "
+"zu erwerben."
 
 msgid ""
 "Your {0} license is expired! Users cannot login any more. Please contact "
 "Metaways Infosystems GmbH to buy a new license."
 msgstr ""
-"Ihre {0} Lizenz ist abgelaufen! Benutzer können sich nicht mehr einloggen. "
-"Bitte kontaktieren Sie Metaways Infosystems GmbH um eine neue Lizenz zu "
-"erwerben."
+"Ihre {0} Lizenz ist abgelaufen! Benutzer können sich nicht mehr "
+"einloggen. Bitte kontaktieren Sie Metaways Infosystems GmbH um eine neue "
+"Lizenz zu erwerben."
 
 msgid "Copy Email Address"
 msgstr "E-Mail-Adresse kopieren"
@@ -5658,11 +5663,11 @@ msgid "Multi Factor Authentication Config"
 msgstr "Multi-Faktor-Authentifizierung"
 
 msgid ""
-"This area is locked. To unlock it we send a securitycode to via {mfaDevice."
-"device_name}"
+"This area is locked. To unlock it we send a securitycode to via "
+"{mfaDevice.device_name}"
 msgstr ""
-"Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via {mfaDevice."
-"device_name} zum entsperren gesendet"
+"Dieser Bereich ist gesperrt. Wir haben einen Sicherheitscode via "
+"{mfaDevice.device_name} zum entsperren gesendet"
 
 msgid "Static PIN for user: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
 msgstr "Statischer PIN: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
