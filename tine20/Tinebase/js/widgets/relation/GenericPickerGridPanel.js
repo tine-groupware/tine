@@ -157,7 +157,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         
         this.title = this.i18nTitle = i18n.ngettext('Relation', 'Relations', 50);
         
-        this.on('rowdblclick', this.onEditInNewWindow.createDelegate(this), this);
+        // this.on('rowdblclick', this.onEditInNewWindow.createDelegate(this), this);
         
         this.on('beforecontextmenu', this.onBeforeContextMenu.createDelegate(this), this);
         
@@ -298,7 +298,57 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         rowParams.body='';
         return '';
     },
-    
+
+    getNodeGrid: function() {
+        if (! this.nodeGrid) {
+            // fake background nodeGrid to support file actions of related files
+            this.nodeGrid = new Tine.Filemanager.NodeGridPanel({
+                app: Tine.Tinebase.appMgr.get('Filemanager'),
+                hasQuickSearchFilterToolbarPlugin: false,
+                stateIdSuffix: '-GenericRelationGrid'
+            });
+        }
+        return this.nodeGrid;
+    },
+
+    onRowDblClick: function(grid, row, col) {
+        // special handling/hack for filemanager
+        const relation = this.getSelectionModel().getSelected();
+        const record = this.getRelatedRecord(relation);
+        if(record.constructor.getPhpClassName() === 'Filemanager_Model_Node') {
+            const nodeGrid = this.getNodeGrid();
+            switch (record.get('type')) {
+                case 'file':
+                    const sm = nodeGrid.getGrid().getSelectionModel();
+                    sm.clearSelections();
+                    sm.selections.add(record);
+                    sm.fireEvent('selectionchange', sm);
+                    record.data.account_grants = {
+                        downloadGrant: true
+                    };
+
+                    return nodeGrid.onRowDblClick(record);
+                case 'folder':
+                    const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+                        mode: 'view',
+                        windowTitle: i18n._('Contents of Related Folder'),
+                        singleSelect: true,
+                        requiredGrants: ['readGrant'],
+                        initialPath: record.get('path'),
+                        applyButtonText: null,
+                        onButtonApply: Ext.emptyFn,
+                        cancelButtonText: i18n._('Close')
+                    });
+                    filePickerDialog.openWindow()
+                    break;
+            }
+
+            return;
+        }
+
+        return this.onEditInNewWindow();
+    },
+
     /**
      * calls the editdialog for the model
      */
@@ -398,6 +448,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         Ext.each(additionalItems, function(item) {
             item.setText(app.i18n._(item.getText()));
             this.contextMenu.add(item);
+            this.actionUpdater.addAction(item);
             if(! this.contextMenu.hasOwnProperty('tempItems')) {
                 this.contextMenu.tempItems = [];
             }
@@ -742,9 +793,11 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         if (Tine[split[0]] && Tine[split[0]].Model) {
             var model = Tine[split[0]].Model[split[1]];
             if (model.getPhpClassName() === 'Filemanager_Model_Node') {
-                return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName')
-                + model.getMeta('modelName') + '">&nbsp;</span>'
-                + model.getAppName();
+                const contenttype =  _.get(arguments, '[2].data.related_record.contenttype');
+                const iconCls = _.get(arguments, '[2].data.related_record.type') === 'folder' ? 'mime-icon-folder' :
+                    ('mime-icon-file ' + Tine.Tinebase.common.getMimeIconCls(contenttype));
+
+                return '<span class="tine-recordclass-gridicon '+ iconCls + '">&nbsp;</span>' + model.getAppName();
             }
             return '<span class="tine-recordclass-gridicon ' + model.getMeta('appName')
                 + model.getMeta('modelName') + '">&nbsp;</span>'

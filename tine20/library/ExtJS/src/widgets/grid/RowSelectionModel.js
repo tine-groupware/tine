@@ -278,7 +278,7 @@ Ext.grid.RowSelectionModel = Ext.extend(Ext.grid.AbstractSelectionModel,  {
             return;
         }
         if(fast !== true){
-            var ds = this.grid.store;
+            var ds = this.grid?.store || this.store;
             var s = this.selections;
             s.each(function(r){
                 this.deselectRow(ds.indexOfId(r.id));
@@ -452,7 +452,7 @@ Ext.grid.RowSelectionModel = Ext.extend(Ext.grid.AbstractSelectionModel,  {
      * prevent notifying the view (disables updating the selected appearance)
      */
     deselectRow : function(index, preventViewNotify){
-        if(this.isLocked()){
+        if(index === -1 || this.isLocked()){
             return;
         }
         if(this.last == index){

@@ -1166,17 +1166,19 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.redirectToParent = false;
 
         const quota = _.get(store, 'reader.jsonData.quota', false);
-            
-        if (quota) {
-            var qhtml = Tine.widgets.grid.QuotaRenderer(quota.effectiveUsage, quota.effectiveQuota, /*use SoftQuota*/ true);
-            this.quotaBar.show();
-            if (this.quotaBar.rendered) {
-                this.quotaBar.update(qhtml);
+
+        if (this.quotaBar) {
+            if (quota) {
+                var qhtml = Tine.widgets.grid.QuotaRenderer(quota.effectiveUsage, quota.effectiveQuota, /*use SoftQuota*/ true);
+                this.quotaBar.show();
+                if (this.quotaBar.rendered) {
+                    this.quotaBar.update(qhtml);
+                } else {
+                    this.quotaBar.html = qhtml;
+                }
             } else {
-                this.quotaBar.html = qhtml;
+                this.quotaBar.hide();
             }
-        } else {
-            this.quotaBar.hide();
         }
     },
 

@@ -291,7 +291,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         const record = selectionModel.getSelections();
         this.updateSelection(record);
         
-        if (this.validSelection && this.selection[0].type !== 'folder') {
+        if (this.mode !== 'view' && this.validSelection && this.selection[0].type !== 'folder') {
             this.fireEvent('forceNodeSelected', this.selection);
             return false;
         }
@@ -362,13 +362,13 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             {field: 'path', operator: 'equals', value: this.initialPath}
         ] : null;
 
-        var gridPanel = new Tine.Filemanager.NodeGridPanel({
+        var gridPanel = this.gridPanel = new Tine.Filemanager.NodeGridPanel({
             app: me.app,
             height: 200,
             width: 200,
             border: false,
             frame: false,
-            readOnly: this.mode !== 'target',
+            readOnly: this.hasOwnProperty('readOnly') ? this.readOnly : false,
             onRowDblClick: Tine.Filemanager.NodeGridPanel.prototype.onRowDblClick.createInterceptor(this.onNodeDblClick, this),
             enableDD: false,
             enableDrag: false,
@@ -547,14 +547,11 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
      * @returns {*}
      */
     getColumnModel: function () {
-        var columns = [{
-            id: 'name',
+        var columns = [Object.assign(_.find(this.gridPanel.customColumnData, {id: 'name'}), {
             header: this.app.i18n._("Name"),
-            width: 70,
-            sortable: true,
             dataIndex: 'name',
-            renderer: Ext.ux.PercentRendererWithName
-        }, {
+            width: 70,
+        }), {
             id: 'size',
             header: this.app.i18n._("Size"),
             width: 40,
