@@ -680,6 +680,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     initActions: function() {
         this.action_saveAndClose = new Ext.Action({
+            hidden: this.readOnly,
             requiredGrant: this.requiredSaveGrant,
             text: (this.saveAndCloseButtonText != '') ? this.app.i18n._(this.saveAndCloseButtonText) : i18n._('Ok'),
             minWidth: 70,
@@ -692,6 +693,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         });
 
         this.action_applyChanges = new Ext.Action({
+            hidden: this.readOnly,
             requiredGrant: this.requiredSaveGrant,
             text: i18n._('Apply'),
             minWidth: 70,
@@ -702,7 +704,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         });
 
         this.action_cancel = new Ext.Action({
-            text: (this.cancelButtonText != '') ? this.app.i18n._(this.cancelButtonText) : i18n._('Cancel'),
+            text: (this.cancelButtonText != '') ? this.app.i18n._(this.cancelButtonText) :
+                (this.readOnly ? i18n._('Close') : i18n._('Cancel')),
             minWidth: 70,
             scope: this,
             handler: this.onCancel,
@@ -1066,6 +1069,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         wrapTicket();
     },
 
+    setReadOnly: function(readOnly) {
+        this.readOnly = true;
+        this.action_saveAndClose.setHidden(readOnly);
+        if (! this.cancelButtonText) {
+            this.action_cancel.setText(readOnly ? i18n._('Close') : i18n._('Cancel'));
+        }
+        this.onAfterRecordLoad();
+    },
+
     // finally load the record into the form
     onAfterRecordLoad: function() {
         var _ = window.lodash,
@@ -1087,10 +1099,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
 
         // apply grants to fields with requiredGrant prop
-        if (this.evalGrants) {
+        if (this.evalGrants || this.readOnly) {
             this.getForm().items.each(function (f) {
                 const recordGrants = _.get(this.record, this.recordClass.getMeta('grantsPath'));
-                let hasRequiredGrants = true;
+                let hasRequiredGrants = !this.readOnly && true;
 
                 const requiredGrants = _.get(this.modelConfig, `fields[${f.fieldName}].requiredGrants`);
                 if (requiredGrants) {

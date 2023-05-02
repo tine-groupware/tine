@@ -19,7 +19,9 @@ class UserConfigPanel extends Tine.Tinebase.BL.BLConfigPanel {
         Object.assign(config, {
             recordClass: Tine.Tinebase.Model.MFA_UserConfig,
             dynamicRecordField: 'config',
-            dataPath: 'data.mfa_configs'
+            dataPath: 'data.mfa_configs',
+            editDialogConfig: {
+            }
         });
         super(config);
     }
@@ -51,6 +53,11 @@ class UserConfigPanel extends Tine.Tinebase.BL.BLConfigPanel {
                 };
             };
         }));
+    }
+
+    openEditDialog(configWrapper) {
+        this.editDialogConfig.readOnly = _.get(configWrapper, 'data.config.id') !== 0
+        return super.openEditDialog(configWrapper)
     }
 
     customizeColumns(columns) {

@@ -132,7 +132,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
         }
 
         if (editDialogClass) {
-            editDialogClass.openWindow({
+            editDialogClass.openWindow(Object.assign({
                 mode: 'local',
                 record: Ext.encode(configRecord.data),
                 recordId: configRecord.getId(),
@@ -152,7 +152,7 @@ Tine.Tinebase.BL.BLConfigPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel,
                         }
                     }
                 }
-            });
+            }, this.editDialogConfig));
         }
     },
 
