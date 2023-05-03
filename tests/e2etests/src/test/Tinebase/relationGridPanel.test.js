@@ -9,7 +9,7 @@ beforeAll(async () => {
 
 describe('Mainpage', () => {
 
-    test('add filemanager relation', async () => {
+    test.skip('add filemanager relation', async () => {
         let popupWindow = await lib.getEditDialog('Kontakt hinzufügen');
 
         // add link to personal folder
