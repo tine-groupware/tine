@@ -9,7 +9,7 @@ beforeAll(async () => {
 
 describe('Mainpage', () => {
 
-    test.skip('add filemanager relation', async () => {
+    test('add filemanager relation', async () => {
         let popupWindow = await lib.getEditDialog('Kontakt hinzufügen');
 
         // add link to personal folder
@@ -28,8 +28,10 @@ describe('Mainpage', () => {
         await popupWindow.waitForTimeout(3000);
 
         // show in filemanager
-        await popupWindow.click('.x-grid3-cell-inner.x-grid3-col-related_record',{button: 'right'});
-        await expect(popupWindow).toClick('span' , {text: 'Im Dateimanager anzeigen'});
+        await popupWindow.click('.x-grid3-row.x-grid3-row-first.x-grid3-row-last', {button: 'right'});
+        await popupWindow.waitForSelector('.x-menu-list', {visible: true});
+        await popupWindow.waitForSelector('span' , {text: 'Im Dateimanager anzeigen', visible: true});
+        await expect(popupWindow).toClick('span' , {text: 'Im Dateimanager anzeigen', visible: true});
         await page.waitForSelector('.x-tab-with-icon.x-tab-strip-active .ApplicationIconCls.FilemanagerIconCls');
 
     });
