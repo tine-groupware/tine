@@ -90,7 +90,7 @@ class Bookmarks_Model_Bookmark extends Tinebase_Record_Abstract
             self::FLDS_URL => [
                 self::TYPE          => self::TYPE_TEXT,
                 self::NULLABLE      => false,
-                self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+                self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL         => 'Url', // _('Url')
                 self::QUERY_FILTER  => true
             ],
@@ -121,5 +121,17 @@ class Bookmarks_Model_Bookmark extends Tinebase_Record_Abstract
     public function isReplicable()
     {
         return true;
+    }
+
+    public function setFromArray(array &$_data)
+    {
+        if (empty($_data[self::FLDS_NAME]) && isset($_data[self::FLDS_URL])) {
+            if (strpos($_data[self::FLDS_URL], 'http') === false){
+                $_data[self::FLDS_URL] = 'https://' . $_data[self::FLDS_URL];
+            }
+            $_data[self::FLDS_NAME] = parse_url($_data[self::FLDS_URL], PHP_URL_HOST);
+        }
+
+        parent::setFromArray($_data);
     }
 }
