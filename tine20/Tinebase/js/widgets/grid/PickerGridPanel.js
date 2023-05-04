@@ -165,18 +165,6 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.readOnly = true;
         }
 
-        // Autodetect if our record has additional metadata for the refId Record or is only a cross table
-        if (this.refIdField) {
-            const systemFields = _.map(Tine.Tinebase.Model.genericFields, 'name').concat(this.recordClass.getMeta('idProperty'), this.refIdField);
-            const dataFields = _.difference(this.recordClass.getModelConfiguration().fieldKeys, systemFields);
-
-            this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 ? dataFields[0] : null;
-            this.metaDataFields = _.difference(dataFields, [this.isMetadataModelFor]);
-            this.columns = this.columns || this.isMetadataModelFor ? [this.isMetadataModelFor] : null;
-        }
-
-
-
         this.contextMenuItems = (this.contextMenuItems !== null) ? this.contextMenuItems : [];
         this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
         this.searchComboConfig = this.searchComboConfig || {};
@@ -190,6 +178,16 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.labelField = this.labelField.match(/(?:{{\s*)(\w+)/)[1];
         }
         this.autoExpandColumn = this.autoExpandColumn? this.autoExpandColumn : this.labelField;
+
+        // Autodetect if our record has additional metadata for the refId Record or is only a cross table
+        if (this.refIdField) {
+            const systemFields = _.map(Tine.Tinebase.Model.genericFields, 'name').concat(this.recordClass.getMeta('idProperty'), this.refIdField);
+            const dataFields = _.difference(this.recordClass.getModelConfiguration().fieldKeys, systemFields);
+
+            this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 ? dataFields[0] : null;
+            this.metaDataFields = _.difference(dataFields, [this.isMetadataModelFor]);
+            this.columns = this.columns || (this.isMetadataModelFor ? [this.isMetadataModelFor] : null);
+        }
 
         this.on('afterrender', this.onAfterRender, this);
         this.initComponentMixin();
