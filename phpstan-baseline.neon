@@ -7476,11 +7476,6 @@ parameters:
 			path: tine20/Tinebase/Model/SchedulerTask.php
 
 		-
-			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_Scheduler_Task    config\\)\\: Unexpected token \"config\", expected variable at offset 170$#"
-			count: 1
-			path: tine20/Tinebase/Model/SchedulerTask.php
-
-		-
 			message: "#^PHPDoc tag @property has invalid value \\(int                        failure_count\\)\\: Unexpected token \"failure_count\", expected variable at offset 470$#"
 			count: 1
 			path: tine20/Tinebase/Model/SchedulerTask.php
@@ -8259,41 +8254,6 @@ parameters:
 			message: "#^Method Tinebase_SambaSAM\\:\\:factory\\(\\) has invalid return type Tinebase_SambaSAM_Abstract\\.$#"
 			count: 1
 			path: tine20/Tinebase/SambaSAM.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:cleanZombieTasks\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:deleteByProperty\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getDueTask\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getLastRun\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getTaskForUpdate\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:hasTask\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:markTaskRunning\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
 
 		-
 			message: "#^Method Tinebase_Server_Abstract\\:\\:_getBasicAuthData\\(\\) should return array but return statement is missing\\.$#"
