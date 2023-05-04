@@ -5,12 +5,14 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  */
 
 /**
  * Task class with handle and run functions
+ *
+ * - methods called addXYZTask are called via \Tinebase_Setup_Initialize::addSchedulerTasks
  * 
  * @package     Tinebase
  * @subpackage  Server
@@ -235,159 +237,134 @@ class Tinebase_Scheduler_Task
 
     /**
      * add alarm task to scheduler
-     * 
+     *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addAlarmTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_Alarm')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_Alarm', self::TASK_TYPE_MINUTELY, [[
-            self::CONTROLLER    => 'Tinebase_Alarm',
-            self::METHOD_NAME   => 'sendPendingAlarms',
-        ]]);
-        $_scheduler->create($task);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_Alarm::sendPendingAlarms in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Alarm::class,
+            'sendPendingAlarms',
+            self::TASK_TYPE_MINUTELY,
+            $_scheduler,
+            'Tinebase_Alarm'
+        );
     }
     
     /**
      * add cache cleanup task to scheduler
-     * 
+     *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addCacheCleanupTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_CacheCleanup')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_CacheCleanup', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_Controller',
-            self::METHOD_NAME   => 'cleanupCache',
-        ]]);
-        
-        $_scheduler->create($task);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Saved task Tinebase_Controller::cleanupCache in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Controller::class,
+            'cleanupCache',
+            self::TASK_TYPE_DAILY,
+            $_scheduler,
+            'Tinebase_CacheCleanup'
+        );
     }
     
     /**
      * add sessions cleanup task to scheduler
-     * 
+     *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addSessionsCleanupTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_cleanupSessions')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_cleanupSessions', self::TASK_TYPE_HOURLY, [[
-            self::CONTROLLER    => 'Tinebase_Controller',
-            self::METHOD_NAME   => 'cleanupSessions',
-        ]]);
-        
-        $_scheduler->create($task);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Saved task Tinebase_Controller::cleanupSessions in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Controller::class,
+            'cleanupSessions',
+            self::TASK_TYPE_HOURLY,
+            $_scheduler,
+            'Tinebase_cleanupSessions'
+        );
     }
     
     /**
      * add credential cache cleanup task to scheduler
-     * 
+     *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addCredentialCacheCleanupTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_CredentialCacheCleanup')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_CredentialCacheCleanup', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_Auth_CredentialCache',
-            self::METHOD_NAME   => 'clearCacheTable',
-        ]]);
-        
-        $_scheduler->create($task);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Saved task Tinebase_Auth_CredentialCache::clearCacheTable in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Auth_CredentialCache::class,
+            'clearCacheTable',
+            self::TASK_TYPE_DAILY,
+            $_scheduler,
+            'Tinebase_CredentialCacheCleanup'
+        );
     }
     
     /**
      * add temp_file table cleanup task to scheduler
-     * 
+     *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addTempFileCleanupTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_TempFileCleanup')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_TempFileCleanup', self::TASK_TYPE_HOURLY, [[
-            self::CONTROLLER    => 'Tinebase_TempFile',
-            self::METHOD_NAME   => 'clearTableAndTempdir',
-        ]]);
-        
-        $_scheduler->create($task);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Saved task Tinebase_TempFile::clearTableAndTempdir in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_TempFile::class,
+            'clearTableAndTempdir',
+            self::TASK_TYPE_HOURLY,
+            $_scheduler,
+            'Tinebase_TempFileCleanup'
+        );
     }
     
     /**
      * add deleted file cleanup task to scheduler
-     * 
+     *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addDeletedFileCleanupTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_DeletedFileCleanup')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_DeletedFileCleanup', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_FileSystem',
-            self::METHOD_NAME   => 'clearDeletedFiles',
-        ]]);
-        
-        $_scheduler->create($task);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Saved task Tinebase_FileSystem::clearDeletedFiles in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_FileSystem::class,
+            'clearDeletedFiles',
+            self::TASK_TYPE_DAILY,
+            $_scheduler,
+            'Tinebase_DeletedFileCleanup'
+        );
     }
 
     /**
      * add access log cleanup task to scheduler
-     * 
+     *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addAccessLogCleanupTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_AccessLogCleanup')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_AccessLogCleanup', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_AccessLog',
-            self::METHOD_NAME   => 'clearTable',
-        ]]);
-        
-        $_scheduler->create($task);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-            . ' Saved task Tinebase_AccessLog::clearTable in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_AccessLog::class,
+            'clearTable',
+            self::TASK_TYPE_DAILY,
+            $_scheduler,
+            'Tinebase_AccessLogCleanup'
+        );
     }
 
     /**
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addAccountSyncTask(Tinebase_Scheduler $_scheduler)
     {
@@ -414,171 +391,139 @@ class Tinebase_Scheduler_Task
 
     /**
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addReplicationTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('readModificationLogFromMaster')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('readModificationLogFromMaster', self::TASK_TYPE_HOURLY, [[
-            self::CONTROLLER    => 'Tinebase_Timemachine_ModificationLog',
-            self::METHOD_NAME   => 'readModificationLogFromMaster'
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_Timemachine_ModificationLog::readModificationLogFromMaster in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Timemachine_ModificationLog::class,
+            'readModificationLogFromMaster',
+            self::TASK_TYPE_HOURLY,
+            $_scheduler,
+            'readModificationLogFromMaster'
+        );
     }
 
     /**
      * add file revision cleanup task to scheduler
      *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addFileRevisionCleanupTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_FileRevisionCleanup')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_FileRevisionCleanup', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_FileSystem',
-            self::METHOD_NAME   => 'clearFileRevisions',
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_FileSystem::clearFileRevisions in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_FileSystem::class,
+            'clearFileRevisions',
+            self::TASK_TYPE_DAILY,
+            $_scheduler,
+            'Tinebase_FileRevisionCleanup'
+        );
     }
 
     /**
      * add file objects cleanup task to scheduler
      *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addFileObjectsCleanupTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_FileSystem::clearFileObjects')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_FileSystem::clearFileObjects', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_FileSystem',
-            self::METHOD_NAME   => 'clearFileObjects',
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_FileSystem::clearFileObjects in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_FileSystem::class,
+            'clearFileObjects',
+            self::TASK_TYPE_DAILY,
+            $_scheduler
+        );
     }
 
     /**
      * add file system index checking task to scheduler
      *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addFileSystemCheckIndexTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_FileSystemCheckIndex')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_FileSystemCheckIndex', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_FileSystem',
-            self::METHOD_NAME   => 'checkIndexing',
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_FileSystem::checkIndexing in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_FileSystem::class,
+            'checkIndexing',
+            self::TASK_TYPE_DAILY,
+            $_scheduler,
+            'Tinebase_FileSystemCheckIndex'
+        );
     }
 
     /**
      * add file system preview checking task to scheduler
      *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addFileSystemSanitizePreviewsTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_FileSystemSanitizePreviews')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_FileSystemSanitizePreviews', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_FileSystem',
-            self::METHOD_NAME   => 'sanitizePreviews',
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_FileSystem::sanitizePreviews in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_FileSystem::class,
+            'sanitizePreviews',
+            self::TASK_TYPE_DAILY,
+            $_scheduler,
+            'Tinebase_FileSystemSanitizePreviews'
+        );
     }
 
     /**
      * add file system index checking task to scheduler
      *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addFileSystemNotifyQuotaTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_FileSystemNotifyQuota')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_FileSystemNotifyQuota', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_FileSystem',
-            self::METHOD_NAME   => 'notifyQuota',
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_FileSystem::notifyQuota in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_FileSystem::class,
+            'notifyQuota',
+            self::TASK_TYPE_DAILY,
+            $_scheduler,
+            'Tinebase_FileSystemNotifyQuota'
+        );
     }
 
+    /**
+     * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
     public static function addFileSystemRepairDeleteTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_FileSystem::repairTreeIsDeletedState')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_FileSystem::repairTreeIsDeletedState', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_FileSystem',
-            self::METHOD_NAME   => 'repairTreeIsDeletedState',
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_FileSystem::repairTreeIsDeletedState in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_FileSystem::class,
+            'repairTreeIsDeletedState',
+            self::TASK_TYPE_DAILY,
+            $_scheduler
+        );
     }
 
     /**
      * add file system av scan task to scheduler
      *
      * @param Tinebase_Scheduler $_scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
      */
     public static function addFileSystemAVScanTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_FileSystem::avScan')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_FileSystem::avScan', self::TASK_TYPE_WEEKLY, [[
-            self::CONTROLLER    => 'Tinebase_FileSystem',
-            self::METHOD_NAME   => 'avScan',
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_FileSystem::avScan in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_FileSystem::class,
+            'avScan',
+            self::TASK_TYPE_WEEKLY,
+            $_scheduler
+        );
     }
 
     /**
@@ -613,19 +558,13 @@ class Tinebase_Scheduler_Task
      */
     public static function addAclTableCleanupTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_AclTablesCleanup')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_AclTablesCleanup', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_Controller',
-            self::METHOD_NAME   => 'cleanAclTables',
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_Controller::cleanAclTables in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Controller::class,
+            'cleanAclTables',
+            self::TASK_TYPE_DAILY,
+            $_scheduler,
+            'Tinebase_AclTablesCleanup'
+        );
     }
 
     /**
@@ -635,19 +574,13 @@ class Tinebase_Scheduler_Task
      */
     public static function addActionQueueConsistencyCheckTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_ActionQueueConsistencyCheck')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_ActionQueueConsistencyCheck', self::TASK_TYPE_HOURLY, [[
-            self::CONTROLLER    => 'Tinebase_Controller',
-            self::METHOD_NAME   => 'actionQueueConsistencyCheck',
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_Controller::actionQueueConsistencyCheck in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Controller::class,
+            'actionQueueConsistencyCheck',
+            self::TASK_TYPE_HOURLY,
+            $_scheduler,
+            'Tinebase_ActionQueueConsistencyCheck'
+        );
     }
 
     /**
@@ -657,19 +590,13 @@ class Tinebase_Scheduler_Task
      */
     public static function addActionQueueMonitoringTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_ActionQueueActiveMonitoring')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_ActionQueueActiveMonitoring', self::TASK_TYPE_MINUTELY, [[
-            self::CONTROLLER    => 'Tinebase_Controller',
-            self::METHOD_NAME   => 'actionQueueActiveMonitoring',
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_Controller::actionQueueActiveMonitoring in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Controller::class,
+            'actionQueueActiveMonitoring',
+            self::TASK_TYPE_MINUTELY,
+            $_scheduler,
+            'Tinebase_ActionQueueActiveMonitoring'
+        );
     }
 
     /**
@@ -679,19 +606,12 @@ class Tinebase_Scheduler_Task
      */
     public static function addFilterSyncTokenCleanUpTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_FilterSyncToken::cleanUp')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Tinebase_FilterSyncToken::cleanUp', self::TASK_TYPE_DAILY, [[
-            self::CONTROLLER    => 'Tinebase_FilterSyncToken',
-            self::METHOD_NAME   => 'cleanUp',
-        ]]);
-
-        $_scheduler->create($task);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_FilterSyncToken::cleanUp in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_FilterSyncToken::class,
+            'cleanUp',
+            self::TASK_TYPE_DAILY,
+            $_scheduler
+        );
     }
 
     /**
@@ -701,18 +621,45 @@ class Tinebase_Scheduler_Task
      */
     public static function addLogEntryCleanUpTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Tinebase_LogEntry::cleanUp')) {
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Controller_LogEntry::class,
+            'cleanUp',
+            self::TASK_TYPE_WEEKLY,
+            $_scheduler,
+            'Tinebase_LogEntry::cleanup'
+        );
+    }
+
+    /**
+     * @param string $taskController
+     * @param string $taskMethod
+     * @param string $cron
+     * @param Tinebase_Scheduler $scheduler
+     * @param string|null $name
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected static function _addTaskIfItDoesNotExist(
+        string $taskController,
+        string $taskMethod,
+        string $cron,
+        Tinebase_Scheduler $scheduler,
+        ?string $name = null): void
+    {
+        $taskName = $name ?? $taskController . '::' . $taskMethod;
+        if ($scheduler->hasTask($taskName)) {
             return;
         }
 
-        $task = self::_getPreparedTask('Tinebase_LogEntry::cleanUp', self::TASK_TYPE_WEEKLY, [[
-            self::CONTROLLER    => 'Tinebase_Controller_LogEntry',
-            self::METHOD_NAME   => 'cleanUp',
+        $task = self::_getPreparedTask($taskName, $cron, [[
+            self::CONTROLLER    => $taskController,
+            self::METHOD_NAME   => $taskMethod,
         ]]);
 
-        $_scheduler->create($task);
+        $scheduler->create($task);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Tinebase_LogEntry::cleanUp in scheduler.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__
+            . ' Saved task ' . $taskName . ' in scheduler.');
     }
 }

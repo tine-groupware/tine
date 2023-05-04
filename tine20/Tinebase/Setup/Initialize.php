@@ -168,35 +168,23 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         self::addSchedulerTasks();
     }
 
-    public static function addSchedulerTasks()
+    /**
+     * adds all tasks from scheduler (calling methods with this name from Tinebase_Scheduler_Task: addXYZTask)
+     *
+     * @return void
+     */
+    public static function addSchedulerTasks(): void
     {
         $scheduler = Tinebase_Core::getScheduler();
         $oldRightValue = $scheduler->doRightChecks(false);
 
-        // TODO do this via reflection
         try {
-            Tinebase_Scheduler_Task::addAlarmTask($scheduler);
-            Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
-            Tinebase_Scheduler_Task::addCredentialCacheCleanupTask($scheduler);
-            Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
-            Tinebase_Scheduler_Task::addDeletedFileCleanupTask($scheduler);
-            Tinebase_Scheduler_Task::addSessionsCleanupTask($scheduler);
-            Tinebase_Scheduler_Task::addAccessLogCleanupTask($scheduler);
-            Tinebase_Scheduler_Task::addAccountSyncTask($scheduler);
-            Tinebase_Scheduler_Task::addReplicationTask($scheduler);
-            Tinebase_Scheduler_Task::addFileObjectsCleanupTask($scheduler);
-            Tinebase_Scheduler_Task::addFileRevisionCleanupTask($scheduler);
-            Tinebase_Scheduler_Task::addFileSystemSizeRecalculation($scheduler);
-            Tinebase_Scheduler_Task::addFileSystemCheckIndexTask($scheduler);
-            Tinebase_Scheduler_Task::addFileSystemSanitizePreviewsTask($scheduler);
-            Tinebase_Scheduler_Task::addFileSystemNotifyQuotaTask($scheduler);
-            Tinebase_Scheduler_Task::addFileSystemAVScanTask($scheduler);
-            Tinebase_Scheduler_Task::addFileSystemRepairDeleteTask($scheduler);
-            Tinebase_Scheduler_Task::addAclTableCleanupTask($scheduler);
-            Tinebase_Scheduler_Task::addActionQueueConsistencyCheckTask($scheduler);
-            Tinebase_Scheduler_Task::addActionQueueMonitoringTask($scheduler);
-            Tinebase_Scheduler_Task::addFilterSyncTokenCleanUpTask($scheduler);
-            Tinebase_Scheduler_Task::addLogEntryCleanUpTask($scheduler);
+            $reflection = new ReflectionClass(Tinebase_Scheduler_Task::class);
+            foreach ($reflection->getMethods() as $method) {
+                if (preg_match('/^add[a-z]+task$/i', $method->getName())) {
+                    call_user_func_array([Tinebase_Scheduler_Task::class, $method->getName()], [$scheduler]);
+                }
+            }
         } finally {
             $scheduler->doRightChecks($oldRightValue);
         }
