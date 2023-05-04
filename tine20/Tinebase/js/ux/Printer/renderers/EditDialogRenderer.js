@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+import { HTMLProxy } from "twingEnv.es6";
+
 Ext.ns('Ext.ux.Printer');
 
 /**
@@ -146,7 +148,12 @@ Ext.ux.Printer.EditDialogRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
     },
 
     getTitle: function(editDialog) {
-        return editDialog.recordClass.getRecordName() + ': ' + editDialog.record.getTitle();
+        return new HTMLProxy(new Promise(async (resolve) => {
+            let recordTitle = editDialog.record.getTitle();
+            if (recordTitle.asString) {
+                recordTitle = await recordTitle.asString();
+            }
+            resolve(editDialog.recordClass.getRecordName() + ': ' + recordTitle);
+        }));
     }
-
 });

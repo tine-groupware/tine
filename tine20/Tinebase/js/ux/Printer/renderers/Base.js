@@ -227,7 +227,15 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
         var me = this;
         return new Promise(function (fulfill, reject) {
             me.prepareData(component).then(function(data) {
-                me.generateBody(component, data).then(function(bodyHtml) {
+                me.generateBody(component, data).then(async function(bodyHtml) {
+                    let title = me.getTitle(component);
+                    if (title.asString) {
+                        title = await title.asString();
+                    }
+                    if (Ext.isThenable(title)) {
+                        title = await title;
+                    }
+
                     fulfill(new Ext.XTemplate(
                         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
                         '<html>',
@@ -235,7 +243,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
                         '<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />',
                         '<x-additional-headers />',
                         '<link href="' + me.stylesheetPath + '?' + new Date().getTime() + '" rel="stylesheet" type="text/css" media="screen,print" />',
-                        '<title>' + me.getTitle(component) + '</title>',
+                        '<title>' + title + '</title>',
                         '</head>',
                         '<body>',
                         '<div id="csscheck"></div>',
