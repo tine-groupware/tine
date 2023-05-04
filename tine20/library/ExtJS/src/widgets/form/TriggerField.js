@@ -360,7 +360,7 @@ Ext.form.TwinTriggerField = Ext.extend(Ext.form.TriggerField, {
         Ext.each(this.triggers, function(t, index){
             var triggerIndex = 'Trigger' + (index + 1),
                 w = t.getWidth();
-            if(w === 0 && !t['hidden' + triggerIndex]){
+            if(w === 0 && t.isVisible()){
                 tw += this.defaultTriggerWidth;
             }else{
                 tw += w;
