@@ -302,6 +302,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     header: false,
                     margins: '0 5 0 5',
                     border: true,
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-editDialog-eastPanel'
+                    }],
                     items: [
                         new Ext.Panel({
                             // @todo generalise!
