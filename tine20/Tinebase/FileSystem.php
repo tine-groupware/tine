@@ -4801,4 +4801,26 @@ class Tinebase_FileSystem implements
 
         return true;
     }
+
+    public function purgeTreeNodes(array $where): int
+    {
+        $this->repairTreeIsDeletedState();
+
+        array_walk($where, function (&$item) {
+            $item = 'n.' . $item;
+        });
+        $table = SQL_TABLE_PREFIX . 'tree_nodes';
+        $idsQuery = 'SELECT n.id from ' . $table . ' as n LEFT JOIN ' . $table . ' as '
+            . 'child on n.id = child.parent_id WHERE child.id is NULL AND ' . implode(' AND ', $where);
+        $deleteQuery = 'DELETE FROM ' . $table . ' WHERE id IN (?)';
+        $deleteCount = 0;
+
+        do {
+            $ids = Tinebase_Core::getDb()->query($idsQuery)->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+            $deleteCount += count($ids);
+        } while (!empty($ids) && Tinebase_Core::getDb()->query(Tinebase_Core::getDb()->quoteInto($deleteQuery, $ids))
+            ->rowCount() > 0);
+
+        return $deleteCount;
+    }
 }
