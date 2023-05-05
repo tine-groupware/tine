@@ -585,7 +585,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
                     $delimiter . ' ',
                     ' ' . $delimiter . ' '
                  ] as $testDelimiter) {
-            $message['to'] = [Tinebase_Core::getUser()->accountEmailAddress . $testDelimiter . $this->_personas['sclever']->accountEmailAddress];
+            $message['to'] = [Tinebase_Core::getUser()->accountEmailAddress . $testDelimiter . $this->_personas['jsmith']->accountEmailAddress];
             $this->_sendMessage(
                 'INBOX',
                 array(),
@@ -677,6 +677,21 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
+     * try search for a message with to filter
+     */
+    public function testSearchMessageWithToFilter()
+    {
+        $sentMessage = $this->_sendMessage();
+        $filter = [
+            ['field' => 'to', 'operator' => 'contains', 'value' => Tinebase_Core::getUser()->accountEmailAddress],
+            ['field' => 'query', 'operator' => 'contains', 'value' => ''],
+        ];
+        $result = $this->_json->searchMessages($filter, '');
+        $message = $this->_getMessageFromSearchResult($result, $sentMessage['subject']);
+        $this->assertTrue(!empty($message), 'Sent message not found with to/contains filter');
+    }
+
+    /**
      * try search for a message with all inboxes and flags filter
      */
     public function testSearchMessageWithAllInboxesFilter()
@@ -765,8 +780,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     {
         $fromEmail = 'unittestalias@' . $this->_mailDomain;
         $messageToSend = $this->_getMessageData($fromEmail);
-        $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
-        $messageToSend['to'] = [$sclever->accountEmailAddress];
+        $jsmith = Tinebase_User::getInstance()->getFullUserByLoginName('jsmith');
+        $messageToSend['to'] = [$jsmith->accountEmailAddress];
         $messageToSend['subject'] = 'subjectfilter';
         $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
@@ -777,8 +792,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => 'subjectfilter']], '');
         $this->assertEquals('subjectfilter', $result['results'][0]['subject'], print_r($result['filter'], true));
         //search to email
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $sclever->accountEmailAddress]], '');
-        $this->assertEquals($sclever->accountEmailAddress, $result['results'][0]['to'][0], print_r($result['filter'], true));
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $jsmith->accountEmailAddress]], '');
+        $this->assertEquals($jsmith->accountEmailAddress, $result['results'][0]['to'][0], print_r($result['filter'], true));
         //search from email
         $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $fromEmail]], '');
         $this->assertEquals($fromEmail, $result['results'][0]['from_email'], print_r($result['filter'], true));
@@ -1454,7 +1469,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             /* $_emailFrom */
             '',
             /*$_subject */
-            'test\test' // is converted to 'test_test'
+            'testÄÖÜäöüß\test' // is converted to 'testÄÖÜäöüß_test'
         );
         $message2 = $this->_sendMessage(
             'INBOX',
@@ -1475,6 +1490,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $emlNode = $nodes->getFirstRecord();
 
         // assertions!
+        self::assertStringContainsString('testÄÖÜäöüß_test', $emlNode->name);
         return $this->_assertFiledMessageNode($message, $result, $emlNode, $personalFilemanagerContainer);
     }
 
@@ -1797,7 +1813,34 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
             $vacationData['mime'] = 'text/html';
         }
 
-        $this->_sieveTestHelper($vacationData, TRUE);
+        $this->_sieveTestHelper($vacationData, true);
+    }
+
+    /**
+     * test mime vacation sieve script (invalid namespace)
+     */
+    public function testMimeVacationWithInvalidNamespace()
+    {
+        $vacationData = self::getVacationData($this->_account);
+        $vacationData['reason'] = '<p class="MsoNormal" style="font-family: tahoma; font-size: 11px;"><br></p><div style=""><span style="background: rgb(255, 255, 255);">
+<p class="MsoNormal" style="font-family: tahoma; font-size: 11px; color: rgb(0, 0, 0);">Sehr geehrte Damen und Herren,&nbsp;</p><p class="MsoNormal" style="font-family: tahoma; font-size: 11px; color: rgb(0, 0, 0);">vielen Dank für Ihre Nachricht.<o:p></o:p></p>
+
+<p class="MsoNormal" style="font-family: tahoma; font-size: 11px; color: rgb(0, 0, 0);">Ich mache bis zum 12.05.2023 Urlaub und werde anschließend Ihre Mail bearbeiten.&nbsp;<o:p></o:p></p>
+
+<p class="MsoNormal" style="font-family: tahoma; font-size: 11px; color: rgb(0, 0, 0);">Meine E-Mails werden in meiner
+Abwesenheit nicht gelesen und nicht weitergeleitet. unittest vacation<o:p></o:p></p>
+
+<p class="MsoNormal" style="font-family: tahoma; font-size: 11px;">In dringenden Fällen wenden Sie
+sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<o:p></o:p></p>
+
+    </span>';
+
+        $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
+        if (!in_array('mime', $_sieveBackend->capability())) {
+            $vacationData['mime'] = 'text/html';
+        }
+
+        $this->_sieveTestHelper($vacationData, true);
     }
 
     /**
@@ -2016,11 +2059,36 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $pwulf = Tinebase_User::getInstance()->getFullUserByLoginName('pwulf');
         $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (" .
             $pwulf->accountEmailAddress . ") oder Susan Clever (" .
-            $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact Paul Wulf<br />(" .
+            $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact<br /> Paul Wulf (" .
             $pwulf->accountEmailAddress . ") or Susan Clever (" .
             $sclever->accountEmailAddress . ") instead.<br /><br />" .
-            Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn, $result['message']);
+            Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn . "<br />", 
+            $result['message'],
+        );
     }
+
+    /**
+     * testGetVacationMessage
+     */
+    public function testGetVacationMessageWithoutContacts()
+    {
+        $template = $this->testGetVacationTemplates();
+        $result = $this->_json->getVacationMessage(array(
+            'start_date' => '2012-04-18',
+            'end_date' => '2012-04-20',
+            'contact_ids' => array(
+            ),
+            'template_id' => $template['id'],
+            'signature' => $this->_account->signature
+        ));
+
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie andere Kollegen.<br /><br /><br />" .
+            "I am on vacation until Apr 20, 2012. Please contact other colleagues.<br /><br /><br />" .
+            Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn . "<br />",
+            $result['message'],
+        );
+    }
+
 
     /**
      * get vacation message with template
@@ -2163,6 +2231,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         
         static::assertStringContainsString('test@test.de', $script->getSieve());
         static::assertStringContainsString('test2@test.de', $script->getSieve());
+        static::assertStringContainsString(':from "noreply@mail.test"', $script->getSieve());
     }
 
     /**

@@ -37,13 +37,28 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      */
     public function __construct()
     {
+        $this->_fromAddress = self::getFromAddress();
+    }
+
+    static function getFromAddress()
+    {
         $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array()))->toArray();
-        $this->_fromAddress = (isset($smtpConfig['from']) && ! empty($smtpConfig['from'])) ? $smtpConfig['from'] : '';
-        
+        $fromAddress = (isset($smtpConfig['from']) && ! empty($smtpConfig['from'])) ? $smtpConfig['from'] : '';
+
         // try to sanitize sender address
-        if (empty($this->_fromAddress) && isset($smtpConfig['primarydomain']) && ! empty($smtpConfig['primarydomain'])) {
-            $this->_fromAddress = 'noreply@' . $smtpConfig['primarydomain'];
+        if (empty($fromAddress) && isset($smtpConfig['primarydomain']) && ! empty($smtpConfig['primarydomain'])) {
+            $fromAddress = 'noreply@' . $smtpConfig['primarydomain'];
         }
+        return $fromAddress;
+    }
+
+    public static function getNotificationAddress()
+    {
+        $emailNotification = Felamimail_Config::getInstance()->{Felamimail_Config::EMAIL_NOTIFICATION_EMAIL_FROM};
+        if (!$emailNotification || !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $emailNotification)) {
+            $emailNotification = self::getFromAddress();
+        }
+        return $emailNotification;
     }
     
     /**

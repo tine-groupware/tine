@@ -500,6 +500,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _getPartStructureFromAttachments($message, $partId)
     {
         $attachments = $message->attachments instanceof Tinebase_Record_RecordSet ? $message->attachments->toArray() : $message->attachments;
+        if ($attachments === null) {
+            return null;
+        }
         $attachment = array_filter($attachments, function($attach) use ($partId) {
             return isset($attach['partId']) && $attach['partId'] === $partId;
         });
@@ -544,9 +547,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         // remove '/' and '\' from name as this might break paths
         $subject = preg_replace('/[\/\\\]+/', '_', $message->subject);
-        // remove possible harmful utf-8 chars
-        // TODO should not be enabled by default (configurable?)
-        $subjectAndMail = Tinebase_Helper::mbConvertTo($message->from_email . '_' . $subject, 'ASCII');
+        $subjectAndMail = $message->from_email . '_' . $subject;
         $fileName = Tinebase_Model_Tree_Node::sanitizeName(str_replace(' ', '_', $message->received->toString('Y-m-d'))
             . '_' . mb_substr($subjectAndMail, 0, 200)
             . '_' . mb_substr(md5($message->messageuid

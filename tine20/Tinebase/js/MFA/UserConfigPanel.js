@@ -53,6 +53,14 @@ class UserConfigPanel extends Tine.Tinebase.BL.BLConfigPanel {
         }));
     }
 
+    openEditDialog(configWrapper) {
+        this.editDialogConfig = {
+            readOnly: _.get(configWrapper, 'data.config.id') !== 0
+        };
+        
+        return super.openEditDialog(configWrapper)
+    }
+
     customizeColumns(columns) {
         super.customizeColumns(columns);
         const noteColumn = _.find(columns, {dataIndex: 'note'});

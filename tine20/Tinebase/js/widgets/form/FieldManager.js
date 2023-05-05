@@ -270,7 +270,6 @@ Tine.widgets.form.FieldManager = function() {
                             }
                             field.allowCreateNew = true;
                             field.refIdField = _.get(fieldDefinition, 'config.refIdField', undefined);
-                            field.enableTbar = !!field.isMetadataModelFor;
                             _.set(field, 'editDialogConfig.mode', 'local');
                         }
                         if (fieldDefinition.config.additionalFilterSpec) {

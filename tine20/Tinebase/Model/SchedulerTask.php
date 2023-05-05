@@ -15,15 +15,15 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  *
- * @property string                     name
- * @property Tinebase_Scheduler_Task    config
- * @property Tinebase_DateTime          last_run
- * @property int                        last_duration
- * @property string                     lock_id
- * @property Tinebase_DateTime          next_run
- * @property Tinebase_DateTime          last_failure
- * @property int                        failure_count
- * @property Tinebase_DateTime          server_time
+ * @property string                     $name
+ * @property Tinebase_Scheduler_Task    $config
+ * @property Tinebase_DateTime          $last_run
+ * @property int                        $last_duration
+ * @property string                     $lock_id
+ * @property Tinebase_DateTime          $next_run
+ * @property Tinebase_DateTime          $last_failure
+ * @property int                        $failure_count
+ * @property Tinebase_DateTime          $server_time
  */
 
 class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract

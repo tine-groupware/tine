@@ -4,18 +4,18 @@ tine can act as [SSO](https://en.wikipedia.org/wiki/Single_sign-on) identity pro
 
 ## 1) Install SSO application
 * Go to `setup.php` and make sure SSO is installed
-* In the UI go to `Admin` > `Applications` > `SSO` and mke sure SSO is activated
+* In the UI go to `Admin` > `Applications` > `SSO` and make sure SSO is activated
 
 
 ## 2) Generate keys
 
 !!! note "Convert certificate to json web key"
 
-    To convert the certificate into the json web key format mwe use the `pem-jwk` tool here.
+    To convert the certificate into the json web key format we use the `pem-jwk` tool here.
 
     `npm install -g pem-jwk`
 
-    Alternatively you can convert the key with an online converter like <https://irrte.ch/jwt-js-decode/pem2jwk.html>
+    You can convert the key alternatively e.g. with an online converter like <https://irrte.ch/jwt-js-decode/pem2jwk.html>
 
 ~~~ sh
 cd /path/to/docker-composer.yml
@@ -23,6 +23,7 @@ openssl req -x509 -newkey rsa:4096 -keyout ./conf.d/sso_key.pem -out ./conf.d/ss
 openssl pkey -in ./conf.d/sso_key.pem -out ./conf.d/sso_cert.crt -pubout
 pem-jwk ./conf.d/sso_cert.crt > ./conf.d/sso_cert.jwk
 sudo chown $(docker-compose exec  web sh -c "id tine20 -u"):$(docker-compose exec  web sh -c "id tine20 -g") ./conf.d/sso_*
+sudo chmod 660 ./conf.d/sso_cert.* ./conf.d/sso_key.*
 ~~~
 
 ## 3) Create config

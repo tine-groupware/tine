@@ -251,9 +251,9 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                 body + '</textarea>';
                         } else if (messageData.body_content_type != 'text/html' || messageData.body_content_type_of_body_property_of_this_record == 'text/plain') {
                             // message content is text and account format non-text
-                            body = Ext.util.Format.nl2br(body);
+                            body = Ext.util.Format.nl2br(Ext.util.Format.wrapEmojis(body));
                         } else {
-                            Tine.Tinebase.common.linkifyText(body, function(linkified) {
+                            Tine.Tinebase.common.linkifyText(Ext.util.Format.wrapEmojis(body), function(linkified) {
                                 var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
                                 Ext.fly(bodyEl).update(linkified);
                             }, this.panel);

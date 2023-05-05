@@ -402,7 +402,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      * update notificationScript for all system accounts
      *
      */
-    public function updateNotificationScripts($mailAccounts = null)
+    public function updateNotificationScripts($mailAccounts = null, $dryRun = false)
     {
         if (!$mailAccounts) {
             $backend = Admin_Controller_EmailAccount::getInstance();
@@ -411,6 +411,10 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
                 ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM]
             ]);
             $mailAccounts = $backend->search($filter);
+        }
+
+        if($dryRun) {
+            return $mailAccounts;
         }
         
         $updatedAccount = [];

@@ -123,6 +123,7 @@
     "symfony/config": "^4",
     "symfony/dependency-injection": "^4",
     "symfony/http-client": "^4",
+    "symfony/intl": "^5.4",
     "syncroton/syncroton": "^1.5",
     "tine20/composerapploader": "1.0.*",
     "twig/extensions": "^1.5",
@@ -131,7 +132,7 @@
     "web-auth/webauthn-lib": "^3.3",
     "xenolope/quahog": "^2.1",
     "zbateson/mail-mime-parser": "2.*",
-    "zendframework/zendframework1": "1.12.20pl62 as 1.12.20"
+    "zendframework/zendframework1": "1.12.20.*"
   },
   "require-dev": {
     "laminas/laminas-psr7bridge": "^1",

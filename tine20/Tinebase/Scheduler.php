@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -15,9 +15,13 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  */
-
 class Tinebase_Scheduler extends Tinebase_Controller_Record_Abstract
 {
+    /**
+     * @var Tinebase_Backend_Scheduler
+     */
+    protected $_backend;
+
     /**
      * the constructor
      *

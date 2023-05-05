@@ -703,11 +703,24 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             '{representation-n_fn-2}',
             '{representation-email-1}',
             '{representation-email-2}',
-            '{representation-tel_work-1}',
-            '{representation-tel_work-2}',
             '{owncontact-n_fn}',
             '{signature}',
         );
+
+        if (!isset($representativesArray[1])) {
+            $message = str_replace(" or {representation-n_fn-2} ({representation-email-2}) instead.", '', $message);
+            $message = str_replace(" oder {representation-n_fn-2} ({representation-email-2}).", '', $message);
+        }
+        
+        if (!isset($representativesArray[0])) {
+            $message = str_replace(" {representation-n_fn-1} ({representation-email-1})", '', $message);
+        }
+
+        if (!isset($representativesArray[0]) && !isset($representativesArray[1])) {
+            $message = str_replace(" Bitte kontaktieren Sie", " Bitte kontaktieren Sie andere Kollegen.", $message);
+            $message = str_replace(" Please contact", " Please contact other colleagues.", $message);
+        }
+        
         $replace = array(
             Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->start_date, $timezone, new Zend_Locale('en_US'), 'date'),
             Tinebase_Translation::dateToStringInTzAndLocaleFormat($vacation->end_date, $timezone, new Zend_Locale('en_US'), 'date'),
@@ -717,15 +730,13 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             (isset($representativesArray[1])) ? $representativesArray[1]->n_fn : 'unknown person',
             (isset($representativesArray[0])) ? $representativesArray[0]->email : 'unknown email',
             (isset($representativesArray[1])) ? $representativesArray[1]->email : 'unknown email',
-            (isset($representativesArray[0])) ? $representativesArray[0]->tel_work : 'unknown phone',
-            (isset($representativesArray[1])) ? $representativesArray[1]->tel_work : 'unknown phone',
             ($ownContact) ? $ownContact->n_fn : '',
             ($vacation->signature) ? Felamimail_Model_Message::convertHTMLToPlainTextWithQuotes(
                 preg_replace("/\\r|\\n/", '', $vacation->signature)) : '',
         );
         
         $result = str_replace($search, $replace, $message);
-        
+  
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $result);
         
         return $result;
@@ -763,6 +774,14 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $adminBounceEmail = $firstAdminUser->accountEmailAddress;
         }
 
+        $notificationEmailAddress = Tinebase_Notification_Backend_Smtp::getNotificationAddress();
+        if(!($notificationEmailAddress)) {
+            $notificationEmailAddress = '';
+        }
+        if($notificationEmailAddress !== '' && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $notificationEmailAddress)) {
+            $notificationEmailAddress = ':from "' . $notificationEmailAddress . '"' . "\n\t\t";
+        }
+
         /** @var Tinebase_Model_Tree_Node $sieveNode */
         foreach ($fileSystem->getTreeNodeChildren(Felamimail_Config::getInstance()->
                 get(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID)) as $sieveNode) {
@@ -783,7 +802,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                 if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $email)) {
                     throw new Tinebase_Exception_UnexpectedValue($email . ' is not a valid email address');
                 }
-                $notifyScript .= "\n\t" . 'notify :message "' . $subject. '${from}: ${subject}"' . "\n\t\t" . '"mailto:' . $email .'?body=${message}";' . "\n";
+                $notifyScript .= "\n\t" . 'notify ' . $notificationEmailAddress . ':message "' . $subject. '${from}: ${subject}"' . "\n\t\t" . '"mailto:' . $email .'?body=${message}";' . "\n";
                 $redirectScript .= "\n\t" . 'redirect :copy "' . $email . '";';
             }
 
@@ -902,5 +921,57 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart');
         $scriptParts->addRecord($_scriptPart);
         $this->_updateScriptParts($_account, $scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST);
+    }
+
+    public function addDefaultNotificationTemplate() {
+        try {
+            $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+                'Felamimail',
+                Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            );
+            $node = Tinebase_FileSystem::getInstance()->createAclNode($basepath . '/Email Notification Templates');
+            Felamimail_Config::getInstance()->set(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID, $node->getId());
+
+            if (false === ($fh = Tinebase_FileSystem::getInstance()->fopen($basepath . '/Email Notification Templates/defaultForwarding.sieve', 'w'))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not create defaultForwarding.sieve file');
+                return;
+            }
+
+            fwrite($fh, <<<'sieveFile'
+require ["enotify", "variables", "copy", "body"];
+
+if header :contains "Return-Path" "<>" {
+    if body :raw :contains "X-Tine20-Type: Notification" {
+        notify :message "there was a notification bounce"
+              "mailto:ADMIN_BOUNCE_EMAIL";
+    }
+} elsif header :contains "X-Tine20-Type" "Notification" {
+    REDIRECT_EMAILS_SCRIPT
+} else {
+    if header :matches "Subject" "*" {
+        set "subject" "${1}";
+    }
+    if header :matches "From" "*" {
+        set "from" "${1}";
+    }
+    set :encodeurl "message" "TRANSLATE_SUBJECT${from}: ${subject}";
+
+    NOTIFY_EMAILS_SCRIPT
+}
+sieveFile
+            );
+
+            if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not create defaultForwarding.sieve file');
+                return;
+            }
+
+        } catch (Tinebase_Exception_Backend $teb) {
+            Tinebase_Exception::log($teb);
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not create email notification template folder: ' . $teb);
+        }
     }
 }

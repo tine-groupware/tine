@@ -158,6 +158,11 @@ module.exports = {
                     ]
                 }
             },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                // exclude: /node_modules/,
+            },
             // {
             //     test: /\.js$/,
             //     include: [
@@ -182,7 +187,7 @@ module.exports = {
         modules: [path.resolve(__dirname, "node_modules")]
     },
     resolve: {
-        extensions: [".js", ".es6.js"],
+        extensions: [".tsx", ".ts", ".js", ".es6.js"],
         // add browserify which is used by some libs (e.g. director)
         mainFields: ["browser", "browserify", "module", "main"],
         // we need an absolut path here so that apps can resolve modules too

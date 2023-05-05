@@ -18,7 +18,7 @@ class Felamimail_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE016_UPDATE004 = __CLASS__ . '::update004';
-
+    const RELEASE016_UPDATE005 = __CLASS__ . '::update005';
 
 
     static protected $_allUpdates = [
@@ -44,6 +44,10 @@ class Felamimail_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE016_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -128,5 +132,14 @@ sieveFile
         }
         
         $this->addApplicationUpdate('Felamimail', '16.4', self::RELEASE016_UPDATE004);
+    }
+
+    public function update005()
+    {
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            Admin_Controller_EmailAccount::getInstance()->updateNotificationScripts();
+        }
+
+        $this->addApplicationUpdate('Felamimail', '16.5', self::RELEASE016_UPDATE005);
     }
 }

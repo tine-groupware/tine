@@ -1337,7 +1337,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (! Tinebase_Config::getInstance()->get(Tinebase_Config::METRICS_API_KEY)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No API key configured');
-
             return new \Laminas\Diactoros\Response\EmptyResponse();
         }
 
@@ -1378,13 +1377,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             if (Tinebase_Application::getInstance()->isInstalled('Felamimail')
                 && Tinebase_EmailUser::isEmailSystemAccountConfigured()) 
             {
-                $backend = Felamimail_Controller_Account::getInstance();
+                $backend = new Felamimail_Backend_Account();
                 $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
                     ['field' => 'type', 'operator' => 'in', 'value' => [
                         Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,
                         Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
                         Tinebase_EmailUser_Model_Account::TYPE_SHARED,
                     ]]
+                ], '', [
+                    'ignoreAcl' => true,
                 ]);
                 $totalSystemAccounts = 0;
                 $totalSharedAccounts = 0;

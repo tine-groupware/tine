@@ -34,15 +34,6 @@ msgstr "Die folgenden Felder wurden nicht importiert: %s"
 msgid "N/A"
 msgstr "n.v."
 
-msgid "Follow System"
-msgstr "System folgen"
-
-msgid "Dark Mode"
-msgstr "Dunkler Modus"
-
-msgid "Light Mode"
-msgstr "Heller Modus"
-
 #: User/Abstract.php:347 User/Abstract.php:348 User/Abstract.php:349
 #: User/Abstract.php:350 User/Abstract.php:351 User/Abstract.php:352
 #: Group/Abstract.php:261 Acl/Roles.php:1020 js/ux/ConnectionStatus.js:60
@@ -1817,39 +1808,6 @@ msgstr "mit der Hilfe von unseren"
 #: js/AboutDialog.js:80
 msgid "Contributors"
 msgstr " Mitwirkenden"
-
-msgid "Contract ID"
-msgstr "Vertrag ID"
-
-msgid "Maximum Users (0=unlimited)"
-msgstr "Maximale Benutzerzahl (0=Unbegrenzt)"
-
-msgid "Organization"
-msgstr "Lizenznehmer"
-
-msgid "Subscription"
-msgstr "Subskription"
-
-msgid "Valid from"
-msgstr "Gültig vom"
-
-msgid "Valid to"
-msgstr "Gültig bis"
-
-msgid "Activation Key"
-msgstr "Aktivierungsschlüssel"
-
-msgid "No valid Subscription"
-msgstr "Keine gültige Subskription"
-
-msgid "Activated Features"
-msgstr "Aktivierte Features"
-
-msgid "Your Subscription is unavailable"
-msgstr "Ihr Subskription ist nicht verfügbar"
-
-msgid "Your Subscription is not valid"
-msgstr "Ihr Subskription ist ungültig"
 
 #: js/MainScreenPanel.js:179
 msgid "Your password expired."
@@ -5062,6 +5020,9 @@ msgstr ""
 msgid "Choose MFA Deivce"
 msgstr "MFA Gerät auswählen"
 
+msgid "MFA password wrong"
+msgstr "MFA-Passwort falsch"
+
 msgid "This area is locked. Which device should be used to unlock."
 msgstr ""
 "Dieser Bereich ist gesperrt. Welches Gerät soll verwendet werden um ihn zu "
@@ -5389,9 +5350,6 @@ msgstr "Nur die angezeigten Spalten exportieren"
 msgid "Quota is exceeded"
 msgstr "Quota ist überschritten"
 
-msgid "MFA password wrong"
-msgstr "MFA-Passwort falsch"
-
 msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 "Ihr Passwort ist abgelaufen. Bitte setzen Sie ein neues Benutzer-Passwort:"
@@ -5666,6 +5624,51 @@ msgstr ""
 
 msgid "Static PIN for user: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
 msgstr "Statischer PIN: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
+
+msgid "Contents of Related Folder"
+msgstr "Inhalt des verknüpften Ordners"
+
+msgid "Follow System"
+msgstr "System folgen"
+
+msgid "Dark Mode"
+msgstr "Dunkler Modus"
+
+msgid "Light Mode"
+msgstr "Heller Modus"
+
+msgid "Contract ID"
+msgstr "Vertrag ID"
+
+msgid "Maximum Users (0=unlimited)"
+msgstr "Maximale Benutzerzahl (0=Unbegrenzt)"
+
+msgid "Organization"
+msgstr "Lizenznehmer"
+
+msgid "Subscription"
+msgstr "Subskription"
+
+msgid "Valid from"
+msgstr "Gültig vom"
+
+msgid "Valid to"
+msgstr "Gültig bis"
+
+msgid "Activation Key"
+msgstr "Aktivierungsschlüssel"
+
+msgid "No valid Subscription"
+msgstr "Keine gültige Subskription"
+
+msgid "Activated Features"
+msgstr "Aktivierte Features"
+
+msgid "Your Subscription is unavailable"
+msgstr "Ihr Subskription ist nicht verfügbar"
+
+msgid "Your Subscription is not valid"
+msgstr "Ihr Subskription ist ungültig"
 
 msgid "This area is locked. Which device should be used to unlock?"
 msgstr ""

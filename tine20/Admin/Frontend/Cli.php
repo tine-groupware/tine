@@ -424,6 +424,36 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * @return int
+     * @throws Zend_Db_Adapter_Exception
+     */
+    public function repairOccurenceTag(Zend_Console_Getopt $_opts)
+    {
+        $db = Tinebase_Core::getDb();
+        $filter = new Tinebase_Model_TagFilter([]);
+        $tags = Tinebase_Tags::getInstance()->searchTags($filter, null, true);
+        echo "Found " . count($tags) . " tags\n";
+        foreach ($tags as $tag) {
+            $select = $db->select()
+                ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'count(*)')
+                ->where($db->quoteIdentifier('tag_id') . ' = ?', $tag->getId());
+            $count = $db->fetchCol($select)[0];
+            if ($count !== $tag->occurrence)
+            {
+                echo "Found wrong occurrence for the tag " . $tag->getId() . "\n";
+                if (!$_opts->d) {
+                    $db->update(SQL_TABLE_PREFIX . 'tags', ['occurrence' => $count],
+                        $db->quoteInto($db->quoteIdentifier('id') . ' = ?', $tag->getId()));
+                    echo "Update occurrence from " . $tag->occurrence . " to " . $count . "\n";
+                } else {
+                    echo "--DRYRUN-- will updating occurrence from " . $tag->occurrence . " to " . $count . "\n";
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
      * @param string $csv filename
      * @param boolean $firstColIsKey
      * @return array|false
@@ -680,20 +710,13 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function updateNotificationScripts(Zend_Console_Getopt $opts)
     {
-        $backend = Admin_Controller_EmailAccount::getInstance();
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-            ['field' => 'sieve_notification_email', 'operator' => 'not', 'value' => NULL],
-            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM]
-        ]);
-        $mailAccounts = $backend->search($filter);
-        
         if ($opts->d) {
             echo "--DRY RUN--\n";
         }
-        echo "Found " . count($mailAccounts) . " system email accounts to update\n";
-        
-        $updatedAccounts = Admin_Controller_EmailAccount::getInstance()->updateNotificationScripts();
-        echo "Updated notification script for " . count($updatedAccounts) . " email accounts\n";
+
+        $updated = Admin_Controller_EmailAccount::getInstance()->updateNotificationScripts(null, $opts->d);
+
+        echo "Updated notification script for " . count($updated) . " email accounts\n";
         return 0;
     }
 
