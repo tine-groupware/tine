@@ -109,7 +109,7 @@ Ext.util.Format = function(){
          * @return {String} The encoded text
          */
         linkSaveHtmlEncodeStepOne : function(value){
-            return !value ? value : String(value).replace(/&/g, " @@@amp@@@ ").replace(/>/g, " @@@gt@@@ ").replace(/</g, " @@@lt@@@ ").replace(/"/g, " @@@quot@@@ ");
+            return !value ? value : String(value).replace(/&amp/g, " @@@amp@@@ ").replace(/&/g, " @@@amp@@@ ").replace(/>/g, " @@@gt@@@ ").replace(/</g, " @@@lt@@@ ").replace(/"/g, " @@@quot@@@ ");
         },
 
         /**
