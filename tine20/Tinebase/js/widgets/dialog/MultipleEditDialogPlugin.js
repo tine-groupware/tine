@@ -332,6 +332,8 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             }
         } else if (formField.isXType('datetimefield')) {
             subLeft += 17; 
+        } else if (formField.isXType('numberfield')) {
+            formField.el.dom.style.textAlign = 'left';
         }
         var el = formField.el.parent().select('.tinebase-editmultipledialog-clearer'), 
             width = formField.getWidth(), 
@@ -345,9 +347,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             return;
         }
         
-        if (formField.isXType('combo') || formField.isXType('extuxclearabledatefield') || formField.isXType('datefield') || formField.isXType('uxspinner'))
+        if (formField.isXType('combo') || formField.isXType('extuxclearabledatefield') || formField.isXType('datefield') 
+            || formField.isXType('uxspinner') || formField.isXType('numberfield'))
         {
-            left = left + ';top: 3px';
+            const top = formField?.multi ? ';top: 3px' : ';top: 5px';
+            left = left + top;
         }
         
         // create Button
@@ -597,8 +601,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         var ff = field.formField;
         
         ff.removeClass('x-form-empty-field');
-        
+
         if (! samevalue) {  // The records does not have the same value on this field
+            if (ff?.el && !ff.wrap) {
+                ff.wrap = ff.el.wrap({cls: 'x-form-field-wrap x-form-field-trigger-wrap'});
+            }
             ff.addClass('tinebase-editmultipledialog-noneedit');
             ff.origAllowBlank = ff.allowBlank;
             ff.allowBlank = true;
@@ -815,4 +822,3 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
 };
 
 Ext.ComponentMgr.registerPlugin('multiple_edit_dialog', Tine.widgets.dialog.MultipleEditDialogPlugin);
-
