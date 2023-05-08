@@ -10,6 +10,9 @@
  */
 class Calendar_Model_EventType extends Tinebase_Record_Abstract
 {
+    const MODEL_NAME_PART = 'EventType';
+    const TABLE_NAME = 'cal_event_type';
+
     /**
      * application the record belongs to
      *
@@ -52,7 +55,7 @@ class Calendar_Model_EventType extends Tinebase_Record_Abstract
         'modelName'         => 'EventType',
 
         'table'             => array(
-            'name'                  => 'cal_event_type',
+            'name'                  => self::TABLE_NAME,
             'uniqueConstraints'     => array(
                 'name'                  => array(
                     'columns'               => array('name', 'deleted_time')

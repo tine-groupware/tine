@@ -30,7 +30,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_configuredModels = [
         'Poll',
-        'EventType'
+        'EventType',
+        'EventTypes'
     ];
 
     /**

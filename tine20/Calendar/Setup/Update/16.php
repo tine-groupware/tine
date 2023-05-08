@@ -56,6 +56,8 @@ class Calendar_Setup_Update_16 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([
             Calendar_Model_EventType::class,
+            Calendar_Model_EventTypes::class,
+            Calendar_Model_Event::class
         ]);
 
         $this->addApplicationUpdate('Calendar', '16.2', self::RELEASE016_UPDATE002);

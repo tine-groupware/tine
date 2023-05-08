@@ -103,7 +103,15 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     },
                         //Todo add a Records Picker fpr Event Types
-                    , {
+                        new Tine.widgets.grid.PickerGridPanel({
+                            border: false,
+                            title: this.app.i18n._('Event Types'),
+                            flex: 1,
+                            height: 200,
+                            recordClass: 'Calendar.EventTypes',
+                            refIdField: 'record'
+                        }),
+                     {
                         layout: 'hbox',
                         items: [{
                             margins: '5',
