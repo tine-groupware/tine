@@ -12,6 +12,7 @@ parameters:
       - Zend_Config
       - Zend_Config_Xml
       - Zend_Console_Getopt
+      - Zend_Session_Namespace
       - Zend_Translate
       - Zend_View
       - Laminas\Stdlib\ParametersInterface
