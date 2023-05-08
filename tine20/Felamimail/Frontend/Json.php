@@ -727,6 +727,19 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * get sieve custom script for account
+     *
+     * @param $id
+     * @return array
+     */
+    public function getSieveCustomScript($id)
+    {
+        $record = Felamimail_Controller_Sieve::getInstance()->getSieveCustomScript($id);
+        return $this->_recordToJson($record);
+
+    }
+
+    /**
      * set sieve vacation for account 
      *
      * @param  array $recordData
@@ -742,6 +755,18 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $vacation = Felamimail_Controller_Sieve::getInstance()->getVacation($account->getId());
         
         return $this->_recordToJson($vacation);
+    }
+
+    /**
+     * set sieve custom script for account
+     *
+     * @param  $scriptData
+     * @return string
+     */
+    public function saveSieveCustomScript($accountId, $scriptData)
+    {
+        $sieveScript = Felamimail_Controller_Sieve::getInstance()->setCustomScript($accountId, $scriptData);
+        return $sieveScript;
     }
     
     /**

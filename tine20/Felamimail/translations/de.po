@@ -2056,6 +2056,9 @@ msgstr ""
 "Es ist nicht nöglich, die Nachricht hier abzulegen (es könnte sich um einen "
 "Wiederholungstermin handeln)."
 
+msgid "Edit Sieve custom script"
+msgstr "Benutzerdefniertes Sieve-Skript bearbeiten"
+
 msgid "Explore Sieve script"
 msgstr "Sieve-Skript anzeigen"
 

@@ -196,7 +196,8 @@ abstract class Felamimail_Sieve_Backend_Abstract
 
         /** @var Felamimail_Model_Sieve_ScriptPart $scriptPart */
         foreach ($this->_scriptParts as $scriptPart) {
-            $result .= $scriptPart->script . "\r\n";
+            $type = $scriptPart->type;
+            $result .= "#$type script\r\n" . $scriptPart->script . "\r\n";
         }
 
         return $result;

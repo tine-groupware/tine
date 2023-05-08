@@ -464,6 +464,58 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
             $translation->_('Vacation message is now active.'), Felamimail_Model_Account::class, 2);
     }
 
+    public function testSaveEmailAccountWithCustomInvalidSieveScript()
+    {
+        $this->_checkMasterUserTable();
+        $account = $this->testEmailAccountApiSharedAccount(false);
+        try {
+            $result = $this->_json->saveSieveCustomScript($account->getId(),  '{test};');
+            self::fail('it should not be possible to update invalid script');
+        } catch (Felamimail_Exception_SievePutScriptFail $fespsf) {
+        }
+        $script = $this->_json->getSieveScript($account->getId());
+        $this->assertStringNotContainsString('{test};', $script, 'invalid custom sieve script should not be saved.');
+    }
+    
+    public function testSaveEmailAccountWithCustomSieveScript()
+    {
+        $this->_checkMasterUserTable();
+        $account = $this->testEmailAccountApiSharedAccount(false);
+        $script = 'require ["fileinto","reject","copy","vacation","date","relational"];
+
+if allof (address :contains "from" "ssdfsd@mail.test") {
+    fileinto "Sent";
+}
+if allof(currentdate :value "le" "date" "2023-04-23",
+currentdate :value "ge" "date" "2023-04-22")
+{vacation :days 7 :from "tine ® Admin <tine20admin@mail.test>" :addresses ["tine20admin@mail.test"] :mime text:
+Content-Type: multipart/alternative; boundary=foo
+
+--foo
+Content-Type: text/plain; charset=UTF-8
+
+Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie
+ tine ® Admin (tine20admin@mail.test)
+
+I am on vacation until Apr 23, 2023. Please contact
+ tine ® Admin (tine20admin@mail.test)
+
+tine ® Admin
+
+--foo
+Content-Type: text/html; charset=UTF-8
+
+Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;br&gt; tine ® Admin (tine20admin@mail.test)&lt;br&gt;&lt;br&gt;I am on vacation until Apr 23, 2023. Please contact&lt;br&gt; tine ® Admin (tine20admin@mail.test)&lt;br&gt;&lt;br&gt;tine ® Admin
+
+--foo--
+.
+;}';
+        $result = $this->_json->saveSieveCustomScript($account->getId(), $script);
+        $this->assertStringContainsString('require ["fileinto","reject","copy","vacation","date","relational"]', $result, 'sieve script should include require.');
+        $result = $this->_json->getSieveCustomScript($account->getId());
+        $this->assertStringContainsString('require ["fileinto","reject","copy","vacation","date","relational"]', $result['script'], 'sieve script should include require.');
+    }
+
     public function testSetSieveRules()
     {
         $this->_checkMasterUserTable();
