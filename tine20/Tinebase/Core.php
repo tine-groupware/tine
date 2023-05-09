@@ -267,7 +267,6 @@ class Tinebase_Core
         }
 
         $server = self::getDispatchServer($request);
-        
         $server->handle($request);
         $method = get_class($server) . '::' . $server->getRequestMethod();
         self::set(self::METHOD, $method);

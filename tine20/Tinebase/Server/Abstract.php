@@ -238,6 +238,25 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
         }
     }
 
+    final static protected function _checkRateLimit($_method)
+    {
+        $rateLimit = new Tinebase_Server_RateLimit();
+        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER) ? Tinebase_Core::getUser()->accountLoginName : 'anon';
+        if ($rateLimit->hasRateLimit($user, $_method)) {
+            if (! $rateLimit->check($user, $_method)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    $definition = $rateLimit->getLimitDefinition($user, $_method);
+                    Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' User ' . $user . ' hit rate limit: '
+                        .  print_r($definition, true));
+                }
+
+                $terl = new Tinebase_Exception_RateLimit('Method is rate-limited: ' . $_method);
+                throw $terl;
+            }
+        }
+    }
+
     /**
      * @param int $code
      */

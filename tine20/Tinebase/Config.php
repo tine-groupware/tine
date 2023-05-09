@@ -182,6 +182,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
 
     /**
+     * RATE_LIMITS
+     *
+     * @var string
+     */
+    const RATE_LIMITS = 'rateLimits';
+
+    /**
      * default sales tax
      *
      * @var string
@@ -1987,6 +1994,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             'default'               => array()
         ),
+        /**
+         * Configure rate limits by user and method
+         *
+         * example:
+         *
+         * ['LOGIN_NAME' => [
+         *   'method' => 'Felamimail.searchMessages',
+         *   'maxrequests' => 100,
+         *   'period' => 3600, // per hour
+         * ]]
+         */
+        self::RATE_LIMITS => [
+            self::LABEL                 => 'Rate Limits',
+            self::DESCRIPTION           => 'Configure rate limits by user and method',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [],
+        ],
         self::SALES_TAX => array(
             //_('Sales Tax Default')
             'label'                 => 'Sales Tax Default',

@@ -388,7 +388,6 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 throw new Tinebase_Exception_ClientOutdated();
             }
 
-
             $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
             $this->_checkJsonKey($method, $jsonKey);
             
@@ -398,6 +397,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
 
             self::_checkAreaLock($method);
+            self::_checkRateLimit($method);
             
             $this->_methods[] = $method;
 
