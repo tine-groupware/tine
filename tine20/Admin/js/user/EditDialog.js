@@ -656,7 +656,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }]
         ];
     },
-    
+
     getCommonConfig() {
         return {
             autoExpandColumn: 'email',
@@ -714,7 +714,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             gridPlugins.push(this.aliasesDispatchCheckColumn);
         }
         const config = _.assign(this.getCommonConfig(), additionConfig);
-        
+
         this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
@@ -753,7 +753,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const app = Tine.Tinebase.appMgr.get('Admin');
         let record = this.record ?? additionConfig.record;
         const config = _.assign(this.getCommonConfig(), additionConfig);
-    
+
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
@@ -1167,10 +1167,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // suggest for new users only!
         if (!this.record.id) {
             // accountFullName (cn im AD) + accountDisplayName(displayname im AD) + accountLoginName + accountEmailAddress
-            for (const [fieldName, template] of Object.entries(Tine.Tinebase.configManager.get('accountTwig'))) {
+            Object.keys(Tine.Tinebase.configManager.get('accountTwig')).asyncForEach(async (fieldName) => {
                 if (fieldName === 'accountEmailAddress' && ! Tine.Tinebase.registry.get('primarydomain')) {
                     // skip email without configured domain
-                    continue;
+                    return;
                 }
                 const field = this.getForm().findField(fieldName);
                 // suggest for unchanged fields only
@@ -1183,7 +1183,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         field.suggestedValue = suggestion;
                     });
                 }
-            }
+            });
         }
     },
 
