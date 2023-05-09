@@ -497,45 +497,26 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     
     /**
      * purge deleted records
-     * 
+     *
      * if param date is given (for example: date=2010-09-17), all records before this date are deleted (if the table has a date field)
      * if table names are given, purge only records from this tables
-     * 
-     * @param $_opts
-     * @return boolean success
      *
-     * TODO move purge logic to applications, purge Tinebase tables at the end
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function purgeDeletedRecords(Zend_Console_Getopt $_opts)
+    public function purgeDeletedRecords(Zend_Console_Getopt $_opts): int
     {
         $this->_checkAdminRight();
 
         $args = $this->_parseArgs($_opts, array(), 'tables');
-        $doEverything = false;
+        $date = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
+        $tables = isset($args['tables']) ? (array) $args['tables'] : [];
 
-        if (! (isset($args['tables']) || array_key_exists('tables', $args)) || empty($args['tables'])) {
-            echo "No tables given.\nPurging records from all tables!\n";
-            $args['tables'] = $this->_getAllApplicationTables();
-            $doEverything = true;
-        }
-        
-        $db = Tinebase_Core::getDb();
-        
-        if ((isset($args['date']) || array_key_exists('date', $args))) {
-            echo "\nRemoving all deleted entries before {$args['date']} ...";
-            $where = array(
-                $db->quoteInto($db->quoteIdentifier('deleted_time') . ' < ?', $args['date'])
-            );
-        } else {
-            echo "\nRemoving all deleted entries ...";
-            $where = array();
-        }
-        $where[] = $db->quoteInto($db->quoteIdentifier('is_deleted') . ' = ?', 1);
+        $result = Tinebase_Controller::getInstance()->removeObsoleteData($date, $tables);
 
-        $orderedTables = $this->_orderTables($args['tables']);
-        $this->_purgeTables($orderedTables, $where);
-
-        if ($doEverything) {
+        if (empty($tables)) {
+            // TODO move to \Tinebase_Controller::removeObsoleteData
             echo "\nCleaning relations...";
             $this->cleanRelations();
 
@@ -555,9 +536,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             Tinebase_Path_Backend_Sql::optimizePathsTable();
         }
 
-        echo "\n\n";
-        
-        return TRUE;
+        return $result ? 0 : 1;
     }
 
     /**
@@ -792,122 +771,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         echo "\ndeleted " . $deleteCount . " customfield values\n";
-    }
-
-    /**
-     * get all app tables
-     * 
-     * @return array
-     */
-    protected function _getAllApplicationTables()
-    {
-        $result = array();
-        
-        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-        foreach ($enabledApplications as $application) {
-            $result = array_merge($result, Tinebase_Application::getInstance()->getApplicationTables($application));
-        }
-        
-        return $result;
-    }
-
-    /**
-     * order tables for purging deleted records in a defined order
-     *
-     * @param array $tables
-     * @return array
-     *
-     * TODO could be improved by using usort
-     */
-    protected function _orderTables($tables)
-    {
-        // tags + tree_nodes should be deleted first
-        // containers should be deleted last
-
-        $orderedTables = array();
-        $lastTables = array();
-        foreach($tables as $table) {
-            switch ($table) {
-                case 'container':
-                    $lastTables[] = $table;
-                    break;
-                case Timetracker_Model_Timeaccount::TABLE_NAME:
-                    array_unshift($lastTables, $table);
-                    break;
-                case 'tags':
-                case 'tree_nodes': // delete them before tree_objects
-                case 'cal_attendee': // delete them before events
-                    array_unshift($orderedTables, $table);
-                    break;
-                default:
-                    $orderedTables[] = $table;
-            }
-        }
-        $orderedTables = array_merge($orderedTables, $lastTables);
-
-        return $orderedTables;
-    }
-
-    /**
-     * purge tables
-     *
-     * @param $orderedTables
-     * @param $where
-     */
-    protected function _purgeTables($orderedTables, $where)
-    {
-        foreach ($orderedTables as $table) {
-            try {
-                $schema = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $table);
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                echo "\nCould not get schema (" . $zdse->getMessage() . "). Skipping table $table";
-                continue;
-            }
-            if (!(isset($schema['is_deleted']) || array_key_exists('is_deleted', $schema)) || !(isset($schema['deleted_time']) || array_key_exists('deleted_time', $schema))) {
-                continue;
-            }
-
-
-            $deleteCount = 0;
-            try {
-                if ($table === 'tree_nodes') {
-                    $deleteCount = $this->_purgeTreeNodes($where);
-                } else {
-                    $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
-                }
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                echo "\nFailed to purge deleted records for table $table. " . $zdse->getMessage();
-            }
-            if ($deleteCount > 0) {
-                echo "\nCleared table $table (deleted $deleteCount records).";
-            }
-            // TODO this should only be echoed with --verbose or written to the logs
-            else {
-                echo "\nNothing to purge from $table";
-            }
-        }
-    }
-
-    protected function _purgeTreeNodes($where)
-    {
-        Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
-
-        array_walk($where, function (&$item) {
-            $item = 'n.' . $item;
-        });
-        $table = SQL_TABLE_PREFIX . 'tree_nodes';
-        $idsQuery = 'SELECT n.id from ' . $table . ' as n LEFT JOIN ' . $table . ' as '
-            . 'child on n.id = child.parent_id WHERE child.id is NULL AND ' . implode(' AND ', $where);
-        $deleteQuery = 'DELETE FROM ' . $table . ' WHERE id IN (?)';
-        $deleteCount = 0;
-
-        do {
-            $ids = Tinebase_Core::getDb()->query($idsQuery)->fetchAll(Zend_Db::FETCH_COLUMN, 0);
-            $deleteCount += count($ids);
-        } while (!empty($ids) && Tinebase_Core::getDb()->query(Tinebase_Core::getDb()->quoteInto($deleteQuery, $ids))
-            ->rowCount() > 0);
-
-        return $deleteCount;
     }
 
     /**
