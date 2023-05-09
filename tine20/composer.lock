@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5fd6c313a322b0fa3d5f60d866799a23",
+    "content-hash": "15b62c2887835993fff6a86a695d2ded",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4256,6 +4256,64 @@
                 "source": "https://github.com/arietimmerman/openid-connect-server/tree/v0.1.7"
             },
             "time": "2020-12-29T21:20:02+00:00"
+        },
+        {
+            "name": "palepurple/rate-limit",
+            "version": "2.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DavidGoodwin/RateLimit.git",
+                "reference": "f1e9d5020adaf69b65a6ab5f2253ee96397ed2a6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DavidGoodwin/RateLimit/zipball/f1e9d5020adaf69b65a6ab5f2253ee96397ed2a6",
+                "reference": "f1e9d5020adaf69b65a6ab5f2253ee96397ed2a6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.6"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.7",
+                "php-coveralls/php-coveralls": "^2.2",
+                "php-parallel-lint/php-parallel-lint": "^1.0",
+                "phpstan/phpstan": "*",
+                "phpunit/phpunit": "^8",
+                "predis/predis": "^1.1",
+                "psr/cache": "^1.0",
+                "tedivm/stash": "^0.16",
+                "vimeo/psalm": "*"
+            },
+            "suggest": {
+                "ext-apc": "^4.0",
+                "ext-apcu": "^4.0",
+                "ext-redis": "^2.2",
+                "predis/predis": "^1.1",
+                "tedivm/stash": "^0.15"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PalePurple\\RateLimit\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Goodwin",
+                    "email": "david@palepurple.co.uk"
+                }
+            ],
+            "description": "PHP rate limiting library with Token Bucket Algorithm, originally touhonoob/rate-limit",
+            "support": {
+                "issues": "https://github.com/DavidGoodwin/RateLimit/issues",
+                "source": "https://github.com/DavidGoodwin/RateLimit/tree/2.0.7"
+            },
+            "time": "2023-03-04T16:02:37+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",

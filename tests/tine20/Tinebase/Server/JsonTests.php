@@ -5,7 +5,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -16,6 +16,20 @@
  */
 class Tinebase_Server_JsonTests extends TestCase
 {
+    protected bool $_resetRateLimitConfig = false;
+
+    /**
+     * tear down tests
+     */
+    protected function tearDown(): void
+    {
+        if ($this->_resetRateLimitConfig) {
+            $rateLimit = new Tinebase_Server_RateLimit();
+            $rateLimit->purge(Tinebase_Core::getUser()->accountLoginName, 'Inventory.searchInventoryItems');
+            Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, []);
+        }
+    }
+
     /**
      * @group ServerTests
      */
@@ -181,13 +195,38 @@ class Tinebase_Server_JsonTests extends TestCase
     }
 
     /**
+     * @group ServerTests
+     */
+    public function testRateLimit()
+    {
+        $this->_resetRateLimitConfig = true;
+        $config = [
+            Tinebase_Core::getUser()->accountLoginName => [[
+                'method' => 'Inventory.searchInventoryItems',
+                'maxrequests' => 1,
+                'period' => 3600, // per hour
+            ]]
+        ];
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $config);
+
+        $params = [
+            'filter' => [],
+            'paging' => [],
+        ];
+        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params);
+        self::assertStringContainsString('{"result":{"totalcount":', $response);
+        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params, true);
+        self::assertStringContainsString('{"error":{"code":-32000,"message":"Method is rate-limited: Inventory.searchInventoryItems"', $response);
+    }
+
+    /**
      * @param string $method
      * @param array $params
      * @throws Tinebase_Exception_SystemGeneric
      * @throws Zend_Session_Exception
      * @return string
      */
-    protected function _handleRequest(string $method, array $params)
+    protected function _handleRequest(string $method, array $params, bool $allowError = false)
     {
         // handle jsonkey check
         $jsonkey = 'myawsomejsonkey';
@@ -218,9 +257,11 @@ class Tinebase_Server_JsonTests extends TestCase
         $this->assertStringNotContainsString('Not Authorised', $out);
         $this->assertStringNotContainsString('Method not found', $out);
         $this->assertStringNotContainsString('No Application Controller found', $out);
-        $this->assertStringNotContainsString('"error"', $out);
+        if (! $allowError) {
+            $this->assertStringNotContainsString('"error"', $out);
+            $this->assertStringContainsString('"result"', $out);
+        }
         $this->assertStringNotContainsString('PHP Fatal error', $out);
-        $this->assertStringContainsString('"result"', $out);
 
         return $out;
     }
