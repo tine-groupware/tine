@@ -164,42 +164,6 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
     afterRender: function() {
         this.supr().afterRender.apply(this, arguments);
 
-        var expiredSince = Tine.Tinebase.registry.get('licenseExpiredSince');
-        if (expiredSince && expiredSince != false) {
-
-            var licensePopup = new Ext.Window({
-                title: i18n._('License expired'),
-
-                layout:'fit',
-                width:500,
-                height:100,
-
-                closable: false,
-
-                items: new Ext.Panel({
-                    html: String.format(i18n._('Your {0} license expired. Please buy a license at:'), Tine.title)
-                        + '<br/><a target="_blank" href="' + Tine.shop + '" border="0"> ' + Tine.title + ' Shop </a></ul>'
-                }),
-
-                buttons: [{
-                    text: 'Close',
-                    disabled: true,
-                    handler: function(ev){
-                        licensePopup.hide();
-                    },
-                    listeners: {
-                        afterrender: function (btn) {
-                            setTimeout(function(){
-                                btn.setDisabled(false);
-                            }, expiredSince * 1000);
-                        }
-                    }
-                }]
-            });
-
-            licensePopup.show();
-        }
-
         // check for new version
         // TODO add helper function for fetching config ... this condition sucks.
         if ((      ! Tine.Tinebase.registry.get("config")
