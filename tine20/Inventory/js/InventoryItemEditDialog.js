@@ -82,7 +82,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             anchor: '100%',
                             labelSeparator: '',
                             columnWidth: .333,
-                            disabled: (this.useMultiple) ? true : false
+                            disabled: this.useMultiple
                         },
                         // Start first line
                         items: [
@@ -144,7 +144,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             anchor: '100%',
                             labelSeparator: '',
                             columnWidth: .333,
-                            disabled: (this.useMultiple) ? true : false
+                            disabled: false
                         },
                         items: [
                             [{
@@ -241,7 +241,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         anchor: '100%',
                         labelSeparator: '',
                         columnWidth: 1,
-                        disabled: (this.useMultiple) ? true : false
+                        disabled: this.useMultiple
                     },
                     items: [
                         [{
