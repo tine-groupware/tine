@@ -221,7 +221,7 @@ abstract class Tinebase_License_Abstract
 
         return array(
             'validFrom'    => $validFrom,
-            'validTo'      => $validFrom->getClone()->addDay(30),
+            'validTo'      => $validFrom->getClone()->addYear(5),
         );
     }
 

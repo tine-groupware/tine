@@ -307,7 +307,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
 
         $this->assertTrue($data['validFrom'] instanceof Tinebase_DateTime && $data['validTo'] instanceof Tinebase_DateTime);
         $this->assertEquals($firstUserCreationTime->toString(), $data['validFrom']->toString());
-        $this->assertEquals($firstUserCreationTime->addDay(30)->toString(), $data['validTo']->toString());
+        $this->assertEquals($firstUserCreationTime->addYear(5)->toString(), $data['validTo']->toString());
     }
 
     public function testLicenseExpiredSince()
