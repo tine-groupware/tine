@@ -1178,10 +1178,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.onRecordUpdate();
                     // @FIXME twing can't cope with null values yet, remove this once twing fixed it
                     const accountData = JSON.parse(JSON.stringify(this.record.data).replace(/:null([,}])/g, ':""$1'));
-                    this.twingEnv.render(fieldName, {account: accountData, email: {primarydomain: Tine.Tinebase.registry.get('primarydomain')}}).then((suggestion) => {
-                        field.setValue(suggestion);
-                        field.suggestedValue = suggestion;
-                    });
+                    const suggestion = await this.twingEnv.render(fieldName, {account: accountData, email: {primarydomain: Tine.Tinebase.registry.get('primarydomain')}});
+
+                    field.setValue(suggestion);
+                    this.record.set(fieldName, suggestion);
+                    field.suggestedValue = suggestion;
                 }
             });
         }
