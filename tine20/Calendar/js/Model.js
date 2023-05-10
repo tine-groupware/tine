@@ -298,7 +298,7 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
         prefs = app.getRegistry().get('preferences'),
         defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me',// one of['me', 'intelligent', 'calendarOwner', 'filteredAttendee', 'none']
         defaultAttendee = [],
-        calendarResources = app.getRegistry().get('calendarResources');
+        calendarResources = Tine.Tinebase.appMgr.get('Calendar').calendarResources;
         
     // shift -> change intelligent <-> me
     if (Ext.EventObject.shiftKey) {
@@ -370,7 +370,7 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
                     }
                 } else if (filteredContainer.type && filteredContainer.type == 'shared' && calendarResources) {
                     Ext.each(calendarResources, function(calendarResource) {
-                        if (calendarResource.container_id == filteredContainer.id) {
+                        if (calendarResource.container_id.id == filteredContainer.id) {
                             var attendeeData = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                                 user_type: 'resource',
                                 user_id: calendarResource,
