@@ -88,10 +88,15 @@ Tine.Felamimail.SignatureGridPanel = Ext.extend(Ext.grid.GridPanel, {
     },
 
     onRecordLoad: function(ed, record) {
-        let me = this;
-        let signatures = _.get(record, 'data.signatures', []);
-
-        me.store.loadData(signatures);
+        const signatures = _.get(record, 'data.signatures', []);
+        this.store.loadData(signatures);
+        
+        const idx = this.store.find('is_default', true);
+        if (idx === -1 && this.store.totalLength > 0) {
+            const record = this.store.getAt(0);
+            record.set('is_default',true);
+            record.commit();
+        }
     },
 
     onRecordUpdate: function(dlg, record) {
@@ -133,9 +138,8 @@ Tine.Felamimail.SignatureGridPanel = Ext.extend(Ext.grid.GridPanel, {
     },
 
     onCheckChange: function(cc, newVal, oldVal, record) {
-        let me = this;
         if (newVal) {
-            me.store.each((r) => {
+            this.store.each((r) => {
                 r.set('is_default', false);
                 r.commit();
             });
