@@ -253,9 +253,10 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                             // message content is text and account format non-text
                             body = Ext.util.Format.nl2br(Ext.util.Format.wrapEmojis(body));
                         } else {
+                            Ext.util.Format.linkSaveHtmlEncodeStepOne(body);
                             Tine.Tinebase.common.linkifyText(Ext.util.Format.wrapEmojis(body), function(linkified) {
                                 var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
-                                Ext.fly(bodyEl).update(linkified);
+                                Ext.fly(bodyEl).update(Ext.util.Format.linkSaveHtmlEncodeStepTwo(linkified));
                             }, this.panel);
                         }
                     }
