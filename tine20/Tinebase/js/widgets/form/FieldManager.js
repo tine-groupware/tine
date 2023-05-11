@@ -137,7 +137,7 @@ Tine.widgets.form.FieldManager = function() {
                 case 'boolean':
                     if (category === 'editDialog') {
                         field.xtype = 'checkbox';
-                        field.boxLabel = _.get(fieldDefinition, 'boxLabel', field.fieldLabel);
+                        field.boxLabel = i18n._hidden(_.get(fieldDefinition, 'boxLabel', field.fieldLabel));
                         field.checked = field['default'];
                         field.hideLabel = !_.get(fieldDefinition, 'boxLabel');
                         field.blurOnChange = true;
