@@ -48,6 +48,7 @@ class Tinebase_Config_KeyFieldRecord extends Tinebase_Record_Abstract
         'color'                => array('allowEmpty' => true          ),
         'system'               => array('allowEmpty' => true          ),
         'xprops'               => array('allowEmpty' => true          ),
+        'disabled'             => array('allowEmpty' => true          ), // property for combo item unable to select this item (UI Only)
     );
     
     /**
