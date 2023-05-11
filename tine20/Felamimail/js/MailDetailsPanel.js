@@ -415,7 +415,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                     record: this.record,
                                     initialApp: this.app,
                                     handleAttachments: this.quicklookHandleAttachments,
-                                    sm: this.grid.getGrid().getSelectionModel(),
+                                    sm: this.grid?.getGrid()?.getSelectionModel(),
                                     initialAttachmentIdx: +idx
                                 });
                             }
