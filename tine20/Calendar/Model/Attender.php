@@ -104,7 +104,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         self::EXPOSE_HTTP_API     => TRUE,
         self::EXPOSE_JSON_API     => TRUE,
 
-        self::APP_NAME           => self::APP_NAME,
+        self::APP_NAME           => Calendar_Config::APP_NAME,
         self::MODEL_NAME         => self::MODEL_NAME_PART,
 
         self::TABLE            => [
