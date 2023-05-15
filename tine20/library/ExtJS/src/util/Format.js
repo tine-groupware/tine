@@ -101,7 +101,7 @@ Ext.util.Format = function(){
         },
 
         /**
-         * Convert certain characters (&, <, >, and ') to their HTML character equivalents but modify them with wit a space and @@@ to separate them from links 
+         * Convert certain characters (<, >, and ') to their HTML character equivalents but modify them with wit a space and @@@ to separate them from links
          * so we can linkify these links without including characters that are not actual part of them (for example a tailing >) 
          * as they are found in Teams Invitations, in the second step we replace these strings by the proper Characters
          * 
@@ -109,17 +109,17 @@ Ext.util.Format = function(){
          * @return {String} The encoded text
          */
         linkSaveHtmlEncodeStepOne : function(value){
-            return !value ? value : String(value).replace(/&amp/g, " @@@amp@@@ ").replace(/&/g, " @@@amp@@@ ").replace(/>/g, " @@@gt@@@ ").replace(/</g, " @@@lt@@@ ").replace(/"/g, " @@@quot@@@ ");
+            return !value ? value : String(value).replace(/>/g, " @@@gt@@@ ").replace(/</g, " @@@lt@@@ ").replace(/"/g, " @@@quot@@@ ");
         },
 
         /**
-         * Replace our custom html characters withe the proper characters
+         * Replace our custom html characters with the proper characters
          *
          * @param {String} value The string to encode
          * @return {String} The encoded text
          */
         linkSaveHtmlEncodeStepTwo : function(value){
-            return !value ? value : String(value).replaceAll(" @@@amp@@@ ", "&amp;").replaceAll(" @@@gt@@@ ", "&gt;").replaceAll(" @@@lt@@@ ", "&lt;").replaceAll(" @@@quot@@@ ", "&quot;");
+            return !value ? value : String(value).replaceAll(" @@@gt@@@ ", "&gt;").replaceAll(" @@@lt@@@ ", "&lt;").replaceAll(" @@@quot@@@ ", "&quot;");
         },
 
         /**
