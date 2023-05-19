@@ -91,7 +91,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                                 subject: `${record.constructor.getRecordName()} ${record.get('document_number')}: ${record.get('document_title')}`,
                                 // @TODO have a boilerplate here
                                 body: body + win.Tine.Felamimail.getSignature(),
-                                to: [`${recipientData.name} <${recipientData.email}>`],
+                                to: [`${recipientData.name} < ${recipientData.email} >`],
                                 attachments: [paperSlip]
                             }), 0);
                             win.Tine.Felamimail.MessageEditDialog.openWindow({
@@ -156,4 +156,3 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         Ext.ux.ItemRegistry.registerItem(`Sales-Document_${type}-editDialog-Toolbar`, Ext.apply(new Ext.Button(action), medBtnStyle), 10)
     })
 })
-

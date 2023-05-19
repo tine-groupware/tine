@@ -214,7 +214,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 },
                 linkifyEmail(name, email) {
                     const id = Ext.id() + ':' + email + Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(name));
-                    const address = name.length ? `${name} < ${email} >` : email;
+                    const address = name ? `${name} < ${email} >` : email;
                     return `<a id="${id}" class="tinebase-email-link">${address}</a>`;
                 },
                 showDate: function (sent, recordData) {
