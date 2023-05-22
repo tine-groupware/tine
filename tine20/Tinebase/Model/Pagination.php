@@ -505,6 +505,16 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
         return $order;
     }
 
+    public static function setContext(array $context)
+    {
+        static::$context = $context;
+    }
+
+    public static function getContext(): array
+    {
+        return static::$context;
+    }
+
     /**
      * can be reimplemented by subclasses to modify values during setFromJson
      * @param array $_data the json decoded values
@@ -522,15 +532,5 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 }
             }
         }
-    }
-
-    public static function setContext(array $context)
-    {
-        static::$context = $context;
-    }
-
-    public static function getContext(): array
-    {
-        return static::$context;
     }
 }
