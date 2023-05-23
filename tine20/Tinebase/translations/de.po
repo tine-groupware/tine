@@ -5629,3 +5629,6 @@ msgstr ""
 
 msgid "Static PIN for user: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
 msgstr "Statischer PIN: {% if pin %}{{ pin }}{% else %}*****{% endif %}"
+
+msgid "Maximum number of users reached."
+msgstr "Maximale Anzahl von Benutzern erreicht."

@@ -448,11 +448,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     
     /**
      * login failed
-     * 
-     * @param  Zend_Auth_Result          $authResult
-     * @param  Tinebase_Model_AccessLog  $accessLog
+     *
+     * @param Zend_Auth_Result $authResult
+     * @param Tinebase_Model_AccessLog $accessLog
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Log_Exception
      */
-    protected function _loginFailed(Zend_Auth_Result $authResult, Tinebase_Model_AccessLog $accessLog)
+    protected function _loginFailed(Zend_Auth_Result $authResult, Tinebase_Model_AccessLog $accessLog): void
     {
         // @todo update sql schema to allow empty sessionid column
         $accessLog->sessionid = Tinebase_Record_Abstract::generateUID();
@@ -480,7 +484,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Auth result messages: ' . print_r($authResult->getMessages(), TRUE));
 
-        Tinebase_AccessLog::getInstance()->create($accessLog);
+        if (Tinebase_Auth::LICENSE_USER_LIMIT_REACHED === $accessLog->result) {
+            $translation = Tinebase_Translation::getTranslation();
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Maximum number of users reached.'));
+        } else {
+            Tinebase_AccessLog::getInstance()->create($accessLog);
+        }
     }
 
     /**
