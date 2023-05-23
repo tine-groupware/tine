@@ -215,27 +215,46 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * create folder
      *
      * @param string|Felamimail_Model_Account $_accountId
-     * @param string $_folderName to create
-     * @param string $_parentFolder parent folder globalname
+     * @param string $_folderName
+     * @param string $_parentFolder
      * @return Felamimail_Model_Folder
+     * @throws Felamimail_Exception
+     * @throws Felamimail_Exception_IMAPInvalidCredentials
      * @throws Felamimail_Exception_IMAPServiceUnavailable
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      * @throws Tinebase_Exception_SystemGeneric
      */
-    public function create($_accountId, $_folderName, $_parentFolder = '')
+    public function create($_accountId, string $_folderName, string $_parentFolder = ''): Felamimail_Model_Folder
     {
-        $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $account = ($_accountId instanceof Felamimail_Model_Account)
+            ? $_accountId
+            : Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
         $foldername = $this->_prepareFolderName($_folderName);
         $globalname = (empty($_parentFolder)) ? $foldername : $_parentFolder . $this->_delimiter . $foldername;
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to create new folder: ' . $globalname . ' (parent: ' . $_parentFolder . ')');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Trying to create new folder: ' . $globalname
+            . ' (parent: ' . $_parentFolder . ')');
         
         $imap = Felamimail_Backend_ImapFactory::factory($account);
-        
+
+        // check if parent folder exists
+        if (! empty($_parentFolder)) {
+            try {
+                $imap->examineFolder($_parentFolder);
+            } catch (Zend_Mail_Storage_Exception $zmse) {
+                throw new Tinebase_Exception_NotFound('Could not create folder: parent folder '
+                    . $_parentFolder . ' not found');
+            }
+        }
+
         try {
             $imap->createFolder(
                 Felamimail_Model_Folder::encodeFolderName($foldername), 
-                (empty($_parentFolder)) ? NULL : Felamimail_Model_Folder::encodeFolderName($_parentFolder), 
+                (empty($_parentFolder)) ? null : Felamimail_Model_Folder::encodeFolderName($_parentFolder),
                 $this->_delimiter
             );
 
@@ -247,7 +266,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
                 'parent' => $_parentFolder,
             ));
             $folder->supports_condstore = $this->supportsCondStore($folder, $account, $imap);
-            
+
+            /* @var Felamimail_Model_Folder $folder */
             $folder = $this->_backend->create($folder);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
@@ -256,12 +276,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // perhaps the folder already exists
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                __METHOD__ . '::' . __LINE__ . ' Could not create new folder: ' . $globalname . ' (' . $zmse->getMessage() . ')');
+                __METHOD__ . '::' . __LINE__ . ' Could not create new folder: ' . $globalname
+                . ' (' . $zmse->getMessage() . ')');
             
             // reload folder cache of parent
             $parentSubs = $this->_cacheController->update($account, $_parentFolder);
             $folder = $parentSubs->filter('globalname', $globalname)->getFirstRecord();
-            if ($folder === NULL) {
+            if ($folder === null) {
                 throw new Felamimail_Exception_IMAPServiceUnavailable($zmse->getMessage());
             }
 
