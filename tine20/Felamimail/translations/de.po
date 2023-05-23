@@ -1531,8 +1531,8 @@ msgstr[0] "Nachricht"
 msgstr[1] "Nachrichten"
 
 #: js/Model.js:218
-msgid "Subject/From"
-msgstr "Betreff/Von"
+msgid "Subject/From/To"
+msgstr "Betreff/Von/An"
 
 #: js/Model.js:221 js/GridPanel.js:522
 msgid "From (Name)"
@@ -2056,9 +2056,6 @@ msgstr ""
 "Es ist nicht nöglich, die Nachricht hier abzulegen (es könnte sich um einen "
 "Wiederholungstermin handeln)."
 
-msgid "Edit Sieve custom script"
-msgstr "Benutzerdefniertes Sieve-Skript bearbeiten"
-
 msgid "Explore Sieve script"
 msgstr "Sieve-Skript anzeigen"
 
@@ -2101,9 +2098,14 @@ msgstr ""
 msgid "Save To All Recipients"
 msgstr "An allen Empfängern speichern"
 
-#: js/Model.js:218
-msgid "Subject/From/To"
-msgstr "Betreff/Von/An"
+msgid "Filter Rules"
+msgstr "Filterregeln"
+
+msgid "Subject/From"
+msgstr "Betreff/Von"
+
+msgid "Edit Sieve custom script"
+msgstr "Benutzerdefniertes Sieve-Skript bearbeiten"
 
 msgid "Agree that this account can be transferred to other users"
 msgstr ""
