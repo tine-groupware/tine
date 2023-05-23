@@ -2048,6 +2048,13 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             'model' => Tinebase_Model_BankAccount::class,
         )));
 
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => Tinebase_Model_BankHolidayCalendar::class,
+            'application_id' => $application,
+            'model' => Tinebase_Model_BankHolidayCalendar::class,
+//            'label' => 'Bank Holiday Calendar' // _('Bank Holiday Calendar')
+        )));
+
         return $result;
     }
 
