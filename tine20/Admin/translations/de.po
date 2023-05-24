@@ -1585,3 +1585,9 @@ msgstr "E-Mail Konten"
 
 msgid "Manage total Filesystem Quota"
 msgstr "Gesamte Dateimanager Quota verwalten"
+
+msgid "Maximum number of users reached."
+msgstr "Maximale Anzahl von Benutzern erreicht."
+
+msgid "Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users."
+msgstr "Bitte kontaktieren Sie Metaways Infosystems GmbH um eine Lizenz mit entsprechend höherer Nutzeranzahl zu erwerben."
