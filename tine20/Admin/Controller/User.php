@@ -482,7 +482,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $maxUsers = $license->getMaxUsers();
         $currentUserCount = $this->_userBackend->countNonSystemUsers();
         if ($currentUserCount >= $maxUsers) {
-            throw new Tinebase_Exception_SystemGeneric($translation->_('Maximum number of users reached'));
+            $message = $translation->_('Maximum number of users reached.') . ' '
+                . $translation->_('Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users.');
+            throw new Tinebase_Exception_SystemGeneric($message);
         }
     }
 
