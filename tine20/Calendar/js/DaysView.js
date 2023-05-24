@@ -1555,7 +1555,7 @@ Ext.extend(Tine.Calendar.DaysView, Tine.Calendar.AbstractView, {
         ts.event = new Ext.XTemplate(
             '<div id="{id}" class="cal-daysviewpanel-event {extraCls}" style="width: {width}; height: {height}; left: {left}; top: {top}; z-index: {zIndex}; background-color: {bgColor}; border-image: {infoColors};">',
                 '<div class="cal-daysviewpanel-event-header" style="background-color: {bgColor};">',
-                    '<div class="cal-daysviewpanel-event-header-inner" style="color: {textColor}; background-color: {bgColor}; z-index: {zIndex};">{startTime}</div>',
+                    '<div class="cal-daysviewpanel-event-header-inner" style="background-color: {bgColor}; z-index: {zIndex};">{startTime}</div>',
                     '<div class="cal-daysviewpanel-event-header-icons">',
                         '<tpl for="statusIcons">',
                             '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-status-icon {status}-{[parent.textColor == \'#FFFFFF\' ? \'white\' : \'black\']}" ext:qtip="{[this.encode(values.text)]}" />',
