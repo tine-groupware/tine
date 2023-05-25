@@ -1,4 +1,4 @@
-Tine 2.0 Business Edition Docker Image
+Docker Installation Guide
 ---
 [www.tine20.com](https://www.tine20.com/) | [GitHub](https://github.com/tine20/tine20) | [Dockerfile](https://github.com/tine20/tine20/blob/main/ci/dockerimage/Dockerfile)
 
