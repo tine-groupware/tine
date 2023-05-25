@@ -5830,7 +5830,7 @@ msgid "The right to access the replication data of all applications."
 msgstr "Das Recht auf die Replikations Daten aller Anwendungen zuzugreifen"
 
 msgid "Bank Holiday Calendars"
-msgstr "Feiertags Kalender"
+msgstr "Feiertagskalender"
 
 msgid "Only numbers are allowed for PINs"
 msgstr "Für die PIN sind nur zahlen zulässig"
