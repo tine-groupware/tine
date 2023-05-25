@@ -1,4 +1,4 @@
-Server requirements
+Server Requirements
 ===================
 
 General
