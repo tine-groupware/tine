@@ -73,6 +73,9 @@ msgstr "DSGVO Datenherkunft"
 msgid "GDPR Data Editing Reason"
 msgstr "DSGVO Bearbeitungsgrund"
 
+msgid "GDPR Data Expiry Date"
+msgstr "DSGVO Datenablaufdatum"
+
 #: Config.php:49
 msgid "Data provenance for ADB contacts mandatory"
 msgstr "Adressbuch Kontakte benötigen Datenherkunft"

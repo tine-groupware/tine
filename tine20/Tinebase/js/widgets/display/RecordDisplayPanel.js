@@ -46,6 +46,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
      * initializes the component, builds this.fields, calls parent
      */
     initComponent: function() {
+        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
         this.appName = this.recordClass.getMeta('appName');
         this.modelName = this.recordClass.getMeta('modelName');
 

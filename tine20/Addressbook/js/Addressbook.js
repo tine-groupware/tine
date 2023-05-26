@@ -188,15 +188,6 @@ Ext.extend(Tine.Addressbook.ListFilterPanel, Tine.widgets.persistentfilter.Picke
     filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_ListFilter'}]
 });
 
-// register Contact related renderers -> needed e.g. for duplicate resolve dlg as Contact is no mcv2 app yet
-Tine.Tinebase.appMgr.isInitialised('Addressbook').then(() => {
-    _.each(Tine.Addressbook.ContactGridPanel.getBaseColumns(Tine.Tinebase.appMgr.get('Addressbook').i18n), (col) => {
-        if (col.renderer) {
-            Tine.widgets.grid.RendererManager.register('Addressbook', 'Contact', col.dataIndex, col.renderer);
-        }
-    });
-});
-
 // register grants for calendar containers
 Tine.widgets.container.GrantsManager.register('Addressbook_Model_Contact', function(container) {
     var _ = window.lodash,

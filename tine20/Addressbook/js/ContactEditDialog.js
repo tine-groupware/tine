@@ -30,7 +30,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
 
     windowNamePrefix: 'ContactEditWindow_',
     appName: 'Addressbook',
-    recordClass: Tine.Addressbook.Model.Contact,
+    recordClass: 'Addressbook.Model.Contact',
     showContainerSelector: true,
     multipleEdit: true,
     displayNotes: true,

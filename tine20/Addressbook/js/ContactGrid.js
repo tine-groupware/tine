@@ -32,8 +32,8 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * record class
      * @cfg {Tine.Addressbook.Model.Contact} recordClass
      */
-    recordClass: Tine.Addressbook.Model.Contact,
-    
+    recordClass: 'Addressbook.Model.Contact',
+
     /**
      * grid specific
      * @private
@@ -59,7 +59,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initComponent: function() {
-        this.recordProxy = Tine.Addressbook.contactBackend;
+        // this.recordProxy = Tine.Addressbook.contactBackend;
         
         // check if felamimail is installed and user has run right and wants to use felamimail in adb
         if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail') && Tine.Felamimail.registry.get('preferences').get('useInAdb')) {
@@ -140,6 +140,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getDetailsPanel: function() {
         return new Tine.Addressbook.ContactGridDetailsPanel({
+            recordClass: this.recordClass,
             gridpanel: this,
             il8n: this.app.i18n,
             felamimail: this.felamimail

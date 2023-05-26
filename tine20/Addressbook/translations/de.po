@@ -432,7 +432,7 @@ msgstr[1] "Kontakte"
 
 #: Model/Contact.php:186
 msgid "Show Disabled"
-msgstr "Zeige geschlossene"
+msgstr "Zeige deaktivierte"
 
 #: Model/Contact.php:194
 msgid "Path"
@@ -668,6 +668,15 @@ msgstr "Pager"
 #: js/ContactGrid.js:235 js/Model.js:53 js/Model.js:170
 msgid "Phone"
 msgstr "Telefon"
+
+msgid "Phone Numbers"
+msgstr "Telefonnummmern"
+
+msgid "Emails"
+msgstr "E-Mails"
+
+msgid "Name/Emails"
+msgstr "Name/E-Mails"
 
 #: Model/Contact.php:772 Model/List.php:143 js/ListGrid.js:100
 #: js/contactListsGridPanel.js:56 js/ContactGrid.js:200 js/Model.js:187
