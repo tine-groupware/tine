@@ -192,7 +192,68 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             }
         }
     }
-    
+
+    protected function sendSaveFailureEmail(string $token, ?string $quarantinePath = null): void
+    {
+        try {
+            if (!Tinebase_Core::getUser()) {
+                Tinebase_Core::set(Tinebase_Core::USER, Tinebase_User::getInstance()
+                    ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
+            }
+
+            $recipients = Tinebase_User::getInstance()->getMultiple(
+                array_unique(array_values(OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        OnlyOfficeIntegrator_Model_AccessToken::class, [
+                        ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN,
+                            'operator' => 'equals', 'value' => $token],
+                        ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED,
+                            'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+                    ]), null, false, ['id', OnlyOfficeIntegrator_Model_AccessToken::FLDS_USER_ID])))
+            , Tinebase_Model_FullUser::class)->contact_id;
+
+            if (!empty($recipients)) {
+
+                $fileName = null;
+                $filePath = null;
+                try {
+                    $accessToken = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
+                        Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                            OnlyOfficeIntegrator_Model_AccessToken::class, [
+                            ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN,
+                                'operator' => 'equals', 'value' => $token],
+                            ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED,
+                                'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+                        ]), new Tinebase_Model_Pagination(['limit' => 1]))->getFirstRecord();
+
+                    if ($accessToken && (int)$accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION}
+                            === OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION) {
+                        $fileName = Tinebase_TempFile::getInstance()->get($accessToken
+                            ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID})->name;
+                        $filePath = 'temporary file: ' . $fileName;
+                    } else {
+                        $filePath = Tinebase_FileSystem::getInstance()->getPathOfNode($accessToken
+                            ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}, true);
+                        $pathParts = explode('/', $filePath);
+                        end($pathParts);
+                        $fileName = current($pathParts);
+                    }
+                } catch (Throwable $t) {
+                    Tinebase_Exception::log($t);
+                }
+                
+                Tinebase_Notification::getInstance()->send(null, $recipients,
+                    'Fehler beim Speichern von "' . ($fileName ?? 'unbekannt') . '"',
+                    'Das Speichern ihrer online Änderungen an der Datei "' . ($filePath ?? 'unbekannt'). '" vom ' .
+                    Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->toString() .
+                    ' konnten aufgrund eines internen technischen Fehlers in OnlyOffice nicht gespeichert werden. Bitte versuchen sie es erneut. Sollte der Fehler bestehen bleiben informieren sie bitte ihren Administrator' .
+                    ($quarantinePath ? PHP_EOL . 'Eine Sicherungskopie konnte in: "' . $quarantinePath . '" angelegt werden.' : ''));
+            }
+        } catch (Throwable $t) {
+            Tinebase_Exception::log($t);
+        }
+    }
+
     public function updateStatus($token)
     {
         if (!is_string($token) || empty($token)) {
@@ -237,6 +298,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                     $e->setLogToSentry(true);
                     $e->setLogLevelMethod('warn');
                     Tinebase_Exception::log($e);
+                    $this->sendSaveFailureEmail($token);
                 // case 4: document closed without changes -> invalidate token
                 case 4:
                     return $this->processStatus4($token);
@@ -254,6 +316,10 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             }
         } catch (Throwable $t) {
             if ((2 === (int)$requestData['status'] || 6 === (int)$requestData['status']) && isset($requestData['url'])) {
+
+                Tinebase_Exception::log($t);
+                $this->sendSaveFailureEmail($token);
+
                 // eventually rewrite the source url depending on config
                 if ($conf->{OnlyOfficeIntegrator_Config::ONLYOFFICE_SERVER_URL} && $conf->{OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL}) {
                     $requestData['url'] = str_replace($conf->{OnlyOfficeIntegrator_Config::ONLYOFFICE_PUBLIC_URL},
@@ -304,7 +370,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                 $node = Tinebase_FileSystem::getInstance()->update($node);
 
                 try {
-                    $token = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
+                    $tokenRec = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
                         Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                             OnlyOfficeIntegrator_Model_AccessToken::class, [
                                 ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN,
@@ -312,15 +378,17 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                                 ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED,
                                     'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
                     ]))->getFirstRecord();
-                    if ($token) {
-                        $node->description = $node->description . PHP_EOL . print_r($token->toArray(false), true);
+                    if ($tokenRec) {
+                        $node->description = $node->description . PHP_EOL . print_r($tokenRec->toArray(false), true);
                         $node = Tinebase_FileSystem::getInstance()->update($node);
                         $path = Tinebase_FileSystem::getInstance()->getPathOfNode(
-                            $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}, true);
+                            $tokenRec->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID}, true);
                         $node->description = $path . PHP_EOL . $node->description;
                         Tinebase_FileSystem::getInstance()->update($node);
                     }
                 } catch (Throwable $tt) {}
+
+                $this->sendSaveFailureEmail($token, $trgtPath);
             }
             throw $t;
         }
@@ -578,7 +646,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         $dataSafeRAII = null;
         try {
             if ((int)$accessToken->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} ===
-                    (int)OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION) {
+                    OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION) {
                 /** @var Tinebase_Model_TempFile $tempFile */
                 $tempFile = Tinebase_TempFile::getInstance()->get($accessToken
                     ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
