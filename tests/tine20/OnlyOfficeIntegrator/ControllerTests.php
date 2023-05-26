@@ -666,6 +666,7 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
                     OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256'))
             ->withBody(new \Zend\Diactoros\Stream($fh)));
 
+        $this->flushMailer();
         try {
             $this->_uit->updateStatus($token);
         } catch (Tinebase_Exception_Expressive_HttpStatus $e) {
@@ -676,6 +677,14 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
             $this->assertSame(1, $files->count());
             $this->assertSame('test', file_get_contents('tine20:///Filemanager/folders/shared/OOIQuarantine/' .
                 $files->getFirstRecord()->name));
+
+            $messages = $this->getMessages();
+            $this->assertCount(2, $messages);
+            $this->assertSame('Fehler beim Speichern von "test.txt"', $messages[0]->getSubject());
+            $this->assertSame('Fehler beim Speichern von "test.txt"', $messages[1]->getSubject());
+
+            $this->assertStringNotContainsString('folders/shared/OOIQuarantine/', $messages[0]->getBodyText(true));
+            $this->assertStringContainsString('folders/shared/OOIQuarantine/', $messages[1]->getBodyText(true));
 
             return;
         }
