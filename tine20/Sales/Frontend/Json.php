@@ -691,6 +691,92 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         return $this->_save($recordData, Sales_Controller_PurchaseInvoice::getInstance(), 'PurchaseInvoice', 'id', array($duplicateCheck));
     }
+
+    /**
+     * export purchase invoice to Datev email
+     *
+     * - support multiple invoices
+     * - add action log
+     *
+     * @param string $modelName
+     * @param $invoiceData
+     * @return array
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    public function exportInvoicesToDatevEmail(string $modelName, $invoiceData)
+    {
+        $modelName = 'PurchaseInvoice';
+        $filterName = $this->_applicationName . '_Model_' . $modelName . 'Filter';
+        $filter = new $filterName();
+        $invalidInvoiceIds = [];
+        $validInvoiceIds = [];
+        $errorMessage = null;
+
+        $senderEmail = Sales_Config::getInstance()->get(Sales_Config::DATEV_SENDER_EMAIL);
+        $sender = !empty($senderEmail) ? Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $senderEmail) 
+            : Tinebase_Core::getUser();
+
+        $recipientEmails = Sales_Config::getInstance()->get(Sales_Config::DATEV_RECIPIENT_EMAILS);
+        if (sizeof($recipientEmails) === 0) {
+            throw new Tinebase_Exception_SystemGeneric('recipient email is not configured');
+        }
+        
+        foreach ($invoiceData as $invoiceId => $attachmentIds) {
+            if (sizeof($attachmentIds) !== 1) {
+                $invalidInvoiceIds[] = $invoiceId;
+            } else {
+                $validInvoiceIds[] = $invoiceId;
+            }
+        }
+        
+        if (sizeof($invalidInvoiceIds) > 0) {
+            foreach (Sales_Controller_PurchaseInvoice::getInstance()->getMultiple($invalidInvoiceIds) as $invoice) {
+                $errorMessage .= PHP_EOL . $invoice->number . ': ' . $invoice->title . ' attachment size: ' . sizeof($invoiceData[$invoice->id]);
+            }
+            $exception = new Tinebase_Exception_SystemGeneric($errorMessage);
+            $exception->setTitle('invoices with invalid attachments');
+            throw $exception;
+        } 
+        
+        $lastDatevSendTime = Tinebase_DateTime::now();
+        $results = Sales_Controller_PurchaseInvoice::getInstance()->getMultiple($validInvoiceIds);
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($results);
+
+        foreach ($results as $invoice) {
+            $attachments = $invoice->attachments;
+            
+            if ($attachments) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Found ' .
+                $attachments->count() . ' attachments for ' . $modelName . ' : ' . $invoice['name']);
+            
+            foreach ($attachments as $attachment) {
+                if ($attachment['id'] === $invoiceData[$invoice['id']][0]) {
+                    $recipients = array_map(function ($recipientEmail) {return new Addressbook_Model_Contact(['email' => $recipientEmail], true);}, $recipientEmails);
+                    $messageBody = PHP_EOL . 'Model  : ' . $modelName . ', ID     : ' . $invoice['id']
+                        . PHP_EOL . 'Number : ' . $invoice['number'] . ', Title  : ' . $invoice->getTitle()
+                        . PHP_EOL . 'Datev Sent Date : ' . $lastDatevSendTime->toString();
+                    
+                    Tinebase_Notification::getInstance()->send($sender, $recipients, 'Datev notification', $messageBody, null,
+                        [$attachment], false, Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL);
+                }
+            }
+        }
+
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $validInvoiceIds)));
+        $json = new Tinebase_Frontend_Json();
+        $result = $json->updateMultipleRecords($this->_applicationName, $modelName,
+            array(array('name' => 'last_datev_send_date', 'value' => $lastDatevSendTime->getIso())),
+            $filter);
+
+        return [
+            'totalcount' => sizeof($result['results']),
+            'results' => $result['results'],
+        ];
+    }
     
     /**
      * deletes existing records

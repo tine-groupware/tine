@@ -16,12 +16,17 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE016_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE016_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -33,7 +38,7 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
             ],
-        ],
+        ]
     ];
 
     public function update000()
@@ -56,5 +61,21 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
             Sales_Model_DocumentPosition_Invoice::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '16.2', self::RELEASE016_UPDATE002);
+    }
+    
+    public function update003()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        if ($this->getTableVersion('sales_purchase_invoices') < 7) {
+            $declaration = new Setup_Backend_Schema_Field_Xml('
+               <field>
+                    <name>last_datev_send_date</name>
+                    <type>datetime</type>
+                </field>
+        ');
+            $this->_backend->addCol('sales_purchase_invoices', $declaration, 7);
+            $this->setTableVersion('sales_purchase_invoices', 7);
+        }
+        $this->addApplicationUpdate('Sales', '16.3', self::RELEASE016_UPDATE003);
     }
 }

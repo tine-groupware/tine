@@ -72,7 +72,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      * @param string|array              $_attachments
      * @throws Zend_Mail_Protocol_Exception
      */
-    public function send($_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL)
+    public function send($_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL, $_fireEvent = false, $_actionLogType = null)
     {
         // create mail object
         $mail = new Tinebase_Mail('UTF-8');
@@ -114,6 +114,15 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         foreach ($attachments as $attachment) {
             if ($attachment instanceof Zend_Mime_Part) {
                 $mail->addAttachment($attachment);
+            }  else if ($attachment instanceof Tinebase_Model_Tree_Node) {
+                $content = Tinebase_FileSystem::getInstance()->getNodeContents($attachment);
+                $mail->createAttachment(
+                    $content,
+                    $attachment->contenttype,
+                    Zend_Mime::DISPOSITION_ATTACHMENT,
+                    Zend_Mime::ENCODING_BASE64,
+                    $attachment->name
+                );
             } else if (isset($attachment['filename'])) {
                 $mail->createAttachment(
                     $attachment['rawdata'], 
