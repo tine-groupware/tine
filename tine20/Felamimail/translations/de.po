@@ -626,6 +626,9 @@ msgstr "Abwesenheitsnotiz bearbeiten"
 msgid "Edit Filter Rules"
 msgstr "Filterregeln bearbeiten"
 
+msgid "Filter Rules"
+msgstr "Filterregeln"
+
 #: js/TreeContextMenu.js:161 js/sieve/NotificationDialog.js:76
 msgid "Notifications"
 msgstr "Benachrichtigungen"
@@ -2098,8 +2101,11 @@ msgstr ""
 msgid "Save To All Recipients"
 msgstr "An allen Empfängern speichern"
 
-msgid "Filter Rules"
-msgstr "Filterregeln"
+msgid "Update Folder"
+msgstr "Ordner aktualisieren"
+
+msgid "Folder cache has been cleared!"
+msgstr "Der Ordner Cache wurde geleert!"
 
 msgid "Subject/From"
 msgstr "Betreff/Von"
