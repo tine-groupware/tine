@@ -288,7 +288,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * init actions and toolbars
      */
     initActionsAndToolbars: function() {
-        const hasEditDialog = !this.recordClass || !(this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass));
+        const hasEditDialog = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
         const useEditDialog = !this.metaDataFields || _.isArray(this.metaDataFields) && this.metaDataFields.length;
 
         this.actionCreate = new Ext.Action({
