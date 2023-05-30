@@ -18,11 +18,8 @@
     - git config merge.pofile.driver "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge-po-files %A %O %B"
     - git config merge.pofile.recursive "binary"
     - git remote add customers https://gitlab.metaways.net/tine20/tine20.git
-<<<<<<< HEAD
-=======
     # TODO remove github.com when github.com/tine20/tine20 is obsolete
     - git remote add github.com https://github.com/tine20/tine20.git
->>>>>>> 2022.11
     - git remote add github https://github.com/tine-groupware/tine.git
     - cd ${CI_BUILDS_DIR}/merge/tine20
     
