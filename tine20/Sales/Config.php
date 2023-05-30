@@ -167,6 +167,14 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const DOCUMENT_INVOICE_STATUS = 'documentInvoiceStatus';
     public const DOCUMENT_INVOICE_STATUS_TRANSITIONS = 'documentInvoiceStatusTransitions';
 
+    /**
+     * sender and recipient emails for datev
+     *
+     * @var string
+     */
+    public const DATEV_SENDER_EMAIL = 'datevSenderEmail';
+    public const DATEV_RECIPIENT_EMAILS = 'datevRecipientEmails';
+
 
     /**
      * Invoice Type
@@ -917,6 +925,22 @@ class Sales_Config extends Tinebase_Config_Abstract
                 'default' => 'TO_CLEAR'
             )
         ),
+        self::DATEV_SENDER_EMAIL                 => [
+            self::LABEL                     => 'Datev sender email', //_('Datev sender email')
+            self::DESCRIPTION               => 'Datev sender email', //_('Datev sender email')
+            self::TYPE                      => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => true,
+            self::DEFAULT_STR               => '',
+        ],
+        self::DATEV_RECIPIENT_EMAILS                 => [
+            self::LABEL                     => 'Datev recipient emails', //_('Datev recipient emails')
+            self::DESCRIPTION               => 'Datev recipient emails', //_('Datev recipient emails')
+            self::TYPE                      => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => true,
+            self::DEFAULT_STR               => [],
+        ],
         /**
          * enabled Sales features
          * 

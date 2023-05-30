@@ -217,7 +217,12 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                         'type'      => 'SUPPLIER'
                     )
                 )
-            )
+            ),
+            'last_datev_send_date'       => [
+                self::LABEL                 => 'Last Datev send date', // _('Last Datev send date')
+                self::TYPE                  => self::TYPE_DATETIME,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ],
         )
     );
     

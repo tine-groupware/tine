@@ -45,13 +45,15 @@ class Sales_JsonTest extends TestCase
         
         Sales_Controller_Contract::getInstance()->setNumberPrefix();
         Sales_Controller_Contract::getInstance()->setNumberZerofill();
+        $this->_datevRecipientEmails = Sales_Config::getInstance()->get(Sales_Config::DATEV_RECIPIENT_EMAILS);
 
         $this->_deleteContracts = array();
     }
 
     protected function tearDown(): void
-{
+    {
         Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, false);
+        Sales_Config::getInstance()->set(Sales_Config::DATEV_RECIPIENT_EMAILS, $this->_datevRecipientEmails);
 
         parent::tearDown();
 
@@ -918,5 +920,38 @@ class Sales_JsonTest extends TestCase
         ), $this->_getPaging());
         
         $this->assertEquals(2, $search['totalcount']);
+    }
+
+    public function testExportPurchaseInvoiceToDatev()
+    {
+        Sales_Config::getInstance()->set(Sales_Config::DATEV_RECIPIENT_EMAILS, [Tinebase_Core::getUser()->accountEmailAddress]);
+        
+        $pit = new Sales_PurchaseInvoiceTest();
+        $pit->setUp();
+        $invoice = $pit->createPurchaseInvoice();
+        //insert attachment to invoice
+        $path = Tinebase_TempFile::getTempPath();
+        file_put_contents($path, 'testAttachmentData');
+        $invoice = Sales_Controller_PurchaseInvoice::getInstance()->get($invoice['id']);
+        $invoice->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', [
+            [
+                'name'      => 'testAttachmentData.txt',
+                'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path),
+            ]
+        ], true);
+        $invoice = Sales_Controller_PurchaseInvoice::getInstance()->update($invoice);
+        //feed test invoice data
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice);
+        $attachments = $invoice->attachments;
+        $invoiceData[$invoice['id']] = $attachments->id;
+        $this->_instance->exportInvoicesToDatevEmail('PurchaseInvoice', $invoiceData);
+        //assert acitionLog and decode data
+        $actionLog = Tinebase_ControllerTest::assertActionLogEntry(Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL, 1);
+        $actionLog = $actionLog->getFirstRecord();
+        $data = json_decode($actionLog->data, true);
+        
+        $invoice = Sales_Controller_PurchaseInvoice::getInstance()->get($invoice['id']);
+        $this->assertEquals($invoice['last_datev_send_date'], $actionLog->datetime, 'invoice datev sent date should be the same as action log datetime');
+        $this->assertStringContainsString('testAttachmentData.txt', $data['attachments'][0], 'attachement is invalid');
     }
 }

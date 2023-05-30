@@ -21,6 +21,7 @@ import './Document/InvoiceEditDialog';
 import './Document/CreateFollowUpAction';
 import './Document/CreatePaperSlipAction';
 import './Document/TracAction';
+import './Document/SendToDatevAction';
 
 /**
  * address renderer, not a default renderer
