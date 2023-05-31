@@ -48,6 +48,9 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                             'doJoin'                => true,
                         ],
                     ],
+                    TMCC::UI_CONFIG         => [
+                        'group'                         => 'GDPR',
+                    ],
                 ],
             ]
         ], true));
@@ -69,6 +72,9 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                     ],
                     TMCC::INPUT_FILTERS     => [
                         Zend_Filter_Empty::class            => 0,
+                    ],
+                    TMCC::UI_CONFIG         => [
+                        'group'                         => 'GDPR',
                     ],
                 ],
                 Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS => [
@@ -105,11 +111,9 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                 Tinebase_Model_CustomField_Config::DEF_HOOK => [
                     [GDPR_Controller_DataProvenance::class, 'modelConfigHook'],
                 ],
-                /*'uiconfig' => [
-                    'order' => '',//'0/0/0/0/0/5',
-                    'group' => '',
-                    'tab'   => '', //'0',
-                ],*/
+                TMCC::UI_CONFIG         => [
+                    'group'                         => 'GDPR',
+                ],
             ]
         ], true));
 
@@ -124,12 +128,11 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                     TMCC::LABEL             => 'GDPR Data Editing Reason', // _('GDPR Data Editing Reason')
                     TMCC::TYPE              => TMCC::TYPE_STRING,
                     TMCC::IS_VIRTUAL        => true,
-                ],/*
-                'uiconfig' => [
-                    'order' => '',//'0/0/0/0/0/5',
-                    'group' => '',
-                    'tab'   => '', //'0',
-                ],*/
+                ],
+                TMCC::UI_CONFIG         => [
+                    'omitDuplicateResolving'        => true,
+                    'group'                         => 'GDPR',
+                ],
             ]
         ], true));
 
@@ -144,6 +147,9 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                     TMCC::TYPE              => TMCC::TYPE_DATE,
                     TMCC::NULLABLE          => true,
                     TMCC::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                ],
+                TMCC::UI_CONFIG         => [
+                    'group'                         => 'GDPR',
                 ],
             ]
         ], true));
