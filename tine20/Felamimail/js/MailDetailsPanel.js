@@ -147,10 +147,14 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 _.forEach(record.get('attachments'), (attachment) => {
                     if (! attachment.cache) {
                         const recordId = record.id.split('_');
-                        attachment.cache = Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', recordId[0], attachment.partId].join(':'), true).then(cache => {
-                            attachment.cache = new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);
-                            return attachment.cache;
-                        });
+                        attachment.cache = Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', recordId[0], attachment.partId].join(':'), true)
+                            .then(cache => {
+                                attachment.cache = new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);
+                                return attachment.cache;
+                            })
+                            .catch((e) => {
+                                console.error(e);
+                            });
                     }
                 })
             }
@@ -363,7 +367,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     // this.refetchBody(this.record, this.onClick.createDelegate(this, [e]));
                     return;
                 }
-                
+
                 const promises = [];
                 // make sure we get the attachment caches
                 if (attachments) {
