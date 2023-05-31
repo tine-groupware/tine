@@ -141,6 +141,7 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
             case 'record':
                 $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [
                     self::TYPE => self::TYPE_RECORD,
+                    self::NULLABLE => true,
                     self::CONFIG => [
                         self::APP_NAME => Addressbook_Config::APP_NAME,
                         self::MODEL_NAME => Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
