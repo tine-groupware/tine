@@ -31,7 +31,6 @@ abstract class Tinebase_License_Abstract
      * @var array featureName => since Licence Version (semver)
      */
     protected $_featureNeedsPermission = [
-        'Bookmarks'                                     => '*',
         'CashBook'                                      => '*',
         'ContractManager'                               => '*',
         'DFCom'                                         => '>=2.0',
