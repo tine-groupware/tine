@@ -26,7 +26,7 @@
 }
 
 .cal-monthview-wkcell:hover{
-    background: #CDDCEF url(../../library/ExtJS/resources/images/default/toolbar/bg.gif) repeat-x scroll left top;
+    background: #CDDCEF;
     /*cursor: pointer; see ticket #1484*/
 }
 
@@ -207,4 +207,23 @@
 }
 .cal-monthview-daycell-today {
     background: #EBF3FD;
+}
+
+
+
+
+.dark-mode .cal-monthview-wkcell {
+    background-color: #e3e3e3;
+}
+.dark-mode .cal-monthview-wkcell:hover{
+    background: #CDDCEF;
+}
+.dark-mode .cal-monthview-daycell-valid {
+    background: #ddd;
+}
+.dark-mode .cal-monthview-daycell-invalid {
+    background: #e6e6e6;
+}
+.dark-mode .cal-monthview-daycell-today {
+    background: #CCCCCC;
 }
