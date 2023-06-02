@@ -1079,7 +1079,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Button} btn
      */
     onImport: function(btn) {
-        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel(),
+        var treePanel = this.treePanel || this.getMainScreen().getWestPanel().getContainerTreePanel(),
             _ = window.lodash;
 
         var container = _.get(this.modelConfig, 'import.defaultImportContainerRegistryKey', false);
@@ -1574,6 +1574,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.store.clearData();
     },
 
+    getMainScreen: function() {
+        return this.mainScreen
+            || this.findParentBy((c) => { return c.xtype === 'Tine.widgets.MainScreen' })
+            || this.app.getMainScreen();
+    },
+
     /**
      * perform the initial load of grid data
      */
@@ -1581,12 +1587,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(
                 this.app.appName, this.recordClass.prototype.modelName
             ),
-            favoritesPanel  = this.app.getMainScreen()
-            && typeof this.app.getMainScreen().getWestPanel === 'function'
-            && typeof this.app.getMainScreen().getWestPanel().getFavoritesPanel === 'function'
-            && this.hasFavoritesPanel
-                ? this.app.getMainScreen().getWestPanel().getFavoritesPanel()
-                : null;
+            mainScreen = this.getMainScreen(),
+            favoritesPanel = mainScreen
+                && typeof mainScreen.getWestPanel === 'function'
+                && typeof mainScreen.getWestPanel().getFavoritesPanel === 'function'
+                && this.hasFavoritesPanel
+                    ? mainScreen.getWestPanel().getFavoritesPanel()
+                    : null;
 
         if (defaultFavorite && favoritesPanel) {
             favoritesPanel.selectFilter(defaultFavorite);
