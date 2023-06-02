@@ -350,6 +350,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME                => Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
                     self::JSON_FACADE               => 'adr_one_',
                 ],
+                self::UI_CONFIG                 => [
+                    'omitDuplicateResolving'        => true,
+                ],
             ],
             'private_address'               => [
                 self::TYPE                      => self::TYPE_RECORD,
@@ -358,6 +361,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     self::APP_NAME                  => Addressbook_Config::APP_NAME,
                     self::MODEL_NAME                => Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
                     self::JSON_FACADE               => 'adr_two_',
+                ],
+                self::UI_CONFIG                 => [
+                    'omitDuplicateResolving'        => true,
                 ],
             ],
             'adr_one_countryname'           => [

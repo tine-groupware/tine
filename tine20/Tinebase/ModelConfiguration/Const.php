@@ -168,6 +168,7 @@ class Tinebase_ModelConfiguration_Const {
 
     /**
      * If this is set to true, the field can't be updated in BE and will be shown as readOnly in the frontend
+     * if set bellow self::UI_CONFIG server can update field
      */
     const READ_ONLY = 'readOnly';
     const REFERENCED_COLUMN_NAME = 'referencedColumnName';
@@ -197,6 +198,9 @@ class Tinebase_ModelConfiguration_Const {
     const SPECIAL_TYPE_PERCENT = 'percent';
     const STORAGE = 'storage';
     const SUPPORTED_FORMATS = 'supportedFormats';
+    /**
+     * legacy - field is not included in export (but not respected by all exports)
+     */
     const SYSTEM = 'system';
 
     const TAB = 'tab';

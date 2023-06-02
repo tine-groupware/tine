@@ -39,6 +39,9 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
         self::APP_NAME => Addressbook_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
+        self::RECORD_NAME => 'Phone', // gettext('GENDER_Phone')
+        self::RECORDS_NAME => 'Phone', // ngettext('Phone', 'Phones', n)
+
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
         ],

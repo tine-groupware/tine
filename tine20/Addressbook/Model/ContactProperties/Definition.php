@@ -47,6 +47,11 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
         self::APP_NAME => Addressbook_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
+        self::EXPOSE_JSON_API => true,
+
+        self::RECORD_NAME => 'Property definition', // gettext('GENDER_Property definition')
+        self::RECORDS_NAME => 'Property definitions', // ngettext('Property definition', 'Property definitions', n)
+
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
         ],
@@ -55,23 +60,34 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
 
         self::FIELDS                        => [
             self::FLD_NAME                      => [
+                self::LABEL                         => 'Name', // _('Name')
                 self::TYPE                          => self::TYPE_STRING,
                 self::LENGTH                        => 255,
+                self::QUERY_FILTER                  => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
             self::FLD_IS_SYSTEM                => [
+                self::LABEL                         => 'System', // _('System')
                 self::TYPE                          => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL                   => false,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_IS_APPLIED               => [
                 self::TYPE                          => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL                   => false,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
             self::FLD_MODEL                     => [
+                self::LABEL                         => 'Model', // _('Model')
                 self::TYPE                          => self::TYPE_MODEL,
+                self::QUERY_FILTER                  => true,
                 self::CONFIG                        => [
                     self::AVAILABLE_MODELS              => [
                         Addressbook_Model_ContactProperties_Address::class,
@@ -90,6 +106,7 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
                 ],
             ],
             self::FLD_LINK_TYPE                 => [
+                self::LABEL                         => 'Link Type', // _('Link Type')
                 self::TYPE                          => self::TYPE_STRING,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
@@ -98,20 +115,27 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
                 ],
             ],
             self::FLD_GRANT_MATRIX              => [
+                self::LABEL                         => 'Grant Matrix', // _('Grant Matrix')
                 self::TYPE                          => self::TYPE_JSON, // Tinebase_Model_GrantContext => keyfield in der config
                 self::NULLABLE                      => true,
             ],
             self::FLD_ACTIVE_SYNC_MAP           => [
+                self::LABEL                         => 'ActiveSync Map', // _('ActiveSync Map')
                 self::TYPE                          => self::TYPE_JSON,
                 self::NULLABLE                      => true,
             ],
             self::FLD_VCARD_MAP                 => [
+                self::LABEL                         => 'VCard Map', // _('VCard Map')
                 self::TYPE                          => self::TYPE_JSON,
                 self::NULLABLE                      => true,
             ],
             self::FLD_LAST_ERROR                => [
+                self::LABEL                         => 'Last Error', // _('Last Error')
                 self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
+                ],
             ],
         ],
     ];

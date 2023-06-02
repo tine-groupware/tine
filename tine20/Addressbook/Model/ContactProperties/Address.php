@@ -46,6 +46,9 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
         self::APP_NAME => Addressbook_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
+        self::RECORD_NAME => 'Address', // gettext('GENDER_Address')
+        self::RECORDS_NAME => 'Addresses', // ngettext('Address', 'Addresses', n)
+
         self::TABLE => [
             self::NAME => self::TABLE_NAME,
         ],
@@ -124,12 +127,18 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Longitude', // _('Longitude')
                 self::INPUT_FILTERS             => [Zend_Filter_Empty::class => null],
+                self::UI_CONFIG                 => [
+                    'omitDuplicateResolving'        => true,
+                ],
             ],
             self::FLD_LAT                   => [
                 self::TYPE                      => self::TYPE_FLOAT,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Latitude', // _('Latitude')
                 self::INPUT_FILTERS             => [Zend_Filter_Empty::class => null],
+                self::UI_CONFIG                 => [
+                    'omitDuplicateResolving'        => true,
+                ],
             ],
         ],
     ];
@@ -141,10 +150,12 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
             case 'record':
                 $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [
                     self::TYPE => self::TYPE_RECORD,
+                    self::LABEL => $def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME},
                     self::NULLABLE => true,
                     self::CONFIG => [
                         self::APP_NAME => Addressbook_Config::APP_NAME,
                         self::MODEL_NAME => Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
+                        self::DEPENDENT_RECORDS => true,
                     ],
                 ];
                 $grants = $def->{Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX};
