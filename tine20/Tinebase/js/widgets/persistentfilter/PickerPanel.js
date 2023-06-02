@@ -271,6 +271,12 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         return this.filterToolbar;
     },
 
+    getMainScreen: function() {
+        return this.mainScreen
+            || this.findParentBy((c) => { return c.xtype === 'Tine.widgets.MainScreen' })
+            || this.app.getMainScreen();
+    },
+
     /**
      * get grid
      * 
@@ -278,7 +284,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      */
     getGrid : function() {
         if (!this.grid) {
-            this.grid = this.findParentBy((c) => { return c.xtype === 'Tine.widgets.MainScreen' }).getCenterPanel();
+            this.grid = this.getMainScreen().getCenterPanel();
         }
 
         return this.grid;

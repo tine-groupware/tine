@@ -256,6 +256,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                 this[contentType + suffix] = def && def.xtype ? Ext.create(def) :
                     new Tine[def.appName || this.app.appName][contentType + suffix](_.merge({
                         app: def.appName ? Tine.Tinebase.appMgr.get(def.appName) : this.app,
+                        mainScreen: this,
                         plugins: (() => {
                             const wp = this.getWestPanel();
                             return wp && wp.getFilterPlugin ? [wp.getFilterPlugin(contentType)] : []
@@ -317,7 +318,8 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         if (! this.moduleTreePanel) {
             if (this.useModuleTreePanel) {
                 this.moduleTreePanel = new Tine.widgets.ContentTypeTreePanel({
-                    app: this.app, 
+                    app: this.app,
+                    mainScreen: this,
                     contentTypes: this.contentTypes,
                     contentType: this.getActiveContentType()
                 });
@@ -358,6 +360,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         if (! this[wpName]) {
             var wpconfig = {
                     app: app,
+                    mainScreen: this,
                     contentTypes: this.contentTypes,
                     contentType: contentType,
                     listeners: {
