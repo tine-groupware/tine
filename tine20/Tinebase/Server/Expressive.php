@@ -85,6 +85,8 @@ class Tinebase_Server_Expressive extends Tinebase_Server_Abstract implements Tin
                 }
             }
 
+            $this->_disallowAppPwdSessions();
+
             Tinebase_Core::initFramework();
 
             $this->_request = Tinebase_Core::getContainer()->get(RequestInterface::class);

@@ -649,7 +649,7 @@ class Tinebase_Core
         
         if (isset($coreSession->currentAccount)) {
             $coreSession->currentAccount = Tinebase_User::getInstance()->getFullUserById($coreSession->currentAccount);
-            self::set(self::USER, $coreSession->currentAccount);
+            self::setUser($coreSession->currentAccount);
         }
         
         if (!isset($coreSession->jsonKey)) {

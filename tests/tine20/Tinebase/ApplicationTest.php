@@ -446,6 +446,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_ActionLog::class,
                 Tinebase_Model_Alarm::class,
                 Tinebase_Model_Application::class,
+                Tinebase_Model_AppPassword::class,
                 Tinebase_Model_AreaLockConfig::class,
                 Tinebase_Model_AreaLockState::class,
                 Tinebase_Model_AsyncJob::class,

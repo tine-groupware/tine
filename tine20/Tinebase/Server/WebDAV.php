@@ -56,6 +56,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
     public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         try {
+            $this->_disallowAppPwdSessions();
+
             $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
 
             if ($body !== null) {
@@ -97,8 +99,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             $hasIdentity = false;
 
             if (isset($_SERVER['HTTP_USER_AGENT']) &&
-                    (strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft-WebDAV-MiniRedir') === 0 ||
-                        strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft Office') === 0)) {
+                (strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft-WebDAV-MiniRedir') === 0 ||
+                    strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft Office') === 0)) {
                 try {
                     Tinebase_Core::startCoreSession();
                     Tinebase_Core::initFramework();
@@ -253,17 +255,17 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             );
 
             $aclPlugin = new Tinebase_WebDav_Plugin_ACL();
-            $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
-            $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
+            $aclPlugin->defaultUsernamePath = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
+            $aclPlugin->principalCollectionSet = array(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
             );
             $aclPlugin->principalSearchPropertySet = array(
-                '{DAV:}displayname'                                                   => 'Display name',
-                '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address'               => 'Email address',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set'  => 'Email addresses',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'         => 'First name',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'          => 'Last name',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-address-set' => 'Calendar user address set',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-type' => 'Calendar user type'
+                '{DAV:}displayname' => 'Display name',
+                '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address' => 'Email address',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set' => 'Email addresses',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => 'First name',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name' => 'Last name',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set' => 'Calendar user address set',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type' => 'Calendar user type'
             );
 
             self::$_server->addPlugin($aclPlugin);
@@ -308,6 +310,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             }
 
             Tinebase_Controller::getInstance()->logout();
+        } catch (Tinebase_Exception_Unauthorized $teu) {
+            @header('HTTP/1.1 401 Not authorized');
         } catch (Tinebase_Exception_AccessDenied $tead) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
