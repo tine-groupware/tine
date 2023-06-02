@@ -74,28 +74,32 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         iconCls: `action_composeEmail`,
                         disabled: !recipientData.email,
                         handler: () => {
-                            const mailDefaults = win.Tine.Felamimail.Model.Message.getDefaultData();
-                            const emailBoilerplate = _.find(record.get('boilerplates'), (bp) => { return bp.name === 'Email'});
-                            let body = '';
-                            if (emailBoilerplate) {
-                                this.twingEnv = getTwingEnv();
-                                const loader = this.twingEnv.getLoader();
-                                loader.setTemplate(`${record.id}-email`, emailBoilerplate.boilerplate);
-                                body = this.twingEnv.render(`${record.id}-email`, record.data);
-                                if (mailDefaults.content_type === 'text/html') {
-                                    body = Ext.util.Format.nl2br(body);
-                                }
-                            }
-
-                            const mailRecord = new win.Tine.Felamimail.Model.Message(Object.assign(mailDefaults, {
-                                subject: `${record.constructor.getRecordName()} ${record.get('document_number')}: ${record.get('document_title')}`,
-                                // @TODO have a boilerplate here
-                                body: body + win.Tine.Felamimail.getSignature(),
-                                to: [`${recipientData.name} < ${recipientData.email} >`],
-                                attachments: [paperSlip]
-                            }), 0);
                             win.Tine.Felamimail.MessageEditDialog.openWindow({
-                                record: mailRecord,
+                                contentPanelConstructorInterceptor: async (config) => {
+                                    const mailDefaults = win.Tine.Felamimail.Model.Message.getDefaultData();
+                                    const emailBoilerplate = _.find(record.get('boilerplates'), (bp) => { return bp.name === 'Email'});
+                                    let body = '';
+                                    if (emailBoilerplate) {
+                                        this.twingEnv = getTwingEnv();
+                                        const loader = this.twingEnv.getLoader();
+                                        loader.setTemplate(`${record.id}-email`, emailBoilerplate.boilerplate);
+                                        body = await this.twingEnv.render(`${record.id}-email`, record.data);
+                                        if (mailDefaults.content_type === 'text/html') {
+                                            body = Ext.util.Format.nl2br(body);
+                                        }
+                                    }
+
+                                    const mailRecord = new win.Tine.Felamimail.Model.Message(Object.assign(mailDefaults, {
+                                        subject: `${record.constructor.getRecordName()} ${record.get('document_number')}: ${record.get('document_title')}`,
+                                        body: body + win.Tine.Felamimail.getSignature(),
+                                        to: [`${recipientData.name} < ${recipientData.email} >`],
+                                        attachments: [paperSlip]
+                                    }), 0);
+
+                                    Object.assign(config, {
+                                        record: mailRecord
+                                    });
+                                }
                                 // listeners: {
                                 //     update: (mail) => {
                                 //         const docType = editDialog.record.constructor.getMeta('recordName');
