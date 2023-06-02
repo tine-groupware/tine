@@ -208,7 +208,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * @return {Tine.Tinebase.widgets.ContainerTreePanel}
      */
     getContainerTreePanel: function(contentType) {
-        contentType = contentType || this.app.getMainScreen().getActiveContentType();
+        contentType = contentType || this.contentType;
         const panelName = contentType + 'TreePanel';
 
         if (! this[panelName]) {
@@ -241,7 +241,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
 
     getFavoritesPanel: function() {
         try {
-            if(!this[this.contentType]) {
+            if(!this[this.contentType + 'FilterPanel']) {
                 var fpConfig = {
                     
                     rootVisible : false,
@@ -279,13 +279,13 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                     }
                 };
                 const Panel = this.getFavoritesPanelConstructor() || Tine.widgets.persistentfilter.PickerPanel;
-                this[this.contentType] = new Panel(fpConfig)
+                this[this.contentType + 'FilterPanel'] = new Panel(fpConfig)
             }
         } catch(e) {
             Tine.log.info('No Favorites Panel created');
         }
         
-        return this[this.contentType];
+        return this[this.contentType + 'FilterPanel'];
     },
     
     /**
