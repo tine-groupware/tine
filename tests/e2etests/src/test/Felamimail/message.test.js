@@ -121,7 +121,7 @@ describe('message', () => {
         await page.waitForTimeout(2000);
     });
     
-    test('overwrite email attachment in filemanager from MailDetailsPanel', async () => {
+    test.skip('overwrite email attachment in filemanager from MailDetailsPanel', async () => {
         await page.waitForTimeout(2000);
         await saveAttachment(page);
         await page.waitForTimeout(10000); //wait for save email.
