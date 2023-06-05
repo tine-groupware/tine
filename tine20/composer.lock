@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39005528caeddb3cd9674c6e126c117e",
+    "content-hash": "2c30aeba497a6da6c2029842759ba755",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2414,12 +2414,11 @@
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
-                "paragonie/random_compat": ">=2",
-                "php": ">=5.4",
-                "phpseclib/phpseclib": "~2.0 || ^3.0"
+                "php": ">=7.0",
+                "phpseclib/phpseclib": "~3.0"
             },
             "require-dev": {
-                "roave/security-advisories": "dev-master",
+                "roave/security-advisories": "dev-latest",
                 "yoast/phpunit-polyfills": "^1.0"
             },
             "default-branch": true,
@@ -4870,6 +4869,7 @@
                 "issues": "https://github.com/php-http/message-factory/issues",
                 "source": "https://github.com/php-http/message-factory/tree/master"
             },
+            "abandoned": "psr/http-factory",
             "time": "2015-12-19T14:08:53+00:00"
         },
         {
@@ -14152,12 +14152,6 @@
             "version": "8.3.5.0-patch1",
             "alias": "8.3.5",
             "alias_normalized": "8.3.5.0"
-        },
-        {
-            "package": "phpoffice/phpexcel",
-            "version": "1.8.2.0-patch4",
-            "alias": "1.8.2",
-            "alias_normalized": "1.8.2.0"
         },
         {
             "package": "phpoffice/phpspreadsheet",
