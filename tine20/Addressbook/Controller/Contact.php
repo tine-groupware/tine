@@ -832,7 +832,70 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 
         return false;
     }
-    
+
+    protected function _setGeoDataForAddressRecord(string $_address, Addressbook_Model_Contact $_record, bool $_omitPostal = false): void
+    {
+        if (!$_record->{$_address} instanceof Addressbook_Model_ContactProperties_Address) {
+            return;
+        }
+        if (empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LOCALITY}) &&
+            ($_omitPostal || empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_POSTALCODE})) &&
+            empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_STREET}) &&
+            empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_COUNTRYNAME})
+        ) {
+            $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LON} = null;
+            $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LAT} = null;
+            return;
+        }
+
+        $nominatim = $this->_getNominatimService();
+
+        if (! empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LOCALITY})) {
+            $nominatim->setVillage($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LOCALITY});
+        }
+
+        if (!$_omitPostal && ! empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_POSTALCODE})) {
+            $nominatim->setPostcode($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_POSTALCODE});
+        }
+
+        if (! empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_STREET})) {
+            $nominatim->setStreet($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_STREET});
+        }
+
+        if (! empty($countryname = $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_COUNTRYNAME})) {
+            try {
+                $country = Zend_Locale::getTranslation($countryname, 'Country', $countryname);
+                $nominatim->setCountry($country);
+            } catch (Zend_Locale_Exception $zle) {
+                // country not found
+            }
+        }
+
+        try {
+            $places = $nominatim->search();
+
+            if (count($places) > 0) {
+                $place = $places->current();
+                $this->_applyNominatimPlaceToRecord($_address, $_record, $place);
+
+            } else {
+                if (!$_omitPostal) {
+                    $this->_setGeoDataForAddress($_address, $_record, true);
+                    return;
+                }
+
+                $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LON} = null;
+                $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LAT} = null;
+            }
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+
+            // the address has changed, the old values for lon/lat can not be valid anymore
+            $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LON} = null;
+            $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LAT} = null;
+        }
+    }
+
     /**
      * set geodata for given address of record
      * 
@@ -869,15 +932,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $nominatim->setStreet($_record->{$_address . 'street'});
         }
         
-        if (! empty($_record->{$_address . 'countryname'})) {
+        if (! empty($countryname = $_record->{$_address . 'countryname'})) {
             try {
-                $countryname = $_record->{$_address . 'countryname'};
-                if (! empty($countryname)) {
-                    $country = Zend_Locale::getTranslation($countryname, 'Country', $countryname);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' country ' . $country);
-                    $nominatim->setCountry($country);
-                }
+                $country = Zend_Locale::getTranslation($countryname, 'Country', $countryname);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' country ' . $country);
+                $nominatim->setCountry($country);
+
             } catch (Zend_Locale_Exception $zle) {
                 // country not found
             }
@@ -1019,6 +1080,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         $this->_setGeoDataForAddress('adr_one_', $_record);
         $this->_setGeoDataForAddress('adr_two_', $_record);
+        foreach (Addressbook_Model_Contact::getAdditionalAddressFields() as $field) {
+            $this->_setGeoDataForAddressRecord($field, $_record);
+        }
     }
 
     /**

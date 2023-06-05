@@ -27,7 +27,6 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
     public const FLD_REGION = 'region';
     public const FLD_STREET = 'street';
     public const FLD_STREET2 = 'street2';
-    public const FLD_TYPE = 'type';
 
     public const MODEL_NAME_PART = 'ContactProperties_Address';
     public const TABLE_NAME = 'addressbook_address';
@@ -156,6 +155,13 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
                         self::APP_NAME => Addressbook_Config::APP_NAME,
                         self::MODEL_NAME => Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
                         self::DEPENDENT_RECORDS => true,
+                        self::REF_ID_FIELD => self::FLD_CONTACT_ID,
+                        self::FORCE_VALUES              => [
+                            Addressbook_Model_ContactProperties_Address::FLD_TYPE => $def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME},
+                        ],
+                        self::ADD_FILTERS               => [
+                            ['field' => Addressbook_Model_ContactProperties_Address::FLD_TYPE, 'operator' => 'equals', 'value' => $def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}],
+                        ],
                     ],
                 ];
                 $grants = $def->{Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX};

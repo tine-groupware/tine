@@ -20,7 +20,6 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
 {
     public const FLD_CONTACT_ID = 'contact_id';
     public const FLD_NUMBER = 'number';
-    public const FLD_TYPE = 'type';
 
     public const MODEL_NAME_PART = 'ContactProperties_Phone';
     public const TABLE_NAME = 'addressbook_phone';
@@ -99,6 +98,31 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
                 if (!empty($grants)) {
                     $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::REQUIRED_GRANTS] = $grants;
                 }
+
+                $cfCtrl = Tinebase_CustomField::getInstance();
+                $nameNorm = $cfc->name . '_normalized';
+                $cfcNorm = $cfCtrl->getCustomFieldByNameAndApplication($cfc->application_id, $nameNorm,
+                    Addressbook_Model_Contact::class, true);
+                if (null === $cfcNorm) {
+                    $cfcNorm = new Tinebase_Model_CustomField_Config([
+                        'is_system' => true,
+                        'application_id' => $cfc->application_id,
+                        'model' => Addressbook_Model_Contact::class,
+                        'name' => $nameNorm,
+                    ], true);
+                }
+                $cfcNorm->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [
+                    self::TYPE                      => self::TYPE_STRING,
+                    self::LENGTH                    => 86,
+                    self::NULLABLE                  => true,
+                    self::SYSTEM                    => true,
+                    self::DISABLED                  => true,
+                ];
+                if (!empty($grants)) {
+                    $cfcNorm->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::REQUIRED_GRANTS] = $grants;
+                }
+                $cfCtrl->addCustomField($cfcNorm);
+
                 break;
             case 'records':
                 /*$cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [

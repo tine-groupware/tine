@@ -1059,6 +1059,11 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::LENGTH                    => 128,
                 self::LABEL                     => 'Type', // _('Type')
                 self::SYSTEM                    => true,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Input::DEFAULT_VALUE    => self::CONTACTTYPE_CONTACT,
+                    ['InArray', [self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT, self::CONTACTTYPE_EMAIL_ACCOUNT]]
+                ],
                 self::DEFAULT_VAL               => self::CONTACTTYPE_CONTACT,
                 self::COPY_OMIT                 => true,
             ],
@@ -1175,6 +1180,42 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         'n_family',
     );
 
+    protected static $_telFields = [
+        'tel_assistent' => 'tel_assistent',
+        'tel_car' => 'tel_car',
+        'tel_cell' => 'tel_cell',
+        'tel_cell_private' => 'tel_cell_private',
+        'tel_fax' => 'tel_fax',
+        'tel_fax_home' => 'tel_fax_home',
+        'tel_home' => 'tel_home',
+        'tel_pager' => 'tel_pager',
+        'tel_work' => 'tel_work',
+        'tel_other' => 'tel_other',
+        'tel_prefer' => 'tel_prefer',
+    ];
+
+    protected static $_emailFields = [
+        'email',
+        'email_home',
+    ];
+
+    protected static $_additionalAdrFields = [];
+
+    static public function getAdditionalAddressFields(): array
+    {
+        return static::$_additionalAdrFields;
+    }
+
+    static public function getTelefoneFields(): array
+    {
+        return static::$_telFields;
+    }
+
+    static public function getEmailFields(): array
+    {
+        return static::$_emailFields;
+    }
+
     /**
      * @return array
      */
@@ -1193,14 +1234,26 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             return;
         }
 
-        foreach (Addressbook_Controller_ContactProperties_Definition::getInstance()->getAll()
-                     ->filter(AMCPD::FLD_IS_SYSTEM, true) as $cpDef) {
-
+        $propDefs = Addressbook_Controller_ContactProperties_Definition::getInstance()->getAll();
+        foreach ($propDefs->filter(AMCPD::FLD_IS_SYSTEM, true) as $cpDef) {
             $cpDef->{AMCPD::FLD_MODEL}::applyJsonFacadeMC($_definition, $cpDef);
 
             if (is_array($cpDef->{AMCPD::FLD_GRANT_MATRIX})) {
                 $_definition[$cpDef->{AMCPD::FLD_NAME}][self::REQUIRED_GRANTS] = $cpDef->{AMCPD::FLD_GRANT_MATRIX};
             }
+        }
+        $phoneDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Phone::class);
+        foreach ($phoneDefs as $phoneDef) {
+            static::$_telFields[$phoneDef->{AMCPD::FLD_NAME}] = $phoneDef->{AMCPD::FLD_NAME};
+        }
+        $emailDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Email::class);
+        foreach ($emailDefs as $emailDef) {
+            static::$_emailFields[$emailDef->{AMCPD::FLD_NAME}] = $emailDef->{AMCPD::FLD_NAME};
+        }
+        $adrDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Address::class)
+            ->filter(AMCPD::FLD_IS_SYSTEM, false);
+        foreach ($adrDefs as $adrDef) {
+            static::$_additionalAdrFields[$adrDef->{AMCPD::FLD_NAME}] = $adrDef->{AMCPD::FLD_NAME};
         }
     }
 
@@ -1335,7 +1388,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 break;
             default:
                 // normalize telephone numbers
-                if (strpos($_name, 'tel_') === 0 && strpos($_name, '_normalized') === false) {
+                if (isset(static::$_telFields[$_name])) {
                     parent::__set($_name . '_normalized', (empty($_value)? $_value : static::normalizeTelephoneNum($_value)));
                 }
                 break;

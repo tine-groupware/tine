@@ -11,6 +11,8 @@
 
 interface Addressbook_Model_ContactProperties_Interface
 {
+    public const FLD_TYPE = 'type';
+    
     static public function updateCustomFieldConfig(Tinebase_Model_CustomField_Config $cfc,
                                                    Addressbook_Model_ContactProperties_Definition $def): void;
 }

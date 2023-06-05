@@ -20,7 +20,6 @@ class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstr
 {
     public const FLD_CONTACT_ID = 'contact_id';
     public const FLD_EMAIL = 'email';
-    public const FLD_TYPE = 'type';
 
     public const MODEL_NAME_PART = 'ContactProperties_Email';
     public const TABLE_NAME = 'addressbook_email';

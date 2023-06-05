@@ -149,6 +149,17 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
         $appId = Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId();
         $cfCtrl = Tinebase_CustomField::getInstance();
 
+        if ($this->{self::FLD_LINK_TYPE} !== self::LINK_TYPE_INLINE) {
+            $modelCtrl = Tinebase_Core::getApplicationInstance($this->{self::FLD_MODEL});
+            $modelCtrl->deleteByFilter(Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->{self::FLD_MODEL}, [
+                [
+                    Tinebase_Model_Filter_Abstract::FIELD => Addressbook_Model_ContactProperties_Interface::FLD_TYPE,
+                    Tinebase_Model_Filter_Abstract::OPERATOR => 'equals',
+                    Tinebase_Model_Filter_Abstract::VALUE => $this->{Addressbook_Model_ContactProperties_Definition::FLD_NAME},
+                ],
+            ]));
+        }
+
         if (null !== $cfCtrl->getCustomFieldByNameAndApplication($appId,
                 $this->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}, Addressbook_Model_Contact::class)) {
             // LOG ERROR
@@ -162,6 +173,8 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
         }
 
         $cfCtrl->deleteCustomField($cfc);
+
+
     }
 
     public function applyToContactModel(): void
