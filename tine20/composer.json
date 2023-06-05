@@ -54,6 +54,10 @@
     },
     {
       "type": "git",
+      "url": "https://github.com/tine-groupware/MAPI.git"
+    },
+    {
+      "type": "git",
       "url": "https://github.com/tine20/oauth2-server.git"
     },
     {
@@ -94,7 +98,7 @@
     "ezyang/htmlpurifier": "^4",
     "firebase/php-jwt": "^6",
     "giggsey/libphonenumber-for-php": "^8",
-    "hfig/mapi": "^1.2",
+    "hfig/mapi": "^1.3",
     "jumbojett/openid-connect-php": "dev-master",
     "laminas/laminas-diactoros": "^2.7",
     "laminas/laminas-http": "^2.16",
@@ -109,11 +113,14 @@
     "nikic/fast-route": "^1.2",
     "nl.idaas/openid-server": "^0.1.7",
     "palepurple/rate-limit": "^2.0",
+    "pear/ole": "^1.0.0RC9",
     "php-http/curl-client": "^2.1",
     "phpoffice/phpexcel": "1.8.2pl5 as 1.8.2",
     "phpoffice/phpspreadsheet": "1.24.1pl3 as 1.24.1",
     "phpoffice/phpword": "^0.18",
     "psr/http-server-middleware": "^1.0",
+    "ramsey/collection": "^1.2",
+    "ramsey/uuid": "^4.7",
     "sabre/dav": "1.8.12pl1 as 1.8.12",
     "sabre/vobject": "3.5.3pl6 as 2.1.0",
     "sentry/sentry": "^3",
