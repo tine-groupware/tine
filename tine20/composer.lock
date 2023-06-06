@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "15b62c2887835993fff6a86a695d2ded",
+    "content-hash": "63d04fea8c2d587a3df67fa2cfa32948",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2532,12 +2532,11 @@
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
-                "paragonie/random_compat": ">=2",
-                "php": ">=5.4",
-                "phpseclib/phpseclib": "~2.0 || ^3.0"
+                "php": ">=7.0",
+                "phpseclib/phpseclib": "~3.0"
             },
             "require-dev": {
-                "roave/security-advisories": "dev-master",
+                "roave/security-advisories": "dev-latest",
                 "yoast/phpunit-polyfills": "^1.0"
             },
             "default-branch": true,
@@ -5046,6 +5045,7 @@
                 "issues": "https://github.com/php-http/message-factory/issues",
                 "source": "https://github.com/php-http/message-factory/tree/master"
             },
+            "abandoned": "psr/http-factory",
             "time": "2015-12-19T14:08:53+00:00"
         },
         {
