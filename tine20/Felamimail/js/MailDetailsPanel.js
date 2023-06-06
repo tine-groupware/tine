@@ -367,25 +367,28 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     // this.refetchBody(this.record, this.onClick.createDelegate(this, [e]));
                     return;
                 }
-
-                const promises = [];
+                
                 // make sure we get the attachment caches
+                let attachmentCaches = [];
                 if (attachments) {
                     attachments.forEach((attachment) => {
                         if (!this.record.get('from_node')) {
                             if (!attachment?.cache) {
-                                const promise = Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', attachment.messageId, attachment.partId].join(':'), false).then(cache => {
-                                    return new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);
-                                });
-                                promises.push(promise);
-                            } else {
-                                promises.push(attachment.cache);
+                                attachment.cache = Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', attachment.messageId, attachment.partId].join(':'), false)
+                                    .then(cache => {
+                                        attachment.cache = new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);
+                                        return attachment.cache;
+                                    })
+                                    .catch((e) => {
+                                        console.error(e);
+                                    });
                             }
                         }
-                    })
+                    });
+                    const cacheObjects = _.map(attachments, 'cache');
+                    attachmentCaches = await Promise.all(cacheObjects);
                 }
-                const attachmentCaches = await Promise.all(promises);
-
+                
                 // remove part id if set (that is the case in message/rfc822 attachments)
                 const messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
 
