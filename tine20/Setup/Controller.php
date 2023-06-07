@@ -2627,7 +2627,7 @@ class Setup_Controller
      * @param string $appname
      * @return boolean
      */
-    public function isInstalled($appname)
+    public function isInstalled($appname = 'Tinebase')
     {
         try {
             $result = Tinebase_Application::getInstance()->isInstalled($appname);
