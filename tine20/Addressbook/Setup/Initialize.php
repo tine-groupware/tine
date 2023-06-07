@@ -264,38 +264,44 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
 
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
-            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'business_address',
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'adr_one',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Company Address', // _('Company Address')
+            Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 1,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'record',
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'WORK'],
             Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP => [
-                'businessAddressCity' => 'business_address.locality',
-                'businessAddressCountry' => 'business_address.countryname',
-                'businessAddressPostalCode' => 'business_address.postalcode',
-                'businessAddressState' => 'business_address.region',
-                'businessAddressStreet' => 'business_address.street',
+                'businessAddressCity' => 'adr_one.locality',
+                'businessAddressCountry' => 'adr_one.countryname',
+                'businessAddressPostalCode' => 'adr_one.postalcode',
+                'businessAddressState' => 'adr_one.region',
+                'businessAddressStreet' => 'adr_one.street',
             ],
         ]));
 
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
-            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'private_address',
+            Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'adr_two',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Private Address', // _('Private Address')
+            Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 2,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'record',
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'HOME'],
             Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP => [
-                'homeAddressCity' => 'business_address.locality',
-                'homeAddressCountry' => 'business_address.countryname',
-                'homeAddressPostalCode' => 'business_address.postalcode',
-                'homeAddressState' => 'business_address.region',
-                'homeAddressStreet' => 'business_address.street',
+                'homeAddressCity' => 'adr_two.locality',
+                'homeAddressCountry' => 'adr_two.countryname',
+                'homeAddressPostalCode' => 'adr_two.postalcode',
+                'homeAddressState' => 'adr_two.region',
+                'homeAddressStreet' => 'adr_two.street',
             ],
         ]));
 
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'email',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'E-Mail', // _('E-Mail')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Company Communication', // _('Company Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Email::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'WORK'],
@@ -307,6 +313,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'email_home',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'E-Mail (private)', // _('E-Mail (private)')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Private Communication', // _('Private Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Email::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
@@ -319,6 +327,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_work',
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Company Communication', // _('Company Communication')
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Phone', // _('Phone')
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'WORK'],
@@ -327,6 +337,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_home',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Phone (private)', // _('Phone (private)')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Private Communication', // _('Private Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
@@ -336,6 +348,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_cell',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Mobile', // _('Mobile')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Company Communication', // _('Company Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['CELL', 'WORK']],
@@ -344,6 +358,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_cell_private',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Mobile (private)', // _('Mobile (private)')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Private Communication', // _('Private Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
@@ -353,6 +369,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_fax',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Fax', // _('Fax')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Company Communication', // _('Company Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
             Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => ['FAX', 'WORK']],
@@ -361,6 +379,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'tel_fax_home',
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Fax (private)', // _('Fax (private)')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Private Communication', // _('Private Communication')
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Phone::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
             Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],

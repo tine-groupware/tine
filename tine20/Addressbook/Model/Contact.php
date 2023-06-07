@@ -342,8 +342,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     'omitDuplicateResolving'        => true,
                 ],
             ],
-            'business_address'              => [
+            'adr_one'              => [
                 self::TYPE                      => self::TYPE_RECORD,
+                self::LABEL                     => 'Company Address', // _('Company Address')
                 self::DOCTRINE_IGNORE           => true,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Addressbook_Config::APP_NAME,
@@ -352,10 +353,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 ],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,
+                    'sort'                          => 1
                 ],
             ],
-            'private_address'               => [
+            'adr_two'               => [
                 self::TYPE                      => self::TYPE_RECORD,
+                self::LABEL                     => 'Private Address', // _('Private Address')
                 self::DOCTRINE_IGNORE           => true,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Addressbook_Config::APP_NAME,
@@ -364,6 +367,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 ],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,
+                    'sort'                          => 2
                 ],
             ],
             'adr_one_countryname'           => [
@@ -779,14 +783,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 ],
             ],
             'preferred_address'             => [
-                self::TYPE                      => self::TYPE_INTEGER,
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Preferred Address', // _('Preferred Address')
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
-                    Zend_Filter_Input::DEFAULT_VALUE    => 0
                 ],
-                self::INPUT_FILTERS             => [Zend_Filter_Empty::class => 0],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,
                 ],

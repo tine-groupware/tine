@@ -157,7 +157,7 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
                 ];*/
                 $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [
                     self::TYPE => self::TYPE_RECORD,
-                    self::LABEL => $def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME},
+                    self::LABEL => $def->{Addressbook_Model_ContactProperties_Definition::FLD_LABEL},
                     self::NULLABLE => true,
                     self::DOCTRINE_IGNORE => true,
                     self::CONFIG => [

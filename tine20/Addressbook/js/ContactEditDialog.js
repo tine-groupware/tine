@@ -9,7 +9,7 @@
  */
 
 /*global Ext, Tine*/
-
+import { getAddressPanels } from "./AddressPanel";
 Ext.ns('Tine.Addressbook');
 
 /**
@@ -59,36 +59,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         }
 
         var allLanguages = Locale.getTranslationList('Language');
-
-        this.preferredAddressBusinessCheckbox = new Ext.form.Checkbox({
-            checked: this.record.get('preferred_address') === "0",
-            hideLabel: false,
-            fieldLabel: this.app.i18n._('Preferred Address'),
-            listeners: {
-                'check': function(checkbox, value) {
-                    if (value) {
-                        this.preferredAddressPrivateCheckbox.setValue(false);
-                        this.record.set('preferred_address', 0);
-                    }
-                },
-                scope: this
-            }
-        });
-
-        this.preferredAddressPrivateCheckbox = new Ext.form.Checkbox({
-            checked: this.record.get('preferred_address') === "1",
-            hideLabel: false,
-            fieldLabel: this.app.i18n._('Preferred Address'),
-            listeners: {
-                'check': function(checkbox, value) {
-                    if (value) {
-                        this.preferredAddressBusinessCheckbox.setValue(false);
-                        this.record.set('preferred_address', 1);
-                    }
-                },
-                scope: this
-            }
-        });
 
         if (Tine.Tinebase.common.hasRight('run', 'Calendar', null) && Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureContactEventList') && this.record.id !== 0) {
             this.contactEventPanel = new Tine.Calendar.ContactEventsGridPanel({
@@ -384,83 +354,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 ptype: 'ux.itemregistry',
                 key: 'Tine.Addressbook.editDialog.southPanel'
             }],
-            items: [{
-                title: this.app.i18n._('Company Address'),
-                xtype: 'columnform',
-                items: [[{
-                    fieldLabel: this.app.i18n._('Street'),
-                    name: 'adr_one_street',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64
-                }, {
-                    fieldLabel: this.app.i18n._('Street 2'),
-                    name: 'adr_one_street2',
-                    maxLength: 64
-                }, {
-                    fieldLabel: this.app.i18n._('Region'),
-                    name: 'adr_one_region',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64
-                }], [{
-                    fieldLabel: this.app.i18n._('Postal Code'),
-                    name: 'adr_one_postalcode',
-                    maxLength: 64
-                }, {
-                    fieldLabel: this.app.i18n._('City'),
-                    name: 'adr_one_locality',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64
-                }, {
-                    xtype: 'widget-countrycombo',
-                    fieldLabel: this.app.i18n._('Country'),
-                    name: 'adr_one_countryname',
-                    maxLength: 64
-                }], [this.preferredAddressBusinessCheckbox]]
-            }, {
-                title: this.app.i18n._('Private Address'),
-                xtype: 'columnform',
-                items: [[{
-                    fieldLabel: this.app.i18n._('Street'),
-                    name: 'adr_two_street',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }, {
-                    fieldLabel: this.app.i18n._('Street 2'),
-                    name: 'adr_two_street2',
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }, {
-                    fieldLabel: this.app.i18n._('Region'),
-                    name: 'adr_two_region',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }], [{
-                    fieldLabel: this.app.i18n._('Postal Code'),
-                    name: 'adr_two_postalcode',
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }, {
-                    fieldLabel: this.app.i18n._('City'),
-                    name: 'adr_two_locality',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }, {
-                    xtype: 'widget-countrycombo',
-                    fieldLabel: this.app.i18n._('Country'),
-                    name: 'adr_two_countryname',
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }], [this.preferredAddressPrivateCheckbox]]
-            }]
+            items: getAddressPanels()
         });
 
         // activities and tags

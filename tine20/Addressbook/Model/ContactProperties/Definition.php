@@ -25,6 +25,9 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
     public const FLD_LINK_TYPE = 'link_type';
     public const FLD_MODEL = 'model';
     public const FLD_NAME = 'name';
+    public const FLD_LABEL = 'label';
+    public const FLD_GROUPING = 'grouping';
+    public const FLD_SORTING = 'sorting';
     public const FLD_VCARD_MAP = 'vcard_map';
 
     public const LINK_TYPE_INLINE = 'inline';
@@ -68,6 +71,24 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+            ],
+            self::FLD_LABEL                     => [
+                self::LABEL                         => 'Label', // _('Label')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::QUERY_FILTER                  => true,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_GROUPING                  => [
+                self::LABEL                         => 'Grouping', // _('Grouping')
+                self::TYPE                          => self::TYPE_STRING,
+                self::LENGTH                        => 255,
+                self::NULLABLE                      => true,
+            ],
+            self::FLD_SORTING                   => [
+                self::LABEL                         => 'Sorting', // _('Sorting')
+                self::TYPE                          => self::TYPE_INTEGER,
+                self::NULLABLE                      => true,
             ],
             self::FLD_IS_SYSTEM                => [
                 self::LABEL                         => 'System', // _('System')
@@ -194,7 +215,7 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
         }
         $this->{self::FLD_LAST_ERROR} = null;
 
-        $cfc = $cfCtrl->getCustomFieldByNameAndApplication($appId,
+        $existingCfC = $cfc = $cfCtrl->getCustomFieldByNameAndApplication($appId,
             $this->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}, Addressbook_Model_Contact::class, true);
 
         if (null === $cfc) {
@@ -202,13 +223,21 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
                 'is_system' => true,
                 'application_id' => $appId,
                 'model' => Addressbook_Model_Contact::class,
-                'name' => $this->{self::FLD_NAME},
             ], true);
         }
+
+        $cfc->name = $this->{self::FLD_NAME};
+
         /** @var Addressbook_Model_ContactProperties_Interface $model */
         $model = $this->{self::FLD_MODEL};
         $model::updateCustomFieldConfig($cfc, $this);
-        $cfCtrl->addCustomField($cfc);
+
+        $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD]
+            [Tinebase_Model_CustomField_Config::UI_CONFIG_FIELD]['order'] = $this->{self::FLD_SORTING};
+        $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD]
+            [Tinebase_Model_CustomField_Config::UI_CONFIG_FIELD]['group'] = $this->{self::FLD_GROUPING};
+
+        $cfCtrl->{$existingCfC ? 'updateCustomField' : 'addCustomField'}($cfc);
 
         $this->{self::FLD_IS_APPLIED} = true;
     }
