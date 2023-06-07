@@ -1062,7 +1062,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
                     Zend_Filter_Input::DEFAULT_VALUE    => self::CONTACTTYPE_CONTACT,
-                    ['InArray', [self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT, self::CONTACTTYPE_EMAIL_ACCOUNT]]
+                    //export key field resolving has a problem with that validation as a key field record, not a string will be set
+                    //['InArray', [self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT, self::CONTACTTYPE_EMAIL_ACCOUNT]]
                 ],
                 self::DEFAULT_VAL               => self::CONTACTTYPE_CONTACT,
                 self::COPY_OMIT                 => true,
@@ -1224,9 +1225,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         return self::$_manageAccountsFields;
     }
 
-    static public function modelConfigHook(array &$_definition)
+    public static function inheritModelConfigHook(array &$_definition)
     {
-        parent::modelConfigHook($_definition);
+        parent::inheritModelConfigHook($_definition);
 
         try {
             Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . AMCPD::TABLE_NAME);
@@ -1239,17 +1240,31 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             $cpDef->{AMCPD::FLD_MODEL}::applyJsonFacadeMC($_definition, $cpDef);
 
             if (is_array($cpDef->{AMCPD::FLD_GRANT_MATRIX})) {
-                $_definition[$cpDef->{AMCPD::FLD_NAME}][self::REQUIRED_GRANTS] = $cpDef->{AMCPD::FLD_GRANT_MATRIX};
+                $_definition[self::FIELDS][$cpDef->{AMCPD::FLD_NAME}][self::REQUIRED_GRANTS] = $cpDef->{AMCPD::FLD_GRANT_MATRIX};
             }
         }
         $phoneDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Phone::class);
         foreach ($phoneDefs as $phoneDef) {
             static::$_telFields[$phoneDef->{AMCPD::FLD_NAME}] = $phoneDef->{AMCPD::FLD_NAME};
         }
+
+        $_definition[self::FILTER_MODEL]['telephone'][self::OPTIONS][self::FIELDS] = array_values(static::$_telFields);
+        $_definition[self::FILTER_MODEL]['telephone_normalized'][self::OPTIONS][self::FIELDS] = [];
+        foreach (static::$_telFields as $telField) {
+            $_definition[self::FILTER_MODEL]['telephone_normalized'][self::OPTIONS][self::FIELDS][] = $telField . '_normalized';
+        }
+
         $emailDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Email::class);
         foreach ($emailDefs as $emailDef) {
             static::$_emailFields[$emailDef->{AMCPD::FLD_NAME}] = $emailDef->{AMCPD::FLD_NAME};
         }
+        $_definition[self::FILTER_MODEL]['email_query'][self::OPTIONS][self::FIELDS] = array_values(static::$_emailFields);
+        foreach (static::$_emailFields as $emailField) {
+            if (!in_array($emailField, $_definition[self::FILTER_MODEL]['name_email_query'][self::OPTIONS][self::FIELDS])) {
+                $_definition[self::FILTER_MODEL]['name_email_query'][self::OPTIONS][self::FIELDS][] = $emailField;
+            }
+        }
+
         $adrDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Address::class)
             ->filter(AMCPD::FLD_IS_SYSTEM, false);
         foreach ($adrDefs as $adrDef) {

@@ -41,6 +41,7 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
         self::DELEGATED_ACL_FIELD => self::FLD_CONTACT_ID,
+        self::JSON_EXPANDER => null,
 
         self::APP_NAME => Addressbook_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
@@ -147,10 +148,18 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
     {
         switch ($def->{Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE}) {
             case 'record':
+                /*$cfc->xprops('definition')[Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS] = [
+                    '_jsonExpander' => [
+                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                            $def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME} => [],
+                        ],
+                    ],
+                ];*/
                 $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [
                     self::TYPE => self::TYPE_RECORD,
                     self::LABEL => $def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME},
                     self::NULLABLE => true,
+                    self::DOCTRINE_IGNORE => true,
                     self::CONFIG => [
                         self::APP_NAME => Addressbook_Config::APP_NAME,
                         self::MODEL_NAME => Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
@@ -182,9 +191,9 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
         if (empty($grants)) {
             return;
         }
-        $prefix = $definition[$def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][self::CONFIG][self::JSON_FACADE];
+        $prefix = $definition[self::FIELDS][$def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][self::CONFIG][self::JSON_FACADE];
         foreach (self::$_facadeFields as $field) {
-            $definition[$prefix . $field][self::REQUIRED_GRANTS] = $grants;
+            $definition[self::FIELDS][$prefix . $field][self::REQUIRED_GRANTS] = $grants;
         }
     }
 

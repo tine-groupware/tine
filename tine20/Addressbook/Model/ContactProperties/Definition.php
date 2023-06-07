@@ -150,6 +150,7 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
         $cfCtrl = Tinebase_CustomField::getInstance();
 
         if ($this->{self::FLD_LINK_TYPE} !== self::LINK_TYPE_INLINE) {
+            /** @var Tinebase_Controller_Record_Abstract $modelCtrl */
             $modelCtrl = Tinebase_Core::getApplicationInstance($this->{self::FLD_MODEL});
             $modelCtrl->deleteByFilter(Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->{self::FLD_MODEL}, [
                 [

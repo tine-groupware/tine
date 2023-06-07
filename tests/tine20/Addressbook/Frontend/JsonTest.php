@@ -600,6 +600,42 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $this->assertEquals(0, $result['totalcount'], 'totalcount does not show the correct number');
     }
 
+    public function testAdditionalAddressProperty()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_transactionId = null;
+
+        $cpDef = Addressbook_Controller_ContactProperties_Definition::getInstance()->create(
+            new Addressbook_Model_ContactProperties_Definition([
+                Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'unittest_adr',
+                Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
+                Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD,
+            ])
+        );
+
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        try {
+            $savedContact = $this->_uit->saveContact([
+                'n_fn' => 'n_fn',
+                $cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME} => [
+                    Addressbook_Model_ContactProperties_Address::FLD_STREET => 'street name',
+                ],
+            ], false);
+
+            $this->assertArrayHasKey($cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}, $savedContact);
+            $this->assertIsArray($savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}]);
+            $this->assertSame('street name', $savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][Addressbook_Model_ContactProperties_Address::FLD_STREET]);
+
+            $savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][Addressbook_Model_ContactProperties_Address::FLD_STREET] = 'update';
+            $savedContact = $this->_uit->saveContact($savedContact, false);
+            $this->assertSame('update', $savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][Addressbook_Model_ContactProperties_Address::FLD_STREET]);
+        } finally {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Addressbook_Controller_ContactProperties_Definition::getInstance()->delete($cpDef->getId());
+        }
+    }
+
     /**
      * test customfield modlog
      */

@@ -38,7 +38,7 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
         }
     }
 
-   /**
+    /**
     * parent converts Tinebase_Record_RecordSet to external format
     * this resolves Image Paths
     *
