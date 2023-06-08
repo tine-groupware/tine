@@ -35,24 +35,28 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
         $this->_uit = Setup_ControllerMock::getInstance();
 
         if (Setup_Controller::getInstance()->isInstalled()) {
-            $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-            if (null === ($oldUser = Tinebase_Core::getUser())) {
-                Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
-            }
+            try {
+                $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+                if (null === ($oldUser = Tinebase_Core::getUser())) {
+                    Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
+                }
 
-            foreach ($setupUser->getGroupMemberships() as $gId) {
-                Tinebase_Group::getInstance()->removeGroupMember($gId, $setupUser->accountId);
-            }
-            foreach (Tinebase_Acl_Roles::getInstance()->getRoleMemberships($setupUser->accountId) as $rId) {
-                Tinebase_Acl_Roles::getInstance()->removeRoleMember($rId, ['id' => $setupUser->accountId, 'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP]);
-            }
-            if (null === $oldUser) {
-                Tinebase_Core::unsetUser();
+                foreach ($setupUser->getGroupMemberships() as $gId) {
+                    Tinebase_Group::getInstance()->removeGroupMember($gId, $setupUser->accountId);
+                }
+                foreach (Tinebase_Acl_Roles::getInstance()->getRoleMemberships($setupUser->accountId) as $rId) {
+                    Tinebase_Acl_Roles::getInstance()->removeRoleMember($rId, ['id' => $setupUser->accountId, 'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP]);
+                }
+                if (null === $oldUser) {
+                    Tinebase_Core::unsetUser();
+                }
+
+                Tinebase_Group::unsetInstance();
+                Tinebase_Acl_Roles::unsetInstance();
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // tine might be in an unexpected state where addressbook table is not existing
             }
         }
-
-        Tinebase_Group::unsetInstance();
-        Tinebase_Acl_Roles::unsetInstance();
     }
 
     /**
