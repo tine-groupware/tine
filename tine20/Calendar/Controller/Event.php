@@ -2011,6 +2011,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if ($_record->location_record && is_string($_record->location_record)) {
             try {
+                /** @var Addressbook_Model_Contact $locationContact */
                 $locationContact = Addressbook_Controller_Contact::getInstance()->get($_record->location_record);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(

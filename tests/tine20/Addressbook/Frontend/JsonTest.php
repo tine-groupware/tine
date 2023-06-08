@@ -471,6 +471,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         $contactWithoutPrivate = $this->_uit->getContact($contact['id']);
         $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate);
+        $this->assertArrayNotHasKey('tel_cell_private_normalized', $contactWithoutPrivate);
+        $this->assertArrayNotHasKey('bday', $contactWithoutPrivate);
 
         Tinebase_Core::setUser($originalUser);
     }

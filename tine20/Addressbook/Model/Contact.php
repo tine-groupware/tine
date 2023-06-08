@@ -553,6 +553,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Birthday', // _('Birthday')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::REQUIRED_GRANTS           => [Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA],
             ],
             'color'                         => [
                 self::TYPE                      => self::TYPE_HEX_COLOR,
@@ -1274,7 +1275,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
         $propDefs = Addressbook_Controller_ContactProperties_Definition::getInstance()->getAll();
         foreach ($propDefs->filter(AMCPD::FLD_IS_SYSTEM, true) as $cpDef) {
-            $cpDef->{AMCPD::FLD_MODEL}::applyJsonFacadeMC($_definition, $cpDef);
+            /** @var Addressbook_Model_ContactProperties_Interface $model */
+            $model = $cpDef->{AMCPD::FLD_MODEL};
+            $model::applyJsonFacadeMC($_definition, $cpDef);
 
             if (is_array($cpDef->{AMCPD::FLD_GRANT_MATRIX})) {
                 $_definition[self::FIELDS][$cpDef->{AMCPD::FLD_NAME}][self::REQUIRED_GRANTS] = $cpDef->{AMCPD::FLD_GRANT_MATRIX};

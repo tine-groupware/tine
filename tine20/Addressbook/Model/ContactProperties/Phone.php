@@ -20,6 +20,7 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
 {
     public const FLD_CONTACT_ID = 'contact_id';
     public const FLD_NUMBER = 'number';
+    public const FLD_NUMBER_NORMALIZED = 'number_normalized';
 
     public const MODEL_NAME_PART = 'ContactProperties_Phone';
     public const TABLE_NAME = 'addressbook_phone';
@@ -77,6 +78,11 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
                 self::LENGTH                    => 255,
             ],
             self::FLD_NUMBER                => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            self::FLD_NUMBER_NORMALIZED     => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
@@ -146,6 +152,12 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
 
     public static function applyJsonFacadeMC(array &$definition, Addressbook_Model_ContactProperties_Definition $def): void
     {
+        $grants = $def->{Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX};
+        if (empty($grants)) {
+            return;
+        }
+        $definition[self::FIELDS][$def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME} . '_normalized']
+            [self::REQUIRED_GRANTS] = $grants;
     }
 
     public static function jsonFacadeToJson(Tinebase_Record_Interface $record, string $fieldKey, array $def): void
