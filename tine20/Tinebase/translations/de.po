@@ -6388,3 +6388,12 @@ msgid "Bank Account"
 msgid_plural "Bank Accounts"
 msgstr[0] "Bank Konto"
 msgstr[1] "Bank Konten"
+
+msgid "Move Details Panel To"
+msgstr "Verschieben des Detailbereichs nach"
+
+msgid "Bottom"
+msgstr "Unten"
+
+msgid "Right"
+msgstr "Rechts"

@@ -574,13 +574,23 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onContentResize: function() {
         // make sure details panel doesn't hide grid
         if (this.detailsPanel && this.grid) {
-            var gridHeight = this.grid.getHeight(),
-                detailsHeight = this.detailsPanel.getHeight();
-
-            if (detailsHeight/2 > gridHeight) {
-                var newDetailsHeight = this.getHeight() *.4;
-                this.layout.south.panel.setHeight(newDetailsHeight);
-                this.doLayout();
+            if (!this.layout.south.isCollapsed) {
+                const gridHeight = this.grid.getHeight();
+                const detailsHeight = this.detailsPanel.getHeight();
+                if (detailsHeight / 4 > gridHeight) {
+                    const newDetailsHeight = this.getHeight() * .4;
+                    this.layout.south.panel.setHeight(newDetailsHeight);
+                    this.doLayout();
+                }
+            }
+            if (!this.layout.east.isCollapsed) {
+                const gridWidth = this.grid.getWidth();
+                const detailsWidth = this.detailsPanel.getWidth();
+                if (detailsWidth / 3 > gridWidth) {
+                    const newDetailsWidth = this.getWidth() * .4;
+                    this.layout.east.panel.setWidth(newDetailsWidth);
+                    this.doLayout();
+                }
             }
         }
     },
@@ -761,7 +771,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         return columns;
     },
-    
+
     /**
      * @private
      * 
@@ -779,45 +789,66 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             tbar: this.pagingToolbar,
             items: this.grid
         }];
-
-
+        
         // add detail panel
         if (this.detailsPanel) {
-
+            // register additional context menu actions
+            const layoutAction = new Ext.Action({
+                text: i18n._('Move Details Panel To'),
+                iconCls: 'action_layout_menu',
+                scope: this,
+                menu: {
+                    items: [
+                        new Ext.Action({
+                            direction: 'south',
+                            text: i18n._('Bottom'),
+                            iconCls: 'action_layout_split_down',
+                            scope: this,
+                            handler: (e) => {
+                                this.switchDetailsPanelRegion(e.direction);
+                            },
+                        }),
+                        new Ext.Action({
+                            direction: 'east',
+                            text: i18n._('Right'),
+                            iconCls: 'action_layout_split_right',
+                            scope: this,
+                            handler: (e) => {
+                                this.switchDetailsPanelRegion(e.direction);
+                            },
+                        }),
+                    ]
+                }
+            });
+            this.detailsPanel.contextMenuItems = [layoutAction];
             // just in case it's a config only
             this.detailsPanel = Ext.ComponentMgr.create(this.detailsPanel);
 
-            const regionCfg = {
-                border: false,
-                collapsible: true,
-                collapseMode: 'mini',
-                header: false,
-                split: true,
-                layout: 'fit',
-                canonicalName: 'DetailsPanel'
+            const regionCfg = (region) => {
+                return {
+                    ref: `${region}Panel`,
+                    region: region,
+                    stateId:`${this.recordClass.prototype.appName}_${region}Panel`,
+                    stateEvents: ['resize'],
+                    items: new Ext.Panel({
+                        items: this.detailsPanelRegion === region ? this.detailsPanel : [],
+                        layout: 'fit',
+                        border: false
+                    }),
+                    height: this.detailsPanel.defaultHeight ? this.detailsPanel.defaultHeight : 200,
+                    width: this.detailsPanel.defaultWidth ? this.detailsPanel.defaultWidth : 500,
+                    hidden: this.detailsPanelRegion !== region,
+                    border: false,
+                    collapsible: true,
+                    collapseMode: 'mini',
+                    header: false,
+                    split: true,
+                    layout: 'fit',
+                    canonicalName: 'DetailsPanel',
+                };
             }
-            this.items.push(Object.assign({
-                ref: 'southPanel',
-                region: 'south',
-                items: new Ext.Panel({
-                    items: this.detailsPanelRegion === 'south' ? this.detailsPanel : [],
-                    layout: 'fit',
-                    border: false
-                }),
-                height: this.detailsPanel.defaultHeight ? this.detailsPanel.defaultHeight : 125,
-                hidden: this.detailsPanelRegion !== 'south'
-            }, regionCfg));
-            this.items.push(Object.assign({
-                ref: 'eastPanel',
-                region: 'east',
-                items: new Ext.Panel({
-                    items: this.detailsPanelRegion === 'east' ? this.detailsPanel : [],
-                    layout: 'fit',
-                    border: false
-                }),
-                width: this.detailsPanel.defaultWidth ? this.detailsPanel.defaultWidth : 300,
-                hidden: this.detailsPanelRegion !== 'east'
-            }, regionCfg));
+            this.items.push(regionCfg('south'));
+            this.items.push(regionCfg('east'));
             this.detailsPanel.doBind(this.grid);
         }
 
@@ -851,17 +882,32 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
     },
-
-    switchDetailsPanelRegion: function() {
+    
+    switchDetailsPanelRegion: function(target) {
+        if (!this.detailsPanel) return;
+        
+        target = target ?? this.detailsPanelRegion;
         const source = this.detailsPanelRegion;
-        const target = this.detailsPanelRegion === 'east' ? 'south' : 'east';
-        this.detailsPanel.ownerCt.remove(0, false);
-        this.layout[target].panel.setVisible(true);
-        this.layout[target].items.add(this.detailsPanel);
-        this.layout[target].panel.expand();
+        if (!this.layout[target] || !this.layout[source]) return;
+        
+        if (!this.layout[target].panel.isVisible()) {
+            this.detailsPanel.ownerCt.remove(0, false);
+            this.layout[target].panel.setVisible(true);
+            this.layout[target].items.add(this.detailsPanel);
+            this.layout[target].panel.expand();
+        }
+        
+        if (source !== target) {
+            if (this.layout[source].panel.isVisible()) {
+                this.layout[source].panel.setVisible(false);
+                window.test = this.layout[source].panel;
+                this.layout[source].panel.collapse(false); // this might take some time ? the glitch might come from animation
+            }
+        }
         this.detailsPanelRegion = target;
-        this.layout[source].panel.setVisible(false);
-        this.layout[source].panel.collapse();
+        Ext.state.Manager.set(this.regionStateId, target);
+        this.doLayout(false, true);
+        this.updateGridState();
     },
 
     gridPrintRenderer: function() {
@@ -983,16 +1029,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
         });
 
-        // TODO use toggle button?
-        this.action_switchDetailsPanelRegion = new Ext.Action({
-            requiredGrant: null,
-            text: i18n._('Switch Layout'),
-            iconCls: 'action_switch',
-            scope: this,
-            handler: this.switchDetailsPanelRegion,
-            disabled: false,
-        });
-
         this.initExports();
         this.initImports();
 
@@ -1005,7 +1041,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.action_deleteRecord,
             this.action_tagsMassAttach,
             this.action_tagsMassDetach,
-            this.action_switchDetailsPanelRegion,
             this.action_resolveDuplicates
         ]);
 
@@ -1423,6 +1458,20 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         // fix nasty paging tb
         Ext.applyIf(options.params, this.defaultPaging);
+        
+        //this.switchDetailsPanelRegion();
+    },
+    
+    updateGridState() {
+        if (!Ext.state.Manager.get(this.gridConfig.stateId)) {
+            this.grid.saveState();
+        }
+        this.grid.stateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
+        const defaultState = Ext.state.Manager.get(this.grid.stateId) ?? this.grid.getState();
+        if (defaultState) {
+            this.grid.applyState(defaultState);
+            this.grid.saveState();
+        }
     },
 
     /**
@@ -1653,7 +1702,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         this.selectionModel.on('selectionchange', function(sm) {
             this.actionUpdater.updateActions(sm, this.getFilteredContainers());
-
+            this.latestSelection = sm;
             this.ctxNode = this.selectionModel.getSelections();
             if (this.updateOnSelectionChange && this.detailsPanel) {
                 this.detailsPanel.onDetailsUpdate(sm);
@@ -1710,7 +1759,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.gridConfig.stateful = true;
             this.gridConfig.stateId  = this.stateId + '-Grid' + this.stateIdSuffix;
         }
-
+        
+        this.regionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
+        this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
+        
         this.grid = new Grid(Ext.applyIf(this.gridConfig, {
             border: false,
             store: this.store,
@@ -1720,7 +1772,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             recordClass: this.recordClass,
             getDragDropText: this.getDragDropText.createDelegate(this)
         }));
-
+        this.stateIdDetailPanelEast = this.grid.stateId + '_DetailsPanel_East';
+        this.grid.stateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
+    
         // init various grid / sm listeners
         this.grid.on('keydown',     this.onKeyDown,         this);
         this.grid.on('rowclick',    this.onRowClick,        this);
@@ -1729,7 +1783,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.grid.on('headerclick', this.onHeaderClick,   this);
 
         this.grid.on('rowcontextmenu', this.onRowContextMenu, this);
-
     },
 
     getDragDropText: function() {
@@ -1803,6 +1856,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         });
         if (this.initialLoadAfterRender) {
             this.initialLoad();
+            this.afterIsRendered().then(() => {
+                this.updateGridState();
+            });
         }
     },
 
@@ -1842,9 +1898,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     getActionToolbar: function() {
         if (! this.actionToolbar) {
-            var additionalItems = this.getActionToolbarItems();
-
-            var items = [];
+            let additionalItems = this.getActionToolbarItems();
+            
+            const items = [];
             
             if (this.action_addInNewWindow) {
                 if (this.splitAddButton) {
@@ -1903,8 +1959,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     })
                 );
             }
-
-            var importExportButtons = [];
+    
+            const importExportButtons = [];
 
             if (this.actions_export) {
                 importExportButtons.push(Ext.apply(new Ext.Button(this.actions_export), {
@@ -1984,7 +2040,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Array/Object}
      */
     getActionToolbarItems: function() {
-        var items = this.actionToolbarItems || [];
+        const items = this.actionToolbarItems || [];
 
         if (! Ext.isEmpty(items)) {
             // legacy handling! subclasses should register all actions when initializing actions
@@ -2064,18 +2120,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
 
             items.push(this.addToRecordAction);
+            
+            const plugins = [{
+                ptype: 'ux.itemregistry',
+                key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }]
 
             this.contextMenu = new Ext.menu.Menu({
                 ownerCt: this,
                 items: items,
-                plugins: [{
-                    ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu'
-                }, {
-                    ptype: 'ux.itemregistry',
-                    key:   'Tinebase-MainContextMenu'
-                }]
+                plugins: plugins
             });
+
             this.contextMenu.doLayout(false, true);
             
             this.actionUpdater.addActions(this.contextMenu.items);

@@ -42,6 +42,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
     layoutConfig: {
         align:'stretch'
     },
+
     border: false,
 
     record: null,
@@ -71,7 +72,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         if (this.hasTopToolbar) {
             this.initTopToolbar();
         }
-
+        
         Tine.Felamimail.MailDetailsPanel.superclass.initComponent.call(this);
     },
 
@@ -296,10 +297,10 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     const idPrefix = Ext.id();
                     const attachmentsStr = this.app.i18n._('Attachments');
                     if (!attachments) return '';
-                    let result = (attachments.length > 0) ? `<span id=${idPrefix}:all class="tinebase-download-link tinebase-download-all"><b>${attachmentsStr}:</b><div class="tinebase-download-link-wait"></div></span>` : '';
+                    let result = (attachments.length > 0) ? `<span id=${idPrefix}:all style="padding-left:5px;" class="tinebase-download-link tinebase-download-all"><b>${attachmentsStr}:</b><div class="tinebase-download-link-wait"></div></span>` : '';
 
                     for (var i=0, id, cls; i < attachments.length; i++) {
-                        result += `<span id="${idPrefix}:${i}" class="tinebase-download-link">`
+                        result += `<span id="${idPrefix}:${i}" style="padding-left:5px;" class="tinebase-download-link">`
                             + '<i>' + attachments[i].filename + '</i>'
                             // NOTE: size is 'transfer size' (base64 encoded) here.
                             // @TODO replace size from message cache size when it's loaded?
