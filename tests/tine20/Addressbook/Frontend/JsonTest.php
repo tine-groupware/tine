@@ -592,7 +592,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         // check invalid data
         $changes = array(
-            array('name' => 'type', 'value' => 'Z'),
+            array('name' => 'tz', 'value' => 'looooongtextwithmorethaneightcharacters'),
         );
         $result = $json->updateMultipleRecords('Addressbook', 'Contact', $changes, $filter);
 
@@ -633,6 +633,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
         } finally {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Addressbook_Controller_ContactProperties_Definition::getInstance()->delete($cpDef->getId());
+            Addressbook_Model_Contact::resetConfiguration();
+            Tinebase_Record_Expander_DataRequest::clearCache();
         }
     }
 

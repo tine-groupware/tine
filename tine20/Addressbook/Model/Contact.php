@@ -87,7 +87,7 @@ use Addressbook_Model_ContactProperties_Definition as AMCPD;
  * @property    string $url                        url/website of the contact
  * @property    string $salutation                 Salutation
  * @property    string $url_home                   private url of the contact
- * @property    integer $preferred_address         defines which is the preferred address of a contact, 0: business, 1: private
+ * @property    string $preferred_address          defines which is the preferred address of a contact
  */
 class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 {
@@ -168,7 +168,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         'appName'           => 'Addressbook',
         'modelName'         => self::MODEL_PART_NAME, // _('GENDER_Contact')
         self::TABLE         => [
-            self::NAME          => 'addressbook',
+            self::NAME          => self::TABLE_NAME,
             self::INDEXES       => [
                 'cat_id'                    => [
                     self::COLUMNS               => ['cat_id'],
@@ -786,10 +786,13 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
                 self::NULLABLE                  => true,
+                self::DEFAULT_VAL               => 'adr_one',
                 self::LABEL                     => 'Preferred Address', // _('Preferred Address')
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY      => true,
+                    Zend_Filter_Input::DEFAULT_VALUE    => 'adr_one',
                 ],
+                self::INPUT_FILTERS         => [Zend_Filter_Empty::class => 'adr_one'],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,
                 ],
@@ -1076,7 +1079,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::LENGTH                    => 8,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Timezone', // _('Timezone')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    ['StringLength', ['max' => 8]],
+                ],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,
                 ],
@@ -1218,6 +1224,34 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
     static public function getEmailFields(): array
     {
         return static::$_emailFields;
+    }
+
+    public static function resetConfiguration()
+    {
+        static::$_emailFields = [
+            'email',
+            'email_home',
+        ];
+        static::$_telFields = [
+            'tel_assistent' => 'tel_assistent',
+            'tel_car' => 'tel_car',
+            'tel_cell' => 'tel_cell',
+            'tel_cell_private' => 'tel_cell_private',
+            'tel_fax' => 'tel_fax',
+            'tel_fax_home' => 'tel_fax_home',
+            'tel_home' => 'tel_home',
+            'tel_pager' => 'tel_pager',
+            'tel_work' => 'tel_work',
+            'tel_other' => 'tel_other',
+            'tel_prefer' => 'tel_prefer',
+        ];
+        static::$_emailFields = [
+            'email',
+            'email_home',
+        ];
+        static::$_additionalAdrFields = [];
+
+        parent::resetConfiguration();
     }
 
     /**
@@ -1433,6 +1467,18 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             return $phoneUtil->format($numberFormat, \libphonenumber\PhoneNumberFormat::E164);
         } catch (Exception $e) {}
 
+        return null;
+    }
+
+    public function getPreferredAddressObject(): ?Addressbook_Model_ContactProperties_Address
+    {
+        if ($this->preferred_address && $this->has($this->preferred_address) &&
+            ($fieldDef = static::getConfiguration()->getJsonFacadeFields()[$this->preferred_address] ?? null) &&
+            Addressbook_Model_ContactProperties_Address::class === $fieldDef[Tinebase_ModelConfiguration_Const::CONFIG][Tinebase_ModelConfiguration_Const::RECORD_CLASS_NAME]) {
+
+            Addressbook_Model_ContactProperties_Address::jsonFacadeToJson($this, $this->preferred_address, $fieldDef);
+            return $this->{$this->preferred_address};
+        }
         return null;
     }
 

@@ -256,6 +256,11 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
 
     protected function _initializeContactProperties()
     {
+        static::createInitialContactProperties();
+    }
+
+    public static function createInitialContactProperties()
+    {
         $ctrl = Addressbook_Controller_ContactProperties_Definition::getInstance();
         $oldAcl = $ctrl->doContainerACLChecks(false);
         $raii = new Tinebase_RAII(function() use($oldAcl, $ctrl) {
