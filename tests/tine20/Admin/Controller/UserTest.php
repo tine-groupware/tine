@@ -219,7 +219,7 @@ class Admin_Controller_UserTest extends TestCase
 
         static::assertSame($container->getId(), $user->container_id);
         static::assertSame($container->getId(),
-            Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->container_id);
+            Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->getIdFromProperty('container_id'));
     }
 
     public function testUpdateUserAdbContainer()
@@ -235,7 +235,7 @@ class Admin_Controller_UserTest extends TestCase
 
         static::assertSame($container->getId(), $user->container_id);
         static::assertSame($container->getId(),
-            Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->container_id);
+            Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->getIdFromProperty('container_id'));
 
         $updateContainer = $this->_getTestContainer(Addressbook_Config::APP_NAME, Addressbook_Model_Contact::class,
             true, __METHOD__);
@@ -246,7 +246,7 @@ class Admin_Controller_UserTest extends TestCase
 
         static::assertSame($updateContainer->getId(), $user->container_id);
         static::assertSame($updateContainer->getId(),
-            Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->container_id);
+            Addressbook_Controller_Contact::getInstance()->get($user->contact_id)->getIdFromProperty('container_id'));
     }
 
     public function testUpdateUserWithEmailButNoPassword()

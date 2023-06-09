@@ -203,6 +203,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             ],
         ],
 
+        self::JSON_EXPANDER => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'container_id' => [],
+            ],
+        ],
+
         'filterModel'       => [
             'id'                => [
                 'filter'            => Addressbook_Model_ContactIdFilter::class,

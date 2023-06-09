@@ -100,7 +100,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $modLogs = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(
             Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME)->getId(),
             new Sales_Model_Document_Offer($document), $updatedDocument['seq']);
-        $this->assertSame(0, $modLogs->count());
+        $this->assertSame(0, $modLogs->count(), print_r($modLogs->toArray(), true));
     }
 
     public function testOfferDocumentWithoutRecipient()

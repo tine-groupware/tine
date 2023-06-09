@@ -582,7 +582,7 @@ class Tinebase_ContainerTest extends TestCase
         
         $movedContact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         
-        $this->assertEquals($initialContainer->getId(), $movedContact->container_id, 'contact has not been moved');
+        $this->assertEquals($initialContainer->getId(), $movedContact->getIdFromProperty('container_id'), 'contact has not been moved');
         
         $contentSeqs = $this->_instance->getContentSequence(array($sharedContainer->getId(), $initialContainer->getId()));
         $this->assertEquals(2, $contentSeqs[$sharedContainer->getId()], 'content seq mismatch: ' . print_r($contentSeqs, TRUE));
