@@ -21,18 +21,7 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
     {
         parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
 
-        if (Tinebase_Application::getInstance()->isInstalled('GDPR', true)
-            && class_exists('GDPR_Controller_DataIntendedPurposeRecord')) {
-            // TODO should be moved to GDPR app
-            $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
-                [GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
-                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'intendedPurpose' => [],
-                    ]
-                ];
-            $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, $expanderDef);
-            $expander->expand($records);
-        }
+        Tinebase_Record_Expander::expandRecords($records);
 
         if($multiple !== true) {
             $contact = $records->getFirstRecord();
@@ -72,21 +61,7 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
 
         // TODO container + account_grants of duplicate records need to be dehydrated, too
         // @see \Addressbook_JsonTest::testDuplicateCheck
-        $expanderDef = [
-            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'container_id' => [],
-            ],
-        ];
-        if (Tinebase_Application::getInstance()->isInstalled('GDPR', true)
-            && class_exists('GDPR_Controller_DataIntendedPurposeRecord')) {
-            // TODO should be moved to GDPR app
-            $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
-                [GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
-                    'intendedPurpose' => [],
-            ];
-        }
-        $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, $expanderDef);
-        $expander->expand($_records);
+        Tinebase_Record_Expander::expandRecords($_records);
 
         $dehydrator = Tinebase_Record_Hydration_Factory::createDehydrator(Tinebase_Record_Hydration_Factory::TYPE_ARRAY,
             Addressbook_Model_Contact::class, [

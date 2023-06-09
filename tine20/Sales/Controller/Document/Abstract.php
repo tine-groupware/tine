@@ -102,7 +102,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                 throw new Tinebase_Exception_Record_Validation(Sales_Model_Document_Abstract::FLD_POSITIONS .
                     ' needs to be instance of ' . Tinebase_Record_RecordSet::class);
             }
-            Tinebase_Record_Expander::expandRecord($_oldRecord);
+
             $deletedPositions = [];
             foreach ($_oldRecord->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $oldPosition) {
                 if (!$_record->{Sales_Model_Document_Abstract::FLD_POSITIONS}->getById($oldPosition->getId())) {

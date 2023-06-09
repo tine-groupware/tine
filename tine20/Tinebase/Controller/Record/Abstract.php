@@ -976,10 +976,17 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (null !== $currentRecord) {
-            $expander = new Tinebase_Record_Expander(get_class($currentRecord), [
+            $jsonExpander = $mc->jsonExpander;
+            $expander = [
                 Tinebase_Record_Expander::EXPANDER_PROPERTIES => array_fill_keys(array_keys($mc->denormalizedFields), [])
-            ]);
-            $expander->expand(new Tinebase_Record_RecordSet(get_class($currentRecord), [$currentRecord]));
+            ];
+            foreach ($jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES] ?? [] as $key => $arr) {
+                unset($expander[Tinebase_Record_Expander::EXPANDER_PROPERTIES][$key]);
+            }
+            if (!empty($expander[Tinebase_Record_Expander::EXPANDER_PROPERTIES])) {
+                $expander = new Tinebase_Record_Expander(get_class($currentRecord), $expander);
+                $expander->expand(new Tinebase_Record_RecordSet(get_class($currentRecord), [$currentRecord]));
+            }
         }
 
         foreach ($mc->denormalizedFields as $property => $definition) {
@@ -1378,6 +1385,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_updateACLCheck($_record, $currentRecord);
 
             $_record->applyFieldGrants(self::ACTION_UPDATE, $currentRecord);
+
+            Tinebase_Record_Expander::expandRecord($currentRecord);
 
             $this->_concurrencyManagement($_record, $currentRecord);
             $this->_forceModlogInfo($_record, $origRecord, self::ACTION_UPDATE);
