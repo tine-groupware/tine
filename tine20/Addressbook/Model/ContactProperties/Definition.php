@@ -195,8 +195,6 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
         }
 
         $cfCtrl->deleteCustomField($cfc);
-
-
     }
 
     public function applyToContactModel(): void
@@ -215,7 +213,7 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
         }
         $this->{self::FLD_LAST_ERROR} = null;
 
-        $existingCfC = $cfc = $cfCtrl->getCustomFieldByNameAndApplication($appId,
+        $cfc = $cfCtrl->getCustomFieldByNameAndApplication($appId,
             $this->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}, Addressbook_Model_Contact::class, true);
 
         if (null === $cfc) {
@@ -230,14 +228,19 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
 
         /** @var Addressbook_Model_ContactProperties_Interface $model */
         $model = $this->{self::FLD_MODEL};
+        $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::SPECIAL_TYPE] = $model;
         $model::updateCustomFieldConfig($cfc, $this);
 
-        $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD]
-            [Tinebase_Model_CustomField_Config::UI_CONFIG_FIELD]['order'] = $this->{self::FLD_SORTING};
-        $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD]
-            [Tinebase_Model_CustomField_Config::UI_CONFIG_FIELD]['group'] = $this->{self::FLD_GROUPING};
+        $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::UI_CONFIG]['order'] =
+            $this->{self::FLD_SORTING};
+        $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::UI_CONFIG]['group'] =
+            $this->{self::FLD_GROUPING};
 
-        $cfCtrl->{$existingCfC ? 'updateCustomField' : 'addCustomField'}($cfc);
+        if ($cfc->getId()) {
+            $cfCtrl->updateCustomField($cfc);
+        } else {
+            $cfCtrl->addCustomField($cfc);
+        }
 
         $this->{self::FLD_IS_APPLIED} = true;
     }

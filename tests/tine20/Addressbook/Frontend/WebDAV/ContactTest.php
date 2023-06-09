@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -22,18 +22,8 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
      * @var array test objects
      */
     protected $objects = array();
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook WebDAV Contact Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
+
+    protected $_transactionId;
 
     /**
      * Sets up the fixture.
@@ -45,7 +35,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
 {
         $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
 
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
         
@@ -65,30 +55,59 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(TRUE);
         
         Tinebase_TransactionManager::getInstance()->rollBack();
     }
-    
+
+    public function testCreateContactWithContactProperties()
+    {
+        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
+
+        $cpDef = null;
+        try {
+            $cpDef = Addressbook_Controller_ContactProperties_Definition::getInstance()->create(
+                new Addressbook_Model_ContactProperties_Definition([
+                    Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'unittest_adr',
+                    Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
+                    Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD,
+                ])
+            );
+
+            Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+            $this->testCreateContact();
+
+        } finally {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+
+            if ($cpDef) {
+                Addressbook_Controller_ContactProperties_Definition::getInstance()->delete($cpDef);
+            }
+
+            Tinebase_Container::getInstance()->delete($this->objects['initialContainer']);
+        }
+    }
+
     /**
      * test create contact
-     * 
+     *
      * @return Addressbook_Frontend_WebDAV_Contact
      */
     public function testCreateContact()
     {
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
-        
+
         $id = Tinebase_Record_Abstract::generateUID();
         $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], "$id.vcf", $vcardStream);
-        
+
         $record = $contact->getRecord();
-        
+
         $this->assertEquals('l.kneschke@metaways.de', $record->email);
         $this->assertEquals('Kneschke', $record->n_family);
         $this->assertEquals('+49 BUSINESS', $record->tel_work);
-        
+
         return $contact;
     }
 

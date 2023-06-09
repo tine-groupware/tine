@@ -16,5 +16,5 @@ interface Addressbook_Model_ContactProperties_Interface
     static public function updateCustomFieldConfig(Tinebase_Model_CustomField_Config $cfc,
                                                    Addressbook_Model_ContactProperties_Definition $def): void;
 
-    public static function applyJsonFacadeMC(array &$definition, Addressbook_Model_ContactProperties_Definition $def): void;
+    static public function applyJsonFacadeMC(array &$definition, Addressbook_Model_ContactProperties_Definition $def): void;
 }
