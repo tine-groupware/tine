@@ -185,15 +185,15 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
         }
     }
 
-    public static function applyJsonFacadeMC(array &$definition, Addressbook_Model_ContactProperties_Definition $def): void
+    public static function applyJsonFacadeMC(array &$fields, Addressbook_Model_ContactProperties_Definition $def): void
     {
         $grants = $def->{Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX};
         if (empty($grants)) {
             return;
         }
-        $prefix = $definition[self::FIELDS][$def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][self::CONFIG][self::JSON_FACADE];
+        $prefix = $fields[$def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][self::CONFIG][self::JSON_FACADE];
         foreach (self::$_facadeFields as $field) {
-            $definition[self::FIELDS][$prefix . $field][self::REQUIRED_GRANTS] = $grants;
+            $fields[$prefix . $field][self::REQUIRED_GRANTS] = $grants;
         }
     }
 

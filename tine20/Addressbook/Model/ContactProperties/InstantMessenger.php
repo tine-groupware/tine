@@ -97,7 +97,7 @@ class Addressbook_Model_ContactProperties_InstantMessenger extends Tinebase_Reco
                     self::TYPE                      => self::TYPE_TEXT,
                     self::LENGTH                    => 255,
                     self::NULLABLE                  => true,
-                    self::LABEL                     => $cfc->name,
+                    self::LABEL                     => $def->{Addressbook_Model_ContactProperties_Definition::FLD_LABEL},
                     self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                     self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class],
                 ];
@@ -114,7 +114,7 @@ class Addressbook_Model_ContactProperties_InstantMessenger extends Tinebase_Reco
         }
     }
 
-    public static function applyJsonFacadeMC(array &$definition, Addressbook_Model_ContactProperties_Definition $def): void
+    public static function applyJsonFacadeMC(array &$fields, Addressbook_Model_ContactProperties_Definition $def): void
     {
     }
 

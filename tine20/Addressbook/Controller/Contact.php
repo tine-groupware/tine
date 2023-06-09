@@ -10,6 +10,9 @@
  * 
  */
 
+use Addressbook_Model_ContactProperties_Definition as AMCPD;
+use Tinebase_ModelConfiguration_Const as TMCC;
+
 /**
  * contact controller for Addressbook
  *
@@ -1600,5 +1603,66 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             return true;
         }
         return parent::checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
+    }
+
+    public static function modelConfigHook(array &$_fields, Tinebase_ModelConfiguration $mc): void
+    {
+        try {
+            Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . AMCPD::TABLE_NAME);
+        } catch (Zend_Db_Statement_Exception $e) {
+            return;
+        }
+
+        $propDefs = Addressbook_Controller_ContactProperties_Definition::getInstance()->getAll();
+        foreach ($propDefs->filter(AMCPD::FLD_IS_SYSTEM, true) as $cpDef) {
+            /** @var Addressbook_Model_ContactProperties_Interface $model */
+            $model = $cpDef->{AMCPD::FLD_MODEL};
+            $model::applyJsonFacadeMC($_fields, $cpDef);
+
+            if (is_array($cpDef->{AMCPD::FLD_GRANT_MATRIX})) {
+                $_fields[$cpDef->{AMCPD::FLD_NAME}][TMCC::REQUIRED_GRANTS] = $cpDef->{AMCPD::FLD_GRANT_MATRIX};
+            }
+        }
+        $telFields = Addressbook_Model_Contact::getTelefoneFields();
+        $phoneDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Phone::class);
+        foreach ($phoneDefs as $phoneDef) {
+            $telFields[$phoneDef->{AMCPD::FLD_NAME}] = $phoneDef->{AMCPD::FLD_NAME};
+        }
+        Addressbook_Model_Contact::setTelefoneFields($telFields);
+
+        $filterModel = $mc->filterModel;
+        $filterModel['telephone'][TMCC::OPTIONS][TMCC::FIELDS] = array_values($telFields);
+        $filterModel['telephone_normalized'][TMCC::OPTIONS][TMCC::FIELDS] = [];
+        foreach ($telFields as $telField) {
+            $filterModel['telephone_normalized'][TMCC::OPTIONS][TMCC::FIELDS][] = $telField . '_normalized';
+        }
+
+        $emailFields = Addressbook_Model_Contact::getEmailFields();
+        $emailDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Email::class);
+        foreach ($emailDefs as $emailDef) {
+            $emailFields[$emailDef->{AMCPD::FLD_NAME}] = $emailDef->{AMCPD::FLD_NAME};
+        }
+        $filterModel['email_query'][TMCC::OPTIONS][TMCC::FIELDS] = array_values($emailFields);
+        foreach ($emailFields as $emailField) {
+            if (!in_array($emailField, $filterModel['name_email_query'][TMCC::OPTIONS][TMCC::FIELDS])) {
+                $filterModel['name_email_query'][TMCC::OPTIONS][TMCC::FIELDS][] = $emailField;
+            }
+        }
+        Addressbook_Model_Contact::setEmailFields($emailFields);
+        $mc->setFilterModel($filterModel);
+
+        $additionalAdrFields = Addressbook_Model_Contact::getAdditionalAddressFields();
+        $adrDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Address::class)
+            ->filter(AMCPD::FLD_IS_SYSTEM, false);
+        foreach ($adrDefs as $adrDef) {
+            $additionalAdrFields[$adrDef->{AMCPD::FLD_NAME}] = $adrDef->{AMCPD::FLD_NAME};
+        }
+        Addressbook_Model_Contact::setAdditionalAddressFields($additionalAdrFields);
+
+        $expanderDef = $mc->jsonExpander;
+        foreach (Addressbook_Model_Contact::getAdditionalAddressFields() as $val) {
+            $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES][$val] = [];
+        }
+        $mc->setJsonExpander($expanderDef);
     }
 }

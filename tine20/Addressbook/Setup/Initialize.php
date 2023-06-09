@@ -284,6 +284,16 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             ],
         ]));
 
+        $adbAppId = Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId();
+        $cfCfg = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($adbAppId, 'adr_one',
+            Addressbook_Model_Contact::class, true, true);
+        $cfCfg->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD]
+            [Tinebase_ModelConfiguration_Const::CONFIG][Tinebase_ModelConfiguration_Const::JSON_FACADE] = 'adr_one_';
+        $cfCfg->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_HOOK] = [
+            [Addressbook_Controller_Contact::class, 'modelConfigHook'],
+        ];
+        Tinebase_CustomField::getInstance()->updateCustomField($cfCfg);
+
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'adr_two',
@@ -301,6 +311,12 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
                 'homeAddressStreet' => 'adr_two.street',
             ],
         ]));
+
+        $cfCfg = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($adbAppId, 'adr_two',
+            Addressbook_Model_Contact::class, true, true);
+        $cfCfg->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD]
+            [Tinebase_ModelConfiguration_Const::CONFIG][Tinebase_ModelConfiguration_Const::JSON_FACADE] = 'adr_two_';
+        Tinebase_CustomField::getInstance()->updateCustomField($cfCfg);
 
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,

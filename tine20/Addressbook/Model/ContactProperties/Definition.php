@@ -208,10 +208,6 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
 
     public function applyToContactModel(): void
     {
-        if ($this->{self::FLD_IS_SYSTEM}) {
-            throw new Tinebase_Exception_AccessDenied('system definitions can not be applied');
-        }
-
         $appId = Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId();
         $cfCtrl = Tinebase_CustomField::getInstance();
 
@@ -252,6 +248,7 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
         }
 
         $this->{self::FLD_IS_APPLIED} = true;
+        Addressbook_Controller_ContactProperties_Definition::getInstance()->getBackend()->update($this);
     }
 
     /**

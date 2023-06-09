@@ -72,12 +72,19 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
                     Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'unittest_adr',
                     Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
                     Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD,
+                    Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP => ['TYPE' => 'UADR'],
                 ])
             );
 
             Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
-            $this->testCreateContact();
+            /** @var Addressbook_Model_Contact $record */
+            $record = $this->testCreateContact('sogo_connector1.vcf')->getRecord();
+            $record->preferred_address = $cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME};
+            $adr = $record->getPreferredAddressObject();
+
+            $this->assertNotNull($adr);
+            $this->assertSame('City U', $adr->{Addressbook_Model_ContactProperties_Address::FLD_LOCALITY});
 
         } finally {
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -95,9 +102,9 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
      *
      * @return Addressbook_Frontend_WebDAV_Contact
      */
-    public function testCreateContact()
+    public function testCreateContact($fileName = 'sogo_connector.vcf')
     {
-        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/sogo_connector.vcf', 'r');
+        $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/' . $fileName, 'r');
 
         $id = Tinebase_Record_Abstract::generateUID();
         $contact = Addressbook_Frontend_WebDAV_Contact::create($this->objects['initialContainer'], "$id.vcf", $vcardStream);

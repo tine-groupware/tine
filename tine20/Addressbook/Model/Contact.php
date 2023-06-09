@@ -342,7 +342,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     'omitDuplicateResolving'        => true,
                 ],
             ],
-            'adr_one'              => [
+            /*'adr_one'              => [
                 self::TYPE                      => self::TYPE_RECORD,
                 self::LABEL                     => 'Company Address', // _('Company Address')
                 self::DOCTRINE_IGNORE           => true,
@@ -369,7 +369,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     'omitDuplicateResolving'        => true,
                     'sort'                          => 2
                 ],
-            ],
+            ],*/
             'adr_one_countryname'           => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 86,
@@ -569,30 +569,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::UI_CONFIG                 => [
                     'omitDuplicateResolving'        => true,
-                ],
-            ],
-            'email'                         => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 255,
-                self::NULLABLE                  => true,
-                self::LABEL                     => 'Email', // _('Email')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class, Zend_Filter_StringToLower::class],
-                self::QUERY_FILTER              => true,
-                self::UI_CONFIG                 => [
-                    'group'                         => 'Company Communication',
-                ],
-            ],
-            'email_home'                    => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 255,
-                self::NULLABLE                  => true,
-                self::LABEL                     => 'Email (private)', // _('Email (private)')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class, Zend_Filter_StringToLower::class],
-                self::QUERY_FILTER              => true,
-                self::UI_CONFIG                 => [
-                    'group'                         => 'Private Communication',
                 ],
             ],
             'freebusy_uri'                  => [
@@ -870,56 +846,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::SYSTEM                    => true,
                 self::DISABLED                  => true,
             ],
-            'tel_cell'                      => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::LABEL                     => 'Mobile', // _('Mobile')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::UI_CONFIG                 => [
-                    'group'                         => 'Company Communication',
-                ],
-            ],
-            'tel_cell_private'              => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::LABEL                     => 'Mobile (private)', // _('Mobile (private)')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::UI_CONFIG                 => [
-                    'group'                         => 'Private Communication',
-                ],
-            ],
-            'tel_fax'                       => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::LABEL                     => 'Fax', // _('Fax')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::UI_CONFIG                 => [
-                    'group'                         => 'Company Communication',
-                ],
-            ],
-            'tel_fax_home'                  => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::LABEL                     => 'Fax (private)', // _('Fax (private)')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::UI_CONFIG                 => [
-                    'group'                         => 'Private Communication',
-                ],
-            ],
-            'tel_home'                      => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::LABEL                     => 'Phone (private)', // _('Phone (private)')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::UI_CONFIG                 => [
-                    'group'                         => 'Private Communication',
-                ],
-            ],
             'tel_pager'                     => [ // not in UI atm.
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 86,
@@ -928,16 +854,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::SYSTEM                    => true,
                 self::DISABLED                  => true,
-            ],
-            'tel_work'                      => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::LABEL                     => 'Phone', // _('Phone')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::UI_CONFIG                 => [
-                    'group'                         => 'Company Communication',
-                ],
             ],
             'tel_other'                     => [ // not in UI atm.
                 self::TYPE                      => self::TYPE_STRING,
@@ -977,55 +893,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::SYSTEM                    => true,
                 self::DISABLED                  => true,
             ],
-            'tel_cell_normalized'           => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::SYSTEM                    => true,
-                self::DISABLED                  => true,
-            ],
-            'tel_cell_private_normalized'   => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::SYSTEM                    => true,
-                self::DISABLED                  => true,
-            ],
-            'tel_fax_normalized'            => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::SYSTEM                    => true,
-                self::DISABLED                  => true,
-            ],
-            'tel_fax_home_normalized'       => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::SYSTEM                    => true,
-                self::DISABLED                  => true,
-            ],
-            'tel_home_normalized'           => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::SYSTEM                    => true,
-                self::DISABLED                  => true,
-            ],
             'tel_pager_normalized'          => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
-                self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::SYSTEM                    => true,
-                self::DISABLED                  => true,
-            ],
-            'tel_work_normalized'           => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
@@ -1087,27 +955,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     'omitDuplicateResolving'        => true,
                 ],
             ],
-            'url'                           => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 255,
-                self::NULLABLE                  => true,
-                self::LABEL                     => 'Web', // _('Web')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class],
-                self::UI_CONFIG                 => [
-                    'group'                         => 'Company Communication',
-                ],
-            ],
-            'url_home'                      => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 255,
-                self::NULLABLE                  => true,
-                self::LABEL                     => 'URL (private)', // _('URL (private)')
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class],
-                self::UI_CONFIG                 => [
-                    'group'                         => 'Private Communication',
-                ],
+
+            // just a placeholder, mainly required for install
+            'email' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
             ],
 
             // do we want to remove those?
@@ -1139,22 +992,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 1,
                 self::NULLABLE                  => true,
-                //self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::DEFAULT_VAL               => 'n', // TODO check if this works!=?!?
-                self::UI_CONFIG                 => [
-                    'omitDuplicateResolving'        => true,
-                ],
+                self::DEFAULT_VAL               => 'n',
             ],
             'private'                       => [
                 'fieldName'                     => 'private',
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::LENGTH                    => 1,
                 self::NULLABLE                  => true,
-                //self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
-                self::DEFAULT_VAL               => 0, // TODO check if this works!=?!?
-                self::UI_CONFIG                 => [
-                    'omitDuplicateResolving'        => true,
-                ],
+                self::DEFAULT_VAL               => 0,
             ],
         ],
     ];
@@ -1193,21 +1038,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
     protected static $_telFields = [
         'tel_assistent' => 'tel_assistent',
         'tel_car' => 'tel_car',
-        'tel_cell' => 'tel_cell',
-        'tel_cell_private' => 'tel_cell_private',
-        'tel_fax' => 'tel_fax',
-        'tel_fax_home' => 'tel_fax_home',
-        'tel_home' => 'tel_home',
         'tel_pager' => 'tel_pager',
-        'tel_work' => 'tel_work',
         'tel_other' => 'tel_other',
         'tel_prefer' => 'tel_prefer',
     ];
 
-    protected static $_emailFields = [
-        'email',
-        'email_home',
-    ];
+    protected static $_emailFields = [];
 
     protected static $_additionalAdrFields = [];
 
@@ -1226,28 +1062,30 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         return static::$_emailFields;
     }
 
+    static public function setAdditionalAddressFields(array $fields): void
+    {
+        static::$_additionalAdrFields = $fields;
+    }
+
+    static public function setTelefoneFields(array $fields): void
+    {
+        static::$_telFields = $fields;
+    }
+
+    static public function setEmailFields(array $fields): void
+    {
+        static::$_emailFields = $fields;
+    }
+
     public static function resetConfiguration()
     {
-        static::$_emailFields = [
-            'email',
-            'email_home',
-        ];
+        static::$_emailFields = [];
         static::$_telFields = [
             'tel_assistent' => 'tel_assistent',
             'tel_car' => 'tel_car',
-            'tel_cell' => 'tel_cell',
-            'tel_cell_private' => 'tel_cell_private',
-            'tel_fax' => 'tel_fax',
-            'tel_fax_home' => 'tel_fax_home',
-            'tel_home' => 'tel_home',
             'tel_pager' => 'tel_pager',
-            'tel_work' => 'tel_work',
             'tel_other' => 'tel_other',
             'tel_prefer' => 'tel_prefer',
-        ];
-        static::$_emailFields = [
-            'email',
-            'email_home',
         ];
         static::$_additionalAdrFields = [];
 
@@ -1260,55 +1098,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
     static public function getManageAccountFields()
     {
         return self::$_manageAccountsFields;
-    }
-
-    public static function inheritModelConfigHook(array &$_definition)
-    {
-        parent::inheritModelConfigHook($_definition);
-
-        try {
-            Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . AMCPD::TABLE_NAME);
-        } catch (Zend_Db_Statement_Exception $e) {
-            return;
-        }
-
-        $propDefs = Addressbook_Controller_ContactProperties_Definition::getInstance()->getAll();
-        foreach ($propDefs->filter(AMCPD::FLD_IS_SYSTEM, true) as $cpDef) {
-            /** @var Addressbook_Model_ContactProperties_Interface $model */
-            $model = $cpDef->{AMCPD::FLD_MODEL};
-            $model::applyJsonFacadeMC($_definition, $cpDef);
-
-            if (is_array($cpDef->{AMCPD::FLD_GRANT_MATRIX})) {
-                $_definition[self::FIELDS][$cpDef->{AMCPD::FLD_NAME}][self::REQUIRED_GRANTS] = $cpDef->{AMCPD::FLD_GRANT_MATRIX};
-            }
-        }
-        $phoneDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Phone::class);
-        foreach ($phoneDefs as $phoneDef) {
-            static::$_telFields[$phoneDef->{AMCPD::FLD_NAME}] = $phoneDef->{AMCPD::FLD_NAME};
-        }
-
-        $_definition[self::FILTER_MODEL]['telephone'][self::OPTIONS][self::FIELDS] = array_values(static::$_telFields);
-        $_definition[self::FILTER_MODEL]['telephone_normalized'][self::OPTIONS][self::FIELDS] = [];
-        foreach (static::$_telFields as $telField) {
-            $_definition[self::FILTER_MODEL]['telephone_normalized'][self::OPTIONS][self::FIELDS][] = $telField . '_normalized';
-        }
-
-        $emailDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Email::class);
-        foreach ($emailDefs as $emailDef) {
-            static::$_emailFields[$emailDef->{AMCPD::FLD_NAME}] = $emailDef->{AMCPD::FLD_NAME};
-        }
-        $_definition[self::FILTER_MODEL]['email_query'][self::OPTIONS][self::FIELDS] = array_values(static::$_emailFields);
-        foreach (static::$_emailFields as $emailField) {
-            if (!in_array($emailField, $_definition[self::FILTER_MODEL]['name_email_query'][self::OPTIONS][self::FIELDS])) {
-                $_definition[self::FILTER_MODEL]['name_email_query'][self::OPTIONS][self::FIELDS][] = $emailField;
-            }
-        }
-
-        $adrDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Address::class)
-            ->filter(AMCPD::FLD_IS_SYSTEM, false);
-        foreach ($adrDefs as $adrDef) {
-            static::$_additionalAdrFields[$adrDef->{AMCPD::FLD_NAME}] = $adrDef->{AMCPD::FLD_NAME};
-        }
     }
 
     /**
@@ -1474,8 +1263,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
     public function getPreferredAddressObject(): ?Addressbook_Model_ContactProperties_Address
     {
-        if ($this->preferred_address && $this->has($this->preferred_address) &&
-            ($fieldDef = static::getConfiguration()->getJsonFacadeFields()[$this->preferred_address] ?? null) &&
+        if (!$this->preferred_address || !$this->has($this->preferred_address)) {
+            return null;
+        }
+        if ($this->{$this->preferred_address} instanceof Addressbook_Model_ContactProperties_Address) {
+            return $this->{$this->preferred_address};
+        }
+
+        if (($fieldDef = static::getConfiguration()->getJsonFacadeFields()[$this->preferred_address] ?? null) &&
             Addressbook_Model_ContactProperties_Address::class === $fieldDef[Tinebase_ModelConfiguration_Const::CONFIG][Tinebase_ModelConfiguration_Const::RECORD_CLASS_NAME]) {
 
             Addressbook_Model_ContactProperties_Address::jsonFacadeToJson($this, $this->preferred_address, $fieldDef);

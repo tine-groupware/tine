@@ -23,7 +23,7 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
     public const FLD_NUMBER_NORMALIZED = 'number_normalized';
 
     public const MODEL_NAME_PART = 'ContactProperties_Phone';
-    public const TABLE_NAME = 'addressbook_phone';
+    //public const TABLE_NAME = 'addressbook_phone';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -31,7 +31,7 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        //self::VERSION => 1,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
         self::DELEGATED_ACL_FIELD => self::FLD_CONTACT_ID,
@@ -42,7 +42,7 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
         self::RECORD_NAME => 'Phone', // gettext('GENDER_Phone')
         self::RECORDS_NAME => 'Phone', // ngettext('Phone', 'Phones', n)
 
-        self::TABLE => [
+        /*self::TABLE => [
             self::NAME => self::TABLE_NAME,
         ],
 
@@ -58,10 +58,10 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
                     ]],
                 ],
             ],
-        ],
+        ],*/
 
         self::FIELDS                    => [
-            self::FLD_CONTACT_ID            => [
+            /*self::FLD_CONTACT_ID            => [
                 self::TYPE                      => self::TYPE_RECORD,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Addressbook_Config::APP_NAME,
@@ -86,7 +86,7 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 86,
                 self::NULLABLE                  => true,
-            ],
+            ],*/
         ],
     ];
 
@@ -98,6 +98,7 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
                 $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [
                     self::TYPE                      => self::TYPE_STRING,
                     self::LENGTH                    => 86,
+                    self::LABEL                     => $def->{Addressbook_Model_ContactProperties_Definition::FLD_LABEL},
                     self::NULLABLE                  => true,
                 ];
                 $grants = $def->{Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX};
@@ -150,13 +151,13 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
         }
     }
 
-    public static function applyJsonFacadeMC(array &$definition, Addressbook_Model_ContactProperties_Definition $def): void
+    public static function applyJsonFacadeMC(array &$fields, Addressbook_Model_ContactProperties_Definition $def): void
     {
         $grants = $def->{Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX};
         if (empty($grants)) {
             return;
         }
-        $definition[self::FIELDS][$def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME} . '_normalized']
+        $fields[$def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME} . '_normalized']
             [self::REQUIRED_GRANTS] = $grants;
     }
 

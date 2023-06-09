@@ -1751,6 +1751,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         return $this->_modelName;
     }
 
+    public function setFilterModel(array $fm): void
+    {
+        $this->_filterModel = $fm;
+    }
+
     public function getFieldModel($field)
     {
         if (isset($this->_fields[$field]) && isset($this->_fields[$field][self::TYPE])) {

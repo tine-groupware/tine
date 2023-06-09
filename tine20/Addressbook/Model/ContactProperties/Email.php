@@ -22,7 +22,7 @@ class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstr
     public const FLD_EMAIL = 'email';
 
     public const MODEL_NAME_PART = 'ContactProperties_Email';
-    public const TABLE_NAME = 'addressbook_email';
+    //public const TABLE_NAME = 'addressbook_email';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -30,7 +30,7 @@ class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstr
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        //self::VERSION => 1,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
         self::DELEGATED_ACL_FIELD => self::FLD_CONTACT_ID,
@@ -41,7 +41,7 @@ class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstr
         self::RECORD_NAME => 'Email', // gettext('GENDER_Email')
         self::RECORDS_NAME => 'Emails', // ngettext('Email', 'Emails', n)
 
-        self::TABLE => [
+        /*self::TABLE => [
             self::NAME => self::TABLE_NAME,
         ],
 
@@ -57,10 +57,10 @@ class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstr
                     ]],
                 ],
             ],
-        ],
+        ],*/
 
         self::FIELDS                    => [
-            self::FLD_CONTACT_ID            => [
+            /*self::FLD_CONTACT_ID            => [
                 self::TYPE                      => self::TYPE_RECORD,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Addressbook_Config::APP_NAME,
@@ -84,7 +84,7 @@ class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstr
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class, Zend_Filter_StringToLower::class],
                 self::QUERY_FILTER              => true,
-            ],
+            ],*/
         ],
     ];
 
@@ -97,7 +97,7 @@ class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstr
                     self::TYPE                      => self::TYPE_STRING,
                     self::LENGTH                    => 255,
                     self::NULLABLE                  => true,
-                    self::LABEL                     => $cfc->name,
+                    self::LABEL                     => $def->{Addressbook_Model_ContactProperties_Definition::FLD_LABEL},
                     self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                     self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class, Zend_Filter_StringToLower::class],
                     self::QUERY_FILTER              => true,
@@ -127,7 +127,7 @@ class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstr
         }
     }
 
-    public static function applyJsonFacadeMC(array &$definition, Addressbook_Model_ContactProperties_Definition $def): void
+    public static function applyJsonFacadeMC(array &$fields, Addressbook_Model_ContactProperties_Definition $def): void
     {
     }
 
