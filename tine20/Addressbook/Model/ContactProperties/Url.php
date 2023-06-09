@@ -95,6 +95,7 @@ class Addressbook_Model_ContactProperties_Url extends Tinebase_Record_NewAbstrac
             case 'inline':
                 $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [
                     self::TYPE                      => self::TYPE_TEXT,
+                    self::LENGTH                    => 255,
                     self::NULLABLE                  => true,
                     self::LABEL                     => $cfc->name,
                     self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],

@@ -1,3 +1,12 @@
+/*
+ * Tine 2.0
+ *
+ * @package     Addressbook
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+
 const getAddressPanels = () => {
     const app = Tine.Tinebase.appMgr.get('Addressbook');
     const recordClass = Tine.Tinebase.data.RecordMgr.get('Addressbook', 'Contact');

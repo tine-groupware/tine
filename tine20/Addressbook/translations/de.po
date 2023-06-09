@@ -739,6 +739,8 @@ msgstr ""
 "Dies ist eine Systemgruppe. Um Änderungen vorzunehmen, benötigen Sie das "
 "Recht 'Benutzerkonten verwalten'"
 
+msgid "Contact Properties"
+msgstr "Kontakt-Felder"
 #: Setup/Initialize.php:126 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
 msgstr "Alle Kontakte für die ich Lese-Rechte habe"

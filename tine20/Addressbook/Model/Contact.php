@@ -644,8 +644,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 ],
             ],
             'language'           => [
-                self::TYPE                      => self::TYPE_STRING,
-                self::LENGTH                    => 86,
+                self::TYPE                      => self::TYPE_LANGUAGE,
                 self::NULLABLE                  => true,
                 self::LABEL                     => 'Language', // _('Language')
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],

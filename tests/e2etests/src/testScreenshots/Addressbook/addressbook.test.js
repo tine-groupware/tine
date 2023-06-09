@@ -231,9 +231,15 @@ describe('Contacts', () => {
             await expect(popupWindow).toFill('input[name=org_unit]', 'Personalwesen');
             //await expect(popupWindow).toFill('input[name=title]', 'CEO');
             await expect(popupWindow).toFill('input[name=bday]', '12.03.1956');
-            await expect(popupWindow).toFill('input[name=tel_work]', '040734662533');
-            await expect(popupWindow).toFill('input[name=tel_cell]', '0179461021');
-            //await expect(popupWindow).toFill('input[name=adr_one_region]', 'Hamburg');
+
+            const tel = await popupWindow.$x("//div[contains(text(), 'Telefon')]");
+            tel[0].click();
+            await expect(popupWindow).toFill('input[class*=x-grid-editor-tel_work]', '040734662533');
+
+            const tel_cel = await popupWindow.$x("//div[contains(text(), 'Handy')]");
+            tel_cel[0].click();
+            await expect(popupWindow).toFill('input[class*=x-grid-editor-tel_cell]', '0179461021');
+
             await expect(popupWindow).toFill('input[name=adr_one_postalcode]', '20475');
             await expect(popupWindow).toFill('input[name=adr_one_street]', 'Pickhuben');
             await expect(popupWindow).toFill('input[name=adr_one_locality]', 'Hamburg');

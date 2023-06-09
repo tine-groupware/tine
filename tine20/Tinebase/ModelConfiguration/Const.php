@@ -231,6 +231,7 @@ class Tinebase_ModelConfiguration_Const {
     const TYPE_JSON_REFID = 'jsonRefId';
     const TYPE_KEY_FIELD = 'keyfield';
     const TYPE_LABEL = 'label';
+    const TYPE_LANGUAGE = 'language';
     /**
      * TODO comment
      */

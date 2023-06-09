@@ -114,6 +114,8 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
                         Addressbook_Model_ContactProperties_Address::class,
                         Addressbook_Model_ContactProperties_Email::class,
                         Addressbook_Model_ContactProperties_Phone::class,
+                        Addressbook_Model_ContactProperties_Url::class,
+                        Addressbook_Model_ContactProperties_InstantMessenger::class,
                     ],
                 ],
                 self::VALIDATORS => [
@@ -123,12 +125,15 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
                         Addressbook_Model_ContactProperties_Address::class,
                         Addressbook_Model_ContactProperties_Email::class,
                         Addressbook_Model_ContactProperties_Phone::class,
+                        Addressbook_Model_ContactProperties_Url::class,
+                        Addressbook_Model_ContactProperties_InstantMessenger::class,
                     ]],
                 ],
             ],
             self::FLD_LINK_TYPE                 => [
                 self::LABEL                         => 'Link Type', // _('Link Type')
                 self::TYPE                          => self::TYPE_STRING,
+                self::SHY                           => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
@@ -139,21 +144,25 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
                 self::LABEL                         => 'Grant Matrix', // _('Grant Matrix')
                 self::TYPE                          => self::TYPE_JSON, // Tinebase_Model_GrantContext => keyfield in der config
                 self::NULLABLE                      => true,
+                self::SHY                           => true,
             ],
             self::FLD_ACTIVE_SYNC_MAP           => [
                 self::LABEL                         => 'ActiveSync Map', // _('ActiveSync Map')
                 self::TYPE                          => self::TYPE_JSON,
                 self::NULLABLE                      => true,
+                self::SHY                           => true,
             ],
             self::FLD_VCARD_MAP                 => [
                 self::LABEL                         => 'VCard Map', // _('VCard Map')
                 self::TYPE                          => self::TYPE_JSON,
                 self::NULLABLE                      => true,
+                self::SHY                           => true,
             ],
             self::FLD_LAST_ERROR                => [
                 self::LABEL                         => 'Last Error', // _('Last Error')
                 self::TYPE                          => self::TYPE_TEXT,
                 self::NULLABLE                      => true,
+                self::SHY                           => true,
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],

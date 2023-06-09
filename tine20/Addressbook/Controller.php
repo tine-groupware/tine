@@ -238,13 +238,6 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
             )));
         }
 
-        $result->addRecord(new CoreData_Model_CoreData(array(
-            'id' => 'adb_contact_properties',
-            'application_id' => $application,
-            'model' => Addressbook_Model_ContactProperties_Definition::class,
-            'label' => 'Contact Properties Definitions' // _('Contact Properties Definitions')
-        )));
-
         return $result;
     }
 

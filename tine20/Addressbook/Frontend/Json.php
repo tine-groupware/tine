@@ -40,6 +40,8 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
         Addressbook_Model_ContactProperties_Email::MODEL_NAME_PART,
         Addressbook_Model_ContactProperties_Phone::MODEL_NAME_PART,
+        Addressbook_Model_ContactProperties_Url::MODEL_NAME_PART,
+        Addressbook_Model_ContactProperties_InstantMessenger::MODEL_NAME_PART,
         Addressbook_Model_List::MODEL_NAME_PART,
         Addressbook_Model_ListRole::MODEL_NAME_PART,
         Addressbook_Model_ContactProperties_Definition::MODEL_NAME_PART,

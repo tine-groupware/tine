@@ -1595,7 +1595,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     ? mainScreen.getWestPanel().getFavoritesPanel()
                     : null;
 
-        if (defaultFavorite && favoritesPanel) {
+        if (defaultFavorite && favoritesPanel && favoritesPanel.recordClass === this.recordClass) {
             favoritesPanel.selectFilter(defaultFavorite);
         } else {
             if (! (this.editDialog && this.editDialogRecordProperty)) {
