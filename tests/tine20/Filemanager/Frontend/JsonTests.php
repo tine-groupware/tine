@@ -427,12 +427,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
      */
     public function testSearchContainersOfOtherUser()
     {
-        if (Tinebase_DateTime::now()->get('N') == 7 // Sunday
-            && (Tinebase_DateTime::now()->get('H') == 22 || Tinebase_DateTime::now()->get('H') == 23)
-        ) {
-            self::markTestSkipped('FIXME: this fails around Sunday -> Monday midnight ' .
-                'as inweek filter uses user tz, but creation_time contains utc');
-        }
+        $this->_skipSundayNight();
 
         $this->_setupTestPath(Tinebase_Model_Container::TYPE_OTHERUSERS);
         
@@ -1174,7 +1169,8 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $node = $this->testUpdateNodeWithCustomfield();
         $node['quota'] = 0; // 0 byte
         $node = $this->_getUit()->saveNode($node);
-        static::assertSame('0', $node['quota'], 'quota should be 0');
+        $expected = PHP_VERSION_ID >= 80100 ? 0 : '0';
+        static::assertSame($expected, $node['quota'], 'quota should be 0');
 
         // test quota > 0
         $node['quota'] = 10 * 1024 * 1024 * 1024; 
