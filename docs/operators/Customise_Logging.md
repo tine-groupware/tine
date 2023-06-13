@@ -9,7 +9,6 @@ a customized logger config in your `conf.d` directory:
 ```
 
 ``` php title="Posible log priorities"
-<?php
     const EMERG   = 0;  // Emergency: system is unusable
     const ALERT   = 1;  // Alert: action must be taken immediately
     const CRIT    = 2;  // Critical: critical conditions
