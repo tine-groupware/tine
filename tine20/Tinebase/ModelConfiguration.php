@@ -1019,6 +1019,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 $definition = $cfc->definition->toArray();
                 if (isset($definition[Tinebase_Model_CustomField_Config::DEF_FIELD])) {
                     $this->_fields[$cfc->name] = $definition[Tinebase_Model_CustomField_Config::DEF_FIELD];
+                    $this->_fields[$cfc->name][self::SYSTEM_CF] = true;
                 }
 
                 if (isset($definition[Tinebase_Model_CustomField_Config::DEF_HOOK])) {

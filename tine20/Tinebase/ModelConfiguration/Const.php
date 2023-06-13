@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  ModelConfiguration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -202,6 +202,7 @@ class Tinebase_ModelConfiguration_Const {
      * legacy - field is not included in export (but not respected by all exports)
      */
     const SYSTEM = 'system';
+    const SYSTEM_CF = 'systemCF'; // this property was created by a system custom field
 
     const TAB = 'tab';
     const TABLE = 'table';

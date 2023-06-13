@@ -228,14 +228,14 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
                 'model' => Addressbook_Model_Contact::class,
             ], true);
         }
-
-        $cfc->name = $this->{self::FLD_NAME};
+        $cfc->name = $this->{self::FLD_NAME}; // we need it here, so the model knows the name, actually not, go an refactor it
 
         /** @var Addressbook_Model_ContactProperties_Interface $model */
         $model = $this->{self::FLD_MODEL};
-        $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::SPECIAL_TYPE] = $model;
         $model::updateCustomFieldConfig($cfc, $this);
 
+        $cfc->name = $this->{self::FLD_NAME}; // we enforce it here again, why not
+        $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::SPECIAL_TYPE] = $model;
         $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::UI_CONFIG]['order'] =
             $this->{self::FLD_SORTING};
         $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::UI_CONFIG]['group'] =
