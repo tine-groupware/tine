@@ -266,15 +266,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     'fields'            => [
                         'tel_assistent',
                         'tel_car',
-                        'tel_cell',
-                        'tel_cell_private',
-                        'tel_fax',
-                        'tel_fax_home',
-                        'tel_home',
                         'tel_other',
                         'tel_pager',
                         'tel_prefer',
-                        'tel_work'
                     ]
                 ],
             ],
@@ -285,15 +279,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     'fields'            => [
                         'tel_assistent_normalized',
                         'tel_car_normalized',
-                        'tel_cell_normalized',
-                        'tel_cell_private_normalized',
-                        'tel_fax_normalized',
-                        'tel_fax_home_normalized',
-                        'tel_home_normalized',
                         'tel_other_normalized',
                         'tel_pager_normalized',
                         'tel_prefer_normalized',
-                        'tel_work_normalized'
                     ]
                 ],
             ],
@@ -302,8 +290,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'label'             => 'Emails', // _('Emails')
                 'options'           => [
                     'fields'            => [
-                        'email',
-                        'email_home',
                     ]
                 ],
             ],
@@ -316,8 +302,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                         'n_given',
                         'n_middle',
                         'org_name',
-                        'email',
-                        'email_home',
                     ]
                 ],
             ],
@@ -342,34 +326,6 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                     'omitDuplicateResolving'        => true,
                 ],
             ],
-            /*'adr_one'              => [
-                self::TYPE                      => self::TYPE_RECORD,
-                self::LABEL                     => 'Company Address', // _('Company Address')
-                self::DOCTRINE_IGNORE           => true,
-                self::CONFIG                    => [
-                    self::APP_NAME                  => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME                => Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
-                    self::JSON_FACADE               => 'adr_one_',
-                ],
-                self::UI_CONFIG                 => [
-                    'omitDuplicateResolving'        => true,
-                    'sort'                          => 1
-                ],
-            ],
-            'adr_two'               => [
-                self::TYPE                      => self::TYPE_RECORD,
-                self::LABEL                     => 'Private Address', // _('Private Address')
-                self::DOCTRINE_IGNORE           => true,
-                self::CONFIG                    => [
-                    self::APP_NAME                  => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME                => Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
-                    self::JSON_FACADE               => 'adr_two_',
-                ],
-                self::UI_CONFIG                 => [
-                    'omitDuplicateResolving'        => true,
-                    'sort'                          => 2
-                ],
-            ],*/
             'adr_one_countryname'           => [
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 86,
