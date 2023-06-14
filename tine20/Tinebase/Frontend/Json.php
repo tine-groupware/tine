@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -1671,7 +1671,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Model_AuthToken::class, [
                 ['field' => Tinebase_Model_AuthToken::FLD_AUTH_TOKEN, 'operator' => 'equals', 'value' => $token]
             ]
-        ))->filter(Tinebase_Model_AuthToken::FLD_AUTH_TOKEN, $token,)->getFirstRecord();
+        ))->getFirstRecord();
 
         if ($t && in_array($channel, $t->{Tinebase_Model_AuthToken::FLD_CHANNELS})) {
             return $t->toArray();
