@@ -48,6 +48,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'from_name'     => array('filter' => 'Tinebase_Model_Filter_Text'),
         'received'      => array('filter' => Tinebase_Model_Filter_DateTime::class),
         'messageuid'    => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'message_id'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'size'          => array('filter' => 'Tinebase_Model_Filter_Int'),
         'has_attachment'=> ['filter' => Tinebase_Model_Filter_Bool::class],
     // custom filters

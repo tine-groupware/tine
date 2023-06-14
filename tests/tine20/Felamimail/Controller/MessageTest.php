@@ -1541,7 +1541,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
     
     /**
      * helper function
-     * - appends message from file
+     * - appends message from filesearchAndCacheMessage
      * - adds appended message to cache
      *
      * @param string $_filename

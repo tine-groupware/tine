@@ -212,14 +212,14 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      * 
      * @return Felamimail_Model_Message
      */
-    protected function _createTestMessage($emailFile = 'multipart_mixed.eml', $headerToReplace = 'multipart/mixed')
+    protected function _createTestMessage($emailFile = 'multipart_mixed.eml', $headerToReplace = 'multipart/mixed', $folder = null)
     {
         $testMessageId = Tinebase_Record_Abstract::generateUID();
         
         return $this->_emailTestClass->messageTestHelper(
             $emailFile,
             $testMessageId,
-            null,
+            $folder,
             array('X-Tine20TestMessage: ' . $headerToReplace, 'X-Tine20TestMessage: ' . $testMessageId)
         );
     }
@@ -756,14 +756,78 @@ Content-Transfer-Encoding: base64&#13;
 
     /**
      * testReplyEmailNexus
+     *
+     * @see 0008572: email reply text garbled
+     *
+     * @group longrunning
+     */
+    protected function _testReplyEmailOutlook($testFolder)
+    {
+        $account = TestServer::getInstance()->getTestEmailAccount();
+        $subject = 'test send outlook ' . Tinebase_Record_Abstract::generateUID();
+        $message = new Felamimail_Model_Message(array(
+            'account_id'    => $account->getId(),
+            'subject'       => $subject,
+            'to'            => $this->_emailTestClass->getEmailAddress(),
+            'body'          => 'aaaaaä <br>',
+            'headers' => array('X-Tine20TestMessage' => 'jsontest'),
+        ));
+        //sen message first
+        Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
+        $inbox = $this->_emailTestClass->getFolder('INBOX');
+        $message = $this->_emailTestClass->searchAndCacheMessage('jsontest', $inbox);
+        $this->_createdMessages->addRecord($message);
+        $mailAsString = Felamimail_Controller_Message::getInstance()->getMessageRawContent($message);
+
+        //copy message to non-system folder
+        Felamimail_Controller_Message::getInstance()->appendMessage($testFolder, $mailAsString);
+        $originalMessage = $this->_emailTestClass->searchAndCacheMessage('jsontest', $testFolder);
+        $this->_createdMessages->addRecord($originalMessage);
+        
+        $xml = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<SendMail xmlns="uri:ComposeMail">
+  <ClientId>{D55BCFD0-0039-46B6-A956-4EE537BA31C2}</ClientId>
+  <SaveInSentItems/>
+  <Mime>From: l.kneschke@metaways.de&#13;
+To: ' . $this->_emailTestClass->getEmailAddress() . '&gt;&#13;
+References: ' . htmlentities($originalMessage->message_id) .'
+In-Reply-To: ' . htmlentities($originalMessage->message_id) . '&#13;
+Subject: Re: ' . $subject . '&#13;
+Date: Wed, 14 Jun 2023 09:49:16 +0200&#13;
+Message-ID: &lt;hw6umldu85v6efjai6i9vqci.1373008455202@email.android.com&gt;&#13;
+MIME-Version: 1.0&#13;
+X-Tine20TestMessage: smartreply.eml&#13;
+Content-Type: text/plain; charset=utf-8&#13;
+Content-Transfer-Encoding: base64&#13;
+&#13;
+TW9pbiEKCk1hbCB3YXMgbWl0IMOWIQoKTGFycwoKUGhpbGlwcCBTY2jDvGxlIDxwLnNjaHVlbGVA&#13;
+bWV0YXdheXMuZGU+IHNjaHJpZWI6Cgo=&#13;
+</Mime>
+</SendMail>';
+        $messageId = '<hw6umldu85v6efjai6i9vqci.1373008455202@email.android.com>';
+        $stringToCheck = 'Mal was mit Ö!';
+
+        $completeMessage = $this->_sendMailTestHelper($xml,
+            $messageId,
+            $stringToCheck,
+            "Syncroton_Command_SendMail",
+            Syncroton_Model_Device::TYPE_ANDROID_40,
+            $testFolder['globalname']);
+        $this->assertStringContainsString('Re: ' . $subject, $completeMessage->subject);
+    }
+
+
+    /**
+     * testReplyEmailNexus
      * 
      * @see 0008572: email reply text garbled
      * 
      * @group longrunning
      */
-    public function testReplyEmailNexus1()
+    protected function _testReplyEmailNexus1($testFolder)
     {
-        $originalMessage = $this->_createTestMessage();
+        $originalMessage = $this->_createTestMessage('multipart_mixed.eml', 'multipart/mixed', $testFolder);
         
         $xml = '<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
@@ -791,7 +855,12 @@ bWV0YXdheXMuZGU+IHNjaHJpZWI6Cgo=&#13;
         $messageId = '<hw6umldu85v6efjai6i9vqci.1373008455202@email.android.com>';
         $stringToCheck = 'Mal was mit Ö!';
         
-        $this->_sendMailTestHelper($xml, $messageId, $stringToCheck);
+        $this->_sendMailTestHelper($xml, 
+            $messageId, 
+            $stringToCheck, 
+            "Syncroton_Command_SmartReply", 
+            Syncroton_Model_Device::TYPE_ANDROID_40,
+            $testFolder['globalname']);
     }
     
     /**
@@ -846,7 +915,8 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
                                            $messageId,
                                            $stringToCheck,
                                            $command = "Syncroton_Command_SmartReply",
-                                           $device = Syncroton_Model_Device::TYPE_ANDROID_40)
+                                           $device = Syncroton_Model_Device::TYPE_ANDROID_40, 
+                                           $targetFolderName = 'INBOX')
     {
         $doc = new DOMDocument();
         $doc->loadXML($xml);
@@ -855,9 +925,11 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         
         $sync->handle();
         $sync->getResponse();
-        
-        $inbox = $this->_emailTestClass->getFolder('INBOX');
-        $message = $this->_emailTestClass->searchAndCacheMessage($messageId, $inbox, TRUE, 'Message-ID');
+
+        $account = TestServer::getInstance()->getTestEmailAccount();
+
+        $targetFolder = $this->_emailTestClass->getFolder($targetFolderName);
+        $message = $this->_emailTestClass->searchAndCacheMessage($messageId, $targetFolder, TRUE, 'Message-ID');
         $this->_createdMessages->addRecord($message);
         
         $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
@@ -868,17 +940,13 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
         $emailAccount = TestServer::getInstance()->getTestEmailAccount();
 
         if ($emailAccount->message_sent_copy_behavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SOURCE) {
-            $sent = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
+            $this->assertEquals($message->folder_id, $targetFolder->getId());
         }
         if ($emailAccount->message_sent_copy_behavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SENT) {
-            $sent = $this->_emailTestClass->getFolder($emailAccount->sent_folder);
+            $sentFolder = $this->_emailTestClass->getFolder($emailAccount->sent_folder);
+            $message = $this->_emailTestClass->searchAndCacheMessage($messageId, $sentFolder, TRUE, 'Message-ID');
+            $this->assertEquals($message->folder_id, $sentFolder->getId());
         }
-
-        $message = $this->_emailTestClass->searchAndCacheMessage($messageId, $sent, TRUE, 'Message-ID');
-        $this->_createdMessages->addRecord($message);
-        $completeMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
-        $this->assertStringContainsString($stringToCheck, $completeMessage->body);
-        
         return $completeMessage;
     }
     
@@ -958,14 +1026,39 @@ ZUBtZXRhd2F5cy5kZT4gc2NocmllYjoKCg==&#13;
      * test Reply SaveInSentItems Source Mode
      *
      */
-    public function testReplySaveInSentItemsSourceMode()
+    public function testReplySaveInSentItemsSourceModeNexus()
+    {
+        // check if mail is in source folder
+        $emailAccount = TestServer::getInstance()->getTestEmailAccount();
+        $emailAccount->message_sent_copy_behavior = Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SOURCE;
+        $emailAccount = Felamimail_Controller_Account::getInstance()->update($emailAccount);
+        $account = TestServer::getInstance()->getTestEmailAccount();
+        $folderName = 'outlook';
+        $this->_createdFolders[] = $folderName;
+        $folder = Felamimail_Controller_Folder::getInstance()->create($account->getId(), $folderName, '');
+        Felamimail_Controller_Cache_Folder::getInstance()->update($account['id']);
+
+        $this->_testReplyEmailNexus1($folder);
+
+        $emailAccount->message_sent_copy_behavior = Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SENT;
+        Felamimail_Controller_Account::getInstance()->update($emailAccount);
+    }
+
+    /**
+     * test Reply SaveInSentItems Source Mode
+     *
+     */
+    public function testReplySaveInSentItemsSourceModeOutlook()
     {
         // check if mail is in sent folder
         $emailAccount = TestServer::getInstance()->getTestEmailAccount();
         $emailAccount->message_sent_copy_behavior = Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SOURCE;
         $emailAccount = Felamimail_Controller_Account::getInstance()->update($emailAccount);
+        $account = TestServer::getInstance()->getTestEmailAccount();
+        $this->_createdFolders[] = 'outlook';
+        $testFolder = Felamimail_Controller_Folder::getInstance()->create($account->getId(), 'outlook', '');
 
-        $this->testReplyEmailNexus1();
+        $this->_testReplyEmailOutlook($testFolder);
 
         $emailAccount->message_sent_copy_behavior = Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SENT;
         Felamimail_Controller_Account::getInstance()->update($emailAccount);
