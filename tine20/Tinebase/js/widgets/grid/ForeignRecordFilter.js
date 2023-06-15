@@ -98,6 +98,9 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         if (this.ownRecordClass) {
             this.ownRecordClass = Tine.Tinebase.data.RecordMgr.get(this.ownRecordClass);
         }
+        if (!this.ownRecordClass) {
+            this.ownRecordClass = Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
+        }
         
         if (this.foreignRecordClass) {
             this.foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(this.foreignRecordClass);
@@ -195,8 +198,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             }
         }
 
-        // get operators from registry
+
         if (this.ownRecordClass) {
+            if (_.get(this.ownRecordClass.getField(this.field), 'fieldDefinition.config.dependentRecords')) {
+                this.operators = ['definedBy'];
+                this.defaultOperator = 'definedBy';
+            }
+
+            // get operators from registry
             Ext.each(Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.get(this.ownRecordClass), function (def) {
                 // translate label
                 var foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(def.foreignRecordClass),

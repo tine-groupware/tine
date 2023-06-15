@@ -252,7 +252,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
             suffix = def && def.xtype ? '' : this.centerPanelClassNameSuffix;
 
         if (! this[contentType + suffix]) {
-            try {
+            // try {
                 this[contentType + suffix] = def && def.xtype ? Ext.create(def) :
                     new Tine[def.appName || this.app.appName][contentType + suffix](_.merge({
                         app: def.appName ? Tine.Tinebase.appMgr.get(def.appName) : this.app,
@@ -268,11 +268,11 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                 } else {
                     this[contentType + suffix].cls = 't-contenttype-' + contentType.toLowerCase();
                 }
-            } catch (e) {
-                Tine.log.error('Could not create centerPanel "Tine.' + this.app.appName + '.' + contentType + suffix + '"');
-                Tine.log.error(e.stack ? e.stack : e);
-                this[contentType + suffix] = new Ext.Panel({html: 'ERROR'});
-            }
+            // } catch (e) {
+            //     Tine.log.error('Could not create centerPanel "Tine.' + this.app.appName + '.' + contentType + suffix + '"');
+            //     Tine.log.error(e.stack ? e.stack : e);
+            //     this[contentType + suffix] = new Ext.Panel({html: 'ERROR'});
+            // }
         }
         
         return this[contentType + suffix];

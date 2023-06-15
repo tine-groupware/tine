@@ -94,7 +94,9 @@ Tine.widgets.form.FieldManager = function() {
                 fieldType = fieldDefinition.config.type || 'textfield';
                 fieldDefinition = _.merge({}, fieldDefinition, fieldDefinition.config);
             }
-
+            if (fieldType === 'text' && fieldDefinition.length && fieldDefinition.length <= 256) {
+                fieldType = 'textfield';
+            }
             if (_.get(fieldDefinition, 'config.specialType') === 'localizedString') {
                 fieldType = fieldDefinition.type = 'localizedString';
             }

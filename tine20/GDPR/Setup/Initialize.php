@@ -35,7 +35,7 @@ class GDPR_Setup_Initialize extends Setup_Initialize
             'is_system' => true,
             'definition' => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    TMCC::LABEL             => 'GDPR Intended Purpose',
+                    TMCC::LABEL             => 'GDPR Intended Purpose', // _('GDPR Intended Purpose')
                     TMCC::TYPE              => TMCC::TYPE_RECORDS,
                     TMCC::CONFIG            => [
                         TMCC::APP_NAME          => GDPR_Config::APPNAME,
@@ -43,9 +43,13 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                         TMCC::REF_ID_FIELD      => 'record',
                         TMCC::DEPENDENT_RECORDS => true,
                         TMCC::FILTER_OPTIONS    => [
+                            TMCC::DISABLED          => true,
                             GDPR_Model_DataIntendedPurposeRecordFilter::OPTIONS_SHOW_WITHDRAWN => true,
                             'doJoin'                => true,
                         ],
+                    ],
+                    TMCC::UI_CONFIG         => [
+                        'group'                         => 'GDPR',
                     ],
                 ],
             ]
@@ -59,7 +63,7 @@ class GDPR_Setup_Initialize extends Setup_Initialize
             'is_system' => true,
             'definition' => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    TMCC::LABEL             => 'GDPR Blacklist',
+                    TMCC::LABEL             => 'GDPR Blacklisted', // _('GDPR Blacklisted')
                     TMCC::TYPE              => TMCC::TYPE_BOOLEAN,
                     TMCC::DEFAULT_VAL       => 0,
                     TMCC::VALIDATORS        => [
@@ -68,6 +72,9 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                     ],
                     TMCC::INPUT_FILTERS     => [
                         Zend_Filter_Empty::class            => 0,
+                    ],
+                    TMCC::UI_CONFIG         => [
+                        'group'                         => 'GDPR',
                     ],
                 ],
                 Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS => [
@@ -86,7 +93,7 @@ class GDPR_Setup_Initialize extends Setup_Initialize
             'is_system' => true,
             'definition' => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    TMCC::LABEL             => 'GDPR Data Provenance',
+                    TMCC::LABEL             => 'GDPR Data Provenance', // _('GDPR Data Provenance')
                     TMCC::TYPE              => TMCC::TYPE_RECORD,
                     TMCC::IS_VIRTUAL        => true,
                     TMCC::CONFIG            => [
@@ -104,11 +111,9 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                 Tinebase_Model_CustomField_Config::DEF_HOOK => [
                     [GDPR_Controller_DataProvenance::class, 'modelConfigHook'],
                 ],
-                /*'uiconfig' => [
-                    'order' => '',//'0/0/0/0/0/5',
-                    'group' => '',
-                    'tab'   => '', //'0',
-                ],*/
+                TMCC::UI_CONFIG         => [
+                    'group'                         => 'GDPR',
+                ],
             ]
         ], true));
 
@@ -120,15 +125,14 @@ class GDPR_Setup_Initialize extends Setup_Initialize
             'is_system' => true,
             'definition' => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    TMCC::LABEL             => 'GDPR Data Provenance Reason',
+                    TMCC::LABEL             => 'GDPR Data Editing Reason', // _('GDPR Data Editing Reason')
                     TMCC::TYPE              => TMCC::TYPE_STRING,
                     TMCC::IS_VIRTUAL        => true,
-                ],/*
-                'uiconfig' => [
-                    'order' => '',//'0/0/0/0/0/5',
-                    'group' => '',
-                    'tab'   => '', //'0',
-                ],*/
+                ],
+                TMCC::UI_CONFIG         => [
+                    'omitDuplicateResolving'        => true,
+                    'group'                         => 'GDPR',
+                ],
             ]
         ], true));
 
@@ -139,10 +143,13 @@ class GDPR_Setup_Initialize extends Setup_Initialize
             'is_system' => true,
             'definition' => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    TMCC::LABEL             => 'GDPR Data Expiry Date',
+                    TMCC::LABEL             => 'GDPR Data Expiry Date', // _('GDPR Data Expiry Date')
                     TMCC::TYPE              => TMCC::TYPE_DATE,
                     TMCC::NULLABLE          => true,
                     TMCC::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                ],
+                TMCC::UI_CONFIG         => [
+                    'group'                         => 'GDPR',
                 ],
             ]
         ], true));

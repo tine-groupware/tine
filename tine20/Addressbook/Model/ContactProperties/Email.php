@@ -1,0 +1,148 @@
+<?php declare(strict_types=1);
+/**
+ * Tine 2.0
+ *
+ * @package     Addressbook
+ * @subpackage  Model
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Paul Mehrer <p.mehrer@metaways.de>
+ */
+
+/**
+ * Contact Property Email Model
+ *
+ * @package     Addressbook
+ * @subpackage  Model
+ */
+class Addressbook_Model_ContactProperties_Email extends Tinebase_Record_NewAbstract
+    implements Addressbook_Model_ContactProperties_Interface, Tinebase_Record_JsonFacadeInterface
+{
+    public const FLD_CONTACT_ID = 'contact_id';
+    public const FLD_EMAIL = 'email';
+
+    public const MODEL_NAME_PART = 'ContactProperties_Email';
+    //public const TABLE_NAME = 'addressbook_email';
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
+     */
+    protected static $_modelConfiguration = [
+        //self::VERSION => 1,
+        self::MODLOG_ACTIVE => true,
+        self::IS_DEPENDENT => true,
+        self::DELEGATED_ACL_FIELD => self::FLD_CONTACT_ID,
+
+        self::APP_NAME => Addressbook_Config::APP_NAME,
+        self::MODEL_NAME => self::MODEL_NAME_PART,
+
+        self::RECORD_NAME => 'Email', // gettext('GENDER_Email')
+        self::RECORDS_NAME => 'Emails', // ngettext('Email', 'Emails', n)
+
+        /*self::TABLE => [
+            self::NAME => self::TABLE_NAME,
+        ],
+
+        self::ASSOCIATIONS                  => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                self::FLD_CONTACT_ID       => [
+                    self::TARGET_ENTITY             => Addressbook_Model_Contact::class,
+                    self::FIELD_NAME                => self::FLD_CONTACT_ID,
+                    self::JOIN_COLUMNS                  => [[
+                        self::NAME                          => self::FLD_CONTACT_ID,
+                        self::REFERENCED_COLUMN_NAME        => self::ID,
+                        self::ON_DELETE                     => self::CASCADE,
+                    ]],
+                ],
+            ],
+        ],*/
+
+        self::FIELDS                    => [
+            /*self::FLD_CONTACT_ID            => [
+                self::TYPE                      => self::TYPE_RECORD,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME                => Addressbook_Model_Contact::MODEL_PART_NAME,
+                ],
+                self::DISABLED => true,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+            ],
+            self::FLD_TYPE                  => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+            ],
+            self::FLD_EMAIL                 => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+                self::LABEL                     => 'Email', // _('Email')
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class, Zend_Filter_StringToLower::class],
+                self::QUERY_FILTER              => true,
+            ],*/
+        ],
+    ];
+
+    static public function updateCustomFieldConfig(Tinebase_Model_CustomField_Config $cfc,
+                                                   Addressbook_Model_ContactProperties_Definition $def): void
+    {
+        switch ($def->{Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE}) {
+            case 'inline':
+                $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [
+                    self::TYPE                      => self::TYPE_STRING,
+                    self::LENGTH                    => 255,
+                    self::NULLABLE                  => true,
+                    self::LABEL                     => $def->{Addressbook_Model_ContactProperties_Definition::FLD_LABEL},
+                    self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                    self::INPUT_FILTERS             => [Zend_Filter_StringTrim::class, Zend_Filter_StringToLower::class],
+                    self::QUERY_FILTER              => true,
+                ];
+                $grants = $def->{Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX};
+                if (!empty($grants)) {
+                    $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::REQUIRED_GRANTS] = $grants;
+                }
+                break;
+            case 'records':
+                /*$cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD] = [
+                    self::TYPE => self::TYPE_RECORD,
+                    self::CONFIG => [
+                        self::APP_NAME => Addressbook_Config::APP_NAME,
+                        self::MODEL_NAME => Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
+                    ],
+                ];
+                $grants = $def->{Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX};
+                if (!empty($grants)) {
+                    $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][self::REQUIRED_GRANTS] = $grants;
+                }
+                break;*/
+            case 'record':
+            default:
+                throw new Tinebase_Exception_NotImplemented(
+                    $def->{Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE} . ' is not implemented');
+        }
+    }
+
+    public static function applyJsonFacadeMC(array &$fields, Addressbook_Model_ContactProperties_Definition $def): void
+    {
+    }
+
+    public static function jsonFacadeToJson(Tinebase_Record_Interface $record, string $fieldKey, array $def): void
+    {
+    }
+
+    public function jsonFacadeFromJson(Tinebase_Record_Interface $record, array $def): void
+    {
+    }
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+}

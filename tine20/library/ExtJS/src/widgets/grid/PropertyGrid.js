@@ -41,6 +41,7 @@ Ext.grid.PropertyRecord = Ext.data.Record.create([
 Ext.grid.PropertyStore = Ext.extend(Ext.util.Observable, {
     
     constructor : function(grid, source){
+        Object.assign(this, grid.storeConfig);
         this.grid = grid;
         this.store = new Ext.data.Store({
             recordType : Ext.grid.PropertyRecord

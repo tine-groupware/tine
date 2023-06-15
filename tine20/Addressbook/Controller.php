@@ -237,6 +237,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                     'label' => 'Industries' // _('Industries')
             )));
         }
+
         return $result;
     }
 

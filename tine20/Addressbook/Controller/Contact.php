@@ -10,6 +10,9 @@
  * 
  */
 
+use Addressbook_Model_ContactProperties_Definition as AMCPD;
+use Tinebase_ModelConfiguration_Const as TMCC;
+
 /**
  * contact controller for Addressbook
  *
@@ -103,27 +106,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         self::$_instance = null;
     }
 
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL,
-                           Tinebase_Model_Pagination $_pagination = NULL,
-                           $_getRelations = FALSE,
-                           $_onlyIds = FALSE,
-                           $_action = self::ACTION_GET)
-    {
-        $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
-        
-        if (!$_onlyIds && is_object(Tinebase_Core::getUser())) {
-            foreach ($result as $contact) {
-                if (!Tinebase_Core::getUser()->hasGrant(
-                        $contact->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA) &&
-                    Tinebase_Core::getUser()->contact_id !== $contact->getId()) {
-                    $this->removePersonalData($contact);
-                };
-            }
-        }
-
-        return $result;
-    }
-
     public function get($_id, $_containerId = NULL, $_getRelatedData = TRUE, $_getDeleted = FALSE, $_aclProtect = true)
     {
         $contact = parent::get($_id, $_containerId, $_getRelatedData, $_getDeleted, $_aclProtect);
@@ -135,14 +117,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         }
 
         Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
-        
-        // Remove personal data from contact if no grants. The user has always grants for his/her own contact
-        if (is_object(Tinebase_Core::getUser()) && !Tinebase_Core::getUser()->hasGrant(
-            $contact->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA) &&
-            Tinebase_Core::getUser()->contact_id !== $contact->getId()) {
-            // Remove that personal data!
-            $contact = $this->removePersonalData($contact);
-        };
 
         return $contact;
     }
@@ -762,13 +736,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        if (!Tinebase_Core::getUser()->hasGrant(
-                $_record->container_id, Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA) &&
-            Tinebase_Core::getUser()->contact_id !== $_record->getId()) {
-            // We need to restore the data we previously removed
-            $_record = $this->removePersonalData($_record);
-        };
-
         // syncBackendIds is read only property!
         unset($_record->syncBackendIds);
     }
@@ -832,7 +799,70 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 
         return false;
     }
-    
+
+    protected function _setGeoDataForAddressRecord(string $_address, Addressbook_Model_Contact $_record, bool $_omitPostal = false): void
+    {
+        if (!$_record->{$_address} instanceof Addressbook_Model_ContactProperties_Address) {
+            return;
+        }
+        if (empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LOCALITY}) &&
+            ($_omitPostal || empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_POSTALCODE})) &&
+            empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_STREET}) &&
+            empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_COUNTRYNAME})
+        ) {
+            $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LON} = null;
+            $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LAT} = null;
+            return;
+        }
+
+        $nominatim = $this->_getNominatimService();
+
+        if (! empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LOCALITY})) {
+            $nominatim->setVillage($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LOCALITY});
+        }
+
+        if (!$_omitPostal && ! empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_POSTALCODE})) {
+            $nominatim->setPostcode($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_POSTALCODE});
+        }
+
+        if (! empty($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_STREET})) {
+            $nominatim->setStreet($_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_STREET});
+        }
+
+        if (! empty($countryname = $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_COUNTRYNAME})) {
+            try {
+                $country = Zend_Locale::getTranslation($countryname, 'Country', $countryname);
+                $nominatim->setCountry($country);
+            } catch (Zend_Locale_Exception $zle) {
+                // country not found
+            }
+        }
+
+        try {
+            $places = $nominatim->search();
+
+            if (count($places) > 0) {
+                $place = $places->current();
+                $this->_applyNominatimPlaceToRecord($_address, $_record, $place);
+
+            } else {
+                if (!$_omitPostal) {
+                    $this->_setGeoDataForAddress($_address, $_record, true);
+                    return;
+                }
+
+                $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LON} = null;
+                $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LAT} = null;
+            }
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+
+            // the address has changed, the old values for lon/lat can not be valid anymore
+            $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LON} = null;
+            $_record->{$_address}->{Addressbook_Model_ContactProperties_Address::FLD_LAT} = null;
+        }
+    }
+
     /**
      * set geodata for given address of record
      * 
@@ -869,15 +899,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $nominatim->setStreet($_record->{$_address . 'street'});
         }
         
-        if (! empty($_record->{$_address . 'countryname'})) {
+        if (! empty($countryname = $_record->{$_address . 'countryname'})) {
             try {
-                $countryname = $_record->{$_address . 'countryname'};
-                if (! empty($countryname)) {
-                    $country = Zend_Locale::getTranslation($countryname, 'Country', $countryname);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' country ' . $country);
-                    $nominatim->setCountry($country);
-                }
+                $country = Zend_Locale::getTranslation($countryname, 'Country', $countryname);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ($_address == 'adr_one_' ? ' Company address' : ' Private address') . ' country ' . $country);
+                $nominatim->setCountry($country);
+
             } catch (Zend_Locale_Exception $zle) {
                 // country not found
             }
@@ -1019,6 +1047,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         $this->_setGeoDataForAddress('adr_one_', $_record);
         $this->_setGeoDataForAddress('adr_two_', $_record);
+        foreach (Addressbook_Model_Contact::getAdditionalAddressFields() as $field) {
+            $this->_setGeoDataForAddressRecord($field, $_record);
+        }
     }
 
     /**
@@ -1558,29 +1589,80 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * Unset Personal data of a contact
-     * 
-     * @param Addressbook_Model_Contact $contact
-     * @return Addressbook_Model_Contact
+     * @param Addressbook_Model_Contact $_record
+     * @param string $_action
+     * @param bool $_throw
+     * @param string $_errorMessage
+     * @param ?Addressbook_Model_Contact $_oldRecord
+     * @return bool
      */
-    private function removePersonalData(Addressbook_Model_Contact $contact) {
-        unset($contact->bday);
-        unset($contact->adr_two_countryname);
-        unset($contact->adr_two_locality);
-        unset($contact->adr_two_postalcode);
-        unset($contact->adr_two_region);
-        unset($contact->adr_two_street);
-        unset($contact->adr_two_street2);
-        unset($contact->adr_two_lon);
-        unset($contact->adr_two_lat);
-        unset($contact->email_home);
-        unset($contact->tel_home);
-        unset($contact->tel_cell_private);
-        unset($contact->tel_fax_home);
-        unset($contact->tel_home_normalized);
-        unset($contact->tel_cell_private_normalized);
-        unset($contact->tel_fax_home_normalized);
+    public function checkGrant($_record, $_action, $_throw = true, $_errorMessage = 'No Permission.', $_oldRecord = null)
+    {
+        if (Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA === $_action && $_record->account_id &&
+                is_object(Tinebase_Core::getUser()) && $_record->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId()) {
+            return true;
+        }
+        return parent::checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
+    }
 
-        return $contact;
+    public static function modelConfigHook(array &$_fields, Tinebase_ModelConfiguration $mc): void
+    {
+        try {
+            Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . AMCPD::TABLE_NAME);
+        } catch (Zend_Db_Statement_Exception $e) {
+            return;
+        }
+
+        $propDefs = Addressbook_Controller_ContactProperties_Definition::getInstance()->getAll();
+        foreach ($propDefs->filter(AMCPD::FLD_IS_SYSTEM, true) as $cpDef) {
+            /** @var Addressbook_Model_ContactProperties_Interface $model */
+            $model = $cpDef->{AMCPD::FLD_MODEL};
+            $model::applyJsonFacadeMC($_fields, $cpDef);
+
+            if (is_array($cpDef->{AMCPD::FLD_GRANT_MATRIX})) {
+                $_fields[$cpDef->{AMCPD::FLD_NAME}][TMCC::REQUIRED_GRANTS] = $cpDef->{AMCPD::FLD_GRANT_MATRIX};
+            }
+        }
+        $telFields = Addressbook_Model_Contact::getTelefoneFields();
+        $phoneDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Phone::class);
+        foreach ($phoneDefs as $phoneDef) {
+            $telFields[$phoneDef->{AMCPD::FLD_NAME}] = $phoneDef->{AMCPD::FLD_NAME};
+        }
+        Addressbook_Model_Contact::setTelefoneFields($telFields);
+
+        $filterModel = $mc->filterModel;
+        $filterModel['telephone'][TMCC::OPTIONS][TMCC::FIELDS] = array_values($telFields);
+        $filterModel['telephone_normalized'][TMCC::OPTIONS][TMCC::FIELDS] = [];
+        foreach ($telFields as $telField) {
+            $filterModel['telephone_normalized'][TMCC::OPTIONS][TMCC::FIELDS][] = $telField . '_normalized';
+        }
+
+        $emailFields = Addressbook_Model_Contact::getEmailFields();
+        $emailDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Email::class);
+        foreach ($emailDefs as $emailDef) {
+            $emailFields[$emailDef->{AMCPD::FLD_NAME}] = $emailDef->{AMCPD::FLD_NAME};
+        }
+        $filterModel['email_query'][TMCC::OPTIONS][TMCC::FIELDS] = array_values($emailFields);
+        foreach ($emailFields as $emailField) {
+            if (!in_array($emailField, $filterModel['name_email_query'][TMCC::OPTIONS][TMCC::FIELDS])) {
+                $filterModel['name_email_query'][TMCC::OPTIONS][TMCC::FIELDS][] = $emailField;
+            }
+        }
+        Addressbook_Model_Contact::setEmailFields($emailFields);
+        $mc->setFilterModel($filterModel);
+
+        $additionalAdrFields = Addressbook_Model_Contact::getAdditionalAddressFields();
+        $adrDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Address::class)
+            ->filter(AMCPD::FLD_IS_SYSTEM, false);
+        foreach ($adrDefs as $adrDef) {
+            $additionalAdrFields[$adrDef->{AMCPD::FLD_NAME}] = $adrDef->{AMCPD::FLD_NAME};
+        }
+        Addressbook_Model_Contact::setAdditionalAddressFields($additionalAdrFields);
+
+        $expanderDef = $mc->jsonExpander;
+        foreach (Addressbook_Model_Contact::getAdditionalAddressFields() as $val) {
+            $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES][$val] = [];
+        }
+        $mc->setJsonExpander($expanderDef);
     }
 }

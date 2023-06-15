@@ -785,8 +785,7 @@ abstract class ActiveSync_Frontend_Abstract implements Syncroton_Data_IData
      */
     protected function _isEmptyValue($value)
     {
-        return empty($value) && $value != '0'
-            || is_array($value) && count($value) === 0;
+        return empty($value) && $value !== '0' && !is_array($value);
     }
 
     /**

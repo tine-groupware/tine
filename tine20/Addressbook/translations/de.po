@@ -432,7 +432,7 @@ msgstr[1] "Kontakte"
 
 #: Model/Contact.php:186
 msgid "Show Disabled"
-msgstr "Zeige geschlossene"
+msgstr "Zeige deaktivierte"
 
 #: Model/Contact.php:194
 msgid "Path"
@@ -669,6 +669,15 @@ msgstr "Pager"
 msgid "Phone"
 msgstr "Telefon"
 
+msgid "Phone Numbers"
+msgstr "Telefonnummmern"
+
+msgid "Emails"
+msgstr "E-Mails"
+
+msgid "Name/Emails"
+msgstr "Name/E-Mails"
+
 #: Model/Contact.php:772 Model/List.php:143 js/ListGrid.js:100
 #: js/contactListsGridPanel.js:56 js/ContactGrid.js:200 js/Model.js:187
 msgid "Type"
@@ -730,6 +739,8 @@ msgstr ""
 "Dies ist eine Systemgruppe. Um Änderungen vorzunehmen, benötigen Sie das "
 "Recht 'Benutzerkonten verwalten'"
 
+msgid "Contact Properties"
+msgstr "Kontakt-Felder"
 #: Setup/Initialize.php:126 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
 msgstr "Alle Kontakte für die ich Lese-Rechte habe"

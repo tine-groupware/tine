@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -2011,6 +2011,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if ($_record->location_record && is_string($_record->location_record)) {
             try {
+                /** @var Addressbook_Model_Contact $locationContact */
                 $locationContact = Addressbook_Controller_Contact::getInstance()->get($_record->location_record);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
@@ -2022,12 +2023,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 return $_record;
             }
 
-            if ($locationContact->preferred_address == 0) {
-                $_record->adr_lon = $locationContact->adr_one_lon ?: null;
-                $_record->adr_lat = $locationContact->adr_one_lat ?: null;
-            } else {
-                $_record->adr_lon = $locationContact->adr_two_lon ?: null;
-                $_record->adr_lat = $locationContact->adr_two_lat ?: null;
+            if ($adr = $locationContact->getPreferredAddressObject()) {
+                $_record->adr_lon = $adr->{Addressbook_Model_ContactProperties_Address::FLD_LON};
+                $_record->adr_lat = $adr->{Addressbook_Model_ContactProperties_Address::FLD_LAT};
             }
         }
         

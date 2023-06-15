@@ -479,6 +479,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                             'Using application name is deprecated and no default model found. Use the classname of the model itself.');
                     }
                 case 3:
+                case 4:
                     $ret['appName'] = $split[0];
                     $ret['recordClass'] = $_recordClass;
                     break;

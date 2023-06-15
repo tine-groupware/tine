@@ -23,8 +23,6 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
     il8n: null,
     felamimail: false,
 
-    recordClass: Tine.Addressbook.Model.Contact,
-
     getSingleRecordPanel: function() {
         var me = this;
         if (! this.singleRecordPanel) {

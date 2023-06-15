@@ -74,7 +74,7 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
 
         if (this.recordClass === null) {
             this.recordClass = Tine.Addressbook.Model.Contact;
-            this.recordProxy = Tine.Addressbook.contactBackend;
+            // this.recordProxy = Tine.Addressbook.contactBackend;
         }
 
         this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : (this.userOnly ?

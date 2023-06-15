@@ -44,6 +44,11 @@ Tine.Addressbook.AdminPanel = Ext.extend(Ext.TabPanel, {
         this.items = [
             new Tine.Admin.config.GridPanel({
                 configApp: this.app
+            }),
+            new Tine.Addressbook.ContactProperties_DefinitionGridPanel({
+                title: this.app.i18n._('Contact Properties'),
+                // disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
+                ownActionToolbar: true
             })
         ];
         

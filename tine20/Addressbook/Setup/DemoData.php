@@ -136,8 +136,21 @@ class Addressbook_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _onCreate()
     {
+        $this->_createContactProperties();
         $this->_createCustomfields();
         $this->_importContacts();
+    }
+
+    protected function _createContactProperties()
+    {
+        Addressbook_Controller_ContactProperties_Definition::getInstance()->create(
+            new Addressbook_Model_ContactProperties_Definition([
+                Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'delivery_address',
+                Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Delivery Address',
+                Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 3,
+                Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
+                Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD,
+            ]));
     }
 
     /**
