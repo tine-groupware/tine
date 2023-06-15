@@ -303,7 +303,8 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      */
     protected static function _getServer($classes = null)
     {
-        $appPwd = Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class};
+        $appPwd = Tinebase_Session::isStarted() ?
+            Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class} : null;
 
         // setup cache if available and we are in production mode
         if (
