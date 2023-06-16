@@ -46,10 +46,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     detailsPanel: null,
 
-    // TODO allow to switch between 2 layouts + save in state
-    // TODO switch grid state / columns
-    // TODO east should be default?
-    // detailsPanelRegion: 'east',
+    /**
+     * default panel region
+     *
+     * @type Tine.Felamimail.GridDetailsPanel
+     * @property detailsPanelRegion
+     */
+    detailsPanelRegion: 'east',
 
     /**
      * transaction id of current delete message request
@@ -592,12 +595,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                 this.action_flag,
                                 this.action_importRecords
                             ]
-                        },
-                        Ext.apply(new Ext.Button(this.action_switchDetailsPanelRegion), {
-                            scale: 'medium',
-                            rowspan: 2,
-                            iconAlign: 'top'
-                        }),
+                        }
                     ]
                 }, this.getActionToolbarItems()]
             });
@@ -1504,29 +1502,21 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     onStoreBeforeLoadFolderChange: function (store, options) {
-        const isSendFolderPath = this.isSendFolderPathInFilterParams(options.params);
-        const stateId = isSendFolderPath ? this.sendFolderGridStateId : this.gridConfig.stateId;
-
+        this.updateGridState();
+        this.updateDefaultfilter(options.params, this.sentFolderSelected);
+    },
+    
+    resolveSendFolderPath: function (params) {
+        const pathFilter = _.find(this.latestFilter, { field: 'path' });
+        const operator = _.get(pathFilter, 'operator', '');
+        const value = operator.match(/equals|in/) ? _.get(pathFilter, 'value', null) : null;
+        const pathFilterValue =  value && _.isArray(value) ? value[0] : value;
+        const isSendFolderPath = this.isSendFolderPath(pathFilterValue);
         if (isSendFolderPath && ! this.sentFolderSelected) {
             this.sentFolderSelected = true;
         } else if (! isSendFolderPath && this.sentFolderSelected) {
             this.sentFolderSelected = false;
         }
-        
-        this.updateDefaultfilter(options.params, this.sentFolderSelected);
-        this.changeGridState(stateId);
-    },
-
-    isSendFolderPathInFilterParams: function (params) {
-        const filters = params.filter[0] ?? _.filter(this.filterToolbar.getValue(), (f) => f.id === 'FilterPanel').pop();
-        const pathFilter = _.find(_.get(filters, 'filters[0].filters', {}), {
-            field: 'path'
-        });
-        const operator = _.get(pathFilter, 'operator', '');
-        const value = operator.match(/equals|in/) ? _.get(pathFilter, 'value', null) : null;
-        const pathFilterValue =  value && _.isArray(value) ? value[0] : value;
-        
-        return this.isSendFolderPath(pathFilterValue);
     },
     
     isSendFolderPath: function (pathFilterValue) {
@@ -1576,23 +1566,31 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *
      * // if switched from send, draft, template to "normal" folder
      * // - switch to default state
-     *
-     *
-     * @param stateId
      */
-    changeGridState: function (stateId) {
+    updateGridState: function () {
+        this.resolveSendFolderPath();
+        let stateId = this.sentFolderSelected ? this.sendFolderGridStateId : this.gridConfig.stateId;
+        
+        if (this.detailsPanelRegion === 'east') {
+            stateId = stateId + '_DetailsPanel_East';
+        }
         const isStateChanged = this.grid.stateId !== stateId;
         this.grid.stateId = stateId;
         
         if (!Ext.state.Manager.get(stateId)) {
             this.grid.saveState();
         }
-        const defaultState = Ext.state.Manager.get(this.gridConfig.stateId) ?? this.grid.getState();
+        const defaultStateId = this.detailsPanelRegion === 'east' ? stateId : this.gridConfig.stateId;
+        const defaultState = Ext.state.Manager.get(defaultStateId) ?? this.grid.getState();
         let cloneDefaultState = JSON.parse(JSON.stringify(defaultState));
         
-        if (stateId === this.sendFolderGridStateId) {
-            const refState = Ext.state.Manager.get(stateId);
-            cloneDefaultState = JSON.parse(JSON.stringify(refState));
+        cloneDefaultState.sort = this.store.getSortState();
+        
+        if (stateId.includes(this.sendFolderGridStateId)) {
+            let refState = Ext.state.Manager.get(stateId);
+            if (refState) {
+                cloneDefaultState = JSON.parse(JSON.stringify(refState));
+            }
             
             // - hide from email + name columns from grid
             // - show to column in grid
@@ -1645,8 +1643,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             folder.commit();
             this.app.checkMailsDelayedTask.delay(1000);
         }
+        this.latestFilter = _.get(options.params, 'filter[0].filters[0].filters', {});
         this.updateDefaultfilter(options.params, this.sentFolderSelected);
         this.updateQuotaBar();
+        this.updateGridState();
     },
     
     /**

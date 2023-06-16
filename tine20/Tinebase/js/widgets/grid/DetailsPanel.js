@@ -83,7 +83,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     autoScroll: true,
     layout: 'card',
     activeItem: 0,
-    
+    contextMenuItems: [],
     /**
      * get panel for default information
      * 
@@ -154,11 +154,31 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
                 layout: 'fit'
             });
         }, this);
-
+        
         if (this.listenMessageBus && this.recordClass) {
             this.initMessageBus();
         }
-
+        this.afterIsRendered().then(() => {
+            this.el.on('contextmenu', (e) => {
+                if (!this.menu) {
+                    this.menu = new Ext.menu.Menu({
+                        items:this.contextMenuItems,
+                        plugins: [{
+                            ptype: 'ux.itemregistry',
+                            key:   this.singleRecordPanel.appName + '-' + this.singleRecordPanel.modelName + '-DetailsPanel'
+                        }, {
+                            ptype: 'ux.itemregistry',
+                            key:   'Tinebase-MainContextMenu'
+                        }]
+                    });
+                }
+                
+                 if (this.menu.items.length > 0 && window.getSelection().toString() === '') {
+                    e.stopEvent();
+                    this.menu.showAt(e.getXY());
+                 }
+            });
+        });
         Tine.widgets.grid.DetailsPanel.superclass.initComponent.apply(this, arguments);
     },
 
