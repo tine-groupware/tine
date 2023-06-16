@@ -255,4 +255,20 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         
         Tinebase_Controller_ActionLog::getInstance()->addActionLogQuotaNotification($plain);
     }
+
+
+    /**
+     * get app metrics
+     *
+     */
+    public function metrics(): array
+    {
+        return [
+            SaasInstance_Config::APP_NAME => [
+                'pricePerUser' => SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER),
+                'pricePerGigabyte' => SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_GIGABYTE),
+                'numberOfIncludedUsers' => SaasInstance_Config::getInstance()->get(SaasInstance_Config::NUMBER_OF_INCLUDED_USERS),
+            ]
+        ];
+    }
 }
