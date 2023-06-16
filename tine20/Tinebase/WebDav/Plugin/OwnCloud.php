@@ -115,12 +115,26 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
         $permission = '{' . self::NS_OWNCLOUD . '}permissions';
         if (in_array($permission, $requestedProperties)) {
             unset($requestedProperties[array_search($permission, $requestedProperties)]);
-//            if ($node instanceof Tinebase_Frontend_WebDAV_Node) {
-                $returnedProperties[200][$permission] = 'SWCKDNV';
-//            } else {
-                // the path does not change for the other nodes => hence the id is "static"
-//                $returnedProperties[200][$permission] = sha1($path);
-//            }
+            $returnedProperties[200][$permission] = 'S';
+            if ($node instanceof Tinebase_Frontend_WebDAV_Node && ($fNode = $node->getNode())) {
+                $grants = Tinebase_FileSystem::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $fNode);
+                if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN}) {
+                    $returnedProperties[200][$permission] .= 'WCKDR';
+                } else {
+                    if ($grants->{Tinebase_Model_Grants::GRANT_DELETE}) {
+                        $returnedProperties[200][$permission] .= 'D';
+                    }
+                    if ($grants->{Tinebase_Model_Grants::GRANT_EDIT}) {
+                        $returnedProperties[200][$permission] .= 'W';
+                    }
+                    if ($grants->{Tinebase_Model_Grants::GRANT_ADD}) {
+                        $returnedProperties[200][$permission] .= 'CK';
+                    }
+                    if ($grants->{Tinebase_Model_Grants::GRANT_PUBLISH}) {
+                        $returnedProperties[200][$permission] .= 'R';
+                    }
+                }
+            }
         }
 
         $fingerPrint = '{' . self::NS_OWNCLOUD . '}data-fingerprint';
