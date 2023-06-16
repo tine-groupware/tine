@@ -3626,9 +3626,13 @@ msgstr ""
 "other {{recordCount, plural, one {# {recordName} ausgewählt} other {# "
 "{recordsName} ausgewählt}}}}"
 
-#: js/widgets/grid/GridPanel.js:1714
 msgid "Records"
 msgstr "Datensätze"
+
+msgid "record"
+msgid_plural "records"
+msgstr[0] "Datensatz"
+msgstr[1] "Datensätze"
 
 #: js/widgets/grid/GridPanel.js:1987
 msgid "New..."
