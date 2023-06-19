@@ -130,9 +130,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * get sieve script for account
      * 
      * @param string|Felamimail_Model_Account $_accountId
-     * @return NULL|Felamimail_Sieve_Backend_Abstract
+     * @return ?Felamimail_Sieve_Backend_Abstract
      */
-    public function getSieveScript($_accountId)
+    public function getSieveScript($_accountId): ?Felamimail_Sieve_Backend_Abstract
     {
         $script = NULL;
         if ($this->_scriptDataBackend === 'Sql') {
