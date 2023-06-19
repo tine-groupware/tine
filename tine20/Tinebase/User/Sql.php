@@ -1011,12 +1011,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * updates a user
      *
      * @param Tinebase_Model_FullUser $_user
+     * @param bool $_getDeleted
      * @return Tinebase_Model_FullUser|Tinebase_Model_User
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_Record_Validation
      * @throws Tinebase_Exception_SystemGeneric
      */
-    public function updateUserInSqlBackend(Tinebase_Model_FullUser $_user)
+    public function updateUserInSqlBackend(Tinebase_Model_FullUser $_user, bool $_getDeleted = false)
     {
         if(! $_user->isValid()) {
             throw new Tinebase_Exception_Record_Validation('Invalid user object. ' . print_r($_user->getValidationErrors(), TRUE));
@@ -1026,14 +1027,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $accountId = Tinebase_Model_User::convertUserIdToInt($_user);
 
-        $oldUser = $this->getFullUserById($accountId);
+        $oldUser = $this->getFullUserById($accountId, $_getDeleted);
         
         if (empty($_user->contact_id)) {
             $_user->visibility = 'hidden';
             $_user->contact_id = null;
         }
         $this->treatMFA($_user, $oldUser);
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, 'update', $oldUser);
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_user, !$_user->is_deleted && $oldUser->is_deleted ? 'undelete' : 'update', $oldUser);
         $accountData = $this->_recordToRawData($_user);
         // don't update id
         unset($accountData['id']);
@@ -1444,12 +1445,27 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getNtlmV2Hash($accountId)
     {
-        $select = $select = $this->_db->select()
+        $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'ntlmv2hash')
             ->where($this->_db->quoteIdentifier('id') . ' = ?', $accountId);
 
         return Tinebase_Auth_CredentialCache::decryptData($this->_db->fetchOne($select),
             Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_ENCRYPTION_KEY});
+    }
+
+    /**
+     * get user pw hash
+     *
+     * @param string $accountLoginName
+     * @return ?string
+     */
+    public function getPasswordHashByLoginname(string $accountLoginName): ?string
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'accounts', 'password')
+            ->where($this->_db->quoteIdentifier('login_name') . ' = ?', $accountLoginName);
+
+        return $this->_db->fetchOne($select);
     }
 
     /**
