@@ -150,7 +150,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             ->joinLeft(
                 /* table  */ array('tree_fileobjects' => $this->_tablePrefix . 'tree_fileobjects'), 
                 /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.object_id') . ' = ' . $this->_db->quoteIdentifier('tree_fileobjects.id'),
-                /* select */ array('type', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'seq', 'contenttype', 'revision_size', 'indexed_hash', 'description')
+                /* select */ array('type', 'flysystem', 'flypath', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'seq', 'contenttype', 'revision_size', 'indexed_hash', 'description')
             )
             ->joinLeft(
                 /* table  */ array('tree_filerevisions' => $this->_tablePrefix . 'tree_filerevisions'), 
@@ -297,13 +297,15 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function updated(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_oldRecord)
     {
+        /** @var Tinebase_Model_Tree_Node $_newRecord */
+        /** @var Tinebase_Model_Tree_Node $_oldRecord */
         Tinebase_Timemachine_ModificationLog::getInstance()
             ->setRecordMetaData($_newRecord, (bool)$_newRecord->is_deleted === (bool)$_oldRecord->is_deleted ?
                 Tinebase_Controller_Record_Abstract::ACTION_UPDATE : ($_newRecord->is_deleted ?
                     Tinebase_Controller_Record_Abstract::ACTION_DELETE :
                     Tinebase_Controller_Record_Abstract::ACTION_UNDELETE), $_oldRecord);
         $currentMods = $this->_writeModLog($_newRecord, $_oldRecord);
-        if (null !== $currentMods && $currentMods->count() > 0) {
+        if (null !== $currentMods && $currentMods->count() > 0 && (!$_newRecord->is_deleted || !$_newRecord->flysystem)) {
             Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
 
             if (true === $this->_notificationActive && Tinebase_Model_Tree_FileObject::TYPE_FILE === $_newRecord->type) {
@@ -311,8 +313,6 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             }
         }
 
-        /** @var Tinebase_Model_Tree_Node $_newRecord */
-        /** @var Tinebase_Model_Tree_Node $_oldRecord */
         $this->_inspectForPreviewCreation($_newRecord, $_oldRecord);
     }
 

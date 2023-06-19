@@ -43,6 +43,8 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  * @property    Tinebase_DateTime           lastavscan_time
  * @property    boolean                     is_quarantined
  * @property    Tinebase_Record_RecordSet   metadata
+ * @property    string                      $flysystem
+ * @property    string                      $flypath
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
@@ -280,6 +282,20 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                     self::FILTER                    => Tinebase_Model_Filter_Text::class,
                     self::OPTIONS                   => ['tablename' => 'tree_fileobjects']
                 ]
+            ],
+            'flysystem'                     => [
+                self::DOCTRINE_IGNORE           => true,
+                self::TYPE                      => self::TYPE_RECORD,
+                self::NULLABLE                  => true,
+                self::CONFIG                    => [
+                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                => Tinebase_Model_Tree_FlySystem::MODEL_NAME_PART,
+                ],
+            ],
+            'flypath'                       => [
+                self::DOCTRINE_IGNORE           => true,
+                self::TYPE                      => self::TYPE_TEXT,
+                self::NULLABLE                  => true,
             ],
             'description'                   => [
                 self::DOCTRINE_IGNORE           => true,

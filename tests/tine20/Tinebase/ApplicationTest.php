@@ -525,6 +525,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_TempFile::class,
                 Tinebase_Model_Tree_FileLocation::class,
                 Tinebase_Model_Tree_FileObject::class,
+                Tinebase_Model_Tree_FlySystem::class,
                 Tinebase_Model_Tree_Node::class,
                 Tinebase_Model_Tree_RefLog::class,
                 Tinebase_Model_UpdateMultipleException::class,

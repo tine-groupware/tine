@@ -97,7 +97,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Tinebase_Exception_Expressive_HttpStatus('changes not found', 404);
         }
-        $stream = new \Zend\Diactoros\Stream(Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash));
+        $stream = new \Laminas\Diactoros\Stream(Tinebase_FileSystem::getInstance()->fopen(Tinebase_FileSystem::getInstance()->getPathOfNode($node, true), 'r', $node->revision));
         $name = $node->name;
         $contentType = $node->contenttype;
 
@@ -156,7 +156,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
             } catch (Tinebase_Exception_NotFound $tenf) {
                 throw new Tinebase_Exception_Expressive_HttpStatus('node not found', 404);
             }
-            $stream = new \Zend\Diactoros\Stream(Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash));
+            $stream = new \Laminas\Diactoros\Stream(Tinebase_FileSystem::getInstance()->fopen(Tinebase_FileSystem::getInstance()->getPathOfNode($node, true), 'r', $node->revision));
             $name = $node->name;
             $contentType = $node->contenttype;
         }
