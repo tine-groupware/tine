@@ -686,23 +686,34 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
     public function testResetUserPWOfPersonalSystemAccount()
     {
         $this->_skipIfLDAPBackend();
+        $scleverId = $this->_personas['sclever']->getId();
+        $pw = '54321';
 
         $adminFE = new Admin_Frontend_Json();
-        $adminFE->resetPassword($this->_personas['sclever']->getId(), '12345', false);
+        $adminFE->resetPassword($scleverId, '12345', false);
         $this->testCreatePersonalSystemAccount();
-        $adminFE->resetPassword($this->_personas['sclever']->getId(), '54321', false);
+        $adminFE->resetPassword($scleverId, $pw, false);
+        self::validateImapUserPw($scleverId, $pw, Felamimail_Model_Account::TYPE_USER_INTERNAL);
+    }
 
+    public static function validateImapUserPw(string $userId, string $pw, string $accountType = Felamimail_Model_Account::TYPE_SYSTEM)
+    {
         $account = Admin_Controller_EmailAccount::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-            ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_USER_INTERNAL],
-            ['field' => 'user_id', 'operator' => 'equals', 'value' => $this->_personas['sclever']['accountId']]
-        ]))->getFirstRecord();
-        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);        
+                ['field' => 'type', 'operator' => 'equals', 'value' => $accountType],
+                ['field' => 'user_id', 'operator' => 'equals', 'value' => $userId]
+            ]))->getFirstRecord();
+
+        self::assertNotNull($account);
+
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
         // fetch email pw from db
         $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
         $rawDovecotUser = $dovecot->getRawUserById($emailUser);
+        self::assertNotEmpty($rawDovecotUser['password']);
         $hashPw = new Hash_Password();
-        $this->assertTrue($hashPw->validate($rawDovecotUser['password'], '54321'), 'password mismatch: ' . print_r($rawDovecotUser, TRUE));
+        self::assertTrue($hashPw->validate($rawDovecotUser['password'], $pw), 'password mismatch! dovecot user:'
+            . print_r($rawDovecotUser, TRUE));
     }
 
     /**
@@ -982,6 +993,5 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
             ['field' => 'note_type_id', 'operator' => 'equals', 'value' => Tinebase_Model_Note::SYSTEM_NOTE_REVEAL_PASSWORD]
         ]));
         self::assertCount(1, $records, 'reveal password failed');
-
     }
 }
