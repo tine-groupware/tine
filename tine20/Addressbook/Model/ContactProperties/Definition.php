@@ -121,7 +121,7 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
-                    [Zend_Validate_InArray::class, [
+                    ['InArray', [
                         Addressbook_Model_ContactProperties_Address::class,
                         Addressbook_Model_ContactProperties_Email::class,
                         Addressbook_Model_ContactProperties_Phone::class,
