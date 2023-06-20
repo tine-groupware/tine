@@ -44,23 +44,25 @@ class Addressbook_Setup_Update_16 extends Setup_Update_Abstract
 
     public function update001()
     {
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Addressbook_Model_Contact::TABLE_NAME .
-            ' SET preferred_address = "adr_two" WHERE preferred_address = "1"');
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Addressbook_Model_Contact::TABLE_NAME .
-            ' SET preferred_address = "adr_one" WHERE preferred_address <> "adr_two" OR preferred_address IS NULL');
-
-        Addressbook_Setup_Initialize::createInitialContactProperties();
+        Setup_SchemaTool::updateSchema([
+            Addressbook_Model_Contact::class,
+            Addressbook_Model_ContactProperties_Address::class,
+            Addressbook_Model_ContactProperties_Definition::class,
+        ]);
 
         $this->addApplicationUpdate('Addressbook', '16.1', self::RELEASE016_UPDATE001);
     }
 
     public function update002()
     {
-        Setup_SchemaTool::updateSchema([
-            Addressbook_Model_Contact::class,
-            Addressbook_Model_ContactProperties_Address::class,
-            Addressbook_Model_ContactProperties_Definition::class,
-        ]);
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Addressbook_Model_Contact::TABLE_NAME .
+            ' SET preferred_address = "adr_two" WHERE preferred_address = "1"');
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Addressbook_Model_Contact::TABLE_NAME .
+            ' SET preferred_address = "adr_one" WHERE preferred_address <> "adr_two" OR preferred_address IS NULL');
+
+        Addressbook_Setup_Initialize::createInitialContactProperties();
 
         $this->addApplicationUpdate('Addressbook', '16.2', self::RELEASE016_UPDATE002);
     }
