@@ -366,24 +366,7 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
     public function getApplications($_anyRight = FALSE)
     {
         $roles = Tinebase_Acl_Roles::getInstance();
-        
-        $result = $roles->getApplications($this->accountId, $_anyRight);
-        
-        if (Tinebase_Controller::getInstance()->userAccountChanged()) {
-            // TODO this information should be saved in application table
-            $disabledAppsForChangedUserAccounts = array('Felamimail');
-            foreach ($result as $key => $app) {
-                if (in_array($app, $disabledAppsForChangedUserAccounts)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . ' Skipping ' . $app . ' because app is disabled for changed user accounts');
-                    }
-                    unset($result[$key]);
-                }
-            }
-        }
-        
-        return $result;
+        return $roles->getApplications($this->accountId, $_anyRight);
     }
     
     /**

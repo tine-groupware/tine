@@ -179,8 +179,6 @@ class Addressbook_Controller_ListTest extends TestCase
 
     public function testListAsMailinglist()
     {
-        $this->_skipIfXpropsUserIdDeactivated();
-
         $list = $this->_createAdbMailingList();
         $account = $this->_searchMailinglistAccount($list);
         $accountCtrl = Felamimail_Controller_Account::getInstance();
@@ -228,8 +226,6 @@ class Addressbook_Controller_ListTest extends TestCase
      */
     public function testDeleteMailingList()
     {
-        $this->_skipIfXpropsUserIdDeactivated();
-
         $list = $this->_createAdbMailingList();
         $mailAccount = $this->_searchMailinglistAccount($list);
         Admin_Controller_EmailAccount::getInstance()->delete($mailAccount);
@@ -418,9 +414,7 @@ class Addressbook_Controller_ListTest extends TestCase
 
     public function testListUpdateSieveMasterPW()
     {
-        $this->_skipIfXpropsUserIdDeactivated();
-
-        if (! Tinebase_EmailUser::sieveBackendSupportsMasterPassword()) {
+        if (! Tinebase_EmailUser::backendSupportsMasterPassword()) {
             self::markTestSkipped('test is only working with sieve master pw support');
         }
 

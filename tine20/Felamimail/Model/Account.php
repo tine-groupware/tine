@@ -721,8 +721,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      */
     public function getImapConfig()
     {
-        $this->resolveCredentials(FALSE);
-        
+        $this->resolveCredentials(false);
+
         $result = array();
         foreach (array('host', 'port', 'user', 'password') as $field) {
             $result[$field] = $this->{$field};

@@ -123,7 +123,12 @@ abstract class Felamimail_TestCase extends TestCase
         Felamimail_Controller_Account::destroyInstance();
 
         // get (or create) test account
-        $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class,  [
+                ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_SYSTEM],
+                ['field' => 'user_id', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()],
+            ]
+        );
+        $this->_account = Felamimail_Controller_Account::getInstance()->search($filter)->getFirstRecord();
         if ($this->_account === null) {
             $this->markTestSkipped('no account found');
         }

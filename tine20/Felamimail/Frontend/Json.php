@@ -560,6 +560,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function _initAccounts(array $accounts): array
     {
         foreach ($accounts as $idx => $account) {
+            // only show system accounts if role was changed
+            if (Tinebase_Controller::getInstance()->userAccountChanged() &&
+                ! in_array($account['type'], [
+                    Felamimail_Model_Account::TYPE_SHARED,
+                    Felamimail_Model_Account::TYPE_USER_INTERNAL,
+                    Felamimail_Model_Account::TYPE_SYSTEM,
+                ])) {
+                unset($accounts[$idx]);
+                continue;
+            }
+
             if (! in_array($account['type'], [
                 Felamimail_Model_Account::TYPE_SHARED,
                 Felamimail_Model_Account::TYPE_USER,
