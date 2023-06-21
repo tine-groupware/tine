@@ -918,6 +918,83 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::LENGTH => 255,
                 self::NULLABLE => true,
             ],
+            // just placeholders, do not edit them, required for update path, can be removed if update path can be broken
+            'email_home' => [
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 255,
+                self::NULLABLE => true,
+            ],
+            'tel_work' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'tel_work_normalized' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'tel_home' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'tel_home_normalized' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'tel_cell' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'tel_cell_normalized' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'tel_cell_private' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'tel_cell_private_normalized' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'tel_fax' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'tel_fax_normalized' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'tel_fax_home' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'tel_fax_home_normalized' => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 86,
+                self::NULLABLE                  => true,
+            ],
+            'url' => [
+                self::TYPE                      => self::TYPE_TEXT,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+            ],
+            'url_home' => [
+                self::TYPE                      => self::TYPE_TEXT,
+                self::LENGTH                    => 255,
+                self::NULLABLE                  => true,
+            ],
+            // placeholders end
 
             // do we want to remove those?
             'label'                         => [
