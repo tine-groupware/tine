@@ -179,7 +179,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $currentAccount = $this->get($_record->getId(), null, true, $_updateDeleted);
 
         $raii = false;
-        if (Tinebase_EmailUser::sieveBackendSupportsMasterPassword($_record)) {
+        if (Tinebase_EmailUser::backendSupportsMasterPassword($_record)) {
             $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($_record->getId());
         }
 
@@ -187,8 +187,8 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $account = $this->_backend->update($_record);
         $this->_inspectAfterUpdate($account, $_record, $currentAccount);
 
-        if ($raii && Tinebase_EmailUser::sieveBackendSupportsMasterPassword($_record)) {
-            Tinebase_EmailUser::removeSieveAdminAccess();
+        if ($raii && Tinebase_EmailUser::backendSupportsMasterPassword($_record)) {
+            Tinebase_EmailUser::removeAdminAccess();
             unset($raii);
         }
 
@@ -422,7 +422,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         
         $updatedAccounts = new Tinebase_Record_RecordSet(Felamimail_Model_Account::class);
         foreach ($mailAccounts as $record) {
-            if (Tinebase_EmailUser::sieveBackendSupportsMasterPassword($record)) {
+            if (Tinebase_EmailUser::backendSupportsMasterPassword($record)) {
                 $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($record->getId());
                 try {
                     Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($record->getId(),
@@ -437,7 +437,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
                         throw $e;
                     }
                 } finally {
-                    Tinebase_EmailUser::removeSieveAdminAccess();
+                    Tinebase_EmailUser::removeAdminAccess();
                     unset($raii);
                 }
             }

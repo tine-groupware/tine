@@ -37,7 +37,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
 
         $this->_controller = Felamimail_Controller_Account::getInstance();
@@ -50,7 +50,13 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
+        Felamimail_Backend_ImapFactory::reset();
+
+        if (Tinebase_Controller::getInstance()->userAccountChanged()) {
+            Tinebase_Session::getSessionNamespace()->userAccountChanged = false;
+        }
+
         if ($this->_userChanged) {
             $originalUser = Admin_Controller_User::getInstance()->update($this->_originalTestUser);
             Tinebase_Core::setUser($originalUser);
@@ -90,6 +96,21 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         Tinebase_Event::fireEvent($event);
 
         $this->_pwChanged = true;
+    }
+
+    public function testUserAccountChangeMasterAccess()
+    {
+        // Felamimail_Backend_ImapFactory::reset();
+
+        // try to access jsmiths mailaccount
+        $jsmith = $this->_personas['jsmith'];
+        $jsmithAccount = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($jsmith);
+        if (! $jsmithAccount) {
+            $jsmithAccount = Felamimail_Controller_Account::getInstance()->createSystemAccount($jsmith, 'abcde');
+        }
+        Tinebase_Session::getSessionNamespace()->userAccountChanged = true;
+        $imap = Felamimail_Backend_ImapFactory::factory($jsmithAccount);
+        self::assertInstanceOf(Felamimail_Backend_ImapProxy::class, $imap);
     }
 
     /**
@@ -421,8 +442,6 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
     public function testCreateUserInternalAccount()
     {
-        $this->_skipIfXpropsUserIdDeactivated();
-
         $extraAccount = $this->_createUserInternalAccount($this->_personas['jsmith']);
         $json = new Felamimail_Frontend_Json();
         $result = $json->searchAccounts([]);
@@ -490,7 +509,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
             Tinebase_Config::ACCOUNT_DELETION_DELETE_EMAIL_ACCOUNTS => true,
         )));
-        
+
         $accountArray = $this->testCreateNewUserAccountWithINBOX();
         Tinebase_Core::setUser($this->_originalTestUser);
 
@@ -506,22 +525,6 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         }
     }
 
-    public function testConvertAccountsToSaveUserIdInXprops()
-    {
-        // switch xprops in user off
-        Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS} = false;
-
-        $account = $this->_createSharedAccount();
-
-        Felamimail_Controller_Account::getInstance()->convertAccountsToSaveUserIdInXprops();
-
-        $convertedAccount = Felamimail_Controller_Account::getInstance()->get($account->getId());
-        self::assertNotEmpty($convertedAccount->xprops[Felamimail_Model_Account::XPROP_EMAIL_USERID_IMAP],
-            'XPROP_EMAIL_USERID_IMAP empty ' . print_r($convertedAccount->toArray(), true));
-        self::assertNotEmpty($convertedAccount->xprops[Felamimail_Model_Account::XPROP_EMAIL_USERID_SMTP],
-            'XPROP_EMAIL_USERID_SMTP empty ' . print_r($convertedAccount->toArray(), true));
-    }
-
     public function testAutoMoveNotifications()
     {
         $this->_testNeedsTransaction();
@@ -532,7 +535,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             'password' => $creds['password']
         ]);
         $account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($user);
-        
+
         self::assertEquals(Felamimail_Model_Account::SIEVE_NOTIFICATION_MOVE_ACTIVE, $account->sieve_notification_move);
         self::assertEquals('Notifications', $account->sieve_notification_move_folder);
 
@@ -554,7 +557,7 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         $script = Felamimail_Controller_Sieve::getInstance()->getSieveScript($account);
         $sieveScript = $script->getSieve();
         self::assertStringContainsString('Notification', $sieveScript);
-        
+
         return $account;
     }
 
@@ -620,5 +623,4 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
             Felamimail_Controller_Account::getInstance()->deleteEmailAccountContact([$account->getId()], true);
         }
     }
-
 }
