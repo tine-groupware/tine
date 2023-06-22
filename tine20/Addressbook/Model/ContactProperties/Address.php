@@ -187,8 +187,8 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
 
     public static function applyJsonFacadeMC(array &$fields, Addressbook_Model_ContactProperties_Definition $def): void
     {
-        $grants = $def->{Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX};
-        if (empty($grants)) {
+        if (!isset($fields[$def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][self::CONFIG][self::JSON_FACADE]) ||
+                empty($grants = $def->{Addressbook_Model_ContactProperties_Definition::FLD_GRANT_MATRIX})) {
             return;
         }
         $prefix = $fields[$def->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][self::CONFIG][self::JSON_FACADE];
@@ -199,6 +199,9 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
 
     public static function jsonFacadeToJson(Tinebase_Record_Interface $record, string $fieldKey, array $def): void
     {
+        if (!isset($def[self::CONFIG][self::JSON_FACADE])) {
+            return;
+        }
         $prefix = $def[self::CONFIG][self::JSON_FACADE];
         $self = new self([
             self::FLD_CONTACT_ID => $record->getId(),
@@ -213,6 +216,9 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
 
     public function jsonFacadeFromJson(Tinebase_Record_Interface $record, array $def): void
     {
+        if (!isset($def[self::CONFIG][self::JSON_FACADE])) {
+            return;
+        }
         $prefix = $def[self::CONFIG][self::JSON_FACADE];
         foreach (self::$_facadeFields as $field) {
             $record->{$prefix . $field} = $this->{$field};
