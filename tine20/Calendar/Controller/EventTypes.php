@@ -31,7 +31,7 @@ class Calendar_Controller_EventTypes extends Tinebase_Controller_Record_Abstract
         $this->_backend = new Tinebase_Backend_Sql(array(
             'modelName'     => 'Calendar_Model_EventTypes',
             'tableName'     => 'cal_event_types',
-            'modlogActive'  => false
+            'modlogActive'  => true
         ));
 
     }

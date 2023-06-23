@@ -74,10 +74,16 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
     },
 
     registerCoreData: function() {
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+
         Tine.CoreData.Manager.registerGrid('cal_resources', Tine.Calendar.ResourceGridPanel, {
             ownActionToolbar: false,
         });
-        Tine.CoreData.Manager.registerGrid('cal_event_types', Tine.Calendar.EventTypeGridPanel);
+
+
+        if (this.app.featureEnabled('featureEventType')) {
+            Tine.CoreData.Manager.registerGrid('cal_event_types', Tine.Calendar.EventTypeGridPanel);
+        }
     },
 
     updateIcon: function() {

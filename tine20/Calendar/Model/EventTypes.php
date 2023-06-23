@@ -40,7 +40,7 @@ class Calendar_Model_EventTypes extends Tinebase_Record_NewAbstract
         self::HAS_SYSTEM_CUSTOM_FIELDS  => false,
         self::HAS_NOTES                 => false,
         self::HAS_TAGS                  => false,
-        self::MODLOG_ACTIVE             => false,
+        self::MODLOG_ACTIVE             => true,
         self::HAS_ATTACHMENTS           => false,
 
         self::CREATE_MODULE             => false,

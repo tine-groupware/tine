@@ -315,6 +315,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Calendar_Model_ResourceType::class,
                 Calendar_Model_Rrule::class,
                 Calendar_Model_EventType::class,
+                Calendar_Model_EventTypes::class,
             ),
             'CoreData' => array(
                 CoreData_Model_CoreData::class,
