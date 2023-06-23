@@ -5085,11 +5085,11 @@
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.2pl4",
+            "version": "1.8.2pl5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PHPExcel.git",
-                "reference": "4de03cec3f15f0d5524dd8c340bbe3486e982248"
+                "reference": "20f0fcaea20b560fe97c593c715b6d2e755186e9"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -5136,7 +5136,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2022-09-22T19:06:45+00:00"
+            "time": "2023-06-05T11:43:50+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -12270,11 +12270,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20.65",
+            "version": "1.12.20.66",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "f27c8fa192b759387cfb49d9e325bd057750e0d5"
+                "reference": "16eaa31ad71fcb53c85525cf892adcc3e8ca5850"
             },
             "require": {
                 "php": ">=7.4.0"
@@ -12291,7 +12291,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2023-05-22T15:19:41+00:00"
+            "time": "2023-06-22T08:47:24+00:00"
         }
     ],
     "packages-dev": [
@@ -14152,6 +14152,12 @@
             "version": "8.3.5.0-patch1",
             "alias": "8.3.5",
             "alias_normalized": "8.3.5.0"
+        },
+        {
+            "package": "phpoffice/phpexcel",
+            "version": "1.8.2.0-patch5",
+            "alias": "1.8.2",
+            "alias_normalized": "1.8.2.0"
         },
         {
             "package": "phpoffice/phpspreadsheet",
