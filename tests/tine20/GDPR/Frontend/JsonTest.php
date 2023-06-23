@@ -103,7 +103,7 @@ class GDPR_Frontend_JsonTest extends TestCase
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME]), 'resolving did not work');
         static::assertCount(2, $updatedContact[
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME], 'expect 2 intended purposes');
-        static::assertTrue(is_array($createdContact[
+        static::assertTrue(is_array($updatedContact[
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME][0]['intendedPurpose']),
             'expect resolved intended purposes');
 

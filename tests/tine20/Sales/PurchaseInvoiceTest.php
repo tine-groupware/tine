@@ -93,7 +93,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
      *
      * @return array
      */
-    protected function _createPurchaseInvoice()
+    public function createPurchaseInvoice()
     {
         $container = Tinebase_Container::getInstance()->getSharedContainer(
                 Tinebase_Core::getUser()->getId(),
@@ -163,7 +163,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
 
     public function testXlsExport()
     {
-        $purchase = $this->_createPurchaseInvoice();
+        $purchase = $this->createPurchaseInvoice();
 
         $export = new Sales_Export_PurchaseInvoiceXls(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_PurchaseInvoice::class, [
@@ -204,7 +204,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
      */
     public function testSavePurchaseInvoice()
     {
-        $purchase = $this->_createPurchaseInvoice();
+        $purchase = $this->createPurchaseInvoice();
         $this->assertEquals('R-12345', $purchase['number']);
         $this->assertEquals('Worldwide Electronics International', $purchase['supplier']['name']);
         $this->assertEquals('2015-03-17 00:00:00', $purchase['date']);
@@ -223,7 +223,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
      */
     public function testUpdatePurchaseInvoice()
     {
-        $purchase = $this->_createPurchaseInvoice();
+        $purchase = $this->createPurchaseInvoice();
         $this->assertEquals('2015-03-27 00:00:00', $purchase['due_at']);
         $purchase['due_at'] = '2015-04-07 00:00:00';
         $updatedPurchase = $this->_json->savePurchaseInvoice($purchase);
@@ -243,7 +243,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
             array('number' => '2', 'name' => 'b')
         );
 
-        $purchase = $this->_createPurchaseInvoice();
+        $purchase = $this->createPurchaseInvoice();
         $purchase['relations'][1] = [
             'own_model' => 'Sales_Model_PurchaseInvoice',
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
@@ -465,7 +465,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
      */
     public function testDeletePurchaseInvoice()
     {
-        $purchase = $this->_createPurchaseInvoice();
+        $purchase = $this->createPurchaseInvoice();
         $this->assertEquals('R-12345', $purchase['number']);
         
         // delete record
@@ -505,7 +505,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
 
     public function testDuplicateCheckOnUpdate()
     {
-        $invoice1 = $this->_createPurchaseInvoice();
+        $invoice1 = $this->createPurchaseInvoice();
 
         $invoice2 = $invoice1;
         unset($invoice2['id']);

@@ -10,6 +10,13 @@
 
 class Tinebase_Server_ZendJsonWrapper extends Zend_Json_Server
 {
+    protected $allowList = null;
+
+    public function setAllowList(array $allowList): void
+    {
+        $this->allowList = $allowList;
+    }
+
     /**
      * Register a class with the server
      *
@@ -32,7 +39,9 @@ class Tinebase_Server_ZendJsonWrapper extends Zend_Json_Server
 
         foreach ($reflection->getMethods() as $method) {
             $definition = $this->_buildSignature($method, $class);
-            $this->_addMethodServiceMap($definition);
+            if (null === $this->allowList || isset($this->allowList[$definition->getName()])) {
+                $this->_addMethodServiceMap($definition);
+            }
         }
         return $this;
     }

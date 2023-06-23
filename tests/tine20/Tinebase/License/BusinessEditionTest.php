@@ -190,9 +190,16 @@ class Tinebase_License_BusinessEditionTest extends TestCase
             $this->_usernamesToDelete[] = $testUser->accountLoginName;
             $this->fail('expected user limit exception');
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            $translation = Tinebase_Translation::getTranslation('Admin');
-            $this->assertEquals($translation->_('Maximum number of users reached'), $tesg->getMessage());
+            $this->_assertMaxUserMessage($tesg);
         }
+    }
+
+    protected function _assertMaxUserMessage(Tinebase_Exception_SystemGeneric $tesg)
+    {
+        $translation = Tinebase_Translation::getTranslation('Admin');
+        $message = $translation->_('Maximum number of users reached.') . ' '
+            . $translation->_('Please contact Metaways Infosystems GmbH to buy a license that supports a higher number of users.');
+        $this->assertEquals($message, $tesg->getMessage());
     }
 
     public function testUserLimitExceededWhenActivatingUser($function = 'setAccountStatus', $licenseFile = 'V-12345.pem')
@@ -213,8 +220,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
             }
             $this->fail('expected user limit exception');
         } catch (Tinebase_Exception_SystemGeneric $tesg) {
-            $translation = Tinebase_Translation::getTranslation('Admin');
-            $this->assertEquals($translation->_('Maximum number of users reached'), $tesg->getMessage());
+            $this->_assertMaxUserMessage($tesg);
         }
     }
 
@@ -308,7 +314,7 @@ class Tinebase_License_BusinessEditionTest extends TestCase
 
         $this->assertTrue($data['validFrom'] instanceof Tinebase_DateTime && $data['validTo'] instanceof Tinebase_DateTime);
         $this->assertEquals($firstUserCreationTime->toString(), $data['validFrom']->toString());
-        $this->assertEquals($firstUserCreationTime->addDay(30)->toString(), $data['validTo']->toString());
+        $this->assertEquals($firstUserCreationTime->addYear(5)->toString(), $data['validTo']->toString());
     }
 
     public function testLicenseExpiredSince()

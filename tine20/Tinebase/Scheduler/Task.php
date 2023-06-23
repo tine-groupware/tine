@@ -47,6 +47,11 @@ class Tinebase_Scheduler_Task
      */
     const TASK_TYPE_WEEKLY = '0 1 * * 4';
 
+    /**
+     * monthly task (first day of month at 2 am)
+     */
+    const TASK_TYPE_MONTHLY = '0 2 1 * *';
+
     const CLASS_NAME = 'class';
     const CONTROLLER = 'controller';
     const METHOD_NAME = 'method';
@@ -627,6 +632,23 @@ class Tinebase_Scheduler_Task
             self::TASK_TYPE_WEEKLY,
             $_scheduler,
             'Tinebase_LogEntry::cleanup'
+        );
+    }
+
+    /**
+     * add purge db task to scheduler
+     *
+     * @param Tinebase_Scheduler $scheduler
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    public static function addRemoveObsoleteDataTask(Tinebase_Scheduler $scheduler): void
+    {
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_Controller::class,
+            'removeObsoleteData',
+            self::TASK_TYPE_MONTHLY,
+            $scheduler
         );
     }
 

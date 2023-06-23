@@ -99,7 +99,6 @@ class HTMLProxy extends Expression {
    * @returns {Promise<boolean|void>}
    */
   async replaceProxy (html) {
-    html = Ext.util.Format.htmlEncode(html)
     // @TODO retry n times, replaceProxy might be registered late!
     if (replaceProxyFns[this.id]) {
       if (replaceProxyFns[this.id](html, this.id)) {
@@ -107,6 +106,7 @@ class HTMLProxy extends Expression {
         return true
       }
     } else {
+      html = Ext.util.Format.htmlEncode(html)
       return this.replaceDomProxy(html)
     }
   }

@@ -471,6 +471,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         $contactWithoutPrivate = $this->_uit->getContact($contact['id']);
         $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate);
+        $this->assertArrayNotHasKey('tel_cell_private_normalized', $contactWithoutPrivate);
+        $this->assertArrayNotHasKey('bday', $contactWithoutPrivate);
 
         Tinebase_Core::setUser($originalUser);
     }
@@ -592,12 +594,50 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         // check invalid data
         $changes = array(
-            array('name' => 'type', 'value' => 'Z'),
+            array('name' => 'tz', 'value' => 'looooongtextwithmorethaneightcharacters'),
         );
         $result = $json->updateMultipleRecords('Addressbook', 'Contact', $changes, $filter);
 
         $this->assertEquals(3, $result['failcount'], 'failcount does not show the correct number');
         $this->assertEquals(0, $result['totalcount'], 'totalcount does not show the correct number');
+    }
+
+    public function testAdditionalAddressProperty()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_transactionId = null;
+
+        $cpDef = Addressbook_Controller_ContactProperties_Definition::getInstance()->create(
+            new Addressbook_Model_ContactProperties_Definition([
+                Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'unittest_adr',
+                Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
+                Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD,
+            ])
+        );
+
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        try {
+            $savedContact = $this->_uit->saveContact([
+                'n_fn' => 'n_fn',
+                $cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME} => [
+                    Addressbook_Model_ContactProperties_Address::FLD_STREET => 'street name',
+                ],
+            ], false);
+
+            $this->assertArrayHasKey($cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}, $savedContact);
+            $this->assertIsArray($savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}]);
+            $this->assertSame('street name', $savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][Addressbook_Model_ContactProperties_Address::FLD_STREET]);
+
+            $savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][Addressbook_Model_ContactProperties_Address::FLD_STREET] = 'update';
+            $savedContact = $this->_uit->saveContact($savedContact, false);
+            $this->assertSame('update', $savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][Addressbook_Model_ContactProperties_Address::FLD_STREET]);
+        } finally {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Addressbook_Controller_ContactProperties_Definition::getInstance()->delete($cpDef->getId());
+            Addressbook_Model_Contact::resetConfiguration();
+            Tinebase_Record_Expander_DataRequest::clearCache();
+        }
     }
 
     /**
@@ -2111,6 +2151,23 @@ class Addressbook_Frontend_JsonTest extends TestCase
         ));
         $emptyResult = $this->_uit->searchContacts($filter, array());
         $this->assertEquals(0, $emptyResult['totalcount']);
+    }
+
+    /**
+     * test search with tag filter with 'in' operator
+     */
+    public function testSearchContactsWithEmptyFilter()
+    {
+        $empty = null;
+        $filter = [[
+                'field' => 'n_fileas',
+                'operator' => 'equals',
+                'value' => Tinebase_Core::getUser()->accountDisplayName
+            ],
+            $empty
+        ];
+        $result = $this->_uit->searchContacts($filter, array());
+        $this->assertEquals(1, $result['totalcount']);
     }
 
     /**

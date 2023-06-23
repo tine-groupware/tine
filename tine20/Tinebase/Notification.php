@@ -85,7 +85,7 @@ class Tinebase_Notification
      * 
      * @todo improve exception handling: collect all messages / exceptions / failed email addresses / ...
      */
-    public function send($_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL, $_fireEvent = false)
+    public function send($_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL, $_fireEvent = false, $_actionLogType = null)
     {
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
@@ -137,6 +137,10 @@ class Tinebase_Notification
             $event->messagePlain = $_messagePlain;
 
             Tinebase_Event::fireEvent($event);
+        }
+        
+        if ($_actionLogType === Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL) {
+            Tinebase_Controller_ActionLog::getInstance()->addActionLogDatevEmail($_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml, $_attachments);
         }
     }
 }

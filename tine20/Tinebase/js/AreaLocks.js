@@ -141,7 +141,10 @@ class AreaLocks extends Ext.util.Observable {
         mfaDevice: selectedDevice
       }, opts))
     }
-    
+    if (this.providerInstances[key].mfaDevice !== selectedDevice) {
+      this.providerInstances[key].mfaDevice=selectedDevice;
+      this.providerInstances[key].passwordFieldLabel=selectedDevice.device_name;
+    }
     return this.providerInstances[key]
   }
 
@@ -459,7 +462,7 @@ class AreaLocks extends Ext.util.Observable {
   handleAreaLockException (exception) {
     const areaName = exception.area
     const mfaDevices = exception.mfaUserConfigs
-    
+    this.setLockState(areaName,{area: areaName, expires: '1970-01-01 01:00:00'});
     this.manageMask(areaName)
     return this.unlock(areaName, {mfaDevices, USERABORTMethod: 'reject'})
   }

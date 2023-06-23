@@ -70,8 +70,12 @@ abstract class Felamimail_Sieve_Backend_Abstract
      *
      * @return Tinebase_Record_RecordSet
      */
-    public function getScriptParts()
+    public function getScriptParts(): Tinebase_Record_RecordSet
     {
+        if (! $this->_scriptParts) {
+            $this->_scriptParts = new Tinebase_Record_RecordSet(Felamimail_Model_Sieve_ScriptPart::class);
+        }
+
         return $this->_scriptParts;
     }
     
@@ -196,7 +200,8 @@ abstract class Felamimail_Sieve_Backend_Abstract
 
         /** @var Felamimail_Model_Sieve_ScriptPart $scriptPart */
         foreach ($this->_scriptParts as $scriptPart) {
-            $result .= $scriptPart->script . "\r\n";
+            $type = $scriptPart->type;
+            $result .= "#$type script\r\n" . $scriptPart->script . "\r\n";
         }
 
         return $result;

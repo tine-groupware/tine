@@ -97,6 +97,7 @@
  * @property string     $delegateAclField
  * @property array|null $grantProtectedFields
  * @property array      $languagesAvailable
+ * @property bool       $runConvertToRecordFromJson
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -383,6 +384,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var array
      */
     protected $_controllerHookBeforeUpdate = [];
+
+    protected $_jsonFacadeFields = [];
 
     /**
      * Holds the field definitions in an associative array where the key
@@ -1016,6 +1019,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 $definition = $cfc->definition->toArray();
                 if (isset($definition[Tinebase_Model_CustomField_Config::DEF_FIELD])) {
                     $this->_fields[$cfc->name] = $definition[Tinebase_Model_CustomField_Config::DEF_FIELD];
+                    $this->_fields[$cfc->name][self::SYSTEM_CF] = true;
                 }
 
                 if (isset($definition[Tinebase_Model_CustomField_Config::DEF_HOOK])) {
@@ -1748,6 +1752,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         return $this->_modelName;
     }
 
+    public function setFilterModel(array $fm): void
+    {
+        $this->_filterModel = $fm;
+    }
+
     public function getFieldModel($field)
     {
         if (isset($this->_fields[$field]) && isset($this->_fields[$field][self::TYPE])) {
@@ -1926,6 +1935,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 }
                 if ($deNormOf) {
                     $this->_denormalizedFields[$fieldKey] = $fieldDef;
+                }
+                if (isset($fieldDef[self::CONFIG][self::JSON_FACADE])) {
+                    $this->_jsonFacadeFields[$fieldKey] = $fieldDef;
                 }
                 break;
             case self::TYPE_DYNAMIC_RECORD:
@@ -2161,6 +2173,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     public function setJsonExpander(?array $expander)
     { // used by crewscheduling gdpr should be refaactored to use it too
         $this->_jsonExpander = $expander;
+    }
+
+    public function getJsonFacadeFields(): array
+    {
+        return $this->_jsonFacadeFields;
     }
 
     /**

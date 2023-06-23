@@ -35,6 +35,8 @@ Ext.ux.direct.JsonRpcProvider = Ext.extend(Ext.direct.RemotingProvider, {
      */
     useNamedParams: false,
 
+    maxRetries: 0,
+
     // private
     initAPI : function() {
         for (var method in this.services){

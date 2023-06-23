@@ -1,0 +1,97 @@
+---
+
+# TODO
+#- name: include role dockercomposeinstall
+
+- name: Log into private registry
+  docker_login:
+    registry: "{{ tinedockercompose_registry_url }}"
+    username: "{{ tinedockercompose_registry_username }}"
+    password: "{{ tinedockercompose_registry_password }}"
+  when:
+    - tinedockercompose_registry_url is defined
+    - tinedockercompose_registry_username is defined
+    - tinedockercompose_registry_password is defined
+
+- name: Add the user tine20 with a specific uid and a primary group of tine20
+  ansible.builtin.user:
+    name: tine20
+    comment: tine20 user of tine docker web container
+    uid: 150
+
+- name: check if db dir already exist
+  stat:
+    path: "{{ tinedockercompose_db_path }}"
+  register: dbdir
+
+- name: create db directory
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    state: directory
+    mode: 0750
+  with_items:
+    - "{{ tinedockercompose_db_path }}"
+  become: true
+  when:
+    - not dbdir.stat.exists
+
+- name: create basic directories
+  file:
+    path: "{{ item }}"
+    owner: root
+    group: root
+    state: directory
+    mode: 0750
+  with_items:
+    - "{{ tinedockercompose_path }}"
+    - "{{ tinedockercompose_path }}/scripts"
+  become: true
+
+- name: create basic tine directories (owned by tine20 user)
+  file:
+    path: "{{ item }}"
+    owner: tine20
+    group: root
+    state: directory
+    mode: 0750
+  with_items:
+    - "{{ tinedockercompose_confd_path }}"
+    - "{{ tinedockercompose_files_path }}"
+    - "{{ tinedockercompose_backup_path }}"
+  become: true
+
+- name: deploy docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: "{{ tinedockercompose_path }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: 0640
+  become: true
+
+- include_tasks: filedeploy.yml
+
+- include_tasks: traefik.yml
+  when:
+    - tinedockercompose_traefik_host is defined
+
+- name: re/start docker compose
+  ansible.builtin.shell: docker compose up -d
+  args:
+    chdir: "{{ tinedockercompose_path }}"
+  when:
+    - not ansible_check_mode
+    - tinedockercompose_no_restart is not defined or tinedockercompose_no_restart|bool == false
+
+## TODO make this work
+#- name: Create and start services
+#  community.docker.docker_compose:
+#    project_src: "{{ tinedockercompose_path }}"
+#  register: output
+#  vars:
+#    ansible_python_interpreter: /usr/bin/python3
+#
+#- ansible.builtin.debug:
+#    var: output

@@ -157,14 +157,14 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
             self::FLD_SHARED_DELIVERY   => [
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::LABEL                 => 'Shared Delivery', //_('Shared Delivery')
-                self::BOX_LABEL             => 'include in shared delivery',
+                self::BOX_LABEL             => 'include in shared delivery',  //_('include in shared delivery')
                 self::DEFAULT_VAL           => false,
                 self::SHY                   => true,
             ],
             self::FLD_SHARED_INVOICE    => [
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::LABEL                 => 'Shared Invoice', //_('Shared Invoice')
-                self::BOX_LABEL             => 'include in shared invoice',
+                self::BOX_LABEL             => 'include in shared invoice', //_('include in shared invoice')
                 self::DEFAULT_VAL           => false,
                 self::SHY                   => true,
             ],

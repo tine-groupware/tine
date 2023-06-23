@@ -7,7 +7,7 @@
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  * @todo remove all deprecated stuff
@@ -111,6 +111,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const CACHE = 'caching';
     const CREDENTIAL_CACHE_SHARED_KEY = 'credentialCacheSharedKey';
+
     const DBLOGGER = 'dblogger';
 
     /**
@@ -136,6 +137,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * default user role
      */
     const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
+
+    /**
+     * DELETED_DATA_RETENTION_TIME
+     *
+     * @var string
+     */
+    const DELETED_DATA_RETENTION_TIME = 'deletedDataRetentionTime';
 
     /**
      * @var string
@@ -172,6 +180,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
+
+    /**
+     * RATE_LIMITS
+     *
+     * @var string
+     */
+    const RATE_LIMITS = 'rateLimits';
 
     /**
      * default sales tax
@@ -1216,6 +1231,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * "additionaldomains":"another.test,onemore.test" (string - comma separated)
          * "instanceName":"tine.test" (string)
          * "onlyemaildestination":true (boolean) - false by default (see \Tinebase_EmailUser_Smtp_Postfix::_createDefaultDestinations)
+         * "from":"notifications@tine.test" (string) - notification sender address
          */
         self::SMTP => array(
                                    //_('System SMTP')
@@ -1750,6 +1766,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             'default'               => 'user role'
         ),
+        self::DELETED_DATA_RETENTION_TIME => [
+            self::LABEL                 => 'Deleted Data Retention Time', // _('Deleted Data Retention Time')
+            self::DESCRIPTION           => 'Deleted Data Retention Time (in months)',
+            self::TYPE                  => self::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => 12,
+        ],
         self::CRON_DISABLED => [
             //_('Cronjob Disabled')
             'label'                 => 'Cronjob Disabled',
@@ -1969,6 +1994,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             'default'               => array()
         ),
+        /**
+         * Configure rate limits by user and method
+         *
+         * example:
+         *
+         * ['LOGIN_NAME' => [
+         *   'method' => 'Felamimail.searchMessages',
+         *   'maxrequests' => 100,
+         *   'period' => 3600, // per hour
+         * ]]
+         */
+        self::RATE_LIMITS => [
+            self::LABEL                 => 'Rate Limits',
+            self::DESCRIPTION           => 'Configure rate limits by user and method',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [],
+        ],
         self::SALES_TAX => array(
             //_('Sales Tax Default')
             'label'                 => 'Sales Tax Default',

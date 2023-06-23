@@ -109,7 +109,9 @@ Ext.namespace('Tine.Felamimail');
             additionalItems: [ new Tine.Felamimail.RecipientPickerFavoritePanel({
                 app: this.app,
                 grid: this.contactGrid
-            })]
+            })],
+            getFavoritesPanel: function() { return this.ContactFilterPanel; },
+            getContainerTreePanel: function() { return this.ContactTreePanel; }
         });
         
         return {

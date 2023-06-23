@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -53,6 +53,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_CostCenter::MODEL_NAME_PART,
         Tinebase_Model_CostUnit::MODEL_NAME_PART,
         Tinebase_Model_BankAccount::MODEL_NAME_PART,
+        Tinebase_Model_BankHolidayCalendar::MODEL_NAME_PART,
+        Tinebase_Model_BankHoliday::MODEL_NAME_PART,
     ];
     
     public function __construct()
@@ -280,12 +282,22 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * set state
      *
-     * @param  string $name
-     * @param  string $value
-     * @return array
+     * @param string $name
+     * @param string|array $value
+     * @return bool[]
+     * @throws Exception
      */
-    public function setState($name, $value)
+    public function setState(string $name, $value): array
     {
+        if (is_array($value)) {
+            $value = json_encode($value);
+            if ($value === false) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' Could not json_encode value');
+                return ['success' => false];
+            }
+        }
+
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
 
@@ -1659,7 +1671,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Model_AuthToken::class, [
                 ['field' => Tinebase_Model_AuthToken::FLD_AUTH_TOKEN, 'operator' => 'equals', 'value' => $token]
             ]
-        ))->filter(Tinebase_Model_AuthToken::FLD_AUTH_TOKEN, $token,)->getFirstRecord();
+        ))->getFirstRecord();
 
         if ($t && in_array($channel, $t->{Tinebase_Model_AuthToken::FLD_CHANNELS})) {
             return $t->toArray();

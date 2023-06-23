@@ -4,11 +4,12 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2012 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /*global Ext, Tine*/
+import { getAddressPanels } from "./AddressPanel";
+import contactPropertiesGrid from "./ContactPropertiesGrid";
 
 Ext.ns('Tine.Addressbook');
 
@@ -30,7 +31,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
 
     windowNamePrefix: 'ContactEditWindow_',
     appName: 'Addressbook',
-    recordClass: Tine.Addressbook.Model.Contact,
+    recordClass: 'Addressbook.Model.Contact',
     showContainerSelector: true,
     multipleEdit: true,
     displayNotes: true,
@@ -57,38 +58,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 html: ''
             });
         }
-
-        var allLanguages = Locale.getTranslationList('Language');
-
-        this.preferredAddressBusinessCheckbox = new Ext.form.Checkbox({
-            checked: this.record.get('preferred_address') === "0",
-            hideLabel: false,
-            fieldLabel: this.app.i18n._('Preferred Address'),
-            listeners: {
-                'check': function(checkbox, value) {
-                    if (value) {
-                        this.preferredAddressPrivateCheckbox.setValue(false);
-                        this.record.set('preferred_address', 0);
-                    }
-                },
-                scope: this
-            }
-        });
-
-        this.preferredAddressPrivateCheckbox = new Ext.form.Checkbox({
-            checked: this.record.get('preferred_address') === "1",
-            hideLabel: false,
-            fieldLabel: this.app.i18n._('Preferred Address'),
-            listeners: {
-                'check': function(checkbox, value) {
-                    if (value) {
-                        this.preferredAddressBusinessCheckbox.setValue(false);
-                        this.record.set('preferred_address', 1);
-                    }
-                },
-                scope: this
-            }
-        });
 
         if (Tine.Tinebase.common.hasRight('run', 'Calendar', null) && Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureContactEventList') && this.record.id !== 0) {
             this.contactEventPanel = new Tine.Calendar.ContactEventsGridPanel({
@@ -269,106 +238,37 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         var contactCenterPanel = {
             xtype: 'fieldset',
             region: 'center',
+            layout: 'fit',
             title: this.app.i18n._('Contact Information'),
-            autoScroll: true,
             plugins: [{
                 ptype: 'ux.itemregistry',
                 key: 'Tine.Addressbook.editDialog.centerPanel'
             }],
             items: [{
-                xtype: 'columnform',
-                items: [[{
-                    fieldLabel: this.app.i18n._('Phone'),
-                    labelIcon: 'images/icon-set/icon_phone.svg',
-                    name: 'tel_work',
-                    maxLength: 40
-                }, {
-                    fieldLabel: this.app.i18n._('Mobile'),
-                    labelIcon: 'images/icon-set/icon_mobile.svg',
-                    name: 'tel_cell',
-                    maxLength: 40
-                }, {
-                    fieldLabel: this.app.i18n._('Fax'),
-                    labelIcon: 'images/icon-set/icon_print.svg',
-                    name: 'tel_fax',
-                    maxLength: 40
-                }], [{
-                    fieldLabel: this.app.i18n._('Phone (private)'),
-                    labelIcon: 'images/icon-set/icon_phone.svg',
-                    name: 'tel_home',
-                    maxLength: 40,
-                    requiredGrant: 'privateDataGrant'
-                }, {
-                    fieldLabel: this.app.i18n._('Mobile (private)'),
-                    labelIcon: 'images/icon-set/icon_mobile.svg',
-                    name: 'tel_cell_private',
-                    maxLength: 40,
-                    requiredGrant: 'privateDataGrant'
-                }, {
-                    fieldLabel: this.app.i18n._('Fax (private)'),
-                    labelIcon: 'images/icon-set/icon_print.svg',
-                    name: 'tel_fax_home',
-                    maxLength: 40,
-                    requiredGrant: 'privateDataGrant'
-                }], [{
-                    fieldLabel: this.app.i18n._('E-Mail'),
-                    labelIcon: 'images/icon-set/icon_email.svg',
-                    name: 'email',
-                    vtype: 'email',
-                    maxLength: 64,
-                    disabled: this.checkDisableEmailField(),
-                    readOnly: this.record.data?.type === 'email_account',
-                    qtip: emailContactToolTip,
-                }, {
-                    fieldLabel: this.app.i18n._('E-Mail (private)'),
-                    labelIcon: 'images/icon-set/icon_email.svg',
-                    name: 'email_home',
-                    vtype: 'email',
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }, {
-                    xtype: 'mirrortextfield',
-                    fieldLabel: this.app.i18n._('Web'),
-                    labelIcon: 'images/icon-set/icon_globe.svg',
-                    name: 'url',
-                    maxLength: 128,
-                    listeners: {
-                        scope: this,
-                        focus: function (field) {
-                            if (!field.getValue()) {
-                                field.setValue('http://www.');
-                                field.selectText.defer(100, field, [7, 11]);
-                            }
-                        },
-                        blur: function (field) {
-                            if (field.getValue() === 'http://www.') {
-                                field.setValue(null);
-                                field.validate();
-                            }
-                            if (field.getValue().indexOf('http://http://') == 0 || field.getValue().indexOf('http://https://') == 0) {
-                                field.setValue(field.getValue().substr(7));
-                                field.validate();
-                            }
-                            if (field.getValue().indexOf('http://www.http://') == 0 || field.getValue().indexOf('http://www.https://') == 0) {
-                                field.setValue(field.getValue().substr(11));
-                                field.validate();
-                            }
-                        }
-                    }
-                }, {
-                    fieldLabel: this.app.i18n._('Language'),
-                    name: 'language',
-                    xtype: 'combo',
-                    mode: 'local',
-                    allowBlank: true,
-                    editable: true,
-                    forceSelection: true,
-                    store: Object.entries(allLanguages)
-                }]]
+                layout: 'hbox',
+                layoutConfig: {
+                    align : 'stretch',
+                    pack  : 'start'
+                },
+                items: [contactPropertiesGrid({
+                    flex: 1,
+                    recordClass: this.recordClass,
+                    fields: _.sortBy(_.filter(this.recordClass.getModelConfiguration().fields, field => {
+                        // @TODO filter by systemCFDefinition.model once available
+                        return field.fieldName.match(/^(tel|email)/) && !field.disabled;
+                    }), ['uiconfig.order'])
+                }), contactPropertiesGrid({
+                    flex: 1,
+                    recordClass: this.recordClass,
+                    fields: _.sortBy(_.filter(this.recordClass.getModelConfiguration().fields,field => {
+                        // @TODO filter by systemCFDefinition.model once available
+                        return field.fieldName.match(/^(url|matrix)/) && !field.disabled;
+                    }).concat(
+                        _.find(this.recordClass.getModelConfiguration().fields, {fieldName: 'language'})
+                    ), ['uiconfig.order'])
+                })]
             }]
-        };
-        
-
+        }
         this.postalAddressesTabPanel = Ext.create({
             xtype: 'tabpanel',
             region: 'south',
@@ -384,83 +284,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 ptype: 'ux.itemregistry',
                 key: 'Tine.Addressbook.editDialog.southPanel'
             }],
-            items: [{
-                title: this.app.i18n._('Company Address'),
-                xtype: 'columnform',
-                items: [[{
-                    fieldLabel: this.app.i18n._('Street'),
-                    name: 'adr_one_street',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64
-                }, {
-                    fieldLabel: this.app.i18n._('Street 2'),
-                    name: 'adr_one_street2',
-                    maxLength: 64
-                }, {
-                    fieldLabel: this.app.i18n._('Region'),
-                    name: 'adr_one_region',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64
-                }], [{
-                    fieldLabel: this.app.i18n._('Postal Code'),
-                    name: 'adr_one_postalcode',
-                    maxLength: 64
-                }, {
-                    fieldLabel: this.app.i18n._('City'),
-                    name: 'adr_one_locality',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64
-                }, {
-                    xtype: 'widget-countrycombo',
-                    fieldLabel: this.app.i18n._('Country'),
-                    name: 'adr_one_countryname',
-                    maxLength: 64
-                }], [this.preferredAddressBusinessCheckbox]]
-            }, {
-                title: this.app.i18n._('Private Address'),
-                xtype: 'columnform',
-                items: [[{
-                    fieldLabel: this.app.i18n._('Street'),
-                    name: 'adr_two_street',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }, {
-                    fieldLabel: this.app.i18n._('Street 2'),
-                    name: 'adr_two_street2',
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }, {
-                    fieldLabel: this.app.i18n._('Region'),
-                    name: 'adr_two_region',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }], [{
-                    fieldLabel: this.app.i18n._('Postal Code'),
-                    name: 'adr_two_postalcode',
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }, {
-                    fieldLabel: this.app.i18n._('City'),
-                    name: 'adr_two_locality',
-                    xtype: 'tine.widget.field.AutoCompleteField',
-                    recordClass: this.recordClass,
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }, {
-                    xtype: 'widget-countrycombo',
-                    fieldLabel: this.app.i18n._('Country'),
-                    name: 'adr_two_countryname',
-                    maxLength: 64,
-                    requiredGrant: 'privateDataGrant'
-                }], [this.preferredAddressPrivateCheckbox]]
-            }]
+            items: getAddressPanels()
         });
 
         // activities and tags

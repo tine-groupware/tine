@@ -448,11 +448,15 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     
     /**
      * login failed
-     * 
-     * @param  Zend_Auth_Result          $authResult
-     * @param  Tinebase_Model_AccessLog  $accessLog
+     *
+     * @param Zend_Auth_Result $authResult
+     * @param Tinebase_Model_AccessLog $accessLog
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Log_Exception
      */
-    protected function _loginFailed(Zend_Auth_Result $authResult, Tinebase_Model_AccessLog $accessLog)
+    protected function _loginFailed(Zend_Auth_Result $authResult, Tinebase_Model_AccessLog $accessLog): void
     {
         // @todo update sql schema to allow empty sessionid column
         $accessLog->sessionid = Tinebase_Record_Abstract::generateUID();
@@ -480,7 +484,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Auth result messages: ' . print_r($authResult->getMessages(), TRUE));
 
-        Tinebase_AccessLog::getInstance()->create($accessLog);
+        if (Tinebase_Auth::LICENSE_USER_LIMIT_REACHED === $accessLog->result) {
+            $translation = Tinebase_Translation::getTranslation();
+            throw new Tinebase_Exception_SystemGeneric($translation->_('Maximum number of users reached.'));
+        } else {
+            Tinebase_AccessLog::getInstance()->create($accessLog);
+        }
     }
 
     /**
@@ -1343,78 +1352,60 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if ($apiKey !== Tinebase_Config::getInstance()->get(Tinebase_Config::METRICS_API_KEY, false)) {
             throw new Tinebase_Exception_AccessDenied('Not authorized. Invalid metrics API Key.');
         }
+        
+        $data = [];
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $appControllerName = $application->name . '_Controller';
+            if (class_exists($appControllerName)) {
+                $appController = call_user_func($appControllerName . '::getInstance');
+                if (method_exists($appController, 'metrics')) {
+                    $metricsData = $appController->metrics();
+                    $data = array_merge($data, $metricsData);
+                }
+            }
+        }
 
+        $response = new \Laminas\Diactoros\Response\JsonResponse($data);
+        return $response;
+    }
+
+    /**
+     * get application metrics
+     *
+     * @return array
+     */
+    public function metrics(): array
+    {
         $data = [
             'activeUsers' => Tinebase_User::getInstance()->getActiveUserCount(),
             'quotas' => Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->toArray(),
         ];
-        
-        try {
-            $fileSystem = Tinebase_FileSystem::getInstance();
-            $rootPath = $fileSystem->getApplicationBasePath('Tinebase');
-            $fileSystemStorage = $fileSystem->getEffectiveAndLocalQuota($fileSystem->stat($rootPath));
-            $data = array_merge($data, ['fileStorage' => $fileSystemStorage['effectiveUsage']]);
-            
-            $imapBackend = Tinebase_EmailUser::getInstance();
-            
-            if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
-                $imapUsageQuota = $imapBackend->getTotalUsageQuota();
-                $emailStorage = $imapUsageQuota['mailQuota'] * 1024 * 1024;
-                $data = array_merge($data, ['emailStorage' => $emailStorage]);
 
-                // there are tine instances without felamimail that still have system mailaccounts
-                // we need to get the number of mail accounts from the users
-                $usersWithSystemAccount = 0;
-                foreach (Tinebase_User::getInstance()->getUsers() as $user) {
-                    $systemEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
-                    if ($imapBackend->userExists($systemEmailUser)) {
-                        $usersWithSystemAccount ++;
-                    }
-                }
-                $data = array_merge($data, ['usersWithSystemAccount' => $usersWithSystemAccount]);
-            }
+        $fileSystem = Tinebase_FileSystem::getInstance();
+        $rootPath = $fileSystem->getApplicationBasePath('Tinebase');
+        $fileSystemStorage = $fileSystem->getEffectiveAndLocalQuota($fileSystem->stat($rootPath));
+        $data = array_merge($data, ['fileStorage' => $fileSystemStorage['effectiveUsage']]);
 
-            if (Tinebase_Application::getInstance()->isInstalled('Felamimail')
-                && Tinebase_EmailUser::isEmailSystemAccountConfigured()) 
-            {
-                $backend = new Felamimail_Backend_Account();
-                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-                    ['field' => 'type', 'operator' => 'in', 'value' => [
-                        Tinebase_EmailUser_Model_Account::TYPE_SYSTEM,
-                        Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST,
-                        Tinebase_EmailUser_Model_Account::TYPE_SHARED,
-                    ]]
-                ], '', [
-                    'ignoreAcl' => true,
-                ]);
-                $totalSystemAccounts = 0;
-                $totalSharedAccounts = 0;
-                $totalMailingLists = 0;
-                foreach ($backend->search($filter) as $account) {
-                    switch ($account->type) {
-                        case Tinebase_EmailUser_Model_Account::TYPE_SYSTEM:
-                            $totalSystemAccounts++;
-                            break;
-                        case Tinebase_EmailUser_Model_Account::TYPE_SHARED:
-                            $totalSharedAccounts++;
-                            break;
-                        case Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST:
-                            $totalMailingLists++;
-                            break;
-                    }
+        $imapBackend = Tinebase_EmailUser::getInstance();
+
+        if ($imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot) {
+            $imapUsageQuota = $imapBackend->getTotalUsageQuota();
+            $emailStorage = $imapUsageQuota['mailQuota'];
+            $data = array_merge($data, ['emailStorage' => $emailStorage]);
+
+            // there are tine instances without felamimail that still have system mailaccounts
+            // we need to get the number of mail accounts from the users
+            $usersWithSystemAccount = 0;
+            foreach (Tinebase_User::getInstance()->getUsers() as $user) {
+                $systemEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
+                if ($imapBackend->userExists($systemEmailUser)) {
+                    $usersWithSystemAccount ++;
                 }
-                $data = array_merge($data, [
-                    'totalEmailSystemAccounts' => $totalSystemAccounts,
-                    'totalEmailSharedAccounts' => $totalSharedAccounts,
-                    'totalEmailMailingList' => $totalMailingLists,
-                ]);
             }
-        } catch (Exception $e) {
-            Tinebase_Exception::log($e);
+            $data = array_merge($data, ['usersWithSystemAccount' => $usersWithSystemAccount]);
         }
         
-        $response = new \Laminas\Diactoros\Response\JsonResponse($data);
-        return $response;
+        return $data;
     }
 
     /**
@@ -2034,14 +2025,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             'id' => Tinebase_Model_CostCenter::class,
             'application_id' => $application,
             'model' => Tinebase_Model_CostCenter::class,
-//            'label' => 'Cost Center' // _('Cost Center')
         )));
 
         $result->addRecord(new CoreData_Model_CoreData(array(
             'id' => Tinebase_Model_CostUnit::class,
             'application_id' => $application,
             'model' => Tinebase_Model_CostUnit::class,
-//            'label' => 'Cost Center' // _('Cost Center')
         )));
 
         $result->addRecord(new CoreData_Model_CoreData(array(
@@ -2050,6 +2039,175 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             'model' => Tinebase_Model_BankAccount::class,
         )));
 
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => Tinebase_Model_BankHolidayCalendar::class,
+            'application_id' => $application,
+            'model' => Tinebase_Model_BankHolidayCalendar::class,
+//            'label' => 'Bank Holiday Calendar' // _('Bank Holiday Calendar')
+        )));
+
         return $result;
+    }
+
+    /**
+     * remove all deleted/obsolete data before $beforeDate from $tables (no tables given: from all tables)
+     * - also removes modlog, obsolete customfields, relations, notes and more
+     *
+     * @param Tinebase_DateTime|null $beforeDate
+     * @param array $tables
+     * @return bool
+     * @throws Tinebase_Exception_InvalidArgument
+     *
+     * TODO allow to delete only some notes (configurable? only systemnotes of type avscan, update ... ?)
+     */
+    public function removeObsoleteData(?Tinebase_DateTime $beforeDate = null, array $tables = []): bool
+    {
+        $doEverything = false;
+
+        if (empty($tables)) {
+            if (Tinebase_Core::isLogLevel(Tinebase_Log::INFO))
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' No tables given. Purging records from all tables.');
+            $tables = $this->_getAllApplicationTables();
+            $doEverything = true;
+        }
+        $orderedTables = $this->_orderTables($tables);
+        if (! $beforeDate) {
+            $beforeDate = Tinebase_DateTime::now()->subMonth(
+                Tinebase_Config::getInstance()->get(Tinebase_Config::DELETED_DATA_RETENTION_TIME)
+            );
+        }
+
+        $this->_purgeTables($beforeDate, $orderedTables);
+
+        if ($doEverything) {
+            // TODO implement
+            /*
+            echo "\nCleaning relations...";
+            $this->cleanRelations();
+
+            echo "\nCleaning modlog...";
+            $this->cleanModlog();
+
+            echo "\nCleaning customfields...";
+            $this->cleanCustomfields();
+
+            echo "\nCleaning notes...";
+            $this->cleanNotes($_opts);
+
+            echo "\nCleaning files...";
+            $this->clearDeletedFiles();
+
+            echo "\nOptimizing path table...";
+            Tinebase_Path_Backend_Sql::optimizePathsTable();
+            */
+        }
+
+        return true;
+    }
+
+    /**
+     * @param Tinebase_DateTime $beforeDate
+     * @param array $orderedTables
+     * @return void
+     */
+    protected function _purgeTables(Tinebase_DateTime $beforeDate, array $orderedTables): void
+    {
+        $db = Tinebase_Core::getDb();
+
+        $beforeDayString = $beforeDate->toString('Y-m-d');
+        if (Tinebase_Core::isLogLevel(Tinebase_Log::INFO))
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing all deleted entries before '
+            . $beforeDayString);
+        $where = array(
+            $db->quoteInto($db->quoteIdentifier('deleted_time') . ' < ?', $beforeDayString)
+        );
+        $where[] = $db->quoteInto($db->quoteIdentifier('is_deleted') . ' = ?', 1);
+
+        foreach ($orderedTables as $table) {
+            try {
+                $schema = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $table);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . " Could not get schema (" . $zdse->getMessage() . "). Skipping table $table");
+                continue;
+            }
+            if (!(isset($schema['is_deleted']) || array_key_exists('is_deleted', $schema))
+                || !(isset($schema['deleted_time']) || array_key_exists('deleted_time', $schema))) {
+                continue;
+            }
+
+            $deleteCount = 0;
+            try {
+                if ($table === 'tree_nodes') {
+                    $deleteCount = Tinebase_FileSystem::getInstance()->purgeTreeNodes($where);
+                } else {
+                    $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
+                }
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . " Failed to purge deleted records for table $table. " . $zdse->getMessage());
+            }
+            if ($deleteCount > 0) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . " Cleared table $table (deleted $deleteCount records).");
+            } else {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . " Nothing to purge from $table");
+            }
+        }
+    }
+
+    /**
+     * get all app tables
+     *
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _getAllApplicationTables(): array
+    {
+        $result = array();
+
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+        foreach ($enabledApplications as $application) {
+            $result = array_merge($result, Tinebase_Application::getInstance()->getApplicationTables($application));
+        }
+
+        return $result;
+    }
+
+    /**
+     * order tables for purging deleted records in a defined order
+     *
+     * @param array $tables
+     * @return array
+     *
+     * TODO could be improved by using usort
+     */
+    protected function _orderTables($tables): array
+    {
+        // tags + tree_nodes should be deleted first
+        // containers should be deleted last
+
+        $orderedTables = array();
+        $lastTables = array();
+        foreach($tables as $table) {
+            switch ($table) {
+                case 'container':
+                    $lastTables[] = $table;
+                    break;
+                case Timetracker_Model_Timeaccount::TABLE_NAME:
+                    array_unshift($lastTables, $table);
+                    break;
+                case 'tags':
+                case 'tree_nodes': // delete them before tree_objects
+                case 'cal_attendee': // delete them before events
+                    array_unshift($orderedTables, $table);
+                    break;
+                default:
+                    $orderedTables[] = $table;
+            }
+        }
+        return array_merge($orderedTables, $lastTables);
     }
 }

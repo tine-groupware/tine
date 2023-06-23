@@ -614,6 +614,15 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 ],
                 self::NULLABLE                  => true
             ],
+            'sieve_custom' => [
+                self::TYPE => self::TYPE_VIRTUAL,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                ],
+                self::OMIT_MOD_LOG              => true,
+                self::SYSTEM                    => true,
+                self::SHY => true,
+            ],
             'all_folders_fetched' => [
                 self::TYPE => self::TYPE_BOOLEAN,
                 // client only
@@ -712,8 +721,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      */
     public function getImapConfig()
     {
-        $this->resolveCredentials(FALSE);
-        
+        $this->resolveCredentials(false);
+
         $result = array();
         foreach (array('host', 'port', 'user', 'password') as $field) {
             $result[$field] = $this->{$field};

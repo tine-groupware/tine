@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d39fb387af745d63d02eb22c9f36b1c",
+    "content-hash": "63d04fea8c2d587a3df67fa2cfa32948",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2532,12 +2532,11 @@
             "require": {
                 "ext-curl": "*",
                 "ext-json": "*",
-                "paragonie/random_compat": ">=2",
-                "php": ">=5.4",
-                "phpseclib/phpseclib": "~2.0 || ^3.0"
+                "php": ">=7.0",
+                "phpseclib/phpseclib": "~3.0"
             },
             "require-dev": {
-                "roave/security-advisories": "dev-master",
+                "roave/security-advisories": "dev-latest",
                 "yoast/phpunit-polyfills": "^1.0"
             },
             "default-branch": true,
@@ -4258,6 +4257,64 @@
             "time": "2020-12-29T21:20:02+00:00"
         },
         {
+            "name": "palepurple/rate-limit",
+            "version": "2.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/DavidGoodwin/RateLimit.git",
+                "reference": "f1e9d5020adaf69b65a6ab5f2253ee96397ed2a6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/DavidGoodwin/RateLimit/zipball/f1e9d5020adaf69b65a6ab5f2253ee96397ed2a6",
+                "reference": "f1e9d5020adaf69b65a6ab5f2253ee96397ed2a6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.6"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.7",
+                "php-coveralls/php-coveralls": "^2.2",
+                "php-parallel-lint/php-parallel-lint": "^1.0",
+                "phpstan/phpstan": "*",
+                "phpunit/phpunit": "^8",
+                "predis/predis": "^1.1",
+                "psr/cache": "^1.0",
+                "tedivm/stash": "^0.16",
+                "vimeo/psalm": "*"
+            },
+            "suggest": {
+                "ext-apc": "^4.0",
+                "ext-apcu": "^4.0",
+                "ext-redis": "^2.2",
+                "predis/predis": "^1.1",
+                "tedivm/stash": "^0.15"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PalePurple\\RateLimit\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Goodwin",
+                    "email": "david@palepurple.co.uk"
+                }
+            ],
+            "description": "PHP rate limiting library with Token Bucket Algorithm, originally touhonoob/rate-limit",
+            "support": {
+                "issues": "https://github.com/DavidGoodwin/RateLimit/issues",
+                "source": "https://github.com/DavidGoodwin/RateLimit/tree/2.0.7"
+            },
+            "time": "2023-03-04T16:02:37+00:00"
+        },
+        {
             "name": "paragonie/constant_time_encoding",
             "version": "v2.6.3",
             "source": {
@@ -4988,6 +5045,7 @@
                 "issues": "https://github.com/php-http/message-factory/issues",
                 "source": "https://github.com/php-http/message-factory/tree/master"
             },
+            "abandoned": "psr/http-factory",
             "time": "2015-12-19T14:08:53+00:00"
         },
         {
@@ -5363,11 +5421,11 @@
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.2pl4",
+            "version": "1.8.2pl5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PHPExcel.git",
-                "reference": "4de03cec3f15f0d5524dd8c340bbe3486e982248"
+                "reference": "20f0fcaea20b560fe97c593c715b6d2e755186e9"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -5414,7 +5472,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2022-09-22T19:06:45+00:00"
+            "time": "2023-06-05T11:43:50+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -12636,11 +12694,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20.63",
+            "version": "1.12.20.66",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/zendframework1.git",
-                "reference": "5f51cff43b9f87764487f1cd2256dd8508cd051f"
+                "reference": "16eaa31ad71fcb53c85525cf892adcc3e8ca5850"
             },
             "require": {
                 "php": ">=7.4.0"
@@ -12657,7 +12715,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2023-05-03T15:00:58+00:00"
+            "time": "2023-06-22T08:47:24+00:00"
         }
     ],
     "packages-dev": [
@@ -14361,7 +14419,7 @@
         },
         {
             "package": "phpoffice/phpexcel",
-            "version": "1.8.2.0-patch4",
+            "version": "1.8.2.0-patch5",
             "alias": "1.8.2",
             "alias_normalized": "1.8.2.0"
         },

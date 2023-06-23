@@ -1191,6 +1191,54 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         return $this->_searchForMessageBySubject($subject, $this->_testFolderName);
     }
 
+    public function testForwardAttachmentCachePdf()
+    {
+        $pdfFile = $this->_createTestNode(
+            'newline.pdf',
+            dirname(__FILE__, 3) . '/Tinebase/files/multipage-text.pdf'
+        );
+        $subject = 'file attachment test';
+        $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain, $subject);
+        $messageToSend['attachments'] = array(
+            array(
+                // @todo use constants?
+                'type' => 'file',
+                'attachment_type' => 'attachment',
+                'path' => $pdfFile[0]['path'],
+                'name' => $pdfFile[0]['name'],
+                'id' => $pdfFile[0]['id'],
+                'size'  => $pdfFile[0]['size'],
+            )
+        );
+        $this->_json->saveMessage($messageToSend);
+        $message = $this->_searchForMessageBySubject($subject);
+        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message['id']);
+
+        $forwardMessage = new Felamimail_Model_Message(array(
+            'account_id'    => $this->_account->getId(),
+            'subject'       => 'test forward with attachmnets',
+            'to'            => array(Tinebase_Core::getUser()->accountEmailAddress),
+            'body'          => 'aaaaaä <br>',
+            'headers'       => array('X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822),
+            'original_id'   => $message['id'],
+            'attachments'   => $messageToSend['attachments']
+        ));
+        Felamimail_Controller_Message_Send::getInstance()->sendMessage($forwardMessage);
+        
+        $forwardMessage = $this->_searchForMessageBySubject('test forward with attachmnets');
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+        $fullMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($forwardMessage['id']);
+        self::assertTrue(count($fullMessage->attachments) === 1, 'attachment not found: ' . print_r($fullMessage->toArray(), true));
+
+        $id = get_class($fullMessage) . ':' . $fullMessage->getId() . ':' . $fullMessage->attachments[0]['partId'];
+        $cachedAttachment = $this->_json->getAttachmentCache($id);
+
+        $this->assertCount(1, $cachedAttachment['attachments']);
+        $this->assertStringContainsString($id . '/newline.pdf', $cachedAttachment['attachments'][0]['path']);
+        $this->assertEquals($message['attachments'][0]['size'], $fullMessage['attachments'][0]['size']);
+    }
+
+
     public function testAttachmentCache()
     {
         $result = $this->_createTestNode(
@@ -1345,7 +1393,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
     /**
      * testSaveMessageWithMixedRecipients
-     *
      */
     public function testSaveMessageWithMixedRecipients()
     {
@@ -1375,11 +1422,11 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         // check if message is in drafts folder and recipients are present
         $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
         self::assertEquals($messageToSave['subject'], $message['subject']);
-        self::assertEquals($messageToSave['to'][0]['email'], $message['to'][0], 'recipient not found: '
+        self::assertTrue(in_array($messageToSave['to'][0]['email'], $message['to']), 'recipient not found: '
             . print_r($message, true));
-        self::assertEquals('teststring@mail.test', $message['to'][1], 'recipient not found');
-        self::assertEquals('teststring2@mail.test', $message['to'][2], 'recipient not found');
-        self::assertEquals('teststring3@mail.test', $message['to'][3], 'recipient not found');
+        self::assertTrue(in_array('teststring@mail.test', $message['to']), 'recipient not found');
+        self::assertTrue(in_array('teststring2@mail.test', $message['to']), 'recipient not found');
+        self::assertTrue(in_array('teststring3@mail.test', $message['to']), 'recipient not found');
         self::assertEquals(2, count($message['bcc']), 'bcc recipient not found: '
             . print_r($message, true));
         self::assertStringContainsString('bccaddress', $message['bcc'][0], 'bcc recipient not found');
@@ -2057,11 +2104,10 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $result = $this->_getVacationMessageWithTemplate();
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $pwulf = Tinebase_User::getInstance()->getFullUserByLoginName('pwulf');
-        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie<br /> Paul Wulf (" .
-            $pwulf->accountEmailAddress . ") oder Susan Clever (" .
-            $sclever->accountEmailAddress . ").<br /><br />I am on vacation until Apr 20, 2012. Please contact<br /> Paul Wulf (" .
-            $pwulf->accountEmailAddress . ") or Susan Clever (" .
-            $sclever->accountEmailAddress . ") instead.<br /><br />" .
+        $this->assertEquals("Ich bin vom 18.04.2012 bis zum 20.04.2012 im Urlaub. Bitte kontaktieren Sie" . 
+        "<br /> Paul Wulf (pwulf@mail.test) +441273-3766-376 oder Susan Clever (sclever@mail.test) +441273-3766-373.<br />" . 
+        "<br />I am on vacation until Apr 20, 2012. Please contact" .
+        "<br /> Paul Wulf (pwulf@mail.test) +441273-3766-376 or Susan Clever (sclever@mail.test) +441273-3766-373 instead.<br /><br />" .
             Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId())->n_fn . "<br />", 
             $result['message'],
         );
@@ -3083,5 +3129,21 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
             'new folder missing from test folder');
         $testFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account, $this->_testFolderName);
         self::assertEquals(1, $testFolder->has_children, 'has_children should be 1');
+    }
+    
+    public function testRefreshFolder()
+    {
+        $folder = $this->_getFolder($this->_testFolderName);
+
+        $this->_moveMessageToFolder($this->_testFolderName);
+        $result = $this->_json->updateMessageCache($folder['id'], 30);
+        $this->assertGreaterThan(0, $result['cache_totalcount']);
+        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_COMPLETE, $result['cache_status']);
+        $this->assertNotNull($result['cache_timestamp']);
+
+        $this->_json->refreshFolder($folder->getId());
+        $updatedFolder = $this->_getFolder($this->_testFolderName);
+        $this->assertEquals(0, $updatedFolder['cache_totalcount']);
+        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_EMPTY, $updatedFolder['cache_status']);
     }
 }

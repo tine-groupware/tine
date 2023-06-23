@@ -1,3 +1,5 @@
+@import './common.less';
+
 :root {
   --focus-color: #0062a7;
   --selection-color: #dbecf4;
@@ -193,67 +195,6 @@ span.x-tab-strip-text.tine-favicon {
 
 .x-toolbar .x-btn-over .x-btn-mc em.x-btn-split, .x-toolbar .x-btn-click .x-btn-mc em.x-btn-split, .x-toolbar .x-btn-menu-active .x-btn-mc em.x-btn-split, .x-toolbar .x-btn-pressed .x-btn-mc em.x-btn-split {
   background-image: none;
-}
-
-#button(@tbColor) {
-
-  .x-btn-tl,
-  .x-btn-tc,
-  .x-btn-tr,
-  .x-btn-ml,
-  .x-btn-mc,
-  .x-btn-mr,
-  .x-btn-bl,
-  .x-btn-bc,
-  .x-btn-br {
-    background-color: @tbColor;
-    background-image: none;
-    transition: background-color .2s ease-out;
-  }
-
-  .x-btn-over {
-    .x-btn-tl,
-    .x-btn-tc,
-    .x-btn-tr,
-    .x-btn-ml,
-    .x-btn-mc,
-    .x-btn-mr,
-    .x-btn-bl,
-    .x-btn-bc,
-    .x-btn-br {
-      background-color: darken(@tbColor, 10%);
-      transition: background-color .2s;
-    }
-  }
-
-  //.x-btn-click {
-  //  .x-btn-tl,
-  //  .x-btn-tc,
-  //  .x-btn-tr,
-  //  .x-btn-ml,
-  //  .x-btn-mc,
-  //  .x-btn-mr,
-  //  .x-btn-bl,
-  //  .x-btn-bc,
-  //  .x-btn-br {
-  //    background-color: darken(@tbColor, 30%);
-  //    transition: background-color .2s;
-  //  }
-  //}
-
-  .x-btn-pressed {
-    .x-btn-tl,
-    .x-btn-tc,
-    .x-btn-tr,
-    .x-btn-ml,
-    .x-btn-mc,
-    .x-btn-mr,
-    .x-btn-bl,
-    .x-btn-bc,
-    .x-btn-br {
-      background-color: darken(@tbColor, 20%);
-    }
-  }
 }
 
 #button(@dialogBg);
@@ -800,7 +741,7 @@ span.x-form-twin-triggers img.x-form-clear-trigger {
 .x-form-invalid-tip .x-tip-body {
   background-image: url('../../images/icon-set/icon_failure.svg') !important;
   background-size: 20px 20px;
-  background-position: 0 4px;
+  background-position: 0 -2px;
   color: #000 !important;
   #transform.blacktowhite();
 }
@@ -815,6 +756,10 @@ textarea.x-form-field, // wrap-less
 .x-box-inner > .x-form-field, // wrap-less
 .x-column-inner > .x-form-field, // wrap-less
 .x-small-editor > .x-form-field, // wrap-less
+.x-toolbar-cell > .x-form-field, // wrap-less
+.tw-ftb-frow-field > .x-form-field, // wrap-less
+.tw-ftb-frow-operator > .x-form-field, // wrap-less
+.tw-ftb-frow-value > .x-form-field, // wrap-less
 .ext-webkit .x-form-field-wrap,
 .x-form-field-wrap {
   background-color: var(--field-bg-color);

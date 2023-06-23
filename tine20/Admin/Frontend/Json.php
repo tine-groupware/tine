@@ -50,7 +50,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false);
         }
         try {
-            $this->_hasMasterSieveAccess = Tinebase_EmailUser::sieveBackendSupportsMasterPassword();
+            $this->_hasMasterSieveAccess = Tinebase_EmailUser::backendSupportsMasterPassword();
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
             $this->_hasMasterSieveAccess = false;
@@ -1324,34 +1324,38 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * Return a single record
      *
-     * @param   string $id
-     * @return  array record data
+     * @param string $id
+     * @return array
+     * @throws Tinebase_Exception_NotFound
      */
-    public function getEmailAccount($id)
+    public function getEmailAccount(string $id): array
     {
-        $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($id);
         try {
-            $result = $this->_get($id, Admin_Controller_EmailAccount::getInstance());
-            
-            if (isset($result['type']) && $result['type'] !== Felamimail_Model_Account::TYPE_USER) {
-                try {
-                    $sieveRecord = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
-                    $result['sieve_vacation'] = $this->_recordToJson($sieveRecord);
-
-                    $records = Felamimail_Controller_Sieve::getInstance()->getRules($id);
-                    $result['sieve_rules'] = $this->_multipleRecordsToJson($records);
-                } catch (Felamimail_Exception_SieveInvalidCredentials $fesic) {
-                    Tinebase_Exception::log($fesic);
-                } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                    Tinebase_Exception::log($zmpe);
-                }
-            }
-        } finally {
-            Tinebase_EmailUser::removeSieveAdminAccess();
+            $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($id);
+            $sieve = true;
+        } catch (Tinebase_Exception_Backend $teb) {
+            $sieve = false;
         }
-        //for unused variable check
-        unset($raii);
-        
+
+        $result = $this->_get($id, Admin_Controller_EmailAccount::getInstance());
+
+        if ($sieve && isset($result['type']) && $result['type'] !== Felamimail_Model_Account::TYPE_USER) {
+            try {
+                $sieveRecord = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
+                $result['sieve_vacation'] = $this->_recordToJson($sieveRecord);
+
+                $records = Felamimail_Controller_Sieve::getInstance()->getRules($id);
+                $result['sieve_rules'] = $this->_multipleRecordsToJson($records);
+            } catch (Felamimail_Exception_SieveInvalidCredentials $fesic) {
+                Tinebase_Exception::log($fesic);
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                Tinebase_Exception::log($zmpe);
+            } finally {
+                Tinebase_EmailUser::removeAdminAccess();
+                unset($raii);
+            }
+        }
+
         return $result;
     }
 
@@ -1591,7 +1595,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     try {
                         $imapBackend = Tinebase_EmailUser::getInstance();
                         $imapUsageQuota = $imapBackend instanceof Tinebase_EmailUser_Imap_Dovecot ? $imapBackend->getTotalUsageQuota() : null;
-                        $totalEmailQuotaUsage = $imapUsageQuota['mailSize'] * 1024 * 1024;
+                        $totalEmailQuotaUsage = $imapUsageQuota['mailSize'];
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         $totalEmailQuotaUsage = 0;
                     }
@@ -1627,7 +1631,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         $emailNode->name = 'Emails';
                         $emailNode->path = $virtualPath;
                         $imapUsageQuota = $imapBackend->getTotalUsageQuota();
-                        $emailNode->quota = $imapUsageQuota['mailQuota'] * 1024 * 1024;
+                        $emailNode->quota = $imapUsageQuota['mailQuota'];
                         $emailNode->size = $imapUsageQuota['mailSize'];
                         $emailNode->revision_size = $emailNode->size;
                         $emailNode->xprops('customfields')['emailQuotas'] = $imapUsageQuota;
@@ -1643,7 +1647,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         $imapUsageQuota = $imapBackend->getTotalUsageQuota();
                         $node = $records->filter('name',
                             Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId())->getFirstRecord();
-                        $node->quota += $imapUsageQuota['mailQuota']  * 1024 * 1024;
+                        $node->quota += $imapUsageQuota['mailQuota'];
                         $node->size += $imapUsageQuota['mailSize'];
                         $node->xprops('customfields')['emailQuotas'] = $imapUsageQuota;
                     }
@@ -1696,7 +1700,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $node = new Tinebase_Model_Tree_Node(array(), true);
                 $node->parent_id = $parent_id;
                 $node->name = $domain;
-                $node->quota = $usageQuota['mailQuota'] * 1024 * 1024;
+                $node->quota = $usageQuota['mailQuota'];
                 $node->size = $usageQuota['mailSize'];
                 $node->revision_size = $usageQuota['mailSize'];
                 $node->setId(md5($domain));
@@ -1885,7 +1889,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Admin_Controller_EmailAccount::getInstance()->checkRight(Admin_Acl_Rights::VIEW_EMAILACCOUNTS);
             $result = (new Felamimail_Frontend_Json())->getVacation($id);
         } finally {
-            Tinebase_EmailUser::removeSieveAdminAccess();
+            Tinebase_EmailUser::removeAdminAccess();
         }
         //for unused variable check
         unset($raii);
@@ -1905,11 +1909,31 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Admin_Controller_EmailAccount::getInstance()->checkRight(Admin_Acl_Rights::MANAGE_EMAILACCOUNTS);
             $result = (new Felamimail_Frontend_Json())->saveVacation($recordData);
         } finally {
-            Tinebase_EmailUser::removeSieveAdminAccess();
+            Tinebase_EmailUser::removeAdminAccess();
         }
         //for unused variable check
         unset($raii);
         return $result;
+    }
+
+    /**
+     * set sieve custom script for account
+     *
+     * @param $scriptData
+     * @return string
+     */
+    public function saveSieveCustomScript($accountId, $scriptData)
+    {
+        $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($accountId);
+        try {
+            Admin_Controller_EmailAccount::getInstance()->checkRight(Admin_Acl_Rights::MANAGE_EMAILACCOUNTS);
+            $sieveScript = Felamimail_Controller_Sieve::getInstance()->setCustomScript($accountId, $scriptData, false);
+        } finally {
+            Tinebase_EmailUser::removeAdminAccess();
+        }
+        //for unused variable check
+        unset($raii);
+        return $sieveScript;
     }
 
     /**
@@ -1925,7 +1949,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Admin_Controller_EmailAccount::getInstance()->checkRight(Admin_Acl_Rights::VIEW_EMAILACCOUNTS);
             $result = (new Felamimail_Frontend_Json())->getRules($accountId);
         } finally {
-            Tinebase_EmailUser::removeSieveAdminAccess();
+            Tinebase_EmailUser::removeAdminAccess();
         }
         unset($raii);
         return $result;
@@ -1944,11 +1968,31 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Admin_Controller_EmailAccount::getInstance()->checkRight(Admin_Acl_Rights::VIEW_EMAILACCOUNTS);
             $result = Felamimail_Controller_Sieve::getInstance()->getSieveScript($accountId);
         } finally {
-            Tinebase_EmailUser::removeSieveAdminAccess();
+            Tinebase_EmailUser::removeAdminAccess();
         }
         // for unused variable check
         unset($raii);
         return $result->getSieve();
+    }
+
+    /**
+     * get sieve custom script for account
+     *
+     * @param  string $accountId
+     * @return array
+     */
+    public function getSieveCustomScript($accountId)
+    {
+        $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($accountId);
+        try {
+            Admin_Controller_EmailAccount::getInstance()->checkRight(Admin_Acl_Rights::VIEW_EMAILACCOUNTS);
+            $result = Felamimail_Controller_Sieve::getInstance()->getSieveCustomScript($accountId);
+        } finally {
+            Tinebase_EmailUser::removeAdminAccess();
+        }
+        // for unused variable check
+        unset($raii);
+        return  $this->_recordToJson($result);;
     }
 
     /**
@@ -1965,7 +2009,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Admin_Controller_EmailAccount::getInstance()->checkRight(Admin_Acl_Rights::MANAGE_EMAILACCOUNTS);
             $result = (new Felamimail_Frontend_Json())->saveRules($accountId, $rulesData);
         } finally {
-            Tinebase_EmailUser::removeSieveAdminAccess();
+            Tinebase_EmailUser::removeAdminAccess();
         }
         //for unused variable check
         unset($raii);
@@ -1975,10 +2019,19 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * reveal email account password
      *
-     * @return  array
+     * @param string|null $accountId
+     * @return array
+     * @throws Felamimail_Exception
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
      */
-    public function revealEmailAccountPassword($accountId)
+    public function revealEmailAccountPassword($accountId): array
     {
+        if (! $accountId) {
+            return [];
+        }
+
         Admin_Controller_EmailAccount::getInstance()->checkRight(Admin_Acl_Rights::MANAGE_EMAILACCOUNTS);
         $fmailaccount = Felamimail_Controller_Account::getInstance()->get($accountId);
         $imapConfig = $fmailaccount->getImapConfig();

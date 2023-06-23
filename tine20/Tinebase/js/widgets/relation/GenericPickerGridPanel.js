@@ -792,6 +792,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         var split = value.split('_Model_');
         if (Tine[split[0]] && Tine[split[0]].Model) {
             var model = Tine[split[0]].Model[split[1]];
+            if (!model) return '';
             if (model.getPhpClassName() === 'Filemanager_Model_Node') {
                 const contenttype =  _.get(arguments, '[2].data.related_record.contenttype');
                 const iconCls = _.get(arguments, '[2].data.related_record.type') === 'folder' ? 'mime-icon-folder' :

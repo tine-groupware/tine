@@ -603,11 +603,11 @@ class Tinebase_Translation
             if ($name == 'CountryList') {
                 $countries = Countries::getNames($_locale);
                 if ( is_array($countries) ) {
-                    $jsContent .= "$name: {";
+                    $jsContent .= "$name:{";
                     asort($countries);
                     foreach ($countries as $key => $value) {
                         $value = preg_replace("/\"/", '\"', $value);
-                        $jsContent .= "'$key': \"$value\",";
+                        $jsContent .= "'$key':\"$value\",";
                     }
                     // remove last comma
                     $jsContent = chop($jsContent, ",");
@@ -618,7 +618,7 @@ class Tinebase_Translation
                 //print_r ( $list );
 
                 if ( is_array($list) ) {
-                    $jsContent .= "$name: {";
+                    $jsContent .= "$name:{";
 
                     foreach ( $list as $key => $value ) {
                         // convert ISO -> PHP for date formats
@@ -626,7 +626,7 @@ class Tinebase_Translation
                             $value = self::convertIsoToPhpFormat($value);
                         }
                         $value = preg_replace("/\"/", '\"', $value);
-                        $jsContent .= "'$key': \"$value\",";
+                        $jsContent .= "'$key':\"$value\",";
                     }
                     // remove last comma
                     $jsContent = chop($jsContent, ",");

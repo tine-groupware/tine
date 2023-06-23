@@ -560,6 +560,17 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function _initAccounts(array $accounts): array
     {
         foreach ($accounts as $idx => $account) {
+            // only show system accounts if role was changed
+            if (Tinebase_Controller::getInstance()->userAccountChanged() &&
+                ! in_array($account['type'], [
+                    Felamimail_Model_Account::TYPE_SHARED,
+                    Felamimail_Model_Account::TYPE_USER_INTERNAL,
+                    Felamimail_Model_Account::TYPE_SYSTEM,
+                ])) {
+                unset($accounts[$idx]);
+                continue;
+            }
+
             if (! in_array($account['type'], [
                 Felamimail_Model_Account::TYPE_SHARED,
                 Felamimail_Model_Account::TYPE_USER,
@@ -625,20 +636,38 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param string $id
      * @return array
+     * @throws Tinebase_Exception_NotFound
      */
-    public function getAccount($id)
+    public function getAccount(string $id): array
     {
         $result = $this->_get($id, Felamimail_Controller_Account::getInstance());
-        
-        if (isset($result['type']) && $result['type'] !== Felamimail_Model_Account::TYPE_USER) {
-            $sieveRecord = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
-            $result['sieve_vacation'] = $this->_recordToJson($sieveRecord);
+        $this->_appendSieveInformationToAccountArray($result);
 
-            $records = Felamimail_Controller_Sieve::getInstance()->getRules($id);
-            $result['sieve_rules'] =  $this->_multipleRecordsToJson($records);
-        }
-        
         return $result;
+    }
+
+    /**
+     * @param array $account
+     * @return void
+     */
+    protected function _appendSieveInformationToAccountArray(array &$account): void
+    {
+        if (! isset($account['type'])
+            || $account['type'] === Tinebase_EmailUser_Model_Account::TYPE_USER
+            || empty($account['sieve_hostname'])
+        ) {
+            return;
+        }
+        try {
+            $sieveRecord = Felamimail_Controller_Sieve::getInstance()->getVacation($account['id']);
+            $account['sieve_vacation'] = $this->_recordToJson($sieveRecord);
+
+            $records = Felamimail_Controller_Sieve::getInstance()->getRules($account['id']);
+            $account['sieve_rules'] = $this->_multipleRecordsToJson($records);
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+            $account['sieve_vacation'] = $account['sieve_rules'] = [];
+        }
     }
     
     /**
@@ -709,6 +738,19 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * get sieve custom script for account
+     *
+     * @param $id
+     * @return array
+     */
+    public function getSieveCustomScript($id)
+    {
+        $record = Felamimail_Controller_Sieve::getInstance()->getSieveCustomScript($id);
+        return $this->_recordToJson($record);
+
+    }
+
+    /**
      * set sieve vacation for account 
      *
      * @param  array $recordData
@@ -724,6 +766,18 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $vacation = Felamimail_Controller_Sieve::getInstance()->getVacation($account->getId());
         
         return $this->_recordToJson($vacation);
+    }
+
+    /**
+     * set sieve custom script for account
+     *
+     * @param  $scriptData
+     * @return string
+     */
+    public function saveSieveCustomScript($accountId, $scriptData)
+    {
+        $sieveScript = Felamimail_Controller_Sieve::getInstance()->setCustomScript($accountId, $scriptData);
+        return $sieveScript;
     }
     
     /**

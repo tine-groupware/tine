@@ -1042,6 +1042,16 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
     }
 
+    protected function _skipSundayNight()
+    {
+        if (Tinebase_DateTime::now()->get('N') == 7 // Sunday
+            && (Tinebase_DateTime::now()->get('H') == 22 || Tinebase_DateTime::now()->get('H') == 23)
+        ) {
+            self::markTestSkipped('FIXME: this fails around Sunday -> Monday midnight ' .
+                'as inweek filter uses user tz, but creation_time contains utc');
+        }
+    }
+
     /**
      * create node in personal container of test user
      *
@@ -1168,15 +1178,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $this->_usernamesToDelete[] = $account->accountLoginName;
 
         return $account;
-    }
-
-    protected function _skipIfXpropsUserIdDeactivated()
-    {
-        if (! Tinebase_EmailUser::isEmailSystemAccountConfigured()
-            || ! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS})
-        {
-            self::markTestSkipped('imap systemaccount and EMAIL_USER_ID_IN_XPROPS config required');
-        }
     }
 
     /**

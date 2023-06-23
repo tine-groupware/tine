@@ -374,23 +374,18 @@ class Addressbook_ControllerTest extends TestCase
      */
     public function testCreationTimeWeekOperator()
     {
-        if (Tinebase_DateTime::now()->get('N') == 7 // Sunday
-            && (Tinebase_DateTime::now()->get('H') == 22 || Tinebase_DateTime::now()->get('H') == 23)
-        ) {
-            self::markTestSkipped('FIXME: this fails around Sunday -> Monday midnight ' .
-                'as inweek filter uses user tz, but creation_time contains utc');
-        }
+        $this->_skipSundayNight();
 
         $contact = $this->_addContact();
         
         $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->container_id),
+            array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->getIdFromProperty('container_id')),
         ));
         $count1 = $this->_instance->searchCount($filter);
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'creation_time', 'operator' => 'inweek',   'value' => 0),
-            array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->container_id),
+            array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->getIdFromProperty('container_id')),
         ));
         $count2 = $this->_instance->searchCount($filter);
         $this->assertEquals($count1, $count2);

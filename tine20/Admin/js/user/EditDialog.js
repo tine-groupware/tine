@@ -13,6 +13,7 @@
 import getTwingEnv from "twingEnv";
 // #endif
 import FieldInfoPlugin from "ux/form/FieldInfoPlugin";
+import XPropsPanel from "widgets/dialog/XPropsPanel";
 
 Ext.ns('Tine.Admin.user');
 
@@ -656,7 +657,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }]
         ];
     },
-    
+
     getCommonConfig() {
         return {
             autoExpandColumn: 'email',
@@ -714,7 +715,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             gridPlugins.push(this.aliasesDispatchCheckColumn);
         }
         const config = _.assign(this.getCommonConfig(), additionConfig);
-        
+
         this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
@@ -753,7 +754,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const app = Tine.Tinebase.appMgr.get('Admin');
         let record = this.record ?? additionConfig.record;
         const config = _.assign(this.getCommonConfig(), additionConfig);
-    
+
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
                 onNewentry: function(value) {
@@ -1158,7 +1159,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     columnWidth: 0.5
                 },
                 items: this.initSmtp()
-            }]
+            }].concat(this.app.featureEnabled('xpropsEditor') ? [new XPropsPanel({})] : [])
         };
         return config;
     },
@@ -1167,10 +1168,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // suggest for new users only!
         if (!this.record.id) {
             // accountFullName (cn im AD) + accountDisplayName(displayname im AD) + accountLoginName + accountEmailAddress
-            for (const [fieldName, template] of Object.entries(Tine.Tinebase.configManager.get('accountTwig'))) {
+            Object.keys(Tine.Tinebase.configManager.get('accountTwig')).asyncForEach(async (fieldName) => {
                 if (fieldName === 'accountEmailAddress' && ! Tine.Tinebase.registry.get('primarydomain')) {
                     // skip email without configured domain
-                    continue;
+                    return;
                 }
                 const field = this.getForm().findField(fieldName);
                 // suggest for unchanged fields only
@@ -1178,12 +1179,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.onRecordUpdate();
                     // @FIXME twing can't cope with null values yet, remove this once twing fixed it
                     const accountData = JSON.parse(JSON.stringify(this.record.data).replace(/:null([,}])/g, ':""$1'));
-                    this.twingEnv.render(fieldName, {account: accountData, email: {primarydomain: Tine.Tinebase.registry.get('primarydomain')}}).then((suggestion) => {
-                        field.setValue(suggestion);
-                        field.suggestedValue = suggestion;
-                    });
+                    const suggestion = await this.twingEnv.render(fieldName, {account: accountData, email: {primarydomain: Tine.Tinebase.registry.get('primarydomain')}});
+
+                    field.setValue(suggestion);
+                    this.record.set(fieldName, suggestion);
+                    field.suggestedValue = suggestion;
                 }
-            }
+            });
         }
     },
 

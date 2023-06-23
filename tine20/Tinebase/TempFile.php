@@ -321,8 +321,9 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
      * @param string $dir
      * @param Tinebase_DateTime $date
      * @return int
+     * @throws Exception
      */
-    protected function _removeFilesFromDirByTimestamp($dir, Tinebase_DateTime $date)
+    protected function _removeFilesFromDirByTimestamp(string $dir, Tinebase_DateTime $date): int
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Deleting old files from dir: ' . $dir);
@@ -344,14 +345,14 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
                 // delete sub dir (including contents)
                 try {
                     $numberOfDeletedFiles += $this->_removeFilesFromDirByTimestamp($directoryIterator->getPathname(), $date);
+                    $subDirIterator = new FilesystemIterator($directoryIterator->getPathname());
+                    $isDirEmpty = !$subDirIterator->valid();
+                    if ($isDirEmpty) {
+                        rmdir($directoryIterator->getPathname());
+                    }
                 } catch (UnexpectedValueException $uve) {
-                    // sub dir was already removed...
-                }
-                try {
-                    rmdir($directoryIterator->getPathname());
-                } catch (Throwable $t) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                        __METHOD__ . '::' . __LINE__ . ' ' . $t->getMessage());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Sub dir was already removed: ' . $uve->getMessage());
                 }
             }
 

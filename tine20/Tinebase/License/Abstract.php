@@ -31,7 +31,6 @@ abstract class Tinebase_License_Abstract
      * @var array featureName => since Licence Version (semver)
      */
     protected $_featureNeedsPermission = [
-        'Bookmarks'                                     => '*',
         'CashBook'                                      => '*',
         'ContractManager'                               => '*',
         'DFCom'                                         => '>=2.0',
@@ -221,7 +220,7 @@ abstract class Tinebase_License_Abstract
 
         return array(
             'validFrom'    => $validFrom,
-            'validTo'      => $validFrom->getClone()->addDay(30),
+            'validTo'      => $validFrom->getClone()->addYear(5),
         );
     }
 

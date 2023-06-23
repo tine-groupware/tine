@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -36,8 +36,15 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = [
+        Addressbook_Model_Contact::MODEL_PART_NAME,
+        Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
+        Addressbook_Model_ContactProperties_Definition::MODEL_NAME_PART,
+        Addressbook_Model_ContactProperties_Email::MODEL_NAME_PART,
+        Addressbook_Model_ContactProperties_InstantMessenger::MODEL_NAME_PART,
+        Addressbook_Model_ContactProperties_Phone::MODEL_NAME_PART,
+        Addressbook_Model_ContactProperties_Url::MODEL_NAME_PART,
         Addressbook_Model_List::MODEL_NAME_PART,
-        Addressbook_Model_ListRole::MODEL_NAME_PART
+        Addressbook_Model_ListRole::MODEL_NAME_PART,
     ];
 
     /**

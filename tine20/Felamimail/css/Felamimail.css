@@ -146,12 +146,12 @@
 .preview-panel-felamimail-headers {
     background-color: #dddddd;
     overflow: auto;
+    padding: 5px;
 }
 
 .preview-panel-felamimail-attachments {
     margin-top: 5px;
     background-color: #e8e8e8;
-    width: 100%;
 }
 
 /* note: el tyle of html areas underling textarea are copied to iframe*/

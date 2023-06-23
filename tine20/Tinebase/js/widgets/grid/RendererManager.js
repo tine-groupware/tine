@@ -251,6 +251,12 @@ Tine.widgets.grid.RendererManager = function() {
                         return configRcordClass ? Tine.Tinebase.data.Record.setFromJson(configRecord, configRcordClass).getTitle() : '';
                     };
                     break;
+                case 'language':
+                    const allLanguages = Locale.getTranslationList('Language');
+                    renderer = (value, metaData, record) => {
+                        return allLanguages[value];
+                    };
+                    break;
                 case 'localizedString':
                     const type = _.get(fieldDefinition, 'config.type')
                     const languagesAvailableDef = _.get(recordClass.getModelConfiguration(), 'languagesAvailable')

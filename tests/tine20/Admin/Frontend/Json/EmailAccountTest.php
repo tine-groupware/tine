@@ -464,6 +464,58 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
             $translation->_('Vacation message is now active.'), Felamimail_Model_Account::class, 2);
     }
 
+    public function testSaveEmailAccountWithCustomInvalidSieveScript()
+    {
+        $this->_checkMasterUserTable();
+        $account = $this->testEmailAccountApiSharedAccount(false);
+        try {
+            $result = $this->_json->saveSieveCustomScript($account->getId(),  '{test};');
+            self::fail('it should not be possible to update invalid script');
+        } catch (Felamimail_Exception_SievePutScriptFail $fespsf) {
+        }
+        $script = $this->_json->getSieveScript($account->getId());
+        $this->assertStringNotContainsString('{test};', $script, 'invalid custom sieve script should not be saved.');
+    }
+    
+    public function testSaveEmailAccountWithCustomSieveScript()
+    {
+        $this->_checkMasterUserTable();
+        $account = $this->testEmailAccountApiSharedAccount(false);
+        $script = 'require ["fileinto","reject","copy","vacation","date","relational"];
+
+if allof (address :contains "from" "ssdfsd@mail.test") {
+    fileinto "Sent";
+}
+if allof(currentdate :value "le" "date" "2023-04-23",
+currentdate :value "ge" "date" "2023-04-22")
+{vacation :days 7 :from "tine ® Admin <tine20admin@mail.test>" :addresses ["tine20admin@mail.test"] :mime text:
+Content-Type: multipart/alternative; boundary=foo
+
+--foo
+Content-Type: text/plain; charset=UTF-8
+
+Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie
+ tine ® Admin (tine20admin@mail.test)
+
+I am on vacation until Apr 23, 2023. Please contact
+ tine ® Admin (tine20admin@mail.test)
+
+tine ® Admin
+
+--foo
+Content-Type: text/html; charset=UTF-8
+
+Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;br&gt; tine ® Admin (tine20admin@mail.test)&lt;br&gt;&lt;br&gt;I am on vacation until Apr 23, 2023. Please contact&lt;br&gt; tine ® Admin (tine20admin@mail.test)&lt;br&gt;&lt;br&gt;tine ® Admin
+
+--foo--
+.
+;}';
+        $result = $this->_json->saveSieveCustomScript($account->getId(), $script);
+        $this->assertStringContainsString('require ["fileinto","reject","copy","vacation","date","relational"]', $result, 'sieve script should include require.');
+        $result = $this->_json->getSieveCustomScript($account->getId());
+        $this->assertStringContainsString('require ["fileinto","reject","copy","vacation","date","relational"]', $result['script'], 'sieve script should include require.');
+    }
+
     public function testSetSieveRules()
     {
         $this->_checkMasterUserTable();
@@ -634,23 +686,34 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
     public function testResetUserPWOfPersonalSystemAccount()
     {
         $this->_skipIfLDAPBackend();
+        $scleverId = $this->_personas['sclever']->getId();
+        $pw = '54321';
 
         $adminFE = new Admin_Frontend_Json();
-        $adminFE->resetPassword($this->_personas['sclever']->getId(), '12345', false);
+        $adminFE->resetPassword($scleverId, '12345', false);
         $this->testCreatePersonalSystemAccount();
-        $adminFE->resetPassword($this->_personas['sclever']->getId(), '54321', false);
+        $adminFE->resetPassword($scleverId, $pw, false);
+        self::validateImapUserPw($scleverId, $pw, Felamimail_Model_Account::TYPE_USER_INTERNAL);
+    }
 
+    public static function validateImapUserPw(string $userId, string $pw, string $accountType = Felamimail_Model_Account::TYPE_SYSTEM)
+    {
         $account = Admin_Controller_EmailAccount::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-            ['field' => 'type', 'operator' => 'equals', 'value' => Felamimail_Model_Account::TYPE_USER_INTERNAL],
-            ['field' => 'user_id', 'operator' => 'equals', 'value' => $this->_personas['sclever']['accountId']]
-        ]))->getFirstRecord();
-        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);        
+                ['field' => 'type', 'operator' => 'equals', 'value' => $accountType],
+                ['field' => 'user_id', 'operator' => 'equals', 'value' => $userId]
+            ]))->getFirstRecord();
+
+        self::assertNotNull($account);
+
+        $emailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($account);
         // fetch email pw from db
         $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
         $rawDovecotUser = $dovecot->getRawUserById($emailUser);
+        self::assertNotEmpty($rawDovecotUser['password']);
         $hashPw = new Hash_Password();
-        $this->assertTrue($hashPw->validate($rawDovecotUser['password'], '54321'), 'password mismatch: ' . print_r($rawDovecotUser, TRUE));
+        self::assertTrue($hashPw->validate($rawDovecotUser['password'], $pw), 'password mismatch! dovecot user:'
+            . print_r($rawDovecotUser, TRUE));
     }
 
     /**
@@ -920,10 +983,10 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         $account = $this->testEmailAccountApiSharedAccount(false);
         $fmailaccount = Felamimail_Controller_Account::getInstance()->get($account['id']);
         $imapConfig = $fmailaccount->getImapConfig();
-        
+
         $result = $this->_json->revealEmailAccountPassword($account);
         self::assertEquals($result['password'], $imapConfig['password'], 'reveal password failed');
-        
+
         $records = Tinebase_Notes::getInstance()->searchNotes(new Tinebase_Model_NoteFilter([
             ['field' => 'record_id', 'operator' => 'equals', 'value' => $account->getId()],
             ['field' => 'record_model', 'operator' => 'equals', 'value' => Felamimail_Model_Account::class],
@@ -931,5 +994,8 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
         ]));
         self::assertCount(1, $records, 'reveal password failed');
 
+        // test again with empty param
+        $result = $this->_json->revealEmailAccountPassword(null);
+        self::assertEmpty($result);
     }
 }

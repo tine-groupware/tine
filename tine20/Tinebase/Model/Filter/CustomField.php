@@ -256,13 +256,17 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             $notOperator = strpos($this->_operator, 'not') === 0;
 
             if ($queryForEmpty) {
-                (new Tinebase_Model_Filter_Id(
-                    [
-                        'field' => 'value',
-                        'operator' => $notOperator ? 'notnull' : 'isnull',
-                        'value' => true,
-                        'options' => $this->_valueFilterOptions
-                    ]))->appendFilterSql($_select, $_backend);
+                if (strpos($this->_operator, 'contains')) {
+                    $_select->where('1=1');
+                } else {
+                    (new Tinebase_Model_Filter_Id(
+                        [
+                            'field' => 'value',
+                            'operator' => $notOperator ? 'notnull' : 'isnull',
+                            'value' => true,
+                            'options' => $this->_valueFilterOptions
+                        ]))->appendFilterSql($_select, $_backend);
+                }
             } else {
                 array_walk($value, function (&$val) {
                     if (isset($val['field']) && strpos($val['field'], ':') === 0) {

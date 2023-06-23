@@ -145,12 +145,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Core::getPreference('Calendar')->deleteUserPref(Calendar_Preference::DEFAULTCALENDAR);
             $defaultCalendarArray = array();
         }
-        
-        $allCalendarResources = Calendar_Controller_Resource::getInstance()->getAll()->toArray();
-        
+
         $registryData = array(
             'defaultContainer'          => $defaultCalendarArray,
-            'calendarResources'         => $allCalendarResources
         );
         $registryData = array_merge($registryData, $this->_getImportDefinitionRegistryData());
         

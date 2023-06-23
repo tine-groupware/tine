@@ -179,7 +179,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $currentAccount = $this->get($_record->getId(), null, true, $_updateDeleted);
 
         $raii = false;
-        if (Tinebase_EmailUser::sieveBackendSupportsMasterPassword($_record)) {
+        if (Tinebase_EmailUser::backendSupportsMasterPassword($_record)) {
             $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($_record->getId());
         }
 
@@ -187,8 +187,8 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $account = $this->_backend->update($_record);
         $this->_inspectAfterUpdate($account, $_record, $currentAccount);
 
-        if ($raii && Tinebase_EmailUser::sieveBackendSupportsMasterPassword($_record)) {
-            Tinebase_EmailUser::removeSieveAdminAccess();
+        if ($raii && Tinebase_EmailUser::backendSupportsMasterPassword($_record)) {
+            Tinebase_EmailUser::removeAdminAccess();
             unset($raii);
         }
 
@@ -399,10 +399,13 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * update notificationScript for all system accounts
-     *
+     * @param ?mixed $mailAccounts
+     * @param bool $dryRun
+     * @param bool $allowToFail
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
-    public function updateNotificationScripts($mailAccounts = null, $dryRun = false)
+    public function updateNotificationScripts($mailAccounts = null, bool $dryRun = false, bool $allowToFail = true): Tinebase_Record_RecordSet
     {
         if (!$mailAccounts) {
             $backend = Admin_Controller_EmailAccount::getInstance();
@@ -413,23 +416,32 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             $mailAccounts = $backend->search($filter);
         }
 
-        if($dryRun) {
+        if ($dryRun) {
             return $mailAccounts;
         }
         
-        $updatedAccount = [];
+        $updatedAccounts = new Tinebase_Record_RecordSet(Felamimail_Model_Account::class);
         foreach ($mailAccounts as $record) {
-            if (Tinebase_EmailUser::sieveBackendSupportsMasterPassword($record)) {
+            if (Tinebase_EmailUser::backendSupportsMasterPassword($record)) {
                 $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($record->getId());
-                Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($record->getId(),
-                    $record->sieve_notification_email);
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                    . __LINE__ . 'Sieve script updated from record: ' . $record->getId());
-                Tinebase_EmailUser::removeSieveAdminAccess();
-                unset($raii);
-                $updatedAccount[] = $record;
+                try {
+                    Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($record->getId(),
+                        $record->sieve_notification_email);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                        . __LINE__ . 'Sieve script updated from record: ' . $record->getId());
+                    $updatedAccounts->addRecord($record);
+                } catch (Exception $e) {
+                    if ($allowToFail) {
+                        Tinebase_Exception::log($e);
+                    } else {
+                        throw $e;
+                    }
+                } finally {
+                    Tinebase_EmailUser::removeAdminAccess();
+                    unset($raii);
+                }
             }
         }
-        return $updatedAccount;
+        return $updatedAccounts;
     }
 }

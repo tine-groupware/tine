@@ -7,8 +7,7 @@
  */
 Ext.ns('Tine.widgets.form');
 
-import 'widgets/form/JsonField';
-import 'widgets/form/XmlField';
+import 'widgets/form/AceField';
 import 'widgets/form/ModelPicker';
 import 'widgets/form/LanguagePicker';
 import 'widgets/form/RecordEditField';
@@ -95,7 +94,9 @@ Tine.widgets.form.FieldManager = function() {
                 fieldType = fieldDefinition.config.type || 'textfield';
                 fieldDefinition = _.merge({}, fieldDefinition, fieldDefinition.config);
             }
-
+            if (fieldType === 'text' && fieldDefinition.length && fieldDefinition.length <= 256) {
+                fieldType = 'textfield';
+            }
             if (_.get(fieldDefinition, 'config.specialType') === 'localizedString') {
                 fieldType = fieldDefinition.type = 'localizedString';
             }
@@ -138,7 +139,7 @@ Tine.widgets.form.FieldManager = function() {
                 case 'boolean':
                     if (category === 'editDialog') {
                         field.xtype = 'checkbox';
-                        field.boxLabel = _.get(fieldDefinition, 'boxLabel', field.fieldLabel);
+                        field.boxLabel = i18n._hidden(_.get(fieldDefinition, 'boxLabel', field.fieldLabel));
                         field.checked = field['default'];
                         field.hideLabel = !_.get(fieldDefinition, 'boxLabel');
                         field.blurOnChange = true;
@@ -322,11 +323,13 @@ Tine.widgets.form.FieldManager = function() {
                     field.disabled = true;
                     break;
                 case 'json':
-                    field.xtype = 'tw-jsonfield';
+                    field.xtype = 'tw-acefield';
+                    field.mode = 'json';
                     field.height = 150; // 12 lines
                     break;
                 case 'xml':
-                    field.xtype = 'tw-xmlfield';
+                    field.xtype = 'tw-acefield';
+                    field.mode = 'xml';
                     field.height = 150; // 12 lines
                     break;
                 case 'container':

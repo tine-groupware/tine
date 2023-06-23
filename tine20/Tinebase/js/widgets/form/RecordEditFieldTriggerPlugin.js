@@ -47,7 +47,7 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
     async onTriggerClick () {
         // let me = this;
         let editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(this.field.recordClass);
-
+        
         if (editDialogClass) {
             const record = this.field.selectedRecord || Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.field.recordClass.getDefaultData(), await this.getRecordDefaults()), this.field.recordClass);
             const mode = this.editDialogMode ?? editDialogClass.prototype.mode;
@@ -56,7 +56,9 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
                 // prevent loading non existing remote record
                 record.setId(0);
             }
-
+            if (this.attachments) {
+                record.set('attachments', this.attachments);
+            }
             editDialogClass.openWindow({mode, record,
                 recordId: record.getId(),
                 listeners: {

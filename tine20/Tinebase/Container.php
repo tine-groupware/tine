@@ -479,6 +479,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                             'Using application name is deprecated and no default model found. Use the classname of the model itself.');
                     }
                 case 3:
+                case 4:
                     $ret['appName'] = $split[0];
                     $ret['recordClass'] = $_recordClass;
                     break;
@@ -1677,6 +1678,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
      */
     public function getContainerWithGrants(array $_containerIds, $_accountId)
     {
+        if (empty($_containerIds)) {
+            return [];
+        }
+
         $accountId = $_accountId instanceof Tinebase_Record_Interface
             ? $_accountId->getId()
             : $_accountId;
@@ -1688,8 +1693,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
                 /* select */ array('*', 'account_grants' => $this->_dbCommand->getAggregate('container_acl.account_grant'))
             )
-            ->group('container.id', 'container_acl.account_type', 'container_acl.account_id');
-            
+            ->group(['container.id']);
+
         $this->addGrantsSql($select, $accountId, '*');
         $where = $select->getPart(Zend_Db_Select::WHERE);
         $where[1] = rtrim($where[1], ')') . ') OR container_acl.account_type IS NULL)';

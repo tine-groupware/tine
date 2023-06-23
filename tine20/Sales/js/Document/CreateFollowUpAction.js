@@ -87,7 +87,9 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         try {
                             updatedRecord = await sourceRecordClass.getProxy().promiseSaveRecord(record)
                             selections.splice.apply(selections, [selections.indexOf(record), 1].concat(updatedRecord ? [updatedRecord] : []))
-                            editDialog ? await editDialog.loadRecord(updatedRecord) : null
+                            if (sourceRecordClass === editDialog.recordClass) {
+                                editDialog ? await editDialog.loadRecord(updatedRecord) : null
+                            }
                         } catch (e) {
                             record.reject()
                             errorMsgs.push(app.formatMessage('Cannot book { sourceDocument }: ({e.code}) { e.message }', { sourceDocument: record.getTitle(), e }))

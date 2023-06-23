@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -278,6 +278,12 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'Addressbook' => array(
                 Addressbook_Model_Contact::class,
+                Addressbook_Model_ContactProperties_Address::class,
+                Addressbook_Model_ContactProperties_Definition::class,
+                Addressbook_Model_ContactProperties_Email::class,
+                Addressbook_Model_ContactProperties_InstantMessenger::class,
+                Addressbook_Model_ContactProperties_Phone::class,
+                Addressbook_Model_ContactProperties_Url::class,
                 Addressbook_Model_Industry::class,
                 Addressbook_Model_List::class,
                 Addressbook_Model_ListGrants::class,
@@ -447,11 +453,14 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_ActionLog::class,
                 Tinebase_Model_Alarm::class,
                 Tinebase_Model_Application::class,
+                Tinebase_Model_AppPassword::class,
                 Tinebase_Model_AreaLockConfig::class,
                 Tinebase_Model_AreaLockState::class,
                 Tinebase_Model_AsyncJob::class,
                 Tinebase_Model_AuthToken::class,
                 Tinebase_Model_AuthTokenChannelConfig::class,
+                Tinebase_Model_BankHoliday::class,
+                Tinebase_Model_BankHolidayCalendar::class,
                 Tinebase_Model_BLConfig::class,
                 Tinebase_Model_CostUnit::class,
                 Tinebase_Model_CostCenter::class,
@@ -619,6 +628,8 @@ class Tinebase_ApplicationTest extends TestCase
             } else {
                 throw $t;
             }
+        } finally {
+            Setup_SchemaTool::resetUninstalledTables();
         }
 
         $appId = Tinebase_Record_Abstract::generateUID();

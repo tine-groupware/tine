@@ -22,7 +22,7 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
     /**
      * @property {Tine.Addressbook.Model.Contact} recordClass
      */
-    recordClass: Tine.Addressbook.Model.Contact,
+    recordClass: 'Addressbook.Model.Contact',
 
     requiredGrant: 'editGrant',
     layout: 'fit',

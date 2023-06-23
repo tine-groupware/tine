@@ -976,10 +976,17 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (null !== $currentRecord) {
-            $expander = new Tinebase_Record_Expander(get_class($currentRecord), [
+            $jsonExpander = $mc->jsonExpander;
+            $expander = [
                 Tinebase_Record_Expander::EXPANDER_PROPERTIES => array_fill_keys(array_keys($mc->denormalizedFields), [])
-            ]);
-            $expander->expand(new Tinebase_Record_RecordSet(get_class($currentRecord), [$currentRecord]));
+            ];
+            foreach ($jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES] ?? [] as $key => $arr) {
+                unset($expander[Tinebase_Record_Expander::EXPANDER_PROPERTIES][$key]);
+            }
+            if (!empty($expander[Tinebase_Record_Expander::EXPANDER_PROPERTIES])) {
+                $expander = new Tinebase_Record_Expander(get_class($currentRecord), $expander);
+                $expander->expand(new Tinebase_Record_RecordSet(get_class($currentRecord), [$currentRecord]));
+            }
         }
 
         foreach ($mc->denormalizedFields as $property => $definition) {
@@ -1378,6 +1385,8 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_updateACLCheck($_record, $currentRecord);
 
             $_record->applyFieldGrants(self::ACTION_UPDATE, $currentRecord);
+
+            Tinebase_Record_Expander::expandRecord($currentRecord);
 
             $this->_concurrencyManagement($_record, $currentRecord);
             $this->_forceModlogInfo($_record, $origRecord, self::ACTION_UPDATE);
@@ -3306,7 +3315,6 @@ abstract class Tinebase_Controller_Record_Abstract
         $ccn = $_fieldConfig['controllerClassName'];
         /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = $ccn::getInstance();
-        $filterClassName = $_fieldConfig['filterClassName'];
 
         $ctrlAclRaii = null;
         if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
@@ -3319,8 +3327,7 @@ abstract class Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' ' . $_property);
 
-        /** @var Tinebase_Model_Filter_FilterGroup $filter */
-        $filter = new $filterClassName(isset($_fieldConfig['addFilters']) ? $_fieldConfig['addFilters'] : [], 'AND');
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($_fieldConfig['recordClassName'], $_fieldConfig['addFilters'] ?? [], 'AND');
         //try {
         //  $filter->addFilter($filter->createFilter($_fieldConfig['refIdField'], 'equals', $_record->getId()));
 

@@ -186,11 +186,6 @@ parameters:
 			path: tine20/Addressbook/Controller/Contact.php
 
 		-
-			message: "#^Variable \\$countryname in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: tine20/Addressbook/Controller/Contact.php
-
-		-
 			message: "#^Access to an undefined property Zend_Config\\:\\:\\$rules\\.$#"
 			count: 1
 			path: tine20/Addressbook/Convert/Contact/String.php

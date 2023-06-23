@@ -2295,3 +2295,15 @@ msgstr "Brutto"
 
 msgid "Excel current columns"
 msgstr "Excel - Aktuelle Spalten"
+
+msgid "include in shared delivery"
+msgstr "Einer Sammellieferung hinzufügen"
+
+msgid "include in shared invoice"
+msgstr "Einer Sammelrechnung hinzufügen"
+
+msgid "Send as Email to Datev"
+msgstr "Als E-Mail an Datev senden"
+
+msgid "Datev email has been sent before , continue anyway?"
+msgstr "Die Datev-E-Mail wurde gesendet, wollen Sie trotzdem fortfahren?"

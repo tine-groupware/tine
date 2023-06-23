@@ -381,9 +381,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             'value'     => $applicationId
         ));
             
-          $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
-          $filter->customfieldACLChecks(FALSE);
-        $customFields = $this->_backendConfig->search($filter);
+        $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
+        $filter->customfieldACLChecks(FALSE);
+        $this->_backendConfig->setAllCFs();
+        try {
+            $customFields = $this->_backendConfig->search($filter);
+        } finally {
+            $this->_backendConfig->setNoSystemCFs();
+        }
             
         $deletedCount = 0;
         foreach ($customFields as $customField) {
@@ -605,7 +610,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         }
 
         // check if customfield value is the record itself
-        if (get_class($_record) == $modelName && strpos($value, $_record->getId()) !== false) {
+        if ($value && get_class($_record) == $modelName && strpos($value, $_record->getId()) !== false) {
             throw new Tinebase_Exception_Record_Validation('It is not allowed to add the same record as customfield record!');
         }
 
