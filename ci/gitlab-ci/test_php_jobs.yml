@@ -51,7 +51,6 @@ php-unit-all-tests-source-matrix:
     IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}
   needs:
     - docker_build_source
-    - 'docker_build_source_matrix: [7.4]'
     - 'docker_build_source_matrix: [8.0]'
     - 'docker_build_source_matrix: [8.1]'
     - 'docker_build_source_matrix: [8.2]'
@@ -61,12 +60,8 @@ php-unit-all-tests-source-matrix:
           - "mariadb:10.6"
           - "mariadb:10.5"
           - "mariadb:10.4"
-          - "mariadb:10.3"
-          - "mariadb:10.2"
           - "dockerregistry.metaways.net/tine20/tine20/mysql:8"
-          - "mysql:5.7"
       - PHP_VERSION:
-          - "7.4"
           - "8.0"
           - "8.1"
           - "8.2"
@@ -313,7 +308,7 @@ php-unit-update-tests:
   script:
     - apk add --repository http://nl.alpinelinux.org/alpine/v3.14/main --repository http://nl.alpinelinux.org/alpine/v3.14/community php7-sodium
     # TODO switch to 2022.11 in 2022/11
-    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git fetch --unshallow; git checkout 2021.11; 
+    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git fetch --unshallow; git checkout 2021.11;
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
     - cd ${TINE20ROOT}/tine20
     - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"

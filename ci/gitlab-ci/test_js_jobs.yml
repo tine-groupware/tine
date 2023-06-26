@@ -111,14 +111,12 @@ js-e2e-tests-source-php-version-matrix:
   variables:
     IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}
   needs:
-    - 'docker_build_source_matrix: [7.4]'
     - 'docker_build_source_matrix: [8.0]'
     - 'docker_build_source_matrix: [8.1]'
     - 'docker_build_source_matrix: [8.2]'
   parallel:
     matrix:
       - PHP_VERSION:
-          - "7.4"
           - "8.0"
           - "8.1"
           - "8.2"
