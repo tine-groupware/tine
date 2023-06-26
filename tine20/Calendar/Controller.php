@@ -462,6 +462,17 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
             )));
         }
 
+        if (Tinebase_Core::getUser()->hasRight($application, Calendar_Acl_Rights::MANAGE_EVENT_TYPES) &&
+            Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_EVENT_TYPE)
+        ) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => 'cal_event_types',
+                'application_id' => $application,
+                'model' => 'Calendar_Model_EventType',
+                'label' => 'Event Types' // _('Event Types')
+            )));
+        }
+
         return $result;
     }
 

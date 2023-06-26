@@ -366,6 +366,19 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                     Zend_Filter_Input::DEFAULT_VALUE => false,
                 ],
             ],
+            'event_types' => [
+                self::TYPE       => self::TYPE_RECORDS,
+                self::NULLABLE   => true,
+                self::LABEL     => 'Event Types', // _('Event Types')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                self::CONFIG => [
+                    self::APP_NAME                  => 'Calendar',
+                    self::MODEL_NAME                => 'EventTypes',
+                    self::REF_ID_FIELD              => 'record',
+                    self::DEPENDENT_RECORDS         => true,
+                ]
+            ],
             Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => [
                 self::TYPE          => self::TYPE_VIRTUAL,
                 self::OMIT_MOD_LOG  => true,
