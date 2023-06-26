@@ -17,6 +17,7 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE016_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -27,6 +28,10 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE016_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -77,5 +82,16 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
             $this->setTableVersion('sales_purchase_invoices', 7);
         }
         $this->addApplicationUpdate('Sales', '16.3', self::RELEASE016_UPDATE003);
+    }
+
+    public function update004()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Customer::class,
+            Sales_Model_DocumentPosition_Offer::class,
+            Sales_Model_DocumentPosition_Order::class,
+            Sales_Model_DocumentPosition_Invoice::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '16.4', self::RELEASE016_UPDATE004);
     }
 }

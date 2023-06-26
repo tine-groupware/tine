@@ -14,9 +14,11 @@ const AbstractMixin = {
         console.error('parent');
     },
 
-    setFromProduct(product, lang) {
+    setFromProduct(product, lang, document) {
         const productClass = Tine.Sales.Model.Product;
         const productData = product.data || product;
+        const vatProcedure = _.get(document, 'data.vat_procedure', 'taxable');
+
         if (!lang) {
             const languagesAvailableDef = _.get(productClass.getModelConfiguration(), 'languagesAvailable')
             const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinition(_.get(languagesAvailableDef, 'config.appName', productClass.getMeta('appName')), languagesAvailableDef.name)
@@ -40,7 +42,7 @@ const AbstractMixin = {
         this.set('position_discount_sum', 0);
         this.set('unit_price_type', productData.salesprice_type || 'net');
         this.set('unit_price', productData.salesprice||0);
-        this.set('sales_tax_rate', productData.salestaxrate||0);
+        this.set('sales_tax_rate', vatProcedure === 'taxable' ? (productData.salestaxrate||0) : 0);
         this.set('grouping', productData.default_grouping);
         this.set('sorting', productData.default_sorting);
 

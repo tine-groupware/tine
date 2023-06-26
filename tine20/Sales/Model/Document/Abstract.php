@@ -49,8 +49,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_INVOICE_DISCOUNT_SUM = 'invoice_discount_sum'; // automatische Berechnung je nach type
 
     public const FLD_NET_SUM = 'net_sum';
+    public const FLD_VAT_PROCEDURE = 'vat_procedure';
     public const FLD_SALES_TAX = 'sales_tax';
     public const FLD_SALES_TAX_BY_RATE = 'sales_tax_by_rate';
+
     public const FLD_GROSS_SUM = 'gross_sum';
 
     public const FLD_PAYMENT_TERMS = 'credit_term';
@@ -322,6 +324,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::READ_ONLY                     => true,
                 ],
             ],
+            self::FLD_VAT_PROCEDURE => [
+                self::LABEL => 'VAT Procedure', // _('VAT Procedure')
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::NAME => Sales_Config::VAT_PROCEDURES,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+            ],
             self::FLD_SALES_TAX                 => [
                 self::LABEL                         => 'Sales Tax', //_('Sales Tax')
                 self::TYPE                          => self::TYPE_MONEY,
@@ -544,6 +554,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_RECIPIENT_ID,
             self::FLD_DOCUMENT_TITLE,
             self::FLD_CUSTOMER_REFERENCE,
+            self::FLD_VAT_PROCEDURE,
             self::FLD_INVOICE_DISCOUNT_PERCENTAGE,
             self::FLD_INVOICE_DISCOUNT_SUM,
             self::FLD_INVOICE_DISCOUNT_TYPE,
@@ -615,6 +626,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         
         /** @var Sales_Model_DocumentPosition_Abstract $position */
         foreach ($this->{self::FLD_POSITIONS} as $position) {
+            if ($this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE
+                && $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE}) {
+                $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} = 0;
+            }
             $position->computePrice();
         }
 

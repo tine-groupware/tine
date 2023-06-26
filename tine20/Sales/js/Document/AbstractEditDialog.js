@@ -107,6 +107,10 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fields['invoice_discount_type'].setValue('PERCENTAGE')
                             fields['invoice_discount_percentage'].setValue(record.get('discount'))
                         }
+                        const vatProcedure = record.get('vat_procedure')
+                        if (vatProcedure) {
+                            fields['vat_procedure']?.setValue(vatProcedure)
+                        }
                     }
                     break;
                 case 'recipient_id':
@@ -115,6 +119,20 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         if (record?.get && record?.get('language')) {
                             fields['document_language'].setValue(record?.get('language'))
                         }
+                    }
+                    break;
+                case 'vat_procedure':
+                    config.listeners = config.listeners || {}
+                    config.listeners.select = (combo, record, index) => {
+                        const positions = fields['positions'].getValue()
+                        positions.forEach(position => {
+                            const productTaxRate = _.get(position, 'product_id.salestaxrate', 0)
+                            if (record.id === 'taxable' && position.sales_tax_rate === 0 && productTaxRate)
+                                position.sales_tax_rate = productTaxRate
+                            else if (record.id !== 'taxable' && position.sales_tax_rate)
+                                position.sales_tax_rate = 0;
+                        })
+                        this.getForm().findField('positions')?.setValue(positions)
                     }
                     break;
             }
@@ -132,7 +150,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 [fields.positions],
                 [_.assign({ ...placeholder } , {columnWidth: 3/5}), fields.positions_discount_sum, fields.positions_net_sum],
                 [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.invoice_discount_type, fields.invoice_discount_percentage, fields.invoice_discount_sum],
-                [_.assign({ ...placeholder } , {columnWidth: 2/5}), fields.net_sum, fields.sales_tax, fields.gross_sum],
+                [{ ...placeholder }, fields.net_sum, fields.vat_procedure, fields.sales_tax, fields.gross_sum],
                 [fields.credit_term, _.assign({ ...placeholder } , {columnWidth: 4/5})],
                 [{xtype: 'textarea', name: 'boilerplate_Posttext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Posttext`}],
                 [fields.cost_center_id, fields.cost_bearer_id, _.assign({ ...placeholder } , {columnWidth: 3/5})]

@@ -77,7 +77,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             let productData = position.get('title');
             const lang = this.editDialog.getForm().findField('document_language').getValue();
 
-            position.setFromProduct(productData, lang);
+            position.setFromProduct(productData, lang, this.editDialog.record);
             position.setId(Tine.Tinebase.data.Record.generateUID());
             if (!position.get('grouping')) {
                 position.set('grouping', this.quickaddRecord.get('grouping'));
@@ -98,7 +98,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                     const subposition = new this.recordClass({}, Tine.Tinebase.data.Record.generateUID());
                     // NOTE: need to create record to do conversions (string -> int) here!
                     const product = Tine.Tinebase.data.Record.setFromJson(subproductMapping.product_id, Tine.Sales.Model.Product);
-                    subposition.setFromProduct(product.data, lang);
+                    subposition.setFromProduct(product.data, lang, this.editDialog.record);
                     subposition.set('quantity', subproductMapping.quantity);
                     subposition.computePrice();
                     subposition.set('parent_id', position.id);

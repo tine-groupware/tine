@@ -295,7 +295,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL                         => 'Price Type', //_('Price Type')
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NAME                          => Sales_Config::PRICE_TYPE,
-                self::NULLABLE                      => false,
+                self::NULLABLE                      => true,
                 self::DEFAULT_VAL                   => Sales_Config::PRICE_TYPE_NET
             ],
             self::FLD_UNIT_PRICE                => [
