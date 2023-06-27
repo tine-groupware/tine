@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  * 
@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -44,6 +44,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'hasAttachments'    => true,
         'hasAlarms'         => true,
         'createModule'      => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         'containerProperty' => 'container_id',
 
@@ -54,6 +55,12 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'titleProperty'     => 'summary',//array('%s - %s', array('number', 'title')),
         'appName'           => 'Tasks',
         'modelName'         => 'Task',
+
+        self::JSON_EXPANDER => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'source' => [],
+            ],
+        ],
 
         'filterModel'       => array(
             'organizer'         => array(
@@ -225,6 +232,22 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
+            'source'    => [
+                self::TYPE          => self::TYPE_DYNAMIC_RECORD,
+                self::CONFIG        => [
+                    self::REF_MODEL_FIELD               => 'source_model',
+                    self::PERSISTENT                    => Tinebase_Model_Converter_DynamicRecord::REFID,
+                ],
+                self::FILTER_DEFINITION => [
+                    self::FILTER            => Tinebase_Model_Filter_Id::class,
+                ]
+            ],
+            'source_model' => [
+                self::TYPE          => self::TYPE_MODEL,
+                self::CONFIG        => [
+                    self::AVAILABLE_MODELS => [],
+                ]
+            ],
         ),
     );
 

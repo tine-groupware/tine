@@ -1,5 +1,4 @@
-<?php
-
+<?php declare(strict_types=1);
 /**
  * class to hold Project data
  * 
@@ -7,9 +6,11 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * class to hold Project data
@@ -71,6 +72,12 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
                     self::COLUMNS               => [self::FLD_DESCRIPTION],
                     self::FLAGS                 => [self::TYPE_FULLTEXT],
                 ],
+            ],
+        ],
+
+        self::JSON_EXPANDER => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_TASKS => [],
             ],
         ],
 
@@ -161,18 +168,21 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
             ],
             self::FLD_TASKS => [
                 self::LABEL => 'Tasks', // _('Tasks')
-                self::TYPE => self::TYPE_VIRTUAL,
+                self::TYPE => self::TYPE_RECORDS,
                 self::CONFIG => [
-                    self::TYPE => self::TYPE_RELATIONS,
-                    self::LABEL => 'Tasks',
-                    self::CONFIG => [
-                        self::TYPE => 'TASK',
-                        self::APP_NAME => 'Tasks',
-                        self::MODEL_NAME => 'Task',
+                    self::APP_NAME      => Tasks_Config::APP_NAME,
+                    self::MODEL_NAME    => Tasks_Model_Task::MODEL_NAME_PART,
+                    self::REF_ID_FIELD  => 'source',
+                    self::DEPENDENT_RECORDS => true,
+                    self::ADD_FILTERS   => [
+                        [TMFA::FIELD => 'source_model', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => self::class],
+                    ],
+                    self::FORCE_VALUES  => [
+                        'source_model' => self::class,
                     ],
                 ],
             ],
-        ]
+        ],
     ];
 
     /**
@@ -197,18 +207,7 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
                 'type' => 'COWORKER',
                 'related_degree' => 'sibling'
             ]
-        ], [
-            'relatedApp' => 'Tasks',
-            'relatedModel' => 'Task',
-            'config' => [[
-                'type' => 'TASK',
-                'degree' => 'sibling',
-                'text' => 'Task',
-                // FIXME a project may have many tasks, but a task may have one project, no more
-                //'max' => '0:1' // _('Task')
-                'max' => '0:0' // _('Task')
-            ]],
-        ]
+        ],
     ];
 }
 

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  * 
@@ -6,9 +6,11 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * Projects Controller (composite)
@@ -107,6 +109,26 @@ class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_
                     $this->deletePersonalFolder($_eventObject->account, Projects_Model_Project::class);
                 }
                 break;
+        }
+    }
+
+    public static function tasksMCHookFun(array &$fields, Tinebase_ModelConfiguration $mc): void
+    {
+        if (!in_array(Projects_Model_Project::class, $fields['source_model'][TMCC::CONFIG][TMCC::AVAILABLE_MODELS])) {
+            $fields['source_model'][TMCC::CONFIG][TMCC::AVAILABLE_MODELS][] = Projects_Model_Project::class;
+        }
+        $filterModels = $mc->filterModel;
+        if (!isset($filterModels['source:' . Projects_Model_Project::class])) {
+            $filterModels['source:' . Projects_Model_Project::class] = [
+                TMCC::FILTER         => Tinebase_Model_Filter_ForeignId::class,
+                TMCC::LABEL          => 'source:' . Projects_Model_Project::class,
+                TMCC::OPTIONS => [
+                    TMCC::CONTROLLER    => Projects_Controller_Project::class,
+                    TMCC::FILTER_GROUP  => Projects_Model_Project::class,
+                    TMCC::FIELD         => 'source'
+                ],
+            ];
+            $mc->setFilterModel($filterModels);
         }
     }
 }
