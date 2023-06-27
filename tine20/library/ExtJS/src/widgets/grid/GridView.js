@@ -1183,6 +1183,8 @@ viewConfig: {
             }
         });
         
+        if (!resolvedCols.length) return;
+
         // handle columns fractional resizing
         let autoExpandColIdx = this.autoExpand && this.grid.autoExpandColumn ? cm.getIndexById(this.grid.autoExpandColumn) : -1;
         const visibleWidth = resolvedCols.reduce((pre, col) => pre + col.width, 0);
