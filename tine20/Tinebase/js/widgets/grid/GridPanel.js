@@ -2378,7 +2378,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         title: i18n._('Grid Panel Key Bindings'),
                         msg: helpText,
                         buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.INFO
+                        icon: Ext.MessageBox.INFO_INSTRUCTION
                     });
                     e.stopEvent();
                 }
@@ -2733,7 +2733,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 title: i18n._('Not Allowed'),
                 msg: i18n._('You are not allowed to delete all pages at once'),
                 buttons: Ext.Msg.OK,
-                icon: Ext.MessageBox.INFO
+                icon: Ext.MessageBox.ERROR_MILD
             });
 
             return;
@@ -2756,11 +2756,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.app.i18n.n_hidden(this.i18nDeleteQuestion[0], this.i18nDeleteQuestion[1], records.length) :
                 String.format(i18n.ngettext('Do you really want to delete the selected record ({0})?',
                     'Do you really want to delete the selected records ({0})?', records.length), recordNames);
-            Ext.MessageBox.confirm(i18n._('Confirm'), i18nQuestion, function(btn) {
-                if (btn == 'yes') {
-                    this.deleteRecords(sm, records);
+            Ext.MessageBox.show({
+                title: i18n._('Confirm'),
+                msg: i18nQuestion,
+                buttons: Ext.MessageBox.YESNO,
+                icon: Ext.MessageBox.QUESTION_WARN,
+                scope:this,
+                fn: function(btn) {
+                    if (btn == 'yes') {
+                        this.deleteRecords(sm, records);
+                    }
                 }
-            }, this);
+            });
         }
     },
 

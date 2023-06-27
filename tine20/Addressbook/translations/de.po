@@ -1265,6 +1265,9 @@ msgstr ""
 msgid "All Contacts"
 msgstr "Alle Kontakte"
 
+msgid "GENDER_Addressbook"
+msgstr "other"
+
 msgid "GENDER_Contact"
 msgstr "male"
 
