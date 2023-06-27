@@ -119,6 +119,13 @@ class Sales_Config extends Tinebase_Config_Abstract
 
     const VARIABLE_POSITION_FLAG = 'subProductPositionFlag';
 
+    const VAT_PROCEDURES = 'vatProcedures';
+    const VAT_PROCEDURE_TAXABLE = 'taxable';
+    const VAT_PROCEDURE_NON_TAXABLE = 'nonTaxable';
+    const VAT_PROCEDURE_REVERSE_CHARGE = 'reverseCharge';
+
+    const REVERSE_CHANGE_TEMPLATE = 'reverseChargeTemplate';
+
     /**
      * followup status
      */
@@ -941,6 +948,57 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE          => true,
             self::DEFAULT_STR               => [],
         ],
+        self::VAT_PROCEDURES => [
+            //_('VAT Procedures')
+            self::LABEL              => 'VAT Procedures',
+            //_('Possible VAT Procedures')
+            self::DESCRIPTION        => 'Possible VAT Procedures',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => self::VAT_PROCEDURE_TAXABLE,
+                        //_('Taxable')
+                        'value' => 'Taxable',
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::VAT_PROCEDURE_NON_TAXABLE,
+                        //_('Non taxable')
+                        'value' => 'Non taxable',
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::VAT_PROCEDURE_REVERSE_CHARGE,
+                        //_('Reverse charge')
+                        'value' => 'Reverse charge',
+                        'icon' => null,
+                        'system' => true,
+                    ],
+                ],
+                self::DEFAULT_STR => self::VAT_PROCEDURE_TAXABLE,
+            ],
+        ],
+        self::REVERSE_CHANGE_TEMPLATE => [
+            //_('Reverse Charge Template')
+            self::LABEL                 => 'Reverse Charge Template',
+            //_('Enabled Features in Sales Application.')
+            self::DESCRIPTION           => 'Reverse Charge Templates in multiple languages.',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                'de' => 'Steuerschuldnerschaft des Leistungsempfangers gemaß §13b UStG. Reverse-Charge-Verfahren.
+USt.-ID des Leistungsempfangers: { vatid }',
+                'en' => 'Tax liability of the recipient of the service according to §13b UStG. Reverse charge procedure.
+VAT ID of the service recipient: { vatid }',
+            ],
+        ],
+
         /**
          * enabled Sales features
          * 

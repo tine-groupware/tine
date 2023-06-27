@@ -2307,3 +2307,18 @@ msgstr "Als E-Mail an Datev senden"
 
 msgid "Datev email has been sent before , continue anyway?"
 msgstr "Die Datev-E-Mail wurde gesendet, wollen Sie trotzdem fortfahren?"
+
+msgid "VAT Procedures"
+msgstr "Mehrwertsteuer-Verfahren"
+
+msgid "VAT Procedure"
+msgstr "Mehrwertsteuer-Verfahren"
+
+msgid "Taxable"
+msgstr "Steuerpflichtig"
+
+msgid "Non taxable"
+msgstr "Nicht steuerpflichtig"
+
+msgid "Reverse charge"
+msgstr "Umkehrung der Steuerschuldnerschaft"

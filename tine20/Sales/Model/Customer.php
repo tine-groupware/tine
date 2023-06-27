@@ -22,6 +22,8 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
 {
     public const MODEL_NAME_PART = 'Customer';
 
+    const FLD_VAT_PROCEDURE = 'vat_procedure';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -138,6 +140,14 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'shy'     => TRUE,
                 self::NULLABLE => true,
             ),
+            self::FLD_VAT_PROCEDURE => [
+                self::LABEL => 'VAT Procedure', // _('VAT Procedure')
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::NAME => Sales_Config::VAT_PROCEDURES,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+            ],
             'credit_term' => array (
                 'label'   => 'Credit Term (days)', // _('Credit Term (days)')
                 'type'    => 'integer',

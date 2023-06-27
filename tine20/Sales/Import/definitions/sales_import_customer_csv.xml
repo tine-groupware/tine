@@ -30,6 +30,10 @@
             <destination>vatid</destination>
         </field>
         <field>
+            <source>vat_procedure</source>
+            <destination>vat_procedure</destination>
+        </field>
+        <field>
             <source>iban</source>
             <destination>iban</destination>
         </field>

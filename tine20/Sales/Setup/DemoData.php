@@ -407,19 +407,22 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'name' => 'ELKO Elektronik und Söhne',
                 'url' => 'www.elko-elektronik.de',
                 'discount' => 0,
-                'name_shorthand' => 'ELKO'
+                'name_shorthand' => 'ELKO',
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
             ),
             array(
                 'name' => 'Reifenlieferant Gebrüder Platt',
                 'url' => 'www.platt-reifen.de',
                 'discount' => 0,
-                'name_shorthand' => 'PLATT'
+                'name_shorthand' => 'PLATT',
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
             ),
             array(
                 'name' => 'Frische Fische Gmbh & Co. KG',
                 'url' => 'www.frische-fische-hamburg.de',
                 'discount' => 15.2,
-                'name_shorthand' => 'FrischeFische'
+                'name_shorthand' => 'FrischeFische',
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
             ),
         );
 

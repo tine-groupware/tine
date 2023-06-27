@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sales</name>
-    <version>16.3</version>
+    <version>16.4</version>
     <order>50</order>
     <status>enabled</status>
     <tables>
@@ -178,7 +178,7 @@
         </table>
         <table>
             <name>sales_customers</name>
-            <version>4</version>
+            <version>5</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -235,6 +235,12 @@
                     <name>vatid</name>
                     <type>text</type>
                     <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>vat_procedure</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <default>taxable</default>
                 </field>
                 <field>
                     <name>iban</name>
