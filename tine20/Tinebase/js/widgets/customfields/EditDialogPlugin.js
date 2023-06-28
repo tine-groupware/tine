@@ -121,11 +121,23 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
             allCfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName);
 
         _.each(allCfConfigs, _.bind(function (fields) {
-            if(_.get(fields, 'data.definition.uiconfig.key')) {
-                var pos = _.get(fields, 'data.definition.uiconfig.order');
-                Ext.ux.ItemRegistry.registerItem(_.get(fields, 'data.definition.uiconfig.key'),
-                    Tine.widgets.customfields.Field.get(this.app, fields, {}, this.editDialog)
-                    , pos ? pos : '0/0');
+            const key = _.get(fields, 'data.definition.uiconfig.key');
+            if(key) {
+                const pos = _.get(fields, 'data.definition.uiconfig.order');
+                const config = {};
+                if (key.match(/eastPanel$/)) {
+                    Object.assign(config, {
+                        labelSeparator: '',
+                        hideLabel: true,
+                        grow: false,
+                        preventScrollbars:false,
+                        anchor:'100% 100%',
+                    });
+                }
+                const field = Tine.widgets.customfields.Field.get(this.app, fields, config, this.editDialog);
+
+                Ext.ux.ItemRegistry.registerItem(key, (key.match(/eastPanel$/) ?
+                    {layout: 'form', items: field, title: field.fieldLabel} : field),pos ? pos : '0/0');
             }
         }, this));
     },
