@@ -1197,7 +1197,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 $listPaths->addRecord(new Tinebase_Model_Path(array(
                     'path'          => $this->_getPathPart($list),
                     'shadow_path'   => '/' . $list->getId(),
-                    'record_id'     => $list->getId(),
                     'creation_time' => Tinebase_DateTime::now(),
                 )));
             }
