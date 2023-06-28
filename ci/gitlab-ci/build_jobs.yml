@@ -83,6 +83,10 @@
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab/
       variables:
         REUSE_IMAGES: "false"
+    # from release-to-github
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-github/
+      variables:
+        REUSE_IMAGES: "false"
     # from deploy-images-to-dockerhub:
     - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
       variables:
@@ -270,6 +274,8 @@ docker_build_built:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
     # from push-to-vpackages:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /push-to-vpackages/
+    # from release-to-github
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-github/
   timeout: 120m
   interruptible: true
 docker_build_built_arm64:
@@ -347,5 +353,7 @@ docker_build_packages:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
     # from push-to-vpackages:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /push-to-vpackages/
+    # from release-to-github
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-github/
   timeout: 120m
   interruptible: true

@@ -263,47 +263,26 @@
       }
 
       # lib/scripts/github.sh
-      github_get_release_by_tag() {
-          owner=$1
-          repo=$2
-          tag=$3
-      
-          curl -s \
-              -H "accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/$owner/$repo/releases/tags/$tag"
-      }
-      
       github_create_release() {
-          owner=$1
-          repo=$2
-          tag=$3
-          user=$4
-          token=$5
+          tag=$1
+          user=$2
+          token=$3
       
-          body="$(github_create_release_body $owner $repo $tag | jq -Rs .)"
+          if ! echo "$version" | grep "nightly" > /dev/null; then
+              body="$(repo_release_notes "$tag" | jq -Rs .)"
+              draft="false"
+          else
+              echo "only publshing as draft: nigtly release detected" > /dev/stderr
+              body="$(repo_release_notes "HEAD" | jq -Rs .)"
+              draft="true"
+          fi
       
           curl -s \
               -X POST \
               -u "$user:$token" \
               -H "accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/$owner/$repo/releases" \
-              -d '{"tag_name":"'"$tag"'", "body":'"$body"'}'
-      }
-      
-      github_create_release_body() {
-          owner=$1
-          repo=$2
-          tag=$3
-      
-          previous_tag=$(github_get_latest_release_tag_name "$owner" "$repo")
-      
-          git fetch origin "$previous_tag"
-      
-          if ! git log "$tag...$previous_tag" 1> /dev/null; then
-              git fetch origin --unshallow --quiet
-          fi
-      
-          repo_release_notes "$tag" "$previous_tag"
+              "https://api.github.com/repos/tine-groupware/tine/releases" \
+              -d '{"tag_name":"'"$tag"'", "body":'"$body"', "draft":'$draft'}'
       }
       
       github_release_add_asset() {
@@ -323,13 +302,6 @@
               -H "accept: application/vnd.github.v3+json" \
               -H "content-type: $(file -b --mime-type $path_to_asset)" \
               "$upload_url?name=$name.tar.bz2"
-      }
-      
-      github_get_latest_release_tag_name() {
-          owner=$1
-          repo=$2
-      
-          curl https://api.github.com/repos/$1/$2/releases | jq -r '.[0].tag_name'
       }
 
       # lib/scripts/matrix.sh
@@ -540,11 +512,6 @@
       }
       
       packaging_push_package_to_github() {
-          if [ "$MAJOR_COMMIT_REF_NAME" != "main" ]; then
-              echo "skip pushing to github: $MAJOR_COMMIT_REF_NAME"
-              return 0
-          fi
-      
           customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
           version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
           release=$(echo ${version} | sed sI-I~Ig)
@@ -554,17 +521,18 @@
       
           curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${release}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${release}.tar.bz2"
       
-          release_json=$(github_create_release "$GITHUB_RELEASE_REPO_OWNER" "$GITHUB_RELEASE_REPO" "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
+          release_json=$(github_create_release "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
           if [ "$?" != "0" ]; then
               echo "$release_json"
               return 1
           fi
       
           echo "$release"
+          echo "$release_json"
       
-          github_release_add_asset "$release_json" "$asset_name" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${release}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
+          github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${release}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
       
-         matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
+          matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
       }
       
       packaging_push_to_vpackages() {
@@ -688,54 +656,11 @@
           curl -H "Authorization: Bearer $GITLAB_TOKEN" -XPOST "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/tags?tag_name=$tag&ref=$CI_COMMIT_SHA&message=version+$tag"
       }
       
-      release_tag_main_if_needed() {
-          if [ "$RELEASE_CE_TO_GITHUB" != "true" ]; then
-              echo "'RELEASE_CE_TO_GITHUB=$RELEASE_CE_TO_GITHUB' => do not tag main."
-              return
-          fi
-      
-          last_release_tag=$(github_get_latest_release_tag_name "$GITHUB_RELEASE_REPO_OWNER" "$GITHUB_RELEASE_REPO")
-          if [ $? != 0 ]; then
-              return 1
-          fi
-      
-          git fetch origin main || return 1
-      
-          commit_diff_count=$(git rev-list "$last_release_tag..origin/main" --count)
-          if [ $? != 0 ]; then
-              return 1
-          fi
-      
-          echo "origin/main and $last_release_tag differ in $commit_diff_count commits"
-      
-          if [ $commit_diff_count = 0 ]; then
-              echo "No difference, no new tag is created."
-              return 0
-          fi
-      
-          tag="$(date '+%Y.%m.%d.')$commit_diff_count"
-          echo "tagging origin/main as $tag"
-      
-          if ! git tag $tag; then
-              if [ "$(git rev-parse "$tag")" != "$(git rev-parse origin/main)" ]; then
-                  echo "tag $tag already exits, but it is ponting to a different commit."
-                  return 1
-              fi
-      
-              echo "Tag $tag already exits, for this commit. Using it..."
-          fi
-      
-          # "tag push" triggers tag pipeline which publishes the release
-          git push origin $tag || return 1
-          git push github $tag
-      }
-      
       release_to_gitlab() {
           tag="${CI_COMMIT_TAG}"
           customer="$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})"
-          previous_tag="$(git describe --abbrev=0 --tags HEAD~1 2> /dev/null || git fetch --unshallow --quiet && git describe --abbrev=0 --tags HEAD~1)" # if describe fails unshallow repo and try again
       
-          release-cli create --description "$(repo_release_notes "$tag" "$previous_tag")" --tag-name "$tag" --ref "$tag" --name "$tag" \
+          release-cli create --description "$(repo_release_notes "$tag")" --tag-name "$tag" --ref "$tag" --name "$tag" \
               --assets-link "{\"name\":\"all.tar\",\"url\":\"${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${tag}/all.tar\"}"
       }
 
@@ -777,7 +702,7 @@
       
       repo_release_notes() {
           tag=$1
-          previous_tag=$2
+          previous_tag="$(git describe --abbrev=0 --tags HEAD~1 2> /dev/null || git fetch --unshallow --quiet && git describe --abbrev=0 --tags HEAD~1)" # if describe fails unshallow repo and try again
       
           echo '# Releasenotes'
           echo '# Changelog'
