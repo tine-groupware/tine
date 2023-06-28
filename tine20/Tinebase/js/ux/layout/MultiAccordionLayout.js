@@ -203,6 +203,7 @@ Ext.extend(Ext.ux.layout.MultiAccordionLayout, Ext.layout.VBoxLayout, {
         for (i = 0; i < ln; i++) {
             child = children[i];
             header = child.header;
+            if (!header) continue;
             header.addClass('x-accordion-hd');
 
             if (siblingCollapsed) {
