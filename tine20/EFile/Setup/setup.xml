@@ -2,7 +2,7 @@
 <application>
     <name>EFile</name>
     <!-- gettext('eFile') -->
-    <version>16.1</version>
+    <version>16.2</version>
     <order>90</order>
     <status>enabled</status>
     <depends>
