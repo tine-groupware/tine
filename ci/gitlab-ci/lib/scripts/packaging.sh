@@ -113,11 +113,6 @@ packaging_gitlab_set_current_link() {
 }
 
 packaging_push_package_to_github() {
-    if [ "$MAJOR_COMMIT_REF_NAME" != "main" ]; then
-        echo "skip pushing to github: $MAJOR_COMMIT_REF_NAME"
-        return 0
-    fi
-
     customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
     version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
     release=$(echo ${version} | sed sI-I~Ig)
@@ -127,17 +122,18 @@ packaging_push_package_to_github() {
 
     curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${release}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${release}.tar.bz2"
 
-    release_json=$(github_create_release "$GITHUB_RELEASE_REPO_OWNER" "$GITHUB_RELEASE_REPO" "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
+    release_json=$(github_create_release "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
     if [ "$?" != "0" ]; then
         echo "$release_json"
         return 1
     fi
 
     echo "$release"
+    echo "$release_json"
 
-    github_release_add_asset "$release_json" "$asset_name" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${release}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
+    github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${release}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
 
-   matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
+    matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
 }
 
 packaging_push_to_vpackages() {

@@ -1,44 +1,23 @@
-github_get_release_by_tag() {
-    owner=$1
-    repo=$2
-    tag=$3
-
-    curl -s \
-        -H "accept: application/vnd.github.v3+json" \
-        "https://api.github.com/repos/$owner/$repo/releases/tags/$tag"
-}
-
 github_create_release() {
-    owner=$1
-    repo=$2
-    tag=$3
-    user=$4
-    token=$5
+    tag=$1
+    user=$2
+    token=$3
 
-    body="$(github_create_release_body $owner $repo $tag | jq -Rs .)"
+    if ! echo "$version" | grep "nightly" > /dev/null; then
+        body="$(repo_release_notes "$tag" | jq -Rs .)"
+        draft="false"
+    else
+        echo "only publshing as draft: nigtly release detected" > /dev/stderr
+        body="$(repo_release_notes "HEAD" | jq -Rs .)"
+        draft="true"
+    fi
 
     curl -s \
         -X POST \
         -u "$user:$token" \
         -H "accept: application/vnd.github.v3+json" \
-        "https://api.github.com/repos/$owner/$repo/releases" \
-        -d '{"tag_name":"'"$tag"'", "body":'"$body"'}'
-}
-
-github_create_release_body() {
-    owner=$1
-    repo=$2
-    tag=$3
-
-    previous_tag=$(github_get_latest_release_tag_name "$owner" "$repo")
-
-    git fetch origin "$previous_tag"
-
-    if ! git log "$tag...$previous_tag" 1> /dev/null; then
-        git fetch origin --unshallow --quiet
-    fi
-
-    repo_release_notes "$tag" "$previous_tag"
+        "https://api.github.com/repos/tine-groupware/tine/releases" \
+        -d '{"tag_name":"'"$tag"'", "body":'"$body"', "draft":'$draft'}'
 }
 
 github_release_add_asset() {
@@ -58,11 +37,4 @@ github_release_add_asset() {
         -H "accept: application/vnd.github.v3+json" \
         -H "content-type: $(file -b --mime-type $path_to_asset)" \
         "$upload_url?name=$name.tar.bz2"
-}
-
-github_get_latest_release_tag_name() {
-    owner=$1
-    repo=$2
-
-    curl https://api.github.com/repos/$1/$2/releases | jq -r '.[0].tag_name'
 }
