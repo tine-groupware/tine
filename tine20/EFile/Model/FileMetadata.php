@@ -55,8 +55,8 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
         self::ASSOCIATIONS => [
-            // this morphs into a one_to_one since node_id is unique too
             ClassMetadataInfo::MANY_TO_ONE => [
+                // this morphs into a one_to_one since node_id is unique too
                 self::FLD_NODE_ID => [
                     'targetEntity' => Tinebase_Model_Tree_Node::class,
                     'fieldName' => self::FLD_NODE_ID,
@@ -65,10 +65,8 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
                         'referencedColumnName' => 'id',
                         'onDelete' => 'CASCADE',
                     ]],
-                ]
-            ],
-            // a real many to one
-            ClassMetadataInfo::MANY_TO_ONE => [
+                ],
+                // a real many to one
                 self::FLD_FINAL_DECREE_BY => [
                     'targetEntity' => Addressbook_Model_Contact::class,
                     'fieldName' => self::FLD_FINAL_DECREE_BY,
@@ -106,7 +104,6 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
                 self::CONFIG => [
                     self::APP_NAME => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME => 'Tree_Node',
-                    self::IS_DEPENDENT => true,
                 ]
             ],
             self::FLD_DURATION_START => [
