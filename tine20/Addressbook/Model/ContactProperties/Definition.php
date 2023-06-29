@@ -170,6 +170,8 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
         ],
     ];
 
+    public static $doNotApplyToContactModel = false;
+
     public function removeFromContactModel(): void
     {
         if ($this->{self::FLD_IS_SYSTEM}) {
@@ -208,6 +210,10 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
 
     public function applyToContactModel(): void
     {
+        if (static::$doNotApplyToContactModel) {
+            return;
+        }
+
         $appId = Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId();
         $cfCtrl = Tinebase_CustomField::getInstance();
 
@@ -257,4 +263,9 @@ class Addressbook_Model_ContactProperties_Definition extends Tinebase_Record_New
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function isReplicable()
+    {
+        return true;
+    }
 }

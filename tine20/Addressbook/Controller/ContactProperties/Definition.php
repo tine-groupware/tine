@@ -110,4 +110,16 @@ class Addressbook_Controller_ContactProperties_Definition extends Tinebase_Contr
         Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(
             [$record, 'removeFromContactModel'], []);
     }
+
+    public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification): void
+    {
+        Addressbook_Model_ContactProperties_Definition::$doNotApplyToContactModel = true;
+        $oldAcl = $this->doContainerACLChecks(false);
+        $raii = new Tinebase_RAII(function() use($oldAcl) {
+            Addressbook_Model_ContactProperties_Definition::$doNotApplyToContactModel = false;
+            $this->doContainerACLChecks($oldAcl);
+        });
+        Tinebase_Timemachine_ModificationLog::defaultApply($_modification, $this);
+        unset($raii);
+    }
 }
