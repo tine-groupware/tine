@@ -1388,7 +1388,7 @@ Tine.Tinebase.tineInit = {
         require('Locale');
         require('Locale/Gettext');
 
-        await waitFor( function() { return Tine.__translationData.__isLoaded; });
+        await waitFor( function() { return Tine.__translationData?.__isLoaded; });
         Tine.__applyExtTranslations();
 
         _.each(Tine.__translationData.msgs, function(msgs, category) {
