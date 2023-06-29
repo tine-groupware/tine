@@ -360,6 +360,22 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
         self::assertEquals($account->email, $userInBackend['email'], 'email was not updated');
     }
 
+    public function testUpdatePwSharedAccount()
+    {
+        $this->_testNeedsTransaction();
+        $account = $this->_createSharedAccount();
+        $account->password = 'acbd';
+        Felamimail_Controller_Account::getInstance()->update($account);
+        $changedNote = Tinebase_Notes::getInstance()->getNotesOfRecord(
+            Felamimail_Model_Account::class, $account->getId(),
+            Tinebase_Notes::DEFAULT_RECORD_BACKEND, false
+        )->filter(Tinebase_Model_Note::FLD_NOTE_TYPE_ID, Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED)
+         ->getFirstRecord();
+        self::assertNotNull($changedNote);
+        self::assertStringContainsString('password ( -> ********)', $changedNote->note,
+            'password is not hidden ("****")');
+    }
+
     public function testDeleteSharedAccount()
     {
         $this->_testNeedsTransaction();

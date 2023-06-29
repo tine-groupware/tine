@@ -262,7 +262,22 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param  boolean $_onlyNonSystemNotes get only non-system notes per default
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Note
      */
-    public function getNotesOfRecord($_model, $_id, $_backend = 'Sql', $_onlyNonSystemNotes = TRUE)
+
+    /**
+     * get all notes of a given record (calls searchNotes)
+     *
+     * @param  string $_model     model of record
+     * @param  string $_id        id of record
+     * @param  string $_backend   backend of record
+     * @param  boolean $_onlyNonSystemNotes get only non-system notes per default
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Note
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function getNotesOfRecord(string $_model,
+                                     string $_id,
+                                     string $_backend = self::DEFAULT_RECORD_BACKEND,
+                                     bool $_onlyNonSystemNotes = true)
     {
         $backend = ucfirst(strtolower($_backend));
 
@@ -274,9 +289,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             'dir'   => 'DESC'
         ));
         
-        $result = $this->searchNotes($filter, $pagination);
-            
-        return $result;
+        return $this->searchNotes($filter, $pagination);
     }
     
     /**
