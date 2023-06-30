@@ -102,7 +102,7 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
     public function update005()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
-        if ($this->getTableVersion('sales_customers') < 5) {
+        if (!$this->_backend->columnExists('vat_procedure', 'sales_customers')) {
             $declaration = new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>vat_procedure</name>
@@ -110,9 +110,11 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
                     <length>40</length>
                     <default>taxable</default>
                 </field>
-        ');
+            ');
             $this->_backend->addCol('sales_customers', $declaration, 10);
-            $this->setTableVersion('sales_customers', 5);
+            if ($this->getTableVersion('sales_customers') < 5) {
+                $this->setTableVersion('sales_customers', 5);
+            }
         }
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '16.5', self::RELEASE016_UPDATE005);
     }
