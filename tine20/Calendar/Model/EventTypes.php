@@ -34,7 +34,7 @@ class Calendar_Model_EventTypes extends Tinebase_Record_NewAbstract
         self::VERSION => 1,
         self::RECORD_NAME               => 'Event Type',
         self::RECORDS_NAME              => 'Event Types', // ngettext('Event Type', 'Event Types', n)
-        self::TITLE_PROPERTY            => self::FLD_EVENT_TYPE,
+        self::TITLE_PROPERTY            => '{{ eventType.name }}',
         self::HAS_RELATIONS             => false,
         self::HAS_CUSTOM_FIELDS         => false,
         self::HAS_SYSTEM_CUSTOM_FIELDS  => false,
@@ -100,7 +100,7 @@ class Calendar_Model_EventTypes extends Tinebase_Record_NewAbstract
                 self::LENGTH            => 40,
                 self::CONFIG            => [
                     self::APP_NAME          => Calendar_Config::APP_NAME,
-                    self::MODEL_NAME        => 'event',
+                    self::MODEL_NAME        => 'Event',
                 ],
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Event', // _('Event')
