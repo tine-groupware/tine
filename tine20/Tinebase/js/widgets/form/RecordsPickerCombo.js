@@ -51,6 +51,8 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     initComponent: function () {
         this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : i18n._('Search for records ...'));
         this.currentValue = this.currentValue || [];
+        // allow to initialize with string
+        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
         Tine.Tinebase.widgets.form.RecordsPickerCombo.superclass.initComponent.call(this);
         this.store = new Ext.data.SimpleStore({
             fields: this.recordClass
@@ -62,11 +64,15 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     getItems: function () {
         this.pickerGrid = new Tine.widgets.grid.PickerGridPanel({
             recordClass: this.recordClass,
+            isMetadataModelFor: this.isMetadataModelFor,
+            refIdField: this.refIdField,
             height: this.layerHeight - 40 || 'auto',
             onStoreChange: Ext.emptyFn,
             store: this.store,
             additionalFilterSpec: this.additionalFilterSpec,
             allowDelete: this.allowDelete,
+            allowCreateNew: this.allowCreateNew,
+            editDialogConfig: this.editDialogConfig
         });
 
         return [this.pickerGrid];

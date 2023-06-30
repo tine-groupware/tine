@@ -261,7 +261,7 @@ Tine.widgets.form.FieldManager = function() {
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
                         field.isFormField = true;
                         field.fieldName = fieldDefinition.fieldName;
-                        field.hideHeaders = !field.columns;
+                        field.hideHeaders = !field.columns || field.columns.length < 2;
                         field.height = 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */
                         if (_.get(fieldDefinition, 'config.dependentRecords', false)) {
                             // @TODO use different widget here (e.g. quickadd gird)

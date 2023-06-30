@@ -181,7 +181,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         // Autodetect if our record has additional metadata for the refId Record or is only a cross table
         if (this.refIdField) {
-            const systemFields = _.map(Tine.Tinebase.Model.genericFields, 'name').concat(this.recordClass.getMeta('idProperty'), this.refIdField);
+            const systemFields = _.map(Tine.Tinebase.Model.genericFields, 'name')
+                .concat(this.recordClass.getMeta('idProperty'), this.refIdField)
+                .concat(this.recordClass.getModelConfiguration().hasNotes ? [] : 'notes');
             const dataFields = _.difference(this.recordClass.getModelConfiguration().fieldKeys, systemFields);
 
             this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 ? dataFields[0] : null;
@@ -210,7 +212,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
 
     onAfterRender: function() {
-        this.parentEditDialog = this.findParentBy(function (c) {
+        this.parentEditDialog = this.parentEditDialog || this.findParentBy(function (c) {
             return c instanceof Tine.widgets.dialog.EditDialog
         });
 
@@ -605,7 +607,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     getRecordDefaults: function() {
         const defaults = {...this.recordDefaults || {} };
         if (this.refIdField) {
-            defaults[this.refIdField] = this.parentEditDialog.record.getId();
+            defaults[this.refIdField] = this.parentEditDialog?.record?.getId();
         }
 
         return defaults;

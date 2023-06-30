@@ -783,7 +783,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'multipleEdit', 'multipleEditRequiredRight', 'languagesAvailable',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
-        'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasAttachments', 'hasAlarms',
+        'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasNotes', 'hasAttachments', 'hasAlarms',
         'idProperty', 'splitButton', 'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields',
         'group', 'multipleEdit', 'multipleEditRequiredRight', 'copyNoAppendTitle', 'denormalizationOf', 'isMetadataModelFor'
     );
