@@ -668,10 +668,6 @@ msgstr "Member E-Mails"
 msgid "System Group"
 msgstr "System Group"
 
-#: js/ListGrid.js:148 Model/List.php:212
-msgid "Group"
-msgstr "Group"
-
 #: js/StructurePanel.js:57
 msgid "Select record to see its details"
 msgstr "Select record to see its details"
