@@ -846,9 +846,10 @@ msgstr "Mitglieder E-Mails"
 msgid "System Group"
 msgstr "Systemgruppe"
 
-#: js/ListGrid.js:148
 msgid "Group"
-msgstr "Gruppe"
+msgid_plural "Groups"
+msgstr[0] "Gruppe"
+msgstr[1] "Gruppen"
 
 #: js/MailinglistPanel.js:38
 msgid "Mailing List"

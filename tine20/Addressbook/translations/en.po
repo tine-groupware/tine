@@ -200,9 +200,10 @@ msgstr "Description"
 msgid "Enter description"
 msgstr "Enter description"
 
-#: js/ContactEditDialog.js:440 js/Model.js:84 Model/Contact.php:452
-msgid "Groups"
-msgstr "Groups"
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Group"
+msgstr[1] "Groups"
 
 #: js/ContactEditDialog.js:521 js/ContactEditDialog.js:563
 msgid "Parse address"

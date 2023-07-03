@@ -1328,6 +1328,11 @@ msgstr "Search for {0} ..."
 msgid "Record"
 msgstr "Record"
 
+msgid "record"
+msgid_plural "records"
+msgstr[0] "record"
+msgstr[1] "records"
+
 #: js/widgets/form/RecordPickerComboBox.js:326
 #: js/widgets/relation/GenericPickerGridPanel.js:1074
 #: js/widgets/form/RecordPickerComboBox.js:378
