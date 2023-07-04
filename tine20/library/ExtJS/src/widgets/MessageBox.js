@@ -203,6 +203,7 @@ Ext.Msg.show({
          * @return {Ext.MessageBox} this
          */
         show: async function(options){
+            window.vue = window.vue || await import(/* webpackChunkName: "Tinebase/js/Vue-Runtime"*/"tine-vue")
             opt = {...defaultConfigs,...options};
             opt.closable = (opt.closable !== false && opt.progress !== true && opt.wait !== true);
             opt.prompt = opt.prompt || (opt.multiline ? true : false);
@@ -217,7 +218,7 @@ Ext.Msg.show({
             // initializing the reactive prop.
             if(!vueProps){
                 otherConfigs.buttonText = this.buttonText;
-                const { reactive } = await import(/* webpackChunkName: "Tinebase/js/Vue"*/'vue')
+                const {reactive} = await import("vue")
                 vueProps = reactive({
                     opt: JSON.parse(JSON.stringify(defaultConfigs)),
                     otherConfigs: JSON.parse(JSON.stringify(otherConfigs)),
@@ -225,7 +226,7 @@ Ext.Msg.show({
             }
             
             if(!vueEmitter){
-                const {default: mitt} = await import(/* webpackChunkName: "Tinebase/js/mitt"*/'mitt')
+                const {default: mitt} = await import(/* webpackChunkName: "Tinebase/js/Mitt"*/'mitt')
                 vueEmitter = mitt();
                 vueEmitter.on("close", handleHide);
                 vueEmitter.on("buttonClicked", handleButton);
@@ -241,14 +242,15 @@ Ext.Msg.show({
 
             // initializing and mounting the app.
             if(!vueHandle){
-                const {createApp, h} = await import(/* webpackChunkName: "Tinebase/js/Vue"*/'vue')
+                const {createApp, h} = await import("vue")
                 const {MessageBoxApp, SymbolKeys} = await import(/* webpackChunkName: "Tinebase/js/VueMessageBox"*/'./VueMessageBox')
-                console.log(MessageBoxApp, SymbolKeys)
+                const {BootstrapVueNext} = await import(/* webpackChunkName: "Tinebase/js/BootstrapVueNext"*/'bootstrap-vue-next')
                 vueHandle = createApp({
                     render: () => h(MessageBoxApp, vueProps)
                 });
                 vueHandle.config.globalProperties.ExtEventBus = vueEmitter;
                 vueHandle.provide(SymbolKeys.ExtEventBusInjectKey, vueEmitter);
+                vueHandle.use(BootstrapVueNext)
 
                 vueHandle.mount(mp);
             }

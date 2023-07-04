@@ -6,6 +6,9 @@
         :hide-header-close="!props.opt.closable"
         :hide-footer="!props.opt.buttons"
         :centered="true"
+        :no-fade="true"
+        :lazy="true"
+        :noCloseOnBackdrop="true"
         @close="closeBox"
     >
         <template #default>
@@ -52,27 +55,17 @@
 // the implementation is not given top priority
 import {
     onBeforeMount,
-    defineProps,
     watch,
     computed,
     ref,
-    onBeforeUnmount
+    inject,
 } from "vue"
 
 import getIconPath from "./helpers";
 
-import { useExtEventBus } from ".";
+import { SymbolKeys } from ".";
 
-import {
-    BModal,
-    BFormTextarea,
-    BProgressBar,
-    BProgress,
-    BButton,
-    BFormInput
-} from "bootstrap-vue-next"
-
-const ExtEventBus = useExtEventBus();
+const ExtEventBus = inject(SymbolKeys.ExtEventBusInjectKey);
 const textBoxElVisibility = ref(false);
 const textAreaElVisibllity = ref(false);
 const progressBarVisibility = ref(false);

@@ -90,7 +90,9 @@ module.exports = {
     },
     externals: {
         fs: "fs",
+        vue: "vue"
     },
+    externalsType: "window",
     output: {
         path: baseDir + '/',
         publicPath: 'auto',
@@ -203,6 +205,10 @@ module.exports = {
             'util': require.resolve("util/"),
             'process': require.resolve('process/browser'),
             'stream': require.resolve("stream-browserify"),
+        },
+        alias: {
+            // convinence alias
+            "tine-vue$": path.resolve(__dirname, "node_modules/vue/dist/vue.runtime.esm-bundler.js"),
         }
     }
 };
