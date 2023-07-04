@@ -17,6 +17,7 @@
 class Tinebase_Server_JsonTests extends TestCase
 {
     protected bool $_resetRateLimitConfig = false;
+    protected $_imapConf = null;
 
     /**
      * tear down tests
@@ -28,6 +29,12 @@ class Tinebase_Server_JsonTests extends TestCase
             $rateLimit->purge(Tinebase_Core::getUser()->accountLoginName, 'Inventory.searchInventoryItems');
             Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, []);
         }
+        if ($this->_imapConf !== null) {
+            Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_imapConf);
+            Tinebase_EmailUser::clearCaches();
+            Tinebase_EmailUser::destroyInstance();
+        }
+        parent::tearDown();
     }
 
     /**
@@ -366,5 +373,26 @@ class Tinebase_Server_JsonTests extends TestCase
         $result = Tinebase_Helper::jsonDecode($resultString);
         self::assertArrayHasKey('success', $result['result']);
         self::assertEquals(true, $result['result']['success'], print_r($result, true));
+    }
+
+    /**
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Json_Exception
+     * @throws Zend_Session_Exception
+     *
+     * @group ServerTests
+     */
+    public function testLoginWithoutConnectionToMailDb()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $this->_imapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        $newConf = $this->_imapConf->toArray();
+        $newConf['dovecot']['host'] = 'somethingelse';
+        Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $newConf);
+        Tinebase_EmailUser::clearCaches();
+        Tinebase_EmailUser::destroyInstance();
+
+        $this->testLogin();
     }
 }
