@@ -155,13 +155,6 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     }
                     Tinebase_Core::startCoreSession();
                     Tinebase_Core::initFramework();
-                } catch (Zend_Session_Exception $zse) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                            . ' Maintenance mode / other session problem: ' . $zse->getMessage());
-                    }
-                    header('HTTP/1.1 503 Service Unavailable');
-                    return;
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     $this->_sendUnauthorizedHeader();
                     return;
@@ -317,6 +310,12 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
             }
             @header('HTTP/1.1 403 Forbidden');
+        } catch (Zend_Session_Exception $zse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Maintenance mode / session problem: ' . $zse->getMessage());
+            }
+            @header('HTTP/1.1 503 Service Unavailable');
         } catch (Throwable $e) {
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');
@@ -325,8 +324,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
     protected function _sendUnauthorizedHeader()
     {
-        header('WWW-Authenticate: Basic realm="' . $this->_getRealm() .  '"');
-        header('HTTP/1.1 401 Unauthorized');
+        @header('WWW-Authenticate: Basic realm="' . $this->_getRealm() .  '"');
+        @header('HTTP/1.1 401 Unauthorized');
     }
 
     protected function _getRealm(): string
