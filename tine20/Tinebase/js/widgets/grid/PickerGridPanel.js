@@ -522,7 +522,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     getSearchCombo: function() {
         if (! this.searchCombo) {
-            if (this.isMetadataModelFor !== null) {
+            if (this.isMetadataModelFor) {
                 var mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor),
                     mappingRecordClass = mappingFieldDef.getRecordClass()
                     this.searchRecordClass = mappingRecordClass;
@@ -556,7 +556,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
            return;
         }
         
-        if (this.isMetadataModelFor !== null) {
+        if (this.isMetadataModelFor) {
             var recordData = this.getRecordDefaults();
             recordData[this.isMetadataModelFor] = recordToAdd.data;
             var record =  Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
