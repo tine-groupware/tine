@@ -560,7 +560,7 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         Admin_Controller_User::getInstance()->setAccountPassword($sclever, $newPw, $newPw);
         $this->_scleverPwChanged = true;
         $scleverAccount = array_filter($systemAccounts, function($account) use ($sclever) {
-            return ($account['user_id']['accountId'] === $sclever->getId());
+            return (is_array($account['user_id']) && $account['user_id']['accountId'] === $sclever->getId());
         });
         $scleverAccount = array_pop($scleverAccount);
         try {
