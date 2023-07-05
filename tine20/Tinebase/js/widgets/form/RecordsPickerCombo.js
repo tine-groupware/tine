@@ -64,7 +64,7 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     getItems: function () {
         this.pickerGrid = new Tine.widgets.grid.PickerGridPanel({
             recordClass: this.recordClass,
-            isMetadataModelFor: this.isMetadataModelFor ? this.isMetadataModelFor : null,
+            isMetadataModelFor: this.isMetadataModelFor,
             refIdField: this.refIdField,
             height: this.layerHeight - 40 || 'auto',
             onStoreChange: Ext.emptyFn,
