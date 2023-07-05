@@ -116,7 +116,7 @@ class Addressbook_Controller_ContactProperties_Definition extends Tinebase_Contr
         Addressbook_Model_ContactProperties_Definition::$doNotApplyToContactModel = true;
         $oldAcl = $this->doContainerACLChecks(false);
         $raii = new Tinebase_RAII(function() use($oldAcl) {
-            Addressbook_Model_ContactProperties_Definition::$doNotApplyToContactModel = false;
+            // do not reset Addressbook_Model_ContactProperties_Definition::$doNotApplyToContactModel here!
             $this->doContainerACLChecks($oldAcl);
         });
         Tinebase_Timemachine_ModificationLog::defaultApply($_modification, $this);
