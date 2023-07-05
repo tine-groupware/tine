@@ -338,7 +338,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected function _createSharedEmailUser($_record)
     {
-        $userId = $_record->user_id ? $_record->user_id : Tinebase_Record_Abstract::generateUID();
+        $userId = $_record->user_id ?: Tinebase_Record_Abstract::generateUID();
         if (Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS}) {
             Tinebase_EmailUser_XpropsFacade::setXprops($_record, $userId);
         } else {
@@ -1120,9 +1120,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
 
         $credentials = null;
         if ($_oldRecord->credentials_id) {
-            $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
-            $credentials->key = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
             try {
+                $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
+                $credentials->key = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
                 $credentialsBackend->getCachedCredentials($credentials);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
