@@ -473,6 +473,50 @@ class Addressbook_ControllerTest extends TestCase
         $this->assertEquals(1, $count);
     }
 
+    public function testContactPropertyDefinitionReplication()
+    {
+        $raii = new Tinebase_RAII(function() {
+            Addressbook_Model_ContactProperties_Definition::$doNotApplyToContactModel = false;
+        });
+
+        $name = 'unittest_adr';
+        $appId = Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId();
+        $cfCtrl = Tinebase_CustomField::getInstance();
+        $cfc = $cfCtrl->getCustomFieldByNameAndApplication($appId, $name, Addressbook_Model_Contact::class, true);
+        $this->assertNull($cfc);
+
+        $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
+
+        /** @var Addressbook_Model_ContactProperties_Definition $cpDef */
+        $cpDef = Addressbook_Controller_ContactProperties_Definition::getInstance()->create(
+            new Addressbook_Model_ContactProperties_Definition([
+                Addressbook_Model_ContactProperties_Definition::FLD_NAME => $name,
+                Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
+                Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD,
+            ])
+        );
+
+        $modifications = Tinebase_Timemachine_ModificationLog::getInstance()->getReplicationModificationsByInstanceSeq($instance_seq);
+        $this->assertSame(1, $modifications->count());
+
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        $cfc = $cfCtrl->getCustomFieldByNameAndApplication($appId, $name, Addressbook_Model_Contact::class, true);
+        $this->assertNull($cfc);
+
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs($modifications);
+        $this->assertTrue($result, 'applyReplicationModLogs failed');
+
+        /** @var Addressbook_Model_ContactProperties_Definition $cpDef */
+        $cpDef = Addressbook_Controller_ContactProperties_Definition::getInstance()->get($cpDef->getId());
+        $cpDef->applyToContactModel();
+
+        $cfc = $cfCtrl->getCustomFieldByNameAndApplication($appId, $name, Addressbook_Model_Contact::class, true);
+        $this->assertNull($cfc);
+        unset($raii);
+    }
+
     public function testCustomFieldRelationLoop()
     {
         $contact = $this->_addContact();

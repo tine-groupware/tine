@@ -364,7 +364,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $model = $_customField->model;
             $model::resetConfiguration();
 
-            Setup_SchemaTool::updateAllSchema();
+            if ((new Tinebase_Record_DoctrineMappingDriver())->isTransient($model)) {
+                Setup_SchemaTool::updateSchema([$model]);
+            }
         }
     }
     
