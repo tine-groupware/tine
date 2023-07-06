@@ -683,8 +683,8 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
             $this->assertSame('Fehler beim Speichern von "test.txt"', $messages[0]->getSubject());
             $this->assertSame('Fehler beim Speichern von "test.txt"', $messages[1]->getSubject());
 
-            $this->assertStringNotContainsString('folders/shared/OOIQuarantine/', $messages[0]->getBodyText(true));
-            $this->assertStringContainsString('folders/shared/OOIQuarantine/', $messages[1]->getBodyText(true));
+            $this->assertStringNotContainsString('folders/shared/OOIQuarantine', $messages[0]->getBodyText(true));
+            $this->assertStringContainsString('folders/shared/OOIQuarantine', $messages[1]->getBodyText(true));
 
             return;
         }
