@@ -238,15 +238,20 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                         end($pathParts);
                         $fileName = current($pathParts);
                     }
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . $tenf->getMessage());
                 } catch (Throwable $t) {
                     Tinebase_Exception::log($t);
                 }
-                
+
+                // TODO add translation
                 Tinebase_Notification::getInstance()->send(null, $recipients,
                     'Fehler beim Speichern von "' . ($fileName ?? 'unbekannt') . '"',
                     'Das Speichern ihrer online Änderungen an der Datei "' . ($filePath ?? 'unbekannt'). '" vom ' .
                     Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->toString() .
-                    ' konnten aufgrund eines internen technischen Fehlers in OnlyOffice nicht gespeichert werden. Bitte versuchen sie es erneut. Sollte der Fehler bestehen bleiben informieren sie bitte ihren Administrator' .
+                    ' konnten aufgrund eines internen technischen Fehlers in OnlyOffice nicht gespeichert werden.' .
+                    ' Bitte versuchen sie es erneut. Sollte der Fehler bestehen bleiben, informieren sie bitte Ihren Administrator' .
                     ($quarantinePath ? PHP_EOL . 'Eine Sicherungskopie konnte in: "' . $quarantinePath . '" angelegt werden.' : ''));
             }
         } catch (Throwable $t) {
