@@ -129,7 +129,7 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
             substr($node->hash, 3) . '/thumbnail_0.jpg');
         $this->_previews->deletePreviews([$node->hash]);
         $deletedThumbNode = Tinebase_FileSystem::getInstance()->get($thumbNode->getId(), true);
-        $this->assertSame('1', $deletedThumbNode->is_deleted);
+        $this->assertTrue(1 == $deletedThumbNode->is_deleted);
         $this->assertGreaterThan($thumbNode->seq, $deletedThumbNode->seq);
 
         $this->_previewService->setReturnValueGetPreviewsForFile(['thumbnail' => ['blub'], 'previews' => ['blub1', 'blub2', 'blub3']]);
