@@ -126,6 +126,19 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
         if (false === $lock->tryAcquire()) {
             return [];
         }
+
+        /** @var Tinebase_Backend_Scheduler $backend */
+        $backend = Tinebase_Scheduler::getInstance()->getBackend();
+        $forUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($backend);
+        /** @var Tinebase_Model_SchedulerTask $task */
+        $task = $backend->getByProperty('Tinebase_User/Group::syncUsers/Groups');
+        unset($forUpdateRaii);
+        if ($task->lock_id) {
+            return [];
+        }
+        $task->lock_id = __CLASS__;
+        $backend->update($task);
+
         try {
             $this->_import();
         } catch (Throwable $t) {
@@ -138,6 +151,13 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 $lock->release();
             }
         }
+
+        $forUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($backend);
+        /** @var Tinebase_Model_SchedulerTask $task */
+        $task = $backend->getByProperty('Tinebase_User/Group::syncUsers/Groups');
+        unset($forUpdateRaii);
+        $task->lock_id = null;
+        $backend->update($task);
 
         return [];
     }
@@ -169,6 +189,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
         } elseif (preg_match('/^last imported revision: (\d+)$/m', $this->note->note, $m) && (int)$m[1] === (int)$this->fileNode->revision) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' no new file revision found, nothing to import.');
+            $this->note = null;
             return false;
         }
         return true;
