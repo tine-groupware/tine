@@ -558,6 +558,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             }
 
             $groupMemberships = $this->groupCtrl->getGroupMemberships($account->getId());
+            $cfg = null;
             if (!in_array($course->group_id, $groupMemberships, true)) {
                 foreach ($groupMemberships as $gid) {
                     if (isset($this->coursesGroupId[$gid])) {
@@ -576,12 +577,13 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                 Courses_Controller_Course::getInstance()->_manageAccessGroups($memberIds, $course);
                 Courses_Controller_Course::getInstance()->_addToStudentGroup($memberIds);
 
-                $sambaCfg = Courses_Controller_Course::getInstance()->_getNewUserConfig($course)['samba'];
+                $cfg = Courses_Controller_Course::getInstance()->_getNewUserConfig($course);
+                $sambaCfg = $cfg['samba'];
                 $sambaSAM = $account->sambaSAM;
-                $sambaSAM['homePath'] = stripslashes($sambaCfg['homePath'] ?: '');
-                $sambaSAM['homeDrive'] = stripslashes($sambaCfg['homeDrive'] ?: '');
+                $sambaSAM['homePath'] = $sambaCfg['homePath'] ?: '';
+                $sambaSAM['homeDrive'] = $sambaCfg['homeDrive'] ?: '';
                 $sambaSAM['logonScript'] = $sambaCfg['logonScript'] ?: '';
-                $sambaSAM['profilePath'] = stripslashes($sambaCfg['profilePath'] ?: '');
+                $sambaSAM['profilePath'] = $sambaCfg['profilePath'] ?: '';
                 $account->sambaSAM = $sambaSAM;
 
                 $msg = 'add student: ' . $account->accountLoginName . ' to course: ' . $course->name;
@@ -601,14 +603,14 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
 
                 $account->accountFirstName = $raw[2];
                 $account->accountLastName = $raw[1];
-                unset($account->accountDisplayName);
-                unset($account->accountFullName);
-                unset($account->accountLoginName);
-                unset($account->accountEmailAddress);
                 $applyTwig = true;
             }
 
             if ($applyTwig) {
+                unset($account->accountDisplayName);
+                unset($account->accountFullName);
+                unset($account->accountLoginName);
+                unset($account->accountEmailAddress);
                 // we did set the course context further up the loop, make sure not to break that
                 $account->applyTwigTemplates();
                 $updateAccount = true;
@@ -621,6 +623,7 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
             }
 
             if ($updateAccount) {
+
                 $count = 1;
                 $shortUsername = $account->shortenUsername(2);
                 while ($count < 100) {
@@ -653,6 +656,10 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         break;
                     }
+                }
+
+                if ($cfg) {
+                    $account->accountHomeDirectory = $cfg['accountHomeDirectoryPrefix'] . $account->accountLoginName;
                 }
 
                 $this->userCtrl->updateUser($account);
