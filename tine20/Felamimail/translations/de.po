@@ -454,6 +454,9 @@ msgstr[1] "Vorschlage für Ablageorte"
 msgid "Message File Suggestions"
 msgstr "Vorschläge für Ablageorte"
 
+msgid "All folders"
+msgstr "Alle Ordner"
+
 #: Setup/Initialize.php:44
 msgid "All inboxes of my email accounts"
 msgstr "Alle Posteingänge meiner Konten"
@@ -2249,3 +2252,6 @@ msgstr "Sieve Kontingent"
 
 msgid "no quota set"
 msgstr "keine Begrenzung"
+
+msgid "{0} {1} is not found"
+msgstr "{0} {1} wurde nicht gefunden."

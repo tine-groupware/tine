@@ -31,7 +31,12 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
     /**
      * path for all inboxes filter
      */
-    const PATH_ALLINBOXES = '/allinboxes';
+    const PATH_ALLINBOXES = '/*/INBOX';
+
+    /**
+     * path for all folders
+     */
+    const PATH_ALLFOLDERS = '/**';
     
     /**
      * @var array filter model fieldName => definition
@@ -158,56 +163,94 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
     protected function _addPathSql($_select, $_backend, $_filterData)
     {
         $db = $_backend->getAdapter();
-        
+        $AllFiltersAccountIds = [];
         $folderIds = array();
+        $folderBackend = new Felamimail_Backend_Folder();
+        $folderFilterData = [];
+        
         foreach ((array)$_filterData['value'] as $filterValue) {
             if (is_array($filterValue) && isset($filterValue['path'])) {
                 $filterValue = $filterValue['path'];
             }
-            if ($filterValue === null || empty($filterValue)) {
+            if (empty($filterValue)) {
                 $_select->where('1 = 0');
-            } else if ($filterValue === self::PATH_ALLINBOXES) {
-                $folderIds = array_merge($folderIds, $this->_getFolderIdsOfAllInboxes());
             } else if (strpos($filterValue, '/') !== FALSE) {
-                $pathParts = explode('/', $filterValue);
-                if (! $pathParts) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                                __METHOD__ . '::' . __LINE__ . ' Could not explode filter:' . var_export($filterValue, true));
-                    continue;
-                }
-                array_shift($pathParts);
-                if (count($pathParts) == 1) {
-                    // we only have an account id
-                    $this->_addAccountFilter($_select, $_backend, (array) $pathParts[0]);
-                } else if (count($pathParts) > 1) {
-                    $folderIds[] = array_pop($pathParts);
+                $pathParts = array_values(array_filter(explode('/', $filterValue)));
+                $parents = [''];
+                
+                foreach ($pathParts as $idx => $path) {
+                    $isLastIndex = $idx === sizeof($pathParts) - 1;
+                    if ($idx === 0) {
+                        //index 0 is account
+                        if (Tinebase_Helper::isHashId($path)) {
+                            $AllFiltersAccountIds = array_merge($AllFiltersAccountIds, [$path]);
+                            continue;
+                        }
+                        if ($path === '**' || $path === '*') {
+                            $accountIds = array_unique($this->_getUserAccountIds());
+                        } else {
+                            $result = Felamimail_Controller_Account::getInstance()->search(
+                                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class,
+                                    [['field' => 'name', 'operator' => 'contains', 'value' => $path]]
+                                ));
+                            $accountIds = array_unique($result->getArrayOfIds());
+                        }
+                        $AllFiltersAccountIds = array_merge($AllFiltersAccountIds, $accountIds);
+                    }
+                    // index above 0 should be folders
+                    if ($idx >= 1) {
+                        if (Tinebase_Helper::isHashId($path) && $isLastIndex) {
+                            $folderIds = array_merge($folderIds, [$path]);
+                            continue;
+                        }
+                        if ($path === '*') {
+                            // filter search parent folder none recursively
+                            if ($isLastIndex) {
+                                $folderFilterData[] = ['field' => 'parent', 'operator' => 'in', 'value' => $parents];
+                                continue;
+                            }
+                            $folders = $folderBackend->search(new Felamimail_Model_FolderFilter($folderFilterData));
+                            $parents = $folders->globalname;
+                            continue;
+                        }
+                        foreach ($parents as &$parent) {
+                            // filter search parent folders recursively
+                            if ($path === '**') {
+                                if ($idx === 1) {
+                                    $folderFilterData[] = ['field' => 'account_id', 'operator' => 'in', 'value' => $AllFiltersAccountIds];
+                                    $folders = $folderBackend->search(new Felamimail_Model_FolderFilter($folderFilterData));
+                                    $folderIds = array_merge($folderIds, $folders->getArrayOfIds());
+                                    continue;
+                                }
+                                $folderFilterData[] = ['field' => 'globalname', 'operator' => 'startswith', 'value' => $parent];
+                                $folderFilterData[] = ['field' => 'parent', 'operator' => 'startswith', 'value' => $parent];
+                                continue;
+                            }
+                            $parent = empty($parent) ? $path : "$parent.$path";
+                            
+                            if ($isLastIndex) {
+                                $folderFilterData[] = ['field' => 'globalname', 'operator' => 'equals', 'value' => $parent];
+                            }
+                        }
+                    }
                 }
             }
+         }
+        
+        if (sizeof($folderFilterData) > 0) {
+            $folderFilterData[] = ['field' => 'account_id',  'operator' => 'in',  'value' => $AllFiltersAccountIds];
+            $folders = $folderBackend->search(new Felamimail_Model_FolderFilter($folderFilterData));
+            $folderIds = array_merge($folderIds, $folders->getArrayOfIds());
         }
         
+        $this->_addAccountFilter($_select, $_backend, array_unique($AllFiltersAccountIds));
+
         if (count($folderIds) > 0) {
-            $folderFilter = new Tinebase_Model_Filter_Id('folder_id', $_filterData['operator'], array_unique($folderIds));
-            $folderFilter->appendFilterSql($_select, $_backend);
-        }
-    }
-    
-    /**
-     * get folder ids of all inboxes for accounts of current user
-     * 
-     * @return array
-     */
-    protected function _getFolderIdsOfAllInboxes()
-    {
-        $folderFilter = new Felamimail_Model_FolderFilter(array(
-            array('field' => 'account_id',  'operator' => 'in',     'value' => $this->_getUserAccountIds()),
-            array('field' => 'localname',   'operator' => 'equals', 'value' => 'INBOX')
-        ));
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folderIds = $folderBackend->search($folderFilter, NULL, TRUE);
-        
-        return $folderIds;
-    }
-    
+             $folderFilter = new Tinebase_Model_Filter_Id('folder_id', $_filterData['operator'], array_unique($folderIds));
+             $folderFilter->appendFilterSql($_select, $_backend);
+         }
+     }
+     
     /**
      * add flags custom filters
      * 

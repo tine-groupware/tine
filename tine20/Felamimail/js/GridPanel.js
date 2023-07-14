@@ -227,7 +227,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     
                     for (var i = 0; i < filters.length; i++) {
                         if (filters[i].field == 'path' && filters[i].operator == 'in') {
-                            if (filters[i].value.indexOf(record.get('path')) !== -1 || (filters[i].value.indexOf('/allinboxes') !== -1 && record.isInbox())) {
+                            if (filters[i].value.indexOf(record.get('path')) !== -1 || (filters[i].value.indexOf('/*/INBOX') !== -1 && record.isInbox())) {
                                 refresh = true;
                                 break;
                             }
@@ -723,15 +723,21 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     accountAndFolderRenderer: function(folderId, metadata, record) {
-        var folderStore = this.app.getFolderStore(),
-            account = this.app.getAccountStore().getById(record.get('account_id')),
-            result = (account) ? account.get('name') : record.get('account_id'),
-            folder = folderStore.getById(folderId);
+        const folderStore = this.app.getFolderStore();
+        const account = this.app.getAccountStore().getById(record.get('account_id'));
+        let result = (account) ? account.get('name') : record.get('account_id');
+        let folder = folderStore.getById(folderId);
         
         if (! folder) {
             folder = folderStore.getById(record.id);
             if (! folder) {
                 // only account
+                if (record.get('account_id') === '') {
+                    return record.get('path');
+                }
+                if (!account) {
+                    return folderId;
+                }
                 return (result) ? result : record.get('name');
             }
         }
@@ -1596,16 +1602,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     isSendFolderPath: function (pathFilterValue) {
         const pathParts = _.isString(pathFilterValue) ? pathFilterValue.split('/') : null;
-        if (! pathParts || pathParts.length < 3) {
-            return false;
-        }
-        const composerAccount = this.app.getAccountStore().getById(pathParts[1]);
+        if (! pathParts || pathParts.length < 3) return false;
         
-        const sendFolderIds = composerAccount ? [
+        const composerAccount = this.app.getAccountStore().getById(pathParts[1]);
+        if (!composerAccount) return false;
+        
+        const sendFolderIds = [
             composerAccount.getSendFolderId(),
             composerAccount.getSpecialFolderId('templates_folder'),
             composerAccount.getSpecialFolderId('drafts_folder')
-        ]: null;
+        ];
         
         return (-1 !== sendFolderIds.indexOf(pathParts[2]));
     },
