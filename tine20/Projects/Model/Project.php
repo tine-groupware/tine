@@ -83,9 +83,13 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
 
         self::FILTER_MODEL => [
             'contact' => [
-                'filter' => 'Tinebase_Model_Filter_Relation', 'options' => [
+                'filter' => 'Tinebase_Model_Filter_Relation',
+                'label' => 'Contact',
+                'type' => 'relations',
+                'options' => [
                     'related_model' => 'Addressbook_Model_Contact',
-                    'filtergroup' => 'Addressbook_Model_ContactFilter'
+                    'filtergroup' => 'Addressbook_Model_ContactFilter',
+                    'jsConfig' => array('filtertype' => 'admin.application'),
                 ]
             ],
         ],

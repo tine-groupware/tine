@@ -881,6 +881,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                         filters.push(line);
                     }
                 }
+
+                else if (filterModel && filterModel.preserveFieldName) {
+                    filters.push(line);
+                }
             } else {
                 if (! (line.operator === 'contains' && !line.value)) {
                     filters.push(line);

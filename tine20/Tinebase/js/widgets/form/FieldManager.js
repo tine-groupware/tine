@@ -255,6 +255,7 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'records':
                     if (category === 'editDialog') {
+                        Ext.apply(field, config);
                         field.xtype = field.xtype || 'wdgt.pickergrid';
                         field.fieldLabel = field.fieldLabel ? field.fieldLabel :
                             Tine.Tinebase.data.RecordMgr.get(fieldDefinition.config.appName, fieldDefinition.config.modelName)?.getRecordsName();
@@ -265,7 +266,7 @@ Tine.widgets.form.FieldManager = function() {
                         field.height = 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */
                         if (_.get(fieldDefinition, 'config.dependentRecords', false)) {
                             // @TODO use different widget here (e.g. quickadd gird)
-                            var modelConf = field.recordClass.getModelConfiguration();
+                            var modelConf = field.recordClass.getModelConfiguration() || {};
                             if (modelConf.isMetadataModelFor) {
                                 field.isMetadataModelFor = modelConf.isMetadataModelFor;
                             }

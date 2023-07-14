@@ -93,3 +93,10 @@ Tine.Tasks.TaskFilterPanel = function(config) {
 Ext.extend(Tine.Tasks.TaskFilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Tasks_Model_TaskFilter'}]
 });
+
+Tine.widgets.grid.RendererManager.register('Tasks', 'Task', 'percent', Ext.ux.PercentRenderer);
+Tine.widgets.form.FieldManager.register('Tasks', 'Task', 'percent', {
+    xtype: 'extuxpercentcombo',
+    autoExpand: true,
+    blurOnSelect: true
+});

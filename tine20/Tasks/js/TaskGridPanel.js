@@ -34,7 +34,7 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * record class
      * @cfg {Tine.Tasks.Model.Task} recordClass
      */
-    recordClass: Tine.Tasks.Model.Task,
+    recordClass: 'Tine.Tasks.Model.Task',
     
     /**
      * @private grid cfg
@@ -58,7 +58,7 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initComponent: function() {
-        this.recordProxy = Tine.Tasks.JsonBackend;
+        this.recordProxy = Tine.Tasks.taskBackend;
         this.gridConfig.cm = this.getColumnModel();
         
         this.defaultFilters = [
@@ -78,30 +78,14 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getColumnModel: function(){
-        
-        var columns = [
+        const colMgr = _.bind(Tine.widgets.grid.ColumnManager.get, Tine.widgets.grid.ColumnManager, this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), _, Tine.widgets.grid.ColumnManager.CATEGORY_PROPERTYGRID, _);
+        let columns = [
             {id: 'attachments', header: window.i18n._('Attachments'), tooltip: window.i18n._('Attachments'), dataIndex: 'attachments', width: 20, sortable: false, resizable: false, renderer: Tine.widgets.grid.attachmentRenderer, hidden: false},
             {id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer}
         ];
-        
-        // if (Tine.hasOwnProperty('Crm') && Tine.Tinebase.common.hasRight('run', 'Crm')) {
-        //     columns.push({
-        //         id: 'lead',
-        //         header: this.app.i18n._('Lead name'),
-        //         width: 150,
-        //         dataIndex: 'relations',
-        //         renderer: Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'lead'),
-        //         sortable: false
-        //     });
-        // }
-        columns.push({
-            id: 'source',
-            header: this.app.i18n._('Source'),
-            width: 150,
-            dataIndex: 'relations',
-            renderer: new Tine.widgets.relation.GridRenderer({appName: 'Tasks', type: 'TASK'}).getRenderer(),
-            sortable: false
-        });
+
+        columns.push(colMgr('source'));
+
         columns = columns.concat([{
             id: 'summary',
             header: this.app.i18n._("Summary"),
