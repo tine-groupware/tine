@@ -160,6 +160,12 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             ],
         ],
 
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'event_types'      => [],
+            ],
+        ],
+
         self::FIELDS        => [
             'external_seq'      => [
                 self::TYPE          => self::TYPE_INTEGER,
@@ -368,6 +374,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             ],
             'event_types' => [
                 self::TYPE       => self::TYPE_RECORDS,
+                self::IS_VIRTUAL => true,
                 self::NULLABLE   => true,
                 self::LABEL     => 'Event Types', // _('Event Types')
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
@@ -377,7 +384,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                     self::MODEL_NAME                => 'EventTypes',
                     self::REF_ID_FIELD              => 'record',
                     self::DEPENDENT_RECORDS         => true,
-                ]
+                ],
+                self::RECURSIVE_RESOLVING => true,
             ],
             Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => [
                 self::TYPE          => self::TYPE_VIRTUAL,
@@ -1015,7 +1023,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if (isset($_data['attendee']) && is_array($_data['attendee'])) {
             $_data['attendee'] = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_data['attendee'], $this->bypassFilters, $this->convertDates);
         }
-        
+
         if (isset($_data['rrule']) && ! empty($_data['rrule']) && ! $_data['rrule'] instanceof Calendar_Model_Rrule) {
             // rrule can be array or string
             $_data['rrule'] = new Calendar_Model_Rrule($_data['rrule'], $this->bypassFilters, $this->convertDates);
