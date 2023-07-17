@@ -6401,3 +6401,21 @@ msgstr "Unten"
 
 msgid "Right"
 msgstr "Rechts"
+
+msgid "small"
+msgstr "klein"
+
+msgid "medium"
+msgstr "mittel"
+
+msgid "large"
+msgstr "groß"
+
+msgid "Select Image"
+msgstr "Bild auswählen"
+
+msgid "Insert an image with the selected size"
+msgstr "Bild in ausgewählter Größe einfügen"
+
+msgid "Image size"
+msgstr "Bildgröße"

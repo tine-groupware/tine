@@ -1,6 +1,11 @@
-/*!
- * MIT license
+/*
+ * Tine 2.0
+ *
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Jan Evers <j.evers@metaways.de>
+ * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
 /**
  * @author Shea Frederick - http://www.vinylfox.com
  * @class Ext.ux.form.HtmlEditor.MidasCommand
@@ -44,6 +49,7 @@ Ext.ux.form.HtmlEditor.MidasCommand = Ext.extend(Ext.util.Observable, {
         Ext.each(this.midasBtns, function(b){
             if (Ext.isObject(b)) {
                 midasCmdButton = {
+                    plugins: b.plugins || [],
                     iconCls: 'x-edit-' + b.cmd,
                     handler: function(){
                         this.cmp.relayCmd(b.cmd);
@@ -69,33 +75,81 @@ Ext.ux.form.HtmlEditor.MidasCommand = Ext.extend(Ext.util.Observable, {
     onEditorEvent: function(){
         var doc = this.cmp.getDoc();
         Ext.each(this.btns, function(b, i){
-            if (this.midasBtns[i].enableOnSelection || this.midasBtns[i].disableOnSelection) {
-                if (doc.getSelection) {
-                    if ((this.midasBtns[i].enableOnSelection && doc.getSelection() !== '') || (this.midasBtns[i].disableOnSelection && doc.getSelection() === '')) {
-                        b.enable();
-                    } else {
-                        b.disable();
-                    }
-                } else if (doc.selection) {
-                    if ((this.midasBtns[i].enableOnSelection && doc.selection.createRange().text !== '') || (this.midasBtns[i].disableOnSelection && doc.selection.createRange().text === '')) {
-                        b.enable();
-                    } else {
-                        b.disable();
+            if (this.midasBtns[i]) {
+                if (this.midasBtns[i].enableOnSelection || this.midasBtns[i].disableOnSelection) {
+                    if (doc.getSelection) {
+                        if ((this.midasBtns[i].enableOnSelection && doc.getSelection() !== '') || (this.midasBtns[i].disableOnSelection && doc.getSelection() === '')) {
+                            b.enable();
+                        } else {
+                            b.disable();
+                        }
+                    } else if (doc.selection) {
+                        if ((this.midasBtns[i].enableOnSelection && doc.selection.createRange().text !== '') || (this.midasBtns[i].disableOnSelection && doc.selection.createRange().text === '')) {
+                            b.enable();
+                        } else {
+                            b.disable();
+                        }
                     }
                 }
-            }
-            if (this.midasBtns[i].monitorCmdState) {
-                b.toggle(doc.queryCommandState(this.midasBtns[i].cmd));
+                if (this.midasBtns[i].monitorCmdState) {
+                    b.toggle(doc.queryCommandState(this.midasBtns[i].cmd));
+                }
             }
         }, this);
+    },
+
+    onImageSelected: async (file, cmp) => {
+        if (typeof file === 'undefined') {
+            return
+        }
+
+        if (!cmp.fileCache) {
+            cmp.fileCache = [];
+        }
+
+        let fileBlob = null;
+        let name = '';
+
+        if (typeof file === 'string') {
+            fileBlob = cmp.fileCache[file]
+            name = file
+        } else {
+            fileBlob = file.fileObject
+            name = file.fileObject.name
+            if (typeof file?.fileObject?.getFile === 'function') {
+                fileBlob = await file.fileObject.getFile();
+            }
+
+            cmp.fileCache[name] = fileBlob
+        }
+
+        let reader = new FileReader()
+        reader.readAsDataURL(fileBlob)
+        reader.onload = () => {
+            let max = 300
+
+            let content = document.createElement('img')
+            content.alt = name
+            content.dataset.size = max
+
+            let img = new Image()
+            img.src = reader.result
+            img.onload = () => {
+                cmp.imgOnload(img, content, max, file.type).then(() => {
+                    cmp.insertAtCursor(content.outerHTML)
+                    cmp.selectedImage = content
+                })
+            }
+        }
     }
 });
+
 /**
  * @namespace   Ext.ux.form.HtmlEditor
  * @class       Ext.ux.form.HtmlEditor.Divider
  * @extends     Ext.util.Observable
  * @author      Shea Frederick - http://www.vinylfox.com
- * 
+ *
  * <p>A plugin that creates a divider on the HtmlEditor. Used for separating additional buttons.</p>
  */
 Ext.ux.form.HtmlEditor.Divider = Ext.extend(Ext.util.Observable, {
@@ -109,12 +163,56 @@ Ext.ux.form.HtmlEditor.Divider = Ext.extend(Ext.util.Observable, {
         this.cmp.getToolbar().addButton([new Ext.Toolbar.Separator()]);
     }
 });
+
+/**
+ * @namespace   Ext.ux.form.HtmlEditor
+ * @class       Ext.ux.form.HtmlEditor.SelectImage
+ * @extends     Ext.ux.form.HtmlEditor.MidasCommand
+ *
+ * <p>A plugin to select image on the HtmlEditor..</p>
+ */
+Ext.ux.form.HtmlEditor.SelectImage = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
+    init: function (cmp) {
+      this.cmp = cmp
+      this.cmp.on('render', this.onRender, this)
+      this.cmp.on('initialize', this.onInit, this, {
+        delay: 100,
+        single: true
+      })
+      this.midasBtns = ['|', {
+          enableOnSelection: true,
+          cmd: 'selectImage',
+          tooltip: {
+              title: i18n._('Select Image'),
+              text: i18n._('Insert an image with the selected size')
+          },
+          overflowText: 'Select Image',
+          plugins: [new Ext.ux.file.BrowsePlugin({
+              multiple: false,
+              handler: fileSelection => {
+                  let file = fileSelection.getFileList()[0]
+                  this.onImageSelected(file, this.cmp)
+              }
+          })]
+      }]
+    },
+    btns: [],
+    midasBtns: ['|', {
+        enableOnSelection: true,
+        cmd: 'selectImage',
+        tooltip: {
+            title: 'Select Image'
+        },
+        overflowText: 'Select Image',
+        plugins: [new Ext.ux.file.BrowsePlugin({})],
+    }]
+});
 /**
  * @namespace   Ext.ux.form.HtmlEditor
  * @class       Ext.ux.form.HtmlEditor.IndentOutdent
  * @extends     Ext.ux.form.HtmlEditor.MidasCommand
  * @author      Shea Frederick - http://www.vinylfox.com
- * 
+ *
  * <p>A plugin that creates two buttons on the HtmlEditor for indenting and outdenting of selected text.</p>
  */
 Ext.ux.form.HtmlEditor.IndentOutdent = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
@@ -138,7 +236,7 @@ Ext.ux.form.HtmlEditor.IndentOutdent = Ext.extend(Ext.ux.form.HtmlEditor.MidasCo
  * @class       Ext.ux.form.HtmlEditor.RemoveFormat
  * @extends     Ext.ux.form.HtmlEditor.MidasCommand
  * @author      Shea Frederick - http://www.vinylfox.com
- * 
+ *
  * <p>A plugin that creates a button on the HtmlEditor that will remove all formatting on selected text.</p>
  */
 Ext.ux.form.HtmlEditor.RemoveFormat = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
@@ -156,7 +254,7 @@ Ext.ux.form.HtmlEditor.RemoveFormat = Ext.extend(Ext.ux.form.HtmlEditor.MidasCom
  * @class       Ext.ux.form.HtmlEditor.SubSuperScript
  * @extends     Ext.ux.form.HtmlEditor.MidasCommand
  * @author      Shea Frederick - http://www.vinylfox.com
- * 
+ *
  * <p>A plugin that creates two buttons on the HtmlEditor for superscript and subscripting of selected text.</p>
  */
 Ext.ux.form.HtmlEditor.SubSuperScript = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
@@ -177,12 +275,13 @@ Ext.ux.form.HtmlEditor.SubSuperScript = Ext.extend(Ext.ux.form.HtmlEditor.MidasC
         overflowText: 'Superscript'
     }]
 });
+
 /**
  * @namespace   Ext.ux.form.HtmlEditor
  * @class       Ext.ux.form.HtmlEditor.SpecialCharacters
  * @extends     Ext.util.Observable
  * @author      Shea Frederick - http://www.vinylfox.com
- * 
+ *
  * <p>A plugin that creates a button on the HtmlEditor for inserting special characters.</p>
  */
 Ext.ux.form.HtmlEditor.SpecialCharacters = Ext.extend(Ext.util.Observable, {
@@ -283,7 +382,7 @@ Ext.ux.form.HtmlEditor.SpecialCharacters = Ext.extend(Ext.util.Observable, {
  * @class       Ext.ux.form.HtmlEditor.Table
  * @extends     Ext.util.Observable
  * @author      Shea Frederick - http://www.vinylfox.com
- * 
+ *
  * <p>A plugin that creates a button on the HtmlEditor for making simple tables.</p>
  */
 Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
@@ -386,7 +485,7 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
                             scope: this
                         }]
                     });
-                
+
                 }else{
                     this.tableWindow.getEl().frame();
                 }
@@ -405,7 +504,7 @@ Ext.ux.form.HtmlEditor.Table = Ext.extend(Ext.util.Observable, {
  * @class       Ext.ux.form.HtmlEditor.Word
  * @extends     Ext.util.Observable
  * @author      Shea Frederick - http://www.vinylfox.com
- * 
+ *
  * <p>A plugin that creates a button on the HtmlEditor for pasting text from Word without all the jibberish html.</p>
  */
 Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
@@ -415,15 +514,15 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
     wordPasteEnabled: true,
     // private
     init: function(cmp){
-        
+
         this.cmp = cmp;
         this.cmp.on('render', this.onRender, this);
         this.cmp.on('initialize', this.onInit, this, {delay:100, single: true});
-        
+
     },
     // private
     onInit: function(){
-        
+
         Ext.EventManager.on(this.cmp.getDoc(), {
             'keyup': this.checkIfPaste,
             scope: this
@@ -431,18 +530,18 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
         this.lastValue = this.cmp.getValue();
         this.curLength = this.lastValue.length;
         this.lastLength = this.lastValue.length;
-        
+
     },
     // private
     checkIfPaste: function(e){
-        
+
         var diffAt = 0;
         this.curLength = this.cmp.getValue().length;
-        
+
         if (e.V == e.getKey() && e.ctrlKey && this.wordPasteEnabled){
-            
+
             this.cmp.suspendEvents();
-            
+
             diffAt = this.findValueDiffAt(this.cmp.getValue());
             var parts = [
                 this.cmp.getValue().substr(0, diffAt),
@@ -450,23 +549,23 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
                 this.cmp.getValue().substr((this.curLength - this.lastLength)+diffAt, this.curLength)
             ];
             this.cmp.setValue(parts.join(''));
-            
+
             this.cmp.resumeEvents();
         }
-        
+
         this.lastLength = this.cmp.getValue().length;
         this.lastValue = this.cmp.getValue();
-        
+
     },
     // private
     findValueDiffAt: function(val){
-        
+
         for (i=0;i<this.curLength;i++){
             if (this.lastValue[i] != val[i]){
-                return i;            
+                return i;
             }
         }
-        
+
     },
     /**
      * Cleans up the jubberish html from Word pasted text.
@@ -474,30 +573,30 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
      * @return {String} The passed in text with all Word jibberish html removed.
      */
     fixWordPaste: function(wordPaste) {
-        
+
         var removals = [/&nbsp;/ig, /[\r\n]/g, /<(xml|style)[^>]*>.*?<\/\1>/ig, /<\/?(meta|object|span)[^>]*>/ig,
-            /<\/?[A-Z0-9]*:[A-Z]*[^>]*>/ig, /(lang|class|type|href|name|title|id|clear)=\"[^\"]*\"/ig, /style=(\'\'|\"\")/ig, /<![\[-].*?-*>/g, 
-            /MsoNormal/g, /<\\?\?xml[^>]*>/g, /<\/?o:p[^>]*>/g, /<\/?v:[^>]*>/g, /<\/?o:[^>]*>/g, /<\/?st1:[^>]*>/g, /&nbsp;/g, 
-            /<\/?SPAN[^>]*>/g, /<\/?FONT[^>]*>/g, /<\/?STRONG[^>]*>/g, /<\/?H1[^>]*>/g, /<\/?H2[^>]*>/g, /<\/?H3[^>]*>/g, /<\/?H4[^>]*>/g, 
-            /<\/?H5[^>]*>/g, /<\/?H6[^>]*>/g, /<\/?P[^>]*><\/P>/g, /<!--(.*)-->/g, /<!--(.*)>/g, /<!(.*)-->/g, /<\\?\?xml[^>]*>/g, 
-            /<\/?o:p[^>]*>/g, /<\/?v:[^>]*>/g, /<\/?o:[^>]*>/g, /<\/?st1:[^>]*>/g, /style=\"[^\"]*\"/g, /style=\'[^\"]*\'/g, /lang=\"[^\"]*\"/g, 
-            /lang=\'[^\"]*\'/g, /class=\"[^\"]*\"/g, /class=\'[^\"]*\'/g, /type=\"[^\"]*\"/g, /type=\'[^\"]*\'/g, /href=\'#[^\"]*\'/g, 
-            /href=\"#[^\"]*\"/g, /name=\"[^\"]*\"/g, /name=\'[^\"]*\'/g, / clear=\"all\"/g, /id=\"[^\"]*\"/g, /title=\"[^\"]*\"/g, 
+            /<\/?[A-Z0-9]*:[A-Z]*[^>]*>/ig, /(lang|class|type|href|name|title|id|clear)=\"[^\"]*\"/ig, /style=(\'\'|\"\")/ig, /<![\[-].*?-*>/g,
+            /MsoNormal/g, /<\\?\?xml[^>]*>/g, /<\/?o:p[^>]*>/g, /<\/?v:[^>]*>/g, /<\/?o:[^>]*>/g, /<\/?st1:[^>]*>/g, /&nbsp;/g,
+            /<\/?SPAN[^>]*>/g, /<\/?FONT[^>]*>/g, /<\/?STRONG[^>]*>/g, /<\/?H1[^>]*>/g, /<\/?H2[^>]*>/g, /<\/?H3[^>]*>/g, /<\/?H4[^>]*>/g,
+            /<\/?H5[^>]*>/g, /<\/?H6[^>]*>/g, /<\/?P[^>]*><\/P>/g, /<!--(.*)-->/g, /<!--(.*)>/g, /<!(.*)-->/g, /<\\?\?xml[^>]*>/g,
+            /<\/?o:p[^>]*>/g, /<\/?v:[^>]*>/g, /<\/?o:[^>]*>/g, /<\/?st1:[^>]*>/g, /style=\"[^\"]*\"/g, /style=\'[^\"]*\'/g, /lang=\"[^\"]*\"/g,
+            /lang=\'[^\"]*\'/g, /class=\"[^\"]*\"/g, /class=\'[^\"]*\'/g, /type=\"[^\"]*\"/g, /type=\'[^\"]*\'/g, /href=\'#[^\"]*\'/g,
+            /href=\"#[^\"]*\"/g, /name=\"[^\"]*\"/g, /name=\'[^\"]*\'/g, / clear=\"all\"/g, /id=\"[^\"]*\"/g, /title=\"[^\"]*\"/g,
             /<span[^>]*>/g, /<\/?span[^>]*>/g, /class=/g];
-                    
+
         Ext.each(removals, function(s){
             wordPaste = wordPaste.replace(s, "");
         });
-        
+
         // keep the divs in paragraphs
         wordPaste = wordPaste.replace(/<div[^>]*>/g, "<p>");
         wordPaste = wordPaste.replace(/<\/?div[^>]*>/g, "</p>");
         return wordPaste;
-        
+
     },
     // private
     onRender: function() {
-        
+
         this.cmp.getToolbar().add({
             iconCls: 'x-edit-wordpaste',
             pressed: true,
@@ -510,7 +609,7 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
                 text: 'Cleanse text pasted from Word or other Rich Text applications'
             }
         });
-        
+
     }
 });
 /**
@@ -518,7 +617,7 @@ Ext.ux.form.HtmlEditor.Word = Ext.extend(Ext.util.Observable, {
  * @class       Ext.ux.form.HtmlEditor.HR
  * @extends     Ext.util.Observable
  * @author      Shea Frederick - http://www.vinylfox.com
- * 
+ *
  * <p>A plugin that creates a button on the HtmlEditor for inserting a horizontal rule.</p>
  */
 Ext.ux.form.HtmlEditor.HR = Ext.extend(Ext.util.Observable, {

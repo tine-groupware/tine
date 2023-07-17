@@ -5912,3 +5912,21 @@ msgstr ""
 #: Acl/Rights/Abstract.php:94
 msgid "App mainscreen is available in UI"
 msgstr ""
+
+msgid "small"
+msgstr ""
+
+msgid "medium"
+msgstr ""
+
+msgid "large"
+msgstr ""
+
+msgid "Select Image"
+msgstr ""
+
+msgid "Insert an image with the selected size"
+msgstr ""
+
+msgid "Image size"
+msgstr ""

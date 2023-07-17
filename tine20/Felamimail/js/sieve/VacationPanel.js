@@ -126,7 +126,8 @@ Ext.extend(Tine.Felamimail.sieve.VacationPanel, Ext.Panel, {
                     .setDisabled(!this.editDialog.getForm().findField('enabled').getValue());
             },
             plugins: [
-                new Ext.ux.form.HtmlEditor.RemoveFormat()
+                new Ext.ux.form.HtmlEditor.RemoveFormat(),
+                new Ext.ux.form.HtmlEditor.SelectImage()
             ]
         });
     },

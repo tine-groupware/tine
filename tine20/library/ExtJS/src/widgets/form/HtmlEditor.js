@@ -764,6 +764,16 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             if(Ext.isIE || Ext.isWebKit || Ext.isOpera){
                 Ext.EventManager.on(doc, 'keydown', this.fixKeys, this);
             }
+    
+            this.plugins.forEach((plugin) => {
+                //fixme: default dropEl(textarea) does not work , we have to use body as element
+                if (plugin.dropEl) {
+                    this.docElement = new Ext.Element(this.iframe.contentDocument);
+                    plugin.dropEl = this.docElement;
+                    plugin.initEvents(this.docElement);
+                }
+            })
+    
             doc.editorInitialized = true;
             this.initialized = true;
             this.pushValue();
@@ -849,7 +859,18 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
 
     // private
     onEditorEvent : function(e){
-        this.updateToolbar();
+        if (this.selectedImage) {
+            this.selectedImage.style = 'outline: none'
+        }
+        if (e.getTarget('img')) {
+            let img = e.getTarget('img')
+            img.style = 'outline: 2px solid #6060FF'
+            this.selectedImage = img
+        } else {
+            this.selectedImage = false
+        }
+
+        this.updateToolbar(e);
     },
 
 
@@ -857,7 +878,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
      * Protected method that will not generally be called directly. It triggers
      * a toolbar update by reading the markup state of the current selection in the editor.
      */
-    updateToolbar: function(){
+    updateToolbar: function(e){
 
         if(this.readOnly){
             return;
@@ -897,7 +918,81 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
 
         Ext.menu.MenuMgr.hideAll();
 
+        if(this.selectedImage) {
+            const menu = new Ext.menu.Menu({
+                items: [
+                    `<b>${window.i18n._('Image size')}</b>`,
+                    {text: window.i18n._('small'), checked: (this.selectedImage.dataset.size === '300'), group: 'image-size', handler: this.setImageSize, scope: this, size: 300},
+                    {text: window.i18n._('medium'), checked: (this.selectedImage.dataset.size === '500'), group: 'image-size', handler: this.setImageSize, scope: this, size: 500},
+                    {text: window.i18n._('large'), checked: (this.selectedImage.dataset.size === '800'), group: 'image-size', handler: this.setImageSize, scope: this, size: 800}
+                ],
+                renderTo: this.wrap,
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   'Tinebase-MainContextMenu'
+                }]
+            });
+            const offset = this.wrap.getXY()
+            const pos = e.getXY()
+
+            menu.showAt([pos[0] + offset[0], pos[1] + offset[1]])
+        }
+
         this.syncValue();
+    },
+
+    getImageBase64: async function (result, max, target, type = 'image/jpeg')
+    {
+        let img = new Image()
+        img.src = result
+        img.onload = () => {
+            this.imgOnload(img, target, max)
+        }
+    },
+
+    imgOnload: async function (img, target, max, type = 'image/jpeg') {
+        let maxWidth = max
+        let maxHeight = max
+
+        let canvas = document.createElement('canvas')
+        let ctx = canvas.getContext('2d')
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        let width = img.width
+        let height = img.height
+        if (width > height) {
+            if (width > maxWidth) {
+                height *= maxWidth / width
+                width = maxWidth
+            }
+        } else {
+            if (height > maxHeight) {
+                width *= maxHeight / height
+                height = maxHeight
+            }
+        }
+
+        canvas.width = width
+        canvas.height = height
+        ctx.drawImage(img, 0, 0, width, height)
+
+        target.src = canvas.toDataURL(type);
+    },
+
+    setImageSize: function (button, event) {
+        if (!this.fileCache[this.selectedImage.alt]) {
+            return
+        }
+
+        let name = this.selectedImage.alt
+        let fileBlob = this.fileCache[name]
+        let reader = new FileReader()
+        reader.readAsDataURL(fileBlob)
+        reader.onload = () => {
+            this.getImageBase64(reader.result, button.size, this.selectedImage).then (() => {
+                this.selectedImage.dataset.size = button.size
+            })
+        }
     },
 
     // private
