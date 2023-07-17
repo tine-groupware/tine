@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Projects
+ * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -14,7 +14,7 @@
  * 
  * @package     Setup
  */
-class Projects_Setup_Uninitialize extends Setup_Uninitialize
+class Crm_Setup_Uninitialize extends Setup_Uninitialize
 {
     protected function _uninitializeTasksLooseCoupling(): void
     {
@@ -30,7 +30,7 @@ class Projects_Setup_Uninitialize extends Setup_Uninitialize
 
         Tasks_Controller_Task::getInstance()->deleteByFilter(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Tasks_Model_Task::class, [
-                ['field' => 'source_model', 'operator' => 'equals', 'value' => Projects_Model_Project::class],
+                ['field' => 'source_model', 'operator' => 'equals', 'value' => Crm_Model_Lead::class],
             ]
         ));
 
@@ -41,7 +41,7 @@ class Projects_Setup_Uninitialize extends Setup_Uninitialize
     {
         if (class_exists('Tasks_Config') && Tasks_Config::APP_NAME === $app->name) {
             $cfc = Tinebase_CustomField::getInstance()
-                ->getCustomFieldByNameAndApplication($app, 'ProjectsTasksCoupling', Tasks_Model_Task::class, true);
+                ->getCustomFieldByNameAndApplication($app, 'CrmTasksCoupling', Tasks_Model_Task::class, true);
             if (null !== $cfc) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
             }

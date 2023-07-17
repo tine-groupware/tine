@@ -450,7 +450,7 @@ class Tasks_JsonTest extends TestCase
      * test advanced search
      *
      * @see 0011492: activate advanced search (search in lead relations)
-     */
+     *
     public function testAdvancedSearch()
     {
         // create task with lead relation
@@ -465,5 +465,5 @@ class Tasks_JsonTest extends TestCase
             'field' => 'query', 'operator' => 'contains', 'value' => 'PHPUnit LEAD'
         )), array());
         $this->assertEquals(1, $result['totalcount']);
-    }
+    }*/
 }

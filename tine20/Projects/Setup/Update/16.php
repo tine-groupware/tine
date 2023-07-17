@@ -41,7 +41,7 @@ class Projects_Setup_Update_16 extends Setup_Update_Abstract
 
     public function update001()
     {
-        if (Tinebase_Application::getInstance()->isInstalled(Tasks_Config::APP_NAME)) {
+        if (class_exists('Tasks_Config') && Tinebase_Application::getInstance()->isInstalled(Tasks_Config::APP_NAME)) {
             Projects_Setup_Initialize::applicationInstalled(
                 Tinebase_Application::getInstance()->getApplicationByName(Tasks_Config::APP_NAME)
             );
@@ -52,6 +52,9 @@ class Projects_Setup_Update_16 extends Setup_Update_Abstract
     public function update002()
     {
         try {
+            if (!class_exists('Tasks_Config')) {
+                throw new Tinebase_Exception_NotFound('');
+            }
             Tinebase_Application::getInstance()->getApplicationByName(Tasks_Config::APP_NAME);
         } catch (Tinebase_Exception_NotFound $e) {
             $this->addApplicationUpdate('Projects', '16.2', self::RELEASE016_UPDATE002);

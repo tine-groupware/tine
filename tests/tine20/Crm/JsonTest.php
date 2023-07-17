@@ -112,21 +112,14 @@ class Crm_JsonTest extends Crm_AbstractTest
         // now we need 2 relations here (frontend search shall return relations with related_model Addressbook_Model_Contact or Sales_Model_Product
         $this->assertEquals(3, count($searchLeads['results'][0]['relations']), 'did not get all relations');
 
-        $relatedTask = null;
-        foreach ($getLead['relations'] as $rel) {
-            if ($rel['type'] == 'TASK') {
-                $relatedTask = $rel['related_record'];
-            }
-        }
-
-        $this->assertTrue($relatedTask !== null);
-        $this->assertEquals($this->_getTask()->summary, $relatedTask['summary'], 'task summary does not match');
+        $task = $getLead['tasks'][0] ?: null;
+        $this->assertTrue($task !== null);
+        $this->assertEquals($this->_getTask()->summary, $task['summary'], 'task summary does not match');
         $defaultTaskContainerId = Tinebase_Core::getPreference('Tasks')->getValue(Tasks_Preference::DEFAULTTASKLIST);
-        $this->assertEquals($defaultTaskContainerId, $relatedTask['container_id']);
-        $this->assertTrue(isset($relatedTask['alarms']) && count($relatedTask['alarms']) === 1, 'alarm missing in related task: ' . print_r($relatedTask, TRUE));
+        $this->assertEquals($defaultTaskContainerId, $task['container_id']);
         
-        $relatedTaskId = $relatedTask['id'];
-        $relatedTask = NULL;
+        $relatedTaskId = $task['id'];
+        $task = $searchLeads['results'][0]['tasks'][0] ?: null;
         
         // get related records and check relations
         foreach ($searchLeads['results'][0]['relations'] as $relation) {
@@ -136,9 +129,6 @@ class Crm_JsonTest extends Crm_AbstractTest
                     $this->assertEquals(200, $relation['remark']['price'], 'product price (remark) does not match');
                     $relatedProduct = $relation['related_record'];
                     break;
-                case 'TASK':
-                    $relatedTask = $relation['related_record'];
-                    break;
                 case 'PARTNER':
                     $relatedContact = $relation['related_record'];
                     break;
@@ -147,7 +137,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertTrue(isset($relatedContact), 'contact not found');
         $this->assertEquals($this->_getContact()->n_fn, $relatedContact['n_fn'], 'contact name does not match');
         
-        $this->assertFalse(is_array($relatedTask), 'task must not be found');
+        $this->assertTrue(is_array($task), 'task not found');
         
         $this->assertTrue(isset($relatedProduct), 'product not found');
         $this->assertEquals($this->_getProduct()->name[0]['text'], $relatedProduct['name'][0]['text'], 'product name does not match');
@@ -270,93 +260,6 @@ class Crm_JsonTest extends Crm_AbstractTest
         
         $this->assertEquals(1, count($savedLead['relations']), 'Relation has not been added');
         $this->assertEquals('CUSTOMER', $savedLead['relations'][0]['type'], 'default type should be CUSTOMER');
-    }
-    
-    /**
-     * @see #8840: relations config - constraints from the other side
-     *      - validate in backend
-     *      
-     *      https://forge.tine20.org/mantisbt/view.php?id=8840
-     */
-    public function testConstraintsOtherSide()
-    {
-        $leadData1 = $this->_getUit()->saveLead($this->_getLead(FALSE, FALSE)->toArray());
-        $task = $this->_getTask();
-        
-        $taskJson = new Tasks_Frontend_Json();
-        $taskData = $task->toArray();
-        $taskData['relations'] = array(
-            array(
-                'type'  => 'TASK',
-                'own_model' => 'Tasks_Model_Task',
-                'own_backend' => 'Sql',
-                'related_degree' => 'sibling',
-                'related_model' => 'Crm_Model_Lead',
-                'related_backend' => 'Sql',
-                'related_id' => $leadData1['id']
-            ),
-        );
-        
-        $taskData = $taskJson->saveTask($taskData);
-        
-        $leadData2 = $this->_getUit()->saveLead($this->_getLead(FALSE, FALSE)->toArray());
-        $taskData['relations'][] = array(
-            'type'  => 'TASK',
-            'own_model' => 'Tasks_Model_Task',
-            'own_backend' => 'Sql',
-            'related_degree' => 'sibling',
-            'related_model' => 'Crm_Model_Lead',
-            'related_backend' => 'Sql',
-            'related_id' => $leadData2['id']
-        );
-        
-        $this->expectException('Tinebase_Exception_InvalidRelationConstraints');
-        $taskJson->saveTask($taskData);
-    }
-    
-    /**
-     * testOtherRecordConstraintsConfig
-     */
-    public function testOtherRecordConstraintsConfig()
-    {
-        $leadData1 = $this->_getUit()->saveLead($this->_getLead(FALSE, FALSE)->toArray());
-        $task = $this->_getTask();
-        
-        $taskJson = new Tasks_Frontend_Json();
-        $leadJson = new Crm_Frontend_Json();
-        
-        $taskData = $task->toArray();
-        $taskData['relations'] = array(
-            array(
-                'type'  => 'TASK',
-                'own_model' => 'Tasks_Model_Task',
-                'own_backend' => 'Sql',
-                'related_degree' => 'sibling',
-                'related_model' => 'Crm_Model_Lead',
-                'related_backend' => 'Sql',
-                'related_id' => $leadData1['id']
-            ),
-        );
-        
-        $taskData = $taskJson->saveTask($taskData);
-        
-        $leadData2 = $this->_getUit()->saveLead($this->_getLead(FALSE, FALSE)->toArray());
-        
-        $leadData2['relations'] = array(
-            array(
-                'type'  => 'TASK',
-                'own_model' => 'Crm_Model_Lead',
-                'own_backend' => 'Sql',
-                'related_degree' => 'sibling',
-                'related_model' => 'Tasks_Model_Task',
-                'related_backend' => 'Sql',
-                'related_id' => $taskData['id']
-            )
-        );
-        
-        $this->expectException('Tinebase_Exception_InvalidRelationConstraints');
-        
-        $leadJson->saveLead($leadData2);
     }
     
     /**
@@ -519,7 +422,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $diff = new Tinebase_Record_Diff(json_decode($modifications->getFirstRecord()->new_value, true));
         $changedAttributes = Tinebase_Timemachine_ModificationLog::getModifiedAttributes($modifications);
 
-        $this->assertEquals(3, count($changedAttributes), 'expected 3 modifications: ' . print_r($modifications->toArray(), TRUE));
+        $this->assertEquals(4, count($changedAttributes), 'expected 3 modifications: ' . print_r($modifications->toArray(), TRUE));
         foreach ($changedAttributes as $attribute) {
             switch ($attribute) {
                 case 'customfields':
@@ -529,7 +432,7 @@ class Crm_JsonTest extends Crm_AbstractTest
                 case 'relations':
                     $diffSet = new Tinebase_Record_RecordSetDiff($diff->diff['relations']);
                     $this->assertEquals(1, count($diffSet->added));
-                    $this->assertEquals(2, count($diffSet->removed), print_r($diffSet->toArray(), true));
+                    $this->assertEquals(1, count($diffSet->removed), print_r($diffSet->toArray(), true));
                     $this->assertEquals(0, count($diffSet->modified), 'relations modified mismatch: ' . print_r($diffSet->toArray(), TRUE));
                     $this->assertTrue(isset($diffSet->added[0]['type']));
                     $this->assertEquals('CUSTOMER', $diffSet->added[0]['type'], 'type diff is not correct: ' . print_r($diffSet->toArray(), TRUE));
@@ -539,6 +442,12 @@ class Crm_JsonTest extends Crm_AbstractTest
                     $this->assertEquals(1, count($diffSet->added));
                     $this->assertEquals(0, count($diffSet->removed));
                     $this->assertEquals(0, count($diffSet->modified), 'tags modified mismatch: ' . print_r($diffSet->toArray(), TRUE));
+                    break;
+                case 'tasks':
+                    $diffSet = new Tinebase_Record_RecordSetDiff($diff->diff['tasks']);
+                    $this->assertEquals(0, count($diffSet->added));
+                    $this->assertEquals(0, count($diffSet->removed));
+                    $this->assertEquals(1, count($diffSet->modified), 'tasks modified mismatch: ' . print_r($diffSet->toArray(), TRUE));
                     break;
                 default:
                     $this->fail('Invalid modification: ' . print_r($diff->toArray(), TRUE));
@@ -706,7 +615,7 @@ class Crm_JsonTest extends Crm_AbstractTest
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
         ];
         $updatedLead = $this->_getUit()->saveLead($lead);
-        self::assertEquals(5, count($updatedLead['relations']), 'relation count mismatch: '
+        self::assertEquals(4, count($updatedLead['relations']), 'relation count mismatch: '
             . print_r($updatedLead, true));
     }
 
