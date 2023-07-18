@@ -183,12 +183,10 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             case 'dynamicRecord':
                 const base = {... filter};
                 const ownRecordClass = Tine.Tinebase.data.RecordMgr.get(`${appName}_Model_${modelName}`);
-                // @TODO: get availableModels from corrensponding model field
-                // const availableModels = ownRecordClass.getModelConfiguration().fields[fieldconfig.config.refModelField].config.availableModels;
-                const availableModels = ['Projects_Model_Project'];
+                const availableModels = ownRecordClass.getModelConfiguration().fields[fieldconfig.config.refModelField].config.availableModels;
                 filter = availableModels.reduce((filter, model) => {
                     const [appName,,modelName] = model.split('_');
-                    const filterDefinition = Object.assign(base, {
+                    const filterDefinition = Object.assign({... base}, {
                         field: `${base.field}:${model}`,
                         preserveFieldName: true,
                         baseLabel: base.label,
@@ -205,10 +203,12 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                     Tine.Tinebase.appMgr.isInitialised(appName).then(() => {
                         const foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(model);
                         filterDefinition.label = foreignRecordClass ? `${filterDefinition.baseLabel} ${foreignRecordClass.getRecordName()}` : filterDefinition.label;
-                    })
+                    });
                     return filter;
                 }, []);
-                filter = filter[0];
+                break;
+            case 'foreignId':
+                debugger
                 break;
             case 'tag': 
                 filter = {filtertype: 'tinebase.tag', app: appName};

@@ -12,6 +12,8 @@
  *
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
+
 /**
  * leads controller class for CRM application
  * 
@@ -130,7 +132,6 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Appli
         if (!isset($filterModels['source:' . Crm_Model_Lead::class])) {
             $filterModels['source:' . Crm_Model_Lead::class] = [
                 TMCC::FILTER         => Tinebase_Model_Filter_ForeignId::class,
-                TMCC::LABEL          => 'source:' . Crm_Model_Lead::class,
                 TMCC::OPTIONS => [
                     TMCC::CONTROLLER    => Crm_Controller_Lead::class,
                     TMCC::FILTER_GROUP  => Crm_Model_Lead::class,

@@ -136,7 +136,7 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             {label: app.i18n._('Start'), field: 'start', valueType: 'date'},
             
             {filtertype: 'crm.contact'},
-            {filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Tasks.Model.Task, ownField: 'task'}
+            {filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: Tine.Tasks.Model.Task, ownField: 'tasks'}
         ];
         
     if (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales')) {

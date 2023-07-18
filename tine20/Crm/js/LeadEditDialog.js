@@ -9,6 +9,7 @@
  */
 
 import {getLocalizedLangPicker} from "../../Tinebase/js/widgets/form/LocalizedLangPicker";
+import dependentTasksPanel from "../../Tasks/js/DependentTasksPanel";
 
 Ext.namespace('Tine.Crm');
 
@@ -22,7 +23,6 @@ Ext.namespace('Tine.Crm');
  * TODO         simplify relation handling (move init of stores to relation grids and get data from there later?)
  * TODO         make marking of invalid fields work again
  * TODO         add export button
- * TODO         disable link grids if user has no run right for the app (adb/tasks/sales)
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -42,9 +42,9 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     contactGrid: null,
     
     /**
-     * linked tasks grid
+     * dependend tasks grid
      * 
-     * @type Tine.Crm.Task.GridPanel
+     * @type dependentTasksPanel
      * @property tasksGrid
      */
     tasksGrid: null,
@@ -65,19 +65,19 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * ignore these models in relation grid
      * @type {Array}
      */
-    ignoreRelatedModels: ['Sales_Model_Product', 'Addressbook_Model_Contact', 'Tasks_Model_Task'],
+    ignoreRelatedModels: ['Sales_Model_Product', 'Addressbook_Model_Contact'],
 
     initComponent: function() {
-        this.tbarItems = [new Ext.Button(new Ext.Action({
-            text: Tine.Tinebase.appMgr.get('Crm').i18n._(
-                !!+this.record.get('mute') ?
-                    'Notifications are disabled' : 'Notifications are enabled'),
+        this.app = Tine.Tinebase.appMgr.get('Crm');
+
+        this.tbarItems = [new Ext.Button(this.notificationsAction = new Ext.Action({
+            text: this.app.i18n._('Notifications are enabled'),
+            pressed: true,
             handler: this.onMuteNotificationOnce,
             iconCls: 'action_mute_noteification',
             disabled: false,
             scope: this,
             enableToggle: true,
-            pressed: !!+this.record.get('mute'),
         }))];
         this.localizedLangPicker = getLocalizedLangPicker(Tine.Sales.Model.Product);
         if (this.localizedLangPicker) {
@@ -102,19 +102,19 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onAfterRecordLoad: function() {
         Tine.Crm.LeadEditDialog.superclass.onAfterRecordLoad.call(this);
-        // load contacts/tasks/products into link grid (only first time this function gets called/store is empty)
-        if (this.contactGrid && this.tasksGrid && this.productsGrid 
+        // load contacts/products into link grid (only first time this function gets called/store is empty)
+        if (this.contactGrid && this.productsGrid
             && this.contactGrid.store.getCount() == 0 
-            && (! this.tasksGrid.store || this.tasksGrid.store.getCount() == 0) 
             && (! this.productsGrid.store || this.productsGrid.store.getCount() == 0)) {
             
             var relations = this.splitRelations();
             
             this.contactGrid.store.loadData(relations.contacts, true);
-            
-            if (this.tasksGrid.store) {
-                this.tasksGrid.store.loadData(relations.tasks, true);
-            }
+            this.notificationsAction.setText(this.app.i18n._hidden(!!+this.record.get('mute') ?
+                'Notifications are disabled' : 'Notifications are enabled'));
+            debugger
+            this.notificationsAction.callEach('toggle', [!!+this.record.get('mute')]);
+
             if (this.productsGrid.store) {
                 this.productsGrid.store.loadData(relations.products, true);
             }
@@ -195,7 +195,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getAdditionalData: function() {
         var relations = this.record.get('relations'),
-            grids = [this.contactGrid, this.tasksGrid, this.productsGrid];
+            grids = [this.contactGrid, this.productsGrid];
             
         Ext.each(grids, function(grid) {
             if (grid.store) {
@@ -209,14 +209,13 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     /**
-     * split the relations array in contacts and tasks and switch related_record and relation objects
+     * split the relations array in contacts and switch related_record and relation objects
      * 
      * @return {Array}
      */
     splitRelations: function() {
         
         var contacts = [],
-            tasks = [],
             products = [];
         
         var relations = this.record.get('relations');
@@ -234,8 +233,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         || newLinkObject.relation_type === 'customer'
                         || newLinkObject.relation_type === 'partner')) {
                     contacts.push(newLinkObject);
-                } else if (newLinkObject.relation_type === 'task') {
-                    tasks.push(newLinkObject);
                 } else if (newLinkObject.relation_type === 'product') {
                     newLinkObject.remark_description = (relations[i].remark) ? relations[i].remark.description : '';
                     newLinkObject.remark_price = (relations[i].remark) ? relations[i].remark.price : 0;
@@ -247,7 +244,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         return {
             contacts: contacts,
-            tasks: tasks,
             products: products
         };
     },
@@ -304,9 +300,10 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         if (Tine.Tasks && Tine.Tinebase.common.hasRight('run', 'Tasks')) {
-            this.tasksGrid = new Tine.Crm.Task.GridPanel({
-                record: this.record
-            });
+            this.tasksGrid = new dependentTasksPanel({
+                title: Tine.Tasks.Model.Task.getAppName(),
+                editDialog: this
+            })
         } else {
             this.tasksGrid = new Ext.Panel({
                 title: this.app.i18n._('Tasks'),

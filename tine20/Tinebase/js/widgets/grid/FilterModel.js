@@ -780,7 +780,7 @@ Tine.widgets.grid.FilterRegistry = function() {
                 filters[key] = [];
             }
             Ext.applyIf(filter, {appName: appName, modelName: modelName});
-            filters[key].push(filter);
+            filters[key] = filters[key].concat(filter);
         },
         
         get: function(appName, modelName) {

@@ -121,7 +121,6 @@ class Projects_Controller extends Tinebase_Controller_Event implements Tinebase_
         if (!isset($filterModels['source:' . Projects_Model_Project::class])) {
             $filterModels['source:' . Projects_Model_Project::class] = [
                 TMCC::FILTER         => Tinebase_Model_Filter_ForeignId::class,
-                TMCC::LABEL          => 'source:' . Projects_Model_Project::class,
                 TMCC::OPTIONS => [
                     TMCC::CONTROLLER    => Projects_Controller_Project::class,
                     TMCC::FILTER_GROUP  => Projects_Model_Project::class,

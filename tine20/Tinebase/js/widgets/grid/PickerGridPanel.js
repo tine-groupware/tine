@@ -179,7 +179,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         this.autoExpandColumn = this.autoExpandColumn? this.autoExpandColumn : this.labelField;
 
-        const modelConf = this.recordClass.getModelConfiguration() || {};
+        const modelConf = (this.recordClass.getModelConfiguration ? this.recordClass.getModelConfiguration() : {}) || {};
 
         // Autodetect if our record has additional metadata for the refId Record or is only a cross table
         if (this.refIdField) {

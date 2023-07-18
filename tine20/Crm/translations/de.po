@@ -198,6 +198,9 @@ msgstr ""
 msgid "Notifications are disabled"
 msgstr "Benachrichtigungen werden unterdrückt"
 
+msgid "Notifications are enabled"
+msgstr "Benachrichtigungen werden nicht unterdrückt"
+
 #: js/LeadEditDialog.js:247
 msgid "Send Notification?"
 msgstr "Benachrichtigung senden?"
@@ -766,6 +769,3 @@ msgstr "Gemeinsame Lead-Favoriten erstellen oder bearbeiten"
 
 #~ msgid "send notification"
 #~ msgstr "Versendet Benachrichtigungen"
-
-#~ msgid "Notifications are enabled"
-#~ msgstr "Benachrichtigungen werden nicht unterdrückt"
