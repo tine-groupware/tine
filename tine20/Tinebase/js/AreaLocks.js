@@ -379,7 +379,7 @@ class AreaLocks extends Ext.util.Observable {
         Ext.MessageBox.show({
           title: window.i18n._('MFA device missing'),
           msg: window.i18n._('No matching MFA device for this area found. Configure a matching device please.'),
-          icon: Ext.MessageBox.INFO,
+          icon: Ext.MessageBox.INFO_FAILURE,
           buttons: Ext.MessageBox.OK
         });
         return resolve();

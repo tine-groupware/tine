@@ -1741,23 +1741,32 @@ msgstr "Bitte den Namen für neue {0} eingeben:"
 
 #: js/widgets/tree/ContextMenu.js:207
 #, python-brace-format
-msgid "No {0} added"
-msgstr "Kein {0} hinzugefügt"
+msgid "{gender, select, male {No {containerName} added} female {No {containerName} added} other {No {containerName} added}}"
+msgstr "{gender, select, male {Kein {containerName} hinzugefügt} female {Keine {containerName} hinzugefügt} other {Kein {containerName} hinzugefügt}}"
 
 #: js/widgets/tree/ContextMenu.js:207 js/widgets/tree/ContextMenu.js:271
 #, python-brace-format
-msgid "You have to supply a {0} name!"
-msgstr "Sie sollten einen Namen für {0} angeben!"
+msgid "{gender, select, male {You have to supply a {containerName} name!} female {You have to supply a {containerName} name!} other {You have to supply a {containerName} name!}}"
+msgstr "{gender, select, male {Sie müssen einen Namen für den {containerName} angeben!} female {Sie müssen einen Namen für die {containerName} angeben!} other {Sie müssen einen Namen für das {containerName} angeben!}}"
 
 #: js/widgets/tree/ContextMenu.js:210
 #, python-brace-format
 msgid "Creating {0}..."
-msgstr "Einrichten {0}..."
+msgstr "{0} wird angelegt..."
 
 #: js/widgets/tree/ContextMenu.js:265
 #, python-brace-format
-msgid "Please enter the new name of the {0}:"
-msgstr "Bitte den Namen für {0}: eingeben:"
+msgid "{gender, select, male {New {containerName}} female {New {containerName}} other {New {containerName}}}"
+msgstr "{gender, select, male {Neuer {containerName}} female {Neue {containerName}} other {Neues {containerName}}}"
+
+msgid "{gender, select, male {Please enter the name for the new {containerName}:} female {Please enter the name for the new {containerName}:} other {Please enter the name for the new {containerName}:}}"
+msgstr "{gender, select, male {Bitte geben sie den Namen für den neuen {containerName} ein:} female {Bitte geben sie den Namen für die neue {containerName} ein:} other {Bitte geben sie den Namen für das neue {containerName} ein:}}"
+
+msgid "{gender, select, male {Rename {containerName}} female {Rename {containerName}} other {Rename {containerName}}}"
+msgstr "{gender, select, male {{containerName} umbenennen} female {{containerName} umbenennen} other {{containerName} umbenennen}}"
+
+msgid "{gender, select, male {Please enter the new name for the {containerName}:} female {Please enter the new name for the {containerName}:} other {Please enter the new name for the {containerName}:}}"
+msgstr "{gender, select, male {Bitte geben sie den neuen Namen für den {containerName} ein:} female {Bitte geben sie den neuen Namen für die {containerName} ein:} other {Bitte geben sie den neuen Namen für das {containerName} ein:}}"
 
 #: js/widgets/tree/ContextMenu.js:271
 #, python-brace-format

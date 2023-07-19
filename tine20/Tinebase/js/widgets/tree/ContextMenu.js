@@ -34,7 +34,6 @@ Tine.widgets.tree.ContextMenu = {
         
         this.config = config;
         this.actionMgr = this.actionMgr ?? this.config?.actionMgr;
-                
         /****************** create ITEMS array ****************/
               
         this.action_add = new Ext.Action({
@@ -201,56 +200,70 @@ Tine.widgets.tree.ContextMenu = {
      * create tree node
      */
     addNode: function() {
-        Ext.MessageBox.prompt(String.format(i18n._('New {0}'), this.nodeName), String.format(i18n._('Please enter the name of the new {0}:'), this.nodeName), function(_btn, _text) {
-            if( this.scope.ctxNode && _btn === 'ok') {
-                if (! _text) {
-                    Ext.Msg.alert(String.format(i18n._('No {0} added'), this.nodeName), String.format(i18n._('You have to supply a {0} name!'), this.nodeName));
-                    return;
-                }
-                Ext.MessageBox.wait(i18n._('Please wait'), String.format(i18n._('Creating {0}...' ), this.nodeName));
-                var parentNode = this.scope.ctxNode;
-                
-                var params = {
-                    method: this.backend + '.add' + this.backendModel,
-                    name: _text
-                };
-                
-                // TODO try to generalize this and move app specific stuff to app
-                if (this.backendModel === 'Container') {
-                    params.application = this.scope.app.appName || this.scope.appName;
-                    params.containerType = Tine.Tinebase.container.path2type(parentNode.attributes.path);
-                    params.modelName = this.scope.app.getMainScreen().getActiveContentType();
-                    if(params.modelName === '') params.modelName = this.scope.contextModel;
-                }
-                Ext.Ajax.request({
-                    params: params,
-                    scope: this,
-                    success: function(result, request){
-                        const nodeData = Ext.util.JSON.decode(result.responseText);
-
-                        if (nodeData.length === 0) {
-                            Tine.log.err('Server returned empty node data!');
-                            Ext.MessageBox.hide();
-                            return;
-                        }
-
-                        const newNode = this.scope.loader.createNode(nodeData);
-                        this.scope.loader.expandChildNode(parentNode, newNode);
-                        this.scope.fireEvent('containeradd', nodeData);
-                                              
-                        Ext.MessageBox.hide();
-                    },
-                    failure: function(result, request) {
-                        const nodeData = Ext.util.JSON.decode(result.responseText);
-                        const appContext = Tine[this.scope.app.appName];
-                        if(appContext && appContext.handleRequestException) {
-                            appContext.handleRequestException(nodeData.data);
-                        }
+        Ext.MessageBox.show({
+            title: formatMessage('{gender, select, male {New {containerName}} female {New {containerName}} other {New {containerName}}}', {containerName: this.nodeName, gender: this.scope?.recordClass?.getContainerGender()}),
+            msg: formatMessage('{gender, select, male {Please enter the name for the new {containerName}:} female {Please enter the name for the new {containerName}:} other {Please enter the name for the new {containerName}:}}', {containerName: this.nodeName, gender: this.scope?.recordClass?.getContainerGender()}),
+            buttons: Ext.MessageBox.OKCANCEL,
+            icon: Ext.MessageBox.QUESTION_INPUT,
+            prompt: true,
+            scope: this,
+            fn: function(_btn, _text) {
+                if( this.scope.ctxNode && _btn === 'ok') {
+                    if (! _text) {
+                        Ext.MessageBox.show({
+                            // title: String.format(i18n._('No {0} added'), this.nodeName),
+                            // msg: String.format(i18n._('You have to supply a {0} name!'), this.nodeName),
+                            title: formatMessage('{gender, select, male {No {containerName} added} female {No {containerName} added} other {No {containerName} added}}', {containerName: this.nodeName, gender: this.scope?.recordClass?.getContainerGender()}),
+                            msg: formatMessage('{gender, select, male {You have to supply a {containerName} name!} female {You have to supply a {containerName} name!} other {You have to supply a {containerName} name!}}', {containerName: this.nodeName, gender: this.scope?.recordClass?.getContainerGender()}),
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR_MILD
+                        });
+                        return;
                     }
-                });
-                
+                    Ext.MessageBox.wait(i18n._('Please wait'), String.format(i18n._('Creating {0}...' ), this.nodeName));
+                    var parentNode = this.scope.ctxNode;
+
+                    var params = {
+                        method: this.backend + '.add' + this.backendModel,
+                        name: _text
+                    };
+
+                    // TODO try to generalize this and move app specific stuff to app
+                    if (this.backendModel === 'Container') {
+                        params.application = this.scope.app.appName || this.scope.appName;
+                        params.containerType = Tine.Tinebase.container.path2type(parentNode.attributes.path);
+                        params.modelName = this.scope.app.getMainScreen().getActiveContentType();
+                        if(params.modelName === '') params.modelName = this.scope.contextModel;
+                    }
+                    Ext.Ajax.request({
+                        params: params,
+                        scope: this,
+                        success: function(result, request){
+                            const nodeData = Ext.util.JSON.decode(result.responseText);
+
+                            if (nodeData.length === 0) {
+                                Tine.log.err('Server returned empty node data!');
+                                Ext.MessageBox.hide();
+                                return;
+                            }
+
+                            const newNode = this.scope.loader.createNode(nodeData);
+                            this.scope.loader.expandChildNode(parentNode, newNode);
+                            this.scope.fireEvent('containeradd', nodeData);
+
+                            Ext.MessageBox.hide();
+                        },
+                        failure: function(result, request) {
+                            const nodeData = Ext.util.JSON.decode(result.responseText);
+                            const appContext = Tine[this.scope.app.appName];
+                            if(appContext && appContext.handleRequestException) {
+                                appContext.handleRequestException(nodeData.data);
+                            }
+                        }
+                    });
+                }
             }
-        }, this);
+        });
     },
     
     /**
@@ -261,8 +274,8 @@ Tine.widgets.tree.ContextMenu = {
     
             var node = this.scope.ctxNode;
             Ext.MessageBox.show({
-                title: String.format(i18n._('Rename {0}'), this.nodeName),
-                msg: String.format(i18n._('Please enter the new name of the {0}:'), this.nodeName),
+                title: formatMessage('{gender, select, male {Rename {containerName}} female {Rename {containerName}} other {Rename {containerName}}}', {containerName: this.nodeName, gender: this.scope?.recordClass?.getContainerGender()}),
+                msg: formatMessage('{gender, select, male {Please enter the new name for the {containerName}:} female {Please enter the new name for the {containerName}:} other {Please enter the new name for the {containerName}:}}', {containerName: this.nodeName, gender: this.scope?.recordClass?.getContainerGender()}),
                 buttons: Ext.MessageBox.OKCANCEL,
                 value: Ext.util.Format.htmlDecode(node.attributes.longName || node.text),
                 fn: function(_btn, _text){
@@ -326,7 +339,7 @@ Tine.widgets.tree.ContextMenu = {
                 },
                 scope: this,
                 prompt: true,
-                icon: Ext.MessageBox.QUESTION
+                icon: Ext.MessageBox.QUESTION_INPUT
             });
         }
     },
@@ -399,7 +412,7 @@ Tine.widgets.tree.ContextMenu = {
                         }
                     });
                 }
-            }, this);
+            }, this).then(mb => mb.setIcon(Ext.MessageBox.QUESTION_WARN));
         }
     },
     

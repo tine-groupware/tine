@@ -146,9 +146,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      */
     protected static $_modelConfiguration = [
         self::VERSION       => 27,
-        'containerName'     => 'Addressbook',
+        'containerName'     => 'Addressbook', // gettext('GENDER_Addressbook')
         'containersName'    => 'Addressbooks', // ngettext('Addressbook', 'Addressbooks', n)
-        'recordName'        => self::MODEL_PART_NAME,
+        'recordName'        => self::MODEL_PART_NAME, // gettext('GENDER_Contact')
         'recordsName'       => 'Contacts', // ngettext('Contact', 'Contacts', n)
         'hasRelations'      => true,
         'copyRelations'     => false,
