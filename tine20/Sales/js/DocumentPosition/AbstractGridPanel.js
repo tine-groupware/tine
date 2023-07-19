@@ -81,7 +81,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             if (! _.isString(productData)) { // manual position
                 position.setFromProduct(productData, lang, this.editDialog.record);
             }
-            
+
             position.setId(Tine.Tinebase.data.Record.generateUID());
             if (!position.get('grouping')) {
                 position.set('grouping', this.quickaddRecord.get('grouping'));
