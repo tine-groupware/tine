@@ -2681,7 +2681,7 @@ class Setup_Controller
      */
     public function clearCacheDir()
     {
-        $cacheDir = Tinebase_Core::getCacheDir();
+        $cacheDir = rtrim(Tinebase_Core::getCacheDir(), '/');
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Clearing routing cache in ' . $cacheDir . ' ...');
 
@@ -2691,6 +2691,12 @@ class Setup_Controller
                     . ' Deleting routing cache file ' . $directoryIterator->getPathname());
                 unlink($directoryIterator->getPathname());
             }
+        }
+
+        if (is_dir($cacheDir . '/tine20Twig')) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Clearing twig cache in ' . $cacheDir . ' ...');
+            exec('rm -rf ' . $cacheDir . '/tine20Twig/*');
         }
     }
 
