@@ -102,7 +102,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     
                     if (in_array($uri->getHost(), $allowedOrigins)) {
                         header('Access-Control-Allow-Methods: POST');
-                        header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type, x-tine20-jsonkey');
+                        header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type, x-tine20-jsonkey, authorization');
                         header('Access-Control-Max-Age: 3600'); // cache result of OPTIONS request for 1 hour
                         
                     } else {
@@ -370,7 +370,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
         }
 
-        if (self::userIsRegistered()) {
+        if (self::userIsRegistered() || $appPwd) {
             $definitions = self::_getModelConfigMethods('Tinebase_Server_Json');
             if ($appPwd) {
                 $definitions = array_intersect_key($definitions, $appPwd->{Tinebase_Model_AppPassword::FLD_CHANNELS});
@@ -403,9 +403,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 $_SERVER['HTTP_X_TINE20_CLIENTASSETHASH'] != Tinebase_Frontend_Http_SinglePageApplication::getAssetHash()) {
                 throw new Tinebase_Exception_ClientOutdated();
             }
-
-            $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
-            $this->_checkJsonKey($method, $jsonKey);
+            if (!Tinebase_Session::isStarted() || !Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class}) {
+                $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
+                $this->_checkJsonKey($method, $jsonKey);
+            }
             
             if (empty($method)) {
                 // SMD request

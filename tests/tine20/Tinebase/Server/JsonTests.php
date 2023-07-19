@@ -211,6 +211,7 @@ class Tinebase_Server_JsonTests extends TestCase
 
             Tinebase_Core::unsetUser();
             $session->currentAccount = null;
+            $session->{Tinebase_Model_AppPassword::class} = null;
             $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH, 'b')) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
             $resultString = $this->_handleRequest('Addressbook.searchContacts', [[], []], true,
                 'Authorization: Basic ' . base64_encode($this->_originalTestUser->accountLoginName . ':' . $pwd) . "\r\n", true);

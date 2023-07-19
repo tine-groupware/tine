@@ -36,6 +36,7 @@ class Tinebase_Model_AppPassword extends Tinebase_Record_NewAbstract
         self::APP_NAME              => Tinebase_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE         => false,
+        self::EXPOSE_JSON_API       => true,
 
         self::TABLE                 => [
             self::NAME                  => self::TABLE_NAME,
