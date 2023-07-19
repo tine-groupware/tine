@@ -219,3 +219,23 @@ trigger-release:
     - if: $PIPELINE_TYPE =~ /trigger-release/
   timeout: 20m
   interruptible: false
+
+mkdocs-deploy:
+  stage: deploy
+  image: ${UTIL_REGISTRY}/mkdocs:ci-r1
+  needs: []
+  script:
+    - cd tine20
+    - composer install --ignore-platform-reqs
+    - vendor/bin/phpdoc-md
+    - cd ..
+    - mkdocs build
+    - s3cmd --access_key=${DOCS_S3_ACCESS_KEY} --secret_key=${DOCS_S3_SECRET_KEY} --host ${DOCS_S3_HOST} --host-bucket "%(bucket)s.${DOCS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ./site/ s3://${DOCS_S3_BUCKET}
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /mkdocs-deploy/
+    - if: $MKDOCS_DEPLOY == "false"
+      when: never
+    - if: $MKDOCS_DEPLOY == "true"
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy/
+  timeout: 20m
+  interruptible: false
