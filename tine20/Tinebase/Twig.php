@@ -215,6 +215,15 @@ class Tinebase_Twig
             
             return Tinebase_Translation::dateToStringInTzAndLocaleFormat($date, null, null, $format);
         }));
+
+        $staticData = [];
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('setStaticData', function ($key, $data) use(&$staticData) {
+            $staticData[$key] = $data;
+        }));
+        $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('getStaticData', function ($key) use(&$staticData) {
+            return $staticData[$key] ?: null;
+        }));
+
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('relationTranslateModel', function ($model) {
             if (!$model || !class_exists($model)) return $model;
             return $model::getRecordName();
