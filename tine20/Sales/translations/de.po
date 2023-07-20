@@ -238,6 +238,18 @@ msgstr "Bitte legen Sei einen Kunden fest!"
 msgid "GENDER_Customer"
 msgstr "male"
 
+msgid "Has Offers"
+msgstr "Hat Angebote"
+
+msgid "Has Orders"
+msgstr "Hat Aufträge"
+
+msgid "Has Invoices"
+msgstr "Hat Rechnungen"
+
+msgid "Has Deliveries"
+msgstr "Hat Lieferungen"
+
 #: Model/Customer.php:39 Model/Customer.php:267 Model/Contract.php:161
 #: Model/Contract.php:260 Model/Contract.php:281 Model/Offer.php:52
 #: Model/Offer.php:96 Model/Invoice.php:90 Model/Invoice.php:239
