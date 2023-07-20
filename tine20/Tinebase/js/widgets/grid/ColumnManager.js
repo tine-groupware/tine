@@ -102,8 +102,8 @@ Tine.widgets.grid.ColumnManager = function() {
             if(fieldDefinition.type == 'attachments') {
                 config.width = 20;
                 config.resizable = false;
-                config.header = window.i18n._('Attachments');
-                config.tooltip = config.header;
+                config.header = '<div class="action_attach tine-grid-row-action-icon"></div>';
+                config.tooltip = window.i18n._('Attachments');
             }
 
             if(fieldDefinition.type == 'image') {

@@ -205,7 +205,7 @@ Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
         },
         columns: additionalColumns.concat([{
             id: 'attachments',
-            header: window.i18n._('Attachments'),
+            header: '<div class="action_attach tine-grid-row-action-icon"></div>',
             tooltip: window.i18n._('Attachments'),
             dataIndex: 'attachments',
             width: 20,

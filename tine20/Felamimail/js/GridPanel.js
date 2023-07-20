@@ -626,7 +626,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             hidden: true
         }, {
             id: 'content_type',
-            header: this.app.i18n._("Attachments"),
+            header: '<div class="action_attach tine-grid-row-action-icon"></div>',
+            tooltip: this.app.i18n._("Attachments"),
             width: 12,
             sortable: true,
             dataIndex: 'has_attachment',

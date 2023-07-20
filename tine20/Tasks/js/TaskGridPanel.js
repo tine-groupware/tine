@@ -80,7 +80,7 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getColumnModel: function(){
         const colMgr = _.bind(Tine.widgets.grid.ColumnManager.get, Tine.widgets.grid.ColumnManager, this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), _, Tine.widgets.grid.ColumnManager.CATEGORY_PROPERTYGRID, _);
         let columns = [
-            {id: 'attachments', header: window.i18n._('Attachments'), tooltip: window.i18n._('Attachments'), dataIndex: 'attachments', width: 20, sortable: false, resizable: false, renderer: Tine.widgets.grid.attachmentRenderer, hidden: false},
+            {id: 'attachments', header: '<div class="action_attach tine-grid-row-action-icon"></div>', tooltip: window.i18n._('Attachments'), dataIndex: 'attachments', width: 20, sortable: false, resizable: false, renderer: Tine.widgets.grid.attachmentRenderer, hidden: false},
             {id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer}
         ];
 
