@@ -1011,7 +1011,7 @@ Ext.extend(Tine.Calendar.Model.AttenderProxy, Tine.Tinebase.data.RecordProxy, {
             return event.getSchedulingData();
         }));
 
-        return Tine.Calendar.Model.AttenderProxy.superclass.searchRecords.apply(this, arguments);
+        return Tine.Calendar.Model.AttenderProxy.superclass.searchRecords.call(this, filter, paging, options);
     },
 
     readRecords : function(resultData){
