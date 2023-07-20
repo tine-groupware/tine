@@ -32,7 +32,7 @@ Tine.Crm.LeadGridContactFilter = Ext.extend(Tine.widgets.grid.ForeignRecordFilte
     /**
      * @cfg {Record} foreignRecordClass needed for explicit defined filters
      */
-    foreignRecordClass : Tine.Addressbook.Model.Contact,
+    foreignRecordClass : 'Addressbook.Contact',
     
     /**
      * @cfg {String} ownField for explicit filterRow

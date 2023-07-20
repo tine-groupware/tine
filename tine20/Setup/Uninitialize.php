@@ -6,7 +6,7 @@
  * @subpackage  Uninitialize
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -37,6 +37,9 @@ class Setup_Uninitialize
 
         $instance->_uninitialize($_application, $_options);
     }
+
+    public static function applicationUninstalled(Tinebase_Model_Application $app): void
+    {}
 
     /**
      * uninitialize application

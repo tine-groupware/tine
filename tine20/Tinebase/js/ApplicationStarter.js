@@ -89,7 +89,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             name: key,
             fieldDefinition: fieldDefinition
         };
-        
+
         if (fieldDefinition.type) {
             // add pre defined type
             field.type = this.types[fieldDefinition.type];
@@ -109,6 +109,13 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                         return Tine.Tinebase.data.RecordMgr.get(field.type);
                     }
                     break;
+            }
+            if (['attachments', 'records', 'relations', 'alarms', 'notes'].indexOf(fieldDefinition.type) >= 0
+                || (fieldDefinition.nullable)) {
+                field.defaultValue = null;
+            }
+            if (fieldDefinition.hasOwnProperty('default')) {
+                field.defaultValue = fieldDefinition['default'];
             }
             // allow overwriting date pattern in model
             if (fieldDefinition.hasOwnProperty('dateFormat')) {
@@ -172,6 +179,36 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                     ownRecordClass: _.get(filterconfig, 'options.own_model'),
                     foreignRecordClass: _.get(filterconfig, 'options.related_model')
                 });
+                break;
+            case 'dynamicRecord':
+                const base = {... filter};
+                const ownRecordClass = Tine.Tinebase.data.RecordMgr.get(`${appName}_Model_${modelName}`);
+                const availableModels = ownRecordClass.getModelConfiguration().fields[fieldconfig.config.refModelField].config.availableModels;
+                filter = availableModels.reduce((filter, model) => {
+                    const [appName,,modelName] = model.split('_');
+                    const filterDefinition = Object.assign({... base}, {
+                        field: `${base.field}:${model}`,
+                        preserveFieldName: true,
+                        baseLabel: base.label,
+                        label: `${base.label} ${modelName}`,
+                        filtertype: 'foreignrecord',
+                        valueType: 'foreignId',
+                        app: _.get(filterconfig, 'options.appName', appName),
+                        ownRecordClass: ownRecordClass,
+                        foreignRecordClass: model
+                    });
+                    filter.push(filterDefinition);
+
+                    // app/model might not be loaded/processed yet -> postpone label creation
+                    Tine.Tinebase.appMgr.isInitialised(appName).then(() => {
+                        const foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(model);
+                        filterDefinition.label = foreignRecordClass ? `${filterDefinition.baseLabel} ${foreignRecordClass.getRecordName()}` : filterDefinition.label;
+                    });
+                    return filter;
+                }, []);
+                break;
+            case 'foreignId':
+                debugger
                 break;
             case 'tag': 
                 filter = {filtertype: 'tinebase.tag', app: appName};

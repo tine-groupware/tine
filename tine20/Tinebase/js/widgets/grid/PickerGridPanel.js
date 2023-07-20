@@ -179,12 +179,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         this.autoExpandColumn = this.autoExpandColumn? this.autoExpandColumn : this.labelField;
 
+        const modelConf = (this.recordClass.getModelConfiguration ? this.recordClass.getModelConfiguration() : {}) || {};
+
         // Autodetect if our record has additional metadata for the refId Record or is only a cross table
         if (this.refIdField) {
             const systemFields = _.map(Tine.Tinebase.Model.genericFields, 'name')
                 .concat(this.recordClass.getMeta('idProperty'), this.refIdField)
-                .concat(this.recordClass.getModelConfiguration().hasNotes ? [] : 'notes');
-            const dataFields = _.difference(this.recordClass.getModelConfiguration().fieldKeys, systemFields);
+                .concat(modelConf.hasNotes ? [] : 'notes');
+            const dataFields = _.difference(modelConf.fieldKeys, systemFields);
 
             this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 ? dataFields[0] : null;
             this.metaDataFields = _.difference(dataFields, [this.isMetadataModelFor]);
@@ -291,7 +293,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     initActionsAndToolbars: function() {
         const hasEditDialog = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
-        const useEditDialog = !this.metaDataFields || _.isArray(this.metaDataFields) && this.metaDataFields.length;
+        const useEditDialog = !this.isMetadataModelFor || !this.metaDataFields || _.isArray(this.metaDataFields) && this.metaDataFields.length;
 
         this.actionCreate = new Ext.Action({
             text: String.format(i18n._('Create {0}'), this.recordName),
@@ -449,11 +451,6 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         // on rowcontextmenu handler
         this.on('rowcontextmenu', this.onRowContextMenu.createDelegate(this), this);
-
-        this.viewConfig = {
-            autoFill: true,
-            forceFit: true
-        };
     },
 
     /**
@@ -476,11 +473,16 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.columns = [labelColumn];
             } else {
                 // convert string cols
+                const fieldManager = _.bind(Tine.widgets.form.FieldManager.get,
+                    Tine.widgets.form.FieldManager, me.recordClass.getMeta('appName'), me.recordClass.getMeta('modelName'), _,
+                    Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID);
+
                 _.each(me.columns, function(col, idx) {
                     if (_.isString(col)) {
                         var config = Tine.widgets.grid.ColumnManager.get(me.recordClass.getMeta('appName'), me.recordClass.getMeta('modelName'), col, 'editDialog');
                         if (config) {
                             me.columns[idx] = config;
+                            config.editor = fieldManager(col);
                         }
                     }
                 });

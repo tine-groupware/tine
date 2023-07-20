@@ -2096,7 +2096,7 @@ class Setup_Controller
             }
             $application = new Tinebase_Model_Application($appData);
 
-            if ('Tinebase' !== $application->name) {
+            if (Tinebase_Config::APP_NAME !== $application->name) {
                 $application = Tinebase_Application::getInstance()->addApplication($application);
             }
 
@@ -2106,7 +2106,7 @@ class Setup_Controller
             // traditional xml declaration
             $createdTables = $this->createXmlTables($_xml);
 
-            if ('Tinebase' === $application->name) {
+            if (Tinebase_Config::APP_NAME === $application->name) {
                 $application = Tinebase_Application::getInstance()->addApplication($application);
                 $tbInstance = Setup_Core::getApplicationInstance($application->name, '', true);
                 Setup_SchemaTool::updateApplicationTable($tbInstance->getModels(true /* MCv2only */));
@@ -2169,6 +2169,18 @@ class Setup_Controller
 
                     Tinebase_Application::getInstance()->setApplicationState($application->getId(),
                         Tinebase_Application::STATE_UPDATES, json_encode($state));
+                }
+            }
+
+            if (Tinebase_Config::APP_NAME !== $application->name) {
+                foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
+                    if ($app->name === $application->name) continue;
+
+                    /** @var Setup_Initialize $classname */
+                    $classname = "{$app->name}_Setup_Initialize";
+                    if (class_exists($classname)) {
+                        $classname::applicationInstalled($application);
+                    }
                 }
             }
         } catch (Exception $e) {
@@ -2443,7 +2455,7 @@ class Setup_Controller
             }
         }
         
-        if ($_application->name != 'Tinebase') {
+        if ($_application->name !== Tinebase_Config::APP_NAME) {
             if (!$uninstallAll) {
                 Tinebase_Relations::getInstance()->removeApplication($_application->name);
 
@@ -2455,6 +2467,16 @@ class Setup_Controller
             
             // remove application from table of installed applications
             Tinebase_Application::getInstance()->deleteApplication($_application);
+
+            foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
+                if ($app->name === $_application->name) continue;
+
+                /** @var Setup_Uninitialize $classname */
+                $classname = "{$app->name}_Setup_Uninitialize";
+                if (class_exists($classname)) {
+                    $classname::applicationUninstalled($_application);
+                }
+            }
         }
 
         Setup_Uninitialize::uninitialize($_application);

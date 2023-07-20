@@ -14,8 +14,15 @@
 class Tasks_Setup_Update_16 extends Setup_Update_Abstract
 {
     const RELEASE016_UPDATE000 = __CLASS__ . '::update000';
+    const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
 
     static protected $_allUpdates = [
+        self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE016_UPDATE001          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update001',
+            ],
+        ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE016_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
@@ -27,5 +34,30 @@ class Tasks_Setup_Update_16 extends Setup_Update_Abstract
     public function update000()
     {
         $this->addApplicationUpdate('Tasks', '16.0', self::RELEASE016_UPDATE000);
+    }
+
+    public function update001()
+    {
+        if (!$this->_backend->columnExists('source', 'tasks')) {
+            $sql = $this->_backend->addAddCol('', 'tasks', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>source</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <default>null</default>
+                </field>'));
+
+            $this->getDb()->query($this->_backend->addAddCol($sql, 'tasks', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>source_model</name>
+                    <type>text</type>
+                    <length>100</length>
+                    <default>null</default>
+                </field>')));
+        }
+
+        if ($this->getTableVersion('tasks') < 12) {
+            $this->setTableVersion('tasks', 12);
+        }
+
+        $this->addApplicationUpdate('Tasks', '16.1', self::RELEASE016_UPDATE001);
     }
 }

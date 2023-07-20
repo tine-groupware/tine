@@ -6,7 +6,7 @@
  * @subpackage  Initialize
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -171,6 +171,9 @@ class Setup_Initialize
             }
         }
     }
+
+    public static function applicationInstalled(Tinebase_Model_Application $app): void
+    {}
 
     /**
      * create application customfields

@@ -94,4 +94,28 @@ class Projects_Setup_Initialize extends Setup_Initialize
             )
         ))));
     }
+
+    protected function _initializeTasksCoupling()
+    {
+        if (class_exists('Tasks_Config') && Tinebase_Application::getInstance()->isInstalled(Tasks_Config::APP_NAME)) {
+            static::applicationInstalled(Tinebase_Application::getInstance()->getApplicationByName(Tasks_Config::APP_NAME));
+        }
+    }
+
+    public static function applicationInstalled(Tinebase_Model_Application $app): void
+    {
+        if (class_exists('Tasks_Config') && Tasks_Config::APP_NAME === $app->name) {
+            Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+                'application_id' => $app->getId(),
+                'model' => Tasks_Model_Task::class,
+                'is_system' => true,
+                'name' => 'ProjectsTasksCoupling',
+                'definition' => [
+                    Tinebase_Model_CustomField_Config::DEF_HOOK => [
+                        [Projects_Controller::class, 'tasksMCHookFun'],
+                    ],
+                ]
+            ]));
+        }
+    }
 }

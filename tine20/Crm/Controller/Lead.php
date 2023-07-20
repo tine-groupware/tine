@@ -38,7 +38,6 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
     {
         $this->_applicationName         = 'Crm';
         $this->_modelName               = 'Crm_Model_Lead';
-        $this->_relatedObjectsToDelete  = array('Tasks_Model_Task');
         $this->_sendNotifications       = TRUE;
         $this->_purgeRecords            = FALSE;
         $this->_doRightChecks           = TRUE;
@@ -119,7 +118,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
                 $this->_backend->getType(), 
                 $leads->getId(), 
                 NULL,
-                array('CUSTOMER', 'PARTNER', 'TASK', 'RESPONSIBLE', 'PRODUCT'),
+                array('CUSTOMER', 'PARTNER', 'RESPONSIBLE', 'PRODUCT'),
                 FALSE,
                 $_getRelations
             ));

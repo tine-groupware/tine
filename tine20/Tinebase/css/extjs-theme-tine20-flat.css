@@ -1060,7 +1060,7 @@ textarea {
 }
 
 .x-form-display-field {
-    padding-top: 2px
+    padding-top: 2px;
 }
 
 .ext-gecko .x-form-display-field, .ext-strict .ext-ie7 .x-form-display-field {

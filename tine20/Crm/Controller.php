@@ -12,6 +12,8 @@
  *
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
+
 /**
  * leads controller class for CRM application
  * 
@@ -119,5 +121,24 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Appli
         );
 
         return new Tinebase_Record_RecordSet(Tinebase_Model_Container::class, array($personalContainer));
+    }
+
+    public static function tasksMCHookFun(array &$fields, Tinebase_ModelConfiguration $mc): void
+    {
+        if (!in_array(Crm_Model_Lead::class, $fields['source_model'][TMCC::CONFIG][TMCC::AVAILABLE_MODELS])) {
+            $fields['source_model'][TMCC::CONFIG][TMCC::AVAILABLE_MODELS][] = Crm_Model_Lead::class;
+        }
+        $filterModels = $mc->filterModel;
+        if (!isset($filterModels['source:' . Crm_Model_Lead::class])) {
+            $filterModels['source:' . Crm_Model_Lead::class] = [
+                TMCC::FILTER         => Tinebase_Model_Filter_ForeignId::class,
+                TMCC::OPTIONS => [
+                    TMCC::CONTROLLER    => Crm_Controller_Lead::class,
+                    TMCC::FILTER_GROUP  => Crm_Model_Lead::class,
+                    TMCC::FIELD         => 'source'
+                ],
+            ];
+            $mc->setFilterModel($filterModels);
+        }
     }
 }

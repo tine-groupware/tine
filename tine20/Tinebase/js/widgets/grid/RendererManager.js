@@ -175,6 +175,10 @@ Tine.widgets.grid.RendererManager = function() {
 
                     }
                     break;
+                case 'text':
+                case 'fulltext':
+                    renderer = Ext.ux.display.DisplayField.prototype.renderer;
+                    break;
                 case 'user':
                     renderer = Tine.Tinebase.common.usernameRenderer;
                     break;
@@ -247,8 +251,8 @@ Tine.widgets.grid.RendererManager = function() {
                 case 'dynamicRecord':
                     const classNameField = fieldDefinition.config.refModelField;
                     renderer = (configRecord, metaData, record) => {
-                        const configRcordClass = Tine.Tinebase.data.RecordMgr.get(record.get(classNameField));
-                        return configRcordClass ? Tine.Tinebase.data.Record.setFromJson(configRecord, configRcordClass).getTitle() : '';
+                        const configRecordClass = Tine.Tinebase.data.RecordMgr.get(record.get(classNameField));
+                        return configRecordClass ? `<a href="#" data-record-class="${configRecordClass.getPhpClassName()}" data-record-id="${configRecord.id}"><span class="tine-recordclass-gridicon ${configRecordClass.getIconCls()}">&nbsp;</span>${Tine.Tinebase.data.Record.setFromJson(configRecord, configRecordClass).getTitle()} (${configRecordClass.getRecordName()})</a>` : '';
                     };
                     break;
                 case 'language':

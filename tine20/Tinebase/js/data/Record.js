@@ -543,7 +543,7 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
             return modelName;
         }
         if (! appName) return;
-        if (Ext.isFunction(appName.getMeta)) {
+        if (Ext.isFunction(appName.getField)) {
             return appName;
         }
         if (! modelName && appName.modelName) {

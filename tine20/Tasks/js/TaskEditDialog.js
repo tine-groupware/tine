@@ -50,8 +50,8 @@ Ext.namespace('Tine.Tasks');
      */
     windowNamePrefix: 'TasksEditWindow_',
     appName: 'Tasks',
-    recordClass: Tine.Tasks.Model.Task,
-    recordProxy: Tine.Tasks.JsonBackend,
+    recordClass: 'Tine.Tasks.Model.Task',
+    // recordProxy: Tine.Tasks.JsonBackend,
     showContainerSelector: true,
     displayNotes: true,
 

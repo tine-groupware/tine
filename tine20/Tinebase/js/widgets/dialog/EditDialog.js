@@ -28,10 +28,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     app: null,
     /**
-     * @cfg {String} mode
+     * @cfg {String} mode (remote|local|load(remote):save(local)
      * Set to 'local' if the EditDialog only operates on this.record (defaults to 'remote' which loads and saves using the recordProxy)
      */
-    mode : 'remote',
+    mode: 'remote',
     /**
      * @cfg {Array} tbarItems
      * additional toolbar items (defaults to false)
@@ -1316,7 +1316,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
 
         isValid.then(function () {
-            if (me.mode !== 'local') {
+            if (me.mode !== 'local' && !me.mode.match(/save\(local\)/)) {
                 me.recordProxy.saveRecord(me.record, {
                     scope: me,
                     success: function (record) {

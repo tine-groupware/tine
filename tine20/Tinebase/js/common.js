@@ -177,7 +177,7 @@ Tine.Tinebase.common = {
         }
 
         if (! Ext.isNumber(v)) {
-            v = 0;
+            v = parseInt(v, 10) || 0;
         }
 
         v = Ext.util.Format.number(v, (type == 'float' ? '0.00' : '0'));

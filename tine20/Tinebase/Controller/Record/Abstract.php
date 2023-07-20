@@ -3050,15 +3050,31 @@ abstract class Tinebase_Controller_Record_Abstract
 
                 if (strlen((string)$rec->getId()) < 40) {
                     $rec->{$rec->getIdProperty()} = Tinebase_Record_Abstract::generateUID();
+                    $rs->addRecord($rec);
+                } elseif ([$rec->getId()] === $controller->has([$rec->getId()])) {
+                    $rec->{$_fieldConfig['refIdField']} = $_createdRecord->getId();
+                    if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+                        foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                            $rec->{$prop} = $val;
+                        }
+                    }
+                    $new->addRecord($controller->update($rec));
                 }
-
-                $rs->addRecord($rec);
             }
             $_record->{$_property} = $rs;
         } else {
             foreach ($_record->{$_property} as $rec) {
                 if (strlen((string)$rec->getId()) < 40) {
-                    $rec->{$rec->getIdProperty()} = Tinebase_Record_Abstract::generateUID();
+                    $rec->setId(Tinebase_Record_Abstract::generateUID());
+                } elseif ([$rec->getId()] === $controller->has([$rec->getId()])) {
+                    $_record->{$_property}->removeRecord($rec);
+                    $rec->{$_fieldConfig['refIdField']} = $_createdRecord->getId();
+                    if (isset($_fieldConfig[TMCC::FORCE_VALUES])) {
+                        foreach ($_fieldConfig[TMCC::FORCE_VALUES] as $prop => $val) {
+                            $rec->{$prop} = $val;
+                        }
+                    }
+                    $new->addRecord($controller->update($rec));
                 }
             }
         }

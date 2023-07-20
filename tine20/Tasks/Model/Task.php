@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  * 
@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -44,6 +44,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'hasAttachments'    => true,
         'hasAlarms'         => true,
         'createModule'      => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         'containerProperty' => 'container_id',
 
@@ -54,6 +55,12 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'titleProperty'     => 'summary',//array('%s - %s', array('number', 'title')),
         'appName'           => 'Tasks',
         'modelName'         => 'Task',
+
+        self::JSON_EXPANDER => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'source' => [],
+            ],
+        ],
 
         'filterModel'       => array(
             'organizer'         => array(
@@ -72,29 +79,11 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             ),
         ),
         'fields'            => array(
-            'percent'           => array(
-                'label'             => 'Percent', //_('Percent')
-                'type'              => 'integer',
-                'default'           => 0,
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            ),
-            'completed'         => array(
-                'label'             => 'Completed', //_('Completed')
-                'type'              => 'datetime',
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            ),
-            'due'               => array(
-                'label'             => 'Due', //_('Due')
-                'type'              => 'datetime',
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-            ),
-            'class'             => array(
-                'label'             => 'Class', //_('Class')
+            'summary'           => array(
+                'label'             => 'Summary', //_('Summary'),
                 'type'              => 'string',
-                'validators'        => array(
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
-                    array('InArray', array(self::CLASS_PUBLIC, self::CLASS_PRIVATE)),
-                ),
+                'validators'        => array(Zend_Filter_Input::PRESENCE => 'required'),
+                'queryFilter'       => true,
             ),
             'description'       => array(
                 'label'             => 'Description', //_('Description')
@@ -102,15 +91,30 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 'queryFilter'       => true,
             ),
-            'geo'               => array(
-                'label'             => 'Geo', //_('Geo')
-                'type'              => 'float',
+            'due'               => array(
+                'label'             => 'Due', //_('Due')
+                'type'              => 'datetime',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
-            'location'          => array(
-                'label'             => 'Location', //_('Location')
-                'type'              => 'string',
+            'priority'          => array(
+                'label'             => 'Priority', //_('Priority')
+                self::TYPE          => self::TYPE_KEY_FIELD,
+                self::NAME          => Tasks_Config::TASK_PRIORITY,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                'default'           => Tasks_Model_Priority::NORMAL,
+            ),
+            'percent'           => array(
+                'label'             => 'Percent', //_('Percent')
+                'type'              => 'integer',
+                'specialType'       => 'percent',
+                'default'           => 0,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'status'            => array(
+                'label'             => 'Status', //_('Status')
+                self::TYPE          => self::TYPE_KEY_FIELD,
+                self::NAME          => Tasks_Config::TASK_STATUS,
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
             ),
             'organizer'         => array(
                 'label'             => 'Organizer', //_('Organizer')
@@ -123,22 +127,31 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
-            'priority'          => array(
-                'label'             => null,
+            'class'             => array(
+                self::DISABLED      => true,
+                'label'             => 'Class', //_('Class')
+                'type'              => 'string',
+                'validators'        => array(
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    array('InArray', array(self::CLASS_PUBLIC, self::CLASS_PRIVATE)),
+                ),
+            ),
+            'completed'         => array(
+                'label'             => 'Completed', //_('Completed')
+                'type'              => 'datetime',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'geo'               => array(
+                self::DISABLED      => true,
+                'label'             => 'Geo', //_('Geo')
+                'type'              => 'float',
+                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            ),
+            'location'          => array(
+                self::DISABLED      => true,
+                'label'             => 'Location', //_('Location')
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'default'           => Tasks_Model_Priority::NORMAL,
-            ),
-            'status'            => array(
-                'label'             => null,
-                'type'              => 'string',
-                'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
-            ),
-            'summary'           => array(
-                'label'             => null,
-                'type'              => 'string',
-                'validators'        => array(Zend_Filter_Input::PRESENCE => 'required'),
-                'queryFilter'       => true,
             ),
             'url'               => array(
                 'label'             => null,
@@ -225,6 +238,23 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
+            'source'    => [
+                self::LABEL         => 'Source', // _('Source')
+                self::TYPE          => self::TYPE_DYNAMIC_RECORD,
+                self::CONFIG        => [
+                    self::REF_MODEL_FIELD               => 'source_model',
+                    self::PERSISTENT                    => Tinebase_Model_Converter_DynamicRecord::REFID,
+                ],
+                self::FILTER_DEFINITION => [
+                    self::FILTER            => Tinebase_Model_Filter_Id::class,
+                ]
+            ],
+            'source_model' => [
+                self::TYPE          => self::TYPE_MODEL,
+                self::CONFIG        => [
+                    self::AVAILABLE_MODELS => [],
+                ]
+            ],
         ),
     );
 
