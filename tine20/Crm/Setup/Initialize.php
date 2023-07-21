@@ -62,20 +62,6 @@ class Crm_Setup_Initialize extends Setup_Initialize
                 ))
             )),
         ))));
-
-        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "Leads with overdue tasks", // _("Leads with overdue tasks")
-            'description'       => "Leads with overdue tasks",
-            'filters'           => array(array(
-                'field'     => 'tasks',
-                'operator'  => 'definedBy',
-                'value'     => array(array(
-                    'field'     => 'due',
-                    'operator'  => 'before',
-                    'value'     => 'dayThis',
-                ))
-            )),
-        ))));
     }
 
     protected function _initializeTasksCoupling()
@@ -99,6 +85,32 @@ class Crm_Setup_Initialize extends Setup_Initialize
                     ],
                 ]
             ]));
+
+            $pfe = Tinebase_PersistentFilter::getInstance();
+            $crmAppId = Tinebase_Application::getInstance()->getApplicationByName(Crm_Config::APP_NAME)->getId();
+            if (!$pfe->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_PersistentFilterFilter::class, [
+                        ['field' => 'account_id', 'operator' => 'isnull', 'value' =>  true],
+                        ['field' => 'application_id', 'operator' => 'equals', 'value' =>  $crmAppId],
+                        ['field' => 'model', 'operator' => 'equals', 'value' =>  Crm_Model_LeadFilter::class],
+                        ['field' => 'name', 'operator' => 'equals', 'value' =>  'Leads with overdue tasks'],
+                    ]))->getFirstRecord()) {
+                $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter([
+                    'account_id' => NULL,
+                    'application_id' => $crmAppId,
+                    'model' => Crm_Model_LeadFilter::class,
+                    'name' => "Leads with overdue tasks", // _("Leads with overdue tasks")
+                    'description' => "Leads with overdue tasks",
+                    'filters' => array(array(
+                        'field' => 'tasks',
+                        'operator' => 'definedBy',
+                        'value' => array(array(
+                            'field' => 'due',
+                            'operator' => 'before',
+                            'value' => 'dayThis',
+                        ))
+                    )),
+                ]));
+            }
         }
     }
 }
