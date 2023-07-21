@@ -765,7 +765,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _doUpdateGeoData($record, $oldRecord)
     {
-        if (! $this->_setGeoDataForContacts) {
+        if (! $this->_setGeoDataForContacts || isset($oldRecord['xprops'][Addressbook_Model_Contact::XPROP_NO_GEODATA_UPDATE])) {
             return false;
         }
 

@@ -128,6 +128,9 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
      */
     const SMALL_PHOTO_SIZE = 36000;
 
+    const XPROP_NO_GEODATA_UPDATE = 'noGeodataUpdate';
+
+
     public const TABLE_NAME = 'addressbook';
 
     /**
@@ -163,6 +166,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         'exposeJsonApi'     => true,
         'containerProperty' => 'container_id',
         'multipleEdit'      => true,
+        self::HAS_XPROPS    => true,
 
         'titleProperty'     => 'n_fileas',
         'appName'           => 'Addressbook',
