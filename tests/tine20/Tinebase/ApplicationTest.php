@@ -437,11 +437,13 @@ class Tinebase_ApplicationTest extends TestCase
                 SimpleFAQ_Model_Config::class,
                 SimpleFAQ_Model_Faq::class,
             ),
-            'Tasks' => array(
+            Tasks_Config::APP_NAME => array(
+                Tasks_Model_Attendee::class,
                 Tasks_Model_Pagination::class,
                 Tasks_Model_Priority::class,
                 Tasks_Model_Status::class,
                 Tasks_Model_Task::class,
+                Tasks_Model_TaskDependency::class,
             ),
             'Timetracker' => array(
                 Timetracker_Model_Timeaccount::class,

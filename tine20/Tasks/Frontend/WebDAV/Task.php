@@ -143,7 +143,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
                 $existingEvent->deleted_by = NULL;
                 $existingEvent->deleted_time = NULL;
 
-                $be = new Tasks_Backend_Sql();
+                $be = Tasks_Controller_Task::getInstance()->getBackend();
                 $be->updateMultiple($existingEvent->getId(), array(
                     'is_deleted'    => 0,
                     'deleted_by'    => NULL,

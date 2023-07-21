@@ -90,7 +90,7 @@ class Tasks_Setup_MigrateFromTine14
      */
     public static function MigrateInfolog2Tasks()
     {
-        $tasksBackend = Tasks_Backend_Factory::factory(Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND);
+        $tasksBackend = Tasks_Controller_Task::getInstance()->getBackend();
 
         $db = Tinebase_Core::getDb();
         $stmt = $db->query($db->select()
