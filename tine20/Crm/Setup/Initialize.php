@@ -94,6 +94,9 @@ class Crm_Setup_Initialize extends Setup_Initialize
                         ['field' => 'model', 'operator' => 'equals', 'value' =>  Crm_Model_LeadFilter::class],
                         ['field' => 'name', 'operator' => 'equals', 'value' =>  'Leads with overdue tasks'],
                     ]))->getFirstRecord()) {
+                // mainly for testing, uninstalling / installing in the same php process
+                Crm_Model_Lead::resetConfiguration();
+
                 $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter([
                     'account_id' => NULL,
                     'application_id' => $crmAppId,
