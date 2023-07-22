@@ -87,6 +87,11 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         return parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
     }
 
+    protected $_employee = null;
+    public function setEmployee(HumanResources_Model_Employee $employee): void
+    {
+        $this->_employee = $employee;
+    }
 
     /**
      * inspect update of one record (before update)
@@ -110,22 +115,9 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             }
         }
 
-        if ($_record->end_date && (!$_oldRecord->end_date || $_record->end_date->isEarlier($_oldRecord->end_date))) {
-            $ftCtrl = HumanResources_Controller_FreeTime::getInstance();
-            $ftRaii = new Tinebase_RAII($ftCtrl->assertPublicUsage());
+        while ($_record->end_date && (!$_oldRecord->end_date || $_record->end_date->isEarlier($_oldRecord->end_date))) {
             $dwtrCtrl = HumanResources_Controller_DailyWTReport::getInstance();
             $dwtrRaii = new Tinebase_RAII($dwtrCtrl->assertPublicUsage());
-
-            if ($ftCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                        HumanResources_Model_FreeTime::class, array_merge([
-                        ['field' => 'lastday_date', 'operator' => 'after', 'value' => $_record->end_date],
-                        ['field' => 'employee_id', 'operator' => 'equals', 'value' => $_oldRecord->employee_id],
-                        ['field' => HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED],
-                    ], $_oldRecord->end_date ? [
-                        ['field' => 'firstday_date', 'operator' => 'before_or_equals', 'value' => $_oldRecord->end_date],
-                    ] : []))) > 0) {
-                throw new Tinebase_Exception_SystemGeneric('can\'t set end_date as there are booked freetimes after new end_date');
-            }
 
             if ($dwtrCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                     HumanResources_Model_DailyWTReport::class, array_merge([
@@ -139,7 +131,35 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             }
 
             unset($dwtrRaii);
+
+            if ($this->_employee) {
+                foreach ($this->_employee->contracts as $contract) {
+                    if ($contract->start_date->isLater($_record->end_date) && (!$_oldRecord->end_date || $contract->start_date->isEarlierOrEquals($_oldRecord->end_date))) {
+                        if ($contract->start_date->equals($_record->end_date->getClone()->addDay(1)) &&
+                            ((!$_oldRecord->end_date && !$contract->end_date) || !$contract->end_date || $contract->end_date->isLaterOrEquals($_oldRecord->end_date))) {
+                            break 2;
+                        }
+                        break;
+                    }
+                }
+            }
+
+            $ftCtrl = HumanResources_Controller_FreeTime::getInstance();
+            $ftRaii = new Tinebase_RAII($ftCtrl->assertPublicUsage());
+
+            if ($ftCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        HumanResources_Model_FreeTime::class, array_merge([
+                        ['field' => 'lastday_date', 'operator' => 'after', 'value' => $_record->end_date],
+                        ['field' => 'employee_id', 'operator' => 'equals', 'value' => $_oldRecord->employee_id],
+                        ['field' => HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED],
+                    ], $_oldRecord->end_date ? [
+                        ['field' => 'firstday_date', 'operator' => 'before_or_equals', 'value' => $_oldRecord->end_date],
+                    ] : []))) > 0) {
+                throw new Tinebase_Exception_SystemGeneric('can\'t set end_date as there are booked freetimes after new end_date');
+            }
+
             unset($ftRaii);
+            break;
         }
         
         $this->_checkDates($_record);
