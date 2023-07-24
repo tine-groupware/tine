@@ -214,6 +214,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         $this->_duplicateCheck($_record);
         $this->_checkContractsOverlap($_record);
         $this->_recordArraysToId($_record);
+        HumanResources_Controller_Contract::getInstance()->setEmployee($_record);
     }
     
     /**
