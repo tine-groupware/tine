@@ -75,8 +75,10 @@ CSV
         $raii = new Tinebase_RAII(function() use($oldValue) {
             $oldValue ? Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG_LOGIN} = $oldValue :
                 Tinebase_Config::getInstance()->delete(Tinebase_Config::ACCOUNT_TWIG_LOGIN);
+            Setup_Controller::getInstance()->clearCacheDir();
         });
         Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG_LOGIN} = '{{ account.accountFirstName|transliterate|removeSpace|trim[0:1]|lower }}{{ account.accountLastName|transliterate|removeSpace|lower }}';
+        Setup_Controller::getInstance()->clearCacheDir();
 
         $importer = new Courses_Import_DivisCourses([
             'divisFile' => '/shared/unittest/import.csv',
