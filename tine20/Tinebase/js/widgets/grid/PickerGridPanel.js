@@ -209,7 +209,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         if (! this.editDialogConfig?.mode) {
             this.editDialogConfig = this.editDialogConfig || {};
-            this.editDialogConfig.mode = (!this.refIdField || !this.recordClass.getModelConfiguration().fields[this.refIdField]?.config?.dependentRecords) ? 'remote' : 'local';
+            const modelConfig = _.isFunction(this.recordClass?.getModelConfiguration) ? this.recordClass.getModelConfiguration() : null;
+            const refConfig = _.get(modelConfig, `fields.${this.refIdField}.config`, {});
+            const foreignFieldDefinition = _.get(Tine.Tinebase.data.RecordMgr.get(refConfig.appName, refConfig.modelName)?.getModelConfiguration(), `fields.${refConfig.foreignField}`, {});
+            const dependentRecords = _.get(foreignFieldDefinition, `config.dependentRecords`, false);
+            const isJSONStorage = _.toUpper(_.get(foreignFieldDefinition, `config.storage`, '')) === 'JSON';
+            const hasNoAPI = !_.get(Tine, `${refConfig.appName}.search${_.upperFirst(refConfig.modelName)}s`)
+
+            this.editDialogConfig.mode = hasNoAPI || isJSONStorage || modelConfig.isDependent || dependentRecords ? 'local' : 'remote';
         }
     },
 

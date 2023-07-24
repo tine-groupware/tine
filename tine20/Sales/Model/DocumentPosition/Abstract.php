@@ -186,6 +186,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     //self::MODEL_NAME                    => Sales_Model_Document_Abstract::MODEL_PART_NAME,
+                    self::FOREIGN_FIELD                 => Sales_Model_Document_Abstract::FLD_POSITIONS,
                 ],
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => false,

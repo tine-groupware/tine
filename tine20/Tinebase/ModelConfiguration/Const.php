@@ -104,6 +104,10 @@ class Tinebase_ModelConfiguration_Const {
     const FLD_ORIGINAL_ID = 'original_id';
     const FLD_TAGS = 'tags';
     const FORCE_VALUES = 'forceValues';
+    /**
+     * valid for the config of fields of type record(s). Defines virtual field in foreign record which holds own record(s)
+     */
+    const FOREIGN_FIELD = 'foreignField';
     const FUNCTION = 'function';
 
     const GRANTS_MODEL = 'grantsModel';
@@ -133,6 +137,9 @@ class Tinebase_ModelConfiguration_Const {
      * this configured field is a record which gets additional information/metadata
      */
     const IS_METADATA_MODEL_FOR = 'isMetadataModelFor';
+    /**
+     * valid vor type record - means the configured model is the parent of this record
+     */
     const IS_PARENT = 'isParent';
     const IS_VIRTUAL = 'isVirtual';
 
@@ -172,6 +179,9 @@ class Tinebase_ModelConfiguration_Const {
      */
     const READ_ONLY = 'readOnly';
     const REFERENCED_COLUMN_NAME = 'referencedColumnName';
+    /**
+     * valid for the config of fields of type record(s). Defines field in foreign record which holds id to own record(s)
+     */
     const REF_ID_FIELD = 'refIdField';
     const REF_MODEL_FIELD = 'refModelField';
     const RECORD_CLASS_NAME = 'recordClassName';
