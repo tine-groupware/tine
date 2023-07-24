@@ -175,7 +175,7 @@
 
 <script>
 import axios from 'axios'
-import { BModal, BButton, BButtonGroup, BAlert, BSpinner/* VBModal */} from 'bootstrap-vue-3'
+import { BModal, BButton, BButtonGroup, BAlert, BSpinner/* VBModal */} from 'bootstrap-vue-next'
 // import Spinner from 'vue-simple-spinner'
 import _ from 'lodash'
 
@@ -230,7 +230,7 @@ export default {
     }
   },
   computed: {
-    
+
   },
 
   components: {
@@ -632,7 +632,7 @@ export default {
 
 <style scoped>
 @import 'bootstrap/dist/css/bootstrap.css';
-@import 'bootstrap-vue-3/dist/bootstrap-vue-3.css';
+@import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 
 #root {
   padding: 10px;

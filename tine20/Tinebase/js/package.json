@@ -21,7 +21,6 @@
     "async": "^3.2.4",
     "axios": "^1.2.2",
     "bootstrap": "^5.2.3",
-    "bootstrap-vue-3": "^0.4.15",
     "bootstrap-vue-next": "^0.8.4",
     "broadcastchannel-polyfill": "^1.0.1",
     "ciena-dagre": "^1.0.10",

@@ -7,9 +7,8 @@
  */
 
 import _ from 'lodash'
-// import Vue from 'vue'
-import { createApp } from 'vue'
-import BootstrapVue3 from 'bootstrap-vue-3'
+import "./loadVue" // @better way?
+import BootstrapVueNext from 'bootstrap-vue-next'
 import Tine20 from './plugin/tine20-rpc'
 import App from './App.vue'
 
@@ -39,7 +38,7 @@ FormatMessage.setup({
   missingTranslation: 'ignore'
 })
 
-const app = createApp(App);
+const app = vue.createApp(App);
 app.config.globalProperties.formatMessage = function (template) {
   arguments[0] = gettext._hidden(template)
   return FormatMessage.apply(FormatMessage, arguments)
@@ -68,6 +67,6 @@ app.config.globalProperties.fmHidden = app.config.globalProperties.formatMessage
 // new Vue(App).$mount('#tine-viewport-app')
 // router.replace('/')
 
-app.use(BootstrapVue3);
+app.use(BootstrapVueNext);
 app.use(Tine20, {});
 app.mount('#tine-viewport-app')
