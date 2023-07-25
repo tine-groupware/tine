@@ -138,11 +138,6 @@
         <field>
             <source>TASK</source>
             <destination>TASK</destination>
-            <relation>1</relation>
-            <filter>summary</filter>
-            <related_model>Tasks_Model_Task</related_model>
-            <related_field>summary</related_field>
-            <degree>sibling</degree>
         </field>
         <field>
             <source>PRODUCT</source>

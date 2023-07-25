@@ -28,13 +28,15 @@ class Projects_Setup_Uninitialize extends Setup_Uninitialize
             return;
         }
 
+        static::applicationUninstalled($app);
+        Tasks_Model_Task::resetConfiguration();
+
+        Tasks_Controller_Task::getInstance()->doContainerACLChecks(false);
         Tasks_Controller_Task::getInstance()->deleteByFilter(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Tasks_Model_Task::class, [
                 ['field' => 'source_model', 'operator' => 'equals', 'value' => Projects_Model_Project::class],
             ]
         ));
-
-        static::applicationUninstalled($app);
     }
 
     public static function applicationUninstalled(Tinebase_Model_Application $app): void
