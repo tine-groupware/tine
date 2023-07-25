@@ -520,7 +520,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
 
         $classes['Tinebase_Frontend_Json'] = 'Tinebase';
         // only load restricted apis if no area_login lock is set or if it is unlocked already
-        if (self::userIsRegistered()) {
+        if (self::userIsRegistered() || (Tinebase_Session::isStarted() && Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class})) {
             $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
             $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
             $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_AreaLock';
