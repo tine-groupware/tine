@@ -177,10 +177,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initList.apply(this, arguments);
         this.ownLangPicker = getLocalizedLangPicker(this.recordClass);
         if (this.ownLangPicker && this.pageTb) {
-            const localizedLangPicker = this.localizedLangPicker || this.findParentBy((c) => {return c.localizedLangPicker})?.localizedLangPicker
-            if (localizedLangPicker) {
-                this.ownLangPicker.setValue(localizedLangPicker.getValue())
-                localizedLangPicker.on('change', (picker, lang) => { this.ownLangPicker.setValue(lang) })
+            if (this.localizedLangPicker) {
+                this.ownLangPicker.setValue(this.localizedLangPicker.getValue())
+                this.localizedLangPicker.on('change', (picker, lang) => {
+                    this.lastQuery = null
+                    this.ownLangPicker.setValue(lang)
+                })
             }
 
             this.ownLangPicker.on('select', (picker, lang) => {
@@ -307,6 +309,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         });
 
         this.relayEvents(c, ['contextmenu']);
+
+        this.localizedLangPicker = this.localizedLangPicker || this.findParentBy((c) => {return c.localizedLangPicker})?.localizedLangPicker
     },
 
     /**
@@ -367,7 +371,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             description = '';
 
         if (r){
-            text = (typeof r.getComboBoxTitle === "function") ? r.getComboBoxTitle() : r.getTitle();
+            text = (typeof r.getComboBoxTitle === "function") ? r.getComboBoxTitle() : r.getTitle({
+                language: this.localizedLangPicker?.getValue()
+            });
             description = r.get('description') || description;
             this.selectedRecord = r;
             if (this.allowLinkingItself === false) {
