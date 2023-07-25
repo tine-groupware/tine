@@ -249,10 +249,20 @@ Tine.widgets.grid.RendererManager = function() {
                     };
                     break;
                 case 'dynamicRecord':
+                    const foreignFieldDefinition = _.get(recordClass?.getModelConfiguration(), `fields.${fieldName}.config`, {});
+                    const isJSONStorage = _.toUpper(_.get(foreignFieldDefinition, `config.storage`, '')) === 'JSON';
+                    const dependentRecords = _.get(foreignFieldDefinition, `config.dependentRecords`, false);
+
                     const classNameField = fieldDefinition.config.refModelField;
                     renderer = (configRecord, metaData, record) => {
                         const configRecordClass = Tine.Tinebase.data.RecordMgr.get(record.get(classNameField));
-                        return configRecordClass ? `<a href="#" data-record-class="${configRecordClass.getPhpClassName()}" data-record-id="${configRecord.id}"><span class="tine-recordclass-gridicon ${configRecordClass.getIconCls()}">&nbsp;</span>${Tine.Tinebase.data.Record.setFromJson(configRecord, configRecordClass).getTitle()} (${configRecordClass.getRecordName()})</a>` : '';
+                        if (! configRecordClass) return '';
+
+                        const hasNoAPI = !_.get(Tine, `${configRecordClass.getMeta('appName')}.search${_.upperFirst(configRecordClass.getMeta('modelName'))}s`);
+                        const isDependent = configRecordClass.getModelConfiguration()?.isDependent;
+
+                        const titleHTML = `<span class="tine-recordclass-gridicon ${configRecordClass.getIconCls()}">&nbsp;</span>${Tine.Tinebase.data.Record.setFromJson(configRecord, configRecordClass).getTitle()} (${configRecordClass.getRecordName()})`;
+                        return isJSONStorage || dependentRecords || hasNoAPI || isDependent ? titleHTML : `<a href="#" data-record-class="${configRecordClass.getPhpClassName()}" data-record-id="${configRecord.id}">${titleHTML}</a>`;
                     };
                     break;
                 case 'language':

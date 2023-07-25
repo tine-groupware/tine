@@ -16,9 +16,6 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
     allowCreateNew: true,
     enableBbar: true,
-    editDialogConfig: {
-        mode: 'local'
-    },
 
     ddSortCol: 'sorting',
     sortInc: 10000,
