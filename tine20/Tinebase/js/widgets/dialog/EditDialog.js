@@ -749,7 +749,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.action_delete
         ]);
 
-        if (this.recordClass) {
+        if (this.recordClass && !this.localizedLangPicker) {
             this.localizedLangPicker = getLocalizedLangPicker(this.recordClass);
             if (this.localizedLangPicker) {
                 this.tbarItems = this.tbarItems || [];
