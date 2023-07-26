@@ -168,7 +168,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         blurOnSelect: true,
                                         selectOnFocus: true,
                                         readOnly: false,
-                                        maxLength: 40,
+                                        maxLength: 1024,
                                         recordEditPluginConfig: {allowCreateNew: false,},
                                         listeners: {
                                             scope: this,
