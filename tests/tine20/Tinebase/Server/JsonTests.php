@@ -163,6 +163,7 @@ class Tinebase_Server_JsonTests extends TestCase
             Tinebase_Model_AppPassword::FLD_CHANNELS => [
                 'Addressbook.saveContact' => true,
                 'Crm.saveLead' => true,
+                'HumanResources.getAttendanceRecorderDeviceStates' => true,
             ],
         ]));
 
@@ -173,9 +174,10 @@ class Tinebase_Server_JsonTests extends TestCase
             $smd = Tinebase_Server_Json::getServiceMap();
             $smdArray = $smd->toArray();
             $msg = print_r($smdArray, true);
-            $this->assertCount(2, $smdArray['services'], $msg);
+            $this->assertCount(3, $smdArray['services'], $msg);
             $this->assertArrayHasKey('Addressbook.saveContact', $smdArray['services'], $msg);
             $this->assertArrayHasKey('Crm.saveLead', $smdArray['services'], $msg);
+            $this->assertArrayHasKey('HumanResources.getAttendanceRecorderDeviceStates', $smdArray['services'], $msg);
 
         } finally {
             $session->{Tinebase_Model_AppPassword::class} = null;
@@ -218,6 +220,41 @@ class Tinebase_Server_JsonTests extends TestCase
             $result = Tinebase_Helper::jsonDecode($resultString);
             $this->assertArrayHasKey('error', $result);
             $this->assertSame(401, ($result['error']['data']['code']));
+
+        } finally {
+            $session->{Tinebase_Model_AppPassword::class} = null;
+            $session->currentAccount = $this->_originalTestUser;
+            Tinebase_Core::setUser($this->_originalTestUser);
+        }
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testAppPwdApiCall1()
+    {
+        $this->_createAreaLockConfig();
+        $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH, 'a')) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
+        $appPwd = Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
+            Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $this->_originalTestUser->getId(),
+            Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $pwd,
+            Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(10),
+            Tinebase_Model_AppPassword::FLD_CHANNELS => [
+                'HumanResources.getAttendanceRecorderDeviceStates' => true,
+            ],
+        ]));
+
+        $session = Tinebase_Session::getSessionNamespace();
+        try {
+            $session->currentAccount = null;
+            $session->{Tinebase_Model_AppPassword::class} = $appPwd;
+            Tinebase_Core::unsetUser();
+
+            $resultString = $this->_handleRequest('HumanResources.getAttendanceRecorderDeviceStates', [], false,
+                'Authorization: Basic ' . base64_encode($this->_originalTestUser->accountLoginName . ':' . $pwd) . "\r\n");
+            $result = Tinebase_Helper::jsonDecode($resultString);
+            $this->assertArrayHasKey('results', $result['result']);
+            $this->assertCount(0, $result['result']['results']);
 
         } finally {
             $session->{Tinebase_Model_AppPassword::class} = null;

@@ -151,6 +151,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             $u->mfa_configs->removeById('userpin');
         }
         if ($this->_originalTestUser instanceof Tinebase_Model_User) {
+            if ($this->_originalTestUser instanceof Tinebase_Model_FullUser) {
+                Tinebase_Core::unsetUser();
+            }
             Tinebase_Core::setUser($this->_originalTestUser);
         }
 
@@ -179,6 +182,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
         if (null !== $this->_oldAreaLockCfg) {
             Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS} = $this->_oldAreaLockCfg;
+            Tinebase_AreaLock::destroyInstance();
         }
 
         if ($this->_originalSmtpConfig) {
