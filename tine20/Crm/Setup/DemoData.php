@@ -136,21 +136,20 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
         );
+        if ($tasks) {
+            $t = [];
+            foreach($tasks as $taskArray) {
+                $t[] = $this->_getTask($taskArray, false)->toArray();
+            }
+            $defaults['tasks'] = $t;
+        }
         
         $lead = $controller->create(
             new Crm_Model_Lead(array_merge($defaults, $a))
         );
         
         $relations = array();
-        
-        if ($tasks) {
-            foreach($tasks as $taskArray) {
-                
-                $task = $this->_getTask($taskArray);
-                $relations[] = $this->_getRelationArray($lead, $task);
-            }
-        }
-        
+
         if ($contacts) {
             foreach($contacts as $contactArray) {
                 $contact = $this->_getContact($contactArray);
@@ -169,7 +168,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     /**
      * creates a task by the given data
      */
-    protected function _getTask($data)
+    protected function _getTask($data, $create = true)
     {
         $defaults = array(
             // tine record fields
@@ -182,6 +181,11 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         // create test task
         $task = new Tasks_Model_Task(array_merge($defaults, $data));
+
+        if (!$create) {
+            return $task;
+        }
+
         $tc = Tasks_Controller_Task::getInstance();
         $tc->doContainerACLChecks(false);
         $task = $tc->create($task);
@@ -392,6 +396,12 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             } else {
                 $state = -1;
             }
+
+            $tasks = $this->_generateTasks($user, $state, $i);
+
+            foreach($tasks as &$taskArray) {
+                $taskArray = $this->_getTask($taskArray, false)->toArray();
+            }
             
             $lead = $controller->create(new Crm_Model_Lead(array(
                 'lead_name'     => $orgName,
@@ -403,7 +413,8 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'end'           => ($state < 0) ? $due : NULL,
                 'end_scheduled' => $due,
                 'probability'   => ($state > 0) ? 50 + ($userIndex*10) : 100,
-                'turnover'      => (($i+2)^5)*1000
+                'turnover'      => (($i+2)^5)*1000,
+                    'tasks'     => $tasks,
             ))
             );
             
@@ -414,13 +425,6 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             }
             
             $relations[] = $this->_getRelationArray($lead, $user, 'sibling', 'RESPONSIBLE');
-            
-            $tasks = $this->_generateTasks($user, $state, $i);
-            
-            foreach($tasks as $taskArray) {
-                $task = $this->_getTask($taskArray);
-                $relations[] = $this->_getRelationArray($lead, $task);
-            }
 
             $lead->relations = $relations;
             $controller->update($lead);

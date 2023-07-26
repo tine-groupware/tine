@@ -45,7 +45,12 @@ class Tinebase_Record_Expander_DynamicRecordProperty extends Tinebase_Record_Exp
             $ids[$model][] = $record->getIdFromProperty($this->_property, false);
         }
         foreach ($ids as $model => $modelIds) {
-            $modelIds = array_filter($modelIds);
+            [$app,] = explode('_', $model);
+            if (!Tinebase_Application::getInstance()->isInstalled($app, true)) {
+                $modelIds = [];
+            } else {
+                $modelIds = array_filter($modelIds);
+            }
             if (!empty($modelIds)) {
                 $self = $this;
                 $this->_rootExpander->_registerDataToFetch(new Tinebase_Record_Expander_DataRequest(

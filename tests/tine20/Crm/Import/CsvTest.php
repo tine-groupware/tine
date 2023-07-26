@@ -47,9 +47,9 @@ class Crm_Import_CsvTest extends ImportTestCase
         $firstLead = $result['results']->getFirstRecord();
         $this->assertStringContainsString('neuer lead', $firstLead->lead_name);
         $this->assertEquals(1, count($firstLead->tags));
-        $this->assertEquals(5, count($firstLead->relations),
+        $this->assertEquals(4, count($firstLead->relations),
             'relations not imported for first lead ' . print_r($firstLead->toArray(), true));
-        $this->assertEquals(6, count($result['results'][1]->relations),
+        $this->assertEquals(5, count($result['results'][1]->relations),
             'relations not imported for second lead ' . print_r($result['results'][1]->toArray(), true));
 
         return $result;
