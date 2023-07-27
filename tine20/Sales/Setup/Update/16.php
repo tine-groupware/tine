@@ -19,6 +19,7 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE016_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE016_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE016_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -37,6 +38,10 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE016_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -117,5 +122,37 @@ class Sales_Setup_Update_16 extends Setup_Update_Abstract
             }
         }
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '16.5', self::RELEASE016_UPDATE005);
+    }
+
+    public function update006()
+    {
+        $pfe = Tinebase_PersistentFilter::getInstance();
+        $filter = new Tinebase_Model_PersistentFilterFilter(array(
+            array(
+                'field' => 'name',
+                'operator' => 'equals',
+                'value' => 'Active Contracts'
+            ),
+            array(
+                'field' => 'application_id',
+                'operator' => 'equals',
+                'value' => Tinebase_Application::getInstance()->getApplicationById('Sales')->getId()
+            ),
+        ));
+        $result = Tinebase_PersistentFilter::getInstance()->search($filter)->getFirstRecord();
+        if($result){
+            $pfe->delete([$result->getId()]);
+        }
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter([
+            'account_id' => NULL,
+            'model' => 'Sales_Model_ContractFilter',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId(),
+            'name' => "Active Contracts", // _('Active Contracts')
+            'description' => "Contracts that are still running", // _('Contracts that are still running')
+            'filters' => [
+                ['field' => 'end_date', 'operator' => 'after', 'value' => Tinebase_Model_Filter_Date::DAY_LAST],
+            ],
+        ]));
+        $this->addApplicationUpdate('Sales', '16.6', self::RELEASE016_UPDATE006);
     }
 }
