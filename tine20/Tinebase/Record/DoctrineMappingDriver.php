@@ -196,18 +196,19 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         $defaultDoctrineIgnore = isset($config['doctrineIgnore']) ? $config['doctrineIgnore'] : false;
 
         $config['doctrineIgnore'] = true;
-        if (isset(self::$_typeMap[$config[self::TYPE]])) {
-            if ($config[self::TYPE] === self::TYPE_CONTAINER) {
+        $type = $config[self::DOCTRINE_MAPPING_TYPE] ?? $config[self::TYPE];
+        if (isset(self::$_typeMap[$type])) {
+            if ($type === self::TYPE_CONTAINER) {
                 $config[self::LENGTH] = 40;
             }
-            if ($config[self::TYPE] === self::TYPE_HEX_COLOR) {
+            if ($type === self::TYPE_HEX_COLOR) {
                 $config[self::LENGTH] = 7;
             }
-            if ($config[self::TYPE] === self::TYPE_LANGUAGE) {
+            if ($type === self::TYPE_LANGUAGE) {
                 $config[self::LENGTH] = 6;
             }
 
-            $config[self::TYPE] = self::$_typeMap[$config[self::TYPE]];
+            $config[self::TYPE] = self::$_typeMap[$type];
             $config['doctrineIgnore'] = $defaultDoctrineIgnore;
             if (isset($config[self::UNSIGNED])) {
                 if (!isset($config[self::OPTIONS])) {

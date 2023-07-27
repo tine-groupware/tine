@@ -83,6 +83,45 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
         static::assertSame(1, $result->count());
     }
 
+    public function testPerspective()
+    {
+        /** @var ExampleApplication_Model_ExampleRecord $exampleRecord */
+        $exampleRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->create($this->_getExampleRecord());
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $exampleRecord->setPerspectiveTo($this->_personas['sclever']);
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+
+        /** @var ExampleApplication_Model_ExampleRecord $exampleRecord */
+        $exampleRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($exampleRecord);
+        $this->assertSame(null, $exampleRecord->getPerspectiveData(ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE));
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE} = true;
+        $exampleRecord->setPerspectiveTo($this->_personas['sclever']);
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE} = true;
+
+        /** @var ExampleApplication_Model_ExampleRecord $exampleRecord */
+        $exampleRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($exampleRecord);
+        $this->assertSame(null, $exampleRecord->getPerspectiveData(ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE));
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $exampleRecord->setPerspectiveTo($this->_personas['sclever']);
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE} = false;
+        $exampleRecord->setPerspectiveTo($this->_personas['jmcblack']);
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+
+        /** @var ExampleApplication_Model_ExampleRecord $exampleRecord */
+        $exampleRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($exampleRecord);
+        $this->assertSame([
+            $exampleRecord->getPerspectiveKey($this->_personas['sclever']) => false,
+        ], $exampleRecord->getPerspectiveData(ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE));
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $exampleRecord->setPerspectiveTo($this->_personas['sclever']);
+        $this->assertSame(false, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $exampleRecord->setPerspectiveTo($this->_personas['jmcblack']);
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+    }
+
     public function testOneToOne()
     {
         $record = $this->_getExampleRecord();
