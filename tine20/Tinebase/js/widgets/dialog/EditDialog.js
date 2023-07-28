@@ -508,7 +508,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     })].concat(this.getEastPanel())
                 }, _.get(this.recordClass.getModelConfiguration(), 'modlogActive') ? this.activitiesTabPanel = new Tine.widgets.activities.ActivitiesTabPanel({
                     app: this.appName,
-                    record_id: this.record.id,
+                    getRecordId: () => {return this.record.id },
                     record_model: this.modelName
                 }) : []
             ])
