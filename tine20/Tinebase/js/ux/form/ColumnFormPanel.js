@@ -125,6 +125,7 @@ Ext.ux.form.ColumnFormPanel = Ext.extend(Ext.Panel, {
         var cell = {
             isWraped: true,
             columnWidth: c.columnWidth ? c.columnWidth : this.formDefaults.columnWidth,
+            labelWidth: c.labelWidth ? c.labelWidth : this.formDefaults.labelWidth,
             layout: 'form',
             labelAlign: this.labelAlign,
             defaults: this.formDefaults,
