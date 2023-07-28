@@ -265,8 +265,9 @@ Ext.ux.PopupWindowGroup = function(config) {
  * @singleton
  */
 try {
-    Ext.ux.PopupWindowMgr = window.opener.Ext.ux.PopupWindowMgr ? 
-        window.opener.Ext.ux.PopupWindowMgr :
+    Ext.ux.PopupWindowMgr =
+        window.opener?.Ext.ux.PopupWindowMgr ||
+        window.parent?.Ext.ux.PopupWindowMgr ||
         new Ext.ux.PopupWindowGroup();
 } catch (e) {
     // we might have no access no opener

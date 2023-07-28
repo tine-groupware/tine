@@ -549,6 +549,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                                     height: edp.windowHeight ? edp.windowHeight :
                                         Tine.widgets.form.RecordForm.getFormHeight(Tine[appName].Model[modelName]),
                                     name: edp.windowNamePrefix + id,
+                                    asIframe: cfg.asIframe,
                                     contentPanelConstructor: 'Tine.' + appName + '.' + editDialogName,
                                     contentPanelConstructorConfig: cfg
                                 });
