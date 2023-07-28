@@ -67,6 +67,8 @@ class Tinebase_ModelConfiguration_Const {
      */
     const DISABLED = 'disabled';
     const DOCTRINE_IGNORE = 'doctrineIgnore';
+    /** use this type for doctrine mapping instead of normal type */
+    const DOCTRINE_MAPPING_TYPE = 'doctrineMapType';
 
     const EXPORT = 'export';
     const EXPOSE_HTTP_API = 'exposeHttpApi';
@@ -141,6 +143,7 @@ class Tinebase_ModelConfiguration_Const {
      * valid vor type record - means the configured model is the parent of this record
      */
     const IS_PARENT = 'isParent';
+    const IS_PERSPECTIVE = 'isPerspective';
     const IS_VIRTUAL = 'isVirtual';
 
     const JOIN_COLUMNS = 'joinColumns';
@@ -170,6 +173,7 @@ class Tinebase_ModelConfiguration_Const {
 
     const PAGING = 'paging';
     const PERSISTENT = 'persistent';
+    const PERSPECTIVE_DEFAULT = 'perspectiveDefault';
 
     const QUERY_FILTER = 'queryFilter';
 

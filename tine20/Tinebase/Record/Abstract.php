@@ -1435,6 +1435,11 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         if (null === $conf) {
             return;
         }
+        if ($conf->hasPerspectives) {
+            /** @var Tinebase_Record_PerspectiveInterface $this */
+            // we need to store perspective data in case we have any
+            $this->setPerspectiveTo($this->getPerspectiveRecord());
+        }
         foreach ($conf->getConverters() as $key => $converters) {
             foreach ($converters as $converter) {
                 if (isset($this->_properties[$key])) {
