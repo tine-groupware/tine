@@ -52,7 +52,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @type Tine.Felamimail.GridDetailsPanel
      * @property detailsPanelRegion
      */
-    detailsPanelRegion: 'east',
+    detailsPanelRegion: 'south',
 
     /**
      * transaction id of current delete message request
