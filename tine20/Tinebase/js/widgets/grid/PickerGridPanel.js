@@ -516,7 +516,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onRowContextMenu: function(grid, row, e) {
         e.stopEvent();
 
-        this.fireEvent('beforecontextmenu', grid, row, e);
+        if (this.fireEvent('beforecontextmenu', grid, row, e) === false) return;
 
         var selModel = grid.getSelectionModel();
         if(!selModel.isSelected(row)) {
@@ -730,6 +730,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var me = this,
             editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(me.recordClass),
             record = me.store.getAt(row);
+
+        if (this.fireEvent('beforeeditrecord', record, this) === false) return;
 
         if (editDialogClass) {
             editDialogClass.openWindow(_.assign({

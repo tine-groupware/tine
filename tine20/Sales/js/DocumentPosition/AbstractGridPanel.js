@@ -51,7 +51,9 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.on('afteredit', this.onAfterEditPosition, this);
         this.on('update', this.onUpdatePosition, this);
         this.on('beforeaddrecord', this.onNewProduct, this);
+        this.on('beforeeditrecord', (r) => { return r !== this.quickaddRecord}, this);
         this.on('beforeremoverecord', this.onBeforeRemovePosition, this);
+        this.on('beforecontextmenu', (grid, row) => { const r = this.store.getAt(row); return r !== this.quickaddRecord}, this);
 
         this.store.on('add', this.checkGroupingState, this, { buffer: 100 });
         this.store.on('update', this.checkGroupingState, this, { buffer: 100 });
@@ -338,8 +340,11 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     checkState(editDialog, record) {
         if (!this.editDialog) {
             this.editDialog = editDialog
-            this.editDialogConfig.localizedLangPicker = this.editDialog.fields.document_language;
             this.getProductPicker().localizedLangPicker = this.editDialog.getForm().findField('document_language')
+            Object.assign(this.editDialogConfig, {
+                documentEditDialog: editDialog,
+                localizedLangPicker: editDialog.fields.document_language
+            })
         }
     },
     /* needed for isFormField cycle */
