@@ -338,8 +338,11 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     checkState(editDialog, record) {
         if (!this.editDialog) {
             this.editDialog = editDialog
-            this.editDialogConfig.localizedLangPicker = this.editDialog.fields.document_language;
             this.getProductPicker().localizedLangPicker = this.editDialog.getForm().findField('document_language')
+            Object.assign(this.editDialogConfig, {
+                documentEditDialog: editDialog,
+                localizedLangPicker: editDialog.fields.document_language
+            })
         }
     },
     /* needed for isFormField cycle */

@@ -17,7 +17,7 @@ Tine.Sales.AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     onProductSelect(combo, record, idx) {
-        this.record.setFromProduct(record);
+        this.record.setFromProduct(record, this.localizedLangPicker.getValue(), this.documentEditDialog);
         this.onRecordLoad();
     },
 
