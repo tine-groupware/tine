@@ -1373,7 +1373,7 @@ myStore.reload(lastOptions);
     // private
     sortData : function(f, direction){
         direction = direction || 'ASC';
-        var st = this.fields.get(f).sortType;
+        var st = this.fields.get(f)?.sortType || Ext.emptyFn;
         var locale = Tine.Tinebase.registry.get('locale').locale;
         var fn = st !== Ext.data.SortTypes.asUCString ? function(r1, r2){
             var v1 = st(r1.data[f]), v2 = st(r2.data[f]);
