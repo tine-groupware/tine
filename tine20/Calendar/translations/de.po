@@ -1034,6 +1034,12 @@ msgstr "Rolle"
 msgid "Select Role"
 msgstr "Rolle wählen"
 
+msgid "%s away"
+msgstr "%s abwesend"
+
+msgid "%s is away"
+msgstr "%s ist abwesend"
+
 #: js/AddToEventPanel.js:101 js/Model.js:404 js/AttendeeGridPanel.js:265
 #: js/EventEditDialog.js:197 js/ContactEventsGridPanel.js:126
 #: Model/Event.php:435
