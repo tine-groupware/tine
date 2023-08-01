@@ -70,7 +70,7 @@
     }
   ],
   "require": {
-    "php": "7.4 - 8.1",
+    "php": "8.0.2 - 8.1",
     "ext-SPL": "*",
     "ext-SimpleXML": "*",
     "ext-bcmath": "*",
@@ -165,8 +165,8 @@
   "config": {
     "secure-http": false,
     "platform": {
-      "php": "7.4",
-      "ext-filter": "7.4"
+      "php": "8.0.2",
+      "ext-filter": "8.0"
     },
     "sort-packages": true,
     "allow-plugins": {
