@@ -243,7 +243,7 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
         }
 
         try {
-            $user = Tinebase_User::getInstance()->getUserByLoginName($authValue[0]);
+            $user = Tinebase_User::getInstance()->getUserByLoginName($authValue[0], Tinebase_Model_FullUser::class);
         } catch (Tinebase_Exception_NotFound $tenf) {
             return false;
         }
