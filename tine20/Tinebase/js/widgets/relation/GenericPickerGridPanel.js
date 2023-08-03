@@ -517,6 +517,8 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         Ext.each(this.possibleRelations, function(rel) {
             var key = rel.relatedApp+rel.relatedModel;
             this.searchCombos[key] = Tine.widgets.form.RecordPickerManager.get(rel.relatedApp, rel.relatedModel,{
+                listWidth: 500,
+                resizable: true,
                 width: 300,
                 allowBlank: true,
                 listeners: {
