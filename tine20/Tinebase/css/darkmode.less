@@ -176,6 +176,7 @@ body.dark-mode {
     filter: none;
   }
 
+  .addressbook-search-combo img,
   .ux-imagefield-text,
   .tw-window-iframe,
   .x-form-field-wrap .x-form-trigger,
@@ -184,6 +185,11 @@ body.dark-mode {
   .x-form-twin-triggers + .x-form-trigger.x-form-trigger-plugin,
   .x-form-field-wrap .ux-pp-field {
     filter: invert(1) hue-rotate(180deg);
+  }
+
+  .addressbook-search-combo img[src*="undefined_contact"],
+  .addressbook-search-combo img[src*="icon"] {
+    filter: none;
   }
 
   .tw-editdialog .status-fields input {
