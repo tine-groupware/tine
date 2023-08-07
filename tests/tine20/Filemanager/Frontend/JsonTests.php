@@ -703,6 +703,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $tempPath = Tinebase_TempFile::getTempPath();
         $tempFileId = Tinebase_TempFile::getInstance()->createTempFile($tempPath);
         file_put_contents($tempPath, 'someData');
+        $raii = new Tinebase_RAII(fn () => @unlink($tempPath));
         $result = $this->_getUit()->createNodes([$sharedContainerNode['path'] . '/file1'],
             Tinebase_Model_Tree_FileObject::TYPE_FILE, [$tempFileId], false);
 
@@ -730,6 +731,7 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $contact = $result['results'][0];
         self::assertTrue(isset($contact['attachments']) && is_array($contact['attachments']) &&
             count($contact['attachments']) === 1, 'attachments not resolved in search()');
+        unset($raii);
     }
 
     public function testOverwriteFileNode()

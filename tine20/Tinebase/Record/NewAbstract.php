@@ -1027,6 +1027,11 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         if (null === $conf) {
             return;
         }
+        if ($conf->hasPerspectives) {
+            /** @var Tinebase_Record_PerspectiveInterface $this */
+            // we need to store perspective data in case we have any
+            $this->setPerspectiveTo($this->getPerspectiveRecord());
+        }
         foreach ($conf->getConverters() as $key => $converters) {
             foreach ($converters as $converter) {
                 if (isset($this->_data[$key])) {
@@ -1234,7 +1239,13 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         foreach ($data as $key => $value) {
             $this->_data[$key] = $value;
         }
+        $raii = null;
+        if (!static::$_isHydratingFromBackend) {
+            $raii = new Tinebase_RAII(fn () => static::doneHydratingFromBackend());
+            static::$_isHydratingFromBackend = true;
+        }
         $this->runConvertToRecord();
+        unset($raii);
     }
 
     /**

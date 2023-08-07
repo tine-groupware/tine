@@ -31,6 +31,18 @@ trait Tinebase_Record_AbstractTrait
      */
     protected $_isDirty = false;
 
+    protected static bool $_isHydratingFromBackend = false;
+
+    public static function isHydratingFromBackend(): bool
+    {
+        return static::$_isHydratingFromBackend;
+    }
+
+    public static function doneHydratingFromBackend(): void
+    {
+        static::$_isHydratingFromBackend = false;
+    }
+
     public function byPassFilters(): bool
     {
         return $this->bypassFilters;

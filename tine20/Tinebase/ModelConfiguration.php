@@ -1445,10 +1445,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 if (!isset($fieldDef[self::PERSPECTIVE_DEFAULT])) {
                     $fieldDef[self::PERSPECTIVE_DEFAULT] = null;
                 }
-                if (!is_array($fieldDef[self::CONVERTERS] ?? null)) {
-                    $fieldDef[self::CONVERTERS] = [];
+
+                if (!array_key_exists(self::CONVERTERS, $fieldDef)) {
+                    $fieldDef[self::CONVERTERS] = [Tinebase_Model_Converter_Perspective::class];
                 }
-                array_unshift($fieldDef[self::CONVERTERS], Tinebase_Model_Converter_Perspective::class);
+                if (($this->_converterDefaultMapping[$fieldDef[self::TYPE]] ?? false) && !array_key_exists(self::PERSPECTIVE_CONVERTERS, $fieldDef)) {
+                    $fieldDef[self::PERSPECTIVE_CONVERTERS] = $this->_converterDefaultMapping[$fieldDef[self::TYPE]];
+                }
                 $fieldDef[self::NULLABLE] = true;
             }
 
