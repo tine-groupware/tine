@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "020a36c6eef50bf159b994fb513d3057",
+    "content-hash": "56936a3fbd0ab55bd2ececb76f6b9e54",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2414,27 +2414,21 @@
         },
         {
             "name": "hfig/mapi",
-            "version": "v1.2.0",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/hfig/MAPI.git",
-                "reference": "692ff02edf35580cba1988590fb58d569cea1003"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/hfig/MAPI/zipball/692ff02edf35580cba1988590fb58d569cea1003",
-                "reference": "692ff02edf35580cba1988590fb58d569cea1003",
-                "shasum": ""
+                "url": "https://github.com/tine-groupware/MAPI.git",
+                "reference": "02ce92cf1f536396c72d8d4d8ebd793183abd48f"
             },
             "require": {
                 "ext-bcmath": "*",
                 "ext-mbstring": "*",
-                "pear/ole": "^1.0.0RC8",
+                "pear/ole": "^1.0.0RC9",
                 "pear/pear-core-minimal": "^1.10",
                 "php": "^7.1||^8.0",
-                "psr/log": "^1.0",
-                "ramsey/uuid": "^3.8 || ^4.0",
-                "symfony/yaml": "^4.1 || ^5.0"
+                "psr/log": "^1.0||^2.0||^3.0",
+                "ramsey/uuid": "^3.8||^4.7",
+                "symfony/yaml": "^4.1||^5.0||^6.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.3",
@@ -2449,16 +2443,16 @@
                     "Hfig\\MAPI\\": "src/MAPI"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Hfig\\MAPI\\Tests\\": "tests/MAPI"
+                }
+            },
             "license": [
                 "MIT"
             ],
             "description": "Pure PHP library for reading and manipulating Microsoft Outlook .msg messages (MAPI documents)",
-            "support": {
-                "issues": "https://github.com/hfig/MAPI/issues",
-                "source": "https://github.com/hfig/MAPI/tree/v1.2.0"
-            },
-            "time": "2021-03-18T09:36:08+00:00"
+            "time": "2023-08-07T10:42:10+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",
@@ -4484,16 +4478,16 @@
         },
         {
             "name": "pear/ole",
-            "version": "v1.0.0RC8",
+            "version": "v1.0.0RC9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pear/OLE.git",
-                "reference": "1ee17e4ac71d6e39ff98f78c4674e8a748d16db3"
+                "reference": "6bb4365451e35b036fc804a53e0e2cc68be9dff0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pear/OLE/zipball/1ee17e4ac71d6e39ff98f78c4674e8a748d16db3",
-                "reference": "1ee17e4ac71d6e39ff98f78c4674e8a748d16db3",
+                "url": "https://api.github.com/repos/pear/OLE/zipball/6bb4365451e35b036fc804a53e0e2cc68be9dff0",
+                "reference": "6bb4365451e35b036fc804a53e0e2cc68be9dff0",
                 "shasum": ""
             },
             "require": {
@@ -4536,7 +4530,7 @@
                 "issues": "http://pear.php.net/bugs/search.php?cmd=display&package_name[]=OLE",
                 "source": "https://github.com/pear/OLE"
             },
-            "time": "2021-02-22T12:41:39+00:00"
+            "time": "2023-06-11T00:17:19+00:00"
         },
         {
             "name": "pear/pear-core-minimal",
@@ -6380,40 +6374,53 @@
         },
         {
             "name": "ramsey/collection",
-            "version": "1.1.4",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/collection.git",
-                "reference": "ab2237657ad99667a5143e32ba2683c8029563d4"
+                "reference": "ad7475d1c9e70b190ecffc58f2d989416af339b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/collection/zipball/ab2237657ad99667a5143e32ba2683c8029563d4",
-                "reference": "ab2237657ad99667a5143e32ba2683c8029563d4",
+                "url": "https://api.github.com/repos/ramsey/collection/zipball/ad7475d1c9e70b190ecffc58f2d989416af339b4",
+                "reference": "ad7475d1c9e70b190ecffc58f2d989416af339b4",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2 || ^8"
+                "php": "^7.4 || ^8.0",
+                "symfony/polyfill-php81": "^1.23"
             },
             "require-dev": {
-                "captainhook/captainhook": "^5.3",
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
-                "ergebnis/composer-normalize": "^2.6",
-                "fakerphp/faker": "^1.5",
-                "hamcrest/hamcrest-php": "^2",
-                "jangregor/phpstan-prophecy": "^0.8",
-                "mockery/mockery": "^1.3",
-                "phpstan/extension-installer": "^1",
-                "phpstan/phpstan": "^0.12.32",
-                "phpstan/phpstan-mockery": "^0.12.5",
-                "phpstan/phpstan-phpunit": "^0.12.11",
-                "phpunit/phpunit": "^8.5 || ^9",
-                "psy/psysh": "^0.10.4",
-                "slevomat/coding-standard": "^6.3",
-                "squizlabs/php_codesniffer": "^3.5",
-                "vimeo/psalm": "^4.4"
+                "captainhook/plugin-composer": "^5.3",
+                "ergebnis/composer-normalize": "^2.28.3",
+                "fakerphp/faker": "^1.21",
+                "hamcrest/hamcrest-php": "^2.0",
+                "jangregor/phpstan-prophecy": "^1.0",
+                "mockery/mockery": "^1.5",
+                "php-parallel-lint/php-console-highlighter": "^1.0",
+                "php-parallel-lint/php-parallel-lint": "^1.3",
+                "phpcsstandards/phpcsutils": "^1.0.0-rc1",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpstan/extension-installer": "^1.2",
+                "phpstan/phpstan": "^1.9",
+                "phpstan/phpstan-mockery": "^1.1",
+                "phpstan/phpstan-phpunit": "^1.3",
+                "phpunit/phpunit": "^9.5",
+                "psalm/plugin-mockery": "^1.1",
+                "psalm/plugin-phpunit": "^0.18.4",
+                "ramsey/coding-standard": "^2.0.3",
+                "ramsey/conventional-commits": "^1.3",
+                "vimeo/psalm": "^5.4"
             },
             "type": "library",
+            "extra": {
+                "captainhook": {
+                    "force-install": true
+                },
+                "ramsey/conventional-commits": {
+                    "configFile": "conventional-commits.json"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Ramsey\\Collection\\": "src/"
@@ -6430,7 +6437,7 @@
                     "homepage": "https://benramsey.com"
                 }
             ],
-            "description": "A PHP 7.2+ library for representing and manipulating collections.",
+            "description": "A PHP library for representing and manipulating collections.",
             "keywords": [
                 "array",
                 "collection",
@@ -6441,7 +6448,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ramsey/collection/issues",
-                "source": "https://github.com/ramsey/collection/tree/1.1.4"
+                "source": "https://github.com/ramsey/collection/tree/1.3.0"
             },
             "funding": [
                 {
@@ -6453,29 +6460,27 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-30T00:58:27+00:00"
+            "time": "2022-12-27T19:12:24+00:00"
         },
         {
             "name": "ramsey/uuid",
-            "version": "4.2.3",
+            "version": "4.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "fc9bb7fb5388691fd7373cd44dcb4d63bbcf24df"
+                "reference": "60a4c63ab724854332900504274f6150ff26d286"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/fc9bb7fb5388691fd7373cd44dcb4d63bbcf24df",
-                "reference": "fc9bb7fb5388691fd7373cd44dcb4d63bbcf24df",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/60a4c63ab724854332900504274f6150ff26d286",
+                "reference": "60a4c63ab724854332900504274f6150ff26d286",
                 "shasum": ""
             },
             "require": {
-                "brick/math": "^0.8 || ^0.9",
+                "brick/math": "^0.8.8 || ^0.9 || ^0.10 || ^0.11",
                 "ext-json": "*",
-                "php": "^7.2 || ^8.0",
-                "ramsey/collection": "^1.0",
-                "symfony/polyfill-ctype": "^1.8",
-                "symfony/polyfill-php80": "^1.14"
+                "php": "^8.0",
+                "ramsey/collection": "^1.2 || ^2.0"
             },
             "replace": {
                 "rhumsaa/uuid": "self.version"
@@ -6487,24 +6492,23 @@
                 "doctrine/annotations": "^1.8",
                 "ergebnis/composer-normalize": "^2.15",
                 "mockery/mockery": "^1.3",
-                "moontoast/math": "^1.1",
                 "paragonie/random-lib": "^2",
                 "php-mock/php-mock": "^2.2",
                 "php-mock/php-mock-mockery": "^1.3",
                 "php-parallel-lint/php-parallel-lint": "^1.1",
                 "phpbench/phpbench": "^1.0",
-                "phpstan/extension-installer": "^1.0",
-                "phpstan/phpstan": "^0.12",
-                "phpstan/phpstan-mockery": "^0.12",
-                "phpstan/phpstan-phpunit": "^0.12",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-mockery": "^1.1",
+                "phpstan/phpstan-phpunit": "^1.1",
                 "phpunit/phpunit": "^8.5 || ^9",
-                "slevomat/coding-standard": "^7.0",
+                "ramsey/composer-repl": "^1.4",
+                "slevomat/coding-standard": "^8.4",
                 "squizlabs/php_codesniffer": "^3.5",
                 "vimeo/psalm": "^4.9"
             },
             "suggest": {
                 "ext-bcmath": "Enables faster math with arbitrary-precision integers using BCMath.",
-                "ext-ctype": "Enables faster processing of character classification using ctype functions.",
                 "ext-gmp": "Enables faster math with arbitrary-precision integers using GMP.",
                 "ext-uuid": "Enables the use of PeclUuidTimeGenerator and PeclUuidRandomGenerator.",
                 "paragonie/random-lib": "Provides RandomLib for use with the RandomLibAdapter",
@@ -6512,9 +6516,6 @@
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-main": "4.x-dev"
-                },
                 "captainhook": {
                     "force-install": true
                 }
@@ -6539,7 +6540,7 @@
             ],
             "support": {
                 "issues": "https://github.com/ramsey/uuid/issues",
-                "source": "https://github.com/ramsey/uuid/tree/4.2.3"
+                "source": "https://github.com/ramsey/uuid/tree/4.7.4"
             },
             "funding": [
                 {
@@ -6551,7 +6552,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-25T23:10:38+00:00"
+            "time": "2023-04-15T23:01:58+00:00"
         },
         {
             "name": "robrichards/xmlseclibs",
@@ -14715,12 +14716,13 @@
     "minimum-stability": "RC",
     "stability-flags": {
         "jumbojett/openid-connect-php": 20,
+        "pear/ole": 5,
         "validator/livr": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "7.4 - 8.1",
+        "php": "8.0.2 - 8.1",
         "ext-spl": "*",
         "ext-simplexml": "*",
         "ext-bcmath": "*",
@@ -14739,8 +14741,8 @@
     },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.4",
-        "ext-filter": "7.4"
+        "php": "8.0.2",
+        "ext-filter": "8.0"
     },
     "plugin-api-version": "2.3.0"
 }
