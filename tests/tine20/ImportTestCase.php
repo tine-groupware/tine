@@ -55,7 +55,7 @@ abstract class ImportTestCase extends TestCase
         }
         
         // cleanup
-        if (file_exists($this->_filename) && $this->_deleteImportFile) {
+        if ($this->_filename && file_exists($this->_filename) && $this->_deleteImportFile) {
              unlink($this->_filename);
         }
     }
