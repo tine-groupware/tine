@@ -788,6 +788,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     onDataSafeToggle: function(button, e) {
+        if (typeof button.pressed === 'undefined') {
+            button.pressed = button.checked
+        }
+
         button.toggle(!button.pressed);
 
         const areaLocks = Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName);
