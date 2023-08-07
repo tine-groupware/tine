@@ -97,7 +97,7 @@ Tine.Tasks.Model.TaskMixin = {
             };
 
             if (prefs.get('defaultalarmenabled')) {
-                data.alarms = [{minutes_before: parseInt(prefs.get('defaultalarmminutesbefore'), 10)}];
+                data.alarms = [{minutes_before: parseInt(prefs.get('defaultalarmminutesbefore'), 10), sent_status: 'pending'}];
             }
 
             return data;
