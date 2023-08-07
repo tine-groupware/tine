@@ -267,7 +267,7 @@ Tine.Tinebase.common = {
      * TODO add style for tag divs
      */
     tagsRenderer: function (tags) {
-        var result = '';
+        let result = '';
         if (tags) {
             for (var i = 0; i < tags.length; i += 1) {
                 if (tags[i] && tags[i].name) {

@@ -164,7 +164,7 @@ viewConfig: {
     /**
      * @cfg {Number} rowSelectorDepth The number of levels to search for rows in event delegation (defaults to <tt>10</tt>)
      */
-    rowSelectorDepth : 10,
+    rowSelectorDepth : 20,
     
     /**
      * @cfg {Number} rowBodySelectorDepth The number of levels to search for row bodies in event delegation (defaults to <tt>10</tt>)
@@ -342,10 +342,7 @@ viewConfig: {
 
         this.mainWrap = new E(cs[0]);
         this.mainHd = new E(this.mainWrap.dom.firstChild);
-
-        if(this.grid.hideHeaders){
-            this.mainHd.setDisplayed(false);
-        }
+        this.mainHd.setDisplayed(!this.grid.hideHeaders);
 
         this.innerHd = this.mainHd.dom.firstChild;
         this.scroller = new E(this.mainWrap.dom.childNodes[1]);
@@ -821,7 +818,8 @@ viewConfig: {
         var c = g.getGridEl();
         var csize = c.getSize(true);
         var vw = csize.width;
-
+        
+        if (this.mainHd) this.mainHd.setDisplayed(!g.hideHeaders);
         if(!g.hideHeaders && (vw < 20 || csize.height < 20)){ // display: none?
             return;
         }
@@ -1142,6 +1140,7 @@ viewConfig: {
 
     // private
     getTotalWidth : function(){
+        if (this.grid.hideHeaders) return (this.cm.getTotalWidth() + this.getScrollOffset()) +'px';
         return this.cm.getTotalWidth()+'px';
     },
     

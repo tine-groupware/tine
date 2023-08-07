@@ -103,6 +103,7 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
             xtype: 'tbsplit',
             text: this.getSelHelperText('main'),
             iconCls: 'x-ux-pagingtb-main',
+            displayPriority: 100,
             menu: new Ext.menu.Menu({
                 items: [
                     this.deselectBtn,
