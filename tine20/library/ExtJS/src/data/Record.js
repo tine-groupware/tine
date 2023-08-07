@@ -234,6 +234,14 @@ rec.{@link #commit}(); // updates the view
         }
     },
 
+    /**
+     * sets the id of the record
+     */
+    setId: function(id) {
+        this.id = id;
+        return this.set('id', id);
+    },
+
     // private
     afterEdit : function(){
         if(this.store){
