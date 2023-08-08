@@ -6,7 +6,7 @@
  * @subpackage  Twig
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -221,7 +221,7 @@ class Tinebase_Twig
             $staticData[$key] = $data;
         }));
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('getStaticData', function ($key) use(&$staticData) {
-            return $staticData[$key] ?: null;
+            return isset($staticData[$key]) ? ($staticData[$key] ?: null) : null;
         }));
 
         $this->_twigEnvironment->addFunction(new Twig_SimpleFunction('relationTranslateModel', function ($model) {
