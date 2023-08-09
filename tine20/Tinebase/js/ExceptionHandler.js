@@ -208,6 +208,14 @@ Tine.Tinebase.ExceptionHandler = function() {
                 Tine.Tinebase.tineInit.checkClientVersion();
                 break;
 
+            // rate limit
+            case 429:
+                Ext.MessageBox.show(Ext.apply(defaults, {
+                    title: i18n._('Rate-Limit'),
+                    msg: i18n._('This method is rate-limited and you sent too many requests.')
+                }));
+                break;
+
             // Service Unavailable!
             // Use this error code for generic problems like misconfig we don't want to see bugreports for
             case 503:
