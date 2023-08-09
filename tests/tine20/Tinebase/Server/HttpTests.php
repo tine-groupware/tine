@@ -55,7 +55,7 @@ class Tinebase_Server_HttpTests extends TestCase
         if ($returnFileLocation) {
             $this->assertStringContainsString('{"success":true,"file_location":{"type":"download","tempfile_id":"', $out);
         } else {
-            $this->assertStringContainsString('"name","description","status","reason","number_str","number_int","datetime","one_to_one","perspective","relations","container_id","tags","attachments","notes","seq","tags"', $out);
+            $this->assertStringContainsString('"name","description","status","reason","number_str","number_int","datetime","one_to_one","perspective","persp_dt","relations","container_id","tags","attachments","notes","seq","tags"', $out);
         }
     }
 

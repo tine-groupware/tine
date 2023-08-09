@@ -1800,8 +1800,14 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
 
     public function hydrateFromBackend(array &$_data)
     {
+        $raii = null;
+        if (!static::$_isHydratingFromBackend) {
+            $raii = new Tinebase_RAII(fn () => static::doneHydratingFromBackend());
+            static::$_isHydratingFromBackend = true;
+        }
         $this->setFromArray($_data);
         $this->runConvertToRecord();
+        unset($raii);
     }
 
     public function setAccountGrants(Tinebase_Record_Interface $grants)

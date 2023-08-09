@@ -11,7 +11,7 @@
 
 interface Tinebase_Record_PerspectiveInterface
 {
-    public function setPerspectiveData(string $property, ?array $data): mixed;
+    public function setPerspectiveData(string $property, array $data): mixed;
     public function getPerspectiveData(string $property): ?array;
 
     public function setPerspectiveTo(Tinebase_Record_Interface $perspectiveRec): void;

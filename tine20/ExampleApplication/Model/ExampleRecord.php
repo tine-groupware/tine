@@ -29,6 +29,7 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_NewAbstract
     const FLD_NUMBER_STR = 'number_str';
     const FLD_ONE_TO_ONE = 'one_to_one';
     const FLD_PERSPECTIVE = 'perspective';
+    const FLD_PERSP_DT = 'persp_dt';
     const FLD_REASON = 'reason';
     const FLD_STATUS = 'status';
 
@@ -183,6 +184,10 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_NewAbstract
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::IS_PERSPECTIVE            => true,
                 self::PERSPECTIVE_DEFAULT       => true,
+            ],
+            self::FLD_PERSP_DT              => [
+                self::TYPE                      => self::TYPE_DATETIME,
+                self::IS_PERSPECTIVE            => true,
             ],
         ]
     ];

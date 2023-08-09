@@ -20,7 +20,7 @@ trait Tinebase_Record_PerspectiveTrait
     protected array $_perspectiveData = [];
     protected ?Tinebase_Record_Interface $_perspectiveRec = null;
 
-    public function setPerspectiveData(string $property, ?array $data): mixed
+    public function setPerspectiveData(string $property, array $data): mixed
     {
         $this->_perspectiveData[$property] = $data;
         $pKey = $this->getPerspectiveKey($this->getPerspectiveRecord());
@@ -41,13 +41,9 @@ trait Tinebase_Record_PerspectiveTrait
         $fields = static::getConfiguration()->getFields();
 
         foreach ($this->_perspectiveData as $property => &$data) {
-            if (array_key_exists(TMCC::PERSPECTIVE_DEFAULT, $fields[$property]) &&
-                    $fields[$property][TMCC::PERSPECTIVE_DEFAULT] === $this->{$property}) {
+            if ($fields[$property][TMCC::PERSPECTIVE_DEFAULT] === $this->{$property}) {
                 unset($data[$oldPKey]);
             } else {
-                if (null === $data) {
-                    $data = [];
-                }
                 $data[$oldPKey] = $this->{$property};
             }
             $this->{$property} = $data[$pKey] ?? $fields[$property][TMCC::PERSPECTIVE_DEFAULT];
