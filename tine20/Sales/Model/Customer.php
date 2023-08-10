@@ -15,9 +15,9 @@
  * @package     Sales
  * @subpackage  Model
  *
- * @property String name_shorthand    
+ * @property string $name_shorthand
+ * @property string $cpextern_id
  */
-
 class Sales_Model_Customer extends Tinebase_Record_Abstract
 {
     public const MODEL_NAME_PART = 'Customer';

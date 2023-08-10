@@ -492,7 +492,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $updateSyncBackendIds = false;
 
         //get sync backends
-        foreach($this->getSyncBackends() as $backendId => $backendArray) {
+        foreach ($this->getSyncBackends() as $backendId => $backendArray) {
             if (isset($backendArray['filter'])) {
                 $oldACL = $this->doContainerACLChecks(false);
 
@@ -662,15 +662,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         /** @var Addressbook_Model_Contact $_record */
         $this->_setGeoData($_record);
 
-        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME) && $this->_duplicateCheck) {
-            // Set Short Name if no Short Name is set or the Short Name Already exists
-            if (!$_record->n_short) {
-                $this->_setShortName($_record);
-            } elseif (! $this->findUnusedShortName([$_record->n_short])) {
-                $this->_setShortName($_record);
-                $this->_throwShortNameException($_record->n_short);
-            }
-        }
+        $this->_checkAndSetShortName($_record);
         
         if (isset($_record->type) &&  $_record->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
             if (!is_array($this->_requestContext) || !isset($this->_requestContext[self::CONTEXT_ALLOW_CREATE_USER]) ||
@@ -701,16 +693,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $this->_setGeoData($_record);
         }
 
-        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME) && $this->_duplicateCheck) {
-            // Set Short Name if no Short Name is set or the Short Name Already exists
-            if (!$_record->n_short) {
-                $this->_setShortName($_record);
-            } elseif ($_record->n_short != $_oldRecord->n_short && ! $this->findUnusedShortName([$_record->n_short])) {
-                $this->_setShortName($_record);
-                $this->_throwShortNameException($_record->n_short);
-            }
-        }
-        
+        $this->_checkAndSetShortName($_record, $_oldRecord);
+
         if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
             $_record->type = Addressbook_Model_Contact::CONTACTTYPE_USER;
         }
@@ -738,6 +722,32 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
 
         // syncBackendIds is read only property!
         unset($_record->syncBackendIds);
+    }
+
+    /**
+     * Set Short Name if no Short Name is set or the Short Name Already exists
+     *
+     * @param Addressbook_Model_Contact $_record
+     * @param Addressbook_Model_Contact|null $_oldRecord
+     * @return void
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _checkAndSetShortName(Addressbook_Model_Contact $_record, ?Addressbook_Model_Contact $_oldRecord = null)
+    {
+        if (Addressbook_Config::getInstance()->featureEnabled(Addressbook_Config::FEATURE_SHORT_NAME)
+            && $this->_duplicateCheck
+        ) {
+            if (!$_record->n_short) {
+                $this->_setShortName($_record);
+            } elseif ($_oldRecord && $_record->n_short != $_oldRecord->n_short
+                && ! $this->findUnusedShortName([$_record->n_short])
+            ) {
+                $this->_setShortName($_record);
+                $this->_throwShortNameException($_record->n_short);
+            }
+        }
     }
 
     /**

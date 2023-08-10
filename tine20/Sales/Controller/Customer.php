@@ -131,6 +131,18 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     }
 
     /**
+     * inspect creation of one record (after create)
+     *
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        $this->_setContactCustomerRelation($_createdRecord);
+    }
+
+    /**
      * inspect update of one record (before update)
      *
      * @param Tinebase_Record_Interface $updatedRecord
@@ -145,6 +157,8 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
+        $this->_setContactCustomerRelation($updatedRecord);
+
         $this->handleExternAndInternId($record);
     }
 
@@ -221,6 +235,43 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
             $billingAddress['type'] = 'billing';
             
             Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($billingAddress));
+        }
+    }
+
+    /**
+     * set / update customer / contact relation when contact container xprop is set
+     *
+     * @param Sales_Model_Customer $customer
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    protected function _setContactCustomerRelation(Sales_Model_Customer $customer): void
+    {
+        if ($customer->cpextern_id) {
+            // get sales customer with cpextern == this contact
+            $contact = $customer->relations?->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
+
+            if (! $contact) {
+                // set special contact relation if missing (TYPE CONTACTCUSTOMER - see \Sales_Controller::createUpdatePostalAddress)
+                $contact = Addressbook_Controller_Contact::getInstance()->get($customer->cpextern_id);
+                if (isset($contact->container_id->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK]) &&
+                    $contact->container_id->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK])
+                {
+                    Tinebase_Relations::getInstance()->addRelation(new Tinebase_Model_Relation([
+                        'own_model' => Addressbook_Model_Contact::class,
+                        'own_id' => $contact->getId(),
+                        'related_degree' => Tinebase_Model_Relation::DEGREE_CHILD,
+                        'related_model' => Sales_Model_Customer::class,
+                        'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                        'related_id' => $customer->getId(),
+                        'type' => 'CONTACTCUSTOMER'
+                    ]), $customer);
+                }
+            }
         }
     }
 }
