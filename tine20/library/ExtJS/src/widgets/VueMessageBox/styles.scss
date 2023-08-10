@@ -1,6 +1,6 @@
 $primary: #0062a7; // setting the primary color
 // todo the line below might cause zindex-error
-$zindex-modal: 5055; // the highest in tine, 5000 @daysviewpanel.css
+$zindex-modal: 10055; // the highest in tine, 5000 @daysviewpanel.css , window is 9003
 @import 'global_bs'; // global bs styles needed for modal
 @import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'; // bs-Vue styles
 

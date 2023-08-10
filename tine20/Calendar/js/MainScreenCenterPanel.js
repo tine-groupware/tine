@@ -1793,7 +1793,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 event.set('status', status);
                 this.updateEvent(event);
             }
-        }, this).setIcon(Ext.MessageBox.QUESTION);
+        }, this);
     },
     
     updateEvent: function(event) {

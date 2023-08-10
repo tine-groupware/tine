@@ -256,7 +256,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                                 if (btn === 'yes') {
                                                     combo.setValue(status.id);
                                                 }
-                                            }, this).setIcon(Ext.MessageBox.QUESTION);
+                                            }, this);
                                         return false;
                                     }
                                 }
