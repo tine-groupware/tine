@@ -270,7 +270,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         method    : 'Admin.resetPassword',
                         account   : accountObject,
                         password  : _text,
-                        mustChange: false
+                        mustChange: true
                     },
                     scope: this,
                     callback : function(_options, _success, _response) {
