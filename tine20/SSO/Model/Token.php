@@ -23,12 +23,14 @@ class SSO_Model_Token extends Tinebase_Record_Abstract
     public const TABLE_NAME = 'sso_token';
 
     public const TYPE_ACCESS = 'access';
+    public const TYPE_ACCESS_EXT_IDP = 'accessExtIdp';
     public const TYPE_AUTH = 'auth';
     public const TYPE_REFRESH = 'refresh';
 
     public const FLD_TOKEN = 'token';
     public const FLD_TYPE = 'type';
     public const FLD_DATA = 'data';
+    public const FLD_TTL = 'ttl';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -43,7 +45,7 @@ class SSO_Model_Token extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 2,
+        self::VERSION => 3,
         self::RECORD_NAME => 'OAuth2 Access Token',
         self::RECORDS_NAME => 'OAuth2 Access Tokens', // ngettext('OAuth2 Access Token', 'OAuth2 Access Tokens', n)
         self::MODLOG_ACTIVE => true,
@@ -83,8 +85,12 @@ class SSO_Model_Token extends Tinebase_Record_Abstract
             self::FLD_DATA              => [
                 self::TYPE                  => self::TYPE_JSON,
                 self::NULLABLE              => true,
-                self::VALIDATORS            => [Zend_Filter_Input::ALLOW_EMPTY  => true],
                 self::LABEL                 => 'Data', // _('Data')
+            ],
+            self::FLD_TTL               => [
+                self::TYPE                  => self::TYPE_DATETIME,
+                self::NULLABLE              => true,
+                self::LABEL                 => 'TTL', // _('TTL')
             ],
         ]
     ];

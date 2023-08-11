@@ -598,6 +598,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             );
         }
 
+        if (empty($password)) {
+            if (SSO_Controller::passwordLessLogin($username)) {
+                return $this->_getLoginSuccessResponse($username);
+            }
+            throw new Tinebase_Exception_Auth_PwdRequired();
+        }
+
         Tinebase_Controller::getInstance()->forceUnlockLoginArea();
         Tinebase_Controller::getInstance()->setRequestContext(array(
             'MFAPassword' => $MFAPassword,

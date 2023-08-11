@@ -17,7 +17,7 @@
  * @package     SSO
  * @subpackage  Model
  */
-class SSO_Model_OAuthOIdRPConfig extends Tinebase_Record_Abstract
+class SSO_Model_OAuthOIdRPConfig extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'OAuthOIdRPConfig';
 

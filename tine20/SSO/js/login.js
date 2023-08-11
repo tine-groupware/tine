@@ -37,7 +37,9 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
                 const values = form.getFieldValues();
                 const formData = new FormData();
                 formData.append('username', values.username);
-                formData.append('password', values.password);
+                if (values.password) {
+                    formData.append('password', values.password);
+                }
                 Object.keys(window.initialData.sso).forEach((key) => {formData.append(key, window.initialData.sso[key])});
                 if (additionalParams !== window) {
                     Object.keys(additionalParams || {}).forEach((key) => {formData.append(key, additionalParams[key])});

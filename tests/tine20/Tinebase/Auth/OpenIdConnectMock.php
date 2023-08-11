@@ -12,7 +12,7 @@
  */
 class Tinebase_Auth_OpenIdConnectMock extends Tinebase_Auth_OpenIdConnect
 {
-    protected function _getClient()
+    public function _getClient(): SSO_Facade_OpenIdConnect_Client
     {
         if ($this->_client === null) {
             return new Tinebase_Auth_OpenIdConnectMockClient();

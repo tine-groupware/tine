@@ -622,4 +622,35 @@ class Tinebase_Helper
 
         return $settings;
     }
+
+    public static function createFormHTML(string $redirectUrl, array $postData): string
+    {
+        $html = '<html>
+  <body>
+    <p class="pulsate">'.Tinebase_Translation::getTranslation()->translate('redirecting ...').'</p>
+    <form method="POST" action="' . $redirectUrl . '">';
+            foreach ($postData as $name => $value) {
+                $html .= '      <input type="hidden" name="' . htmlspecialchars($name, ENT_HTML5 | ENT_COMPAT)
+                    . '" value="' . htmlspecialchars($value, ENT_HTML5 | ENT_COMPAT) . '"/>';
+            }
+            $html .= '
+      <input type="submit" value="continue" style="display: none;"/>
+    </form>
+    <script type="text/javascript">window.onload = function() { document.getElementsByTagName("form")[0].submit() };</script>
+    <style>
+        .pulsate {
+            animation: pulsate 1s ease-out;
+            animation-iteration-count: infinite;
+        }
+        @keyframes pulsate {
+            0% { opacity: 0.5; }
+            50% { opacity: 1.0; }
+            100% { opacity: 0.5; }
+        }
+    </style>
+  </body>
+</html>';
+
+            return $html;
+    }
 }

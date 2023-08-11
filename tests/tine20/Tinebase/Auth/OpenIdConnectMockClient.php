@@ -10,9 +10,9 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
-class Tinebase_Auth_OpenIdConnectMockClient
+class Tinebase_Auth_OpenIdConnectMockClient extends SSO_Facade_OpenIdConnect_Client
 {
-    public function requestUserInfo()
+    public function requestUserInfo($attribute = null)
     {
         return json_decode('{"email":"test@example.org","email_verified":true}');
     }

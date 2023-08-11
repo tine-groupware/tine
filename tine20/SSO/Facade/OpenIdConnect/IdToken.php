@@ -43,6 +43,6 @@ class SSO_Facade_OpenIdConnect_IdToken extends IdToken
             $token->withClaim($key, $value);
         }
 
-        return $token->getToken($configuration->signer(), $configuration->signingKey())->toString();
+        return $token->getToken($configuration->signer(), $configuration->signingKey());
     }
 }

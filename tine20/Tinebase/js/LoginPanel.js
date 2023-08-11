@@ -529,6 +529,17 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     me.onLoginPress();
                 }});
                 break;
+            case 650: // Auth requires redirect
+                if (String(exception.method).toUpperCase() !== 'POST') {
+                    window.location.href = exception.url;
+                } else {
+                    window.document.body.innerHTML = exception.postFormHTML;
+                    document.getElementsByTagName("form")[0].submit();
+                }
+                break;
+            case 651: // Password required
+                //@TODO
+                break;
             default:
                 return Tine.Tinebase.ExceptionHandler.handleRequestException(response);
                 break;
