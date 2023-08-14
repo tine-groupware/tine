@@ -1134,7 +1134,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
                     app.i18n._('It is not permitted to store files in this folder!')
-                );
+                ).setIcon(Ext.MessageBox.ERROR);
         
                 return;
             }

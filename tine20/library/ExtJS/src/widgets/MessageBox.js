@@ -351,8 +351,7 @@ Ext.MessageBox.ERROR
                 buttons: this.OK,
                 fn: fn,
                 scope : scope,
-                minWidth: this.minWidth,
-                icon: this.ERROR,
+                minWidth: this.minWidth
             });
         },
 

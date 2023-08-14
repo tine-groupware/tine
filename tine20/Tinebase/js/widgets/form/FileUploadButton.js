@@ -75,7 +75,7 @@ Tine.widgets.form.FileUploadButton = Ext.extend(Ext.Button, {
      */
     onFileSelect: function(fileSelector, event) {
         if (Ext.isArray(this.allowedTypes) && this.allowedTypes.indexOf(fileSelector.getFileCls()) < 0) {
-            Ext.MessageBox.alert(i18n._('Wrong File Type'), [i18n._('Please select a file with one of the following extensions:'), '<br />', this.allowedTypes].join(''));
+            Ext.MessageBox.alert(i18n._('Wrong File Type'), [i18n._('Please select a file with one of the following extensions:'), '<br />', this.allowedTypes].join('')).setIcon(Ext.MessageBox.ERROR);
             return;
         }
         

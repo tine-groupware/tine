@@ -745,6 +745,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 plugins: gridPlugins
             },config)
         );
+        this.aliasesGrid.render(document.body);
         return this.aliasesGrid;
     },
 
@@ -784,6 +785,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }])
             }, config)
         );
+        this.forwardsGrid.render(document.body);
         
         return this.forwardsGrid;
     },

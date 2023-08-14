@@ -156,7 +156,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
             this.loadMask.hide();
         }, this);
         img.on('error', function () {
-            Ext.MessageBox.alert(i18n._('Image Failed'), i18n._('Could not load image. Please notify your Administrator'));
+            Ext.MessageBox.alert(i18n._('Image Failed'), i18n._('Could not load image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
             this.loadMask.hide();
         }, this);
     },
@@ -178,7 +178,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      */
     onFileSelect: function (fileSelector) {
         if (! fileSelector.isImage()) {
-            Ext.MessageBox.alert(i18n._('Not An Image'), i18n._('Please select an image file (gif/png/jpeg)'));
+            Ext.MessageBox.alert(i18n._('Not An Image'), i18n._('Please select an image file (gif/png/jpeg)')).setIcon(Ext.MessageBox.ERROR);
             return;
         }
         
@@ -221,7 +221,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.uploader.un('uploadcomplete', this.onUploadComplete, this);
         this.uploader.un('uploadfailure', this.onUploadFail, this);
         
-        Ext.MessageBox.alert(i18n._('Upload Failed'), i18n._('Could not upload image. Please notify your Administrator'));
+        Ext.MessageBox.alert(i18n._('Upload Failed'), i18n._('Could not upload image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
     },
     /**
      * executed on image contextmenu
@@ -379,3 +379,4 @@ Ext.ux.util.ImageURL.prototype.parseURL = function (url) {
     }
     return new Ext.ux.util.ImageURL(params);
 };
+

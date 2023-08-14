@@ -621,7 +621,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             Ext.MessageBox.alert(
                 i18n._('Upload Failed'),
                 app.i18n._('It is not permitted to store files in this folder!')
-            );
+            ).setIcon(Ext.MessageBox.ERROR);
 
             return;
         }

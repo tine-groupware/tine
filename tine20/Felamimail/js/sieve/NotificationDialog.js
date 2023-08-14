@@ -129,6 +129,8 @@ Ext.namespace('Tine.Felamimail.sieve');
                 }])
             }, config)
         );
+        
+        this.sieveNotifyGrid.render(document.body);
         return this.sieveNotifyGrid;
     },
 });
