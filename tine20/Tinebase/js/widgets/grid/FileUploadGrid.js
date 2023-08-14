@@ -189,7 +189,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         Ext.MessageBox.alert(
             i18n._('Upload Failed'),
             i18n._('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:') + ' ' + parseInt(dataSize, 10) / 1048576 + ' MB'
-        ).setIcon(Ext.MessageBox.ERROR);
+        );
 
         this.getStore().remove(fileRecord);
         if (this.loadMask) this.loadMask.hide();

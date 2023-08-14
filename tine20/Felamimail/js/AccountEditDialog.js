@@ -1239,10 +1239,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this['connectLoadMask' + server].hide();
 
             if (showDialog) {
-                Ext.MessageBox.alert(
-                    this.app.formatMessage('{server} Connection Status',{server : server}),
-                    message
-                ).setIcon(result ? Ext.MessageBox.INFO : Ext.MessageBox.WARNING);
+                Ext.MessageBox.show({
+                    title: this.app.formatMessage('{server} Connection Status',{server : server}),
+                    msg: message,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.INFO
+                });
             }
         }
 

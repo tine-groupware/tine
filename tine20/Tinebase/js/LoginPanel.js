@@ -506,6 +506,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         const exception = _.get(JSON.parse(response.responseText), 'data', {});
         const me = this;
         
+        Ext.MessageBox.hide();
         switch (exception.code) {
             case 630:
                 const mfaDevices = exception.mfaUserConfigs
