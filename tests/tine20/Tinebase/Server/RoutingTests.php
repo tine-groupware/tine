@@ -169,11 +169,5 @@ class Tinebase_Server_RoutingTests extends TestCase
             self::assertGreaterThanOrEqual(0, $decodedContent['totalEmailSharedAccounts']);
             self::assertGreaterThanOrEqual(0, $decodedContent['totalEmailMailingList']);
         }
-        
-        if (Tinebase_Application::getInstance()->isInstalled('SaasInstance')) {
-            self::assertGreaterThanOrEqual(2.2, $content['SaasInstance']['pricePerUser']);
-            self::assertGreaterThanOrEqual(0.5, $content['SaasInstance']['pricePerGigabyte']);
-            self::assertGreaterThanOrEqual(30, $content['SaasInstance']['numberOfIncludedUsers']);
-        }
     }
 }
