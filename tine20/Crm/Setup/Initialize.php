@@ -74,17 +74,19 @@ class Crm_Setup_Initialize extends Setup_Initialize
     public static function applicationInstalled(Tinebase_Model_Application $app): void
     {
         if (class_exists('Tasks_Config') && Tasks_Config::APP_NAME === $app->name) {
-            Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
-                'application_id' => $app->getId(),
-                'model' => Tasks_Model_Task::class,
-                'is_system' => true,
-                'name' => 'CrmTasksCoupling',
-                'definition' => [
-                    Tinebase_Model_CustomField_Config::DEF_HOOK => [
-                        [Crm_Controller::class, 'tasksMCHookFun'],
-                    ],
-                ]
-            ]));
+            if (!Tinebase_Core::isReplica()) {
+                Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+                    'application_id' => $app->getId(),
+                    'model' => Tasks_Model_Task::class,
+                    'is_system' => true,
+                    'name' => 'CrmTasksCoupling',
+                    'definition' => [
+                        Tinebase_Model_CustomField_Config::DEF_HOOK => [
+                            [Crm_Controller::class, 'tasksMCHookFun'],
+                        ],
+                    ]
+                ]));
+            }
 
             $pfe = Tinebase_PersistentFilter::getInstance();
             $crmAppId = Tinebase_Application::getInstance()->getApplicationByName(Crm_Config::APP_NAME)->getId();

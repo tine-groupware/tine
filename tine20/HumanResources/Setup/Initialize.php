@@ -480,6 +480,9 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
     public static function addCORSystemCustomField()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
         $appId = Tinebase_Application::getInstance()->getApplicationByName(Timetracker_Config::APP_NAME)->getId();
 
         Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
@@ -504,6 +507,9 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
 
     public static function addABSRSystemCustomField()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
         $appId = Tinebase_Application::getInstance()->getApplicationByName(Timetracker_Config::APP_NAME)->getId();
 
         if (null !== Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,

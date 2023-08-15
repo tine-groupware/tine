@@ -207,6 +207,9 @@ class Setup_Initialize
      */
     public static function createCustomFields(array $customfields)
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
         foreach ($customfields as $appModel) {
             $appId = Tinebase_Application::getInstance()->getApplicationByName($appModel['app'])->getId();
 

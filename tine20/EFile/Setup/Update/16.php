@@ -37,7 +37,7 @@ class EFile_Setup_Update_16 extends Setup_Update_Abstract
     public function update001()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
-        
+
         $ids = $this->getDb()->query('select e.id from ' . SQL_TABLE_PREFIX . EFile_Model_FileMetadata::TABLE_NAME
             . ' as e left join ' . SQL_TABLE_PREFIX . Tinebase_Model_Tree_Node::TABLE_NAME
             . ' as n on e.node_id = n.id where n.id is null')->fetchAll(PDO::FETCH_COLUMN, 0);

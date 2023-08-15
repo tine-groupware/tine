@@ -63,6 +63,9 @@ class DFCom_Setup_Initialize extends Setup_Initialize
 
     protected function _initializeSystemCFs()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
         $appId = Tinebase_Application::getInstance()->getApplicationByName(HumanResources_Config::APP_NAME)->getId();
 
         if ($scf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId, 'dfcom_id', HumanResources_Model_Employee::class, true, true)) {

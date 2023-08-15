@@ -63,7 +63,7 @@ class OnlyOfficeIntegrator_Setup_Initialize extends Setup_Initialize
     protected function _initializeCustomFields()
     {
         // this is only done on primary and then replicated to the secondaries
-        if (!Tinebase_Core::isReplicationPrimary()) {
+        if (Tinebase_Core::isReplica()) {
             return;
         }
         

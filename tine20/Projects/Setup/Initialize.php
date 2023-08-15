@@ -104,6 +104,9 @@ class Projects_Setup_Initialize extends Setup_Initialize
 
     public static function applicationInstalled(Tinebase_Model_Application $app): void
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
         if (class_exists('Tasks_Config') && Tasks_Config::APP_NAME === $app->name) {
             Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
                 'application_id' => $app->getId(),
