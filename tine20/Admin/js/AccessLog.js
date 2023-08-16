@@ -154,35 +154,35 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var gridValue;
         
         switch (_value) {
-            case '-102' :
+            case -102 :
                 gridValue = this.app.i18n._('user blocked');
                 break;
 
-            case '-101' :
+            case -101 :
                 gridValue = this.app.i18n._('password expired');
                 break;
 
-            case '-100' :
+            case -100 :
                 gridValue = this.app.i18n._('user disabled');
                 break;
 
-            case '-3' :
+            case -3 :
                 gridValue = this.app.i18n._('invalid password');
                 break;
 
-            case '-2' :
+            case -2 :
                 gridValue = this.app.i18n._('ambiguous username');
                 break;
 
-            case '-1' :
+            case -1 :
                 gridValue = this.app.i18n._('user not found');
                 break;
 
-            case '0' :
+            case 0 :
                 gridValue = this.app.i18n._('failure');
                 break;
 
-            case '1' :
+            case 1 :
                 gridValue = this.app.i18n._('success');
                 break;
         }
