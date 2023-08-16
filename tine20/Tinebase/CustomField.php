@@ -165,8 +165,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $this->_clearCache();
         $this->_backendConfig->setAllCFs();
         try {
+            $oldRecord = $this->_backendConfig->get($_record->getId());
+            $oldRecord->grants = $this->getGrants($oldRecord);
+
             /** @var Tinebase_Model_CustomField_Config $result */
             $result = $this->_backendConfig->update($_record);
+            $result->grants = $this->getGrants($result);
+            $this->_writeModLog($result, $oldRecord);
+
             if ($result->is_system) {
                 Tinebase_Application::getInstance()->getApplicationById($result->application_id);
                 /** @var Tinebase_Record_Interface $model */
