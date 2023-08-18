@@ -111,7 +111,7 @@
     "metaways/timezoneconvert": "1.*",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
-    "nl.idaas/openid-server": "^0.1.7",
+    "nl.idaas/openid-server": "0.*",
     "palepurple/rate-limit": "^2.0",
     "pear/ole": "^1.0.0RC9",
     "php-http/curl-client": "^2.1",
