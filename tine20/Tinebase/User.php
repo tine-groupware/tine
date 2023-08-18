@@ -616,6 +616,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     $syncedUser = $userBackend->updateUserInSqlBackend($syncedUser);
                     $userBackend->updatePluginUser($syncedUser, $user);
                 }
+
+                $userBackend->writeModLog($syncedUser, null);
             }
 
             Tinebase_Group::syncMemberships($syncedUser);
