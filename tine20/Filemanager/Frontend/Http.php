@@ -34,6 +34,68 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         exit;
     }
 
+    public function downloadFolder($_path, $recursive = false)
+    {
+        $path = Filemanager_Controller_Node::getInstance()->addBasePath($_path);
+        $fs = Tinebase_FileSystem::getInstance();
+        if (!$fs->isDir($path)) {
+            throw new Tinebase_Exception_SystemGeneric($_path . ' is not a directory');
+        }
+        $node = $fs->stat($path);
+
+        if ($recursive) {
+            $ids = $fs->getAllChildIds([$node->getId()], [], false, [Tinebase_Model_Grants::GRANT_DOWNLOAD]);
+            $nodes = $fs->searchNodes(new Tinebase_Model_Tree_Node_Filter([
+                ['field' => 'id', 'operator' => 'in', 'value' => $ids],
+            ], '', ['ignoreAcl' => true]));
+        } else {
+            $filter = new Tinebase_Model_Tree_Node_Filter([
+                ['field' => 'parent_id', 'operator' => 'equals', 'value' => $node->getId()],
+                ['field' => 'type', 'operator' => 'not', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER],
+            ]);
+            $filter->setRequiredGrants([Tinebase_Model_Grants::GRANT_DOWNLOAD]);
+            $nodes = $fs->searchNodes($filter);
+        }
+
+        if ($nodes->count() === 0) {
+            throw new Tinebase_Exception_SystemGeneric($_path . ' is empty');
+        }
+
+        $tmpPath = Tinebase_Core::getTempDir() . '/' . uniqid('tine20_') . '.zip';
+        try {
+            $z = new ZipArchive();
+            $z->open($tmpPath, ZipArchive::CREATE);
+
+            $fun = function(Tinebase_Model_Tree_Node $node, string $path = '') use($nodes, $z, &$fun): void {
+                $children = $nodes->filter('parent_id', $node->getId());
+                $nodes->removeRecords($children);
+                foreach ($children as $child) {
+                    $childPath = $path . $child->name;
+                    if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $child->type) {
+                        $z->addEmptyDir($childPath);
+                        $fun($child, $childPath . '/');
+                    } elseif (is_file($realPath = $child->getFilesystemPath())) {
+                        $z->addFile($realPath, $childPath);
+                    }
+                }
+            };
+            $fun($node);
+            if (!$z->close()) {
+                throw new Tinebase_Exception_SystemGeneric('could not create zip file');
+            }
+
+            $node = new Tinebase_Model_Tree_Node([
+                'name' => $node->name,
+                'contenttype' => 'application/zip',
+                'size' => filesize($tmpPath),
+            ], true);
+            $this->_downloadFileNode($node, $tmpPath, null, true);
+
+        } finally {
+            unlink($tmpPath);
+        }
+    }
+
     /**
      * _downloadFileNodeByPathOrId
      *
