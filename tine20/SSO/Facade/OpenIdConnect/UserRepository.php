@@ -60,6 +60,6 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
 
     public function getUserInfoAttributes(\League\OAuth2\Server\Entities\UserEntityInterface $userEntity, $claims, $scopes)
     {
-        // TODO: Implement getUserInfoAttributes() method.
+        return $this->getAttributes($userEntity, $claims, $scopes);
     }
 }
