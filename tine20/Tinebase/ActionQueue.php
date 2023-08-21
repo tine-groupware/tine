@@ -31,6 +31,7 @@
  * @method void reschedule(string $jobId)
  * @method boolean hasAsyncBackend()
  * @method boolean|string peekJobId()
+ * @method boolean restoreDeadletter(string $jobId)
  *
  */
  class Tinebase_ActionQueue

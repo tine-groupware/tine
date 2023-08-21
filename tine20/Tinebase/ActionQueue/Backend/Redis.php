@@ -117,6 +117,25 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
             throw new Tinebase_Exception_Backend('Could not connect to redis server at ' . $host);
         }
     }
+
+    public function restoreDeadletter($jobId)
+    {
+        $data = $this->_redis->dump($this->_deadLetterStructName . ":" . $jobId);
+        if (false !== $data) {
+            try {
+                $this->_redis->multi()
+                    ->restore($this->_dataStructName . ":" . $jobId, 0, $data)
+                    ->hSet($this->_dataStructName . ":" . $jobId, 'retry' , 0)
+                    ->hSet($this->_dataStructName . ':' . $jobId, 'time', time())
+                    ->lPush($this->_queueStructName,   $jobId)
+                    ->exec();
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' restored job from deadletter queue:' . $jobId);
+            } catch (RedisException $re) {
+                // already exists
+            }
+        }
+    }
     
     /**
      * Delete a job from the queue
