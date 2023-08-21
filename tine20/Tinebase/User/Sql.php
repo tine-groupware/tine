@@ -854,6 +854,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function updateUser(Tinebase_Model_FullUser $_user)
     {
+        $oldUser = $this->getFullUserById($_user->getId());
+
         $visibility = $_user->visibility;
 
         if ($this instanceof Tinebase_User_Interface_SyncAble) {
@@ -874,6 +876,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             // update user xprops if necessary (plugin user with xprops might have been updated)
             $updatedUser = $this->updateUserInSqlBackend($updatedUser);
         }
+
+        $this->_writeModLog($updatedUser, $oldUser);
 
         return $updatedUser;
     }
@@ -1088,11 +1092,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw($e);
         }
         
-        $newUser = $this->getUserById($accountId, 'Tinebase_Model_FullUser');
-
-        $this->_writeModLog($newUser, $oldUser);
-
-        return $newUser;
+        return $this->getUserById($accountId, 'Tinebase_Model_FullUser');
     }
     
     /**
@@ -1130,7 +1130,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $addedUser = $this->updateUserInSqlBackend($addedUser);
         }
 
+        $this->_writeModLog($addedUser, null);
+
         return $addedUser;
+    }
+
+    public function writeModLog($_newRecord, $_oldRecord)
+    {
+        $this->_writeModLog($_newRecord, $_oldRecord);
     }
     
     /**
@@ -1182,8 +1189,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             __METHOD__ . '::' . __LINE__ . ' Adding user to SQL backend: ' . $_user->accountLoginName);
         
         $accountsTable->insert($accountData);
-
-        $this->_writeModLog($_user, null);
 
         // we don't need the data from the plugins yet
         $createdUser = $this->getUserByPropertyFromSqlBackend('accountId', $_user->getId(), 'Tinebase_Model_FullUser');
