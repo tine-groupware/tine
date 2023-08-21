@@ -521,6 +521,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                 resizable: true,
                 width: 300,
                 allowBlank: true,
+                noEditPlugin: true,
                 listeners: {
                     scope: this,
                     select: this.onAddRecordFromCombo
