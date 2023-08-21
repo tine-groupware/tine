@@ -239,7 +239,7 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             return $fallback;
         }
 
-        return $name;
+        return str_replace('/', '-', $name);
     }
 
     /**
