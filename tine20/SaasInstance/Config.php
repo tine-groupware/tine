@@ -19,6 +19,7 @@ class SaasInstance_Config extends Tinebase_Config_Abstract
 
     public const APP_NAME = 'SaasInstance';
     public const PRICE_PER_USER = 'pricePerUser';
+    public const PRICE_PER_USER_VOLUNTEER = 'pricePerUserVolunteer';
     public const PRICE_PER_GIGABYTE = 'pricePerGigabyte';
     public const NUMBER_OF_INCLUDED_USERS = 'numberOfIncludedUsers';
     public const PACKAGE_STORAGE_INFO_TEMPLATE = 'packageStorageInfoTemplate';
@@ -36,6 +37,14 @@ class SaasInstance_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION           => 'Price per user of current SaasInstance package',
             self::TYPE                  => Tinebase_ModelConfiguration_Const::TYPE_MONEY,
             self::DEFAULT_STR           => 2.2,
+        ],
+        self::PRICE_PER_USER_VOLUNTEER => [
+            //_('Price per volunteer user')
+            self::LABEL                 => 'Price per volunteer user',
+            //_('Price per volunteer user of current SaasInstance package')
+            self::DESCRIPTION           => 'Price per volunteer user of current SaasInstance package',
+            self::TYPE                  => Tinebase_ModelConfiguration_Const::TYPE_MONEY,
+            self::DEFAULT_STR           => null,
         ],
         self::PRICE_PER_GIGABYTE                => [
             //_('Price per Gigabyte')
