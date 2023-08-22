@@ -513,11 +513,11 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     protected function _createCachedConfig()
     {
-        $tmpDir = Tinebase_Core::guessTempDir(self::$_configFileData);
+        $filename = $this->_getCachedConfigFilename();
         $confdFolder = self::$_configFileData['confdfolder'];
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Creating new cached config file in ' . $tmpDir);
+            . ' Creating new cached config file: ' . $filename);
 
         if (! is_readable($confdFolder)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
@@ -567,7 +567,6 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
                 . $ttlErrorMsg);
         }
         
-        $filename = $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
         $filenameTmp = $filename . uniqid('tine20', true);
         $fh = fopen($filenameTmp, 'w');
         if (false === $fh) {
