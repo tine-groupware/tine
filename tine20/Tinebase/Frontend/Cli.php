@@ -1691,6 +1691,26 @@ fi';
         return 0;
     }
 
+    public function actionQueueRestoreDeadLetter(Zend_Console_Getopt $opts): int
+    {
+        $this->_checkAdminRight();
+
+        if (Tinebase_ActionQueue_Backend_Redis::class !== Tinebase_ActionQueue::getInstance()->getBackendType()) {
+            echo 'only works with redis backend' . PHP_EOL;
+            return 1;
+        }
+
+        $data = $this->_parseArgs($opts, array('jobId'));
+
+        if (Tinebase_ActionQueue::getInstance()->restoreDeadletter($data['jobId'])) {
+            echo 'restore succeeded' . PHP_EOL;
+        } else {
+            echo 'restore failed' . PHP_EOL;
+        }
+
+        return 0;
+    }
+
     /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
      * 

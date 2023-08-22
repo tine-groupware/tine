@@ -4487,7 +4487,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:dump\\(\\)\\.$#"
-			count: 1
+			count: 2
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
 		-
@@ -4527,7 +4527,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:multi\\(\\)\\.$#"
-			count: 2
+			count: 3
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
 		-
