@@ -482,8 +482,15 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
 
     protected function _getCachedConfigFilename(): string
     {
-        $tmpDir = Tinebase_Core::guessTempDir(self::$_configFileData);
-        return $tmpDir . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
+        if (self::$_configFileData && isset(self::$_configFileData[Tinebase_Config::CACHED_CONFIG_PATH])
+            && self::$_configFileData[Tinebase_Config::CACHED_CONFIG_PATH]
+            && file_exists(self::$_configFileData[Tinebase_Config::CACHED_CONFIG_PATH])
+        ) {
+            $path = self::$_configFileData[Tinebase_Config::CACHED_CONFIG_PATH];
+        } else {
+            $path = Tinebase_Core::guessTempDir(self::$_configFileData);
+        }
+        return $path . DIRECTORY_SEPARATOR . 'cachedConfig.inc.php';
     }
 
     /**
