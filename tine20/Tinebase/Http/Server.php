@@ -74,6 +74,8 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
      * @var string Current Method
      */
     private $_method;
+
+    protected $allowList = null;
     
     /**
      * Constructor
@@ -84,6 +86,11 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
         $this->_reflection = new Zend_Server_Reflection();
 
         parent::__construct();
+    }
+
+    public function setAllowList(array $allowList): void
+    {
+        $this->allowList = $allowList;
     }
 
     /**
@@ -213,8 +220,11 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
     {
         $this->_args = $argv;
         foreach ($this->_reflection->reflectClass($classname, $argv)->getMethods() as $method) {
-            $prefix = ($namespace === '' ? $classname : $namespace);
-            $this->_functions[$prefix .'.'. $method->getName()] = $method;
+            $funName = ($namespace === '' ? $classname : $namespace) . '.' . $method->getName();
+            if ($this->allowList && !($this->allowList[$funName] ?? false)) {
+                continue;
+            }
+            $this->_functions[$funName] = $method;
         }
     }
     

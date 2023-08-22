@@ -30,7 +30,21 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
      * @var boolean
      */
     protected $_supportsSessions = true;
-    
+
+    protected ?Laminas\HttpHandlerRunner\Emitter\EmitterInterface $_emitter = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_emitter = new \Laminas\HttpHandlerRunner\Emitter\SapiEmitter();
+    }
+
+    public function setEmitter(Laminas\HttpHandlerRunner\Emitter\EmitterInterface $emitter): self
+    {
+        $this->_emitter = $emitter;
+        return $this;
+    }
+
     /**
      * (non-PHPdoc)
      * @see Tinebase_Server_Interface::handle()
@@ -41,39 +55,45 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
 
         $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
         $this->_body    = $body ?? fopen('php://input', 'r');
-        
-        $server = new Tinebase_Http_Server();
-        $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
-        $server->setClass('Filemanager_Frontend_Download', 'Download');
 
         try {
-            if (Tinebase_Session::sessionExists()) {
-                try {
-                    Tinebase_Core::startCoreSession();
-                } catch (Zend_Session_Exception $zse) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                        __METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage() . ' - expire session cookie for client');
-                    Tinebase_Session::expireSessionCookie();
-                }
+            try {
+                Tinebase_Core::startCoreSession();
+            } catch (Zend_Session_Exception $zse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $zse->getMessage() . ' - expire session cookie for client');
+                Tinebase_Session::expireSessionCookie();
             }
-
-            $this->_disallowAppPwdSessions();
 
             Tinebase_Core::initFramework();
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Is HTTP request. method: ' . $this->getRequestMethod());
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' REQUEST: ' . print_r($_REQUEST, TRUE));
-            
+
+            if (null === Tinebase_Core::getUser() && $this->_request->getHeader('Authorization')) {
+                $this->_handleAppPwdAuth();
+            }
+
+            $server = new Tinebase_Http_Server();
+            if ($appPwd = Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class}) {
+                $server->setAllowList($appPwd->{Tinebase_Model_AppPassword::FLD_CHANNELS});
+            }
+            $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
+            $server->setClass('Filemanager_Frontend_Download', 'Download');
+
             // register additional HTTP apis only available for authorised users
-            if (Tinebase_Session::isStarted() && Zend_Auth::getInstance()->hasIdentity()) {
+            if (Tinebase_Session::isStarted() && ($appPwd || Zend_Auth::getInstance()->hasIdentity())) {
 
                 if (empty($_REQUEST['method'])) {
                     $_REQUEST['method'] = 'Tinebase.mainScreen';
 
                     // only load restricted apis if no area_login lock is set or if it is unlocked already
-                } elseif (self::checkLoginAreaLock()) {
+                } elseif ($appPwd || self::checkLoginAreaLock()) {
 
                     $definitions = self::_getModelConfigMethods('Tinebase_Server_Http');
+                    if ($appPwd) {
+                        $definitions = array_intersect_key($definitions, $appPwd->{Tinebase_Model_AppPassword::FLD_CHANNELS});
+                    }
                     $server->loadFunctions($definitions);
 
                     $applicationParts = explode('.', (string) $this->getRequestMethod());
@@ -106,13 +126,14 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
 
             $this->_method = $this->getRequestMethod();
 
-            self::_checkAreaLock($this->_method);
+            if (!$appPwd) {
+                self::_checkAreaLock($this->_method);
+            }
             self::_checkRateLimit(Tinebase_Server_Http::class, $this->_method);
 
             $response = $server->handle($_REQUEST);
             if ($response instanceof \Laminas\Diactoros\Response) {
-                $emitter = new \Zend\HttpHandlerRunner\Emitter\SapiEmitter();
-                $emitter->emit($response);
+                $this->_emitter->emit($response);
             }
             
         } catch (Zend_Json_Server_Exception $zjse) {
@@ -145,6 +166,10 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 if ($setupController->setupRequired()) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setup required');
                     $this->_method = 'Tinebase.setupRequired';
+                    $server = new Tinebase_Http_Server();
+                    $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
+                    $server->handle(array('method' => $this->_method));
+
                 } else if (preg_match('/download|export/', $this->_method)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Server error during download/export - exit with 500');
                     header('HTTP/1.0 500 Internal Server Error');
@@ -154,9 +179,6 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                     header('HTTP/1.0 500 Internal Server Error');
                     exit;
                 }
-                
-                $server->handle(array('method' => $this->_method));
-                
             } catch (Throwable $e) {
                 header('HTTP/1.0 503 Service Unavailable');
                 Tinebase_Exception::log($e, false);

@@ -30,7 +30,7 @@ class Addressbook_Export_VCardReportTest extends Calendar_TestCase
         );
 
         // export container to filemanager path
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('cal_default_vcard_report');
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('adb_default_vcard_report');
         Tinebase_FileSystem::getInstance()->mkdir('/Filemanager/folders/shared/unittestexport');
         $fileLocation = new Tinebase_Model_Tree_FileLocation([
             Tinebase_Model_Tree_FileLocation::FLD_TYPE      => Tinebase_Model_Tree_FileLocation::TYPE_FM_NODE,
@@ -44,9 +44,10 @@ class Addressbook_Export_VCardReportTest extends Calendar_TestCase
             'target' => $fileLocation->toArray(),
         ], null);
         $exporter->generate();
+        $exporter->save();
 
         // check if file exists in path and has the right contents
-        $exportFilenamePath = 'Filemanager/folders/shared/unittestexport/'
+        $exportFilenamePath = 'Filemanager/folders/shared/unittestexport/0_'
             . str_replace([' ', DIRECTORY_SEPARATOR], '', $this->_getTestAddressbook()->name . '.vcf');
         $vcf = file_get_contents('tine20:///' . $exportFilenamePath);
         self::assertStringContainsString('Platz der Deutschen Einheit 4', $vcf);

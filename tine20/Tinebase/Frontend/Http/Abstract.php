@@ -123,6 +123,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 case 'vcf':
                 case 'xls':
                 case 'xlsx':
+                case 'xml':
                 case 'doc':
                 case 'docx':
                     $result = $export->generate($_filter);
@@ -184,6 +185,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             case 'newPDF':
             case 'xls':
             case 'xlsx':
+            case 'xml':
             case 'doc':
             case 'ics':
             case 'vcf':
