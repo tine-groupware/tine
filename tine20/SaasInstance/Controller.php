@@ -79,12 +79,18 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
      */
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
+        if (!Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
+            return;
+        }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()
             ->debug(__METHOD__ . '::' . __LINE__ . ' Handle event of type ' . get_class($_eventObject));
 
         switch (get_class($_eventObject)) {
             case Admin_Event_BeforeAddAccount::class:
                 $this->_handleUserConfirmationException($_eventObject);
+                break;
+            case Admin_Event_BeforeUpdateAccount::class:
+                $this->_handleChangeUserTypeException($_eventObject);
                 break;
             case Admin_Event_UpdateQuota::class:
                 $this->_handleQuotaConfirmationException($_eventObject);
@@ -101,10 +107,6 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
      */
     protected function _handleQuotaConfirmationException(Admin_Event_UpdateQuota $_eventObject)
     {
-        if (!Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
-            return;
-        }
-        
         $context = Admin_Controller_Quota::getInstance()->getRequestContext();
         if ($this->_hasConfirmContextHeader($context)) {
             Tinebase_Controller_ActionLog::getInstance()->addActionLogConfirmationEvent($_eventObject);
@@ -121,10 +123,13 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
             "Do you want to change your {0} Quota?");
 
         $exception = new Tinebase_Exception_Confirmation($message);
-
+        $userType = 'Customer';
         $pricePerUser = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER);
         $pricePerGB = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_GIGABYTE);
         $infoTemplate = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PACKAGE_STORAGE_INFO_TEMPLATE);
+
+        $throwException = false;
+        $quota = 0;
         
         if ($application === 'Tinebase') {
             // check allow total quota management config first
@@ -133,14 +138,8 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
 
             if (($additionalData['totalInMB'] / 1024 / 1024) > $totalQuota) {
                 $totalQuota = $totalQuota / 1024;
-                if (!empty($infoTemplate)) {
-                    $info = str_replace(
-                        ['{0}', '{1}', '{2}'],
-                        [$totalQuota, $pricePerUser, $pricePerGB],
-                        $infoTemplate);
-                    $exception->setInfo($info);
-                }
-                throw $exception;
+                $quota = $totalQuota;
+                $throwException = true;
             }
         }
 
@@ -149,35 +148,33 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         if ($isPersonalNode && $application === 'Felamimail') {
             $currentEmailQuota = isset($recordData->email_imap_user) ? round($recordData->email_imap_user['emailMailQuota'] / 1024 / 1024 / 1024.4,2) : 0;
             if ($additionalData['emailMailQuota'] > $recordData->email_imap_user['emailMailQuota']) {
-                if (!empty($infoTemplate)) {
-                    $info = str_replace(
-                        ['{0}', '{1}', '{2}'],
-                        [$currentEmailQuota, $pricePerUser, $pricePerGB],
-                        $infoTemplate);
-                    $exception->setInfo($info);
-                }
-                
-                throw $exception;
+                $quota = $currentEmailQuota;
+                $throwException = true;
             }
         }
 
         if ($isPersonalNode && $application === 'Filemanager') {
             $user = Admin_Controller_User::getInstance()->get($additionalData['accountId']);
+            $userType = $user->type ?? $userType;
+            if ($userType === Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER) {
+                $pricePerUser = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER_VOLUNTEER);
+            }
             $userFSQuota = isset($user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA]) ? $user->xprops()[Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] : 0;
             
             if ($recordData['quota'] > $userFSQuota) {
                 $userFSQuota = round($userFSQuota / 1024 / 1024 / 1024.4,2);
-
-                if (!empty($infoTemplate)) {
-                    $info = str_replace(
-                        ['{0}', '{1}', '{2}'],
-                        [$userFSQuota, $pricePerUser, $pricePerGB],
-                        $infoTemplate);
-                    $exception->setInfo($info);
-                }
-
-                throw $exception;
+                $quota = $userFSQuota;
+                $throwException = true;
             }
+        }
+
+        if ($throwException && !empty($infoTemplate)) {
+            $info = str_replace(
+                ['{0}', '{1}', '{2}', '{3}'],
+                [$quota, $pricePerUser, $userType, $pricePerGB],
+                $infoTemplate);
+            $exception->setInfo($info);
+            throw $exception;
         }
     }
 
@@ -187,10 +184,6 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
      */
     protected function _handleUserConfirmationException(Admin_Event_BeforeAddAccount $_eventObject)
     {
-        if (!Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
-            return;
-        }
-
         $context = Admin_Controller_User::getInstance()->getRequestContext();
         if ($this->_hasConfirmContextHeader($context)) {
             Tinebase_Controller_ActionLog::getInstance()->addActionLogConfirmationEvent($_eventObject);
@@ -204,24 +197,70 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         $userLimit = SaasInstance_Config::getInstance()->get(SaasInstance_Config::NUMBER_OF_INCLUDED_USERS);
         $infoTemplate = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PACKAGE_USER_INFO_TEMPLATE);
         
+        $newUser = $_eventObject->account;
+        $userType = $newUser->type ?? 'Customer';
+        if ($userType === Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER) {
+            $pricePerUser = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER_VOLUNTEER);
+        }
+        
         $noneSystemUserCount = Tinebase_User::getInstance()->countNonSystemUsers();
         $currentUserCount = Tinebase_User::getInstance()->getUsersCount();
         
         if ($noneSystemUserCount + 1 > $userLimit) {
-
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice
             (__METHOD__ . '::' . __LINE__ . 'Current total user count : "' . $currentUserCount . 
                 ' , User limit : ' . $userLimit . PHP_EOL);
                 
             if (!empty($infoTemplate)) {
                 $info = str_replace(
-                    ['{0}', '{1}'],
-                    [$userLimit, $pricePerUser],
+                    ['{0}', '{1}', '{2}'],
+                    [$userLimit, $pricePerUser, $userType],
                     $infoTemplate);
                 $exception->setInfo($info);
             }
             throw $exception;
         }
+    }
+
+    /**
+     * @param Admin_Event_BeforeUpdateAccount $_eventObject
+     * @throws Tinebase_Exception_Confirmation
+     */
+    protected function _handleChangeUserTypeException(Admin_Event_BeforeUpdateAccount $_eventObject)
+    {
+        $oldUser = $_eventObject->oldAccount;
+        $updatedUser = $_eventObject->newAccount;
+        
+        if ($updatedUser->type === null || $updatedUser->type === $oldUser->type) {
+            return;
+        }
+            
+        $context = Admin_Controller_User::getInstance()->getRequestContext();
+        if ($this->_hasConfirmContextHeader($context)) {
+            Tinebase_Controller_ActionLog::getInstance()->addActionLogConfirmationEvent($_eventObject);
+            return;
+        }
+        
+        $message = "Do you want to change the user type?";
+        $exception = new Tinebase_Exception_Confirmation($message);
+
+        $pricePerUser = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER);
+        $infoTemplate = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PACKAGE_CHANGE_USER_TYPE_INFO_TEMPLATE);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice
+        (__METHOD__ . '::' . __LINE__ . 'Change User type to : ' . $updatedUser->type . PHP_EOL);
+        
+        if ($updatedUser->type === Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER) {
+            $pricePerUser = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER_VOLUNTEER);
+        }
+        if (!empty($infoTemplate)) {
+            $info = str_replace(
+                ['{0}', '{1}',],
+                [$updatedUser->type, $pricePerUser],
+                $infoTemplate);
+            $exception->setInfo($info);
+        }
+        throw $exception;
     }
     
     protected function _hasConfirmContextHeader($context)
@@ -239,10 +278,6 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
      */
     protected function _handleQuotaNotification(Tinebase_Event_Notification $_eventObject)
     {
-        if (!Tinebase_Application::getInstance()->isInstalled('SaasInstance', true)) {
-            return;
-        }
-
         $updater = $_eventObject->updater ?? 'unknown updater';
         $recipients = $_eventObject->recipients ?? 'unknown recipients';
         $subject = $_eventObject->subject ?? 'unknown subject';
@@ -267,6 +302,7 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         try {
             $data[SaasInstance_Config::APP_NAME] = [
                 SaasInstance_Config::PRICE_PER_USER => SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER),
+                SaasInstance_Config::PRICE_PER_USER_VOLUNTEER => SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER_VOLUNTEER),
                 SaasInstance_Config::PRICE_PER_GIGABYTE => SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_GIGABYTE),
                 SaasInstance_Config::NUMBER_OF_INCLUDED_USERS => SaasInstance_Config::getInstance()->get(SaasInstance_Config::NUMBER_OF_INCLUDED_USERS),
             ];
