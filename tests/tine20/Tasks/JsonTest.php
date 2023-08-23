@@ -113,7 +113,18 @@ class Tasks_JsonTest extends TestCase
         
         $this->_checkAlarm($persistentTaskData);
     }
-    
+
+    public function testCreateTaskWithDefaultAlarm()
+    {
+        $task = $this->_getTaskWithAlarm(array(
+            'alarm_time'        => Tinebase_DateTime::now(),
+            'minutes_before'    => '15',
+            'sent_status' => null
+        ));
+        $persistentTaskData = $this->_backend->saveTask($task->toArray());
+        $this->_checkAlarm($persistentTaskData);
+    }
+
     /**
      * test create task with alarm
      */
