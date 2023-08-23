@@ -504,8 +504,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_ModificationLog::class,
                 Tinebase_Model_Note::class,
                 Tinebase_Model_NoteType::class,
-                Tinebase_Model_OpenId_Association::class,
-                Tinebase_Model_OpenId_TrustedSite::class,
                 Tinebase_Model_Pagination::class,
                 Tinebase_Model_Path::class,
                 Tinebase_Model_PersistentFilterGrant::class,
