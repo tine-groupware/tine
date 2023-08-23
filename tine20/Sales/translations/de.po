@@ -2334,3 +2334,6 @@ msgstr "Nicht steuerpflichtig"
 
 msgid "Reverse charge"
 msgstr "Umkehrung der Steuerschuldnerschaft"
+
+msgid "Show closed"
+msgstr "Geschlossene anzeigen"

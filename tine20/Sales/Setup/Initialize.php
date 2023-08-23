@@ -130,10 +130,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 'name' => "Active Contracts", // _('Active Contracts')
                 'description' => "Contracts that are still running", // _('Contracts that are still running')
                 'filters' => [
-                    ['condition' => 'OR', 'filters' => [
                         ['field' => 'end_date', 'operator' => 'after', 'value' => Tinebase_Model_Filter_Date::DAY_LAST],
-                        ['field' => 'end_date', 'operator' => 'isnull', 'value' => null],
-                    ]]
                 ],
             ))
         ));
