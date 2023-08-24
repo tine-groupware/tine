@@ -75,7 +75,14 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const PRODUCT_NUMBER_ZEROFILL = 'productNumberZeroFill';
-    
+
+    /**
+     * container xprop to update related customer contacts
+     *
+     * @const string XPROP_CUSTOMER_ADDRESSBOOK
+     */
+    public const XPROP_CUSTOMER_ADDRESSBOOK = 'customer_addressbook';
+
     /**
      * Invoice Type
      * 
