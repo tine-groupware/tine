@@ -24,6 +24,7 @@ class SaasInstance_Config extends Tinebase_Config_Abstract
     public const NUMBER_OF_INCLUDED_USERS = 'numberOfIncludedUsers';
     public const PACKAGE_STORAGE_INFO_TEMPLATE = 'packageStorageInfoTemplate';
     public const PACKAGE_USER_INFO_TEMPLATE = 'packageUserInfoTemplate';
+    public const PACKAGE_CHANGE_USER_TYPE_INFO_TEMPLATE = 'packageChangeUserTypeInfoTemplate';
     
     /**
      * (non-PHPdoc)
@@ -70,8 +71,8 @@ class SaasInstance_Config extends Tinebase_Config_Abstract
             self::TYPE                  => self::TYPE_STRING,
             self::DEFAULT_STR           =>  '<br /> Your current file system Quota limit is : {0} GB
                 <br />Do you want to upgrade your subscription?<br />
-                <br />Package Price : {1} Euro / Customer
-                <br />Storage Price : {2} Euro / Gigabyte'
+                <br />Package Price : {1} Euro / {2}
+                <br />Storage Price : {3} Euro / Gigabyte'
         ],
         self::PACKAGE_USER_INFO_TEMPLATE                => [
             //_('Saas user package info template')
@@ -81,7 +82,16 @@ class SaasInstance_Config extends Tinebase_Config_Abstract
             self::TYPE                  => self::TYPE_STRING,
             self::DEFAULT_STR           =>  '<br /> Your current user account limit is : {0} 
                 <br />Do you want to upgrade your subscription?<br />
-                <br />Package Price : {1} Euro / Customer'
+                <br />Package Price : {1} Euro / {2}'
+        ],
+        self::PACKAGE_CHANGE_USER_TYPE_INFO_TEMPLATE                => [
+            //_('Saas change user type info template')
+            self::LABEL                 => 'Saas change user type info template',
+            //_('The upgraded user package info template, display when user set higher quota then current config')
+            self::DESCRIPTION           => 'The change user type info template, display when user update user type in admin module',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           =>  '<br /> New user type : {0} 
+                <br />Package Price : {1} Euro / {0}<br />'
         ],
     ];
 
