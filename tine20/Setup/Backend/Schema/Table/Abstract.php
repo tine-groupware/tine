@@ -4,7 +4,7 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
@@ -62,7 +62,7 @@ abstract class Setup_Backend_Schema_Table_Abstract extends Setup_Backend_Schema_
      * @var array
      */
     public $indices = array();
-    
+    public $indicesByName = [];
     
     
     /**
@@ -84,6 +84,7 @@ abstract class Setup_Backend_Schema_Table_Abstract extends Setup_Backend_Schema_
     public function addIndex(Setup_Backend_Schema_Index_Abstract $_index)
     {
         $this->indices[] = $_index;
+        $this->indicesByName[$_index->name] = $_index;
     }
     
     /**
