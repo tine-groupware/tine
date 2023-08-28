@@ -282,20 +282,23 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             // TODO add "no access/app not available" class?
             return '';
         }
-            
-        if (this.invalidRowRecords && this.invalidRowRecords.indexOf(record.id) !== -1) {
-            rowParams.body = '<div style="height: 19px; margin-top: -19px" ext:qtip="' +
-                String.format(i18n._("The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"), ownModel.getRecordsName(), this.grid.typeRenderer(record.get('type'), null, record))
-                + '"></div>';
-            return 'tine-editorgrid-row-invalid';
-        } else if (this.invalidRelatedRecords && this.invalidRelatedRecords.indexOf(record.id) !== -1) {
-            rowParams.body = '<div style="height: 19px; margin-top: -19px" ext:qtip="' +
-                String.format(i18n._("The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"), ownModel.getRecordsName(), this.grid.typeRenderer(record.get('type'), null, record), relatedModel.getRecordName())
-                + '"></div>';
-            return 'tine-editorgrid-row-invalid';
+
+        if (rowParams) {
+            if (this.invalidRowRecords && this.invalidRowRecords.indexOf(record.id) !== -1) {
+                rowParams.body = '<div style="height: 19px; margin-top: -19px" ext:qtip="' +
+                    String.format(i18n._("The maximum number of {0} with the type \"{1}\" is reached. Please change the type of this relation"), ownModel.getRecordsName(), this.grid.typeRenderer(record.get('type'), null, record))
+                    + '"></div>';
+                return 'tine-editorgrid-row-invalid';
+            } else if (this.invalidRelatedRecords && this.invalidRelatedRecords.indexOf(record.id) !== -1) {
+                rowParams.body = '<div style="height: 19px; margin-top: -19px" ext:qtip="' +
+                    String.format(i18n._("The maximum number of {0}s with the type \"{1}\" is reached at the {2} you added. Please change the type of this relation or edit the {2}"), ownModel.getRecordsName(), this.grid.typeRenderer(record.get('type'), null, record), relatedModel.getRecordName())
+                    + '"></div>';
+                return 'tine-editorgrid-row-invalid';
+            }
+
+            rowParams.body='';
         }
-        
-        rowParams.body='';
+
         return '';
     },
 
