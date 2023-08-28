@@ -90,7 +90,7 @@ class Tasks_Setup_MigrateFromTine14
      */
     public static function MigrateInfolog2Tasks()
     {
-        $tasksBackend = Tasks_Backend_Factory::factory(Tasks_Backend_Factory::SQL);
+        $tasksBackend = Tasks_Backend_Factory::factory(Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND);
 
         $db = Tinebase_Core::getDb();
         $stmt = $db->query($db->select()
@@ -170,7 +170,7 @@ class Tasks_Setup_MigrateFromTine14
                 'Tasks',
                 'My Tasks (from egw 1.4 migration)',
                 Tinebase_Model_Container::TYPE_PERSONAL,
-                Tasks_Backend_Factory::SQL
+                Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND
             );
         }
         return $containers[$_owner];

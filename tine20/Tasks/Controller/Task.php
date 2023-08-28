@@ -37,7 +37,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
     {
         $this->_applicationName = 'Tasks';
         $this->_modelName = 'Tasks_Model_Task';
-        $this->_backend = Tasks_Backend_Factory::factory(Tasks_Backend_Factory::SQL);
+        $this->_backend = Tasks_Backend_Factory::factory(Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND);
         $this->_recordAlarmField = 'due';
     }
 

@@ -73,11 +73,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $contract->relations = array(
             array(
                 'own_model'              => Sales_Model_Contract::class,
-                'own_backend'            => Tasks_Backend_Factory::SQL,
+                'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'own_id'                 => NULL,
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => Tinebase_Model_CostCenter::class,
-                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id'             => $this->_costcenterRecords->getFirstRecord()->getId(),
                 'type'                   => 'LEAD_COST_CENTER'
             ),
@@ -292,13 +292,13 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $contract->relations = array_merge($contract->relations->toArray(), [[
             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Timetracker_Model_Timeaccount',
-            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'related_id'             => $ta1->getId(),
             'type'                   => 'TIME_ACCOUNT'
         ],[
         'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Timetracker_Model_Timeaccount',
-            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'related_id'             => $ta2->getId(),
             'type'                   => 'TIME_ACCOUNT'
         ]]);

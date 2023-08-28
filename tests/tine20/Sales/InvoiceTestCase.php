@@ -614,21 +614,21 @@ class Sales_InvoiceTestCase extends TestCase
             $contract->relations = array(
                 array(
                     'own_model'              => Sales_Model_Contract::class,
-                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'own_id'                 => NULL,
                     'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'related_model'          => Tinebase_Model_CostCenter::class,
-                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'related_id'             => $costcenter->getId(),
                     'type'                   => 'LEAD_COST_CENTER'
                 ),
                 array(
                     'own_model'              => Sales_Model_Contract::class,
-                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'own_id'                 => NULL,
                     'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'related_model'          => Sales_Model_Customer::class,
-                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'related_id'             => $customer->getId(),
                     'type'                   => 'CUSTOMER'
                 ),
@@ -637,11 +637,11 @@ class Sales_InvoiceTestCase extends TestCase
             if ($this->_timeaccountRecords) {
                 $contract->relations = array_merge($contract->relations, array(array(
                     'own_model'              => 'Sales_Model_Contract',
-                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'own_id'                 => NULL,
                     'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'related_model'          => 'Timetracker_Model_Timeaccount',
-                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'related_id'             => $timeaccount->getId(),
                     'type'                   => 'TIME_ACCOUNT'
                 )));
