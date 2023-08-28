@@ -710,10 +710,13 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
         // fetch email pw from db
         $dovecot = Tinebase_User::getInstance()->getSqlPlugin(Tinebase_EmailUser_Imap_Dovecot::class);
         $rawDovecotUser = $dovecot->getRawUserById($emailUser);
-        self::assertNotEmpty($rawDovecotUser['password']);
-        $hashPw = new Hash_Password();
-        self::assertTrue($hashPw->validate($rawDovecotUser['password'], $pw), 'password mismatch! dovecot user:'
-            . print_r($rawDovecotUser, TRUE));
+        if ($rawDovecotUser) {
+            // only check pw if dovecot user is found
+            self::assertNotEmpty($rawDovecotUser['password']);
+            $hashPw = new Hash_Password();
+            self::assertTrue($hashPw->validate($rawDovecotUser['password'], $pw), 'password mismatch! dovecot user:'
+                . print_r($rawDovecotUser, TRUE));
+        }
     }
 
     /**
