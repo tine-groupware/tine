@@ -556,10 +556,10 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($customerCalculated) {
             $recordData['relations'] = array_merge($recordData['relations'], array(array(
                 "own_model"              => "Sales_Model_Invoice",
-                "own_backend"            => Tasks_Backend_Factory::SQL,
+                "own_backend"            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Sales_Model_Customer',
-                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id'             => $foundCustomer,
                 'type'                   => 'CUSTOMER'
             )));

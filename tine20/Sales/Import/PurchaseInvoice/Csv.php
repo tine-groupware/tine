@@ -68,11 +68,11 @@ class Sales_Import_PurchaseInvoice_Csv extends Tinebase_Import_Csv_Abstract
                     $result['relations'][] =
                         array(
                             'own_model' => 'Sales_Model_PurchaseInvoice',
-                            'own_backend' => Tasks_Backend_Factory::SQL,
+                            'own_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                             'own_id' => NULL,
                             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                             'related_model' => Tinebase_Model_CostCenter::class,
-                            'related_backend' => Tasks_Backend_Factory::SQL,
+                            'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                             'related_id' => $costCenter['id'],
                             'type' => 'LEAD_COST_CENTER'
                         );
@@ -96,11 +96,11 @@ class Sales_Import_PurchaseInvoice_Csv extends Tinebase_Import_Csv_Abstract
                 if ($user['n_fileas'] == $result['contact']) {
                     $result['relations'][] = array(
                         'own_model' => 'Sales_Model_PurchaseInvoice',
-                        'own_backend' => Tasks_Backend_Factory::SQL,
+                        'own_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                         'own_id' => NULL,
                         'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                         'related_model' => 'Addressbook_Model_Contact',
-                        'related_backend' => Tasks_Backend_Factory::SQL,
+                        'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                         'related_id' => $user['id'],
                         'type' => 'APPROVER'
                     );
@@ -124,11 +124,11 @@ class Sales_Import_PurchaseInvoice_Csv extends Tinebase_Import_Csv_Abstract
                 if ($supplier['name'] == $result['supplier']) {
                     $result['relations'][] = array(
                         'own_model' => 'Sales_Model_PurchaseInvoice',
-                        'own_backend' => Tasks_Backend_Factory::SQL,
+                        'own_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                         'own_id' => NULL,
                         'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                         'related_model' => 'Sales_Model_Supplier',
-                        'related_backend' => Tasks_Backend_Factory::SQL,
+                        'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                         'related_id' => $supplier['id'],
                         'type' => 'SUPPLIER'
                     );

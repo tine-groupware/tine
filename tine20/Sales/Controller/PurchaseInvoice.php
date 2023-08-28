@@ -127,10 +127,10 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
     {
         return array(
             'own_model'       => 'Sales_Model_PurchaseInvoice',
-            'own_backend'     => Tasks_Backend_Factory::SQL,
+            'own_backend'     => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'own_id'          => NULL,
             'related_degree'  => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'related_backend' => Tasks_Backend_Factory::SQL,
+            'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'type'            => 'PURCHASE_INVOICE'
         );
     }

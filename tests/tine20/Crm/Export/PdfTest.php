@@ -179,7 +179,7 @@ class Crm_Export_PdfTest extends TestCase
             'own_id'                 => $lead->getId(),
             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Tasks_Model_Task',
-            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'related_id'             => $task->getId(),
             'type'                   => 'TASK'
         ));

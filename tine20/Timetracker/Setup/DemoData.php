@@ -266,7 +266,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                             'own_id'                 => NULL,
                             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                             'related_model'          => Tinebase_Model_CostCenter::class,
-                            'related_backend'        => Tasks_Backend_Factory::SQL,
+                            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                             'related_id'             => $costcenter->getId(),
                             'type'                   => 'COST_CENTER'
                         ),
@@ -276,7 +276,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                             'own_id'                 => NULL,
                             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                             'related_model'          => 'Sales_Model_Contract',
-                            'related_backend'        => Tasks_Backend_Factory::SQL,
+                            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                             'related_id'             => $contract->getId(),
                             'type'                   => 'TIME_ACCOUNT'
                         ));
@@ -290,7 +290,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                             'own_id'                 => NULL,
                             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                             'related_model'          => Tinebase_Model_CostCenter::class,
-                            'related_backend'        => Tasks_Backend_Factory::SQL,
+                            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                             'related_id'             => $costcenter->getId(),
                             'type'                   => 'COST_CENTER'
                         )
