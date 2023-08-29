@@ -138,6 +138,7 @@ class SaasInstance_ControllerTest extends TestCase
         self::assertInstanceOf(Tinebase_Model_FullUser::class, $accountData);
 
         Tinebase_ControllerTest::assertActionLogEntry();
+        return $accountData;
     }
 
     /**
@@ -248,5 +249,43 @@ class SaasInstance_ControllerTest extends TestCase
                 static::assertStringContainsString($recipient->email, $actionLog->data, 'recipients in action log should include : ' . $recipient->email);
             }
         }
+    }
+
+    /**
+     * change user type confirmation
+     */
+    public function testChangeUserTypeConfirmation()
+    {
+        // enable feature
+        $features = Admin_Config::getInstance()->{Admin_Config::ENABLED_FEATURES};
+        $features[Admin_Config::FEATURE_CHANGE_USER_TYPE] = true;
+        Admin_Config::getInstance()->set(Admin_Config::ENABLED_FEATURES, $features);
+
+        $accountData = $this->_createTestUser();
+        $accountData['type'] = Tinebase_Model_FullUser::USER_TYPE_USER;
+        Admin_Controller_User::getInstance()->update($accountData);
+        try {
+            Admin_Controller_User::getInstance()->setRequestContext([]);
+            $accountData['type'] = Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER;
+            Admin_Controller_User::getInstance()->update($accountData);
+            self::fail('should throw Tinebase_Exception_Confirmation');
+        } catch (Tinebase_Exception_Confirmation $e) {
+            $translate = Tinebase_Translation::getTranslation('SaasInstance');
+            $translation = $translate->_("Do you want to change the user type?");
+
+            self::assertEquals($translation, $e->getMessage());
+        }
+        //test confoirmed request
+        $accountData = $this->_createTestUser();
+        $accountData['type'] = Tinebase_Model_FullUser::USER_TYPE_USER;
+        Admin_Controller_User::getInstance()->update($accountData);
+        
+        Admin_Controller_User::getInstance()->setRequestContext(['confirm' => true]);
+        $accountData['type'] = Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER;
+        $account = Admin_Controller_User::getInstance()->update($accountData);
+        self::assertEquals($account['type'], Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER);
+
+        $features[Admin_Config::FEATURE_CHANGE_USER_TYPE] = false;
+        Admin_Config::getInstance()->set(Admin_Config::ENABLED_FEATURES, $features);
     }
 }
