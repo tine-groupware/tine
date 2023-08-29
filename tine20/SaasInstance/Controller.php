@@ -117,10 +117,9 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         $additionalData = $_eventObject->additionalData;
         $recordData = $_eventObject->recordData;
 
-        $message = str_replace(
-            ['{0}'],
-            [$application],
-            "Do you want to change your {0} Quota?");
+        $translate = Tinebase_Translation::getTranslation('SaasInstance');
+        $message = $translate->_("Do you want to change your {0} Quota?");
+        $message = str_replace(['{0}'], [$application], $message);
 
         $exception = new Tinebase_Exception_Confirmation($message);
         $userType = 'Customer';
@@ -190,7 +189,8 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
             return;
         }
 
-        $message = "Do you want to upgrade your user limit?";
+        $translate = Tinebase_Translation::getTranslation('SaasInstance');
+        $message = $translate->_("Do you want to upgrade your user limit?");
         $exception = new Tinebase_Exception_Confirmation($message);
 
         $pricePerUser = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER);
@@ -231,7 +231,7 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         $oldUser = $_eventObject->oldAccount;
         $updatedUser = $_eventObject->newAccount;
         
-        if ($updatedUser->type === null || $updatedUser->type === $oldUser->type) {
+        if ($updatedUser->type === null || $oldUser->type === null || $updatedUser->type === $oldUser->type) {
             return;
         }
             
@@ -240,8 +240,9 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
             Tinebase_Controller_ActionLog::getInstance()->addActionLogConfirmationEvent($_eventObject);
             return;
         }
-        
-        $message = "Do you want to change the user type?";
+
+        $translate = Tinebase_Translation::getTranslation('SaasInstance');
+        $message = $translate->_("Do you want to change the user type?");
         $exception = new Tinebase_Exception_Confirmation($message);
 
         $pricePerUser = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER);
@@ -253,10 +254,11 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
         if ($updatedUser->type === Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER) {
             $pricePerUser = SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER_VOLUNTEER);
         }
+        $userType = Tinebase_Config::getInstance()->get(Tinebase_Config::USER_TYPES)->getTranslatedValue($updatedUser->type);
         if (!empty($infoTemplate)) {
             $info = str_replace(
                 ['{0}', '{1}',],
-                [$updatedUser->type, $pricePerUser],
+                [$userType, $pricePerUser],
                 $infoTemplate);
             $exception->setInfo($info);
         }
