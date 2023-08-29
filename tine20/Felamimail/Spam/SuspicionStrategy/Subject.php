@@ -42,7 +42,7 @@ class Felamimail_Spam_SuspicionStrategy_Subject implements Felamimail_Spam_Suspi
      */
     public function apply(Felamimail_Model_Message $message)
     {
-        if (preg_match($this->_pattern, $message->subject)) {
+        if (!empty($message['subject']) && preg_match($this->_pattern, $message->subject)) {
             return true;
         }
 

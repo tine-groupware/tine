@@ -374,8 +374,12 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
                 $inReplyTo = $incomingMessage->getHeader('In-Reply-To');
                 $cacheBackend = new Felamimail_Backend_Cache_Sql_Message();
                 $systemFolders = Felamimail_Controller_Folder::getInstance()->getSystemFolders($account);
+
+                $userAccountIds = Felamimail_Controller_Account::getInstance()->search(
+                    Felamimail_Controller_Account::getVisibleAccountsFilterForUser(), NULL, FALSE, TRUE);
                 $result =  $cacheBackend->search(new Felamimail_Model_MessageFilter([
                     array('field' => 'message_id', 'operator' => 'equals', 'value' => $inReplyTo),
+                    array('field' => 'account_id', 'operator' => 'in', 'value' => $userAccountIds)
                 ]));
 
                 //we might have multiple messages with same header 'In-Reply-To', atm we save copy to all of their folder

@@ -521,9 +521,16 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         $mailAsString = $_transport->getRawMessage(NULL, $_additionalHeaders);
         $folders = Felamimail_Controller_Folder::getInstance()->getMultiple($_imapFolderIds);
+        // sent folder should be allowed
+        $blacklist =  ['inbox', 'drafts', 'templates', 'junk', 'trash', 'inbox.spam', 'inbox.ham'];
         
         foreach ($folders as $targetFolder) {
             try {
+                if (in_array(strtolower((string)$targetFolder['globalname']), $blacklist)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' skip saving message to system folder (' . $targetFolder->globalname . ') ...');
+                    continue;
+                }
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                     ' About to save message in folder (' . $targetFolder->globalname . ') ...');
                 
