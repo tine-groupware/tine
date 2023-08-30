@@ -115,7 +115,7 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
         Setup_SchemaTool::updateSchema([
             Tinebase_Model_SchedulerTask::class
         ]);
-        
+        Tinebase_TransactionManager::getInstance()->rollBack();
         $scheduler = Tinebase_Core::getScheduler();
         if (Tinebase_Application::getInstance()->isInstalled('Sales')) {
             Sales_Scheduler_Task::addCreateAutoInvoicesDailyTask($scheduler);
@@ -123,5 +123,4 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
         }
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '16.4', self::RELEASE016_UPDATE004);
     }
-
 }
