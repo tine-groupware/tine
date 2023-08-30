@@ -6,4 +6,6 @@ $zindex-modal: 10055; // the highest in tine, 5000 @daysviewpanel.css , window i
 
 .bootstrap-scope{
     @import "scoped_bs";
+    font-size: 1.1em;
+    font-family: arial, tahoma, helvetica, sans-serif; // this seems to be the default font stack in tine
 }
