@@ -64,7 +64,6 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function create_auto_invoices($_opts)
     {
         if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
-            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' create_auto_invoices ran allthoug feature ' . Sales_Config::FEATURE_INVOICES_MODULE . ' is disabled');
             return false;
         }
 

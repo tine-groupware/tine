@@ -100,6 +100,8 @@ class Sales_Setup_Initialize extends Setup_Initialize
     {
         $scheduler = Tinebase_Core::getScheduler();
         Sales_Scheduler_Task::addUpdateProductLifespanTask($scheduler);
+        Sales_Scheduler_Task::addCreateAutoInvoicesDailyTask($scheduler);
+        Sales_Scheduler_Task::addCreateAutoInvoicesMonthlyTask($scheduler);
     }
 
     /**

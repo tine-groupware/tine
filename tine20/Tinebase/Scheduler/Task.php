@@ -212,8 +212,20 @@ class Tinebase_Scheduler_Task
                 continue;
             }
 
+            // catch output buffer
+            ob_start();
+            $writer = new Zend_Log_Writer_Stream('php://output');
+            // get priority from scheduler config?
+            $priority = 6;
+            $writer->addFilter(new Zend_Log_Filter_Priority($priority));
+            Tinebase_Core::getLogger()->addWriter($writer);
+            
             $result = call_user_func_array([$class, $callable[self::METHOD_NAME]], isset($callable[self::ARGS]) ?
                 $callable[self::ARGS] : []);
+
+            $notificationBody = ob_get_clean();
+            $this->_sendNotification($callable, $notificationBody);
+            // send notification with $notificationBody to configured email
 
             $aggResult = $aggResult && $result;
         }
@@ -226,6 +238,55 @@ class Tinebase_Scheduler_Task
         return $aggResult;
     }
 
+    /**
+     * send notification to configured addresses
+     *
+     */
+    protected function _sendNotification($callable, $infoData)
+    {
+        if (empty($infoData)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' No notification data is set');
+            };
+            return;
+        }
+        
+        $taskName = $callable[self::CONTROLLER] . '::' . $callable[self::METHOD_NAME]; 
+        
+        try {
+            $scheduler = new Tinebase_Backend_Scheduler();
+            /** @var Tinebase_Model_SchedulerTask $task */
+            $task = $scheduler->getByProperty($taskName, 'name');
+            
+            if (empty($task->emails)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' No recipient address configured');
+                };
+                return;
+            }
+            
+            $emails = explode(
+                ',', $task->emails);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Sending notification to ' . print_r($emails, true));
+            }
+            
+            $subject = $taskName . ' notification';
+            $messageBody = "$subject: \n\n" . print_r($infoData, true);
+            
+            foreach ($emails as $recipient) {
+                $contact = [new Addressbook_Model_Contact(['email' => $recipient], true)];
+                Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $contact, $subject, $messageBody);
+            }
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send notification :' . $e);
+        }
+    }
+    
     /**
      * @param string $name
      * @param string $cron

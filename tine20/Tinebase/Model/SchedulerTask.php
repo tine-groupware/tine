@@ -30,6 +30,7 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
 {
     public const FLD_ACCOUNT_ID = 'account_id';
     public const FLD_CONFIG = 'config';
+    public const FLD_EMAILS = 'emails';
     public const FLD_IS_SYSTEM = 'is_system';
     public const FLD_NAME = 'name';
     public const FLD_NEXT_RUN = 'next_run';
@@ -89,6 +90,13 @@ class Tinebase_Model_SchedulerTask extends Tinebase_Record_NewAbstract
                 'label'         => 'Configuration', // _('Configuration')
                 'converters'    => [Tinebase_Scheduler_TaskConverter::class],
                 'inputFilters'  => []
+            ],
+            self::FLD_EMAILS => [
+                self::LABEL => 'Emails', // _('Emails')
+                self::NULLABLE => true,
+                self::TYPE => 'string',
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::QUERY_FILTER => true,
             ],
             'last_run' => [
                 'validators'    => [Zend_Filter_Input::ALLOW_EMPTY => true],

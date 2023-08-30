@@ -275,6 +275,8 @@ class Tinebase_Frontend_CliTest extends TestCase
                 'Tinebase_TempFileCleanup',
                 'Tinebase_FileSystem::repairTreeIsDeletedState',
                 'Tinebase_User/Group::syncUsers/Groups',
+                'createAutoInvoicesDailyTask', // skip because invoice might not installed
+                'createAutoInvoicesMonthlyTask', // skip because invoice might not installed
             ])) {
                 // FIXME skip those checks as they fail at random (?)
                 continue;

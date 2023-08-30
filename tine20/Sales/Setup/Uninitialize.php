@@ -23,5 +23,7 @@ class Sales_Setup_Uninitialize extends Setup_Uninitialize
     {
         $scheduler = Tinebase_Core::getScheduler();
         Sales_Scheduler_Task::removeUpdateProductLifespanTask($scheduler);
+        Sales_Scheduler_Task::removeCreateAutoInvoicesDailyTask($scheduler);
+        Sales_Scheduler_Task::removeCreateAutoInvoicesMonthlyTask($scheduler);
     }
 }

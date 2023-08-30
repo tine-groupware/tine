@@ -18,6 +18,8 @@
 
 abstract class Admin_Model_SchedulerTask_Abstract extends Tinebase_Record_NewAbstract
 {
+    public const MODEL_NAME_PART = 'SchedulerTask_Abstract';
+    
     public const FLD_PARENT_ID = 'parent_id';
 
     /**
