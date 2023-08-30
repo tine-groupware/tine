@@ -57,6 +57,7 @@
 }
 
 .cal-monthview-dayheader-more {
+    font-weight: bold;
     position: absolute;
     padding: 2px 5px;
     border-collapse: separate;
