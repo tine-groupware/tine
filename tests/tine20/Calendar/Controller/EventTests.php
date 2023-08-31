@@ -2765,6 +2765,39 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event = $this->_controller->get($event->getId());
 
         $this->assertEquals(0, count($event->attendee->_listOfRecords));
+    }
 
+    public function testEventTypeFilter()
+    {
+        $eventType1 = Calendar_Controller_EventType::getInstance()->create(new Calendar_Model_EventType(['name' => 'foo']));
+        $eventType2 = Calendar_Controller_EventType::getInstance()->create(new Calendar_Model_EventType(['name' => 'bar']));
+
+        $filter = new Calendar_Model_EventTypeFilter([
+            ['field' => 'name', 'operator' => 'equals', 'value' => 'foo']
+        ]);
+
+        $eventTypeFound = Calendar_Controller_EventType::getInstance()->search($filter);
+        $this->assertEquals(1, count($eventTypeFound), 'no EventType "foo" was found');
+
+        $event = $this->_getEvent();
+        $event = $this->_controller->create($event);
+
+        $event->event_types = new Tinebase_Record_RecordSet('Calendar_Model_EventTypes', array(
+            array('record' => $event->getId(), 'eventType' => $eventType1->getId()),
+            array('record' => $event->getId(), 'eventType' => $eventType2->getId()),
+        ));
+
+        $event = $this->_controller->update($event);
+
+        self::assertCount(2, $event->event_types);
+
+        $filter = new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()],
+            ['field' => 'event_types', 'operator' => 'definedBy', 'value' => [
+                ['field' => Calendar_Model_EventTypes::FLD_EVENT_TYPE, 'operator' => 'in', 'value' => [$eventType1->getId()]],
+            ]]
+        ]);
+        $eventsFound = $this->_controller->search($filter);
+        $this->assertEquals(1, count($eventsFound), 'no Event with the EventType "foo" was found');
     }
 }
