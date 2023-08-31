@@ -250,7 +250,17 @@ abstract class Tinebase_License_Abstract
 
     public function isLicenseAvailable()
     {
-        return $this->_license !== null;
+        return $this->_getLicense() !== null;
+    }
+
+    /**
+     * fetch current license string
+     *
+     * @return string|null
+     */
+    protected function _getLicense(): ?string
+    {
+        return $this->_license;
     }
 
     public function reset()
