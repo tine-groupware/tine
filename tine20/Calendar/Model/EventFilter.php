@@ -72,5 +72,10 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'customfield'           => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array(
             'idProperty' => 'cal_events.id'
         )),
+        'event_types' => ['filter' => Tinebase_Model_Filter_ForeignRecords::class, 'options' => [
+            'controller' => Calendar_Controller_EventTypes::class,
+            'recordClassName' => Calendar_Model_EventTypes::class,
+            'refIdField' => 'record',
+        ]],
     );
 }
