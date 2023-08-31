@@ -26,24 +26,23 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     /**
      * ca files
      *
-     * @var array
+     * @var ?array
      */
-    protected $_caFiles = array();
-
-    /**
-     * the constructor
-     */
-    public function __construct()
-    {
-        $this->_license = $this->_getLicense();
-        $this->_caFiles = $this->_getCaFiles();
-    }
+    protected $_caFiles = null;
 
     /**
      * @return array
      */
-    public function getCaFiles()
+
+    /**
+     * @return array|string[]
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getCaFiles(): array
     {
+        if ($this->_caFiles === null) {
+            $this->_caFiles = $this->_getCaFiles();
+        }
         return $this->_caFiles;
     }
 
@@ -56,7 +55,11 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
      */
     protected function _getLicense(): ?string
     {
-        if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
+        if ($this->_license) {
+            return $this->_license;
+        }
+
+        if (! Setup_Controller::getInstance()->isInstalled()) {
             return null;
         }
 
@@ -75,6 +78,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
                     __METHOD__ . '::' . __LINE__ . ' ' . $zce->getMessage());
             }
         }
+        $this->_license = $license;
         return $license;
     }
 
@@ -251,13 +255,21 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     }
     
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isValid()
+    public function isValid(): bool
     {
-        return $this->_license
-            ? openssl_x509_checkpurpose($this->_license, X509_PURPOSE_SSL_CLIENT, $this->_caFiles)
-            : false;
+        try {
+            $license = $this->_getLicense();
+            return $license
+                ? openssl_x509_checkpurpose($license, X509_PURPOSE_SSL_CLIENT, $this->_getCaFiles())
+                : false;
+        } catch (Tinebase_Exception_InvalidArgument|Tinebase_Exception_NotFound $te) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+        }
+
+        return false;
     }
 
     /**
@@ -298,8 +310,8 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
 
             $this->_certData = $this->getDefaultExpiryDate();
 
-            if ($this->_license !== null) {
-                $certData = $this->getCertDatafromLicenseString($this->_license);
+            if ($this->_getLicense() !== null) {
+                $certData = $this->getCertDatafromLicenseString();
                 if ($certData) {
                     $this->_certData = $certData;
                 } else {
@@ -312,12 +324,13 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     }
 
     /**
-     * @param string $license
      * @return array|null
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
-    public function getCertDatafromLicenseString($license)
+    public function getCertDatafromLicenseString(): ?array
     {
-        $data = openssl_x509_parse($license);
+        $data = openssl_x509_parse($this->_getLicense());
         if (is_array($data) && array_key_exists('validFrom_time_t', $data)
             && array_key_exists('validTo_time_t', $data)
             && array_key_exists('serialNumber', $data)
@@ -360,8 +373,8 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
      * @return array|boolean
      */
     public function getInstallationData() {
-        if ($this->_license) {
-            return openssl_pkey_get_details(openssl_pkey_get_private($this->_license));
+        if ($this->_getLicense()) {
+            return openssl_pkey_get_details(openssl_pkey_get_private($this->_getLicense()));
         }
 
         return false;
@@ -401,7 +414,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
      */
     protected function _getPolicy($policyIndex, $default = null, $_getAll = false)
     {
-        if ($this->_license) {
+        if ($this->_getLicense()) {
             $certData = $this->getCertificateData();
             if ($_getAll && isset($certData['policies'][$policyIndex])) {
                 return $certData['policies'][$policyIndex];
