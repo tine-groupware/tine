@@ -553,6 +553,10 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 $alarm->alarm_time->subMinute($alarm->getOption('minutes_before'));
             }
         }
+
+        if ($_recurrence->attendee instanceof Tinebase_Record_RecordSet) {
+            $_recurrence->attendee->{\Calendar_Model_Attender::FLD_CAL_EVENT_ID} = $_recurrence->getId();
+        }
         
         $_eventSet->addRecord($_recurrence);
     }
