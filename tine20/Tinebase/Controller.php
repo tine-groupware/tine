@@ -1402,6 +1402,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     {
         $data = [
             'activeUsers' => Tinebase_User::getInstance()->getActiveUserCount(),
+            'nonSystemUsers'   => Tinebase_User::getInstance()->countNonSystemUsers(),
             'quotas' => Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA}->toArray(),
         ];
 
