@@ -5,7 +5,7 @@
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -32,7 +32,7 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     
     /**
      * models to work on
-     * @var unknown_type
+     * @var array
      */
     protected $_models = array('lead');
 
@@ -102,10 +102,8 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     /**
      * @see Tinebase_Setup_DemoData_Abstract
      */
-    protected function _onCreate() {
-        $currentUser = Tinebase_Core::getUser();
-        
-        $this->_getDays();
+    protected function _onCreate()
+    {
         $this->_sharedTaskContainer = $this->_createSharedContainer('Tasks aus Leads', array('application_id' => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId()), false);
         
         $fe = new Tinebase_Frontend_Json();
@@ -244,47 +242,47 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         
         $tasks[] = array(
             'percent' => ($state == 0) ? 90 : (($state < 0) ? 100 : 0),
-            'due' => $this->_nextMonday,
+            'due' => new Tinebase_DateTime('monday'),
             'summary' => 'Alpha Test',
             'organizer' => $organizer
         );
         $tasks[] = array(
             'percent' => ($state == 0) ? 70 : (($state < 0) ? 100 : 0),
-            'due' => $this->_nextThursday, 
+            'due' => new Tinebase_DateTime('thursday'), 
             'summary' => 'Beta Test',
             'organizer' => $organizer
         );
         $tasks[] = array(
             'percent' => ($state == 0) ? 90 : (($state < 0) ? 100 : 0),
-            'due' => $this->_nextTuesday, 
+            'due' => new Tinebase_DateTime('tuesday'), 
             'summary' => 'Release Test',
             'organizer' => $organizer ,
             'priority' => Tasks_Model_Priority::HIGH
         );
         $tasks[] = array(
             'percent' => ($state == 0) ? 80 : (($state < 0) ? 100 : 0),
-            'due' => $this->_nextFriday, 
+            'due' => new Tinebase_DateTime('friday'), 
             'summary' => 'Pre- Production Tests',
             'organizer' => $organizer,
             'priority' => Tasks_Model_Priority::URGENT
         );
         $tasks[] = array(
             'percent' => ($state == 0) ? 50 : (($state < 0) ? 100 : 0),
-            'due' => $this->_nextFriday, 
+            'due' => new Tinebase_DateTime('friday'), 
             'summary' => 'Erstellung Schulungsunterlagen',
             'organizer' => $organizer,
             'priority' => Tasks_Model_Priority::LOW
         );
         $tasks[] = array(
             'percent' => ($state == 0) ? 10 : (($state < 0) ? 100 : 0),
-            'due' => $this->_nextWednesday, 
+            'due' => new Tinebase_DateTime('wednesday'), 
             'summary' => 'Newsletter',
             'organizer' => $organizer,
             'priority' => Tasks_Model_Priority::HIGH
         );
         $tasks[] = array(
             'percent' => ($state == 0) ? 20 : (($state < 0) ? 100 : 0),
-            'due' => $this->_nextMonday, 
+            'due' => new Tinebase_DateTime('monday'), 
             'summary' => 'Projektierung',
             'organizer' => $organizer,
             'priority' => Tasks_Model_Priority::LOW
@@ -386,7 +384,6 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $due = clone $startDate;
             $due->addWeek(1)->addDay(4);
             
-            $this->_getDays($due);
             $now = new Tinebase_DateTime();
             
             if ($startDate < $now && $due > $now) {
@@ -431,40 +428,5 @@ class Crm_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             
             $i++;
         }
-    }
-
-    /**
-     * creates leads for pwulf
-     */
-    protected function _createLeadsForPwulf()
-    {
-    }
-    
-    /**
-     * creates leads for jsmith
-     */
-    protected function _createLeadsForJsmith()
-    {
-    }
-
-    /**
-     * creates leads for rwright
-     */
-    protected function _createLeadsForRwright()
-    {
-    }
-
-    /**
-     * creates leads for sclever
-     */
-    protected function _createLeadsForSclever()
-    {
-    }
-
-    /**
-     * creates leads for jmcblack
-     */
-    protected function _createLeadsForJmcblack()
-    {
     }
 }

@@ -23,6 +23,7 @@ class Tasks_Import_Csv extends Tinebase_Import_Csv_Generic
         'container_id' => '',
         'dates' => array('due')
     );
+
     /**
      * @param array $_data
      * @return array
@@ -38,5 +39,4 @@ class Tasks_Import_Csv extends Tinebase_Import_Csv_Generic
 
         return $result;
     }
-
 }

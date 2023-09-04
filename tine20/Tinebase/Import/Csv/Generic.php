@@ -29,7 +29,9 @@ class Tinebase_Import_Csv_Generic extends Tinebase_Import_Csv_Abstract
 
         parent::__construct($_options);
 
-        $this->_setFieldMapping();
+        if (! isset($this->_options['mapping']) || empty($this->_options['mapping'])) {
+            $this->_setFieldMapping();
+        }
     }
 
     /**

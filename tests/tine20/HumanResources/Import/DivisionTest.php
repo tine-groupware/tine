@@ -11,7 +11,7 @@
 /**
  * Test class for HumanResources
  */
-class HumanResources_Import_Division extends TestCase
+class HumanResources_Import_DivisionTest extends TestCase
 {
     /**
      * @var Tinebase_Model_Container

@@ -7,7 +7,7 @@
     <headline>1</headline>
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
-    <description>Import CSV formated task from Tine 2.0 task</description>
+    <description>Import CSV formatted tasks</description>
     <extension>csv</extension>
     <mapping>
         <field>
@@ -38,6 +38,10 @@
         <field>
             <source>completed</source>
             <destination>completed</destination>
+        </field>
+        <field>
+            <source>alarm_minutes_before</source>
+            <destination>alarm_minutes_before</destination>
         </field>
     </mapping>
 </config>
