@@ -1,12 +1,13 @@
 Tine Admin HowTo: ActionQueue + Worker
 =================
 
-Version: Nele 2018.11
+Version: Ellie 2023.11
 
 Einleitung
 =================
 
 TODO: add more (was machen queue + worker?)
+TODO translate to english
 
 Welche Jobs landen in der Queue?
 =================
@@ -16,20 +17,6 @@ Welche Jobs landen in der Queue?
 - Preview-Generierung
 - Virenscans?
 - TODO: gibt es mehr?
-
-Einrichtung der ActionQueue
-=================
-
-TODO: add more (config.inc.php)
-
-Einrichtung des Workers
-=================
-
-TODO: add more (configuration)
-
-    apt install tine20-worker
-
-TODO: add low-prio queue configuration
 
 Monitoring
 =================
@@ -55,3 +42,19 @@ oder
 eintrag in der queue anschauen
 
     redis-cli hval tine20workerData:UUID
+
+Restore a job from the dead letter queue
+=================
+
+find out job id (tine.log):
+
+    Tinebase_ActionQueue_Backend_Redis::send::286 queued job c0cf42818a1dc246ffe1319afd221df88f9cfec9 on queue
+        besQueue (datastructname: PREFIXData)
+
+look at deadletter queue job:
+
+    redis-cli -h redishost hgetall PREFIXDeadLetter:c0cf42818a1dc246ffe1319afd221df88f9cfec9
+
+restore:
+
+    php tine20.php --method Tinebase.actionQueueRestoreDeadLetter -- jobId=c0cf42818a1dc246ffe1319afd221df88f9cfec9
