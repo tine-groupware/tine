@@ -1676,7 +1676,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             $grantProtectedFields = $grantProtectedFields[$action];
         }
         /** @var Tinebase_Controller_Record_Abstract $ctrl */
-        $ctrl = Tinebase_Core::getApplicationInstance(static::class);
+        $ctrl = Tinebase_Core::getApplicationInstance(static::class, '', true);
 
         $access = [];
         $deny = [];
