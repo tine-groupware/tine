@@ -199,6 +199,274 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 Calendar_Model_ResourceGrants::RESOURCE_READ => true,
             ]]
         )));
+        // Creating resource for the tables
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'eg_table_1',
+            'description'          => 'EG Table 1',
+            'email'                => 'eg_table_1@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'eg_table_2',
+            'description'          => 'EG Table 2',
+            'email'                => 'eg_table_2@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'eg_table_3',
+            'description'          => 'EG Table 3',
+            'email'                => 'eg_table_3@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'eg_table_4',
+            'description'          => 'EG Table 4',
+            'email'                => 'eg_table_4@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'eg_table_5',
+            'description'          => 'EG Table 5',
+            'email'                => 'eg_table_5@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'eg_table_6',
+            'description'          => 'EG Table 6',
+            'email'                => 'eg_table_6@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'og_2_table_1',
+            'description'          => 'OG 2 Table 1',
+            'email'                => 'og_2_table_1@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'og_2_table_2',
+            'description'          => 'OG 2 Table 2',
+            'email'                => 'og_2_table_2@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'og_2_table_3',
+            'description'          => 'OG 2 Table 3',
+            'email'                => 'og_2_table_3@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'og_2_table_4',
+            'description'          => 'OG 2 Table 4',
+            'email'                => 'og_2_table_4@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'og_2_table_5',
+            'description'          => 'OG 2 Table 5',
+            'email'                => 'og_2_table_5@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'og_2_table_6',
+            'description'          => 'OG 2 Table 6',
+            'email'                => 'og_2_table_6@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'og_2_table_7',
+            'description'          => 'OG 2 Table 7',
+            'email'                => 'og_2_table_7@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+        $this->_ressources[] = Calendar_Controller_Resource::getInstance()->create(new Calendar_Model_Resource(array(
+            'name'                 => 'og_2_table_8',
+            'description'          => 'OG 2 Table 8',
+            'email'                => 'og_2_table_8@tin20.com',
+            'busy_type'            => Calendar_Model_FreeBusy::FREEBUSY_BUSY_UNAVAILABLE,
+            'grants'               => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Calendar_Model_ResourceGrants::RESOURCE_ADMIN => true,
+            ],[
+                'account_id'      => 0,
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Calendar_Model_ResourceGrants::EVENTS_ADD => true,
+                Calendar_Model_ResourceGrants::EVENTS_READ => true,
+                Calendar_Model_ResourceGrants::EVENTS_DELETE => true,
+                Calendar_Model_ResourceGrants::RESOURCE_INVITE => true,
+                Calendar_Model_ResourceGrants::EVENTS_FREEBUSY => true
+            ]]
+        )));
+
     }
     
     /**
