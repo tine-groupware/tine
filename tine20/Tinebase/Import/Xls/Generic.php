@@ -158,7 +158,7 @@ class Tinebase_Import_Xls_Generic extends Tinebase_Import_Xls_Abstract
      * @return array
      * @throws Exception
      */
-    protected function _doMappingConversion($_data)
+    protected function _doMappingConversion(array $_data): array
     {
         $_data = parent::_doMappingConversion($_data);
 

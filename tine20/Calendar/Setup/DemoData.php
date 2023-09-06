@@ -114,7 +114,6 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _onCreate() {
 
-        $this->_getDays();
         foreach ($this->_personas as $loginName => $persona) {
             $this->_calendars[$loginName] = Tinebase_Container::getInstance()->getContainerById(Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $persona->getId()));
 
@@ -476,12 +475,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
         $this->_createSharedCalendar();
 
-        $monday = clone $this->_monday;
-        $tuesday = clone $this->_tuesday;
-        $wednesday = clone $this->_wednesday;
-        $thursday = clone $this->_thursday;
-        $lastMonday = clone $this->_lastMonday;
-        $lastFriday = clone $this->_lastFriday;
+        $monday = new Tinebase_DateTime('monday');
+        $tuesday = new Tinebase_DateTime('tuesday');
+        $wednesday = new Tinebase_DateTime('wednesday');
+        $thursday = new Tinebase_DateTime('thursday');
+        $lastMonday = new Tinebase_DateTime('last monday');
+        $lastFriday = new Tinebase_DateTime('last friday');
 
         $defaultAttendeeData = array(
             'quantity'  => "1",
@@ -651,14 +650,14 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createEventsForPwulf() {
 
         // Paul Wulf
-        $monday = clone $this->_monday;
-        $tuesday = clone $this->_tuesday;
-        $thursday = clone $this->_thursday;
-        $friday = clone $this->_friday;
-        $saturday = clone $this->_saturday;
-        $sunday = clone $this->_sunday;
-        $lastMonday = clone $this->_lastMonday;
-        $lastSaturday = clone $this->_lastSaturday;
+        $monday = new Tinebase_DateTime('monday');
+        $tuesday = new Tinebase_DateTime('tuesday');
+        $thursday = new Tinebase_DateTime('thursday');
+        $friday = new Tinebase_DateTime('friday');
+        $saturday = new Tinebase_DateTime('saturday');
+        $sunday = new Tinebase_DateTime('sunday');
+        $lastMonday = new Tinebase_DateTime('last monday');
+        $lastSaturday = new Tinebase_DateTime('last saturday');
 
         $cal = $this->_calendars['pwulf'];
         $user = $this->_personas['pwulf'];
@@ -826,17 +825,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createEventsForJsmith() {
 
         // John Smith
-        $monday = clone $this->_monday;
-        $tuesday = clone $this->_tuesday;
-        $wednesday = clone $this->_wednesday;
-        $thursday = clone $this->_thursday;
-        $friday = clone $this->_friday;
-        $saturday = clone $this->_saturday;
-        $sunday = clone $this->_sunday;
-        $lastMonday = clone $this->_lastMonday;
-        $lastFriday = clone $this->_lastFriday;
-        $lastSaturday = clone $this->_lastSaturday;
-        $lastSunday = clone $this->_lastSunday;
+        $monday = new Tinebase_DateTime('monday');
+        $tuesday = new Tinebase_DateTime('tuesday');
+        $thursday = new Tinebase_DateTime('thursday');
+        $friday = new Tinebase_DateTime('friday');
+        $saturday = new Tinebase_DateTime('saturday');
+        $lastSaturday = new Tinebase_DateTime('last saturday');
 
         $cal = $this->_calendars['jsmith'];
         $user = $this->_personas['jsmith'];
@@ -981,12 +975,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createEventsForRwright() {
         // Roberta Wright
-        $monday = clone $this->_monday;
-        $tuesday = clone $this->_tuesday;
-        $wednesday = clone $this->_wednesday;
-        $friday = clone $this->_friday;
-        $saturday = clone $this->_saturday;
-        $lastSaturday = clone $this->_lastSaturday;
+        $monday = new Tinebase_DateTime('monday');
+        $tuesday = new Tinebase_DateTime('tuesday');
+        $wednesday = new Tinebase_DateTime('wednesday');
+        $friday = new Tinebase_DateTime('friday');
+        $saturday = new Tinebase_DateTime('saturday');
+        $lastSaturday = new Tinebase_DateTime('last saturday');
 
         $cal = $this->_calendars['rwright'];
         $user = $this->_personas['rwright'];
@@ -1166,17 +1160,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _createEventsForSclever() {
         // Susan Clever
-        $monday = clone $this->_monday;
-        $tuesday = clone $this->_tuesday;
-        $wednesday = clone $this->_wednesday;
-        $thursday = clone $this->_thursday;
-        $friday = clone $this->_friday;
-        $saturday = clone $this->_saturday;
-        $sunday = clone $this->_sunday;
-        $lastMonday = clone $this->_lastMonday;
-        $lastFriday = clone $this->_lastFriday;
-        $lastSaturday = clone $this->_lastSaturday;
-        $lastSunday = clone $this->_lastSunday;
+        $monday = new Tinebase_DateTime('monday');
+        $tuesday = new Tinebase_DateTime('tuesday');
+        $wednesday = new Tinebase_DateTime('wednesday');
+        $friday = new Tinebase_DateTime('friday');
+        $saturday = new Tinebase_DateTime('saturday');
+        $lastSaturday = new Tinebase_DateTime('last saturday');
 
         $cal = $this->_calendars['sclever'];
         $user = $this->_personas['sclever'];
@@ -1322,17 +1311,12 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected function _createEventsForJmcblack() {
 
         // James McBlack
-        $monday =       clone $this->_monday;
-        $tuesday =      clone $this->_tuesday;
-        $wednesday =    clone $this->_wednesday;
-        $thursday =     clone $this->_thursday;
-        $friday =       clone $this->_friday;
-        $saturday =     clone $this->_saturday;
-        $sunday =       clone $this->_sunday;
-        $lastMonday =   clone $this->_lastMonday;
-        $lastFriday =   clone $this->_lastFriday;
-        $lastSaturday = clone $this->_lastSaturday;
-        $lastSunday =   clone $this->_lastSunday;
+        $monday =       new Tinebase_DateTime('monday');
+        $tuesday =      new Tinebase_DateTime('tuesday');
+        $wednesday =    new Tinebase_DateTime('wednesday');
+        $thursday =     new Tinebase_DateTime('thursday');
+        $friday =       new Tinebase_DateTime('friday');
+        $saturday =     new Tinebase_DateTime('saturday');
 
         $cal = $this->_calendars['jmcblack'];
         $user = $this->_personas['jmcblack'];
