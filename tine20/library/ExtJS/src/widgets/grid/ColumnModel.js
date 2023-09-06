@@ -567,13 +567,16 @@ myGrid.getColumnModel().setHidden(0, true); // hide column 0 (0 = the first colu
 </code></pre>
      * @param {Number} colIndex The column index
      * @param {Boolean} hidden True if the column is hidden
+     * @param {Boolean} suppressEvent True to suppress firing the <code>{@link #widthchange}</code>
      */
-    setHidden : function(colIndex, hidden){
+    setHidden : function(colIndex, hidden, suppressEvent){
         var c = this.config[colIndex];
         if(c.hidden !== hidden){
             c.hidden = hidden;
             this.totalWidth = null;
-            this.fireEvent("hiddenchange", this, colIndex, hidden);
+            if (!suppressEvent) {
+                this.fireEvent("hiddenchange", this, colIndex, hidden);
+            }
         }
     },
 
