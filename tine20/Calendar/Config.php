@@ -266,6 +266,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
     const FREEBUSY_INFO_ALLOW_CALENDAR = 40;
     const FREEBUSY_INFO_ALLOW_ALL_ATTENDEE = 50;
 
+    const FLOORPLANS = 'floorplans';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
@@ -562,6 +564,83 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => FALSE,
             'default'               => '',
         ),
+        self::FLOORPLANS => [
+            //_('Floorplans')
+            self::LABEL                 => 'Floorplans',
+            //_('List of floorplans with their ressources configs.')
+            self::DESCRIPTION           => 'List of floorplans with their ressources configs.',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [[
+                'name' => '2. OG',
+                'image' => 'index.php?&frontend=http&method=Filemanager.downloadFile&path=%2Fshared%2FFloorplan%2FMW_Grundriss_OG.svg&id=155d9aa7ae1b4131526e1c690e6c2261bfe038b0&revision=1',
+                'resources' => [[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'og_2_table_1',
+                    'polygon' => [[ [677, 88], [677, 120], [742, 120], [742, 88]]] // or path
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'og_2_table_2',
+                    'polygon' => [[[677, 124], [677, 156], [742, 156], [742, 124]]]
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'og_2_table_3',
+                    'polygon' => [[[677, 210], [677, 243], [742, 243], [742, 210]]]
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'og_2_table_4',
+                    'polygon' => [[[677, 246], [677, 279], [742, 279], [742, 246]]]
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'og_2_table_5',
+                    'polygon' => [[[677, 327], [677, 359], [742, 359], [742, 327]]]
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'og_2_table_6',
+                    'polygon' => [[[677, 363], [677, 395], [742, 395], [742, 363]]]
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'og_2_table_7',
+                    'polygon' => [[[677, 471], [677, 504], [742, 504], [742, 471]]]
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'og_2_table_8',
+                    'polygon' => [[[677, 507], [677, 540], [742, 540], [742, 507]]]
+                ]],
+                'referenceImageDim' => [[1000, 1353]]
+            ],[
+                'name' => 'EG',
+                'image' => 'index.php?&frontend=http&method=Filemanager.downloadFile&path=%2Fshared%2FFloorplan%2FMW_Grundriss_EG.svg&id=14b238dfa8b37c3364fa4665e264dca26a12e8d1&revision=1',
+                'resources' => [[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'eg_table_1',
+                    'polygon' => [[[677, 246], [677, 279], [742, 279], [742, 246]]] // or path
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'eg_table_2',
+                    'polygon' => [[[677, 282], [677, 315], [742, 315], [742, 282]]]
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'eg_table_3',
+                    'polygon' => [[[677, 393], [677, 425], [742, 425], [742, 393]]]
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'eg_table_4',
+                    'polygon' => [[[677, 429], [677, 461], [742, 461], [742, 429]]]
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'eg_table_5',
+                    'polygon' => [[[677, 554], [677, 586], [742, 586], [742, 554]]]
+                ],[
+                    'eventSaveLocation' => 'RESOURCE_CAL',
+                    'resourceName' => 'eg_table_6',
+                    'polygon' => [[[677, 590], [677, 622], [742, 622], [742, 590]]]
+                ]],
+                'referenceImageDim' => [[1000, 1000]]
+            ]]
+        ],
         self::ENABLED_FEATURES => [
             //_('Enabled Features')
             self::LABEL                 => 'Enabled Features',

@@ -516,9 +516,44 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                     Calendar_Controller_Poll::class, 'publicApiAddAttendee', [
                     Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
                 ]))->toArray());
+                $routeCollector->get('/view/floorplan[/{floorplan}]', (new Tinebase_Expressive_RouteHandler(
+                    self::class, 'floorplanMainScreen', [
+                    Tinebase_Expressive_RouteHandler::IS_PUBLIC => false
+                ]))->toArray());
             });
         }
 
         return null;
+    }
+
+    public function floorplanMainScreen($floorplan=0)
+    {
+        $locale = Tinebase_Core::getLocale();
+
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Calendar";
+        $jsFiles[] = 'Calendar/js/floorplan/src/index.es6.js';
+
+        $user = Tinebase_Core::getUser();
+        $userContactArray = array();
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+            try {
+                $userContactArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray();
+            } catch (Addressbook_Exception_NotFound $aenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) /** @noinspection PhpUndefinedMethodInspection */
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' User not found in Addressbook: ' . $user->accountDisplayName);
+            }
+        }
+
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+            'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
+            'lang' => $locale,
+            'initialData' => json_encode([
+                'floorplans' => Calendar_Config::getInstance()->{Calendar_Config::FLOORPLANS},
+                'resources' => Calendar_Controller_Resource::getInstance()->getAll()->toArray(),
+                'currentContact' => $userContactArray,
+                'jsonKey' => Tinebase_Core::get('jsonKey')
+            ])
+        ]);
     }
 }

@@ -15,7 +15,8 @@
   "license": "AGPL-3.0",
   "tine20": {
     "entryPoints": [
-      "pollClient/src/index.es6.js"
+      "pollClient/src/index.es6.js",
+      "floorplan/src/index.es6.js"
     ]
   }
 }
