@@ -553,12 +553,6 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 icon: Ext.MessageBox.ERROR,
                 fn: function () {
                     this.getLoginPanel().getForm().findField('password').focus(true);
-                    if (document.getElementById('useCaptcha')) {
-                        if (typeof responseData.c1 != 'undefined') {
-                            document.getElementById('imgCaptcha').src = 'data:image/png;base64,' + responseData.c1;
-                            document.getElementById('contImgCaptcha').style.visibility = 'visible';
-                        }
-                    }
                 }.createDelegate(this)
             });
         }
