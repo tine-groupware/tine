@@ -3,6 +3,9 @@ Import Definitions
 
 Version: Ellie 2023.11
 
+Import Definition Example
+-------
+
 Import definitions are configured in xml format. Example:
 
 ``` xml title="tasks_import_csv"
@@ -10,7 +13,7 @@ Import definitions are configured in xml format. Example:
 ```
 
 Import Alarms
-=================
+-------
 
 ~~~ xml
 <field>
@@ -23,9 +26,9 @@ Import Alarms
 
 
 Import DateTime fields
-=================
+-------
 
-tine imports support the php strtotime() (see https://www.php.net/manual/de/function.strtotime.php) formats:
+tine imports support the php [strtotime](https://www.php.net/manual/de/function.strtotime.php) formats:
 
 ~~~ php 
 echo strtotime("now"), "\n";
