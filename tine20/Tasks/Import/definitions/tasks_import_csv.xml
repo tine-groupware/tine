@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-    <name>tasks_import_demo_csv</name>
+    <name>tasks_import_csv</name>
     <model>Tasks_Model_Task</model>
     <plugin>Tasks_Import_Csv</plugin>
     <type>import</type>
@@ -45,4 +45,3 @@
         </field>
     </mapping>
 </config>
-

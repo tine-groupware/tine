@@ -5,8 +5,8 @@ Version: Ellie 2023.11
 
 Import definitions are configured in xml format. Example:
 
-``` xml title="tasks_import_demo_csv"
---8<-- "tine20/Tasks/Import/definitions/tasks_import_demo_csv.xml"
+``` xml title="tasks_import_csv"
+--8<-- "tine20/Tasks/Import/definitions/tasks_import_csv.xml"
 ```
 
 Import Alarms
