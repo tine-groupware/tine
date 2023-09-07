@@ -128,13 +128,16 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
                     ->hSet($this->_dataStructName . ":" . $jobId, 'retry' , 0)
                     ->hSet($this->_dataStructName . ':' . $jobId, 'time', time())
                     ->lPush($this->_queueStructName,   $jobId)
+                    ->delete($this->_deadLetterStructName . ":" . $jobId)
                     ->exec();
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
                     . ' restored job from deadletter queue:' . $jobId);
+                return true;
             } catch (RedisException $re) {
                 // already exists
             }
         }
+        return false;
     }
     
     /**
