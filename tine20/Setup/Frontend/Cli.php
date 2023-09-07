@@ -98,7 +98,7 @@ class Setup_Frontend_Cli
             $this->_installDump($_opts);
         } elseif(isset($_opts->maintenance_mode)) {
             $this->_maintenanceMode($_opts);
-        } elseif(isset($_opts->list)) {
+        } elseif(isset($_opts->list) || isset($_opts->version)) {
             $result = $this->_listInstalled();
         } elseif(isset($_opts->sync_accounts_from_ldap)) {
             $this->_importAccounts($_opts);
