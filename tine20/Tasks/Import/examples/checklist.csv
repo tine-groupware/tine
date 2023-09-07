@@ -1,0 +1,4 @@
+summary,due,priority,description,percent,status,completed,alarm_minutes_before
+Configure Backup,+1 week friday,normal,,0,NEEDS-ACTION,,1440
+Configure Monitoring,+1 week friday,normal,,0,NEEDS-ACTION,,1440
+Restore Test Database,+1 week friday,normal,,0,NEEDS-ACTION,,1440
