@@ -52,7 +52,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
                          Examples:
                            setup.php --install_dump -- db=1 files=1 backupDir=/backup/tine20 keepTinebaseID=1
                            setup.php --install_dump -- db=1 files=1 backupUrl=https://username:password@example.org/mydump',
-                'list-s'                    => 'List installed applications',
+                'list-s'                    => 'List installed applications and show version information',
+                'version'                   => 'List installed applications and show version information',
                 'sync_accounts_from_ldap'   => 'Import user and groups from ldap',
                     'dbmailldap'            => 'Only usable with sync_accounts_from_ldap. Fetches dbmail email user data from LDAP.',
                     'onlyusers'             => 'Only usable with sync_accounts_from_ldap. Fetches only users and no groups from LDAP.',
@@ -124,7 +125,8 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             empty($opts->update_needed) &&
             empty($opts->uninstall) &&
             empty($opts->list) && 
-            empty($opts->sync_accounts_from_ldap) && 
+            empty($opts->version) &&
+            empty($opts->sync_accounts_from_ldap) &&
             empty($opts->sync_passwords_from_ldap) && 
             empty($opts->egw14import) && 
             empty($opts->check_requirements) && 
