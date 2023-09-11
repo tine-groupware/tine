@@ -441,73 +441,78 @@ Tine.Calendar.Model.Event.getDefaultLocationRecord = function(resource) {
 };
 
 Tine.Calendar.Model.Event.getFilterModel = function() {
-    var app = Tine.Tinebase.appMgr.get('Calendar');
+    var app = Tine.Tinebase.appMgr.get('Calendar'),
+        filter = [
+            {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
+            {label: app.i18n._('Summary'), field: 'summary'},
+            {label: app.i18n._('Location'), field: 'location'},
+            {filtertype: 'addressbook.contact', field: 'location_record', label: app.i18n._('Location Contact')},
+            {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
+            // _('GENDER_Calendar')
+            {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Calendar.Model.Event, /*defaultOperator: 'in',*/ defaultValue: {path: Tine.Tinebase.container.getMyNodePath()}},
+            {filtertype: 'calendar.attendee'},
+            {
+                label: app.i18n._('Attendee Status'),
+                gender: app.i18n._('GENDER_Attendee Status'),
+                field: 'attender_status',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: app,
+                keyfieldName: 'attendeeStatus',
+                defaultOperator: 'notin',
+                defaultValue: ['DECLINED']
+            },
+            {
+                label: app.i18n._('Attendee Role'),
+                gender: app.i18n._('GENDER_Attendee Role'),
+                field: 'attender_role',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: app,
+                keyfieldName: 'attendeeRoles'
+            },
+            {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
+            {filtertype: 'tinebase.tag', app: app},
+            {
+                label: app.i18n._('Status'),
+                gender: app.i18n._('GENDER_Status'),
+                field: 'status',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: { name: 'Calendar' },
+                keyfieldName: 'eventStatus',
+                defaultAll: true
+            },
+            {
+                label: app.i18n._('Blocking'),
+                gender: app.i18n._('GENDER_Blocking'),
+                field: 'transp',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: { name: 'Calendar' },
+                keyfieldName: 'eventTransparencies',
+                defaultAll: true
+            },
+            {
+                label: app.i18n._('Classification'),
+                gender: app.i18n._('GENDER_Classification'),
+                field: 'class',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: { name: 'Calendar' },
+                keyfieldName: 'eventClasses',
+                defaultAll: true
+            },
+            {label: i18n._('Last Modified Time'), field: 'last_modified_time', valueType: 'date'},
+            //{label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+            {label: i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
+            //{label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+            {
+                filtertype: 'calendar.rrule',
+                app: app
+            }
+        ];
+
+    if (app.featureEnabled('featureEventType')) {
+        filter.push({filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: Tine.Calendar.Model.EventTypes, ownField: 'event_types', foreignRefIdField: 'eventType'});
+    }
     
-    return [
-        {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
-        {label: app.i18n._('Summary'), field: 'summary'},
-        {label: app.i18n._('Location'), field: 'location'},
-        {filtertype: 'addressbook.contact', field: 'location_record', label: app.i18n._('Location Contact')},
-        {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
-        // _('GENDER_Calendar')
-        {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Calendar.Model.Event, /*defaultOperator: 'in',*/ defaultValue: {path: Tine.Tinebase.container.getMyNodePath()}},
-        {filtertype: 'calendar.attendee'},
-        {
-            label: app.i18n._('Attendee Status'),
-            gender: app.i18n._('GENDER_Attendee Status'),
-            field: 'attender_status',
-            filtertype: 'tine.widget.keyfield.filter', 
-            app: app, 
-            keyfieldName: 'attendeeStatus', 
-            defaultOperator: 'notin',
-            defaultValue: ['DECLINED']
-        },
-        {
-            label: app.i18n._('Attendee Role'),
-            gender: app.i18n._('GENDER_Attendee Role'),
-            field: 'attender_role',
-            filtertype: 'tine.widget.keyfield.filter', 
-            app: app, 
-            keyfieldName: 'attendeeRoles'
-        },
-        {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
-        {filtertype: 'tinebase.tag', app: app},
-        {
-            label: app.i18n._('Status'),
-            gender: app.i18n._('GENDER_Status'),
-            field: 'status',
-            filtertype: 'tine.widget.keyfield.filter',
-            app: { name: 'Calendar' },
-            keyfieldName: 'eventStatus',
-            defaultAll: true
-        },
-        {
-            label: app.i18n._('Blocking'),
-            gender: app.i18n._('GENDER_Blocking'),
-            field: 'transp',
-            filtertype: 'tine.widget.keyfield.filter',
-            app: { name: 'Calendar' },
-            keyfieldName: 'eventTransparencies',
-            defaultAll: true
-        },
-        {
-            label: app.i18n._('Classification'),
-            gender: app.i18n._('GENDER_Classification'),
-            field: 'class',
-            filtertype: 'tine.widget.keyfield.filter',
-            app: { name: 'Calendar' },
-            keyfieldName: 'eventClasses',
-            defaultAll: true
-        },
-        {label: i18n._('Last Modified Time'), field: 'last_modified_time', valueType: 'date'},
-        //{label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-        {label: i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
-        //{label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
-        {
-            filtertype: 'calendar.rrule',
-            app: app
-        }
-    ];
+    return filter;
 };
 
 Tine.Calendar.Model.Event.datetimeRenderer = function(dt) {
