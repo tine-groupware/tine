@@ -127,11 +127,11 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
                 self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
-                    Zend_Validate_InArray::class    => [
+                    [Zend_Validate_InArray::class, [
                         self::TYPE_CLOCK_IN,
                         self::TYPE_CLOCK_OUT,
                         self::TYPE_CLOCK_PAUSED,
-                    ]
+                    ]],
                 ],
             ],
             self::FLD_STATUS            => [
@@ -139,11 +139,11 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
                 self::VALIDATORS            => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
-                    Zend_Validate_InArray::class    => [
+                    [Zend_Validate_InArray::class, [
                         self::STATUS_CLOSED,
                         self::STATUS_FAULTY,
                         self::STATUS_OPEN,
-                    ]
+                    ]],
                 ],
             ],
             self::FLD_BLPROCESSED       => [
