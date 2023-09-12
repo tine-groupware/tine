@@ -59,11 +59,11 @@ class Sales_Model_InvoicePosition extends Tinebase_Record_Abstract
                 'validators' => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => '',
-                    Zend_Validate_InArray::class => [
+                    [Zend_Validate_InArray::class, [
                         self::TYPE_EXCEEDING,
                         self::TYPE_INCLUSIVE,
                         self::TYPE_TOTAL,
-                    ]
+                    ]],
                 ],
             ),
             'invoice_id' => array(

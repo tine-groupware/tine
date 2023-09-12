@@ -662,10 +662,10 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE =>               self::TYPE_STRING,
                 self::SYSTEM => true,
                 self::VALIDATORS => [
-                    Zend_Validate_InArray::class => [
+                    [Zend_Validate_InArray::class, [
                         self::VISIBILITY_HIDDEN,
                         self::VISIBILITY_DISPLAYED,
-                    ],
+                    ]],
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_HIDDEN
                 ],
@@ -686,11 +686,11 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE =>               self::TYPE_STRING,
                 self::SYSTEM => true,
                 self::VALIDATORS => [
-                    Zend_Validate_InArray::class => [
+                    [Zend_Validate_InArray::class, [
                         self::MESSAGE_COPY_FOLDER_SKIP,
                         self::MESSAGE_COPY_FOLDER_SENT,
                         self::MESSAGE_COPY_FOLDER_SOURCE,
-                    ],
+                    ]],
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::DEFAULT_VALUE => self::MESSAGE_COPY_FOLDER_SENT
                 ],
