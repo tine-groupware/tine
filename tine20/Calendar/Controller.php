@@ -494,8 +494,9 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
      */
     public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector)
     {
-        if (Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_POLLS)) {
-            $routeCollector->addGroup('/Calendar', function (\FastRoute\RouteCollector $routeCollector) {
+
+        $routeCollector->addGroup('/Calendar', function (\FastRoute\RouteCollector $routeCollector) {
+            if (Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_POLLS)) {
                 $routeCollector->get('/view/pollagb', (new Tinebase_Expressive_RouteHandler(
                     Calendar_Controller_Poll::class, 'publicApiGetAGB', [
                     Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
@@ -516,12 +517,12 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                     Calendar_Controller_Poll::class, 'publicApiAddAttendee', [
                     Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
                 ]))->toArray());
-                $routeCollector->get('/view/floorplan[/{floorplan}]', (new Tinebase_Expressive_RouteHandler(
-                    self::class, 'floorplanMainScreen', [
-                    Tinebase_Expressive_RouteHandler::IS_PUBLIC => false
-                ]))->toArray());
-            });
-        }
+            }
+            $routeCollector->get('/view/floorplan[/{floorplan}]', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'floorplanMainScreen', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => false
+            ]))->toArray());
+        });
 
         return null;
     }
