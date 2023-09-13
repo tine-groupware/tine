@@ -457,6 +457,27 @@ var form = new Ext.form.FormPanel({
      * @param {String} msg (optional) The validation message (defaults to {@link #invalidText})
      */
     markInvalid : function(msg){
+        function findParentTab(fromElement) {
+            const tabpanel = fromElement.findParentByType('tabpanel');
+            let tabPanelEl = null;
+            if (tabpanel) {
+                if (fromElement?.el) {
+                    const tabpanelId = _.find(tabpanel.items.keys, (id)=>{return fromElement.el.up(`#${id}`)}) // Finde das richtige Tab
+                    tabPanelEl = tabpanel.getTabEl(tabpanelId);
+                } else {
+                    const parent = fromElement.findParentBy(function(p){return p.tabEl;});
+                    tabPanelEl = parent?.tabEl;
+                }
+                if (tabPanelEl) {
+                    Ext.fly(tabPanelEl).setStyle('background','#ff7870')
+                    tabPanelEl.dataset.invalidfield  = fromElement.id;
+                }
+                findParentTab(tabpanel)
+            }
+        }
+        if (!this.preventMark) {
+            findParentTab(this);
+        }
         if(!this.rendered || this.preventMark){ // not rendered
             return;
         }
@@ -466,19 +487,6 @@ var form = new Ext.form.FormPanel({
         var mt = this.getMessageHandler();
         if(mt){
             mt.mark(this, msg);
-
-            function findParentTab(fromElement) {
-                const tabpanel = fromElement.findParentByType('tabpanel');
-                if (tabpanel) {
-                    const tabpanelId = _.find(tabpanel.items.keys, (id)=>{return fromElement.el.up(`#${id}`)}) // Finde das richtige Tab
-                    const tabpanelEl = tabpanel.getTabEl(tabpanelId);
-                    Ext.fly(tabpanelEl).setStyle('background','#ff7870')
-                    tabpanelEl.dataset.invalidfield  = fromElement.id;
-                    findParentTab(tabpanel)
-                }
-            }
-            findParentTab(this);
-
         }else if(this.msgTarget){
             this.el.addClass(this.invalidClass);
             var t = Ext.getDom(this.msgTarget);

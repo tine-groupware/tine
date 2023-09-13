@@ -1085,7 +1085,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         if (form) {
             form.loadRecord(this.record);
-            form.clearInvalid();
+            form.isValid();
         }
 
         if (this.record && this.record.hasOwnProperty('data') && Ext.isObject(this.record.data[this.recordClass.getMeta('containerProperty')])) {
