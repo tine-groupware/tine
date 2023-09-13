@@ -812,24 +812,27 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     }
     
     /**
-     * resolves group members and adds/removes them if nesesary
-     * 
-     * NOTE: If a user is listed as user and as groupmember, we suppress the groupmember
-     * 
+     * resolves group members and adds/removes them if necessary
+     *
+     * NOTE: If a user is listed as user and as group member, we suppress the group member
+     *
      * NOTE: The role to assign to a new group member is not always clear, as multiple groups
      *       might be the 'source' of the group member. To deal with this, we take the role of
      *       the first group when we add new group members
-     *       
+     *
      * @param Tinebase_Record_RecordSet $_attendee
      * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public static function resolveGroupMembers($_attendee)
+    public static function resolveGroupMembers($_attendee): void
     {
         if (! $_attendee instanceof Tinebase_Record_RecordSet) {
             return;
         }
-        $_attendee->addIndices(array('user_type'));
-        
+
         // flatten user_ids (not groups for group/list handling bellow)
         foreach($_attendee as $attendee) {
             if ($attendee->user_type != Calendar_Model_Attender::USERTYPE_GROUP && $attendee->user_id instanceof Tinebase_Record_Interface) {
@@ -856,23 +859,27 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $list = Addressbook_Controller_List::getInstance()->get($groupAttender->user_id);
                     $listId = $list->getId();
                 } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                     // let's try group
                     try {
                         $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
                         if (!empty($group->list_id)) {
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' fixme: depricated use of  group id');
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                                . ' FIXME: deprecated use of group id');
                             $groupAttender->user_id = $listId = $group->list_id;
                         }
                     } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__
                             . ' ' . $ternd->getMessage());
                     }
                 }
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                    . ' Group attender ID missing');
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' ' . print_r($groupAttender->toArray(), TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Group attender ID missing');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . print_r($groupAttender->toArray(), TRUE));
             }
             
             if ($listId !== null) {
@@ -892,7 +899,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         $toDel = array_diff($allCurrGroupMembersContactIds, $allGroupMembersContactIds);
-        foreach ($toDel as $idx => $contactId) {
+        foreach ($toDel as $contactId) {
             $attender = $allCurrGroupMembers->find('user_id', $contactId);
             $_attendee->removeRecord($attender);
         }
@@ -900,13 +907,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         // calculate double members (groupmember + user)
         $groupmembers = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
         $users        = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_USER);
-        $doublicates = array_intersect($users->user_id, $groupmembers->user_id);
-        foreach ($doublicates as $user_id) {
+        $duplicates = array_intersect($users->user_id, $groupmembers->user_id);
+        foreach ($duplicates as $user_id) {
             $attender = $groupmembers->find('user_id', $user_id);
             $_attendee->removeRecord($attender);
         }
     }
-    
+
     /**
      * get own attender
      * 
