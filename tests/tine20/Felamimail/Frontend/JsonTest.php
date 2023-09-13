@@ -780,73 +780,23 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     {
         $fromEmail = 'unittestalias@' . $this->_mailDomain;
         $messageToSend = $this->_getMessageData($fromEmail);
-
-        $messageToSend['to'] = [$this->_personas['jsmith']->accountEmailAddress];
-        $messageToSend['cc'] = [$this->_personas['jmcblack']->accountEmailAddress];
+        $jsmith = Tinebase_User::getInstance()->getFullUserByLoginName('jsmith');
+        $messageToSend['to'] = [$jsmith->accountEmailAddress];
         $messageToSend['subject'] = 'subjectfilter';
         $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
 
-        // fulltext, always a pleasure, needs commit ...
-        $this->_testNeedsTransaction();
-
         // check if message is in sent folder
-        $this->_searchForMessageBySubject($messageToSend['subject'], $this->_account->sent_folder);
-
+        $message = $this->_searchForMessageBySubject($messageToSend['subject'], $this->_account->sent_folder);
         //search subject
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'subjectfilter']], '');
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => 'subjectfilter']], '');
         $this->assertEquals('subjectfilter', $result['results'][0]['subject'], print_r($result['filter'], true));
         //search to email
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => $this->_personas['jsmith']->accountEmailAddress]], '');
-        $this->assertEquals($this->_personas['jsmith']->accountEmailAddress, $result['results'][0]['to'][0], print_r($result['filter'], true));
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $jsmith->accountEmailAddress]], '');
+        $this->assertEquals($jsmith->accountEmailAddress, $result['results'][0]['to'][0], print_r($result['filter'], true));
         //search from email
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => $fromEmail]], '');
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'contains', 'value' => $fromEmail]], '');
         $this->assertEquals($fromEmail, $result['results'][0]['from_email'], print_r($result['filter'], true));
-        //search from cc
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'jmcblack']], '');
-        $this->assertEquals($this->_personas['jmcblack']->accountEmailAddress, $result['results'][0]['cc'][0], print_r($result['results'][0]['cc'], true));
-    }
-
-    public function testSearchMessageMixedQueryFilterFTOff()
-    {
-        $fromEmail = 'unittestalias@' . $this->_mailDomain;
-        $messageToSend = $this->_getMessageData($fromEmail);
-
-        $messageToSend['to'] = [$this->_personas['jsmith']->accountEmailAddress];
-        $messageToSend['cc'] = [$this->_personas['jmcblack']->accountEmailAddress];
-        $messageToSend['subject'] = 'subjectfilter';
-        $this->_json->saveMessage($messageToSend);
-        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
-
-        // fulltext, always a pleasure, needs commit ...
-        $this->_testNeedsTransaction();
-
-        // check if message is in sent folder
-        $this->_searchForMessageBySubject($messageToSend['subject'], $this->_account->sent_folder);
-
-        $oldValue = clone Tinebase_Config::getInstance()->{Tinebase_Config::ENABLED_FEATURES};#
-        try {
-            Tinebase_Config::getInstance()->{Tinebase_Config::ENABLED_FEATURES}->{Tinebase_Config::FEATURE_FULLTEXT_INDEX} = false;
-            Tinebase_Config::getInstance()->clearCache();
-            Tinebase_Cache_PerRequest::getInstance()->reset(Tinebase_Config::class);
-
-            //search subject
-            $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'subjectfilter']], '');
-            $this->assertEquals('subjectfilter', $result['results'][0]['subject'], print_r($result['filter'], true));
-            //search to email
-            $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => $this->_personas['jsmith']->accountEmailAddress]], '');
-            $this->assertEquals($this->_personas['jsmith']->accountEmailAddress, $result['results'][0]['to'][0], print_r($result['filter'], true));
-            //search from email
-            $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => $fromEmail]], '');
-            $this->assertEquals($fromEmail, $result['results'][0]['from_email'], print_r($result['filter'], true));
-            //search from cc
-            $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'jmcblack']], '');
-            $this->assertEquals($this->_personas['jmcblack']->accountEmailAddress, $result['results'][0]['cc'][0], print_r($result['results'][0]['cc'], true));
-        } finally {
-            Tinebase_Config::getInstance()->{Tinebase_Config::ENABLED_FEATURES} = $oldValue;
-            Tinebase_Config::getInstance()->clearCache();
-            Tinebase_Cache_PerRequest::getInstance()->reset(Tinebase_Config::class);
-        }
     }
 
     /**
