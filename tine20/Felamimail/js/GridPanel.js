@@ -49,7 +49,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * default panel region
      *
-     * @type Tine.Felamimail.GridDetailsPanel
      * @property detailsPanelRegion
      */
     detailsPanelRegion: 'south',
@@ -1571,27 +1570,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     updateGridState: function () {
         this.resolveSendFolderPath();
         let stateId = this.sentFolderSelected ? this.sendFolderGridStateId : this.gridConfig.stateId;
-        
-        if (this.detailsPanelRegion === 'east') {
-            stateId = stateId + '_DetailsPanel_East';
-        }
+        const isEastLayout = this.detailsPanelRegion === 'east';
+        if (isEastLayout) stateId = stateId + '_DetailsPanel_East';
         const isStateChanged = this.grid.stateId !== stateId;
+        if (!Ext.state.Manager.get(stateId)) this.grid.saveState();
         this.grid.stateId = stateId;
         
-        if (!Ext.state.Manager.get(stateId)) {
-            this.grid.saveState();
-        }
-        const defaultStateId = this.detailsPanelRegion === 'east' ? stateId : this.gridConfig.stateId;
-        const defaultState = Ext.state.Manager.get(defaultStateId) ?? this.grid.getState();
-        let cloneDefaultState = JSON.parse(JSON.stringify(defaultState));
-        
-        cloneDefaultState.sort = this.store.getSortState();
-        
+        const stateIdDefault = isEastLayout ? stateId : this.gridConfig.stateId;
+        const stateStored = Ext.state.Manager.get(stateIdDefault);
+        const stateCurrent = this.grid.getState();
+        let stateCloned = stateStored;
+        if (!isStateChanged || !stateStored) stateCloned = stateCurrent;
+        let stateClonedResolved = JSON.parse(JSON.stringify(stateCloned));
+
         if (stateId.includes(this.sendFolderGridStateId)) {
             let refState = Ext.state.Manager.get(stateId);
-            if (refState) {
-                cloneDefaultState = JSON.parse(JSON.stringify(refState));
-            }
+            if (refState) stateClonedResolved = JSON.parse(JSON.stringify(refState));
             
             // - hide from email + name columns from grid
             // - show to column in grid
@@ -1602,23 +1596,23 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
             //overwrite custom states
             _.each(customHideCols, (isHidden, colId) => {
-                const idx = _.findIndex(cloneDefaultState.columns, {id: colId});
+                const idx = _.findIndex(stateClonedResolved.columns, {id: colId});
                 isHidden = !refState ? isHidden : _.get(_.find(refState.columns, {id: colId}), 'hidden', false);
                 
-                if (idx > -1 && isHidden !== _.get(cloneDefaultState.columns[idx], 'hidden', false)) {
+                if (idx > -1 && isHidden !== _.get(stateClonedResolved.columns[idx], 'hidden', false)) {
                     if (isHidden) {
-                        cloneDefaultState.columns[idx].hidden = true;
+                        stateClonedResolved.columns[idx].hidden = true;
                     } else {
-                        delete cloneDefaultState.columns[idx].hidden;
+                        delete stateClonedResolved.columns[idx].hidden;
                     }
                 }
             })
         } 
         
         if (!isStateChanged) {
-            cloneDefaultState.sort = this.store.getSortState();
+            stateClonedResolved.sort = this.store.getSortState();
         }
-        this.grid.applyState(cloneDefaultState);
+        this.grid.applyState(stateClonedResolved);
         // save state
         this.grid.saveState();
     },
@@ -1648,6 +1642,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.updateDefaultfilter(options.params, this.sentFolderSelected);
         this.updateQuotaBar();
         this.updateGridState();
+        this.grid.view.refresh(true);
     },
     
     /**
