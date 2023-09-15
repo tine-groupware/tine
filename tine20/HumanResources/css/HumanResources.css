@@ -84,10 +84,11 @@
     height: 100% !important;
 }
 
-.attendance-recorder .x-grid3-scroller, .attendance-recorder input, .attendance-recorder .x-form-trigger {
+.attendance-recorder .x-grid3-scroller,
+.attendance-recorder .x-form-trigger {
     background-color: #f2f2f2;
 }
-.attendance-recorder .x-trigger-wrap-focus input, .attendance-recorder .x-trigger-wrap-focus .x-form-trigger{
+.attendance-recorder .x-trigger-wrap-focus .x-form-trigger{
     background-color: #fff;
 }
 

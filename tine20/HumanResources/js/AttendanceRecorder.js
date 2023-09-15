@@ -195,12 +195,12 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                     getColumnModel: function() {
                         const colModel = Tine.widgets.grid.PickerGridPanel.prototype.getColumnModel.call(this);
                         colModel.columns.unshift({
-                            width: 40,
+                            width: 58,
                             id: 'buttons',
                             renderer: (value, metaData, record) => {
                                 const type = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.type', TYPE_CLOCK_OUT);
 
-                                return `<div class="tine-row-action-icons">
+                                return `<div class="tine-row-action-icons" style="width: 58px;">
                                             <div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_IN ? 'x-item-disabled' : ''} project-clock-in" data-action="clockIn" ext:qtip="${me.app.i18n._('Start')}">&nbsp;</div>
                                             <div class="tine-recordclass-gridicon ${!me.ptAllowPause || type !== TYPE_CLOCK_IN ? 'x-item-disabled' : ''} ${true || me.ptAllowPause ? '' : 'x-hidden'} project-clock-pause" data-action="clockPause" ext:qtip="${me.app.i18n._('Pause')}">&nbsp;</div>
                                             <div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_OUT ? 'x-item-disabled' : ''} project-clock-out" data-action="clockOut" ext:qtip="${me.app.i18n._('Stop')}">&nbsp;</div>
