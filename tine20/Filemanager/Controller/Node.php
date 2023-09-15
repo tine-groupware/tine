@@ -454,6 +454,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected function _searchNodesRecursive($_filter, $_pagination)
     {
         $_filter->removeFilter('type');
+        // TODO should also find folders? - may need an ui change, to remove recursive filter on folder-dblclick
+        // $_filter->addFilter($_filter->createFilter('type', 'in', [Tinebase_Model_Tree_FileObject::TYPE_FILE, Tinebase_Model_Tree_FileObject::TYPE_LINK, , Tinebase_Model_Tree_FileObject::TYPE_FOLDER]]));
         $_filter->addFilter($_filter->createFilter('type', 'in', [Tinebase_Model_Tree_FileObject::TYPE_FILE, Tinebase_Model_Tree_FileObject::TYPE_LINK]));
         $filter = clone $_filter;
         // prepend base path to original $_filter object! it is required for toArray() in the response array
