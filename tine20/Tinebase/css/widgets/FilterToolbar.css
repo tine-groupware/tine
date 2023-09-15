@@ -18,6 +18,10 @@
     background-image:url(../../../images/icon-set/icon_search.svg) !important;
 }
 
+.action_filter {
+    background-image:url(../../../images/icon-set/icon_filter.svg) !important;
+}
+
 .x-panel-bwrap .tw-filtertoolbar  {
     background-image: none;
     background-color: #E5EDF8;

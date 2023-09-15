@@ -133,8 +133,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                         contentType: 'Node',
                         NodeTreePanel: this.treePanel,
                         gridPanel: this.gridPanel,
-                        // @todo needs filterToolBar to clear filter
-                        hasFavoritesPanel: false
+                        hasFavoritesPanel: true
                     })
                 ]
             }, {
@@ -376,6 +375,7 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             hasQuickSearchFilterToolbarPlugin: false,
             stateIdSuffix: '-FilePicker',
             defaultFilters: defaultFilters,
+            displaySelectionHelper: false,
             plugins: [this.getTreePanel().getFilterPlugin()]
         });
 
@@ -392,6 +392,27 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
 
         // Hide filter toolbar
         gridPanel.filterToolbar.hide();
+
+        const showFilterBtn = new Ext.Button({
+            tooltip: i18n._('Show Filters'),
+            iconCls: 'action_filter',
+            enableToggle: true,
+            handler: (btn) => {
+                btn.setTooltip(btn.pressed ? i18n._('Hide Filters') : i18n._('Show Filters'));
+                gridPanel.filterToolbar[btn.pressed ? 'show' : 'hide']();
+                gridPanel.doLayout();
+            }
+        });
+        gridPanel.pagingToolbar.insert(100, showFilterBtn);
+        gridPanel.getGrid().store.on('load', (store) => {
+            if(gridPanel.filterToolbar.hidden) {
+                const filters = _.filter(_.get(store, 'reader.jsonData.filter'), (filter) => {
+                    return _.get(filter, 'field') !== 'path'
+                });
+                showFilterBtn.toggle(filters.length);
+                showFilterBtn.handler(showFilterBtn);
+            }
+        });
 
         return gridPanel;
     },

@@ -69,14 +69,6 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
             this.refresh.disable();
             this.refresh.addClass('x-ux-pagingtb-refresh-disabled');
         }
-    },
-    
-    /**
-     * @private
-     */
-    onRender : function(ct, position) {
-        Ext.ux.grid.PagingToolbar.superclass.onRender.call(this, ct, position);
-        
         if (this.displaySelectionHelper) {
             this.renderSelHelper();
         }
