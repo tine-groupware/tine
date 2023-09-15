@@ -1615,6 +1615,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.grid.applyState(stateClonedResolved);
         // save state
         this.grid.saveState();
+        if (isStateChanged) this.getView().refresh(true);
     },
 
     /**
