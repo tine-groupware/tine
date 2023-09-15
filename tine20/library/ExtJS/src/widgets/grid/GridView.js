@@ -1175,8 +1175,8 @@ viewConfig: {
             col.initialConfig = col.initialConfig || {... col};
             col.index = idx;
             // reset grid state if stateId changed, make sure column config is based on current stateId
-            if (isStateIdChanged && currentGridState?.columns) {
-                col.width = currentGridState.columns[idx].width ?? this.grid.minColumnWidth;
+            if (isStateIdChanged && currentGridState?.columns?.[idx]) {
+                cm.setColumnWidth(col.index, currentGridState.columns[idx].width ?? this.grid.minColumnWidth, true);
                 cm.setHidden(idx, currentGridState.columns[idx].hidden ?? false, true);
             }
             if (!cm.isHidden(idx)) {
@@ -1186,7 +1186,7 @@ viewConfig: {
         });
         this.latestGridStateId = currentGridStateId;
         if (!colsToResolve.length) return;
-        if (isStateIdChanged) this.render();
+        if (isStateIdChanged) return;
         
         // handle columns fractional resizing
         const widthToResolve = colsToResolve.reduce((acc, col) => {return acc + col.width;}, 0);
@@ -1212,7 +1212,9 @@ viewConfig: {
         if (colIdxResolvedAutoExpand >= 0 && fraction !== 1) {
             const diff = widthResizedGrid - widthUpdatedTotalVisibleCols;
             const width = cm.getColumnWidth(colIdxResolvedAutoExpand);
-            cm.setColumnWidth(colIdxResolvedAutoExpand, Math.max(this.grid.minColumnWidth,  width + diff), true);
+            if (!cm.isHidden(colIdxResolvedAutoExpand)) {
+                cm.setColumnWidth(colIdxResolvedAutoExpand, Math.max(this.grid.minColumnWidth,  width + diff), true);
+            }
         }
         
         if (preventRefresh !== true) this.updateAllColumnWidths();
