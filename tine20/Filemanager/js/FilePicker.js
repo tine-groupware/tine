@@ -201,12 +201,55 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 }]
             }]
         }];
-        
+        this.on('show', () => {
+            if (_.get(this, 'createFolderButton.setHidden')) {
+                this.createFolderButton.setHidden(!this.allowCreateNewFile);
+            }
+        });
+        this.on('hide', () => {
+                if (_.get(this, 'createFolderButton.setHidden')) {
+                    this.createFolderButton?.setHidden(true);
+                }
+        });
+
         Tine.Filemanager.FilePicker.superclass.initComponent.call(this);
     },
 
     afterRender: function() {
         Tine.Filemanager.FilePicker.superclass.afterRender.call(this);
+
+        const editDialog = this.findParentBy((c) => {return c instanceof Tine.Tinebase.dialog.Dialog});
+        editDialog.fbar.insert(0, this.createFolderButton = new Ext.Button(Object.assign({... Tine.Filemanager.nodeActions.CreateFolder}, {
+            hidden: this.hidden || !this.allowCreateNewFile, // @TODO hide if other plugin is active!
+            handler: () => {
+                const currentPath = this.treePanel.getSelectedContainer()?.path;
+                if (! currentPath) return;
+                Ext.MessageBox.prompt(this.app.i18n._('New Folder'), this.app.i18n._('Please enter the name of the new folder:'), async function (btn, text) {
+                    if (currentPath && btn === 'ok') {
+                        if (!text) {
+                            Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You have to supply a {0} name!'), nodeName));
+                            return;
+                        }
+
+                        if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
+                            Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Illegal characters: ') + forbidden);
+                            return;
+                        }
+
+                        const filename = `${currentPath}${text}/`;
+                        await Tine.Filemanager.nodeBackend.createFolder(filename)
+                            .then((result) => {
+                                // messageBus does the trick!
+                            })
+                            .catch((e) => {
+                                if (e.message === "file exists") {
+                                    Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Folder with this name already exists!'));
+                                }
+                            });
+                    }
+                }, this);
+            }
+        })));
     },
 
     checkState: function() {
@@ -234,12 +277,17 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 this.validSelection = true;
                 this.assertRowSelection();
                 this.fireEvent('nodeSelected', this.selection);
+            } else {
+                this.createFolderButton.setDisabled(false);
             }
         } else {
             this.selection = [];
             this.validSelection = false;
             this.fireEvent('invalidNodeSelected');
         }
+
+        const filters = _.filter(_.get(this.gridPanel.getGrid().store, 'reader.jsonData.filter'), (filter) => { return _.get(filter, 'field') !== 'path' });
+        this.createFolderButton.setDisabled(filters.length > 0 || !_.get(this.treePanel.getSelectedContainer(), 'account_grants.addGrant'));
     },
 
     /**
