@@ -1643,7 +1643,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.updateDefaultfilter(options.params, this.sentFolderSelected);
         this.updateQuotaBar();
         this.updateGridState();
-        this.grid.view.refresh(true);
     },
     
     /**

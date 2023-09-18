@@ -1165,6 +1165,7 @@ viewConfig: {
                 widthExtra = 0; 
             }
         }
+        
         const currentGridStateId = this.grid.stateId;
         const currentGridState = Ext.state.Manager.get(currentGridStateId);
         const isStateIdChanged = this.latestGridStateId !== currentGridStateId;
@@ -1186,7 +1187,9 @@ viewConfig: {
         });
         this.latestGridStateId = currentGridStateId;
         if (!colsToResolve.length) return;
-        if (isStateIdChanged) return;
+        if (isStateIdChanged) {
+            this.fitColumns(preventRefresh, onlyExpand, omitColumn);
+        };
         
         // handle columns fractional resizing
         const widthToResolve = colsToResolve.reduce((acc, col) => {return acc + col.width;}, 0);
