@@ -1,10 +1,9 @@
 Docker Installation Guide
 ---
-[www.tine20.com](https://www.tine20.com/) | [GitHub](https://github.com/tine20/tine20) | [Dockerfile](https://github.com/tine20/tine20/blob/main/ci/dockerimage/Dockerfile)
+[www.tine-groupware.de](https://www.tine-groupware.de/) | [docker-compose.yml](https://tine-docu.s3web.rz1.metaways.net/de/operators/docker/docker-compose.yml) | [Dockerfile](https://github.com/tine20/tine20/blob/main/ci/dockerimage/built.Dockerfile)
 
-# TODO: update EN quickstart (from DE version)
+## Quickstart
 
-### Quickstart
 This is an easy way to try out tine20. You need Docker and Docker Compose (https://docs.docker.com/compose/).
 
 First, create a folder. Docker Compose uses the folder names as an identifier.
@@ -15,7 +14,7 @@ cd tine20
 ```
 Then you need to download the current docker-compose.yaml. And save it in the folder just created.
 ```
-wget http://packages.tine20.com/maintenance/docker/current/quickstart/docker-compose.yaml
+wget https://tine-docu.s3web.rz1.metaways.net/de/operators/docker/docker-compose.yml
 ```
 Now you can start the docker-compose.
 ```
@@ -30,72 +29,139 @@ docker-compose exec web tine20_install
 
 Tine2.0 is now reachable under http://127.0.0.1:4000.
 
-##### Cleanup
+### Cleanup
 Use the following to stop and delete all containers, networks and volumes created by this compose.
 ```
 docker-compose down --volumes
 ``` 
 
-#### compose
-```
-version: '2'
-services:
-  db:
-    image: mariadb:10.4.1
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: &MYSQL_DATABASE tine20db
-      MYSQL_USER: &MYSQL_USER tine20
-      MYSQL_PASSWORD: &MYSQL_PASSWORD tine20
-    networks:
-      - internal_network
-
-  cache:
-    image: redis:5.0.5
-    networks:
-      - internal_network
-
-  web:
-    image: tine20/tine20:2019.11-7.3-fpm-alpine
-    depends_on:
-      - db
-      - cache
-    environment:
-      TINE20_DATABASE_HOST: db
-      TINE20_DATABASE_DBNAME: *MYSQL_DATABASE
-      TINE20_DATABASE_USERNAME: *MYSQL_USER
-      TINE20_DATABASE_PASSWORD: *MYSQL_PASSWORD
-      TINE20_SETUPUSER_USERNAME: tine20setup
-      TINE20_SETUPUSER_PASSWORD: tine20setup
-      TINE20_LOGIN_USERNAME: tine20admin
-      TINE20_LOGIN_PASSWORD: tine20admin
-      TINE20_ADMIN_EMAIL: tine20admin@mail.invalid
-      TINE20_CACHING_BACKEND: Redis
-      TINE20_CACHING_REDIS_HOST: cache
-      TINE20_SESSION_BACKEND: Redis
-      TINE20_SESSION_HOST: cache
-      TINE20_CREDENTIALCACHESHAREDKEY: change_me
-      TINE20_ACCEPTED_TERMS_VERSION: ${TINE20_ACCEPTED_TERMS_VERSION}
-    networks:
-      - external_network
-      - internal_network
-    ports:
-      - "127.0.0.1:4000:80"
-
-networks:
-  external_network:
-  internal_network:
-    internal: true
-```
 ### Image
-This image contains the Tine 2.0 code, PHP-FPM, and Nginx. Additionally, a database e.g MariaDB is required. In production, this image should be utilized with a reverse proxy handling all the custom configuration and ssl termination.
+This image contains the tine code, PHP-FPM, and Nginx. Additionally, a database e.g MariaDB is required. In production, this image should be utilized with a reverse proxy handling all the custom configuration and ssl termination.
 
-#### Path
+### Paths
 | Path | Description |
 |---|---|
-| `/etc/tine20/config.inc.php` | Tine 2.0 main config file.
-| `/etc/tine20/conf.d/*` | Tine 2.0 auto include config files.
-| `/var/lib/tine20/files` | Stores user data. Files like in Tine 2.0 Filemanager
+| `/etc/tine20/config.inc.php` | tine main config file.
+| `/etc/tine20/conf.d/*` | tine auto include config files.
+| `/var/lib/tine20/files` | Stores user data. Files like in tine Filemanager
 | `/var/lib/tine20/tmp` | Temporary file storage
 |`/var/lib/tine20/caching` | Used for caching if `TINE20_CACHING_BACKEND == 'File'`
 |`/var/lib/tine20/sessions`  | Used as session store if `TINE20_SESSION_BACKEND == 'File'`
+
+## Update
+
+Use 'docker-compose up' to fetch the latest docker image.
+
+Use this command to update tine:
+
+```
+docker exec --user tine20 tine-docker_web_1 sh -c "php /usr/share/tine20/setup.php --config=/etc/tine20 --update"
+```
+
+## SSL / Reverse Proxy
+
+### NGINX
+
+Example NGINX VHOST conf:
+
+```apacheconf
+server {
+    listen 80;
+    listen 443 ssl;
+    
+    ssl_certificate /etc/letsencrypt/live/MYDOMAIN.de/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/MYDOMAIN.de/privkey.pem;
+    
+    server_name tine.MYDOMAIN.de autodiscover.MYDOMAIN.de;
+    
+    if ($ssl_protocol = "" ) {
+        rewrite        ^ https://$server_name$request_uri? permanent;
+    }
+    
+    access_log /var/www/MYDOMAIN/logs/nginx-access.log;
+    error_log /var/www/MYDOMAIN/logs/nginx-error.log;
+    
+    client_max_body_size 2G; # set maximum upload size
+    
+    location /.well-known { }
+    
+    location / {
+        proxy_pass http://127.0.0.1:4000;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+### TRAEFIK
+
+```yaml
+  traefik:
+    image: "traefik:v2.6"
+    restart: always
+    container_name: "traefik"
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.http01.acme.httpchallenge=true"
+      - "--certificatesresolvers.http01.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.http01.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "./letsencrypt:/letsencrypt"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  web:
+    image: tinegroupware/tine:2021.11
+    #[...]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tile-server.rule=Host(`MYDOMAIN.de`)"
+      - "traefik.http.routers.tile-server.entrypoints=websecure"
+      - "traefik.http.routers.tile-server.tls.certresolver=http01"
+      - "traefik.http.services.tile-server.loadbalancer.server.port=80"
+```
+
+## Migration
+
+To migrate from an old tine installation, you can try to just mount the database as a volume:
+
+```yaml
+  db:
+    image: mariadb:10.6
+    volumes:
+      - "/var/lib/mysql:/var/lib/mysql"
+    #[...]
+    
+  web:
+    image: tinegroupware/tine:2021.11
+    volumes:
+      - "/var/lib/tine20/files:/var/lib/tine20/files"
+    #[...]
+```
+
+## Custom Configuration
+
+```yaml
+  web:
+    image: tinegroupware/tine:2021.11
+    volumes:
+      - "conf.d:/etc/tine20/conf.d"
+    #[...]
+```
+
+## docker-compose.yml
+
+``` yaml title="docker-compose.yml"
+--8<-- "./docker-compose.yml"
+```

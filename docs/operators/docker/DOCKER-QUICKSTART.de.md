@@ -1,6 +1,6 @@
 tine Business Edition Docker Image
 ---
-[www.tine-groupware.de](https://www.tine-groupware.de/) | [GitHub](https://github.com/tine20/tine20) | [Dockerfile](https://github.com/tine20/tine20/blob/main/ci/dockerimage/built.Dockerfile)
+[www.tine-groupware.de](https://www.tine-groupware.de/) | [docker-compose.yml](https://tine-docu.s3web.rz1.metaways.net/de/operators/docker/docker-compose.yml) | [Dockerfile](https://github.com/tine20/tine20/blob/main/ci/dockerimage/built.Dockerfile)
 
 ## Schnellstart
 
@@ -15,7 +15,7 @@ cd tine
 Als zweiten Schritt laden Sie die aktuelle Datei docker-compose.yaml herunter und speichern diese in dem soeben erstellten Ordner.
 
 ```
-wget https://packages.tine20.com/maintenance/docker/current/quickstart/docker-compose.yaml
+wget https://tine-docu.s3web.rz1.metaways.net/de/operators/docker/docker-compose.yml
 ```
 
 Jetzt können Sie Docker-Compose starten.
@@ -171,4 +171,10 @@ Wenn man möchte, kann man Custom-Configs (via conf.d) ebenfalls als eigenes Vol
     volumes:
       - "conf.d:/etc/tine20/conf.d"
     #[...]
+```
+
+## docker-compose.yml
+
+``` yaml title="docker-compose.yml"
+--8<-- "./docker-compose.yml"
 ```
