@@ -1181,15 +1181,15 @@ viewConfig: {
                 cm.setHidden(idx, currentGridState.columns[idx].hidden ?? false, true);
             }
             if (!cm.isHidden(idx)) {
-                colIdxLastVisible = idx;
-                if (idx > colIdxOmitColumn && !cm.isFixed(idx)) colsToResolve.push(col);
+                if (idx > colIdxOmitColumn) colsToResolve.push(col);
+                if (!cm.isFixed(col.index)) colIdxLastVisible = idx;
             }
         });
         this.latestGridStateId = currentGridStateId;
         if (!colsToResolve.length) return;
         if (isStateIdChanged) {
             this.fitColumns(preventRefresh, onlyExpand, omitColumn);
-        };
+        }
         
         // handle columns fractional resizing
         const widthToResolve = colsToResolve.reduce((acc, col) => {return acc + col.width;}, 0);
@@ -1199,7 +1199,7 @@ viewConfig: {
             : widthResizedGrid / widthToResolve;
 
         colsToResolve.forEach((col) => {
-            const width = col.width * fraction;
+            const width = cm.isFixed(col.index) ? col.width : col.width * fraction;
             let widthResolved = Math.max(this.grid.minColumnWidth, Math.floor(width));
             if (colIdxDefaultAutoExpand < 0 && !isOmitColumnValid && col.width && widthToResolve <= widthResizedGrid) {
                 widthResolved = Math.max(col.width, width);
