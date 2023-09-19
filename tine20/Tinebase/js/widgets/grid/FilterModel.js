@@ -655,14 +655,14 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 Ext.ux.form.PeriodPicker.getRange(value):
                 Ext.ux.form.PeriodPicker.prototype.range);
 
-            if (me.dateFilterSupportsPeriod && ! this.manualSelect && value != 'period' && !value.from) {
+            if (me.dateFilterSupportsPeriod && ! this.manualSelect && value != 'period' && !value?.from) {
                 range = window.lodash.get(String(value).match(/(day|week|month|quater|year)This$/), 1);
                 if (range) {
                     value = 'period';
                 }
             }
 
-            if (value == 'period' || value.from) {
+            if (value == 'period' || value?.from) {
                 this.setRawValue('');
 
                 if (! this.pp) {
