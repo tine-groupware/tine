@@ -1,16 +1,13 @@
-Tine Admin HowTo: Scheduler / Hintergrunddienste
-=================
+# Tine Admin HowTo: Scheduler / Hintergrunddienste
 
-Version: Caroline 2017.11
+## Wie richte ich den Cronjob ein?
 
-Wie richte ich den Cronjob ein?
-====
-
-Tine 2.0 führt regelmäßige Hintergrund-Dienste aus. Diese werden durch den SystemCron angestoßen. Er läuft minütlich. Intern prüft Tine 2.0 ob aufgaben zu erledigen sind
-(wie z.b. das Versenden einer Termin-Erinnerung) und delegiert die Aufgaben
+tine Groupware führt regelmäßige Hintergrund-Dienste aus. Diese werden durch den System-Cron angestoßen.
+Er läuft minütlich. Intern prüft tine, ob Aufgaben zu erledigen sind
+(wie z.b. das Versenden einer Terminerinnerung) und delegiert die Aufgaben
 entsprechend.
 
-Der System Cron ist in der Konfigurationsdatei durch die Installationspakete hinterlegt
+Der System-Cron ist im Docker-Image enthalten und muss bei Verwendung von Docker nicht angelegt werden.
 
 cat /etc/cron.d/tine20-tinebase:
 
@@ -19,3 +16,7 @@ cat /etc/cron.d/tine20-tinebase:
     * * * * * www-data /usr/sbin/tine20-cli
     --method=Tinebase.triggerAsyncEvents | logger -p daemon.notice -t "Tine 2.0
     scheduler"
+
+## Wie kann ich die Scheduler-Jobs einsehen?
+
+Im Admin-Bereich gibt es eine Anzeige der Jobs unter dem Punkt "Scheduler".
