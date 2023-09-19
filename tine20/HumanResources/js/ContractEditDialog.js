@@ -183,7 +183,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         // NOTE: this reduces working_time_scheme to id...
         Tine.HumanResources.ContractEditDialog.superclass.onRecordUpdate.call(this);
         
-        this.record.set('feast_calendar_id', this.getForm().findField('feast_calendar_id').selectedContainer);
+        this.record.set('feast_calendar_id', this.getForm().findField('feast_calendar_id').selectedRecord);
         this.record.set('working_time_scheme', working_time_scheme);
         this.blConfigPanel.onRecordUpdate(this, this.record);
         _.set(this.record, 'data.working_time_scheme.json', this.getJsonData());
