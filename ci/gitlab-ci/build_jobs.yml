@@ -357,6 +357,8 @@ docker_build_dev_arm64:
 docker_build_packages:
   extends: .abstract_jobs.docker
   stage: build3
+  variables:
+    GIT_DEPTH: 100
   script:
     - !reference [.lib, script]
     - packaging
