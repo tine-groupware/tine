@@ -200,7 +200,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
 
 
         if (this.ownRecordClass) {
-            if (_.get(this.ownRecordClass.getField(this.field), 'fieldDefinition.config.dependentRecords')) {
+            if (!this.independentRecords && _.get(this.ownRecordClass.getField(this.field), 'fieldDefinition.config.dependentRecords')) {
                 this.operators = ['definedBy'];
                 this.defaultOperator = 'definedBy';
             }
