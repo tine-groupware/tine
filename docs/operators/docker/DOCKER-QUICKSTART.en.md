@@ -163,5 +163,5 @@ To migrate from an old tine installation, you can try to just mount the database
 ## docker-compose.yml
 
 ``` yaml title="docker-compose.yml"
---8<-- "./docker-compose.yml"
+--8<-- "docs/operators/docker/docker-compose.yml"
 ```

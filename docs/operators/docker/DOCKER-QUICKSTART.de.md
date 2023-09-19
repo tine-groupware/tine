@@ -176,5 +176,5 @@ Wenn man möchte, kann man Custom-Configs (via conf.d) ebenfalls als eigenes Vol
 ## docker-compose.yml
 
 ``` yaml title="docker-compose.yml"
---8<-- "./docker-compose.yml"
+--8<-- "docs/operators/docker/docker-compose.yml"
 ```
