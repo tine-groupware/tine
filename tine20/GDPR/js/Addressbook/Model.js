@@ -16,6 +16,8 @@ Tine.widgets.grid.FilterRegistry.register('Addressbook', 'Contact', {
     foreignRefIdField: 'intendedPurpose',
     linkType: 'foreignId',
     filterName: 'GDPRDataIntendedPurposeFilter',
+    independentRecords: true,
+    multipleForeignRecords: true,
     ownField: 'GDPR_DataIntendedPurposeRecord',
     // i18n._('GDPR Intended Purpose')
     label: 'GDPR Intended Purpose'
