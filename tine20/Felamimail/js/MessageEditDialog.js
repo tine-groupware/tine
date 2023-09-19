@@ -1254,16 +1254,17 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     updateFileLocations: function () {
         const selections = this?.button_fileMessage?.pressed ? this.action_fileRecord.getSelected() : [];
-        const imapFolderIds = _.map(selections, (selection) => {
-            if (selection?.type && selection.type === 'folder') {
-                return selection.record_id.id;
+        const fileLocations = [];
+        const imapFolderIds = [];
+        selections.forEach((item) => {
+            if (item?.type === 'folder') {
+                if (item?.record_id?.id) imapFolderIds.push(item.record_id.id);
+            } else {
+                fileLocations.push(item);
             }
-        });
-        const fileLocations = _.filter(selections, (selection) => {
-            return selection?.type && selection.type !== 'folder';
-        });
-
-        this.record.set('fileLocations',fileLocations);
+        })
+        
+        this.record.set('fileLocations', fileLocations);
         this.record.set('sent_copy_folder', imapFolderIds);
     },
 
