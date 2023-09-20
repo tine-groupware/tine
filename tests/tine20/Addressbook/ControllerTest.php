@@ -360,7 +360,65 @@ class Addressbook_ControllerTest extends TestCase
             ['field' => 'adr_one_street', 'operator' => 'contains', 'value' => 'IsVeryS']
         ], '', [Tinebase_Model_Filter_Text::CASE_SENSITIVE => true]))->count(), 'cs search did not work');
     }
-    
+
+    public function testAddRemoveGroups()
+    {
+        $listCtrl = Addressbook_Controller_List::getInstance();
+        $sharedContainer = $this->_getTestContainer(Addressbook_Config::APP_NAME, Addressbook_Model_List::class, true);
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($sharedContainer->getId());
+        $grants->find('account_type', 'anyone')->adminGrant = true;
+        Tinebase_Container::getInstance()->setGrants($sharedContainer->getId(), $grants);
+        $publicList = $listCtrl->create(new Addressbook_Model_List([
+            'name' => 'unittest list public',
+            'container_id' => $sharedContainer->getId(),]));
+        $publicList2 = $listCtrl->create(new Addressbook_Model_List([
+            'name' => 'unittest list public2',
+            'container_id' => $sharedContainer->getId(),]));
+
+        $privateContainer = $this->_getTestContainer(Addressbook_Config::APP_NAME, Addressbook_Model_List::class);
+        $privateList = $listCtrl->create(new Addressbook_Model_List([
+            'name' => 'unittest list private',
+            'container_id' => $privateContainer->getId(),
+        ]));
+
+        $container = $this->_getTestContainer(Addressbook_Config::APP_NAME, Addressbook_Model_Contact::class, true);
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($container->getId());
+        $grants->find('account_type', 'anyone')->adminGrant = true;
+        Tinebase_Container::getInstance()->setGrants($container->getId(), $grants);
+        $contact = $this->_instance->create(new Addressbook_Model_Contact([
+            'container_id' => $container->getId(),
+            'n_family' => 'unittest',
+        ]));
+
+        $listCtrl->addListMember($publicList->getId(), $contact->getId());
+        $listCtrl->addListMember($privateList->getId(), $contact->getId());
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+
+        $contact = $this->_instance->get($contact->getId());
+
+        $groups = $contact->groups->getArrayOfIds();
+        $this->assertContains($publicList->getId(), $groups);
+        $this->assertNotContains($privateList->getId(), $groups);
+
+        unset($groups[array_search($publicList->getId(), $groups)]);
+        $groups[] = $publicList2->getId();
+        $contact->groups = $groups;
+
+        $contact = $this->_instance->update($contact);
+        $groups = $contact->groups->getArrayOfIds();
+        $this->assertContains($publicList2->getId(), $groups);
+        $this->assertNotContains($publicList->getId(), $groups);
+        $this->assertNotContains($privateList->getId(), $groups);
+
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $contact = $this->_instance->get($contact->getId());
+        $groups = $contact->groups->getArrayOfIds();
+        $this->assertContains($publicList2->getId(), $groups);
+        $this->assertNotContains($publicList->getId(), $groups);
+        $this->assertContains($privateList->getId(), $groups);
+    }
+
     /**
      * test remove image
      */
