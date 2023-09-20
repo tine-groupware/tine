@@ -572,8 +572,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 height: '16px'
             }
         });
-        this.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
-        this.pagingToolbar.insert(12, this.quotaBar);
+        const idx = _.indexOf(this.pagingToolbar.items.items, _.find(this.pagingToolbar.items.items, {constructor: Ext.Toolbar.Fill})) +1;
+        this.pagingToolbar.insert(idx, new Ext.Toolbar.Separator());
+        this.pagingToolbar.insert(idx, this.quotaBar);
         this.pagingToolbar.doLayout();
     },
 
