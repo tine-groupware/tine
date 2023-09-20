@@ -258,7 +258,7 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
         }
         delete this.buttons;
         if(this.displayInfo){
-            this.items.push('->');
+            this.items.push(new Ext.Toolbar.Fill());
             this.items.push(this.displayItem = new T.TextItem({}));
         }
         Ext.PagingToolbar.superclass.initComponent.call(this);

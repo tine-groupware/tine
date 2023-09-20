@@ -171,7 +171,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     metadata.css = 'x-grid-mimeicon';
 
     if(record.get('type') === 'folder') {
-        metadata.css += ' mime-icon-folder';
+        metadata.css += record.id === '..' ? ' action_filemanager_folder_up' : ' mime-icon-folder';
         
         if (dataSafeEnabled && !!record.get('pin_protected_node')) {
             metadata.css += ' x-type-data-safe'
