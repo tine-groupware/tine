@@ -122,8 +122,6 @@ deploy-built-image-to-dockerhub:
 deploy-customer-image-to-registry:
   extends: .abstract_jobs.docker
   stage: deploy
-  variables:
-    GIT_DEPTH: 100
   script:
     - !reference [.lib, script]
     - docker login --username $CUSTOMER_IMAGE_REGISTRY_USERNAME --password $CUSTOMER_IMAGE_REGISTRY_PASSWORD $CUSTOMER_IMAGE_REGISTRY_REPO

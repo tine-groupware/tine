@@ -2,8 +2,6 @@ packaging_build_packages() {
     version=$1
     release=$2
 
-    echo "packaging_build_packages() version: $version release: $release"
-
     CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
     MAJOR_COMMIT_REF_NAME_ESCAPED=$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)
 
@@ -80,8 +78,6 @@ packaging_gitlab_set_ci_id_link() {
     version=$1
     customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
 
-    echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID customer: $customer version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
-
     if ! curl -S -s \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
         -XPUT --data "${version}" \
@@ -126,12 +122,12 @@ packaging_gitlab_set_current_link() {
 packaging_push_package_to_github() {
     customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
     version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+    release=$(echo ${version} | sed sI-I~Ig)
 
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
     asset_name="tine-$(date '+%Y.%m.%d')-$(git rev-parse --short HEAD)-nightly"
 
-    echo curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
-    curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
+    curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${release}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${release}.tar.bz2"
 
     release_json=$(github_create_release "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
     if [ "$?" != "0" ]; then
@@ -139,9 +135,10 @@ packaging_push_package_to_github() {
         return 1
     fi
 
-    echo "customer: $customer version: $version asset_name: $asset_name release_json: $release_json"
+    echo "$release"
+    echo "$release_json"
 
-    github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
+    github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${release}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
 
     matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
 }
@@ -164,29 +161,10 @@ packaging_push_to_vpackages() {
     fi
 }
 
-packaging_get_version() {
-    if test nz "$CI_COMMIT_TAG"; then
-        echo "$CI_COMMIT_TAG"
-        return
-    fi
-
-    description=$(git describe --tags 2> /dev/null)
-
-    if test -z "$description"; then
-         git fetch --unshallow --quiet > /dev/null 2> /dev/null
-         description=$(git describe --tags 2> /dev/null)
-    fi
-
-    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
-
-    echo nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$description
-}
-
 packaging() {
-    version=$(packaging_get_version)
+    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+    version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(git describe --tags)"}
     release=${version}
-
-    echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version: $version release: $release MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
 
     if ! repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME}; then
         echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
@@ -216,3 +194,6 @@ packaging() {
         return 1
     fi
 }
+
+
+
