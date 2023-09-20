@@ -19,6 +19,7 @@ class Felamimail_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE016_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE016_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE016_UPDATE006 = __CLASS__ . '::update006';
 
 
     static protected $_allUpdates = [
@@ -48,6 +49,10 @@ class Felamimail_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE016_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
     ];
@@ -137,5 +142,87 @@ sieveFile
         }
 
         $this->addApplicationUpdate('Felamimail', '16.5', self::RELEASE016_UPDATE005);
+    }
+
+    public function update006()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        if ($this->getTableVersion('felamimail_cache_message') < 16) {
+            $this->setTableVersion('felamimail_cache_message', 16);
+        }
+
+        $schema = $this->_backend->getExistingSchema('felamimail_cache_message');
+        $truncated = false;
+
+        if (!isset($schema->indicesByName['to_list'])) {
+            if (!$truncated) {
+                // truncate email cache to make this go faster
+                Felamimail_Controller::getInstance()->truncateEmailCache();
+                $truncated = true;
+            }
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>to_list</name>
+                        <fulltext>true</fulltext>
+                        <field>
+                            <name>to_list</name>
+                        </field>
+                    </index>');
+            $this->_backend->addIndex('felamimail_cache_message', $declaration);
+        }
+
+        if (!isset($schema->indicesByName['cc_list'])) {
+            if (!$truncated) {
+                // truncate email cache to make this go faster
+                Felamimail_Controller::getInstance()->truncateEmailCache();
+                $truncated = true;
+            }
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>cc_list</name>
+                        <fulltext>true</fulltext>
+                        <field>
+                            <name>cc_list</name>
+                        </field>
+                    </index>');
+            $this->_backend->addIndex('felamimail_cache_message', $declaration);
+        }
+
+        if (!isset($schema->indicesByName['bcc_list'])) {
+            if (!$truncated) {
+                // truncate email cache to make this go faster
+                Felamimail_Controller::getInstance()->truncateEmailCache();
+                $truncated = true;
+            }
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>bcc_list</name>
+                        <fulltext>true</fulltext>
+                        <field>
+                            <name>bcc_list</name>
+                        </field>
+                    </index>');
+            $this->_backend->addIndex('felamimail_cache_message', $declaration);
+        }
+
+        if (!isset($schema->indicesByName['subject'])) {
+            if (!$truncated) {
+                // truncate email cache to make this go faster
+                Felamimail_Controller::getInstance()->truncateEmailCache();
+                //$truncated = true;
+            }
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>subject</name>
+                        <fulltext>true</fulltext>
+                        <field>
+                            <name>subject</name>
+                        </field>
+                    </index>');
+            $this->_backend->addIndex('felamimail_cache_message', $declaration);
+        }
+
+        $this->addApplicationUpdate('Felamimail', '16.6', self::RELEASE016_UPDATE006);
     }
 }
