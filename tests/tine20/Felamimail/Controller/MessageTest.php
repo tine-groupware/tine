@@ -808,8 +808,10 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
     public function testAddMessageToCacheInvalidDate()
     {
         $cachedMessage = $this->messageTestHelper('invaliddate.eml', 'text/invaliddate');
-        
-        $this->assertEquals('1970-01-01 00:00:00', $cachedMessage->sent->toString(), print_r($cachedMessage->toArray(), true));
+
+        // note: date can be parsed correctly now
+        $this->assertEquals('2010-03-01 21:39:42', $cachedMessage->sent->toString(),
+            print_r($cachedMessage->toArray(), true));
     }
     
     /**
@@ -2156,5 +2158,17 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
 
         $this->assertStringContainsString('<a href="https://teams.live.com/meet/9477691496180" target="_blank">Click here to join the meeting</a>', $message->body);
+    }
+
+    /**
+     * NON-RFC-Date-header leads to "01.01.1970 01:00:00" #7402
+     */
+    public function testNonRFCDateHeader()
+    {
+        $cachedMessage = $this->messageTestHelper('nonrfcdate.eml');
+
+        $message = $this->_getController()->getCompleteMessage($cachedMessage);
+
+        self::assertEquals('2022-10-06 10:27:13', $message->sent->get('Y-m-d h:i:s'));
     }
 }
