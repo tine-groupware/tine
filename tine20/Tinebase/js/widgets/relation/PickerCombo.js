@@ -97,7 +97,7 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
      */
     deferredLoading: function() {
 
-        if (!this.editDialog.relationsPanel) {
+        if (!this.editDialog?.relationsPanel) {
             this.deferredLoading.defer(100, this);
             return;
         }
