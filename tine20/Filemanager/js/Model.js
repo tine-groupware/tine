@@ -380,21 +380,16 @@ Tine.Filemanager.nodeBackendMixin = {
                 message = app.i18n._('Moving data .. {0}');
             }
         }
-        
-        this.loadMask = new Ext.LoadMask(app.getMainScreen().getCenterPanel().getEl(), {msg: String.format(i18n._('Please wait')) + '. ' + String.format(message, '' )});
-        app.getMainScreen().getWestPanel().setDisabled(true);
-        app.getMainScreen().getNorthPanel().setDisabled(true);
-        this.loadMask.show();
-        
+
+        Ext.MessageBox.wait(i18n._('Please wait'), i18n._('Please wait'));
+
         Ext.Ajax.request({
             params: params,
             timeout: 300000, // 5 minutes
             scope: this,
             success: function(result, request){
-                
-                this.loadMask.hide();
-                app.getMainScreen().getWestPanel().setDisabled(false);
-                app.getMainScreen().getNorthPanel().setDisabled(false);
+
+                Ext.MessageBox.hide();
 
                 // send updates
                 var _ = window.lodash,
@@ -448,11 +443,9 @@ Tine.Filemanager.nodeBackendMixin = {
             failure: function(response, request) {
                 var nodeData = Ext.util.JSON.decode(response.responseText),
                     request = Ext.util.JSON.decode(request.jsonData);
-                
-                this.loadMask.hide();
-                app.getMainScreen().getWestPanel().setDisabled(false);
-                app.getMainScreen().getNorthPanel().setDisabled(false);
-                
+
+                Ext.MessageBox.hide();
+
                 Tine.Filemanager.nodeBackend.handleRequestException(nodeData.data, request);
             }
         });
