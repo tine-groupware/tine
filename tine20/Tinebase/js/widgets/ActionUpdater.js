@@ -259,6 +259,7 @@
 
             // custom grants model
             for (grant in recordGrants) {
+                if(!grant.match(/.*Grant$/)) continue;
                 grants[grant] = _.get(grants, grant, defaultGrant) && _.get(recordGrants, grant, false);
             }
         }
