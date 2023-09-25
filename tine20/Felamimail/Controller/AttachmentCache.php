@@ -147,7 +147,7 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             $lock = Tinebase_Core::getMultiServerLock($lockId);
             if (!$lock->isLocked()) {
                 while (false === $lock->tryAcquire()) {sleep(1);}
-                return $this->get($_id);
+                return $this->get($id);
             }
         } else if (! $te instanceof Tinebase_Exception_UnexpectedValue) {
             Tinebase_Exception::log($te);
