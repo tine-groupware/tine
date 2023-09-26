@@ -72,7 +72,7 @@ Tine.widgets.form.FieldManager = function() {
             fieldDefinition.appName = appName;
             fieldDefinition.fieldName = fieldName;
 
-            if (_.get(fieldDefinition, 'disabled')) {
+            if (_.get(fieldDefinition, 'disabled') || _.get(fieldDefinition, 'uiconfig.disabled')) {
                 return null;
             }
 
@@ -262,13 +262,14 @@ Tine.widgets.form.FieldManager = function() {
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
                         field.isFormField = true;
                         field.fieldName = fieldDefinition.fieldName;
-                        field.hideHeaders = !field.columns || field.columns.length < 2;
+                        // NOTE: it's hard to compute height here as enableTbar, hideHeaders is calculated on runtime
                         field.height = 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */
                         if (_.get(fieldDefinition, 'config.dependentRecords', false)) {
                             // @TODO use different widget here (e.g. quickadd gird)
                             var modelConf = field.recordClass.getModelConfiguration() || {};
                             if (modelConf.isMetadataModelFor) {
                                 field.isMetadataModelFor = modelConf.isMetadataModelFor;
+                                field.height = field.height + 26; // picker
                             }
                             field.allowCreateNew = true;
                             field.refIdField = _.get(fieldDefinition, 'config.refIdField', undefined);

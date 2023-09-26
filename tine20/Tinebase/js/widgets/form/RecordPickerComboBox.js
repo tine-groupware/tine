@@ -430,7 +430,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             value.original_id = this.selectedRecord.json.original_id || value[this.valueField];
         }
 
-        return value;
+        if (this.inEditor && this.selectedRecord) {
+            // NOTE: in editorGrids we need the data to show render the title
+            value = { ...this.selectedRecord.data };
+        }
+
+        return Tine.Tinebase.common.assertComparable(value);
     },
 });
 Ext.reg('tinerecordpickercombobox', Tine.Tinebase.widgets.form.RecordPickerComboBox);
