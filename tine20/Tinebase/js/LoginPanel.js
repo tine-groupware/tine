@@ -600,8 +600,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             values = form.getFieldValues();
             
         if (form.isValid()) {
-            //TODO: make this an async method, atm it take too long to initialize
-            //Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'));
+            Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'));
 
             Ext.Ajax.request({
                 scope: this,

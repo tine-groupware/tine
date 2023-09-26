@@ -9,7 +9,7 @@
         :no-fade="true"
         :lazy="true"
         :noCloseOnBackdrop="true"
-        @close="closeBox"
+        @close="closeBox" :style="{'z-index': otherConfigs.zIndex}"
     >
         <template #default>
             <div class="container">
@@ -51,7 +51,7 @@
 
 <script setup>
 // TODO: change the progressBar according to `props.opt.waitConfig` if available
-// NOTE: Ext.MessageBox.wait is currently not used with any waitConfig, so 
+// NOTE: Ext.MessageBox.wait is currently not used with any waitConfig, so
 // the implementation is not given top priority
 import {
     onBeforeMount,
@@ -90,15 +90,14 @@ const init = async function() {
     }else{
         textBoxElVisibility.value = false;
         textAreaElVisibllity.value = false;
-    } 
+    }
     textElValue.value = props.opt.value;
     progressBarVisibility.value = props.opt.progress === true || props.opt.wait === true;
-    
+
 }
 
 const props = defineProps({
     opt: Object,
-    visible: Boolean,
     otherConfigs: Object
 })
 
@@ -109,7 +108,7 @@ const closeBox = () => {
 }
 
 const buttonToShow = computed(() => {
-    if(props.opt.buttons){ 
+    if(props.opt.buttons){
         const keys = Object.keys(props.opt.buttons).map(buttonName => {
             return {
                 clickHandler: () => {
