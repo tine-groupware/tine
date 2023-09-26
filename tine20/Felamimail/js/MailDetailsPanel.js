@@ -117,11 +117,11 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
      * add on click event after render
      * @private
      */
-    afterRender: function () {
+    afterRender: async function () {
         Tine.Felamimail.MailDetailsPanel.superclass.afterRender.apply(this, arguments);
         this.body.on('click', this.onClick, this);
         if (this.nodeRecord) {
-            this.loadRecord();
+            await this.loadRecord();
         }
     },
 
@@ -138,25 +138,27 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
      *
      * @param {Tine.Tinebase.data.Record|Object} record
      */
-    loadRecord: function (record) {
+    loadRecord: async function (record) {
         if (record) {
             this.record = record;
             this.tpl.overwrite(this.messageRecordPanel.body, record.data);
             this.doLayout();
 
             // prefill attachmentCache, all attachments cache got saved the first time, to filemanager_attachmentcache
-            this.record.set('attachments', this.resolveAttachmentCache('Felamimail_Model_Message', this.record));
+            const attachments = this.resolveAttachmentCache('Felamimail_Model_Message', this.record);
+            this.record.set('attachments', attachments, this.record);
         } else if (this.nodeRecord) {
-            Tine.Felamimail.messageBackend.getMessageFromNode(this.nodeRecord, {
-                success: (response) => {
+            await Tine.Felamimail.getMessageFromNode(this.nodeRecord.id)
+                .then(async (response) => {
                     // this.record.id is not the original messageId, we can not get attachment from this record
-                    this.record = Tine.Felamimail.messageBackend.recordReader({responseText: Ext.util.JSON.encode(response.data)});
+                    this.record = Tine.Felamimail.messageBackend.recordReader({responseText: Ext.util.JSON.encode(response)});
                     this.tpl.overwrite(this.messageRecordPanel.body, this.record.data);
                     // prefill attachmentCache, all attachments cache got saved the first time, to filemanager_attachmentcache
                     //fixme: attachment cache created from Filemanager_Model_Node has size 0
-                    this.record.set('attachments', this.resolveAttachmentCache('Filemanager_Model_Node', this.record));
-                },
-                failure: (exception) => {
+                    const attachments = this.resolveAttachmentCache('Filemanager_Model_Node', this.record);
+                    this.record.set('attachments', attachments, this.record);
+                }).catch((exception) => {
+                    Tine.log.debug(exception);
                     Tine.log.debug(exception);
                     // @todo add loadMask? move loadMask from GridDetailsPanel here?
                     // this.getLoadMask().hide();
@@ -165,9 +167,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     // } else {
                     //     // @todo handle exception?
                     // }
-                },
-                scope: this
-            });
+                });
         }
     },
 
@@ -369,8 +369,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     return;
                 }
                 // make sure we get the attachment caches
-                const attachments = this.resolveAttachmentCache(sourceModel, this.record);
-                const attachmentCaches = await Promise.all(_.map(attachments, 'cache'));
+                const attachments = this.resolveAttachmentCache(sourceModel, this.record, true);
                 const idx = target.id.split(':')[1];
                 const selectedAttachments = idx !== 'all' ? [attachments[idx]] : attachments;
                 // remove part id if set (that is the case in message/rfc822 attachments)
@@ -436,7 +435,6 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         }, {
                             record: this.record,
                             attachments: selectedAttachments,
-                            attachmentCachesData: _.map(attachmentCaches, 'data'),
                         })
                     ]
                 });
@@ -510,29 +508,45 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         }
     },
     
-    resolveAttachmentCache(sourceModel, record) {
+    resolveAttachmentCache(sourceModel, record, createPreviewInstantly = false) {
         const attachments = record.get('attachments');
-        attachments.forEach((attachment) => {
-            const attachmentId = [sourceModel, record.id, attachment.partId].join(':');
-            if (!attachment?.cache) {
-                attachment.cache = Tine.Felamimail.getAttachmentCache(attachmentId, false)
-                    .then(cache => {
-                        attachment.cache = new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]);
-                        return attachment.cache;
+
+        _.each(attachments, (attachment) => {
+            if (!attachment.promises) attachment.promises = [];
+            if (attachment?.isCacheValid) return;
+            const promise = new Promise(async (resolve) => {
+                let validCache = null;
+                await Promise.all(attachment.promises).then((responses) => {
+                    validCache = responses.find((r) => {return r.isCacheValid});
+                });
+                if (validCache) {
+                    attachment.isCacheValid = true;
+                    return resolve(validCache);
+                }
+                const attachmentId = [sourceModel, record.id, attachment.partId].join(':');
+                await Tine.Felamimail.getAttachmentCache(attachmentId, createPreviewInstantly)
+                    .then(async (cache) => {
+                        return resolve({
+                            cache: new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]),
+                            createPreviewInstantly: createPreviewInstantly,
+                            isCacheValid: cache.attachments[0].preview_count !== 0,
+                        });
                     })
                     .catch((e) => {
                         console.error(e);
-                        attachment.cache = null;
+                        return resolve(attachment);
                     });
-            }
+            })
+            attachment.promises.push(promise);
         });
+        record.set('attachments', attachments);
         return attachments;
     },
 
     // NOTE: runs in the scope of QuickLookPanel
     quicklookHandleAttachments: async function() {
         this.cardPanel.layout.setActiveItem(0); // wait cycle
-        if (this.record.isAttachmentCache) return; // key-nav
+        if (this.record?.isAttachmentCache) return; // key-nav
         // remove part id if set (that is the case in message/rfc822 attachments)
         const messageId = this.record.get('messageId') || ((String(this.record.id).match(/_/)) ? this.record.id.split('_')[0] : this.record.id);
         const sourceModel = this.record.get('from_node') ? 'Filemanager_Model_Node' : 'Felamimail_Model_Message';
@@ -547,17 +561,23 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             }
             
             // make sure we get the attachment caches
-            attachments = Tine.Felamimail.MailDetailsPanel.prototype.resolveAttachmentCache(sourceModel, this.record);
-            const attachmentCaches = await Promise.all(_.map(attachments, 'cache'));
-            this.attachments = _.map(attachmentCaches, (attachment) => {
-                return attachment.data ? attachment : Tine.Tinebase.data.Record.setFromJson(Object.assign(attachment, {
-                    id: `${this.record.id}:${attachment.partId}`,
-                    messageId: this.record.id
-                }), Tine.Felamimail.Model.Attachment);
-            });
-
-            this.record = this.attachments[this.initialAttachmentIdx];
-            this.record.isAttachmentCache = true;
+            attachments = Tine.Felamimail.MailDetailsPanel.prototype.resolveAttachmentCache(sourceModel, this.record, true);
+            const initialAttachmentIdx = this.initialAttachmentIdx ?? 0;
+            if (!attachments[initialAttachmentIdx].promises) return;
+            
+            await Promise.all(attachments[initialAttachmentIdx].promises).then((attachments) => {
+                let attachment = attachments.find((attachment) => {return attachment.isCacheValid});
+                if (!attachment) return;
+                if (attachment?.cache?.data) {
+                    this.record = attachment.cache;
+                } else {
+                    attachment = attachments[initialAttachmentIdx];
+                    attachment.id = `${this.record.id}:${attachment.partId}`;
+                    attachment.messageId = this.record.id;
+                    this.record = Tine.Tinebase.data.Record.setFromJson(attachment.cache, Tine.Tinebase.Model.Tree_Node);
+                }
+                this.record.isAttachmentCache = true;
+            })
         }
     },
 
