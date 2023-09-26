@@ -34,14 +34,15 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         exit;
     }
 
-    public function downloadFolder($_path, $recursive = false)
+    public function downloadFolder($path, $recursive = false)
     {
-        $path = Filemanager_Controller_Node::getInstance()->addBasePath($_path);
+        $path = Filemanager_Controller_Node::getInstance()->addBasePath($path);
         $fs = Tinebase_FileSystem::getInstance();
-        if (!$fs->isDir($path)) {
-            throw new Tinebase_Exception_SystemGeneric($_path . ' is not a directory');
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($path);
+        if (!$fs->isDir($pathRecord->statpath)) {
+            throw new Tinebase_Exception_SystemGeneric($path . ' is not a directory');
         }
-        $node = $fs->stat($path);
+        $node = $fs->stat($pathRecord->statpath);
 
         if ($recursive) {
             $ids = $fs->getAllChildIds([$node->getId()], [], false, [Tinebase_Model_Grants::GRANT_DOWNLOAD]);
@@ -58,7 +59,7 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
 
         if ($nodes->count() === 0) {
-            throw new Tinebase_Exception_SystemGeneric($_path . ' is empty');
+            throw new Tinebase_Exception_SystemGeneric($path . ' is empty');
         }
 
         $tmpPath = Tinebase_Core::getTempDir() . '/' . uniqid('tine20_') . '.zip';
