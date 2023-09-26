@@ -550,7 +550,7 @@ Ext.form.ComboBox.prototype.expand = Ext.form.ComboBox.prototype.expand.createSe
     // fix z-index problem when used in editorGrids
     // manage z-index by windowMgr
     this.list.setActive = Ext.emptyFn;
-    this.list.setZIndex = Ext.emptyFn;
+    // this.list.setZIndex = Ext.emptyFn;
     Ext.WindowMgr.register(this.list);
     Ext.WindowMgr.bringToFront(this.list);
 });

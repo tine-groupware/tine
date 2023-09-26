@@ -38,7 +38,7 @@ Ext.Msg.show({
  * @singleton
  */
 Ext.MessageBox = function(){
-    var opt;
+    let opt, dlg;
     
     // start vue properties
     let vueHandle, vueProps, vueEmitter;
@@ -73,7 +73,12 @@ Ext.MessageBox = function(){
     const otherConfigs = {
         height: 100,
         minHeight: 80,
-        visible: false
+        visible: false,
+        zIndex: 5000
+    }
+
+    const setZIndex = function(zIndex){
+        vueProps.otherConfigs.zIndex = zIndex
     }
     // end vue properties
 
@@ -89,6 +94,29 @@ Ext.MessageBox = function(){
     }
 
     return {
+
+        getDialog: function(titleText){
+            if(!dlg){
+                dlg = new Ext.Window()
+                const handler = {
+                    get(target, key){
+                        switch(key){
+                            case "hidden":
+                                return !vueProps.otherConfigs.visible
+                            case "setZIndex":
+                                return setZIndex
+                            case "setActive":
+                                return Ext.emptyFn
+                            default:
+                                return target[key]
+                        }
+                    }
+                }
+                const dlg_proxy = new Proxy(dlg, handler)
+                Ext.WindowMgr.register(dlg_proxy)
+            }
+            return dlg
+        },
         /**
          * Updates the message box body text
          * @param {String} text (optional) Replaces the message box element's innerHTML with the specified string (defaults to
@@ -203,10 +231,17 @@ Ext.Msg.show({
          * @return {Ext.MessageBox} this
          */
         show: async function(options){
+            Ext.getBody().mask("Loading");
             window.vue = window.vue || await import(/* webpackChunkName: "Tinebase/js/Vue-Runtime"*/"tine-vue")
+            const {default: mitt} = await import(/* webpackChunkName: "Tinebase/js/Mitt"*/'mitt')
+            const {createApp, h} = await import("vue")
+            const {MessageBoxApp, SymbolKeys} = await import(/* webpackChunkName: "Tinebase/js/VueMessageBox"*/'./VueMessageBox')
+            const {BootstrapVueNext} = await import(/* webpackChunkName: "Tinebase/js/BootstrapVueNext"*/'bootstrap-vue-next')
+            Ext.getBody().unmask();
+
             opt = {...defaultConfigs,...options};
-            opt.closable = (opt.closable !== false && opt.progress !== true && opt.wait !== true);
-            opt.prompt = opt.prompt || (opt.multiline ? true : false);
+            opt["closable"] = (opt.closable !== false && opt.progress !== true && opt.wait !== true);
+            opt["prompt"] = opt.prompt || (opt.multiline ? true : false);
             // creating mount point
             const mountId = "Vue-Message-Box-Mount-Point";
             let mp = document.getElementById(mountId);
@@ -226,7 +261,6 @@ Ext.Msg.show({
             }
             
             if(!vueEmitter){
-                const {default: mitt} = await import(/* webpackChunkName: "Tinebase/js/Mitt"*/'mitt')
                 vueEmitter = mitt();
                 vueEmitter.on("close", handleHide);
                 vueEmitter.on("buttonClicked", handleButton);
@@ -242,9 +276,6 @@ Ext.Msg.show({
 
             // initializing and mounting the app.
             if(!vueHandle){
-                const {createApp, h} = await import("vue")
-                const {MessageBoxApp, SymbolKeys} = await import(/* webpackChunkName: "Tinebase/js/VueMessageBox"*/'./VueMessageBox')
-                const {BootstrapVueNext} = await import(/* webpackChunkName: "Tinebase/js/BootstrapVueNext"*/'bootstrap-vue-next')
                 vueHandle = createApp({
                     render: () => h(MessageBoxApp, vueProps)
                 });
@@ -256,6 +287,8 @@ Ext.Msg.show({
             }
 
             vueProps.otherConfigs.visible = true;
+            const d = this.getDialog("");
+            Ext.WindowMgr.bringToFront(d)
             if (! opt.fn) {
                 return new Promise((resolve) => {
                     opt.fn = function () {
