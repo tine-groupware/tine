@@ -212,22 +212,28 @@ class Tinebase_Scheduler_Task
                 continue;
             }
 
-            // catch output buffer
-            ob_start();
-            $writer = new Zend_Log_Writer_Stream('php://output');
-            // get priority from scheduler config?
-            $priority = 6;
-            $writer->addFilter(new Zend_Log_Filter_Priority($priority));
-            Tinebase_Core::getLogger()->addWriter($writer);
-            
-            $result = call_user_func_array([$class, $callable[self::METHOD_NAME]], isset($callable[self::ARGS]) ?
-                $callable[self::ARGS] : []);
+            $classmethod = [$class, $callable[self::METHOD_NAME]];
+            if (! is_callable($classmethod)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not get callable for scheduler job');
+                $aggResult = false;
+            } else {
+                // catch output buffer
+                ob_start();
+                $writer = new Zend_Log_Writer_Stream('php://output');
+                // TODO get priority from scheduler config?
+                $priority = 6;
+                $writer->addFilter(new Zend_Log_Filter_Priority($priority));
+                Tinebase_Core::getLogger()->addWriter($writer);
 
-            $notificationBody = ob_get_clean();
-            $this->_sendNotification($callable, $notificationBody);
-            // send notification with $notificationBody to configured email
+                $result = call_user_func_array($classmethod, $callable[self::ARGS] ?? []);
 
-            $aggResult = $aggResult && $result;
+                $notificationBody = ob_get_clean();
+                $this->_sendNotification($callable, $notificationBody);
+                // send notification with $notificationBody to configured email
+
+                $aggResult = $aggResult && $result;
+            }
         }
 
         $this->_runDuration = time() - $startTime;
