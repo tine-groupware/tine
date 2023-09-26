@@ -190,7 +190,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
             this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 ? dataFields[0] : null;
             this.metaDataFields = _.difference(dataFields, [this.isMetadataModelFor]);
-            this.columns = this.columns || (this.isMetadataModelFor ? [this.isMetadataModelFor] : null);
+            this.columns = this.columns || (this.isMetadataModelFor ? [this.isMetadataModelFor].concat(this.metaDataFields) : null);
         }
 
         this.on('afterrender', this.onAfterRender, this);
@@ -504,6 +504,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             });
         }
 
+        this.hideHeaders = this.hasOwnProperty('hideHeaders') ? this.hideHeaders : (!this.columns || this.columns.length < 2);
         return this.colModel;
     },
 
