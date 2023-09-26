@@ -697,11 +697,17 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     public function testSearchMessageWithAllInboxesFilter()
     {
         $sentMessage = $this->_sendMessage();
+        $dateString = Tinebase_DateTime::now()->subDay(2)->toString();
         $filter = array(
             array('field' => 'path', 'operator' => 'in', 'value' => Felamimail_Model_MessageFilter::PATH_ALLINBOXES),
             array('field' => 'flags', 'operator' => 'notin', 'value' => Zend_Mail_Storage::FLAG_FLAGGED),
+            array('field' => 'received', 'operator' => 'after', 'value' => $dateString)
         );
-        $result = $this->_json->searchMessages($filter, '');
+        $result = $this->_json->searchMessages($filter, []);
+        $filter = array_filter($result['filter'], function($item) {
+            return $item['field'] === 'received';
+        });
+        $this->assertEquals($dateString, $filter[0]['value']);
         $this->assertGreaterThan(0, $result['totalcount']);
         $this->assertEquals($result['totalcount'], count($result['results']));
 
