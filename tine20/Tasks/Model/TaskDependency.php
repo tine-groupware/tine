@@ -33,7 +33,7 @@ class Tasks_Model_TaskDependency extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE             => true,
         self::IS_DEPENDENT              => true,
 
-        self::APP_NAME                  => Sales_Config::APP_NAME,
+        self::APP_NAME                  => Tasks_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
 
         self::RECORD_NAME               => 'Task Dependency', // gettext('GENDER_Task Dependency')
@@ -89,7 +89,11 @@ class Tasks_Model_TaskDependency extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
-                ]
+                ],
+                self::UI_CONFIG                 => [
+                    'xtype' => 'tasks.dependency'
+//                    'columns'   => 'summary, status'
+                ],
             ],
             self::FLD_DEPENDS_ON            => [
                 self::LABEL                     => 'Depends on Task', // _('Depends on Task')
@@ -101,7 +105,10 @@ class Tasks_Model_TaskDependency extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
-                ]
+                ],
+                self::UI_CONFIG                 => [
+//                    'columns'   => 'summary, status'
+                ],
             ],
         ],
     ];

@@ -135,7 +135,7 @@ class Tasks_JsonTest extends TestCase
 
         // we should be able to update our attendee status, attendee alarms, add notes and attachments
         foreach ($returned[Tasks_Model_Task::FLD_ATTENDEES] as &$attendee) {
-            if ($attendee[Tasks_Model_Attendee::FLD_USER_ID] === $this->_personas['sclever']->contact_id) {
+            if ($attendee[Tasks_Model_Attendee::FLD_USER_ID]['id'] === $this->_personas['sclever']->contact_id) {
                 $attendee[Tasks_Model_Attendee::FLD_STATUS] = Tasks_Model_Attendee::STATUS_TENTATIVE;
                 $attendee['alarms'] = [
                     (new Tinebase_Model_Alarm([
@@ -165,7 +165,7 @@ class Tasks_JsonTest extends TestCase
         $returned = $this->_backend->saveTask($returned);
         $found = false;
         foreach ($returned[Tasks_Model_Task::FLD_ATTENDEES] as $attendee) {
-            if ($attendee[Tasks_Model_Attendee::FLD_USER_ID] === $this->_personas['sclever']->contact_id) {
+            if ($attendee[Tasks_Model_Attendee::FLD_USER_ID]['id'] === $this->_personas['sclever']->contact_id) {
                 $this->assertSame(Tasks_Model_Attendee::STATUS_TENTATIVE, $attendee[Tasks_Model_Attendee::FLD_STATUS]);
                 $this->assertCount(1, $attendee['alarms']);
                 $found = true;

@@ -53,13 +53,14 @@ class Tasks_Model_Attendee extends Tinebase_Record_NewAbstract
     protected static $_modelConfiguration = [
         self::VERSION           => 1,
         self::IS_DEPENDENT      => true,
-        self::RECORD_NAME       => 'Attendee',
-        self::RECORDS_NAME      => 'Attendees', // ngettext('Attendee', 'Attendees', n)
+        self::RECORD_NAME       => 'Collaborator',
+        self::RECORDS_NAME      => 'Collaborators', // ngettext('Collaborator', 'Collaborators', n)
         self::TITLE_PROPERTY    => self::FLD_USER_ID,
         self::MODLOG_ACTIVE     => true,
         self::HAS_ALARMS        => true,
+        self::IS_METADATA_MODEL_FOR => self::FLD_USER_ID,
 
-        self::APP_NAME           => Calendar_Config::APP_NAME,
+        self::APP_NAME           => Tasks_Config::APP_NAME,
         self::MODEL_NAME         => self::MODEL_NAME_PART,
 
         self::TABLE            => [
@@ -88,10 +89,14 @@ class Tasks_Model_Attendee extends Tinebase_Record_NewAbstract
 
         self::FIELDS          => [
             self::FLD_USER_ID => [
-                self::TYPE       => self::TYPE_STRING,
+                self::TYPE       => self::TYPE_RECORD,
                 self::LENGTH     => 40,
                 self::VALIDATORS  => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
-                self::LABEL      => 'User', // _('User')
+                self::LABEL      => 'Collaborator', // _('Collaborator')
+                self::CONFIG                => [
+                    self::APP_NAME              => Addressbook_Config::APP_NAME,
+                    self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_PART_NAME,
+                ],
                 self::QUERY_FILTER => TRUE
             ],
             self::FLD_TASK_ID => [
@@ -105,9 +110,14 @@ class Tasks_Model_Attendee extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME        => Tasks_Model_Task::MODEL_NAME_PART,
                     self::FOREIGN_FIELD     => Tasks_Model_Task::FLD_ATTENDEES,
                 ],
+                self::UI_CONFIG                     => [
+                    self::DISABLED                      => true,
+                ],
             ],
             self::FLD_STATUS => [
-                self::TYPE       => self::TYPE_STRING,
+                self::LABEL      => 'Status', // _('Status')
+                self::TYPE       => self::TYPE_KEY_FIELD,
+                self::NAME       => Tasks_Config::ATTENDEE_STATUS,
                 self::LENGTH     => 40,
                 self::DEFAULT_VAL   => self::STATUS_NEEDSACTION,
                 self::VALIDATORS    => [

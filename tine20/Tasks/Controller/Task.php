@@ -77,7 +77,10 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
 
             if ($result && $_oldRecord && self::ACTION_UPDATE === $_action) {
                 // limit write to own attendee status/alarms, alarms.skip, add notes, add attachements
-                $ownAttendee = $_record->{TMT::FLD_ATTENDEES}?->find(TMA::FLD_USER_ID, Tinebase_Core::getUser()->contact_id);
+                $findOwnAttendee = function(Tasks_Model_Attendee $a) {
+                    return $a->getIdFromProperty(TMA::FLD_USER_ID) === Tinebase_Core::getUser()->contact_id;
+                };
+                $ownAttendee = $_record->{TMT::FLD_ATTENDEES}?->find($findOwnAttendee, null);
                 $alarms = $_record->alarms;
                 $notes = $_record->notes;
                 $attachments = is_array($_record->attachments) ?
@@ -88,7 +91,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
                 }
                 if ($ownAttendee) {
                     Tinebase_Record_Expander::expandRecord($_record);
-                    $oldOwnAttendee = $_record->{TMT::FLD_ATTENDEES}?->find(TMA::FLD_USER_ID, Tinebase_Core::getUser()->contact_id);
+                    $oldOwnAttendee = $_record->{TMT::FLD_ATTENDEES}?->find($findOwnAttendee, null);
                     $oldOwnAttendee->{TMA::FLD_STATUS} = $ownAttendee->{TMA::FLD_STATUS};
                     if (null !== $ownAttendee->alarms) {
                         $oldOwnAttendee->alarms = $ownAttendee->alarms;

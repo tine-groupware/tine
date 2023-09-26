@@ -87,11 +87,20 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 'source' => [],
                 self::FLD_ATTENDEES => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Tasks_Model_Attendee::FLD_USER_ID => [],
                         'alarms' => [],
                     ],
                 ],
-                self::FLD_DEPENDENS_ON => [],
-                self::FLD_DEPENDENT_TASKS => [],
+                self::FLD_DEPENDENS_ON => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Tasks_Model_TaskDependency::FLD_DEPENDS_ON => [],
+                    ],
+                ],
+                self::FLD_DEPENDENT_TASKS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Tasks_Model_TaskDependency::FLD_TASK_ID => [],
+                    ],
+                ],
             ],
         ],
 
@@ -253,6 +262,9 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                     self::DEPENDENT_RECORDS => true,
                     self::REF_ID_FIELD      => Tasks_Model_TaskDependency::FLD_TASK_ID,
                 ],
+                self::UI_CONFIG                 => [
+                    'xtype' => 'tasks.dependency'
+                ],
             ],
             self::FLD_DEPENDENT_TASKS => [
                 self::LABEL         => 'Dependent Tasks', // _('Dependent Tasks')
@@ -263,9 +275,12 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                     self::DEPENDENT_RECORDS => true,
                     self::REF_ID_FIELD      => Tasks_Model_TaskDependency::FLD_DEPENDS_ON,
                 ],
+                self::UI_CONFIG                 => [
+                    'xtype' => 'tasks.dependency'
+                ],
             ],
             self::FLD_ATTENDEES         => [
-                self::LABEL                 => 'Attendees', // _('Attendees')
+                self::LABEL                 => 'Collaborators', // _('Collaborators')
                 self::TYPE                  => self::TYPE_RECORDS,
                 self::CONFIG        => [
                     self::APP_NAME          => Tasks_Config::APP_NAME,
