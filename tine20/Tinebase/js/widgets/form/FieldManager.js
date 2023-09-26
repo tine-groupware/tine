@@ -72,7 +72,7 @@ Tine.widgets.form.FieldManager = function() {
             fieldDefinition.appName = appName;
             fieldDefinition.fieldName = fieldName;
 
-            if (_.get(fieldDefinition, 'disabled')) {
+            if (_.get(fieldDefinition, 'disabled') || _.get(fieldDefinition, 'uiconfig.disabled')) {
                 return null;
             }
 
