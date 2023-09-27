@@ -40,6 +40,27 @@ msgstr ""
 msgid "Check"
 msgstr "Teste"
 
+msgid "No valid license"
+msgstr "Keine aktive Lizenz"
+
+msgid "License Information"
+msgstr "Lizenzinformation"
+
+msgid "License Configuration"
+msgstr "Lizenzkonfiguration"
+
+msgid "Contract ID"
+msgstr "Vertragsnummer"
+
+msgid "Valid from"
+msgstr "Gültig ab"
+
+msgid "Serial Number"
+msgstr "Seriennummer"
+
+msgid "Valid to"
+msgstr "Gültig bis"
+
 #: js/EnvCheckGridPanel.js:161
 msgid "Result"
 msgstr "Ergebnis"
