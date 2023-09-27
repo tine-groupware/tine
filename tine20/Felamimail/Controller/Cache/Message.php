@@ -482,6 +482,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                             }
                         }
                     } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . " Reset messageSequence");
                         $this->_imapMessageSequence = 0;
                         $messageSequence = 1;
                     }
@@ -534,10 +536,12 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             'sort'  => 'messageuid',
             'dir'   => 'DESC'
         ));
-        
+
         $result = $this->_backend->searchMessageUids($filter, $pagination);
         
         if (count($result) === 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " No cached messages for folder: " . $folderId);
             return null;
         }
 
