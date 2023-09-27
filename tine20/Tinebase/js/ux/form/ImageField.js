@@ -143,14 +143,17 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.imageCt = img;
         this.textCt.setVisible(this.value === this.defaultImage);
         this.imageCt.setOpacity(this.value === this.defaultImage ? 0.2 : 1);
-        this.el[(this.value !== this.defaultImage ? 'add' : 'remove') + 'Class']('dark-reverse');
-        
+
         img.on('load', function () {
             if (this.value === this.defaultImage) {
                 this.imageCt.setStyle({
                     position: 'absolute',
                     top: ((this.height - this.imageCt.getHeight()) /2)+ 'px',
                     left: ((this.width - this.imageCt.getWidth()) /2) + 'px'
+                });
+            } else {
+                this.imageCt.setStyle({
+                    filter: 'none'
                 });
             }
             this.loadMask.hide();
