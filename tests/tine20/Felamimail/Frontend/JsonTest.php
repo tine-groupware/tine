@@ -807,21 +807,31 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     {
         $fromEmail = 'unittestalias@' . $this->_mailDomain;
 
-        //search subject
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'subjectfilter']], '');
+        // search subject
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'subjectfilter']], []);
         $this->assertEquals('subjectfilter', $result['results'][0]['subject'], print_r($result['filter'], true));
-        //search to email
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => $this->_personas['jsmith']->accountEmailAddress]], '');
+        // search to email
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => $this->_personas['jsmith']->accountEmailAddress]], []);
         $this->assertEquals($this->_personas['jsmith']->accountEmailAddress, $result['results'][0]['to'][0], print_r($result['filter'], true));
-        //search from email
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => $fromEmail]], '');
+        // search from email
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => $fromEmail]], []);
         $this->assertEquals($fromEmail, $result['results'][0]['from_email'], print_r($result['filter'], true));
-        //search from cc
-        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'jmcblack']], '');
+        // search from cc
+        $result = $this->_json->searchMessages([['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'jmcblack']], []);
         $this->assertEquals($this->_personas['jmcblack']->accountEmailAddress, $result['results'][0]['cc'][0], print_r($result['results'][0]['cc'], true));
+        // search from name #1
+        $result = $this->_json->searchMessages([
+            ['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'Admin'],
+        ], ['limit' => 1]);
+        $this->assertCount(1, $result['results']);
+        // search from name #2
+        $result = $this->_json->searchMessages([
+            ['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'tine']
+        ], ['limit' => 1]);
+        $this->assertCount(1, $result['results']);
     }
 
-    public function testSearchMessageMixedQueryFilterFTOff()
+    public function testSearchMessageMixedQuery_FilterFTOff()
     {
         $messageToSend = $this->_createMessageForQueryFilterTest();
 
