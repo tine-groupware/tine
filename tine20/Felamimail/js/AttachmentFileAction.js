@@ -110,6 +110,15 @@ const getFileAttachmentAction = (fileFn, config) => {
                                 text: model.getRecordName() + ' ...',
                                 iconCls: model.getIconCls(),
                                 handler: async (action, e) => {
+                                    let attachmentRecordsData = [];
+                                    if (config?.attachments) {
+                                        await _.reduce(config?.attachments, async (prev, attachment, id)=> {
+                                            return prev.then(async () => {
+                                                await Promise.all(attachment.promises);
+                                                return attachmentRecordsData.push(attachment.cache.data);
+                                            })
+                                        }, Promise.resolve());
+                                    }
                                     var pickerDialog = Tine.WindowFactory.getWindow({
                                         layout: 'fit',
                                         width: 250,
@@ -141,7 +150,7 @@ const getFileAttachmentAction = (fileFn, config) => {
                                                 name: 'attachRecord',
                                                 plugins: [new RecordEditFieldTriggerPlugin({
                                                     editDialogMode: 'remote',
-                                                    attachments: config?.attachmentCachesData ?? null,
+                                                    attachments: attachmentRecordsData,
                                                 })]
                                             })
                                         })
