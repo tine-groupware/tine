@@ -43,8 +43,8 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
             'options'       => array(
                 'fields' => array('subject', 'from_email', 'from_name', 'to_list', 'cc_list', 'bcc_list'),
                 'fieldOperatorMapping' => [
-                    'from_name' => ['wordstartswith' => 'startswith'],
-                    'from_email' => ['wordstartswith' => 'startswith'],
+                    'from_name' => ['wordstartswith' => 'contains'],
+                    'from_email' => ['wordstartswith' => 'contains'],
                 ],
                 'ignoreFullTextConfig' => true,
             )
