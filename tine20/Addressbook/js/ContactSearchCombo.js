@@ -82,10 +82,7 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
             this.app.i18n._('Search for Contacts ...')
         ));
 
-        this.plugins = this.plugins || [];
-        if (! this.useAccountRecord && !this.additionalFilterSpec && !this.additionalFilters && !this.noEditPlugin) {
-            this.plugins.push(new RecordEditFieldTriggerPlugin(this.recordEditPluginConfig || {}));
-        }
+        this.useEditPlugin = !this.useAccountRecord && !this.noEditPlugin;
 
         this.initTemplate();
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);
