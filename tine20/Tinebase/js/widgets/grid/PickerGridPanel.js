@@ -205,7 +205,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.initActionsAndToolbars();
 
 
-        this.on('rowdblclick', this.onRowDblClick, this);
+        this.on('celldblclick', this.onRowDblClick, this);
 
         if (! this.editDialogConfig?.mode) {
             this.editDialogConfig = this.editDialogConfig || {};
@@ -730,10 +730,24 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     validate: function() { return true; },
 
     // NOTE: shared with Tine.widgets.grid.QuickaddGridPanel
-    onRowDblClick: function(grid, row, col) {
+    onRowDblClick: function(grid, row, col, e) {
         var me = this,
             editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(me.recordClass),
-            record = me.store.getAt(row);
+            record = me.store.getAt(row),
+            editDialogConfig = { ... this.editDialogConfig || {} },
+            updateFn = me.onEditDialogRecordUpdate;
+
+        // in case of metadataFor / simple cross tables we might edit the metadataFor / referenced record
+        if(this.isMetadataModelFor && this.isMetadataModelFor === this.colModel.getColumnAt(col).dataIndex) {
+            const recordClass = this.recordClass.getField(this.isMetadataModelFor).getRecordClass();
+            editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
+            record = Tine.Tinebase.data.Record.setFromJson(record.get(this.isMetadataModelFor), recordClass);
+            editDialogConfig.mode = 'remote';
+            updateFn = (updatedRecord) => {
+                me.store.getAt(row).set(this.isMetadataModelFor, updatedRecord.data ? updatedRecord.data : updatedRecord);
+                me.store.getAt(row).commit();
+            }
+        }
 
         if (this.fireEvent('beforeeditrecord', record, this) === false) return;
 
@@ -744,9 +758,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 fixedFields: this.readOnly ? JSON.stringify(Object.assign(Object.fromEntries(record.constructor.getFieldNames().map((k, i) => [k, null])), record.data)) : null,
                 listeners: {
                     scope: me,
-                    update: me.onEditDialogRecordUpdate
+                    update: updateFn
                 }
-            }, this.editDialogConfig || {}));
+            }, editDialogConfig));
         }
     },
     
