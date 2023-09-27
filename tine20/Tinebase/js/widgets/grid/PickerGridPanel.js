@@ -254,6 +254,13 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.doLayout();
     },
 
+    onBeforeEdit: function(o) {
+        if (this.isMetadataModelFor && this.isMetadataModelFor === o.field) {
+            o.cancel = true;
+        }
+        return Tine.widgets.grid.PickerGridPanel.superclass.onBeforeEdit.apply(this, arguments);
+    },
+
     /**
      * init store
      * @private
