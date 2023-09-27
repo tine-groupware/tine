@@ -1234,7 +1234,7 @@ viewConfig: {
                 var ci = cm.getIndexById(g.autoExpandColumn);
                 var currentWidth = cm.getColumnWidth(ci);
                 var cw = Math.min(Math.max(((aw-tw)+currentWidth), g.autoExpandMin), g.autoExpandMax);
-                if(cw != currentWidth){
+                if(cw != currentWidth && ci >= 0){
                     cm.setColumnWidth(ci, cw, true);
                     if(preventUpdate !== true){
                         this.updateColumnWidth(ci, cw);
