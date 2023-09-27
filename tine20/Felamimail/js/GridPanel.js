@@ -1544,10 +1544,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *
      */
     updateDefaultfilter: function (params, isSentFolder) {
+        return; // not longer needed as the query filter now contains 'to' as well
         let targetFilters = params?.filter?.[0]?.filters?.[0]?.filters;
         if (!targetFilters) return;
 
-        const defaultFilterField = isSentFolder ? 'to' : 'query';
+        const defaultFilterField = isSentFolder ? 'to_list' : 'query';
         const existingDefaultFilter =  _.find(targetFilters, {field: defaultFilterField});
         
         if (!existingDefaultFilter) {

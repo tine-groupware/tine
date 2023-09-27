@@ -505,6 +505,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
 
         this.hideHeaders = this.hasOwnProperty('hideHeaders') ? this.hideHeaders : (!this.columns || this.columns.length < 2);
+        if (this.autoExpandColumn && !_.find(this.columns, {dataIndex: this.autoExpandColumn})) {
+            this.autoExpandColumn = this.columns[0]?.dataIndex;
+        }
         return this.colModel;
     },
 

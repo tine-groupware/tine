@@ -382,8 +382,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             const grid = this.filterPlugin.getGridPanel();
             const pathFilterValue =  newPathFilter?.value && _.isArray(newPathFilter?.value) ? newPathFilter.value[0] : null;
             const isSentFolder = grid.isSendFolderPath(pathFilterValue);
-            
-            ftb.defaultFilter = isSentFolder ? 'to' : 'query';
+
+            // not longer needed as the query filter now contains 'to' as well
+            // ftb.defaultFilter = isSentFolder ? 'to_list' : 'query';
 
             if (oldPathFilters.length > 0) {
                 // update path filter
