@@ -542,15 +542,17 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     getSearchCombo: function() {
         if (! this.searchCombo) {
+            const searchComboConfig = {... this.searchComboConfig || {}};
+
             if (this.isMetadataModelFor) {
                 var mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor),
-                    mappingRecordClass = mappingFieldDef.getRecordClass()
-                    this.searchRecordClass = mappingRecordClass;
+                    mappingRecordClass = mappingFieldDef.getRecordClass();
+                this.searchRecordClass = mappingRecordClass;
+                searchComboConfig.useEditPlugin = true;
             }
             
             var recordClass = (this.searchRecordClass !== null) ? Tine.Tinebase.data.RecordMgr.get(this.searchRecordClass) : this.recordClass,
                 appName = recordClass.getMeta('appName');
-                //model = recordClass.getModel();
 
             this.searchCombo = Tine.widgets.form.RecordPickerManager.get(appName, recordClass, Ext.apply({
                 blurOnSelect: true,
@@ -558,7 +560,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     scope: this,
                     select: this.onAddRecordFromCombo
                 }
-            }, this.searchComboConfig));
+            }, searchComboConfig));
         }
 
         return this.searchCombo;
