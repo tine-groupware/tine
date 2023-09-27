@@ -114,6 +114,11 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      */
     denormalizationRecordClass: null,
 
+    /**
+     * @cfg {Boolean} useEditPlugin
+     */
+    useEditPlugin: false,
+
     triggerAction: 'all',
     pageSize: 50,
     forceSelection: true,
@@ -169,6 +174,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.initTemplate();
 
         this.additionalFilters = expandFilter(this.additionalFilterSpec, this.additionalFilters);
+
+        this.plugins = this.plugins || [];
+        if (this.useEditPlugin) {
+            this.plugins.push(new RecordEditFieldTriggerPlugin(Ext.applyIf(this.recordEditPluginConfig || {}, {
+                allowCreateNew: !(this.additionalFilterSpec || this.additionalFilters?.length >0)
+            })));
+        }
 
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initComponent.call(this);
     },
