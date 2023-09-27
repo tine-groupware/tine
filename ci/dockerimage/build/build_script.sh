@@ -215,7 +215,7 @@ function createArchives()
                 Tinebase)
                     echo " $FILE"
                     echo -n "building "
-                    local FILES="Addressbook Admin Setup Tinebase CoreData images library vendor docs fonts"
+                    local FILES="Addressbook Admin Setup Tinebase CoreData images library vendor fonts"
                     local FILES="$FILES config.inc.php.dist index.php langHelper.php setup.php tine20.php bootstrap.php worker.php status.php"
                     local FILES="$FILES CREDITS LICENSE PRIVACY RELEASENOTES init_plugins.php favicon.ico"
 
