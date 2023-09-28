@@ -564,18 +564,18 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             attachments = Tine.Felamimail.MailDetailsPanel.prototype.resolveAttachmentCache(sourceModel, this.record, true);
             const initialAttachmentIdx = this.initialAttachmentIdx ?? 0;
             if (!attachments[initialAttachmentIdx].promises) return;
-            
-            await Promise.all(attachments[initialAttachmentIdx].promises).then((attachments) => {
-                let attachment = attachments.find((attachment) => {return attachment.isCacheValid});
-                if (!attachment) return;
-                if (attachment?.cache?.data) {
-                    this.record = attachment.cache;
+            await Promise.all(attachments[initialAttachmentIdx].promises).then((cachePromises) => {
+                let resolvedAttachmentData = {};
+                const validResponse = cachePromises.find((cachePromise) => {return cachePromise.isCacheValid});
+                if (validResponse) {
+                    resolvedAttachmentData = validResponse.cache.data;
                 } else {
-                    attachment = attachments[initialAttachmentIdx];
-                    attachment.id = `${this.record.id}:${attachment.partId}`;
-                    attachment.messageId = this.record.id;
-                    this.record = Tine.Tinebase.data.Record.setFromJson(attachment.cache, Tine.Tinebase.Model.Tree_Node);
+                    const invalidResponse = cachePromises.find((cachePromise) => {return cachePromise?.cache});
+                    if (invalidResponse) resolvedAttachmentData = invalidResponse.cache.data;
                 }
+                resolvedAttachmentData.id = `${this.record.id}:${attachments[initialAttachmentIdx].partId}`;
+                resolvedAttachmentData.messageId = this.record.id;
+                this.record = Tine.Tinebase.data.Record.setFromJson(resolvedAttachmentData, Tine.Tinebase.Model.Tree_Node);
                 this.record.isAttachmentCache = true;
             })
         }
