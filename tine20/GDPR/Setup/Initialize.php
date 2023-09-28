@@ -107,6 +107,7 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                         GDPR_Model_Validator_DataProvenance::class,
                         Zend_Filter_Input::DEFAULT_VALUE => '',
                     ],
+                    TMCC::FILTER_DEFINITION => [],
                 ],
                 Tinebase_Model_CustomField_Config::DEF_HOOK => [
                     [GDPR_Controller_DataProvenance::class, 'modelConfigHook'],
@@ -128,6 +129,7 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                     TMCC::LABEL             => 'GDPR Data Editing Reason', // _('GDPR Data Editing Reason')
                     TMCC::TYPE              => TMCC::TYPE_STRING,
                     TMCC::IS_VIRTUAL        => true,
+                    TMCC::FILTER_DEFINITION => [],
                 ],
                 TMCC::UI_CONFIG         => [
                     'omitDuplicateResolving'        => true,
