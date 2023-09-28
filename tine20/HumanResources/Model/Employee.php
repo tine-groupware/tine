@@ -47,7 +47,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         self::DELEGATED_ACL_FIELD => 'division_id',
 
-        'titleProperty'     => 'n_fn',
+        'titleProperty'     => '{{number}} {{n_fn}}',
         'appName'           => 'HumanResources',
         'modelName'         =>  self::MODEL_NAME_PART,
 
