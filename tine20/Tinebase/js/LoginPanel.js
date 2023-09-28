@@ -598,23 +598,24 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     onLoginPress: function (additionalParams) {
         var form = this.getLoginPanel().getForm(),
             values = form.getFieldValues();
-            
+        
         if (form.isValid()) {
-            Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'));
-
-            Ext.Ajax.request({
-                scope: this,
-                params : _.assign({
-                    method: this.loginMethod,
-                    username: values.username,
-                    password: values.password
-                }, additionalParams),
-                timeout: 60000, // 1 minute
-                success: this.onLoginSuccess,
-                failure: this.onLoginFail
-            });
+            Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'))
+                .then((r) => {
+                    Ext.Ajax.request({
+                        scope: this,
+                        params: _.assign({
+                            method: this.loginMethod,
+                            username: values.username,
+                            password: values.password
+                        }, additionalParams),
+                        timeout: 60000, // 1 minute
+                        success: this.onLoginSuccess,
+                        failure: this.onLoginFail
+                    });
+                });
         } else {
-
+            
             Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
         }
     },
