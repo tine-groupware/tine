@@ -459,7 +459,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
      */
     public function testGetPrivateContactData()
     {
-        $originalUser = Tinebase_Core::getUser();
         $contact = $this->_addContact();
 
         $this->assertTrue(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
@@ -474,8 +473,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate);
         $this->assertArrayNotHasKey('tel_cell_private_normalized', $contactWithoutPrivate);
         $this->assertArrayNotHasKey('bday', $contactWithoutPrivate);
-
-        Tinebase_Core::setUser($originalUser);
     }
 
     /**
@@ -487,7 +484,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
      */
     public function testGetPrivateContactDataOfOwnContact()
     {
-        $originalUser = Tinebase_Core::getUser();
         $internalContainer = Tinebase_Container::getInstance()->getContainerByName(
             Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
 
@@ -498,8 +494,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         $contactWithoutPrivate = $this->_uit->getContact(Tinebase_Core::getUser()->contact_id);
         $this->assertArrayHasKey('tel_cell_private', $contactWithoutPrivate);
-
-        Tinebase_Core::setUser($originalUser);
     }
 
     /**
@@ -509,7 +503,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
      */
     public function testSearchPrivateContactData()
     {
-        $originalUser = Tinebase_Core::getUser();
         $contact = $this->_addContact();
 
         $paging = $this->objects['paging'];
@@ -528,8 +521,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         $contactWithoutPrivate = $this->_uit->searchContacts($filter, $paging);
         $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate['results'][0]);
-
-        Tinebase_Core::setUser($originalUser);
     }
 
     /**
