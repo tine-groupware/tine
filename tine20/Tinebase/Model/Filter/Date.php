@@ -185,6 +185,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      */
     protected function _getDateValues($_operator, $_value)
     {
+        //FIXME: operator equals with value should be resolved as 'within' ?
         if ($_operator === 'within') {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Setting "within" filter: ' . print_r($_value, true));
@@ -505,7 +506,9 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     public function toArray($_valueToJson = false)
     {
         $result = parent::toArray($_valueToJson);
-        $result['value'] = $this->_orgValue;
+        if ($_valueToJson) {
+            $result['value'] = $this->_orgValue;
+        }
         return $result;
     }
 }

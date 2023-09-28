@@ -76,7 +76,6 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
     public function setValue($_value)
     {
         $this->_orgValue = $_value;
-
         if ($this->_operator !== 'within' && $_value) {
             $_value = $this->_convertStringToUTC($_value);
         }
@@ -124,8 +123,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
             }
             return parent::_convertStringToUTC($string);
         }
-        $this->_orgValue = parent::_convertStringToUTC($_string);
-        return $this->_orgValue;
+        return parent::_convertStringToUTC($_string);
     }
 
     /**
