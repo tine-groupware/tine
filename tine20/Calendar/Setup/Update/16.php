@@ -45,8 +45,14 @@ class Calendar_Setup_Update_16 extends Setup_Update_Abstract
 
     public function update001()
     {
+        // yes, that is the... or at least a... way of doing it
         Setup_SchemaTool::updateSchema([
             Calendar_Model_Attender::class,
+        ]);
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_Container::class,
+            Calendar_Model_Attender::class,
+            Calendar_Model_Event::class,
         ]);
 
         $this->addApplicationUpdate('Calendar', '16.1', self::RELEASE016_UPDATE001);

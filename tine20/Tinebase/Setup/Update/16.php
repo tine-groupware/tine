@@ -18,9 +18,10 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE016_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE016_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
-        self::PRIO_NORMAL_APP_STRUCTURE     => [
+        self::PRIO_TINEBASE_STRUCTURE     => [
             self::RELEASE016_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
@@ -33,8 +34,12 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
             ],
+            self::RELEASE016_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
+            ],
         ],
-        self::PRIO_NORMAL_APP_UPDATE        => [
+        self::PRIO_TINEBASE_UPDATE        => [
             self::RELEASE016_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
@@ -91,6 +96,7 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '16.1', self::RELEASE016_UPDATE001);
     }
+
     public function update002()
     {
         Setup_SchemaTool::updateSchema([
@@ -122,5 +128,14 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
             Sales_Scheduler_Task::addCreateAutoInvoicesMonthlyTask($scheduler);
         }
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '16.4', self::RELEASE016_UPDATE004);
+    }
+
+    public function update005()
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_AppPassword::class,
+        ]);
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '16.5', self::RELEASE016_UPDATE005);
     }
 }
