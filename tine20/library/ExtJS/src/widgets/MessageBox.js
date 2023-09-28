@@ -237,7 +237,6 @@ Ext.Msg.show({
             const {createApp, h} = await import("vue")
             const {MessageBoxApp, SymbolKeys} = await import(/* webpackChunkName: "Tinebase/js/VueMessageBox"*/'./VueMessageBox')
             const {BootstrapVueNext} = await import(/* webpackChunkName: "Tinebase/js/BootstrapVueNext"*/'bootstrap-vue-next')
-            Ext.getBody().unmask();
 
             opt = {...defaultConfigs,...options};
             opt["closable"] = (opt.closable !== false && opt.progress !== true && opt.wait !== true);
@@ -259,7 +258,7 @@ Ext.Msg.show({
                     otherConfigs: JSON.parse(JSON.stringify(otherConfigs)),
                 });
             }
-            
+            Ext.getBody().unmask();
             if(!vueEmitter){
                 vueEmitter = mitt();
                 vueEmitter.on("close", handleHide);
@@ -362,7 +361,8 @@ Ext.MessageBox.ERROR
                 wait:true,
                 modal:true,
                 minWidth: this.minProgressWidth,
-                waitConfig: config
+                waitConfig: config,
+                fn: 'fake',
             });
         },
 
