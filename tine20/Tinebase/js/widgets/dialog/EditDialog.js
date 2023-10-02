@@ -1356,9 +1356,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             // @TODO recordsPickers & pickerGrids?
                         }
                     });
-                    if(Object.keys(me.record.modified).length) {
-                        me.fireEvent('update', Ext.util.JSON.encode(recordData), me.mode, me, ticketFn);
-                    }
+
+                    me.fireEvent('update', Ext.util.JSON.encode(recordData), me.mode, me, ticketFn);
                     wrapTicket();
                 }.bind(me));
 
