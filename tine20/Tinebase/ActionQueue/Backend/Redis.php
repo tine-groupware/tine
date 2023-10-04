@@ -234,10 +234,11 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
      * get one job from the queue
      *
      * @param  integer  $jobId  the id of the job
+     * @param  boolean  $noUnserialize
      * @throws RuntimeException
      * @return array           the job
      */
-    public function receive($jobId)
+    public function receive($jobId, bool $noUnserialize = false)
     {
         $data = $this->_redis->hMGet(
             $this->_dataStructName . ':' . $jobId,
@@ -254,7 +255,7 @@ class Tinebase_ActionQueue_Backend_Redis implements Tinebase_ActionQueue_Backend
             throw new RuntimeException('max retry count reached');
         }
         
-        $message = unserialize($data['data']);
+        $message = $noUnserialize ? $data['data'] : unserialize($data['data']);
         
         return $message;
     }

@@ -160,7 +160,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
             }
             
             try {
-                $job = $this->_actionQueue->receive($jobId);
+                $job = $this->_actionQueue->receive($jobId, true);
             } catch (RuntimeException $re) {
                 $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " Failed to receive job " . $jobId
                     . " / message: " . $re->getMessage());
@@ -172,10 +172,9 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
                 
                 continue;
             }
-            
-            $this->_getLogger()->info (__METHOD__ . '::' . __LINE__ . " forking to process job {$job['action']} with id $jobId");
-            $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " process message: " . print_r($job, TRUE)); 
 
+            $this->_getLogger()->info (__METHOD__ . '::' . __LINE__ . " forking to process job $jobId");
+            $this->_getLogger()->debug(__METHOD__ . '::' . __LINE__ . " process message: " . print_r($job, TRUE));
 
             // this method will exit on fork errors, no need to take care of it
             $childPid = $this->_forkChild();
@@ -188,7 +187,7 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
                     exit(0); // message will be deleted in parent process
                     
                 } catch (Exception $e) {
-                    $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " could not execute job : " . $job['action']);
+                    $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " could not execute job : " . $jobId);
                     $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " could not execute job : " . $e->getMessage());
                     $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ .    " could not execute job : " . $e->getTraceAsString());
 
