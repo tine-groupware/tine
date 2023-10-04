@@ -66,9 +66,11 @@ The user you specify here is just for entering the setup. For administrating you
 Connect to your MySQL database server using your favorite client. Create a database with UTF8 charset and connect user with the data you had entered into the 'database' array of your 'config.inc.php':
 ~~~
 mysql> CREATE DATABASE tine20db DEFAULT CHARACTER SET 'UTF8';
-mysql> GRANT ALL PRIVILEGES ON tine20db.* TO 'tine20user'@'localhost' IDENTIFIED BY 'tine20pw';
+mysql> CREATE USER 'tine20user'@'localhost' IDENTIFIED BY 'tine20pw';
+mysql> GRANT ALL PRIVILEGES ON tine20db.* TO 'tine20user'@'localhost';
 ~~~
-The first command creates the database 'tine20db'. The second one adds a user 'tine20user' with password 'tine20pw' and all privileges on the previously created database. Connections of that user are allowed only from localhost.
+The first command creates the database 'tine20db'. The second one adds an user 'tine20user' with password 'tine20pw',
+and the third grants all privileges on the previously created database to the 'tine20user'. Connections of that user are allowed only from localhost.
 
 ### Start the setup GUI
 
