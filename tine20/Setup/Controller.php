@@ -2060,6 +2060,8 @@ class Setup_Controller
             $this->_backend->setForeignKeyChecks(1);
         }
 
+        $this->clearCache();
+
         return count($applications);
     }
     
@@ -2646,15 +2648,15 @@ class Setup_Controller
     /**
      * clear caches
      *
-     * @param boolean $deactivateCache after clearing
+     * @param bool $deactivateCache after clearing
      * @return array
      */
-    public function clearCache($deactivateCache = true)
+    public function clearCache(bool $deactivateCache = true): array
     {
         $cachesCleared = [];
 
-        // setup cache (via tinebase because it is disabled in setup by default)
-        Tinebase_Core::setupCache(TRUE);
+        // setup cache (via Tinebase because it is disabled in setup by default)
+        Tinebase_Core::setupCache();
         Tinebase_Controller::getInstance()->cleanupCache(Zend_Cache::CLEANING_MODE_ALL);
         $cachesCleared[] = 'TinebaseCache';
 
@@ -2673,7 +2675,7 @@ class Setup_Controller
         $cachesCleared[] = 'RoutesCache';
     
         if ($deactivateCache) {
-            Tinebase_Core::setupCache(FALSE);
+            Tinebase_Core::setupCache(false);
         }
 
         return $cachesCleared;
