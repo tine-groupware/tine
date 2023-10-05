@@ -832,9 +832,10 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $this->assertCount(1, $result['results']);
         // search from name #2
         $result = $this->_json->searchMessages([
-            ['field' => 'query', 'operator' => 'wordstartswith', 'value' => 'tine']
+            ['field' => 'query', 'operator' => 'wordstartswith', 'value' => Tinebase_Core::getUser()->accountFirstName]
         ], ['limit' => 1]);
-        $this->assertCount(1, $result['results']);
+        $this->assertCount(1, $result['results'], 'could not find mail by accountFirstName: '
+            . Tinebase_Core::getUser()->accountFirstName);
     }
 
     public function testSearchMessageMixedQuery_FilterFTOff()
