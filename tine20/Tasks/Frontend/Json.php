@@ -40,6 +40,8 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected $_configuredModels = [
         Tasks_Model_Task::MODEL_NAME_PART,
+        Tasks_Model_Attendee::MODEL_NAME_PART,
+        Tasks_Model_TaskDependency::MODEL_NAME_PART,
     ];
 
     /**

@@ -10,6 +10,8 @@
  
 Ext.namespace('Tine.Tasks');
 
+import './DependencyPanel'
+
 /**
  * @namespace   Tine.Tasks
  * @class       Tine.Tasks.TaskEditDialog
@@ -229,6 +231,11 @@ Ext.namespace('Tine.Tasks');
                             fieldLabel: this.app.i18n._('Completed'),
                             name: 'completed'
                         })
+                    ], [
+                        this.fieldManager('attendees', {columnWidth: 1})
+                    ], [
+                        this.fieldManager('dependens_on', {columnWidth: .5}),
+                        this.fieldManager('dependent_taks', {columnWidth: .5})
                     ]]
                 }, {
                     // activities and tags
@@ -279,7 +286,7 @@ Tine.Tasks.TaskEditDialog.openWindow = function (config) {
     const id = config.recordId ?? config.record?.id ?? 0;
     var window = Tine.WindowFactory.getWindow({
         width: 900,
-        height: 490,
+        height: 800,
         name: Tine.Tasks.TaskEditDialog.prototype.windowNamePrefix + id,
         contentPanelConstructor: 'Tine.Tasks.TaskEditDialog',
         contentPanelConstructorConfig: config

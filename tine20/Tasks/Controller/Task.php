@@ -6,9 +6,14 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
+use Tasks_Model_Task as TMT;
+use Tasks_Model_Attendee as TMA;
+use Tinebase_Model_Alarm as TBMA;
 
 /**
  * Tasks Controller for Tasks
@@ -21,122 +26,166 @@
  */
 class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implements Tinebase_Controller_Alarm_Interface
 {
-    /**
-     * @var boolean
-     * 
-     * just set is_delete=1 if record is going to be deleted
-     */
-    protected $_purgeRecords = FALSE;
-    
+    use Tinebase_Controller_SingletonTrait;
+
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
+     * don't use the constructor. use the singleton
      */
-    private function __construct()
+    protected function __construct()
     {
-        $this->_applicationName = 'Tasks';
-        $this->_modelName = 'Tasks_Model_Task';
-        $this->_backend = Tasks_Backend_Factory::factory(Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND);
+        $this->_applicationName = Tasks_Config::APP_NAME;
+        $this->_backend = new Tinebase_Backend_Sql([
+            Tinebase_Backend_Sql_Abstract::MODEL_NAME => Tasks_Model_Task::class,
+            Tinebase_Backend_Sql_Abstract::TABLE_NAME => Tasks_Model_Task::TABLE_NAME,
+            Tinebase_Backend_Sql_Abstract::MODLOG_ACTIVE => true,
+        ]);
+        $this->_modelName = Tasks_Model_Task::class;
+        $this->_purgeRecords = false;
         $this->_recordAlarmField = 'due';
-    }
-
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() 
-    {
-    }
-
-    /**
-     * holds self
-     * @var Tasks_Controller_Task
-     */
-    private static $_instance = NULL;
-
-    /**
-     * holds backend instance
-     * (only sql atm.)
-     *
-     * @var Tasks_Backend_Sql
-     */
-    protected $_backend;
-    
-    /**
-     * singleton
-     *
-     * @return Tasks_Controller_Task
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tasks_Controller_Task();
-        }
-        return self::$_instance;
-    }
-
-    /**
-     * destroy instance
-     */
-    public static function unsetInstance()
-    {
-        self::$_instance = NULL;
     }
 
     /****************************** overwritten functions ************************/
 
     /**
-     * add one record
+     * check grant for action (CRUD)
      *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     * @throws  Tinebase_Exception_AccessDenied
-     * @throws  Tinebase_Exception_Record_Validation
+     * @param Tinebase_Record_Interface $_record
+     * @param string $_action
+     * @param boolean $_throw
+     * @param string $_errorMessage
+     * @param Tinebase_Record_Interface $_oldRecord
+     * @return boolean
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public function create(Tinebase_Record_Interface $_task, $_duplicateCheck = true)
+    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
     {
-        $this->_handleCompleted($_task);
-        $_task->originator_tz = $_task->originator_tz ? $_task->originator_tz : Tinebase_Core::getUserTimezone();
+        try {
+            $result = parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            $result = false;
+        }
 
-        $task = parent::create($_task, $_duplicateCheck);
-        
-        $this->_addAutomaticAlarms($task);
-        
-        return $task;
+        if (!$result && (self::ACTION_GET === $_action || ($_oldRecord && self::ACTION_UPDATE === $_action))) {
+            // check attendees for Tinebase_Core::getUser()->contact_id
+            $result = Tasks_Controller_Attendee::getInstance()->searchCount(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Attendee::class, [
+                        [TMFA::FIELD => Tasks_Model_Attendee::FLD_TASK_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->getId()],
+                        [TMFA::FIELD => Tasks_Model_Attendee::FLD_USER_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Core::getUser()->contact_id],
+                    ])) > 0;
+
+            if ($result && $_oldRecord && self::ACTION_UPDATE === $_action) {
+                // limit write to own attendee status/alarms, alarms.skip, add notes, add attachements
+                $findOwnAttendee = function(Tasks_Model_Attendee $a) {
+                    return $a->getIdFromProperty(TMA::FLD_USER_ID) === Tinebase_Core::getUser()->contact_id;
+                };
+                $ownAttendee = $_record->{TMT::FLD_ATTENDEES}?->find($findOwnAttendee, null);
+                $alarms = $_record->alarms;
+                $notes = $_record->notes;
+                $attachments = is_array($_record->attachments) ?
+                    new Tinebase_Record_RecordSet(Tinebase_Model_Tree_Node::class, $_record->attachments, true) :
+                    $_record->attachments;
+                foreach (array_keys($_record::getConfiguration()->getFields()) as $property) {
+                    $_record->{$property} = $_oldRecord->{$property};
+                }
+                if ($ownAttendee) {
+                    Tinebase_Record_Expander::expandRecord($_record);
+                    $oldOwnAttendee = $_record->{TMT::FLD_ATTENDEES}?->find($findOwnAttendee, null);
+                    $oldOwnAttendee->{TMA::FLD_STATUS} = $ownAttendee->{TMA::FLD_STATUS};
+                    if (null !== $ownAttendee->alarms) {
+                        $oldOwnAttendee->alarms = $ownAttendee->alarms;
+                    }
+                }
+                if ($alarms && $_record->alarms) {
+                    foreach ($alarms as $alarm) {
+                        if ($oldAlarm = $_record->alarms->getById($alarm->getId())) {
+                            $oldAlarm->{TBMA::FLD_SKIP}         = $alarm->{TBMA::FLD_SKIP};
+                            $oldAlarm->{TBMA::FLD_SNOOZE_TIME}  = $alarm->{TBMA::FLD_SNOOZE_TIME};
+                            $oldAlarm->{TBMA::FLD_ACK_TIME}     = $alarm->{TBMA::FLD_ACK_TIME};
+                        }
+                    }
+                }
+
+                foreach ($notes ?? [] as $note) {
+                    if ($note['id'] ?? false) continue;
+                    if (!is_object($note)) {
+                        $note = new Tinebase_Model_Note($note, true);
+                    }
+                    $note->note_type_id = Tinebase_Model_Note::SYSTEM_NOTE_NAME_NOTE;
+                    $_record->notes->addRecord($note);
+                }
+                if ($attachments && ($attachments = $attachments->filter('id', null)) && $attachments->count() > 0) {
+                    $_record->attachments->merge($attachments);
+                }
+            }
+        }
+
+        if (!$result && $_throw) {
+            throw new Tinebase_Exception_AccessDenied($_errorMessage);
+        }
+
+        return $result;
     }
-    
+
     /**
-     * inspect before create/update
+     * Removes containers where current user has no access to
      *
-     * @param   Tinebase_Record_Interface $_record      the record to inspect
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action get|update
      */
-    protected function _inspectTask($_record)
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = self::ACTION_GET)
     {
-        $_record->uid = $_record->uid ? $_record->uid : Tinebase_Record_Abstract::generateUID();
-        $_record->organizer = $_record->organizer ? $_record->organizer : Tinebase_Core::getUser()->getId();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . " Inspected Task: " . print_r($_record->toArray(), true)
-        );
+        if (!$this->_doContainerACLChecks) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Container ACL disabled for ' . $_filter->getModelName() . '.');
+            return;
+        }
+
+        parent::checkFilterACL($_filter, $_action);
+
+        if (self::ACTION_GET !== $_action) {
+            return;
+        }
+
+        $aclFilters = $_filter->getAclFilters();
+        if (! $aclFilters) {
+            throw new Tinebase_Exception('no acl filter found, must not happen');
+        }
+
+        $aclFilterGroup = new Tinebase_Model_Filter_FilterGroup();
+        /** @var Tinebase_Model_Filter_Abstract $filter */
+        foreach ($aclFilters as $filter) {
+            $_filter->removeFilter($filter);
+            $aclFilterGroup->addFilter($filter);
+        }
+        $orWrapper = Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, [
+            [TMFA::FIELD => Tasks_Model_Task::FLD_ATTENDEES, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                [TMFA::FIELD => Tasks_Model_Attendee::FLD_USER_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Core::getUser()->contact_id],
+            ]],
+        ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
+        $orWrapper->addFilterGroup($aclFilterGroup);
+
+        $_filter->addFilterGroup($orWrapper);
     }
-    
+
     /**
      * inspect creation of one record (before create)
      *
-     * @param   Tinebase_Record_Interface $_record
+     * @param   Tasks_Model_Task $_record
      * @return  void
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->_addAutomaticAlarms($_record);
         $this->_inspectTask($_record);
     }
     
     /**
      * inspect update of one record (before update)
      *
-     * @param   Tinebase_Record_Interface $_record      the update record
-     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @param   Tasks_Model_Task $_record      the update record
+     * @param   Tasks_Model_Task $_oldRecord   the current persistent record
      * @return  void
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
@@ -146,23 +195,27 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         }
         $this->_inspectTask($_record);
     }
-    
+
     /**
-     * update one record
+     * inspect before create/update
      *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     * @throws  Tinebase_Exception_AccessDenied
-     * @throws  Tinebase_Exception_Record_Validation
+     * @param   Tasks_Model_Task $_record      the record to inspect
      */
-    public function update(Tinebase_Record_Interface $_task, $_duplicateCheck = true, $_updateDeleted = false)
+    protected function _inspectTask($_record)
     {
-        $this->_handleCompleted($_task);
-        return parent::update($_task, $_duplicateCheck, $_updateDeleted);
+        $_record->uid = $_record->uid ?: Tinebase_Record_Abstract::generateUID();
+        $_record->organizer = $_record->organizer ?: Tinebase_Core::getUser()->getId();
+        $_record->originator_tz = $_record->originator_tz ?: Tinebase_Core::getUserTimezone();
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . " Inspected Task: " . print_r($_record->toArray(), true)
+        );
+
+        $this->_handleCompleted($_record);
     }
-    
+
     /**
-     * handles completed date and sets task to 100%
+     * handles completed date
      * 
      * @param Tasks_Model_Task $_task
      */
@@ -234,8 +287,6 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
      * 
      * @param Tinebase_Record_Interface $_record
      * @return void
-     * 
-     * @todo    move this to Tinebase_Controller_Record_Abstract
      */
     protected function _addAutomaticAlarms(Tinebase_Record_Interface $_record)
     {
@@ -264,10 +315,9 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         foreach ($automaticAlarmsArray as $minutesBefore) {
             $_record->alarms->addRecord(new Tinebase_Model_Alarm(array(
                 'minutes_before' => $minutesBefore,
+                'options' => '{"custom":false}',
             ), TRUE));
         }
-        
-        $this->_saveAlarms($_record);
     }
 
     /**
@@ -282,6 +332,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         $dueDiff = $_oldRecord->due->diff($_record->due);
         
         if ($_record->alarms instanceof Tinebase_Record_RecordSet) {
+            /** @var Tinebase_Model_Alarm $alarm */
             foreach ($_record->alarms as $alarm) {
                if ($alarm->alarm_time && $alarm->options == '{"custom":false}') {
                    $alarm->alarm_time = $alarm->alarm_time->add($dueDiff);
