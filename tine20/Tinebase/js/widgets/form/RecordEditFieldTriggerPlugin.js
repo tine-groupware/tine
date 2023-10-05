@@ -61,6 +61,7 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
             }
             editDialogClass.openWindow({mode, record,
                 recordId: record.getId(),
+                needsUpdateEvent: true,
                 listeners: {
                     scope: this,
                     'update': (updatedRecord) => {
