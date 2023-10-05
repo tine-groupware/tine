@@ -22,18 +22,7 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends \PHPUnit\Framework\TestCa
      * @var array test objects
      */
     protected $objects = array();
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tasks WebDAV Generic Task Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
+
 
     /**
      * Sets up the fixture.
@@ -171,15 +160,12 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends \PHPUnit\Framework\TestCa
         $this->assertEquals(0, count($task->alarms));
     }    
 
-    /**
-     * @depends testConvertToTine20Model
-     */
     public function testConvertFromTine20Model()
     {
         $task = $this->testConvertToTine20Model();
         $task->creation_time      = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
         $task->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
-        $task->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        $task->attendees = new Tinebase_Record_RecordSet(Tasks_Model_Attendee::class);
         
         $converter = Tasks_Convert_Task_VCalendar_Factory::factory(Tasks_Convert_Task_VCalendar_Factory::CLIENT_GENERIC);
         

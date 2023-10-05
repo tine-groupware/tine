@@ -175,6 +175,9 @@ const avatarRenderer = function(n_short, metadata, record) {
         if (!names.length && fullName) {
             names = fullName.split(' ');
         }
+        if (!names.length) {
+            names = _.compact([record.get('accountLastName'), record.get('accountFirstName')]);
+        }
         if (names.length > 1) {
             shortName = _.map(names, (n) => { return n.substring(0, 1).toUpperCase() }).join('');
         } else {

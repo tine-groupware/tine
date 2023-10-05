@@ -5,9 +5,11 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Tinebase_ModelConfiguration
@@ -1196,10 +1198,18 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         }
 
         if ($this->_hasAlarms) {
-            $this->_fields['alarms'] = array(
-                'label' => NULL,
-                'type'  => 'alarms'
-            );
+            $this->_fields['alarms'] = [
+                self::LABEL     => null,
+                self::TYPE      => self::TYPE_RECORDS,
+                self::CONFIG    => [
+                    self::APP_NAME      => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME    => Tinebase_Model_Alarm::MODEL_NAME_PART,
+                    self::REF_ID_FIELD  => Tinebase_Model_Alarm::FLD_RECORD_ID,
+                    self::ADD_FILTERS   => [
+                        [TMFA::FIELD => Tinebase_Model_Alarm::FLD_MODEL, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $recordClass]
+                    ],
+                ],
+            ];
         }
 
         if ($this->_hasXProps) {
