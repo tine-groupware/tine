@@ -257,13 +257,14 @@ class Tinebase_Scheduler_Task
             };
             return;
         }
-        
+
+        // FIXME: task name is not always like this ... for example: "Tinebase_ActionQueueActiveMonitoring"
         $taskName = $callable[self::CONTROLLER] . '::' . $callable[self::METHOD_NAME]; 
         
         try {
             $scheduler = new Tinebase_Backend_Scheduler();
             /** @var Tinebase_Model_SchedulerTask $task */
-            $task = $scheduler->getByProperty($taskName, 'name');
+            $task = $scheduler->getByProperty($taskName);
             
             if (empty($task->emails)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -288,6 +289,8 @@ class Tinebase_Scheduler_Task
                 $contact = [new Addressbook_Model_Contact(['email' => $recipient], true)];
                 Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $contact, $subject, $messageBody);
             }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not send notification :' . $tenf->getMessage());
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send notification :' . $e);
         }
