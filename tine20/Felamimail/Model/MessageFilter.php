@@ -41,18 +41,20 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'query'         => array(
             'filter'        => Tinebase_Model_Filter_Query::class,
             'options'       => array(
-                'fields' => array('subject', 'from_email', 'from_name', 'to_list', 'cc_list', 'bcc_list'),
-                'fieldOperatorMapping' => [
-                    'from_name' => ['wordstartswith' => 'contains'],
-                    'from_email' => ['wordstartswith' => 'contains'],
-                ],
+                'fields' => array('subject', 'from_email_ft', 'from_name_ft', 'to_list', 'cc_list', 'bcc_list'),
                 'ignoreFullTextConfig' => true,
             )
         ),
         'folder_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
         'subject'       => array('filter' => Tinebase_Model_Filter_FullText::class),
         'from_email'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'from_email_ft' => array('filter' => Tinebase_Model_Filter_FullText::class, 'options' => [
+            'field'         => 'from_email',
+        ]),
         'from_name'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'from_name_ft'  => array('filter' => Tinebase_Model_Filter_FullText::class, 'options' => [
+            'field'         => 'from_name',
+        ]),
         'received'      => array('filter' => Tinebase_Model_Filter_DateTime::class),
         'messageuid'    => array('filter' => 'Tinebase_Model_Filter_Int'),
         'message_id'    => array('filter' => 'Tinebase_Model_Filter_Text'),
