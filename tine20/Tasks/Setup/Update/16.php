@@ -70,6 +70,7 @@ class Tasks_Setup_Update_16 extends Setup_Update_Abstract
     public function update002()
     {
         Setup_SchemaTool::updateSchema([
+            Tasks_Model_Attendee::class,
             Tasks_Model_Task::class,
             Tasks_Model_TaskDependency::class,
         ]);
