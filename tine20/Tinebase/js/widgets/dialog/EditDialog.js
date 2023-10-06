@@ -204,6 +204,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     canonicalName: 'EditDialog',
 
+    descriptionFieldName: 'description',
+
     // private
     bodyStyle:'padding:5px',
     layout: 'fit',
@@ -517,8 +519,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
     getEastPanel: function() {
         var items = [];
-        if (this.recordClass.hasField('description')) {
-            const field = Tine.widgets.form.FieldManager.get(this.app, this.recordClass, 'description', 'editDialog');
+        if (this.recordClass.hasField(this.descriptionFieldName)) {
+            const field = Tine.widgets.form.FieldManager.get(this.app, this.recordClass, this.descriptionFieldName, 'editDialog');
 
             items.push(new Ext.Panel({
                 title: field.fieldLabel, //i18n._('Description'),
@@ -534,7 +536,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     style: 'margin-top: -4px; border 0px;',
                     labelSeparator: '',
                     xtype: 'textarea',
-                    name: 'description',
+                    name: this.descriptionFieldName,
                     hideLabel: true,
                     grow: false,
                     preventScrollbars: false,
