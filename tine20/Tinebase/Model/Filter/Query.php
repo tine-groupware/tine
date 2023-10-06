@@ -124,8 +124,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
     {
         $subGroup = new Tinebase_Model_Filter_FilterGroup(array(), $condition);
         foreach ($this->_options['fields'] as $field) {
-            $op = $this->_options['fieldOperatorMapping'][$field][$this->_operator] ?? $this->_operator;
-            $filter = $parentFilterGroup->createFilter(['field' => $field, 'operator' => $op, 'value' => $query, 'clientOptions' => $this->_clientOptions]);
+            $filter = $parentFilterGroup->createFilter(['field' => $field, 'operator' => $this->_operator, 'value' => $query, 'clientOptions' => $this->_clientOptions]);
             $this->_addFilterToGroup($subGroup, $filter);
         }
 
