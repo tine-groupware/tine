@@ -596,6 +596,141 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertTrue($fs->isDir('Filemanager/folders/shared/unittestdirectory1/foo'));
     }
 
+    public function testMoveFlySystemDirs()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $node = $fs->createAclNode('Filemanager/folders/shared/flysystem1');
+
+        if (is_dir(Tinebase_Config::getInstance()->filesdir . '/flysystem')) {
+            exec('rm -rf ' . Tinebase_Config::getInstance()->filesdir . '/flysystem');
+        }
+        $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
+            Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest',
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER => League\Flysystem\Local\LocalFilesystemAdapter::class,
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => [
+                Tinebase_Config::getInstance()->filesdir . '/flysystem/',
+            ],
+        ]));
+        $node->flysystem = $flySystem;
+        $node->flypath = '/';
+
+        $node = $fs->update($node);
+        $this->assertSame($flySystem->getId(), $node->flysystem);
+        $this->assertSame('/', $node->flypath);
+
+        $fs->mkdir('Filemanager/folders/shared/flysystem1/test');
+        $fs->mkdir('Filemanager/folders/shared/flysystem1/test1');
+
+        $path = Tinebase_Config::getInstance()->filesdir . '/flysystem/';
+        $this->assertTrue(is_dir($path . 'test'));
+        $this->assertTrue(is_dir($path . 'test1'));
+
+        // move directory within a flysystem
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD'    => 'MOVE',
+            'REQUEST_URI'       => '/webdav/Filemanager/shared/flysystem1/test',
+            'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/flysystem1/test2',
+        ));
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        $this->assertFalse(is_dir($path . 'test'));
+        $this->assertTrue(is_dir($path . 'test2'));
+        $this->assertSame('/test2', $fs->stat('Filemanager/folders/shared/flysystem1/test2')->flypath);
+
+        // move directory within a flysystem to subfolder
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD'    => 'MOVE',
+            'REQUEST_URI'       => '/webdav/Filemanager/shared/flysystem1/test2',
+            'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/flysystem1/test1/foo',
+        ));
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        $this->assertFalse(is_dir($path . 'test2'));
+        $this->assertTrue(is_dir($path . 'test1/foo'));
+        $this->assertSame('/test1/foo', $fs->stat('Filemanager/folders/shared/flysystem1/test1/foo')->flypath);
+
+        $this->assertNotFalse(
+            file_put_contents('tine20://Filemanager/folders/shared/flysystem1/aTestFile.test', 'unittesting'));
+        $this->assertSame('unittesting', file_get_contents($path . 'aTestFile.test'));
+        $this->assertSame('/aTestFile.test', $fs->stat('Filemanager/folders/shared/flysystem1/aTestFile.test')->flypath);
+
+        // move file within a flysystem
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD'    => 'MOVE',
+            'REQUEST_URI'       => '/webdav/Filemanager/shared/flysystem1/aTestFile.test',
+            'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/flysystem1/test1/aTestFile.test',
+        ));
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        $this->assertFalse(is_file($path . 'aTestFile.test'));
+        $this->assertTrue(is_file($path . 'test1/aTestFile.test'));
+        $this->assertSame('/test1/aTestFile.test', $fs->stat('Filemanager/folders/shared/flysystem1/test1/aTestFile.test')->flypath);
+
+        // move file from flysystem to tine fs
+        $fs->createAclNode('Filemanager/folders/shared/tinesystem');
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD'    => 'MOVE',
+            'REQUEST_URI'       => '/webdav/Filemanager/shared/flysystem1/test1/aTestFile.test',
+            'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/tinesystem/aTestFile.test',
+        ));
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        $this->assertFalse(is_file($path . 'test1/aTestFile.test'));
+        $this->assertSame('unittesting',
+            file_get_contents('tine20://Filemanager/folders/shared/tinesystem/aTestFile.test'));
+        $this->assertEmpty($fs->stat('Filemanager/folders/shared/tinesystem/aTestFile.test')->flypath);
+
+        // move file from tine fs to flysystem
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD'    => 'MOVE',
+            'REQUEST_URI'       => '/webdav/Filemanager/shared/tinesystem/aTestFile.test',
+            'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/flysystem1/aTestFile.test',
+        ));
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        $this->assertFalse($fs->isFile('Filemanager/folders/shared/tinesystem/aTestFile.test'));
+        $this->assertSame('unittesting',
+            file_get_contents($path . '/aTestFile.test'));
+        $this->assertSame('/aTestFile.test', $fs->stat('Filemanager/folders/shared/flysystem1/aTestFile.test')->flypath);
+
+        $node = $fs->createAclNode('Filemanager/folders/shared/flysystem2');
+        if (is_dir(Tinebase_Config::getInstance()->filesdir . '/flysystem1')) {
+            exec('rm -rf ' . Tinebase_Config::getInstance()->filesdir . '/flysystem1');
+        }
+        $flySystem1 = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
+            Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest1',
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER => League\Flysystem\Local\LocalFilesystemAdapter::class,
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => [
+                Tinebase_Config::getInstance()->filesdir . '/flysystem1/',
+            ],
+        ]));
+        $node->flysystem = $flySystem1;
+        $node->flypath = '/';
+
+        $node = $fs->update($node);
+        $this->assertSame($flySystem1->getId(), $node->flysystem);
+        $this->assertSame('/', $node->flypath);
+
+        // from file from one flysystem to a different one
+        $request = new Sabre\HTTP\Request(array(
+            'REQUEST_METHOD'    => 'MOVE',
+            'REQUEST_URI'       => '/webdav/Filemanager/shared/flysystem1/aTestFile.test',
+            'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/flysystem2/aTestFil.test',
+        ));
+        $this->server->httpRequest = $request;
+        $this->server->exec();
+
+        $this->assertFalse(is_file($path . '/aTestFile.test'));
+        $this->assertSame('unittesting',
+            file_get_contents(Tinebase_Config::getInstance()->filesdir . '/flysystem1/aTestFil.test'));
+        $this->assertSame('/aTestFil.test', $fs->stat('Filemanager/folders/shared/flysystem2/aTestFil.test')->flypath);
+    }
+
     public function testMove($destination = null)
     {
         $fs = Tinebase_FileSystem::getInstance();

@@ -2623,6 +2623,44 @@ fi';
         return 0;
     }
 
+    public function flySync1()
+    {
+        $this->_checkAdminRight();
+
+        /*$flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
+-            Tinebase_Model_Tree_FlySystem::FLD_NAME => 'test',
+-            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER => League\Flysystem\Local\LocalFilesystemAdapter::class,
+-            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => [
+-                '/var/lib/tine20/flysystem/',
+-            ],
+-        ]));*/
+
+        $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_Tree_FlySystem::class, [
+            ['field' => 'name', 'operator' => 'equals', 'value' => 'test'],
+        ]))->getFirstRecord();
+
+        $fs = Tinebase_FileSystem::getInstance();
+        $path = '/' . Tinebase_Application::getInstance()->getApplicationByName(Filemanager_Config::APP_NAME)->getId() . '/folders/' . Tinebase_Model_Container::TYPE_SHARED . '/flySysGutachten';
+
+        $node = $fs->createAclNode($path);
+        $node->flysystem = $flySystem->getId();
+        $node->flypath = '/';
+        $node = $fs->update($node);
+
+        $fs->syncFlySystem($node, 0);
+    }
+
+    public function flySync2(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+        $args = $this->_parseArgs($_opts, ['path']);
+
+        $fs = Tinebase_FileSystem::getInstance();
+        $node = $fs->stat('/' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() .
+            '/folders/' . Tinebase_Model_Container::TYPE_SHARED . '/flySysGutachten/' . $args['path']);
+        $fs->syncFlySystem($node);
+    }
+
     /**
      * Generates new js Translation List files for given locale and path
      * If no locales is given all available locales are generated
