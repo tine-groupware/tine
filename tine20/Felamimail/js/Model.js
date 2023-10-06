@@ -100,6 +100,31 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
             return 'images/favicon.svg';
         }
     },
+    
+    getFlagIcons() {
+        const icons = [];
+        const app = Tine.Tinebase.appMgr.get('Felamimail');
+        
+        icons.push({name: 'seen',src: 'images/icon-set/empty.svg', qtip: app.i18n._('Unread Message'), cls: 'unread-flag-dot', 
+            visibility: !this.hasFlag('\\Seen') ? 'visible' : 'hidden'});
+        
+        if (this.get('is_spam_suspicions')) {
+            icons.push({name: 'spam',src: 'images/icon-set/icon_spam.svg', qtip: app.i18n._('This message might be SPAM')});
+        }
+        if (this.hasFlag('\\Answered')) {
+            icons.push({name: 'answered', src: 'images/icon-set/icon_email_answer.svg', qtip: app.i18n._('Answered')});
+        }
+        if (this.hasFlag('Passed')) {
+            icons.push({name: 'passed',src: 'images/icon-set/icon_email_forward.svg', qtip: app.i18n._('Forwarded')});
+        }
+        if (this.get('content_type') === 'multipart/encrypted') {
+            icons.push({name: 'encrypted',src: 'images/icon-set/icon_lock.svg', qtip: app.i18n._('Encrypted Message')});
+        }
+        if (this.hasFlag('Tine20')) {
+            icons.push({name: 'tine20',src: this.getTine20Icon(), qtip: app.i18n._('Tine20')});
+        }
+        return icons;
+    },
 
     /**
      * adds given flag to message

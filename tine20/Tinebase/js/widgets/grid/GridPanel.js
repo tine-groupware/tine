@@ -1725,7 +1725,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.pagingToolbar.on('beforechange', function() {
                 this.grid.getView().isPagingRefresh = true;
             }, this);
-
+            
             if (this.recordClass) {
                 this.localizedLangPicker = getLocalizedLangPicker(this.recordClass)
                 if (this.localizedLangPicker) {
@@ -1772,9 +1772,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             recordClass: this.recordClass,
             getDragDropText: this.getDragDropText.createDelegate(this)
         }));
+        this.grid.store.sortInfo = this.defaultSortInfo;
         this.stateIdDetailPanelEast = this.grid.stateId + '_DetailsPanel_East';
         this.grid.stateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
-    
+
         // init various grid / sm listeners
         this.grid.on('keydown',     this.onKeyDown,         this);
         this.grid.on('rowclick',    this.onRowClick,        this);
