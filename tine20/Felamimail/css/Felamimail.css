@@ -109,15 +109,9 @@
     font-weight: bold;
 }
 
-.FelamimailFlagIcon.unread-flag {
-    mask-image:url(../../images/icon-set/icon_sticky_dot.svg) !important;
-    mask-size: 10px 10px;
-    mask-repeat: no-repeat;
-    mask-position: 3px 1px;
+.unread-flag-dot {
     -webkit-mask-image:url(../../images/icon-set/icon_sticky_dot.svg) !important;
-    -webkit-mask-size: 10px 10px;
     -webkit-mask-repeat: no-repeat;
-    -webkit-mask-position: 3px 1px;
     background-color: #4e79b2;
 }
 
@@ -161,8 +155,26 @@
     padding: 5px;
 }
 
+.preview-panel-felamimail-header-row {
+    display: flex;
+    padding-top: 3px;
+}
+
+.preview-panel-felamimail-header-row-left {
+    font-weight: bold;
+    min-width: 50px;
+    text-align: right;
+}
+
+.preview-panel-felamimail-header-row-right {
+    padding-left: 10px;
+    display: flex;
+    text-align: left;
+}
+
 .preview-panel-felamimail-attachments {
     margin-top: 5px;
+    padding: 3px;
     background-color: #e8e8e8;
 }
 
@@ -171,6 +183,7 @@
 .preview-panel-felamimail-body {
     overflow: auto;
     font-size: 13px;
+    padding: 10px;
 }
 
 .preview-panel-felamimail-body ul {
@@ -408,4 +421,40 @@
 
 .dark-mode .preview-panel-felamimail-body img {
     filter: invert(1) hue-rotate(180deg);
+}
+
+.felamimail-message-block {
+    border-bottom: 1px solid lightgrey;
+    display: block;
+}
+
+.felamimail-message-title {
+    margin: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.felamimail-message-title-row {
+    display: flex;
+    min-width: 16px;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 16px;
+}
+
+.felamimail-message-title-text {
+    font-size: 12px;
+    padding: 0px 5px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+
+.felamimail-message-icon {
+    width: 16px;
+    height: 16px;
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    margin: 0px 2px;
 }
