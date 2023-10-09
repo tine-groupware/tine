@@ -1358,8 +1358,11 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             // @TODO recordsPickers & pickerGrids?
                         }
                     });
-
-                    me.fireEvent('update', Ext.util.JSON.encode(recordData), me.mode, me, ticketFn);
+                    // skip unnecessary server updates
+                    if(me.needsUpdateEvent || Object.keys(me.record.modified).length || !me.record.getId()
+                        || (me.record.has('creation_time') && !me.record.creation_time)) {
+                        me.fireEvent('update', Ext.util.JSON.encode(recordData), me.mode, me, ticketFn);
+                    }
                     wrapTicket();
                 }.bind(me));
 

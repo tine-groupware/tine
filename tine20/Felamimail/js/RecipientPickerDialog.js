@@ -41,6 +41,7 @@ Ext.namespace('Tine.Felamimail');
     evalGrants: false,
     mode: 'local',
     hideAttachmentsPanel: true,
+    needsUpdateEvent: true,
     
     bodyStyle:'padding:0px',
     

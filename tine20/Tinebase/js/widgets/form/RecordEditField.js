@@ -112,6 +112,7 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         editDialogClass.openWindow({
             mode: 'local',
             record: this.recordData,
+            needsUpdateEvent: true,
             listeners: {
                 scope: me,
                 'update': (updatedRecord) => {

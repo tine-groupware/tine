@@ -619,6 +619,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         editDialogClass.openWindow(_.assign({
             record: Ext.encode(record.data),
             recordId: record.getId(),
+            needsUpdateEvent: true,
             listeners: {
                 scope: this,
                 update: this.onEditDialogRecordUpdate
