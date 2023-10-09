@@ -1341,7 +1341,7 @@ viewConfig: {
     // private
     updateHeaderSortState : function(){
         var state = this.ds.getSortState();
-        if(!state){
+        if(!state || !this.grid){
             return;
         }
         if(!this.sortState || (this.sortState.field != state.field || this.sortState.direction != state.direction)){
