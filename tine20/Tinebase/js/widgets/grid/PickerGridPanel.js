@@ -611,13 +611,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         const editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
         const mode = this.editDialogConfig?.mode || editDialogClass.prototype.mode;
 
-        if (mode === 'remote') {
-            // prevent loading non existing remote record
-            record.setId(0);
-        }
-
         editDialogClass.openWindow(_.assign({
-            record: Ext.encode(record.data),
+            record: Ext.encode(record.getData()),
             recordId: record.getId(),
             needsUpdateEvent: true,
             listeners: {
@@ -763,7 +758,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         if (editDialogClass) {
             editDialogClass.openWindow(_.assign({
-                record: JSON.stringify(record.data),
+                record: JSON.stringify(record.getData()),
                 recordId: record.getId(),
                 fixedFields: this.readOnly ? JSON.stringify(Object.assign(Object.fromEntries(record.constructor.getFieldNames().map((k, i) => [k, null])), record.data)) : null,
                 listeners: {

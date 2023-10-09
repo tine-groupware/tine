@@ -890,7 +890,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // To bypass this you can set recordFromJson === true, then the dialog wouldn't load the record from server!
         // But to make this work you need to pass a json encoded record to the editdialog as string!
         // NOTE: we only load records with id from remote, new records (id === 0/null/undefined) are local
-        if (this.mode !== 'local' && this.recordFromJson !== true && [null, undefined, 0, '0'].indexOf(this.record?.id) < 0) {
+        if (!this.record.phantom && (this.mode !== 'local' || this.mode.match(/load\(remote\)/)) && this.recordFromJson !== true && [null, undefined, 0, '0'].indexOf(this.record?.id) < 0) {
+            this.initialRecord = this.record;
             this.loadRemoteRecord();
         } else {
             this.onRecordLoad.defer(10, this);
@@ -906,6 +907,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             scope: this,
             success: function(record) {
                 this.record = record;
+                // apply modifications from initial Record
+                _.forEach(this.initialRecord?.modified, (val, field) => {
+                    this.record.set(field, this.initialRecord.get(field));
+                });
                 this.onRecordLoad();
             }
         });
@@ -1126,7 +1131,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         (function() {
             this.checkStates();
-            this.record.commit();
+            // this.record.commit(); // why?
         }).defer(100, this);
 
         this.hideLoadMask();
@@ -1330,7 +1335,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                                 let ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]);
                                 let wrapTicket = ticketFn();
 
-                                me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
+                                me.fireEvent('update', Ext.util.JSON.encode(me.record.getData()), me.mode, me, ticketFn);
                                 wrapTicket();
                             });
 
@@ -1340,10 +1345,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }, me.getAdditionalSaveParams(me));
             } else {
                 me.afterIsRendered().then(function() {
-                    me.onRecordLoad();
                     const ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]);
                     const wrapTicket = ticketFn();
-                    const recordData = {...me.record.data};
+                    const recordData = {...me.record.getData()};
 
                     // NOTE: update event in local mode should have resolved data (like in remote mode)
                     this.getForm().items.items.forEach((field) => {
@@ -1358,6 +1362,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             // @TODO recordsPickers & pickerGrids?
                         }
                     });
+                    me.onRecordLoad();
                     // skip unnecessary server updates
                     if(me.needsUpdateEvent || Object.keys(me.record.modified).length || !me.record.getId()
                         || (me.record.has('creation_time') && !me.record.creation_time)) {

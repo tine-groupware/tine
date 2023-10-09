@@ -180,14 +180,14 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
             if (value) {
                 if(value.accountId) {
                     // account object
+                    this.selectedRecord = this.selectedAccount = Tine.Tinebase.data.Record.setFromJson(value, Tine.Tinebase.Model.User);
                     this.accountId = value.accountId;
                     value = value.accountDisplayName;
-                    this.selectedAccount = Tine.Tinebase.data.Record.setFromJson(value, Tine.Tinebase.Model.Account);
                 } else if (typeof(value.get) == 'function') {
                     // account record
+                    this.selectedRecord = this.selectedAccount = value;
                     this.accountId = value.get('id');
                     value = value.get('name');
-                    this.selectedAccount = value;
                 }
             } else {
                 this.accountId = null;
