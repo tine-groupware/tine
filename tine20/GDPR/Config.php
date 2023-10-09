@@ -15,12 +15,7 @@
  */
 class GDPR_Config extends Tinebase_Config_Abstract
 {
-    /**
-     * the Tine2.0 Application name
-     *
-     * @var string
-     */
-    const APP_NAME = 'GDPR';
+    public const APP_NAME = 'GDPR';
 
     /**
      * Is data provenance for ADB contacts mandatory
