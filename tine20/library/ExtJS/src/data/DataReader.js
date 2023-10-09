@@ -188,6 +188,7 @@ Ext.data.DataReader.prototype = {
             for (var i = 0; i < root.length; i++) {
                 var n = root[i];
                 var record = new Record(this.extractValues(n, fi, fl), this.getId(n));
+                if (n.__meta) Object.assign(record, n.__meta);
                 record[rawName] = n;    // <-- There's implementation of ugly bit, setting the raw record-data.
                 rs.push(record);
             }
