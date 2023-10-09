@@ -31,7 +31,7 @@ msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"
 
 #: js/TaskEditDialog.js:184 js/TaskGridPanel.js:100 js/Models.js:114
 msgid "Summary"
-msgstr "Beschreibung"
+msgstr "Zusammenfassung"
 
 #: js/TaskEditDialog.js:191
 msgid "Due date"
