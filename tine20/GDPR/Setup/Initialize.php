@@ -38,7 +38,7 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                     TMCC::LABEL             => 'GDPR Intended Purpose', // _('GDPR Intended Purpose')
                     TMCC::TYPE              => TMCC::TYPE_RECORDS,
                     TMCC::CONFIG            => [
-                        TMCC::APP_NAME          => GDPR_Config::APPNAME,
+                        TMCC::APP_NAME          => GDPR_Config::APP_NAME,
                         TMCC::MODEL_NAME        => GDPR_Model_DataIntendedPurposeRecord::MODEL_NAME_PART,
                         TMCC::REF_ID_FIELD      => 'record',
                         TMCC::DEPENDENT_RECORDS => true,
@@ -97,7 +97,7 @@ class GDPR_Setup_Initialize extends Setup_Initialize
                     TMCC::TYPE              => TMCC::TYPE_RECORD,
                     TMCC::IS_VIRTUAL        => true,
                     TMCC::CONFIG            => [
-                        TMCC::APP_NAME          => GDPR_Config::APPNAME,
+                        TMCC::APP_NAME          => GDPR_Config::APP_NAME,
                         TMCC::MODEL_NAME        => GDPR_Model_DataProvenance::MODEL_NAME_PART,
                     ],
                     TMCC::INPUT_FILTERS     => [
