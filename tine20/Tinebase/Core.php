@@ -2007,6 +2007,10 @@ class Tinebase_Core
             $port = parse_url($configUrl, PHP_URL_PORT);
         }
 
+        if (! in_array($part, [self::GET_URL_PATH, self::GET_URL_HOST, self::GET_URL_PROTOCOL]) && ! empty($port)) {
+            $hostname .= ':' . $port;
+        }
+
         switch ($part) {
             case self::GET_URL_PATH:
                 $url = '' === $pathname || null === $pathname ? '/' : $pathname;
@@ -2027,10 +2031,6 @@ class Tinebase_Core
             default:
                 $url = $protocol . '://' . $hostname . $pathname;
                 break;
-        }
-
-        if (! in_array($part, [self::GET_URL_PATH, self::GET_URL_HOST, self::GET_URL_PROTOCOL]) && ! empty($port)) {
-            $url .= ':' . $port;
         }
         return $url;
     }
