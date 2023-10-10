@@ -146,7 +146,7 @@ class Crm_Export_PdfTest extends TestCase
             'own_id'                 => $lead->getId(),
             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Addressbook_Model_Contact',
-            'related_backend'        => Addressbook_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'related_id'             => $this->objects['linkedContact']->id,
             'type'                   => 'RESPONSIBLE',
         ));

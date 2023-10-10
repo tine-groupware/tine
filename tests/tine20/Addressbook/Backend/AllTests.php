@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -15,11 +15,6 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 
 class Addressbook_Backend_AllTests
 {
-    public static function main ()
-    {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
-    }
-    
     public static function suite ()
     {
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Addressbook All Backend Tests');
