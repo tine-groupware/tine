@@ -6,7 +6,7 @@
  * @subpackage  FileSystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -4660,7 +4660,7 @@ class Tinebase_FileSystem implements
 
     public function getQuotaNotificationRecipients(Tinebase_Model_User $sender = null, $softQuota = true): ?array
     {
-        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $contactsBackend = new Addressbook_Backend_Sql();
         $senderContact = $sender && $sender->contact_id ? $contactsBackend->get($sender->contact_id) : null;
         $contacts = $senderContact ? [$senderContact] : [];
         $additionalContacts = [];

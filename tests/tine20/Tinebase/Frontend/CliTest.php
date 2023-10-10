@@ -116,7 +116,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $result = $this->_cli->purgeDeletedRecords($opts);
         self::assertEquals(0, $result);
 
-        $contactBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $contactBackend = new Addressbook_Backend_Sql();
         $this->expectException('Tinebase_Exception_NotFound');
         $contactBackend->get($deletedRecord->getId(), true);
     }
@@ -142,7 +142,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $deletedLead = $this->_addAndDeleteLead();
 
         // test deleted contact is still there
-        $contactBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $contactBackend = new Addressbook_Backend_Sql();
         $contacts = $contactBackend->getMultipleByProperty($deletedContact->getId(), 'id', TRUE);
         $this->assertEquals(1, count($contacts));
 

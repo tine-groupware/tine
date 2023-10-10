@@ -4,7 +4,7 @@
  * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -279,7 +279,7 @@ class Phone_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
             
         $phone = Voipmanager_Controller_Snom_Phone::getInstance()->getByMacAddress($mac);
         
-        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $contactsBackend = new Addressbook_Backend_Sql();
         
         $tbContainer = Tinebase_Container::getInstance();
         

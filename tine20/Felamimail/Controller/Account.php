@@ -508,7 +508,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                             $contact = Addressbook_Controller_Contact::getInstance()->get($emailAccount->contact_id);
                             if ($contact->type !== Addressbook_Model_Contact::CONTACTTYPE_USER) {
                                 // hard delete contact in admin module
-                                $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                                $contactsBackend = new Addressbook_Backend_Sql();
                                 if ($hardDelete) {
                                     $contactsBackend->delete($contact->getId());
                                 } else {

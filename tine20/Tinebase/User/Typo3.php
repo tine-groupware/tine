@@ -188,7 +188,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
             
             // import contactdata(phone, address, fax, birthday. photo)
             //$contact = $this->_getContactFromBackend($user);
-            //Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL)->update($contact);
+            //Addressbook_Backend_Factory::factory(Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND)->update($contact);
         }
     }
     
