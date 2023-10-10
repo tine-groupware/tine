@@ -34,6 +34,7 @@ class Calendar_Controller_EventType extends Tinebase_Controller_Record_Abstract
             'modlogActive'  => true
         ));
         $this->_purgeRecords = FALSE;
+        $this->_duplicateCheckFields = [['name']];
     }
     
     /**
