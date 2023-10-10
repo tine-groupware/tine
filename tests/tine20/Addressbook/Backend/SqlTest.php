@@ -54,7 +54,7 @@ class Addressbook_Backend_SqlTest extends \PHPUnit\Framework\TestCase
 {
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-        $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $this->_backend = new Addressbook_Backend_Sql();
         
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 

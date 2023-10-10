@@ -288,7 +288,7 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
                         'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : NULL,
                         'remark'                 => (isset($relation['remark'])) ? $relation['remark'] : NULL,
                         'related_model'          => (isset($relation['related_model'])) ? $relation['related_model'] : NULL,
-                        'related_backend'        => (isset($relation['related_backend'])) ? $relation['related_backend'] : Addressbook_Backend_Factory::SQL
+                        'related_backend'        => (isset($relation['related_backend'])) ? $relation['related_backend'] : Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND
                     );
                     
                     // set id from related record (if it didn't got set in javascript frontend)
@@ -302,7 +302,7 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
                         case 'CUSTOMER':
                         case 'PARTNER':
                             $data['related_model'] = 'Addressbook_Model_Contact';
-                            $data['related_backend'] = Addressbook_Backend_Factory::SQL;
+                            $data['related_backend'] = Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND;
                             break;
                         case 'PRODUCT':
                             $data['related_model'] = 'Sales_Model_Product';

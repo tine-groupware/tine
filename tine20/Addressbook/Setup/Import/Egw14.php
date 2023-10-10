@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -63,7 +63,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' starting egw import for Adressbook');
         
         $this->_migrationStartTime = Tinebase_DateTime::now();
-        $this->_tineRecordBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $this->_tineRecordBackend = new Addressbook_Backend_Sql();
         
         $estimate = $this->_getEgwRecordEstimate();
         $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . " found {$estimate} contacts for migration");

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -53,7 +53,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         $this->_applicationName = 'Addressbook';
         $this->_modelName = 'Addressbook_Model_Contact';
-        $this->_backend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $this->_backend = new Addressbook_Backend_Sql();
         $this->_purgeRecords = FALSE;
         $this->_resolveCustomFields = TRUE;
         $this->_updateMultipleValidateEachRecord = TRUE;

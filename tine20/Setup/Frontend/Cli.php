@@ -4,7 +4,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add ext check again
  */
@@ -305,7 +305,6 @@ class Setup_Frontend_Cli
         Setup_Backend_Factory::clearCache();
         Tinebase_User::destroyInstance();
         Setup_Core::set(Setup_Core::USER, 'setupuser');
-        Addressbook_Backend_Factory::clearCache();
         Addressbook_Controller_Contact::destroyInstance();
         $dbConfig['driver'] = 'pdo_mysql';
         $dbConfig['user']   = $dbConfig['username'];
