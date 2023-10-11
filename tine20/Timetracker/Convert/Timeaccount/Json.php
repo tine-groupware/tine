@@ -46,7 +46,6 @@ class Timetracker_Convert_Timeaccount_Json extends Tinebase_Convert_Json
                     break;
                 default:
                     throw new Tinebase_Exception_InvalidArgument('Unsupported accountType.');
-                    break;
             }
         }
 

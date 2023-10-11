@@ -472,6 +472,14 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals($value, $ts['customfields'][$cf->name], 'value should still not have changed');
     }
 
+    public function testAddTimesheetWithoutAccountId()
+    {
+        $timesheetArray = $this->_getTimesheet()->toArray();
+        unset($timesheetArray['account_id']);
+        $ts = $this->_json->saveTimesheet($timesheetArray);
+        self::assertEquals(Tinebase_Core::getUser()->getId(), $ts['account_id']['accountId']);
+    }
+
     /**
      * update timesheet customfields and return saved ts
      *
