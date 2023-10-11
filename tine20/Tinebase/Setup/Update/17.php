@@ -38,6 +38,8 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update001()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
         Setup_SchemaTool::updateSchema([
             Tinebase_Model_Tree_FileObject::class,
             Tinebase_Model_Tree_FlySystem::class,
