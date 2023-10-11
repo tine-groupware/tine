@@ -20,14 +20,12 @@
  * @property string $start_time
  * @property string $end_time
  * @property string $timeaccount_id
+ * @property string $account_id
  * @property string $accounting_time_factor
  */
 class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sales_Model_Billable_Interface
 {
     const MODEL_NAME_PART = 'Timesheet';
-
-    const TYPE_WORKINGTIME = 'AZ';
-    const TYPE_PROJECTTIME = 'PZ';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -56,6 +54,7 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
         'copyEditAction'    => true,
         'copyNoAppendTitle' => true,
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
+        Tinebase_ModelConfiguration::RUN_CONVERT_TO_RECORD_FROM_JSON => true,
 
         'titleProperty'     => 'description',
         'appName'           => Timetracker_Config::APP_NAME,
@@ -111,7 +110,9 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                 'duplicateCheckGroup'   => 'account',
                 'type'                  => 'user',
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-                // TODO add filter: 'inputFilters'          => array('Zend_Filter_Empty' => CURRENT USER ACCOUNT ID),
+                self::CONVERTERS    => [
+                    Tinebase_Model_Converter_CurrentUserIfEmpty::class
+                ],
             ),
             'timeaccount_id'        => array(
                 'label'                 => 'Time Account (Number - Title)', //_('Time Account (Number - Title)')
@@ -124,8 +125,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
                     'idProperty'            => 'id',
                     'doNotCheckModuleRight'      => true
                 ),
-                // TODO ?????
-                //'default'               => array('account_grants' => array('bookOwnGrant' => true)),
                 'filterDefinition'      => array(
                     'filter'                => 'Tinebase_Model_Filter_ForeignId',
                     'options'               => array(
@@ -335,7 +334,8 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
         return 'hour'; // _('hour')
     }
 
-    public static function filterEmptyNonZero($data) { 
+    public static function filterEmptyNonZero($data)
+    {
         return empty($data) && $data !== 0 && $data !== '0' ? 1 : $data; 
     }
 }
