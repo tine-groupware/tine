@@ -235,6 +235,16 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         }
     },
 
+    initValue: function() {
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initValue.call(this);
+        this.originalSelectedRecord = this.selectedRecord;
+    },
+
+    reset: function() {
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.reset.call(this);
+        this.selectedRecord = this.originalSelectedRecord;
+    },
+
     getListItemQtip(record) {
         let value = _.get(record, 'data.description', '');
 
@@ -412,8 +422,11 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         const setValue = _.bind(Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue, this);
         if (text && text.registerReplacer) {
             text.registerReplacer((text) => {
-                setValue(text);
-                this.value = value;
+                // check if value is still valid
+                if (value === this.value) {
+                    setValue(text);
+                    this.value = text;
+                }
             });
         } else {
             setValue(text);
