@@ -69,6 +69,10 @@ class Tasks_Setup_Update_16 extends Setup_Update_Abstract
 
     public function update002()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $this->getDb()->update(SQL_TABLE_PREFIX . Tasks_Model_Task::TABLE_NAME, ['percent' => 0], '`percent` is null');
+
         Setup_SchemaTool::updateSchema([
             Tasks_Model_Attendee::class,
             Tasks_Model_Task::class,
