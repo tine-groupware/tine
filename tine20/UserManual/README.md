@@ -10,15 +10,13 @@ Development
 HOWTOs
 =============
 
+Download Manual from https://packages.tine20.com/maintenance/manual/
+
 Import manual into database:
 
-    $ php tine20.php --method=UserManual.importManualPages \
-      UserManual/doc/tine20_handbuch_2017-01-31_base64_2941752.tar.gz
+    $ php tine20.php --method=UserManual.importHandbookBuild \
+      tine20-handbook_html_chunked_build-1071705_commit-91af5aa9edabc31757e77fcd821ae2f71b5da4f1.zip
     
-Import manual with clearing existing database records first:
-
-    $ php tine20.php --method=UserManual.importManualPages clear=1 \
-      UserManual/doc/tine20_handbuch_2017-01-31_base64_2941752.tar.gz
     
 Your Database might need this setting for the import (minimum value):
 
