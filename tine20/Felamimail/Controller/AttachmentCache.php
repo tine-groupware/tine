@@ -163,6 +163,8 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
         /* @var Felamimail_Model_AttachmentCache $createdRecord */
         try {
             $createdRecord = $this->create($record);
+        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
+            throw new Tinebase_Exception_NotFound($teuv);
         } catch (ErrorException $e) {
             // email attachment encoding failure
             if (strpos($e->getMessage(), 'invalid byte sequence')) {
