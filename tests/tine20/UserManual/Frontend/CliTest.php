@@ -35,6 +35,13 @@ class UserManual_Frontend_CliTest extends TestCase
      */
     public function testImportManualPages($importBuild = true)
     {
+        $umAppId = Tinebase_Application::getInstance()->getApplicationByName('UserManual')->getId();
+        $adminRoleRights = array_filter(Tinebase_Acl_Roles::getInstance()->getRoleRights(Tinebase_Acl_Roles::getInstance()->getRoleByName('admin role')->getId()),
+            function ($val) use($umAppId) { return $val['application_id'] == $umAppId; });
+        $this->assertTrue(Tinebase_Core::getUser()->hasRight('UserManual', Tinebase_Acl_Rights::ADMIN),
+            Tinebase_Core::getUser()->accountLoginName . ' has no admin right on UserManual ' . print_r($adminRoleRights, true)
+        );
+
         $docFileToImport = dirname(__DIR__) . '/files/tine20_handbuch_2017-01-31_base64_2941752.tar.gz';
         $opts = new Zend_Console_Getopt('abp:');
         $opts->setArguments(array(
