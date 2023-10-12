@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -40,7 +40,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version' => 1,
+        'version' => 2,
         'recordName' => 'Data intended purpose',
         'recordsName' => 'Data intended purposes', // ngettext('Data intended purpose', 'Data intended purposes', n)
         'titleProperty' => 'id',
@@ -65,7 +65,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
 
         self::TABLE => [
             self::NAME      => 'gdpr_dataintendedpurposerecords',
-            self::UNIQUE_CONSTRAINTS   => [
+            self::INDEXES   => [
                 'intendedPurpose'       => [
                     self::COLUMNS           => ['intendedPurpose', 'record'],
                 ],
@@ -73,6 +73,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                     self::COLUMNS           => ['record', 'intendedPurpose'],
                 ],
             ]
+
         ],
 
         self::ASSOCIATIONS => [
@@ -123,6 +124,13 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL             => 'Withdraw date', // _('Withdraw date')
+                self::FILTER_DEFINITION => [
+                    self::FILTER            => Tinebase_Model_Filter_Date::class,
+                    self::OPTIONS           => [
+                        Tinebase_Model_Filter_Date::BEFORE_OR_IS_NULL => true,
+                        Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL  => true,
+                    ]
+                ],
             ],
             'withdrawComment' => [
                 self::TYPE              => self::TYPE_STRING,
