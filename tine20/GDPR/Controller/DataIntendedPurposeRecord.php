@@ -6,9 +6,12 @@
  * @subpackage   Controller
  * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Paul Mehrer <p.mehrer@metaways.de>
- * @copyright    Copyright (c) 2018-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * GDPR Data Intended Purpose Record Controller
@@ -69,6 +72,53 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
         return self::$_instance;
     }
 
+    /**
+     * @param GDPR_Model_DataIntendedPurposeRecord $_record
+     * @return void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+
+        $this->checkAgreeWithdrawDates($_record);
+    }
+
+    /**
+     * @param GDPR_Model_DataIntendedPurposeRecord $_record
+     * @param GDPR_Model_DataIntendedPurposeRecord $_oldRecord
+     * @return void
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        // changes in agreeDate / withdrawDate need to be checked. setting a new withdrawDate where none was set before does not need to be checked
+        if ($_record->agreeDate->compare($_oldRecord->agreeDate) !== 0 || ($_oldRecord->withdrawDate
+                && (!$_record->withdrawDate || $_record->withdrawDate->compare($_oldRecord->withdrawDate) !== 0))) {
+            $this->checkAgreeWithdrawDates($_record);
+        }
+    }
+
+    protected function checkAgreeWithdrawDates(GDPR_Model_DataIntendedPurposeRecord $_record): void
+    {
+        if ($_record->withdrawDate && $_record->withdrawDate < $_record->agreeDate) {
+            throw new Tinebase_Exception_Record_Validation('agreeDate must not be after withdrawDate');
+        }
+        $filter = [
+            [TMFA::FIELD => 'intendedPurpose', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->getIdFromProperty('intendedPurpose')],
+            [TMFA::FIELD => 'record', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_record->getIdFromProperty('record')],
+            [TMFA::FIELD => 'withdrawDate', TMFA::OPERATOR => 'after_or_equals', TMFA::VALUE => $_record->agreeDate],
+        ];
+        if ($_record->withdrawDate) {
+            $filter[] = [TMFA::FIELD => 'agreeDate', TMFA::OPERATOR => 'before_or_equals', TMFA::VALUE => $_record->withdrawDate];
+        }
+        if (null !== $_record->getId()) {
+            $filter[] = [TMFA::FIELD => TMCC::ID, TMFA::OPERATOR => 'not', TMFA::VALUE => $_record->getId()];
+        }
+        if ($this->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, $filter)) > 0) {
+            throw new Tinebase_Exception_Record_Validation('agreeDate and withdrawDate must not overlap');
+        }
+    }
 
     /**
      * inspect update of one record (before update)
