@@ -425,7 +425,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 // check if value is still valid
                 if (value === this.value) {
                     setValue(text);
-                    this.value = text;
+                    this.value = value;
                 }
             });
         } else {
