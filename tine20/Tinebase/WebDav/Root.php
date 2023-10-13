@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
+class Tinebase_WebDav_Root extends \Tine20\DAV\SimpleCollection
 {
     /**
      * Tinebase_WebDav_Root constructor.
@@ -29,7 +29,7 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
             : new Tinebase_Record_RecordSet('Tinebase_Model_Application');
         
         parent::__construct('root', array(
-            new \Sabre\DAV\SimpleCollection('principals', array(
+            new \Tine20\DAV\SimpleCollection('principals', array(
                 new Tinebase_WebDav_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), Tinebase_WebDav_PrincipalBackend::PREFIX_USERS),
                 new Tinebase_WebDav_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS),
                 new Tinebase_WebDav_PrincipalCollection(new Tinebase_WebDav_PrincipalBackend(), Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS)
@@ -38,7 +38,7 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
         
         if ($applications->find('name', 'Calendar')) {
             $this->addChild(
-                new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT, array(
+                new Calendar_Frontend_WebDAV(\Tine20\CalDAV\Plugin::CALENDAR_ROOT, array(
                     'useIdAsName' => true,
                 ))
             );
@@ -54,7 +54,7 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
 
         if ($applications->find('name', 'Addressbook')) {
             $this->addChild(
-                new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT, array(
+                new Addressbook_Frontend_WebDAV(\Tine20\CardDAV\Plugin::ADDRESSBOOK_ROOT, array(
                     'useIdAsName' => true,
                 ))
             );
@@ -63,12 +63,12 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
         // main entry point for ownCloud 
         if ($applications->find('name', 'Filemanager')) {
             $this->addChild(
-                new \Sabre\DAV\SimpleCollection('remote.php', [
+                new \Tine20\DAV\SimpleCollection('remote.php', [
                     // for owncloud v2
                     new Filemanager_Frontend_WebDAV('webdav'),
                     // for owncloud v3 , they have the same "path" => 'webdav',add the path rewrite as option there.
-                    new \Sabre\DAV\SimpleCollection('dav', [
-                        new \Sabre\DAV\SimpleCollection('files', [
+                    new \Tine20\DAV\SimpleCollection('dav', [
+                        new \Tine20\DAV\SimpleCollection('files', [
                             new Filemanager_Frontend_WebDAV('webdav', [
                                 Tinebase_WebDav_Collection_AbstractContainerTree::NAME_NOT_IN_PATH => Tinebase_Core::getUser()->accountLoginName,
                             ]),
@@ -79,7 +79,7 @@ class Tinebase_WebDav_Root extends \Sabre\DAV\SimpleCollection
         }
         
         // webdav tree
-        $webDAVCollection = new \Sabre\DAV\SimpleCollection('webdav');
+        $webDAVCollection = new \Tine20\DAV\SimpleCollection('webdav');
         
         foreach ($applications as $application) {
             $applicationClass = $application->name . '_Frontend_WebDAV';

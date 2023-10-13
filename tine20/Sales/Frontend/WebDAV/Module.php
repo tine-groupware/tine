@@ -21,17 +21,17 @@ class Sales_Frontend_WebDAV_Module extends Tinebase_Frontend_WebDAV_Abstract
      * Creates a new subdirectory
      *
      * @param string $name
-     * @throws Sabre\DAV\Exception\Forbidden
+     * @throws Tine20\DAV\Exception\Forbidden
      * @return void
      */
     public function createDirectory($name)
     {
-        throw new \Sabre\DAV\Exception\Forbidden('Forbidden to create folders here');
+        throw new \Tine20\DAV\Exception\Forbidden('Forbidden to create folders here');
     }
     
     /**
      * (non-PHPdoc)
-     * @see Sabre\DAV\Collection::getChild()
+     * @see Tine20\DAV\Collection::getChild()
      */
     public function getChild($name)
     {
@@ -42,7 +42,7 @@ class Sales_Frontend_WebDAV_Module extends Tinebase_Frontend_WebDAV_Abstract
                 break;
                 
             default:
-                throw new Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
+                throw new Tine20\DAV\Exception\NotFound("Directory $this->_path/$name not found");
                 
                 break;
         }

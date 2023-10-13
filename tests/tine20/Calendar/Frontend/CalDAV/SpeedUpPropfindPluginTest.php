@@ -12,7 +12,7 @@
 /**
  * Test helper
  */
-require_once __DIR__ . '/../../../../../tine20/vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
+require_once __DIR__ . '/../../../../../tine20/vendor/tine20/sabredav/tests/Sabre/HTTP/ResponseMock.php';
 
 /**
  * Test class for Tinebase_WebDav_Plugin_OwnCloud
@@ -21,7 +21,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
 {
     /**
      *
-     * @var Sabre\DAV\Server
+     * @var Tine20\DAV\Server
      */
     protected $server;
 
@@ -48,13 +48,13 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
 
         parent::setUp();
 
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new Tine20\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
 
         $this->plugin = new Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin();
 
         $this->server->addPlugin($this->plugin);
 
-        $this->response = new Sabre\HTTP\ResponseMock();
+        $this->response = new Tine20\HTTP\ResponseMock();
         $this->server->httpResponse = $this->response;
     }
 
@@ -83,7 +83,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
                     </prop>
                  </propfind>';
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $event->getRecord()->container_id,
             'HTTP_DEPTH'     => '1',
@@ -154,7 +154,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
                  </propfind>';
 
         $uri = '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->_personasDefaultCals['jmcblack']->getId();
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI'    => $uri,
             'HTTP_DEPTH'     => '1',

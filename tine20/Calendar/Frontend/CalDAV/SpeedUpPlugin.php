@@ -19,12 +19,12 @@
  * @subpackage  Frontend
  */
 
-class Calendar_Frontend_CalDAV_SpeedUpPlugin extends Sabre\DAV\ServerPlugin 
+class Calendar_Frontend_CalDAV_SpeedUpPlugin extends Tine20\DAV\ServerPlugin 
 {
     /**
      * Reference to server object 
      * 
-     * @var Sabre\DAV\Server 
+     * @var Tine20\DAV\Server 
      */
     private $server;
     
@@ -44,7 +44,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPlugin extends Sabre\DAV\ServerPlugin
 
         $reports = array();
         if ($node instanceof ICalendar || $node instanceof ICalendarObject) {
-            $reports[] = '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-multiget';
+            $reports[] = '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-multiget';
         }
         
         return $reports;
@@ -54,10 +54,10 @@ class Calendar_Frontend_CalDAV_SpeedUpPlugin extends Sabre\DAV\ServerPlugin
     /**
      * Initializes the plugin 
      * 
-     * @param Sabre\DAV\Server $server 
+     * @param Tine20\DAV\Server $server 
      * @return void
      */
-    public function initialize(Sabre\DAV\Server $server) 
+    public function initialize(Tine20\DAV\Server $server) 
     {
         $this->server = $server;
         
@@ -74,7 +74,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPlugin extends Sabre\DAV\ServerPlugin
     public function report($reportName,$dom) 
     {
         switch($reportName) {
-            case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-multiget' :
+            case '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-multiget' :
                 $this->calendarMultiGetReport($dom);
         }
     }
@@ -89,7 +89,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPlugin extends Sabre\DAV\ServerPlugin
      */
     public function calendarMultiGetReport($dom) 
     {
-        $properties = array_keys(\Sabre\DAV\XMLUtil::parseProperties($dom->firstChild));
+        $properties = array_keys(\Tine20\DAV\XMLUtil::parseProperties($dom->firstChild));
         $hrefElems = $dom->getElementsByTagNameNS('urn:DAV','href');
 
         $filters = array(
@@ -103,7 +103,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPlugin extends Sabre\DAV\ServerPlugin
         );
         
         foreach($hrefElems as $elem) {
-            list($dirName, $baseName) = \Sabre\DAV\URLUtil::splitPath($elem->nodeValue);
+            list($dirName, $baseName) = \Tine20\DAV\URLUtil::splitPath($elem->nodeValue);
             
             $filters['comp-filters'][0]['prop-filters'][] = array(
                 'name' => 'UID',

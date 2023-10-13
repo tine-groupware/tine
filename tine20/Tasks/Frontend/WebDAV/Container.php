@@ -15,7 +15,7 @@
  * @package     Tasks
  * @subpackage  Frontend
  */
-class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements \Sabre\CalDAV\ICalendar
+class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements \Tine20\CalDAV\ICalendar
 {
     protected $_applicationName = 'Tasks';
 
@@ -35,7 +35,7 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
      * query.
      *
      * The list of filters are specified as an array. The exact array is
-     * documented by \Sabre\CalDAV\CalendarQueryParser.
+     * documented by \Tine20\CalDAV\CalendarQueryParser.
      *
      * @param array $filters
      * @return array
@@ -70,7 +70,7 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
 
     /**
      * (non-PHPdoc)
-     * @see \Sabre\DAV\Collection::getChild()
+     * @see \Tine20\DAV\Collection::getChild()
      */
     public function getChild($_name)
     {
@@ -102,11 +102,11 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
             $object = $this->_getController()->search($filter, null, false, false, 'sync')->getFirstRecord();
 
             if ($object == null) {
-                throw new \Sabre\DAV\Exception\NotFound('Object not found');
+                throw new \Tine20\DAV\Exception\NotFound('Object not found');
             }
         }
         
-        $httpRequest = new \Sabre\HTTP\Request();
+        $httpRequest = new \Tine20\HTTP\Request();
         
         // lie about existance of event of request is a PUT request from an ATTENDEE for an already existing event 
         // to prevent ugly (and not helpful) error messages on the client
@@ -115,7 +115,7 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
                 $object->organizer != Tinebase_Core::getUser()->getId() && 
                 Calendar_Model_Attender::getOwnAttender($object->attendee) !== null
             ) {
-                throw new \Sabre\DAV\Exception\NotFound('Object not found');
+                throw new \Tine20\DAV\Exception\NotFound('Object not found');
             }
         }
         
@@ -127,7 +127,7 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
     /**
      * Returns an array with all the child nodes
      *
-     * @return Sabre\DAV\INode[]
+     * @return Tine20\DAV\INode[]
      */
     public function getChildren()
     {
@@ -171,18 +171,18 @@ class Tasks_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract
             'id'                => $this->_container->getId(),
             'uri'               => $this->_useIdAsName == true ? $this->_container->getId() : $this->_container->name,
             '{DAV:}resource-id' => 'urn:uuid:' . $this->_container->getId(),
-            '{DAV:}owner'       => new \Sabre\DAVACL\Property\Principal(\Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
+            '{DAV:}owner'       => new \Tine20\DAVACL\Property\Principal(\Tine20\DAVACL\Property\Principal::HREF, 'principals/users/' . Tinebase_Core::getUser()->contact_id),
             '{DAV:}displayname' => $this->_container->name,
             '{http://apple.com/ns/ical/}calendar-color' => (empty($this->_container->color)) ? '#000000' : $this->_container->color,
             
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new \Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VTODO')),
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new \Sabre\CalDAV\Property\SupportedCalendarData(),
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description'             => 'Tasks ' . $this->_container->name,
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => Tinebase_WebDav_Container_Abstract::getCalendarVTimezone($this->_application)
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new \Tine20\CalDAV\Property\SupportedCalendarComponentSet(array('VTODO')),
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new \Tine20\CalDAV\Property\SupportedCalendarData(),
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-description'             => 'Tasks ' . $this->_container->name,
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => Tinebase_WebDav_Container_Abstract::getCalendarVTimezone($this->_application)
         );
         
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            $properties['{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set'	] = new \Sabre\DAV\Property\HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false); 
+            $properties['{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set'	] = new \Tine20\DAV\Property\HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false); 
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 

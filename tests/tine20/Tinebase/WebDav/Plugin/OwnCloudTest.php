@@ -96,7 +96,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     public function testGetRootsV2()
     {
         $body = '<?xml version="1.0" encoding="utf-8"?><d:propfind xmlns:d="DAV:"><d:prop><d:resourcetype/></d:prop>M</d:propfind>';
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI' => self::BASE_URIV2_WEBDAV,
             'HTTP_DEPTH' => '1',
@@ -114,7 +114,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     {
         // fixme: owncloud client expect response path start with /dav/files/userLoginName too , /webdav/folder does not work anymore
         $body = '<?xml version="1.0" encoding="utf-8"?><d:propfind xmlns:d="DAV:"><d:prop><d:resourcetype/></d:prop></d:propfind>';
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI' => self::BASE_URIV3_DAV_FILES_USERNAME,
             'HTTP_DEPTH' => '1',
@@ -131,7 +131,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     public function testGetPropertiesV2()
     {
         $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:id';
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI' => self::BASE_URIV2_WEBDAV . '/' . Tinebase_Core::getUser()->accountDisplayName,
             'HTTP_DEPTH' => '0',
@@ -146,7 +146,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     public function testGetPropertiesV3()
     {
         $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:id';
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI' => self::BASE_URIV3_DAV_FILES_USERNAME,
             'HTTP_DEPTH' => '0',
@@ -177,7 +177,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     protected function _execPropfindRequest($body = null, $request = null)
     {
         if (!$request) {
-            $request = new Sabre\HTTP\Request(array(
+            $request = new Tine20\HTTP\Request(array(
                 'REQUEST_METHOD' => 'PROPFIND',
                 'REQUEST_URI' => self::BASE_URIV2_WEBDAV . '/' . Tinebase_Core::getUser()->accountDisplayName,
                 'HTTP_DEPTH' => '0',
@@ -211,7 +211,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
 </propfind>';
         
         $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:size';
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI' => self::BASE_URIV2_WEBDAV . '/' . Tinebase_Core::getUser()->accountDisplayName,
             'HTTP_DEPTH' => '0',
@@ -235,7 +235,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
 </propfind>';
         
         $query = '//d:multistatus/d:response/d:propstat/d:prop/owncloud:size';
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI' => self::BASE_URIV3_DAV_FILES_USERNAME . '/' . Tinebase_Core::getUser()->accountDisplayName,
             'HTTP_DEPTH' => '0',
@@ -250,13 +250,13 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
      */
     public function testGetPropertiesForSharedDirectoryV2()
     {
-        $webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        $webdavTree = new \Tine20\DAV\ObjectTree(new Tinebase_WebDav_Root());
         $node = $webdavTree->getNodeForPath('/webdav/Filemanager/shared');
         $node->createDirectory('unittestdirectory');
         $node = $webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
         $node->createDirectory('subdir');
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI' => self::BASE_URIV2_WEBDAV . '/shared/unittestdirectory',
             'HTTP_DEPTH' => '1',
@@ -276,13 +276,13 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
      */
     public function testGetPropertiesForSharedDirectoryV3()
     {
-        $webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        $webdavTree = new \Tine20\DAV\ObjectTree(new Tinebase_WebDav_Root());
         $node = $webdavTree->getNodeForPath('/webdav/Filemanager/shared');
         $node->createDirectory('unittestdirectory');
         $node = $webdavTree->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory');
         $node->createDirectory('subdir');
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI' => self::BASE_URIV3_DAV_FILES_USERNAME . '/shared',
             'HTTP_DEPTH' => '1',
@@ -297,7 +297,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
         $query = '//d:multistatus/d:response/d:propstat/d:prop/d:getetag';
         $this->_assertQueryResponse($responseDoc, $query, 2);
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI' => self::BASE_URIV3_DAV_FILES_USERNAME . '/shared/unittestdirectory',
             'HTTP_DEPTH' => '1',
@@ -335,7 +335,7 @@ class Tinebase_WebDav_Plugin_OwnCloudTest extends Tinebase_WebDav_Plugin_Abstrac
     public function testGetPropertiesWithAccountLoginName()
     {
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_LOGINNAME_AS_FOLDERNAME, true);
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI' => self::BASE_URIV2_WEBDAV . '/' . Tinebase_Core::getUser()->accountLoginName,
             'HTTP_DEPTH' => '0',

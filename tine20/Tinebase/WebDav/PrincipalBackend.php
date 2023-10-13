@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  WebDav
  */
-class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend\BackendInterface
+class Tinebase_WebDav_PrincipalBackend implements \Tine20\DAVACL\PrincipalBackend\BackendInterface
 {
     const PREFIX_USERS  = 'principals/users';
     const PREFIX_GROUPS = 'principals/groups';
@@ -39,7 +39,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
     
     /**
      * (non-PHPdoc)
-     * @see Sabre\DAVACL\IPrincipalBackend::getPrincipalsByPrefix()
+     * @see Tine20\DAVACL\IPrincipalBackend::getPrincipalsByPrefix()
      */
     public function getPrincipalsByPrefix($prefixPath) 
     {
@@ -87,7 +87,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
     
     /**
      * (non-PHPdoc)
-     * @see Sabre\DAVACL\IPrincipalBackend::getPrincipalByPath()
+     * @see Tine20\DAVACL\IPrincipalBackend::getPrincipalByPath()
      * @todo resolve real $path
      */
     public function getPrincipalByPath($path) 
@@ -102,7 +102,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
         
         $principal = null;
         
-        list($prefix, $id) = \Sabre\DAV\URLUtil::splitPath($path);
+        list($prefix, $id) = \Tine20\DAV\URLUtil::splitPath($path);
         
         // special handling for calendar proxy principals
         // they are groups in the user namespace
@@ -112,7 +112,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             // set prefix to calendar-proxy-read or calendar-proxy-write
             $prefix = $id;
             
-            list(, $id) = \Sabre\DAV\URLUtil::splitPath($path);
+            list(, $id) = \Tine20\DAV\URLUtil::splitPath($path);
         }
         
         switch ($prefix) {
@@ -133,8 +133,8 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                 
                 $principal = array(
                     'uri'                     => $contactPrincipal['uri'] . '/' . $prefix,
-                    '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => 'GROUP',
-                    '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'groups'
+                    '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => 'GROUP',
+                    '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'groups'
                 );
                 
                 break;
@@ -236,13 +236,13 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
     
     /**
      * (non-PHPdoc)
-     * @see Sabre\DAVACL\IPrincipalBackend::getGroupMemberSet()
+     * @see Tine20\DAVACL\IPrincipalBackend::getGroupMemberSet()
      */
     public function getGroupMemberSet($principal) 
     {
         $result = array();
         
-        list($prefix, $id) = \Sabre\DAV\URLUtil::splitPath($principal);
+        list($prefix, $id) = \Tine20\DAV\URLUtil::splitPath($principal);
         
         // special handling for calendar proxy principals
         // they are groups in the user namespace
@@ -252,7 +252,7 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             // set prefix to calendar-proxy-read or calendar-proxy-write
             $prefix = $id;
             
-            list(, $id) = \Sabre\DAV\URLUtil::splitPath($path);
+            list(, $id) = \Tine20\DAV\URLUtil::splitPath($path);
         }
         
         switch ($prefix) {
@@ -399,13 +399,13 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
 
     /**
      * (non-PHPdoc)
-     * @see Sabre\DAVACL\IPrincipalBackend::getGroupMembership()
+     * @see Tine20\DAVACL\IPrincipalBackend::getGroupMembership()
      */
     public function getGroupMembership($principal)
     {
         $result = array();
         
-        list($prefix, $contactId) = \Sabre\DAV\URLUtil::splitPath($principal);
+        list($prefix, $contactId) = \Tine20\DAV\URLUtil::splitPath($principal);
         
         switch ($prefix) {
             case self::PREFIX_GROUPS:
@@ -622,19 +622,19 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
                     )));
                 }
                 
-                if (!empty($searchProperties['{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'])) {
+                if (!empty($searchProperties['{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'])) {
                     $filter->addFilter($filter->createFilter(array(
                         'field'     => 'n_given',
                         'operator'  => 'contains',
-                        'value'     => $searchProperties['{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name']
+                        'value'     => $searchProperties['{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name']
                     )));
                 }
                 
-                if (!empty($searchProperties['{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'])) {
+                if (!empty($searchProperties['{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'])) {
                     $filter->addFilter($filter->createFilter(array(
                         'field'     => 'n_family',
                         'operator'  => 'contains',
-                        'value'     => $searchProperties['{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name']
+                        'value'     => $searchProperties['{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name']
                     )));
                 }
                 
@@ -664,11 +664,11 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             'uri'                     => self::PREFIX_USERS . '/' . self::SHARED,
             '{DAV:}displayname'       => $translate->_('Shared folders'),
             
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => 'INDIVIDUAL',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => 'INDIVIDUAL',
             
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'users',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => 'Folders',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => 'Shared'
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'users',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => 'Folders',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => 'Shared'
         );
         
         return $principal;
@@ -688,11 +688,11 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             '{DAV:}displayname'       => $contact->n_fileas,
             '{DAV:}alternate-URI-set' => array('urn:uuid:' . $contact->getId()),
             
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => 'INDIVIDUAL',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => 'INDIVIDUAL',
             
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'users',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => $contact->n_given,
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => $contact->n_family
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'users',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => $contact->n_given,
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => $contact->n_family
         );
         
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
@@ -805,11 +805,11 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             '{DAV:}displayname'       => $list->name . ' (' . $translation = Tinebase_Translation::getTranslation('Calendar')->_('Group') . ')',
             '{DAV:}alternate-URI-set' => array('urn:uuid:' . $prefix . '/' . $list->getId()),
             
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => $calUserType,
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => $calUserType,
             
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'groups',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => Tinebase_Translation::getTranslation('Calendar')->_('Group'),
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => $list->name,
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'groups',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => Tinebase_Translation::getTranslation('Calendar')->_('Group'),
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => $list->name,
         );
 
         if ($calUserType == 'INTELLIGROUP') {
@@ -836,11 +836,11 @@ class Tinebase_WebDav_PrincipalBackend implements \Sabre\DAVACL\PrincipalBackend
             '{DAV:}displayname'       => $role->name . ' (' . $translation = Tinebase_Translation::getTranslation('Calendar')->_('Group') . ')',
             '{DAV:}alternate-URI-set' => array('urn:uuid:' . $prefix . '/role-' . $role->getId()),
 
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => $calUserType,
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'  => $calUserType,
 
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'groups',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => Tinebase_Translation::getTranslation('Calendar')->_('Group'),
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => $role->name,
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type' => 'groups',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'  => Tinebase_Translation::getTranslation('Calendar')->_('Group'),
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'   => $role->name,
         );
 
         if ($calUserType == 'INTELLIGROUP') {

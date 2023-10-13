@@ -68,11 +68,11 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * returns VObject of input data
      * 
      * @param   mixed  $blob
-     * @return  \Sabre\VObject\Component\VCard
+     * @return  \Tine20\VObject\Component\VCard
      */
     public static function getVObject($blob)
     {
-        if ($blob instanceof \Sabre\VObject\Component\VCard) {
+        if ($blob instanceof \Tine20\VObject\Component\VCard) {
             return $blob;
         }
         
@@ -80,13 +80,13 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
             $blob = stream_get_contents($blob);
         }
         
-        return \Sabre\VObject\Reader::read($blob);
+        return \Tine20\VObject\Reader::read($blob);
     }
  
     /**
      * converts vcard to Addressbook_Model_Contact
      * 
-     * @param  \Sabre\VObject\Component|resource|string  $blob       the vcard to parse
+     * @param  \Tine20\VObject\Component|resource|string  $blob       the vcard to parse
      * @param  Tinebase_Record_Interface                $_record    update existing contact
      * @param  array                                   $options    array of options
      * @return Addressbook_Model_Contact
@@ -103,7 +103,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         
         $data = $this->_emptyArray;
 
-        /** @var \Sabre\VObject\Property $property */
+        /** @var \Tine20\VObject\Property $property */
         foreach ($vcard->children() as $property) {
             switch ($property->name) {
                 case 'VERSION':
@@ -356,14 +356,14 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * parse telephone
      * 
      * @param array $data
-     * @param \Sabre\VObject\Property $property
+     * @param \Tine20\VObject\Property $property
      */
-    protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
+    protected function _toTine20ModelParseTel(&$data, \Tine20\VObject\Property $property)
     {
         $telField = null;
         
         if (isset($property['TYPE'])) {
-            /** @var \Sabre\VObject\Parameter $typeParameter */
+            /** @var \Tine20\VObject\Parameter $typeParameter */
             $typeParameter = $property['TYPE'];
             // comvert all TYPE's to lowercase and ignore voice and pref
             $typeParameter->setParts(array_diff(
@@ -412,10 +412,10 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * parse email address field
      *
      * @param  array                           $data      reference to tine20 data array
-     * @param  \Sabre\VObject\Property         $property  mail property
-     * @param  \Sabre\VObject\Component\VCard  $vcard     vcard object
+     * @param  \Tine20\VObject\Property         $property  mail property
+     * @param  \Tine20\VObject\Component\VCard  $vcard     vcard object
      */
-    protected function _toTine20ModelParseEmail(&$data, \Sabre\VObject\Property $property, \Sabre\VObject\Component\VCard $vcard)
+    protected function _toTine20ModelParseEmail(&$data, \Tine20\VObject\Property $property, \Tine20\VObject\Component\VCard $vcard)
     {
         $type = null;
         
@@ -449,7 +449,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseOther()
      */
-    protected function _toTine20ModelParseOther(&$data, \Sabre\VObject\Property $property) {
+    protected function _toTine20ModelParseOther(&$data, \Tine20\VObject\Property $property) {
        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cardData ' . $property->name);
     }
@@ -458,9 +458,9 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * parse BIRTHDAY
      * 
      * @param array                    $data
-     * @param \Sabre\VObject\Property  $property
+     * @param \Tine20\VObject\Property  $property
      */
-    protected function _toTine20ModelParseBday(&$data, \Sabre\VObject\Property $property)
+    protected function _toTine20ModelParseBday(&$data, \Tine20\VObject\Property $property)
     {
         $value = $property->getValue();
         if (preg_match('/^([0-9]{4})([0-9]{2})([0-9]{2})$/', $value, $matches) == 1) {
@@ -475,9 +475,9 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * add GEO data to VCard
      * 
      * @param  Tinebase_Record_Interface  $record
-     * @param  \Sabre\VObject\Component  $card
+     * @param  \Tine20\VObject\Component  $card
      */
-    protected function _fromTine20ModelAddGeoData(Tinebase_Record_Interface $record, \Sabre\VObject\Component $card)
+    protected function _fromTine20ModelAddGeoData(Tinebase_Record_Interface $record, \Tine20\VObject\Component $card)
     {
         /** @var Addressbook_Model_Contact $record */
         if ($record->adr_one_lat && $record->adr_one_lon) {
@@ -492,9 +492,9 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * add birthday data to VCard
      * 
      * @param  Tinebase_Record_Interface  $record
-     * @param  \Sabre\VObject\Component  $card
+     * @param  \Tine20\VObject\Component  $card
      */
-    protected function _fromTine20ModelAddBirthday(Tinebase_Record_Interface $record, \Sabre\VObject\Component $card)
+    protected function _fromTine20ModelAddBirthday(Tinebase_Record_Interface $record, \Tine20\VObject\Component $card)
     {
         /** @var Addressbook_Model_Contact $record */
         if ($record->bday instanceof Tinebase_DateTime) {
@@ -509,9 +509,9 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * parse categories from Tine20 model to VCard and attach it to VCard $card
      *
      * @param Tinebase_Record_Interface $record
-     * @param Sabre\VObject\Component $card
+     * @param Tine20\VObject\Component $card
      */
-        protected function _fromTine20ModelAddCategories(Tinebase_Record_Interface $record, Sabre\VObject\Component $card)
+        protected function _fromTine20ModelAddCategories(Tinebase_Record_Interface $record, Tine20\VObject\Component $card)
         {
             if (!isset($record->tags)) {
                 // If the record has not been populated yet with tags, let's try to get them all and update the record
@@ -527,9 +527,9 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * add photo data to VCard
      * 
      * @param  Addressbook_Model_Contact $record
-     * @param  \Sabre\VObject\Component  $card
+     * @param  \Tine20\VObject\Component  $card
      */
-    protected function _fromTine20ModelAddPhoto(Addressbook_Model_Contact $record, \Sabre\VObject\Component $card)
+    protected function _fromTine20ModelAddPhoto(Addressbook_Model_Contact $record, \Tine20\VObject\Component $card)
     {
         if (! empty($record->jpegphoto)) {Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
             try {
@@ -548,7 +548,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * initialize vcard object
      * 
      * @param  Tinebase_Record_Interface  $record
-     * @return \Sabre\VObject\Component
+     * @return \Tine20\VObject\Component
      */
     protected function _fromTine20ModelRequiredFields(Tinebase_Record_Interface $record,$fn = null,$org = null)
     {
@@ -560,7 +560,7 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         if ( !isset($org) || $org === null ) {
             $org = array($record->org_name, $record->org_unit);
         }
-        $card = new \Sabre\VObject\Component\VCard(array(
+        $card = new \Tine20\VObject\Component\VCard(array(
             'VERSION' => '3.0',
             'FN'      => $fn,
             'N'       => array($record->n_family, $record->n_given, $record->n_middle, $record->n_prefix, $record->n_suffix),

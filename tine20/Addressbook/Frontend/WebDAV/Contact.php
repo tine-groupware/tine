@@ -1,5 +1,5 @@
 <?php
-use \Sabre\DAV;
+use \Tine20\DAV;
 
 /**
  * class to handle a single vcard
@@ -20,7 +20,7 @@ use \Sabre\DAV;
  * @package     Addressbook
  * @subpackage  Frontend
  */
-class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabre\CardDAV\ICard, Sabre\DAVACL\IACL
+class Addressbook_Frontend_WebDAV_Contact extends Tine20\DAV\File implements Tine20\CardDAV\ICard, Tine20\DAVACL\IACL
 {
     /**
      * @var Tinebase_Model_Container
@@ -274,7 +274,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
-            throw new Sabre\DAV\Exception\NotFound('Contact not found');
+            throw new Tine20\DAV\Exception\NotFound('Contact not found');
         } catch (Tinebase_Exception_AccessDenied $tead) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());

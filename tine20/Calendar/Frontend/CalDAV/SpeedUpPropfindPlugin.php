@@ -19,12 +19,12 @@
  * @subpackage  Frontend
  */
 
-class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Sabre\DAV\ServerPlugin
+class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Tine20\DAV\ServerPlugin
 {
     /**
      * Reference to server object
      *
-     * @var Sabre\DAV\Server
+     * @var Tine20\DAV\Server
      */
     private $server;
 
@@ -32,7 +32,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Sabre\DAV\ServerPlu
      * Returns a plugin name.
      *
      * Using this name other plugins will be able to access other plugins
-     * using \Sabre\DAV\Server::getPlugin
+     * using \Tine20\DAV\Server::getPlugin
      *
      * @return string
      */
@@ -44,10 +44,10 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Sabre\DAV\ServerPlu
     /**
      * Initializes the plugin
      *
-     * @param Sabre\DAV\Server $server
+     * @param Tine20\DAV\Server $server
      * @return void
      */
-    public function initialize(Sabre\DAV\Server $server)
+    public function initialize(Tine20\DAV\Server $server)
     {
         $this->server = $server;
 
@@ -76,16 +76,16 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Sabre\DAV\ServerPlu
 
         $body = $this->server->httpRequest->getBody(true);
         rewind($this->server->httpRequest->getBody());
-        $dom = Sabre\DAV\XMLUtil::loadDOMDocument($body);
+        $dom = Tine20\DAV\XMLUtil::loadDOMDocument($body);
 
-        $reportName = Sabre\DAV\XMLUtil::toClarkNotation($dom->firstChild);
+        $reportName = Tine20\DAV\XMLUtil::toClarkNotation($dom->firstChild);
 
         if(strpos($reportName, 'calendar-query') !== false) {
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " in report speedup");
 
-            $properties = array_keys(\Sabre\DAV\XMLUtil::parseProperties($dom->firstChild));
+            $properties = array_keys(\Tine20\DAV\XMLUtil::parseProperties($dom->firstChild));
             if (count($properties) != 2 || !in_array('{DAV:}getetag', $properties) || !in_array('{DAV:}getcontenttype',$properties)) {
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -131,16 +131,16 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Sabre\DAV\ServerPlu
         }
         
         rewind($this->server->httpRequest->getBody());
-        $dom = Sabre\DAV\XMLUtil::loadDOMDocument($body);
+        $dom = Tine20\DAV\XMLUtil::loadDOMDocument($body);
 
-        $reportName = Sabre\DAV\XMLUtil::toClarkNotation($dom->firstChild);
+        $reportName = Tine20\DAV\XMLUtil::toClarkNotation($dom->firstChild);
 
         if($reportName === '{DAV:}propfind') {
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . " in propfind speedup");
 
-            $properties = array_keys(\Sabre\DAV\XMLUtil::parseProperties($dom->firstChild));
+            $properties = array_keys(\Tine20\DAV\XMLUtil::parseProperties($dom->firstChild));
             if (count($properties) != 2 || !in_array('{DAV:}getetag', $properties) || !in_array('{DAV:}getcontenttype',$properties)) {
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -217,7 +217,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Sabre\DAV\ServerPlu
                 '{DAV:}getcontenttype' => 'text/calendar',
             );
             $href = $uri . '/' . $row['id'] . '.ics';
-            $response = new Sabre\DAV\Property\Response($href, $a);
+            $response = new Tine20\DAV\Property\Response($href, $a);
             $response->serialize($this->server, $multiStatus);
         }
 

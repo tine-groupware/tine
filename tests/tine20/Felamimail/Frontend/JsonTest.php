@@ -8,7 +8,7 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
-use Sabre\DAV;
+use Tine20\DAV;
 
 /**
  * Test class for Felamimail_Frontend_Json
