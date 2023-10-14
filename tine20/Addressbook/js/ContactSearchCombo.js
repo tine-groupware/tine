@@ -166,7 +166,7 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
     getValue: function() {
         if (this.useAccountRecord) {
             if (this.selectedRecord) {
-                return this.selectedRecord.get('account_id');
+                return this.selectedRecord.get('account_id') || this.selectedRecord.get('accountId');
             } else {
                 return this.accountId;
             }
