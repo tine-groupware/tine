@@ -104,9 +104,10 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
     getFlagIcons() {
         const icons = [];
         const app = Tine.Tinebase.appMgr.get('Felamimail');
-        
-        icons.push({name: 'seen',src: 'images/icon-set/empty.svg', qtip: app.i18n._('Unread Message'), cls: 'unread-flag-dot', 
-            visibility: !this.hasFlag('\\Seen') ? 'visible' : 'hidden'});
+
+        if (!this.hasFlag('\\Seen')) {
+            icons.push({name: 'seen',src: 'images/icon-set/empty.svg', qtip: app.i18n._('Unread Message'), cls: 'unread-flag-dot'});
+        }
         
         if (this.get('is_spam_suspicions')) {
             icons.push({name: 'spam',src: 'images/icon-set/icon_spam.svg', qtip: app.i18n._('This message might be SPAM')});
