@@ -443,9 +443,18 @@
     padding-right: 16px;
 }
 
-.felamimail-message-title-text {
+.felamimail-message-title-text-small{
     font-size: 12px;
-    padding: 0px 5px;
+    padding: 0 5px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    opacity: 0.7;
+}
+
+.felamimail-message-title-text-medium {
+    font-size: 14px;
+    padding: 0 5px;
     white-space: nowrap;
     overflow: hidden !important;
     text-overflow: ellipsis;
@@ -456,5 +465,5 @@
     height: 16px;
     background-size: 16px 16px;
     background-repeat: no-repeat;
-    margin: 0px 2px;
+    margin: 0 2px;
 }
