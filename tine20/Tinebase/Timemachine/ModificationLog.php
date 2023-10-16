@@ -865,9 +865,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @param  string $_id
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      */
-    public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id)
+    public function writeModLog($_newRecord, $_curRecord, $_model, $_backend, $_id): Tinebase_Record_RecordSet
     {
-        $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         if (null !== $_curRecord && null !== $_newRecord) {
             try {
                 Tinebase_Record_Expander::expandRecord($_newRecord);
@@ -892,6 +891,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 $diff->purgeLonelySeq();
             }
             $notNullRecord = $_newRecord;
+
         } else {
             if (null !== $_newRecord) {
                 $notNullRecord = $_newRecord;
@@ -910,59 +910,89 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             $diff = new Tinebase_Record_Diff(array($diffProp => $diffData));
         }
 
+        $modifications = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
+
         if (! $diff->isEmpty()) {
-            $updateMetaData = array('seq' => ($notNullRecord->has('seq')) ? $notNullRecord->seq : 0);
-            $commonModLog = $this->_getCommonModlog($_model, $_backend, $updateMetaData, $_id);
-            $commonModLog->new_value = json_encode($diff->toArray());
-            if(null === $_curRecord) {
-                if (!empty($notNullRecord->creation_time)) {
-                    $commonModLog->modification_time = $notNullRecord->creation_time;
-                }
-                if (!empty($notNullRecord->created_by)) {
-                    $commonModLog->modification_account = $notNullRecord->created_by;
-                }
-                $commonModLog->change_type = self::CREATED;
-            } elseif (null === $_newRecord || ($_newRecord->is_deleted && !$_curRecord->is_deleted)) {
-                if (!empty($notNullRecord->deleted_time)) {
-                    $commonModLog->modification_time = $notNullRecord->deleted_time;
-                }
-                if (!empty($notNullRecord->deleted_by)) {
-                    $commonModLog->modification_account = $notNullRecord->deleted_by;
-                }
-                $commonModLog->change_type = self::DELETED;
-            } else {
-                if (!empty($notNullRecord->last_modified_time)) {
-                    $commonModLog->modification_time = $notNullRecord->last_modified_time;
-                }
-                if (!empty($notNullRecord->last_modified_by)) {
-                    $commonModLog->modification_account = $notNullRecord->last_modified_by;
-                }
-                $commonModLog->change_type = self::UPDATED;
-            }
-
-            if(true === $notNullRecord->isReplicable()) {
-                $commonModLog->instance_id = Tinebase_Core::getTinebaseId();
-            }
-
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' Diffs: ' . print_r($diff->diff, TRUE));
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' CurRecord: ' . ($_curRecord!==null?print_r($_curRecord->toArray(), TRUE):'null'));
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' NewRecord: ' . ($_newRecord!==null?print_r($_newRecord->toArray(), TRUE):'null'));
-                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-                    . ' Common modlog: ' . print_r($commonModLog->toArray(), TRUE));
-            }
-
-            $this->setModification($commonModLog);
-
-            $modifications->addRecord($commonModLog);
+            $modlog = $this->_writeModlog($notNullRecord, $_newRecord, $_curRecord, $diff, $_model, $_backend, $_id);
+            $modifications->addRecord($modlog);
         }
 
         return $modifications;
     }
-    
+
+    protected function _writeModlog(Tinebase_Record_Interface $notNullRecord,
+                                    ?Tinebase_Record_Interface $_newRecord,
+                                    ?Tinebase_Record_Interface $_curRecord,
+                                    Tinebase_Record_Diff $diff,
+                                    string $_model,
+                                    string $_backend,
+                                    string $_id): Tinebase_Model_ModificationLog
+    {
+        $this->_replacePasswords($diff, $notNullRecord);
+
+        $updateMetaData = array('seq' => ($notNullRecord->has('seq')) ? $notNullRecord->seq : 0);
+        $modlog = $this->_getCommonModlog($_model, $_backend, $updateMetaData, $_id);
+        $modlog->new_value = json_encode($diff->toArray());
+        if(null === $_curRecord) {
+            if (!empty($notNullRecord->creation_time)) {
+                $modlog->modification_time = $notNullRecord->creation_time;
+            }
+            if (!empty($notNullRecord->created_by)) {
+                $modlog->modification_account = $notNullRecord->created_by;
+            }
+            $modlog->change_type = self::CREATED;
+        } elseif (null === $_newRecord || ($_newRecord->is_deleted && !$_curRecord->is_deleted)) {
+            if (!empty($notNullRecord->deleted_time)) {
+                $modlog->modification_time = $notNullRecord->deleted_time;
+            }
+            if (!empty($notNullRecord->deleted_by)) {
+                $modlog->modification_account = $notNullRecord->deleted_by;
+            }
+            $modlog->change_type = self::DELETED;
+        } else {
+            if (!empty($notNullRecord->last_modified_time)) {
+                $modlog->modification_time = $notNullRecord->last_modified_time;
+            }
+            if (!empty($notNullRecord->last_modified_by)) {
+                $modlog->modification_account = $notNullRecord->last_modified_by;
+            }
+            $modlog->change_type = self::UPDATED;
+        }
+
+        if (true === $notNullRecord->isReplicable()) {
+            $modlog->instance_id = Tinebase_Core::getTinebaseId();
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' Diffs: ' . print_r($diff->diff, TRUE));
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' CurRecord: ' . ($_curRecord!==null?print_r($_curRecord->toArray(), TRUE):'null'));
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' NewRecord: ' . ($_newRecord!==null?print_r($_newRecord->toArray(), TRUE):'null'));
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                . ' modlog: ' . print_r($modlog->toArray(), TRUE));
+        }
+
+        $this->setModification($modlog);
+        return $modlog;
+    }
+
+    protected function _replacePasswords(Tinebase_Record_Diff $diff, Tinebase_Record_Interface $notNullRecord): void
+    {
+        $mc = $notNullRecord::getConfiguration();
+        if ($mc) {
+            // TODO this should be done in a more elegant way
+            $diffdiff = $diff->diff;
+            foreach ($mc->pwFields as $pwField) {
+                if (isset($diffdiff[$pwField])) {
+                    $diffdiff[$pwField] = '********';
+                }
+            }
+            $diff->diff = $diffdiff;
+        }
+    }
+
     /**
      * creates a common modlog record
      * 
