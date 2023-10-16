@@ -66,6 +66,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  * @property array      $fieldKeys holds the keys of all fields
  * @property array      $timeFields holds the time fields
  * @property array      $modlogOmitFields holds the fields which will be omitted in the modlog
+ * @property array      $pwFields holds the fields which are passwords
  * @property array      $readOnlyFields these fields will just be readOnly
  * @property array      $datetimeFields holds the datetime fields
  * @property array      $dateFields holds the date fields (maybe we use Tinebase_Date sometimes)
@@ -662,6 +663,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var array
     */
     protected $_modlogOmitFields = array();
+
+    /**
+     * holds the fields which will be replaced in the notes
+     *
+     * @var array
+     */
+    protected $_pwFields = [];
 
     /**
      * these fields will just be readOnly
@@ -1538,11 +1546,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     $this->_filters[$fieldKey][] = $if ? new $if($val) : new $val();
                 }
             }
-            
-            // add field to modlog omit, if configured and modlog is used
-            if ($this->_modlogActive && isset($fieldDef['modlogOmit']) && $fieldDef['modlogOmit']) {
-                $this->_modlogOmitFields[] = $fieldKey;
-            }
+
+            $this->_addToModlogOmit($fieldDef, $fieldKey);
+            $this->_addToPasswordFields($fieldDef, $fieldKey);
 
             // set converters
             foreach ((isset($fieldDef['converters']) && is_array($fieldDef['converters'])) ? $fieldDef['converters'] :
@@ -1580,6 +1586,34 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         $this->_fieldKeys = array_keys($this->_fields);
 
         self::$createdModels[] = $recordClass;
+    }
+
+    /**
+     * add field to modlog omit, if configured and modlog is used OR field is password
+     *
+     * @param array $fieldDef
+     * @param string $fieldKey
+     * @return void
+     */
+    protected function _addToModlogOmit(array $fieldDef, string $fieldKey): void
+    {
+        if ($this->_modlogActive && isset($fieldDef['modlogOmit']) && $fieldDef['modlogOmit']) {
+            $this->_modlogOmitFields[] = $fieldKey;
+        }
+    }
+
+    /**
+     * add field to modlog omit, if configured and modlog is used OR field is password
+     *
+     * @param array $fieldDef
+     * @param string $fieldKey
+     * @return void
+     */
+    protected function _addToPasswordFields(array $fieldDef, string $fieldKey): void
+    {
+        if (isset($fieldDef[self::SPECIAL_TYPE]) && $fieldDef[self::SPECIAL_TYPE] === self::SPECIAL_TYPE_PASSWORD) {
+            $this->_pwFields[] = $fieldKey;
+        }
     }
 
     /**
