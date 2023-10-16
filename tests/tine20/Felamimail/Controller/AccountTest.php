@@ -363,8 +363,14 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
     {
         $this->_testNeedsTransaction();
         $account = $this->_createSharedAccount();
-        $account->password = 'acbd';
+        $pw = 'acbd';
+        $account->password = $pw;
         Felamimail_Controller_Account::getInstance()->update($account);
+
+        $modlogs = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications('Felamimail',$account->getId());
+        $this->assertStringNotContainsString('"password":"' . $pw . '"', $modlogs->getLastRecord()->new_value,
+            'password is not hidden ("****")');
+
         $changedNote = Tinebase_Notes::getInstance()->getNotesOfRecord(
             Felamimail_Model_Account::class, $account->getId(),
             Tinebase_Notes::DEFAULT_RECORD_BACKEND, false
