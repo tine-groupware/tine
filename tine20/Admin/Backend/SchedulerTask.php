@@ -45,6 +45,8 @@ class Admin_Backend_SchedulerTask extends Tinebase_Backend_Sql
             'callables'     => $_record->{Admin_Model_SchedulerTask::FLD_CONFIG}->getCallables(),
             'config'        => $_record->{Admin_Model_SchedulerTask::FLD_CONFIG}->toArray(),
             'config_class'  => $_record->{Admin_Model_SchedulerTask::FLD_CONFIG_CLASS},
+            'emails'        => $_record->{Admin_Model_SchedulerTask::FLD_EMAILS},
+            'name'          => $_record->{Admin_Model_SchedulerTask::FLD_NAME},
         ]))->toArray());
 
         return $raw;
