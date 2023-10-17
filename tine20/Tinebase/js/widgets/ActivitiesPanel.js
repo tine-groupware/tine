@@ -280,7 +280,7 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             filterModels: [
                 {label: i18n._('Quick Search'), field: 'query',         operators: ['contains']},
                 //{label: this.translation._('Time'), field: 'creation_time', operators: ['contains']}
-                {label: this.translation.gettext('Time'), field: 'creation_time', valueType: 'date', pastOnly: true},
+                {label: this.translation.gettext('Time'), field: 'creation_time', valueType: 'datetime', pastOnly: true},
                 // user search is note working yet -> see NoteFilter.php
                 //{label: this.translation._('User'), field: 'created_by', defaultOperator: 'contains'},
                 // type search isn't implemented yet
