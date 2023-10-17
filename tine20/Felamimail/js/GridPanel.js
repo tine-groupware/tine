@@ -874,12 +874,24 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
         
         // unread icon
-        const unreadIconEl = flagIconEls.find((item) => item.id === 'seen');
+        let unreadIconEl = flagIconEls.find((item) => item.id === 'seen');
+        if (!unreadIconEl) {
+            unreadIconEl = document.createElement('img');
+            unreadIconEl.id = 'empty';
+            unreadIconEl.className = 'felamimail-message-icon ';
+            unreadIconEl.src = '';
+        }
         
         // sender
         const senderEl = document.createElement('div');
         senderEl.innerText = record.data.from_name ?? record.data.from_email;
         senderEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.from_email));
+        
+        // recipient
+        const recipientEl = document.createElement('div');
+        const recipients = record.data.to.map((to) => { return to?.n_fileas || to?.email || to;});
+        const extra = recipients.length > 2 ? ' ...' : '';
+        recipientEl.innerText = recipients.slice(0, 2).join(' & ') + extra;
         
         // attachment
         const attachmentEl = document.createElement('div');
@@ -918,9 +930,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         row1.className = 'felamimail-message-title';
         row1Left.className = 'felamimail-message-title-row';
         row1Right.className = 'felamimail-message-title-row';
-        senderEl.className = 'felamimail-message-title-text';
-        if (unreadIconEl) row1Left.appendChild(unreadIconEl);
-        row1Left.appendChild(senderEl);
+        senderEl.className = 'felamimail-message-title-text-small';
+        recipientEl.className = 'felamimail-message-title-text-small';
+        row1Left.appendChild(unreadIconEl);
+        if (this.sentFolderSelected) {
+            row1Left.appendChild(recipientEl);
+        } else {
+            row1Left.appendChild(senderEl);
+        }
         row1Right.appendChild(receivedDateEl);
         
         const row2 = document.createElement('div');
@@ -930,7 +947,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         row2Left.className = 'felamimail-message-title-row';
         row2Right.className = 'felamimail-message-title-row';
         row2Right.style.minWidth = '50px';
-        subjectEl.className = 'felamimail-message-title-text';
+        subjectEl.className = 'felamimail-message-title-text-medium';
         
         row2Left.appendChild(attachmentEl);
         row2Left.appendChild(subjectEl);
@@ -1435,10 +1452,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Tine.log.debug(record);
 
             if (Tine.Felamimail.registry.get('preferences').get('markEmailRead') === 1) {
-                record.addFlag('\\Seen');
-                record.mtime = new Date().getTime();
-                Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
-                this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+                setTimeout( ()=>  {
+                    record.addFlag('\\Seen');
+                    record.mtime = new Date().getTime();
+                    Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
+                    this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+                }, 2000);
             }
             
             if (record.get('headers')['disposition-notification-to']) {
