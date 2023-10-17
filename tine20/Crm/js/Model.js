@@ -125,15 +125,15 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             },
             {label: app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
             {filtertype: 'tinebase.tag', app: app},
-            {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
+            {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'datetime'},
             {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-            {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
+            {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'datetime'},
             {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
             
-            {label: app.i18n._('Estimated end'), field: 'end_scheduled', valueType: 'date'},
-            {label: app.i18n._('Resubmission Date'), field: 'resubmission_date', valueType: 'date'},
-            {label: app.i18n._('End'), field: 'end', valueType: 'date'},
-            {label: app.i18n._('Start'), field: 'start', valueType: 'date'},
+            {label: app.i18n._('Estimated end'), field: 'end_scheduled', valueType: 'datetime'},
+            {label: app.i18n._('Resubmission Date'), field: 'resubmission_date', valueType: 'datetime'},
+            {label: app.i18n._('End'), field: 'end', valueType: 'datetime'},
+            {label: app.i18n._('Start'), field: 'start', valueType: 'datetime'},
             
             {filtertype: 'crm.contact'},
             {filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: Tine.Tasks.Model.Task, ownField: 'tasks'}

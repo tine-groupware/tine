@@ -231,9 +231,11 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 filter.keyfieldName = fieldconfig.name;
                 break;
             case 'date':
-            case 'datetime':
             case 'datetime_separated_date':
                 filter.valueType = 'date';
+                break;
+            case 'datetime':
+                filter.valueType = 'datetime';
                 break;
             case 'time':
                 filter.valueType = 'time';
