@@ -139,8 +139,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         
         if (this.defaultOperator === null) {
             switch (this.valueType) {
-                
                 case 'date':
+                case 'datetime':
                     this.defaultOperator = 'within';
                     break;
                 case 'account':
@@ -174,6 +174,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     this.defaultValue = '0';
                     break;
                 case 'date':
+                case 'datetime':
                 case 'account':
                 case 'group':
                 case 'user':
@@ -296,6 +297,9 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 case 'date':
                     this.operators.push('equals', 'before', 'after', 'within', 'inweek');
                     break;
+                case 'datetime':
+                    this.operators.push('before', 'after', 'within', 'inweek');
+                    break;
                 case 'number':
                 case 'money':
                 case 'percentage':
@@ -390,7 +394,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         filter.set('value', '');
         
         // for date filters we need to rerender the value section
-        if (this.valueType == 'date') {
+        if (this.valueType === 'date' || this.valueType === 'datetime') {
             switch (newOperator) {
                 case 'within':
                     filter.numberfield.hide();
@@ -456,6 +460,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 }));
                 break;
             case 'date':
+            case 'datetime':
                 value = this.dateValueRenderer(filter, el);
                 break;
             case 'percentage':
@@ -609,7 +614,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         }
         
         var comboOps = this.pastOnly ? this.datePastOps : this.dateFutureOps.concat(this.datePastOps);
-        var comboValue = 'weekThis';
+        var comboValue = this.valueType === 'datetime' ? 'dayThis' : 'weekThis';
         if (filter.data.value && filter.data.value.toString().match(/^[a-zA-Z]+$/)) {
             comboValue = filter.data.value.toString();
         } else if (filter.data.value && filter.data.value.from) {

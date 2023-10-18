@@ -104,8 +104,8 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {label: this.app.i18n._('Access Log'),  field: 'query',         operators: ['contains']},
                 {label: this.app.i18n._('IP Address'),  field: 'ip'},
                 {label: this.app.i18n._('User'),        field: 'account_id',    valueType: 'user'},
-                {label: this.app.i18n._('Login Time'),  field: 'li',            valueType: 'date', pastOnly: true        },
-                {label: this.app.i18n._('Logout Time'), field: 'lo',            valueType: 'date', pastOnly: true        },
+                {label: this.app.i18n._('Login Time'),  field: 'li',            valueType: 'datetime', pastOnly: true        },
+                {label: this.app.i18n._('Logout Time'), field: 'lo',            valueType: 'datetime', pastOnly: true        },
                 {label: this.app.i18n._('Client Type'), field: 'clienttype'}
             ],
             defaultFilter: 'query',
