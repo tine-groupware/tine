@@ -128,6 +128,9 @@ Tine.widgets.form.FieldManager = function() {
                     if (fieldDefinition.format) {
                         field.format = fieldDefinition.format;
                     }
+                    if (fieldDefinition.nullable) {
+                        field.xtype = 'extuxclearabledatefield';
+                    }
                     break;
                 case 'time':
                     field.xtype = 'timefield';
