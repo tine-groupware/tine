@@ -119,6 +119,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * @var array|null
      */
     private static $_backendConfiguration;
+
+    private static ?Tinebase_Model_AccessLog $_accessLog = null;
     
     /**
      * Holds the backend configuration options.
@@ -327,6 +329,16 @@ class Tinebase_User implements Tinebase_Controller_Interface
             ' Setting backend type to ' . $newBackendType);
         
         self::$_backendType = $newBackendType;
+    }
+
+    public static function setAccessLog(Tinebase_Model_AccessLog $accessLog)
+    {
+        self::$_accessLog = $accessLog;
+    }
+
+    public static function getAccessLog(): ?Tinebase_Model_AccessLog
+    {
+        return self::$_accessLog;
     }
 
     /**

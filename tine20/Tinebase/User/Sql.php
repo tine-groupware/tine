@@ -88,7 +88,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * @var Tinebase_Backend_Sql_Command_Interface
      */
     protected $_dbCommand;
-
+    
     /**
      * the constructor
      *
@@ -408,16 +408,19 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     protected function _getUserSelectObject(bool $_getDeleted = false)
     {
+        $accessLog = Tinebase_User::getAccessLog();
+        $clientType = $accessLog && $accessLog['clienttype'] ? $accessLog['clienttype'] : 'Unknown';
+        $command = 'JSON_VALUE(' . $this->rowNameMapping['loginFailures'] . ', ' . $this->_db->quote("$.$clientType") . ')';
         $interval = $this->_dbCommand->getDynamicInterval(
             'SECOND',
             '1',
-            'CASE WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures'])
-            . ' > 5 THEN 60 ELSE POWER(2, ' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures']) . ') END');
+            'CASE WHEN ' . $command
+            . ' > 5 THEN 60 ELSE POWER(2, ' . $command . ') END');
         
         $statusSQL = 'CASE WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('enabled') . ' THEN ('
             . 'CASE WHEN '.$this->_dbCommand->setDate('NOW()') .' > ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountExpires'])
             . ' THEN ' . $this->_db->quote('expired')
-            . ' WHEN ( ' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures']) . ' > 0 AND '
+            . ' WHEN ( ' . $command . ' > 0 AND '
             . $this->_db->quoteIdentifier($this->rowNameMapping['lastLoginFailure']) . ' + ' . $interval . ' > NOW()) THEN ' . $this->_db->quote('blocked')
             . ' ELSE ' . $this->_db->quote('enabled') . ' END)'
             . ' WHEN ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('expired')
@@ -653,7 +656,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData['seq'] = $oldUser->seq + 1;
         switch($_status) {
             case Tinebase_Model_User::ACCOUNT_STATUS_ENABLED:
-                $accountData[$this->rowNameMapping['loginFailures']]  = 0;
+                $accountData[$this->rowNameMapping['loginFailures']] = $this->resetLoginFailureCount();
                 $accountData[$this->rowNameMapping['accountExpires']] = null;
                 $accountData['status'] = $_status;
                 break;
@@ -748,7 +751,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $values = array(
             'last_login_failure_at' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-            'login_failures'        => new Zend_Db_Expr($this->_db->quoteIdentifier('login_failures') . ' + 1')
+            'login_failures'        => $this->addLoginFailureCount(),
         );
         
         $where = array(
@@ -756,7 +759,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         );
         
         $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $values, $where);
-
         return $user;
     }
     
@@ -775,7 +777,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $accountData['last_login_from'] = $_ipAddress;
         $accountData['last_login']      = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
-        $accountData['login_failures']  = 0;
+        $accountData['login_failures']  = $this->resetLoginFailureCount();
         
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
@@ -1070,7 +1072,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $accountData[$this->rowNameMapping['accountStatus']] = $_user->accountStatus;
             
             if ($oldUser->accountStatus === Tinebase_User::STATUS_BLOCKED) {
-                $accountData[$this->rowNameMapping['loginFailures']] = 0;
+                $accountData[$this->rowNameMapping['loginFailures']] = $this->resetLoginFailureCount();
             } elseif ($oldUser->accountStatus === Tinebase_User::STATUS_EXPIRED) {
                 $accountData[$this->rowNameMapping['accountExpires']] = null;
             }
@@ -1696,5 +1698,30 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $stmt = $select->query();
         return $stmt->fetchAll(Zend_Db::FETCH_NUM);
+    }
+    
+    public function addLoginFailureCount(): Zend_Db_Expr
+    {
+        $accessLog = Tinebase_User::getAccessLog();
+        $clientType = $accessLog && $accessLog['clienttype'] ? $accessLog['clienttype'] : 'Unknown';
+        $field = $this->rowNameMapping['loginFailures'];
+        $valueCommand = "COALESCE(JSON_VALUE($field," .  $this->_db->quote("$.$clientType") . '), 0) + 1';
+        $loginCommand = "CASE WHEN JSON_VALID($field) " .
+            "THEN JSON_SET($field," .  $this->_db->quote("$.$clientType") . ', ' . $valueCommand . ') ' .
+            'ELSE JSON_OBJECT(' . $this->_db->quote($clientType) . ', 1) ' .
+            'END';
+        return new Zend_Db_Expr($loginCommand);
+    }
+    
+    public function resetLoginFailureCount(): Zend_Db_Expr
+    {
+        $accessLog = Tinebase_User::getAccessLog();
+        $clientType = $accessLog && $accessLog['clienttype'] ? $accessLog['clienttype'] : 'Unknown';
+        $field = $this->rowNameMapping['loginFailures'];
+        $loginCommand = "CASE WHEN JSON_VALID($field) " .
+            "THEN JSON_SET($field," .  $this->_db->quote("$.$clientType") . ', 0) ' .
+            'ELSE JSON_OBJECT(' . $this->_db->quote($clientType) . ', 0) ' .
+            'END';
+        return new Zend_Db_Expr($loginCommand);
     }
 }
