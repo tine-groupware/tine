@@ -1,13 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * class for Tinebase initialization
@@ -102,6 +104,47 @@ class Sales_Setup_Initialize extends Setup_Initialize
         Sales_Scheduler_Task::addUpdateProductLifespanTask($scheduler);
         Sales_Scheduler_Task::addCreateAutoInvoicesDailyTask($scheduler);
         Sales_Scheduler_Task::addCreateAutoInvoicesMonthlyTask($scheduler);
+    }
+
+    protected function _initializeTbSystemCFEvaluationDimension(): void
+    {
+        self::createTbSystemCFEvaluationDimension();
+    }
+
+    public static function createTbSystemCFEvaluationDimension(): void
+    {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+/*
+        $appId = Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId();
+
+        Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+            'name' => 'divisions',
+            'application_id' => $appId,
+            'model' => Tinebase_Model_EvaluationDimension::class,
+            'is_system' => true,
+            'definition' => [
+                Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                    TMCC::LABEL             => 'Sales Divisions', // _('Sales Divisions')
+                    TMCC::TYPE              => TMCC::TYPE_RECORDS,
+                    TMCC::CONFIG            => [
+                        TMCC::APP_NAME          => Sales_Config::APP_NAME,
+                        TMCC::MODEL_NAME        => SalModD::MODEL_NAME_PART,
+                        TMCC::REF_ID_FIELD      => 'record',
+                        TMCC::DEPENDENT_RECORDS => true,
+                        TMCC::FILTER_OPTIONS    => [
+                            TMCC::DISABLED          => true,
+                            GDPR_Model_DataIntendedPurposeRecordFilter::OPTIONS_SHOW_WITHDRAWN => true,
+                            'doJoin'                => true,
+                        ],
+                    ],
+                    TMCC::UI_CONFIG         => [
+                        'group'                         => 'GDPR',
+                    ],
+                ],
+            ]
+        ], true));*/
     }
 
     /**
