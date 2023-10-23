@@ -21,6 +21,7 @@ class Felamimail_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE016_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE016_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE016_UPDATE008 = __CLASS__ . '::update008';
 
 
     static protected $_allUpdates = [
@@ -36,6 +37,10 @@ class Felamimail_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE007          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update007',
+            ],
+            self::RELEASE016_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -264,5 +269,54 @@ sieveFile
         }
 
         $this->addApplicationUpdate(Felamimail_Config::APP_NAME, '16.7', self::RELEASE016_UPDATE007);
+    }
+
+    public function update008()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        if ($this->getTableVersion('felamimail_cache_message') < 18) {
+            $this->setTableVersion('felamimail_cache_message', 18);
+        }
+
+        $schema = $this->_backend->getExistingSchema('felamimail_cache_message');
+
+        if (isset($schema->indicesByName['received'])) {
+            $this->_backend->dropIndex('felamimail_cache_message', 'received');
+        }
+        if (isset($schema->indicesByName['account_id-folder_id'])) {
+            $this->_backend->dropIndex('felamimail_cache_message', 'account_id-folder_id');
+        }
+
+        if (!isset($schema->indicesByName['account_id-folder_id-received'])) {
+            $this->_backend->addIndex('felamimail_cache_message', new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>account_id-folder_id-received</name>
+                        <field>
+                            <name>account_id</name>
+                        </field>
+                        <field>
+                            <name>folder_id</name>
+                        </field>
+                        <field>
+                            <name>received</name>
+                        </field>
+                    </index>'));
+        }
+
+        if (!isset($schema->indicesByName['account_id-received'])) {
+            $this->_backend->addIndex('felamimail_cache_message', new Setup_Backend_Schema_Index_Xml('
+                    <index>
+                        <name>account_id-received</name>
+                        <field>
+                            <name>account_id</name>
+                        </field>
+                        <field>
+                            <name>received</name>
+                        </field>
+                    </index>'));
+        }
+
+        $this->addApplicationUpdate(Felamimail_Config::APP_NAME, '16.8', self::RELEASE016_UPDATE008);
     }
 }
