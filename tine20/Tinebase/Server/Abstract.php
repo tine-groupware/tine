@@ -217,14 +217,28 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
         return $definitions;
     }
 
+    /**
+     * @return void
+     * @throws Tinebase_Exception_Unauthorized
+     * @throws Zend_Session_Exception
+     */
     final protected function _disallowAppPwdSessions(): void
     {
         if (Tinebase_Session::sessionExists()) {
             if (!Tinebase_Session::isStarted()) {
-                Tinebase_Core::startCoreSession();
+                try {
+                    Tinebase_Core::startCoreSession();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' ' . $tenf->getMessage());
+                    }
+                    throw new Tinebase_Exception_Unauthorized('User not found');
+                }
             }
+
             if (Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class}) {
-                throw new Tinebase_Exception_Unauthorized('session not allowed for this api');
+                throw new Tinebase_Exception_Unauthorized('Session not allowed for this api');
             }
         }
     }
