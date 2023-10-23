@@ -242,4 +242,34 @@ class Sales_Setup_Initialize extends Setup_Initialize
             ))
         ));
     }
+
+    protected function _initializeDefaultDivision(): void
+    {
+        $division = static::createDefaultDivision();
+        static::createDefaultCategory($division);
+    }
+
+    public static function createDefaultDivision(): Sales_Model_Division
+    {
+        $t = Tinebase_Translation::getTranslation('Sales');
+        $division = Sales_Controller_Division::getInstance()->create(new Sales_Model_Division([
+            Sales_Model_Division::FLD_TITLE => $t->_('Default Division'),
+        ]));
+        Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION} = $division->getId();
+
+        return $division;
+    }
+
+    public static function createDefaultCategory(Sales_Model_Division $division): Sales_Model_Document_Category
+    {
+        $t = Tinebase_Translation::getTranslation('Sales');
+        $category = Sales_Controller_Document_Category::getInstance()->create(new Sales_Model_Document_Category([
+            Sales_Model_Document_Category::FLD_NAME => $t->_('Standard'),
+            Sales_Model_Document_Category::FLD_DIVISION_ID => $division->getId(),
+        ]));
+        Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT} = $category->getId();
+
+        return $category;
+
+    }
 }

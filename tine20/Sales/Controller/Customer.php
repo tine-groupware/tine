@@ -10,6 +10,9 @@
  *
  */
 
+use Sales_Model_Customer as SMC;
+use Sales_Model_Debitor as SMDN;
+
 /**
  * customer controller class for Sales application
  * 
@@ -140,6 +143,18 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
         $this->_setContactCustomerRelation($_createdRecord);
+
+        // create default debitor if missing
+        if (!$_record->{SMC::FLD_DEBITORS}) {
+            $_record->{SMC::FLD_DEBITORS} = new Tinebase_Record_RecordSet(Sales_Model_Debitor::class);
+        }
+        if ($_record->{SMC::FLD_DEBITORS}->count() > 0) {
+            return;
+        }
+        $_record->{SMC::FLD_DEBITORS}->addRecord(new Sales_Model_Debitor([
+            Sales_Model_Debitor::FLD_CUSTOMER_ID => $_record->getId(),
+            Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}
+        ]));
     }
 
     /**
@@ -207,7 +222,7 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
     /**
      * create postal address record after creat customer
      *
-     * - create billing address adter postal address created
+     * - create billing address after postal address created
      * - billing address equal to postal address
      *
      * @param Tinebase_Record_Interface $_record
@@ -220,9 +235,12 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
      */
     protected function _resolveBillingAddress($_record)
     {
-        if (!empty($_record->billing) && (!$_record->billing instanceof Tinebase_Record_RecordSet || $_record->billing->count() > 0)) {
+        // TODO FIXME WHAT DO WE DO WITH THIS?!? check each debitor? should we do this on the creation of each debitor? now its only been done on the creation of the customer...
+
+        if ($_record->{SMC::FLD_DEBITORS}?->getFirstRecord()?->{SMDN::FLD_BILLING}?->count() > 0) {
             return;
         }
+
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $_record['id'])));
 
@@ -232,9 +250,12 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
         if ($postalAddressRecord) {
             $billingAddress = $postalAddressRecord->getData();
             unset($billingAddress['id']);
-            $billingAddress['type'] = 'billing';
+            unset($billingAddress[Sales_Model_Address::FLD_CUSTOMER_ID]);
+            $billingAddress['type'] = Sales_Model_Address::TYPE_BILLING;
+            $billingAddress[Sales_Model_Address::FLD_DEBITOR_ID] = $_record->{SMC::FLD_DEBITORS}->getFirstRecord()->getId();
             
-            Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($billingAddress));
+            $address = Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($billingAddress));
+            $_record->{SMC::FLD_DEBITORS}?->getFirstRecord()?->{SMDN::FLD_BILLING}?->addRecord($address);
         }
     }
 

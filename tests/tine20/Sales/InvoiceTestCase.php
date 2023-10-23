@@ -396,6 +396,10 @@ class Sales_InvoiceTestCase extends TestCase
             $customer['adr_pobox'] = 'test pobox';
             $customer['adr_postalcode'] = 'test postalcode';
             $customer['adr_locality'] ='test locality';
+            $customer[Sales_Model_Customer::FLD_DEBITORS] = [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]];
+
         
             $this->_customerRecords->addRecord($this->_customerController->create(new Sales_Model_Customer($customer)));
         }
@@ -404,7 +408,8 @@ class Sales_InvoiceTestCase extends TestCase
             foreach(array('postal', 'billing', 'delivery') as $type) {
                 $caddress = $this->_contactRecords->getByIndex($i);
                 $address = new Sales_Model_Address(array(
-                    'customer_id' => $customer->getId(),
+                    'customer_id' => $type === 'postal' ? $customer->getId() : null,
+                    Sales_Model_Address::FLD_DEBITOR_ID => $type !== 'postal' ? $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId() : null,
                     'type'        => $type,
                     'prefix1'     => $caddress->title,
                     'prefix2'     => $caddress->n_fn,
@@ -535,8 +540,8 @@ class Sales_InvoiceTestCase extends TestCase
                     'description'  => '1 unittest begin',
                     'container_id' => $this->_sharedContractsContainerId,
                     'billing_address_id' => $this->_addressRecords->filter(
-                        'customer_id', $this->_customerRecords->filter(
-                            'name', 'Customer1')->getFirstRecord()->getId())->filter(
+                        Sales_Model_Address::FLD_DEBITOR_ID, $this->_customerRecords->filter(
+                            'name', 'Customer1')->getFirstRecord()->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter(
                                 'type', 'billing')->getFirstRecord()->getId(),
                     
                     'start_date' => clone $startDate,
@@ -552,7 +557,7 @@ class Sales_InvoiceTestCase extends TestCase
                     'title'        => Tinebase_Record_Abstract::generateUID(),
                     'description'  => '2 unittest end',
                     'container_id' => $this->_sharedContractsContainerId,
-                    'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer2')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
+                    'billing_address_id' => $this->_addressRecords->filter(Sales_Model_Address::FLD_DEBITOR_ID, $this->_customerRecords->filter('name', 'Customer2')->getFirstRecord()->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
                     'start_date' => clone $startDate,
                     'end_date' => clone $endDate,
                     'products' => array(
@@ -565,7 +570,7 @@ class Sales_InvoiceTestCase extends TestCase
                     'title'        => Tinebase_Record_Abstract::generateUID(),
                     'description'  => '3 unittest end',
                     'container_id' => $this->_sharedContractsContainerId,
-                    'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
+                    'billing_address_id' => $this->_addressRecords->filter(Sales_Model_Address::FLD_DEBITOR_ID, $this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
                     'start_date' => clone $startDate,
                     'end_date' => NULL,
                     'products' => array(
@@ -578,7 +583,7 @@ class Sales_InvoiceTestCase extends TestCase
                     'title'        => Tinebase_Record_Abstract::generateUID(),
                     'description'  => '4 unittest products',
                     'container_id' => $this->_sharedContractsContainerId,
-                    'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer4')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
+                    'billing_address_id' => $this->_addressRecords->filter(Sales_Model_Address::FLD_DEBITOR_ID, $this->_customerRecords->filter('name', 'Customer4')->getFirstRecord()->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
                     // this has an interval of 1 month, but there will be 2 products (6,3 months), so we need 5 invoices (4 in the first year, 1 for the beginning of the second year)
                     'start_date' => clone $startDate,
                     'end_date' => NULL,

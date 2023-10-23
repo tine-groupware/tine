@@ -1411,6 +1411,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         if (empty($record->address_id) && $foundCustomer) {
             $json = new Sales_Frontend_Json();
             $resolved = $json->getCustomer($foundCustomer->getId());
+            //TODO FIXME!!!
             if (! empty($resolved['billing'])) {
                 $record->address_id = $resolved['billing'][0]['id'];
             } else {

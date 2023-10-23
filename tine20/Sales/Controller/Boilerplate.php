@@ -154,8 +154,17 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
         $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_FROM, 'operator' => 'before_or_equals', 'value' => $date];
         $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_UNTIL, 'operator' => 'after_or_equals', 'value' => $date];
 
-        $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' =>
-            $category ?: Sales_Config::DOCUMENT_CATEGORY_DEFAULT];
+        if ($category) {
+            $filter[] = [
+                'condition' => Tinebase_Model_Filter_FilterGroup::CONDITION_OR,
+                'filters'   => [
+                    ['field' => \Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' => null],
+                    ['field' => \Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' => $category],
+                ],
+            ];
+        } else {
+            $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY, 'operator' => 'equals', 'value' => null];
+        }
 
         if ($customerId) {
             $filter[] = [

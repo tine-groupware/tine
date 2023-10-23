@@ -1463,8 +1463,10 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Doing ACL check ...');
         
         if (($_currentRecord->has('container_id') && Tinebase_Record_Abstract::convertId($_currentRecord->container_id) != Tinebase_Record_Abstract::convertId($_record->container_id)) ||
-            (($mc = $_record::getConfiguration()) && ($daf = $mc->delegateAclField) &&
-                $_currentRecord->getIdFromProperty($daf) !== $_record->getIdFromProperty($daf))) {
+            (($mc = $_record::getConfiguration()) && ($daf = $mc->delegateAclField) && (
+                $mc->getFields()[$daf][TMCC::TYPE] === TMCC::TYPE_RECORDS ?
+                    (($migration = $_currentRecord->{$daf}->getMigration($_record->{$daf}->getArrayOfIds())) && (count($migration['toDeleteIds']) > 0 || count($migration['toCreateIds']) > 0))
+                    : ($_currentRecord->getIdFromProperty($daf) !== $_record->getIdFromProperty($daf))))) {
             $this->_checkGrant($_record, self::ACTION_CREATE);
             $this->_checkRight(self::ACTION_CREATE);
             // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine

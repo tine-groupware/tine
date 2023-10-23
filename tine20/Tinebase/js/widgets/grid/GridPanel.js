@@ -1140,6 +1140,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         Tine.widgets.dialog.ImportDialog.openWindow({
+            openerCt: this,
             appName: this.app.name,
             modelName: this.recordClass.getMeta('modelName'),
             defaultImportContainer: container,
@@ -2597,6 +2598,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         var popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
+                openerCt: this,
                 plugins: Ext.encode(plugins),
                 fixedFields: fixedFields,
                 additionalConfig: Ext.encode(additionalConfig),

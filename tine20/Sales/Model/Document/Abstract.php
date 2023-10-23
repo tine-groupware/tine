@@ -21,7 +21,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 {
-    //const MODEL_NAME_PART = ''; // als konkrete document_types gibt es Offer, Order, Delivery, Invoice (keine Gutschrift!)
+    public const MODEL_NAME_PART = 'Document_Abstract'; // als konkrete document_types gibt es Offer, Order, Delivery, Invoice (keine Gutschrift!)
 
     public const FLD_ID = 'id';
     public const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
@@ -59,6 +59,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_COST_CENTER_ID = 'cost_center_id';
     public const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
+    public const FLD_DEBITOR_ID = 'debitor_id';
     public const FLD_DESCRIPTION = 'description';
 
     public const FLD_REVERSAL_STATUS = 'reversal_status';
@@ -118,8 +119,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_CUSTOMER_ID       => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'delivery'              => [],
-                        'billing'               => [],
+                        Sales_Model_Customer::FLD_DEBITORS => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                Sales_Model_Debitor::FLD_DELIVERY => [],
+                                Sales_Model_Debitor::FLD_BILLING  => [],
+                            ],
+                        ],
                         'postal'                => [],
                         'cpextern_id'           => [],
                         'cpintern_id'           => [],
@@ -168,9 +173,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             ],
             self::FLD_DOCUMENT_CATEGORY => [
                 self::LABEL                 => 'Category', // _('Category')
-                self::TYPE                  => self::TYPE_KEY_FIELD,
-                self::NAME                  => Sales_Config::DOCUMENT_CATEGORY,
+                self::TYPE                  => self::TYPE_RECORD,
                 self::SHY                   => true,
+                self::CONFIG                => [
+                    self::APP_NAME              => Sales_Config::APP_NAME,
+                    self::MODEL_NAME            => Sales_Model_Document_Category::MODEL_NAME_PART,
+                ],
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => null,
+                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
             ],
             self::FLD_PRECURSOR_DOCUMENTS => [
                 self::TYPE                      => self::TYPE_RECORDS,
@@ -246,6 +259,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_POSTAL,
+                    self::FORCE_VALUES          => [
+                        Sales_Model_Document_Address::FLD_DEBITOR_ID => null,
+                    ],
                 ],
                 self::SHY                   => true,
             ],
@@ -391,6 +407,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER                  => true,
                 self::SHY                           => true,
             ],
+            self::FLD_DEBITOR_ID                => [
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Debitor::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
+            ],
         ]
     ];
 
@@ -411,12 +435,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         parent::inheritModelConfigHook($_definition);
 
-        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::BUCKETKEY] =
-            static::class . '#' . self::FLD_DOCUMENT_NUMBER;
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_CATEGORY][self::VALIDATORS][Zend_Filter_Input::DEFAULT_VALUE] =
+            Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT};
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable_String::PREFIX] =
             Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
                 new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE})
             )->_(static::$_documentNumberPrefix);
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
+            'Sales_Controller_' . static::MODEL_NAME_PART . '::documentNumberConfigOverride';
     }
 
     public function isBooked(): bool
@@ -806,5 +832,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             $updated = $ownCtrl->update($this);
             $this->seq = $updated->seq;
         }
+    }
+
+    public function getDivisionId(): string
+    {
+        return 'fixme';
     }
 }

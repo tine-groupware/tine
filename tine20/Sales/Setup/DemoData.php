@@ -56,6 +56,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected $_models = array('product', 'customer', 'contract', 'invoice', 'orderconfirmation', 'offer');
 
+    protected ?Sales_Model_Division $_division;
+
     /**
      * the constructor
      *
@@ -64,6 +66,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
         $this->_productController     = Sales_Controller_Product::getInstance();
         $this->_contractController    = Sales_Controller_Contract::getInstance();
+        $this->_division = Sales_Controller_Division::getInstance()->getAll()->getFirstRecord();
 
         $this->_loadCostCentersAndDivisions();
     }
@@ -449,6 +452,12 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $customer['credit_term'] = 30;
             $customer['currency'] = 'EUR';
             $customer['currency_trans_rate'] = 1;
+            $customer[Sales_Model_Customer::FLD_DEBITORS] =
+                new Tinebase_Record_RecordSet(Sales_Model_Debitor::class, [[
+                    Sales_Model_Debitor::FLD_DIVISION_ID => $this->_division->getId(),
+                    Sales_Model_Debitor::FLD_NAME        => 'Demo Debitor'
+                ]], true);
+
             try {
                 $customerRecords->addRecord($customerController->create(new Sales_Model_Customer($customer)));
             } catch (Tinebase_Exception_Duplicate $e) {
@@ -464,7 +473,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             foreach(array('postal', 'billing', 'delivery', 'billing', 'delivery') as $type) {
                 $caddress = $addresses->getByIndex($i);
                 $address = new Sales_Model_Address(array(
-                    'customer_id' => $customer->getId(),
+                    'customer_id' => 'postal' === $type ? $customer->getId() : null,
+                    Sales_Model_Address::FLD_DEBITOR_ID => 'postal' !== $type ? $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId() : null,
                     'type'        => $type,
                     'prefix1'     => $caddress->title,
                     'prefix2'     => $caddress->n_fn,
@@ -483,7 +493,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             // the last customer gets plus one delivery address
             $caddress = $addresses->getByIndex($i);
             $address = new Sales_Model_Address(array(
-                'customer_id' => $customer->getId(),
+                'customer_id' => 'postal' === $type ? $customer->getId() : null,
+                Sales_Model_Address::FLD_DEBITOR_ID => 'postal' !== $type ? $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId() : null,
                 'type'        => $type,
                 'prefix1'     => $caddress->title,
                 'prefix2'     => $caddress->n_fn,
@@ -501,7 +512,14 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         if (static::$_createFullData) {
             $i=0;
             while ($i < 200) {
-                $customerController->create(new Sales_Model_Customer(array('name' => Tinebase_Record_Abstract::generateUID())));
+                $customerController->create(new Sales_Model_Customer(array(
+                    'name' => Tinebase_Record_Abstract::generateUID(),
+                    Sales_Model_Customer::FLD_DEBITORS =>
+                        new Tinebase_Record_RecordSet(Sales_Model_Debitor::class, [[
+                            Sales_Model_Debitor::FLD_DIVISION_ID => $this->_division->getId(),
+                            Sales_Model_Debitor::FLD_NAME        => 'Demo Debitor '. $i
+                        ]], true),
+                )));
                 $i++;
             }
         }

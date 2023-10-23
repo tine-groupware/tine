@@ -43,7 +43,7 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
 
         // deprecated documents
         // TODO add migration to new documents
-        // {modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true},
+        {modelName: 'Invoice', requiredRight: 'manage_invoices', singularContainerMode: true},
         // {modelName: 'OrderConfirmation', requiredRight: 'manage_orderconfirmations', singularContainerMode: true},
         {modelName: 'Offer', requiredRight: 'manage_offers', singularContainerMode: true},
 
@@ -57,28 +57,6 @@ Tine.Sales.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
 
 // rendered sums registry for the invoiceposition grid panel
 Tine.Sales.renderedSumsPerMonth = {};
-
-Tine.Sales.addToClipboard = function(record, companyName) {
-    // this is called either from the edit dialog or from the grid, so we have different record types
-    var fieldPrefix = record.data.hasOwnProperty('bic') ? 'adr_' : '';
-
-    companyName = companyName ? companyName : (record.get('name') ? record.get('name') : '');
-
-    var lines = companyName + "\n";
-
-        lines += (record.get((fieldPrefix + 'prefix1')) ? record.get((fieldPrefix + 'prefix1')) + "\n" : '');
-        lines += (record.get((fieldPrefix + 'prefix2')) ? record.get((fieldPrefix + 'prefix2')) + "\n" : '');
-        lines += (record.get(fieldPrefix + 'pobox') ? record.get(fieldPrefix + 'pobox') + "\n" : (record.get(fieldPrefix + 'street') ? record.get(fieldPrefix + 'street') + "\n" : ''));
-        lines += (record.get((fieldPrefix + 'postalcode')) ? (record.get((fieldPrefix + 'postalcode')) + ' ') : '') + (record.get((fieldPrefix + 'locality')) ? record.get((fieldPrefix + 'locality')) : '');
-
-        if (record.get('countryname')) {
-            lines += "\n" + record.get('countryname');
-        }
-
-    var app = Tine.Tinebase.appMgr.get('Sales');
-
-    Tine.Sales.CopyAddressDialog.openWindow({winTitle: app.i18n._('Copy address to the clipboard'), app: app, content: lines});
-};
 
 /** @param {Tine.Tinebase.data.Record} record
  * @param {String} companyName
@@ -120,6 +98,26 @@ Tine.Sales.addToClipboard = function(record, companyName) {
         content: Tine.Sales.renderAddress(record, companyName)
     });
 };
+Tine.Tinebase.appMgr.isInitialised('Sales').then(() => {
+    const app = Tine.Tinebase.appMgr.get('Sales');
+    Ext.preg('sales.address.to-clipboard', Ext.extend(Ext.ux.grid.ActionColumnPlugin, {
+        header: app.i18n._('Clipboard'),
+        keepSelection: false,
+        actions: [{
+            name: 'clipboard',
+            iconIndex: 'copy_clipboard',
+            iconCls: 'clipboard',
+            tooltip: app.i18n._('Copy address to the clipboard'),
+            callback: function(rowIndex) {
+                var record = this.store.getAt(rowIndex);
+                var companyName =this.findParentBy(c => {
+                    return c.recordClass?.getPhpClassName() === 'Sales_Model_Customer';
+                })?.record.get('name');
+                Tine.Sales.addToClipboard(record, companyName);
+            }
+        }]
+    }));
+});
 
 Tine.Sales.renderAddressAsLine = function(values) {
     var ret = '';

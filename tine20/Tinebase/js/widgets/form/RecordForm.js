@@ -111,7 +111,7 @@ Tine.widgets.form.RecordForm.getFormFields = function(recordClass, configInterce
 Tine.widgets.form.RecordForm.getFormHeight = function(recordClass) {
     var dlgConstructor = Tine.widgets.dialog.EditDialog.getConstructor(recordClass),
         fieldDefinitions = Tine.widgets.form.RecordForm.getFieldDefinitions(recordClass),
-        formHeight = 38+23+15; // btnfooter + tabpanel + paddings
+        formHeight = 38+23+30; // btnfooter + tabpanel + paddings
 
     if (dlgConstructor) {
         // toolbar

@@ -150,27 +150,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         var currency = Tine.Sales.registry.get('config').ownCurrency.value;
-        
-        this.billingAddressGridPanel = new Tine.Sales.BillingAddressGridPanel({
-            app: this.app,
-            editDialog: this,
-            frame: false,
-            border: true,
-            autoScroll: true,
-            layout: 'border',
-            editDialogRecordProperty: 'billing'
-        });
-        
-        this.deliveryAddressGridPanel = new Tine.Sales.DeliveryAddressGridPanel({
-            app: this.app,
-            editDialog: this,
-            frame: false,
-            border: true,
-            autoScroll: true,
-            layout: 'border',
-            editDialogRecordProperty: 'delivery'
-        });
-        
+
         return {
             xtype: 'tabpanel',
             defaults: {
@@ -304,6 +284,14 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }
                         ]]
                     }]
+                }, {
+                    xtype: 'fieldset',
+                    layout: 'hfit',
+                    autoHeight: true,
+                    title: this.app.i18n._('Debitors'),
+                    items: [
+                        fieldManager('debitors')
+                    ]
                 }, {
                     xtype: 'fieldset',
                     layout: 'hfit',
@@ -458,9 +446,8 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     })
                 ]
             }]
-        }, this.billingAddressGridPanel,
-           this.deliveryAddressGridPanel,
-           new Tine.widgets.activities.ActivitiesTabPanel({
+        },
+            new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: 'Sales_Model_Customer'

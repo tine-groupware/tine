@@ -64,18 +64,6 @@
           "path": "js/"
         },
         {
-          "text": "AddressGridPanel.js",
-          "path": "js/"
-        },
-        {
-          "text": "DeliveryAddressGridPanel.js",
-          "path": "js/"
-        },
-        {
-          "text": "BillingAddressGridPanel.js",
-          "path": "js/"
-        },
-        {
           "text": "AddressEditDialog.js",
           "path": "js/"
         },

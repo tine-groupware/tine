@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * 
  */
@@ -39,6 +39,12 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_CONTRACTS = 'manage_contracts';
+
+    /**
+     * the right to manage contracts
+     * @staticvar string
+     */
+    const MANAGE_DIVISIONS = 'manage_divisions';
     
     /**
      * the right to manage cost centers
@@ -148,6 +154,7 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_CONTRACTS,
             self::MANAGE_COSTCENTERS,
             self::MANAGE_CUSTOMERS,
+            self::MANAGE_DIVISIONS,
         );
         
         // add rights dependent on feature switches
@@ -227,6 +234,10 @@ class Sales_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::SET_INVOICE_NUMBER => array(
                 'text'          => $translate->_('Set number of invoices'),
                 'description'   => $translate->_('Allow to set the number of an invoice.'),
+            ),
+            self::MANAGE_DIVISIONS => array(
+                'text'          => $translate->_('Manage Divisions'),
+                'description'   => $translate->_('Add, edit and delete divisions'),
             ),
         );
         

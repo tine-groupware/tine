@@ -247,20 +247,36 @@ class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
     {
         $controller = Sales_Controller_Customer::getInstance();
     
-        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto1')));
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto1',
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
+        )));
     
         $this->assertEquals(1, $record->number);
     
-        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto2')));
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto2',
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
+        )));
     
         $this->assertEquals(2, $record->number);
     
         // set number to 4, should return the formatted number
-        $record = $controller->create(new Sales_Model_Customer(array('name' => 'manu1', 'number' => 4)));
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'manu1', 'number' => 4,
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
+        )));
         $this->assertEquals(4, $record->number);
     
         // the next number should be a number after the manual number
-        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto3')));
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto3',
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
+        )));
         $this->assertEquals(5, $record->number);
     }
     

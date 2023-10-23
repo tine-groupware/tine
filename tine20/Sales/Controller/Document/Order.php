@@ -78,10 +78,14 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
         if (!empty($_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID})) {
             $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}
                 ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
+            $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}
+                ->{Sales_Model_Address::FLD_DEBITOR_ID} = null;
         }
         if (!empty($_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID})) {
             $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}
                 ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
+            $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}
+                ->{Sales_Model_Address::FLD_DEBITOR_ID} = null;
         }
 
         parent::_inspectBeforeCreate($_record);
@@ -93,38 +97,8 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        if (!empty($_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID})) {
-            // the recipient address is not part of a customer, we enforce that here
-            $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
-
-            // if the recipient address is a denormalized customer address, we denormalize it again from the original address
-            if ($address = Sales_Controller_Document_Address::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Address::class, [
-                    ['field' => 'id', 'operator' => 'equals', 'value' => $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}->getId()],
-                    ['field' => 'document_id', 'operator' => 'equals', 'value' => null],
-                    ['field' => 'customer_id', 'operator' => 'not', 'value' => null],
-                ]))->getFirstRecord()) {
-                $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}->setId($address->{Sales_Model_Address::FLD_ORIGINAL_ID});
-                $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}->{Sales_Model_Address::FLD_ORIGINAL_ID} = null;
-            }
-        }
-        if (!empty($_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID})) {
-            // the recipient address is not part of a customer, we enforce that here
-            $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
-
-            // if the recipient address is a denormalized customer address, we denormalize it again from the original address
-            if ($address = Sales_Controller_Document_Address::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Address::class, [
-                    ['field' => 'id', 'operator' => 'equals', 'value' => $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}->getId()],
-                    ['field' => 'document_id', 'operator' => 'equals', 'value' => null],
-                    ['field' => 'customer_id', 'operator' => 'not', 'value' => null],
-                ]))->getFirstRecord()) {
-                $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}->setId($address->{Sales_Model_Address::FLD_ORIGINAL_ID});
-                $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}->{Sales_Model_Address::FLD_ORIGINAL_ID} = null;
-            }
-        }
+        $this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID);
+        $this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID);
 
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }

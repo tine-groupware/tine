@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -32,7 +32,9 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
     sortBy: 'locality',
     recordClass: 'Sales.Model.Document_Address',
     resizable: true,
+    // mode: 'local',
 
+    // NOTE: customer selection logic is here because customer is no select combo in old invoices module
     checkState: function(editDialog, record) {
         const mc = editDialog?.recordClass?.getModelConfiguration();
         const type = this.type || _.get(mc, `fields.${this.fieldName}.config.type`, 'billing');
@@ -41,15 +43,24 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
         const customer = customerField?.selectedRecord;
         const customer_id = customer?.json?.original_id || customer?.id;
 
+        const category = editDialog.getForm().findField('document_category').selectedRecord;
+        const division = category?.data?.division_id;
+
         this.setDisabled(!customer_id);
 
-        if (this.customer_id && this.customer_id !== customer_id) {
+        if ((this.customer_id && this.customer_id !== customer_id) || (this.division_id && this.division_id !== division.id)) {
             // handle customer changes
             this.clearValue();
         }
-        if (customer_id && !this.selectedRecord) {
-            const typeRecords = customer?.data[type];
-            const typeRecord = Ext.isArray(typeRecords) && typeRecords.length ? typeRecords[0] : customer?.data?.postal;
+        if (customer_id && customer && !this.selectedRecord) {
+            let typeRecord = null;
+            if (type === 'postal') {
+                typeRecord = customer.data?.postal;
+            } else {
+                const debitors = _.filter(customer.data.debitors, (deb) => { return _.get(deb, 'division_id.id', deb) === division?.id});
+                const typeRecords = _.flatten(_.map(debitors, type));
+                typeRecord = Ext.isArray(typeRecords) && typeRecords.length ? typeRecords[0] : customer?.data?.postal;
+            }
             if (typeRecord) {
                 const address = Tine.Tinebase.data.Record.setFromJson(typeRecord, this.recordClass);
                 this.setValue(address);
@@ -57,18 +68,29 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
             }
         }
         this.customer_id = customer_id;
+        this.division_id = division.id;
 
         if (! customer_id) {
             this.clearValue();
         } else {
             this.lastQuery = null;
-            this.additionalFilters = [
-                {field: 'customer_id', operator: 'equals', value: customer_id}
-            ];
+            this.additionalFilters = [{ condition: 'OR', filters: [
+                {field: 'customer_id', operator: 'equals', value: customer_id},
+                {field: 'debitor_id', operator: 'definedBy', value: [{
+                    field: 'customer_id', operator: 'equals', value: customer_id
+                }]}
+            ]}];
             if (type === 'postal') {
                 this.additionalFilters.push({field: 'type', operator: 'equals', value: type });
             } else {
                 this.additionalFilters.push({field: 'type', operator: 'not', value: type === 'billing' ? 'delivery' : 'billing' });
+                if (division) {
+                    this.additionalFilters.push({
+                        field: 'debitor_id', operator: 'definedBy', value: [{
+                            field: 'division_id', operator: 'equals', value: division.id
+                        }]
+                    });
+                }
             }
         }
     }

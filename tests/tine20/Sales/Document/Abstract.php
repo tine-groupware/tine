@@ -32,27 +32,35 @@ class Sales_Document_Abstract extends TestCase
             'name' => $name,
             'cpextern_id' => $this->_personas['sclever']->contact_id,
             'bic' => 'SOMEBIC',
-            'delivery' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[[
-                'name' => 'some delivery address for ' . $name,
-                'type' => 'delivery'
-            ]]),
-            'billing' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[[
-                'name' => 'some billing address for ' . $name,
-                'type' => 'billing'
-            ]]),
             'postal' => new Sales_Model_Address([
                 'name' => 'some postal address for ' . $name,
                 'street' => 'teststreet for ' . $name,
                 'type' => 'postal'
             ]),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_NAME => '-',
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+                'delivery' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[[
+                    'name' => 'some delivery address for ' . $name,
+                    'type' => 'delivery'
+                ]]),
+                'billing' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[[
+                    'name' => 'some billing address for ' . $name,
+                    'type' => 'billing'
+                ]]),
+            ]],
         ]));
 
         $expander = new Tinebase_Record_Expander(Sales_Model_Customer::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'delivery' => [],
-                'billing' => [],
                 'postal' => [],
-            ]
+                Sales_Model_Customer::FLD_DEBITORS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'delivery' => [],
+                        'billing' => [],
+                    ],
+                ],
+            ],
         ]);
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Customer::class, [$customer]));
         return $customer;

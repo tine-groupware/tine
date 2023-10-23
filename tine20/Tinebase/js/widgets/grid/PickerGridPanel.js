@@ -451,7 +451,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         for (var i=0; i < nonPluginColumns.length; i++) {
             this.configColumns.remove(nonPluginColumns[i]);
         }
-        this.plugins = this.configColumns;
+        this.plugins = (this.plugins || []).concat(this.configColumns);
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}))
 
         // // on selectionchange handler
@@ -614,6 +614,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         const mode = this.editDialogConfig?.mode || editDialogClass.prototype.mode;
 
         editDialogClass.openWindow(_.assign({
+            openerCt: this,
             record: Ext.encode(record.getData()),
             recordId: record.getId(),
             needsUpdateEvent: true,
@@ -761,6 +762,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         if (editDialogClass) {
             editDialogClass.openWindow(_.assign({
+                openerCt: this,
                 record: JSON.stringify(record.getData()),
                 recordId: record.getId(),
                 fixedFields: this.readOnly ? JSON.stringify(Object.assign(Object.fromEntries(record.constructor.getFieldNames().map((k, i) => [k, null])), record.data)) : null,

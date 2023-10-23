@@ -54,6 +54,14 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             return _.delay(_.bind(this.checkStates, this), 250)
         }
 
+        // default category
+        const categoryField = this.getForm().findField('document_category');
+        const category = categoryField.getValue()
+        if (!category) {
+            categoryField.recordProxy.promiseLoadRecord(Tine.Tinebase.configManager.get('documentCategoryDefault', 'Sales'))
+                .then(_.bind(categoryField.setValue, categoryField));
+        }
+
         const positions = this.getForm().findField('positions').getValue(); //this.record.get('positions')
         const sums = positions.reduce((a, pos) => {
             a['positions_net_sum'] = (a['positions_net_sum'] || 0) + (pos['net_price'] || 0)

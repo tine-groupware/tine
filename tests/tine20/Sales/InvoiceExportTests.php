@@ -128,10 +128,6 @@ class Sales_InvoiceExportTests extends Sales_InvoiceTestCase
      */
     public function testSpecialExportInvoice()
     {
-        if ($this->_dbIsPgsql()) {
-            $this->markTestSkipped('0011670: fix Sales_Invoices Tests with postgresql backend');
-        }
-
         $this->_createFullFixtures();
     
         $date = clone $this->_referenceDate;

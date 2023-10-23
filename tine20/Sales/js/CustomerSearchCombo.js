@@ -40,7 +40,36 @@ Tine.Sales.CustomerSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPic
         
         this.displayField = 'fulltext';
         this.sortBy = 'number';
-    }
+    },
+
+    // checkState: function(editDialog, record) {
+    //     const division = this.getDivision();
+    //     if (division) {
+    //         // check if customer has
+    //     }
+    // },
+    //
+    // onBeforeQuery: function(qevent){
+    //     Tine.Sales.CustomerSearchCombo.superclass.onBeforeQuery.apply(this, arguments);
+    //
+    //     const filter = this.store.baseParams.filter;
+    //     const division = this.getDivision();
+    //
+    //     if (division) {
+    //         // @TODO fallback to postal adr. if customer has no debitor
+    //         filter.push({field: 'debitors', operator: 'definedBy', value: [{
+    //             field: 'division_id', operator: 'definedBy', value: [{
+    //                 field: ':id', operator: 'equals', value: division.id
+    //         }]}]})
+    //     }
+    // },
+    //
+    // getDivision: function() {
+    //     const form = this.findParentBy((c) => { return c instanceof Ext.form.FormPanel }).getForm();
+    //     const category = form.findField('document_category').selectedRecord;
+    //     return category?.data?.division_id;
+    // }
 });
 
 Tine.widgets.form.RecordPickerManager.register('Sales', 'Customer', Tine.Sales.CustomerSearchCombo);
+Tine.widgets.form.RecordPickerManager.register('Sales', 'Document_Customer', Tine.Sales.CustomerSearchCombo);

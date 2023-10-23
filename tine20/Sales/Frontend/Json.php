@@ -51,6 +51,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_Product::MODEL_NAME_PART,
         Sales_Model_ProductLocalization::MODEL_NAME_PART,
         Sales_Model_SubProductMapping::MODEL_NAME_PART,
+        Sales_Model_Document_Offer::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART,
         Sales_Model_Document_Order::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Order::MODEL_NAME_PART,
@@ -58,11 +59,17 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_DocumentPosition_Delivery::MODEL_NAME_PART,
         Sales_Model_Document_Invoice::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART,
+        Sales_Model_Debitor::MODEL_NAME_PART,
+        Sales_Model_Document_Debitor::MODEL_NAME_PART,
+        Sales_Model_Division::MODEL_NAME_PART,
+        Sales_Model_DivisionGrants::MODEL_NAME_PART,
+        Sales_Model_Document_Category::MODEL_NAME_PART,
         'Contract',
         'Customer',
         'Address',
         'ProductAggregate',
-        'Boilerplate'
+        'Boilerplate',
+        'Invoice',
     );
     
     /**

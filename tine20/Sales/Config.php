@@ -6,7 +6,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -109,12 +109,14 @@ class Sales_Config extends Tinebase_Config_Abstract
 
     /**
      * Document Category
-     *
+     * @deprecated DO NOT USE, it is just required for migration purposes
      * @var string
      */
     const DOCUMENT_CATEGORY = 'documentCategory';
 
-    const DOCUMENT_CATEGORY_DEFAULT = 'STANDARD';
+    const DEFAULT_DIVISION = 'defaultDivision';
+
+    const DOCUMENT_CATEGORY_DEFAULT = 'documentCategoryDefault';
 
     const DOCUMENT_POSITION_TYPE = 'documentPositionType';
 
@@ -779,20 +781,36 @@ class Sales_Config extends Tinebase_Config_Abstract
                 self::DEFAULT_STR           => Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT,
             ],
         ],
-        self::DOCUMENT_CATEGORY => [
-            self::LABEL                 => 'Document Category', //_('Document Category')
-            self::DESCRIPTION           => 'Document Category', //_('Document Category')
-            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
-            /*self::OPTIONS               => [
-                self::RECORD_MODEL          => ....
-            ],*/
-            self::SETBYADMINMODULE      => true,
+        self::DOCUMENT_CATEGORY_DEFAULT => [
+            //_('Default Category')
+            self::LABEL                 => 'Default Category',
+            //_('Default Category')
+            self::DESCRIPTION           => 'Default Category',
+            self::TYPE                  => self::TYPE_RECORD,
+            self::OPTIONS               => [
+                self::APPLICATION_NAME      => Sales_Config::APP_NAME,
+                self::MODEL_NAME            => Sales_Model_Document_Category::MODEL_NAME_PART,
+            ],
             self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+        ],
+
+        // DEPRECATED!!!! DO NOT USE only for migration purposes required
+        self::DOCUMENT_CATEGORY => [
+            self::LABEL                 => 'Document Category',
+            self::DESCRIPTION           => 'Document Category',
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::OPTIONS               => [
+                self::RECORD_MODEL          => Tinebase_Config_KeyFieldRecord::class,
+            ],
+            self::SETBYADMINMODULE      => false,
+            self::CLIENTREGISTRYINCLUDE => false,
             self::DEFAULT_STR           => [
                 self::RECORDS               => [
-                    ['id' => self::DOCUMENT_CATEGORY_DEFAULT, 'value' => 'Standard', 'system' => true], // _('Standard')
+                    ['id' => 'STANDARD', 'value' => 'Standard', 'system' => false],
                 ],
-                self::DEFAULT_STR           => self::DOCUMENT_CATEGORY_DEFAULT,
+                self::DEFAULT_STR           => 'STANDARD',
             ],
         ],
         self::PRODUCT_CATEGORY => array(
@@ -1013,6 +1031,20 @@ USt.-ID des Leistungsempfangers: { vatid }',
                 'en' => 'Tax liability of the recipient of the service according to §13b UStG. Reverse charge procedure.
 VAT ID of the service recipient: { vatid }',
             ],
+        ],
+        self::DEFAULT_DIVISION => [
+            //_('Default Division')
+            self::LABEL                 => 'Default Division',
+            //_('Default Division')
+            self::DESCRIPTION           => 'Default Division',
+            self::TYPE                  => self::TYPE_RECORD,
+            self::OPTIONS               => [
+                self::APPLICATION_NAME      => Sales_Config::APP_NAME,
+                self::MODEL_NAME            => Sales_Model_Division::MODEL_NAME_PART,
+            ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
         ],
 
         /**

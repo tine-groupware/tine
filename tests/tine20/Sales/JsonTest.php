@@ -397,6 +397,9 @@ class Sales_JsonTest extends TestCase
                 'name' => Tinebase_Record_Abstract::generateUID(),
                 'cpextern_id' => $contact->getId(),
                 'bic' => 'SOMEBIC',
+                Sales_Model_Customer::FLD_DEBITORS => [[
+                    Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+                ]],
             ]));
             $i++;
         }
@@ -542,6 +545,9 @@ class Sales_JsonTest extends TestCase
     {
         $customer = $this->_instance->saveCustomer(array(
             'name'      => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
         ));
         
         $customer['postal']['prefix1'] = 'test';
@@ -560,6 +566,9 @@ class Sales_JsonTest extends TestCase
     {
         $customer = $this->_instance->saveCustomer(array(
             'name'      => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
             'postal' => [
                 'street' => '11212stree',
                 'postalcode' => '1111',
@@ -568,8 +577,8 @@ class Sales_JsonTest extends TestCase
         ));
 
         // assert invoice address (same as postal address)
-        self::assertTrue(is_array($customer['billing']), print_r($customer, true));
-        self::assertCount(1, $customer['billing'], print_r($customer, true));
+        self::assertTrue(is_array($customer[Sales_Model_Customer::FLD_DEBITORS][0]['billing']), print_r($customer, true));
+        self::assertCount(1, $customer[Sales_Model_Customer::FLD_DEBITORS][0]['billing'], print_r($customer, true));
     }
     
     /**
@@ -604,6 +613,9 @@ class Sales_JsonTest extends TestCase
     {
         $customer = $this->_instance->saveCustomer(array(
             'name'      => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
         ));
 
         $ctrl = Sales_Controller_Boilerplate::getInstance();
