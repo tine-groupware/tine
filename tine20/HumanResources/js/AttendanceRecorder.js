@@ -510,6 +510,9 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
     },
 
     showClock() {
+        this.menu.el.setActive = Ext.emptyFn
+        Ext.WindowMgr.register(this.menu.el)
+        Ext.WindowMgr.bringToFront(this.menu.el)
         const date = this.getServerDate();
         let wtStatus = this.wtType === TYPE_CLOCK_PAUSED ? `${this.app.i18n._('Away')}: ${this.app.i18n._hidden(this.freeTimeType.name)}`  : (this.wtType === TYPE_CLOCK_IN ?  this.app.i18n._('Clocked-in') : this.app.i18n._('Clocked-out'));
         this.menu.displayPanel.update(`
@@ -520,6 +523,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
     },
 
     hideClock() {
+        Ext.WindowMgr.unregister(this.menu.el)
         this.menu.displayPanel.update('');
         if (this.clockTimeout) {
             window.clearTimeout(this.clockTimeout);
