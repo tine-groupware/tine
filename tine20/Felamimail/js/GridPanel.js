@@ -879,7 +879,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             unreadIconEl = document.createElement('img');
             unreadIconEl.id = 'empty';
             unreadIconEl.className = 'felamimail-message-icon ';
-            unreadIconEl.src = '';
+            unreadIconEl.src = 'images/icon-set/empty.svg';
         }
         
         // sender
@@ -901,9 +901,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // receivedDate
         const date = record.data.received;
         const isToday = date.format('Y-m-d') === new Date().format('Y-m-d');
+        const isThisWeek = date.between(new Date().add(Date.DAY, -7), new Date());
         const isThisYear = date.format('Y') === new Date().format('Y');
         const receivedDateEl = document.createElement('div');
         let formattedDate = date.format('l').substr(0,2) + Ext.util.Format.date(date, ' d/m');
+        if (isThisWeek) formattedDate = date.format('l').substr(0,2) + Ext.util.Format.date(date, ' d/m H:i');
         if (isToday) formattedDate = Ext.util.Format.date(date, 'H:i');
         if (!isThisYear) formattedDate = Ext.util.Format.date(date, 'd.m.Y');
         
