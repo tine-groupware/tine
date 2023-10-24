@@ -415,11 +415,13 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         return $result;
     }
 
-    public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document): array
+    public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document, string $property = Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER): array
     {
         // TODO FIXME needs update script!!!! the old numberables should be updated to add the division id to the bucket key!
+        $division = Sales_Controller_Division::getInstance()->get($document->getDivisionId());
         return [
-            Tinebase_Numberable::BUCKETKEY => $this->_modelName . '#' . Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER . '#' . $document->getDivisionId()
+            Tinebase_Numberable::BUCKETKEY => $this->_modelName . '#' . $property . '#' . $division->getId(),
+            Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => 'Division - ' . $division->{Sales_Model_Division::FLD_TITLE},
         ];
     }
 }

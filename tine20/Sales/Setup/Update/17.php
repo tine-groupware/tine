@@ -17,6 +17,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -37,6 +38,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE017_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
     ];
@@ -135,5 +140,21 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
+    }
+
+    public function update004()
+    {
+        $divisionId = Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION};
+        foreach ([
+                Sales_Model_Document_Delivery::class => [Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER, Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER],
+                Sales_Model_Document_Invoice::class => [Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER, Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER],
+                Sales_Model_Document_Offer::class => [Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER],
+                Sales_Model_Document_Order::class => [Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER],
+                 ] as $model => $props) {
+            foreach ($props as $property) {
+                $this->getDb()->update(SQL_TABLE_PREFIX . 'numberable', ['bucket' => new Zend_Db_Expr('CONCAT(bucket, "#' . $divisionId . '")')], 'bucket = "' . $model . '#' . $property);
+            }
+        }
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.4', self::RELEASE017_UPDATE004);
     }
 }

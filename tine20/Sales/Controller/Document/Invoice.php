@@ -56,12 +56,12 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         parent::__construct();
     }
 
-    public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document): array
+    public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document, string $property = Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER): array
     {
         if (!$document->isBooked()) {
             return ['skip' => true];
         }
-        return parent::documentNumberConfigOverride($document);
+        return parent::documentNumberConfigOverride($document, $property);
     }
 
     public function documentProformaNumberConfigOverride(Sales_Model_Document_Abstract $document): array
@@ -69,7 +69,7 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         if ($document->isBooked()) {
             return ['skip' => true];
         }
-        return parent::documentNumberConfigOverride($document);
+        return parent::documentNumberConfigOverride($document, Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER);
     }
 
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)

@@ -437,6 +437,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_CATEGORY][self::VALIDATORS][Zend_Filter_Input::DEFAULT_VALUE] =
             Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT};
+
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable_String::PREFIX] =
             Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
                 new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE})
@@ -836,6 +837,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public function getDivisionId(): string
     {
-        return 'fixme';
+        if (! $this->_data[self::FLD_DOCUMENT_CATEGORY] instanceof Sales_Model_Document_Category) {
+            $this->_data[self::FLD_DOCUMENT_CATEGORY] = Sales_Controller_Document_Category::getInstance()->get(
+                $this->getIdFromProperty(self::FLD_DOCUMENT_CATEGORY));
+        }
+        return $this->_data[self::FLD_DOCUMENT_CATEGORY]->getIdFromProperty(Sales_Model_Document_Category::FLD_DIVISION_ID);
     }
 }
