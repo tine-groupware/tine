@@ -508,7 +508,7 @@
         </table>
         <table>
             <name>felamimail_cache_message</name>
-            <version>17</version>
+            <version>18</version>
             <backupStructureOnly>true</backupStructureOnly>
             <declaration>
                 <field>
@@ -631,16 +631,22 @@
                     </field>
                 </index>
                 <index>
-                    <name>account_id-folder_id</name>
+                    <name>account_id-folder_id-received</name>
                     <field>
                         <name>account_id</name>
                     </field>
                     <field>
                         <name>folder_id</name>
                     </field>
+                    <field>
+                        <name>received</name>
+                    </field>
                 </index>
                 <index>
-                    <name>received</name>
+                    <name>account_id-received</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
                     <field>
                         <name>received</name>
                     </field>
