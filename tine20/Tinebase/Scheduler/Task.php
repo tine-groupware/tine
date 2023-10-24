@@ -83,6 +83,8 @@ class Tinebase_Scheduler_Task
 
     protected $_config = null;
     protected $_config_class = null;
+    protected $_emails = null;
+    protected $_name = null;
 
     /**
      * Tinebase_Scheduler_Task constructor.
@@ -110,6 +112,8 @@ class Tinebase_Scheduler_Task
         $this->_callables = $options['callables'];
         $this->_config = isset($options['config']) ? $options['config'] : null;
         $this->_config_class = isset($options['config_class']) ? $options['config_class'] : null;
+        $this->_emails = isset($options['emails']) ? $options['emails'] : null;
+        $this->_name = isset($options['name']) ? $options['name'] : null;
     }
 
     public function toArray()
@@ -119,6 +123,8 @@ class Tinebase_Scheduler_Task
             'callables'         => $this->_callables,
             'config'            => $this->_config,
             'config_class'      => $this->_config_class,
+            'emails'            => $this->_emails,
+            'name'              => $this->_name,
         ];
     }
 
@@ -257,25 +263,18 @@ class Tinebase_Scheduler_Task
             };
             return;
         }
-
-        // FIXME: task name is not always like this ... for example: "Tinebase_ActionQueueActiveMonitoring"
-        $taskName = $callable[self::CONTROLLER] . '::' . $callable[self::METHOD_NAME]; 
         
         try {
-            $scheduler = new Tinebase_Backend_Scheduler();
-            /** @var Tinebase_Model_SchedulerTask $task */
-            $task = $scheduler->getByProperty($taskName);
-            
-            if (empty($task->emails)) {
+            if (empty($this->_emails)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' No recipient address configured');
                 };
                 return;
             }
-            
-            $emails = explode(
-                ',', $task->emails);
+
+            $taskName = $this->_name ?? $callable[self::CONTROLLER] . '::' . $callable[self::METHOD_NAME];
+            $emails = explode(',', $this->_emails);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
