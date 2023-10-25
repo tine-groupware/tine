@@ -1675,6 +1675,10 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         } else {
             $grantProtectedFields = $grantProtectedFields[$action];
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' grant procteded properties of class '
+            . static::class . ' ' . print_r($grantProtectedFields,true));
+
         /** @var Tinebase_Controller_Record_Abstract $ctrl */
         $ctrl = Tinebase_Core::getApplicationInstance(static::class, '', true);
 
@@ -1690,6 +1694,9 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         if (empty($denyProperties = array_diff($deny, $access))) {
             return;
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' deny properties '
+            . print_r($denyProperties,true));
 
         if (null === $oldRecord) {
             $bypassFilters = $this->bypassFilters;
