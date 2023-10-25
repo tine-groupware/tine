@@ -31,6 +31,86 @@ class Filemanager_Frontend_HttpTest extends TestCase
         self::assertEquals('test file content', $out);
     }
 
+    protected function _createDownloadFolderStruct(): string
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $testPath = $fs->getApplicationBasePath(Filemanager_Config::APP_NAME, Tinebase_FileSystem::FOLDER_TYPE_SHARED)
+            . '/unittest';
+        $fs->createAclNode($testPath);
+        $fs->mkdir($testPath . '/subfolder1');
+        $fs->mkdir($testPath . '/subfolder2');
+
+        file_put_contents('tine20://' . $testPath . '/file1', 'file1c');
+        file_put_contents('tine20://' . $testPath . '/file2', 'file2c');
+        file_put_contents('tine20://' . $testPath . '/subfolder1/file3', 'file3c');
+
+        return '/' . Tinebase_FileSystem::FOLDER_TYPE_SHARED . '/unittest';
+    }
+
+    public function testDownloadFolderNotRecursive(): void
+    {
+        $path = $this->_createDownloadFolderStruct();
+
+        ob_start();
+        (new Filemanager_Frontend_Http())->downloadFolder($path, false);
+        $zipData = ob_get_clean();
+
+        $path = Tinebase_TempFile::getTempPath();
+        try {
+            file_put_contents($path, $zipData);
+            unset($zipData);
+            $z = new ZipArchive();
+            $z->open($path);
+            $this->assertSame('file1c', $z->getFromName('file1'));
+            $this->assertSame('file2c', $z->getFromName('file2'));
+            $this->assertSame(false, $z->getFromName('subfolder1/file3'));
+
+            $found = false;
+            for ($i = 0; $i < $z->numFiles; $i++) {
+                if ('subfolder2/' === $z->getNameIndex($i)) {
+                    $found = true;
+                    break;
+                }
+            }
+            $this->assertFalse($found, 'subfolder2 found');
+
+        } finally {
+            unlink($path);
+        }
+    }
+
+    public function testDownloadFolderRecursive(): void
+    {
+        $path = $this->_createDownloadFolderStruct();
+
+        ob_start();
+        (new Filemanager_Frontend_Http())->downloadFolder($path, true);
+        $zipData = ob_get_clean();
+
+        $path = Tinebase_TempFile::getTempPath();
+        try {
+            file_put_contents($path, $zipData);
+            unset($zipData);
+            $z = new ZipArchive();
+            $z->open($path);
+            $this->assertSame('file1c', $z->getFromName('file1'));
+            $this->assertSame('file2c', $z->getFromName('file2'));
+            $this->assertSame('file3c', $z->getFromName('subfolder1/file3'));
+
+            $found = false;
+            for ($i = 0; $i < $z->numFiles; $i++) {
+                if ('subfolder2/' === $z->getNameIndex($i)) {
+                    $found = true;
+                    break;
+                }
+            }
+            $this->assertTrue($found, 'subfolder2 not found');
+
+        } finally {
+            unlink($path);
+        }
+    }
+
     public function testDownloadFileWithoutGrant()
     {
         $jsonTests = new Filemanager_Frontend_JsonTests();

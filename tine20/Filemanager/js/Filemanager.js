@@ -108,8 +108,8 @@ Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
     actionType: 'download',
     allowMultiple: false,
     handler: function(action) {
-        var node = action.grid.store.getAt(action.gridIndex).get('related_record');
-        Tine.Filemanager.downloadFile(node);
+        const record = action.grid.store.getAt(action.gridIndex).get('related_record');
+        Tine.Filemanager.downloadNode(record);
     },
     actionUpdater: function(action, grants, records) {
         action.setDisabled(_.get(records, '[0].data.related_record.type') !== 'file');
@@ -145,40 +145,13 @@ Tine.Filemanager.NodeFilterPanel = Ext.extend(Tine.widgets.persistentfilter.Pick
 });
 
 /**
- * download file into browser
+ * download file/folder into browser
  *
- * @param {String|Tine.Filemanager.Model.Node}
+ * @param record
  * @param revision
- * @param appName deprecated
  * @returns {Ext.ux.file.Download}
  *
  */
-Tine.Filemanager.downloadFile = function(path, revision, appName) {
-    return new Ext.ux.file.Download(!_.isString(path) ? {
-        url: Tine.Filemanager.Model.Node.getDownloadUrl(path, revision)
-    } : {
-        // deprecated usage
-        params: {
-            method: `${appName || 'Filemanager'}.downloadFile`,
-            requestType: 'HTTP',
-            id: '',
-            path: path,
-            revision: revision
-        }
-    }).start();
-};
-
-
-/**
- * download file into browser with base64 (btoa) encoded path
- *
- * @param {String} encodedpath
- * @param revision
- * @param appName
- * @returns {Ext.ux.file.Download}
- *
- * @refactor: we should only need one downloadFile fn
- */
-Tine.Filemanager.downloadFileByEncodedPath = function(encodedpath, revision, appName) {
-    return Tine.Filemanager.downloadFile(atob(encodedpath), revision, appName);
+Tine.Filemanager.downloadNode = function(record, revision) {
+    return new Ext.ux.file.Download({url: Tine.Filemanager.Model.Node.getDownloadUrl(record, revision)}).start();
 };
