@@ -488,13 +488,12 @@ Tine.Filemanager.nodeActions.Download = {
         this.hidden = this.hidden || !Tine.Tinebase.configManager.get('downloadsAllowed');
     },
     handler: function() {
-        Tine.Filemanager.downloadFile(this.initialConfig.selections[0]);
+        Tine.Filemanager.downloadNode(this.initialConfig.selections[0]);
     },
     actionUpdater: function(action, grants, records, isFilterSelect) {
         const isQuarantined = !action.initialConfig.allowQuarantined && records[0] && !!+records[0].get('is_quarantined');
         const enabled = !isFilterSelect
             && records && records.length === 1
-            && records[0].get('type') !== 'folder'
             && (
                 String(_.get(records, '[0].data.path', '')).match(/^\/records/)
                 || _.get(records, '[0].data.account_grants.downloadGrant', false)

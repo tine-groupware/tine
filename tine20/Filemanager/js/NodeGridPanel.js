@@ -740,7 +740,15 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.folderContextMenu = Tine.Filemanager.nodeContextMenu.getMenu({
             nodeName: Tine.Filemanager.Model.Node.getContainerName(),
-            actions: [this.action_deleteRecord, 'rename', this.action_moveRecord, this.action_editFile, this.action_publish, this.action_systemLink],
+            actions: [
+                this.action_deleteRecord, 
+                'rename', 
+                this.action_moveRecord,
+                this.action_download,
+                this.action_editFile, 
+                this.action_publish, 
+                this.action_systemLink
+            ],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'

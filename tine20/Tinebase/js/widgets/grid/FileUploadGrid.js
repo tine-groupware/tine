@@ -455,7 +455,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (Ext.isObject(tempFile)) {
             this.downloadTempFile(tempFile.id);
         } else {
-            this.downloadNode(recordId, fileRow.id)
+            this.downloadRecordAttachment(recordId, fileRow.id)
         }
     },
 
@@ -726,7 +726,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },
 
-    downloadNode: function (recordId, id) {
+    downloadRecordAttachment: function (recordId, id) {
         new Ext.ux.file.Download({
             params: {
                 method: 'Tinebase.downloadRecordAttachment',
