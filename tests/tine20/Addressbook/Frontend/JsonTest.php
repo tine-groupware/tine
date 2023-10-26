@@ -472,6 +472,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact['id']);
         $this->assertFalse($contact->account_id && is_object(Tinebase_Core::getUser()) &&
             $contact->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId(), print_r($contact->toArray(false), true));
+        $this->assertTrue($contact->has('container_id'));
+        $this->assertTrue(Addressbook_Controller_Contact::getInstance()->doContainerACLChecks());
         $this->assertFalse(Addressbook_Controller_Contact::getInstance()->checkGrant($contact,
             Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
 
