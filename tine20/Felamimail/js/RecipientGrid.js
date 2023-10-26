@@ -259,10 +259,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         const clipboardData = e.clipboardData || window.clipboardData;
                         const pastedData = clipboardData.getData('Text');
                         // replace new line to comma , and then remove start/ending special chars
-                        const value = _.compact(_.map(pastedData.replace(/\r?\n/, '\n').split('\n'), (email) => {
+                        const value = _.compact(_.map(pastedData.replace(/\r?\n+/g, '\n').split('\n'), (email) => {
                             return String(email).replace(/^[,;]+|[,;]+$/, '');
                         })).join(',').replace(/^[,;]+|[,;]+$/, '');
-    
+                        
                         if (!this.loadMask) {
                             this.loadMask = new Ext.LoadMask(Ext.getBody(), {msg: app.i18n._('Loading Mail Addresses')});
                         }
@@ -943,7 +943,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         
         if (updatedRecipients.length > 0) {
             if (index > -1) {
-                this.store.insert(index, updatedRecipients);
+                this.store.insert(index, updatedRecipients.reverse());
                 
                 _.each(updatedRecipients, (recipient, rowCount) => {
                     const row = this.getView().getRow(index + rowCount);
