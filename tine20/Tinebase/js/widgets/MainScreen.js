@@ -68,7 +68,51 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         }
         
         this.stateId = this.app.appName + '-mainScreen';
+
+        this.on('resize', this.applyResponsiveLayout, this);
+
+        this.tbar = {
+            hidden: true,
+            items:
+                [{
+                    iconCls: 'action_menu',
+                    handler: () => {
+                        this.layout.west.slideOut()
+                    }
+                }, '->', {
+                    text: '...',
+                    handler: (btn) => {
+                        const tbar = _.get(_.get(this.northCardPanel, 'layout.activeItem'), 'items.items[0]');
+                        if (tbar) {
+                            tbar.layout.initMore();
+                            const moreMenu = tbar.layout.moreMenu;
+                            moreMenu.showAll = true;
+                            moreMenu[new Date().getTime() - moreMenu.lastVisible < 100 ? 'hide' : 'show'](btn.el);
+                            moreMenu.showAll = false;
+                        }
+                    }
+                }]
+        }
+
         Tine.widgets.MainScreen.superclass.initComponent.apply(this, arguments);
+    },
+
+    applyResponsiveLayout: function(me, width, height) {
+        // @TODO centralize breakpoints / have more breakpoints
+        if (!this._initResponsiveLayout) {
+            this.northCardPanel.on('beforeshow', () => {
+                return  1024 < this.getWidth();
+            })
+            this._initResponsiveLayout = true
+        }
+
+        const isSmall = width < 1024;
+        this.westRegionPanel.afterIsRendered().then((panel) => { panel[isSmall ? 'collapse' : 'expand']() });
+        this.northCardPanel.afterIsRendered().then((panel) => {panel.setVisible(!isSmall) });
+        this.westRegionPanel.on('click', () => { })
+
+        this.getTopToolbar().setVisible(isSmall);
+        _.defer(_.bind(this.doLayout, this), true);
     },
 
     onDestroy: function() {
