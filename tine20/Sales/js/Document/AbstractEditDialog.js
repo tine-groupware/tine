@@ -125,12 +125,20 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     config.listeners = config.listeners || {}
                     config.listeners.select = (combo, record, index) => {
                         const positions = fields['positions'].getValue()
-                        positions.forEach(position => {
-                            const productTaxRate = _.get(position, 'product_id.salestaxrate', 0)
-                            if (record.id === 'taxable' && position.sales_tax_rate === 0 && productTaxRate)
-                                position.sales_tax_rate = productTaxRate
-                            else if (record.id !== 'taxable' && position.sales_tax_rate)
-                                position.sales_tax_rate = 0;
+                        positions.forEach((positionData, idx) => {
+                            const position = Tine.Tinebase.data.Record.setFromJson(positionData, fields['positions'].recordClass)
+                            const productTaxRate = _.get(positionData, 'product_id.salestaxrate', 0)
+                            if (record.id === 'taxable' && position.get('sales_tax_rate') === 0 && productTaxRate) {
+                                position.set('sales_tax_rate', productTaxRate)
+                            } else if (record.id !== 'taxable' && position.get('sales_tax_rate')) {
+                                if (position.get('unit_price_type') === 'gross') {
+                                    position.set('unit_price', position.get('unit_price') - (position.get('sales_tax') || 0))
+                                    position.set('unit_price_type', 'net')
+                                }
+                                position.set('sales_tax_rate', 0)
+                            }
+                            position.computePrice()
+                            positions[idx] = position.getData()
                         })
                         this.getForm().findField('positions')?.setValue(positions)
                     }
