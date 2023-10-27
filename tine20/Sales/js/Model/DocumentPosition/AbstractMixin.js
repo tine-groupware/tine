@@ -42,9 +42,16 @@ const AbstractMixin = {
         this.set('position_discount_sum', 0);
         this.set('unit_price_type', productData.salesprice_type || 'net');
         this.set('unit_price', productData.salesprice||0);
-        this.set('sales_tax_rate', vatProcedure === 'taxable' ? (productData.salestaxrate||0) : 0);
+        this.set('sales_tax_rate', productData.salestaxrate || 0)
         this.set('grouping', productData.default_grouping);
         this.set('sorting', productData.default_sorting);
+
+        if (vatProcedure !== 'taxable' && this.get('unit_price_type') === 'gross') {
+            this.computePrice();
+            this.set('unit_price', this.get('unit_price') - (this.get('sales_tax') || 0))
+            this.set('unit_price_type', 'net')
+            this.set('sales_tax_rate', 0)
+        }
 
         this.computePrice();
         this.commit();
