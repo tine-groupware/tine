@@ -459,6 +459,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
      */
     public function testGetPrivateContactData()
     {
+        Addressbook_Controller_Contact::destroyInstance();
+        
         $contact = $this->_addContact();
 
         $this->assertTrue(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
@@ -475,7 +477,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $this->assertTrue($contact->has('container_id'));
         $this->assertTrue(Addressbook_Controller_Contact::getInstance()->doContainerACLChecks());
         $this->assertFalse(Addressbook_Controller_Contact::getInstance()->checkGrant($contact,
-            Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+            Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA, false));
 
         $contactWithoutPrivate = $this->_uit->getContact($contact['id']);
         $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate);
