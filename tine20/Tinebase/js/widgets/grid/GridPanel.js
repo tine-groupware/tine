@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import {getLocalizedLangPicker} from "../form/LocalizedLangPicker";
+import { getCls } from "../../util/responsiveLayout"
 
 Ext.ns('Tine.widgets.grid');
 
@@ -35,6 +36,14 @@ Tine.widgets.grid.GridPanel = function(config) {
     this.defaultPaging = this.defaultPaging || {
         start: 0,
         limit: 50
+    };
+
+    // screen is of widthClass if width <= px
+    this.widthClasses = {
+        small: 300,
+        medium: 800,
+        big: 1600,
+        large: Infinity
     };
 
     // allow to initialize with string
@@ -479,9 +488,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }, this);
         }
 
-        if (this.detailsPanel) {
-            this.on('resize', this.onContentResize, this, {buffer: 100});
-        }
+        this.on('resize', this.onContentResize, this, {buffer: 100});
 
         this.areaLockSelector = this.recordClass.getPhpClassName().replace('_Model_', '.');
         this.initMessageBus();

@@ -753,6 +753,8 @@ Ext.state.Manager.setProvider(new Ext.state.CookieProvider({
      * button on a window by setting hide:true on the button when adding it to its parent container.
      */
     hideParent : false,
+
+    lastVisible: 0,
     /**
      * <p>The {@link Ext.Element} which encapsulates this Component. Read-only.</p>
      * <p>This will <i>usually</i> be a &lt;DIV> element created by the class's onRender method, but
@@ -1495,6 +1497,7 @@ new Ext.Panel({
 
     // private
     onHide : function(){
+        this.lastVisible = new Date().getTime();
         this.getVisibilityEl().addClass('x-hide-' + this.hideMode);
     },
 
