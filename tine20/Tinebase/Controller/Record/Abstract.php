@@ -2646,6 +2646,7 @@ abstract class Tinebase_Controller_Record_Abstract
 
         if ($_filter->getCondition() !== Tinebase_Model_Filter_FilterGroup::CONDITION_AND) {
             $_filter->andWrapItself();
+            $_filter->isImplicit(true);
         }
 
         $aclFilters = $_filter->getAclFilters();
@@ -2668,6 +2669,7 @@ abstract class Tinebase_Controller_Record_Abstract
             if (null === $containerFilter) {
                 $containerFilter = $_filter->createFilter('container_id', 'specialNode', 'all');
             }
+            $containerFilter->isImplicit(true);
             $_filter->addFilter($containerFilter);
         } else {
             /** @var Tinebase_Model_Filter_Abstract $filter */
