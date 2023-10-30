@@ -27,6 +27,11 @@ Tine.SSO.AdminPanel = Ext.extend(Ext.TabPanel, {
                 disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
                 ownActionToolbar: true
             }),
+            new Tine.SSO.ExternalIdpGridPanel({
+                title: this.app.i18n._('External Identity Providers'),
+                disabled: !Tine.Tinebase.common.hasRight('manage_sso', 'SSO'),
+                ownActionToolbar: true
+            }),
             new Tine.Admin.config.GridPanel({
                 configApp: this.app
             })

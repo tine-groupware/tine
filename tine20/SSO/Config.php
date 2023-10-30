@@ -31,6 +31,12 @@ class SSO_Config extends Tinebase_Config_Abstract
     public const SAML2_BINDINGS_POST = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
     public const SAML2_BINDINGS_REDIRECT = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
 
+    public const PWD_LESS_LOGIN = 'pwdLessLogin';
+    public const PWD_LESS_LOGIN_NONE = 'none';
+    public const PWD_LESS_LOGIN_ONLY_LOCAL = 'onlyLocal';
+    public const PWD_LESS_LOGIN_ONLY_PROXY = 'onlyProxy';
+    public const PWD_LESS_LOGIN_BOTH = 'both';
+
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties

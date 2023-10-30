@@ -4,10 +4,10 @@
  * @package     SSO
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2022-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
-interface SSO_RPConfigInterface
+interface SSO_ExIdpConfigInterface
 {
-    public function beforeCreateUpdateHook(): void;
+    public function initAuthProcess(): bool;
 }

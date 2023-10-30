@@ -23,6 +23,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @var Tinebase_User_Abstract
      */
     protected $_userBackend = NULL;
+
+    protected $_doRightChecks = true;
     
     /**
      * the constructor
@@ -368,6 +370,23 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_Core::set(Tinebase_Core::USER, $updatedUser);
             Tinebase_Session::getSessionNamespace()->currentAccount = $updatedUser;
         }
+    }
+
+    public function doRightChecks($setTo = NULL)
+    {
+        $oldValue = $this->_doRightChecks;
+        if (null !== $setTo) {
+            $this->_doRightChecks= $setTo;
+        }
+        return $oldValue;
+    }
+
+    public function checkRight($_right, $_throwException = true, $_includeTinebaseAdmin = true)
+    {
+        if (!$this->_doRightChecks) {
+            return true;
+        }
+        return parent::checkRight($_right, $_throwException, $_includeTinebaseAdmin);
     }
 
     /**

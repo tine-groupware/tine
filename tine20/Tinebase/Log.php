@@ -89,6 +89,7 @@ class Tinebase_Log extends Zend_Log
      */
     public function addReplacement($search, $replace = '********')
     {
+        if ('' === $search) return;
         foreach ($this->_formatters as $formatter) {
             $formatter->addReplacement($search, $replace);
         }

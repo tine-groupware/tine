@@ -1,0 +1,26 @@
+#! /bin/sh
+
+curl $URL \
+  -H 'Accept: */*' \
+  -H 'Content-Type: application/json' \
+  -H 'Cookie: TINE20SESSID='"$SESSIONID"'' \
+  -H 'X-Requested-With: XMLHttpRequest' \
+  -H 'X-Tine20-JsonKey: '"$JSONKEY"'' \
+  -H 'X-Tine20-Request-Type: JSON' \
+  --insecure \
+  -d '{"jsonrpc":"2.0","method":"SSO.saveExternalIdp","params":{"recordData":{
+    "name": "oidc-test-idp",
+    "config_class": "SSO_Model_ExIdp_OIdConfig",
+    "config": {
+      "name": "test idp",
+      "provider_url": "http://oidc-server-mock:4903",
+      "issuer": "http://oidc-server-mock:4903",
+      "client_id": "tine20",
+      "client_secret": "tine20"
+    },
+    "domains": [
+      {
+        "domain": "idp.test"
+      }
+    ]
+  },"duplicateCheck":true},"id":3}'
