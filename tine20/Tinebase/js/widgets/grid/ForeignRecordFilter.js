@@ -474,10 +474,13 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 filterModels = filterModels.concat(this.getSubFilters());
             }
 
+            const defaultFilter = foreignRecordClass.getMeta('defaultFilter');
+            const filterModel = foreignRecordClass.getModelConfiguration()?.filterModel;
+
             filter.toolbar = new Tine.widgets.grid.FilterToolbar({
                 recordClass: foreignRecordClass,
                 filterModels: filterModels,
-                defaultFilter: foreignRecordClass.getMeta('defaultFilter') ? foreignRecordClass.getMeta('defaultFilter') : 'query'
+                defaultFilter: filterModel ? (filterModel[defaultFilter] ? defaultFilter : Object.keys(filterModel)[0]) : (defaultFilter || 'query')
             });
             
             ftb.addFilterSheet(filter.toolbar);

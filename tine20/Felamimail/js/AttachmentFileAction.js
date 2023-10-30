@@ -148,6 +148,7 @@ const getFileAttachmentAction = (fileFn, config) => {
                                             items: Tine.widgets.form.RecordPickerManager.get(model.getMeta('appName'), model.getMeta('modelName'), {
                                                 fieldLabel: model.getRecordName(),
                                                 name: 'attachRecord',
+                                                useEditPlugin: false,
                                                 plugins: [new RecordEditFieldTriggerPlugin({
                                                     editDialogMode: 'remote',
                                                     attachments: attachmentRecordsData,
