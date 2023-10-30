@@ -899,18 +899,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         attachmentEl.style.visibility = record?.data?.has_attachment ? 'visible' : 'hidden';
         
         // receivedDate
-        const date = record.data.received;
-        const isToday = date.format('Y-m-d') === new Date().format('Y-m-d');
-        const isThisWeek = date.between(new Date().add(Date.DAY, -7), new Date());
-        const isThisYear = date.format('Y') === new Date().format('Y');
         const receivedDateEl = document.createElement('div');
-        let formattedDate = date.format('l').substr(0,2) + Ext.util.Format.date(date, ' d/m');
-        if (isThisWeek) formattedDate = date.format('l').substr(0,2) + Ext.util.Format.date(date, ' d/m H:i');
-        if (isToday) formattedDate = Ext.util.Format.date(date, 'H:i');
-        if (!isThisYear) formattedDate = Ext.util.Format.date(date, 'd.m.Y');
-        
+        const date = record.data?.received ?? '';
+        let formattedDate = date;
+        let qtip = date;
+        if (Ext.isFunction(date.format)) {
+            const isToday = date.format('Y-m-d') === new Date().format('Y-m-d');
+            const isThisWeek = date.between(new Date().add(Date.DAY, -7), new Date());
+            const isThisYear = date.format('Y') === new Date().format('Y');
+            formattedDate = date.format('l').substr(0,2) + Ext.util.Format.date(date, ' d/m');
+            if (isThisWeek) formattedDate = date.format('l').substr(0,2) + Ext.util.Format.date(date, ' d/m H:i');
+            if (isToday) formattedDate = Ext.util.Format.date(date, 'H:i');
+            if (!isThisYear) formattedDate = Ext.util.Format.date(date, 'd.m.Y');
+            qtip = date.format('H:i:s d/m/y');
+        }
         receivedDateEl.innerHTML = formattedDate;
-        receivedDateEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.received.format('H:i:s d/m/y')));
+        receivedDateEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(qtip));
         
         // subject
         const subjectEl = document.createElement('div');
