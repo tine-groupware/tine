@@ -112,7 +112,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 $username,
                 $password,
                 Tinebase_Core::get(Tinebase_Core::REQUEST),
-                self::REQUEST_TYPE
+                self::REQUEST_TYPE // TODO FIXME that needs to go into tine20/Tinebase/Controller.php:916 too $accessLog->clienttype !== Tinebase_Frontend_Json::REQUEST_TYPE etc.
             ) === TRUE);
         } else {
             $success = FALSE;
@@ -588,8 +588,15 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function openIDCLogin()
     {
+        /** @var Tinebase_Auth_OpenIdConnect $oidc */
         $oidc = Tinebase_Auth_Factory::factory('OpenIdConnect');
         // request gets redirected to login page on success
-        return $oidc->providerAuthRequest();
+        try {
+            $oidc->providerAuthRequest();
+        } catch (Tinebase_Exception_Auth_Redirect $tear) {
+            header('Location: ' . $tear->_url);
+            exit();
+        }
+        return false;
     }
 }

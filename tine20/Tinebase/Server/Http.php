@@ -100,7 +100,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 // sessionId got send by client, but we don't use sessions for non authenticated users
                 if (Tinebase_Session::sessionExists()) {
                     // expire session cookie on client
-                    Tinebase_Session::expireSessionCookie();
+                    //Tinebase_Session::expireSessionCookie();
                 }
             }
 

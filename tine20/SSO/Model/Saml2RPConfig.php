@@ -17,7 +17,7 @@
  * @package     SSO
  * @subpackage  Model
  */
-class SSO_Model_Saml2RPConfig extends Tinebase_Record_Abstract implements SSO_RPConfigInterface
+class SSO_Model_Saml2RPConfig extends Tinebase_Record_NewAbstract implements SSO_RPConfigInterface
 {
     public const MODEL_NAME_PART = 'Saml2RPConfig';
 

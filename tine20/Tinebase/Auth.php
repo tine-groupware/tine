@@ -116,6 +116,8 @@ class Tinebase_Auth
      */
     const SUCCESS                        =  Zend_Auth_Result::SUCCESS;
 
+    use Tinebase_Controller_SingletonTrait;
+
     /**
      * the name of the authenticationbackend
      *
@@ -190,33 +192,6 @@ class Tinebase_Auth
     private function __construct() 
     {
         $this->setBackend();
-    }
-    
-    /**
-     * don't clone. Use the singleton.
-     *
-     */
-    private function __clone() {}
-
-    /**
-     * holds the instance of the singleton
-     *
-     * @var Tinebase_Auth
-     */
-    private static $_instance = NULL;
-    
-    /**
-     * the singleton pattern
-     *
-     * @return Tinebase_Auth
-     */
-    public static function getInstance() 
-    {
-        if (self::$_instance === NULL) {
-            self::$_instance = new Tinebase_Auth;
-        }
-        
-        return self::$_instance;
     }
     
     /**
@@ -349,12 +324,12 @@ class Tinebase_Auth
      * 
      * @todo persist in db
      * 
-     * @param string $_backendType
+     * @param ?string $_backendType
      * @return void
      */
     public static function setBackendType($_backendType)
     {
-        self::$_backendType = ucfirst($_backendType);
+        self::$_backendType = $_backendType ? ucfirst($_backendType) : null;
     }
     
     /**
