@@ -286,7 +286,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     
     generateTitle: function() {
         var title = this.id;
-        
+
         if (this.recordClass) {
             var app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName')),
                 recordName = this.recordClass.getMeta('recordName'),
@@ -603,7 +603,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @private
      */
     initComponent: function() {
-        this.title = this.generateTitle();
+        this.title = this.title || this.generateTitle();
         this.on('titlechange', this.onTitleChange, this);
         
         Tine.widgets.grid.FilterToolbar.superclass.initComponent.call(this);

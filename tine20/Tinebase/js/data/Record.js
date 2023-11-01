@@ -379,6 +379,12 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     f.hasField = function(n) {
         return p.fields.indexOfKey(n) >= 0;
     };
+    f.getDataFields = function() {
+        const systemFields = _.map(Tine.Tinebase.Model.genericFields, 'name')
+            .concat(f.getMeta('idProperty'))
+            .concat(p.modelConfiguration?.hasNotes ? [] : 'notes');
+        return _.difference(p.modelConfiguration?.fieldKeys, systemFields);
+    };
     f.getRecordName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n : window.i18n;
