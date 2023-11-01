@@ -183,12 +183,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         // Autodetect if our record has additional metadata for the refId Record or is only a cross table
         if (this.refIdField) {
-            const systemFields = _.map(Tine.Tinebase.Model.genericFields, 'name')
-                .concat(this.recordClass.getMeta('idProperty'), this.refIdField)
-                .concat(modelConf.hasNotes ? [] : 'notes');
-            const dataFields = _.difference(modelConf.fieldKeys, systemFields);
+            const dataFields = _.difference(this.recordClass.getDataFields(), [this.refIdField]);
 
-            this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 ? dataFields[0] : null;
+            this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 /* precisely this is a cross-record */ ? dataFields[0] : null;
             this.metaDataFields = _.difference(dataFields, [this.isMetadataModelFor]);
             this.columns = this.columns || (this.isMetadataModelFor ? [this.isMetadataModelFor].concat(this.metaDataFields) : null);
         }
