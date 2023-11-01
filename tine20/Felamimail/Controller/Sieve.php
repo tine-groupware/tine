@@ -841,7 +841,11 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             
             foreach ($emails as $email) {
                 if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $email)) {
-                    throw new Tinebase_Exception_UnexpectedValue($email . ' is not a valid email address');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                            . $email . ' is not a valid email address - skipping');
+                    }
+                    continue;
                 }
                 $notifyScript .= "\n\t" . 'notify ' . $notificationEmailAddress . ':message "' . $subject. '${from}: ${subject}"' . "\n\t\t" . '"mailto:' . $email .'?body=${message}";' . "\n";
                 $redirectScript .= "\n\t" . 'redirect :copy "' . $email . '";';
