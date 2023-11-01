@@ -1131,7 +1131,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         (function() {
             this.checkStates();
-            // this.record.commit(); // why?
+            // otherwise we would get modifications in a normal roundtrip record->form->record
+            this.record.commit();
         }).defer(100, this);
 
         this.hideLoadMask();
@@ -1364,8 +1365,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     });
                     me.onRecordLoad();
                     // skip unnecessary server updates
-                    if(me.needsUpdateEvent || Object.keys(me.record.modified).length || !me.record.getId()
-                        || (me.record.has('creation_time') && !me.record.creation_time)) {
+                    if(me.needsUpdateEvent || Object.keys(me.record.getChanges()).length || !me.record.getId()
+                        || (me.record.constructor.hasField('creation_time') && !me.record.creation_time)) {
                         me.fireEvent('update', Ext.util.JSON.encode(recordData), me.mode, me, ticketFn);
                     }
                     wrapTicket();
