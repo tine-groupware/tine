@@ -151,6 +151,8 @@ Tine.Filemanager.Model.NodeMixin = {
             if (root === 'records') {
                 httpRequest.method = 'Tinebase.downloadRecordAttachment';
                 httpRequest.nodeId = record.get('id');
+                httpRequest.recordId = recordId;
+                httpRequest.modelName = modelName;
             } else {
                 httpRequest.path = path;
                 if (type === 'file') {
