@@ -170,6 +170,11 @@
     padding-left: 10px;
     display: flex;
     text-align: left;
+    flex-wrap: wrap;
+}
+
+.preview-panel-felamimail-header-longtext {
+    white-space: nowrap;
 }
 
 .preview-panel-felamimail-attachments {
