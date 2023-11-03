@@ -377,7 +377,8 @@ rec.{@link #commit}(); // updates the view
     getChanges : function(){
         var m = this.modified, cs = {};
         for(var n in m){
-            if(m.hasOwnProperty(n)){
+            const encode = Ext.isPrimitive(this.modified[n]) ? String : Ext.encode;
+            if(m.hasOwnProperty(n) && encode(this.modified[n]) !== encode(this.data[n])){
                 cs[n] = this.data[n];
             }
         }
