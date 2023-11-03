@@ -763,7 +763,7 @@ class SSO_Controller extends Tinebase_Controller_Event
                         $idp = SSO_Controller_ExternalIdp::getInstance()->get(substr($account->openid, 0, $pos));
                         break;
                     } catch(Tinebase_Exception_NotFound $tenf) {
-                        $tenf->setLogLevelMethod(Zend_Log::NOTICE);
+                        $tenf->setLogLevelMethod('notice');
                         $tenf->setLogToSentry(false);
                         Tinebase_Exception::log($tenf);
                     }
