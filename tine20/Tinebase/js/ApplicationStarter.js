@@ -300,7 +300,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation'))),
             i18n = globalI18n ? window.i18n : app.i18n;
         
-        if (! label || _.get(fieldconfig, 'disabled') || _.get(filterOptions, 'disabled')) {
+        if (! label || _.get(fieldconfig, 'disabled') || _.get(fieldconfig, 'uiconfig.disabled') || _.get(filterOptions, 'disabled')) {
             return null;
         }
         // prepare filter
