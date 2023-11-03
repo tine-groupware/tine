@@ -140,7 +140,7 @@ class Addressbook_Convert_Contact_VCard_CardDAVSync extends Addressbook_Convert_
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseTel()
      */
-    protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
+    protected function _toTine20ModelParseTel(&$data, \Tine20\VObject\Property $property)
     {
         if (!isset($property['TYPE'])) {
             // CardDAVSync sends OTHER just as TEL:12345678 without any TYPE

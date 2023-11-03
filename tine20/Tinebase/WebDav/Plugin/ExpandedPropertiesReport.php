@@ -13,12 +13,12 @@
  * @author     Cornelius Weiß <c.weiss@metaways.de>
  * @license    http://www.gnu.org/licenses/agpl.html
  */
-class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Sabre\DAV\ServerPlugin {
+class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Tine20\DAV\ServerPlugin {
 
     /**
      * Reference to server object
      *
-     * @var \Sabre\DAV\Server
+     * @var \Tine20\DAV\Server
      */
     protected $server;
 
@@ -34,7 +34,7 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Sabre\DAV\ServerP
 
     /**
      * (non-PHPdoc)
-     * @see \Sabre\DAV\ServerPlugin::getPluginName()
+     * @see \Tine20\DAV\ServerPlugin::getPluginName()
      */
     public function getPluginName() 
     {
@@ -43,7 +43,7 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Sabre\DAV\ServerP
     
     /**
      * (non-PHPdoc)
-     * @see \Sabre\DAV\ServerPlugin::getSupportedReportSet()
+     * @see \Tine20\DAV\ServerPlugin::getSupportedReportSet()
      */
     public function getSupportedReportSet($uri) 
     {
@@ -55,10 +55,10 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Sabre\DAV\ServerP
     /**
      * Initializes the plugin 
      * 
-     * @param \Sabre\DAV\Server $server 
+     * @param \Tine20\DAV\Server $server 
      * @return void
      */
-    public function initialize(\Sabre\DAV\Server $server) 
+    public function initialize(\Tine20\DAV\Server $server) 
     {
         $this->server = $server;
 
@@ -78,7 +78,7 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Sabre\DAV\ServerP
      * @param array $returnedProperties
      * @return void
      */
-    public function beforeGetProperties($path, \Sabre\DAV\INode $node, &$requestedProperties, &$returnedProperties)
+    public function beforeGetProperties($path, \Tine20\DAV\INode $node, &$requestedProperties, &$returnedProperties)
     {
         if (in_array('{http://calendarserver.org/ns/}expanded-group-member-set', $requestedProperties)) {
             $parentNode = $this->server->tree->getNodeForPath($path);
@@ -94,7 +94,7 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Sabre\DAV\ServerP
                 $path
             );
 
-            $returnedProperties[200]['{http://calendarserver.org/ns/}expanded-group-member-set'] = new Sabre\DAV\Property\HrefList($groupMemberSet);
+            $returnedProperties[200]['{http://calendarserver.org/ns/}expanded-group-member-set'] = new Tine20\DAV\Property\HrefList($groupMemberSet);
         }
     }
 

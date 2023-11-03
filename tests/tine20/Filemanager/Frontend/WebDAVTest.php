@@ -8,7 +8,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
-require_once 'vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
+require_once 'vendor/tine20/sabredav/tests/Sabre/HTTP/ResponseMock.php';
 
 /**
  * Test class for Filemanager_Frontend_Tree
@@ -19,20 +19,20 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 {
     /**
      *
-     * @var Sabre\DAV\Server
+     * @var Tine20\DAV\Server
      */
     protected $server;
 
     /**
      *
-     * @var Sabre\HTTP\ResponseMock
+     * @var Tine20\HTTP\ResponseMock
      */
     protected $response;
 
     /**
      * Tree
      *
-     * @var Sabre\DAV\ObjectTree
+     * @var Tine20\DAV\ObjectTree
      */
     protected $_webdavTree;
 
@@ -47,10 +47,10 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         // avoid cache issues
         $this->_webdavTree = null;
-        $this->server = new Sabre\DAV\Server($this->_getWebDAVTree());
+        $this->server = new Tine20\DAV\Server($this->_getWebDAVTree());
         $this->server->debugExceptions = true;
 
-        $this->response = new Sabre\HTTP\ResponseMock();
+        $this->response = new Tine20\HTTP\ResponseMock();
         $this->server->httpResponse = $this->response;
 
         $_SERVER['HTTP_CONTENT_LENGTH'] = '8';
@@ -77,7 +77,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->_assertWebDAVTreeNodeTypes('', $node->getName());
         $children = $node->getChildren();
         
-        $this->expectException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Tine20\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/');
     }
@@ -91,7 +91,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $children = $node->getChildren();
         $this->assertInstanceOf('Tinebase_WebDav_Collection_AbstractContainerTree', $children[0], 'wrong child class');
         
-        $this->expectException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Tine20\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav');
     }
@@ -106,7 +106,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertGreaterThanOrEqual(2, count($children));
         //$this->_assertWebDAVTreeNodeTypes($children[0]);
         
-        $this->expectException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Tine20\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager');
     }
@@ -116,7 +116,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      * @throws Timetracker_Exception_UnexpectedValue
      * @throws Tinebase_Exception_Backend
      * @throws Tinebase_Exception_NotFound
-     * @throws \Sabre\DAV\Exception\NotFound
+     * @throws \Tine20\DAV\Exception\NotFound
      */
     protected function _testGetNodeForPath_webdav_filemanagerWithOtherUsers($property)
     {
@@ -194,7 +194,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
     /**
      * @throws Tinebase_Exception_NotFound
-     * @throws \Sabre\DAV\Exception\NotFound
+     * @throws \Tine20\DAV\Exception\NotFound
      */
     public function testGetNodeForPath_webdav_filemanagerWithoutGrants_otherUser()
     {
@@ -233,7 +233,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
     /**
      * @throws Tinebase_Exception_NotFound
-     * @throws \Sabre\DAV\Exception\NotFound
+     * @throws \Tine20\DAV\Exception\NotFound
      */
     public function testGetNodeForPath_webdav_filemanagerWithoutGrants_shared()
     {
@@ -266,7 +266,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      * node should only be sync when user has both READ_GRANT and SYNC_GRANT
      * 
      * @throws Tinebase_Exception_NotFound
-     * @throws \Sabre\DAV\Exception\NotFound
+     * @throws \Tine20\DAV\Exception\NotFound
      */
     protected function _testGrantsHelper($folder, $nodePath, $isForcedSyncNode = false)
     {
@@ -374,7 +374,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
      * test currently fails:
      * 
      * 1) Filemanager_Frontend_WebDAVTest::testgetNodeForPath_webdav_filemanager_personal
-     * Sabre\DAV\Exception\NotFound: Directory Filemanager/personal not found
+     * Tine20\DAV\Exception\NotFound: Directory Filemanager/personal not found
      * 
      * /var/lib/jenkins-tine20.com/jobs/tine20com-gerrit/workspace/tine20/Tinebase/WebDav/Collection/AbstractContainerTree.php:128
      * /var/lib/jenkins-tine20.com/jobs/tine20com-gerrit/workspace/tine20/vendor/sabre/dav/lib/Sabre/DAV/ObjectTree.php:72
@@ -393,7 +393,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertEquals(1, count($children));
         $this->assertEquals('Filemanager_Frontend_WebDAV', get_class($children[0]), 'wrong child class');
         
-        $this->expectException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Tine20\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/personal');
     }
@@ -409,7 +409,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertGreaterThanOrEqual(1, count($children));
         $this->assertInstanceOf(Filemanager_Frontend_WebDAV_Directory::class, $children[0], 'wrong node class');
         
-        $this->expectException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Tine20\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountDisplayName);
     }
@@ -433,7 +433,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         
         $this->_getWebDAVTree()->delete($path . '/unittestdirectory');
         
-        $this->expectException('Sabre\DAV\Exception\NotFound');
+        $this->expectException('Tine20\DAV\Exception\NotFound');
 
         Tinebase_WebDav_Collection_AbstractContainerTree::clearClassCache();
         $this->_webdavTree = null;
@@ -448,7 +448,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         
         $children = $node->getChildren();
         
-        $this->expectException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Tine20\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/shared');
     }
@@ -465,7 +465,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $uNode = $fs->stat($oldPath);
         $fNode = $fs->stat($oldPath . '/aTestFile.test');
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD'    => 'MOVE',
             'REQUEST_URI'       => '/webdav/Filemanager/shared/a/unittestdirectory',
             'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/a/unittestdirectory1/new',
@@ -502,7 +502,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $fs->createAclNode('/Filemanager/folders/shared/a');
         $fs->createAclNode(($oldPath = 'Filemanager/folders/shared/a/unittestdirectory'));
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'MOVE',
             'REQUEST_URI' => '/webdav/Filemanager/shared/a/unittestdirectory',
             'HTTP_DESTINATION' => '/remote.php/webdav/' . (
@@ -521,7 +521,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         Tinebase_Core::setUser($this->_personas['sclever']);
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'MOVE',
             'REQUEST_URI' => '/webdav/Filemanager/shared/unittestdirectory',
             'HTTP_DESTINATION' => '/webdav/Filemanager/shared/unittestdirectory1',
@@ -543,7 +543,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         Tinebase_Core::setUser($this->_personas['sclever']);
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'MOVE',
             'REQUEST_URI' => '/webdav/Filemanager/shared/unittestdirectory',
             'HTTP_DESTINATION' => '/webdav/Filemanager/shared/unittestdirectory1/foo',
@@ -562,7 +562,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $fs = Tinebase_FileSystem::getInstance();
         $fs->createAclNode('Filemanager/folders/shared/unittestdirectory');
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'MOVE',
             'REQUEST_URI' => '/webdav/Filemanager/shared/unittestdirectory',
             'HTTP_DESTINATION' => '/webdav/Filemanager/shared/unittestdirectory1',
@@ -582,7 +582,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $fs->createAclNode('Filemanager/folders/shared/unittestdirectory');
         $fs->createAclNode('Filemanager/folders/shared/unittestdirectory1');
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'MOVE',
             'REQUEST_URI' => '/webdav/Filemanager/shared/unittestdirectory',
             'HTTP_DESTINATION' => '/webdav/Filemanager/shared/unittestdirectory1/foo',
@@ -626,7 +626,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertTrue(is_dir($path . 'test1'));
 
         // move directory within a flysystem
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD'    => 'MOVE',
             'REQUEST_URI'       => '/webdav/Filemanager/shared/flysystem1/test',
             'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/flysystem1/test2',
@@ -639,7 +639,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertSame('/test2', $fs->stat('Filemanager/folders/shared/flysystem1/test2')->flypath);
 
         // move directory within a flysystem to subfolder
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD'    => 'MOVE',
             'REQUEST_URI'       => '/webdav/Filemanager/shared/flysystem1/test2',
             'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/flysystem1/test1/foo',
@@ -657,7 +657,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertSame('/aTestFile.test', $fs->stat('Filemanager/folders/shared/flysystem1/aTestFile.test')->flypath);
 
         // move file within a flysystem
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD'    => 'MOVE',
             'REQUEST_URI'       => '/webdav/Filemanager/shared/flysystem1/aTestFile.test',
             'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/flysystem1/test1/aTestFile.test',
@@ -671,7 +671,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         // move file from flysystem to tine fs
         $fs->createAclNode('Filemanager/folders/shared/tinesystem');
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD'    => 'MOVE',
             'REQUEST_URI'       => '/webdav/Filemanager/shared/flysystem1/test1/aTestFile.test',
             'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/tinesystem/aTestFile.test',
@@ -685,7 +685,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertEmpty($fs->stat('Filemanager/folders/shared/tinesystem/aTestFile.test')->flypath);
 
         // move file from tine fs to flysystem
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD'    => 'MOVE',
             'REQUEST_URI'       => '/webdav/Filemanager/shared/tinesystem/aTestFile.test',
             'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/flysystem1/aTestFile.test',
@@ -717,7 +717,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertSame('/', $node->flypath);
 
         // from file from one flysystem to a different one
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD'    => 'MOVE',
             'REQUEST_URI'       => '/webdav/Filemanager/shared/flysystem1/aTestFile.test',
             'HTTP_DESTINATION'  => '/webdav/Filemanager/shared/flysystem2/aTestFil.test',
@@ -739,7 +739,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->assertNotFalse(
             file_put_contents('tine20://Filemanager/folders/shared/unittestdirectory/aTestFile.test', 'unittesting'));
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD'    => 'MOVE',
             'REQUEST_URI'       => '/webdav/Filemanager/shared/unittestdirectory/aTestFile.test',
             'HTTP_DESTINATION'  => $destination ?: '/webdav/Filemanager/shared/unittestdirectory1/aTestFile.test',
@@ -986,7 +986,7 @@ EOS
         $server->handle($request);
         $result = ob_get_contents();
         ob_end_clean();
-        static::assertStringContainsString('<s:exception>Sabre\DAV\Exception\Locked</s:exception>', $result);
+        static::assertStringContainsString('<s:exception>Tine20\DAV\Exception\Locked</s:exception>', $result);
 
         $request = Tinebase_Http_Request::fromString(<<<EOS
 UNLOCK /webdav/Filemanager/shared/unittestdirectory/aTestFile HTTP/1.1\r
@@ -1070,7 +1070,7 @@ EOS
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
 
         // it should not be possible to create a file in /webdav/Filemanager/shared folder
-        $this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+        $this->expectException(\Tine20\DAV\Exception\Forbidden::class);
         $this->expectExceptionCode(0);
 
         $node->createFile('test.file');
@@ -1107,7 +1107,7 @@ EOS
             try {
                 $createdNode->createDirectory('moreTestDirectories');
                 static::fail('acl test failed');
-            } catch (Sabre\DAV\Exception\Forbidden $f) {}
+            } catch (Tine20\DAV\Exception\Forbidden $f) {}
 
             $fileManagerId = Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId();
             /** @var Tinebase_Model_Role $role */
@@ -1131,11 +1131,11 @@ EOS
             try {
                 $sharedNode->createDirectory('moreTestDirectories');
                 static::fail('creating shared folder in top level should require MANAGE_SHARED_FOLDERS right');
-            } catch (Sabre\DAV\Exception\Forbidden $f) {}
+            } catch (Tine20\DAV\Exception\Forbidden $f) {}
             try {
                 $createdNode->createDirectory('moreTestDirectories');
                 static::fail('acl test failed');
-            } catch (Sabre\DAV\Exception\Forbidden $f) {}
+            } catch (Tine20\DAV\Exception\Forbidden $f) {}
         } finally {
             Tinebase_Core::set(Tinebase_Core::USER, $oldUser);
             Tinebase_Acl_Roles::unsetInstance();
@@ -1245,7 +1245,7 @@ EOS
                 $instance = Tinebase_WebDav_Root::class;
                 break;
             case '/webdav':
-                $instance = '\Sabre\DAV\SimpleCollection';
+                $instance = '\Tine20\DAV\SimpleCollection';
                 break;
             case '/webdav/Filemanager':
                 // tine20_tree_node path = appid/folders
@@ -1305,7 +1305,7 @@ EOS
         $this->assertGreaterThanOrEqual(1, count($children));
         $this->assertInstanceOf(Filemanager_Frontend_WebDAV_Directory::class, $children[0], 'wrong node class');
     
-        $this->expectException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Tine20\DAV\Exception\Forbidden');
     
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/' . Tinebase_Core::getUser()->accountLoginName);
     }
@@ -1336,7 +1336,7 @@ EOS
 
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/sclever');
 
-        $this->expectException(Sabre\DAV\Exception\Forbidden::class);
+        $this->expectException(Tine20\DAV\Exception\Forbidden::class);
         $node->createFile('test.file');
     }
 
@@ -1365,7 +1365,7 @@ EOS
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/sclever');
 
         // it should not be possible to create a folder in foreign /webdav/Filemanager/personal folder
-        $this->expectException(\Sabre\DAV\Exception\Forbidden::class);
+        $this->expectException(\Tine20\DAV\Exception\Forbidden::class);
 
         $node->createDirectory('testFolder');
     }
@@ -1466,7 +1466,7 @@ EOS
     
         $this->_getWebDAVTree()->delete('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
     
-        $this->expectException('Sabre\DAV\Exception\NotFound');
+        $this->expectException('Tine20\DAV\Exception\NotFound');
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/unittestdirectory/tine_logo.png');
     }
@@ -1491,32 +1491,32 @@ EOS
     
     public function testgetNodeForPath_invalidApplication()
     {
-        $this->expectException('Sabre\DAV\Exception\NotFound');
+        $this->expectException('Tine20\DAV\Exception\NotFound');
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/invalidApplication');
     }
     
     public function testgetNodeForPath_invalidContainerType()
     {
-        $this->expectException('Sabre\DAV\Exception\NotFound');
+        $this->expectException('Tine20\DAV\Exception\NotFound');
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/invalidContainerType');
     }
     
     public function testgetNodeForPath_invalidFolder()
     {
-        $this->expectException('Sabre\DAV\Exception\NotFound');
+        $this->expectException('Tine20\DAV\Exception\NotFound');
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/invalidContainer');
     }
     
     /**
      * 
-     * @return \Sabre\DAV\ObjectTree
+     * @return \Tine20\DAV\ObjectTree
      */
     protected function _getWebDAVTree()
     {
-        if (! $this->_webdavTree instanceof \Sabre\DAV\ObjectTree) {
+        if (! $this->_webdavTree instanceof \Tine20\DAV\ObjectTree) {
             $this->_webdavTree = new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root());
         }
         
@@ -1525,7 +1525,7 @@ EOS
 
     /**
      *
-     * @return \Sabre\DAV\ICollection|\Sabre\DAV\INode|\Sabre\DAV\ObjectTree
+     * @return \Tine20\DAV\ICollection|\Tine20\DAV\INode|\Tine20\DAV\ObjectTree
      */
     protected function _getNewWebDAVTreeNode($path)
     {   

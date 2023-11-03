@@ -102,7 +102,7 @@ class Addressbook_Convert_Contact_VCard_CalDAVSynchronizer extends Addressbook_C
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseTel()
      */
-    protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
+    protected function _toTine20ModelParseTel(&$data, \Tine20\VObject\Property $property)
     {
         parent::_toTine20ModelParseTel($data, $property);
 
@@ -160,10 +160,10 @@ class Addressbook_Convert_Contact_VCard_CalDAVSynchronizer extends Addressbook_C
      * parse email address field
      *
      * @param  array                           $data      reference to tine20 data array
-     * @param  \Sabre\VObject\Property         $property  mail property
-     * @param  \Sabre\VObject\Component\VCard  $vcard     vcard object
+     * @param  \Tine20\VObject\Property         $property  mail property
+     * @param  \Tine20\VObject\Component\VCard  $vcard     vcard object
      */
-    protected function _toTine20ModelParseEmail(&$data, \Sabre\VObject\Property $property, \Sabre\VObject\Component\VCard $vcard)
+    protected function _toTine20ModelParseEmail(&$data, \Tine20\VObject\Property $property, \Tine20\VObject\Component\VCard $vcard)
     {
         foreach ($property['TYPE'] as $typeProperty) {
             if (strtolower($typeProperty) == 'internet') {

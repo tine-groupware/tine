@@ -13,23 +13,23 @@
 /**
  * Test class for Calendar_Frontend_iMIP
  */
-class Calendar_Convert_Event_VCalendar_SabrePropertyParser extends \Sabre\VObject\Parser\MimeDir
+class Calendar_Convert_Event_VCalendar_SabrePropertyParser extends \Tine20\VObject\Parser\MimeDir
 {
     /** @noinspection PhpMissingParentConstructorInspection */
-    public function __construct(\Sabre\VObject\Component $root)
+    public function __construct(\Tine20\VObject\Component $root)
     {
         $this->root = $root;
     }
 
     /**
      * @param string $data
-     * @return \Sabre\VObject\Property
-     * @throws \Sabre\VObject\ParseException
+     * @return \Tine20\VObject\Property
+     * @throws \Tine20\VObject\ParseException
      */
     public function parseProperty($data)
     {
         /** stupid Sabre, their method signature markup is broken! */
-        /** @var \Sabre\VObject\Property $property */
+        /** @var \Tine20\VObject\Property $property */
         /** @noinspection PhpVoidFunctionResultUsedInspection */
         $property = $this->readProperty($data);
         return $property;

@@ -16,7 +16,7 @@ class Tinebase_Frontend_WebDAV_RecordTest extends TestCase
      /**
       * Tree
       *
-      * @var Sabre\DAV\ObjectTree
+      * @var Tine20\DAV\ObjectTree
       */
     protected $_webdavTree;
     
@@ -65,12 +65,12 @@ class Tinebase_Frontend_WebDAV_RecordTest extends TestCase
 
     /**
      * 
-     * @return \Sabre\DAV\ObjectTree
+     * @return \Tine20\DAV\ObjectTree
      */
     protected function _getWebDAVTree()
     {
-        if (! $this->_webdavTree instanceof \Sabre\DAV\ObjectTree) {
-            $this->_webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        if (! $this->_webdavTree instanceof \Tine20\DAV\ObjectTree) {
+            $this->_webdavTree = new \Tine20\DAV\ObjectTree(new Tinebase_WebDav_Root());
         }
         
         return $this->_webdavTree;

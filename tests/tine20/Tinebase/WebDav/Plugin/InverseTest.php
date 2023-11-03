@@ -77,7 +77,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
                      <user-list/>
                  </acl-query>';
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'REPORT',
             'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->objects['initialContainer']->id,
             'HTTP_DEPTH'     => '1',
@@ -101,7 +101,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
                      <roles user="' . Tinebase_Core::getUser()->contact_id . '"/>
                  </acl-query>';
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'REPORT',
             'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->objects['initialContainer']->id,
             'HTTP_DEPTH'     => '1',
@@ -125,7 +125,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
                      <add-user user="' . Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->contact_id . '"/>
                  </acl-query>';
         
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'POST',
             'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->objects['initialContainer']->id,
             'HTTP_DEPTH'     => '1',
@@ -154,7 +154,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
                      <remove-user user="' . Tinebase_Helper::array_value('pwulf', Zend_Registry::get('personas'))->contact_id . '"/>
                  </acl-query>';
         
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'POST',
             'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->objects['initialContainer']->id,
             'HTTP_DEPTH'     => '1',
@@ -185,7 +185,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
                      </set-roles>
                  </acl-query>';
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'POST',
             'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->objects['initialContainer']->id,
             'HTTP_DEPTH'     => '1',
@@ -217,7 +217,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
                      </D:principal-property>
                  </D:principal-match>';
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'REPORT',
             'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->objects['initialContainer']->id,
             'HTTP_DEPTH'     => '1',
@@ -241,7 +241,7 @@ class Tinebase_WebDav_Plugin_InverseTest extends Tinebase_WebDav_Plugin_Abstract
                      <users match-name="' . Tinebase_Core::getUser()->accountFullName . '"/>
                  </user-query>';
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'REPORT',
             'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->objects['initialContainer']->id,
             'HTTP_DEPTH'     => '1',

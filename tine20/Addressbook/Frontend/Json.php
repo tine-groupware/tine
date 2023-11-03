@@ -480,7 +480,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         try {
             $record = $converter->toTine20Model($vcard);
-        } catch (Sabre\VObject\ParseException $svpe) {
+        } catch (Tine20\VObject\ParseException $svpe) {
             return ['exceptions' => $svpe->getMessage()];
         }
         $contactData = $this->_recordToJson($record);

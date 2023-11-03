@@ -106,7 +106,7 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
         }
     }
 
-    protected function _addComponentToEndOfFile(Sabre\VObject\Component $component)
+    protected function _addComponentToEndOfFile(Tine20\VObject\Component $component)
     {
         fwrite($this->_exportFileHandle, $component->serialize());
     }

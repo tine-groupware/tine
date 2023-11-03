@@ -18,7 +18,7 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
      */
     public function testGetChildren()
     {
-        $collection = new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT, true);
+        $collection = new Addressbook_Frontend_WebDAV(\Tine20\CardDAV\Plugin::ADDRESSBOOK_ROOT, true);
         
         $children = $collection->getChildren();
         
@@ -30,7 +30,7 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
      */
     public function testGetChild()
     {
-        $collection = new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
+        $collection = new Addressbook_Frontend_WebDAV(\Tine20\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
         $child = $collection->getChild($this->_getTestContainer('Addressbook', Addressbook_Model_Contact::class)->getId());
         
@@ -42,9 +42,9 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
      */
     public function testCreateFile()
     {
-        $collection = new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
+        $collection = new Addressbook_Frontend_WebDAV(\Tine20\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
-        $this->expectException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Tine20\DAV\Exception\Forbidden');
         
         $collection->createFile('foobar');
     }
@@ -56,7 +56,7 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
     {
         $randomName = Tinebase_Record_Abstract::generateUID();
         
-        $collection = new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
+        $collection = new Addressbook_Frontend_WebDAV(\Tine20\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
         
         $collection->createDirectory($randomName);
         
@@ -69,7 +69,7 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'Mac OS X/10.9 (13A603) AddressBook/1365';
     
-        $collection = new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
+        $collection = new Addressbook_Frontend_WebDAV(\Tine20\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' . Tinebase_Core::getUser()->contact_id, true);
     
         $children = $collection->getChildren();
         
@@ -81,7 +81,7 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
     
-        $collection = new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT, true);
+        $collection = new Addressbook_Frontend_WebDAV(\Tine20\CardDAV\Plugin::ADDRESSBOOK_ROOT, true);
     
         $children = $collection->getChildren();
     
@@ -104,7 +104,7 @@ class Addressbook_Frontend_CardDAVTest extends TestCase
 
         $_SERVER['HTTP_USER_AGENT'] = 'DAVdroid/0.1';
 
-        $collection = new Addressbook_Frontend_WebDAV(\Sabre\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' .
+        $collection = new Addressbook_Frontend_WebDAV(\Tine20\CardDAV\Plugin::ADDRESSBOOK_ROOT . '/' .
             Tinebase_Core::getUser()->contact_id, true);
 
         $children = $collection->getChildren();

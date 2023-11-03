@@ -12,7 +12,7 @@
 /**
  * Test helper
  */
-require_once 'vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
+require_once 'vendor/tine20/sabredav/tests/Sabre/HTTP/ResponseMock.php';
 
 
 /**
@@ -22,13 +22,13 @@ abstract class Tinebase_WebDav_Plugin_AbstractBaseTest extends TestCase
 {
     /**
      *
-     * @var Sabre\DAV\Server
+     * @var Tine20\DAV\Server
      */
     protected $server;
 
     /**
      *
-     * @var Sabre\HTTP\ResponseMock
+     * @var Tine20\HTTP\ResponseMock
      */
     protected $response;
 
@@ -47,10 +47,10 @@ abstract class Tinebase_WebDav_Plugin_AbstractBaseTest extends TestCase
 {
         parent::setUp();
 
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new Tine20\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
         $this->server->debugExceptions = true;
 
-        $this->response = new Sabre\HTTP\ResponseMock();
+        $this->response = new Tine20\HTTP\ResponseMock();
         $this->server->httpResponse = $this->response;
     }
 

@@ -215,7 +215,7 @@ class Tasks_Frontend_WebDAV_TaskTest extends Tasks_TestCase
         
         $vcalendarStream = fopen(dirname(__FILE__) . '/../../Import/files/lightning.ics', 'r');
         
-        $this->expectException('Sabre\DAV\Exception\Forbidden');
+        $this->expectException('Tine20\DAV\Exception\Forbidden');
         
         $task->put($vcalendarStream);
         

@@ -19,7 +19,7 @@
  * @package     Tasks
  * @subpackage  Frontend
  */
-class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\ICalendarObject, Sabre\DAVACL\IACL
+class Tasks_Frontend_WebDAV_Task extends Tine20\DAV\File implements Tine20\CalDAV\ICalendarObject, Tine20\DAVACL\IACL
 {
     /**
      * @var Tinebase_Model_Container
@@ -80,7 +80,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
             $vobjectData = stream_get_contents($vobjectData);
         }
         // Converting to UTF-8, if needed
-        $vobjectData = Sabre\DAV\StringUtil::ensureUTF8($vobjectData);
+        $vobjectData = Tine20\DAV\StringUtil::ensureUTF8($vobjectData);
         
         #Sabre_CalDAV_ICalendarUtil::validateICalendarObject($vobjectData, array('VTODO', 'VFREEBUSY'));
         
@@ -90,7 +90,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
-            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+            throw new Tine20\DAV\Exception\PreconditionFailed($e->getMessage());
         }
 
         $task->container_id = $container->getId();
@@ -129,7 +129,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($task->toArray(), true));
-                throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+                throw new Tine20\DAV\Exception\PreconditionFailed($e->getMessage());
             }
 
             $vevent = new self($container, $task);
@@ -185,7 +185,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         try {
             $task = Tasks_Controller_Task::getInstance()->get($this->_task);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new \Sabre\DAV\Exception\NotFound('Object not found');
+            throw new \Tine20\DAV\Exception\NotFound('Object not found');
         }
         
         // allow delete only if deleted in origin calendar
@@ -350,14 +350,14 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         if (get_class($this->_converter) == 'Tasks_Convert_Task_VCalendar_Generic') {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Tasks_Convert_Task_VCalendar_Factory for supported clients.");
-            throw new Sabre\DAV\Exception\Forbidden('Update denied for unknow client');
+            throw new Tine20\DAV\Exception\Forbidden('Update denied for unknow client');
         }
         
         if (is_resource($cardData)) {
             $cardData = stream_get_contents($cardData);
         }
         // Converting to UTF-8, if needed
-        $cardData = Sabre\DAV\StringUtil::ensureUTF8($cardData);
+        $cardData = Tine20\DAV\StringUtil::ensureUTF8($cardData);
         
         #Sabre_CalDAV_ICalendarUtil::validateICalendarObject($cardData, array('VTODO', 'VFREEBUSY'));
         
@@ -431,16 +431,16 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         try {
             $this->_task = Tasks_Controller_Task::getInstance()->update($task);
         } catch (Tinebase_Exception_ConcurrencyConflict $ttecc) {
-            throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
+            throw new Tine20\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
         }  catch (Tinebase_Exception_AccessDenied $tead) {
-            throw new Sabre\DAV\Exception\Forbidden('forbidden update');
+            throw new Tine20\DAV\Exception\Forbidden('forbidden update');
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Sabre\DAV\Exception\PreconditionFailed('not found');
+            throw new Tine20\DAV\Exception\PreconditionFailed('not found');
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $e);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $cardData);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($task->toArray(), true));
-            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
+            throw new Tine20\DAV\Exception\PreconditionFailed($e->getMessage());
         }
         
         return $this->getETag();
@@ -482,7 +482,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
      */
     public function setACL(array $acl) 
     {
-        throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
+        throw new Tine20\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
     
     /**
