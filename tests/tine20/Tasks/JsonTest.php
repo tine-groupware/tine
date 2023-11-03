@@ -407,16 +407,30 @@ class Tasks_JsonTest extends TestCase
      */
     public function testSearchTasks()    
     {
+        Tasks_Controller_Task::destroyInstance();
+
         // create task
         $task = $this->_getTask();
         $task = $this->_backend->saveTask($task->toArray());
         
         // search tasks
-        $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
+        $tasks = $this->_backend->searchTasks($filter = $this->_getFilter(), $this->_getPaging());
         
         // check
         $count = $tasks['totalcount'];
         $this->assertGreaterThan(0, $count);
+        $filter[0]['operator'] = 'equals';
+        $filter[0]['value'] = ['path' => '/'];
+        $this->assertSame($filter, $tasks['filter']['filters'] ?? null, print_r($tasks['filter'], true));
+
+        $tasks = $this->_backend->searchTasks($filter = [
+            ['field' => Tasks_Model_Task::FLD_DEPENDENS_ON, 'operator' => 'definedBy', 'value' => [
+                ['field' => Tasks_Model_TaskDependency::FLD_DEPENDS_ON, 'operator' => 'definedBy', 'value' => [
+                    ['field' => 'summary', 'operator' => 'equals', 'value' => 'shalala'],
+                ]],
+            ]],
+        ], $this->_getPaging());
+        $this->assertSame($filter, $tasks['filter']['filters']);
         
         // delete task
         $this->_backend->deleteTasks(array($task['id']));

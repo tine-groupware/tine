@@ -142,11 +142,14 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
             return;
         }
 
-        parent::checkFilterACL($_filter, $_action);
-
         if (self::ACTION_GET !== $_action) {
+            parent::checkFilterACL($_filter, $_action);
             return;
         }
+
+        $_filter->andWrapItself();
+        $_filter->isImplicit(true);
+        parent::checkFilterACL($_filter, $_action);
 
         $aclFilters = $_filter->getAclFilters();
         if (! $aclFilters) {
@@ -165,6 +168,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
             ]],
         ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
         $orWrapper->addFilterGroup($aclFilterGroup);
+        $orWrapper->isImplicit(true);
 
         $_filter->addFilterGroup($orWrapper);
     }
