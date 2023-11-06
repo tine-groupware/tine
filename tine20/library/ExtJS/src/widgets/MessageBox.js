@@ -39,6 +39,8 @@ Ext.Msg.show({
  */
 Ext.MessageBox = function(){
     let opt, dlg;
+
+    const skinShades = ["#ffffff", "#fad9b4", "#fcbf89", "#ec8f2e", "#d97103", "#b75b01", "#924500"]
     
     // start vue properties
     let vueHandle, vueProps, vueEmitter;
@@ -67,6 +69,7 @@ Ext.MessageBox = function(){
         wait: false,
         waitConfig: null,
         width: 600,
+        skinColor: '#FFFFFF'
     })
 
     // modal container config
@@ -231,6 +234,7 @@ Ext.Msg.show({
          * @return {Ext.MessageBox} this
          */
         show: async function(options){
+            options.skinColor = skinShades[Math.floor(Math.random()*skinShades.length)]
             Ext.getBody().mask("Loading");
             window.vue = window.vue || await import(/* webpackChunkName: "Tinebase/js/Vue-Runtime"*/"tine-vue")
             const {default: mitt} = await import(/* webpackChunkName: "Tinebase/js/Mitt"*/'mitt')
