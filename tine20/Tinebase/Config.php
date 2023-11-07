@@ -742,8 +742,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const MAINTENANCE_MODE = 'maintenanceMode';
     const MAINTENANCE_MODE_OFF = 'off';
+    const MAINTENANCE_MODE_ON = 'on';
     const MAINTENANCE_MODE_NORMAL = 'normal';
     const MAINTENANCE_MODE_ALL = 'all';
+    const MAINTENANCE_MODE_FLAGS = 'flags';
+    const MAINTENANCE_MODE_FLAG_SKIP_APPS = 'skipApps';
+    const MAINTENANCE_MODE_FLAG_ONLY_APPS = 'onlyApps';
+    const MAINTENANCE_MODE_FLAG_ALLOW_ADMIN_LOGIN = 'allowAdminLogin';
 
     /**
      * @var string

@@ -61,6 +61,7 @@ class Tinebase_ModelConfiguration_Const {
      * valid vor type 'records' - means records are governed (not independent)
      */
     public const DEPENDENT_RECORDS = 'dependentRecords';
+    public const DELAY_DEPENDENT_RECORDS = 'delayDependentRecords';
     public const DESCRIPTION = 'description'; // e.g. Tinebase_Model_Grants
     /**
      * UI ONLY - If this is set to true, the field can't be updated and will not be shown in the frontend
