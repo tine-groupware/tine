@@ -1676,7 +1676,8 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             $grantProtectedFields = $grantProtectedFields[$action];
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' grant procteded properties of class '
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' grant protected properties of class '
             . static::class . ' ' . print_r($grantProtectedFields,true));
 
         /** @var Tinebase_Controller_Record_Abstract $ctrl */
