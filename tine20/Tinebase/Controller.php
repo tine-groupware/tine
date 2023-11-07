@@ -2092,8 +2092,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      * @param array $tables
      * @return bool
      * @throws Tinebase_Exception_InvalidArgument
-     *
-     * TODO allow to delete only some notes (configurable? only systemnotes of type avscan, update ... ?)
      */
     public function removeObsoleteData(?Tinebase_DateTime $beforeDate = null, array $tables = []): bool
     {
@@ -2116,6 +2114,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $this->_purgeTables($beforeDate, $orderedTables);
 
         if ($doEverything) {
+            Tinebase_Notes::getInstance()->removeObsoleteData();
+
             // TODO implement
             /*
             echo "\nCleaning relations...";
@@ -2126,9 +2126,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
             echo "\nCleaning customfields...";
             $this->cleanCustomfields();
-
-            echo "\nCleaning notes...";
-            $this->cleanNotes($_opts);
 
             echo "\nCleaning files...";
             $this->clearDeletedFiles();
