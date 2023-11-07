@@ -557,7 +557,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * cleanNotes: removes notes of records that have been deleted
+     * cleanNotes: removes notes of records that have been deleted and old avscans
      *
      * -- purge=1 param also removes redundant notes (empty updates + create notes)
      * supports dry run (-d)
@@ -568,128 +568,17 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $args = $this->_parseArgs($_opts, array(), 'cleanNotesOffset');
 
-        $notesController = Tinebase_Notes::getInstance();
-        $limit = 1000;
         $offset = (isset($args['cleanNotesOffset']) ? $args['cleanNotesOffset'] : 0);
-        $controllers = array();
-        $models = array();
-        $deleteIds = array();
-        $deletedCount = 0;
         $purge = isset($args['purge']) ? $args['purge'] : false;
-        $purgeCountCreated = 0;
-        $purgeCountEmptyUpdate = 0;
 
-        do {
-            echo "\noffset $offset...";
+        echo "\noffset $offset...";
 
-            $notes = $notesController->getAllNotes('id ASC', $limit, $offset);
-            $offset += $limit;
-
-            /** @var Tinebase_Model_Note $note */
-            foreach ($notes as $note) {
-                if (!isset($controllers[$note->record_model])) {
-                    if (strpos($note->record_model, 'Tinebase') === 0) {
-                        continue;
-                    }
-                    try {
-                        $controllers[$note->record_model] = Tinebase_Core::getApplicationInstance($note->record_model);
-                    } catch (Tinebase_Exception_AccessDenied $e) {
-                        // TODO log
-                        continue;
-                    } catch (Tinebase_Exception_NotFound $tenf) {
-                        $deleteIds[] = $note->getId();
-                        continue;
-                    }
-                    $oldACLCheckValue = $controllers[$note->record_model]->doContainerACLChecks(false);
-                    $models[$note->record_model] = array(
-                        0 => new $note->record_model(),
-                        1 => ($note->record_model !== 'Filemanager_Model_Node' ? class_exists($note->record_model . 'Filter') : false),
-                        2 => $note->record_model . 'Filter',
-                        3 => $oldACLCheckValue
-                    );
-                }
-                $controller = $controllers[$note->record_model];
-                $model = $models[$note->record_model];
-
-                if ($model[1]) {
-                    $filter = new $model[2](array(
-                        array(
-                            'field' => $model[0]->getIdProperty(),
-                            'operator' => 'equals',
-                            'value' => $note->record_id
-                        )
-                    ));
-                    if ($model[0]->has('is_deleted')) {
-                        $filter->addFilter(new Tinebase_Model_Filter_Int(array(
-                            'field' => 'is_deleted',
-                            'operator' => 'notnull',
-                            'value' => null
-                        )));
-                    }
-                    $result = $controller->searchCount($filter);
-
-                    if (is_bool($result) || (is_string($result) && $result === ((string)intval($result)))) {
-                        $result = (int)$result;
-                    }
-
-                    if (!is_int($result)) {
-                        if (is_array($result) && isset($result['totalcount'])) {
-                            $result = (int)$result['totalcount'];
-                        } elseif (is_array($result) && isset($result['count'])) {
-                            $result = (int)$result['count'];
-                        } else {
-                            // todo log
-                            // dummy line, remove!
-                            $result = 1;
-                        }
-                    }
-
-                    if ($result === 0) {
-                        $deleteIds[] = $note->getId();
-                    } else if ($purge) {
-                        if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED) {
-                            $deleteIds[] = $note->getId();
-                            $purgeCountCreated++;
-                        } else if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED && strpos($note->note, '|') === false) {
-                            $deleteIds[] = $note->getId();
-                            $purgeCountEmptyUpdate++;
-                        }
-                    }
-                } else {
-                    try {
-                        $controller->get($note->record_id, null, false, true);
-                    } catch (Tinebase_Exception_NotFound $tenf) {
-                        $deleteIds[] = $note->getId();
-                    }
-                }
-            }
-            if (count($deleteIds) > 0) {
-                $deletedCount += count($deleteIds);
-                if ($_opts->d) {
-                    $offset -= count($deleteIds);
-                } else {
-                    $offset -= $notesController->purgeNotes($deleteIds);
-                }
-                if ($offset < 0) {
-                    $offset = 0;
-                }
-                $deleteIds = [];
-            }
-            echo ' done';
-        } while ($notes->count() === $limit);
-
-        foreach($controllers as $model => $controller) {
-            $controller->doContainerACLChecks($models[$model][3]);
-        }
+        $deletedCount = Tinebase_Notes::getInstance()->removeObsoleteData($purge, $offset, $_opts->d);
 
         if ($_opts->d) {
             echo "\nDRY RUN!";
         }
 
-        if ($purge) {
-            echo "\npurged " . $purgeCountEmptyUpdate . " system notes with empty updates";
-            echo "\npurged " . $purgeCountCreated . " create system notes";
-        }
         echo "\ndeleted " . $deletedCount . " notes\n";
     }
 
