@@ -144,8 +144,12 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * clean timemachine_modlog for records that have been pruned (not deleted!)
      *
      * TODO if replication is on, we need to keep the "deleted" / "pruned" message in the modlog
+     *
+     * @param Tinebase_DateTime|null $deleteBeforeDate
+     * @return int
+     * @throws Tinebase_Exception_AccessDenied
      */
-    public function clean()
+    public function clean(?Tinebase_DateTime $deleteBeforeDate = null): int
     {
         $filter = new Tinebase_Model_Filter_FilterGroup();
         $pagination = new Tinebase_Model_Pagination();
@@ -160,7 +164,14 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             $models = array();
 
             /** @var Tinebase_Model_ModificationLog $modlog */
-            foreach($recordSet as $modlog) {
+            foreach ($recordSet as $modlog) {
+
+                if ($deleteBeforeDate && $deleteBeforeDate->isLater($modlog->modification_time)) {
+                    $this->_backend->delete($modlog->getId());
+                    $totalCount++;
+                    continue;
+                }
+
                 if (Tinebase_Model_Container::class === $modlog->record_type) {
                     $models[$modlog->record_type][$modlog->application_id][$modlog->record_id][] = $modlog->id;
                 } else {
@@ -168,101 +179,114 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 }
             }
 
-            foreach($models as $model => &$ids) {
-
-                if (Tinebase_Model_Tree_Node::class === $model) {
-                    continue;
-                }
-
-                $app = null;
-                $appNotFound = false;
-
-                try {
-                    $app = Tinebase_Core::getApplicationInstance($model, '', true);
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    $appNotFound = true;
-                }
-
-                if (!$appNotFound) {
-
-                    if ($app instanceof Tinebase_Container)
-                    {
-                        $backend = $app;
-
-                    } else {
-                        if (!$app instanceof Tinebase_Controller_Record_Abstract) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' controller: ' . get_class($app) . ' not an instance of Tinebase_Controller_Record_Abstract');
-                            continue;
-                        }
-
-                        $backend = $app->getBackend();
-                    }
-
-                    if (!$backend instanceof Tinebase_Backend_Interface) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model . ' backend: ' . get_class($backend) . ' not an instance of Tinebase_Backend_Interface');
-                        continue;
-                    }
-
-                    /** @var Tinebase_Record_Interface $record */
-                    $record = new $model(null, true);
-
-                    foreach ($ids as $key => &$ids2) {
-                        /** @var Tinebase_Model_Filter_FilterGroup $idFilter */
-                        $idFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                            $model,
-                            array(),
-                            '',
-                            array('ignoreAcl' => true)
-                        );
-                        $idFilter->addFilter(new Tinebase_Model_Filter_Id(array(
-                            'field' => $record->getIdProperty(),
-                            'operator' => 'in',
-                            'value' => array_keys($ids2)
-                        )));
-                        if (Tinebase_Model_Container::class === $model) {
-                            $idFilter->addFilter(new Tinebase_Model_Filter_Id(array(
-                                'field' => 'application_id',
-                                'operator' => 'equals',
-                                'value' => $key
-                            )));
-                        }
-
-                        // to work around Tinebase_Container, we just send one more true parameter, will be ignored by all real backends, only taken into account by Tinebase_Container
-                        $existingIds = $backend->search($idFilter, null, true, true);
-
-                        if (!is_array($existingIds)) {
-                            throw new Exception('search for model: ' . $model . ' returned not an array!');
-                        }
-                        foreach ($existingIds as $id) {
-                            unset($ids2[$id]);
-                        }
-                    }
-                    unset($ids2);
-                }
-
-                foreach ($ids as $ids2) {
-                    if (count($ids2) > 0) {
-                        $toDelete = array();
-                        foreach ($ids2 as $idArrays) {
-                            foreach ($idArrays as $id) {
-                                $toDelete[$id] = true;
-                            }
-                        }
-
-                        $toDelete = array_keys($toDelete);
-
-                        $this->_backend->delete($toDelete);
-                        $totalCount += count($toDelete);
-                    }
-                }
-            }
-            unset($ids);
+            $totalCount += $this->_deleteModlogsByModel($models);
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' deleted ' . $totalCount . ' modlogs records');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' deleted ' . $totalCount . ' modlogs records');
+
+        return $totalCount;
+    }
+
+    protected function _deleteModlogsByModel(array $models): int
+    {
+        $totalCount = 0;
+
+        foreach ($models as $model => &$ids) {
+
+            if (Tinebase_Model_Tree_Node::class === $model) {
+                continue;
+            }
+
+            $app = null;
+            $appNotFound = false;
+
+            try {
+                $app = Tinebase_Core::getApplicationInstance($model, '', true);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $appNotFound = true;
+            }
+
+            if (!$appNotFound) {
+
+                if ($app instanceof Tinebase_Container) {
+                    $backend = $app;
+
+                } else {
+                    if (!$app instanceof Tinebase_Controller_Record_Abstract) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model
+                                . ' controller: ' . get_class($app) . ' not an instance of Tinebase_Controller_Record_Abstract');
+                        continue;
+                    }
+
+                    $backend = $app->getBackend();
+                }
+
+                if (!$backend instanceof Tinebase_Backend_Interface) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' model: ' . $model
+                            . ' backend: ' . get_class($backend) . ' not an instance of Tinebase_Backend_Interface');
+                    continue;
+                }
+
+                /** @var Tinebase_Record_Interface $record */
+                $record = new $model(null, true);
+
+                foreach ($ids as $key => &$ids2) {
+                    /** @var Tinebase_Model_Filter_FilterGroup $idFilter */
+                    $idFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                        $model,
+                        array(),
+                        '',
+                        array('ignoreAcl' => true)
+                    );
+                    $idFilter->addFilter(new Tinebase_Model_Filter_Id(array(
+                        'field' => $record->getIdProperty(),
+                        'operator' => 'in',
+                        'value' => array_keys($ids2)
+                    )));
+                    if (Tinebase_Model_Container::class === $model) {
+                        $idFilter->addFilter(new Tinebase_Model_Filter_Id(array(
+                            'field' => 'application_id',
+                            'operator' => 'equals',
+                            'value' => $key
+                        )));
+                    }
+
+                    if ($backend instanceof Tinebase_Container) {
+                        $existingIds = $backend->search($idFilter, null, true, true);
+                    } else {
+                        $existingIds = $backend->search($idFilter, null, true);
+                    }
+
+                    if (!is_array($existingIds)) {
+                        throw new Exception('search for model: ' . $model . ' returned not an array!');
+                    }
+                    foreach ($existingIds as $id) {
+                        unset($ids2[$id]);
+                    }
+                }
+                unset($ids2);
+            }
+
+            foreach ($ids as $ids2) {
+                if (count($ids2) > 0) {
+                    $toDelete = array();
+                    foreach ($ids2 as $idArrays) {
+                        foreach ($idArrays as $id) {
+                            $toDelete[$id] = true;
+                        }
+                    }
+
+                    $toDelete = array_keys($toDelete);
+
+                    $this->_backend->delete($toDelete);
+                    $totalCount += count($toDelete);
+                }
+            }
+        }
 
         return $totalCount;
     }
