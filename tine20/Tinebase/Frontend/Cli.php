@@ -173,14 +173,26 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * clean timemachine_modlog for records that have been pruned (not deleted!)
+     *  - accepts optional param date=YYYY-MM-DD to delete all modlogs before this date
+     *
+     * @param Zend_Console_Getopt|null $_opts
+     * @return int
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function cleanModlog()
+    public function cleanModlog(?Zend_Console_Getopt $_opts = null): int
     {
         $this->_checkAdminRight();
 
-        $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean();
+        $args = $_opts ? $this->_parseArgs($_opts, array()) : [];
+
+        $before = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
+
+        $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean($before);
 
         echo "\ndeleted $deleted modlogs records\n";
+
+        return 0;
     }
 
     /**
@@ -502,8 +514,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * purge deleted records
      *
-     * if param date is given (for example: date=2010-09-17), all records before this date are deleted (if the table has a date field)
-     * if table names are given, purge only records from this tables
+     * If param date is given (for example: date=2010-09-17), all records before this date are deleted
+     * (if the table has a date field). If table names are given, purge only records from these tables.
+     * We also remove all modification log records before the given date (with param modlog=purge)!
      *
      * @param Zend_Console_Getopt $_opts
      * @return int
@@ -525,7 +538,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $this->cleanRelations();
 
             echo "\nCleaning modlog...";
-            $this->cleanModlog();
+            $this->cleanModlog(isset($args['modlog']) && $args['modlog'] === 'purge' ? $_opts : null);
 
             echo "\nCleaning customfields...";
             $this->cleanCustomfields();
