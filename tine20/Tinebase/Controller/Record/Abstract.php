@@ -211,6 +211,11 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected $_handleVirtualRelationProperties = false;
 
+    protected bool $_delayDependentRecords = false;
+    protected array $_delayedDepRecFuncs = [];
+    protected array $_delayedDepRecRaiis = [];
+    protected array $_delyedDepRecCtrls = [];
+
     /**
      * constants for actions
      *
@@ -380,6 +385,15 @@ abstract class Tinebase_Controller_Record_Abstract
     public function sendNotifications($setTo = NULL)
     {
         return $this->_setBooleanMemberVar('_sendNotifications', $setTo);
+    }
+
+    public function delayDependentRecords(?bool $setTo = null): bool
+    {
+        $result = $this->_delayDependentRecords;
+        if (null !== $setTo) {
+            $this->_delayDependentRecords = $setTo;
+        }
+        return $result;
     }
 
     /**
@@ -1561,6 +1575,14 @@ abstract class Tinebase_Controller_Record_Abstract
                         $updatedRecord->{$property} = $record->{$property};
                     }
                 }
+            }
+            // unset them all
+            $this->_delayedDepRecRaiis = [];
+            $ctrls = $this->_delyedDepRecCtrls;
+            $this->_delyedDepRecCtrls = [];
+            /** @var Tinebase_Controller_Record_Abstract $ctrl */
+            foreach ($ctrls as $ctrl) {
+                $ctrl->executeDelayedDependentRecords();
             }
         }
         
@@ -2854,6 +2876,36 @@ abstract class Tinebase_Controller_Record_Abstract
         return $result;
     }
 
+    public function executeDelayedDependentRecords(): void
+    {
+        $funcs = $this->_delayedDepRecFuncs;
+        $this->_delayedDepRecFuncs = [];
+        foreach ($funcs as $fun) {
+            $fun();
+        }
+    }
+
+    protected function _getDelayedCrUpFunc(Tinebase_Record_Interface $record, Tinebase_Controller_Record_Abstract $controller, bool $ignoreAcl, bool $create): Closure
+    {
+        $tmpRecord = clone $record;
+        return function() use($tmpRecord, $controller, $ignoreAcl, $create) {
+            $ctrlAclRaiii = null;
+            if ($ignoreAcl) {
+                if (true === $controller->doContainerACLChecks(false)) {
+                    $ctrlAclRaiii = new Tinebase_RAII(function () use ($controller) {
+                        $controller->doContainerACLChecks(true);
+                    });
+                }
+            }
+            if ($create) {
+                $controller->create($tmpRecord);
+            } else {
+                $controller->update($tmpRecord);
+            }
+            unset($ctrlAclRaiii);
+        };
+    }
+
     /**
      * creates dependent record after creating the parent record
      *
@@ -2883,11 +2935,22 @@ abstract class Tinebase_Controller_Record_Abstract
         /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = $ccn::getInstance();
         $ctrlAclRaii = null;
-        if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
-            $oldCtrlAclVal = $controller->doContainerACLChecks(false);
-            $ctrlAclRaii = new Tinebase_RAII(function() use($oldCtrlAclVal, $controller) {
-                $controller->doContainerACLChecks($oldCtrlAclVal);
-            });
+        if ($_fieldConfig[TMCC::IGNORE_ACL] ?? false) {
+            if (true === $controller->doContainerACLChecks(false)) {
+                $ctrlAclRaii = new Tinebase_RAII(function () use ($controller) {
+                    $controller->doContainerACLChecks(true);
+                });
+            }
+        }
+        if (($_fieldConfig[TMCC::DELAY_DEPENDENT_RECORDS] ?? false) && !$this->_delayDependentRecords) {
+            if (!in_array($controller, $this->_delyedDepRecCtrls)) {
+                $this->_delyedDepRecCtrls[] = $controller;
+            }
+            if (false === $controller->delayDependentRecords(true)) {
+                $this->_delayedDepRecRaiis[] = new Tinebase_RAII(function () use ($controller) {
+                    $controller->delayDependentRecords(false);
+                });
+            }
         }
 
         /** @var Tinebase_Record_Interface $rec */
@@ -2916,7 +2979,11 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
 
-        $_createdRecord->{$_property} = $controller->create($_record->{$_property});
+        if ($this->_delayDependentRecords) {
+            $this->_delayedDepRecFuncs[] = $this->_getDelayedCrUpFunc($_record->{$_property}, $controller, $_fieldConfig[TMCC::IGNORE_ACL] ?? false, true);
+        } else {
+            $_createdRecord->{$_property} = $controller->create($_record->{$_property});
+        }
 
         unset($ctrlAclRaii);
 
@@ -2959,12 +3026,24 @@ abstract class Tinebase_Controller_Record_Abstract
         /** @var Tinebase_Controller_Record_Abstract $controller */
         $controller = $ccn::getInstance();
         $ctrlAclRaii = null;
-        if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
-            $oldCtrlAclVal = $controller->doContainerACLChecks(false);
-            $ctrlAclRaii = new Tinebase_RAII(function() use($oldCtrlAclVal, $controller) {
-                $controller->doContainerACLChecks($oldCtrlAclVal);
-            });
+        if ($_fieldConfig[TMCC::IGNORE_ACL] ?? false) {
+            if (true === $controller->doContainerACLChecks(false)) {
+                $ctrlAclRaii = new Tinebase_RAII(function () use ($controller) {
+                    $controller->doContainerACLChecks(true);
+                });
+            }
         }
+        if (($_fieldConfig[TMCC::DELAY_DEPENDENT_RECORDS] ?? false) && !$this->_delayDependentRecords) {
+            if (!in_array($controller, $this->_delyedDepRecCtrls)) {
+                $this->_delyedDepRecCtrls[] = $controller;
+            }
+            if (false === $controller->delayDependentRecords(true)) {
+                $this->_delayedDepRecRaiis[] = new Tinebase_RAII(function () use ($controller) {
+                    $controller->delayDependentRecords(false);
+                });
+            }
+        }
+
         $recordClassName = $_fieldConfig[TMCC::RECORD_CLASS_NAME];
         $filter = [['field' => $_fieldConfig[TMCC::REF_ID_FIELD], 'operator' => 'equals', 'value' => $_record->getId()]];
         if (isset($_fieldConfig[TMCC::ADD_FILTERS])) {
@@ -3000,12 +3079,22 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
 
-            if ($existingDepRec) {
-                $_record->{$_property}->setId($existingDepRec->getId());
-                $_record->{$_property} = $controller->update($_record->{$_property});
+            if ($this->_delayDependentRecords) {
+                $create = true;
+                if ($existingDepRec) {
+                    $_record->{$_property}->setId($existingDepRec->getId());
+                    $create = false;
+                }
+                $this->_delayedDepRecFuncs[] = $this->_getDelayedCrUpFunc($_record->{$_property}, $controller, $_fieldConfig[TMCC::IGNORE_ACL] ?? false, $create);
             } else {
-                $_record->{$_property} = $controller->create($_record->{$_property});
+                if ($existingDepRec) {
+                    $_record->{$_property}->setId($existingDepRec->getId());
+                    $_record->{$_property} = $controller->update($_record->{$_property});
+                } else {
+                    $_record->{$_property} = $controller->create($_record->{$_property});
+                }
             }
+
         } elseif ($existingDepRec) {
             $controller->delete($existingDepRec);
         }
@@ -3039,11 +3128,22 @@ abstract class Tinebase_Controller_Record_Abstract
         $controller = $ccn::getInstance();
 
         $ctrlAclRaii = null;
-        if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
-            $oldCtrlAclVal = $controller->doContainerACLChecks(false);
-            $ctrlAclRaii = new Tinebase_RAII(function() use($oldCtrlAclVal, $controller) {
-                $controller->doContainerACLChecks($oldCtrlAclVal);
-            });
+        if ($_fieldConfig[TMCC::IGNORE_ACL] ?? false) {
+            if (true === $controller->doContainerACLChecks(false)) {
+                $ctrlAclRaii = new Tinebase_RAII(function () use ($controller) {
+                    $controller->doContainerACLChecks(true);
+                });
+            }
+        }
+        if (($_fieldConfig[TMCC::DELAY_DEPENDENT_RECORDS] ?? false) && !$this->_delayDependentRecords) {
+            if (!in_array($controller, $this->_delyedDepRecCtrls)) {
+                $this->_delyedDepRecCtrls[] = $controller;
+            }
+            if (false === $controller->delayDependentRecords(true)) {
+                $this->_delayedDepRecRaiis[] = new Tinebase_RAII(function () use ($controller) {
+                    $controller->delayDependentRecords(false);
+                });
+            }
         }
 
         /** @var Tinebase_Record_Interface $rec */
@@ -3056,7 +3156,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $rec->setFromJsonInUsersTimezone($recordArray);
 
                 if (strlen((string)$rec->getId()) < 40) {
-                    $rec->{$rec->getIdProperty()} = Tinebase_Record_Abstract::generateUID();
+                    $rec->setId(Tinebase_Record_Abstract::generateUID());
                     $rs->addRecord($rec);
                 } elseif ([$rec->getId()] === $controller->has([$rec->getId()])) {
                     $rec->{$_fieldConfig['refIdField']} = $_createdRecord->getId();
@@ -3065,7 +3165,11 @@ abstract class Tinebase_Controller_Record_Abstract
                             $rec->{$prop} = $val;
                         }
                     }
-                    $new->addRecord($controller->update($rec));
+                    if ($this->_delayDependentRecords) {
+                        $this->_delayedDepRecFuncs[] = $this->_getDelayedCrUpFunc($rec, $controller, $_fieldConfig[TMCC::IGNORE_ACL] ?? false, false);
+                    } else {
+                        $new->addRecord($controller->update($rec));
+                    }
                 }
             }
             $_record->{$_property} = $rs;
@@ -3081,7 +3185,11 @@ abstract class Tinebase_Controller_Record_Abstract
                             $rec->{$prop} = $val;
                         }
                     }
-                    $new->addRecord($controller->update($rec));
+                    if ($this->_delayDependentRecords) {
+                        $this->_delayedDepRecFuncs[] = $this->_getDelayedCrUpFunc($rec, $controller, $_fieldConfig[TMCC::IGNORE_ACL] ?? false, false);
+                    } else {
+                        $new->addRecord($controller->update($rec));
+                    }
                 }
             }
         }
@@ -3101,7 +3209,11 @@ abstract class Tinebase_Controller_Record_Abstract
             if (! $record->getId() || strlen((string)$record->getId()) != 40) {
                 $record->{$record->getIdProperty()} = NULL;
             }
-            $new->addRecord($controller->create($record));
+            if ($this->_delayDependentRecords) {
+                $this->_delayedDepRecFuncs[] = $this->_getDelayedCrUpFunc($record, $controller, $_fieldConfig[TMCC::IGNORE_ACL] ?? false, true);
+            } else {
+                $new->addRecord($controller->create($record));
+            }
         }
 
         $_createdRecord->{$_property} = $new;
@@ -3152,11 +3264,22 @@ abstract class Tinebase_Controller_Record_Abstract
         $existing = new Tinebase_Record_RecordSet($recordClassName);
 
         $ctrlAclRaii = null;
-        if (isset($_fieldConfig[TMCC::IGNORE_ACL]) && $_fieldConfig[TMCC::IGNORE_ACL]) {
-            $oldCtrlAclVal = $controller->doContainerACLChecks(false);
-            $ctrlAclRaii = new Tinebase_RAII(function() use($oldCtrlAclVal, $controller) {
-                $controller->doContainerACLChecks($oldCtrlAclVal);
-            });
+        if ($_fieldConfig[TMCC::IGNORE_ACL] ?? false) {
+            if (true === $controller->doContainerACLChecks(false)) {
+                $ctrlAclRaii = new Tinebase_RAII(function () use ($controller) {
+                    $controller->doContainerACLChecks(true);
+                });
+            }
+        }
+        if (($_fieldConfig[TMCC::DELAY_DEPENDENT_RECORDS] ?? false) && !$this->_delayDependentRecords) {
+            if (!in_array($controller, $this->_delyedDepRecCtrls)) {
+                $this->_delyedDepRecCtrls[] = $controller;
+            }
+            if (false === $controller->delayDependentRecords(true)) {
+                $this->_delayedDepRecRaiis[] = new Tinebase_RAII(function () use ($controller) {
+                    $controller->delayDependentRecords(false);
+                });
+            }
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -3199,7 +3322,12 @@ abstract class Tinebase_Controller_Record_Abstract
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating dependent record with id = "' . $record->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);
                             }
-                            $existing->addRecord($controller->update($record));
+                            if ($this->_delayDependentRecords) {
+                                $this->_delayedDepRecFuncs[] = $this->_getDelayedCrUpFunc($record, $controller, $_fieldConfig[TMCC::IGNORE_ACL] ?? false, false);
+                                $existing->addRecord($record);
+                            } else {
+                                $existing->addRecord($controller->update($record));
+                            }
                         } else {
                             $existing->addRecord($record);
                         }
@@ -3209,12 +3337,17 @@ abstract class Tinebase_Controller_Record_Abstract
                     }
                 } else {
                     $create = true;
-                    $record->{$record->getIdProperty()} = NULL;
+                    $record->setId(Tinebase_Record_Abstract::generateUID());
                 }
 
                 if (true === $create) {
-                    $crc = $controller->create($record);
-                    $existing->addRecord($crc);
+                    if ($this->_delayDependentRecords) {
+                        $this->_delayedDepRecFuncs[] = $this->_getDelayedCrUpFunc($record, $controller, $_fieldConfig[TMCC::IGNORE_ACL] ?? false, true);
+                        $crc = $record;
+                    } else {
+                        $crc = $controller->create($record);
+                        $existing->addRecord($crc);
+                    }
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating dependent record with id = "' . $crc->getId() . '" on property ' . $_property . ' for ' . $this->_applicationName . ' ' . $this->_modelName);

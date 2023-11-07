@@ -77,7 +77,12 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
 
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                self::FLD_TASKS => [],
+                self::FLD_TASKS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Tasks_Model_Task::FLD_DEPENDENT_TASKS => [],
+                        Tasks_Model_Task::FLD_DEPENDENS_ON => [],
+                    ],
+                ],
             ],
         ],
 
@@ -178,6 +183,7 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME    => Tasks_Model_Task::MODEL_NAME_PART,
                     self::REF_ID_FIELD  => 'source',
                     self::DEPENDENT_RECORDS => true,
+                    self::DELAY_DEPENDENT_RECORDS => true,
                     self::ADD_FILTERS   => [
                         [TMFA::FIELD => 'source_model', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => self::class],
                     ],
