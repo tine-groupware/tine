@@ -31,7 +31,7 @@
 .preview-panel-timesheet-left {
     float:left;
     position: relative;
-    width:48%;
+    flex: 1 1 auto;
     height: 102px;
     padding:5px;
     margin:5px 2px 5px 5px;
@@ -40,10 +40,9 @@
 .preview-panel-timesheet-right {
     float:left;
     position: relative;
-    width:48%;
-    height: 97px;
+    flex: 1 1 auto;
     padding:5px;
-    margin:5px 1px 5px 2px;
+    margin:5px;
     border: solid 3px #e5e6fe;
     font-family:verdana;
     }
@@ -56,5 +55,11 @@
     padding: 5px;
     }
 .preview-panel-timesheet-nobreak {
-    min-width:900px;
-    }
+    display: flex;
+    align-items: stretch;
+    align-content: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding-right: 16px;
+}

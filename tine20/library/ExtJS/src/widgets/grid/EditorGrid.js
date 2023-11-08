@@ -58,6 +58,11 @@ Ext.grid.EditorGridPanel = Ext.extend(Ext.grid.GridPanel, {
      */
     // private
     trackMouseOver: false, // causes very odd FF errors
+    
+    /**
+     * @cfg {Boolean}     disableResponsiveLayout
+     */
+    disableResponsiveLayout: true,
 
     // private
     initComponent : function(){

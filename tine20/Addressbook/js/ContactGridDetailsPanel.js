@@ -30,18 +30,16 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                 recordClass: this.recordClass,
                 getBodyItems: function() {
                     return [{
-                        layout: 'hbox',
+                        layout: 'vbox',
                         flex: 1,
                         border: false,
                         layoutConfig: {
-                            padding: '0',
-                            align: 'stretch'
+                            align: 'stretch',
                         },
                         defaults: {
-                            margins: '0 5 0 0'
+                            margins: '15 0',
                         },
                         items: [{
-                            width: 90,
                             layout: 'ux.display',
                             layoutConfig: {
                                 background: 'solid'
@@ -49,25 +47,26 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                             items: [{
                                 xtype: 'ux.displayfield',
                                 name: 'jpegphoto',
-                                cls: 'preview-panel-image',
-                                anchor:'100% 100%',
                                 hideLabel: true,
                                 htmlEncode: false,
-                                renderer: Tine.widgets.grid.RendererManager.get('Addressbook', 'Addressbook_Model_Contact', 'image', 'displayPanel').createDelegate(me)
+                                cls: 'responsive-title',
+                                renderer: () => {
+                                    return this.ownerCt.gridpanel.responsiveRenderer.call(this, null, null, this.record)
+                                }
                             }]
                         }, {
-                            flex: 1,
+                            flex: 2,
                             layout: 'ux.display',
                             labelWidth: 60,
                             layoutConfig: {
-                                background: 'solid'
+                                background: 'solid',
                             },
                             items: [{
                                 layout: 'hbox',
                                 border: false,
                                 anchor: '100% 100%',
                                 layoutConfig: {
-                                    align: 'stretch'
+                                    align: 'stretch',
                                 },
                                 items: [{
                                     layout: 'ux.display',
@@ -137,7 +136,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                 }]
                             }]
                         }, {
-                            flex: 1,
+                            flex: 2,
                             layout: 'ux.display',
                             labelWidth: 60,
                             layoutConfig: {

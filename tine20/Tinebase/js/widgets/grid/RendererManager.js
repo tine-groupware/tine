@@ -276,7 +276,7 @@ Tine.widgets.grid.RendererManager = function() {
                     const languagesAvailableDef = _.get(recordClass.getModelConfiguration(), 'languagesAvailable')
                     const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinition(_.get(languagesAvailableDef, 'config.appName', appName), languagesAvailableDef.name)
                     const translationList = Locale.getTranslationList('Language')
-
+                    
                     renderer = function renderer(value, metaData, record, rowIndex, colIndex, store) {
                         const lang = store?.localizedLang || keyFieldDef.default
                         const localized = _.find(value, { language: lang })
@@ -285,9 +285,22 @@ Tine.widgets.grid.RendererManager = function() {
                         const qtip = i18n._('This is a multilingual field:') + '<br />' + _.reduce(value, (text, localized) => {
                             return text + '<br />' + translationList[localized.language] + ': ' + Ext.util.Format.htmlEncode(localized.text)
                         }, '')
-
+                        const row =  document.createElement('div');
+                        row.className = 'tine-grid-cell-action-fit';
+                        
+                        const row1Left = document.createElement('div');
+                        row1Left.innerHTML = text;
+                        
+                        const row1Right =  document.createElement('div');
+                        row1Right.innerHTML = langCode;
+                        row1Right.className = 'tine-grid-cell-action tine-grid-cell-localized';
+                        row1Right.setAttribute('ext:qtip',  qtip);
+                        
+                        row.appendChild(row1Left);
+                        row.appendChild(row1Right);
+                        
                         metaData.css = 'tine-grid-cell-action-wrap'
-                        return  `${text}<div ext:qtip="${Ext.util.Format.htmlEncode(qtip)}" class="tine-grid-cell-action tine-grid-cell-localized">${langCode}</div>`
+                        return  row.outerHTML;
                     }
                     break;
                 case 'records':

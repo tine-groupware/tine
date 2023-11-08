@@ -512,6 +512,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (! Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase')) {
             this.hideColumns.push('isIndexed');
         }
+        this.on('resize', this.onContentResize, this, {buffer: 100});
     },
 
     /**

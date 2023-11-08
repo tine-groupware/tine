@@ -351,6 +351,9 @@ Ext.grid.RowSelectionModel = Ext.extend(Ext.grid.AbstractSelectionModel,  {
                 this.selectRow(rowIndex, e.ctrlKey || e.shiftKey);
                 view.focusRow(rowIndex);
             }
+            if (this.gridPanel.isSmallLayout()) {
+                this.gridPanel.setFullScreen(true);
+            }
         }
     },
 

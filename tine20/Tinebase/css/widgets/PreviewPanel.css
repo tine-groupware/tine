@@ -36,9 +36,8 @@
 }
 
 .preview-panel-image {
-    padding:0px;
+    padding:0;
     display: table-cell;
-    vertical-align: middle;
     position: relative;
     left: -7px;
 }

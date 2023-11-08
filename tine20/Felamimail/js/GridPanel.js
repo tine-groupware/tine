@@ -126,10 +126,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (record.get('is_spam_suspicions')) {
             className += 'is_spam_suspicions ';
         }
-        if (this.detailsPanelRegion === 'east') {
-            className += 'felamimail-message-block ';
-        }
-       
         return className;
     },
     
@@ -141,21 +137,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.i18nEmptyText = this.app.i18n._('No Messages found.');
         this.recordProxy = Tine.Felamimail.messageBackend;
+        this.gridConfig.cm = new Ext.grid.ColumnModel({
+            defaults: {
+                resizable: true
+            },
+            columns: this.getColumns()
+        });
         this.gridConfig.columns = this.getColumns();
-        this.gridConfig.hideHeaders = this.detailsPanelRegion === 'east';
-        
-        if (this.stateful) {
-            this.gridConfig.stateful = true;
-            const stateId  = this.stateId + '-Grid' + this.stateIdSuffix;
-            this.regionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
-            this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
-            this.stateIdDetailPanelEast = stateId + '_DetailsPanel_East';
-            this.gridConfig.stateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : stateId;
-            const state = Ext.state.Manager.get(this.gridConfig.stateId);
-            if (state) {
-                this.defaultSortInfo = state.sort;
-            }
-        }
         
         this.initDetailsPanel();
         
@@ -196,39 +184,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 height: '16px'
             }
         });
-
-        const columns = this.getColumns();
-        const sortActions = columns
-            .filter((col) => col.sortable === true)
-            .map((column) => {
-                return new Ext.Action({
-                    text: column.header,
-                    dataIndex: column.dataIndex,
-                    scope: this,
-                    handler: (action)=> {
-                        this.store.sort(action.dataIndex);
-                    }
-                });
-            })
-        this.sortingMenu = new Ext.Action({
-            xtype: 'tbsplit',
-            iconCls: 'action_sort',
-            menu: new Ext.menu.Menu({ items: sortActions}),
-            hidden: true,
-            displayPriority: 0,
-            handler: (action)=> {
-                const sortState = this.store.getSortState();
-                sortActions.forEach((action) => {
-                    if (sortState.field === action.initialConfig.dataIndex) {
-                        const icls = sortState.direction === 'ASC' ? 'action_sort_asc' : 'action_sort_desc';
-                        action.setIconClass(icls);
-                    } else {
-                        action.setIconClass('');
-                    }
-                })
-            }
-        });
-        this.pagingToolbar.insert(11, this.sortingMenu);
         this.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
         this.pagingToolbar.insert(13, this.quotaBar);
     },
@@ -665,14 +620,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getColumns: function(){
         return [{
-            id: 'responsive',
-            header: this.app.i18n._("Responsive"),
-            width: 100,
-            sortable: false,
-            dataIndex: 'responsive',
-            hidden: true,
-            renderer: this.responsiveRenderer.createDelegate(this)
-        },{
             id: 'id',
             header: this.app.i18n._("Id"),
             width: 100,
@@ -861,7 +808,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     responsiveRenderer: function(folderId, metadata, record) {
-        const block = document.createElement('span');
+        const block = document.createElement('div');
+        
         const flagIcons = record.getFlagIcons();
         const flagIconEls = flagIcons.map((icon) => {
             const iconEl = document.createElement('img');
@@ -939,6 +887,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         senderEl.className = 'felamimail-message-title-text-small';
         recipientEl.className = 'felamimail-message-title-text-small';
         row1Left.appendChild(unreadIconEl);
+        
         if (this.sentFolderSelected) {
             row1Left.appendChild(recipientEl);
         } else {
@@ -1728,9 +1677,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.resolveSendFolderPath();
         let stateId = this.sentFolderSelected ? this.sendFolderGridStateId : this.gridConfig.stateId;
         const isEastLayout = this.detailsPanelRegion === 'east';
-        if (isEastLayout) stateId = stateId + '_DetailsPanel_East';
-        this.grid.hideHeaders = isEastLayout;
-        if (this.sortingMenu) this.sortingMenu.setHidden(!isEastLayout);
+        if (isEastLayout && !stateId.includes('_DetailsPanel_East')) stateId = stateId + '_DetailsPanel_East';
         const isStateIdChanged = this.grid.stateId !== stateId;
         if (!Ext.state.Manager.get(stateId)) this.grid.saveState();
         this.grid.stateId = stateId;
@@ -1768,20 +1715,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             })
         } 
 
-        stateClonedResolved.columns.forEach((col) => {
-            if (col.id === 'responsive') {
-                if (isEastLayout) {
-                    delete col.hidden;
-                } else {
-                    col.hidden = true;
-                }
-            } else {
-                if (isEastLayout) {
-                    col.hidden = true;
-                }
-            }
-        })
-        
         if (!isStateIdChanged) {
             stateClonedResolved.sort = this.store.getSortState();
         }

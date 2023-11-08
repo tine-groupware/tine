@@ -70,8 +70,52 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (this.hasDetailsPanel) {
             this.detailsPanel = this.getDetailsPanel();
         }
-
+        
         Tine.Addressbook.ContactGridPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * responsive content Renderer
+     *
+     * @param {String} folderId
+     * @param {Object} metadata
+     * @param {Folder|Account} record
+     * @return {String}
+     */
+    responsiveRenderer: function(folderId, metadata, record) {
+        const block =  document.createElement('div');
+        block.className = 'responsive-title';
+        
+        const iconEl = document.createElement('img');
+        iconEl.src = (record.data.jpegphoto || '');
+        iconEl.className = 'contact-image';
+        
+        // nameEl
+        const nameEl = document.createElement('div');
+        nameEl.innerText = record.data.n_fileas;
+        nameEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.n_fileas));
+        
+        // companyEl
+        const companyEl = document.createElement('div');
+        companyEl.innerText = record.data.org_name;
+        companyEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.org_name));
+        
+        const row1 =  document.createElement('div');
+        const row1Left = document.createElement('div');
+        const row1Right =  document.createElement('div');
+        row1.className = 'responsive-grid-row ';
+        row1Left.className = 'responsive-grid-row-left';
+        row1Right.className = 'responsive-grid-row-right';
+        nameEl.className = 'responsive-grid-text-medium';
+        companyEl.className = 'responsive-grid-text-small';
+        row1Left.appendChild(iconEl);
+        row1Right.appendChild(nameEl);
+        row1Right.appendChild(companyEl);
+        
+        row1.appendChild(row1Left);
+        row1.appendChild(row1Right);
+        block.appendChild(row1);
+        return  block.outerHTML;
     },
     
     /**
