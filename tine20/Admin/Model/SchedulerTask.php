@@ -76,7 +76,6 @@ class Admin_Model_SchedulerTask extends Tinebase_Model_SchedulerTask
                 self::VALIDATORS    => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
-                self::QUERY_FILTER => true,
             ]
         ]);
 

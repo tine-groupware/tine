@@ -42,4 +42,13 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
         $this->assertNotNull($runTask->last_run);
         $this->assertEquals('0', $runTask->failure_count);
     }
+    
+    public function testSearchSchedulerTask()
+    {
+        $result = Admin_Controller_SchedulerTask::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Admin_Model_SchedulerTask::class, [
+            ['field' => 'query', 'operator' => 'contains', 'value' => 'task']
+        ]), new Tinebase_Model_Pagination(['sort' => 'name', 'dir' => 'desc']));
+        $this->assertNotNull($result);
+    }
 }
