@@ -2025,9 +2025,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     public function goIntoMaintenanceMode()
     {
         parent::goIntoMaintenanceMode();
-
-        // delete sessions
-        Zend_Session::getSaveHandler()->gc(0);
+        Tinebase_Session::deleteSessions();
     }
 
     /**
