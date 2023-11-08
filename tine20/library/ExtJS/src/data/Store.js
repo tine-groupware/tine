@@ -770,7 +770,8 @@ sortInfo: {
      * @return {Number} The index of the Record. Returns -1 if not found.
      */
     indexOfId : function(id){
-        return this.data.indexOfKey(String(id));
+        const index = this.data.indexOfKey(String(id));
+        return index === -1 ? this.data.indexOfKey(id) : index;
     },
 
     /**
