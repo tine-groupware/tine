@@ -211,9 +211,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             const foreignFieldDefinition = _.get(Tine.Tinebase.data.RecordMgr.get(refConfig.appName, refConfig.modelName)?.getModelConfiguration(), `fields.${refConfig.foreignField}`, {});
             const dependentRecords = _.get(foreignFieldDefinition, `config.dependentRecords`, false);
             const isJSONStorage = _.toUpper(_.get(foreignFieldDefinition, `config.storage`, '')) === 'JSON';
-            const hasNoAPI = !_.get(Tine, `${refConfig.appName}.search${_.upperFirst(refConfig.modelName)}s`)
+            const hasNoAPI = _.isFunction(this.recordClass.getMeta) && !_.get(Tine, `${this.recordClass.getMeta('appName')}.search${_.upperFirst(this.recordClass.getMeta('modelName'))}s`)
 
-            this.editDialogConfig.mode = hasNoAPI || isJSONStorage || modelConfig.isDependent || dependentRecords ? 'local' : 'remote';
+            this.editDialogConfig.mode = hasNoAPI || isJSONStorage || modelConfig?.isDependent || dependentRecords ? 'local' : 'remote';
         }
     },
 
@@ -605,6 +605,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     onCreate: function() {
         const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.recordClass.getDefaultData(), this.getRecordDefaults()), this.recordClass);
+        record.phantom = true;
         const editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
         const mode = this.editDialogConfig?.mode || editDialogClass.prototype.mode;
 

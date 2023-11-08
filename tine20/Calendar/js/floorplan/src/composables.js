@@ -1,4 +1,16 @@
 import {reactive, computed, ref} from "vue"
+import {toValue} from '@vueuse/core'
+
+const generateUID = function(length) {
+    length = length || 40;
+
+    const s = '0123456789abcdef',
+        uuid = new Array(length);
+    for(let i=0; i<length; i++) {
+        uuid[i] = s.charAt(Math.ceil(Math.random() *15));
+    }
+    return uuid.join('');
+};
 
 /**
  *
@@ -53,7 +65,7 @@ const useReservationOperations = (currentConfig, selectedDate, currentFloor) => 
      *
      * @returns {Promise<void>}
      */
-    const fetchReservations = async function () {
+    const fetchReservations = async function (uiBlocking=true) {
         const values = Object.values(resourceNameToObjMap.value).map(element => element.model.id)
         const v = values
             .map(el => {
@@ -69,12 +81,12 @@ const useReservationOperations = (currentConfig, selectedDate, currentFloor) => 
             },
             {field: "attender", operator: 'in', value: v}
         ]]
-        fetchingData.value = true
+        fetchingData.value = true && uiBlocking
         await jsonRPC("Calendar.searchEvents", params)
             .then(data => {
                 updateReservationData(data)
             }).finally(() => {
-                fetchingData.value = false
+                fetchingData.value = false && uiBlocking
             })
     }
 
@@ -117,8 +129,11 @@ const useReservationOperations = (currentConfig, selectedDate, currentFloor) => 
             default:
                 container_id = null
         }
+        const _id = generateUID()
+        console.log(_id)
         const params = {
             recordData: {
+                id: _id,
                 summary: `Resource Reservation: ${reservableName}`,
                 attendee: [
                     {
@@ -169,22 +184,13 @@ const useReservationOperations = (currentConfig, selectedDate, currentFloor) => 
         resourceNameToObjMap,
         reserveTable,
         deleteReservation,
-        fetchReservations
+        fetchReservations,
+        jsonRPC
     }
 }
 
 const useTineJsonRPC = (url, jsonKey) => {
     let fetchId = 0
-    const generateUID = function(length) {
-        length = length || 40;
-
-        const s = '0123456789abcdef',
-            uuid = new Array(length);
-        for(let i=0; i<length; i++) {
-            uuid[i] = s.charAt(Math.ceil(Math.random() *15));
-        }
-        return uuid.join('');
-    };
     const jsonRPC = async (method, params) => {
         const body = {
             jsonrpc: "2.0",
@@ -197,7 +203,7 @@ const useTineJsonRPC = (url, jsonKey) => {
             method: "POST",
             headers: {
                 "content-type": "application/json",
-                "x-tine20-jsonkey": jsonKey.value
+                "x-tine20-jsonkey": toValue(jsonKey)
             },
             body: JSON.stringify(body)
         }).then(res => res.json())
@@ -209,5 +215,6 @@ const useTineJsonRPC = (url, jsonKey) => {
 }
 
 export {
-    useReservationOperations
+    useReservationOperations,
+    useTineJsonRPC
 }

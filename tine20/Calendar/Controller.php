@@ -553,7 +553,9 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                 'floorplans' => Calendar_Config::getInstance()->{Calendar_Config::FLOORPLANS},
                 'resources' => Calendar_Controller_Resource::getInstance()->getAll()->toArray(),
                 'currentContact' => $userContactArray,
-                'jsonKey' => Tinebase_Core::get('jsonKey')
+                'jsonKey' => Tinebase_Core::get('jsonKey'),
+                'locale' => $locale->toString(),
+                'broadcasthubConfig' => Tinebase_Config::getInstance()->getClientRegistryConfig()['Tinebase']['broadcasthub']['value']
             ])
         ]);
     }
