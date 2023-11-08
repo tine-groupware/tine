@@ -147,13 +147,13 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      *
      * @param Tinebase_DateTime|null $deleteBeforeDate
      * @return int
-     * @throws Tinebase_Exception_AccessDenied
+     * @throws Exception
      */
     public function clean(?Tinebase_DateTime $deleteBeforeDate = null): int
     {
         $filter = new Tinebase_Model_Filter_FilterGroup();
         $pagination = new Tinebase_Model_Pagination();
-        $pagination->limit = 10000;
+        $pagination->limit = 1000;
         $pagination->sort = 'id';
 
         $totalCount = 0;
@@ -161,14 +161,15 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         while ( ($recordSet = $this->_backend->search($filter, $pagination)) && $recordSet->count() > 0 ) {
             $filter = new Tinebase_Model_Filter_FilterGroup();
             $pagination->start += $pagination->limit;
-            $models = array();
+            $models = [];
+            $toDeleteObsolete = [];
+            $deleteCount = 0;
 
             /** @var Tinebase_Model_ModificationLog $modlog */
             foreach ($recordSet as $modlog) {
 
                 if ($deleteBeforeDate && $deleteBeforeDate->isLater($modlog->modification_time)) {
-                    $this->_backend->delete($modlog->getId());
-                    $totalCount++;
+                    $toDeleteObsolete[] = $modlog->getId();
                     continue;
                 }
 
@@ -179,12 +180,23 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 }
             }
 
-            $totalCount += $this->_deleteModlogsByModel($models);
+            if (count($toDeleteObsolete) > 0) {
+                $deleteCount += $this->_backend->delete($toDeleteObsolete);
+            }
+            if (count($models) > 0) {
+                $deleteCount += $this->_deleteModlogsByModel($models);
+            }
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Deleted ' . $deleteCount . '/' . $recordSet->count() . ' modlogs records');
+
+            $totalCount += $deleteCount;
         }
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' deleted ' . $totalCount . ' modlogs records');
+                . ' Deleted ' . $totalCount . ' modlogs records');
 
         return $totalCount;
     }

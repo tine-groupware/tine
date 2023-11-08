@@ -530,7 +530,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $date = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
         $tables = isset($args['tables']) ? (array) $args['tables'] : [];
 
-        $result = Tinebase_Controller::getInstance()->removeObsoleteData($date, $tables);
+        echo "\nPurging obsolete data from tables...";
+        $result = Tinebase_Controller::getInstance()->removeObsoleteData($date, $tables, false);
 
         if (empty($tables)) {
             // TODO move to \Tinebase_Controller::removeObsoleteData
