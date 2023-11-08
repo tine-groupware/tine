@@ -2090,19 +2090,17 @@ class Tinebase_Controller extends Tinebase_Controller_Event
      *
      * @param Tinebase_DateTime|null $beforeDate
      * @param array $tables
+     * @param bool $doEverything
      * @return bool
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function removeObsoleteData(?Tinebase_DateTime $beforeDate = null, array $tables = []): bool
+    public function removeObsoleteData(?Tinebase_DateTime $beforeDate = null, array $tables = [], bool $doEverything = true): bool
     {
-        $doEverything = false;
-
         if (empty($tables)) {
             if (Tinebase_Core::isLogLevel(Tinebase_Log::INFO))
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' No tables given. Purging records from all tables.');
             $tables = $this->_getAllApplicationTables();
-            $doEverything = true;
         }
         $orderedTables = $this->_orderTables($tables);
         if (! $beforeDate) {
