@@ -294,13 +294,30 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                     Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' found url: ' . $match[1]);
 
-                if (!in_array(mb_strtolower(pathinfo($match[1], PATHINFO_EXTENSION)), array('jpg', 'jpeg', 'png', 'gif'))) {
+                $imgFormats = ['jpg', 'jpeg', 'png', 'gif', 'tif', 'tiff'];
+                if (!in_array(mb_strtolower(pathinfo($match[1], PATHINFO_EXTENSION)), $imgFormats)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
                         Tinebase_Core::getLogger()->info(__METHOD__ . ' ' . __LINE__ .
                             ' unsupported file extension: ' . $match[1]);
                     continue;
                 }
                 if (preg_match('#Relationship Id="' . $match[2] . '"[^>]+Target="(media/[^"]+)"#', $relData, $relMatch)) {
+                    // if file was not found try all (other) supported file extensions
+                    // i.e. file might be defined as jpg but a tiff with this name is in the filemanager
+                    if (!is_file($match[1])) {
+                        $pInfo = pathinfo($match[1]);
+                        $ext = strtolower($pInfo[PATHINFO_EXTENSION]);
+                        $path = $pInfo[PATHINFO_DIRNAME] . '/' . $pInfo[PATHINFO_FILENAME] . '.';
+                        foreach ($imgFormats as $format) {
+                            if ($ext === $format) {
+                                continue;
+                            }
+                            if (is_file($path . $format)) {
+                                $match[1] = $path . $format;
+                                break;
+                            }
+                        }
+                    }
                     $fileContent = @file_get_contents($match[1]);
                     if (!empty($fileContent)) {
                         $this->zipClass->deleteName('word/' . $relMatch[1]);
