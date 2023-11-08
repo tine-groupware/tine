@@ -9,7 +9,7 @@
                  src="images/icon-set/icon_arrow_left.svg">
           </div>
           <div class="col-5 col-md-7 col-sm-5 p-0 d-flex align-items-center">
-            <BFormInput v-model="selectedDate" type="date" class="text-center"/>
+            <CustomDatePicker v-model="selectedDate" :locale="currentConfig?.locale"/>
           </div>
           <div class="col-1 col-md-1 d-flex justify-content-start align-items-center p-0 d-inline-block">
             <img @click="selectNextDay"
@@ -53,8 +53,12 @@ import {computed, onMounted, reactive, ref, watch, shallowRef, inject} from "vue
 import {useElementSize} from "@vueuse/core"
 
 import {checkInside} from "./utils";
-import {useReservationOperations} from "./composables"
+import {useReservationOperations, useTineJsonRPC} from "./composables"
 import {translationHelper} from "./keys";
+
+import {init} from "./broadcastClient_spa";
+
+import CustomDatePicker from "./CustomDatePicker.vue";
 
 const formatMessage = inject(translationHelper)
 
@@ -112,7 +116,8 @@ const {
   resourceNameToObjMap,
   reserveTable,
   fetchReservations,
-  deleteReservation
+  deleteReservation,
+  jsonRPC
 } = useReservationOperations(currentConfig, selectedDate, currentFloor)
 
 watch(reservationData, (nv) => {
@@ -134,16 +139,19 @@ const reservableCoordinateDict = computed(() => {
     let [l_x, l_y, u_x, u_y] = [Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, 0, 0]
     for (let i = 0; i < resources.length; i++) {
       const t = resources[i]
-      retDict[t.resourceName] = t.polygon[0].map(point => {
-        let [x, y] = point
-        x = x * scalingFactor
-        y = y * scalingFactor
-        l_x = l_x >= x ? x : l_x
-        l_y = l_y >= y ? y : l_y
-        u_x = u_x <= x ? x : u_x
-        u_y = u_y <= y ? y : u_y
-        return {x, y}
-      })
+      retDict[t.resourceName] = {
+        pointMap: t.polygon[0].map(point => {
+          let [x, y] = point
+          x = x * scalingFactor
+          y = y * scalingFactor
+          l_x = l_x >= x ? x : l_x
+          l_y = l_y >= y ? y : l_y
+          u_x = u_x <= x ? x : u_x
+          u_y = u_y <= y ? y : u_y
+          return {x, y}
+        }),
+        displayName: t.resourceDisplayName
+      }
     }
     retDict['meta'] = [{x: l_x, y: l_y}, {x: l_x, y: u_y}, {x: u_x, y: u_y}, {x: u_x, y: l_y}]
   }
@@ -152,7 +160,7 @@ const reservableCoordinateDict = computed(() => {
 
 const checkIfCoordinateInsideReservables = (x, y) => {
   if (!checkInside(reservableCoordinateDict.value['meta'], {x, y})) return
-  for (const [id, pointMap] of Object.entries(reservableCoordinateDict.value)) {
+  for (const [id, {pointMap}] of Object.entries(reservableCoordinateDict.value)) {
     if (id === "meta") continue
     if (checkInside(pointMap, {x, y})) {
       return id
@@ -172,9 +180,9 @@ const modalProps = computed(() => {
     return {modalTitle, modalContent, modalAction}
   } else {
     if (!modalData.reservationEvent) {
-      modalTitle = formatMessage('Reserve Resource: {name}', {name: modalData.reservableObj.name})
-      modalContent = formatMessage("Reserve the resource {name} on floor {floorName} for {date} ?", {
-        name: modalData.reservableObj.name,
+      modalTitle = formatMessage('Reserve Resource: {name}', {name: modalData.reservableObj.displayName})
+      modalContent = formatMessage("Do you want to reserve the resource {name} on floor {floorName} for {date} ?", {
+        name: modalData.reservableObj.displayName,
         floorName: currentFloor.value.name,
         date: selectedDate.value
       })
@@ -182,15 +190,15 @@ const modalProps = computed(() => {
         await reserveTable(modalData.reservableObj.name)
       }
     } else if (modalData.reservationEvent.deletable) {
-      modalTitle = formatMessage("Resource {name} reserved by you", {name: modalData.reservableObj.name})
+      modalTitle = formatMessage("Resource: {name} reserved by you", {name: modalData.reservableObj.displayName})
       modalContent = formatMessage(`Do you want to delete your reservation ?`)
       modalAction = async () => {
         await deleteReservation(modalData.reservableObj.name)
       }
     } else {
-      modalTitle = formatMessage(`Resource: {name} already reserved`, {name: modalData.reservableObj.name})
-      modalContent = formatMessage(`The resource {name} on floor {floorName} is reserved for selected date: {date} by {name1}`, {
-        name: modalData.reservableObj.name,
+      modalTitle = formatMessage(`Resource: {name} already reserved`, {name: modalData.reservableObj.displayName})
+      modalContent = formatMessage(`The resource {name} on floor {floorName} is reserved for selected date: {date} by {name1}.`, {
+        name: modalData.reservableObj.displayName,
         floorName: currentFloor.value.name,
         date: selectedDate.value,
         name1: modalData.reservationEvent.reservedBy.n_fn
@@ -219,7 +227,9 @@ const checkIfDeskClicked = async (e) => {
   const {offsetX: x, offsetY: y} = e
   const resourceName = checkIfCoordinateInsideReservables(x, y)
   if (resourceName) {
-    modalData.reservableObj = resourceNameToObjMap.value[resourceName].model
+    const t = resourceNameToObjMap.value[resourceName]
+    modalData.reservableObj = t.model
+    modalData.reservableObj.displayName = t.config.resourceDisplayName
     modalData.reservationEvent = reservationData[resourceName]
     console.log(modalData)
     modalShowing.value = true
@@ -227,11 +237,14 @@ const checkIfDeskClicked = async (e) => {
 }
 
 const overlayCanvas = ref(null)
-const debouncedDraw = _.debounce(() => drawTables(), 50)
 const drawTables = function () {
   const getColor = function (resId) {
-    if (!reservationData[resId]) return TABLE_COLOR_RESERVABLE
-    else if (!reservationData[resId].deletable) return TABLE_COLOR_RESERVED
+    if (!reservationData[resId]){
+      return resourceNameToObjMap[resId]?.model.color || TABLE_COLOR_RESERVABLE
+    }
+    else if (!reservationData[resId].deletable) {
+      return reservationData[resId].event.container_id.color || TABLE_COLOR_RESERVED
+    }
     else return TABLE_COLOR_DELETABLE
   }
 
@@ -239,7 +252,14 @@ const drawTables = function () {
     const r = reservationData[resName]
     if (!r) return null
     else {
-      return r.reservedBy.n_given ? r.reservedBy.n_given : r.reservedBy.n_family
+      const {n_given: first, n_family: last} = r.reservedBy
+      if (first && last){
+        return `${first} ${last[0]}.`
+      } else if (first){
+        return first
+      } else {
+        return last
+      }
     }
   }
   console.info("Drawing Tables")
@@ -249,23 +269,61 @@ const drawTables = function () {
   }
   const ctx = overlayCanvas.value.getContext("2d")
   ctx.clearRect(0, 0, overlayCanvas.value.width, overlayCanvas.value.height)
-  for (const [resourceName, pointMap] of Object.entries(reservableCoordinateDict.value)) {
+  for (const [resourceName, {pointMap, displayName}] of Object.entries(reservableCoordinateDict.value)) {
     if (resourceName === "meta") continue
+    const start = pointMap[0]
+    const second = pointMap[1]
+    // drawing background
+    // ctx.fillStyle = TABLE_COLOR_RESERVABLE
+    // ctx.beginPath()
+    // ctx.moveTo(start.x, start.y)
+    // pointMap.slice(1,).forEach(point => {
+    //   ctx.lineTo(point.x, point.y)
+    // })
+    // ctx.fill()
+    // drawing the left bar
     ctx.fillStyle = getColor(resourceName)
     ctx.beginPath()
-    const start = pointMap[0]
     ctx.moveTo(start.x, start.y)
-    pointMap.slice(1,).forEach(point => {
-      ctx.lineTo(point.x, point.y)
-    })
+    ctx.lineTo(second.x, second.y)
+    ctx.lineTo(second.x + 10, second.y)
+    ctx.lineTo(start.x + 10, start.y)
     ctx.fill()
+    // Writing resource display name on canvas
+    const posX = start.x + 15
+    const posY = start.y + 14
+    ctx.font = 'bold 14px Arial'
+    ctx.fillStyle = 'white'
+    ctx.fillText(displayName, posX, posY)
+    // Writes reserver name on canvas if resource is reserved
     const t = getReserverName(resourceName)
     if (t) {
-      const secondPt = pointMap[1]
-      const midY = Math.ceil((secondPt.y + start.y) / 2)
       ctx.font = '13px Arial'
-      ctx.fillStyle = "black"
-      ctx.fillText(t, start.x + 10, midY)
+      ctx.fillStyle = "white"
+      ctx.fillText(t, second.x + 15, second.y-10)
+    }
+  }
+}
+const debouncedDraw = _.debounce(drawTables, 100)
+
+const initWS = async () => {
+  const bhConfig = currentConfig.value?.broadcasthubConfig
+  const relevantContainerIds = currentConfig.value.resources.map(element => element.container_id)
+  const debouncedReservationFetch = _.debounce(_.bind(fetchReservations, this, false), 1000)
+  const cb = (data) => {
+    console.log(data)
+    const topicPrefix = String(data.model).replace('_Model_', '.');
+    const containerId = data.containerId
+    if (topicPrefix === 'Calendar.Event' && relevantContainerIds.includes(containerId)){
+      debouncedReservationFetch()
+    }
+  }
+  if (bhConfig && bhConfig?.active){
+    const wsUrl = bhConfig.url
+    try{
+      await init(wsUrl, jsonRPC, cb)
+    } catch(e){
+      window.location.reload()
     }
   }
 }
@@ -273,15 +331,21 @@ const drawTables = function () {
 onMounted(() => {
   let waitIRef = null
   waitIRef = setInterval(() => {
-    if (window.initialData && !currentConfig.value) {
+    if (window.initialData) {
       currentConfig.value = window.initialData
       currentFloor.value = currentConfig.value.floorplans[0]
       document.getElementsByClassName("tine-viewport-waitcycle")[0].style.display = "none";
+      document.getElementsByClassName("tine-viewport-poweredby")[0].style.position = "fixed";
+      const last = document.URL.split('/').pop()
+      if(last.includes('-') && new Date(last).toString() !== "Invalid Date") selectedDate.value = last
       clearInterval(waitIRef)
       console.info("CurrentConfig:", currentConfig.value)
       fetchReservations()
+      initWS()
+    } else {
+      window.location.reload()
     }
-  }, 0)
+  }, 5)
 })
 </script>
 
