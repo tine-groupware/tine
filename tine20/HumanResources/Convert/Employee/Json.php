@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -25,8 +25,7 @@ class HumanResources_Convert_Employee_Json extends Tinebase_Convert_Json
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'contracts' => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'is_editable' => [],
-                        HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME => [],
+                        HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME => [],
                     ],
                 ],
             ],
