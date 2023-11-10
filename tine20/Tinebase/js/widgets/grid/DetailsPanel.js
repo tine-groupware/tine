@@ -113,7 +113,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
 
             if (this.recordClass) {
                 this.singleRecordPanel = new Tine.widgets.display.RecordDisplayPanel({
-                    recordClass : this.recordClass
+                    recordClass : this.recordClass,
                 });
                 this.defaultHeight = Math.max(this.defaultHeight, this.singleRecordPanel.defaultHeight);
             } else {
@@ -139,7 +139,21 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      * inits this details panel
      */
     initComponent: function() {
-
+        this.tbar = [
+            new Ext.Action({
+                text: i18n._('Back'),
+                iconCls: 'action_previous',
+                scope: this,
+                handler: this.onClose
+            }),
+            '->',
+            new Ext.Action({
+                text: i18n._('Edit'),
+                iconCls: 'action_edit',
+                scope: this,
+                handler: this.onEdit
+            })
+        ];
         this.items = [
             this.getDefaultInfosPanel(),
             this.getSingleRecordPanel(),
@@ -185,6 +199,18 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         Tine.widgets.grid.DetailsPanel.superclass.initComponent.apply(this, arguments);
     },
 
+    onClose(e) {
+        if (!this.gridpanel) return;
+        this.gridpanel.setFullScreen(false);
+    },
+
+    onEdit(e) {
+        if (!this.gridpanel) return;
+        this.gridpanel.onEditInNewWindow.call(this.gridpanel, {
+            actionType: 'edit'
+        });
+    },
+    
     onDestroy: function() {
         _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
         return this.supr().onDestroy.call(this);

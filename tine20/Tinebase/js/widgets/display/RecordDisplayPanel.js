@@ -66,9 +66,9 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             items: [{
                 layout: 'hbox',
                 flex: 0,
-                height: 16,
+                height: 40,
                 border: false,
-                style: 'padding-left: 5px; padding-right: 5px',
+                style: 'padding: 5px;',
                 layoutConfig: {
                     align:'stretch'
                 },
@@ -96,7 +96,7 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
             flex: 0.5,
             xtype: 'ux.displayfield',
             name: this.recordClass.getMeta('titleProperty'),
-            style: 'padding-top: 2px',
+            style: 'padding: 3px',
             cls: 'x-ux-display-header',
             htmlEncode: false,
             renderer: this.titleRenderer.createDelegate(this)
