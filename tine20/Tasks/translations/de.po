@@ -247,7 +247,7 @@ msgstr "%ss persönliche Aufgaben"
 
 #: Model/Task.php:37
 msgid "GENDER_Task"
-msgstr ""
+msgstr "female"
 
 #: Model/Task.php:87 Model/Task.php:308
 msgid "Due"

@@ -577,7 +577,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         if (this.isMetadataModelFor) {
             var recordData = this.getRecordDefaults();
-            recordData[this.isMetadataModelFor] = recordToAdd.data;
+            recordData[this.isMetadataModelFor] = recordToAdd.getData();
             var record =  Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
 
             // check if already in
@@ -588,15 +588,19 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 }
             }, this);
             if (existingRecord === -1) {
-                this.store.add([record]);
-                this.fireEvent('add', this, [record]);
+                if (this.fireEvent('beforeaddrecord', record, this) !== false) {
+                    this.store.add([record]);
+                    this.fireEvent('add', this, [record]);
+                }
             }
         } else {
             var record = new this.recordClass(Ext.applyIf(recordToAdd.data, this.getRecordDefaults()), recordToAdd.id);
             // check if already in
             if (! this.store.getById(record.id)) {
-                this.store.add([record]);
-                this.fireEvent('add', this, [record]);
+                if (this.fireEvent('beforeaddrecord', record, this) !== false) {
+                    this.store.add([record]);
+                    this.fireEvent('add', this, [record]);
+                }
             }
         }
 
@@ -745,9 +749,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             const recordClass = this.recordClass.getField(this.isMetadataModelFor).getRecordClass();
             editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
             record = Tine.Tinebase.data.Record.setFromJson(record.get(this.isMetadataModelFor), recordClass);
-            editDialogConfig.mode = 'remote';
+            editDialogConfig.mode = record.phantom ? 'local' : 'remote';
             updateFn = (updatedRecord) => {
-                me.store.getAt(row).set(this.isMetadataModelFor, updatedRecord.data ? updatedRecord.data : updatedRecord);
+                me.store.getAt(row).set(this.isMetadataModelFor, updatedRecord.getData ? updatedRecord.getData() : updatedRecord);
                 me.store.getAt(row).commit();
             }
         }

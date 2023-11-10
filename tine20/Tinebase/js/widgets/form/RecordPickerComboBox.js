@@ -145,7 +145,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 preserveJsonProps: 'original_id',
                 qtip: window.i18n._('Edit copy'),
                 editDialogMode: 'local'
-            }))
+            }));
+            this.useEditPlugin = false;
         }
 
         this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
@@ -161,7 +162,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.sortBy = this.sortBy || this.recordClass.getModelConfiguration()?.defaultSortInfo?.field;
         this.pageSize = parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) || this.pageSize;
 
-        this.store = new Tine.Tinebase.data.RecordStore({
+        this.store = this.store || new Tine.Tinebase.data.RecordStore({
             remoteSort: true,
             readOnly: true,
             proxy: this.recordProxy || undefined,

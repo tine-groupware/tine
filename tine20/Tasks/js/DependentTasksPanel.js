@@ -9,6 +9,8 @@
 
 /**
  * simple task panel to be used in editDialogs like projects, crm, ...
+ *
+ * @TODO support default data like container_id
  */
 export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     recordClass: 'Tasks.Task',
@@ -19,6 +21,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     allowCreateNew: true,
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Tasks');
+        this.editDialogConfig.dependendTaskPanel = this;
         this.columns = [
             {
                 id: 'summary',
