@@ -102,7 +102,7 @@ class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Re
         // if we see a contract with this working time scheme, we do see the working time scheme
         if (0 < HumanResources_Controller_Contract::getInstance()->searchCount(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Contract::class, [
-                    ['field' => HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME, 'operator' => 'equals', 'value' => $_record->getId()],
+                    ['field' => HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME, 'operator' => 'equals', 'value' => $_record->getId()],
                 ]))) {
             return true;
         }
@@ -163,7 +163,7 @@ class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Re
         // add or where id in (?) <- distinct wts ids from contracts that we see
         $wtsIds = array_keys(HumanResources_Controller_Contract::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Contract::class),
-            /*Pagi*/null, /*Rels*/ false, [HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME]
+            /*Pagi*/null, /*Rels*/ false, [HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME]
         ));
         $orWrapper->addFilter($_filter->createFilter(['field' => 'id', 'operator' => 'in', 'value' => $wtsIds]));
 

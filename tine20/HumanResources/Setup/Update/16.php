@@ -18,8 +18,15 @@ class HumanResources_Setup_Update_16 extends Setup_Update_Abstract
 {
     const RELEASE016_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
+        self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE016_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
+            ],
+        ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE016_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
@@ -61,5 +68,42 @@ class HumanResources_Setup_Update_16 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '16.1', self::RELEASE016_UPDATE001);
+    }
+
+    public function update002()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_Contract::class,
+        ]);
+
+        $this->getDb()->update(SQL_TABLE_PREFIX . HumanResources_Model_Contract::TABLE_NAME, [
+            HumanResources_Model_Contract::FLD_VACATION_ENTITLEMENT_BASE => new Zend_Db_Expr($this->getDb()->quoteIdentifier('vacation_days'))
+        ]);
+
+        $contractCtrl = HumanResources_Controller_Contract::getInstance();
+        $raii = $contractCtrl->assertPublicUsage();
+        $contracts = $contractCtrl->getAll();
+        (new Tinebase_Record_Expander(HumanResources_Model_Contract::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME,
+            ],
+        ]))->expand($contracts);
+        foreach ($contracts as $contract) {
+            $days = 0;
+            foreach ($contract->{HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME}?->{HumanResources_Model_WorkingTimeScheme::FLDS_JSON}[0]['days'] ?? [] as $day) {
+                if ($day > 0) ++$days;
+            }
+            if ($days > 0 && $days !== 5) {
+                $contract->{HumanResources_Model_Contract::FLD_VACATION_ENTITLEMENT_DAYS} = $days;
+                $this->getDb()->update(SQL_TABLE_PREFIX . HumanResources_Model_Contract::TABLE_NAME, [
+                    HumanResources_Model_Contract::FLD_VACATION_ENTITLEMENT_DAYS => $days,
+                ], $this->getDb()->quoteInto('WHERE id = ?', $contract->getId()));
+            }
+        }
+
+        unset($raii);
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '16.2', self::RELEASE016_UPDATE002);
     }
 }
