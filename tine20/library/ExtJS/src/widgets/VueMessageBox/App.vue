@@ -21,11 +21,11 @@
             <div class="pb-1 mb-1">
               <span v-html="props.opt.msg"></span>
             </div>
-            <div class="pb-1 mb-1 ext-mb-textarea" v-if="textAreaElVisibllity">
-              <BFormTextarea v-model="textElValue" :rows="textAreaHeight"/>
+            <div class="pb-1 mb-1 ext-mb-textarea" v-if="textAreaElVisiblity">
+              <BFormTextarea v-model="textElValue" :rows="textAreaHeight" ref="textAreaField"/>
             </div>
             <div class="pb-1 mb-1" v-if="textBoxElVisibility">
-              <BFormInput v-model="textElValue"/>
+              <BFormInput v-model="textElValue" ref="inputField"/>
             </div>
             <div v-if="progressBarVisibility">
               <BProgress :max="1" height="2em">
@@ -55,7 +55,7 @@
 // TODO: change the progressBar according to `props.opt.waitConfig` if available
 // NOTE: Ext.MessageBox.wait is currently not used with any waitConfig, so
 // the implementation is not given top priority
-import {computed, inject, onBeforeMount, ref, watch,} from "vue"
+import {computed, inject, onBeforeMount, ref, watch, onMounted, onUpdated} from "vue"
 
 import getIconPath from "./helpers";
 
@@ -63,7 +63,9 @@ import {SymbolKeys} from ".";
 
 const ExtEventBus = inject(SymbolKeys.ExtEventBusInjectKey);
 const textBoxElVisibility = ref(false);
-const textAreaElVisibllity = ref(false);
+const inputField = ref();
+const textAreaElVisiblity = ref(false);
+const textAreaField = ref();
 const progressBarVisibility = ref(false);
 const textAreaHeight = ref(0);
 const textElValue = ref("");
@@ -77,19 +79,23 @@ const init = async function () {
   if (props.opt.prompt) {
     if (props.opt.multiline) {
       textBoxElVisibility.value = false;
-      textAreaElVisibllity.value = true;
+      textAreaElVisiblity.value = true;
       textAreaHeight.value = (typeof props.opt.multiline === "number") ? props.opt.multiline / 25 : props.opt.defaultTextAreaHeight;
     } else {
       textBoxElVisibility.value = true;
-      textAreaElVisibllity.value = false;
+      textAreaElVisiblity.value = false;
     }
   } else {
     textBoxElVisibility.value = false;
-    textAreaElVisibllity.value = false;
+    textAreaElVisiblity.value = false;
   }
   textElValue.value = props.opt.value;
   progressBarVisibility.value = props.opt.progress === true || props.opt.wait === true;
 
+  _.delay(() => {
+    if(textAreaElVisiblity.value) textAreaField.value.focus()
+    if(textBoxElVisibility.value) inputField.value.focus()
+  },20)
 }
 
 const props = defineProps({
