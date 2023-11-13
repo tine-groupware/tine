@@ -122,14 +122,14 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if (Tinebase_Session::sessionExists()) {
             try {
                 Tinebase_Core::startCoreSession();
-            } catch (Zend_Session_Exception $zse) {
+            } catch (Tinebase_Exception_NotFound | Zend_Session_Exception $e) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .' Starting session failed: ' .
+                    get_class($e) . ' ' . $e->getMessage());
                 $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
-                
-                // expire session cookie for client
                 Tinebase_Session::expireSessionCookie();
             }
         }
-        
+
         if ($exception === false) {
             try {
                 Tinebase_Core::initFramework();
