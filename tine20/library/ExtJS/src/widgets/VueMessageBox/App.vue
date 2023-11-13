@@ -9,7 +9,7 @@
           :no-fade="true"
           :lazy="true"
           :noCloseOnBackdrop="true"
-          @close="closeBox"
+          @close="closeBox" :style="{'z-index': otherConfigs.zIndex}"
   >
     <template #default>
       <div class="container" :style="`--skin-color: ${opt.skinColor}`">
