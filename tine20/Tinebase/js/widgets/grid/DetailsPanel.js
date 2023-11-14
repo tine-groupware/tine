@@ -309,11 +309,15 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
             this.showDefault(this.getDefaultInfosPanel().body);
             this.record = null;
         } else if (count === 1) {
-            this.layout.setActiveItem(this.getSingleRecordPanel());
+            if(this.layout && Ext.isFunction(this.layout.setActiveItem)) {
+                this.layout.setActiveItem(this.getSingleRecordPanel());
+            }
             this.record = sm.getSelected();
             this.updateDetails(this.record, this.getSingleRecordPanel().body);
         } else if (count > 1) {
-            this.layout.setActiveItem(this.getMultiRecordsPanel());
+            if(this.layout && Ext.isFunction(this.layout.setActiveItem)) {
+                this.layout.setActiveItem(this.getMultiRecordsPanel());
+            }
             this.record = sm.getSelected();
             this.showMulti(sm, this.getMultiRecordsPanel().body);
         }
