@@ -148,6 +148,7 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $registryData = array(
             'defaultContainer'          => $defaultCalendarArray,
+            'floorplansEnabled'         => count(Calendar_Config::getInstance()->{Calendar_Config::FLOORPLANS}) > 0,
         );
         $registryData = array_merge($registryData, $this->_getImportDefinitionRegistryData());
         

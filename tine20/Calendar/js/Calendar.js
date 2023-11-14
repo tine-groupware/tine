@@ -58,3 +58,4 @@ require('./ImportDialog');
 require('./CalendarPanelSplitPlugin');
 require('./RruleFilter');
 require('./EventFinderOptionsDialog');
+require('./floorplan/src/openViewBtn');
