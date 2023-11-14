@@ -87,7 +87,7 @@ class HumanResources_Setup_Update_16 extends Setup_Update_Abstract
         $contracts = $contractCtrl->getAll();
         (new Tinebase_Record_Expander(HumanResources_Model_Contract::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME,
+                HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME => [],
             ],
         ]))->expand($contracts);
         foreach ($contracts as $contract) {
