@@ -595,6 +595,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
                 if (this.detailsPanelRegion === 'south' && !this.layout.south.panel.isVisible()) {
                     this.layout.south.panel.setVisible(true);
+                    this.action_layout.setHidden(false);
                     this.layout.south.items.add(this.detailsPanel);
                 }
                 
@@ -607,6 +608,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
                 if (this.detailsPanelRegion === 'east' && !this.layout.east.panel.isVisible()) {
                     this.layout.east.panel.setVisible(true);
+                    this.action_layout.setHidden(false);
                     this.layout.east.items.add(this.detailsPanel);
                 }                
                 if (!this.layout.east.isCollapsed) {
