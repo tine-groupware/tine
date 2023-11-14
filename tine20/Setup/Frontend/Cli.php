@@ -741,7 +741,10 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo "Currently installed applications:\n";
         $applications->sort('name');
         foreach ($applications as $application) {
-            echo "* " . $application->name . " (Version: " . $application->version . ") - " . $application->status . "\n";
+            $maintenance = Tinebase_Core::getApplicationInstance(
+                $application->name, '', true)->isInMaintenanceMode();
+            echo "* " . $application->name . " (Version: " . $application->version . ") - " . $application->status
+                . ' (maintenance: ' . ($maintenance ? 'on' : 'off') . ")\n";
         }
         
         return 0;
