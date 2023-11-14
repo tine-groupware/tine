@@ -66,6 +66,7 @@ class Sales_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                         array('field' => 'budget', 'operator' => 'equals', 'value' => 0),
                         array('field' => 'budget', 'operator' => 'equals', 'value' => NULL),
                     )),
+                    array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
                 )),
             ));
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoiceId)));
