@@ -167,14 +167,15 @@ class Tinebase_FileSystemTest extends TestCase
         
         $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
             Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest',
-            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER => League\Flysystem\Local\LocalFilesystemAdapter::class,
-            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => [
-                Tinebase_Config::getInstance()->filesdir . '/flysystem/',
-            ],
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG_CLASS => Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_Local([
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => Tinebase_Config::getInstance()->filesdir . '/flysystem/',
+            ]),
+            Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_originalTestUser->getId(),
         ]));
 
         $node = $this->_controller->mkdir($this->_basePath . '/flysystem');
-        $node->flysystem = $flySystem;
+        $node->flysystem = $flySystem->getId();
         $node->flypath = '/';
 
         $node = $this->_controller->update($node);
@@ -220,6 +221,57 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertSame(0, $this->_controller->clearDeletedFilesFromDatabase());
     }
 
+    public function testFlySystemSyncOtherUser()
+    {
+        if (is_dir(Tinebase_Config::getInstance()->filesdir . '/flysystem')) {
+            exec('rm -rf ' . Tinebase_Config::getInstance()->filesdir . '/flysystem');
+        }
+
+        $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
+            Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest',
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG_CLASS => Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_Local([
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => Tinebase_Config::getInstance()->filesdir . '/flysystem/',
+            ]),
+            Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_personas['sclever']->getId(),
+        ]));
+
+        $this->_basePath   = '/' . Tinebase_Application::getInstance()->getApplicationByName(Filemanager_Config::APP_NAME)->getId() . '/folders/' . Tinebase_Model_Container::TYPE_SHARED;
+
+        $grants = Tinebase_Model_Grants::getDefaultGrants();
+        $grants = $grants->filter(fn($grant) => $grant->account_type === 'user');
+        $node = $this->_controller->createAclNode($this->_basePath . '/flysystem', $grants);
+        $node->flysystem = $flySystem;
+        $node->flypath = '/';
+        $node = $this->_controller->update($node);
+        $this->assertSame($flySystem->getId(), $node->flysystem);
+        $this->assertSame('/', $node->flypath);
+
+        $path = Tinebase_Config::getInstance()->filesdir . '/flysystem/';
+        mkdir($path);
+        mkdir($path . 'a');
+        file_put_contents($path .'a/b', 'unittest');
+
+        Tinebase_Core::setUser($this->_personas['jmcblack']);
+
+        $this->_controller->clearStatCache();
+        $this->_controller->syncFlySystem($node);
+        $this->_controller->clearStatCache();
+
+        $node = $this->_controller->stat($this->_basePath . '/flysystem/a');
+        $this->assertSame($flySystem->getId(), $node->flysystem);
+        $this->assertSame('/a', $node->flypath);
+        $this->assertSame($this->_personas['sclever']->getId(), $node->created_by);
+        $this->assertNull($node->last_modified_by);
+
+        $node = $this->_controller->stat($this->_basePath . '/flysystem/a/b');
+        $this->assertSame($flySystem->getId(), $node->flysystem);
+        $this->assertSame('/a/b', $node->flypath);
+        $this->assertSame('unittest', file_get_contents('tine20://' . $this->_basePath . '/flysystem/a/b'));
+        $this->assertSame($this->_personas['sclever']->getId(), $node->created_by);
+        $this->assertSame($this->_personas['sclever']->getId(), $node->last_modified_by);
+    }
+
     public function testFlySystemSync()
     {
         if (is_dir(Tinebase_Config::getInstance()->filesdir . '/flysystem')) {
@@ -228,10 +280,11 @@ class Tinebase_FileSystemTest extends TestCase
 
         $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
             Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest',
-            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER => League\Flysystem\Local\LocalFilesystemAdapter::class,
-            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => [
-                Tinebase_Config::getInstance()->filesdir . '/flysystem/',
-            ],
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG_CLASS => Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_Local([
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => Tinebase_Config::getInstance()->filesdir . '/flysystem/',
+            ]),
+            Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_personas['sclever']->getId(),
         ]));
 
         $node = $this->_controller->mkdir($this->_basePath . '/flysystem');
@@ -278,20 +331,28 @@ class Tinebase_FileSystemTest extends TestCase
         $node = $this->_controller->stat($this->_basePath . '/flysystem/z');
         $this->assertSame($flySystem->getId(), $node->flysystem);
         $this->assertSame('/z', $node->flypath);
+        $this->assertNull($node->last_modified_by);
+        $this->assertSame($this->_personas['sclever']->getId(), $node->created_by);
 
         $node = $this->_controller->stat($this->_basePath . '/flysystem/z/y');
         $this->assertSame($flySystem->getId(), $node->flysystem);
         $this->assertSame('/z/y', $node->flypath);
         $this->assertSame('unittest', file_get_contents('tine20://' . $this->_basePath . '/flysystem/z/y'));
+        $this->assertSame($this->_personas['sclever']->getId(), $node->created_by);
+        $this->assertSame($this->_personas['sclever']->getId(), $node->last_modified_by);
 
         $node = $this->_controller->stat($this->_basePath . '/flysystem/z/x');
         $this->assertSame($flySystem->getId(), $node->flysystem);
         $this->assertSame('/z/x', $node->flypath);
+        $this->assertSame($this->_personas['sclever']->getId(), $node->created_by);
+        $this->assertNull($node->last_modified_by);
 
         $node = $this->_controller->stat($this->_basePath . '/flysystem/z/x/w');
         $this->assertSame($flySystem->getId(), $node->flysystem);
         $this->assertSame('/z/x/w', $node->flypath);
         $this->assertSame('unittest', file_get_contents('tine20://' . $this->_basePath . '/flysystem/z/x/w'));
+        $this->assertSame($this->_personas['sclever']->getId(), $node->created_by);
+        $this->assertSame($this->_personas['sclever']->getId(), $node->last_modified_by);
     }
     
     /**

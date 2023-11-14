@@ -464,7 +464,15 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function getChild($parentId, $childName, $getDeleted = false, $throw = true)
     {
-        $parentId  = $parentId  instanceof Tinebase_Model_Tree_Node ? $parentId->getId() : $parentId;
+        $flySystem = null;
+        $flyNode = null;
+        if ($parentId instanceof Tinebase_Model_Tree_Node) {
+            if ($parentId->flysystem) {
+                $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($parentId->flysystem);
+                $flyNode = $parentId;
+            }
+            $parentId  = $parentId->getId();
+        }
         $childName = $childName instanceof Tinebase_Model_Tree_Node ? $childName->name   : $childName;
         
         $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
@@ -484,13 +492,26 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             $searchFilter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
                 Tinebase_Model_Filter_Bool::VALUE_NOTSET));
         }
+        /** @var Tinebase_Model_Tree_Node $child */
         $child = $this->search($searchFilter)->getFirstRecord();
         
         if (!$child) {
+            if ($flySystem && ($flySystem->fileExists($flyNode->flypath . '/' . $childName) ||
+                    $flySystem->directoryExists($flyNode->flypath . '/' . $childName))) {
+                Tinebase_FileSystem::getInstance()->syncFlySystem($flyNode, 0);
+                return $this->getChild($parentId, $childName, $getDeleted, $throw);
+            }
             if (true === $throw) {
                 throw new Tinebase_Exception_NotFound('child: ' . $childName . ' not found!');
             }
             return null;
+        } elseif ($flySystem) {
+            if ($child->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER ? !$flySystem->directoryExists($child->flypath) :  !$flySystem->fileExists($child->flypath)) {
+                Tinebase_FileSystem::getInstance()->syncFlySystem($child, 0);
+                return $this->getChild($parentId, $childName, $getDeleted, $throw);
+            } elseif ($child->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+                Tinebase_FileSystem::getInstance()->syncFlySystem($child, 0);
+            }
         }
         
         return $child;

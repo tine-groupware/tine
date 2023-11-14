@@ -8,13 +8,15 @@
  * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+/**
+ * @property Tinebase_FileSystem_FlySystem_AdapterConfig_Interface $adapter_config
+ */
 class Tinebase_Model_Tree_FlySystem extends Tinebase_Record_NewAbstract
 {
-    public const ADAPTER_LOCAL = 'League\Flysystem\Local\LocalFilesystemAdapter';
-
-    public const FLD_ADAPTER = 'adapter';
     public const FLD_ADAPTER_CONFIG = 'adapter_config';
+    public const FLD_ADAPTER_CONFIG_CLASS = 'adapter_config_class';
     public const FLD_NAME = 'name';
+    public const FLD_SYNC_ACCOUNT = 'sync_account';
 
     public const MODEL_NAME_PART = 'Tree_FlySystem';
     public const TABLE_NAME = 'tree_flysystem';
@@ -25,7 +27,7 @@ class Tinebase_Model_Tree_FlySystem extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 1,
+        self::VERSION       => 2,
         self::APP_NAME      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
 
@@ -40,24 +42,40 @@ class Tinebase_Model_Tree_FlySystem extends Tinebase_Record_NewAbstract
 
         self::FIELDS        => [
             self::FLD_NAME      => [
-                self::TYPE          => self::TYPE_STRING,
+                self::TYPE          => self::TYPE_MODEL,
                 self::LENGTH        => 255,
                 self::VALIDATORS    => [
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
-            self::FLD_ADAPTER   => [
-                self::TYPE          => self::TYPE_STRING,
-                self::LENGTH        => 255,
+            self::FLD_ADAPTER_CONFIG_CLASS => [
+                self::TYPE          => self::TYPE_MODEL,
+                self::CONFIG        => [
+                    self::AVAILABLE_MODELS  => [
+                        Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
+                        Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::class,
+                    ],
+                ],
                 self::VALIDATORS    => [
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
-                    ['InArray', [
-                        self::ADAPTER_LOCAL,
+                    [Zend_Validate_InArray::class, [
+                        Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
+                        Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::class,
                     ]],
                 ],
             ],
             self::FLD_ADAPTER_CONFIG => [
-                self::TYPE          => self::TYPE_JSON,
+                self::TYPE          => self::TYPE_DYNAMIC_RECORD,
+                self::VALIDATORS    => [
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
+                self::CONFIG        => [
+                    self::REF_MODEL_FIELD   => self::FLD_ADAPTER_CONFIG_CLASS,
+                    self::PERSISTENT        => true,
+                ],
+            ],
+            self::FLD_SYNC_ACCOUNT => [
+                self::TYPE              => self::TYPE_USER,
                 self::VALIDATORS    => [
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],

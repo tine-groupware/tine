@@ -8,6 +8,9 @@
  * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+/**
+ * @method static Tinebase_Controller_Tree_FlySystem getInstance()
+ */
 class Tinebase_Controller_Tree_FlySystem extends Tinebase_Controller_Record_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
@@ -33,13 +36,18 @@ class Tinebase_Controller_Tree_FlySystem extends Tinebase_Controller_Record_Abst
     {
         if (!isset(static::$flySystems[$id])) {
             $flyConf = static::getInstance()->get($id);
-            $adapter = $flyConf->{Tinebase_Model_Tree_FlySystem::FLD_ADAPTER};
-
             static::$flySystems[$id] = new \League\Flysystem\Filesystem(
-                new $adapter(... $flyConf->{Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG})
+                $flyConf->{Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG}->getFlySystemAdapter()
             );
+            static::$flyConfs[$id] = $flyConf;
         }
+        static::$currentFlyConf = static::$flyConfs[$id];
         return static::$flySystems[$id];
+    }
+
+    public static function getCurrentFlyConfiguration(): ?Tinebase_Model_Tree_FlySystem
+    {
+        return static::$currentFlyConf;
     }
 
     public static function getHashForPath(string $path, \League\Flysystem\Filesystem $flySystem): string
@@ -48,4 +56,6 @@ class Tinebase_Controller_Tree_FlySystem extends Tinebase_Controller_Record_Abst
     }
 
     protected static $flySystems = [];
+    protected static $flyConfs = [];
+    protected static ?Tinebase_Model_Tree_FlySystem $currentFlyConf = null;
 }

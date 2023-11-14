@@ -3507,7 +3507,14 @@ class Tinebase_FileSystem implements
 
     public function syncFlySystem(Tinebase_Model_Tree_Node $node, int $depth = -1): void
     {
+        static $recursionCache = [];
+        if (isset($recursionCache[$node->getId()])) return;
+        $recursionCache[$node->getId()] = true;
+
         $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($node->flysystem);
+        $flyConf = Tinebase_Controller_Tree_FlySystem::getCurrentFlyConfiguration();
+        $oldModLogCurrentAccount = Tinebase_Timemachine_ModificationLog::setCurrentAccountId($flyConf->{Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT});
+        $raii = new Tinebase_RAII(fn() => Tinebase_Timemachine_ModificationLog::setCurrentAccountId($oldModLogCurrentAccount));
 
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
             if (!$flySystem->directoryExists($node->flypath)) {
@@ -3631,6 +3638,8 @@ class Tinebase_FileSystem implements
             }
             $transaction->release();
         }
+
+        unset($raii);
     }
 
     protected function _syncFlySystemDeleteNode(Tinebase_Model_Tree_Node $node): void

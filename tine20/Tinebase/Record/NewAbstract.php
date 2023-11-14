@@ -158,7 +158,7 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      * @return Tinebase_NewModelConfiguration
      * @throws Tinebase_Exception_Record_DefinitionFailure
      */
-    public static function getConfiguration()
+    public static function getConfiguration(): ?Tinebase_NewModelConfiguration
     {
         if (null === static::$_configurationObject) {
             if (static::class !== (new ReflectionProperty(static::class, '_configurationObject'))->getDeclaringClass()

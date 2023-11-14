@@ -259,7 +259,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      *
      * @return Tinebase_ModelConfiguration|NULL
      */
-    public static function getConfiguration()
+    public static function getConfiguration(): ?Tinebase_ModelConfiguration
     {
         if (! isset (static::$_modelConfiguration)) {
             return NULL;
