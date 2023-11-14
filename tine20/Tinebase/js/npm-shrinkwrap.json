@@ -67,6 +67,7 @@
         "@babel/plugin-transform-runtime": "^7.19.6",
         "@babel/preset-env": "^7.20.2",
         "@babel/runtime": "^7.20.7",
+        "@xmldom/xmldom": "^0.8.10",
         "assets-webpack-plugin": "^7.1.1",
         "babel-loader": "^9.1.0",
         "brotli-webpack-plugin": "^1.1.0",
@@ -120,8 +121,7 @@
         "webpack-cli": "^5.0.1",
         "webpack-conditional-loader": "^1.0.12",
         "webpack-dev-server": "^4.11.1",
-        "webpack-merge": "^5.8.0",
-        "xmldom": "^0.6.0"
+        "webpack-merge": "^5.8.0"
       }
     },
     "node_modules/@ampproject/remapping": {
@@ -2946,6 +2946,15 @@
         "webpack-dev-server": {
           "optional": true
         }
+      }
+    },
+    "node_modules/@xmldom/xmldom": {
+      "version": "0.8.10",
+      "resolved": "https://registry.npmjs.org/@xmldom/xmldom/-/xmldom-0.8.10.tgz",
+      "integrity": "sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==",
+      "dev": true,
+      "engines": {
+        "node": ">=10.0.0"
       }
     },
     "node_modules/@xtuc/ieee754": {
@@ -16035,15 +16044,6 @@
         "node": ">=6.0"
       }
     },
-    "node_modules/xmldom": {
-      "version": "0.6.0",
-      "resolved": "https://registry.npmjs.org/xmldom/-/xmldom-0.6.0.tgz",
-      "integrity": "sha512-iAcin401y58LckRZ0TkI4k0VSM1Qg0KGSc3i8rU+xrxe19A/BN1zHyVSJY7uoutVlaTSzYyk/v5AmkewAP7jtg==",
-      "dev": true,
-      "engines": {
-        "node": ">=10.0.0"
-      }
-    },
     "node_modules/y18n": {
       "version": "5.0.8",
       "resolved": "https://registry.npmjs.org/y18n/-/y18n-5.0.8.tgz",
@@ -18309,6 +18309,12 @@
       "integrity": "sha512-0G7tNyS+yW8TdgHwZKlDWYXFA6OJQnoLCQvYKkQP0Q2X205PSQ6RNUj0M+1OB/9gRQaUZ/ccYfaxd0nhaWKfjw==",
       "dev": true,
       "requires": {}
+    },
+    "@xmldom/xmldom": {
+      "version": "0.8.10",
+      "resolved": "https://registry.npmjs.org/@xmldom/xmldom/-/xmldom-0.8.10.tgz",
+      "integrity": "sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==",
+      "dev": true
     },
     "@xtuc/ieee754": {
       "version": "1.2.0",
@@ -27906,12 +27912,6 @@
       "version": "12.0.0",
       "resolved": "https://registry.npmjs.org/xmlbuilder/-/xmlbuilder-12.0.0.tgz",
       "integrity": "sha512-lMo8DJ8u6JRWp0/Y4XLa/atVDr75H9litKlb2E5j3V3MesoL50EBgZDWoLT3F/LztVnG67GjPXLZpqcky/UMnQ==",
-      "dev": true
-    },
-    "xmldom": {
-      "version": "0.6.0",
-      "resolved": "https://registry.npmjs.org/xmldom/-/xmldom-0.6.0.tgz",
-      "integrity": "sha512-iAcin401y58LckRZ0TkI4k0VSM1Qg0KGSc3i8rU+xrxe19A/BN1zHyVSJY7uoutVlaTSzYyk/v5AmkewAP7jtg==",
       "dev": true
     },
     "y18n": {
