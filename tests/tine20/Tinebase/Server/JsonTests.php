@@ -426,11 +426,14 @@ class Tinebase_Server_JsonTests extends TestCase
 
         $this->_imapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
         $newConf = $this->_imapConf->toArray();
-        $newConf['dovecot']['host'] = 'somethingelse';
+        $newConf['dovecot']['host'] = 'www.tine-groupware.de';
         Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $newConf);
         Tinebase_EmailUser::clearCaches();
         Tinebase_EmailUser::destroyInstance();
 
+        $before = Tinebase_DateTime::now();
         $this->testLogin();
+        self::assertTrue($before->isLater(Tinebase_DateTime::now()->subSecond(5))
+            , 'login took longer than 4-5 secs!');
     }
 }
