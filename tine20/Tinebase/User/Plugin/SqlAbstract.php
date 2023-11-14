@@ -119,7 +119,6 @@ abstract class Tinebase_User_Plugin_SqlAbstract extends Tinebase_User_Plugin_Abs
                 $dbConfig = array_intersect_key($mailDbConfig, array_flip(array('adapter', 'host', 'dbname', 'username', 'password', 'port')));
                 $dbConfig['driver_options'] = [
                     // use lower timeouts (in seconds) as we don't want this to block tine (for example the login)
-                    MYSQLI_OPT_CONNECT_TIMEOUT => 3,
                     PDO::ATTR_TIMEOUT => 3,
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
                 ];
