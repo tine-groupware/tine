@@ -2528,11 +2528,11 @@ abstract class Tinebase_Controller_Record_Abstract
      *
      */
     protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.',
-        /** @noinspection PhpUnusedParameterInspection */ $_oldRecord = NULL)
+        /** @noinspection PhpUnusedParameterInspection */ $_oldRecord = null)
     {
         if (! $this->_doContainerACLChecks
             || (! $_record->has('container_id') && (!($mc = $_record->getConfiguration()) || !$mc->delegateAclField))) {
-            return TRUE;
+            return true;
         }
 
         if (($mc = $_record->getConfiguration()) && $mc->delegateAclField) {
@@ -3736,7 +3736,9 @@ HumanResources_CliTests.testSetContractsEndDate */
                 . ' Record not found');
             return null;
         }
-
+        
+        $this->checkGrant($record, self::ACTION_UPDATE, TRUE, 'No permission to update record.');
+        
         $tempFile = Felamimail_Controller_Message::getInstance()->putRawMessageIntoTempfile($message);
         $filename = Felamimail_Controller_Message::getInstance()->getMessageNodeFilename($message);
 
