@@ -817,7 +817,7 @@ viewConfig: {
     handleResponsive() {
         this.grid.hideHeaders = this.isResponsive();
         this.cm.config.forEach((col, idx) => {
-            const hidden = this.isResponsive() ? col.id !== 'responsive' : col?.hidden;
+            const hidden = this.isResponsive() ? col.id !== 'responsive' : (col?.hidden || col.id === 'responsive');
             const display = hidden ? 'none' : '';
             this.updateColumnStyle(idx, {
                 'display': display,
@@ -1121,7 +1121,7 @@ viewConfig: {
     getColumnStyle : function(col, isHeader){
         var style = !isHeader ? (this.cm.config[col].css || '') : '';
         style += 'width:'+this.getColumnWidth(col)+';';
-        const hidden = this.isResponsive() ? this.cm.config[col].id !== 'responsive' : this.cm.config[col]?.hidden;
+        const hidden = this.isResponsive() ? this.cm.config[col].id !== 'responsive' : (this.cm.config[col]?.hidden || this.cm.config[col].id === 'responsive');
         if (hidden){
             style += 'display:none;';
         }

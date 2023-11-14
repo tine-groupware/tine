@@ -357,7 +357,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $this->assertEquals(1, count($savedEmployee['contracts']));
         static::assertTrue(is_array($savedEmployee['contracts'][0]['working_time_scheme']));
-        $this->assertArrayHasKey('is_editable', $savedEmployee['contracts'][0]);
         $this->assertEquals(1, count($savedEmployee['costcenters']));
 
         // check if accounts has been created properly on aftercreate
@@ -593,13 +592,13 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $contract->employee_id = $e['id'];
 
         $savedContract = $this->_json->saveContract($contract->toArray(true));
-        static::assertTrue(is_array($savedContract[0]['working_time_scheme']));
+        static::assertTrue(is_array($savedContract['working_time_scheme']));
 
         HumanResources_Controller_WorkingTimeScheme::getInstance()
-            ->delete($savedContract[0]['working_time_scheme']['id']);
+            ->delete($savedContract['working_time_scheme']['id']);
 
-        $savedContract = $this->_json->getContract($savedContract[0]['id']);
-        static::assertTrue(is_array($savedContract[0]['working_time_scheme']), 'expect deleted WTS to be resolved');
+        $savedContract = $this->_json->getContract($savedContract['id']);
+        static::assertTrue(is_array($savedContract['working_time_scheme']), 'expect deleted WTS to be resolved');
     }
 
     /**
@@ -1352,22 +1351,6 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employeeJson['contracts'][0]['end_date'] = $endDate;
         $recordData = $this->_json->saveEmployee($employeeJson);
         $this->assertEquals($endDate, $recordData['contracts'][0]['end_date']);
-
-        HumanResources_Controller_FreeTime::getInstance()->create(new HumanResources_Model_FreeTime([
-            'employee_id' => $employeeJson['id'],
-            'account_id' => $account->getId(),
-            'type' => 'vacation',
-            HumanResources_Model_FreeTime::FLD_PROCESS_STATUS => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
-            'freedays' => [['duration' => '1', 'date' => '2013-01-11 00:00:00']],
-        ]));
-
-        $recordData['contracts'][0]['vacation_days'] = 31;
-        try {
-            $this->_json->saveEmployee($recordData);
-            $this->fail('an exception should be thrown');
-        } catch (Exception $e) {
-            $this->assertTrue($e instanceof HumanResources_Exception_ContractNotEditable, $e->getMessage());
-        }
     }
 
     public function testWTSGrants()

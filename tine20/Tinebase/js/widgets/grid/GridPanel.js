@@ -584,6 +584,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (this.detailsPanel) {
             const isSmall = this.grid.getView().isResponsive() || gridHeight < 500;
             this.detailsPanel.tbar.setDisplayed(isSmall);
+            if (this.action_layout) this.action_layout.setHidden(isSmall);
+            
             if (isSmall) {
                 this.layout['south'].panel.setVisible(false);
                 this.layout['east'].panel.setVisible(false);
@@ -593,6 +595,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
                 if (this.detailsPanelRegion === 'south' && !this.layout.south.panel.isVisible()) {
                     this.layout.south.panel.setVisible(true);
+                    this.action_layout.setHidden(false);
                     this.layout.south.items.add(this.detailsPanel);
                 }
                 
@@ -605,6 +608,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
                 if (this.detailsPanelRegion === 'east' && !this.layout.east.panel.isVisible()) {
                     this.layout.east.panel.setVisible(true);
+                    this.action_layout.setHidden(false);
                     this.layout.east.items.add(this.detailsPanel);
                 }                
                 if (!this.layout.east.isCollapsed) {
@@ -816,11 +820,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // add detail panel
         if (this.detailsPanel) {
             // register additional context menu actions
-            const layoutAction = new Ext.Action({
+            this.action_layout = new Ext.Action({
                 text: i18n._('Move Details Panel To'),
                 iconCls: 'action_layout_menu',
                 scope: this,
-                hidden: this.grid.getView().isResponsive(),
                 menu: {
                     items: [
                         new Ext.Action({
@@ -844,7 +847,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     ]
                 }
             });
-            this.detailsPanel.contextMenuItems = [layoutAction];
+            this.detailsPanel.contextMenuItems = [this.action_layout];
             // just in case it's a config only
             this.detailsPanel = Ext.ComponentMgr.create(this.detailsPanel);
             const regionCfg = (region) => {
