@@ -174,6 +174,7 @@ class Tinebase_Server_RoutingTests extends TestCase
             self::assertIsArray($decodedContent[SaasInstance_Config::APP_NAME]);
             $metrics = $decodedContent[SaasInstance_Config::APP_NAME];
             self::assertGreaterThanOrEqual(2.2, $metrics[SaasInstance_Config::PRICE_PER_USER]);
+            self::assertGreaterThanOrEqual(0, $metrics['numberOfReducedPriceUsers']);
             self::assertNull($metrics[SaasInstance_Config::PRICE_PER_USER_VOLUNTEER]);
             self::assertGreaterThanOrEqual(0.5, $metrics[SaasInstance_Config::PRICE_PER_GIGABYTE]);
             self::assertGreaterThanOrEqual(30, $metrics[SaasInstance_Config::NUMBER_OF_INCLUDED_USERS]);
