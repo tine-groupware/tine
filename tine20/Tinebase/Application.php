@@ -692,7 +692,7 @@ class Tinebase_Application
                     try {
                         $count = Tinebase_CustomField::getInstance()->deleteCustomFieldsForApplication($_application->getId());
                     } catch (Exception $e) {
-                        Tinebase_Exception::log($e);
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . $e->getMessage());
                         $count = 0;
                     }
                     break;
