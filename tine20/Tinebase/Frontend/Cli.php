@@ -1362,39 +1362,39 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * nagios monitoring for mail servers
+     * monitoring for mail servers
      * imap/smtp/sieve
      *
      * @return integer
-     *
-     * @see http://nagiosplug.sourceforge.net/developer-guidelines.html#PLUGOUTPUT
      */
     public function monitoringMailServers()
     {
         $result = 0;
-        $servers = [
-            Tinebase_Config::SMTP,
-            Tinebase_Config::IMAP,
-            Tinebase_Config::SIEVE
-        ];
+        $skipcount = 0;
+        $error = '';
 
-        $message = "\n";
-
-        foreach ($servers as $server) {
+        foreach ([
+                     Tinebase_Config::SMTP,
+                     Tinebase_Config::IMAP,
+                     Tinebase_Config::SIEVE
+                 ] as $server) {
             $serverConfig = Tinebase_Config::getInstance()->{$server};
             
             if (empty($serverConfig)) {
-                $message .= 'CONFIG : ' . $server . ' IS NOT SET, SKIP' .  PHP_EOL;
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' CONFIG : ' . $server . ' IS NOT SET, SKIP');
+                $skipcount++;
                 continue;
             }
             
-            $host = isset($serverConfig->{'hostname'}) ? $serverConfig->{'hostname'} : $serverConfig->{'host'};
+            $host = $serverConfig->{'hostname'} ?? $serverConfig->{'host'};
             $port = $serverConfig->{'port'};
 
-            $message .= $server . ' | host: '. $host . ' | port: ' . $port;
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' ' .$server . ' | host: '. $host . ' | port: ' . $port);
 
             if (empty($host) || empty($port)) {
-                $message .= ' -> INVALID VALUE' . PHP_EOL;
+                $skipcount++;
                 continue;
             }
             
@@ -1410,8 +1410,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 );
             };
 
-            $message .= PHP_EOL . $output . PHP_EOL;
             $result = $result_code;
+            if ($result > 0) {
+                $error .= '| ' . $server . ' on ' . $host . ' failed';
+            }
         }
 
         // also check mail db connectivity
@@ -1423,19 +1425,29 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $table = $db->describeTable('dovecot_users');
                     if (empty($table)) {
                         $result = 1;
-                        // TODO add more schema checks here
-                        $message .= 'table dovecot_users has no valid schema';
+                        // TODO add more schema checks here?
+                        $error .= '| dovecot_users table not found';
                     }
                 }
             } catch (Exception $e) {
                 $result = 1;
-                $message .= $e->getMessage();
+                $error .= '| ' . $e->getMessage();
             }
+        }
+
+        if ($result === 0) {
+            if ($skipcount > 2) {
+                $message = 'MAIL INACTIVE';
+            } else {
+                $message = 'MAIL OK';
+            }
+        } else {
+            $message = 'MAIL FAIL: ' . $error;
         }
 
         $this->_logMonitoringResult($result, $message);
 
-        echo $message . "\n";
+        echo $message . PHP_EOL;
         return $result;
     }
 
