@@ -26,7 +26,6 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param string $id
      * @param string $revision
      * @throws Tinebase_Exception_InvalidArgument
-     * @todo allow to download a folder as ZIP file
      */
     public function downloadFile($path, $id, $revision = null)
     {
@@ -86,7 +85,7 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
 
             $node = new Tinebase_Model_Tree_Node([
-                'name' => $node->name,
+                'name' => $node->name . '.zip',
                 'contenttype' => 'application/zip',
                 'size' => filesize($tmpPath),
             ], true);
