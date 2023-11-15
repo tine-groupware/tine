@@ -32,7 +32,7 @@
  * @property    string                      $configuration
  * @property    array                       $groups              list of group memberships
  * @property    Tinebase_DateTime           $lastLoginFailure    time of last login failure
- * @property    string                      $loginFailures       login failures by client type
+ * @property    int                         $loginFailures       number of login failures
  * @property    string                      $visibility          displayed/hidden in/from addressbook
  * @property    string                      $type
  * @property    Tinebase_Model_EmailUser    $emailUser
@@ -185,10 +185,8 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'loginFailures'                 => [
-                self::TYPE                      => self::TYPE_JSON,
-                self::VALIDATORS        => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
-                ],
+                'type'                          => 'integer',
+                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
             'sambaSAM'                      => [
                 'type'                          => 'string',
