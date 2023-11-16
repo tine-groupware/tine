@@ -961,7 +961,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         }
 
         if ($this->_isImplicit && count($result) === 1) {
-            $result = $result[0];
+            $result = $result[0]['filters'];
         }
 
         return $result;
