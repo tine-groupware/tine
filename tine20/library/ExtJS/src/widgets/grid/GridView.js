@@ -829,13 +829,7 @@ viewConfig: {
     isResponsive() {
         if (this.disableResponsiveLayout) return false;
         const width = this.grid?.getWidth?.() ?? 0;
-        const isWidthSmall = width < 800;
-        if (this.cm) {
-            const visibleCount = this.cm.getColumnCount(true);
-            return visibleCount < 7 ? width < visibleCount * 150 : isWidthSmall;
-        } else {
-            return isWidthSmall;
-        }
+        return width < 800;
     },
     
     updateColumnStyle(col, styles) {

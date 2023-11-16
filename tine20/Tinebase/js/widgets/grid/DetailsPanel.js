@@ -139,21 +139,25 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      * inits this details panel
      */
     initComponent: function() {
-        this.tbar = [
-            new Ext.Action({
-                text: i18n._('Back'),
-                iconCls: 'action_previous',
-                scope: this,
-                handler: this.onClose
-            }),
-            '->',
-            new Ext.Action({
-                text: i18n._('Edit'),
-                iconCls: 'action_edit',
-                scope: this,
-                handler: this.onEdit
-            })
-        ];
+        if (!this.tbar) {
+            this.tbar = [
+                new Ext.Action({
+                    text: i18n._('Back'),
+                    iconCls: 'action_previous',
+                    scope: this,
+                    handler: this.onClose
+                }),
+                '->',
+                new Ext.Action({
+                    text: i18n._('Edit'),
+                    iconCls: 'action_edit',
+                    scope: this,
+                    handler: this.onEdit
+                })
+            ]
+            this.useResponsiveTbar = true;
+        }
+
         this.items = [
             this.getDefaultInfosPanel(),
             this.getSingleRecordPanel(),
@@ -197,7 +201,23 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
             });
         });
         Tine.widgets.grid.DetailsPanel.superclass.initComponent.apply(this, arguments);
+        if (this.useResponsiveTbar) {
+            this.topToolbar.on('resize', this.onToolbarResize, this);
+        }
     },
+    
+    onToolbarResize() {
+        let isSmall = false;
+        if (this.gridpanel) {
+            isSmall = !!this.isInFullScreenMode && this.gridpanel.isSmallLayout();
+        }
+        if (isSmall) {
+            this.topToolbar.show();
+        } else {
+            this.topToolbar.hide();
+        }
+    },
+
 
     onClose(e) {
         if (!this.gridpanel) return;
@@ -363,7 +383,8 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
                     defaults:{
                         margins:'0 5 0 0'
                     },
-                    items: [{
+                    items: [
+                        {
                         flex: 2,
                         layout: 'ux.display',
                         labelWidth: labelWidth,
