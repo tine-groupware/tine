@@ -421,7 +421,7 @@ class Tasks_JsonTest extends TestCase
         $this->assertGreaterThan(0, $count);
         $filter[0]['operator'] = 'equals';
         $filter[0]['value'] = ['path' => '/'];
-        $this->assertSame($filter, $tasks['filter']['filters'] ?? null, print_r($tasks['filter'], true));
+        $this->assertSame($filter, $tasks['filter'] ?? null, print_r($tasks['filter'], true));
 
         $tasks = $this->_backend->searchTasks($filter = [
             ['field' => Tasks_Model_Task::FLD_DEPENDENS_ON, 'operator' => 'definedBy', 'value' => [
@@ -430,7 +430,7 @@ class Tasks_JsonTest extends TestCase
                 ]],
             ]],
         ], $this->_getPaging());
-        $this->assertSame($filter, $tasks['filter']['filters']);
+        $this->assertSame($filter, $tasks['filter']);
         
         // delete task
         $this->_backend->deleteTasks(array($task['id']));
