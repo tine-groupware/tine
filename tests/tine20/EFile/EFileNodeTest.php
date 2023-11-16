@@ -20,6 +20,62 @@ class EFile_EFileNodeTest extends TestCase
         Tinebase_FileSystem::getInstance()->clearStatCache();
     }
 
+    public function testAutoDocumentDir1()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->mkdir(Filemanager_Controller_Node::getInstance()->addBasePath('/shared'));
+
+        $path = Filemanager_Controller_Node::getInstance()->addBasePath('/shared/A');
+        EFile_Controller::getInstance()->createEFileFolder($path, EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN);
+
+        $this->expectException(Tinebase_Exception_Record_Validation::class);
+        $this->expectExceptionMessage('eFile validation failed');
+        $fs->mkdir($path . '/B');
+    }
+
+    public function testAutoDocumentDir2()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->mkdir(Filemanager_Controller_Node::getInstance()->addBasePath('/shared'));
+
+        $path = Filemanager_Controller_Node::getInstance()->addBasePath('/shared/A');
+        EFile_Controller::getInstance()->createEFileFolder($path, EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN);
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B', EFile_Model_EFileTierType::TIER_TYPE_FILE_GROUP);
+
+        $this->expectException(Tinebase_Exception_Record_Validation::class);
+        $this->expectExceptionMessage('eFile validation failed');
+        $fs->mkdir($path . '/B/C');
+    }
+
+    public function testAutoDocumentDir3()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->mkdir(Filemanager_Controller_Node::getInstance()->addBasePath('/shared'));
+
+        $path = Filemanager_Controller_Node::getInstance()->addBasePath('/shared/A');
+        EFile_Controller::getInstance()->createEFileFolder($path, EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN);
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B', EFile_Model_EFileTierType::TIER_TYPE_FILE_GROUP);
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B/C', EFile_Model_EFileTierType::TIER_TYPE_FILE);
+
+        $node = $fs->mkdir($path . '/B/C/D');
+        $this->assertSame(EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR, $node->{EFile_Config::TREE_NODE_FLD_TIER_TYPE});
+
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B/C/E', EFile_Model_EFileTierType::TIER_TYPE_SUB_FILE);
+
+        $node = $fs->mkdir($path . '/B/C/E/F');
+        $this->assertSame(EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR, $node->{EFile_Config::TREE_NODE_FLD_TIER_TYPE});
+
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B/C/E/G', EFile_Model_EFileTierType::TIER_TYPE_CASE);
+
+        $node = $fs->mkdir($path . '/B/C/E/G/H');
+        $this->assertSame(EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR, $node->{EFile_Config::TREE_NODE_FLD_TIER_TYPE});
+
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B/C/E/G/I', EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR);
+
+        $node = $fs->mkdir($path . '/B/C/E/G/I/J');
+        $this->assertSame(EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR, $node->{EFile_Config::TREE_NODE_FLD_TIER_TYPE});
+    }
+
     public function testMetaDataInheritance()
     {
         $fs = Tinebase_FileSystem::getInstance();

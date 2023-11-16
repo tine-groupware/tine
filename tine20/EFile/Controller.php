@@ -436,6 +436,13 @@ class EFile_Controller extends Tinebase_Controller_Event
                     ])) {
                         $_record->{EFile_Config::TREE_NODE_FLD_TIER_TYPE} = EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT;
                     }
+                } elseif (in_array($parent->{EFile_Config::TREE_NODE_FLD_TIER_TYPE}, [
+                    EFile_Model_EFileTierType::TIER_TYPE_FILE,
+                    EFile_Model_EFileTierType::TIER_TYPE_SUB_FILE,
+                    EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR,
+                    EFile_Model_EFileTierType::TIER_TYPE_CASE,
+                ])) {
+                    $_record->{EFile_Config::TREE_NODE_FLD_TIER_TYPE} = EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR;
                 }
             }
         }
