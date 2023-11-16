@@ -1688,7 +1688,21 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         let stateCloned = stateStored;
         if (!isStateIdChanged || !stateStored) stateCloned = stateCurrent;
         let stateClonedResolved = JSON.parse(JSON.stringify(stateCloned));
-
+        
+        if (stateClonedResolved?.columns && isEastLayout) {
+            const stateClonedResolvedVisibleColumns = stateClonedResolved.columns.filter((col) => { return !col.hidden;});
+            if (stateClonedResolvedVisibleColumns.length === 0) {
+                const restoreStateId = stateId.replace('_DetailsPanel_East', '');
+                const restoreState = Ext.state.Manager.get(restoreStateId);
+                const restoreStateVisibleColumns = restoreState.columns.filter((col) => { return !col.hidden;});
+                if (restoreStateVisibleColumns === 0) {
+                    stateClonedResolved.columns.forEach((c) => {c.hidden = c.id === 'responsive';})
+                } else {
+                    stateClonedResolved.columns.forEach((c, idx) => {c.hidden = restoreState.columns[idx].hidden ?? false;})
+                }
+            }
+        }
+        
         if (stateId.includes(this.sendFolderGridStateId)) {
             let refState = Ext.state.Manager.get(stateId);
             if (refState) stateClonedResolved = JSON.parse(JSON.stringify(refState));
@@ -1713,7 +1727,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     }
                 }
             })
-        } 
+        }
 
         if (!isStateIdChanged) {
             stateClonedResolved.sort = this.store.getSortState();
