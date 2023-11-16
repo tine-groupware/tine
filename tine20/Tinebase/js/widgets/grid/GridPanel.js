@@ -579,46 +579,31 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     onContentResize: function() {
         // make sure details panel doesn't hide grid
-        const gridWidth = this.getWidth();
-        const gridHeight = this.getHeight();
-        if (this.detailsPanel) {
-            const isSmall = this.grid.getView().isResponsive() || gridHeight < 500;
-            this.detailsPanel.tbar.setDisplayed(isSmall);
-            if (this.action_layout) this.action_layout.setHidden(isSmall);
-            
+        const layout = this.layout[this.detailsPanelRegion] ?? null;
+        if (this.detailsPanel && layout) {
+            const isSmall = this.isSmallLayout();
             if (isSmall) {
                 this.layout['south'].panel.setVisible(false);
                 this.layout['east'].panel.setVisible(false);
             } else {
-                if (this.grid.stateId.includes('Touch')) {
-                    this.layout.south.panel.setHeight(gridHeight * .6);
+                if (!layout.panel.isVisible()) {
+                    layout.panel.setVisible(true);
+                    layout.items.add(this.detailsPanel);
                 }
-                if (this.detailsPanelRegion === 'south' && !this.layout.south.panel.isVisible()) {
-                    this.layout.south.panel.setVisible(true);
-                    this.action_layout.setHidden(false);
-                    this.layout.south.items.add(this.detailsPanel);
-                }
-                
-                if (!this.layout.south.isCollapsed) {
-                    const detailsHeight = this.detailsPanel.getHeight();
-                    if (detailsHeight / 4 > gridHeight) {
-                        const newDetailsHeight = gridHeight * .4;
-                        this.layout.south.panel.setHeight(newDetailsHeight);
+                if (!layout.isCollapsed) {
+                    if (this.detailsPanelRegion === 'south') {
+                        const detailsHeight = this.detailsPanel.getHeight();
+                        const gridHeight = this.grid.getHeight();
+                        if (detailsHeight / 4 > gridHeight) layout.panel.setHeight(detailsHeight * .4);
                     }
-                }
-                if (this.detailsPanelRegion === 'east' && !this.layout.east.panel.isVisible()) {
-                    this.layout.east.panel.setVisible(true);
-                    this.action_layout.setHidden(false);
-                    this.layout.east.items.add(this.detailsPanel);
-                }                
-                if (!this.layout.east.isCollapsed) {
-                    const detailsWidth = this.detailsPanel.getWidth();
-                    if (detailsWidth / 3 > gridWidth) {
-                        const newDetailsWidth = gridWidth * .4;
-                        this.layout.east.panel.setWidth(newDetailsWidth);
+                    if (this.detailsPanelRegion === 'east') {
+                        const detailsWidth = this.detailsPanel.getWidth();
+                        const gridWidth = this.grid.getWidth();
+                        if (detailsWidth / 3 > gridWidth) layout.panel.setWidth(detailsWidth * .4);
                     }
                 }
             }
+            if (this.action_layout) this.action_layout.setHidden(isSmall);
             this.doLayout();
         }
     },
@@ -2498,11 +2483,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
     
     isSmallLayout() {
-        return this.grid.getView().isResponsive() || this.getHeight() < 500;
+        const isWidthSmall = this.getWidth() < 800;
+        const isHeightSmall = this.getHeight() < 500;
+        return isWidthSmall && (this.grid.getView().isResponsive() || isHeightSmall);
     },
     
     setFullScreen(fullScreen = true) {
         if (!this.detailsPanel) return;
+        this.detailsPanel.isInFullScreenMode = fullScreen;
         if (!fullScreen) {
             Tine.Tinebase.viewport.tineViewportMaincardpanel.remove(this.detailsPanel, false);
             const latestActive = Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem;
