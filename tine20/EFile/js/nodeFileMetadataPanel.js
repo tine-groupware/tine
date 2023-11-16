@@ -129,29 +129,30 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
     onRecordLoad: async function(editDialog, record) {
         const mflds = this.metadataFields;
         const tierTypes = _.map(await getTierTypes(), 'tierType');
-        
-        const tierType = record.get('efile_tier_type');
+
+        const path = record.get('path');
+        const basePaths = Array.from(Tine.Tinebase.configManager.get('basePath', 'EFile'));
+        const tierType = record.get('efile_tier_type') || (basePaths.indexOf(path) > -1 && path !== '/shared/' ? 'masterPlan' : null);;
         const typeIsFileParent = tierType ? _.indexOf(tierTypes, tierType) < _.indexOf(tierTypes, 'file') : undefined;
-        
+        const typeIsFileChild = tierType && _.indexOf(tierTypes, tierType) > _.indexOf(tierTypes, 'file');
+
         // NOTE: have fast UI alignment (before async request starts)
-        this.gotoFileButton[tierType && !typeIsFileParent && tierType !== 'file' ? 'show' : 'hide']();
-        this.ownerCt[(tierType && !typeIsFileParent ? 'un' : '') +'hideTabStripItem'](this);
+        this.gotoFileButton[typeIsFileChild ? 'show' : 'hide']();
+        this.ownerCt[(tierType /*&& !typeIsFileParent*/ ? 'un' : '') +'hideTabStripItem'](this);
+
+        // @TODO show note if typeIsFileParent
 
         this.fileData = null;
-        if (tierType) {
-            if (typeIsFileParent) {
-                // hide all mflds
-            } else if (tierType === 'file') {
-                this.fileData = record.data;
-            } else {
-                this.fileData = await Tine.Filemanager.getParentNodeByFilter(record.id, [{
-                    field: 'efile_tier_type',
-                    operator: 'equals',
-                    value: 'file'
-                }]);
-            }
+        if (typeIsFileChild) {
+            this.fileData = await Tine.Filemanager.getParentNodeByFilter(record.id, [{
+                field: 'efile_tier_type',
+                operator: 'equals',
+                value: 'file'
+            }]);
+        } else if (tierType) {
+            this.fileData = record.data;
         }
-        
+
         if (this.fileData) {
             const fileMetadata = _.get(this.fileData, 'efile_file_metadata.data', _.get(this.fileData, 'efile_file_metadata'));
             this.metadataRecord = Tine.Tinebase.data.Record.setFromJson(fileMetadata, this.recordClass);
