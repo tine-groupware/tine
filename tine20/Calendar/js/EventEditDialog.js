@@ -515,6 +515,8 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         Tine.Calendar.EventEditDialog.superclass.initComponent.call(this);
         this.addAttendee();
+        // Start with unmodified Record
+        this.record.commit();
     },
 
     setLocationRecord: function(resource, overwrite = false) {
