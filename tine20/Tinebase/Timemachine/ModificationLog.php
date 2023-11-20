@@ -145,11 +145,10 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      *
      * TODO if replication is on, we need to keep the "deleted" / "pruned" message in the modlog
      *
-     * @param Tinebase_DateTime|null $deleteBeforeDate
      * @return int
      * @throws Exception
      */
-    public function clean(?Tinebase_DateTime $deleteBeforeDate = null): int
+    public function clean(): int
     {
         $filter = new Tinebase_Model_Filter_FilterGroup();
         $pagination = new Tinebase_Model_Pagination();
@@ -162,17 +161,10 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             $filter = new Tinebase_Model_Filter_FilterGroup();
             $pagination->start += $pagination->limit;
             $models = [];
-            $toDeleteObsolete = [];
             $deleteCount = 0;
 
             /** @var Tinebase_Model_ModificationLog $modlog */
             foreach ($recordSet as $modlog) {
-
-                if ($deleteBeforeDate && $deleteBeforeDate->isLater($modlog->modification_time)) {
-                    $toDeleteObsolete[] = $modlog->getId();
-                    continue;
-                }
-
                 if (Tinebase_Model_Container::class === $modlog->record_type) {
                     $models[$modlog->record_type][$modlog->application_id][$modlog->record_id][] = $modlog->id;
                 } else {
@@ -180,9 +172,6 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 }
             }
 
-            if (count($toDeleteObsolete) > 0) {
-                $deleteCount += $this->_backend->delete($toDeleteObsolete);
-            }
             if (count($models) > 0) {
                 $deleteCount += $this->_deleteModlogsByModel($models);
             }
@@ -308,31 +297,53 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     }
 
     /**
-     * clear mod log table
-     * - if $date param is omitted, exception is thrown
-     * 
-     * @param Tinebase_DateTime $date
-     * @return bool
+     * clear mod log table by date or $instanceseq
+     *
+     * @param Tinebase_DateTime|null $date
+     * @param int|null $instanceseq
+     * @return int
+     * @throws Tinebase_Exception_Backend_Database
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function clearTable($date = NULL)
+    public function clearTable(?Tinebase_DateTime $date = null, ?int $instanceseq = null): int
     {
-        
-        if(empty($date)){
-            throw new Tinebase_Exception_InvalidArgurment("Date not set");
+        if (empty($date) && empty($instanceseq)) {
+            throw new Tinebase_Exception_InvalidArgument("Needs date or instanceseq param");
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Removing all modification log entries before ' . $date->toString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            if ($date) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Removing all modification log entries before ' . $date->toString());
+            }
+            if ($instanceseq) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Removing all modification log entries before ' . $instanceseq);
+            }
+        }
         
         $db = $this->_backend->getAdapter();
-        $where = array(
-            $db->quoteInto($db->quoteIdentifier('modification_time') . ' <= ?', $date->toString())
-        );
-        $deletedRows = $db->delete($this->_backend->getTablePrefix() . $this->_backend->getTableName(), $where);
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Removed ' . $deletedRows . ' rows.');
+        $where = [];
+        $sumDeletedRows = 0;
+        $table = $this->_backend->getTablePrefix() . $this->_backend->getTableName();
+        if ($date) {
+            $where[] = $db->quoteInto($db->quoteIdentifier('modification_time') . ' <= ?', $date->toString());
+        }
+        if ($instanceseq) {
+            $where[] = $db->quoteInto($db->quoteIdentifier('instance_seq') . ' <= ?', $instanceseq);
+        }
+
+        do {
+            $result = $db->query('DELETE FROM ' . $table. ' WHERE ' . implode(' AND' , $where)
+                . ' ORDER BY instance_seq LIMIT 50000;');
+            $deleted = $result->rowCount();
+            $sumDeletedRows += $deleted;
+        } while ($deleted > 0);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Removed ' . $sumDeletedRows . ' rows.');
         
-        return true;
+        return $sumDeletedRows;
     }
     
     /**
