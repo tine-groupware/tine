@@ -469,6 +469,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $this->_setPersonaGrantsForTestContainer($contact['container_id'], 'sclever');
         Tinebase_Core::setUser($this->_personas['sclever']);
         Tinebase_Container::getInstance()->resetClassCache();
+        Tinebase_Core::clearAppInstanceCache();
         $this->assertFalse(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
         $this->assertFalse(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_ADMIN));
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact['id']);
