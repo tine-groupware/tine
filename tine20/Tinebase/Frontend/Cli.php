@@ -174,6 +174,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * clean timemachine_modlog for records that have been pruned (not deleted!)
      *  - accepts optional param date=YYYY-MM-DD to delete all modlogs before this date
+     *  - accepts optional param instanceseq=NUMBER to delete all modlogs before this instance_seq
      *
      * @param Zend_Console_Getopt|null $_opts
      * @return int
@@ -187,10 +188,15 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $_opts ? $this->_parseArgs($_opts, array()) : [];
 
         $before = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
+        $beforeSeq = $args['instanceseq'] ?? null;
 
-        $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean($before);
+        if ($beforeSeq || $before) {
+            $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clearTable($before, $beforeSeq);
+        } else {
+            $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean();
+        }
 
-        echo "\ndeleted $deleted modlogs records\n";
+        echo "\nDeleted $deleted modlogs records\n";
 
         return 0;
     }
@@ -528,6 +534,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $this->_parseArgs($_opts, array(), 'tables');
         $date = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
         $tables = isset($args['tables']) ? (array) $args['tables'] : [];
+        $skip = isset($args['skip']) ? $args['skip'] : null;
 
         echo "\nPurging obsolete data from tables...";
         $result = Tinebase_Controller::getInstance()->removeObsoleteData($date, $tables, false);
@@ -537,8 +544,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "\nCleaning relations...";
             $this->cleanRelations();
 
-            echo "\nCleaning modlog...";
-            $this->cleanModlog(isset($args['modlog']) && $args['modlog'] === 'purge' ? $_opts : null);
+            if ($skip === 'modlog') {
+                echo "\nCleaning modlog...";
+                $this->cleanModlog(isset($args['modlog']) && $args['modlog'] === 'purge' ? $_opts : null);
+            }
 
             echo "\nCleaning customfields...";
             $this->cleanCustomfields();
