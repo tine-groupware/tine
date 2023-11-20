@@ -1282,7 +1282,7 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         $modLogsBefore = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications("Addressbook", $contact->getId());
         
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->clearTable(Tinebase_DateTime::now());
-        $this->assertTrue($result);
+        $this->assertGreaterThan(0, $result);
         
         $modLogsAfter = Tinebase_Timemachine_ModificationLog::getInstance()->getModifications("Addressbook", $contact->getId());
         $this->assertGreaterThan(count($modLogsAfter), count($modLogsBefore)); 
