@@ -478,6 +478,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $this->assertTrue(Addressbook_Controller_Contact::getInstance()->doContainerACLChecks());
         $this->assertFalse(Addressbook_Controller_Contact::getInstance()->checkGrant($contact,
             Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA, false));
+        $this->assertFalse(Addressbook_Controller_Contact::getInstance()->checkGrant($contact,
+            Addressbook_Model_ContactGrants::GRANT_ADMIN, false));
 
         $contactWithoutPrivate = $this->_uit->getContact($contact['id']);
         $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate);
