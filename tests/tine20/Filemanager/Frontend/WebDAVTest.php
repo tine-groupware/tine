@@ -606,10 +606,11 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         }
         $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
             Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest',
-            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER => League\Flysystem\Local\LocalFilesystemAdapter::class,
-            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => [
-                Tinebase_Config::getInstance()->filesdir . '/flysystem/',
-            ],
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG_CLASS => Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_Local([
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => Tinebase_Config::getInstance()->filesdir . '/flysystem/',
+            ]),
+            Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_originalTestUser->getId(),
         ]));
         $node->flysystem = $flySystem;
         $node->flypath = '/';
@@ -704,10 +705,11 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         }
         $flySystem1 = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
             Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest1',
-            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER => League\Flysystem\Local\LocalFilesystemAdapter::class,
-            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => [
-                Tinebase_Config::getInstance()->filesdir . '/flysystem1/',
-            ],
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG_CLASS => Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_Local([
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => Tinebase_Config::getInstance()->filesdir . '/flysystem1/',
+            ]),
+            Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_originalTestUser->getId(),
         ]));
         $node->flysystem = $flySystem1;
         $node->flypath = '/';
