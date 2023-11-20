@@ -505,14 +505,14 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     /**
      * Restore Database
      *
-     * @param $backupDir
+     * @param string $backupDir
      * @throws Exception
      */
     public function restore($backupDir)
     {
         $mysqlBackupFile = $backupDir . '/tine20_mysql.sql.bz2';
-        if (! file_exists($mysqlBackupFile)) {
-            throw new Exception("$mysqlBackupFile not found");
+        if (! file_exists($mysqlBackupFile) || ! is_readable($mysqlBackupFile)) {
+            throw new Exception("$mysqlBackupFile not found or not readable");
         }
 
         // hide password from shell via my.cnf
@@ -526,8 +526,20 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' restore cmd: ' . $cmd);
 
-        exec($cmd);
-        unlink($mycnf);
+        $error = false;
+        try {
+            exec($cmd, $output, $result);
+        } catch (ErrorException $ee) {
+            $error = true;
+            if (Setup_Core::isLogLevel(Zend_Log::ERR)) Setup_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . ' ' . $ee->getMessage());
+        } finally {
+            unlink($mycnf);
+        }
+
+        if ($error || $result > 0) {
+            throw new Exception('restore command failed: '. $output);
+        }
     }
 
     /**
