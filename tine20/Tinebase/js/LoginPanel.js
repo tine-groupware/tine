@@ -530,12 +530,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 }});
                 break;
             case 650: // Auth requires redirect
-                if (String(exception.method).toUpperCase() !== 'POST') {
-                    window.location.href = exception.url;
-                } else {
-                    window.document.body.innerHTML = exception.postFormHTML;
-                    document.getElementsByTagName("form")[0].submit();
-                }
+                this.redirect(exception);
                 break;
             case 651: // Password required
                 //@TODO
@@ -545,10 +540,22 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 break;
         }
     },
-    
+
+    redirect: function(redirectTo) {
+        if (String(redirectTo.method).toUpperCase() !== 'POST') {
+            window.location.href = redirectTo.url;
+        } else {
+            window.document.body.innerHTML = redirectTo.postFormHTML;
+            document.getElementsByTagName("form")[0].submit();
+        }
+    },
+
     onLoginSuccess: function(response) {
         var responseData = Ext.util.JSON.decode(response.responseText);
         if (responseData.success === true) {
+            if (window.initialData?.afterLoginRedirect) {
+                return this.redirect(window.initialData.afterLoginRedirect);
+            }
             Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
             window.document.title = this.originalTitle;
             response.responseData = responseData;
