@@ -60,10 +60,28 @@ class Felamimail_Model_Sieve_Rule extends Tinebase_Record_Abstract
      * 
      * @param Felamimail_Sieve_Rule $fsr
      */
-    public function setFromFSR(Felamimail_Sieve_Rule $fsr)
+    public function setFromFSR(Felamimail_Sieve_Rule $fsr, bool $save = false)
     {
         $data = $fsr->toArray();
-        $this->setFromArray($data);
+        if ($save) {
+            $this->_validators['action_argument'][Zend_Filter_Input::DEFAULT_VALUE] = '';
+            $this->_validators['action_argument'][] = [Zend_Validate_StringLength::class, ['max' => 255]];
+            unset(static::$_inputFilters[self::class]);
+
+            if (is_array($data['action_argument'])) {
+                $data['action_argument'] = Zend_Json::encode($data['action_argument']);
+            }
+        }
+
+        try {
+            $this->setFromArray($data);
+        } finally {
+            if ($save) {
+                array_pop($this->_validators['action_argument']);
+                unset($this->_validators['action_argument'][Zend_Filter_Input::DEFAULT_VALUE]);
+                unset(static::$_inputFilters[self::class]);
+            }
+        }
     }
     
     /**
