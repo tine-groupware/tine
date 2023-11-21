@@ -89,7 +89,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         self::VERSION       => 19,
         'containerName'     => 'Calendar',
         'containersName'    => 'Calendars', // ngettext('Calendar', 'Calendars', n)
-        'recordName'        => self::MODEL_PART_NAME,
+        'recordName'        => self::MODEL_PART_NAME, // gettext('GENDER_Event')
         'recordsName'       => 'Events', // ngettext('Event', 'Events', n)
         'hasRelations'      => true,
         'copyRelations'     => false,

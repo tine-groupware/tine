@@ -172,7 +172,7 @@ msgstr[0] "Arbeitszeitschema"
 msgstr[1] "Arbeitszeitschemas"
 
 #: Controller/WorkingTimeScheme.php:204
-msgid "HR Empoyee Working Time"
+msgid "HR Employee Working Time"
 msgstr "HR Mitarbeiter Arbeitszeit"
 
 #: Controller/DailyWTReport.php:290

@@ -208,7 +208,7 @@ class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Re
                 $i18n = Tinebase_Translation::getTranslation('HumanResources');
                 $timeaccount = $tac->create(new Timetracker_Model_Timeaccount([
                     'number' => 'HRWT',
-                    'title' => $i18n->translate('HR Empoyee Working Time'),
+                    'title' => $i18n->translate('HR Employee Working Time'),
 
                 ]), false);
                 HumanResources_Config::getInstance()->set(HumanResources_Config::WORKING_TIME_TIMEACCOUNT, $timeaccount->getId());

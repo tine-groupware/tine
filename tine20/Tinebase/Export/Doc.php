@@ -380,7 +380,7 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
 
     protected function renderProcessorsTwigTemplate()
     {
-        if (null === ($src = $this->_currentProcessor->getTwigSource())) {
+        if (! $this->_currentProcessor || null === $this->_currentProcessor->getTwigSource()) {
             return;
         }
 
