@@ -1735,6 +1735,22 @@ myStore.setBaseParam('foo', {bar:3});
     setBaseParam : function (name, value){
         this.baseParams = this.baseParams || {};
         this.baseParams[name] = value;
+    },
+
+    getClone: function() {
+        const clone = new Ext.data.Store({
+           fields: this.fields,
+            // data: this.data.clone().items,
+           // proxy: this.proxy,
+           replaceRecord: function(o, n) {
+               var r = this.getById(o.id); // refetch record as it might be outdated in the meantime
+               var idx = this.indexOf(r);
+               this.remove(r);
+               this.insert(idx, n);
+           }
+        });
+        clone.data = this.data.clone();
+        return clone;
     }
 });
 

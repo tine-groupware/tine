@@ -234,8 +234,8 @@ import './DependencyPanel'
                     ], [
                         this.fieldManager('attendees', {columnWidth: 1})
                     ], [
-                        this.fieldManager('dependens_on', {columnWidth: .5}),
-                        this.fieldManager('dependent_taks', {columnWidth: .5})
+                        this.fieldManager('dependens_on', {dependendTaskPanel: this.dependendTaskPanel, columnWidth: .5}),
+                        this.fieldManager('dependent_taks', {dependendTaskPanel: this.dependendTaskPanel, columnWidth: .5})
                     ]]
                 }, {
                     // activities and tags
