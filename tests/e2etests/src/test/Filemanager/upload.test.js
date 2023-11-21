@@ -31,7 +31,8 @@ describe('filemanager', () => {
                 await expect(page).toClick('.t-app-filemanager button', {text: 'Ordner anlegen',visibile:true});
                 await page.type('.x-layer.x-editor.x-small-editor.x-grid-editor input', folder);
                 await page.keyboard.press('Enter');
-                await page.waitForTimeout(2000);
+                await page.click('.t-app-filemanager .x-btn-image.x-tbar-loading');
+                await page.waitForTimeout(5000);
                 await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name' ,{text:folder});
                 await page.waitForTimeout(1000);
             });
@@ -52,7 +53,7 @@ describe('filemanager', () => {
                 await expect(editDialog).toClick('.x-combo-list-item', {text:'Users'});
             });
             test('give new user rights', async () => {
-                await editDialog.waitForXPath('//div[contains(@class, "x-grid3-row ") and contains(., "Users")]');;
+                await editDialog.waitForXPath('//div[contains(@class, "x-grid3-row ") and contains(., "Users")]');
                 await clickCheckBox(editDialog,'x-grid3-cc-add');
                 await clickCheckBox(editDialog,'x-grid3-cc-edit');
                 await clickCheckBox(editDialog,'x-grid3-cc-delete');
