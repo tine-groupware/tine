@@ -105,4 +105,30 @@ abstract class Tinebase_Import_Db_Abstract
 
         return $note;
     }
+
+    protected function _parseTime(?string $value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        if (preg_match('/^([0-9][0-9]).([0-9][0-9])/', $value, $matches)) {
+            if ($matches[1] >= 0 && $matches[1] < 24 && $matches[2] >=0 && $matches[2] < 59) {
+                return $matches[1] . ':' . $matches[2];
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
+    protected function _parseFloat(?string $value): ?float
+    {
+        if ($value !== 0 && empty($value)) {
+            return null;
+        }
+
+        return (float) preg_replace(['/[\.a-z ]*/i', '/,/'],['','.'], $value);
+    }
 }
