@@ -1002,11 +1002,13 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                         continue;
                     }
                     $oldACLCheckValue = $recordController->doContainerACLChecks(false);
+                    $oldRightCheckValue = $recordController->doRightChecks(false);
                     $models[$note->record_model] = array(
                         0 => new $note->record_model(),
                         1 => ($note->record_model !== 'Filemanager_Model_Node' && class_exists($note->record_model . 'Filter')),
                         2 => $note->record_model . 'Filter',
-                        3 => $oldACLCheckValue
+                        3 => $oldACLCheckValue,
+                        4 => $oldRightCheckValue,
                     );
                 }
                 $recordController = $controllers[$note->record_model];
@@ -1060,6 +1062,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                     }
                 } else {
                     try {
+
                         $recordController->get($note->record_id, null, false, true);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         $deleteIds[] = $note->getId();
@@ -1083,6 +1086,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
 
         foreach ($controllers as $model => $controller) {
             $controller->doContainerACLChecks($models[$model][3]);
+            $controller->doRightChecks($models[$model][4]);
         }
 
         if ($purge && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
