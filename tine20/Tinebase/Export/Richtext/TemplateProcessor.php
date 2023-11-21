@@ -306,8 +306,8 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
                     // i.e. file might be defined as jpg but a tiff with this name is in the filemanager
                     if (!is_file($match[1])) {
                         $pInfo = pathinfo($match[1]);
-                        $ext = strtolower($pInfo[PATHINFO_EXTENSION]);
-                        $path = $pInfo[PATHINFO_DIRNAME] . '/' . $pInfo[PATHINFO_FILENAME] . '.';
+                        $ext = strtolower($pInfo['extension']);
+                        $path = $pInfo['dirname'] . '/' . $pInfo['filename'] . '.';
                         foreach ($imgFormats as $format) {
                             if ($ext === $format) {
                                 continue;
