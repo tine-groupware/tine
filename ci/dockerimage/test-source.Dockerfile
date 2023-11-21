@@ -17,3 +17,4 @@ RUN apk add mysql-client jq rsync coreutils
 COPY etc /config
 COPY phpstan.neon ${TINE20ROOT}/phpstan.neon
 COPY phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon
+COPY etc/php/30_opcache.ini /etc/php/conf.d/30_opcache.ini
