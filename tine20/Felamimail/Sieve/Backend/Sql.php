@@ -210,7 +210,7 @@ class Felamimail_Sieve_Backend_Sql extends Felamimail_Sieve_Backend_Abstract
             $id = 1;
             foreach ($this->_rules as $rule) {
                 $ruleRecord = new Felamimail_Model_Sieve_Rule();
-                $ruleRecord->setFromFSR($rule);
+                $ruleRecord->setFromFSR($rule, true);
                 $ruleRecord->account_id = $this->_accountId;
                 $ruleRecord->conditions = Zend_Json::encode($ruleRecord->conditions);
                 if (is_array($ruleRecord->action_argument)) {

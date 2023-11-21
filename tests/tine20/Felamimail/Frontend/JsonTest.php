@@ -2077,6 +2077,16 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $this->_sieveTestHelper($ruleData);
     }
 
+    public function testSetSieveRuleValidationFail()
+    {
+        $this->expectException(Tinebase_Exception_Record_Validation::class);
+        $this->expectExceptionMessage('Some fields action_argument have invalid content');
+        $this->_json->saveRules($this->_account->getId(), $this->_getRedirectRuleData(array(
+            'emails' => join('', array_fill(0, 255, 'a')) . '@' . $this->_mailDomain,
+            'copy' => 0,
+        )));
+    }
+
     /**
      * @see 0006222: Keep a copy from mails forwarded to another emailaddress
      */
