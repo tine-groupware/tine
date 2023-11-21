@@ -149,6 +149,90 @@ class Calendar_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         return $this->sharedCalendar;
     }
 
+    protected function _createFloorPlanConfig()
+    {
+        Calendar_Config::getInstance()->{Calendar_Config::FLOORPLANS} = [[
+            'name' => 'Second Floor',
+            'image' => 'https://tine-docu.s3web.rz1.metaways.net/images/Calendar/Floorplans/second_floor.svg',
+            'resources' => [[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'og_2_table_1',
+                'resourceDisplayName' => 'Table 1',
+                'polygon' => [[ [677, 88], [677, 120], [742, 120], [742, 88]]] // or path
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'og_2_table_2',
+                'resourceDisplayName' => 'Table 2',
+                'polygon' => [[[677, 124], [677, 156], [742, 156], [742, 124]]]
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'og_2_table_3',
+                'resourceDisplayName' => 'Table 3',
+                'polygon' => [[[677, 210], [677, 243], [742, 243], [742, 210]]]
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'og_2_table_4',
+                'resourceDisplayName' => 'Table 4',
+                'polygon' => [[[677, 246], [677, 279], [742, 279], [742, 246]]]
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'og_2_table_5',
+                'resourceDisplayName' => 'Table 5',
+                'polygon' => [[[677, 327], [677, 359], [742, 359], [742, 327]]]
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'og_2_table_6',
+                'resourceDisplayName' => 'Table 6',
+                'polygon' => [[[677, 363], [677, 395], [742, 395], [742, 363]]]
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'og_2_table_7',
+                'resourceDisplayName' => 'Table 7',
+                'polygon' => [[[677, 471], [677, 504], [742, 504], [742, 471]]]
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'og_2_table_8',
+                'resourceDisplayName' => 'Table 8',
+                'polygon' => [[[677, 507], [677, 540], [742, 540], [742, 507]]]
+            ]],
+            'referenceImageDim' => [[1000, 1353]]
+        ],[
+            'name' => 'First Floor',
+            'image' => 'https://tine-docu.s3web.rz1.metaways.net/images/Calendar/Floorplans/basement.svg',
+            'resources' => [[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'eg_table_1',
+                'resourceDisplayName' => 'Table 1',
+                'polygon' => [[[677, 246], [677, 279], [742, 279], [742, 246]]] // or path
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'eg_table_2',
+                'resourceDisplayName' => 'Table 2',
+                'polygon' => [[[677, 282], [677, 315], [742, 315], [742, 282]]]
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'eg_table_3',
+                'resourceDisplayName' => 'Table 3',
+                'polygon' => [[[677, 393], [677, 425], [742, 425], [742, 393]]]
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'eg_table_4',
+                'resourceDisplayName' => 'Table 4',
+                'polygon' => [[[677, 429], [677, 461], [742, 461], [742, 429]]]
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'eg_table_5',
+                'resourceDisplayName' => 'Table 5',
+                'polygon' => [[[677, 554], [677, 586], [742, 586], [742, 554]]]
+            ],[
+                'eventSaveLocation' => 'RESOURCE_CAL',
+                'resourceName' => 'eg_table_6',
+                'resourceDisplayName' => 'Table 6',
+                'polygon' => [[[677, 590], [677, 622], [742, 622], [742, 590]]]
+            ]],
+            'referenceImageDim' => [[1000, 1000]]
+        ]];
+    }
     /**
      * creates a shared calendar
      */

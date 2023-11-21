@@ -29,6 +29,11 @@
     background-image:url(../../images/icon-set/icon_calendar_strahl_transparent.svg) !important;
 }
 
+.cal-floorplan-view-type {
+    background-image:url(../../images/icon-set/icon_resource_homeoffice.svg) !important;
+
+}
+
 .cal-print-loose-leaf {
     background-image:url(../../images/icon-set/icon_looseleaf.svg) !important;
 }
