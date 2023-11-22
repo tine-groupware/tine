@@ -59,10 +59,11 @@ class Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV extends Tinebase_Record
      */
     protected static $_configurationObject = null;
 
+    public static $clientClass = Tinebase_FileSystem_FlySystem_CachingSabreDavClient::class;
     public function getFlySystemAdapter(): \League\Flysystem\FilesystemAdapter
     {
         return new \League\Flysystem\WebDAV\WebDAVAdapter(
-            new \Sabre\DAV\Client([
+            new static::$clientClass([
                 'baseUri' => $this->{self::FLD_URL},
                 'userName' => $this->{self::FLD_USERNAME},
                 'password' => $this->getPasswordFromProperty(self::FLD_PWD),
