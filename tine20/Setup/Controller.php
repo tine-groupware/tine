@@ -2923,7 +2923,9 @@ class Setup_Controller
             $tables[] = SQL_TABLE_PREFIX . 'felamimail_attachmentcache';
         }
 
-        // TODO add UserManual content tables?
+        $tables[] = SQL_TABLE_PREFIX . 'logentries';
+
+        // TODO add UserManual content tables? need to re-fetch usermanual content after restore
 
         return $tables;
     }
