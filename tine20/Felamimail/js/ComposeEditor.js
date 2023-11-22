@@ -77,6 +77,7 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
                 multiple: true,
                 scope: this,
                 handler: this.onFileSelect,
+                enableFileDialog: false,
             }),
             new Ext.ux.form.HtmlEditor.PlainText()
         ];
