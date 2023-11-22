@@ -3,7 +3,7 @@ TINE RELEASENOTES
 =====================
                     
   Release:     TBA (2024.11)
-  Last change: 2023-11-15
+  Last change: 2023-11-22
 
 # GENERAL CHANGES (Administrative)
 
@@ -14,6 +14,10 @@ TINE RELEASENOTES
 # ADMIN / OPERATION
 
 # ADDRESSBOOK
+
+# EMAIL
+
+## New "Floorplan" feature for booking resources (rooms / tables / ...)
 
 # EMAIL
 
