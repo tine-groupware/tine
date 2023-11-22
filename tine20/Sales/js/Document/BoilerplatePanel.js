@@ -85,8 +85,21 @@ const BoilerplatePanel = Ext.extend(Ext.Panel, {
             field.originalValue = boilerplate.get('boilerplate');
             field.setFieldLabel(fieldLabel);
         });
-        // remove unused fields
-        fields.forEach((field) => { this.remove(field) });
+
+        fields.forEach((field) => {
+            if (this.getComponent(field)) {
+                // remove unused fields
+                this.remove(field);
+            } else {
+                // field is somewhere in dialog, but has no definition... we keep it
+                const boilerplateRecord = Tine.Tinebase.data.Record.setFromJson({
+                    name: field.name.replace(/^.+_/, ''),
+                    model: editDialog.record.constructor.getPhpClassName()
+                }, this.recordClass);
+                this.store.add(boilerplateRecord)
+            }
+
+        });
 
         // show/hide tabstripe
         this.ownerCt[(this.items.getCount() ? 'un' : '') +'hideTabStripItem'](this);
