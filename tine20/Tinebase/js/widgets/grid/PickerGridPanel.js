@@ -750,8 +750,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
             record = Tine.Tinebase.data.Record.setFromJson(record.get(this.isMetadataModelFor), recordClass);
             editDialogConfig.mode = record.phantom ? 'local' : 'remote';
-            updateFn = (updatedRecord) => {
-                me.store.getAt(row).set(this.isMetadataModelFor, updatedRecord.getData ? updatedRecord.getData() : updatedRecord);
+            updateFn = (updatedRecordData) => {
+                const updatedRecord = Tine.Tinebase.data.Record.setFromJson(updatedRecordData, recordClass);
+                me.store.getAt(row).set(this.isMetadataModelFor, updatedRecord.getData());
                 me.store.getAt(row).commit();
             }
         }
