@@ -3505,11 +3505,12 @@ class Tinebase_FileSystem implements
         return $result;
     }
 
+    static public $syncFlySystemRecursionCache = [];
+
     public function syncFlySystem(Tinebase_Model_Tree_Node $node, int $depth = -1): void
     {
-        static $recursionCache = [];
-        if (isset($recursionCache[$node->getId()])) return;
-        $recursionCache[$node->getId()] = true;
+        if (isset(static::$syncFlySystemRecursionCache[$node->getId()])) return;
+        static::$syncFlySystemRecursionCache[$node->getId()] = true;
 
         $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($node->flysystem);
         $flyConf = Tinebase_Controller_Tree_FlySystem::getCurrentFlyConfiguration();
@@ -3544,6 +3545,7 @@ class Tinebase_FileSystem implements
                             $this->unDeleteFileNode($childNode->getId(), false);
                             $childNode = $this->get($childNode->getId());
                         }
+                        $childNode->unsetDirty();
                         if ($childNode->flysystem !== $node->flysystem) {
                             $childNode->flysystem = $node->flysystem;
                         }
@@ -3615,6 +3617,7 @@ class Tinebase_FileSystem implements
             $forUpdateRAII = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($this->_getTreeNodeBackend());
             $node = $this->get($node->getId());
             unset($forUpdateRAII);
+            $node->unsetDirty();
 
             $size = $flySystem->fileSize($node->flypath);
             $mime = null;

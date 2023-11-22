@@ -55,9 +55,14 @@ trait Tinebase_Record_AbstractTrait
      *
      * @return boolean
      */
-    public function isDirty()
+    public function isDirty(): bool
     {
         return $this->_isDirty;
+    }
+
+    public function unsetDirty(): void
+    {
+        $this->_isDirty = false;
     }
 
     /**

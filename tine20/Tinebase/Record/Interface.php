@@ -410,7 +410,9 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
 
     public function setAccountGrants(Tinebase_Record_Interface $grants);
 
-    public function isDirty();
+    public function isDirty(): bool;
+
+    public function unsetDirty(): void;
 
     public function byPassFilters(): bool;
 

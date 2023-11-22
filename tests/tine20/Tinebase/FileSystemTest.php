@@ -159,6 +159,118 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertNotEquals($basePathNode->hash, $this->_controller->stat($testPath)->hash);
     }
 
+    public function testFlySystemWebDav()
+    {
+        $oldClientClass = Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::$clientClass;
+        $raii = new Tinebase_RAII(fn() => Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::$clientClass = $oldClientClass);
+        Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::$clientClass = Tinebase_FileSystem_FlySystem_SabreDavClientMock::class;
+
+        Tinebase_FileSystem_FlySystem_SabreDavClientMock::$callBack = function() {
+            static $calls = 0;
+            static $time = null;
+            if (!$time) {
+                $time = date('Y-m-d H:i:s');
+            }
+            switch ($calls++) {
+                case 0:
+                    $response = '<?xml version="1.0" encoding="utf-8" ?>
+<multistatus xmlns="DAV:">
+    <response>
+        <href>/</href>
+        <propstat>
+            <prop>
+                <iscollection>1</iscollection>
+                <resourcetype>
+                    <collection/>
+                </resourcetype>
+                <displayname>/</displayname>
+                <getlastmodified>' . $time . '</getlastmodified>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+</multistatus>';
+                    return new \Sabre\HTTP\Response(207, [
+                            'Content-Type' => 'text/xml; charset="utf-8"',
+                            'Content-Length' => strlen($response),
+                        ], $response);
+
+                case 1:
+                    $response = '<?xml version="1.0" encoding="utf-8" ?>
+<multistatus xmlns="DAV:">
+    <response>
+        <href>/</href>
+        <propstat>
+            <prop>
+                <iscollection>1</iscollection>
+                <resourcetype>
+                    <collection/>
+                </resourcetype>
+                <displayname>/</displayname>
+                <getlastmodified>' . $time . '</getlastmodified>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+    <response>
+        <href>/test.txt</href>
+        <propstat>
+            <prop>
+                <displayname>test.txt</displayname>
+                <iscollection>0</iscollection>
+                <resourcetype/>
+                <getlastmodified>' . $time . '</getlastmodified>
+                <getcontenttype>text/text</getcontenttype>
+                <getcontentlength>23</getcontentlength>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+</multistatus>';
+                    return new \Sabre\HTTP\Response(207, [
+                        'Content-Type' => 'text/xml; charset="utf-8"',
+                        'Content-Length' => strlen($response),
+                    ], $response);
+                case 2:
+                    return new \Sabre\HTTP\Response(200, [
+                        'Content-Type' => 'text/xml; charset="utf-8"',
+                        'Content-Length' => 23,
+                    ], join('', array_fill(0, 23, 'a')));
+            }
+        };
+
+        $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
+            Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest',
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG_CLASS => Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::class,
+            Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV([
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::FLD_URL => 'http://unittest.test',
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::FLD_USERNAME => 'user',
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::FLD_PWD => 'pwd',
+            ]),
+            Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_originalTestUser->getId(),
+        ]));
+
+        $node = $this->_controller->mkdir($this->_basePath . '/flysystem');
+        $node->flysystem = $flySystem->getId();
+        $node->flypath = '/';
+
+        $node = $this->_controller->update($node);
+        $this->assertSame($flySystem->getId(), $node->flysystem);
+        $this->assertSame('/', $node->flypath);
+
+        $this->_controller->syncFlySystem($node);
+        $this->_controller->clearStatCache($this->_basePath . '/flysystem/test.txt');
+        $fileNode = $this->_controller->stat($this->_basePath . '/flysystem/test.txt');
+        $this->_controller->clearStatCache($this->_basePath . '/flysystem/test.txt');
+        \Tinebase_FileSystem::$syncFlySystemRecursionCache = [];
+
+        $this->_controller->syncFlySystem($node);
+        $unchangedFileNode = $this->_controller->stat($this->_basePath . '/flysystem/test.txt');
+        $this->assertSame($fileNode->seq, $unchangedFileNode->seq);
+
+        unset($raii);
+    }
+
     public function testCreateFlysystemDir()
     {
         if (is_dir(Tinebase_Config::getInstance()->filesdir . '/flysystem')) {
