@@ -103,23 +103,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 ],
             ],
         ],
-
-        'filterModel'       => array(
-            'organizer'         => array(
-                'filter'            => 'Tinebase_Model_Filter_User',
-                'label'             => null,
-                'options'           => array(
-                    'appName' => 'Tasks', 'modelName' => 'Task'
-                ),
-            ),
-            'queryRelated'      => array(
-                'filter'            => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
-                'label'             => null,
-                'options'           => array(
-                    'related_model'     => 'Crm_Model_Lead',
-                ),
-            ),
-        ),
+        
         'fields'            => array(
             'summary'           => array(
                 'label'             => 'Summary', //_('Summary'),
