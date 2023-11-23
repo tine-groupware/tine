@@ -522,6 +522,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * If param date is given (for example: date=2010-09-17), all records before this date are deleted
      * (if the table has a date field). If table names are given, purge only records from these tables.
      * We also remove all modification log records before the given date (with param modlog=purge)!
+     *      - modlog can be skipped with skip=modlog
      *
      * @param Zend_Console_Getopt $_opts
      * @return int
@@ -534,7 +535,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $this->_parseArgs($_opts, array(), 'tables');
         $date = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
         $tables = isset($args['tables']) ? (array) $args['tables'] : [];
-        $skip = isset($args['skip']) ? $args['skip'] : null;
+        $skip = $args['skip'] ?? null;
 
         echo "\nPurging obsolete data from tables...";
         $result = Tinebase_Controller::getInstance()->removeObsoleteData($date, $tables, false);
@@ -544,7 +545,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "\nCleaning relations...";
             $this->cleanRelations();
 
-            if ($skip === 'modlog') {
+            if ('modlog' !== $skip) {
                 echo "\nCleaning modlog...";
                 $this->cleanModlog(isset($args['modlog']) && $args['modlog'] === 'purge' ? $_opts : null);
             }
