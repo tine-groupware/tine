@@ -343,7 +343,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Removed ' . $sumDeletedRows . ' rows.');
 
-        if ($sumDeletedRows > 1000) {
+        if ($sumDeletedRows > 100000) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Optimizing table ...');
             $stmt = $db->query('OPTIMIZE TABLE ' . $table . ';');
             $stmt->closeCursor();
