@@ -98,7 +98,7 @@ abstract class Tinebase_Import_Db_Abstract
     {
         $note = '';
         foreach ($this->_descriptionFields as $field) {
-            if ($row[$field] !== null) {
+            if (! empty($row[$field])) {
                 $note .= "$field: " . $row[$field] . "\n";
             }
         }
