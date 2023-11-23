@@ -618,16 +618,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         this.initTemplates();
         this.initActions();
-        
-        // init filters
-        this.filters = Ext.isArray(this.filters) ? this.filters : [];
-        if (this.filters.length < 1) {
-            this.filters = [{field: this.defaultFilter}];
-        }
-        this.filterStore = new Ext.data.JsonStore({
-            fields: this.record,
-            data: this.filters
-        });
 
         // init filter models
         this.filterModelMap = {};
@@ -709,6 +699,22 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 field: 'label',
                 direction: 'ASC'
             }
+        });
+
+
+        // make sure default filter exists
+        this.defaultFilter = _.find(this.filterModels, {field: this.defaultFilter}) ? this.defaultFilter : (
+            _.find(this.filterModels, {field: 'query'}) ? 'query' : this.filterModels[0].field
+        );
+
+        // init filters
+        this.filters = Ext.isArray(this.filters) ? this.filters : [];
+        if (this.filters.length < 1) {
+            this.filters = [{field: this.defaultFilter}];
+        }
+        this.filterStore = new Ext.data.JsonStore({
+            fields: this.record,
+            data: this.filters
         });
     },
     
