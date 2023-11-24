@@ -3557,7 +3557,9 @@ class Tinebase_FileSystem implements
                             $childNode = $this->update($childNode);
                         }
                         $transaction->release();
-                        $this->syncFlySystem($childNode);
+                        if (0 !== $depth) {
+                            $this->syncFlySystem($childNode, $depth - 1);
+                        }
 
                     } else {
                         // create node
