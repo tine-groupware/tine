@@ -91,7 +91,15 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 vtype: 'email',
                                 maxLength: 255,
                                 allowBlank: true,
-                                disabled: ! Tine.Tinebase.common.hasRight('manage', 'Addressbook', 'list_email_options')
+                                checkState: function (editDialog, field) {
+                                    if (editDialog?.mailingListPanel) {
+                                        const checked = editDialog.mailingListPanel.isMailinglistCheckbox.checked;
+                                        const field = editDialog.getForm().findField('email');
+                                        field.setVisible(checked);
+                                        editDialog.doLayout();
+                                    }
+                                },
+                                disabled: ! Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook'),
                             }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
                                 columnWidth: 0.75,
                                 fieldLabel: this.app.i18n._('List type'),
@@ -237,6 +245,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         ['name', 'description', 'email', 'account_only'].forEach((fieldName) => {this.getForm().findField(fieldName).setReadOnly(!allowEditSysFields)});
         this.memberGridPanel.setReadOnly(!allowEditSysFields);
         this.mailingListPanel?.setReadOnly(!allowEditSysFields);
+        this.doLayout();
     }
 });
 

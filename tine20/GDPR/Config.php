@@ -39,6 +39,9 @@ class GDPR_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const DEFAULT_ADB_CONTACT_DATA_PROVENANCE = 'defaultADBContactDataProvenance';
+    const MANAGE_CONSENT_PAGE_EXPLAIN_TEXT = 'manageConsentPageExplainText';
+    const MANAGE_CONSENT_EMAIL_TEMPLATE = 'manageConsentEmailTemplate';
+    const LANGUAGES_AVAILABLE = 'languagesAvailable';
 
     /**
      * (non-PHPdoc)
@@ -79,6 +82,49 @@ class GDPR_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
             self::DEFAULT_STR           => '',
+        ],
+        self::MANAGE_CONSENT_PAGE_EXPLAIN_TEXT => [
+            //_('Manage consent page explain text')
+            self::LABEL                 => 'Manage consent page explain text',
+            //_('Manage consent page explain text')
+            self::DESCRIPTION           => 'Manage consent page explain text',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+            self::DEFAULT_STR           => [
+                'en' => 'Example GDPR text',
+                'de' => 'Beispiel Text für GDPR'
+            ],
+        ],
+        self::MANAGE_CONSENT_EMAIL_TEMPLATE => [
+            //_('Manage consent Email template')
+            self::LABEL                 => 'Manage consent Email template',
+            //_('Manage consent Email template')
+            self::DESCRIPTION           => 'Manage consent Email template',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+            self::DEFAULT_STR           => [
+                'de' => '<a href="{{manageconstentlink}}">Abmelden</a>',
+                'en' => '<a href="{{manageconstentlink}}">Unsubscribe</a>'
+            ],
+        ],
+        self::LANGUAGES_AVAILABLE => [
+            self::LABEL                 => 'Languages Available', //_('Languages Available')
+            self::DESCRIPTION           => 'List of languages available in the sales modules.', //_('List of languages available in the sales modules.')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            'localeTranslationList'     => 'Language',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => 'de', 'value' => 'German'],
+                    ['id' => 'en', 'value' => 'English'],
+                ],
+                self::DEFAULT_STR           => 'en',
+            ],
         ],
     ];
     

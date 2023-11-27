@@ -88,6 +88,12 @@ class Addressbook_Convert_Contact_Json extends Tinebase_Convert_Json
                 ]
             ]);
 
+        foreach ($_records as $record) {
+            if ($record['GDPR_DataIntendedPurposeRecord']) {
+                $record['GDPR_DataIntendedPurposeRecord'] = $record['GDPR_DataIntendedPurposeRecord']->toArray();
+            }
+        }
+        
         return $dehydrator->dehydrate($_records);
     }
 

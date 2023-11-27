@@ -841,7 +841,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 'type': '',
                 'n_fileas': '',
                 'name': name !== email ? name : '',
-                'record_id': ''
+                'contact_record': ''
             }];
             
             // we might get the recipient token from server
@@ -983,10 +983,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.autoSave) {
             this.trottledsaveAsDraft.cancel();
         }
-
-        const matches = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-signature-current');
-        while (matches.length > 0) matches[0].outerHTML = matches[0].innerHTML;
-
+        
+        this.flattenHtmlElements();
         this.onRecordUpdate();
 
         var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
@@ -1054,21 +1052,22 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {} button
      * @param {} e
      */
-    onToggleMassMailing: function (button, e) {
-        var active = !this.record.get('massMailingFlag');
-
+    onToggleMassMailing: async function (button, e) {
+        const active = !this.record.get('massMailingFlag');
+        if (!active && this.button_massMailing.pressed) this.button_massMailing.toggle();
+        if (this.massMailingMode === active) return;
+        this.massMailingMode = active;
+        if (this.recipientGrid) this.recipientGrid.massMailingMode = active;
         this.record.set('massMailingFlag', active);
-        this.recipientGrid.switchMassMailingRecipients(active);
-
-        this.recipientGrid.view.refresh();
-
+        await this.switchMassMailingMode(active);
+    },
+    
+    async switchMassMailingMode(active) {
+        this.massMailingInfoText.setVisible(active);
         if (active) {
-            this.massMailingInfoText.show();
-            this.doLayout();
-        } else {
-            this.massMailingInfoText.hide();
-            this.doLayout();
+            await this.recipientGrid.updateMassMailingRecipients();
         }
+        this.doLayout();
     },
 
     onFileMessageSelectionChange: function(btn, selection) {
@@ -1248,10 +1247,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.from) {
             this.accountCombo.setValue(this.from.id);
         }
-
-        if (this.record.get('massMailingFlag')) {
-            this.massMailingInfoText.show();
-        }
+        
+        this.switchMassMailingMode(this.record.get('massMailingFlag'));
 
         this.addDefaultSignature();
         this.updateFileLocations();
@@ -1292,6 +1289,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.loadMask) {
             this.hideLoadMask();
         }
+        
+        this.recipientGrid.addEmptyRowAndDoLayout(true);
     },
 
     /**
@@ -1534,7 +1533,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 matches[0].outerHTML = matches[0].innerHTML.replace(`--<br>${oldSignature}`, '');
             }
             const resolvedSignature = newSignature === '' ? '' : `--<br>${newSignature}`;
-            bodyContent = this.appendSignatureHTML(format, newPosition, resolvedSignature);
+            // bodyContent = this.appendSignatureHTML(format, newPosition, resolvedSignature);
+            const signatureElement = document.createElement('span');
+            signatureElement.className = 'felamimail-body-signature-current';
+            signatureElement.innerHTML = resolvedSignature;
+            bodyContent = this.appendHtmlNode(signatureElement, newPosition);
         }
 
         this.record.set('body', bodyContent);
@@ -1548,38 +1551,33 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (position === 'above' && !bodyContent.startsWith(ch)) bodyContent = `${ch}${ch}${bodyContent}`;
         return position === 'above' ? `${ch}${ch}${signatureText}${bodyContent}` : `${bodyContent}${signatureText}`;
     },
-
-    appendSignatureHTML(format, position, signature) {
+    
+    appendHtmlNode(element, position, targetClassName = null) {
         const quotedHeader = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-quoted-header')[0];
         const blockquote = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-blockquote')[0];
-        const targetElement = position === 'above' ? quotedHeader : (blockquote || quotedHeader);
-        const signatureElement = document.createElement('span');
-        signatureElement.className = 'felamimail-body-signature-current';
-        signatureElement.innerHTML = signature;
-
-        if (!targetElement || position === 'below') {
-            this.htmlEditor.getDoc().getElementsByTagName('body')[0].appendChild(signatureElement);
+        const targetElement = targetClassName ? this.htmlEditor.getDoc().getElementsByClassName(targetClassName)[0] : null;
+        let el = targetElement;
+        
+        if (!targetElement) el = position === 'above' ? quotedHeader : (blockquote || quotedHeader);
+        const insertNewLines = (target, count) => {
+            for (let i = 0; i < count; i++) {
+                if (!target.previousSibling || target.previousSibling?.nodeName !== 'BR') target.insertAdjacentHTML("beforebegin", '<br>');
+                target = target.previousSibling;
+            }
+            return target;
+        }
+        if (!el || position === 'below') {
+            this.htmlEditor.getDoc().getElementsByTagName('body')[0].appendChild(element);
         } else {
             if (position === 'above') {
-                let el = quotedHeader;
-                for (let i = 0; i < 2; i++) {
-                    if (!el.previousSibling || el.previousSibling?.nodeName !== 'BR') {
-                        el.insertAdjacentHTML("beforebegin", '<br>');
-                    }
-                    el = el.previousSibling;
-                }
-                targetElement.previousSibling.previousSibling.insertAdjacentElement("beforebegin", signatureElement);
+                const target = insertNewLines(el, 2);
+                target.insertAdjacentElement("beforebegin", element);
             }
         }
-        // append newline above signature
-        let el = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-signature-current')[0];
+        // add newline above new appended element
+        el = this.htmlEditor.getDoc().getElementsByClassName(element.className)[0];
         if (el.innerHTML !== '') {
-            for (let i = 0; i<2 ; i++) {
-                if (!el.previousSibling || el.previousSibling?.nodeName !== 'BR') {
-                    el.insertAdjacentHTML("beforebegin", '<br>');
-                }
-                el = el.previousSibling;
-            }
+            insertNewLines(el, 2);
         }
         return this.htmlEditor.getDoc().getElementsByTagName('body')[0].innerHTML;
     },
@@ -1624,7 +1622,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             i18n: this.app.i18n,
             hideLabel: true,
             composeDlg: this,
-            autoStartEditing: !this.AddressLoadMask
+            autoStartEditing: !this.AddressLoadMask,
         });
 
         this.southPanel = new Ext.Panel({
@@ -1679,14 +1677,44 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 return '';
             }
         });
+        
+        const infoItems = [
+            {
+                // message file info text
+                ref: '../../messageFileInfoText',
+                style: 'display: block;',
+            },
+            {
+                // mass mailing info text
+                html: this.app.i18n._('NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy.'),
+                ref: '../../massMailingInfoText',
+                style: 'padding: 5px 0px; display: block;',
+            }
+        ]
 
         const activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
-
         return {
             border: false,
             frame: true,
             layout: 'border',
             items: [
+                {
+                    ref: '../messageInfoFormPanel',
+                    layout: 'form',
+                    region: 'north',
+                    padding: '5px',
+                    border:  false,
+                    autoHeight: true,
+                    align: 'left',
+                    labelWidth: 250,
+                    cls: 'felamimail-compose-info',
+                    margins: '0 0 10 0',
+                    defaults: {
+                        hidden: true,
+                        xtype: 'label',
+                    },
+                    items: infoItems
+                },
                 {
                     region: 'center',
                     layout: {
@@ -1698,22 +1726,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         scope: this
                     },
                     items: [
-                        {
-                            // mass mailing info text
-                            cls: 'felamimail-compose-info',
-                            html: this.app.i18n._('NOTE: This is mail will be sent as a mass mail, i.e. each recipient will get his or her own copy.'),
-                            hidden: true,
-                            ref: '../../massMailingInfoText',
-                            padding: '2px',
-                            height: 20
-                        }, {
-                            // message file info text
-                            cls: 'felamimail-compose-info',
-                            hidden: true,
-                            ref: '../../messageFileInfoText',
-                            padding: '2px',
-                            height: 'auto'
-                        },
                         this.accountCombo,
                         {
                             // extuxclearabletextfield would be better, but breaks the layout big tim
@@ -1943,14 +1955,24 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             return;
         }
-
-        const matches = this.htmlEditor.getDoc().getElementsByClassName('felamimail-body-signature-current');
-        while (matches.length > 0) matches[0].outerHTML = matches[0].innerHTML;
+        this.flattenHtmlElements();
 
         this.record.set('body', this.bodyCards.layout.activeItem.getValue());
 
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::doApplyChanges - call parent');
         this.doApplyChanges(closeWindow);
+    },
+    
+    flattenHtmlElements() {
+        const classesToRemove = [
+            'felamimail-body-signature-current',
+            'felamimail-body-manage-consent-link'
+        ];
+        classesToRemove.forEach(( className) => {
+            const matches = this.htmlEditor.getDoc().getElementsByClassName(className);
+            while (matches.length > 0) matches[0].outerHTML = matches[0].innerHTML;
+        });
+        
     },
 
     /**

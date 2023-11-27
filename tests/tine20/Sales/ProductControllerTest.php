@@ -34,7 +34,7 @@ class Sales_ProductControllerTest extends TestCase
      */
     public function testCreateProduct()
     {
-        $product = $this->getUit()->create(new Sales_Model_Product(array(
+        $data = new Sales_Model_Product(array(
             'name' => [[
                 Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => 'en',
                 Tinebase_Record_PropertyLocalization::FLD_TEXT => 'A new product',
@@ -42,7 +42,8 @@ class Sales_ProductControllerTest extends TestCase
                 Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => 'de',
                 Tinebase_Record_PropertyLocalization::FLD_TEXT => 'Ein neues Produkt',
             ]],
-        )));
+        ));
+        $product = $this->getUit()->create($data);
         
         $this->assertNotEmpty($product->number);
         

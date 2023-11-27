@@ -20,7 +20,16 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
         var me = this;
         this.app = this.app || Tine.Tinebase.appMgr.get('GDPR');
         this.title = this.app.i18n._('GDPR');
-
+        this.action_gdpr = new Ext.Button({
+            text: this.app.i18n._('GRPR LINK'),
+            handler: () => {
+                window.open(this.gdprLink, '_blank');
+            },
+            disabled: false,
+            hidden: true,
+            scope: this
+        });
+    
         this.blacklistContactLabel = new Ext.form.Label({
             text: this.app.i18n._('Must not be contacted')
         });
@@ -30,7 +39,6 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
             boxLabel: this.app.i18n._("This Contact withdrawed usage of his data for any purpose."),
             listeners: {scope: this, check: this.onBlacklistContactCheck}
         });
-
         this.expiryDatePicker = new Ext.ux.form.ClearableDateField({
             fieldLabel: this.app.i18n._('Expiry Date'),
         });
@@ -43,7 +51,7 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
         this.dataIntendedPurposesGrid = new Tine.widgets.grid.QuickaddGridPanel({
             border: true,
             frame: false,
-            useBBar: true,
+            enableBbar: false,
             allowCreateNew: true,
             allowDelete: false,
             editDialogConfig: {mode: 'local'},
@@ -71,6 +79,7 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
                 width: '100%',
                 labelAlign: 'top',
                 items: [
+                    [this.action_gdpr],
                     this.blacklistContactLabel,
                     this.blacklistContactCheckbox,
                     {
@@ -157,6 +166,7 @@ Tine.GDPR.Addressbook.ContactGDPRPanel = Ext.extend(Ext.Panel, {
         if (blacklistContact) {
             this.dataIntendedPurposesGrid.setReadOnly(true);
         }
+        this.gdprLink = Tine.Tinebase.common.getUrl() + `GDPR/view/manageConsent/${record.id}`;
     },
 
     setReadOnly: function(readOnly) {

@@ -281,7 +281,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
                 'type': contact.get('type'),
                 'n_fileas': contact.get('n_fileas'),
                 'name': contact.get('n_fn'),
-                'record_id': contact.get('id')
+                'contact_record': contact
             };
         }
         

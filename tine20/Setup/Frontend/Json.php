@@ -322,14 +322,15 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         
         return $registryData;
     }
-    
+
     /**
      * Returns registry data of all applications current user has access to
-     * @see Tinebase_Application_Json_Abstract
-     * 
      * @return mixed array 'variable name' => 'data'
      *
      * TODO DRY: most of this already is part of Tinebase_Frontend_Json::_getAnonymousRegistryData
+     * @throws Tinebase_Exception
+     * @see Tinebase_Application_Json_Abstract
+     *
      */
     public function getAllRegistryData()
     {
@@ -338,42 +339,12 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
 
         $registryData['Setup'] = $this->getRegistryData();
         
+        $coreRegistryData = Tinebase_Core::getCoreRegistryData();
+        $coreRegistryData['serviceMap'] = Setup_Frontend_Http::getServiceMap();
+        $coreRegistryData['timeZone'] = Setup_Core::getUserTimezone();
+        $coreRegistryData['jsonKey'] = Setup_Core::get('jsonKey');
         // setup also need some core tinebase regdata
-        $locale = Tinebase_Core::get('locale');
-        $symbols = Zend_Locale::getTranslationList('symbols', $locale);
-
-        $registryData['Tinebase'] = array(
-            'serviceMap'       => Setup_Frontend_Http::getServiceMap(),
-            'timeZone'         => Setup_Core::getUserTimezone(),
-            'jsonKey'          => Setup_Core::get('jsonKey'),
-            'locale'           => array(
-                'locale'   => $locale->toString(), 
-                'language' => Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale),
-                'region'   => Zend_Locale::getTranslation($locale->getRegion(), 'country', $locale),
-            ),
-            'version'          => array(
-                'buildType'     => TINE20_BUILDTYPE,
-                'codeName'      => TINE20SETUP_CODENAME,
-                'packageString' => TINE20SETUP_PACKAGESTRING,
-                'releaseTime'   => TINE20SETUP_RELEASETIME,
-                // NOTE: if assetHash is not available we have a serious problem -  please don't generate one!
-                'assetHash'     => Tinebase_Frontend_Http_SinglePageApplication::getAssetHash(),
-            ),
-            'maxFileUploadSize' => Tinebase_Helper::convertToBytes(ini_get('upload_max_filesize')),
-            'maxPostSize'       => Tinebase_Helper::convertToBytes(ini_get('post_max_size')),
-            'thousandSeparator' => $symbols['group'],
-            'decimalSeparator'  => $symbols['decimal'],
-            'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
-            'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
-            'brandingFaviconSvg' => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG),
-            'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
-            'brandingDescription'=> Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_DESCRIPTION),
-            'brandingHelpUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_HELPURL),
-            'brandingShopUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_SHOPURL),
-            'brandingBugsUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_BUGSURL),
-            'installLogo'       => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
-            'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
-        );
+        $registryData['Tinebase'] = $coreRegistryData;
         
         return $registryData;
     }

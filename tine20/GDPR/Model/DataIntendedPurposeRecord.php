@@ -26,6 +26,7 @@
 class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
 {
     const MODEL_NAME_PART = 'DataIntendedPurposeRecord';
+    public const FLD_INTENDEDPURPOSE = 'intendedPurpose';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -73,7 +74,6 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                     self::COLUMNS           => ['record', 'intendedPurpose'],
                 ],
             ]
-
         ],
 
         self::ASSOCIATIONS => [
@@ -89,8 +89,27 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
             ],
         ],
 
+        self::LANGUAGES_AVAILABLE => [
+            self::TYPE => self::TYPE_KEY_FIELD,
+            self::NAME => GDPR_Config::LANGUAGES_AVAILABLE,
+            self::CONFIG => [
+                self::APP_NAME => GDPR_Config::APP_NAME,
+            ],
+        ],
+        
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_INTENDEDPURPOSE => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        GDPR_Model_DataIntendedPurpose::FLD_NAME            => [],
+                        GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION     => [],
+                    ]
+                ]
+            ],
+        ],
+
         self::FIELDS => [
-            'intendedPurpose'       => [
+            self::FLD_INTENDEDPURPOSE       => [
                 self::TYPE              => self::TYPE_RECORD,
                 self::LENGTH            => 40,
                 self::CONFIG            => [
@@ -108,7 +127,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::DISABLED          => true,
             ],
             'agreeDate' => [
-                self::TYPE              => self::TYPE_DATE,
+                self::TYPE              => self::TYPE_DATETIME,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Agreement date', // _('Agreement date')
             ],
@@ -120,7 +139,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::LABEL             => 'Agreement comment', // _('Agreement comment')
             ],
             'withdrawDate' => [
-                self::TYPE              => self::TYPE_DATE,
+                self::TYPE              => self::TYPE_DATETIME,
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL             => 'Withdraw date', // _('Withdraw date')

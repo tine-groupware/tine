@@ -907,7 +907,7 @@ Tine.Tinebase.common = {
                 'type': '',
                 'n_fileas': '',
                 'name': parsed?.name ?? '',
-                'record_id': ''
+                'contact_record': ''
             };
 
             if (contact['email'] !== '') {

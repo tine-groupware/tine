@@ -92,25 +92,27 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         var isMailinglist = _.get(record, 'data.xprops.useAsMailinglist', false);
 
         // TODO check right here, too
-        var hasRight = Tine.Tinebase.common.hasRight('manage', 'Addressbook', 'list_email_options'),
+        var hasRight = Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook'),
             hasRequiredGrant = !evalGrants
             || (_.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant) && hasRight),
             mailinglistDisabled = ! (_.get(record, 'data.account_grants.adminGrant', false) && hasRight);
 
         this.isMailinglistCheckbox.setDisabled(mailinglistDisabled);
         this.isMailinglistCheckbox.setValue(isMailinglist);
-
         _.forOwn(this.checkboxes, function(checkbox, key) {
             checkbox.setValue(_.get(record, 'data.xprops.' + key, false));
             checkbox.setDisabled(! isMailinglist);
         });
 
-        this.setReadOnly(!hasRequiredGrant);
+        this.setReadOnly(!hasRequiredGrant || !hasRight);
     },
 
     setReadOnly: function(readOnly) {
         this.readOnly = readOnly;
         this.isMailinglistCheckbox.setDisabled(readOnly);
+        _.forOwn(this.checkboxes, function(checkbox, key) {
+            checkbox.setDisabled(readOnly);
+        });
     },
 
     onRecordUpdate: function(editDialog, record) {

@@ -28,12 +28,18 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
 
         $this->_dataIntendedPurpose1 = GDPR_Controller_DataIntendedPurpose::getInstance()->create(
             new GDPR_Model_DataIntendedPurpose([
-                'name' => 'unittest1',
-            ], true));
+                'name' => [[
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'new purpose 1',
+                ]],
+            ]));
         $this->_dataIntendedPurpose2 = GDPR_Controller_DataIntendedPurpose::getInstance()->create(
             new GDPR_Model_DataIntendedPurpose([
-                'name' => 'unittest2',
-            ], true));
+                'name' => [[
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'new purpose 2',
+                ]],
+            ]));
     }
 
     public function testCreateByAdbContact($agreeDate = null, $withdrawDate = null)
@@ -258,7 +264,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
             $this->assertTrue($e instanceof Tinebase_Exception_Record_Validation);
         }
     }
-    
+
     public function testCreateMultipleEmptyWithdrawDate()
     {
         $createdContact = $this->testCreateByAdbContact();
@@ -274,7 +280,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
             $this->assertTrue($e instanceof Tinebase_Exception_Record_Validation);
         }
     }
-
+    
     public function testUpdateAgreeDateOverlap()
     {
         // dip records should be sorted by agreeDate
@@ -305,7 +311,7 @@ class GDPR_Controller_DataIntendedPurposeRecordTest extends TestCase
             $this->fail('update withdrawDate to overlap open ended second intended purpose should not be possible and throw exception');
         } catch (Tinebase_Exception_Record_Validation) {}
     }
-
+    
     public function testUpdateWithdrawDateOverlap1()
     {
         $paging = new Tinebase_Model_Pagination(['sort' => 'withdrawDate', 'dir' => 'DESC']);

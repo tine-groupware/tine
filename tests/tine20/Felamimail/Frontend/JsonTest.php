@@ -1473,7 +1473,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
                 "type" =>  '',
                 "n_fileas" => '',
                 "email_type" =>  '',
-                "record_id" => ''
+                "contact_record" => ''
             ], 'test String <testString@mail.test>',
             'test String 2 <testString2@mail.test>; test String 3 <testString3@mail.test>',
             [

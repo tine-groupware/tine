@@ -158,3 +158,36 @@ msgstr "Kontakt wird nach dem Ablaufdatum automatisch gelöscht."
 
 #~ msgid "GDPR Data provenance"
 #~ msgstr "DSGVO Datenherkunft"
+
+msgid "Consent management for"
+msgstr "Consent management für"
+
+msgid "Data Intended purpose of this mass mailing"
+msgstr "Verwendungszweck dieser Massen-Mail"
+
+msgid "Please select a data intended purpose"
+msgstr "Bitte einen Verwendungszweck auswählen"
+
+msgid "The following recipients will be removed by their consent status."
+msgstr "Die folgenden Empfänger werden nach ihrem Zustimmungsstatus entfernt."
+
+msgid "The following recipients will be removed from this mass mail."
+msgstr "Die folgenden Empfänger werden von dieser Massen-Mail entfernt."
+
+msgid "The recipients will be removed if they have not consent to the selected intended purpose."
+msgstr "Die Empfänger werden entfernt, wenn sie dem gewählten Verwendungszweck nicht zugestimmt haben."
+
+msgid "The recipients with 'Must not be contacted' will be removed when no intended purpose is selected."
+msgstr "Die Empfänger mit 'Darf nicht kontaktiert werden' werden entfernt, wenn kein Verwendungszweck ausgewählt wurde."
+
+msgid "In {0} mass mailing mode this recipient will be removed, "
+msgstr "Im {0} Massen Mailing Modus wird dieser Empfänger entfernt, "
+
+msgid "as it must not be contacted at all"
+msgstr "weil er nicht kontaktiert werden darf"
+
+msgid "as contact has not consent to this purpose"
+msgstr "weil der Kontakt diesem Verwendungszweck nicht zugestimmt hat"
+
+msgid "as consent date has expired"
+msgstr "weil das Zustimmung wiederrufen wurde"

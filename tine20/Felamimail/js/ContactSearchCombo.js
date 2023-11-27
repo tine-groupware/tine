@@ -58,32 +58,12 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
             '<tpl for="."><div class="search-item">',
             '{[this.getIcon(values)]}',
             '<span style="padding-left: 5px;">',
-            '{[this.encode(values, "name")]}',
-            ' <b>{[this.shorten(this.encode(values, "email"))]}</b>',
+            '{[this.encode(values)]}',
             '</span>',
             '</div></tpl>',
             {
-                encode: function(values, field) {
-                    let value = _.get(values, field) ?? '';
-                    
-                    if (field === 'email' && value !== '') {
-                        value = `< ${value} >`;
-                    }
-                    
-                    return Ext.util.Format.htmlEncode(value);
-                },
-                shorten: function(text) {
-                    if (text) {
-                        if (text.length < 50) {
-                            return text;
-                        } else {
-                            return text.substr(0,50) + "...";
-                        }
-                    } else {
-                        return "";
-                    }
-                },
-                getIcon: this.resolveAddressIconCls.createDelegate(this)
+                encode: this.renderEmailAddress.createDelegate(this),
+                getIcon: this.renderAddressIconCls.createDelegate(this)
             }
         );
         
@@ -160,111 +140,83 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * @param {} options
      */
     onStoreLoad: function(store, records, options) {
-        this.removeDuplicates(store);
+        this.removeInvalidRecords(store);
     },
     
-    resolveAddressIconCls: function(values) {
-        let type = values?.type ?? '';
-        let iconClass = 'EmailAccount';
-        let tip = Ext.util.Format.capitalize(type);
+    renderAddressIconCls: function(token) {
         const i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
+        let data = {tip: 'E-Mail', iconClass: 'EmailAccount'};
         
-        switch (type) {
+        switch (token?.type) {
             case 'user':
-                tip = 'Contact of a user account'
-                iconClass = 'Account';
+                data = {tip: 'Contact of a user account', iconClass: 'Account'};
                 break;
             case 'mailingListMember':
-                tip = 'Mailing List Member';
-                iconClass = 'Account';
+                data = {tip: 'Mailing List Member', iconClass: 'Account'};
                 break;
             case 'responsible':
-                iconClass = 'Contact';
+                data = {tip: 'E-Mail', iconClass: 'Contact'};
                 break;
             case 'mailingList':
-                tip = 'Mailing List';
-                iconClass = 'MailingList';
+                data = {tip: 'Mailing List', iconClass: 'MailingList'};
                 break;
             case 'email_account':
-                iconClass = 'EmailAccount';
+                data = {tip: 'E-Mail', iconClass: 'EmailAccount'};
                 break;
             case 'email_home':
-                iconClass = 'Private';
+                data = {tip: 'Email (private)', iconClass: 'Private'};
                 break;
             case 'group':
-                tip = 'System Group';
-                iconClass = 'Group';
+                data = {tip: 'System Group', iconClass: 'Group'};
                 break;
             case 'list':
-                tip = 'Group';
-                iconClass = 'List';
+                data = {tip: 'Group', iconClass: 'List'};
                 break;
             case 'groupMember':
             case 'listMember':
-                tip = 'Group Member';
-                iconClass = 'GroupMember';
+                data = {tip: 'Group Member', iconClass: 'GroupMember'};
+                break;
+            case 'contact':
+                data = {tip: 'Contact', iconClass: 'Contact'};
                 break;
             default :
-                if (type === '') {
-                    tip = 'E-Mail';
-                    iconClass = 'EmailAccount';
-                    if (values.record_id !== '') {
-                        tip = 'Contact';
-                        iconClass = 'Contact';
-                    }
-                }
+                if (token?.contact_record !== '') data = {tip: 'Contact', iconClass: 'Contact'};
                 break;
         }
     
-        if (values?.email_type === 'email_home') {
-            iconClass = 'Private';
-            tip = 'Email (private)';
-        }
+        if (token?.email_type === 'email_home') data = {tip: 'Email (private)', iconClass: 'Private'};
         
-        return '<div class="tine-combo-icon renderer AddressbookIconCls renderer_type' + iconClass + 'Icon" ext:qtip="' 
-            + Ext.util.Format.htmlEncode(i18n._(tip)) + '"/></div>';
+        return '<div class="tine-combo-icon renderer AddressbookIconCls renderer_type' + data.iconClass + 'Icon" ext:qtip="' 
+            + Ext.util.Format.htmlEncode(i18n._(data.tip)) + '"/></div>';
     },
     
-    /**
-     * remove duplicate contacts
-     * 
-     * @param {} store
-     */
-    removeDuplicates: function(store) {
-        let duplicates = null;
-        
-        store.each(function(record) {
-            duplicates = store.queryBy(function(contact) {
+    renderEmailAddress(token) {
+        const renderEmail = token.email !== '' && token.name !== '' ? ` < ${token.email} >` : token.email;
+        const note = token?.note && token.note !== '' ? ` ( ${token.note} )` : '';
+        return Ext.util.Format.htmlEncode(token.name) 
+            + '<b>' + Ext.util.Format.htmlEncode(renderEmail) + '</b>'
+            + Ext.util.Format.htmlEncode(note);
+    },
+    
+    removeInvalidRecords(store) {
+        store.each((record) => {
+            const idx = store.indexOf(record);
+            if (!this.validate(record)){
+                store.removeAt(idx);
+                return;
+            }
+            const duplicates = store.queryBy((contact) => {
                 return record.id !== contact.id && Tine.Felamimail.getEmailStringFromContact(record) === Tine.Felamimail.getEmailStringFromContact(contact);
             });
             if (duplicates.getCount() > 0) {
-                Tine.log.debug('remove duplicate: ' + Tine.Felamimail.getEmailStringFromContact(record));
-                store.remove(record);
-            }
-        });
-    
-        // only remove duplicated email addresses with type mailingList ,
-        store.each(function(record) {
-            if (record.data.emails !== '' && record.data.type === 'useAsMailinglist') {
-                const idx = store.indexOf(record);
-                let emailArray = _.compact(_.split(record.data.emails, ','));
-
-                duplicates = store.queryBy(function (contact) {
-                    if (contact.data.email !== '' ) {
-                        return record.id !== contact.id && _.includes(emailArray, contact.data.email);
-                    }
-                });
-
-                emailArray = _.difference(emailArray, _.map(duplicates.items, 'data.email'));
-                record.data.emails = _.join(emailArray, ',');
-                Tine.log.debug('remove duplicate email from mailing list: ' + Tine.Felamimail.getEmailStringFromContact(record));
+                Tine.log.debug(`remove duplicate email from ${record.data.type}: ${record.data.email}`);
                 store.removeAt(idx);
-                
-                if (emailArray.length > 0) {
-                    store.insert(idx, record);
-                }
             }
         });
+    },
+    
+    validate (record) {
+        return true;
     }
 });
 Ext.reg('felamimailcontactcombo', Tine.Felamimail.ContactSearchCombo);
