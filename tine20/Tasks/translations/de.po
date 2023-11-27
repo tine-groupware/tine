@@ -369,3 +369,5 @@ msgstr "Mitarbeitend mit einem offenen Status"
 msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
 msgstr "Bitte beachten: Aufgaben werden nicht angezeigt wenn die gefilterte Person zwar Organisator ist, aber das Fälligkeitsdatum noch nicht verstrichen ist so lange es Mitarbeitende mit offenen Status gibt."
 
+msgid "Estimated Duration"
+msgstr "Geschätzte Dauer"

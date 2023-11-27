@@ -113,7 +113,9 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 defaultTime: '12:00',
                 allowBlank: true
             })
-        }, {
+        }, colMgr('estimated_duration', {
+            width: 50,
+        }), {
             id: 'priority',
             header: this.app.i18n._("Priority"),
             width: 65,
