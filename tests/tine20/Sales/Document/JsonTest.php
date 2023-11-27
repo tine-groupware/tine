@@ -632,4 +632,43 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                 [Tinebase_Model_DynamicRecordWrapper::FLD_RECORD]);
         }
     }
+
+
+    public function testExportInvoiceToDatev()
+    {
+        Sales_Config::getInstance()->set(Sales_Config::DATEV_RECIPIENT_EMAILS, [Tinebase_Core::getUser()->accountEmailAddress]);
+        $testData = $this->getTrackingTestData();
+        //insert attachment to invoice
+        $invoice = null;
+        foreach ($testData as $document) {
+            if ($document instanceof Sales_Model_Document_Invoice) {
+                $invoice = $document;
+            }
+        }
+        $path1 = Tinebase_TempFile::getTempPath();
+        file_put_contents($path1, 'testAtt1');
+        $path2 = Tinebase_TempFile::getTempPath();
+        file_put_contents($path2, 'testAtt2');
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice['id']);
+        $invoice->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', [
+            ['name' => 'testAtt1.txt', 'tempFile' => Tinebase_TempFile::getInstance()->createTempFile($path1)],
+            ['name' => 'testAtt2.txt', 'tempFile' => Tinebase_TempFile::getInstance()->createTempFile($path2)],
+        ], true);
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+        //feed test invoice data
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice);
+        $attachments = $invoice->attachments;
+        $invoiceData[$invoice['id']] = $attachments->id;
+        $this->_instance->exportInvoicesToDatevEmail('Document_Invoice', $invoiceData);
+        //assert acitionLog and decode data
+        $actionLog = Tinebase_ControllerTest::assertActionLogEntry(Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL, 1);
+        $actionLog = $actionLog->getFirstRecord();
+        $data = json_decode($actionLog->data, true);
+
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice['id']);
+        $this->assertEquals($invoice['last_datev_send_date'], $actionLog->datetime, 'invoice datev sent date should be the same as action log datetime');
+        $this->assertStringContainsString('testAtt1.txt', $data['attachments'][0], 'attachement1 is invalid');
+        $this->assertStringContainsString('testAtt2.txt', $data['attachments'][1], 'attachement1 is invalid');
+
+    }
 }
