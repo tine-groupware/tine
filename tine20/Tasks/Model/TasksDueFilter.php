@@ -24,7 +24,8 @@ class Tasks_Model_TasksDueFilter extends Tinebase_Model_Filter_Abstract
         }
 
         /** @var Addressbook_Model_Contact $contact */
-        $contact = Addressbook_Controller_Contact::getInstance()->get($this->_value);
+        $contact = Addressbook_Controller_Contact::getInstance()->get(
+            Tinebase_Model_User::CURRENTACCOUNT === $this->_value ? Tinebase_Core::getUser()->contact_id : $this->_value);
 
         $stati = Tasks_Config::getInstance()->{Tasks_Config::ATTENDEE_STATUS}->records->filter('is_open', 1)
             ->getArrayOfIds();
