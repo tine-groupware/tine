@@ -53,7 +53,7 @@ class Tasks_Model_Attendee extends Tinebase_Record_NewAbstract
     protected static $_modelConfiguration = [
         self::VERSION           => 1,
         self::IS_DEPENDENT      => true,
-        self::RECORD_NAME       => 'Collaborator',
+        self::RECORD_NAME       => 'Collaborator', // gettext('GENDER_Collaborator')
         self::RECORDS_NAME      => 'Collaborators', // ngettext('Collaborator', 'Collaborators', n)
         self::TITLE_PROPERTY    => self::FLD_USER_ID,
         self::MODLOG_ACTIVE     => true,
