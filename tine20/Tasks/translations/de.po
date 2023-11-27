@@ -204,6 +204,18 @@ msgstr ""
 msgid "No response"
 msgstr "Keine Antwort"
 
+msgid "Accepted"
+msgstr "Akzeptiert"
+
+msgid "Declined"
+msgstr "Abgelehnt"
+
+msgid "Tentative"
+msgstr "Vorläufig"
+
+msgid "Delegated"
+msgstr "Delegiert"
+
 #: Config.php:50
 msgid "Cancelled"
 msgstr "Abgebrochen"
@@ -280,6 +292,31 @@ msgstr "Telefon"
 #: Model/Task.php:327
 msgid "Email"
 msgstr "Email"
+
+msgid "Depends on"
+msgstr "Hängt ab von"
+
+msgid "Dependent Tasks"
+msgstr "Abhängige Aufgaben"
+
+msgid "Task Dependency"
+msgid_plural "Task Dependencies"
+msgstr[0] "Abhängigkeit"
+msgstr[1] "Abhängigkeiten"
+
+msgid "Collaborator"
+msgid_plural "Collaborators"
+msgstr[0] "Mitarbeiter*in"
+msgstr[1] "Mitarbeitende"
+
+msgid "Collaborators"
+msgstr "Mitarbeitende"
+
+msgid "GENDER_Collaborator"
+msgstr "female"
+
+msgid "GENDER_Task Dependency"
+msgstr "female"
 
 #: Controller/Task.php:211
 msgid "Notification for Task %1$s"

@@ -815,7 +815,7 @@ viewConfig: {
     },
     
     handleResponsive() {
-        this.grid.hideHeaders = this.isResponsive();
+        this.grid.hideHeaders = this.isResponsive() || this.cm.config.length === 1;
         this.cm.config.forEach((col, idx) => {
             const hidden = this.isResponsive() ? col.id !== 'responsive' : (col?.hidden || col.id === 'responsive');
             const display = hidden ? 'none' : '';
