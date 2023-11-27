@@ -11,5 +11,10 @@
     "extension"
   ],
   "author": "Cornelius Weiß",
-  "license": "AGPL-3.0"
+  "license": "AGPL-3.0",
+  "tine20": {
+    "entryPoints": [
+      "ConsentClient/src/index.es6.js"
+    ]
+  }
 }

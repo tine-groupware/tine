@@ -403,6 +403,7 @@
 .preview-panel-felamimail-filelocations,
 .felamimail-compose-info .x-panel-body {
     background-color: #ffffaa;
+    border-radius: 5px;
 }
 
 .felamimail-location {

@@ -136,7 +136,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $contactPaging->sort = ['type', 'n_fn']; // Field are not named the same for contacts and lists
         $contactPaging->dir = ['DESC', 'ASC']; 
         
-        $contacts = $this->_search($filter, $contactPaging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
+        $contacts = $this->_search($filter, $contactPaging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter', true);
         
         $possibleAddresses =  Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts["results"]);
         $results = array_merge($results, $possibleAddresses);
@@ -165,6 +165,8 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     Addressbook_Controller_List::destroyInstance();
                 }
             }
+            $adbConfig->clearCache();
+            Addressbook_Controller_List::destroyInstance();
             // NOTE: please ignore the "Skipping filter (no filter model defined)" INFO message in the logs ...
             $lists = $this->_search($filter, $paging, Addressbook_Controller_List::getInstance(),
                 'Addressbook_Model_ListFilter');
@@ -215,8 +217,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 return $address['type'];
             }, $addressData);
 
-            $contacts = Addressbook_Controller_Contact::getInstance()->getContactsByEmailArrays($emails, $names, $types);
-            
+            $contacts = Addressbook_Controller_Contact::getInstance()->searchContactsByEmailArrays($emails, $names, $types);
             $possibleAddresses = Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts);
             $results = array_merge($results, $possibleAddresses);
         }

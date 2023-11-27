@@ -863,6 +863,12 @@ msgstr "Bcc:"
 msgid "Remove"
 msgstr "Entfernen"
 
+msgid "The following recipients will be removed from this mass mail"
+msgstr "Die folgenden Empfänger werden von dieser Massen Mail entfernt"
+
+msgid "Send message to individual list members instead"
+msgstr "Sende eigene Kopie der E-Mail zu jeden Empfänger"
+
 #: js/sieve/RuleConditionsPanel.js:70 js/Model.js:220 js/GridPanel.js:516
 msgid "From (Email)"
 msgstr "Von (E-Mail)"

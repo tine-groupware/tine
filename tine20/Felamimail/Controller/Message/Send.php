@@ -134,16 +134,41 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _sendMassMailing(Felamimail_Model_Message $_message)
     {
+        $locale = Tinebase_Translation::getLocale(Tinebase_Core::getLocale());
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        $twig = new Tinebase_Twig($locale, $translation);
+        
+        $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
+        $from = $this->_getSenderName($_message, $account);
+        $twig->getEnvironment()->addGlobal('sender', $from);
+
+        $contacts = Felamimail_Controller_Message_File::getInstance()->getRecipientContactsOfMessage($_message)->toArray();
+        $possibleAddresses = Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts);
         foreach ($_message->bcc as $to) {
-            $clonedMessage = clone $_message;
-            $clonedMessage->to = [$to];
-            $clonedMessage->cc = [];
-            $clonedMessage->bcc = [];
-            $clonedMessage->massMailingFlag = false;
-
-            $this->_runMassMailingPlugins($clonedMessage);
-
-            $this->sendMessage($clonedMessage);
+            $emailTo = $to['email'] ?? $to;
+            $contacts = array_values(array_filter($possibleAddresses, function($contact) use ($emailTo) { return $emailTo === $contact['email'];}));
+            
+            if (sizeof($contacts) === 0) {
+                $contacts[] = [
+                    "n_fileas" => $emailTo,
+                    "name" => $emailTo,
+                    "type" => '',
+                    "email" => $emailTo,
+                    "email_type" =>  '',
+                    "contact_record" => null,
+                ];
+            }
+            foreach ($contacts as $contact) {
+                $clonedMessage = clone $_message;
+                $clonedMessage->to = [$contact];
+                $clonedMessage->cc = [];
+                $clonedMessage->bcc = [];
+                $clonedMessage->massMailingFlag = false;
+                
+                $twig->getEnvironment()->addGlobal('recipient', $contact['n_fileas']);
+                $this->_runMassMailingPlugins($clonedMessage, $twig);
+                $this->sendMessage($clonedMessage);
+            }
         }
     }
 
@@ -152,16 +177,17 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      *
      * @param Felamimail_Model_Message $_message
      */
-    protected function _runMassMailingPlugins(Felamimail_Model_Message $_message)
+    protected function _runMassMailingPlugins(Felamimail_Model_Message $_message, Tinebase_Twig $_twig)
     {
         if (null === $this->_massMailingPlugins) {
             $this->_initMassMailingPlugins();
         }
-
+        
         /** @var Felamimail_Controller_MassMailingPluginInterface $plugin */
         foreach ($this->_massMailingPlugins as $plugin) {
-            $plugin->prepareMassMailingMessage($_message);
+            $plugin->prepareMassMailingMessage($_message, $_twig);
         }
+        $_message->body = $_twig->getEnvironment()->createTemplate($_message->body)->render();
     }
 
     /**

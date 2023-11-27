@@ -447,7 +447,7 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
      * @param Felamimail_Model_Message $_message
      * @return null
      */
-    public function prepareMassMailingMessage(Felamimail_Model_Message $_message)
+    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig)
     {
         if (!is_array($_message->to) || !isset($_message->to[0])) {
             throw new Tinebase_Exception_UnexpectedValue('bad message, no to[0] set');
@@ -652,23 +652,18 @@ class Calendar_Controller_Poll extends Tinebase_Controller_Record_Abstract imple
             });
 
             $response = new \Laminas\Diactoros\Response();
+            $coreRegistryData = Tinebase_Core::getCoreRegistryData();
+            $config = array_merge($coreRegistryData, [
+                'has_gtc'           => !!Calendar_Config::getInstance()->get(Calendar_Config::POLL_GTC),
+                'status_available'  => Calendar_Config::getInstance()->get(Calendar_Config::ATTENDEE_STATUS)->toArray(),
+                'current_contact'   => $currentCalUser ? Addressbook_Controller_Contact::getInstance()->get($currentCalUser->user_id, TRUE)->toArray() : null,
+            ]);
             $response->getBody()->write(json_encode(array_merge($poll->toArray(), [
                 'event_summary'     => $event->summary,
                 'event_organizer'   => $event->resolveOrganizer()->n_fn,
                 'alternative_dates' => $dates,
                 'attendee_status'   => $attendee_status,
-                'config' => [
-                    'locale'            => (string) Tinebase_Core::getLocale(),
-                    'has_gtc'           => !!Calendar_Config::getInstance()->get(Calendar_Config::POLL_GTC),
-                    'status_available'  => Calendar_Config::getInstance()->get(Calendar_Config::ATTENDEE_STATUS)->toArray(),
-                    'is_anonymous'      => $anonymousAccess,
-                    'current_contact'   => $currentCalUser ? Addressbook_Controller_Contact::getInstance()->get($currentCalUser->user_id, TRUE)->toArray() : null,
-                    'jsonKey'           => Tinebase_Core::get('jsonKey'),
-                    'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
-                    'brandingLogo'      => Tinebase_ImageHelper::getDataUrl(Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_LOGO)),
-                    'installLogo'       => Tinebase_ImageHelper::getDataUrl(Tinebase_Core::getInstallLogo()),
-                    'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
-                ]
+                'config' => $config
             ])));
 
         } catch (Tinebase_Exception_NotFound $tenf) {

@@ -196,8 +196,12 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
             // const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(this.constructor, this.titleProperty);
             const languagesAvailableDef = _.get(this.constructor.getModelConfiguration(), 'languagesAvailable')
             const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinition(_.get(languagesAvailableDef, 'config.appName', this.appName), languagesAvailableDef.name)
-            const language = options?.language || keyFieldDef.default
+            let language = options?.language || keyFieldDef.default;
             const value = this.get(this.titleProperty);
+            const preferredLanguage = Tine.Tinebase.registry.get('preferences')?.get('locale');
+            if (preferredLanguage !== 'auto') {
+                language = preferredLanguage;
+            }
             return _.get(_.find(value, { language }), 'text', '') || _.find(value, (r) => {return r.text})?.text || i18n._('Translation not found')
         } else {
             var s = this.titleProperty ? this.titleProperty.split('.') : [null];

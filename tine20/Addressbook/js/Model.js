@@ -57,9 +57,10 @@ Tine.Addressbook.Model.EmailAddress = Tine.Tinebase.data.Record.create([
     {name: 'n_fileas'},
     {name: 'name'},
     {name: 'email_type'},
-    {name: 'email'}, 
+    {name: 'email'},
+    {name: 'emails'},
     {name: 'type'},
-    {name: 'record_id'}
+    {name: 'contact_record'},
 ], {
     appName: 'Addressbook',
     modelName: 'EmailAddress',
