@@ -108,7 +108,10 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'filterModel'       => array(
             'tasksDue'          => [
                 self::FILTER        => Tasks_Model_TasksDueFilter::class,
-                self::LABEL         => 'Tasks Due',
+                self::LABEL         => 'To be done for', // _('To be done for')
+                'jsConfig'          => [
+                    'filtertype' => 'tasks.tasksdue',
+                ],
             ],
         ),
 

@@ -341,3 +341,31 @@ msgstr "Erstelle neue Aufgabe..."
 
 msgid "Attention: This due date is in the past!"
 msgstr "Achtung: Das Fälligkeitsdatum liegt in der Vergangenheit!"
+
+msgid "To be done for"
+msgstr "Zu erledigen für"
+
+msgid "Filter: To be done for"
+msgstr "Filter: Zu erledigen für"
+
+msgid "Show all tasks matching all the following criteria:"
+msgstr "Zeigt alle Aufgaben die den folgenden Kriterien entsprechen:"
+
+msgid "Tasks has an open status."
+msgstr "Die Aufgabe ist in einem offenen Status"
+
+msgid "Filtered person is either:"
+msgstr "Die gefilterte Person ist entweder:"
+
+msgid "Organizer and no coworker with open status is assigned."
+msgstr "Organisator und es sind keine Mitarbeitende mit offenen Status zugewiesen."
+
+msgid "Organizer and the task is over due date, regardless of assigned coworkers."
+msgstr "Organisator und das Fälligkeitsdatum ist verstrichen, unabhängig der zugewiesenen Mitarbeitenden."
+
+msgid "Coworker with an open status assigned."
+msgstr "Mitarbeitend mit einem offenen Status"
+
+msgid "Please note: Tasks are not shown if filtered person is organizer but due date has not yet passed and a coworker with an open state is assigned."
+msgstr "Bitte beachten: Aufgaben werden nicht angezeigt wenn die gefilterte Person zwar Organisator ist, aber das Fälligkeitsdatum noch nicht verstrichen ist so lange es Mitarbeitende mit offenen Status gibt."
+
