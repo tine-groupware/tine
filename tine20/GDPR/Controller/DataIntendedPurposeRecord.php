@@ -26,7 +26,11 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
     const ADB_CONTACT_CUSTOM_FIELD_NAME = 'GDPR_DataIntendedPurposeRecord';
     const ADB_CONTACT_BLACKLIST_CUSTOM_FIELD_NAME = 'GDPR_Blacklist';
     const ADB_CONTACT_EXPIRY_CUSTOM_FIELD_NAME = 'GDPR_DataExpiryDate';
-
+    
+    /**
+     * @var array contains cached contacts during prepareMassMailingMessage
+     */
+    protected $_cachedContacts = [];
 
     /**
      * the constructor
@@ -209,5 +213,184 @@ class GDPR_Controller_DataIntendedPurposeRecord extends Tinebase_Controller_Reco
         $contactController->doContainerACLChecks($oldACL);
 
         return true;
+    }
+
+
+    /**
+     * @param Felamimail_Model_Message $_message
+     * @return null
+     */
+    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, $twig)
+    {
+        if (!is_array($_message->to) || !isset($_message->to[0])) {
+            throw new Tinebase_Exception_UnexpectedValue('bad message, no to[0] set');
+        }
+        // new recipient structure is array and should always have email field
+        $contactId = $_message->to[0]['contact_record']['id'] ?? '';
+        $twig->getEnvironment()->addGlobal('manageconstentlink', Tinebase_Core::getUrl() . '/GDPR/view/manageConsent/' . $contactId);
+        return ;
+    }
+
+    public function publicApiMainScreen() {
+        $locale = Tinebase_Core::getLocale();
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=GDPR";
+        $jsFiles[] = 'GDPR/js/ConsentClient/src/index.es6.js';
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles);
+    }
+    public function publicApiGetManageConsent($contactId = null) {
+        $assertAclUsage = $this->assertPublicUsage();
+        $response = new \Laminas\Diactoros\Response();
+        try {
+            $allDataIntendedPurposes = GDPR_Controller_DataIntendedPurpose::getInstance()->search();
+            $expander = new Tinebase_Record_Expander(GDPR_Model_DataIntendedPurpose::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    GDPR_Model_DataIntendedPurpose::FLD_NAME            => [],
+                    GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION     => [],
+                ],
+            ]);
+            $expander->expand($allDataIntendedPurposes);
+            
+            $result = array_merge(Tinebase_Core::getCoreRegistryData(), [
+                'manageConsentPageExplainText'  => GDPR_Config::getInstance()->{GDPR_Config::MANAGE_CONSENT_PAGE_EXPLAIN_TEXT} ?? '',
+                'GDPR_default_lang'    => GDPR_Config::getInstance()->{GDPR_Config::LANGUAGES_AVAILABLE}->default,
+                'allDataIntendedPurposes'   =>  $allDataIntendedPurposes->toArray(),
+            ]);
+
+            if ($contactId && $contactId !== 'manageConsent') {
+                $contact = Addressbook_Controller_Contact::getInstance()->get($contactId, null, true, false, false);
+                if (isset($contact[GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME]) && $contact[GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] instanceof Tinebase_Record_RecordSet) {
+                    $contact->{GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME}->sort('agreeDate', 'DESC');
+                }
+                $user = Tinebase_Core::getUser();
+                $result = array_merge($result, [
+                    'current_contact'   => $contact?->toArray(),
+                    'isCurrentUser'     => $user['accountId'] === $contact['account_id'],
+                ]);
+            }
+            $response->getBody()->write(json_encode($result));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response->getBody()->write(json_encode($tenf->getMessage()));
+        } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response->getBody()->write(json_encode($terna->getMessage()));
+        } catch (Tinebase_Exception_AccessDenied $e) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response->getBody()->write(json_encode($e->getMessage()));
+        } finally {
+            $assertAclUsage();
+        }
+
+        return $response;
+    }
+
+    public function publicApiSearchManageConsent($email = null) {
+        $assertAclUsage = $this->assertPublicUsage();
+        //todo: if the user click the link but the link does not belongs to the user , then we should check the be and and return correct link to the use
+        try {
+            $response = new \Laminas\Diactoros\Response();
+            $result = '';
+            if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $email)) {
+                $contacts = Addressbook_Controller_Contact::getInstance()->search(new Addressbook_Model_ContactFilter(array(
+                    array('field' => 'email', 'operator' => 'equals', 'value' => $email),
+                )), null, true);
+
+                if (sizeof($contacts) === 0) {
+                    $response = new \Laminas\Diactoros\Response('php://memory', 404);
+                    $result = 'no system user contact relate to this email';
+                }
+                
+                foreach ($contacts as $contact){
+                    // new recipient structure is array and should always have email field
+                    if ($contact && !$contact->GDPR_Blacklist) {
+                        $emailTo = $contact->email;
+                        // add manage consent link after search all contacts from the recipients
+                        $translation = Tinebase_Translation::getTranslation('GDPR');
+                        $locale = Tinebase_Translation::getLocale($translation->getLocale());
+                        $twig = new Tinebase_Twig($locale, $translation);
+                        $linkConfig = GDPR_Config::getInstance()->{GDPR_Config::MANAGE_CONSENT_EMAIL_TEMPLATE};
+                        $template = $twig->getEnvironment()->createTemplate($linkConfig[$locale->getLanguage()]);
+                        $message = new Felamimail_Model_Message([
+                            'account_id'    => Tinebase_Core::getUser()->getId(),
+                            'subject'       => $translation->_('Consent management for') .  $emailTo,
+                            'to'            => $emailTo,
+                            'body'          => $template->render([
+                                'manageconstentlink' => Tinebase_Core::getUrl() . '/GDPR/view/manageConsent/' . $contact['id']
+                            ]),
+                        ]);
+                        Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
+                    }
+                }
+            } else {
+                $response = new \Laminas\Diactoros\Response('php://memory', 404);
+                $result = empty($email) ? 'email should not be empty' : 'email is not valid';
+            }
+            $response->getBody()->write(json_encode($result));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response->getBody()->write(json_encode($tenf->getMessage()));
+        } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response->getBody()->write(json_encode($terna->getMessage()));
+        } catch (Tinebase_Exception_AccessDenied $e) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 403);
+            $response->getBody()->write(json_encode($e->getMessage()));
+        } finally {
+            $assertAclUsage();
+        }
+
+        return $response;
+    }
+
+    public function publicApiPostManageConsent($contactId) {
+        $assertAclUsage = $this->assertPublicUsage();
+
+        try {
+            $request = json_decode(Tinebase_Core::get(Tinebase_Core::REQUEST)->getContent(), true);
+            if (empty($request['id'])) {
+                //first time create
+                $dipr = GDPR_Controller_DataIntendedPurposeRecord::getInstance()
+                    ->search(new GDPR_Model_DataIntendedPurposeRecordFilter([
+                        ['field' => 'record', 'operator' => 'equals', 'value' => $contactId],
+                        ['field' => 'intendedPurpose', 'operator' => 'equals', 'value' => $request['intendedPurpose']['id']],
+                    ]))->getFirstRecord();
+            } else {
+                $dipr = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->get($request['id']);
+            }
+            if (!$dipr) {
+                $request['record'] = $contactId;
+                $request['agreeDate'] = Tinebase_DateTime::now();
+                $dipr = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->create(new GDPR_Model_DataIntendedPurposeRecord($request));
+            } else {
+                // update or create new dip depends on date data
+                if (empty($dipr['withdrawDate'])) {
+                    $dipr['withdrawDate'] = Tinebase_DateTime::now();
+                    $dipr['withdrawComment'] = $request['withdrawComment'];
+                    $dipr = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->update($dipr);
+                } else {
+                    $data = [
+                        'intendedPurpose' => $request['intendedPurpose'],
+                        'record' =>  $request['record'],
+                        'agreeDate' => Tinebase_DateTime::now(),
+                        'agreeComment'  => $request['agreeComment'],
+                    ];
+                    $dipr = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->create(new GDPR_Model_DataIntendedPurposeRecord($data));
+                }
+            }
+            $response = new \Laminas\Diactoros\Response();
+            $response->getBody()->write(json_encode($dipr->toArray()));
+        } catch (Tinebase_Exception_Record_Validation $terv) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response->getBody()->write(json_encode($terv->getMessage()));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 404);
+            $response->getBody()->write(json_encode($tenf->getMessage()));
+        } catch (Tinebase_Exception_Record_NotAllowed $terna) {
+            $response = new \Laminas\Diactoros\Response('php://memory', 401);
+            $response->getBody()->write(json_encode($terna->getMessage()));
+        } finally {
+            $assertAclUsage();
+        }
+        return $response;
     }
 }

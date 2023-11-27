@@ -50,7 +50,7 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
     deferredRender: false,
     buttonAlign: null,
     bufferResize: 500,
-    buttonOptions: ['Yes', 'No'],
+    buttonOptions: ['Yes', 'No', 'Ok'],
 
     initComponent: function() {
         // init buttons and tbar

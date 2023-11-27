@@ -381,15 +381,11 @@ Tine.Tinebase.tineInit = {
 
     async getEmailContextMenu(target, email, name, type = 'contact') {
         // store click position, make sure menuItem diaplay around the link
-        if (! Tine.Addressbook  ||  ! email) {
-            return;
-        }
+        if (! Tine.Addressbook  ||  ! email) return;
         
-        const contextMenu = new Ext.menu.Menu({
-            items: []
-        });
-    
+        const contextMenu = new Ext.menu.Menu({items: []});
         let items = [];
+        
         if (type === 'group' || type ===  'mailingList' || type ===  'list') {
             items = await this.getListContextMenuItems(email, name);
         } else {

@@ -2894,7 +2894,7 @@ Steuernummer 33/111/32212";
     public function testSearchEmailAddresss()
     {
         $list = Addressbook_Controller_List::getInstance()->getAll()->getFirstRecord();
-        $hasListContact = false;
+        $hasListMembers = false;
         
         if (empty($list->email)) {
             $list->email = 'somelistemail@' . TestServer::getPrimaryMailDomain();
@@ -2909,7 +2909,7 @@ Steuernummer 33/111/32212";
             ))), NULL, FALSE, TRUE);
             
             if (count($allVisibleMemberIds) > 0) {
-                $hasListContact = true;
+                $hasListMembers = true;
             }
         }
         
@@ -2917,13 +2917,13 @@ Steuernummer 33/111/32212";
         $result = $this->_uit->searchEmailAddresss([
             ["condition" => "OR", "filters" => [["condition" => "AND", "filters" => [
                 ["field" => "query", "operator" => "contains", "value" => ""],
-                ["field" => "email_query", "operator" => "contains", "value" => "@"]
+                ["field" => "name_email_query", "operator" => "contains", "value" => $list['name']]
             ]], ["field" => "path", "operator" => "contains", "value" => ""]]]
         ], ["sort" => "name", "dir" => "ASC", "start" => 0, "limit" => 50]);
 
         static::assertGreaterThan(0, $result['totalcount'], 'no results found');
         
-        if ($hasListContact) {
+        if ($hasListMembers) {
             static::assertTrue(isset($result['results'][count($result['results']) - 1]['emails']),
                 'last entry should be a list that has emails: ' . print_r($result['results'],
                     true));

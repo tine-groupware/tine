@@ -2092,40 +2092,31 @@
       }
     },
     "node_modules/@floating-ui/core": {
-      "version": "1.2.6",
-      "resolved": "https://registry.npmjs.org/@floating-ui/core/-/core-1.2.6.tgz",
-      "integrity": "sha512-EvYTiXet5XqweYGClEmpu3BoxmsQ4hkj3QaYA6qEnigCWffTP3vNRwBReTdrwDwo7OoJ3wM8Uoe9Uk4n+d4hfg=="
+      "version": "1.3.1",
+      "resolved": "https://registry.npmjs.org/@floating-ui/core/-/core-1.3.1.tgz",
+      "integrity": "sha512-Bu+AMaXNjrpjh41znzHqaz3r2Nr8hHuHZT6V2LBKMhyMl0FgKA62PNYbqnfgmzOhoWZj70Zecisbo4H1rotP5g=="
     },
     "node_modules/@floating-ui/dom": {
-      "version": "1.2.6",
-      "resolved": "https://registry.npmjs.org/@floating-ui/dom/-/dom-1.2.6.tgz",
-      "integrity": "sha512-02vxFDuvuVPs22iJICacezYJyf7zwwOCWkPNkWNBr1U0Qt1cKFYzWvxts0AmqcOQGwt/3KJWcWIgtbUU38keyw==",
+      "version": "1.4.3",
+      "resolved": "https://registry.npmjs.org/@floating-ui/dom/-/dom-1.4.3.tgz",
+      "integrity": "sha512-nB/68NyaQlcdY22L+Fgd1HERQ7UGv7XFN+tPxwrEfQL4nKtAP/jIZnZtpUlXbtV+VEGHh6W/63Gy2C5biWI3sA==",
       "dependencies": {
-        "@floating-ui/core": "^1.2.6"
+        "@floating-ui/core": "^1.3.1"
       }
     },
     "node_modules/@floating-ui/vue": {
-      "version": "0.2.1",
-      "resolved": "https://registry.npmjs.org/@floating-ui/vue/-/vue-0.2.1.tgz",
-      "integrity": "sha512-HE+EIeakID7wI6vUwF0yMpaW48bNaPj8QtnQaRMkaQFhQReVBA4bY6fmJ3J7X+dqVgDbMhyfCG0fBJfdQMdWxQ==",
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/@floating-ui/vue/-/vue-1.0.1.tgz",
+      "integrity": "sha512-HZmmNWaztKYKOQxXvMzJYCYtfgG07cL/bPQvZ92AFG3Ktw71bvvLKXsZDAyIxGpqRo9WiTPsYknnSuLV2H/riA==",
       "dependencies": {
-        "@floating-ui/dom": "^1.2.1",
-        "vue-demi": "^0.13.11"
-      },
-      "peerDependencies": {
-        "@vue/composition-api": "^1.0.0-rc.1",
-        "vue": "^2.0.0 || >=3.0.0"
-      },
-      "peerDependenciesMeta": {
-        "@vue/composition-api": {
-          "optional": true
-        }
+        "@floating-ui/dom": "^1.2.9",
+        "vue-demi": ">=0.13.0"
       }
     },
     "node_modules/@floating-ui/vue/node_modules/vue-demi": {
-      "version": "0.13.11",
-      "resolved": "https://registry.npmjs.org/vue-demi/-/vue-demi-0.13.11.tgz",
-      "integrity": "sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==",
+      "version": "0.14.5",
+      "resolved": "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.5.tgz",
+      "integrity": "sha512-o9NUVpl/YlsGJ7t+xuqJKx8EBGf1quRhCiT6D/J0pfwmk9zUwYkC7yrF4SZCe6fETvSM3UNL2edcbYrSyc4QHA==",
       "hasInstallScript": true,
       "bin": {
         "vue-demi-fix": "bin/vue-demi-fix.js",
@@ -3587,15 +3578,15 @@
       }
     },
     "node_modules/bootstrap-vue-next": {
-      "version": "0.8.4",
-      "resolved": "https://registry.npmjs.org/bootstrap-vue-next/-/bootstrap-vue-next-0.8.4.tgz",
-      "integrity": "sha512-9lFg45KMOKgQmz0odUg3a2zCTMTsI2V3hHyEEMDA1DKXmRrrZ9DCoqXgwxqJvxs7BB98qR/Liae5hZB2gdLd5Q==",
+      "version": "0.8.15",
+      "resolved": "https://registry.npmjs.org/bootstrap-vue-next/-/bootstrap-vue-next-0.8.15.tgz",
+      "integrity": "sha512-X8eGDMx+Xa6g5UIfDxg1NcH+UmGAzFbCMFqlG9ETW5bGr5hKQbCODVUG8yoF6EBoWTW6IRsmL8hQiVhmaxqmFw==",
       "dependencies": {
-        "@floating-ui/vue": "^0.2.1",
-        "@vueuse/core": "^9.13.0"
+        "@floating-ui/vue": "^1.0.0",
+        "@vueuse/core": "^10.1.2"
       },
       "peerDependencies": {
-        "vue": "^3.2.47"
+        "vue": "^3.3.4"
       }
     },
     "node_modules/bootstrap-vue-next/node_modules/@types/web-bluetooth": {
@@ -17567,31 +17558,31 @@
       }
     },
     "@floating-ui/core": {
-      "version": "1.2.6",
-      "resolved": "https://registry.npmjs.org/@floating-ui/core/-/core-1.2.6.tgz",
-      "integrity": "sha512-EvYTiXet5XqweYGClEmpu3BoxmsQ4hkj3QaYA6qEnigCWffTP3vNRwBReTdrwDwo7OoJ3wM8Uoe9Uk4n+d4hfg=="
+      "version": "1.3.1",
+      "resolved": "https://registry.npmjs.org/@floating-ui/core/-/core-1.3.1.tgz",
+      "integrity": "sha512-Bu+AMaXNjrpjh41znzHqaz3r2Nr8hHuHZT6V2LBKMhyMl0FgKA62PNYbqnfgmzOhoWZj70Zecisbo4H1rotP5g=="
     },
     "@floating-ui/dom": {
-      "version": "1.2.6",
-      "resolved": "https://registry.npmjs.org/@floating-ui/dom/-/dom-1.2.6.tgz",
-      "integrity": "sha512-02vxFDuvuVPs22iJICacezYJyf7zwwOCWkPNkWNBr1U0Qt1cKFYzWvxts0AmqcOQGwt/3KJWcWIgtbUU38keyw==",
+      "version": "1.4.3",
+      "resolved": "https://registry.npmjs.org/@floating-ui/dom/-/dom-1.4.3.tgz",
+      "integrity": "sha512-nB/68NyaQlcdY22L+Fgd1HERQ7UGv7XFN+tPxwrEfQL4nKtAP/jIZnZtpUlXbtV+VEGHh6W/63Gy2C5biWI3sA==",
       "requires": {
-        "@floating-ui/core": "^1.2.6"
+        "@floating-ui/core": "^1.3.1"
       }
     },
     "@floating-ui/vue": {
-      "version": "0.2.1",
-      "resolved": "https://registry.npmjs.org/@floating-ui/vue/-/vue-0.2.1.tgz",
-      "integrity": "sha512-HE+EIeakID7wI6vUwF0yMpaW48bNaPj8QtnQaRMkaQFhQReVBA4bY6fmJ3J7X+dqVgDbMhyfCG0fBJfdQMdWxQ==",
+      "version": "1.0.1",
+      "resolved": "https://registry.npmjs.org/@floating-ui/vue/-/vue-1.0.1.tgz",
+      "integrity": "sha512-HZmmNWaztKYKOQxXvMzJYCYtfgG07cL/bPQvZ92AFG3Ktw71bvvLKXsZDAyIxGpqRo9WiTPsYknnSuLV2H/riA==",
       "requires": {
-        "@floating-ui/dom": "^1.2.1",
-        "vue-demi": "^0.13.11"
+        "@floating-ui/dom": "^1.2.9",
+        "vue-demi": ">=0.13.0"
       },
       "dependencies": {
         "vue-demi": {
-          "version": "0.13.11",
-          "resolved": "https://registry.npmjs.org/vue-demi/-/vue-demi-0.13.11.tgz",
-          "integrity": "sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==",
+          "version": "0.14.5",
+          "resolved": "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.5.tgz",
+          "integrity": "sha512-o9NUVpl/YlsGJ7t+xuqJKx8EBGf1quRhCiT6D/J0pfwmk9zUwYkC7yrF4SZCe6fETvSM3UNL2edcbYrSyc4QHA==",
           "requires": {}
         }
       }
@@ -18793,9 +18784,9 @@
       "requires": {}
     },
     "bootstrap-vue-next": {
-      "version": "0.8.4",
-      "resolved": "https://registry.npmjs.org/bootstrap-vue-next/-/bootstrap-vue-next-0.8.4.tgz",
-      "integrity": "sha512-9lFg45KMOKgQmz0odUg3a2zCTMTsI2V3hHyEEMDA1DKXmRrrZ9DCoqXgwxqJvxs7BB98qR/Liae5hZB2gdLd5Q==",
+      "version": "0.8.15",
+      "resolved": "https://registry.npmjs.org/bootstrap-vue-next/-/bootstrap-vue-next-0.8.15.tgz",
+      "integrity": "sha512-X8eGDMx+Xa6g5UIfDxg1NcH+UmGAzFbCMFqlG9ETW5bGr5hKQbCODVUG8yoF6EBoWTW6IRsmL8hQiVhmaxqmFw==",
       "requires": {
         "@floating-ui/vue": "^0.2.1",
         "@vueuse/core": "^9.13.0"

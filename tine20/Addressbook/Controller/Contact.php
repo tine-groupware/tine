@@ -118,7 +118,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         }
 
         Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
-
         return $contact;
     }
 
@@ -1459,7 +1458,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    public function getContactsByEmailArrays(array $emails, array $names, array $types = []): array
+    public function searchContactsByEmailArrays(array $emails, array $names, array $types = []): array
     {
         $result = [];
         $contactFilters = [];
@@ -1502,10 +1501,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if (count($contactFilters) > 0) {
             $contactResult = Addressbook_Controller_Contact::getInstance()->search(
                 new Addressbook_Model_ContactFilter($contactFilters),
-                new Tinebase_Model_Pagination([
-                    'sort' => 'type', // prefer user over contact
-                    'dir' => 'DESC',
-                ]));
+                new Tinebase_Model_Pagination(['sort' => 'type', 'dir' => 'DESC']),// prefer user to contact
+            );
             $result = array_merge($result, $contactResult->toArray());
         }
         
@@ -1532,13 +1529,29 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $mailTypes =  ['email', 'email_home'];
         $possibleAddresses = [];
         
+        $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        GDPR_Model_DataIntendedPurposeRecord::FLD_INTENDEDPURPOSE => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                GDPR_Model_DataIntendedPurpose::FLD_NAME            => [],
+                                GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION     => [],
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+        $expander->expand(new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, $contacts));
+        
         foreach ($contacts as $contact) {
-            if (in_array($contact['type'], ['group', 'list'])) {
+            if (in_array($contact['type'], ['group', 'list', 'mailingList'])) {
                 $listMemberEmails = [];
-
+                // always get member contacts
                 if (isset($contact['members']) && count($contact['members']) > 0) {
                     try {
-                        $memberContacts = Addressbook_Controller_Contact::getInstance()->getMultiple($contact['members']);
+                        $memberContacts = Addressbook_Controller_Contact::getInstance()->getMultiple($contact['members'], false, $expander);
                         foreach ($memberContacts as $memberContact) {
                             $memberPossibleAddresses = $this->getContactsRecipientToken([$memberContact->toArray()]);
                             if (count($memberPossibleAddresses) === 0) {
@@ -1574,7 +1587,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                     "type" =>  $useAsMailinglist ? 'mailingList' : $contact["type"],
                     "email" => $contact['email'] ?? '',
                     "email_type" =>  '',
-                    "record_id" => $contact['id'],
+                    "contact_record" => $contact,
                     "emails" => $listMemberEmails
                 ];
             } else {
@@ -1589,7 +1602,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                         "type" =>  $contact["type"] ?? '',
                         "email" => $contact[$emailType],
                         "email_type" =>  $emailType,
-                        "record_id" => $contact['id']
+                        "contact_record" => $contact
                     ];
                 }
             }

@@ -69,7 +69,12 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
     public function testSaveGDPRFilter()
     {
         $inPurp = GDPR_Controller_DataIntendedPurpose::getInstance()->create(
-            new GDPR_Model_DataIntendedPurpose(['name' => 'unittest']));
+            new GDPR_Model_DataIntendedPurpose([
+                'name' =>                 [[
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'unittest1',
+                ]],
+            ]));
 
         $filterData = [
             'name'              => 'PHPUnit testFilter',

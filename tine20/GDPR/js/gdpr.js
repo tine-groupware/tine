@@ -9,3 +9,4 @@
 require('./Application');
 require('./Addressbook/Model');
 require('./Addressbook/ContactEditDialogPlugin');
+require('./Felamimail/MessageEditDialogPlugin');

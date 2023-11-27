@@ -19,12 +19,17 @@ class GDPR_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE016_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE016_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE016_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -91,11 +96,10 @@ class GDPR_Setup_Update_16 extends Setup_Update_Abstract
             $cf->xprops('definition')[Tinebase_Model_CustomField_Config::DEF_FIELD][TMCC::UI_CONFIG]
                 = ['group'                         => 'GDPR',];
             Tinebase_CustomField::getInstance()->updateCustomField($cf);
+
+            $this->addApplicationUpdate('GDPR', '16.1', self::RELEASE016_UPDATE001);
         }
-
-        $this->addApplicationUpdate('GDPR', '16.1', self::RELEASE016_UPDATE001);
     }
-
     public function update002()
     {
         Setup_SchemaTool::updateSchema([
@@ -116,5 +120,15 @@ class GDPR_Setup_Update_16 extends Setup_Update_Abstract
             Tinebase_CustomField::getInstance()->updateCustomField($cfc);
         }
         $this->addApplicationUpdate(GDPR_Config::APP_NAME, '16.3', self::RELEASE016_UPDATE003);
+    }
+
+    public function update004()
+    {
+        Setup_SchemaTool::updateSchema([
+            GDPR_Model_DataIntendedPurpose::class,
+            GDPR_Model_DataIntendedPurposeRecord::class,
+            GDPR_Model_DataIntendedPurposeLocalization::class,
+        ]);
+        $this->addApplicationUpdate('GDPR', '16.4', self::RELEASE016_UPDATE004);
     }
 }

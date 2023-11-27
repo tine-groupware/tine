@@ -120,7 +120,7 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
             $names = array_map(function($address)  {return $address['name'];},  $addressList);
             
             if (count($addressList) > 0) {
-                $contacts = Addressbook_Controller_Contact::getInstance()->getContactsByEmailArrays($emails, $names);
+                $contacts = Addressbook_Controller_Contact::getInstance()->searchContactsByEmailArrays($emails, $names);
                 // add parsed address data to addressList
                 foreach ($addressList as $parsedEmail) {
                     $address = [
@@ -129,7 +129,7 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
                         "type" =>  '',
                         "n_fileas" => '',
                         "email_type" =>  '',
-                        "record_id" => ''
+                        "contact_record" => ''
                     ];
                     
                     $possibleAddresses = Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts);

@@ -28,11 +28,17 @@ class GDPR_Frontend_JsonTest extends TestCase
 
         $this->_dataIntendedPurpose1 = GDPR_Controller_DataIntendedPurpose::getInstance()->create(
             new GDPR_Model_DataIntendedPurpose([
-                'name' => 'unittest1',
+                'name' =>   [[
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'unittest1',
+                ]],
             ], true));
         $this->_dataIntendedPurpose2 = GDPR_Controller_DataIntendedPurpose::getInstance()->create(
             new GDPR_Model_DataIntendedPurpose([
-                'name' => 'unittest2',
+                'name' =>                 [[
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'unittest2',
+                ]],
             ], true));
     }
 

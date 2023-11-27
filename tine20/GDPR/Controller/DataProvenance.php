@@ -115,7 +115,14 @@ class GDPR_Controller_DataProvenance extends Tinebase_Controller_Record_Abstract
         $expanderDef = $mc->jsonExpander;
         $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
             [GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
-                Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['intendedPurpose' => []]
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    GDPR_Model_DataIntendedPurposeRecord::FLD_INTENDEDPURPOSE => [
+                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                            GDPR_Model_DataIntendedPurpose::FLD_NAME            => [],
+                            GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION     => [],
+                        ]
+                    ]
+                ]
             ];
         $mc->setJsonExpander($expanderDef);
     }
