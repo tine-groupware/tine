@@ -190,11 +190,10 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 panel: this,
                 encode: function(value) {
                     if (value) {
-                        var encoded = Ext.util.Format.htmlEncode(value);
-                        encoded = Ext.util.Format.nl2br(encoded);
                         // it should be enough to replace only 2 or more spaces
-                        encoded = encoded.replace(/ /g, '&nbsp;');
-
+                        value = value.replace(/\s{2,}/g, ' ');
+                        let encoded = Ext.util.Format.htmlEncode(value);
+                        encoded = Ext.util.Format.nl2br(encoded);
                         return encoded;
                     } else {
                         return '';
@@ -608,7 +607,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         row.style.margin = '5px';
         row.style.textAlign = 'left';
         const rowLeft = document.createElement('div');
-        rowLeft.innerHTML = header;
+        rowLeft.textContent = header;
         rowLeft.style.minWidth = '60px';
         const rowRight =  document.createElement('div');
         rowRight.innerHTML = value;
