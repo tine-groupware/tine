@@ -1081,7 +1081,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
                 }
                 $deleteIds = [];
             }
-            echo ' done';
         } while ($notes->count() === $limit);
 
         foreach ($controllers as $model => $controller) {

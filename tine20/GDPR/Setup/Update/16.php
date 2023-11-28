@@ -22,14 +22,17 @@ class GDPR_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
+        // we need to make sure to run this before our normal app structure updates
+        self::PRIO_TINEBASE_UPDATE => [
+            self::RELEASE016_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
+            ],
+        ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE016_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
-            ],
-            self::RELEASE016_UPDATE004          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update004',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -124,6 +127,27 @@ class GDPR_Setup_Update_16 extends Setup_Update_Abstract
 
     public function update004()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema([
+            GDPR_Model_DataIntendedPurposeLocalization::class,
+        ]);
+
+        $defaultLocale = Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE};
+
+        foreach ($this->getDb()->select()->from(SQL_TABLE_PREFIX . GDPR_Model_DataIntendedPurpose::TABLE_NAME, [
+                    GDPR_Model_DataIntendedPurpose::ID,
+                    GDPR_Model_DataIntendedPurpose::FLD_NAME
+                ])->query()->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+            GDPR_Controller_DataIntendedPurposeLocalization::getInstance()->create(
+                new GDPR_Model_DataIntendedPurposeLocalization([
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TYPE => GDPR_Model_DataIntendedPurpose::FLD_NAME,
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_RECORD_ID => $row[0],
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => $row[1],
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => $defaultLocale,
+                ]));
+        }
+
         Setup_SchemaTool::updateSchema([
             GDPR_Model_DataIntendedPurpose::class,
             GDPR_Model_DataIntendedPurposeRecord::class,
