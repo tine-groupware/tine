@@ -107,7 +107,7 @@ class Tinebase_Notification
                     continue;
                 }
                 if (! in_array($recipient->getId(), $sentContactIds)) {
-                    $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachments);
+                    $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachments, $_fireEvent, $_actionLogType);
                     if ($recipient->getId()) {
                         $sentContactIds[] = $recipient->getId();
                     }
