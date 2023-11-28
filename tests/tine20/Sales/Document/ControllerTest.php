@@ -58,6 +58,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         Tinebase_Record_Expander::expandRecord($storno);
         $this->assertSame(-2, (int)$storno->{Sales_Model_Document_Invoice::FLD_NET_SUM});
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID}, $storno->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID});
     }
 
     public function testCustomerFilterForDocuments()
