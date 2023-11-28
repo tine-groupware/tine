@@ -72,7 +72,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         if (this.hasTopToolbar) {
             this.initTopToolbar();
         }
-        
+
         Tine.Felamimail.MailDetailsPanel.superclass.initComponent.call(this);
     },
 
@@ -235,7 +235,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         if (header === 'from') value = this.showFrom(values.from_email, values.from_name);
                         if (header === 'date') value = this.showDate(values.sent, values);
                         if (header === 'extra') headerValue = this.panel.showExtraHeaderButton();
-                        
+
                         if (['to', 'cc', 'bcc'].includes(header)) {
                             if (!values.headers.hasOwnProperty(header)) return;
                             const emails = this.panel.record.get(header);
@@ -303,7 +303,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     if (!attachments || attachments.length === 0) return '';
                     const attachmentBlock =  document.createElement('div');
                     attachmentBlock.className = 'preview-panel-felamimail-attachments';
-                    
+
                     let result = `<span id=${idPrefix}:all style="padding-left:5px;" class="tinebase-download-link tinebase-download-all"><b>${attachmentsStr}:</b><div class="tinebase-download-link-wait"></div></span>`;
 
                     for (var i=0, id, cls; i < attachments.length; i++) {
@@ -509,14 +509,14 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
         _.each(attachments, (attachment) => {
             if (!attachment.promises) attachment.promises = [];
-            if (attachment?.isCacheValid) return;
+            if (attachment?.isPreviewReady) return;
             const promise = new Promise(async (resolve) => {
                 let validCache = null;
                 await Promise.all(attachment.promises).then((responses) => {
-                    validCache = responses.find((r) => {return r.isCacheValid});
+                    validCache = responses.find((r) => {return r.isPreviewReady});
                 });
                 if (validCache) {
-                    attachment.isCacheValid = true;
+                    attachment.isPreviewReady = true;
                     return resolve(validCache);
                 }
                 const attachmentId = [sourceModel, record.id, attachment.partId].join(':');
@@ -525,7 +525,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         return resolve({
                             cache: new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]),
                             createPreviewInstantly: createPreviewInstantly,
-                            isCacheValid: cache.attachments[0].preview_count !== 0,
+                            isPreviewReady: cache.attachments[0].preview_count !== 0,
                         });
                     })
                     .catch((e) => {
@@ -562,7 +562,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             if (!attachments[initialAttachmentIdx].promises) return;
             await Promise.all(attachments[initialAttachmentIdx].promises).then((cachePromises) => {
                 let resolvedAttachmentData = {};
-                const validResponse = cachePromises.find((cachePromise) => {return cachePromise.isCacheValid});
+                const validResponse = cachePromises.find((cachePromise) => {return cachePromise.isPreviewReady});
                 if (validResponse) {
                     resolvedAttachmentData = validResponse.cache.data;
                 } else {
@@ -587,7 +587,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
         return result;
     },
-    
+
     renderHeader(header, value) {
         const row =  document.createElement('div');
         row.className = 'preview-panel-felamimail-header-row';
@@ -601,7 +601,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         row.appendChild(rowRight);
         return row;
     },
-    
+
     renderHeaderRaw(header, value) {
         const row =  document.createElement('div');
         row.style.display = 'flex';
@@ -612,16 +612,16 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         rowLeft.style.minWidth = '60px';
         const rowRight =  document.createElement('div');
         rowRight.innerHTML = value;
-        
+
         if (header.length > 10 || value.length > 50) {
             row.style.flexDirection = 'column';
             rowRight.style.paddingLeft = '55px';
-        } 
+        }
         row.appendChild(rowLeft);
         row.appendChild(rowRight);
         return row;
     },
-    
+
     showExtraHeaderButton() {
         const qtip = this.app.i18n._('Show or hide header information');
         return ' <span ext:qtip="' + Tine.Tinebase.common.doubleEncode(qtip) + '" id="' + Ext.id() + ':show" class="tinebase-showheaders-link">[...]</span>';
