@@ -285,6 +285,9 @@ class SaasInstance_ControllerTest extends TestCase
         $account = Admin_Controller_User::getInstance()->update($accountData);
         self::assertEquals($account['type'], Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER);
 
+        $metrics = SaasInstance_Controller::getInstance()->metrics();
+        self::assertEquals(1, $metrics[SaasInstance_Config::APP_NAME]['numberOfReducedPriceUsers']);
+        
         $features[Admin_Config::FEATURE_CHANGE_USER_TYPE] = false;
         Admin_Config::getInstance()->set(Admin_Config::ENABLED_FEATURES, $features);
     }

@@ -302,11 +302,15 @@ class SaasInstance_Controller extends Tinebase_Controller_Event
     {
         $data = [];
         try {
+            $volunteerUserCount = Tinebase_User::getInstance()->search(new Tinebase_Model_FullUserFilter([
+                ['field' => 'type', 'operator'  => 'equals', 'value' => Tinebase_Model_FullUser::USER_TYPE_VOLUNTEER]
+            ]))->count();
             $data[SaasInstance_Config::APP_NAME] = [
                 SaasInstance_Config::PRICE_PER_USER => SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER),
                 SaasInstance_Config::PRICE_PER_USER_VOLUNTEER => SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_USER_VOLUNTEER),
                 SaasInstance_Config::PRICE_PER_GIGABYTE => SaasInstance_Config::getInstance()->get(SaasInstance_Config::PRICE_PER_GIGABYTE),
                 SaasInstance_Config::NUMBER_OF_INCLUDED_USERS => SaasInstance_Config::getInstance()->get(SaasInstance_Config::NUMBER_OF_INCLUDED_USERS),
+                'numberOfReducedPriceUsers' => $volunteerUserCount
             ];
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
