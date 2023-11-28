@@ -118,9 +118,16 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
     {
         parent::transitionFrom($transition);
 
-        $this->{self::FLD_RECIPIENT_ID} = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}
-            ->getFirstRecord()->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
-            ->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID};
+        $sourceDoc = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->getFirstRecord();
+        switch ($sourceDoc->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL}) {
+            case Sales_Model_Document_Order::class:
+                $this->{self::FLD_RECIPIENT_ID} = $sourceDoc->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+                    ->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID};
+            case Sales_Model_Document_Invoice::class:
+                break;
+            default:
+                throw new Tinebase_Exception_SystemGeneric('transition from ' . $sourceDoc->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL} . ' to ' . static::class . ' not allowed');
+        }
 
         if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
             $this->_checkProductPrecursorPositionsComplete();
