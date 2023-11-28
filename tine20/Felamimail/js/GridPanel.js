@@ -832,14 +832,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         // sender
         const senderEl = document.createElement('div');
-        senderEl.innerText = record.data.from_name ?? record.data.from_email;
+        senderEl.innerHTML = Ext.util.Format.htmlEncode(record.data.from_name ?? record.data.from_email);
         senderEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.from_email));
         
         // recipient
         const recipientEl = document.createElement('div');
         const recipients = record.data.to.map((to) => { return to?.n_fileas || to?.email || to;});
         const extra = recipients.length > 2 ? ' ...' : '';
-        recipientEl.innerText = recipients.slice(0, 2).join(' & ') + extra;
+        recipientEl.innerHTML =  Ext.util.Format.htmlEncode(recipients.slice(0, 2).join(' & ') + extra);
         
         // attachment
         const attachmentEl = document.createElement('div');
@@ -866,7 +866,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         // subject
         const subjectEl = document.createElement('div');
-        subjectEl.innerText = record.data.subject;
+        subjectEl.innerHTML = Ext.util.Format.htmlEncode(record.data.subject);
         subjectEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.subject));
         
         

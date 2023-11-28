@@ -393,8 +393,8 @@ Ext.util.Format = function(){
         
         /**
          * Converts newline characters to the HTML tag &lt;br/>
-         * @param {String} The string value to format.
          * @return {String} The string with embedded &lt;br/> tags in place of newlines.
+         * @param v
          */
         nl2br : function(v){
             return Ext.isEmpty(v) ? '' : v.replace(nl2brRe, '<br/>');
