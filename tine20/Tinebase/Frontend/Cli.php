@@ -581,15 +581,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $offset = (isset($args['cleanNotesOffset']) ? $args['cleanNotesOffset'] : 0);
         $purge = isset($args['purge']) ? $args['purge'] : false;
 
-        echo "\noffset $offset...";
-
         $deletedCount = Tinebase_Notes::getInstance()->removeObsoleteData($purge, $offset, $_opts->d);
 
         if ($_opts->d) {
             echo "\nDRY RUN!";
         }
 
-        echo "\ndeleted " . $deletedCount . " notes\n";
+        echo "\nDeleted " . $deletedCount . " notes\n";
     }
 
     /**
