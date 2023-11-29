@@ -94,12 +94,21 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 ],
                 self::FLD_DEPENDENS_ON => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Tasks_Model_TaskDependency::FLD_DEPENDS_ON => [],
+                        Tasks_Model_TaskDependency::FLD_DEPENDS_ON => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                'organizer' => [],
+                                'source' => [],
+                            ],
+                        ],
                     ],
                 ],
                 self::FLD_DEPENDENT_TASKS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Tasks_Model_TaskDependency::FLD_TASK_ID => [],
+                        Tasks_Model_TaskDependency::FLD_TASK_ID => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                'organizer' => [],
+                            ],
+                        ],
                     ],
                 ],
             ],
