@@ -1528,22 +1528,24 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $contacts = isset($contacts['id']) ? [$contacts] : $contacts;
         $mailTypes =  ['email', 'email_home'];
         $possibleAddresses = [];
-        
-        $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, [
-            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME => [
-                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        GDPR_Model_DataIntendedPurposeRecord::FLD_INTENDEDPURPOSE => [
-                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                                GDPR_Model_DataIntendedPurpose::FLD_NAME            => [],
-                                GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION     => [],
+
+        if (class_exists('GDPR_Controller_DataIntendedPurposeRecord')) {
+            $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME => [
+                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                            GDPR_Model_DataIntendedPurposeRecord::FLD_INTENDEDPURPOSE => [
+                                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                    GDPR_Model_DataIntendedPurpose::FLD_NAME => [],
+                                    GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION => [],
+                                ]
                             ]
                         ]
                     ]
                 ]
-            ]
-        ]);
-        $expander->expand(new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, $contacts));
+            ]);
+            $expander->expand(new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, $contacts));
+        }
         
         foreach ($contacts as $contact) {
             if (in_array($contact['type'], ['group', 'list', 'mailingList'])) {
