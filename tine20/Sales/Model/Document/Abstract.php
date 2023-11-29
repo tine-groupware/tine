@@ -328,9 +328,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL => 'VAT Procedure', // _('VAT Procedure')
                 self::TYPE => self::TYPE_KEY_FIELD,
                 self::NAME => Sales_Config::VAT_PROCEDURES,
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
-                ],
             ],
             self::FLD_SALES_TAX                 => [
                 self::LABEL                         => 'Sales Tax', //_('Sales Tax')
