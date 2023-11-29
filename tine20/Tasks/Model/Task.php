@@ -60,7 +60,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'containersName'    => 'Tasks',
         'containerUsesFilter' => true,
 
-        'titleProperty'     => 'summary',//array('%s - %s', array('number', 'title')),
+        'titleProperty'     => 'summary',
         'appName'           => 'Tasks',
         'modelName'         => 'Task',
 

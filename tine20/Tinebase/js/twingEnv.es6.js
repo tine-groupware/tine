@@ -182,7 +182,15 @@ const getTwingEnv = function () {
     }))
 
     twingEnv.addFunction(new TwingFunction('keyField', function (appName, keyFieldName, id) {
-      return Promise.resolve(Tine.Tinebase.widgets.keyfield.Renderer.render(appName, keyFieldName, id))
+      return Promise.resolve(Tine.Tinebase.widgets.keyfield.Renderer.render(appName, keyFieldName, id, 'text'))
+    }))
+
+    twingEnv.addFunction(new TwingFunction('renderModel', function (modelName) {
+      return Promise.resolve(Tine.Tinebase.data.RecordMgr.get(modelName)?.getRecordName())
+    }))
+
+    twingEnv.addFunction(new TwingFunction('renderTitle', function (recordData, modelName) {
+      return Promise.resolve(Tine.Tinebase.data.Record.setFromJson(recordData, modelName)?.getTitle())
     }))
 
     /**
