@@ -1204,8 +1204,8 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
     public function testGetEditorConfigForNodeId($assert = true)
     {
         Tinebase_FileSystem::getInstance()->createAclNode('/Tinebase/folders/shared/ootest');
-        file_put_contents('tine20:///Tinebase/folders/shared/ootest/test.txt', 'blub');
-        $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/test.txt');
+        file_put_contents('tine20:///Tinebase/folders/shared/ootest/testü.txt', 'blub');
+        $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/testü.txt');
 
         $editorConfigArray = $this->_uit->getEditorConfigForNodeId($node->getId(), (string)$node->revision);
 
