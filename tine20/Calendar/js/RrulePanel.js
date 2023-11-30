@@ -706,7 +706,7 @@ Tine.Calendar.RrulePanel.MONTHLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstr
                     '<div style="position: relative;">' +
                         '<table><tr>' +
                             '<td width="65" id="' + this.idPrefix + 'bymonthdayradio"></td>' +
-                            '<td width="40" id="' + this.idPrefix + 'bymonthdayday"></td>' +
+                            '<td width="40" id="' + this.idPrefix + 'bymonthdayday" class="bymonthdayday"></td>' +
                             '<td>.</td>' +
                          '</tr></table>' +
                     '</div>' +
@@ -906,7 +906,7 @@ Tine.Calendar.RrulePanel.YEARLYcard = Ext.extend(Tine.Calendar.RrulePanel.Abstra
                     '<div style="position: relative;">' +
                         '<table><tr>' +
                             '<td width="65" id="' + this.idPrefix + 'bymonthdayradio"></td>' +
-                            '<td width="40" id="' + this.idPrefix + 'bymonthdayday"></td>' +
+                            '<td width="40" id="' + this.idPrefix + 'bymonthdayday" class="bymonthdayday"></td>' +
                             '<td>.</td>' +
                             '<td width="15" style="padding-left: 37px">' + this.app.i18n._('of') + '</td>' +
                             '<td width="100" id="' + this.idPrefix + 'bymonth"></td>' +
