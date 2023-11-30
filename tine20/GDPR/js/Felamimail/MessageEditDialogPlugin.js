@@ -34,6 +34,8 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
     },
     
     switchMassMailingMode(active) {
+        this.editDialog.massMailingMode = active;
+        if (this.recipientGrid) this.recipientGrid.massMailingMode = active;
         this.editDialog.massMailingInfoText.setVisible(active);
         this.manageConsentRecordPicker.setVisible(active);
         this.updateMessageBody(active);
