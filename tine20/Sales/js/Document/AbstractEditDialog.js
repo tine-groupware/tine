@@ -32,6 +32,12 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         ) !== 'yes') {
             return false;
         }
+
+        if (this.record.phantom) {
+            // new documents need to be saved first to get a proforma number
+            await this.applyChanges()
+        }
+
         _.delay(async () => {
             try {
                 await this.applyChanges()
