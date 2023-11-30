@@ -421,12 +421,23 @@
     vertical-align: middle;
 }
 
+em.emoji {
+    font-style: normal;
+}
+
 .dark-mode .is_spam_suspicions td {
     color: #7a5010;
 }
 
-.dark-mode .preview-panel-felamimail-body img {
+.dark-mode .preview-panel-felamimail-body {
     filter: invert(1) hue-rotate(180deg);
+    background-color: #222222;
+    color: #f1f1f1;
+}
+
+.dark-mode .preview-panel-felamimail-body em.emoji {
+    filter: none;
+    font-style: normal;
 }
 
 .felamimail-message-title {
