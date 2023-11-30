@@ -80,6 +80,24 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         return [];
     }
 
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+
+        if ($_record->isBooked()) {
+            throw new Tinebase_Exception_Record_Validation('document must not be booked');
+        }
+    }
+
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        if (!$_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER}) {
+            $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER} = $_oldRecord->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER};
+        }
+    }
+
     /**
      * @param Sales_Model_Document_Invoice $_record
      * @param Sales_Model_Document_Invoice|null $_oldRecord
