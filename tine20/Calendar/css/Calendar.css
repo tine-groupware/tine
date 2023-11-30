@@ -323,3 +323,8 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .t-contenttype-event .action_import {
     background-image:url(../../images/icon-set/icon_meeting_import.svg) !important;
 }
+
+.dark-mode .bymonthdayday .x-form-field,
+.dark-mode .x-hide-label .x-form-element .x-form-check-group .x-form-check-wrap label.x-form-cb-label {
+    filter: invert(1) hue-rotate(180deg);
+}
