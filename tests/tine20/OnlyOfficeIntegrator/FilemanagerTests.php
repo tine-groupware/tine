@@ -55,7 +55,7 @@ class OnlyOfficeIntegrator_FilemanagerTests extends TestCase
         $this->_jsonTest->testGetEditorConfigForNodeId(false);
         OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->clearUnresolvedTokensCache();
 
-        $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/test.txt');
+        $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/testü.txt');
         static::assertTrue($node->{OnlyOfficeIntegrator_Config::FM_NODE_EDITING_CFNAME});
         $fmJson = new Filemanager_Frontend_Json();
         $fmNode = $fmJson->getNode($node->getId());

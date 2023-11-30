@@ -165,7 +165,7 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
 
         return new \Zend\Diactoros\Response($stream, 200, [
-            'Content-Disposition'   => 'attachment; filename="' . $name . '"',
+            'Content-Disposition'   => 'attachment; filename*=UTF-8\'\'' . urlencode($name),
             'Content-Type'          => $contentType,
         ]);
     }
