@@ -439,6 +439,7 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             Tasks_Config::APP_NAME => array(
                 Tasks_Model_Attendee::class,
+                Tasks_Model_AttendeeStatus::class,
                 Tasks_Model_Pagination::class,
                 Tasks_Model_Priority::class,
                 Tasks_Model_Status::class,

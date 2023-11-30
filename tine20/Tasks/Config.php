@@ -86,7 +86,7 @@ class Tasks_Config extends Tinebase_Config_Abstract
             //_('Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation.')
             'description'           => 'Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-//            'options'               => array('recordModel' => 'Calendar_Model_AttendeeStatus'),
+            'options'               => array('recordModel' => Tasks_Model_AttendeeStatus::class),
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default'               => array(
