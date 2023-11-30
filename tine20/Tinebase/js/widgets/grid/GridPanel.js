@@ -2616,7 +2616,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @returns {Tine.Tinebase.data.Record}
      */
     createNewRecord: function() {
-        return new this.recordClass(this.recordClass.getDefaultData(), 0);
+        const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.recordClass.getDefaultData(), this.getRecordDefaults()), this.recordClass);
+        record.phantom = true;
+
+        // legacy should be removed some day
+        record.setId(0);
+
+        return record;
+    },
+
+    getRecordDefaults: function() {
+        const defaults = {...this.recordDefaults || {} };
+
+        return defaults;
     },
 
     /**
