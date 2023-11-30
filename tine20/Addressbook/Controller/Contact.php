@@ -1545,6 +1545,8 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 ]
             ]);
             $expander->expand(new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, $contacts));
+        } else {
+            $expander = null;
         }
         
         foreach ($contacts as $contact) {
