@@ -345,11 +345,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else if (this.draftOrTemplate) {
             this.record.set('original_id', this.draftOrTemplate.id);
         }
-
-        if (this.record.get('massMailingFlag')) {
-            this.button_massMailing.toggle();
-        }
-
+        
         this.button_fileMessage.toggle(currentAccount.get('message_sent_copy_behavior') !== 'skip');
 
         Tine.log.debug('Tine.Felamimail.MessageEditDialog::initRecord() -> record:');
@@ -661,7 +657,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
         this.htmlEditor.on('toggleFormat', this.onToggleFormat, this);
         this.initHtmlEditorDD();
-    
+        
         await waitFor(() => {
             return this.recipientGrid.store.getCount() > 0
         });
@@ -675,6 +671,11 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
             }
         }, 250);
+        
+        if (this.record.get('massMailingFlag')) {
+            this.button_massMailing.toggle();
+            await this.switchMassMailingMode(this.record.get('massMailingFlag'));
+        }
     },
 
 
@@ -1056,13 +1057,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const active = !this.record.get('massMailingFlag');
         if (!active && this.button_massMailing.pressed) this.button_massMailing.toggle();
         if (this.massMailingMode === active) return;
-        this.massMailingMode = active;
-        if (this.recipientGrid) this.recipientGrid.massMailingMode = active;
         this.record.set('massMailingFlag', active);
         await this.switchMassMailingMode(active);
     },
     
     async switchMassMailingMode(active) {
+        this.massMailingMode = active;
+        if (this.recipientGrid) this.recipientGrid.massMailingMode = active;
         this.massMailingInfoText.setVisible(active);
         if (active) {
             await this.recipientGrid.updateMassMailingRecipients();
@@ -1248,8 +1249,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.accountCombo.setValue(this.from.id);
         }
         
-        this.switchMassMailingMode(this.record.get('massMailingFlag'));
-
         this.addDefaultSignature();
         this.updateFileLocations();
         this.onFileMessageSelectionChange('', this.action_fileRecord.getSelected());

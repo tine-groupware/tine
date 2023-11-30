@@ -115,10 +115,10 @@ const extendedDataIntendedPurposes = computed(() => {
         };
         const _GDPR_DEFAULT_LANG = "GDPR_default_lang"
         const def_lang = _.get(consentConfig.value, _GDPR_DEFAULT_LANG)
-        const getItem = (array, locale) => _.find(array, (item) => item.language == locale) || null
+        const getItem = (array, locale) => _.find(array, (item) => item.language === locale) || null
         _purposeRecord.__record = {
-            name: getItem(_purposeRecord.intendedPurpose.name, def_lang).text,
-            desc: getItem(_purposeRecord.intendedPurpose.description, def_lang).text,
+            name: getItem(_purposeRecord.intendedPurpose.name, def_lang)?.text,
+            desc: getItem(_purposeRecord.intendedPurpose.description, def_lang)?.text,
             key: `${_purposeRecord.id}_${_purposeRecord.last_modified_time}`,
             ...getStatus(_purposeRecord),
         };
