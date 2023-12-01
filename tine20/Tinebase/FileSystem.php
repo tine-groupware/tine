@@ -3600,10 +3600,14 @@ class Tinebase_FileSystem implements
                 }
                 unset($forUpdateRAII);
 
-                if (!$childNode->flysystem || (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $childNode->type &&
-                        !$flySystem->directoryExists($childNode->flypath)) ||
-                            (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $childNode->type &&
-                                !$flySystem->fileExists($childNode->flypath))) {
+                try {
+                    if (!$childNode->flysystem || !is_string($childNode->flypath) || (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $childNode->type &&
+                            !$flySystem->directoryExists($childNode->flypath)) ||
+                        (Tinebase_Model_Tree_FileObject::TYPE_FOLDER !== $childNode->type &&
+                            !$flySystem->fileExists($childNode->flypath))) {
+                        $this->_syncFlySystemDeleteNode($childNode);
+                    }
+                } catch (Throwable) {
                     $this->_syncFlySystemDeleteNode($childNode);
                 }
 

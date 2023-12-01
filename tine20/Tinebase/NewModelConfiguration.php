@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -24,11 +24,12 @@ class Tinebase_NewModelConfiguration  extends Tinebase_ModelConfiguration
      *
      * @var array
      */
-    protected $_converterDefaultMapping = array(
-        'json'      => [Tinebase_Model_Converter_Json::class],
-        'date'      => [Tinebase_Model_Converter_Date::class],
-        'datetime'  => [Tinebase_Model_Converter_DateTime::class],
-    );
+    protected $_converterDefaultMapping = [
+        self::TYPE_JSON      => [Tinebase_Model_Converter_Json::class],
+        self::TYPE_DATE      => [Tinebase_Model_Converter_Date::class],
+        self::TYPE_DATETIME  => [Tinebase_Model_Converter_DateTime::class],
+        self::TYPE_PASSWORD  => [Tinebase_Model_Converter_Password::class],
+    ];
 
     /**
      * the constructor (must be called in a singleton per model fashion, each model maintains its own singleton)

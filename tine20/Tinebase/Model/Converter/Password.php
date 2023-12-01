@@ -34,12 +34,12 @@ class Tinebase_Model_Converter_Password implements Tinebase_Model_Converter_Inte
                 $cc->setCacheAdapter('Shared');
 
                 $refIdProperty = $record::getConfiguration()->getFields()[$key][TMCC::CONFIG][TMCC::REF_ID_FIELD];
-                $oldCCId = $this->{$refIdProperty};
+                $oldCCId = $record->{$refIdProperty};
 
                 $sharedCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(null,
                     $fieldValue, null, true /* save in DB */, Tinebase_DateTime::now()->addYear(100));
 
-                $this->{$refIdProperty} = $sharedCredentials->getId();
+                $record->{$refIdProperty} = $sharedCredentials->getId();
                 if ($oldCCId) {
                     $cc->delete($oldCCId);
                 }
