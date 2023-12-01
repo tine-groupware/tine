@@ -176,6 +176,11 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
         var _ = window.lodash,
             me = this;
 
+        const template = Tine.Tinebase.appMgr.get(this.appName).getRegistry().get('preferences')?.get(`${_.lowerFirst(this.modelName)}TitleTemplate`);
+        if (template) {
+            this.titleProperty = template;
+        }
+
         if (Tine.Tinebase.data.TitleRendererManager.has(this.appName, this.modelName)) {
             return Tine.Tinebase.data.TitleRendererManager.get(this.appName, this.modelName)(this);
         } else if (String(this.titleProperty).match(/[{ ]/)) {
@@ -600,6 +605,8 @@ Tine.Tinebase.data.RecordMgr = new Tine.Tinebase.data.RecordManager(true);
  * @returns {Tine.Tinebase.data.Record}
  */
 Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
+    recordClass = Tine.Tinebase.data.RecordMgr.get(recordClass);
+    if (!recordClass) return null;
     var jsonReader = new Ext.data.JsonReader({
         id: recordClass.idProperty,
         root: 'results',
