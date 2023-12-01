@@ -505,7 +505,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 throw new Tinebase_Exception_NotFound('child: ' . $childName . ' not found!');
             }
             return null;
-        } elseif ($flySystem) {
+        } elseif ($flySystem && is_string($child->flypath)) {
             if ($child->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER ? !$flySystem->directoryExists($child->flypath) :  !$flySystem->fileExists($child->flypath)) {
                 Tinebase_FileSystem::getInstance()->syncFlySystem($child, 0);
                 return $this->getChild($parentId, $childName, $getDeleted, $throw);

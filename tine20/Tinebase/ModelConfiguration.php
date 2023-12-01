@@ -908,6 +908,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      */
     protected $_converterDefaultMapping = array(
         'json'      => [Tinebase_Model_Converter_Json::class],
+        self::TYPE_PASSWORD => [Tinebase_Model_Converter_Password::class],
     );
 
     /**

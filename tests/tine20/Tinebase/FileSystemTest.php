@@ -245,10 +245,20 @@ class Tinebase_FileSystemTest extends TestCase
             Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV([
                 Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::FLD_URL => 'http://unittest.test',
                 Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::FLD_USERNAME => 'user',
-                Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::FLD_PWD => 'pwd',
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::FLD_PWD => 'secret',
             ]),
             Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_originalTestUser->getId(),
         ]));
+
+        $row = Tinebase_Core::getDb()->select()->from(SQL_TABLE_PREFIX . Tinebase_Model_Tree_FlySystem::TABLE_NAME)
+            ->where('id = "' . $flySystem->getId() . '"')->query()->fetch(Zend_Db::FETCH_ASSOC);
+        $this->assertStringNotContainsString(Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::FLD_PWD . '":"secret"',
+            $row[Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG]);
+
+        $this->assertNull($flySystem->{Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG}
+            ->{Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::FLD_PWD});
+        $this->assertSame('secret', $flySystem->{Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG}
+            ->getPasswordFromProperty(Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV::FLD_PWD));
 
         $node = $this->_controller->mkdir($this->_basePath . '/flysystem');
         $node->flysystem = $flySystem->getId();
