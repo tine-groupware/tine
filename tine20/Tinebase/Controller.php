@@ -10,6 +10,7 @@
  * 
  */
 
+use \IPLib\Factory;
 use \Psr\Http\Message\RequestInterface;
 
 /**
@@ -896,6 +897,18 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $areaLock = Tinebase_AreaLock::getInstance();
         $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
         if ($areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN)) {
+            // mfa free netmasks:
+            if (($_SERVER['HTTP_X_REAL_IP'] ?? false) &&
+                    !empty($byPassMasks = Tinebase_Config::getInstance()->{Tinebase_Config::MFA_BYPASS_NETMASKS}) &&
+                    ($ip = Factory::parseAddressString($_SERVER['HTTP_X_REAL_IP']))) {
+                foreach ($byPassMasks as $netmask) {
+                    if (Factory::parseRangeString($netmask)?->contains($ip)) {
+                        // bypassing
+                        return;
+                    }
+                }
+            }
+
             /** @var Tinebase_Model_AreaLockConfig $areaConfig */
             foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
                 if (Tinebase_Model_AreaLockConfig::POLICY_REQUIRED ===
