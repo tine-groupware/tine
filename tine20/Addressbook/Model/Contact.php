@@ -1487,12 +1487,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             'note'        => true,
             'email'       => true,
             'email_home'  => true,
+            'salutation'  => true,
             'n_family'    => true,
             'n_given'     => true,
             'n_fileas'    => true,
             'n_fn'        => true,
             'n_short'     => true,
             'account_id'  => true,
+            'org_name'    => true,
         ]);
     }
 

@@ -853,10 +853,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var result = "",
             email = "";
 
-        if (typeof name.get == 'function' && name.get('n_fileas')) {
-            result = name.get('n_fileas');
+        if (typeof name.getTitle == 'function') {
+            result = name.getTitle();
         } else if (name.n_fileas) {
-            result = name.n_fileas;
+            result = Tine.Tinebase.data.Record.setFromJson(name, Tine.Addressbook.Model.Contact).getTitle();
         } else if (name.accountDisplayName) {
             result = name.accountDisplayName;
         } else if (Ext.isString(name) && ! name.match('^[0-9a-f-]{40,}$') && ! parseInt(name, 10)) {

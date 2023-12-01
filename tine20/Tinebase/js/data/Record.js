@@ -196,7 +196,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
                 this.constructor.titleTwing = twingEnv;
             }
 
-            return this.constructor.titleTwing.renderProxy(this.constructor.getPhpClassName() + 'Title', this.data);
+            return this.constructor.titleTwing.renderProxy(this.constructor.getPhpClassName() + 'Title', Object.assign({record: this}, this.data));
         } else if (_.get(this.fields.get(this.titleProperty), 'fieldDefinition.config.specialType') === 'localizedString') {
             // const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(this.constructor, this.titleProperty);
             const languagesAvailableDef = _.get(this.constructor.getModelConfiguration(), 'languagesAvailable')
