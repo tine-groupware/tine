@@ -2860,7 +2860,8 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Addressbook_Model_Contact::class, $contact->getId());
         self::assertEquals(1, count($notes), 'record has no notes');
         $note = $notes->getFirstRecord();
-        self::assertEquals(Tinebase_Model_Note::SYSTEM_NOTE_NAME_EMAIL, $note->note_type_id, '3 is email type ' . print_r($note->toArray(), true));
+        self::assertEquals(Tinebase_Model_Note::SYSTEM_NOTE_NAME_EMAIL, $note->note_type_id,
+            '3 is email type ' . print_r($note->toArray(), true));
         return $message;
     }
     
@@ -2880,7 +2881,13 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         ]));
         Tinebase_Core::setUser($sclever);
         $this->_account = Admin_Controller_EmailAccount::getInstance()->getSystemAccount($sclever);
-        $message = $this->_sendMessage();
+        try {
+            $message = $this->_sendMessage();
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' ' . $tesg->getMessage());
+            self::markTestSkipped('sclever email account missing');
+        }
 
         $filter = [[
             'field' => 'id', 'operator' => 'in', 'value' => [$message['id']]
