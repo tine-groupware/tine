@@ -51,6 +51,8 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'hasAttachments'    => true,
         self::HAS_ALARMS    => true,
         'createModule'      => true,
+        'exposeHttpApi'     => true,
+        'exposeJsonApi'     => true,
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         'containerProperty' => 'container_id',
