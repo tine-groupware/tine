@@ -51,6 +51,7 @@ class Tinebase_Server_JsonTests extends TestCase
             'Inventory.deleteInventoryItems',
             'Inventory.getInventoryItem',
             'Inventory.importInventoryItems',
+            'Tasks.importTasks',
         );
 
         foreach ($expectedFunctions as $function) {
