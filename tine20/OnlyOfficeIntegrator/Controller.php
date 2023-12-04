@@ -1050,8 +1050,14 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
         foreach ($keys as $key) {
             $users = array_unique($accessTokens->filter(OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY, $key)
                 ->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_USER_ID});
-            $this->callCmdServiceDrop($key, $users);
-            $this->callCmdServiceForceSave($accessTokens->find(OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY, $key));
+            try {
+                $this->callCmdServiceDrop($key, $users);
+                $this->callCmdServiceForceSave($accessTokens->find(OnlyOfficeIntegrator_Model_AccessToken::FLDS_KEY, $key));
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                // maybe we are already in maintenance mode - ignore that
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
+            }
         }
 
         $raii->release();
