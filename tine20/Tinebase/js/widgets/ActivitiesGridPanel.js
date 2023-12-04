@@ -60,6 +60,7 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     store: null,
 
     viewConfig: {},
+    autoExpandColumn: 'note',
 
     /**
      * initializes the component
@@ -100,18 +101,17 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * @return Array
      */
     getColumns: function () {
-        var columns = [
+        return [
             {
                 id: 'note_type_id',
                 header: i18n._('Type'),
                 dataIndex: 'note_type_id',
-                width: 50,
+                width: 80,
                 renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteType')
             },
             {
                 id: 'note',
                 dataIndex: 'note',
-                width: 450,
                 header: i18n._('Note'),
                 sortable: true,
                 renderer: this.renderMultipleLines
@@ -119,18 +119,17 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             {
                 id: 'created_by',
                 header: i18n._('Created By'),
-                dataIndex: 'created_by'
+                dataIndex: 'created_by',
+                renderer: Tine.Tinebase.common.usernameRenderer,
             },
             {
                 id: 'creation_time',
                 header: i18n._('Creation time'),
                 dataIndex: 'creation_time',
-                width: 120,
+                width: 140,
                 renderer: Tine.Tinebase.common.dateTimeRenderer
             }
         ];
-
-        return columns;
     },
 
     /**
@@ -406,8 +405,13 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * - add note to activities panel
      */
     onNoteAdd: function (text, typeId, recordId) {
-        if (text && typeId  && recordId == undefined) {
-            var newNote = new Tine.Tinebase.Model.Note({note_type_id: typeId, note: text});
+        if (text && typeId  && recordId === undefined) {
+            const newNote = new Tine.Tinebase.Model.Note({
+                note_type_id: typeId, 
+                note: text,
+                creation_time: new Date(),
+                created_by: Tine.Tinebase.registry.get('currentAccount'),
+            });
             this.store.add(newNote);
         } else if (text, typeId, recordId) {
             this.store.getById(recordId).set('note_type_id', typeId);
