@@ -133,19 +133,20 @@ class GDPR_Setup_Update_16 extends Setup_Update_Abstract
             GDPR_Model_DataIntendedPurposeLocalization::class,
         ]);
 
-        $defaultLocale = Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE};
-
+        // create DataIntendedPurpose name localizations for all available langs
         foreach ($this->getDb()->select()->from(SQL_TABLE_PREFIX . GDPR_Model_DataIntendedPurpose::TABLE_NAME, [
                     GDPR_Model_DataIntendedPurpose::ID,
                     GDPR_Model_DataIntendedPurpose::FLD_NAME
                 ])->query()->fetchAll(Zend_Db::FETCH_NUM) as $row) {
-            GDPR_Controller_DataIntendedPurposeLocalization::getInstance()->create(
-                new GDPR_Model_DataIntendedPurposeLocalization([
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TYPE => GDPR_Model_DataIntendedPurpose::FLD_NAME,
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_RECORD_ID => $row[0],
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => $row[1],
-                    GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => $defaultLocale,
-                ]));
+            foreach (Sales_Config::getInstance()->{GDPR_Config::LANGUAGES_AVAILABLE}->records as $lang) {
+                GDPR_Controller_DataIntendedPurposeLocalization::getInstance()->create(
+                    new GDPR_Model_DataIntendedPurposeLocalization([
+                        GDPR_Model_DataIntendedPurposeLocalization::FLD_TYPE => GDPR_Model_DataIntendedPurpose::FLD_NAME,
+                        GDPR_Model_DataIntendedPurposeLocalization::FLD_RECORD_ID => $row[0],
+                        GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => $row[1],
+                        GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => $lang->id,
+                    ]));
+            }
         }
 
         Setup_SchemaTool::updateSchema([
