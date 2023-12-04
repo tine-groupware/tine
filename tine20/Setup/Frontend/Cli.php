@@ -738,6 +738,11 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         echo 'Version: "' . TINE20_CODENAME . '" ' . TINE20_PACKAGESTRING . ' (Build: ' . TINE20_BUILDTYPE . ")\n";
+        if (Tinebase_Core::inMaintenanceModeAll()) {
+            echo 'Maintenance Mode : ALL' . PHP_EOL;
+        } else if (Tinebase_Core::inMaintenanceMode()) {
+            echo 'Maintenance Mode : ON' . PHP_EOL;
+        }
         echo "Currently installed applications:\n";
         $applications->sort('name');
         foreach ($applications as $application) {
@@ -1249,7 +1254,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (Setup_Controller::getInstance()->setMaintenanceMode($options)) {
             echo PHP_EOL . 'set maintenance mode to: ' . $options['mode'] . PHP_EOL;
         } else {
-            echo PHP_EOL . 'failed to set maintance mode to: ' . $options['mode'] . PHP_EOL;
+            echo PHP_EOL . 'failed to set maintenance mode to: ' . $options['mode'] . PHP_EOL;
         }
 
         return 0;
