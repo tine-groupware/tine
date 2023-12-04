@@ -32,6 +32,7 @@ class Admin_AllTests
         $suite->addTestSuite(Admin_Acl_RightsTest::class);
         $suite->addTestSuite(Admin_Import_AllTests::class);
         $suite->addTestSuite(Admin_Frontend_AllTests::class);
+        $suite->addTestSuite(Admin_Export_UserTest::class);
         return $suite;
     }
 }

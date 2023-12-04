@@ -114,10 +114,15 @@ class Tinebase_Record_Iterator
         }
         
         if (! (isset($this->_options['idProperty']) || array_key_exists('idProperty', $this->_options))) {
-            // TODO:resolve this by modelconfiguration when mc has been applied to all models
+            // TODO resolve this by modelconfiguration when mc has been applied to all models
             $mn = $this->_filter->getModelName();
-            $model = new $mn();
-            $this->_options['idProperty'] = $model->getIdProperty();
+            // TODO remove special handling when user + user filter is full MC!
+            if ($mn === Tinebase_Model_FullUser::class) {
+                $this->_options['idProperty'] = 'id';
+            } else {
+                $model = new $mn();
+                $this->_options['idProperty'] = $model->getIdProperty();
+            }
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
@@ -176,6 +181,9 @@ class Tinebase_Record_Iterator
                 . ' Getting record ids using filter: ' . print_r($this->_filter->toArray(), TRUE) . ' and pagination: ' . print_r($pagination->toArray(), true));
             
             $this->_recordIds = $this->_controller->search($this->_filter, $pagination, FALSE, TRUE, $this->_options['searchAction']);
+            if ($this->_recordIds instanceof Tinebase_Record_RecordSet) {
+                $this->_recordIds = $this->_recordIds->getArrayOfIds();
+            }
             $this->_totalCount = count($this->_recordIds);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Found ' . $this->_totalCount . ' total records to process.');

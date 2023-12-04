@@ -244,7 +244,11 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                 ],
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL                     => 'Area lock configurations', // _('Area lock configurations')
-            ]
+            ],
+            'roles'        => array(
+                self::TYPE          => self::TYPE_VIRTUAL,
+                self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ),
         ],
     ];
 
