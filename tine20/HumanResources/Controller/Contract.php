@@ -93,6 +93,18 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $this->_employee = $employee;
     }
 
+    protected function _inspectEmploymentEnd(HumanResources_Model_Contract $contract)
+    {
+        $employee = $contract->employee_id;
+        if (is_string($employee)) {
+            $employee = HumanResources_Controller_Employee::getInstance()->get($employee);
+        }
+
+        if ($employee->employment_end && (!$contract->end_date || $employee->employment_end->isEarlier($contract->end_date))) {
+            $contract->end_date = clone $employee->employment_end;
+        }
+    }
+
     /**
      * inspect update of one record (before update)
      *
@@ -102,6 +114,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        $this->_inspectEmploymentEnd($_record);
         $this->_checkDates($_record);
 
         if (!empty($_record->{HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME})) {
@@ -195,6 +208,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->_inspectEmploymentEnd($_record);
         $this->_checkDates($_record);
 
         if (empty($_record->start_date)) {
@@ -558,10 +572,10 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $subFilter2 = new HumanResources_Model_ContractFilter(array(), 'OR');
         
         $subFilter21 = new HumanResources_Model_ContractFilter(array(), 'AND');
-        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $period['until'])));
-        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after', 'value' =>  $period['from'])));
+        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $period['until'])));
+        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after_or_equals', 'value' =>  $period['from'])));
         $subFilter22 = new HumanResources_Model_ContractFilter(array(), 'AND');
-        $subFilter22->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $period['until'])));
+        $subFilter22->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $period['until'])));
         $subFilter22->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'isnull', 'value' => TRUE)));
         $subFilter2->addFilterGroup($subFilter21);
         $subFilter2->addFilterGroup($subFilter22);
@@ -577,43 +591,23 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      * 
      * @param string $_employeeId
      * @param Tinebase_DateTime $_firstDayDate
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws HumanResources_Exception_NoCurrentContract
-     * @throws Tinebase_Exception_Duplicate
-     * @return HumanResources_Model_Contract
+     * @return ?HumanResources_Model_Contract
      */
-    public function getValidContract($_employeeId, $_firstDayDate = NULL)
+    public function getValidContract(string $_employeeId, ?Tinebase_DateTime $_firstDayDate = null): ?HumanResources_Model_Contract
     {
-        if (! $_employeeId) {
-            throw new Tinebase_Exception_InvalidArgument('You have to set an account id at least');
-        }
-        $_firstDayDate = $_firstDayDate ? new Tinebase_DateTime($_firstDayDate) : new Tinebase_DateTime();
+        $_firstDayDate = $_firstDayDate ?: Tinebase_DateTime::now();
         
         $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $_firstDayDate)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $_firstDayDate)));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
         $endDate = new Tinebase_Model_Filter_FilterGroup(array(), 'OR');
-        $endDate->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after', 'value' =>  $_firstDayDate)));
+        $endDate->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after_or_equals', 'value' =>  $_firstDayDate)));
+        $endDate->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'isnull', 'value' =>  true)));
         $filter->addFilterGroup($endDate);
-        
-        $contracts = $this->search($filter);
-        
-        if ($contracts->count() < 1) {
-            $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
-            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
-            $contracts = $this->search($filter);
-            if ($contracts->count() > 0) {
-                $e = new HumanResources_Exception_NoCurrentContract();
-                $e->addRecord($contracts->getFirstRecord());
-                throw $e;
-            } else {
-                throw new HumanResources_Exception_NoContract();
-            }
-        } else if ($contracts->count() > 1) {
-            throw new Tinebase_Exception_Duplicate('There are more than one valid contracts for this employee!');
-        }
 
-        return $contracts->getFirstRecord();
+        /** @var ?HumanResources_Model_Contract $result */
+        $result = $this->search($filter)->getFirstRecord();
+        return $result;
     }
     
     /**
