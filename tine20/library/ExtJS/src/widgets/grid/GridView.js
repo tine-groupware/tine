@@ -815,7 +815,9 @@ viewConfig: {
     },
     
     handleResponsive() {
-        this.grid.hideHeaders = this.isResponsive() || this.cm.config.length === 1;
+        if (!this.grid.hideHeaders) {
+            if (this.mainHd) this.mainHd.setDisplayed(!this.isResponsive());
+        }
         this.cm.config.forEach((col, idx) => {
             const hidden = this.isResponsive() ? col.id !== 'responsive' : (col?.hidden || col.id === 'responsive');
             const display = hidden ? 'none' : '';
@@ -829,7 +831,7 @@ viewConfig: {
     isResponsive() {
         if (this.disableResponsiveLayout) return false;
         const width = this.grid?.getWidth?.() ?? 0;
-        return width < 800;
+        return width < 800 || this.cm.config.length === 1;
     },
     
     updateColumnStyle(col, styles) {
