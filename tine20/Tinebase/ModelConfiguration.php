@@ -1670,6 +1670,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
                     // set id filter controller
                     if ($type === self::TYPE_RECORD || $type === self::TYPE_RECORDS) {
+                        if ($type === self::TYPE_RECORD && ($config[self::REF_ID_FIELD] ?? false)) {
+                            $this->_filterModel[$fieldKey]['filter'] = $this->_filterModelMapping[self::TYPE_RECORDS];
+                        }
                         $this->_filterModel[$fieldKey]['options']['filtergroup'] =
                             ($config['recordClassName'] ?? ($config['appName'] . '_Model_' . $config['modelName'])) . 'Filter';
                         $this->_filterModel[$fieldKey]['options']['controller']  =

@@ -151,7 +151,7 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
     {
         $record = $this->_getExampleRecord();
         $record->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE} = [
-            ExampleApplication_Model_OneToOne::FLD_NAME => 'unittest'
+            ExampleApplication_Model_OneToOne::FLD_NAME => 'unittestone2one'
         ];
 
         $createdRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->create($record);
@@ -167,6 +167,16 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
         static::assertNull($createdRecord
             ->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
             ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD});
+
+        $this->assertSame(1, ExampleApplication_Controller_ExampleRecord::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(ExampleApplication_Model_ExampleRecord::class, [
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'one2one'],
+            ]))->count());
+
+        $this->assertSame(1, ExampleApplication_Controller_OneToOne::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(ExampleApplication_Model_OneToOne::class, [
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'minimal'],
+            ]))->count());
 
         $createdRecord->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
             ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD} = Addressbook_Controller_Contact::getInstance()

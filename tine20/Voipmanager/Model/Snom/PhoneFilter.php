@@ -35,7 +35,8 @@ class Voipmanager_Model_Snom_PhoneFilter extends Tinebase_Model_Filter_FilterGro
         'query'         => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array(
-                'fields' => array('macaddress', 'ipaddress', 'description')
+                'fields' => array('macaddress', 'ipaddress', 'description'),
+                'modelName' => Voipmanager_Model_Snom_Phone::class,
             )
         ),
         'account_id'    => array('filter' => 'Tinebase_Model_Filter_Text'),

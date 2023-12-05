@@ -34,7 +34,7 @@ class Tinebase_Model_RoleFilter extends Tinebase_Model_Filter_FilterGroup
         'id'                    => array('filter' => 'Tinebase_Model_Filter_Int'),
         'query'                 => array(
             'filter' => 'Tinebase_Model_Filter_Query',
-            'options' => array('fields' => array('name', 'description'))
+            'options' => array('fields' => array('name', 'description'), 'modelName' => Tinebase_Model_Role::class)
         ),
         'name'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'           => array('filter' => 'Tinebase_Model_Filter_Text'),

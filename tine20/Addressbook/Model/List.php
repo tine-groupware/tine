@@ -130,7 +130,8 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                     'fields'            => [
                         'name',
                         'email',
-                    ]
+                    ],
+                    'modelName' => self::class,
                 ],
             ],
             'email_query'           => [
@@ -139,7 +140,8 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 'options'           => [
                     'fields'            => [
                         'email',
-                    ]
+                    ],
+                    'modelName' => self::class,
                 ],
             ],
         ),

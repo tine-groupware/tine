@@ -37,6 +37,7 @@ class Tinebase_Model_DepartmentFilter extends Tinebase_Model_Filter_FilterGroup
         'description'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => [
             'fields' =>['name', 'description'],
+            'modelName' => Tinebase_Model_Department::class,
         ]),
     );
 }
