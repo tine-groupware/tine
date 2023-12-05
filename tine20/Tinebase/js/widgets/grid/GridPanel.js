@@ -916,11 +916,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.layout[source].panel.collapse(false); // this might take some time ? the glitch might come from animation
             }
         }
-        
         this.detailsPanelRegion = target;
         Ext.state.Manager.set(this.regionStateId, target);
-        this.doLayout(false, true);
+
         this.updateGridState();
+        this.doLayout(false, true);
     },
 
     gridPrintRenderer: function() {
@@ -1475,10 +1475,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     
     updateGridState() {
         if (!this.stateful) return;
-        if (!Ext.state.Manager.get(this.gridConfig.stateId)) {
+        this.grid.stateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
+        if (!Ext.state.Manager.get(this.grid.stateId)) {
             this.grid.saveState();
         }
-        this.grid.stateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
         const defaultState = Ext.state.Manager.get(this.grid.stateId) ?? this.grid.getState();
         if (defaultState) {
             this.grid.applyState(defaultState);
@@ -1806,8 +1806,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.regionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
             this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
             this.stateIdDetailPanelEast = !this.gridConfig.stateId.includes('_DetailsPanel_East') ? this.gridConfig.stateId + '_DetailsPanel_East' : this.gridConfig.stateId;
-            this.gridConfig.stateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
-            const state = Ext.state.Manager.get(this.gridConfig.stateId);
+            const StoredStateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
+            const state = Ext.state.Manager.get(StoredStateId);
             if (state) this.defaultSortInfo = state.sort;
         }
         
