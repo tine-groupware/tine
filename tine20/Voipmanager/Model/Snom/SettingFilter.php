@@ -34,7 +34,8 @@ class Voipmanager_Model_Snom_SettingFilter extends Tinebase_Model_Filter_FilterG
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array(
-                'fields' => array('name', 'description')
+                'fields' => array('name', 'description'),
+                'modelName' => Voipmanager_Model_Snom_Setting::class,
             )
         ),
         'name'          => array('filter' => 'Tinebase_Model_Filter_Text'),

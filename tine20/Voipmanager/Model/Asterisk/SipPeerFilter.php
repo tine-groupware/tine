@@ -33,7 +33,8 @@ class Voipmanager_Model_Asterisk_SipPeerFilter extends Tinebase_Model_Filter_Fil
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array(
-                'fields' => array('name', 'callerid', 'ipaddr')
+                'fields' => array('name', 'callerid', 'ipaddr'),
+                'modelName' => Voipmanager_Model_Asterisk_SipPeer::class,
             )
         ),
         'context'      => array('filter' => 'Tinebase_Model_Filter_Text'),        

@@ -42,6 +42,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
             'filter'        => Tinebase_Model_Filter_Query::class,
             'options'       => array(
                 'fields' => array('subject', 'from_email_ft', 'from_name_ft', 'to_list', 'cc_list', 'bcc_list'),
+                'modelName' => Felamimail_Model_Message::class,
                 'ignoreFullTextConfig' => true,
             )
         ),

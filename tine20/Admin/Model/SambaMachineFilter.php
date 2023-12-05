@@ -33,7 +33,8 @@ class Admin_Model_SambaMachineFilter extends Tinebase_Model_Filter_FilterGroup
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array(
-                'fields' => array('accountLoginName')
+                'fields' => array('accountLoginName'),
+                'modelName' => Admin_Model_SambaMachine::class,
             )
         ),
         'accountLoginName'     => array('filter' => 'Tinebase_Model_Filter_Text'),

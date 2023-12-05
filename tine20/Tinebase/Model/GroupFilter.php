@@ -32,7 +32,7 @@ class Tinebase_Model_GroupFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'             => array('filter' => Tinebase_Model_Filter_Group::class),
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'description'))),
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'description'), 'modelName' => Tinebase_Model_Group::class)),
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
     );

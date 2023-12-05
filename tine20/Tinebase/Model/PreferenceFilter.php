@@ -32,7 +32,7 @@ class Tinebase_Model_PreferenceFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'value'))),
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'value'), 'modelName' => Tinebase_Model_Preference::class)),
         'application_id' => array('filter' => 'Tinebase_Model_Filter_Id'),
         'account'        => array('filter' => 'Tinebase_Model_PreferenceAccountFilter'),
         'account_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),

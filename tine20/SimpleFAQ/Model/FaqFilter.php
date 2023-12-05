@@ -29,7 +29,7 @@ class SimpleFAQ_Model_FaqFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'                => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'query'             => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('answer', 'question'))),
+        'query'             => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('answer', 'question'), 'modelName' => SimpleFAQ_Model_Faq::class)),
         'faqstatus_id'      => array('filter' => 'Tinebase_Model_Filter_Int'),
         'faqtype_id'        => array('filter' => 'Tinebase_Model_Filter_Int'),
         'question'          => array('filter' => 'Tinebase_Model_Filter_Text'),

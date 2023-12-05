@@ -31,7 +31,8 @@ class Voipmanager_Model_Asterisk_MeetmeFilter extends Tinebase_Model_Filter_Filt
         'query'     => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array(
-                'fields' => array('confno', 'pin', 'adminpin')
+                'fields' => array('confno', 'pin', 'adminpin'),
+                'modelName' => Voipmanager_Model_Asterisk_Meetme::class,
             )
         ),
         'confno'    => array('filter' => 'Tinebase_Model_Filter_Text'),
