@@ -579,9 +579,9 @@ viewConfig: {
         this.innerHd.firstChild.style.width = this.getOffsetWidth();
         this.innerHd.firstChild.firstChild.style.width = tw;
         this.mainBody.dom.style.width = tw;
-        
-        this.updateColumnStyle(col, {'width': width});
-        this.onColumnWidthUpdated(col, width, tw);
+        const w = this.getColumnWidth(col);
+        this.updateColumnStyle(col, {'width': w});
+        this.onColumnWidthUpdated(col, w, tw);
     },
 
     // private
@@ -596,8 +596,6 @@ viewConfig: {
         this.onColumnHiddenUpdated(col, hidden, tw);
         delete this.lastViewWidth; // force recalc
         this.layout();
-        const result = this.renderBody();
-        this.mainBody.update(result).setWidth(this.getTotalWidth());
     },
 
     // private
