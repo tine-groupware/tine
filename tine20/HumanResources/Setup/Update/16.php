@@ -19,6 +19,7 @@ class HumanResources_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -35,6 +36,10 @@ class HumanResources_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE016_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];
@@ -105,5 +110,31 @@ class HumanResources_Setup_Update_16 extends Setup_Update_Abstract
 
         unset($raii);
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '16.2', self::RELEASE016_UPDATE002);
+    }
+
+    public function update003()
+    {
+        /** @var HumanResources_Model_Employee $employee */
+        foreach (HumanResources_Controller_Employee::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Employee::class, [
+                    ['field' => 'employment_end', 'operator' => 'notnull', 'value' => true],
+                ])) as $employee) {
+            HumanResources_Controller_Account::getInstance()->deleteByFilter(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Account::class, [
+                    ['field' => 'employee_id', 'operator' => 'equals', 'value' => $employee->getId()],
+                    ['field' => 'year', 'operator' => 'greater', 'value' => $employee->employment_end->format('Y')],
+                ]));
+            if (($contract = HumanResources_Controller_Contract::getInstance()
+                    ->getValidContract($employee->getId(), $employee->employment_end)) && (!$contract->end_date ||
+                    $employee->employment_end->isBefore($contract->end_date))) {
+                $contract->end_date = clone $employee->employment_end;
+                try {
+                    HumanResources_Controller_Contract::getInstance()->update($contract);
+                } catch (Throwable $t) {
+                    Tinebase_Exception::log($t);
+                }
+            }
+        }
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '16.3', self::RELEASE016_UPDATE003);
     }
 }

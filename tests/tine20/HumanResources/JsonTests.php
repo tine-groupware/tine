@@ -843,10 +843,8 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         $employmentEnd    = new Tinebase_DateTime('2014-06-30');
     
         $referenceDate = new Tinebase_DateTime('2013-10-10');
-        
-        $contractController = HumanResources_Controller_Contract::getInstance();
+
         $employeeController = HumanResources_Controller_Employee::getInstance();
-        $contractBackend = new HumanResources_Backend_Contract();
     
         $employee = $this->_getEmployee(Tinebase_Core::getUser()->accountLoginName);
         $employee->employment_begin = $employmentBegin;
@@ -854,6 +852,7 @@ class HumanResources_JsonTests extends HumanResources_TestCase
         
         $contract1 = $this->_getContract();
         $contract1->start_date = $employmentBegin;
+        $contract1->end_date = $employmentChange->getClone()->subDay(1);
         $contract1->vacation_days = 25;
         
         $contract2 = $this->_getContract();
