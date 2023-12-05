@@ -28,6 +28,9 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
                 case 'sub':
                     $result['sub'] = $userEntity->getTineUser()->accountEmailAddress;
                     break;
+                case 'preferred_username':
+                    $result['preferred_username'] = $userEntity->getTineUser()->accountLoginName;
+                    break;
                 case 'name':
                     $result['name'] = $userEntity->getTineUser()->accountFullName;
                     break;
