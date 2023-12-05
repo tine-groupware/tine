@@ -31,7 +31,8 @@ class Voipmanager_Model_Asterisk_ContextFilter extends Tinebase_Model_Filter_Fil
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array(
-                'fields' => array('name', 'description')
+                'fields' => array('name', 'description'),
+                'modelName' => Voipmanager_Model_Asterisk_Context::class,
             )
         ),
         'name'          => array('filter' => 'Tinebase_Model_Filter_Text'),

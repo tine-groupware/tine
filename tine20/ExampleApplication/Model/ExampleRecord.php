@@ -172,8 +172,8 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_NewAbstract
                 self::DOCTRINE_IGNORE           => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true,],
                 self::NULLABLE                  => true,
+                self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
-                    self::APPLICATION               => ExampleApplication_Config::APP_NAME,
                     self::APP_NAME                  => ExampleApplication_Config::APP_NAME,
                     self::MODEL_NAME                => ExampleApplication_Model_OneToOne::MODEL_NAME_PART,
                     self::REF_ID_FIELD              => ExampleApplication_Model_OneToOne::FLD_EXAMPLE_RECORD,

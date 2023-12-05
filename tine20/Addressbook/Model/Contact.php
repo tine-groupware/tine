@@ -273,7 +273,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                         'tel_other',
                         'tel_pager',
                         'tel_prefer',
-                    ]
+                    ],
+                    'modelName' => self::class,
                 ],
             ],
             'telephone_normalized' => [
@@ -286,7 +287,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                         'tel_other_normalized',
                         'tel_pager_normalized',
                         'tel_prefer_normalized',
-                    ]
+                    ],
+                    'modelName' => self::class,
                 ],
             ],
             'email_query'       => [
@@ -294,7 +296,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 'label'             => 'Emails', // _('Emails')
                 'options'           => [
                     'fields'            => [
-                    ]
+                    ],
+                    'modelName' => self::class,
                 ],
             ],
             'name_email_query'       => [
@@ -306,7 +309,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                         'n_given',
                         'n_middle',
                         'org_name',
-                    ]
+                    ],
+                    'modelName' => self::class,
                 ],
             ],
             'adr_one_countryname' => [

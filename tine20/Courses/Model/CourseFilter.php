@@ -33,6 +33,7 @@ class Courses_Model_CourseFilter extends Tinebase_Model_Filter_FilterGroup
         'group_id'       => array('filter' => 'Tinebase_Model_Filter_Id'),
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => [
             'fields' => array('name', 'type'),
+            'modelName' => Courses_Model_Course::class
         ]),
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array(
