@@ -24,6 +24,7 @@ class SSO_Facade_OpenIdConnect_ClaimRepository implements ClaimRepositoryInterfa
     {
         return [
             'sub',
+            'preferred_username',
             'name',
             'given_name',
             'family_name',
