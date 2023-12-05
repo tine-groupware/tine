@@ -22,6 +22,7 @@ class Felamimail_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE016_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE016_UPDATE008 = __CLASS__ . '::update008';
+    const RELEASE016_UPDATE009 = __CLASS__ . '::update009';
 
 
     static protected $_allUpdates = [
@@ -63,6 +64,10 @@ class Felamimail_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE016_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ],
     ];
@@ -318,5 +323,13 @@ sieveFile
         }
 
         $this->addApplicationUpdate(Felamimail_Config::APP_NAME, '16.8', self::RELEASE016_UPDATE008);
+    }
+
+    public function update009()
+    {
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX .
+            'state where `state_id` like "Felamimail-Message-GridPanel%" or `state_id` = "Felamimail_detailspanelregion"');
+
+        $this->addApplicationUpdate('Felamimail', '16.9', self::RELEASE016_UPDATE009);
     }
 }
