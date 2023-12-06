@@ -846,7 +846,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         layout: 'fit',
                         border: false
                     }),
-                    height: this.detailsPanel.defaultHeight ? this.detailsPanel.defaultHeight : 200,
+                    height: this.detailsPanel.defaultHeight ? this.detailsPanel.defaultHeight : 600,
                     width: this.detailsPanel.defaultWidth ? this.detailsPanel.defaultWidth : 500,
                     hidden: this.detailsPanelRegion !== region,
                     border: false,
@@ -897,7 +897,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     
     expandDetailsPanelRegion: function(target) {
         if (!this.detailsPanel) return;
-        
         target = target ?? this.detailsPanelRegion;
         const source = this.detailsPanelRegion;
         if (!this.layout[target] || !this.layout[source]) return;

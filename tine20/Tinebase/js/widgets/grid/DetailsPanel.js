@@ -114,6 +114,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
             if (this.recordClass) {
                 this.singleRecordPanel = new Tine.widgets.display.RecordDisplayPanel({
                     recordClass : this.recordClass,
+                    boxLayout: this.isSmall ? 'vbox' : 'hbox',
                 });
                 this.defaultHeight = Math.max(this.defaultHeight, this.singleRecordPanel.defaultHeight);
             } else {
@@ -200,25 +201,10 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
                  }
             });
         });
+        
         Tine.widgets.grid.DetailsPanel.superclass.initComponent.apply(this, arguments);
-        if (this.useResponsiveTbar) {
-            this.topToolbar.on('resize', this.onToolbarResize, this);
-        }
     },
     
-    onToolbarResize() {
-        let isSmall = false;
-        if (this.gridpanel) {
-            isSmall = !!this.isInFullScreenMode && this.gridpanel.isSmallLayout();
-        }
-        if (isSmall) {
-            this.topToolbar.show();
-        } else {
-            this.topToolbar.hide();
-        }
-    },
-
-
     onClose(e) {
         if (!this.gridpanel) return;
         this.gridpanel.setFullScreen(false);
@@ -229,6 +215,18 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         this.gridpanel.onEditInNewWindow.call(this.gridpanel, {
             actionType: 'edit'
         });
+    },
+    
+    onResize() {
+        if(this.layout && Ext.isFunction(this.layout.setActiveItem)) {
+            const p = this.getSingleRecordPanel();
+            this.layout.setActiveItem(p);
+            p.doLayout();
+        }
+        if (this.useResponsiveTbar) {
+            const visible = !!this.isInFullScreenMode && this.gridpanel.isSmallLayout();
+            this.topToolbar.setVisible(visible);
+        }
     },
     
     onDestroy: function() {
