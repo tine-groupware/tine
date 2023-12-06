@@ -340,7 +340,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
 
         try {
             if (method_exists($controller, 'get')) {
-                $recordArray = $controller->get($value, /* $_containerId = */ null, /* $_getRelatedData = */ false)->toArray();
+                $recordArray = $controller->get($value, /* $_containerId = */ null, /* $_getRelatedData = */ true)->toArray();
             } else {
                 Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . ' Controller ' . get_class($controller) . ' has no get method');
                 return $value;
