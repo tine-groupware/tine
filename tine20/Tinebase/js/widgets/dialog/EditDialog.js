@@ -1332,11 +1332,20 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         me.record = record;
                         me.afterIsRendered()
                             .then(me.onRecordLoad.bind(me))
-                            .then(() => {
+                            .then(async () => {
                                 let ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]);
                                 let wrapTicket = ticketFn();
 
-                                me.fireEvent('update', Ext.util.JSON.encode(me.record.getData()), me.mode, me, ticketFn);
+                                try {
+                                    me.fireEvent('update', Ext.util.JSON.encode(me.record.getData()), me.mode, me, ticketFn);
+                                } catch(e) {
+                                    this.forceClose = true;
+                                } finally {
+                                    if (me.loadMask) {
+                                        await me.hideLoadMask();
+                                    }
+                                }
+
                                 wrapTicket();
                             });
 
@@ -1392,15 +1401,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         };
     },
 
-    onAfterApplyChanges: function(closeWindow) {
-        this.window.rename(this.windowNamePrefix + this.record.id);
+    onAfterApplyChanges: async function (closeWindow) {
+        await this.hideLoadMask();
         this.saving = false;
-
+        
+        if (this.window.popup) this.window.rename(this.windowNamePrefix + this.record.id);
+        
         if (closeWindow) {
             this.window.fireEvent('saveAndClose');
+            if (this.forceClose || !this.window.popup.opener) {
+                this.window.popup.close();
+            }
             this.window.close(true);
-        } else {
-            this.hideLoadMask();
         }
     },
 

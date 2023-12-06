@@ -212,10 +212,16 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
          * @param {String} nameProperty
          */
         Tine.Felamimail.Model.Account.prototype.getSpecialFolderId = function(nameProperty) {
-            const app = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
-                folderName = this.get(nameProperty),
-                accountId = this.id,
-                folder = folderName ? app.getFolderStore().queryBy(function(record) {
+            const mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
+            if (!mainWindow) return null;
+            const appmgr = mainWindow.Tine?.Tinebase.appMgr;
+            if (!appmgr) return null;
+            const app = appmgr.get('Felamimail');
+            if (!app) return null;
+            
+            const folderName = this.get(nameProperty);
+            const accountId = this.id;
+            const folder = folderName ? app.getFolderStore().queryBy(function(record) {
                     return record.get('account_id') === accountId && record.get('globalname') === folderName;
                 }, this).first() : null;
 
