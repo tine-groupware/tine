@@ -203,6 +203,10 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         });
         
         Tine.widgets.grid.DetailsPanel.superclass.initComponent.apply(this, arguments);
+        
+        if (this.useResponsiveTbar) {
+            this.topToolbar.on('resize', this.onToolbarResize, this);
+        }
     },
     
     onClose(e) {
@@ -217,15 +221,15 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
         });
     },
     
-    onResize() {
-        if(this.layout && Ext.isFunction(this.layout.setActiveItem)) {
-            const p = this.getSingleRecordPanel();
-            this.layout.setActiveItem(p);
-            p.doLayout();
+    onToolbarResize() {
+        let isSmall = false;
+        if (this.gridpanel) {
+            isSmall = !!this.isInFullScreenMode && this.gridpanel.isSmallLayout();
         }
-        if (this.useResponsiveTbar) {
-            const visible = !!this.isInFullScreenMode && this.gridpanel.isSmallLayout();
-            this.topToolbar.setVisible(visible);
+        if (isSmall) {
+            this.topToolbar.show();
+        } else {
+            this.topToolbar.hide();
         }
     },
     
