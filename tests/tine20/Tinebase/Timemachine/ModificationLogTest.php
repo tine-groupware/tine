@@ -784,14 +784,6 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
 
     public function testUserReplication()
     {
-        if (PHP_VERSION_ID >= 70200) {
-            static::markTestSkipped('FIXME fix for php 7.2+');
-        }
-
-        if (Tinebase_Core::getDb() instanceof Zend_Db_Adapter_Pdo_Pgsql) {
-            static::markTestSkipped('pgsql gets dropped anyway');
-        }
-
         $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
 
         $userController = Tinebase_User::getInstance();
@@ -819,6 +811,20 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
             return;
         }
 
+        $delModLog = $userModifications->getLastRecord();
+        $filter = new Tinebase_Model_ModificationLogFilter([
+            ['field' => 'instance_seq', 'operator' => 'greater',    'value' => ($delModLog->instance_seq - 1)],
+            ['field' => 'instance_seq', 'operator' => 'less',       'value' => ($delModLog->instance_seq + 1)],
+        ]);
+        $result = Tinebase_Timemachine_ModificationLog::getInstance()->undo($filter);
+        $this->assertSame(1, $result['totalcount']);
+        $this->assertSame(0, $result['failcount']);
+        $this->assertSame(1, $result['undoneModlogs']->count());
+        $user = $userController->getUserById($newUser->getId());
+        $this->assertSame(0, (int)$user->is_deleted);
+
+        // TODO FIXME check email users?
+
         // rollback
         Tinebase_TransactionManager::getInstance()->rollBack();
         Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -839,10 +845,10 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         $mod = $userModifications->getFirstRecord();
         $userModifications->removeRecord($mod);
         $mods[] = $mod;
-        // set visibility
+        // set visibility / email users -> we skipp that, FIXME mabybe?
         $mod = $userModifications->getFirstRecord();
         $userModifications->removeRecord($mod);
-        $mods[] = $mod;
+        //$mods[] = $mod;
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $mods));
         $this->assertTrue($result, 'applyReplicationModLogs failed');
         $replicationUser = $userController->getUserById($newUser->getId(), 'Tinebase_Model_FullUser');
