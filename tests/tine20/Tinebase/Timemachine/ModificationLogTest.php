@@ -841,14 +841,7 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         $mod = $userModifications->getFirstRecord();
         $userModifications->removeRecord($mod);
         $mods[] = $mod;
-        // set container id
-        $mod = $userModifications->getFirstRecord();
-        $userModifications->removeRecord($mod);
-        $mods[] = $mod;
-        // set visibility / email users -> we skipp that, FIXME mabybe?
-        $mod = $userModifications->getFirstRecord();
-        $userModifications->removeRecord($mod);
-        //$mods[] = $mod;
+
         $result = Tinebase_Timemachine_ModificationLog::getInstance()->applyReplicationModLogs(new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', $mods));
         $this->assertTrue($result, 'applyReplicationModLogs failed');
         $replicationUser = $userController->getUserById($newUser->getId(), 'Tinebase_Model_FullUser');
