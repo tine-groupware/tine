@@ -126,7 +126,7 @@ class HumanResources_Setup_Update_16 extends Setup_Update_Abstract
                 ]));
             if (($contract = HumanResources_Controller_Contract::getInstance()
                     ->getValidContract($employee->getId(), $employee->employment_end)) && (!$contract->end_date ||
-                    $employee->employment_end->isBefore($contract->end_date))) {
+                    $employee->employment_end->isEarlier($contract->end_date))) {
                 $contract->end_date = clone $employee->employment_end;
                 try {
                     HumanResources_Controller_Contract::getInstance()->update($contract);
