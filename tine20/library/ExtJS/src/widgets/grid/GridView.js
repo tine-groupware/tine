@@ -1142,6 +1142,7 @@ viewConfig: {
     },
     
     fitColumns : function(preventRefresh, onlyExpand, omitColumn){
+        if (!this.mainBody) return;
         const cm = this.cm;
         const widthCurrentVisibleTotal = cm.getTotalWidth(false);
         if (!widthCurrentVisibleTotal) return;
