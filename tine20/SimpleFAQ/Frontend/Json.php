@@ -65,7 +65,6 @@ class SimpleFAQ_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveFaq($recordData)
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') pr hier: ' . print_r($recordData, true) );
         return $this->_save($recordData, $this->_controller, 'Faq');
     }
 
