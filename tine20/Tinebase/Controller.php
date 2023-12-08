@@ -904,6 +904,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                 foreach ($byPassMasks as $netmask) {
                     if (Factory::parseRangeString($netmask)?->contains($ip)) {
                         // bypassing
+                        $areaLock->forceUnlock(Tinebase_Model_AreaLockConfig::AREA_LOGIN);
                         return;
                     }
                 }
