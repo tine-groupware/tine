@@ -6475,3 +6475,6 @@ msgstr "Bild in ausgewählter Größe einfügen"
 
 msgid "Image size"
 msgstr "Bildgröße"
+
+msgid "Reload the application"
+msgstr "Anwendung neu laden"
