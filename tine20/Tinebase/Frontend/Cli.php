@@ -1580,9 +1580,9 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                  ] as $server) {
             $serverConfig = Tinebase_Config::getInstance()->{$server};
             
-            if (empty($serverConfig)) {
+            if (empty($serverConfig) || ! $serverConfig->active) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                    __METHOD__ . '::' . __LINE__ . ' CONFIG : ' . $server . ' IS NOT SET, SKIP');
+                    __METHOD__ . '::' . __LINE__ . ' CONFIG : ' . $server . ' IS NOT SET/ACTIVE, SKIP');
                 $skipcount++;
                 continue;
             }
