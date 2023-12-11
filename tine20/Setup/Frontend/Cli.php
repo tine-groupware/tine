@@ -1203,7 +1203,16 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $flags = (array)($options[Tinebase_Config::MAINTENANCE_MODE_FLAGS] ?? []);
 
-        if (!in_array(Tinebase_Config::MAINTENANCE_MODE_FLAG_SKIP_APPS, $flags)) {
+        $licenseProblem = false;
+        try {
+            Tinebase_License::getInstance()->isLicenseAvailable();
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            $licenseProblem = true;
+        }
+
+        if (! $licenseProblem && !in_array(Tinebase_Config::MAINTENANCE_MODE_FLAG_SKIP_APPS, $flags)) {
             $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
             if (isset($options['apps'])) {
                 $apps = (array)$options['apps'];
@@ -1314,7 +1323,8 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public static function parseConfigValue($_value)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, TRUE));
         
         // check value is json encoded
         if (Tinebase_Helper::is_json($_value)) {
