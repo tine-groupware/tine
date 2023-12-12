@@ -250,6 +250,7 @@ describe('Contacts', () => {
         });
 
         test('parseAddress', async () => {
+            await expect(popupWindow).toMatchElement('button', {text: 'Adresse einlesen'});
             await expect(popupWindow).toClick('button', {text: 'Adresse einlesen'});
             await popupWindow.waitForSelector('.ext-mb-textarea');
             await expect(popupWindow).toFill('.ext-mb-textarea', 'Max Mustermann \nBeispielweg 1 \n \n354234 Musterdorf !');
