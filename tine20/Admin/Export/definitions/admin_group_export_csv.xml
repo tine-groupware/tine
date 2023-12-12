@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Tinebase_Model_Group</model>
+    <name>groupRoles_csv</name>
+    <!-- _('CSV all data') -->
+    <label>CSV group and role membership</label>
+    <type>export</type>
+    <plugin>Admin_Export_Group_Csv</plugin>
+    <icon_class>tinebase-action-export-csv</icon_class>
+    <columns>
+        <column>
+            <header>Gruppenname</header>
+            <identifier>name</identifier>
+        </column>
+        <column>
+            <header>Rollenname</header>
+            <identifier>roles</identifier>
+        </column>
+    </columns>
+</config>
