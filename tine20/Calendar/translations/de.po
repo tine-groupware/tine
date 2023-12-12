@@ -2562,7 +2562,7 @@ msgstr "Dies ist eine Terminserienausnahme"
 
 #: views/eventNotification.php:25
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr "%1$s wurde von  \"%2$s\" auf \"%3$s\" geändert"
+msgstr "%1$s wurde von \"%2$s\" auf \"%3$s\" geändert"
 
 #: views/eventNotification.php:32
 msgid "%1$s has been invited"
