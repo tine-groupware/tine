@@ -75,6 +75,10 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
         'deleted_time'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'deleted_by'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'seq'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'roles'        => array(
+            self::TYPE          => self::TYPE_VIRTUAL,
+            self::VALIDATORS    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+        ),
     );
     
    /**
