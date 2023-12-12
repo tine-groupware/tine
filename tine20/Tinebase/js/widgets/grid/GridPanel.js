@@ -915,11 +915,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.layout[source].panel.collapse(false); // this might take some time ? the glitch might come from animation
             }
         }
-        this.detailsPanelRegion = target;
-        Ext.state.Manager.set(this.regionStateId, target);
 
-        this.updateGridState();
-        this.doLayout(false, true);
+        if (this.detailsPanelRegion !== target) {
+            this.detailsPanelRegion = target;
+            Ext.state.Manager.set(this.regionStateId, target);
+            this.updateGridState();
+            this.doLayout(false, true);
+        }
     },
 
     gridPrintRenderer: function() {

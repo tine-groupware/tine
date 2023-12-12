@@ -1216,16 +1216,8 @@ viewConfig: {
                 cm.setColumnWidth(colIdxResolvedAutoExpand, Math.max(this.grid.minColumnWidth,  width + diff), true);
             }
         }
-        if (currentGridState?.columns) {
-            cm.config.forEach((col, idx) => {
-                if (currentGridState.columns[idx]) {
-                    currentGridState.columns[idx].width = col.width;
-                    currentGridState.columns[idx].hidden = col?.hidden;
-                }
-            })
-            this.grid.applyState(currentGridState);
-            this.grid.saveState();
-        }
+
+        this.grid.saveState();
         
         if (preventRefresh !== true) this.updateAllColumnWidths();
         return true;

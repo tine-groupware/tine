@@ -100,12 +100,13 @@ Tine.widgets.grid.RendererManager = function() {
                             var foreignRecordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
 
                             if (foreignRecordClass && value) {
-                                const record = Tine.Tinebase.data.Record.setFromJson(value, foreignRecordClass);
-                                const titleProperty = foreignRecordClass.getMeta('titleProperty');
-                                value = _.isFunction(_.get(record, 'getTitle')) ? record.getTitle() : _.get(record, titleProperty, '');
-
-                                if (!!+_.get(record, 'data.is_deleted')) {
-                                    value = '<span style="text-decoration: line-through;">' + value + '</span>';
+                                if (typeof value !== 'string') {
+                                    const record = Tine.Tinebase.data.Record.setFromJson(value, foreignRecordClass);
+                                    const titleProperty = foreignRecordClass.getMeta('titleProperty');
+                                    value = _.isFunction(_.get(record, 'getTitle')) ? record.getTitle() : _.get(record, titleProperty, '');
+                                    if (!!+_.get(record, 'data.is_deleted')) {
+                                        value = '<span style="text-decoration: line-through;">' + value + '</span>';
+                                    }
                                 }
                             }
                             return value;
