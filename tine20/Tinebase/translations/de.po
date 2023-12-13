@@ -3894,6 +3894,9 @@ msgstr "Konfiguriere was mit den Daten gelöschter Benutzer geschehen soll"
 msgid "Delete personal containers"
 msgstr "Lösche persönliche Ordner"
 
+msgid "Personal container"
+msgstr "Persönlicher Ordner"
+
 #: Config.php:953
 msgid "Delete file folders and files"
 msgstr "Dateien und Ordner löschen"
