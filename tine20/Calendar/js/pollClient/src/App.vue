@@ -396,7 +396,7 @@ export default {
 
         this.poll = response.data
 
-        this.formatMessage.setup({ locale: this.poll.config.locale || 'en' })
+        this.formatMessage.setup({ locale: this.poll.config.locale.locale || 'en' })
 
         if (this.poll.config.has_gtc === true) {
           this.hidegtcmessage = false
