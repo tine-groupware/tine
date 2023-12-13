@@ -146,7 +146,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $possibleAddresses = Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts);
         foreach ($_message->bcc as $to) {
             $emailTo = $to['email'] ?? $to;
-            $contacts = array_values(array_filter($possibleAddresses, function($contact) use ($emailTo) { return $emailTo === $contact['email'];}));
+            $contacts = array_values(array_filter($possibleAddresses, function($contact) use ($emailTo) { 
+                return $emailTo === $contact['email'] && $contact['email_type'] !== 'email_home';
+            }));
             
             if (sizeof($contacts) === 0) {
                 $contacts[] = [
