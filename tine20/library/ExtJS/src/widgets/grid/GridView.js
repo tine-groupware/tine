@@ -829,7 +829,7 @@ viewConfig: {
     isResponsive() {
         if (this.disableResponsiveLayout) return false;
         const width = this.grid?.getWidth?.() ?? 0;
-        return width > 0 && (width < 800 || this.cm.config.length === 1);
+        return width > 0 && (width < 576 || this.cm.config.length === 1);
     },
     
     updateColumnStyle(col, styles) {
@@ -1579,7 +1579,8 @@ viewConfig: {
                     
                     const headerEl = document.createElement('div');
                     headerEl.innerHTML = col.header;
-                    headerEl.className = 'responsive-grid-text-medium';
+                    headerEl.className = 'responsive-grid-text-small';
+                    headerEl.style.fontWeight = 'bold';
                     row1Left.appendChild(headerEl);
                     
                     const row1Right =  document.createElement('div');
