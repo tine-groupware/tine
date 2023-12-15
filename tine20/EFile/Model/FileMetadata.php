@@ -47,7 +47,7 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
 
@@ -109,6 +109,7 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
             self::FLD_DURATION_START => [
                 self::TYPE => self::TYPE_DATE,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::NULLABLE => true,
                 self::LABEL => 'Duration Start', // _('Duration Start')
             ],
             self::FLD_DURATION_END => [
@@ -120,10 +121,8 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
             self::FLD_COMMISSIONED_OFFICE => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 255,
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
+                self::NULLABLE => true,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL => 'Commissioned Office', // _('Commissioned Office')
             ],
             self::FLD_IS_HYBRID => [

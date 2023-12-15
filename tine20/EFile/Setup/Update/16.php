@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Tine 2.0
  *
@@ -15,23 +14,30 @@ class EFile_Setup_Update_16 extends Setup_Update_Abstract
 {
     const RELEASE016_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
+    const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
 
     static protected $_allUpdates = [
+        self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE016_UPDATE001          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE016_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
+            ],
+        ],
         self::PRIO_NORMAL_APP_UPDATE        => [
             self::RELEASE016_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
-            ],
-            self::RELEASE016_UPDATE001          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update001',
             ],
         ],
     ];
 
     public function update000()
     {
-        $this->addApplicationUpdate('EFile', '16.0', self::RELEASE016_UPDATE000);
+        $this->addApplicationUpdate(EFile_Config::APP_NAME, '16.0', self::RELEASE016_UPDATE000);
     }
 
     public function update001()
@@ -51,6 +57,14 @@ class EFile_Setup_Update_16 extends Setup_Update_Abstract
             EFile_Model_FileMetadata::class,
             Tinebase_Model_Tree_Node::class,
         ]);
-        $this->addApplicationUpdate('EFile', '16.1', self::RELEASE016_UPDATE001);
+        $this->addApplicationUpdate(EFile_Config::APP_NAME, '16.1', self::RELEASE016_UPDATE001);
+    }
+
+    public function update002()
+    {
+        Setup_SchemaTool::updateSchema([
+            EFile_Model_FileMetadata::class,
+        ]);
+        $this->addApplicationUpdate(EFile_Config::APP_NAME, '16.2', self::RELEASE016_UPDATE002);
     }
 }
