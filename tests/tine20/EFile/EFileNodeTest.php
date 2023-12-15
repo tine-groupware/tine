@@ -20,6 +20,120 @@ class EFile_EFileNodeTest extends TestCase
         Tinebase_FileSystem::getInstance()->clearStatCache();
     }
 
+    public function testAutoDocumentDir1()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->mkdir(Filemanager_Controller_Node::getInstance()->addBasePath('/shared'));
+
+        $path = Filemanager_Controller_Node::getInstance()->addBasePath('/shared/A');
+        EFile_Controller::getInstance()->createEFileFolder($path, EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN);
+
+        $this->expectException(Tinebase_Exception_Record_Validation::class);
+        $this->expectExceptionMessage('eFile validation failed');
+        $fs->mkdir($path . '/B');
+    }
+
+    public function testAutoDocumentDir2()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->mkdir(Filemanager_Controller_Node::getInstance()->addBasePath('/shared'));
+
+        $path = Filemanager_Controller_Node::getInstance()->addBasePath('/shared/A');
+        EFile_Controller::getInstance()->createEFileFolder($path, EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN);
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B', EFile_Model_EFileTierType::TIER_TYPE_FILE_GROUP);
+
+        $this->expectException(Tinebase_Exception_Record_Validation::class);
+        $this->expectExceptionMessage('eFile validation failed');
+        $fs->mkdir($path . '/B/C');
+    }
+
+    public function testAutoDocumentDir3()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->mkdir(Filemanager_Controller_Node::getInstance()->addBasePath('/shared'));
+
+        $path = Filemanager_Controller_Node::getInstance()->addBasePath('/shared/A');
+        EFile_Controller::getInstance()->createEFileFolder($path, EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN);
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B', EFile_Model_EFileTierType::TIER_TYPE_FILE_GROUP);
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B/C', EFile_Model_EFileTierType::TIER_TYPE_FILE);
+
+        $node = $fs->mkdir($path . '/B/C/D');
+        $this->assertSame(EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR, $node->{EFile_Config::TREE_NODE_FLD_TIER_TYPE});
+
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B/C/E', EFile_Model_EFileTierType::TIER_TYPE_SUB_FILE);
+
+        $node = $fs->mkdir($path . '/B/C/E/F');
+        $this->assertSame(EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR, $node->{EFile_Config::TREE_NODE_FLD_TIER_TYPE});
+
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B/C/E/G', EFile_Model_EFileTierType::TIER_TYPE_CASE);
+
+        $node = $fs->mkdir($path . '/B/C/E/G/H');
+        $this->assertSame(EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR, $node->{EFile_Config::TREE_NODE_FLD_TIER_TYPE});
+
+        EFile_Controller::getInstance()->createEFileFolder($path . '/B/C/E/G/I', EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR);
+
+        $node = $fs->mkdir($path . '/B/C/E/G/I/J');
+        $this->assertSame(EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR, $node->{EFile_Config::TREE_NODE_FLD_TIER_TYPE});
+    }
+
+    public function testMetaDataInheritance()
+    {
+        $fs = Tinebase_FileSystem::getInstance();
+        $fs->mkdir(Filemanager_Controller_Node::getInstance()->addBasePath('/shared'));
+        $basePath = rtrim(Filemanager_Controller_Node::getInstance()->addBasePath(''), '/');
+
+        $path = Filemanager_Controller_Node::getInstance()->addBasePath('/shared/A');
+        $node = EFile_Controller::getInstance()->createEFileFolder($path, EFile_Model_EFileTierType::TIER_TYPE_MASTER_PLAN);
+
+        $fmFE = new Filemanager_Frontend_Json();
+        $node = $fmFE->getNode($node->getId());
+        $node[EFile_Config::TREE_NODE_FLD_FILE_METADATA] = [
+            EFile_Model_FileMetadata::FLD_ARCHIVE_NAME => 'archive',
+        ];
+
+        $savedNode = $fmFE->saveNode($node);
+        $this->assertArrayHasKey(EFile_Config::TREE_NODE_FLD_FILE_METADATA, $savedNode);
+        $this->assertArrayHasKey(EFile_Model_FileMetadata::FLD_ARCHIVE_NAME, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
+        $this->assertSame('archive', $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_ARCHIVE_NAME]);
+
+        $node = EFile_Controller::getInstance()->createEFileFolder($path . '/B', EFile_Model_EFileTierType::TIER_TYPE_FILE_GROUP);
+        $savedNode = $fmFE->getNode($node->getId());
+        $this->assertArrayHasKey(EFile_Config::TREE_NODE_FLD_FILE_METADATA, $savedNode);
+        $this->assertEmpty($savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
+
+        $node = EFile_Controller::getInstance()->createEFileFolder($path . '/C', EFile_Model_EFileTierType::TIER_TYPE_FILE_GROUP);
+        $savedNode = $fmFE->getNode($node->getId());
+        $this->assertArrayHasKey(EFile_Config::TREE_NODE_FLD_FILE_METADATA, $savedNode);
+        $this->assertEmpty($savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
+
+        $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA] = [
+            EFile_Model_FileMetadata::FLD_PAPER_LOCATION => 'dtype',
+        ];
+        $savedNode = $fmFE->saveNode($savedNode);
+
+        $this->assertArrayHasKey(EFile_Config::TREE_NODE_FLD_FILE_METADATA, $savedNode);
+        $this->assertArrayHasKey(EFile_Model_FileMetadata::FLD_ARCHIVE_NAME, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
+        $this->assertNull($savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_ARCHIVE_NAME]);
+        $this->assertArrayHasKey(EFile_Model_FileMetadata::FLD_PAPER_LOCATION, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
+        $this->assertSame('dtype', $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_PAPER_LOCATION]);
+
+        $node = EFile_Controller::getInstance()->createEFileFolder($path . '/B/F1', EFile_Model_EFileTierType::TIER_TYPE_FILE);
+        $savedNode = $fmFE->getNode($node->getId());
+        $this->assertArrayHasKey(EFile_Config::TREE_NODE_FLD_FILE_METADATA, $savedNode);
+        $this->assertArrayHasKey(EFile_Model_FileMetadata::FLD_ARCHIVE_NAME, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
+        $this->assertSame('archive', $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_ARCHIVE_NAME]);
+        $this->assertArrayHasKey(EFile_Model_FileMetadata::FLD_PAPER_LOCATION, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
+        $this->assertNull($savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_PAPER_LOCATION]);
+
+        $node = EFile_Controller::getInstance()->createEFileFolder($path . '/C/F2', EFile_Model_EFileTierType::TIER_TYPE_FILE);
+        $savedNode = $fmFE->getNode($node->getId());
+        $this->assertArrayHasKey(EFile_Config::TREE_NODE_FLD_FILE_METADATA, $savedNode);
+        $this->assertArrayHasKey(EFile_Model_FileMetadata::FLD_ARCHIVE_NAME, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
+        $this->assertSame('archive', $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_ARCHIVE_NAME]);
+        $this->assertArrayHasKey(EFile_Model_FileMetadata::FLD_PAPER_LOCATION, $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA]);
+        $this->assertSame('dtype', $savedNode[EFile_Config::TREE_NODE_FLD_FILE_METADATA][EFile_Model_FileMetadata::FLD_PAPER_LOCATION]);
+    }
+
     /**
      * asserts are done in testCreateEFileTree()
      *

@@ -140,16 +140,54 @@ class EFile_Controller extends Tinebase_Controller_Event
             ]))->getFirstRecord();
 
         if (!$metaData) {
-            if (null === ($contact = Addressbook_Config::getInstallationRepresentative())) {
-                $str = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST) ?: 'tine20';
-            } else {
-                $str = $contact->n_fileas;
-            }
             $metaData = new EFile_Model_FileMetadata([
                 EFile_Model_FileMetadata::FLD_DURATION_START        => Tinebase_DateTime::today(Tinebase_Core::getUserTimezone()),
-                EFile_Model_FileMetadata::FLD_COMMISSIONED_OFFICE   => $str,
                 EFile_Model_FileMetadata::FLD_NODE_ID               => $_newRecord->getId(),
-            ]);
+            ], true);
+
+            $fields = EFile_Model_FileMetadata::getConfiguration()->getFields();
+            unset($fields['id']);
+            unset($fields['notes']);
+            unset($fields['created_by']);
+            unset($fields['creation_time']);
+            unset($fields['last_modified_by']);
+            unset($fields['last_modified_time']);
+            unset($fields['seq']);
+            unset($fields['is_deleted']);
+            unset($fields['deleted_by']);
+            unset($fields['deleted_time']);
+            unset($fields[EFile_Model_FileMetadata::FLD_DURATION_START]);
+            unset($fields[EFile_Model_FileMetadata::FLD_NODE_ID]);
+            $fields = array_keys($fields);
+
+
+            $fun = function($node) use (&$fun, $metaData, $fields) {
+                if (!($parent = static::getEFilesParentNode($node))) {
+                    return;
+                }
+                if ($mData = EFile_Controller_FileMetadata::getInstance()
+                        ->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(EFile_Model_FileMetadata::class, [
+                            ['field' => EFile_Model_FileMetadata::FLD_NODE_ID, 'operator' => 'equals', 'value' => $parent->getId()]
+                        ]))->getFirstRecord()) {
+                    foreach ($fields as $field) {
+                        if (empty($metaData->{$field}) && !empty($mData->{$field})) {
+                            $metaData->{$field} = $mData->{$field};
+                        }
+                    }
+                }
+                $fun($parent);
+            };
+            $fun($_newRecord);
+
+            if (null === $metaData->{EFile_Model_FileMetadata::FLD_COMMISSIONED_OFFICE}) {
+                if (null === ($contact = Addressbook_Config::getInstallationRepresentative())) {
+                    $metaData->{EFile_Model_FileMetadata::FLD_COMMISSIONED_OFFICE} =
+                        Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST) ?: 'tine20';
+                } else {
+                    $metaData->{EFile_Model_FileMetadata::FLD_COMMISSIONED_OFFICE} = $contact->n_fileas;
+                }
+            }
+
             EFile_Controller_FileMetadata::getInstance()->create($metaData);
         }
     }
@@ -398,6 +436,13 @@ class EFile_Controller extends Tinebase_Controller_Event
                     ])) {
                         $_record->{EFile_Config::TREE_NODE_FLD_TIER_TYPE} = EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT;
                     }
+                } elseif (in_array($parent->{EFile_Config::TREE_NODE_FLD_TIER_TYPE}, [
+                    EFile_Model_EFileTierType::TIER_TYPE_FILE,
+                    EFile_Model_EFileTierType::TIER_TYPE_SUB_FILE,
+                    EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR,
+                    EFile_Model_EFileTierType::TIER_TYPE_CASE,
+                ])) {
+                    $_record->{EFile_Config::TREE_NODE_FLD_TIER_TYPE} = EFile_Model_EFileTierType::TIER_TYPE_DOCUMENT_DIR;
                 }
             }
         }
