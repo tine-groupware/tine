@@ -117,7 +117,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                     continue;
                 }
                 $docId = $delPos->{Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION}
-                    ->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID};
+                    ->getIdFromProperty(Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID);
                 if (isset($checkedDocumentIds[$docId])) {
                     continue;
                 }
@@ -126,7 +126,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                         function(Sales_Model_DocumentPosition_Abstract $pos) use($deletedPositions, $docId) {
                             return $pos->{Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION}
                                 && $docId === $pos->{Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION}
-                                ->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID}
+                                ->getIdFromProperty(Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID)
                                 && !isset($deletedPositions[$pos->getId()]);
                         }, null)) {
                     $removeDocumentIds[$docId] = $docId;
@@ -136,7 +136,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             if (!empty($removeDocumentIds)) {
                 /** @var Tinebase_Model_DynamicRecordWrapper $precursor */
                 foreach ($_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} as $precursor) {
-                    if (isset($removeDocumentIds[$precursor->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}])) {
+                    if (isset($removeDocumentIds[$precursor->getIdFromProperty(Tinebase_Model_DynamicRecordWrapper::FLD_RECORD)])) {
                         $_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS}->removeRecord($precursor);
                     }
                 }
