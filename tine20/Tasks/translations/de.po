@@ -414,3 +414,12 @@ msgstr "Bitte beachten: Aufgaben werden nicht angezeigt wenn die gefilterte Pers
 
 msgid "Estimated Duration"
 msgstr "Geschätzte Dauer"
+
+msgid "Task Title Template"
+msgstr "Aufgaben Titel Template"
+
+msgid "How to build task titles."
+msgstr "Wie Aufgabentitel angezeigt werden."
+
+msgid "(source): Summary"
+msgstr "(Quelle): Zusammenfassung"
