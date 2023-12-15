@@ -251,6 +251,12 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 filter.valueType = 'number';
                 filter.decimalPrecision = 0;
                 break;
+            case 'language':
+                filter.valueType = 'combo';
+                filter.operators = ['equals', 'not'/*, 'in', 'notin'*/];
+                filter.defaultOperator = 'equals';
+                filter.store = Object.entries(Locale.getTranslationList('Language'));
+                break;
         }
         return filter;
     },
