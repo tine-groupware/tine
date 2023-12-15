@@ -50,7 +50,7 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
 
         if (editDialogClass) {
             const record = this.field.selectedRecord || Object.assign(Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.field.recordClass.getDefaultData(), await this.getRecordDefaults()), this.field.recordClass), {phantom: true});
-            const mode = this.editDialogMode ?? this.editDialogConfig.mode ?? editDialogClass.prototype.mode;
+            const mode = this.editDialogMode ?? this.editDialogConfig?.mode ?? editDialogClass.prototype.mode;
 
             if (!this.field.selectedRecord && mode === 'remote') {
                 // prevent loading non existing remote record
