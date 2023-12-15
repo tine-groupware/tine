@@ -116,11 +116,16 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
 
             this.metadataFields[fieldName] =  Ext.create(metaDataFieldManager(fieldName, config));
         });
-        
+
+        this.inheritableDescription = new Ext.form.Label({
+            text: this.app.i18n._("Metadata entered here is automatically inherited in newly created e-files.")
+        });
+
         this.items = [{
             xtype: 'columnform',
             defaults: {columnWidth: 0.5},
             items: [
+                [this.inheritableDescription],
                 [mflds.duration_start, mflds.duration_end],
                 [_.assign(mflds.commissioned_office, {columnWidth: 2/3})],
                 [_.assign(mflds.is_hybrid, {columnWidth: 2/3})], 
@@ -151,10 +156,8 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
 
         // NOTE: have fast UI alignment (before async request starts)
         this.gotoFileButton[typeIsFileChild ? 'show' : 'hide']();
+        this.inheritableDescription[typeIsFileParent ? 'show' : 'hide']();
         this.ownerCt[(tierType /*&& !typeIsFileParent*/ ? 'un' : '') +'hideTabStripItem'](this);
-
-        // @TODO show note if typeIsFileParent
-
 
         this.fileData = null;
         if (typeIsFileChild) {
