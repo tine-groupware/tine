@@ -291,14 +291,17 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      */
     getCenterPanel: function(contentType) {
         contentType = contentType || this.getActiveContentType();
+        // if (!contentType) return;
 
         var def = this.getContentTypeDefinition(contentType) || {},
             suffix = def && def.xtype ? '' : this.centerPanelClassNameSuffix;
 
         if (! this[contentType + suffix]) {
             // try {
-                this[contentType + suffix] = def && def.xtype ? Ext.create(def) :
-                    new Tine[def.appName || this.app.appName][contentType + suffix](_.merge({
+                if (def && def.xtype) {
+                    this[contentType + suffix] = Ext.create(def);
+                } else if (Tine[def.appName || this.app.appName][contentType + suffix]) {
+                    this[contentType + suffix] = new Tine[def.appName || this.app.appName][contentType + suffix](_.merge({
                         app: def.appName ? Tine.Tinebase.appMgr.get(def.appName) : this.app,
                         mainScreen: this,
                         plugins: (() => {
@@ -306,6 +309,9 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
                             return wp && wp.getFilterPlugin ? [wp.getFilterPlugin(contentType)] : []
                         })()
                     }, def?.config || {}));
+                } else {
+                    return null;
+                }
 
                 if (this[contentType + suffix].cls) {
                     this[contentType + suffix].cls = this[contentType + suffix].cls + ' t-contenttype-' + contentType.toLowerCase();
