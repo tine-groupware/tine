@@ -828,7 +828,10 @@ viewConfig: {
     
     isResponsive() {
         if (this.disableResponsiveLayout) return false;
-        const width = this.grid?.getWidth?.() ?? 0;
+        let width = this.grid?.getWidth?.() ?? 0;
+        if (width === 0 && this.grid?.lastSize) {
+            width = this.grid.lastSize.width;
+        }
         return width > 0 && (width < 576 || this.cm.config.length === 1);
     },
     
