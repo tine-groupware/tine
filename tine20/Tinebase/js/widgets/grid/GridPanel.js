@@ -2476,17 +2476,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 });
             }
         }
-        if (this.isSmallLayout()) {
-            this.setFullScreen(true);
-        } else {
-            this.expandDetailsPanelRegion();
+        if (this?.isSmallLayout?.()) {
+            if (this.isSmallLayout()) {
+                this.setFullScreen(true);
+            } else {
+                this.expandDetailsPanelRegion();
+            }
         }
     },
     
     isSmallLayout() {
         const isWidthSmall = this.getWidth() < 800;
         const isHeightSmall = this.getHeight() < 500;
-        return isWidthSmall && (this.grid.getView().isResponsive() || isHeightSmall);
+        return this.grid.getView().isResponsive() && (isWidthSmall || isHeightSmall);
     },
     
     setFullScreen(fullScreen = true) {
