@@ -1,7 +1,7 @@
 <?php
 // logger configuration
 return [
-    'logger' => array (
+    'logger' => [
         'active' => true,
         'filename' => 'php://stdout',
         'priority' => 5,
@@ -9,20 +9,24 @@ return [
         'logdifftime' => true,
         'traceQueryOrigins' => true,
         'additionalWriters' => [
+{% if tinedockercompose_file_log_user is defined %}
+{% for user in tinedockercompose_file_log_user %}
             [
-{% if tinedockercompose_file_log_user is defined %}
                 'filter'   => [
-                    'user' => '{{ tinedockercompose_file_log_user }}'
+                    'user' => '{{ user }}'
                 ],
-{% endif %}
                 'active' => true,
-{% if tinedockercompose_file_log_user is defined %}
-                'filename' => '/var/log/tine20/{{ tinedockercompose_file_log_user }}.log',
-{% else %}
-                'filename' => '/var/log/tine20/tine.log',
-{% endif %}
+                'filename' => '/var/log/tine20/{{ user }}.log',
                 'priority' => '7',
             ],
+{% endfor %}
+{% else %}
+            [
+                'active' => true,
+                'filename' => '/var/log/tine20/tine.log',
+                'priority' => '7',
+            ],
+{% endif %}
         ],
-    ),
+     ],
 ];
