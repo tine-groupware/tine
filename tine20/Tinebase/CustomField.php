@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  CustomField
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add join to cf config to value backend to get name
@@ -53,6 +53,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @var array (app id + modelname => Tinebase_Record_RecordSet with cfs)
      */
     protected $_cfByApplicationCache = array();
+
+    protected string $_modelName;
 
     /**
      * holds the instance of the singleton
