@@ -74,7 +74,7 @@
     }
   ],
   "require": {
-    "php": "8.0.2 - 8.1",
+    "php": "8.0.2 - 8.2",
     "ext-SPL": "*",
     "ext-SimpleXML": "*",
     "ext-bcmath": "*",
