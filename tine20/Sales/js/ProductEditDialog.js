@@ -64,7 +64,9 @@ Tine.widgets.form.FieldManager.register('Sales', 'Product', 'accountable', {
     initComponent() {
         var data = [];
         var id = 0;
-
+        this.app = Tine.Tinebase.appMgr.get('Sales');
+        this.fieldLabel = this.app.i18n._('Accountable');
+        
         Ext.each(Tine.Sales.AccountableRegistry.getArray(), function(rel) {
             const rc = Tine.Tinebase.data.RecordMgr.get(rel.appName, rel.modelName);
             const label = rc.getAppName() + ' ' + rc.getRecordsName();
