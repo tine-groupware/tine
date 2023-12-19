@@ -234,7 +234,8 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
         const title = event.data.title;
         const url = event.data.url;
         const path = this.record.get('path');
-
+        const fileType = event.data.fileType;
+        
         const win = new Tine.Tinebase.widgets.file.SelectionDialog.openWindow({
             windowId: 'OnlyOfficeEditDialog.SaveAs' + this.id,
             mode: 'target',
@@ -244,7 +245,9 @@ Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog = Ext.extend(Ext.Panel, {
             initialPath: path.match(/^\/records\//) ? Tine.Tinebase.container.getMyFileNodePath(): path.match(/.*\//)[0],
             constraint: new RegExp('\\.' + url.split('.').pop() + '$'),
             listeners: { apply: async (node) => {
-                    const path = _.get(node, 'fm_path');
+                    let path = _.get(node, 'fm_path');
+                    if (!path.endsWith(`.${fileType}`)) path = `${path}.${fileType}`;
+                    
                     const loadMask = new Ext.LoadMask(Ext.getBody(), {
                         msg: this.app.i18n._('Exporting Document ...'),
                         removeMask: true
