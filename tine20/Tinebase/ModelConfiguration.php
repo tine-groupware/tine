@@ -121,6 +121,20 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_idProperty = 'id';
 
     /**
+     * the module name
+     *
+     * @var string
+     */
+    protected string $_moduleName;
+
+    /**
+     * frontend property
+     *
+     * TODO add type
+     */
+    protected $_copyNoAppendTitle;
+
+    /**
      * table definition
      *
      * @var array
