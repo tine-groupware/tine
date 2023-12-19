@@ -1246,7 +1246,10 @@ class Admin_Frontend_JsonTest extends Admin_Frontend_TestCase
         // deactivate user
         $userArray = $this->_createTestUser();
         $userArray['lastLoginFailure'] = Tinebase_DateTime::now()->toString();
-        $userArray['loginFailures'] = 10;
+
+        $accessLog = Tinebase_User::getAccessLog();
+        $clientType = $accessLog && $accessLog['clienttype'] ? $accessLog['clienttype'] : 'Unknown';
+        $userArray['loginFailures']= json_encode([$clientType => 10]);
 
         $savedGroup = $this->_saveGroup($userArray);
 
