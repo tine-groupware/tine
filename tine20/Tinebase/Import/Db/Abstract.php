@@ -20,6 +20,8 @@ abstract class Tinebase_Import_Db_Abstract
     protected ?string $_mainTableName = null;
     protected bool $_duplicateCheck = true;
     protected array $_descriptionFields = [];
+    protected ?string $_importFilter = null;
+    protected ?string $_importOrder = null;
 
     public function __construct(?Zend_Db_Adapter_Abstract $db = null)
     {
@@ -39,7 +41,14 @@ abstract class Tinebase_Import_Db_Abstract
         $importedIds = [];
         do {
             $cont = false;
-            $stmt = $this->_importDb->select()->from($this->_mainTableName)->limitPage(++$pageNumber, $pageCount)->query();
+            $select = $this->_importDb->select()->from($this->_mainTableName)->limitPage(++$pageNumber, $pageCount);
+            if ($this->_importFilter) {
+                $select->where($this->_importFilter);
+            }
+            if ($this->_importOrder) {
+                $select->order($this->_importOrder);
+            }
+            $stmt = $select->query();
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' fetched ' . count($rows) . ' rows  / pagenumber: ' . $pageNumber);
