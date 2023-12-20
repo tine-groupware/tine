@@ -24,6 +24,11 @@ class Tinebase_ImageHelperTest extends \PHPUnit\Framework\TestCase
     protected $objects = array();
 
     /**
+     * @var string $_testImagePath
+     */
+    protected string $_testImagePath;
+
+    /**
      * Runs the test methods of this class.
      *
      * @access public

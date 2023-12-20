@@ -4,13 +4,14 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
-
 class Setup_Backend_Schema_Table_Xml extends Setup_Backend_Schema_Table_Abstract
 {
+    public array $requirements;
+
     public function __construct($_tableDefinition = NULL)
     {
         if($_tableDefinition !== NULL) {
