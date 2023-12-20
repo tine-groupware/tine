@@ -429,7 +429,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
         return allTasks
             .filter(t => {
                 const parentPath = Tine.Filemanager.Model.Node.dirname(t.args.nodeData.path);
-                return path === parentPath && t.tag !== this.tag.REMOVE;
+                return path === parentPath && t.tag !== this.tag.REMOVE && t.tag !== this.tag.COMPLETE;
             })
             .map(t => t.args.nodeData);
     },
