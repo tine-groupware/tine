@@ -30,8 +30,8 @@ variables:
   # "Database image used by tests."
   DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.4.1"
 
-  # "Rdis image to use druing tests."
-  REDIS_IMAGE: "${UTIL_REGISTRY}/redis:5.0.5"
+  # "Redis image to use during tests."
+  REDIS_IMAGE: "${UTIL_REGISTRY}/redis:6.0.16"
 
   # "Add a php unit filter to all php unit test jobs e.g. CashBook. This is used for customapp tests."
   PHPUNIT_FILTER: ""
