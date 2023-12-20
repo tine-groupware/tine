@@ -127,17 +127,59 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array $filter
      * @param  array $paging
      * @return array
+     *
+     *  TODO api should be changed to make this code here a lot easier and less prone to bad client data
      */
     public function searchEmailAddresss($filter, $paging)
     {
         $results = [];
-        $contactPaging = $this->_preparePaginationParameter($paging);
-        // type user should have higher priority than type contact
-        $contactPaging->sort = ['type', 'n_fn']; // Field are not named the same for contacts and lists
-        $contactPaging->dir = ['DESC', 'ASC']; 
+        // type user should have higher priority than type email_account than type contact
+        $paging['sort'] = ['type', 'n_fn']; // Field are not named the same for contacts and lists
+        $paging['dir'] = ['DESC', 'ASC'];
+        if (!($paging['start'] ?? null)) {
+            $paging['start'] = 0;
+        }
+        if (!($paging['limit'] ?? null)) {
+            $paging['limit'] = 50;
+        }
+
+        $contacts = $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), Addressbook_Model_ContactFilter::class);
         
-        $contacts = $this->_search($filter, $contactPaging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter', true);
-        
+        $msgCacheNameEmail = null;
+        foreach ($filter as $field) {
+            if ($field['field'] === 'name_email_query') {
+                $msgCacheNameEmail = $field['value'];
+            }
+        }
+
+        if ($msgCacheNameEmail) {
+            $messages = Felamimail_Controller_Cache_Message::getInstance()->search(new Felamimail_Model_MessageFilter([[
+                'condition' => 'OR',
+                'filters' => [
+                    ['field' => 'from_email_ft', 'operator' => 'contains', 'value' => $msgCacheNameEmail],
+                    ['field' => 'from_name_ft', 'operator' => 'contains', 'value' => $msgCacheNameEmail],
+                    ['field' => 'to_list', 'operator' => 'contains', 'value' => $msgCacheNameEmail],
+                    ['field' => 'cc_list', 'operator' => 'contains', 'value' => $msgCacheNameEmail],
+                    ['field' => 'bcc_list', 'operator' => 'contains', 'value' => $msgCacheNameEmail],
+                ]
+            ]]));
+            $addresses = [];
+            $recipients = array_merge($messages->to, $messages->cc, $messages->bcc, [$messages->from_email]);
+            $recipients = array_unique(array_merge(...$recipients));
+            foreach ($recipients as $recipient) {
+                if (str_contains($recipient, $msgCacheNameEmail)) {
+                    $addresses[] = [
+                        "n_fileas" => '',
+                        "name" => '',
+                        "type" => 'cached',
+                        "email" => $recipient,
+                        "email_type" => 'email',
+                        "record_id" => '',
+                    ];
+                }
+            }
+            $results = array_merge($results, $addresses);
+        }
         $possibleAddresses =  Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts["results"]);
         $results = array_merge($results, $possibleAddresses);
         
