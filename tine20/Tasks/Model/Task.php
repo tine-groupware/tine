@@ -28,6 +28,11 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     public const FLD_DUE = 'due';
     public const FLD_ESTIMATED_DURATION = 'estimated_duration';
 
+    public const TASK_STATUS_NEEDS_ACTION = 'NEEDS-ACTION';
+    public const TASK_STATUS_COMPLETED = 'COMPLETED';
+    public const TASK_STATUS_CANCELLED = 'CANCELLED';
+    public const TASK_STATUS_IN_PROCESS = 'IN-PROCESS';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
