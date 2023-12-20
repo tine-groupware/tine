@@ -3,11 +3,9 @@ TINE RELEASENOTES
 =====================
                     
   Release:     TBA (2024.11)
-  Last change: 2023-11-22
+  Last change: 2023-12-20
 
 # GENERAL CHANGES (Administrative)
-
-## Support for MySQL 5.7 dropped
 
 # GENERAL CHANGES (User Interface)
 

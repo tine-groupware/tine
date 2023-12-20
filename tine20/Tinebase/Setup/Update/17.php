@@ -16,7 +16,6 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
-    const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
        self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -27,10 +26,6 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
            self::RELEASE017_UPDATE002          => [
                self::CLASS_CONST                   => self::class,
                self::FUNCTION_CONST                => 'update002',
-           ],
-           self::RELEASE017_UPDATE003          => [
-               self::CLASS_CONST                   => self::class,
-               self::FUNCTION_CONST                => 'update003',
            ],
         ],
         self::PRIO_TINEBASE_UPDATE        => [
@@ -66,25 +61,5 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.2', self::RELEASE017_UPDATE002);
-    }
-
-    public function update003()
-    {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-        if ($this->getTableVersion('accounts') < 20) {
-            $declaration = new Setup_Backend_Schema_Field_Xml('
-                <field>
-                    <name>login_failures</name>
-                    <type>text</type>
-                    <length>4000</length>
-                </field>
-            ');
-            $this->_backend->alterCol('accounts', $declaration);
-            $this->setTableVersion('accounts', 20);
-        }
-
-        Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'accounts SET login_failures = ' .
-            'JSON_OBJECT("JSON-RPC", CAST(login_failures AS INTEGER)) WHERE login_failures IS NOT NULL');
-        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
     }
 }
