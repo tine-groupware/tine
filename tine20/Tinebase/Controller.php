@@ -954,7 +954,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             } else {
                 if (!Tinebase_Auth_MFA::getInstance($userCfg->{Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID})
                         ->sendOut($userCfg)) {
-                    throw new Tinebase_Exception('mfa send out failed');
+                    throw new Tinebase_Exception_SystemGeneric(Tinebase_Translation::getTranslation()
+                        ->_('MFA send out failed, please try again or check with your system administrator'));
                 } else {
                     // success, FE to render input field
                     $this->_throwMFAException($areaConfig, new Tinebase_Record_RecordSet(
