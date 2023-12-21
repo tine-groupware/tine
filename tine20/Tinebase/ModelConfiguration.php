@@ -125,7 +125,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      *
      * @var string
      */
-    protected string $_moduleName;
+    protected $_moduleName;
 
     /**
      * frontend property

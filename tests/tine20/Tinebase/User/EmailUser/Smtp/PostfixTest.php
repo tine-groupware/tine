@@ -24,7 +24,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends TestCase
     /**
      * @var array test objects
      */
-    protected $_objects = array();
+    protected $objects = array();
 
     /**
      * mailserver domain

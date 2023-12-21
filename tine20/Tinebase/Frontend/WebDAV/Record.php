@@ -18,6 +18,7 @@ class Tinebase_Frontend_WebDAV_Record implements Sabre\DAV\ICollection
 {
     protected $_record = null;
     protected $_appName = null;
+    protected $_path;
     
     /**
      * the constructor

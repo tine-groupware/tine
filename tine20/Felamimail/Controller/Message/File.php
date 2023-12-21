@@ -23,7 +23,9 @@ class Felamimail_Controller_Message_File extends Felamimail_Controller_Message
      * @var Felamimail_Controller_Message_File
      */
     private static $_instance = NULL;
-    
+
+    protected array $_modelControllers;
+
     /**
      * the constructor
      *

@@ -21,6 +21,7 @@ class Tinebase_Setup_DemoData_Import
 
     protected $_application = null;
     protected $_options = [];
+    protected $_importer;
 
     /**
      * Tinebase_Setup_DemoData_Import constructor.

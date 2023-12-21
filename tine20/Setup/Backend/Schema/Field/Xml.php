@@ -11,6 +11,8 @@
 
 class Setup_Backend_Schema_Field_Xml extends Setup_Backend_Schema_Field_Abstract
 {
+    protected $collation;
+
     /**
      * constructor of this class
      *

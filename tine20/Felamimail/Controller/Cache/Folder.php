@@ -34,6 +34,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     protected $_backend = NULL;
 
+    protected string $_delimiter;
+
     /**
      * holds the instance of the singleton
      *
@@ -46,7 +48,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct() {
+    private function __construct()
+    {
         $this->_backend = new Felamimail_Backend_Folder();
     }
     
