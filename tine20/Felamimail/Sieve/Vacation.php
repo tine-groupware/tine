@@ -263,7 +263,7 @@ class Felamimail_Sieve_Vacation
                 'scheme'        => 'Q',
                 'line-length'   => 500,
             ));
-            $subject = ':subject ' . $this->_quoteString(substr($subject, 2)) . ' ';
+            $subject = ':subject ' . $this->_quoteString(substr($subject, 2), false) . ' ';
         } else {
             $subject = null;
         }
@@ -350,20 +350,26 @@ class Felamimail_Sieve_Vacation
     }
 
     /**
-     * quote string for usage in Sieve script 
-     * 
-     * @param   string  $string     the string to quote
-     * 
+     * quote string for usage in Sieve script
+     *
      * @todo generalize this
+     * @param string|array $_string
+     * @param bool $_replaceComma
+     * @return string
      */
-    protected function _quoteString($_string)
+    protected function _quoteString($_string, bool $_replaceComma = true): string
     {
-        if(is_array($_string)) {
+        if (is_array($_string)) {
             $string = array_map(array($this, '_quoteString'), $_string);
-            return '[' . implode(',', $string) . ']';
+            $string = '[' . implode(',', $string) . ']';
         } else {
-            return '"' . str_replace('"', '\"', $_string) . '"';
+            $string = '"' . str_replace('"', '\"', $_string) . '"';
+            if ($_replaceComma) {
+                $string = str_replace(',', '', $string);
+            }
         }
+
+        return $string;
     }
     
     /**
