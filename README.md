@@ -1,83 +1,70 @@
-# tine - Community Edition
+# tine - more than groupware
+tine is the ideal software for digital collaboration in companies and organizations. From powerful groupware
+functionalities to clever add-ons, tine combines everything to make daily team collaboration easier.
 
-Welcome to the tine Community Edition, the base of our popular [tine Business Edition](https://www.tine20.com/en.html).
+For more information please visit our [homepage](https://www.tine-groupware.de) and don't miss our latest
+[podcast](https://www.tine-groupware.de/tine-podcast/) episodes.
 
-## Official Community resources
-* [Tine2.0 Contributors Guide](https://github.com/tine20/tine20/blob/master/CONTRIBUTING.md)
-* [Documentation Wiki](https://github.com/tine20/tine20/wiki)
-* [Github Issue tracker / Questions](https://github.com/tine20/tine20/issues)
-* [Github Implementation Project](https://github.com/tine20/tine20/projects/1)
-* [Github Documentation Project](https://github.com/tine20/tine20/projects/2)
-* [Package Downloads](https://github.com/tine20/tine20/releases)
-* [Twitter](https://twitter.com/tine20org)
+## Official resources
 * [Matrix chat room #tine20org:matrix.org](https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org)
+* [Mastodon](https://mastodon.social/@tinegroupware)
+* [Documentation](https://tine-docu.s3web.rz1.metaways.net)
+* [OCI images](https://hub.docker.com/u/tinegroupware)
 
-## Other Community resources
-* [all in one docker image - by talsen-team](https://github.com/talsen-team/docker-app--tine20)
 
-## Free Software without compromise
-In contrast to the so called "open core" approach, where only a subset of the software is released as open source, 
-you'll find the complete sourcecode of all standard tine applications and features here. Like RHEL is the stable
-extract of Fedora, our Business Edition is a approved subset of stable code combined with a long term business support.
+## quick start
+tine consists of a number of integrated services which are provided as oci images. The easiest way to get you own
+evaluation copy up and running on premise, please follow our [quick-start-guide](https://tine-docu.s3web.rz1.metaways.net/en/operators/Installation_Guide/#quickstart).
 
-Everything you need to build and run tine is released as free software. See the LICENSE file for more details.
-Unlike others, our community edition is no baitfish for closed source plugins or add ons.
+For most use cases our [saas packages](https://www.tine-groupware.de/produkte/) should be the perfect fit to get a
+professional hosting environment.
 
-## Home of Innovation
-Together with our great community of open source addicted developers and testers, we build new features, try out
-exciting concepts and drive innovation within the tine Community Edition. As a user you become a member of this
-community and we expect you to support innovation by creating code, reporting bugs or improving the documentation.
+On Premise options are available also but should be evaluated carefully as running tine performant, secure and high
+available is not an easy task and usually pays of for large installations or restricted environments only.
 
-With the tine Community Edition you are always provided with the latest additions. For the sake of innovation we
-don't fix bugs or supply security updates for old versions.
+## support
+**Please note:** All our [packages](https://www.tine-groupware.de/produkte/) include support options and a separate
+issue tracking system. Issue tracking here is for our developers' community only.
 
-## Support
-In general, users of the Community Edition are technically experienced and able to help themselves. The ability to read,
+In general, users of the developers' community are technically experienced and able to help themselves. The ability to read,
 understand and change the software as well as to share the new version with others really is the heart of free software.
 
-Moreover, in our [Issues and Questions Section](https://github.com/tine20/tine20/issues)
-you can get support from other community members. As a rule of thumb: You can expect more support from others the more
+Having said this, in our [issues](https://github.com/tine-groupware/tine/issues) and [discussions](https://github.com/orgs/tine-groupware/discussions) sections
+you can get support from other developers' community members. As a rule of thumb: You can expect more support from others the more
 you contribute yourself. Don't expect others to contribute if you are not willing to contribute yourself. Remember: We
-are a community of free software enthusiasts and innovators. If you are out for a good Samaritan you need to look
+are a developers' community of free software enthusiasts and innovators. If you are out for a good Samaritan you need to look
 elsewhere.
 
-There is no commercial support for the community edition at all. Please be fair and don't try to suck community
-resources if you are not willing or able to contribute to the community. In this case the community edition is not 
-appropriate for you, please go with the business edition.
+There is no commercial support for the developers' community versions at all. Please be fair and don't try to suck community
+resources if you are not willing or able to contribute to the community.
 
-## Business Edition
-For all those who are not willing or able to be part of the community as an active contributor, and for organisations
-who prefer stability and support over innovation we created our [tine Business Edition](http://www.tine20.com).
+## documentation & training
+A nightly version of our documentation is published to https://tine-docu.s3web.rz1.metaways.net.
 
-Once a year we take a subset of well proven and stable applications and features from our community edition and build
-a new major release of our business edition.
+As tine is extremely powerful, feature rich and customizable we emphasize to train your operators, admins and users properly.
+Introducing tine in your organisation is a project itself.
 
-Each [tine Business Edition](https://www.tine20.com/en.html) is maintained with security patches and bug fixes for at least two
-years. Our [partners](https://www.tine20.com/en/contact.html/) offer a wide range of commercial support for different business needs.
+## licenses, copyrights and trademarks
+tine is released under the terms of the AGPLv3 License mainly.
 
-## Quickstart with Docker Compose
-
-Head over to dockerhub to give tine a try on your favorite Docker host:
-https://hub.docker.com/r/tine20/tine20
-
-## Reporting security issues
-If you found any security relevant issue you can mail us [security@tine20.com](mailto:security@tine20.com).
-
-## Server Requirements
-* Webserver like [Apache](https://httpd.apache.org/), [Ngnix](https://www.nginx.com/), …
-* [MySQL](http://www.mysql.com/) 5.7.5 - 8.0 or [MariaDB](https://mariadb.org) 10.2 - 10.6
-* [PHP](http://www.php.net/) 7.4 - 8.0
-  + Required Extensions: json, gd, date, SPL, SimpleXML, ctype, dom, openssl, iconv, zip, xml, hash, mbstring, intl, yaml
-  + Optional Extensions: redis, ldap, bcmath (for ActiveDirectory)
-
-## Licenses, Copyrights and Trademarks 
-tine - this community edition as well as the business edition are released under the terms of the AGPLv3 License mainly.
-
-In short this means: Any customisations, changes or additions you do to the code needs to be made available under the 
-AGPLv3 as well. If this is not appropriate for you, please contact us directly. As we hold the complete copyright for 
+In short this means: Any customisations, changes or additions you do to the code needs to be made available under the
+AGPLv3 as well. If this is not appropriate for you, please contact us directly. As we hold the complete copyright for
 all tine specific source code it's possible to offer it with different license options.
 
 The name "tine" is our registered trademark. This is for your and our safety. We can use the name and logo without
 legal fraught from other parties.
 
-see [Tine2.0 LICENSE file](https://github.com/tine20/tine20/blob/master/LICENSE.md)
+see [tine LICENSE file](https://github.com/tine-groupware/tine/blob/main/LICENSE.md)
+
+## beta program
+You can run tine business edition with up to five users permanently without any costs and support. If you are an active
+developers' community member you can apply for our _beta program_ to get a license file for more users and addons.
+
+As a member of the beta program we expect you to actively contribute to the project. There are a number of possibilities
+to do so. If you have an idea, don't hesitate to contact us.
+
+## dev setup
+To build and use tine directly from source code please use the [tine-dev setup](https://github.com/tine-groupware/tine-dev)
+and follow the instructions of the repo.
+
+**Please note:** The dev setup is not suited for production usage. You should run it in a restricted demilitarized zone only!
