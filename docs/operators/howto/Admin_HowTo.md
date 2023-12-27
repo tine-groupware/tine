@@ -1,13 +1,12 @@
 Tine Admin HowTo
 =================
 
-Version: Amon 2020.11
+Version: Ellie 2023.11
 
 # Ressourcen
 
-- Github: https://github.com/tine20/tine20
-- Wiki: https://github.com/tine20/tine20/wiki
-- Forum: https://github.com/tine20/tine20/discussions
+- Github: https://github.com/tine-groupware/tine
+- Forum: https://github.com/tine-groupware/tine/discussions
 - Handbuch: https://www.amazon.de/Tine-2-0-Benutzerhandbuch-Kai-Uwe-Kroll/dp/3737579385/ bzw. UserManual App
 - Community Chat: https://matrix.to/#/!gGPNgDOyMWwSPjFFXa:matrix.org
 

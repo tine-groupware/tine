@@ -1,61 +1,64 @@
 Installation Guide
 ===================
 
-Docker Installation Guide
----
 [www.tine-groupware.de](https://www.tine-groupware.de/) | [docker-compose.yml](https://tine-docu.s3web.rz1.metaways.net/de/operators/docker/docker-compose.yml) | [Dockerfile](https://github.com/tine-groupware/tine/blob/main/ci/dockerimage/built.Dockerfile)
 
-## Quickstart
+## Schnellstart
 
-This is an easy way to try out tine-groupware. You need Docker and Docker Compose (https://docs.docker.com/compose/).
+Dies ist eine schnelle und leichte Möglichkeit, tine auszuprobieren. Hierfür benötigen Sie Docker und Docker Compose (https://docs.docker.com/compose/).
 
-First, create a folder. Docker Compose uses the folder names as an identifier.
+Erstellen Sie im ersten Schritt einen Ordner. Docker Compose verwendet die Ordnernamen zur Identifizierung.
 
 ```
 mkdir tine
 cd tine
 ```
-Then you need to download the current docker-compose.yaml. And save it in the folder just created.
+Als zweiten Schritt laden Sie die aktuelle Datei docker-compose.yaml herunter und speichern diese in dem soeben erstellten Ordner.
+
 ```
 wget https://tine-docu.s3web.rz1.metaways.net/de/operators/docker/docker-compose.yml
 ```
-Now you can start the docker-compose.
+
+Jetzt können Sie Docker-Compose starten.
+
 ```
 docker-compose up
 ```
 
-Wait for the database to become available. If it is, the web container will log `web_1    | DB available`. Now open another terminal and start the tine installer. There you need to accept the tine-license and Privacy policy and you will be able to set the initial admin password.
+Warten Sie einen Moment, bis die Datenbank erreichbar ist. Im Webcontainer Log steht dann `web_1    | DB available`. Dann können Sie Tine installieren. Öffnen Sie dafür ein neues Terminal und führen Sie den Installer aus. Im Installer müssen Sie die Tine-Lizenz und Datenschutzerklärung bestätigen und können das Password für den initialen Admin festlegen.
 
 ```
 docker-compose exec web tine20_install
 ```
 
-Tine2.0 is now reachable under http://127.0.0.1:4000.
+tine ist jetzt unter http://127.0.0.1:4000 erreichbar.
 
-### Cleanup
-Use the following to stop and delete all containers, networks and volumes created by this compose.
+### Aufräumen
+Um alle von Docker Compose erstellten Container, Netzwerke und Volumes zu stoppen und löschen nutzen Sie:
 ```
 docker-compose down --volumes
-``` 
+```
 
-### Image
-This image contains the tine code, PHP-FPM, and Nginx. Additionally, a database e.g MariaDB is required. In production, this image should be utilized with a reverse proxy handling all the custom configuration and ssl termination.
+## Image
+Dieses Image enthält den tine-Code, PHP-FPM und Nginx. Zusätzlich benötigen Sie eine Datenbank, beispielsweise MariaDB. In der Produktion sollte dieses Image mit einem Reverse-Proxy verwendet werden, der die gesamte benutzerdefinierte Konfiguration und SSL-Terminierung übernimmt.
 
 ### Paths
-| Path | Description |
+| Path | Definition |
 |---|---|
-| `/etc/tine20/config.inc.php` | tine main config file.
-| `/etc/tine20/conf.d/*` | tine auto include config files.
-| `/var/lib/tine20/files` | Stores user data. Files like in tine Filemanager
-| `/var/lib/tine20/tmp` | Temporary file storage
-|`/var/lib/tine20/caching` | Used for caching if `TINE20_CACHING_BACKEND == 'File'`
-|`/var/lib/tine20/sessions`  | Used as session store if `TINE20_SESSION_BACKEND == 'File'`
+| `/etc/tine20/config.inc.php` | tine Hauptkonfigurationsdatei.
+| `/etc/tine20/conf.d/*` | tine Konfigurationsdateien werden automatisch eingeschlossen.
+| `/var/lib/tine20/files` | Speichern der User-Daten. Dateien wie die im tine-Dateimanager
+| `/var/lib/tine20/tmp` | Temporäre Dateispeicherung
+| `/var/lib/tine20/caching` | Wird zum Zwischenspeichern verwendet, wenn `TINE20_CACHING_BACKEND == 'File'`
+| `/var/lib/tine20/sessions`  | Wird als Sitzungsspeicher verwendet, wenn `TINE20_SESSION_BACKEND == 'File'`
 
 ## Update
 
-Use 'docker-compose up' to fetch the latest docker image.
+Zum Updaten einmal 'docker-compose down && docker-composer up' machen. Falls man eine andere Major-Version haben möchte, kann
+vorher in der docker-compose.yml auch eine konkrete Version angegeben werden.
 
-Use this command to update tine:
+Zum Updaten von tine selbst verwendet man folgenden Befehl (ggf. muss der Name des Containers angepasst werden, herausfinden
+kann man ihn z.B. mit 'docker ps'):
 
 ```
 docker exec --user tine20 tine-docker_web_1 sh -c "php /usr/share/tine20/setup.php --config=/etc/tine20 --update"
@@ -63,9 +66,11 @@ docker exec --user tine20 tine-docker_web_1 sh -c "php /usr/share/tine20/setup.p
 
 ## SSL / Reverse Proxy
 
+Um den tine-Container "von aussen" verfügbar zu machen, kann man einen NGINX, Traefik oder HAProxy davorschalten.
+
 ### NGINX
 
-Example NGINX VHOST conf:
+Beispiel einer NGINX VHOST conf:
 
 ```apacheconf
 server {
@@ -99,6 +104,8 @@ server {
 ```
 
 ### TRAEFIK
+
+Alternativ zu NGINX kann man auch traefik zur docker-composer.yml hinzufügen:
 
 ```yaml
   traefik:
@@ -137,7 +144,7 @@ server {
 
 ## Migration
 
-To migrate from an old tine installation, you can try to just mount the database as a volume:
+Um von einer alten Installation mit lokaler tine auf das Docker-Setup zu migrieren, müssen nur die Volumes entsprechend gemountet werden:
 
 ```yaml
   db:
@@ -153,7 +160,11 @@ To migrate from an old tine installation, you can try to just mount the database
     #[...]
 ```
 
-## Custom Configuration
+Bitte achtet auf die korrekte Angabe des TINE20_DATABASE_TABLEPREFIX -> sonst werden ggf. die Tabellen nicht gefunden.
+
+## Custom-Konfiguration
+
+Wenn man möchte, kann man Custom-Configs (via conf.d) ebenfalls als eigenes Volume in den Container mounten:
 
 ```yaml
   web:
