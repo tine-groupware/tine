@@ -33,10 +33,13 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
         $this->assertNull($createdTask->last_run);
         $this->assertEquals('0', $createdTask->failure_count);
 
-        $this->assertTrue(Tinebase_Scheduler::getInstance()->run());
+        // run 5 times, there might be other tasks to do
+        for ($i = 0; $i < 5; $i++) {
+            $this->assertTrue(Tinebase_Scheduler::getInstance()->run());
+        }
 
         $runTask = Admin_Controller_SchedulerTask::getInstance()->get($createdTask->getId());
-        $this->assertNotNull($runTask->last_run);
+        $this->assertNotNull($runTask->last_run, print_r($runTask->toArray(), true));
         $this->assertEquals('0', $runTask->failure_count);
     }
 }
