@@ -30,7 +30,7 @@ Wait for the database to become available. If it is, the web container will log 
 docker-compose exec web tine20_install
 ```
 
-Tine2.0 is now reachable under http://127.0.0.1:4000.
+Your tine-groupware is now reachable at http://127.0.0.1:4000.
 
 ### Cleanup
 Use the following to stop and delete all containers, networks and volumes created by this compose.

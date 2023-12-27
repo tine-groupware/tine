@@ -3,4 +3,4 @@ Docker Quickstart
 
 see [INSTALLGUIDE]
 
-[INSTALLGUIDE]: ../Installation_Guide/
+[INSTALLGUIDE]: ../../Installation_Guide/
