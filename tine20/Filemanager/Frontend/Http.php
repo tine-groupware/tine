@@ -58,7 +58,9 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
 
         if ($nodes->count() === 0) {
-            throw new Tinebase_Exception_SystemGeneric($path . ' is empty');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $path . ' is empty');
+            $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
         }
 
         $tmpPath = Tinebase_Core::getTempDir() . '/' . uniqid('tine20_') . '.zip';
@@ -81,7 +83,9 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             };
             $fun($node);
             if (!$z->close()) {
-                throw new Tinebase_Exception_SystemGeneric('could not create zip file');
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                    __METHOD__ . '::' . __LINE__ . ' Could not create zip file');
+                $this->_handleFailure();
             }
 
             $node = new Tinebase_Model_Tree_Node([
