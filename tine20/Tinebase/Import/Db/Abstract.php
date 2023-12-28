@@ -52,6 +52,7 @@ abstract class Tinebase_Import_Db_Abstract
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' fetched ' . count($rows) . ' rows  / pagenumber: ' . $pageNumber);
+
             foreach ($rows as $row) {
                 try {
                     if ($record = $this->_importRecord($row)) {
@@ -91,7 +92,7 @@ abstract class Tinebase_Import_Db_Abstract
             $record = $controller->create($recordToImport, $this->_duplicateCheck);
         }
 
-        $this->_onAfterImportRecord($record);
+        $this->_onAfterImportRecord($record, $row);
 
         return $record;
     }
@@ -99,7 +100,7 @@ abstract class Tinebase_Import_Db_Abstract
     abstract protected function _getRecord($row): Tinebase_Record_Interface;
     abstract protected function _getController(): Tinebase_Controller_Record_Abstract;
 
-    protected function _onAfterImportRecord(Tinebase_Record_Interface $record)
+    protected function _onAfterImportRecord(Tinebase_Record_Interface $record, array $row)
     {
     }
 
