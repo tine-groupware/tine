@@ -25,6 +25,8 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
     public const FLD_ITEMS = 'items';
     public const FLD_MODELS = 'models';
     public const FLD_NAME = self::NAME;
+    public const FLD_DESCRIPTION = 'description';
+    public const FLD_ORDER = 'order';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -37,6 +39,10 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => true,
         self::HAS_DELETED_TIME_UNIQUE   => true,
+        self::EXPOSE_JSON_API           => true,
+        self::RECORD_NAME               => 'Evaluation Dimension', // gettext('GENDER_Evaluation Dimension')
+        self::RECORDS_NAME              => 'Evaluation Dimensions', // ngettext('Evaluation Dimension', 'Evaluation Dimensions', n)
+        self::TITLE_PROPERTY            => self::FLD_NAME,
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
@@ -49,32 +55,53 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
 
         self::FIELDS                    => [
             self::FLD_NAME                  => [
+                self::LABEL                     => 'Name', // _('Name')
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
+                self::QUERY_FILTER              => true,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
-                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    Zend_Validate_Regex::class      => '/^[a-zA-Z\-_ 0-9]+$/',
                 ],
+            ],
+            self::FLD_DESCRIPTION           => [
+                self::LABEL                     => 'Description', // _('Description')
+                self::TYPE                      => self::TYPE_FULLTEXT,
+                self::NULLABLE                  => true,
+                self::QUERY_FILTER              => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
             ],
             self::FLD_ITEMS                 => [
                 self::TYPE                      => self::TYPE_RECORDS,
+                self::LABEL                     => 'Dimension Items', // _('Dimension Items')
                 self::CONFIG                    => [
                     self::APP_NAME                  => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME                => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
-                    self::IS_DEPENDENT              => true,
+                    self::REF_ID_FIELD              => Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID,
+                    self::DEPENDENT_RECORDS         => true,
                 ],
             ],
             self::FLD_MODELS                => [
+                self::LABEL                     => 'Configured Models', // _('Configured Models')
                 self::TYPE                      => self::TYPE_JSON,
                 self::NULLABLE                  => true,
+                self::UI_CONFIG                 => [
+                    'xtype'                         => 'tw-modelspickers',
+                ]
             ],
             self::FLD_DEPENDS_ON            => [
                 self::TYPE                      => self::TYPE_RECORD,
+                self::LABEL                     => 'Depends on', // _('Depends on')
                 self::NULLABLE                  => true,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME                => Tinebase_Model_EvaluationDimension::MODEL_NAME_PART,
                 ],
+            ],
+            self::FLD_ORDER                 => [
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::DEFAULT_VAL               => 0,
             ],
         ],
     ];
@@ -85,4 +112,30 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function getSystemCF(string $model): Tinebase_Model_CustomField_Config
+    {
+        [$appId] = explode('_', $model, 2);
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($appId)->getId();
+
+        $fldName = 'eval_dim_' . str_replace(' ', '_', strtolower($this->{self::FLD_NAME}));
+
+        return new Tinebase_Model_CustomField_Config([
+            'name' => $fldName,
+            'application_id' => $appId,
+            'model' => $model,
+            'is_system' => true,
+            'definition' => [
+                Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                    self::LABEL             => $this->{self::FLD_NAME},
+                    self::TYPE              => self::TYPE_RECORD,
+                    self::CONFIG            => [
+                        self::APP_NAME          => Tinebase_Config::APP_NAME,
+                        self::MODEL_NAME        => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
+                    ],
+                    self::NULLABLE          => true,
+                ],
+            ]
+        ], true);
+    }
 }

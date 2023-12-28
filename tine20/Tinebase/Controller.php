@@ -2090,6 +2090,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         )));
 
         $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => Tinebase_Model_EvaluationDimension::class,
+            'application_id' => $application,
+            'model' => Tinebase_Model_EvaluationDimension::class,
+        )));
+
+        $result->addRecord(new CoreData_Model_CoreData(array(
             'id' => Tinebase_Model_BankAccount::class,
             'application_id' => $application,
             'model' => Tinebase_Model_BankAccount::class,

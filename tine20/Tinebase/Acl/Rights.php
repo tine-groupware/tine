@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  * 
@@ -51,6 +51,8 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_OWN_STATE = 'manage_own_state';
+
+    public const MANAGE_EVALUATION_DIMENSIONS = 'manage_evaluation_dimensions';
 
     /**
      * the right to use the installation in maintenance mode
@@ -150,6 +152,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 self::MANAGE_NUMBERABLES,
                 self::MANAGE_OWN_PROFILE,
                 self::MANAGE_OWN_STATE,
+                self::MANAGE_EVALUATION_DIMENSIONS,
                 self::MAINTENANCE,
                 self::SHOW_LICENSE_INFO,
                 self::REPLICATION,
@@ -200,6 +203,10 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'                  => $translate->_('Manage own client state'),
                 'description'           => $translate->_('The right to manage the own client state.'),
             ),
+            self::MANAGE_EVALUATION_DIMENSIONS   => [
+                'text'                  => $translate->_('Manage evaluation dimensions'),
+                'description'           => $translate->_('The right to manage evaluation dimensions.'),
+            ],
             self::MAINTENANCE        => array(
                 'text'                  => $translate->_('Maintenance'),
                 'description'           => $translate->_('The right to use the installation in maintenance mode.'),

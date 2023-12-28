@@ -21,8 +21,10 @@ class Tinebase_Model_EvaluationDimensionItem extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'EvaluationDimensionItem';
     public const TABLE_NAME = 'evaluation_dimension_item';
 
-    public const FLD_NAME = self::NAME;
     public const FLD_EVALUATION_DIMENSION_ID = 'evaluation_dimension_id';
+    public const FLD_NAME = self::NAME;
+    public const FLD_NUMBER = 'number';
+    public const FLD_DESCRIPTION = 'description';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -36,6 +38,9 @@ class Tinebase_Model_EvaluationDimensionItem extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE             => true,
         self::HAS_DELETED_TIME_UNIQUE   => true,
         self::IS_DEPENDENT              => true,
+        self::RECORD_NAME               => 'Item', // gettext('GENDER_Item')
+        self::RECORDS_NAME              => 'Items', // ngettext('Item', 'Items', n)
+        self::TITLE_PROPERTY            => '{{ number }} - {{ name }}',
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
@@ -43,6 +48,7 @@ class Tinebase_Model_EvaluationDimensionItem extends Tinebase_Record_NewAbstract
                 self::NAME            => [
                     self::COLUMNS                   => [
                         self::FLD_EVALUATION_DIMENSION_ID,
+                        self::FLD_NUMBER,
                         self::FLD_NAME,
                         self::FLD_DELETED_TIME
                     ],
@@ -62,14 +68,34 @@ class Tinebase_Model_EvaluationDimensionItem extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
+                self::DISABLED                  => true,
+            ],
+            self::FLD_NUMBER                => [
+                self::LABEL                     => 'Number', //_('Number')
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 64,
+                self::QUERY_FILTER              => true,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED,
+                ],
             ],
             self::FLD_NAME                  => [
+                self::LABEL                     => 'Name', // _('Name')
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 255,
+                self::QUERY_FILTER              => true,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
+            ],
+            self::FLD_DESCRIPTION           => [
+                self::LABEL                     => 'Description', // _('Description')
+                self::TYPE                      => self::TYPE_FULLTEXT,
+                self::NULLABLE                  => true,
+                self::QUERY_FILTER              => true,
+                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => TRUE],
             ],
         ]
     ];

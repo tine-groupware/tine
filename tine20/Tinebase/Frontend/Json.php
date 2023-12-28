@@ -56,6 +56,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_BankAccount::MODEL_NAME_PART,
         Tinebase_Model_BankHolidayCalendar::MODEL_NAME_PART,
         Tinebase_Model_BankHoliday::MODEL_NAME_PART,
+        Tinebase_Model_EvaluationDimension::MODEL_NAME_PART,
+        Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
     ];
     
     public function __construct()

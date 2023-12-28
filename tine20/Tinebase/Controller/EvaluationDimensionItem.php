@@ -37,4 +37,18 @@ class Tinebase_Controller_EvaluationDimensionItem extends Tinebase_Controller_Re
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
     }
+
+    protected function _checkRight($_action)
+    {
+        parent::_checkRight($_action);
+
+        if (self::ACTION_GET === $_action) {
+            return;
+        }
+
+        if (!Tinebase_Core::getUser()
+            ->hasRight(Tinebase_Config::APP_NAME, Tinebase_Acl_Rights::MANAGE_EVALUATION_DIMENSIONS)) {
+            throw new Tinebase_Exception_AccessDenied('no right to ' . $_action . ' evaluation dimension items');
+        }
+    }
 }
