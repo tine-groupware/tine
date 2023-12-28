@@ -16,6 +16,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
        self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -27,6 +28,12 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                self::CLASS_CONST                   => self::class,
                self::FUNCTION_CONST                => 'update002',
            ],
+        ],
+        self::PRIO_TINEBASE_STRUCTURE   => [
+            self::RELEASE017_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
+            ],
         ],
         self::PRIO_TINEBASE_UPDATE        => [
             self::RELEASE017_UPDATE000          => [
@@ -61,5 +68,24 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.2', self::RELEASE017_UPDATE002);
+    }
+
+    public function update003()
+    {
+        $this->getDb()->update(SQL_TABLE_PREFIX . 'numberable', ['bucket' => ''], 'bucket IS NULL');
+
+        $this->_backend->alterCol('numberable', new Setup_Backend_Schema_Field_Xml('<field>
+                    <name>bucket</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                    <default/>
+                </field>'));
+
+        if ($this->getTableVersion('numberable') < 2) {
+            $this->setTableVersion('numberable', 2);
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
     }
 }

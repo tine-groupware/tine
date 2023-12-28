@@ -6,9 +6,11 @@
  * @subpackage  Numberable
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Tine20 implementation for numberables
@@ -47,29 +49,50 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
         parent::__construct(array_merge($_numberableConfiguration, self::$_baseConfiguration), $_dbAdapter, $_options);
     }
 
-    /**
-     * @param string $_class
-     * @param string $_field
-     * @param array $_config
-     * @return ?Tinebase_Numberable_Abstract
-     * @throws Tinebase_Exception_NotImplemented
-     */
-    public static function getNumberable($_class, $_field, array $_config)
+    public static function getNumberable(Tinebase_Record_Interface $_record, string $_class, string $_field, array $_config): ?Tinebase_Numberable_Abstract
     {
+        $key = $_class . '_#_' . $_field;
+        if (isset($_config['config'][Tinebase_Numberable::CONFIG_OVERRIDE])) {
+            list($objectClass, $method) = explode('::', $_config['config'][Tinebase_Numberable::CONFIG_OVERRIDE]);
+            $object = call_user_func($objectClass . '::getInstance');
+            if (method_exists($object, $method)) {
+                $configOverride = call_user_func_array([$object, $method], [$_record]);
+                $_config['config'] = array_merge($_config['config'], $configOverride);
+                $key .= Tinebase_Helper::arrayHash($_config['config']);
+            }
+        }
+
         if (isset($_config['config']['skip']) && $_config['config']['skip']) {
             return null;
         }
 
-        if (!isset(self::$_numberableCache[$_class . '_#_' . $_field])) {
-            if ($_config['type'] === 'numberableStr') {
-                self::$_numberableCache[$_class . '_#_' . $_field] = new Tinebase_Numberable_String($_config['config']);
-            } elseif($_config['type'] === 'numberableInt') {
-                self::$_numberableCache[$_class . '_#_' . $_field] = new Tinebase_Numberable($_config['config']);
+        if (!isset(self::$_numberableCache[$key])) {
+            if (null !== ($numberableCfg = Tinebase_Controller_NumberableConfig::getInstance()->search(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_NumberableConfig::class, [
+                        [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_MODEL, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_class],
+                        [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_PROPERTY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $_field],
+                        [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => ($_config[TMCC::CONFIG][Tinebase_Numberable::BUCKETKEY] ?? '')],
+                    ]))->getFirstRecord())) {
+                $_config[TMCC::CONFIG][Tinebase_Numberable_String::ZEROFILL] = $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ZEROFILL};
+                $_config[TMCC::CONFIG][Tinebase_Numberable_Abstract::START] = $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_START};
+                $_config[TMCC::CONFIG][Tinebase_Numberable_String::PREFIX] = $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX};
+            } else {
+                Tinebase_Controller_NumberableConfig::getInstance()->create(new Tinebase_Model_NumberableConfig([
+                    Tinebase_Model_NumberableConfig::FLD_MODEL => $_class,
+                    Tinebase_Model_NumberableConfig::FLD_PROPERTY => $_field,
+                    Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY => ($_config[TMCC::CONFIG][Tinebase_Numberable::BUCKETKEY] ?? ''),
+                    Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => ($_config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] ?? ''),
+                ]));
+            }
+            if ($_config['type'] === TMCC::TYPE_NUMBERABLE_STRING) {
+                self::$_numberableCache[$key] = new Tinebase_Numberable_String($_config['config']);
+            } elseif($_config['type'] === TMCC::TYPE_NUMBERABLE_INT) {
+                self::$_numberableCache[$key] = new Tinebase_Numberable($_config['config']);
             } else {
                 throw new Tinebase_Exception_NotImplemented('field type "' . $_config['type'] . '" is not known');
             }
         }
-        return self::$_numberableCache[$_class . '_#_' . $_field];
+        return self::$_numberableCache[$key];
     }
 
     public static function clearCache()

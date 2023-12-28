@@ -859,7 +859,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 continue;
             }
 
-            if (!($numberable = $this->_getNumberable($_record, $className, $fieldDef['fieldName'], $fieldDef))) {
+            if (!($numberable = Tinebase_Numberable::getNumberable($_record, $className, $fieldDef['fieldName'], $fieldDef))) {
                 if (null !== $_oldRecord) {
                     $_record->{$fieldDef['fieldName']} = $_oldRecord->{$fieldDef['fieldName']};
                 }
@@ -908,30 +908,6 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _inspectAutoincrement($_record, $_oldRecord, $numberable, $fieldDef, $createNewValue)
     {
         return $createNewValue;
-    }
-
-    /**
-     * get record numberable value for given field
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @param string $className
-     * @param string $fieldName
-     * @param array $fieldConfig
-     * @return ?Tinebase_Numberable_Abstract
-     */
-    protected function _getNumberable($_record, $className, $fieldName, $fieldConfig)
-    {
-        if (isset($fieldConfig['config'][Tinebase_Numberable::CONFIG_OVERRIDE])) {
-            list($objectClass, $method) = explode('::', $fieldConfig['config'][Tinebase_Numberable::CONFIG_OVERRIDE]);
-            $object = call_user_func($objectClass . '::getInstance');
-            if (method_exists($object, $method)) {
-                $configOverride = call_user_func_array([$object, $method], [$_record]);
-                $fieldConfig['config'] = array_merge($fieldConfig['config'], $configOverride);
-                $fieldName .= Tinebase_Helper::arrayHash($fieldConfig['config']);
-            }
-        }
-
-        return Tinebase_Numberable::getNumberable($className, $fieldName, $fieldConfig);
     }
 
     /**
