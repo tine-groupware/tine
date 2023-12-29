@@ -86,6 +86,7 @@ class Sales_Model_Document_Delivery extends Sales_Model_Document_Abstract
                     Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_PROFORMA_NUMBER,
                     Tinebase_Numberable_String::PREFIX     => 'PD-', // _('PD-')
                     Tinebase_Numberable_String::ZEROFILL   => 7,
+                    Tinebase_Model_NumberableConfig::NO_AUTOCREATE => true,
                     Tinebase_Numberable::CONFIG_OVERRIDE   =>
                         Sales_Controller_Document_Delivery::class . '::documentProformaNumberConfigOverride',
                 ],

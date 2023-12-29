@@ -10,6 +10,8 @@
  *
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
+
 /**
  * Division controller class for Sales application
  *
@@ -115,6 +117,57 @@ class Sales_Controller_Division extends Tinebase_Controller_Record_Container
             'observed_event'        => Tinebase_Event_Record_Delete::class,
         ));
         Tinebase_Record_PersistentObserver::getInstance()->addObserver($deleteObserver);
+
+        $this->_updateNumberables($_createdRecord);
+    }
+
+    protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+
+        if ($updatedRecord->{Sales_Model_Division::FLD_TITLE} !== $currentRecord->{Sales_Model_Division::FLD_TITLE}) {
+            $this->_updateNumberables($updatedRecord);
+        }
+    }
+
+    protected function _updateNumberables(Sales_Model_Division $division): void
+    {
+        /**
+         * @var Tinebase_Record_Interface $model
+         * @var array<string> $properties
+         */
+        foreach([
+                    Sales_Model_Document_Delivery::class => [Sales_Model_Document_Delivery::FLD_DOCUMENT_NUMBER, Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER],
+                    Sales_Model_Document_Invoice::class => [Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER, Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER],
+                    Sales_Model_Document_Offer::class => [Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER],
+                    Sales_Model_Document_Order::class => [Sales_Model_Document_Order::FLD_DOCUMENT_NUMBER],
+                ] as $model => $properties) {
+            $fields = $model::getConfiguration()->getFields();
+            foreach ($properties as $property) {
+                $config = $fields[$property];
+                unset($config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::NO_AUTOCREATE]);
+                $record = new $model([
+                    Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY => new Sales_Model_Document_Category([
+                        Sales_Model_Document_Category::FLD_DIVISION_ID => $division,
+                    ], true),
+                ], true);
+
+                list($objectClass, $method) = explode('::', $config[TMCC::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE]);
+                $object = call_user_func($objectClass . '::getInstance');
+                $configOverride = call_user_func_array([$object, $method], [$record]);
+                $config['config'] = array_merge($config['config'], $configOverride);
+
+                Tinebase_Numberable::getCreateUpdateNumberableConfig($model, $property, $config);
+            }
+        }
+
+        $config = Sales_Model_Debitor::getConfiguration()->getFields()[Sales_Model_Debitor::FLD_NUMBER];
+        unset($config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::NO_AUTOCREATE]);
+        $record = new Sales_Model_Debitor([
+            Sales_Model_Debitor::FLD_DIVISION_ID => $division,
+        ], true);
+        $config['config'] = array_merge($config['config'], Sales_Controller_Debitor::getInstance()->numberConfigOverride($record));
+        Tinebase_Numberable::getCreateUpdateNumberableConfig(Sales_Model_Debitor::class, Sales_Model_Debitor::FLD_NUMBER, $config);
     }
 
     /**

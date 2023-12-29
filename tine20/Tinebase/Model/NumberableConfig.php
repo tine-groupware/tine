@@ -21,6 +21,8 @@ class Tinebase_Model_NumberableConfig extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'NumberableConfig';
     public const TABLE_NAME = 'numberable_config';
 
+    public const NO_AUTOCREATE = 'noAutocreate';
+
     public const FLD_MODEL = 'model';
     public const FLD_PROPERTY = 'property';
     public const FLD_BUCKET_KEY = 'bucket_key';

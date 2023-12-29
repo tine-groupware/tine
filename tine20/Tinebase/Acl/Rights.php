@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        move some functionality to Tinebase_Acl_Roles
@@ -37,7 +37,9 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const CHECK_VERSION = 'check_version';
-    
+
+    const MANAGE_NUMBERABLES = 'manage_numberables';
+
     /**
      * the right to manage the own profile
      * @staticvar string
@@ -145,6 +147,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             $addRights = array(
                 self::REPORT_BUGS,
                 self::CHECK_VERSION,
+                self::MANAGE_NUMBERABLES,
                 self::MANAGE_OWN_PROFILE,
                 self::MANAGE_OWN_STATE,
                 self::MAINTENANCE,
@@ -189,6 +192,10 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'                  => $translate->_('Manage own profile'),
                 'description'           => $translate->_('The right to manage the own profile (selected contact data).'),
             ),
+            self::MANAGE_NUMBERABLES => [
+                'text'                  => $translate->_('Manage Numberables'),
+                'description'           => $translate->_('The right to manage numberables.'),
+            ],
             self::MANAGE_OWN_STATE   => array(
                 'text'                  => $translate->_('Manage own client state'),
                 'description'           => $translate->_('The right to manage the own client state.'),

@@ -149,6 +149,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     //Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_NUMBER,
                     //Tinebase_Numberable_String::PREFIX     => 'XX-',
                     Tinebase_Numberable_String::ZEROFILL   => 7,
+                    Tinebase_Model_NumberableConfig::NO_AUTOCREATE => true,
                     //Tinebase_Numberable::CONFIG_OVERRIDE   => '',
                     // these values will be set dynamically below in inheritModelConfigHook
                 ],
@@ -448,7 +449,10 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public function isBooked(): bool
     {
-        return (bool)(Sales_Config::getInstance()->{static::$_statusConfigKey}->records->getById($this->{static::$_statusField})
+        if (null === ($status = $this->{static::$_statusField})) {
+            return false;
+        }
+        return (bool)(Sales_Config::getInstance()->{static::$_statusConfigKey}->records->getById($status)
             ->{Sales_Model_Document_Status::FLD_BOOKED});
     }
 

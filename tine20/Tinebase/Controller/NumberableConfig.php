@@ -37,4 +37,19 @@ class Tinebase_Controller_NumberableConfig extends Tinebase_Controller_Record_Ab
         ]);
         $this->_purgeRecords = false;
     }
+
+    protected function _checkRight($_action)
+    {
+        if (! $this->_doRightChecks || self::ACTION_GET === $_action) {
+            return;
+        }
+
+        parent::_checkRight($_action);
+
+        if (! Tinebase_Core::getUser()->hasRight(
+                Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME),
+                Tinebase_Acl_Rights::MANAGE_NUMBERABLES)) {
+            throw new Tinebase_Exception_AccessDenied('no right to ' . $_action . ' ' . Tinebase_Model_NumberableConfig::class);
+        }
+    }
 }

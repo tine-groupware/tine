@@ -37,4 +37,15 @@ class Sales_Controller_Debitor extends Tinebase_Controller_Record_Abstract
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = true;
     }
+
+    public function numberConfigOverride(Sales_Model_Debitor $debitor): array
+    {
+        if (!($division = $debitor->{Sales_Model_Debitor::FLD_DIVISION_ID}) instanceof Sales_Model_Division) {
+            $division = Sales_Controller_Division::getInstance()->get($division);
+        }
+        return [
+            Tinebase_Numberable::BUCKETKEY => $this->_modelName . '#' . Sales_Model_Debitor::FLD_NUMBER . '#' . $division->getId(),
+            Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => 'Division - ' . $division->{Sales_Model_Division::FLD_TITLE},
+        ];
+    }
 }
