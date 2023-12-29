@@ -594,8 +594,6 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             readOnly: true,
                             name: 'customer'
                         }],[
-                            this.fieldManager('debitor_id')
-                        ],[
                             Tine.widgets.form.RecordPickerManager.get('Sales', 'Address', {
                                 fieldLabel: this.app.i18n._('Billing Address'),
                                 name: 'address_id',

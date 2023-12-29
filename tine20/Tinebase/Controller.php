@@ -2060,6 +2060,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
 
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => Tinebase_Model_NumberableConfig::class,
+            'application_id' => $application,
+            'model' => Tinebase_Model_NumberableConfig::class,
+        )));
+
         if (Tinebase_Config::getInstance()->featureEnabled(
             Tinebase_Config::FEATURE_COMMUNITY_IDENT_NR)
         ) {

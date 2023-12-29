@@ -73,6 +73,29 @@ msgstr "Das neue Passwort muss sich vom alten unterscheiden."
 msgid "Old pin is wrong."
 msgstr "Die alte PIN ist falsch."
 
+msgid "Numbering Range"
+msgid_plural "Numbering Ranges"
+msgstr[0] "Nummernkreis"
+msgstr[1] "Nummernkreise"
+
+msgid "GENDER_Numbering Range"
+msgstr "male"
+
+msgid "Property"
+msgstr "Eigenschaft"
+
+msgid "Additional Key"
+msgstr "Schlüssel-Zusatz"
+
+msgid "Numbering Range Start"
+msgstr "Nummernkreis Start"
+
+msgid "Number of Zerofill"
+msgstr "Anzahl Nullauffüllungen"
+
+msgid "Prefix"
+msgstr "Präfix"
+
 #: Controller.php:1936 Config.php:1706 Model/MunicipalityKey.php:61
 #, fuzzy
 msgid "Municipality Key"

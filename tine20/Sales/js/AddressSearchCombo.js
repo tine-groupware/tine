@@ -68,7 +68,7 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
             }
         }
         this.customer_id = customer_id;
-        this.division_id = division.id;
+        this.division_id = division?.id;
 
         if (! customer_id) {
             this.clearValue();

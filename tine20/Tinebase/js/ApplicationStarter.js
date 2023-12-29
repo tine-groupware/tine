@@ -567,13 +567,13 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                     }
                     // create Gridpanel
                     var gridPanelName = modelName + 'GridPanel', 
-                        gpConfig = {
+                        gpConfig = Object.assign({
                             modelConfig: modelConfig,
                             app: Tine.Tinebase.appMgr.get(appName),
                             recordProxy: Tine[appName][recordProxyName],
                             recordClass: Tine[appName].Model[modelName],
                             listenMessageBus: true
-                        };
+                        }, modelConfig.uiconfig);
                         
                     if (! Tine[appName].hasOwnProperty(gridPanelName)) {
                         Tine[appName][gridPanelName] = Ext.extend(Tine.widgets.grid.GridPanel, gpConfig);
