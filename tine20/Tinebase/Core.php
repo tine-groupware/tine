@@ -1150,7 +1150,7 @@ class Tinebase_Core
      * 
      * @param array $dbConfigArray
      * @param string $dbBackend
-     * @return Zend_Db_Adapter_Abstract
+     * @return Tinebase_Backend_Sql_Adapter_Pdo_Mysql
      * @throws Tinebase_Exception_Backend_Database
      * @throws Tinebase_Exception_UnexpectedValue
      */
@@ -1207,6 +1207,7 @@ class Tinebase_Core
                     "SET SQL_MODE = 'STRICT_ALL_TABLES'",
                     "SET SESSION group_concat_max_len = 4294967295"
                 );
+                /* @var Tinebase_Backend_Sql_Adapter_Pdo_Mysql $db */
                 $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
 
                 if (! isset($dbConfigArray['useUtf8mb4'])) {
@@ -1233,34 +1234,10 @@ class Tinebase_Core
 
                 break;
                 
-            case self::PDO_OCI:
-                $db = Zend_Db::factory('Pdo_Oci', $dbConfigArray);
-                break;
-                
-            case self::ORACLE:
-                $db = Zend_Db::factory(self::ORACLE, $dbConfigArray);
-                /** @noinspection PhpUndefinedMethodInspection */
-                $db->supportPositionalParameters(true);
-                /** @noinspection PhpUndefinedMethodInspection */
-                $db->setLobAsString(true);
-                break;
-                
-            case self::PDO_PGSQL:
-                unset($dbConfigArray['adapter']);
-                unset($dbConfigArray['tableprefix']);
-                if (empty($dbConfigArray['port'])) {
-                    $dbConfigArray['port'] = 5432;
-                }
-                $dbConfigArray['options']['init_commands'] = array(
-                    "SET timezone = '+0:00'"
-                );
-                $db = Zend_Db::factory('Pdo_Pgsql', $dbConfigArray);
-                
-                break;
-                
             default:
-                throw new Tinebase_Exception_UnexpectedValue('Invalid database adapter defined. Please set adapter to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.inc.php.');
-                break;
+                throw new Tinebase_Exception_UnexpectedValue(
+                    'Invalid database adapter defined. Please set adapter to ' . self::PDO_MYSQL
+                    . ' in config.inc.php.');
         }
 
         return $db;

@@ -26,7 +26,7 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends Tinebase_WebDav_Plugin_
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::ACTIVEDIRECTORY) {
             $this->markTestSkipped('only working in non-AD setups');
         }

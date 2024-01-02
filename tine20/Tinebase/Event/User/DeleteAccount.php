@@ -25,6 +25,13 @@ class Tinebase_Event_User_DeleteAccount extends Tinebase_Event_Abstract
     public $account;
 
     /**
+     * additional text
+     *
+     * @var string $additionalText
+     */
+    public string $additionalText;
+
+    /**
      * delete personal containers
      *
      * @var boolean

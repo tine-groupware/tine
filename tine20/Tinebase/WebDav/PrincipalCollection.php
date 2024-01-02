@@ -9,7 +9,9 @@
  * @author Evert Pot (http://evertpot.com/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Tinebase_WebDav_PrincipalCollection extends Tine20\DAVACL\AbstractPrincipalCollection {
+class Tinebase_WebDav_PrincipalCollection extends Tine20\DAVACL\AbstractPrincipalCollection
+{
+    protected $principalPrefix;
 
     /**
      * This method returns a node for a principal.

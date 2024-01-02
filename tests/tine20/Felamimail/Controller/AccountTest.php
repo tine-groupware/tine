@@ -183,7 +183,6 @@ class Felamimail_Controller_AccountTest extends Felamimail_TestCase
 
         // set another trash folder
         $this->_account->trash_folder = 'newtrash';
-        $this->_foldersToDelete[] = 'newtrash';
         $accountBackend = new Felamimail_Backend_Account();
         $account = $accountBackend->update($this->_account);
         $newtrash = $this->_controller->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_TRASH);

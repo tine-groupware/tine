@@ -28,6 +28,7 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
 
     protected $_basePath;
 
+    protected $_oldFileSystemConfig;
 
     protected $_rmDir = array();
 

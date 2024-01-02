@@ -22,7 +22,9 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
      * @var string application of this filter group
      */
     protected $_applicationName = 'Tinebase';
-    
+
+    protected array $_validCustomfields;
+
     /**
      * @var array one of these grants must be met
      */

@@ -85,6 +85,8 @@ class Tinebase_Group_ActiveDirectory extends Tinebase_Group_Ldap
     
     protected $_isReadOnlyBackend    = false;
 
+    protected $_baseDn;
+
     /**
      * the constructor
      *
