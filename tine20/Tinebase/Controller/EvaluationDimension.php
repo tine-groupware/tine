@@ -6,9 +6,11 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * controller for EvaluationDimension
@@ -40,6 +42,10 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
 
     protected function _checkRight($_action)
     {
+        if (! $this->_doRightChecks) {
+            return;
+        }
+
         parent::_checkRight($_action);
 
         if (self::ACTION_GET === $_action) {
@@ -76,8 +82,8 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
     {
         /** @var Tinebase_Model_EvaluationDimension $updatedRecord */
         parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
-        $newModels = $updatedRecord->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS);
-        $oldModels = $currentRecord->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS);
+        $newModels = array_unique($updatedRecord->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS));
+        $oldModels = array_unique($currentRecord->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS));
 
         if (!empty($addModels = array_diff($newModels, $oldModels))) {
             $this->addDimensionToModel($updatedRecord, $addModels);
@@ -92,7 +98,7 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
         /** @var Tinebase_Model_EvaluationDimension $record */
         parent::_inspectAfterDelete($record);
         if (!empty($models = $record->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS))) {
-            $this->removeDimensionFromModel($record, $models);
+            $this->removeDimensionFromModel($record, array_unique($models));
         }
     }
 
@@ -120,5 +126,33 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
                 Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
             }
         }
+    }
+
+    public static function removeModelsFromDimension(string $dimensionName, array $models): bool
+    {
+        if (null === ($cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+                [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $dimensionName],
+            ]))->getFirstRecord())) {
+            return false;
+        }
+
+        $cc->{Tinebase_Model_EvaluationDimension::FLD_MODELS} =
+            array_diff($cc->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS), $models);
+        Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+        return true;
+    }
+
+    public static function addModelsToDimension(string $dimensionName, array $models): bool
+    {
+        if (null === ($cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+                    [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $dimensionName],
+                ]))->getFirstRecord())) {
+            return false;
+        }
+
+        $cc->{Tinebase_Model_EvaluationDimension::FLD_MODELS} = array_unique(
+            array_merge($cc->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS), $models));
+        Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+        return true;
     }
 }

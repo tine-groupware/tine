@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -102,6 +102,7 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  * @property array      $languagesAvailable
  * @property bool       $runConvertToRecordFromJson
  * @property bool       $hasPerspectives
+ * @property bool       $hasSystemCustomFields
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {

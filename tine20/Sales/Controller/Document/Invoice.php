@@ -43,8 +43,8 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         $this->_documentStatusField = Sales_Model_Document_Invoice::FLD_INVOICE_STATUS;
         $this->_oldRecordBookWriteableFields = [
             Sales_Model_Document_Invoice::FLD_INVOICE_STATUS,
-            Sales_Model_Document_Invoice::FLD_COST_CENTER_ID,
-            Sales_Model_Document_Invoice::FLD_COST_BEARER_ID,
+            Sales_Model_Document_Invoice::FLD_EVAL_DIM_COST_CENTER,
+            Sales_Model_Document_Invoice::FLD_EVAL_DIM_COST_BEARER,
             Sales_Model_Document_Invoice::FLD_DESCRIPTION,
             Sales_Model_Document_Invoice::FLD_REVERSAL_STATUS,
             'tags', 'attachments', 'relations',

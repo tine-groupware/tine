@@ -116,13 +116,13 @@ class Sales_Setup_Initialize extends Setup_Initialize
         if (Tinebase_Core::isReplica()) {
             return;
         }
-/*
+
         $appId = Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId();
 
         Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
             'name' => 'divisions',
             'application_id' => $appId,
-            'model' => Tinebase_Model_EvaluationDimension::class,
+            'model' => Tinebase_Model_EvaluationDimensionItem::class,
             'is_system' => true,
             'definition' => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
@@ -130,21 +130,33 @@ class Sales_Setup_Initialize extends Setup_Initialize
                     TMCC::TYPE              => TMCC::TYPE_RECORDS,
                     TMCC::CONFIG            => [
                         TMCC::APP_NAME          => Sales_Config::APP_NAME,
-                        TMCC::MODEL_NAME        => SalModD::MODEL_NAME_PART,
-                        TMCC::REF_ID_FIELD      => 'record',
+                        TMCC::MODEL_NAME        => Sales_Model_DivisionEvalDimensionItem::MODEL_NAME_PART,
+                        TMCC::REF_ID_FIELD      => Sales_Model_DivisionEvalDimensionItem::FLD_EVAL_DIMENSION_ITEM_ID,
                         TMCC::DEPENDENT_RECORDS => true,
-                        TMCC::FILTER_OPTIONS    => [
-                            TMCC::DISABLED          => true,
-                            GDPR_Model_DataIntendedPurposeRecordFilter::OPTIONS_SHOW_WITHDRAWN => true,
-                            'doJoin'                => true,
-                        ],
-                    ],
-                    TMCC::UI_CONFIG         => [
-                        'group'                         => 'GDPR',
                     ],
                 ],
             ]
-        ], true));*/
+        ], true));
+    }
+
+    protected function _initializeCostCenterCostBearer()
+    {
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+            Sales_Model_DocumentPosition_Invoice::class,
+            Sales_Model_DocumentPosition_Offer::class,
+            Sales_Model_DocumentPosition_Order::class,
+        ]);
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_BEARER, [
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+            Sales_Model_DocumentPosition_Invoice::class,
+            Sales_Model_DocumentPosition_Offer::class,
+            Sales_Model_DocumentPosition_Order::class,
+        ]);
     }
 
     /**

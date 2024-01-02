@@ -57,8 +57,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_PAYMENT_TERMS = 'credit_term';
 
-    public const FLD_COST_CENTER_ID = 'cost_center_id';
-    public const FLD_COST_BEARER_ID = 'cost_bearer_id'; // ist auch ein cost center
+    public const FLD_EVAL_DIM_COST_CENTER = 'eval_dim_cost_center';
+    public const FLD_EVAL_DIM_COST_BEARER = 'eval_dim_cost_bearer'; // ist auch ein cost center
     public const FLD_DEBITOR_ID = 'debitor_id';
     public const FLD_DESCRIPTION = 'description';
 
@@ -114,6 +114,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         self::HAS_NOTES => false,
         self::HAS_RELATIONS => true,
         self::HAS_TAGS => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -380,27 +381,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::SHY                           => TRUE,
                 self::NULLABLE                      => true,
             ],
-
-            self::FLD_COST_CENTER_ID            => [
-                self::LABEL                         => 'Cost Center', //_('Cost Center')
-                self::TYPE                          => self::TYPE_RECORD,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME                    => Tinebase_Model_CostCenter::MODEL_NAME_PART,
-                ],
-                self::NULLABLE                      => true,
-                self::SHY                           => true,
-            ],
-            self::FLD_COST_BEARER_ID            => [
-                self::LABEL                         => 'Cost Bearer', //_('Cost Bearer')
-                self::TYPE                          => self::TYPE_RECORD,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME                    => Tinebase_Model_CostUnit::MODEL_NAME_PART,
-                ],
-                self::NULLABLE                      => true,
-                self::SHY                           => true,
-            ],
             self::FLD_DESCRIPTION               => [
                 self::LABEL                         => 'Internal Note', //_('Internal Note')
                 self::TYPE                          => self::TYPE_TEXT,
@@ -586,8 +566,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_INVOICE_DISCOUNT_PERCENTAGE,
             self::FLD_INVOICE_DISCOUNT_SUM,
             self::FLD_INVOICE_DISCOUNT_TYPE,
-            self::FLD_COST_BEARER_ID,
-            self::FLD_COST_CENTER_ID,
+            self::FLD_EVAL_DIM_COST_BEARER,
+            self::FLD_EVAL_DIM_COST_CENTER,
             self::FLD_DESCRIPTION,
             Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID,
             Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID,

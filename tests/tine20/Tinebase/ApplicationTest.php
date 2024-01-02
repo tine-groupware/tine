@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -403,6 +403,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_Customer::class,
                 Sales_Model_Debitor::class,
                 Sales_Model_Division::class,
+                Sales_Model_DivisionEvalDimensionItem::class,
                 Sales_Model_DivisionGrants::class,
                 Sales_Model_DocumentPosition_Delivery::class,
                 Sales_Model_DocumentPosition_Invoice::class,

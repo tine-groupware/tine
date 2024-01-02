@@ -106,16 +106,17 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         if (null === Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
-                    [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => 'Cost Center'],
+                    [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Model_EvaluationDimension::COST_CENTER],
                 ]))->getFirstRecord()) {
             $dimension = new Tinebase_Model_EvaluationDimension([
-                Tinebase_Model_EvaluationDimension::FLD_NAME => 'Cost Center',
+                Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_CENTER,
             ]);
 
             if ($this->_backend->tableExists('cost_centers')) {
                 $items = new Tinebase_Record_RecordSet(Tinebase_Model_EvaluationDimensionItem::class);
-                foreach ($this->_db->select()->from(SQL_TABLE_PREFIX . 'cost_centers', ['number', 'name', 'description'])->query()->fetchAll(Zend_Db::FETCH_ASSOC) as $cc) {
+                foreach ($this->_db->select()->from(SQL_TABLE_PREFIX . 'cost_centers', ['id', 'number', 'name', 'description'])->query()->fetchAll(Zend_Db::FETCH_ASSOC) as $cc) {
                     $items->addRecord(new Tinebase_Model_EvaluationDimensionItem([
+                        Tinebase_Model_EvaluationDimensionItem::ID => $cc['id'],
                         Tinebase_Model_EvaluationDimensionItem::FLD_NAME => ($cc['name'] ?: '-'),
                         Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER => $cc['number'],
                         Tinebase_Model_EvaluationDimensionItem::FLD_DESCRIPTION => $cc['description'],
@@ -124,9 +125,28 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                 $dimension->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} = $items;
             }
 
-            $dimension->{Tinebase_Model_EvaluationDimension::FLD_MODELS} = [
+            Tinebase_Controller_EvaluationDimension::getInstance()->create($dimension);
+        }
 
-            ];
+        if (null === Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+                [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Model_EvaluationDimension::COST_BEARER],
+            ]))->getFirstRecord()) {
+            $dimension = new Tinebase_Model_EvaluationDimension([
+                Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_BEARER,
+            ]);
+
+            if ($this->_backend->tableExists('cost_bearers')) {
+                $items = new Tinebase_Record_RecordSet(Tinebase_Model_EvaluationDimensionItem::class);
+                foreach ($this->_db->select()->from(SQL_TABLE_PREFIX . 'cost_bearers', ['id', 'number', 'name', 'description'])->query()->fetchAll(Zend_Db::FETCH_ASSOC) as $cc) {
+                    $items->addRecord(new Tinebase_Model_EvaluationDimensionItem([
+                        Tinebase_Model_EvaluationDimensionItem::ID => $cc['id'],
+                        Tinebase_Model_EvaluationDimensionItem::FLD_NAME => ($cc['name'] ?: '-'),
+                        Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER => $cc['number'],
+                        Tinebase_Model_EvaluationDimensionItem::FLD_DESCRIPTION => $cc['description'],
+                    ]));
+                }
+                $dimension->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} = $items;
+            }
 
             Tinebase_Controller_EvaluationDimension::getInstance()->create($dimension);
         }

@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -28,6 +28,9 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
     public const FLD_DESCRIPTION = 'description';
     public const FLD_ORDER = 'order';
 
+    public const COST_CENTER = 'Cost Center';
+    public const COST_BEARER = 'Cost Bearer';
+
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
@@ -43,6 +46,12 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
         self::RECORD_NAME               => 'Evaluation Dimension', // gettext('GENDER_Evaluation Dimension')
         self::RECORDS_NAME              => 'Evaluation Dimensions', // ngettext('Evaluation Dimension', 'Evaluation Dimensions', n)
         self::TITLE_PROPERTY            => self::FLD_NAME,
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_ITEMS     => [],
+            ],
+        ],
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
