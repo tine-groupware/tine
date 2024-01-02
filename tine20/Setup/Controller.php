@@ -52,6 +52,11 @@ class Setup_Controller
      * @var array
      */
     protected $_emailConfigKeys = array();
+
+    /**
+     * @var Zend_Db_Adapter_Abstract|null
+     */
+    protected ?Zend_Db_Adapter_Abstract $_db;
     
     /**
      * number of updated apps
@@ -121,7 +126,7 @@ class Setup_Controller
             $this->_db = Setup_Core::getDb();
             $this->_backend = Setup_Backend_Factory::factory();
         } else {
-            $this->_db = NULL;
+            $this->_db = null;
         }
         
         $this->_emailConfigKeys = array(

@@ -36,6 +36,8 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      * @var array test objects
      */
     protected $objects = array();
+
+    protected $_testUser;
     
     /**
      * xml output
@@ -50,6 +52,8 @@ class Felamimail_Frontend_ActiveSyncTest extends TestCase
      * @var array
      */
     protected $_createdFolders = array();
+
+    protected $_createdMessages;
 
     /**
      * set up test environment

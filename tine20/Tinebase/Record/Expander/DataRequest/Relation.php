@@ -14,6 +14,7 @@ class Tinebase_Record_Expander_DataRequest_Relation extends Tinebase_Record_Expa
 {
     protected $_model;
     protected $_backend;
+    protected $_ids;
 
     public function __construct($_model, $_backend, $_ids, $_callback)
     {

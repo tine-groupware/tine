@@ -37,6 +37,8 @@ abstract class Tinebase_WebDav_Plugin_AbstractBaseTest extends TestCase
      */
     protected $objects = array();
 
+    protected $plugin;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
