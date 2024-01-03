@@ -80,6 +80,9 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                         Sales_Model_Debitor::FLD_BILLING      => [],
                         Sales_Model_Debitor::FLD_DELIVERY     => [],
                     ],
+                    Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                        Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
+                    ],
                 ],
                 'postal'        => [],
                 'cpextern_id'   => [],

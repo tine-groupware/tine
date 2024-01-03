@@ -144,6 +144,7 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
                         self::MODEL_NAME        => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
                         self::FLD_DEPENDS_ON    => $this->{self::FLD_DEPENDS_ON},
                     ],
+                    self::SHY              => true,
                     self::UI_CONFIG         => [
                         'sorting'              => $this->{self::FLD_SORTING},
                         'grouping'             => self::RECORDS_NAME,
