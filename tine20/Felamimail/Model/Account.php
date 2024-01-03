@@ -348,15 +348,6 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 ],
                 self::NULLABLE                  => true,
             ],
-            'preserve_format' => [
-                self::TYPE => self::TYPE_BOOLEAN,
-                self::LABEL => 'Preserve Format', // _('Preserve Format')
-                self::SHY => true,
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => false,
-                ],
-            ],
             'reply_to' => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 255,

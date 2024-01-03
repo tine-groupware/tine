@@ -419,23 +419,18 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initContent: function (message) {
         if (!this.record.get('body')) {
             const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+            if (!message) message = this.getMessageFromConfig();
+            
             // we follow the account compose_format when fetch msg failed
-            const format =  account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 
-                    message.getBodyType();
-
+            const composeFormat =  account && account.get('compose_format') !== '' 
+                ? 'text/' + account.get('compose_format') 
+                : message.getBodyType();
+            
             if (!this.msgBody) {
-                message = this.getMessageFromConfig();
                 if (message) {
-                    // fixme : how to deal with preserve_format = true && format = text/html && message.get('body_content_type') = text/plain ?
-                    // the conflict case : we want to show text/html but we also want to preserve format as text/plain
-                    let fetchType = format;
-                    if (message.bodyIsFetched() && account.get('preserve_format')) {
-                        // format of the received message. this is the format to preserve
-                        fetchType = message.get('body_content_type');
-                    }
-                    if (!message.bodyIsFetched() || fetchType !== message.getBodyType()) {
+                    if (!message.bodyIsFetched() || composeFormat !== message.getBodyType()) {
                         // self callback when body needs to be (re) fetched
-                        return this.recordProxy.fetchBody(message, fetchType, {
+                        return this.recordProxy.fetchBody(message, 'compose_format', {
                             success: this.initContent.createDelegate(this),
                             // set format to message body format if fetch fails
                             failure: message.bodyIsFetched()
@@ -443,8 +438,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 : null
                         });
                     }
-
-                    this.setMessageBody(message, account, format);
+                    this.setMessageBody(message, account, composeFormat);
                     this.handleAttachmentsOfExistingMessage(message);
 
                     let folder = this.app.getFolderStore().getById(message.get('folder_id'));
@@ -464,7 +458,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
             }
 
-            this.record.set('content_type', format);
+            this.record.set('content_type', composeFormat);
             this.record.set('body', this.msgBody);
         }
 
@@ -1095,8 +1089,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
         const text = this.bodyCards.layout.activeItem.getValue() || this.record.get('body');
-        const format = this.record.getBodyType();
-        const textEditor = format === 'text/html' ? this.htmlEditor : this.textEditor;
+        const displayFormat = this.record.getBodyType();
+        const textEditor = displayFormat === 'text/html' ? this.htmlEditor : this.textEditor;
 
         this.bodyCards.layout.setActiveItem(btn.pressed ? this.mailvelopeWrap : textEditor);
 

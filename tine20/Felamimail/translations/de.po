@@ -382,11 +382,9 @@ msgstr "Anzeigeformat"
 
 #: Model/Account.php:264 js/AccountEditDialog.js:534
 msgid "Compose Format"
-msgstr "Textformat"
+msgstr "Schreibformat"
 
 #: Model/Account.php:275 js/AccountEditDialog.js:549
-msgid "Preserve Format"
-msgstr "Format beibehalten"
 
 #: Model/Account.php:286
 msgid "Reply-To"
@@ -1286,8 +1284,8 @@ msgid "Plain Text"
 msgstr "Nur Text"
 
 #: js/AccountEditDialog.js:531
-msgid "Depending on content type (experimental)"
-msgstr "Abhängig vom Content-Typ (experimentell)"
+msgid "Depending on content format"
+msgstr "Abhängig vom Format"
 
 #: js/AccountEditDialog.js:560
 msgid "No"
