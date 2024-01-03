@@ -111,7 +111,6 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         $categories = Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY};
 
         $updates = [];
-        // @TODO migrate category keyfield to records & update category_id in all documents & set DOCUMENT_CATEGORY_DEFAULT
         /** @var Tinebase_Config_KeyFieldRecord $record */
         foreach ($categories->records as $record) {
             if ('STANDARD' === $record->getId()) {
@@ -134,6 +133,14 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                 $db->update(SQL_TABLE_PREFIX . $table, [
                     Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY => $newId,
                 ], Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY . $db->quoteInto(' = ?', $oldId));
+            }
+            foreach ([
+                         Sales_Model_Document_Boilerplate::TABLE_NAME,
+                         Sales_Model_Boilerplate::TABLE_NAME,
+                     ] as $table) {
+                $db->update(SQL_TABLE_PREFIX . $table, [
+                    Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY => $newId,
+                ], Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY . $db->quoteInto(' = ?', $oldId));
             }
         }
 
