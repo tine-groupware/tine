@@ -30,6 +30,8 @@ class Tinebase_ImageHelperTest extends \PHPUnit\Framework\TestCase
 
     protected $_testImage;
 
+    protected $_testImageData;
+
     /**
      * Runs the test methods of this class.
      *

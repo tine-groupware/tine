@@ -32,6 +32,8 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
 
     protected $_rmDir = array();
 
+    protected $_oldQuota;
+
     protected function setUp(): void
     {
         if (empty(Tinebase_Core::getConfig()->filesdir)) {
