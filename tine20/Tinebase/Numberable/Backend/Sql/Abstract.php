@@ -140,7 +140,8 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
 
         return $this->_db->query('INSERT INTO ' . $tableName . ' (' . $bucketColumn . ', ' . $numberableColumn . ') SELECT ' . $bucketColumn . ', '
             . $numberableColumn .' + ' . $this->_stepSize . ' FROM ' . $tableName . ' WHERE ' . $bucketColumn
-            . ($this->_bucketKey===null?' IS NULL':' = ' . $this->_db->quote($this->_bucketKey))
+            . ($this->_bucketKey===null?' IS NULL':' = ' . $this->_db->quote($this->_bucketKey)) . ' AND '
+            . $numberableColumn . ' >= ' . $this->_start
             . ' ORDER BY ' . $bucketColumn . ' DESC, ' . $numberableColumn . ' DESC LIMIT 1');
     }
 
