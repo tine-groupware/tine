@@ -88,7 +88,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * 
      * @param string $_id
      */
-    public function setId($_id);
+    public function setId($_id): self;
     
     /**
      * gets identifier of record

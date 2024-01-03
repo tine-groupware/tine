@@ -316,24 +316,10 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             }
         }
     }
-    
-    /**
-     * sets identifier of record
-     * 
-     * @param int $_id
-     * @return Tinebase_Record_Abstract this
-     */
-    public function setId($_id)
-    {
-        // set internal state to "not validated"
-        $this->_isValidated = false;
-        
-        if ($this->bypassFilters === true) {
-            $this->_properties[$this->_identifier] = $_id;
-        } else {
-            $this->__set($this->_identifier, $_id);
-        }
 
+    public function setId($_id): self
+    {
+        $this->__set($this->_identifier, $_id);
         return $this;
     }
     
