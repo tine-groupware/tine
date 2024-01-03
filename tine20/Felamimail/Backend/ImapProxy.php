@@ -22,6 +22,7 @@
  * @method selectFolder($globalName, $params=[])
  * @method examineFolder($globalName)
  * @method removeMessage($id)
+ * @method getChangedFlags($modseq)
  */
 class Felamimail_Backend_ImapProxy
 {
