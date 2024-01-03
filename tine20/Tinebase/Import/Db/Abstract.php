@@ -40,7 +40,6 @@ abstract class Tinebase_Import_Db_Abstract
         $pageCount = 100;
         $importedIds = [];
         do {
-            $cont = false;
             $select = $this->_importDb->select()->from($this->_mainTableName)->limitPage(++$pageNumber, $pageCount);
             if ($this->_importFilter) {
                 $select->where($this->_importFilter);
@@ -66,9 +65,8 @@ abstract class Tinebase_Import_Db_Abstract
                         . ' Could not import ' . $this->_mainTableName . ' record: ' . $e);
                     $failcount++;
                 }
-                $cont = count($rows) >= $pageCount;
             }
-        } while ($cont);
+        } while (count($rows) >= $pageCount);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Imported ' . $count . ' records (failcount: ' . $failcount . ' | skipcount: ' . $skipcount . ')');
