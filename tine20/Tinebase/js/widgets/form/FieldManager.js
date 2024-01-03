@@ -366,6 +366,7 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 default:
                     field.xtype = this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
+                    field.emptyValue = field.emptyValue || (fieldDefinition.nullable ? null : '');
                     if (fieldDefinition.length) {
                         field.maxLength = fieldDefinition.length;
                     }
