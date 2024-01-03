@@ -14,10 +14,15 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         return new Ext.Action(Object.assign({
             text: app.i18n._('Send as Email to Datev'),
             iconCls: `action_export`,
+            actionUpdater(action, grants, records, isFilterSelect, filteredContainers) {
+                let enabled = records.length === 1
+                action.setDisabled(!enabled)
+                action.baseAction.setDisabled(!enabled) // WTF?
+            },
             async handler(cmp) {
                 const selections = this.initialConfig.selections ?? [];
                 if (selections.length === 0) return; 
-                const method = 'searchPurchaseInvoices';
+                const method =  `search${modelName}s`;
                 const {results: invoices} = await Tine.Sales[method]([{field: 'id', operator: 'in', value: _.map(selections, 'data.id')}]);
                 if (!await validate(invoices)) return;
                 
@@ -50,7 +55,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     });
         
                     invoice.attachments.forEach((attachment, idx) => {
-                        const isValid = modelName === 'Invoice' ? 
+                        const isValid = modelName === 'Document_Invoice' ? 
                             !(/.*(timesheet|resource|ip-volum).*/).test(attachment.name)
                             : true;
                         const attachmentNode = new Ext.tree.TreeNode({
@@ -66,9 +71,6 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             node.parentNode.childNodes.forEach((n) => {
                                 if (n.ui.isChecked()) {
                                     hasSelection = true;
-                                    if (n.id !== node.id) {
-                                        n.ui.toggleCheck(false);
-                                    }
                                 }
                             })
                             if (!hasSelection) {
@@ -138,7 +140,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         });
     };
     
-    ['PurchaseInvoice'].forEach((modelName) => {
+    ['PurchaseInvoice', 'Document_Invoice'].forEach((modelName) => {
         const action = getAction(modelName, {})
         const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
         Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-GridPanel-ContextMenu`, action, 2)
