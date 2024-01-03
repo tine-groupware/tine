@@ -670,7 +670,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.htmlEditor.focus();
                 }
             }
-        }, 250);
+        }, 1000);
         
         if (this.record.get('massMailingFlag')) {
             this.button_massMailing.toggle();
@@ -1288,8 +1288,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.loadMask) {
             this.hideLoadMask();
         }
-        
-        this.recipientGrid.addEmptyRowAndDoLayout(true);
     },
 
     /**
