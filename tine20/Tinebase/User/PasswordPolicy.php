@@ -170,7 +170,7 @@ class Tinebase_User_PasswordPolicy
                 $minLength = $configValue;
                 if ($minLength > 0) {
                     $reduced = ($regex) ? preg_replace($regex, '', $password) : $password;
-                    $charCount = strlen(utf8_decode((string)$reduced));
+                    $charCount = strlen(Tinebase_Helper::mbConvertTo((string)$reduced));
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' Found ' . $charCount . '/' . $minLength . ' chars for ' . $configKey /*. ': ' . $reduced */);
 
