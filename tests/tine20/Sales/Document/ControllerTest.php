@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -22,7 +22,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
             Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
             Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
-            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
             Sales_Model_Document_Invoice::FLD_POSITIONS => [
                 new Sales_Model_DocumentPosition_Invoice([
                     Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 1',
@@ -40,6 +40,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         ]));
 
         Tinebase_Record_Expander::expandRecord($invoice);
+
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
 

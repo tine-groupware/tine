@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -19,8 +19,6 @@ class Sales_Model_Document_Debitor extends Sales_Model_Debitor
     public const TABLE_NAME         = 'sales_document_debitor';
 
     public const FLD_DOCUMENT_ID = 'document_id';
-
-    public static string $documentIdModel = Sales_Model_Document_Offer::MODEL_NAME_PART;
 
     /**
      * @param array $_definition
