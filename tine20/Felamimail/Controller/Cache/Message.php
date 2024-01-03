@@ -1278,33 +1278,42 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' got ' . count($flags) . ' changed flags');
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Flags: ' . print_r($flags, true));
-        
+
         if (! empty($flags)) {
+            // order flags array by modseq
+            uasort($flags, function($a,$b) { return $a['modseq'] > $b['modseq'] ? 1 : -1; });
+
+            $count = 0;
+            $lastmodseq = $folder->imap_lastmodseq;
+            $flagsToUpdate = [];
+            foreach ($flags as $uid => $flag) {
+                if ($count++ > $this->_flagSyncCountPerStep && $lastmodseq !== $flag['modseq']) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Limit reached: ' . $count . ' modseq: ' . $lastmodseq);
+                    break;
+                }
+                $lastmodseq = $flag['modseq'];
+                $flagsToUpdate[$uid] = $flag;
+            }
+
             $filter = new Felamimail_Model_MessageFilter([
                 ['field' => 'account_id', 'operator' => 'equals', 'value' => $folder->account_id],
                 ['field' => 'folder_id',  'operator' => 'equals', 'value' => $folder->getId()],
-                ['field' => 'messageuid', 'operator' => 'in', 'value' => array_keys($flags)]
+                ['field' => 'messageuid', 'operator' => 'in', 'value' => array_keys($flagsToUpdate)]
             ]);
-            $pagination = new Tinebase_Model_Pagination(['limit' => $this->_flagSyncCountPerStep]);
-            
-            $messages = $this->_backend->search($filter, $pagination);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' got ' . count($messages) . ' messages.');
-            
-            $this->_setFlagsOnCache($flags, $folder, $messages, false);
-            
-            foreach ($flags as $flag) {
-                if ($folder->imap_lastmodseq < $flag['modseq']) {
-                    $folder->imap_lastmodseq = $flag['modseq'];
-                }
+            $messages = $this->_backend->search($filter);
+
+            $this->_setFlagsOnCache($flagsToUpdate, $folder, $messages, false);
+
+            if ($folder->imap_lastmodseq < $lastmodseq) {
+                $folder->imap_lastmodseq = $lastmodseq;
             }
-            
+            Felamimail_Controller_Folder::getInstance()->update($folder);
+
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-                ' Got ' . count($flags) . ' changed flags and updated last mod seq to ' . $folder->imap_lastmodseq);
-            
-            $folder = Felamimail_Controller_Folder::getInstance()->update($folder);
+                ' Handled ' . count($flagsToUpdate) . ' changed flags and updated last mod seq to ' . $folder->imap_lastmodseq);
         }
     }
     
