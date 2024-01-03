@@ -202,6 +202,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 fieldLabel: this.app.i18n._('Customer Number'),
                                 name: 'number',
                                 allowBlank: true,
+                                nullable: true,
                                 columnWidth: .250,
                                 minValue: 1,
                                 maxValue: 4294967296,
