@@ -41,6 +41,7 @@ class Tinebase_Model_EvaluationDimensionItem extends Tinebase_Record_NewAbstract
         self::RECORD_NAME               => 'Item', // gettext('GENDER_Item')
         self::RECORDS_NAME              => 'Items', // ngettext('Item', 'Items', n)
         self::TITLE_PROPERTY            => '{{ number }} - {{ name }}',
+        self::EXPOSE_JSON_API           => true,
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,

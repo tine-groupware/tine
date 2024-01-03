@@ -26,7 +26,7 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
     public const FLD_MODELS = 'models';
     public const FLD_NAME = self::NAME;
     public const FLD_DESCRIPTION = 'description';
-    public const FLD_ORDER = 'order';
+    public const FLD_SORTING = 'sorting';
 
     public const COST_CENTER = 'Cost Center';
     public const COST_BEARER = 'Cost Bearer';
@@ -108,8 +108,9 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME                => Tinebase_Model_EvaluationDimension::MODEL_NAME_PART,
                 ],
             ],
-            self::FLD_ORDER                 => [
+            self::FLD_SORTING               => [
                 self::TYPE                      => self::TYPE_INTEGER,
+                self::LABEL                     => 'Sorting', // _('Sorting')
                 self::DEFAULT_VAL               => 0,
             ],
         ],
@@ -141,6 +142,15 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
                     self::CONFIG            => [
                         self::APP_NAME          => Tinebase_Config::APP_NAME,
                         self::MODEL_NAME        => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
+                        self::FLD_DEPENDS_ON    => $this->{self::FLD_DEPENDS_ON},
+                    ],
+                    self::UI_CONFIG         => [
+                        'sorting'              => $this->{self::FLD_SORTING},
+                        'additionalFilters'    => [[
+                            'field'     => Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID,
+                            'operator'  => 'equals',
+                            'value'     => $this->id,
+                        ]]
                     ],
                     self::NULLABLE          => true,
                 ],

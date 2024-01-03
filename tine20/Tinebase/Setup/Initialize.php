@@ -218,7 +218,12 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         Tinebase_Controller_EvaluationDimension::getInstance()->modlogActive(false);
         Tinebase_Controller_EvaluationDimension::getInstance()->useNotes(false);
         Tinebase_Controller_EvaluationDimension::getInstance()->create(new Tinebase_Model_EvaluationDimension([
-            Tinebase_Model_EvaluationDimension::FLD_NAME => 'Cost Center',
+            Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_CENTER,
+            Tinebase_Model_EvaluationDimension::FLD_SORTING => 10,
+        ]));
+        Tinebase_Controller_EvaluationDimension::getInstance()->create(new Tinebase_Model_EvaluationDimension([
+            Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_BEARER,
+            Tinebase_Model_EvaluationDimension::FLD_SORTING => 20,
         ]));
         Tinebase_Controller_EvaluationDimension::getInstance()->doRightChecks(true);
         Tinebase_Controller_EvaluationDimension::getInstance()->modlogActive(true);

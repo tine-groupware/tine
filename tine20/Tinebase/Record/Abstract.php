@@ -321,7 +321,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      * sets identifier of record
      * 
      * @param int $_id
-     * @return void
+     * @return Tinebase_Record_Abstract this
      */
     public function setId($_id)
     {
@@ -333,6 +333,8 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
         } else {
             $this->__set($this->_identifier, $_id);
         }
+
+        return $this;
     }
     
     /**

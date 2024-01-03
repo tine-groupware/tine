@@ -91,6 +91,9 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
         if (!empty($delModels = array_diff($oldModels, $newModels))) {
             $this->removeDimensionFromModel($updatedRecord, $delModels);
         }
+        if (!empty($updateModels = array_intersect($newModels, $oldModels))) {
+            $this->updateDimensionOfModel($updatedRecord, $updateModels);
+        }
     }
 
     protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
@@ -112,6 +115,21 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
 
             /** @var string $model */
             Tinebase_CustomField::getInstance()->addCustomField($dimension->getSystemCF($model));
+        }
+    }
+
+    protected function updateDimensionOfModel(Tinebase_Model_EvaluationDimension $dimension, array $models): void
+    {
+        /** @var string $model */
+        foreach ($models as $model) {
+            $cfc = $dimension->getSystemCF($model);
+            $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
+                $cfc->application_id, $cfc->name, $cfc->model, true);
+            if (null !== $cfc) {
+                Tinebase_CustomField::getInstance()->updateCustomField($dimension->getSystemCF($model)->setId($cfc->getId()));
+            } else {
+                $this->addDimensionToModel($dimension, [$model]);
+            }
         }
     }
 

@@ -8,6 +8,7 @@
 Ext.ns('Tine.Sales');
 
 import { BoilerplatePanel } from './BoilerplatePanel'
+import EvaluationDimensionForm from "../../../Tinebase/js/widgets/form/EvaluationDimensionForm";
 
 Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 1240,
@@ -175,7 +176,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 [{ ...placeholder }, fields.net_sum, fields.vat_procedure, fields.sales_tax, fields.gross_sum],
                 [fields.credit_term, _.assign({ ...placeholder } , {columnWidth: 4/5})],
                 [{xtype: 'textarea', name: 'boilerplate_Posttext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Posttext`}],
-                [fields.cost_center_id, fields.cost_bearer_id, _.assign({ ...placeholder } , {columnWidth: 3/5})]
+                [new EvaluationDimensionForm({recordClass: this.recordClass})]
             ]
         }]
     }

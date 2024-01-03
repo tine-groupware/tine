@@ -73,6 +73,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
         self::HAS_NOTES => false,
         self::HAS_RELATIONS => true,
         self::HAS_TAGS => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         self::EXPOSE_HTTP_API => true,
         self::EXPOSE_JSON_API => true,
