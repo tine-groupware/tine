@@ -710,14 +710,16 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function exportInvoicesToDatevEmail(string $modelName, $invoiceData)
     {
-        $modelName = 'PurchaseInvoice';
-        $filterName = $this->_applicationName . '_Model_' . $modelName . 'Filter';
-        $filter = new $filterName();
+        $controller = $modelName === 'PurchaseInvoice' ? Sales_Controller_PurchaseInvoice::getInstance() 
+            : Sales_Controller_Document_Invoice::getInstance();
+        $configName = $modelName === 'PurchaseInvoice' ? Sales_Config::DATEV_SENDER_EMAIL_PURCHASE_INVOICE
+            : Sales_Config::DATEV_SENDER_EMAIL_INVOICE;
+        
         $invalidInvoiceIds = [];
         $validInvoiceIds = [];
         $errorMessage = null;
 
-        $senderEmail = Sales_Config::getInstance()->get(Sales_Config::DATEV_SENDER_EMAIL);
+        $senderEmail = Sales_Config::getInstance()->get($configName);
         $sender = !empty($senderEmail) ? Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $senderEmail) 
             : Tinebase_Core::getUser();
 
@@ -727,7 +729,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         foreach ($invoiceData as $invoiceId => $attachmentIds) {
-            if (sizeof($attachmentIds) !== 1) {
+            if (sizeof($attachmentIds) === 0) {
                 $invalidInvoiceIds[] = $invoiceId;
             } else {
                 $validInvoiceIds[] = $invoiceId;
@@ -735,7 +737,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         if (sizeof($invalidInvoiceIds) > 0) {
-            foreach (Sales_Controller_PurchaseInvoice::getInstance()->getMultiple($invalidInvoiceIds) as $invoice) {
+            foreach ($controller->getMultiple($invalidInvoiceIds) as $invoice) {
                 $errorMessage .= PHP_EOL . $invoice->number . ': ' . $invoice->title . ' attachment size: ' . sizeof($invoiceData[$invoice->id]);
             }
             $exception = new Tinebase_Exception_SystemGeneric($errorMessage);
@@ -744,37 +746,46 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } 
         
         $lastDatevSendTime = Tinebase_DateTime::now();
-        $results = Sales_Controller_PurchaseInvoice::getInstance()->getMultiple($validInvoiceIds);
-        Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($results);
+        $records = $controller->getMultiple($validInvoiceIds);
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($records);
 
-        foreach ($results as $invoice) {
+        foreach ($records as $invoice) {
             $attachments = $invoice->attachments;
             
             if ($attachments) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Found ' .
                 $attachments->count() . ' attachments for ' . $modelName . ' : ' . $invoice['name']);
             
-            foreach ($attachments as $attachment) {
-                if ($attachment['id'] === $invoiceData[$invoice['id']][0]) {
-                    $recipients = array_map(function ($recipientEmail) {return new Addressbook_Model_Contact(['email' => $recipientEmail], true);}, $recipientEmails);
-                    $messageBody = PHP_EOL . 'Model  : ' . $modelName . ', ID     : ' . $invoice['id']
-                        . PHP_EOL . 'Number : ' . $invoice['number'] . ', Title  : ' . $invoice->getTitle()
-                        . PHP_EOL . 'Datev Sent Date : ' . $lastDatevSendTime->toString();
-                    
-                    Tinebase_Notification::getInstance()->send($sender, $recipients, 'Datev notification', $messageBody, null,
-                        [$attachment], false, Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL);
-                }
-            }
+            $recipients = array_map(function ($recipientEmail) {return new Addressbook_Model_Contact(['email' => $recipientEmail], true);}, $recipientEmails);
+            $messageBody = PHP_EOL . 'Model  : ' . $modelName . ', ID     : ' . $invoice['id']
+                . PHP_EOL . 'Number : ' . $invoice['number'] . ', Title  : ' . $invoice->getTitle()
+                . PHP_EOL . 'Datev Sent Date : ' . $lastDatevSendTime->toString();
+            
+            Tinebase_Notification::getInstance()->send($sender, $recipients, 'Datev notification', $messageBody, null,
+                $attachments->asArray(), false, Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL);
         }
 
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $validInvoiceIds)));
-        $json = new Tinebase_Frontend_Json();
-        $result = $json->updateMultipleRecords($this->_applicationName, $modelName,
-            array(array('name' => 'last_datev_send_date', 'value' => $lastDatevSendTime->getIso())),
-            $filter);
-
+        $model = Sales_Config::APP_NAME . '_Model_' . $modelName;
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
+            ['field' => 'id', 'operator' => 'in', 'value' => $validInvoiceIds]
+        ]);
+        $result = [];
+        if ($model === Sales_Model_PurchaseInvoice::class) {
+            $result = $controller->updateMultiple($filter, ['last_datev_send_date' => $lastDatevSendTime->getIso()]);
+            $result = $result['results'];
+        }
+        if ($model === Sales_Model_Document_Invoice::class) {
+            $expander = new Tinebase_Record_Expander($model, Sales_Model_Document_Invoice::getConfiguration()->jsonExpander);
+            $expander->expand($records);
+            foreach ($records as $validInvoice) {
+                $validInvoice['last_datev_send_date'] = $lastDatevSendTime;
+                $controller->update($validInvoice);
+            }
+            $result = $controller->getMultiple($validInvoiceIds);
+        }
+        
         return [
-            'totalcount' => sizeof($result['results']),
-            'results' => $result['results'],
+            'totalcount' => sizeof($result),
+            'results' => $result->toArray(),
         ];
     }
     

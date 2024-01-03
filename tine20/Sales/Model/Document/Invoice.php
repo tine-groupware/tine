@@ -25,6 +25,8 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
     public const FLD_IS_SHARED = 'is_shared';
 
+    public const FLD_LAST_DATEV_SEND_DATE = 'last_datev_send_date';
+
     /**
      * invoice status
      */
@@ -92,6 +94,12 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                     Tinebase_Numberable::CONFIG_OVERRIDE   =>
                         Sales_Controller_Document_Invoice::class . '::documentProformaNumberConfigOverride',
                 ],
+            ],
+            self::FLD_LAST_DATEV_SEND_DATE       => [
+                self::LABEL                 => 'Last Datev send date', // _('Last Datev send date')
+                self::TYPE                  => self::TYPE_DATETIME,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                self::NULLABLE => true,
             ],
         ]);
 
