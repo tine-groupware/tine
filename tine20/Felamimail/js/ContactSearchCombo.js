@@ -179,14 +179,8 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
             case 'contact':
                 data = {tip: 'Contact', iconClass: 'Contact'};
                 break;
-            case 'cached':
-                data = {tip: 'Email (cached)', iconClass: 'EmailAccount'};
-                break;
             default :
-                if (token.contact_record !== '') {
-                    data.tip = 'Contact';
-                    data.iconClass = 'Contact';
-                }
+                if (token?.contact_record !== '') data = {tip: 'Contact', iconClass: 'Contact'};
                 break;
         }
     
@@ -204,20 +198,15 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
             + Ext.util.Format.htmlEncode(note);
     },
     
-    removeInvalidRecords: function(store) {
-        let duplicates = null;
-        
+    removeInvalidRecords(store) {
         store.each((record) => {
             const idx = store.indexOf(record);
             if (!this.validate(record)){
                 store.removeAt(idx);
                 return;
             }
-            duplicates = store.queryBy(function(contact) {
-                const isIdDuplicated = record.id === contact.id;
-                const isCachedEmailDuplicated = record.data.type === 'cached' && contact.data.email === record.data.email;
-                const isEmailStringDuplicated = Tine.Felamimail.getEmailStringFromContact(record) === Tine.Felamimail.getEmailStringFromContact(contact);
-                return !isIdDuplicated && (isCachedEmailDuplicated || isEmailStringDuplicated);
+            const duplicates = store.queryBy((contact) => {
+                return record.id !== contact.id && Tine.Felamimail.getEmailStringFromContact(record) === Tine.Felamimail.getEmailStringFromContact(contact);
             });
             if (duplicates.getCount() > 0) {
                 Tine.log.debug(`remove duplicate email from ${record.data.type}: ${record.data.email}`);

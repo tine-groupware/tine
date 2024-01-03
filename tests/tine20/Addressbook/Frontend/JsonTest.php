@@ -2880,7 +2880,6 @@ Steuernummer 33/111/32212";
      */
     public function testSearchEmailAddresss()
     {
-        Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
         $list = Addressbook_Controller_List::getInstance()->getAll()->getFirstRecord();
         $hasListMembers = false;
         
@@ -2903,7 +2902,10 @@ Steuernummer 33/111/32212";
         
         Addressbook_Controller_List::destroyInstance();
         $result = $this->_uit->searchEmailAddresss([
-            ["field" => "name_email_query", "operator" => "contains", "value" => "@"]
+            ["condition" => "OR", "filters" => [["condition" => "AND", "filters" => [
+                ["field" => "query", "operator" => "contains", "value" => ""],
+                ["field" => "name_email_query", "operator" => "contains", "value" => $list['name']]
+            ]], ["field" => "path", "operator" => "contains", "value" => ""]]]
         ], ["sort" => "name", "dir" => "ASC", "start" => 0, "limit" => 50]);
 
         static::assertGreaterThan(0, $result['totalcount'], 'no results found');
@@ -2918,43 +2920,6 @@ Steuernummer 33/111/32212";
                     self::fail('empty lists should not be returned - list: ' . print_r($entry, true));
                 }
             }
-        }
-    }
-
-    public function testSearchEmailAddresssWithMessageCache()
-    {
-        $emailTest = new Felamimail_Controller_MessageTest();
-        $emailTest->setUp();
-        $inbox = $emailTest->getFolder('INBOX');
-        $message = $emailTest->messageTestHelper('multipart_alternative.eml', null, $inbox);
-
-        // fulltext, always a pleasure, needs commit ...
-        $this->_testNeedsTransaction();
-        try {
-            self::assertEquals('newsletter@stiftung-warentest.de', $message['from_email']);
-            self::assertEquals('someone@mail.test', $message['to'][0]);
-
-            $messages = Felamimail_Controller_Cache_Message::getInstance()->getAll();
-            static::assertGreaterThan(0, $messages->count(), 'no messages found');
-            // search contact by from  
-            $result1 = $this->_uit->searchEmailAddresss([
-                ["field" => "name_email_query", "operator" => "contains", "value" => 'newsletter@stiftung-warentest.de']
-            ], []);
-            $this->assertSame(1, $result1['totalcount'], 'should find contact joined from table felamimail_cache_message');
-
-            // search contact by to  
-            $result2 = $this->_uit->searchEmailAddresss([
-                ["field" => "name_email_query", "operator" => "contains", "value" => 'someone@mail.test']
-            ], []);
-            $this->assertSame(1, $result2['totalcount'], 'should find contact joined from table felamimail_cache_message_to');
-        } finally {
-            /** @var Felamimail_Backend_Imap $imap */
-            $imap = Felamimail_Backend_ImapFactory::factory($emailTest->getAccount());
-            // delete test messages from given folders on imap server (search by special header)
-            $imap->selectFolder('INBOX');
-            $result = $imap->search(['HEADER X-Tine20TestMessage multipart_alternative.eml']);
-            $imap->removeMessage($result[0]);
-            Felamimail_Controller_Cache_Message::getInstance()->clear($inbox);
         }
     }
 
@@ -2988,8 +2953,10 @@ Steuernummer 33/111/32212";
 
         $list = $this->_createMailinglist();
         $result = $this->_uit->searchEmailAddresss([
-            ["field" => "name_email_query", "operator" => "equals", "value" => $list['email']]
-        ], []);
+            ["condition" => "AND", "filters" => [["condition" => "AND", "filters" => [
+                ["field" => "email", "operator" => "equals", "value" => $list['email']]
+            ]]]
+            ]], []);
 
         static::assertEquals(1, $result['totalcount'], 'no results found');
         static::assertEquals($list['email'], $result['results'][0]['email']);
@@ -3014,7 +2981,9 @@ Steuernummer 33/111/32212";
         $list = $this->testCreateListWithMemberAndRole();
         
         $result = $this->_uit->searchEmailAddresss([
-            ["field" => "name_email_query", "operator" => "contains", "value" => $list['name']]
+            ["condition" => "OR", "filters" => [["condition" => "AND", "filters" => [
+                ["field" => "name_email_query", "operator" => "contains", "value" => $list['name']]
+            ]], ["field" => "path", "operator" => "contains", "value" => ""]]]
         ], ["sort" => "name", "dir" => "ASC", "start" => 0, "limit" => 50]);
 
         static::assertEquals(1, $result['totalcount'], 'no results found');
