@@ -146,6 +146,7 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
                     ],
                     self::UI_CONFIG         => [
                         'sorting'              => $this->{self::FLD_SORTING},
+                        'grouping'             => self::RECORDS_NAME,
                         'additionalFilters'    => [[
                             'field'     => Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID,
                             'operator'  => 'equals',

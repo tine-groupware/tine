@@ -79,13 +79,17 @@ Tine.widgets.form.RecordForm.getFieldDefinitions = function(recordClass) {
     Ext.each(Tine.Tinebase.Model.genericFields, function(field) {fieldsToExclude.push(field.name)});
     fieldsToExclude.push(recordClass.getMeta('idProperty'));
 
-    return _.reduce(fieldNames, function(fieldDefinitions, fieldName) {
-        var fieldDefinition = modelConfig.fields[fieldName];
+    let fieldDefs = _.sortBy(_.reduce(fieldNames, function(fieldDefinitions, fieldName) {
+        var fieldDefinition = _.cloneDeep(modelConfig.fields[fieldName]);
         if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0) {
+            _.set(fieldDefinition, 'uiconfig.sorting', _.get(fieldDefinition, 'uiconfig.sorting', fieldDefinitions.length * 10));
             fieldDefinitions.push(fieldDefinition);
         }
         return fieldDefinitions;
-    }, []);
+    }, []), (field) => {return _.get(field, 'uiconfig.sorting')});
+
+
+    return fieldDefs;
 };
 
 Tine.widgets.form.RecordForm.getFormFields = function(recordClass, configInterceptor) {
