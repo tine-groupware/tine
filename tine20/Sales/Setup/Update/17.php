@@ -19,8 +19,15 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
+        self::PRIO_TINEBASE_BEFORE_STRUCT   => [
+            self::RELEASE017_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
+            ],
+        ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
             self::RELEASE017_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
@@ -60,12 +67,15 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
         Setup_SchemaTool::updateSchema([
+            Sales_Model_Address::class,
             Sales_Model_Customer::class,
             Sales_Model_Division::class,
+            Sales_Model_DivisionEvalDimensionItem::class,
             Sales_Model_Debitor::class,
-            Sales_Model_Invoice::class,
             Sales_Model_Document_Address::class,
+            Sales_Model_Document_Category::class,
             Sales_Model_Document_Customer::class,
+            Sales_Model_Document_Debitor::class,
             Sales_Model_Document_Delivery::class,
             Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Offer::class,
@@ -157,7 +167,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                 Sales_Model_Document_Order::class => [Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER],
                  ] as $model => $props) {
             foreach ($props as $property) {
-                $this->getDb()->update(SQL_TABLE_PREFIX . 'numberable', ['bucket' => new Zend_Db_Expr('CONCAT(bucket, "#' . $divisionId . '")')], 'bucket = "' . $model . '#' . $property);
+                $this->getDb()->update(SQL_TABLE_PREFIX . 'numberable', ['bucket' => new Zend_Db_Expr('CONCAT(bucket, "#' . $divisionId . '")')], 'bucket = "' . $model . '#' . $property . '"');
             }
         }
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.4', self::RELEASE017_UPDATE004);
@@ -165,8 +175,85 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update005()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        foreach ($this->_backend->getOwnForeignKeys(Sales_Model_Product::TABLE_NAME) as $key) {
+            $this->_backend->dropForeignKey(Sales_Model_Product::TABLE_NAME, $key['constraint_name']);
+        }
+
         Sales_Setup_Initialize::createTbSystemCFEvaluationDimension();
+        Sales_Setup_Initialize::initializeCostCenterCostBearer();
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE005);
+    }
+
+    public function update006()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        if ($this->_backend->columnExists('costcenter', Sales_Model_Product::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Product::TABLE_NAME)
+                . ' RENAME COLUMN costcenter TO eval_dim_cost_center');
+        }
+        if ($this->_backend->columnExists('costbearer', Sales_Model_Product::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Product::TABLE_NAME)
+                . ' RENAME COLUMN costbearer TO eval_dim_cost_bearer');
+        }
+
+        if ($this->_backend->columnExists('cost_center_id', Sales_Model_Document_Invoice::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Invoice::TABLE_NAME)
+                . ' RENAME COLUMN cost_center_id TO eval_dim_cost_center');
+        }
+        if ($this->_backend->columnExists('cost_bearer_id', Sales_Model_Document_Invoice::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Invoice::TABLE_NAME)
+                . ' RENAME COLUMN cost_bearer_id TO eval_dim_cost_bearer');
+        }
+
+        if ($this->_backend->columnExists('cost_center_id', Sales_Model_Document_Offer::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Offer::TABLE_NAME)
+                . ' RENAME COLUMN cost_center_id TO eval_dim_cost_center');
+        }
+        if ($this->_backend->columnExists('cost_bearer_id', Sales_Model_Document_Offer::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Offer::TABLE_NAME)
+                . ' RENAME COLUMN cost_bearer_id TO eval_dim_cost_bearer');
+        }
+
+        if ($this->_backend->columnExists('cost_center_id', Sales_Model_Document_Order::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Order::TABLE_NAME)
+                . ' RENAME COLUMN cost_center_id TO eval_dim_cost_center');
+        }
+        if ($this->_backend->columnExists('cost_bearer_id', Sales_Model_Document_Order::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Order::TABLE_NAME)
+                . ' RENAME COLUMN cost_bearer_id TO eval_dim_cost_bearer');
+        }
+
+        if ($this->_backend->columnExists('payment_cost_center_id', Sales_Model_DocumentPosition_Invoice::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Invoice::TABLE_NAME)
+                . ' RENAME COLUMN payment_cost_center_id TO eval_dim_cost_center');
+        }
+        if ($this->_backend->columnExists('payment_cost_bearer_id', Sales_Model_DocumentPosition_Invoice::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Invoice::TABLE_NAME)
+                . ' RENAME COLUMN payment_cost_bearer_id TO eval_dim_cost_bearer');
+        }
+
+        if ($this->_backend->columnExists('payment_cost_center_id', Sales_Model_DocumentPosition_Offer::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Offer::TABLE_NAME)
+                . ' RENAME COLUMN payment_cost_center_id TO eval_dim_cost_center');
+        }
+        if ($this->_backend->columnExists('payment_cost_bearer_id', Sales_Model_DocumentPosition_Offer::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Offer::TABLE_NAME)
+                . ' RENAME COLUMN payment_cost_bearer_id TO eval_dim_cost_bearer');
+        }
+
+        if ($this->_backend->columnExists('payment_cost_center_id', Sales_Model_DocumentPosition_Order::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Order::TABLE_NAME)
+                . ' RENAME COLUMN payment_cost_center_id TO eval_dim_cost_center');
+        }
+        if ($this->_backend->columnExists('payment_cost_bearer_id', Sales_Model_DocumentPosition_Order::TABLE_NAME)) {
+            $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Order::TABLE_NAME)
+                . ' RENAME COLUMN payment_cost_bearer_id TO eval_dim_cost_bearer');
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.6', self::RELEASE017_UPDATE006);
     }
 }

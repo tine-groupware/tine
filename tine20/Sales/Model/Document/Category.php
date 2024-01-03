@@ -34,6 +34,7 @@ class Sales_Model_Document_Category extends Tinebase_Record_NewAbstract
         self::RECORDS_NAME => 'Categories', // ngettext('Category', 'Categories', n)
         self::MODLOG_ACTIVE => true,
         self::HAS_DELETED_TIME_UNIQUE => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         self::EXPOSE_JSON_API => true,
         self::TITLE_PROPERTY => "{{ name }}{% if division_id.title %} ({{ division_id.title }}){% endif %}",
         self::CONTAINER_PROPERTY => null,

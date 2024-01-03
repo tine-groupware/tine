@@ -11,6 +11,7 @@
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * controller for EvaluationDimension
@@ -114,7 +115,15 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
             }
 
             /** @var string $model */
-            Tinebase_CustomField::getInstance()->addCustomField($dimension->getSystemCF($model));
+            $cfc = $dimension->getSystemCF($model);
+            $fun = function() use ($cfc) {
+                Tinebase_CustomField::getInstance()->addCustomField($cfc, [Tinebase_Model_EvaluationDimensionItem::class]);
+            };
+            if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback($fun);
+            } else {
+                $fun();
+            }
         }
     }
 
@@ -126,7 +135,15 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
             $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
                 $cfc->application_id, $cfc->name, $cfc->model, true);
             if (null !== $cfc) {
-                Tinebase_CustomField::getInstance()->updateCustomField($dimension->getSystemCF($model)->setId($cfc->getId()));
+                $cfc = $dimension->getSystemCF($model)->setId($cfc->getId());
+                $fun = function() use ($cfc) {
+                    Tinebase_CustomField::getInstance()->updateCustomField($cfc, [Tinebase_Model_EvaluationDimensionItem::class]);
+                };
+                if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+                    Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback($fun);
+                } else {
+                    $fun();
+                }
             } else {
                 $this->addDimensionToModel($dimension, [$model]);
             }
@@ -172,5 +189,39 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
             array_merge($cc->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS), $models));
         Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
         return true;
+    }
+
+    public static function modelConfigHook(array &$_fields, Tinebase_ModelConfiguration $mc): void
+    {
+        $table = $mc->getTable();
+        if (!isset($table[TMCC::INDEXES])) {
+            $table[TMCC::INDEXES] = [];
+        }
+        $assoc = $mc->getAssociations();
+        if (!isset($assoc[\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE])) {
+            $assoc[\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE] = [];
+        }
+
+        foreach (array_keys($_fields) as $property) {
+            if (strpos($property, 'eval_dim_') === 0) {
+                if (!array_key_exists($property, $table[TMCC::INDEXES])) {
+                    $table[TMCC::INDEXES][$property] = [
+                        TMCC::COLUMNS => [$property]
+                    ];
+                }
+                if (!array_key_exists($property, $assoc[\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE])) {
+                    $assoc[\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE][$property] = [
+                        TMCC::TARGET_ENTITY         => Tinebase_Model_EvaluationDimensionItem::class,
+                        TMCC::FIELD_NAME            => $property,
+                        TMCC::JOIN_COLUMNS          => [[
+                            TMCC::NAME                  => $property,
+                            TMCC::REFERENCED_COLUMN_NAME=> 'id',
+                        ]],
+                    ];
+                }
+            }
+        }
+
+        $mc->setTable($table);
     }
 }

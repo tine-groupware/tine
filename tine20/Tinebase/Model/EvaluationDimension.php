@@ -155,6 +155,9 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
                     ],
                     self::NULLABLE          => true,
                 ],
+                Tinebase_Model_CustomField_Config::DEF_HOOK => [
+                    [Tinebase_Controller_EvaluationDimension::class, 'modelConfigHook'],
+                ],
             ]
         ], true);
     }

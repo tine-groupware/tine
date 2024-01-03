@@ -1840,6 +1840,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         return $this->_table;
     }
 
+    public function setTable(array $table)
+    {
+        $this->_table = $table;
+    }
+
     public function getVersion()
     {
         return $this->_version;
@@ -2263,6 +2268,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     public function getAssociations()
     {
         return $this->_associations;
+    }
+
+    public function setAssociations(array $assoc)
+    {
+        $this->_associations = $assoc;
     }
 
     /**

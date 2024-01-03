@@ -44,6 +44,8 @@ class Sales_Setup_Uninitialize extends Setup_Uninitialize
     protected function _uninitializeCostCenterCostBearer()
     {
         Tinebase_Controller_EvaluationDimension::removeModelsFromDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
+            Sales_Model_Product::class,
+            Sales_Model_Document_Category::class,
             Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Offer::class,
             Sales_Model_Document_Order::class,
@@ -52,6 +54,8 @@ class Sales_Setup_Uninitialize extends Setup_Uninitialize
             Sales_Model_DocumentPosition_Order::class,
         ]);
         Tinebase_Controller_EvaluationDimension::removeModelsFromDimension(Tinebase_Model_EvaluationDimension::COST_BEARER, [
+            Sales_Model_Product::class,
+            Sales_Model_Document_Category::class,
             Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Offer::class,
             Sales_Model_Document_Order::class,

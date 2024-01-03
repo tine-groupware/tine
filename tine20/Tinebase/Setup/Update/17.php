@@ -79,6 +79,12 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update003()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_NumberableConfig::class,
+        ]);
+
         $this->getDb()->update(SQL_TABLE_PREFIX . 'numberable', ['bucket' => ''], 'bucket IS NULL');
 
         $this->_backend->alterCol('numberable', new Setup_Backend_Schema_Field_Xml('<field>
