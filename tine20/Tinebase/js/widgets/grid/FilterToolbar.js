@@ -633,6 +633,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             // concat registered filters
             this.filterModels = this.filterModels.concat(Tine.widgets.grid.FilterRegistry.get(this.recordClass));
 
+            this.filterModels = this.filterModels.concat(Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters(this.recordClass));
+
             // auto add foreign record filter on demand
             var foreignRecordFilter = this.createFilterModel({filtertype: 'foreignrecord', ownRecordClass: this.recordClass, isGeneric: true});
             if (foreignRecordFilter.operatorStore.getCount() > 0) {
@@ -744,7 +746,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             return new Tine.widgets.grid.FilterModel(config);
         }
     },
-    
+
     /**
      * returns filterModel
      * 
