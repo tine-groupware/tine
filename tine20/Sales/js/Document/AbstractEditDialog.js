@@ -60,7 +60,10 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const category = categoryField.getValue()
         if (!category) {
             categoryField.recordProxy.promiseLoadRecord(Tine.Tinebase.configManager.get('documentCategoryDefault', 'Sales'))
-                .then(_.bind(categoryField.setValue, categoryField));
+                .then(category => {
+                    categoryField.setValue(category);
+                    categoryField.onSelect(category, 0);
+                });
         }
 
         const positions = this.getForm().findField('positions').getValue(); //this.record.get('positions')
@@ -103,8 +106,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const booked = statusField.store.getById(statusField.getValue())?.json.booked
         this.getForm().items.each((field) => {
             if (_.get(field, 'initialConfig.readOnly')) return;
-            if ([this.statusFieldName, 'cost_center_id', 'cost_bearer_id', 'description', 'customer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
-            && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)/)) {
+            if ([this.statusFieldName, 'description', 'customer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
+            && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
                 field.setReadOnly(booked);
             }
         });
@@ -113,6 +116,16 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     getRecordFormItems: function() {
         const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, config, fieldDefinition) => {
             switch (fieldName) {
+                case 'document_category':
+                    config.listeners = config.listeners || {}
+                    config.listeners.select = (combo, record, index) => {
+                        _.forEach(record?.data, (val, key) => {
+                            if (key.match(/^eval_dim_(.*)/) && this.getForm().findField(key) && val) {
+                                this.getForm().findField(key).setValue(val);
+                            }
+                        });
+                    }
+                    break;
                 case 'customer_id':
                     config.listeners = config.listeners || {}
                     config.listeners.select = (combo, record, index) => {
