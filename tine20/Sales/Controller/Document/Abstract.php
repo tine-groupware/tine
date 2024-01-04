@@ -11,6 +11,8 @@
  *
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * Abstract Document controller class for Sales application
  *
@@ -57,6 +59,29 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         }
 
         $_record->calculatePricesIncludingPositions();
+
+        if (!$_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}) {
+            $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY} = Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT};
+        }
+        if (is_string($_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY})) {
+            $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY} = Sales_Controller_Document_Category::getInstance()->get($_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY});
+        }
+
+        if (!$_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} && $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}) {
+            $divisionId = $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->getIdFromProperty(Sales_Model_Document_Category::FLD_DIVISION_ID);
+            if (is_string($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID})) {
+                $customerId = $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID};
+            } elseif (isset($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->{Sales_Model_Document_Customer::FLD_ORIGINAL_ID})) {
+                $customerId = $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->{Sales_Model_Document_Customer::FLD_ORIGINAL_ID};
+            } else {
+                $customerId = $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->getId();
+            }
+            $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = Sales_Controller_Debitor::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Debitor::class, [
+                    [TMFA::FIELD => Sales_Model_Debitor::FLD_CUSTOMER_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $customerId],
+                    [TMFA::FIELD => Sales_Model_Debitor::FLD_DIVISION_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $divisionId],
+                ]))->getFirstRecord();
+        }
 
         parent::_inspectBeforeCreate($_record);
     }

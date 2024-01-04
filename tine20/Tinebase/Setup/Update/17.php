@@ -126,7 +126,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                         Tinebase_Model_EvaluationDimensionItem::FLD_NAME => ($cc['name'] ?: '-'),
                         Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER => $cc['number'],
                         Tinebase_Model_EvaluationDimensionItem::FLD_DESCRIPTION => $cc['description'],
-                    ]));
+                    ], true));
                 }
                 $dimension->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} = $items;
             }
@@ -149,7 +149,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                         Tinebase_Model_EvaluationDimensionItem::FLD_NAME => ($cc['name'] ?: '-'),
                         Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER => $cc['number'],
                         Tinebase_Model_EvaluationDimensionItem::FLD_DESCRIPTION => $cc['description'],
-                    ]));
+                    ], true));
                 }
                 $dimension->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} = $items;
             }

@@ -125,17 +125,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
                 self::FLD_CUSTOMER_ID       => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Sales_Model_Customer::FLD_DEBITORS => [
-                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                                Sales_Model_Debitor::FLD_DELIVERY => [],
-                                Sales_Model_Debitor::FLD_BILLING  => [],
-                            ],
-                        ],
                         'postal'                => [],
                         'cpextern_id'           => [],
                         'cpintern_id'           => [],
                     ],
                 ],
+                self::FLD_DEBITOR_ID        => [],
                 self::FLD_RECIPIENT_ID      => [],
                 self::FLD_POSITIONS         => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -397,7 +392,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_RECORD,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
-                    self::MODEL_NAME                    => Sales_Model_Debitor::MODEL_NAME_PART,
+                    self::MODEL_NAME                    => Sales_Model_Document_Debitor::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => Sales_Model_Document_Debitor::FLD_DOCUMENT_ID,
                 ],
                 self::NULLABLE                      => true,
             ],

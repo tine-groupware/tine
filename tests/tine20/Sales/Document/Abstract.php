@@ -51,18 +51,7 @@ class Sales_Document_Abstract extends TestCase
             ]],
         ]));
 
-        $expander = new Tinebase_Record_Expander(Sales_Model_Customer::class, [
-            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'postal' => [],
-                Sales_Model_Customer::FLD_DEBITORS => [
-                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'delivery' => [],
-                        'billing' => [],
-                    ],
-                ],
-            ],
-        ]);
-        $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Customer::class, [$customer]));
+        Tinebase_Record_Expander::expandRecord($customer);
         return $customer;
     }
 }

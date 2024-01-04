@@ -32,8 +32,8 @@ class Sales_Model_Document_Debitor extends Sales_Model_Debitor
         $_definition[self::TABLE] = [
             self::NAME      => self::TABLE_NAME,
             self::INDEXES   => [
-                self::FLD_CUSTOMER_ID => [
-                    self::COLUMNS   => [self::FLD_CUSTOMER_ID],
+                self::FLD_DOCUMENT_ID => [
+                    self::COLUMNS   => [self::FLD_DOCUMENT_ID],
                 ],
                 self::FLD_ORIGINAL_ID => [
                     self::COLUMNS   => [self::FLD_ORIGINAL_ID],
@@ -42,31 +42,24 @@ class Sales_Model_Document_Debitor extends Sales_Model_Debitor
         ];
         $_definition[self::EXPOSE_JSON_API] = true;
 
-        $_definition[self::FIELDS][self::FLD_DELIVERY][self::CONFIG][self::MODEL_NAME] =
-            Sales_Model_Document_Address::MODEL_NAME_PART;
-        $_definition[self::FIELDS][self::FLD_BILLING][self::CONFIG][self::MODEL_NAME] =
-            Sales_Model_Document_Address::MODEL_NAME_PART;
+        unset($_definition[self::FIELDS][self::FLD_DELIVERY]);
+        unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_DELIVERY]);
+        unset($_definition[self::FIELDS][self::FLD_BILLING]);
+        unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_BILLING]);
+        unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID]);
+
         $_definition[self::FIELDS][self::FLD_NUMBER][self::TYPE] = self::TYPE_STRING;
         unset($_definition[self::FIELDS][self::FLD_NUMBER][self::CONFIG]);
 
-
-        if (!isset($_definition[self::ASSOCIATIONS])) {
-            $_definition[self::ASSOCIATIONS] = [];
-        }
-        if (!isset($_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE])) {
-            $_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE] = [];
-        }
-        $_definition[self::ASSOCIATIONS][\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE][self::FLD_CUSTOMER_ID] =
-            [
-                self::TARGET_ENTITY             => Sales_Model_Document_Customer::class,
-                self::FIELD_NAME                => self::FLD_CUSTOMER_ID,
-                self::JOIN_COLUMNS              => [[
-                    self::NAME                      => self::FLD_CUSTOMER_ID,
-                    self::REFERENCED_COLUMN_NAME    => Sales_Model_Document_Customer::ID,
-                ]],
-            ];
-
         $_definition[self::DENORMALIZATION_OF] = Sales_Model_Debitor::class;
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_ID] = [
+            self::TYPE                  => self::TYPE_RECORD,
+            self::NORESOLVE             => true,
+            self::CONFIG                => [
+                self::APP_NAME              => Sales_Config::APP_NAME,
+                self::MODEL_NAME            => Sales_Model_Document_Offer::MODEL_NAME_PART, // TODO not nice, it can be any document really...
+            ],
+        ];
     }
 
     /**
