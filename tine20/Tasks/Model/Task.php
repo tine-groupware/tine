@@ -27,6 +27,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     public const FLD_DEPENDENT_TASKS = 'dependent_taks';
     public const FLD_DUE = 'due';
     public const FLD_ESTIMATED_DURATION = 'estimated_duration';
+    public const FLD_STATUS = 'status';
 
     public const TASK_STATUS_NEEDS_ACTION = 'NEEDS-ACTION';
     public const TASK_STATUS_COMPLETED = 'COMPLETED';
@@ -166,7 +167,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 'default'           => 0,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
-            'status'            => array(
+            self::FLD_STATUS    => array(
                 'label'             => 'Status', //_('Status')
                 self::TYPE          => self::TYPE_KEY_FIELD,
                 self::NAME          => Tasks_Config::TASK_STATUS,
