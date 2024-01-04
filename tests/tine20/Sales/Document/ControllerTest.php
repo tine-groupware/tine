@@ -62,6 +62,32 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID}, $storno->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID});
     }
 
+    public function testCategoryEvalDimensionCopy()
+    {
+        $customer = $this->_createCustomer();
+        $cat = Sales_Controller_Document_Category::getInstance()->getAll()->getFirstRecord();
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->getAll()->find(Tinebase_Model_EvaluationDimension::FLD_NAME, Tinebase_Model_EvaluationDimension::COST_CENTER);
+        $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} = new Tinebase_Record_RecordSet(Tinebase_Model_EvaluationDimensionItem::class, [
+            new Tinebase_Model_EvaluationDimensionItem([
+                Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER => '01',
+                Tinebase_Model_EvaluationDimensionItem::FLD_NAME => 'foo',
+            ], true),
+        ]);
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+
+        $cat->eval_dim_cost_center = $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->getFirstRecord()->getId();
+        Sales_Controller_Document_Category::getInstance()->update($cat);
+
+        $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_RECEIVED,
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Order::FLD_DOCUMENT_CATEGORY => $cat->getId(),
+        ]));
+
+        $this->assertSame($cat->eval_dim_cost_center, $order->eval_dim_cost_center);
+    }
+
     public function testCustomerFilterForDocuments()
     {
         $customer = $this->_createCustomer();

@@ -832,4 +832,30 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         }
         return $this->_data[self::FLD_DOCUMENT_CATEGORY]->getIdFromProperty(Sales_Model_Document_Category::FLD_DIVISION_ID);
     }
+
+    public function setFromArray(array &$_data)
+    {
+        static $evalDimProperties = [];
+        if (!isset($evalDimProperties[static::class])) {
+            $evalDimProperties[static::class] = [];
+            foreach (static::getConfiguration()->recordFields as $prop => $conf) {
+                if (Tinebase_Model_EvaluationDimensionItem::class === ($conf[self::CONFIG][self::RECORD_CLASS_NAME] ?? null)) {
+                    $evalDimProperties[static::class][] = $prop;
+                }
+            }
+        }
+
+        if (isset($_data[self::FLD_DOCUMENT_CATEGORY])) {
+            if (is_string($_data[self::FLD_DOCUMENT_CATEGORY])) {
+                $_data[self::FLD_DOCUMENT_CATEGORY] = Sales_Controller_Document_Category::getInstance()->get($_data[self::FLD_DOCUMENT_CATEGORY]);
+            }
+            foreach ($evalDimProperties[static::class] as $evalDimProperty) {
+                if (!array_key_exists($evalDimProperty, $_data) && isset($_data[self::FLD_DOCUMENT_CATEGORY][$evalDimProperty])) {
+                    $_data[$evalDimProperty] = $_data[self::FLD_DOCUMENT_CATEGORY][$evalDimProperty];
+                }
+            }
+        }
+
+        parent::setFromArray($_data);
+    }
 }
