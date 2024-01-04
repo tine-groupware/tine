@@ -571,20 +571,18 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             self::FLD_INVOICE_DISCOUNT_PERCENTAGE,
             self::FLD_INVOICE_DISCOUNT_SUM,
             self::FLD_INVOICE_DISCOUNT_TYPE,
-            self::FLD_EVAL_DIM_COST_BEARER,
-            self::FLD_EVAL_DIM_COST_CENTER,
             self::FLD_DESCRIPTION,
             Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID,
             Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID,
         ];
 
-        $thisCFs = Tinebase_CustomField::getInstance()->searchConfig(new Tinebase_Model_CustomField_ConfigFilter([
-            ['field' => 'model', 'operator' => 'equals', 'value' => get_class($this)]
-        ], '', ['ignoreAcl' => true]))->name;
-        $sourceCFs = Tinebase_CustomField::getInstance()->searchConfig(new Tinebase_Model_CustomField_ConfigFilter([
-            ['field' => 'model', 'operator' => 'equals', 'value' => get_class($sourceDocument)]
-        ], '', ['ignoreAcl' => true]))->name;
-        $properties = array_merge($properties, array_intersect($thisCFs, $sourceCFs));
+        $cfc = new Tinebase_CustomField_Config();
+        $cfc->setAllCFs();
+        $properties = array_merge($properties, array_unique($cfc->search(new Tinebase_Model_CustomField_ConfigFilter([
+            ['field' => 'model', 'operator' => 'startswith', 'value' => 'Sales_Model_Document_'],
+            ['field' => 'name', 'operator' => 'startswith', 'value' => 'eval_dim_'],
+        ], '', ['ignoreAcl' => true]))->name));
+
 
         foreach ($properties as $property) {
             if ($this->has($property) && $sourceDocument->has($property)) {
