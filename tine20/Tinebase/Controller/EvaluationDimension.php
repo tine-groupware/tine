@@ -201,6 +201,10 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
         if (!isset($assoc[\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE])) {
             $assoc[\Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE] = [];
         }
+        $jsonExpander = $mc->jsonExpander;
+        if (!isset($jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES])) {
+            $jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES] = [];
+        }
 
         foreach (array_keys($_fields) as $property) {
             if (strpos($property, 'eval_dim_') === 0) {
@@ -219,9 +223,14 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
                         ]],
                     ];
                 }
+                if (!array_key_exists($property, $jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES])) {
+                    $jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES][$property] = [];
+                }
             }
         }
 
         $mc->setTable($table);
+        $mc->setAssociations($assoc);
+        $mc->setJsonExpander($jsonExpander);
     }
 }

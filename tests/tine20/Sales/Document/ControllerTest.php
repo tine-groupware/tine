@@ -85,7 +85,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             Sales_Model_Document_Order::FLD_DOCUMENT_CATEGORY => $cat->getId(),
         ]));
 
-        $this->assertSame($cat->eval_dim_cost_center, $order->eval_dim_cost_center);
+        $this->assertSame($cat->eval_dim_cost_center, $order->eval_dim_cost_center->getId());
 
         Tinebase_Record_Expander::expandRecord($order);
         $this->assertNotNull($order->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID});

@@ -7,7 +7,7 @@
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @property Tinebase_Record_RecordSet $ids;
  */
@@ -40,7 +40,9 @@ class Tinebase_Record_Expander_DataRequest_AccountGrants extends Tinebase_Record
         $func = function (Tinebase_Record_Interface $record, callable $func) use(&$funcCache) {
             $mc = $record::getConfiguration();
             if ($mc->delegateAclField) {
-                $delegateRecord = $record->{$mc->delegateAclField};
+                if (empty($delegateRecord = $record->{$mc->delegateAclField})) {
+                    throw new Tinebase_Exception_Record_Validation($mc->delegateAclField . ' must not be empty');
+                }
                 if ($delegateRecord instanceof Tinebase_Record_RecordSet) {
                     $grants = null;
                     foreach ($delegateRecord as $delegate) {

@@ -116,6 +116,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         self::HAS_TAGS => true,
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
+        self::CONTAINER_PROPERTY        => null,
+        self::DELEGATED_ACL_FIELD       => self::FLD_DEBITOR_ID,
+
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_DOCUMENT_CATEGORY => [

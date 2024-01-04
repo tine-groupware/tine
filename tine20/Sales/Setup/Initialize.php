@@ -324,6 +324,13 @@ class Sales_Setup_Initialize extends Setup_Initialize
             Sales_Model_Division::FLD_TITLE => $t->_('Default Division'),
         ]));
         Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION} = $division->getId();
+        Tinebase_Container::getInstance()->setGrants($division->container_id,
+            new Tinebase_Record_RecordSet(Sales_Model_DivisionGrants::class, [
+                new Sales_Model_DivisionGrants([
+                    'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                    Sales_Model_DivisionGrants::GRANT_ADMIN => true,
+                ])
+            ]));
 
         return $division;
     }
