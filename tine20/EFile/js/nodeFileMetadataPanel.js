@@ -206,7 +206,9 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
 
     onRecordUpdate: function(editDialog, record) {
         const mflds = this.metadataFields;
-        const tierType = record.get('efile_tier_type') || (basePaths.indexOf(path) > -1 && path !== '/shared/' ? 'masterPlan' : null);;
+        const path = record.get('path');
+        const basePaths = Array.from(Tine.Tinebase.configManager.get('basePath', 'EFile'));
+        const tierType = record.get('efile_tier_type') || (basePaths.indexOf(path) > -1 && path !== '/shared/' ? 'masterPlan' : null);
         const typeIsFileParent = tierType ? _.indexOf(this.tierTypes, tierType) < _.indexOf(this.tierTypes, 'file') : undefined;
         
         if ((tierType === 'file' || typeIsFileParent) && this.metadataRecord) {
@@ -248,5 +250,3 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
     }
     
 }), 5);
-
-
