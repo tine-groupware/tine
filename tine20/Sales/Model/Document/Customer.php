@@ -49,6 +49,7 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
         ];
         $_definition[self::EXPOSE_JSON_API] = true;
 
+        unset($_definition[self::DELEGATED_ACL_FIELD]);
         unset($_definition[self::FIELDS][self::FLD_DEBITORS]);
         unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_DEBITORS]);
         $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES] = null;
