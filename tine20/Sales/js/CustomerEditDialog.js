@@ -24,7 +24,7 @@ Ext.ns('Tine.Sales');
  */
 Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 900,
-    windowHeight: 800,
+    windowHeight: 1000,
     displayNotes: true,
     
     initComponent: function() {
@@ -165,6 +165,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             frame: true,
             layout: 'border',
+            defaults: { autoScroll: true },
             items: [{
                 region: 'center',
                 layout: 'hfit',
