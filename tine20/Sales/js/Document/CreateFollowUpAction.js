@@ -87,7 +87,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                         try {
                             updatedRecord = await sourceRecordClass.getProxy().promiseSaveRecord(record)
                             selections.splice.apply(selections, [selections.indexOf(record), 1].concat(updatedRecord ? [updatedRecord] : []))
-                            if (sourceRecordClass === editDialog.recordClass) {
+                            if (sourceRecordClass === editDialog?.recordClass) {
                                 editDialog ? await editDialog.loadRecord(updatedRecord) : null
                             }
                         } catch (e) {
