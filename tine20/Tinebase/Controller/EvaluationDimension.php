@@ -158,7 +158,14 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
             $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
                 $cfc->application_id, $cfc->name, $cfc->model, true);
             if (null !== $cfc) {
-                Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
+                $fun = function() use ($cfc) {
+                    Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
+                };
+                if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+                    Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback($fun);
+                } else {
+                    $fun();
+                }
             }
         }
     }
