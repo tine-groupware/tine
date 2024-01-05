@@ -71,33 +71,13 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
                 Tinebase_Model_NumberableConfig::FLD_START => $config[TMCC::CONFIG][Tinebase_Numberable_Abstract::START] ?? 1,
             ]));
             unset($raii);
-        } else {
-            if ($numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY} !==
-                    ($config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] ?? '')) {
-                $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY} =
-                    $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] ?? '';
-            }
-            if ($numberableCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX} !==
-                    ($config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_PREFIX] ?? '')) {
-                $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX} =
-                    $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_PREFIX] ?? '';
-            }
-            if ((int)$numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ZEROFILL} !==
-                    (int)($config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ZEROFILL] ?? 0)) {
-                $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ZEROFILL} =
-                    $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ZEROFILL] ?? 0;
-            }
-            if ((int)$numberableCfg->{Tinebase_Model_NumberableConfig::FLD_START} !==
-                    (int)($config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_START] ?? 1)) {
-                $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_START} =
-                    $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_START] ?? 1;
-            }
-
-            if ($numberableCfg->isDirty()) {
-                $raii = new Tinebase_RAII(Tinebase_Controller_NumberableConfig::getInstance()->assertPublicUsage());
-                $numberableCfg = Tinebase_Controller_NumberableConfig::getInstance()->update($numberableCfg);
-                unset($raii);
-            }
+        } elseif ($numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY} !==
+                ($config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] ?? '')) {
+            $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY} =
+                $config[TMCC::CONFIG][Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY] ?? '';
+            $raii = new Tinebase_RAII(Tinebase_Controller_NumberableConfig::getInstance()->assertPublicUsage());
+            $numberableCfg = Tinebase_Controller_NumberableConfig::getInstance()->update($numberableCfg);
+            unset($raii);
         }
 
         /** @var Tinebase_Model_NumberableConfig $numberableCfg */
