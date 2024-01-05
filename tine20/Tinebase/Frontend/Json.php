@@ -662,6 +662,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'jsonKey' => Tinebase_Core::get('jsonKey'),
             'welcomeMessage' => "Welcome to Tine 2.0!"
         );
+
+        try {
+            $response['assetHash'] = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
+        } catch (Exception $e) {}
+        
         if (Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa) {
             $response['encourage_mfa'] = true;
         }
