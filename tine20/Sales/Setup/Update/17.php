@@ -71,6 +71,9 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     public function update001()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Sales_Setup_Initialize::initializeCostCenterCostBearer();
+        
         Setup_SchemaTool::updateSchema([
             Sales_Model_Address::class,
             Sales_Model_Customer::class,
@@ -85,6 +88,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Offer::class,
             Sales_Model_Document_Order::class,
+            Tinebase_Model_EvaluationDimensionItem::class,
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.1', self::RELEASE017_UPDATE001);
