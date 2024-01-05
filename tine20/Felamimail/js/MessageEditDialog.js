@@ -1006,7 +1006,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.recordProxy.saveInFolder(this.record, folderName, {
                 scope: this,
                 success: function (record) {
-                    this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+                    try {
+                        this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+                    } finally {
+                        if (this.loadMask) {
+                            this.hideLoadMask();
+                        }
+                    }                    
                     Promise.resolve()
                         .then(() => {
                             if (this.draftUid) {
