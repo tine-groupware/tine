@@ -39,7 +39,7 @@ class Sales_Document_Abstract extends TestCase
             ]),
             Sales_Model_Customer::FLD_DEBITORS => [[
                 Sales_Model_Debitor::FLD_NAME => '-',
-                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION},
                 'delivery' => new Tinebase_Record_RecordSet(Sales_Model_Address::class,[[
                     'name' => 'some delivery address for ' . $name,
                     'type' => 'delivery'
