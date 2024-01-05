@@ -93,6 +93,8 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
      */
     setValue: function (value) {
         value = value || [];
+        value = _.isArray(value) ? value : [value];
+
         this.setStoreFromArray(value);
         if (this.rendered) {
             Promise.all(_.map(this.store.data.items, function(record) {
