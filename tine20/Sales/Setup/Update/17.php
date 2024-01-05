@@ -29,7 +29,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                 self::FUNCTION_CONST                => 'update006',
             ],
         ],
-        self::PRIO_NORMAL_APP_STRUCTURE     => [
+        (self::PRIO_NORMAL_APP_STRUCTURE - 1)=> [
             self::RELEASE017_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
@@ -98,7 +98,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         $db = $this->getDb();
 
         foreach (Sales_Controller_Customer::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                Sales_Model_Customer::class), null, true) as $customerId) {
+                Sales_Model_Customer::class), null, false, true) as $customerId) {
             $debitor = $debitorCtrl->create(new Sales_Model_Debitor([
                 Sales_Model_Debitor::FLD_NAME => '-',
                 Sales_Model_Debitor::FLD_CUSTOMER_ID => $customerId,
@@ -310,12 +310,6 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                 $customer = $allCustomer->getById($did2c[$row[0]]);
                 $debitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}
                     ->find(Sales_Model_Debitor::FLD_DIVISION_ID, $cat->{Sales_Model_Document_Category::FLD_DIVISION_ID});
-                if (!$debitor) {
-                    echo $table . PHP_EOL;
-                    var_dump($customer);
-                    var_dump($cat);
-                    exit($customer->getId() . ' ' . $cat->getId() . ' ' . $cat->{Sales_Model_Document_Category::FLD_DIVISION_ID});
-                }
                 $data = array_intersect_key($debitor->toArray(), $flds);
                 $data[Sales_Model_Document_Debitor::FLD_ORIGINAL_ID] = $data['id'];
                 unset($data['id']);
