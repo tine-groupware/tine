@@ -20,6 +20,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE017_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -54,6 +55,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE017_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
     ];
@@ -107,7 +112,6 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                 . Sales_Model_Address::FLD_TYPE . ' != "' . Sales_Model_Address::TYPE_POSTAL . '"');
         }
 
-        //
         $categories = Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY};
 
         $updates = [];
@@ -262,5 +266,64 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.6', self::RELEASE017_UPDATE006);
+    }
+
+    public function update007()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        $allCat = Sales_Controller_Document_Category::getInstance()->getAll();
+        $allCustomer = Sales_Controller_Customer::getInstance()->getAll();
+        (new Tinebase_Record_Expander(Sales_Model_Customer::class, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_Customer::FLD_DEBITORS => [],
+            ],
+        ]))->expand($allCustomer);
+
+        $did2c = [];
+        foreach ($this->_db->select()->from(SQL_TABLE_PREFIX . Sales_Model_Document_Customer::TABLE_NAME, [
+                    Sales_Model_Document_Customer::FLD_DOCUMENT_ID,
+                    Sales_Model_Document_Customer::FLD_ORIGINAL_ID,
+                ])->query()->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+            $did2c[$row[0]] = $row[1];
+        }
+
+        $stdCat = Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT};
+        $flds = Sales_Model_Document_Debitor::getConfiguration()->fields;
+        $ctrl = Sales_Controller_Document_Debitor::getInstance();
+        $ctrl->doContainerACLChecks(false);
+        foreach ([
+                     Sales_Model_Document_Delivery::TABLE_NAME,
+                     Sales_Model_Document_Invoice::TABLE_NAME,
+                     Sales_Model_Document_Offer::TABLE_NAME,
+                     Sales_Model_Document_Order::TABLE_NAME,
+                 ] as $table) {
+            foreach ($this->_db->select()->from(['a' => SQL_TABLE_PREFIX . $table], [
+                        Sales_Model_Document_Abstract::ID,
+                        Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY
+                    ])->joinLeft(['b' => SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME], 'a.id = b.'.Sales_Model_Document_Debitor::FLD_DOCUMENT_ID, [])
+                         ->where('b.id IS NULL')->query()->fetchAll(Zend_Db::FETCH_NUM) as $row) {
+                if (!($cat = $allCat->getById($row[1]))) {
+                    $this->_db->update(SQL_TABLE_PREFIX . $table, [Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY => $stdCat], 'id = "' . $row[0] . '"');
+                    $cat = $allCat->getById($stdCat);
+                }
+                $customer = $allCustomer->getById($did2c[$row[0]]);
+                $debitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}
+                    ->find(Sales_Model_Debitor::FLD_DIVISION_ID, $cat->{Sales_Model_Document_Category::FLD_DIVISION_ID});
+                if (!$debitor) {
+                    echo $table . PHP_EOL;
+                    var_dump($customer);
+                    var_dump($cat);
+                    exit($customer->getId() . ' ' . $cat->getId() . ' ' . $cat->{Sales_Model_Document_Category::FLD_DIVISION_ID});
+                }
+                $data = array_intersect_key($debitor->toArray(), $flds);
+                $data[Sales_Model_Document_Debitor::FLD_ORIGINAL_ID] = $data['id'];
+                unset($data['id']);
+                $data[Sales_Model_Document_Debitor::FLD_DOCUMENT_ID] = $row[0];
+                $ctrl->create(new Sales_Model_Document_Debitor($data));
+            }
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.7', self::RELEASE017_UPDATE007);
     }
 }
