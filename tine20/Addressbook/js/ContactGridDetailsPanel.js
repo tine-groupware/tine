@@ -43,7 +43,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                             align: 'stretch',
                         },
                         defaults: {
-                            margins: '5 0',
+                            margins: '15 0',
                         },
                         items: [{
                             layout: 'ux.display',
