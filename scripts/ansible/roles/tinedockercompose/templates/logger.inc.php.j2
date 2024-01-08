@@ -20,13 +20,14 @@ return [
                 'priority' => '7',
             ],
 {% endfor %}
-{% else %}
+{% endif %}
+{% if tinedockercompose_file_log_debug|bool %}
             [
                 'active' => true,
-                'filename' => '/var/log/tine20/tine.log',
+                'filename' => '/var/log/tine20/debug.log',
                 'priority' => '7',
             ],
 {% endif %}
         ],
-     ],
+    ],
 ];
