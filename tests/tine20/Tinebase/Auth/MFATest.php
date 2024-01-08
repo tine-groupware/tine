@@ -48,46 +48,13 @@ class Tinebase_Auth_MFATest extends TestCase
         Tinebase_AreaLock::destroyInstance();
     }
 
-    protected function prepTOTP()
-    {
-        $secret = Base32::encodeUpperUnpadded(random_bytes(64));
-
-        $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
-            Tinebase_Model_MFA_UserConfig::class, [[
-            Tinebase_Model_MFA_UserConfig::FLD_ID => 'TOTPunittest',
-            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
-            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
-                Tinebase_Model_MFA_TOTPUserConfig::class,
-            Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
-                new Tinebase_Model_MFA_TOTPUserConfig([
-                    Tinebase_Model_MFA_TOTPUserConfig::FLD_SECRET => $secret,
-                ]),
-        ]]);
-
-        $this->_createAreaLockConfig([
-            Tinebase_Model_AreaLockConfig::FLD_MFAS => ['unittest'],
-        ], [
-            Tinebase_Model_MFA_Config::FLD_ID => 'unittest',
-            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
-                Tinebase_Model_MFA_TOTPUserConfig::class,
-            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
-                Tinebase_Model_MFA_TOTPConfig::class,
-            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
-                Tinebase_Auth_MFA_HTOTPAdapter::class,
-            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => []
-        ]);
-
-        $this->_originalTestUser = Tinebase_User::getInstance()->updateUser($this->_originalTestUser);
-        return TOTP::create($secret);
-    }
-
     public function testAuthPAMvalidateTOTP()
     {
         if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
             $this->markTestSkipped('LDAP backend enabled');
         }
 
-        $totp = $this->prepTOTP();
+        $totp = $this->_prepTOTP();
         $pass = $totp->now();
         $credentials = TestServer::getInstance()->getTestCredentials();
 
@@ -111,7 +78,7 @@ class Tinebase_Auth_MFATest extends TestCase
             $this->markTestSkipped('LDAP backend enabled');
         }
         
-        $this->prepTOTP();
+        $this->_prepTOTP();
         $credentials = TestServer::getInstance()->getTestCredentials();
 
         Tinebase_Core::getContainer()->set(RequestInterface::class,

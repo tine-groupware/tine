@@ -880,7 +880,18 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             return false;
         }
 
-        $this->_validateSecondFactor($accessLog, $user);
+        try {
+            $this->_validateSecondFactor($accessLog, $user);
+        } catch (Tinebase_Exception_AreaUnlockFailed $teauf) {
+            $accessLog->result = Tinebase_Auth::FAILURE;
+            $mfaAuthResult = new Zend_Auth_Result(
+                Tinebase_Auth::FAILURE,
+                $authResult->getIdentity(),
+                [$teauf->getMessage()]
+            );
+            $this->_loginFailed($mfaAuthResult, $accessLog);
+            throw $teauf;
+        }
 
         return $user;
     }

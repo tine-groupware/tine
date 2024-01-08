@@ -9,6 +9,8 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
+use Psr\Http\Message\RequestInterface;
+
 /**
  * Test class for Tinebase_Server_Json
  * 
@@ -34,7 +36,67 @@ class Tinebase_Server_JsonTests extends TestCase
             Tinebase_EmailUser::clearCaches();
             Tinebase_EmailUser::destroyInstance();
         }
+
         parent::tearDown();
+    }
+
+    /**
+     * @param bool $success
+     * @return void
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Json_Exception
+     * @throws Zend_Session_Exception
+     *
+     * @group ServerTests
+     */
+    public function testLoginMFA(bool $success = true)
+    {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+            $this->markTestSkipped('LDAP backend enabled');
+        }
+
+        $totp = $this->_prepTOTP();
+
+        $user = Tinebase_Core::getUser();
+        $mfaId = $user->mfa_configs->getFirstRecord()->getId();
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $loginData = [
+            'username' => $credentials['username'],
+            'password' => $credentials['password'],
+            'MFAUserConfigId' => $mfaId,
+            'MFAPassword' => $success ? $totp->now() : '000000',
+        ];
+        $resultString = $this->_handleRequest('Tinebase.login', $loginData, !$success);
+
+        $result = Tinebase_Helper::jsonDecode($resultString);
+        if ($success) {
+            self::assertArrayHasKey('success', $result['result']);
+            self::assertEquals($success, $result['result']['success'], print_r($result, true));
+        } else {
+            $accessLog = Tinebase_AccessLog::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Tinebase_Model_AccessLog::class, [[
+                    'field' => 'user_agent', 'operator' => 'equals', 'value' => 'Unit Test Client',
+                    'field' => 'clienttype', 'operator' => 'equals', 'value' => 'JSON-RPC',
+                ]]
+            ), new Tinebase_Model_Pagination(['sort' => 'li', 'dir' => 'desc']))->getFirstRecord();
+            self::assertNotNull($accessLog);
+            self::assertNotEquals(Tinebase_Auth::SUCCESS, $accessLog->result,
+                print_r($accessLog->toArray(), true));
+        }
+    }
+
+    /**
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Json_Exception
+     * @throws Zend_Session_Exception
+     *
+     * @group ServerTests
+     */
+    public function testLoginMFAFail()
+    {
+        // wait 1 sec to make sure we get the correct access log
+        sleep(1);
+        $this->testLoginMFA(false);
     }
 
     /**
