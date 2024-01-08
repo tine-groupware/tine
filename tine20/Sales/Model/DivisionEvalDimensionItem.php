@@ -31,6 +31,7 @@ class Sales_Model_DivisionEvalDimensionItem extends Tinebase_Record_NewAbstract
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => true,
+        self::IS_DEPENDENT              => true,
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -66,6 +67,7 @@ class Sales_Model_DivisionEvalDimensionItem extends Tinebase_Record_NewAbstract
                 self::CONFIG                    => [
                     self::APP_NAME                  => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME                => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
+                    self::IS_PARENT                 => true,
                 ],
             ],
         ],

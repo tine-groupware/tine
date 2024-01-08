@@ -64,6 +64,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_Division::MODEL_NAME_PART,
         Sales_Model_DivisionGrants::MODEL_NAME_PART,
         Sales_Model_Document_Category::MODEL_NAME_PART,
+        Sales_Model_DivisionEvalDimensionItem::MODEL_NAME_PART,
         'Contract',
         'Customer',
         'Address',

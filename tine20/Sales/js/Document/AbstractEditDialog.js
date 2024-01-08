@@ -148,6 +148,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fields['document_language'].setValue(record?.get('language'))
                         }
                     }
+                    // more logic in Tine.Sales.AddressSearchCombo
                     break;
                 case 'vat_procedure':
                     config.listeners = config.listeners || {}
@@ -180,7 +181,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             xtype: 'columnform',
             items: [
                 [fields.document_number, fields.document_proforma_number || placeholder, fields[this.statusFieldName], fields.document_category, fields.document_language],
-                _.assign([fields.customer_id, fields.recipient_id, fields.contact_id, _.assign(fields.customer_reference, {columnWidth: 2/5})], {line: 'recipient'}),
+                _.assign([fields.customer_id, fields.debitor_id, fields.recipient_id, fields.contact_id, fields.customer_reference], {line: 'recipient'}),
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
                 [{xtype: 'textarea', name: 'boilerplate_Pretext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Pretext`}],
                 [fields.positions],

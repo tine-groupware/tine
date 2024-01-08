@@ -32,9 +32,9 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
     public const FLD_BOILERPLATES = 'boilerplates';
 
     public const FLD_CUSTOMER_ID = 'customer_id'; // Kunde(Sales) (Optional beim Angebot, danach required). denormalisiert pro beleg, denormalierungs inclusive addressen, exklusive contacts
-    public const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern, will NOT be denormalized
-    // TODO FIXME denormalized.... as json in the document or as copy in the db?
+    public const FLD_DEBITOR_ID = 'debitor_id';
     public const FLD_RECIPIENT_ID = 'recipient_id'; // Adresse(Sales) -> bekommt noch ein. z.Hd. Feld(text). denormalisiert pro beleg. muss nicht notwendigerweise zu einem kunden gehören. kann man aus kontakt übernehmen werden(z.B. bei Angeboten ohne Kunden)
+    public const FLD_CONTACT_ID = 'contact_id'; // Kontakt(Addressbuch) per default AP Extern, will NOT be denormalized
 
     public const FLD_DOCUMENT_TITLE = 'document_title';
     public const FLD_DOCUMENT_DATE = 'date'; // Belegdatum,  defaults empty, today when booked and not set differently
@@ -59,7 +59,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_EVAL_DIM_COST_CENTER = 'eval_dim_cost_center';
     public const FLD_EVAL_DIM_COST_BEARER = 'eval_dim_cost_bearer'; // ist auch ein cost center
-    public const FLD_DEBITOR_ID = 'debitor_id';
+
     public const FLD_DESCRIPTION = 'description';
 
     public const FLD_REVERSAL_STATUS = 'reversal_status';
@@ -256,6 +256,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
             ],
+            self::FLD_DEBITOR_ID                => [
+                self::TYPE                          => self::TYPE_RECORD,
+                self::LABEL                         => 'Debitor', // _('Debitor')
+                self::SHY                           => true,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Document_Debitor::MODEL_NAME_PART,
+                    self::REF_ID_FIELD                  => Sales_Model_Document_Debitor::FLD_DOCUMENT_ID,
+                ],
+                self::NULLABLE                      => true,
+            ],
             self::FLD_RECIPIENT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
                 self::LABEL                 => 'Recipient', //_('Recipient')
@@ -390,15 +401,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
                 self::SHY                           => true,
-            ],
-            self::FLD_DEBITOR_ID                => [
-                self::TYPE                          => self::TYPE_RECORD,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => Sales_Config::APP_NAME,
-                    self::MODEL_NAME                    => Sales_Model_Document_Debitor::MODEL_NAME_PART,
-                    self::REF_ID_FIELD                  => Sales_Model_Document_Debitor::FLD_DOCUMENT_ID,
-                ],
-                self::NULLABLE                      => true,
             ],
         ]
     ];
