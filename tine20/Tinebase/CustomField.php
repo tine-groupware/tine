@@ -122,7 +122,10 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             } finally {
                 $this->_backendConfig->setNoSystemCFs();
             }
-            $this->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
+
+            $this->setGrants($result, empty($_record['grants']) ?
+                Tinebase_Model_CustomField_Grant::getAllGrants()
+                : $_record['grants']);
             $result->grants = $this->getGrants($result);
             $this->_writeModLog($result, null);
 
