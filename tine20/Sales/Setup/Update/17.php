@@ -21,12 +21,20 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE017_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE017_UPDATE008 = __CLASS__ . '::update008';
+    const RELEASE017_UPDATE009 = __CLASS__ . '::update009';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
             self::RELEASE017_UPDATE006          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update006',
+            ],
+        ],
+        (self::PRIO_NORMAL_APP_STRUCTURE - 2)=> [
+            self::RELEASE017_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
         (self::PRIO_NORMAL_APP_STRUCTURE - 1)=> [
@@ -45,6 +53,12 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+        ],
+        self::PRIO_NORMAL_APP_STRUCTURE     => [
+            self::RELEASE017_UPDATE009          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update009',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -323,5 +337,21 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.7', self::RELEASE017_UPDATE007);
+    }
+
+    public function update008()
+    {
+        $this->_db->query('INSERT INTO ' . SQL_TABLE_PREFIX . 'numberable (bucket, `number`) SELECT "' . Sales_Model_Customer::class . '#number", `number` FROM ' . SQL_TABLE_PREFIX . Sales_Model_Customer::TABLE_NAME);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.8', self::RELEASE017_UPDATE008);
+    }
+
+    public function update009()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Customer::class,
+            Sales_Model_Document_Customer::class,
+        ]);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.9', self::RELEASE017_UPDATE009);
     }
 }

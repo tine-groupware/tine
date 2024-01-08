@@ -153,9 +153,10 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 'label'       => 'Customer Number', //_('Customer Number')
                 'group'       => 'core',
                 'queryFilter' => true,
-                'type'        => self::TYPE_BIGINT,
-                self::UNSIGNED => true,
-                self::DEFAULT_VAL => 0,
+                self::TYPE    => self::TYPE_NUMBERABLE_STRING,
+                self::CONFIG  => [
+                    Tinebase_Numberable_Abstract::BUCKETKEY => self::CLASS . '#number',
+                ],
             ),
             'name' => array(
                 'label'       => 'Name', // _('Name')

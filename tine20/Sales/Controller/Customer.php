@@ -19,7 +19,7 @@ use Sales_Model_Debitor as SMDN;
  * @package     Sales
  * @subpackage  Controller
  */
-class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
+class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
 {
     /**
      * delete or just set is_delete=1 if record is going to be deleted
@@ -95,7 +95,6 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        $this->_setNextNumber($_record);
         self::validateCurrencyCode($_record->currency);
     }
 
@@ -127,10 +126,6 @@ class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
         $this->handleExternAndInternId($_record);
         
         self::validateCurrencyCode($_record->currency);
-
-        if ($_record->number != $_oldRecord->number) {
-            $this->_setNextNumber($_record, TRUE);
-        }
     }
 
     /**
