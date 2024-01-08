@@ -57,6 +57,10 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
         $_definition[self::FIELDS]['postal'][self::CONFIG][self::MODEL_NAME] =
             Sales_Model_Document_Address::MODEL_NAME_PART;
 
+        unset($_definition[self::FIELDS]['number'][self::CONFIG]);
+        $_definition[self::FIELDS]['number'][self::TYPE] = self::TYPE_STRING;
+        $_definition[self::FIELDS]['number'][self::LENGTH] = 255;
+
         if (!isset($_definition[self::ASSOCIATIONS])) {
             $_definition[self::ASSOCIATIONS] = [];
         }
