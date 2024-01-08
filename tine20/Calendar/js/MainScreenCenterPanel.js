@@ -665,7 +665,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         return options.params.filter;
     },
     
-    getCustomfieldFilters: Tine.widgets.grid.GridPanel.prototype.getCustomfieldFilters,
+    getCustomfieldFilters: Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters,
     
     getFilterToolbar: Tine.widgets.grid.GridPanel.prototype.getFilterToolbar,
     
