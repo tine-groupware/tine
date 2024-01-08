@@ -142,10 +142,15 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
     /**
      * convert Tinebase_Record_RecordSet to Tine20\VObject\Component
      *
-     * @param  Tinebase_Record_RecordSet  $_records
+     * @param ?Tinebase_Record_RecordSet $_records
+     * @param ?Tinebase_Model_Filter_FilterGroup $_filter
+     * @param ?Tinebase_Model_Pagination $_pagination
+     *
      * @return Tine20\VObject\Component
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
+    public function fromTine20RecordSet(?Tinebase_Record_RecordSet $_records = null,
+                                        ?Tinebase_Model_Filter_FilterGroup $_filter = null,
+                                        ?Tinebase_Model_Pagination $_pagination = null)
     {
         $vcalendar = $this->createVCalendar($_records->getFirstRecord());
 

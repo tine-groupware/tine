@@ -56,10 +56,16 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     /**
      * convert Tinebase_Record_RecordSet to Tine20\VObject\Component
      *
-     * @param  Tinebase_Record_RecordSet  $_records
      * @return Tine20\VObject\Component
+     * @param ?Tinebase_Record_RecordSet $_records
+     * @param ?Tinebase_Model_Filter_FilterGroup $_filter
+     * @param ?Tinebase_Model_Pagination $_pagination
+     *
+     * @throws Tinebase_Exception_NotImplemented
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
+    public function fromTine20RecordSet(?Tinebase_Record_RecordSet $_records = null,
+                                        ?Tinebase_Model_Filter_FilterGroup $_filter = null,
+                                        ?Tinebase_Model_Pagination $_pagination = null)
     {
         $oldGroupValue = static::$cutypeMap[Calendar_Model_Attender::USERTYPE_GROUP];
 
