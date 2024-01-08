@@ -572,4 +572,22 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         
         return $card;
     }
+
+    /**
+     * converts Tinebase_Record_RecordSet to external format
+     *
+     * @param ?Tinebase_Record_RecordSet $_records
+     * @param ?Tinebase_Model_Filter_FilterGroup $_filter
+     * @param ?Tinebase_Model_Pagination $_pagination
+     *
+     * @return mixed
+     *
+     * @throws Tinebase_Exception_NotImplemented
+     */
+    public function fromTine20RecordSet(?Tinebase_Record_RecordSet $_records = null,
+                                        ?Tinebase_Model_Filter_FilterGroup $_filter = null,
+                                        ?Tinebase_Model_Pagination $_pagination = null)
+    {
+        throw new Tinebase_Exception_NotImplemented();
+    }
 }

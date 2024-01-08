@@ -96,14 +96,15 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
     /**
      * converts Tinebase_Record_RecordSet to external format
      *
-     * @param Tinebase_Record_RecordSet|Tinebase_Record_Interface  $_records
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param Tinebase_Model_Pagination $_pagination
+     * @param ?Tinebase_Record_RecordSet $_records
+     * @param ?Tinebase_Model_Filter_FilterGroup $_filter
+     * @param ?Tinebase_Model_Pagination $_pagination
      *
      * @return mixed
      */
-    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records = NULL, /** @noinspection PhpUnusedParameterInspection */
-                                        $_filter = NULL, /** @noinspection PhpUnusedParameterInspection */ $_pagination = NULL)
+    public function fromTine20RecordSet(?Tinebase_Record_RecordSet $_records = null,
+                                        ?Tinebase_Model_Filter_FilterGroup $_filter = null,
+                                        ?Tinebase_Model_Pagination $_pagination = null)
     {
         if (! $_records || count($_records) == 0) {
             return array();
@@ -126,7 +127,7 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
      * @param bool $multiple
      * @return array
      */
-    protected function _fromTine20RecordSet(Tinebase_Record_RecordSet $_records, $config, $multiple)
+    protected function _fromTine20RecordSet(Tinebase_Record_RecordSet $_records, $config, $multiple): array
     {
         $this->_resolveBeforeToArray($_records, $config, $multiple);
 
