@@ -156,6 +156,7 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 self::TYPE    => self::TYPE_NUMBERABLE_STRING,
                 self::CONFIG  => [
                     Tinebase_Numberable_Abstract::BUCKETKEY => self::CLASS . '#number',
+                    Tinebase_Numberable_String::ZEROFILL => 6,
                 ],
             ),
             'name' => array(
