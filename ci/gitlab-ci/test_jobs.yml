@@ -136,17 +136,27 @@ phpcs-analysis:
   image: composer
   needs: []
   before_script:
-    - composer require squizlabs/php_codesniffer
-    - composer require micheh/phpcs-gitlab
+    - composer require squizlabs/php_codesniffer --no-interaction
+    - composer require micheh/phpcs-gitlab --no-interaction
+    - composer config --no-plugins allow-plugins.digitalrevolution/php-codesniffer-baseline true
+    - composer require digitalrevolution/php-codesniffer-baseline --no-interaction
   script:
     - if test "${CI_PROJECT_NAME}" == "tine20"; then dir=./tine20; else dir=./lib; fi
-    - ./vendor/bin/phpcs -s --report=full --standard=PSR12
-      --report-\\Micheh\\PhpCodeSniffer\\Report\\Gitlab=${CI_PROJECT_DIR}/phpcs-report.json $dir
+    # # generate baseline
+    # - >
+    #   php vendor/bin/phpcs -s --standard=PSR12 --report=\\DR\\CodeSnifferBaseline\\Reports\\Baseline --report-file=phpcs.baseline.xml
+    #   --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration
+    #   --extensions=php $dir || true
+    - >
+      php vendor/bin/phpcs -s --standard=PSR12 --report=full --report-\\Micheh\\PhpCodeSniffer\\Report\\Gitlab=${CI_PROJECT_DIR}/phpcs-report.json
       --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration
-      --extensions=php
+      --extensions=php $dir
   artifacts:
     reports:
       codequality: ${CI_PROJECT_DIR}/phpcs-report.json
+    # # generate baseline
+    # paths:
+    #   - phpcs.baseline.xml
   allow_failure: true
   rules:
     - if: $RUN_NO_TESTS == "true"
