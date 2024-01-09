@@ -551,12 +551,20 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     },
 
     onLoginSuccess: function(response) {
-        var responseData = Ext.util.JSON.decode(response.responseText);
+        const responseData = Ext.util.JSON.decode(response.responseText);
         if (responseData.success === true) {
             if (window.initialData?.afterLoginRedirect) {
                 return this.redirect(window.initialData.afterLoginRedirect);
             }
             Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
+            
+            if (responseData?.assetHash && Tine.clientVersion.assetHash !== responseData.assetHash) {
+                Tine.Tinebase.common.reload({
+                    keepRegistry: false,
+                    clearCache: true
+                });
+            }
+            
             window.document.title = this.originalTitle;
             response.responseData = responseData;
             this.onLogin.call(this.scope, response);
