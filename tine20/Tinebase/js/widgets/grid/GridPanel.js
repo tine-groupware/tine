@@ -580,7 +580,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onContentResize: function() {
         // make sure details panel doesn't hide grid
         const layout = this.layout[this.detailsPanelRegion] ?? null;
-        
         if (this.detailsPanel && layout) {
             const isSmall = this.isSmallLayout();
             if (isSmall) {
@@ -594,21 +593,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 if (!layout.isCollapsed) {
                     if (this.detailsPanelRegion === 'south') {
                         const detailsHeight = this.detailsPanel.getHeight();
-                        const gridHeight = this.getHeight();
-                        if (!!Ext.isTouchDevice) {
-                            layout.panel.setHeight(gridHeight * .5);
-                        } else {
-                            if (gridHeight / detailsHeight < 1.3) layout.panel.setHeight(gridHeight * .4);
-                        }
+                        const gridHeight = this.grid.getHeight();
+                        if (detailsHeight / 4 > gridHeight) layout.panel.setHeight(detailsHeight * .4);
                     }
                     if (this.detailsPanelRegion === 'east') {
                         const detailsWidth = this.detailsPanel.getWidth();
-                        const gridWidth = this.getWidth();
-                        if (!!Ext.isTouchDevice) {
-                            layout.panel.setWidth(gridWidth * .6);
-                        } else {
-                            if (gridWidth / detailsWidth < 1.3) layout.panel.setWidth(gridWidth * .6);
-                        }
+                        const gridWidth = this.grid.getWidth();
+                        if (detailsWidth / 3 > gridWidth) layout.panel.setWidth(detailsWidth * .4);
                     }
                 }
             }
@@ -930,8 +921,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             Ext.state.Manager.set(this.regionStateId, target);
             this.updateGridState();
             this.doLayout(false, true);
-            // fetch details panel depends on new region width, otherwise the details panel still have the old layout after switch region.
-            this.detailsPanel.onDetailsUpdate(this.grid.getSelectionModel());
         }
     },
 
@@ -2404,7 +2393,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * 
      */
     onRowClick: function(grid, row, e) {
-        const sm = grid.getSelectionModel();
+        var _ = window.lodash,
+            sm = grid.getSelectionModel();
 
         /* TODO check if we need this in IE
         // hack to get percentage editor working
@@ -2421,7 +2411,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         // fix selection of one record if shift/ctrl key is not pressed any longer
         if (e.button === 0 && !e.shiftKey && !e.ctrlKey && !e.getTarget('.x-grid3-row-checker')) {
-            if (sm.getCount() === 1 && sm.isSelected(row)) {
+            if (sm.getCount() == 1 && sm.isSelected(row)) {
                 // return;
             } else {
                 sm.clearSelections();
@@ -2439,7 +2429,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 });
             }
         }
-        if (this?.isSmallLayout?.() && !e.getTarget('.x-grid3-row-checker')) {
+        if (this?.isSmallLayout?.()) {
             if (this.isSmallLayout()) {
                 this.setFullScreen(true);
             } else {
@@ -2449,10 +2439,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
     
     isSmallLayout() {
-        if (this.grid.getView().disableResponsiveLayout) return false;
-        const isWidthSmall = this.getWidth() < 700;
+        const isWidthSmall = this.getWidth() < 800;
         const isHeightSmall = this.getHeight() < 500;
-        return isWidthSmall || isHeightSmall;
+        return this.grid.getView().isResponsive() && (isWidthSmall || isHeightSmall);
     },
     
     setFullScreen(fullScreen = true) {
