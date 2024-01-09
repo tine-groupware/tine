@@ -33,18 +33,20 @@ class Sales_Model_Document_Address extends Sales_Model_Address
         $_definition[self::VERSION] = 3;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
-        $_definition[self::TABLE][self::INDEXES][self::FLD_DOCUMENT_ID] = [
-            self::COLUMNS => [self::FLD_DOCUMENT_ID],
+        $_definition[self::TABLE][self::INDEXES] = [
+            self::FLD_DOCUMENT_ID => [
+                self::COLUMNS => [self::FLD_DOCUMENT_ID],
+            ],
         ];
         $_definition[self::EXPOSE_JSON_API] = true;
         $_definition[self::DENORMALIZATION_OF] = Sales_Model_Address::class;
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID] = [
             self::TYPE                  => self::TYPE_RECORD,
-            self::NULLABLE              => true,
             self::CONFIG                => [
                 self::APP_NAME              => Sales_Config::APP_NAME,
                 self::MODEL_NAME            => Sales_Model_Customer::MODEL_NAME_PART,
+                self::IS_PARENT             => true,
             ],
         ];
         $_definition[self::FIELDS][self::FLD_DOCUMENT_FIELD] = [
@@ -52,10 +54,16 @@ class Sales_Model_Document_Address extends Sales_Model_Address
             self::LENGTH                => 255,
             self::NULLABLE              => true,
         ];
+        $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::TYPE] = self::TYPE_STRING;
+        $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::LENGTH] = 40;
+        unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::LABEL]);
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::VALIDATORS]);
+        unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::CONFIG]);
 
-        $_definition[self::FIELDS][self::FLD_CUSTOMER_ID][self::CONFIG][self::MODEL_NAME] = Sales_Model_Document_Customer::MODEL_NAME_PART;
         $_definition[self::FIELDS][self::FLD_DEBITOR_ID][self::CONFIG][self::MODEL_NAME] = Sales_Model_Document_Debitor::MODEL_NAME_PART;
+        $_definition[self::FIELDS][self::FLD_DEBITOR_ID][self::CONFIG][self::DENORMALIZATION_OF] = null;
+        unset($_definition[self::FIELDS][self::FLD_DEBITOR_ID][self::CONFIG][self::IS_PARENT]);
+        unset($_definition[self::FIELDS][self::FLD_DEBITOR_ID][self::NULLABLE]);
     }
 
     /**

@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -128,7 +128,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 ],
                 self::FLD_CUSTOMER_ID       => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'postal'                => [],
                         'cpextern_id'           => [],
                         'cpintern_id'           => [],
                     ],
@@ -184,11 +183,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::APP_NAME              => Sales_Config::APP_NAME,
                     self::MODEL_NAME            => Sales_Model_Document_Category::MODEL_NAME_PART,
                 ],
-                self::VALIDATORS            => [
-                    Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => null,
-                    Zend_Filter_Input::PRESENCE    => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
+                // not null! mandatory property
             ],
             self::FLD_PRECURSOR_DOCUMENTS => [
                 self::TYPE                      => self::TYPE_RECORDS,
@@ -265,7 +260,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME                    => Sales_Model_Document_Debitor::MODEL_NAME_PART,
                     self::REF_ID_FIELD                  => Sales_Model_Document_Debitor::FLD_DOCUMENT_ID,
                 ],
-                self::NULLABLE                      => true,
+                // not null! mandatory property
             ],
             self::FLD_RECIPIENT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,
@@ -275,9 +270,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_POSTAL,
-                    self::FORCE_VALUES          => [
-                        Sales_Model_Document_Address::FLD_DEBITOR_ID => null,
-                    ],
                 ],
                 self::SHY                   => true,
             ],
