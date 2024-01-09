@@ -652,6 +652,21 @@ function(grid, rowIndex, columnIndex, e) {
             oldIndex;
             
         if(cs){
+            //handle the case when other column data got pushed after responsive column
+            const responsiveColIdxOld = cm.config.findIndex(c => { return c.id === 'responsive';});
+            const responsiveColIdxNew = cs.findIndex(c => { return c.id === 'responsive';});
+            
+            if (responsiveColIdxOld  > -1 && responsiveColIdxOld !== cm.config.length - 1) {
+                const item = cm.config[responsiveColIdxOld];
+                cm.config.splice(responsiveColIdxOld, 1);
+                cm.config.splice(cm.config.length, 0, item);
+            }
+            if (responsiveColIdxNew > -1 && responsiveColIdxNew !== cs.length - 1) {
+                const item = cs[responsiveColIdxNew];
+                cs.splice(responsiveColIdxNew, 1);
+                cs.splice(cs.length, 0, item);
+            }
+            
             for(var i = 0, len = cs.length; i < len; i++){
                 s = cs[i];
                 c = cm.getColumnById(s.id);
