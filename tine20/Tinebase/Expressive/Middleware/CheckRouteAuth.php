@@ -68,6 +68,8 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
                             try {
                                 Admin_Controller_JWTAccessRoutes::doRouteAuth($routeHandler->getName(), $token);
                                 $user = Tinebase_Core::getUser();
+                                $unauthorized = false;
+                                break 2;
                             } catch (Tinebase_Exception_AccessDenied $tead) {
                                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ .
                                     '::' . __LINE__ . ' returning with HTTP 401 unauthorized: ' . $tead->getMessage());
