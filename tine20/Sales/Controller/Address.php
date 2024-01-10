@@ -99,10 +99,6 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         
         $ft .= $i18n->_($type);
         
-        if ($type == Sales_Model_Address::TYPE_BILLING) {
-            $ft .= ' - ' . $address['custom1'];
-        }
-        
         $ft .= ')';
         
         $address['fulltext'] = $ft;

@@ -305,6 +305,7 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 ],
                 self::UI_CONFIG         => [
                     'columns'               => [ Sales_Model_Debitor::FLD_NUMBER, Sales_Model_Debitor::FLD_NAME, Sales_Model_Debitor::FLD_DIVISION_ID ],
+                    'editDialogConfig'      => ['fieldsToExclude' => [Sales_Model_Debitor::FLD_CUSTOMER_ID]]
                 ],
             ],
             'fulltext' => array(

@@ -40,13 +40,16 @@ class Sales_Model_Document_Debitor extends Sales_Model_Debitor
                 ],
             ],
         ];
-        $_definition[self::EXPOSE_JSON_API] = true;
+        $_definition[self::EXPOSE_JSON_API] = false;
+        $_definition[self::EXPOSE_HTTP_API] = false;
 
         unset($_definition[self::FIELDS][self::FLD_DELIVERY]);
         unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_DELIVERY]);
         unset($_definition[self::FIELDS][self::FLD_BILLING]);
         unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_BILLING]);
         unset($_definition[self::FIELDS][self::FLD_CUSTOMER_ID]);
+        unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_CUSTOMER_ID]);
+
 
         $_definition[self::FIELDS][self::FLD_NUMBER][self::TYPE] = self::TYPE_STRING;
         unset($_definition[self::FIELDS][self::FLD_NUMBER][self::CONFIG]);

@@ -30,6 +30,8 @@ class Sales_Model_DocumentPosition_Invoice extends Sales_Model_DocumentPosition_
         $_definition[self::VERSION] = 3;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
+        $_definition[self::RECORD_NAME] = 'Invoice Position'; // ngettext('Invoice Position', 'Invoice Positions', n)
+        $_definition[self::RECORDS_NAME] = 'Invoice Positions'; // gettext('GENDER_Invoice Position')
 
         $_definition[self::FIELDS][self::FLD_PARENT_ID][self::CONFIG][self::MODEL_NAME] = self::MODEL_NAME_PART;
 

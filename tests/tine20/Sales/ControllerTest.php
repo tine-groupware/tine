@@ -187,14 +187,13 @@ class Sales_ControllerTest extends TestCase
             'locality' => 'Munich',
             'region' => 'Bavaria',
             'countryname' => 'DE',
-            'custom1' => 'de-234',
             'type' => 'billing',
         );
         
         $i18nTypeString = Tinebase_Translation::getTranslation('Sales')->_('billing');
         
         $result = Sales_Controller_Address::getInstance()->resolveVirtualFields($address);
-        $this->assertEquals($result['fulltext'], "Meister Eder, Brunnengässla 4, 80331 Munich ($i18nTypeString - de-234)");
+        $this->assertEquals($result['fulltext'], "Meister Eder, Brunnengässla 4, 80331 Munich ($i18nTypeString)");
     }
 
     /**

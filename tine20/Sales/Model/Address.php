@@ -68,7 +68,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE => true,
         self::CREATE_MODULE => false,
         self::IS_DEPENDENT  => true,
-        self::TITLE_PROPERTY => "{% if name_shorthand %}{{ name_shorthand }} => {% endif %}{% if name %}{{ name }} {% endif %}{% if email %}{{ email }} {% endif %}{% if prefix1 %}{{ prefix1 }}{% if prefix2 %} {% else %}, {% endif %}{% endif %}{% if prefix2 %}{{ prefix2 }}, {% endif %}{% if postbox %}{{ postbox }}, {% elseif street %}{{ street }}, {% endif %}{% if postalcode %}{{ postalcode }} {% endif %}{% if locality %}{{ locality }} {% endif %}({{ type }}{% if type == '" . self::TYPE_BILLING . "' and custom1 %} - {{ custom1 }}{% endif %})",//self::FLD_FULLTEXT,
+        self::TITLE_PROPERTY => "{% if debitor_id.number %}{{ debitor_id.number }} {% endif %}{% if name_shorthand %}'{{ name_shorthand }}' {% endif %}{% if name %}{{ name }} {% endif %}{% if email %}{{ email }} {% endif %}{% if prefix1 %}{{ prefix1 }}{% if prefix2 %} {% else %}, {% endif %}{% endif %}{% if prefix2 %}{{ prefix2 }}, {% endif %}{% if postbox %}{{ postbox }}, {% elseif street %}{{ street }}, {% endif %}{% if postalcode %}{{ postalcode }} {% endif %}{% if locality %}{{ locality }} {% endif %}({{ type }})",
 
         self::EXPOSE_JSON_API => true,
         'resolveRelated'  => TRUE,
