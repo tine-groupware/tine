@@ -215,6 +215,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     this.metaDataForField = this.metaDataRecordClass.getModelConfiguration().isMetadataModelFor;
                     const metaDataForRecordConfig = _.get(this.metaDataRecordClass.getField(this.metaDataForField), 'fieldDefinition.config');
                     this.foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(metaDataForRecordConfig.appName, metaDataForRecordConfig.modelName);
+                } else if (this.foreignRecordClass.getModelConfiguration()?.denormalizationOf) {
+                    // denormalization -> filter for original model
+                    this.denormalizationRecordClass = this.foreignRecordClass;
+                    this.foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(this.foreignRecordClass.getModelConfiguration().denormalizationOf);
                 } else {
                     // we have no api's to pick foreign records - and it makes no sense
                     this.operators = ['definedBy'];
@@ -681,7 +685,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             case 'allOf':
                 //@TODO find it
                 var pickerRecordClass = this.foreignRecordClass;
-                if (this.foreignRefIdField) {
+                if (this.foreignRefIdField && !this.denormalizationRecordClass) {
                     // many 2 many relation
                     var foreignRecordConfig = _.get(this.foreignRecordClass.getModelConfiguration(), 'fields.' + this.foreignRefIdField + '.config');
                     pickerRecordClass = Tine.Tinebase.data.RecordMgr.get(foreignRecordConfig.appName, foreignRecordConfig.modelName);
