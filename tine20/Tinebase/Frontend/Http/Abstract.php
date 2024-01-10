@@ -325,6 +325,8 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
     protected function _downloadFileNode(Tinebase_Model_Tree_Node $node, $filesystemPath, $revision = null, $ignoreAcl = false)
     {
         if (! $ignoreAcl && ! Tinebase_Core::getUser()->hasGrant($node, Tinebase_Model_Grants::GRANT_DOWNLOAD)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' User has no download grant for node ' . $node->getId());
             $this->_handleFailure(403);
         }
 

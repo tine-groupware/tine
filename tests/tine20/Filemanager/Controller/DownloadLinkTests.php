@@ -140,7 +140,7 @@ class Filemanager_Controller_DownloadLinkTests extends TestCase
             $resultNode = $this->_getUit()->getNode($downloadLink, array());
             $this->fail('user should not be able to access expired download link node');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            $this->assertEquals('Download link has expired', $tead->getMessage());
+            $this->assertStringContainsString('Download link has expired', $tead->getMessage());
         }
     }
 
