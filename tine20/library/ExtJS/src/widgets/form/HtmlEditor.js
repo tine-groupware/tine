@@ -47,6 +47,8 @@ new Ext.Panel({
  * @xtype htmleditor
  */
 
+import {contrastColors} from "../../../../../Tinebase/js/util/contrastColors";
+
 Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
     /**
      * @cfg {Boolean} enableFormat Enable the bold, italic and underline buttons (defaults to true)
@@ -773,7 +775,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                     plugin.initEvents(this.docElement);
                 }
             })
-    
+
             doc.editorInitialized = true;
             this.initialized = true;
             this.pushValue();
@@ -870,9 +872,10 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             this.selectedImage = false
         }
 
+        contrastColors.adjustColors(e.getTarget())
+
         this.updateToolbar(e);
     },
-
 
     /**
      * Protected method that will not generally be called directly. It triggers

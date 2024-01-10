@@ -12,6 +12,7 @@ import waitFor from "../../Tinebase/js/util/waitFor.es6";
 Ext.ns('Tine.Felamimail');
 
 import getFileAttachmentAction from './AttachmentFileAction';
+import {contrastColors} from "../../Tinebase/js/util/contrastColors";
 
 /**
  * @param config
@@ -289,8 +290,10 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         } else {
                             Ext.util.Format.linkSaveHtmlEncodeStepOne(body);
                             Tine.Tinebase.common.linkifyText(Ext.util.Format.wrapEmojis(body), function(linkified) {
-                                var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
-                                Ext.fly(bodyEl).update(Ext.util.Format.linkSaveHtmlEncodeStepTwo(linkified));
+                                const bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
+                                bodyEl.innerHTML = Ext.util.Format.linkSaveHtmlEncodeStepTwo(linkified);
+                                contrastColors.adjustColors(bodyEl);
+                                Ext.fly(bodyEl).update(bodyEl.innerHTML);
                             }, this.panel);
                         }
                     }
