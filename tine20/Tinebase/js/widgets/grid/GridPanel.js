@@ -2278,7 +2278,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         return new Tine.widgets.grid.FilterPanel(Ext.apply(config, {
             app: this.app,
             recordClass: this.recordClass,
-            filterModels: this.recordClass.getFilterModel().concat(Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters(this.recordClass)),
+            filterModels: this.recordClass.getFilterModel(),
             defaultFilter: 'query',
             filters: this.defaultFilters || []
         }));
