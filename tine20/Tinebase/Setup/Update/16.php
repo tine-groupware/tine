@@ -21,6 +21,7 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE016_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE016_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE016_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_STRUCTURE => [
@@ -59,6 +60,12 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
                 self::FUNCTION_CONST => 'update003',
             ]
         ],
+        self::PRIO_NORMAL_APP_UPDATE        => [
+            self::RELEASE016_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
+            ]
+        ]
     ];
 
     public function update000()
@@ -165,5 +172,33 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '16.7', self::RELEASE016_UPDATE007);
+    }
+
+    public function update008()
+    {
+        $pageNumber = 0;
+        $pageCount = 10;
+        $counter = 0;
+        do {
+            $select = $this->_db->select()->from(SQL_TABLE_PREFIX . 'timemachine_modlog')
+                ->limitPage(++$pageNumber, $pageCount)
+                ->where('new_value like "%\"password\":%"');
+            $stmt = $select->query();
+            $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+
+            foreach ($rows as $row) {
+                if (! str_contains($row['new_value'], '"password":null')) {
+                    Tinebase_Core::getDB()->update(SQL_TABLE_PREFIX . 'timemachine_modlog', [
+                        'new_value' => preg_replace('/"password":"[^"]+"/', '"password":"******"', $row['new_value'])
+                    ], 'id = ' . Tinebase_Core::getDb()->quote($row['id']));
+                    $counter++;
+                }
+            }
+        } while (count($rows) >= $pageCount);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Updated ' . $counter . ' modlog records');
+
+        $this->addApplicationUpdate('Tinebase', '16.8', self::RELEASE016_UPDATE008);
     }
 }
