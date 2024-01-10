@@ -26,6 +26,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE007 = __CLASS__ . '::update007';
     const RELEASE017_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE017_UPDATE009 = __CLASS__ . '::update009';
+    const RELEASE017_UPDATE010 = __CLASS__ . '::update010';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -77,6 +78,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update007',
             ],
+            self::RELEASE017_UPDATE010          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update010',
+            ],
         ],
     ];
 
@@ -90,6 +95,13 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         Tinebase_TransactionManager::getInstance()->rollBack();
 
         Sales_Setup_Initialize::initializeCostCenterCostBearer();
+
+        foreach ($this->_backend->getOwnForeignKeys(Sales_Model_Product::TABLE_NAME) as $fKey)
+        {
+            $this->_backend->dropForeignKey(Sales_Model_Product::TABLE_NAME, $fKey['constraint_name']);
+        }
+
+        $this->_db->delete(SQL_TABLE_PREFIX . Sales_Model_Document_Address::TABLE_NAME, Sales_Model_Document_Address::FLD_DOCUMENT_ID . ' IS NULL');
         
         Setup_SchemaTool::updateSchema([
             Sales_Model_Address::class,
@@ -367,5 +379,15 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         Tinebase_Controller_NumberableConfig::getInstance()->update($numConf);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.9', self::RELEASE017_UPDATE009);
+    }
+
+    public function update010()
+    {
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Document_Address::TABLE_NAME . ' AS a JOIN '
+            . SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME . ' AS d '
+            . 'ON a.' . Sales_Model_Document_Address::FLD_DOCUMENT_ID . ' = d.' . Sales_Model_Document_Debitor::FLD_DOCUMENT_ID
+            . ' SET a.' . Sales_Model_Document_Address::FLD_DEBITOR_ID . ' = d.id');
+        
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.10', self::RELEASE017_UPDATE010);
     }
 }
