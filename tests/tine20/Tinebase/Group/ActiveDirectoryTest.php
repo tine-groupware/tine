@@ -28,7 +28,8 @@ class Tinebase_Group_ActiveDirectoryTest extends \PHPUnit\Framework\TestCase
     protected $groupObjectGUID = '0cbadcc5-72f7-4a2d-8858-7ba6c80e6c15';
     protected $userObjectGUID  = '0cbadcc5-72f7-4a2d-8858-7ba6c80e6c16';
     protected $groupBaseFilter = 'objectclass=group';
-    
+    protected $_groupAD;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.

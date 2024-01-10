@@ -4,11 +4,10 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
 
- 
 class Setup_Backend_Schema_Index_Mysql extends Setup_Backend_Schema_Index_Abstract
 {
 
@@ -20,12 +19,9 @@ class Setup_Backend_Schema_Index_Mysql extends Setup_Backend_Schema_Index_Abstra
     public function setForeignKey($_declaration)
     {
         parent::setForeignKey($_declaration);
-        $this->referencetable = substr($_declaration['REFERENCED_TABLE_NAME'], strlen(SQL_TABLE_PREFIX));
-        $this->referencefield = $_declaration['REFERENCED_COLUMN_NAME'];
-//        $this->referenceOnDelete;
-//        $this->referenceOnUpdate;
+        $this->referenceTable = substr($_declaration['REFERENCED_TABLE_NAME'], strlen(SQL_TABLE_PREFIX));
+        $this->referenceField = $_declaration['REFERENCED_COLUMN_NAME'];
     }
-    
     
     /**
      * set Setup_Backend_Schema_Table from a given database query 
