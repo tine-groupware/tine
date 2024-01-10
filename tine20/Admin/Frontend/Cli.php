@@ -9,6 +9,8 @@
  * 
  */
 
+use Firebase\JWT\JWT;
+
 /**
  * cli server for Admin
  *
@@ -38,6 +40,43 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             )
         ),
     );
+
+    public function createJwtAccessRoute(Zend_Console_Getopt $_opts)
+    {
+        $this->_checkAdminRight();
+
+        $args = $this->_parseArgs($_opts, ['account', 'route']);
+
+        $accountId = Tinebase_User::getInstance()->getFullUserByLoginName($args['account'])->getId();
+        $route = (array)$args['route'];
+
+        //create new private and public key
+        $new_key_pair = openssl_pkey_new(array(
+            "private_key_bits" => 2048,
+            "private_key_type" => OPENSSL_KEYTYPE_RSA,
+        ));
+        openssl_pkey_export($new_key_pair, $private_key_pem);
+
+
+        $jwtAccessRoute = new Admin_Model_JWTAccessRoutes([
+            Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => $accountId,
+            Admin_Model_JWTAccessRoutes::FLD_KEYID => Tinebase_Record_Abstract::generateUID(),
+            Admin_Model_JWTAccessRoutes::FLD_ISSUER => Tinebase_Record_Abstract::generateUID(),
+            Admin_Model_JWTAccessRoutes::FLD_KEY => $private_key_pem,
+            Admin_Model_JWTAccessRoutes::FLD_ROUTES => $route,
+        ]);
+
+        $token = JWT::encode(
+            payload: ['iss' => $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_ISSUER}],
+            key: $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_KEY},
+            alg: 'RS512',
+            keyId: $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_KEYID}
+        );
+
+        Admin_Controller_JWTAccessRoutes::getInstance()->create($jwtAccessRoute);
+
+        echo PHP_EOL . $token . PHP_EOL;
+    }
 
     /**
      * create system groups for addressbook lists that don't have a system group
