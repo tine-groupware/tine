@@ -352,7 +352,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $record->getId());
 
-
         $record->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath, $this->_applicationName);
         $this->resolveGrants($record);
 

@@ -176,11 +176,16 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
      */
     protected function _checkExpiryDate(Filemanager_Model_DownloadLink $download)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Checking download link expiry time: ' . $download->expiry_time);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Checking download link expiry time: ' . $download->expiry_time);
         
-        if ($download->expiry_time instanceof Tinebase_DateTime && $download->expiry_time->isEarlier(Tinebase_DateTime::now())) {
-            throw new Tinebase_Exception_AccessDenied('Download link has expired');
+        if (   $download->expiry_time instanceof Tinebase_DateTime
+            && $download->expiry_time->isEarlier(Tinebase_DateTime::now())
+        ) {
+            $message = 'Download link has expired: ' . $download->expiry_time;
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $message);
+            throw new Tinebase_Exception_AccessDenied($message);
         }
     }
 
@@ -205,12 +210,10 @@ class Filemanager_Controller_DownloadLink extends Tinebase_Controller_Record_Abs
      * @param  Filemanager_Model_DownloadLink $download
      * @return Tinebase_Model_Tree_Node
      */
-    protected function _getRootNode(Filemanager_Model_DownloadLink $download)
+    protected function _getRootNode(Filemanager_Model_DownloadLink $download): Tinebase_Model_Tree_Node
     {
         // ACL is checked here, download link user should be already set by frontend
-        $node = Filemanager_Controller_Node::getInstance()->get($download->node_id);
-        
-        return $node;
+        return Filemanager_Controller_Node::getInstance()->get($download->node_id);
     }
     
     /**
