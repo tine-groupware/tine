@@ -38,7 +38,7 @@ class Sales_Model_Document_Address extends Sales_Model_Address
                 self::COLUMNS => [self::FLD_DOCUMENT_ID],
             ],
         ];
-        $_definition[self::EXPOSE_JSON_API] = true;
+        $_definition[self::EXPOSE_JSON_API] = false;
         $_definition[self::DENORMALIZATION_OF] = Sales_Model_Address::class;
 
         $_definition[self::FIELDS][self::FLD_DOCUMENT_ID] = [

@@ -136,12 +136,7 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                         
                         $address = $addresses->filter('id', $record['address_id']['id'])->getFirstRecord();
 
-                        if ($address) {
-                            $value = $address->custom1;
-                        } else {
-                            $value = '';
-                        }
-                        
+                        $value = '';
                         break;
                     
                     default:

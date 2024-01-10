@@ -365,12 +365,10 @@ class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(0, count($customer['delivery']));
         
         $customer = $this->_json->getCustomer($customer['id']);
-        $customer['billing'][0]['custom1'] = '4219832435';
         $customer['delivery'] = NULL;
         $customer = $this->_json->saveCustomer($customer);
     
         $this->assertEquals(1406708670499, $customer['billing'][0]['id']);
-        $this->assertEquals('4219832435', $customer['billing'][0]['custom1']);
         $this->assertEquals(0, count($customer['delivery']));
     }
 

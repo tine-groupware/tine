@@ -483,7 +483,6 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'locality'    => $caddress->adr_two_locality,
                     'region'      => $caddress->adr_two_region,
                     'countryname' => $caddress->adr_two_countryname,
-                    'custom1'     => ($type == 'billing') ? Tinebase_Record_Abstract::generateUID(5) : NULL
                 ));
 
                 $addressController->create($address);
@@ -503,7 +502,6 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'locality'    => $caddress->adr_two_locality,
                 'region'      => $caddress->adr_two_region,
                 'countryname' => $caddress->adr_two_countryname,
-                'custom1'     => NULL
             ));
 
             $addressController->create($address);

@@ -30,6 +30,8 @@ class Sales_Model_DocumentPosition_Delivery extends Sales_Model_DocumentPosition
         $_definition[self::VERSION] = 3;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
+        $_definition[self::RECORD_NAME] = 'Delivery Position'; // ngettext('Delivery Position', 'Delivery Positions', n)
+        $_definition[self::RECORDS_NAME] = 'Delivery Positions'; // gettext('GENDER_Delivery Position')
 
         $_definition[self::FIELDS][self::FLD_PARENT_ID][self::CONFIG][self::MODEL_NAME] = self::MODEL_NAME_PART;
 

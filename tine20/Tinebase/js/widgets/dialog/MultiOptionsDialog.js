@@ -173,6 +173,7 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
             }) : null;
         } else {
             option = selected ? selected.getGroupValue() : null;
+            option = _.find(this.options, {name: option})?.value || option;
         }
 
         if (! option) {

@@ -418,7 +418,6 @@ class Sales_InvoiceTestCase extends TestCase
                     'locality'    => $caddress->adr_two_locality,
                     'region'      => $caddress->adr_two_region,
                     'countryname' => $caddress->adr_two_countryname,
-                    'custom1'     => ($type == 'billing') ? Tinebase_Record_Abstract::generateUID(5) : NULL
                 ));
         
                 $this->_addressRecords->addRecord($this->_addressController->create($address));

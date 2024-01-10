@@ -41,11 +41,16 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE             => true,
         self::HAS_DELETED_TIME_UNIQUE   => true,
         self::CREATE_MODULE             => false,
-        self::EXPOSE_JSON_API           => false,
+        self::EXPOSE_JSON_API           => true,
+        self::EXPOSE_HTTP_API           => true,
         self::IS_DEPENDENT              => true,
         self::TITLE_PROPERTY            => "{{ number }} {{ name }}{% if division_id.title %} ({{ division_id.title }}){% endif %}",
         self::CONTAINER_PROPERTY        => null,
         self::DELEGATED_ACL_FIELD       => self::FLD_DIVISION_ID,
+//        generic export is not so useful atm.
+//        self::EXPORT                    => [
+//            self::SUPPORTED_FORMATS         => ['csv'],
+//        ],
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,
@@ -63,6 +68,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_CUSTOMER_ID   => [],
                 self::FLD_DELIVERY      => [],
                 self::FLD_BILLING       => [],
             ],
@@ -100,6 +106,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
             ],
             self::FLD_CUSTOMER_ID           => [
                 self::TYPE                      => self::TYPE_RECORD,
+                self::LABEL                     => 'Customer', // _('Customer')
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
                     self::MODEL_NAME                => Sales_Model_Customer::MODEL_NAME_PART,
@@ -109,7 +116,6 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
-                self::DISABLED                  => true,
             ],
             self::FLD_DIVISION_ID            => [
                 self::TYPE                      => self::TYPE_RECORD,
