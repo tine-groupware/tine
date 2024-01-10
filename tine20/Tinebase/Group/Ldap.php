@@ -85,6 +85,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
     protected $_isReadOnlyBackend    = false;
     
     protected $_isDisabledBackend    = false;
+
+    protected $_baseDn;
     
     /**
      * the constructor

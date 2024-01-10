@@ -149,7 +149,7 @@ class DFCom_Model_DeviceResponse //extends \Zend\Diactoros\Response
      */
     public function displayMessage($message, $duration=5, $beep=self::BEEP_SHORTLONG, $font=self::FONT_STANDARD)
     {
-        $this->_responseData['df_msg'] = implode(',', [rawurlencode(utf8_decode($message)), $duration, $beep, $font]);
+        $this->_responseData['df_msg'] = implode(',', [rawurlencode(Tinebase_Helper::mbConvertTo($message)), $duration, $beep, $font]);
         return $this;
     }
 

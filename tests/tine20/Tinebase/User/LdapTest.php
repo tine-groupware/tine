@@ -20,6 +20,8 @@ class Tinebase_User_LdapTest extends TestCase
      * @var Tinebase_User_LDAP
      */
     protected $_backend = NULL;
+
+    protected $objects;
         
     /**
      * Sets up the fixture.
