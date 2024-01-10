@@ -126,7 +126,6 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
                     self::FORCE_VALUES          => [
                         Sales_Model_Document_Address::FLD_DOCUMENT_FIELD    => self::FLD_INVOICE_RECIPIENT_ID,
-                        Sales_Model_Document_Address::FLD_DEBITOR_ID     => null,
                     ],
                     self::ADD_FILTERS           => [
                         ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_INVOICE_RECIPIENT_ID],
@@ -147,7 +146,6 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
                     self::FORCE_VALUES          => [
                         Sales_Model_Document_Address::FLD_DOCUMENT_FIELD    => self::FLD_DELIVERY_RECIPIENT_ID,
-                        Sales_Model_Document_Address::FLD_DEBITOR_ID     => null,
                     ],
                     self::ADD_FILTERS           => [
                         ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_DELIVERY_RECIPIENT_ID],

@@ -176,10 +176,10 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID], 'customer_id is not an array');
 //        $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID][SMC::FLD_DEBITORS][0]['billing'], 'customer_id.billing is not an array');
 //        $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID][SMC::FLD_DEBITORS][0]['delivery'], 'customer_id.delivery is not an array');
-        $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal'], 'customer_id.postal is not an array');
+//        $this->assertIsArray($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal'], 'customer_id.postal is not an array');
 //        $this->assertIsString($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID][SMC::FLD_DEBITORS][0]['delivery'][0]['id'], 'customer_id.delivery.0.id is not set');
-        $this->assertIsString($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal']['id'], 'customer_id.postal.id is not set');
-        $this->assertStringStartsWith('teststreet for ', $document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal']['street']);
+//        $this->assertIsString($document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal']['id'], 'customer_id.postal.id is not set');
+//        $this->assertStringStartsWith('teststreet for ', $document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['postal']['street']);
         $this->assertSame($customerData['number'] . ' - ' . $customerData['name'],
             $document[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]['fulltext']);
         $this->assertArrayHasKey('fulltext', $document[SMDOffer::FLD_RECIPIENT_ID]);
@@ -200,8 +200,8 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                         SMDN::FLD_DELIVERY => [],
                         SMDN::FLD_BILLING => [],
                     ],
-                ],*/
-                'postal'   => [],
+                ],
+                'postal'   => [],*/
             ]
         ]);
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Customer::class, [$customerCopy]));
@@ -269,11 +269,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $document = Sales_Controller_Document_Offer::getInstance()->get($document['id']);
         $docExpander = new Tinebase_Record_Expander(SMDOffer::class, [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                SMDOffer::FLD_CUSTOMER_ID => [
-                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'postal' => [],
-                    ]
-                ]
+                SMDOffer::FLD_CUSTOMER_ID => []
             ]
         ]);
         $docExpander->expand(new Tinebase_Record_RecordSet(SMDOffer::class, [$document]));
@@ -286,19 +282,13 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
 
         $customer = $document->{SMDOffer::FLD_CUSTOMER_ID};
         $customerUpdated = Sales_Controller_Document_Customer::getInstance()->get($documentUpdated[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]);
-        $expander = new Tinebase_Record_Expander(Sales_Model_Document_Customer::class, [
-            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'postal' => [],
-            ]
-        ]);
-        $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Customer::class, [$customerUpdated]));
 
         $this->assertSame($customer->getId(), $customerUpdated->getId());
         /*$this->assertSame($customer->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->getId(), $customerUpdated->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->getId());
         $this->assertSame($oldDeliveryAddress->getId(), $customerUpdated->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->getFirstRecord()->getId());
         $this->assertNotSame($oldDeliveryAddress->name, $customerUpdated->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->getFirstRecord()->name);
-        $this->assertSame('other name', $customer->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->getFirstRecord()->name);*/
-        $this->assertSame($customer->postal->getId(), $customerUpdated->postal->getId());
+        $this->assertSame('other name', $customer->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->getFirstRecord()->name);
+        $this->assertSame($customer->postal->getId(), $customerUpdated->postal->getId());*/
 
         $secondCustomer = $this->_createCustomer();
         $document = Sales_Controller_Document_Offer::getInstance()->get($documentUpdated['id']);
@@ -306,7 +296,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
 
 /*        $document->{SMDOffer::FLD_CUSTOMER_ID}->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->getFirstRecord()->name = 'shoo';
         $document->{SMDOffer::FLD_CUSTOMER_ID}->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->addRecord(new Sales_Model_Document_Address($secondCustomer->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->getFirstRecord()->toArray()));*/
-        $document->{SMDOffer::FLD_CUSTOMER_ID}->postal = [
+        /*$document->{SMDOffer::FLD_CUSTOMER_ID}->postal = [
             'name' => 'new postal adr',
             'seq' => $document->{SMDOffer::FLD_CUSTOMER_ID}->postal->seq,
         ];
@@ -315,7 +305,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $customerUpdated = Sales_Controller_Document_Customer::getInstance()->get($documentUpdated[Sales_Model_Document_Abstract::FLD_CUSTOMER_ID]);
         $expander->expand(new Tinebase_Record_RecordSet(Sales_Model_Document_Customer::class, [$customerUpdated]));
 
-        /*$this->assertSame(2, $customerUpdated->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->count());
+        $this->assertSame(2, $customerUpdated->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->count());
         foreach ($customerUpdated->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery as $address) {
             if ('shoo' === $address->name) {
                 $this->assertSame($oldDeliveryAddress->getId(), $address->getId());
@@ -324,9 +314,9 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                 $this->assertNotSame($secondCustomer->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->getFirstRecord()->getId(), $address->getId());
                 $this->assertSame($secondCustomer->{SMC::FLD_DEBITORS}->getFirstRecord()->delivery->getFirstRecord()->name, $address->name);
             }
-        }*/
+        }
         $this->assertNotSame($customer->postal->getId(), $customerUpdated->postal->getId());
-        $this->assertSame('new postal adr', $customerUpdated->postal->name);
+        $this->assertSame('new postal adr', $customerUpdated->postal->name);*/
     }
 
     public function testOfferDocumentPosition()

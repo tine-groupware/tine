@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -54,8 +54,8 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
         unset($_definition[self::FIELDS][self::FLD_DEBITORS]);
         unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_DEBITORS]);
         $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES] = null;
-        $_definition[self::FIELDS]['postal'][self::CONFIG][self::MODEL_NAME] =
-            Sales_Model_Document_Address::MODEL_NAME_PART;
+        unset($_definition[self::FIELDS]['postal']);
+        unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES]['postal']);
 
         unset($_definition[self::FIELDS]['number'][self::CONFIG]);
         $_definition[self::FIELDS]['number'][self::TYPE] = self::TYPE_STRING;

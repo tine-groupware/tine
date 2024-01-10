@@ -74,21 +74,12 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        // the recipient address is not part of a customer, we enforce that here
-        if (!empty($_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID})) {
-            $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
-            $_record->{Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_DEBITOR_ID} = null;
-        }
-        if (!empty($_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID})) {
-            $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
-            $_record->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_DEBITOR_ID} = null;
-        }
-
         parent::_inspectBeforeCreate($_record);
+
+        // important! after _inspectDenormalization in parent::_inspectBeforeUpdate
+        // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
+        $this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID);
+        $this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID);
     }
 
     /**
@@ -97,9 +88,11 @@ class Sales_Controller_Document_Order extends Sales_Controller_Document_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        // important! after _inspectDenormalization in parent::_inspectBeforeUpdate
+        // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
         $this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_DELIVERY_RECIPIENT_ID);
         $this->_inspectAddressField($_record, Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID);
-
-        parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
 }
