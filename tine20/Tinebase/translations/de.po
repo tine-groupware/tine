@@ -2480,6 +2480,9 @@ msgstr ""
 "Nachfolgend finden Sie eine Liste mit allen Import-Formaten und eine "
 "Beispieldatei, anhand derer Sie sehen, wir die Datei aussehen sollte."
 
+msgid "Following you find a list of all supported import formats."
+msgstr "Nachfolgend finden Sie eine Liste mit allen unterstützten Import-Formaten."
+
 #: js/widgets/dialog/ImportDialog.js:292
 #: js/widgets/dialog/SimpleImportDialog.js:191
 msgid "Please select the import format of the file you want to upload"
