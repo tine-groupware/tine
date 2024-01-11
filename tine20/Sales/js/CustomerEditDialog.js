@@ -287,6 +287,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }]
                 }, {
                     xtype: 'fieldset',
+                    hidden: this.denormalizationRecordClass,
                     layout: 'hfit',
                     autoHeight: true,
                     title: this.app.i18n._('Debitors'),
