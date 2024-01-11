@@ -215,6 +215,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'save_sent_mail_to_source':
                     item.setDisabled(this.record.get('message_sent_copy_behavior') === 'skip');
                     break;
+                case 'name':
+                    item.setDisabled(! this.asAdminModule && (
+                        this.record.get('type') === 'shared'
+                        || this.record.get('type') === 'adblist'
+                        || ! this.hasEditAccountRight
+                    ));
+                    break;
                 default:
                     item.setDisabled(! this.asAdminModule && (this.isSystemAccount() || ! this.hasEditAccountRight));
             }
