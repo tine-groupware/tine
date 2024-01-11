@@ -341,8 +341,16 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                     $cat = $allCat->getById($stdCat);
                 }
                 $customer = $allCustomer->getById($did2c[$row[0]]);
-                $debitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}
-                    ->find(Sales_Model_Debitor::FLD_DIVISION_ID, $cat->{Sales_Model_Document_Category::FLD_DIVISION_ID});
+                if (!($debitor = $customer->{Sales_Model_Customer::FLD_DEBITORS}
+                        ->find(Sales_Model_Debitor::FLD_DIVISION_ID, $cat->{Sales_Model_Document_Category::FLD_DIVISION_ID}))) {
+                    $customer->{Sales_Model_Customer::FLD_DEBITORS}->addRecord($debitor = Sales_Controller_Debitor::getInstance()->create(
+                        new Sales_Model_Debitor([
+                            Sales_Model_Debitor::FLD_DIVISION_ID => $cat->{Sales_Model_Document_Category::FLD_DIVISION_ID},
+                            Sales_Model_Debitor::FLD_CUSTOMER_ID => $customer->getId(),
+                            Sales_Model_Debitor::FLD_NAME => '-',
+                        ], true)
+                    ));
+                }
                 $data = array_intersect_key($debitor->toArray(), $flds);
                 $data[Sales_Model_Document_Debitor::FLD_ORIGINAL_ID] = $data['id'];
                 unset($data['id']);
