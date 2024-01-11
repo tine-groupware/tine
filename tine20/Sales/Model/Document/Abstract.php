@@ -146,6 +146,23 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             ]
         ],
 
+        self::FILTER_MODEL => [
+            Sales_Model_Debitor::FLD_DIVISION_ID => [
+                self::LABEL => 'Division', // _('Division')
+                self::FILTER => Sales_Model_Document_DivisionFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => 'xxx',
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => 'xxx',
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+        ],
+
         self::FIELDS                        => [
             self::FLD_DOCUMENT_NUMBER => [
                 self::TYPE                      => self::TYPE_NUMBERABLE_STRING,
@@ -427,6 +444,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             )->_(static::$_documentNumberPrefix);
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
             'Sales_Controller_' . static::MODEL_NAME_PART . '::documentNumberConfigOverride';
+
+        $_definition[self::FILTER_MODEL][Sales_Model_Debitor::FLD_DIVISION_ID][self::OPTIONS][self::MODEL_NAME] =
+            'Sales_Model_' . static::MODEL_NAME_PART;
+        $_definition[self::FILTER_MODEL][Sales_Model_Debitor::FLD_DIVISION_ID]['jsConfig']['foreignRecordClass'] =
+            'Sales_Model_' . static::MODEL_NAME_PART;
     }
 
     public function isBooked(): bool

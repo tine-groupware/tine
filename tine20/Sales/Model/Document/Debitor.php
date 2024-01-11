@@ -20,6 +20,7 @@ class Sales_Model_Document_Debitor extends Sales_Model_Debitor
 
     public const FLD_DOCUMENT_ID = 'document_id';
 
+    public static string $documentIdModel = Sales_Model_Document_Offer::MODEL_NAME_PART;
     /**
      * @param array $_definition
      */
@@ -60,7 +61,7 @@ class Sales_Model_Document_Debitor extends Sales_Model_Debitor
             self::NORESOLVE             => true,
             self::CONFIG                => [
                 self::APP_NAME              => Sales_Config::APP_NAME,
-                self::MODEL_NAME            => Sales_Model_Document_Offer::MODEL_NAME_PART, // TODO not nice, it can be any document really...
+                self::MODEL_NAME            => self::$documentIdModel, // TODO not nice, it can be any document really...
             ],
         ];
     }
