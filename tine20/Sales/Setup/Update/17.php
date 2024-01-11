@@ -395,6 +395,9 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             . SQL_TABLE_PREFIX . Sales_Model_Document_Debitor::TABLE_NAME . ' AS d '
             . 'ON a.' . Sales_Model_Document_Address::FLD_DOCUMENT_ID . ' = d.' . Sales_Model_Document_Debitor::FLD_DOCUMENT_ID
             . ' SET a.' . Sales_Model_Document_Address::FLD_DEBITOR_ID . ' = d.id');
+
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Boilerplate::TABLE_NAME . ' SET '
+            . Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY . ' = NULL');
         
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.10', self::RELEASE017_UPDATE010);
     }
