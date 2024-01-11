@@ -80,7 +80,7 @@ abstract class Setup_Backend_Schema_Index_Abstract extends Setup_Backend_Schema_
      * @var boolean
      */
     public $referenceOnUpdate;
-    
+
     /**
      * lenght of index 
      * 
@@ -89,6 +89,7 @@ abstract class Setup_Backend_Schema_Index_Abstract extends Setup_Backend_Schema_
     public $length = NULL;
 
     public $fulltext;
+    public $ondelete;
 
     abstract protected function _setIndex($_declaration);
 
