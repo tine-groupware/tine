@@ -30,6 +30,7 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
                     ],
                 ],
                 Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => [],
+                Sales_Model_Document_Abstract::FLD_DEBITOR_ID => [],
                 Sales_Model_Document_Abstract::FLD_POSITIONS => [],
                 Sales_Model_Document_Abstract::FLD_BOILERPLATES => [],
                 Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY => [],
