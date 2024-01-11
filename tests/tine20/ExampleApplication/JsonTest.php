@@ -37,7 +37,7 @@ class ExampleApplication_JsonTest extends ExampleApplication_TestCase
                 $className = get_class($record);
                 $configuration = $record->getConfiguration();
                 foreach ($configuration->getAutoincrementFields() as $fieldDef) {
-                    $numberable = Tinebase_Numberable::getNumberable($className, $fieldDef['fieldName'], $fieldDef);
+                    $numberable = Tinebase_Numberable::getNumberable($record, $className, $fieldDef['fieldName'], $fieldDef);
                     $numberable->free($record->{$fieldDef['fieldName']});
                 }
             }

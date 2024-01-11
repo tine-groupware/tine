@@ -38,8 +38,8 @@ class Addressbook_Model_ContactProperties_Url extends Tinebase_Record_NewAbstrac
         self::APP_NAME => Addressbook_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
-        self::RECORD_NAME => 'Email', // gettext('GENDER_Email')
-        self::RECORDS_NAME => 'Emails', // ngettext('Email', 'Emails', n)
+        self::RECORD_NAME => 'URL', // gettext('GENDER_URL')
+        self::RECORDS_NAME => 'URLs', // ngettext('URL', 'URLs', n)
 
         /*self::TABLE => [
             self::NAME => self::TABLE_NAME,

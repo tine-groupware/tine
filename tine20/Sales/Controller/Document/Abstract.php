@@ -11,6 +11,8 @@
  *
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * Abstract Document controller class for Sales application
  *
@@ -41,22 +43,79 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        // the recipient address is not part of a customer, we enforce that here
-        if (!empty($_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID})) {
-            $_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
-        }
-
         $this->_validateTransitionState($this->_documentStatusField,
             Sales_Config::getInstance()->{$this->_documentStatusTransitionConfig}, $_record);
+
+        $_record->calculatePricesIncludingPositions();
+
+        $this->_inspectCategoryDebitor($_record);
 
         if ($_record->isBooked()) {
             $this->_inspectBeforeForBookedRecord($_record);
         }
 
-        $_record->calculatePricesIncludingPositions();
-
         parent::_inspectBeforeCreate($_record);
+
+        // important! after _inspectDenormalization in parent::_inspectBeforeCreate
+        // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
+        $this->_inspectAddressField($_record, Sales_Model_Document_Abstract::FLD_RECIPIENT_ID);
+    }
+
+    protected function _inspectCategoryDebitor(Sales_Model_Document_Abstract $_record)
+    {
+        // set default category
+        if (!$_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}) {
+            $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY} = Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT};
+        }
+        if (is_string($_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY})) {
+            $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY} = Sales_Controller_Document_Category::getInstance()->get(_id: $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}, _getRelatedData: false);
+        }
+
+        // check debitor / category division id match
+        if ($_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}) {
+            if (is_string($_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID})) {
+                $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = Sales_Controller_Document_Debitor::getInstance()->get(_id: $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}, _getRelatedData: false);
+            }
+            if ($_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->getIdFromProperty(Sales_Model_Debitor::FLD_DIVISION_ID) !==
+                $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->getIdFromProperty(Sales_Model_Document_Category::FLD_DIVISION_ID)) {
+                throw new Tinebase_Exception_Record_Validation('debitor division does not match category division');
+            }
+        }
+        if (!$_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}) {
+            $divisionId = $_record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->getIdFromProperty(Sales_Model_Document_Category::FLD_DIVISION_ID);
+            if (is_string($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID})) {
+                $customerId = $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID};
+            } elseif (isset($_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->{Sales_Model_Document_Customer::FLD_ORIGINAL_ID})) {
+                $customerId = $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->{Sales_Model_Document_Customer::FLD_ORIGINAL_ID};
+            } else {
+                $customerId = $_record->{Sales_Model_Document_Abstract::FLD_CUSTOMER_ID}->getId();
+            }
+            $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = Sales_Controller_Debitor::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Debitor::class, [
+                    [TMFA::FIELD => Sales_Model_Debitor::FLD_CUSTOMER_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $customerId],
+                    [TMFA::FIELD => Sales_Model_Debitor::FLD_DIVISION_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $divisionId],
+                ]))->getFirstRecord();
+
+            if (null === $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}) {
+                $customer = Sales_Controller_Customer::getInstance()->get($customerId);
+                $customer->{Sales_Model_Customer::FLD_DEBITORS}->addRecord(new Sales_Model_Debitor([
+                    Sales_Model_Debitor::FLD_DIVISION_ID => $divisionId,
+                    Sales_Model_Debitor::FLD_NAME => '-',
+                ], true));
+                $customer = Sales_Controller_Customer::getInstance()->update($customer);
+                $_record->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID} = $customer->{Sales_Model_Customer::FLD_DEBITORS}->find(Sales_Model_Debitor::FLD_DIVISION_ID, $divisionId);
+            }
+        }
+    }
+
+    protected function _inspectAddressField($_record, $field)
+    {
+        if (!empty($fieldValue = $_record->{$field})) {
+            // the address is not part of a customer, we enforce that here
+            $fieldValue->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
+            // debitor_id needs to refer to the local denormalized instance
+            $fieldValue->{Sales_Model_Address::FLD_DEBITOR_ID} = $_record->getIdFromProperty(Sales_Model_Document_Abstract::FLD_DEBITOR_ID);
+        }
     }
 
     /**
@@ -68,22 +127,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         $_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} = $_oldRecord
             ->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS};
 
-        if (!empty($_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID})) {
-            // the recipient address is not part of a customer, we enforce that here
-            $_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}
-                ->{Sales_Model_Address::FLD_CUSTOMER_ID} = null;
-
-            // if the recipient address is a denormalized customer address, we denormalize it again from the original address
-            if ($address = Sales_Controller_Document_Address::getInstance()->search(
-                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Address::class, [
-                        ['field' => 'id', 'operator' => 'equals', 'value' => $_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}->getId()],
-                        ['field' => 'document_id', 'operator' => 'equals', 'value' => null],
-                        ['field' => 'customer_id', 'operator' => 'not', 'value' => null],
-                    ]))->getFirstRecord()) {
-                $_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}->setId($address->{Sales_Model_Address::FLD_ORIGINAL_ID});
-                $_record->{Sales_Model_Document_Abstract::FLD_RECIPIENT_ID}->{Sales_Model_Address::FLD_ORIGINAL_ID} = null;
-            }
-        }
+        $this->_inspectCategoryDebitor($_record);
 
         $this->_validateTransitionState($this->_documentStatusField,
             Sales_Config::getInstance()->{$this->_documentStatusTransitionConfig}, $_record, $_oldRecord);
@@ -146,6 +190,10 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         $_record->calculatePricesIncludingPositions();
 
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        // important! after _inspectDenormalization in parent::_inspectBeforeUpdate
+        // the recipient address is not part of a customer, debitor_id needs to refer to the local denormalized instance
+        $this->_inspectAddressField($_record, Sales_Model_Document_Abstract::FLD_RECIPIENT_ID);
     }
 
     protected function _inspectBeforeForBookedOldRecord(Sales_Model_Document_Abstract $_record, Sales_Model_Document_Abstract $_oldRecord)
@@ -400,5 +448,15 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         $transactionRAII->release();
 
         return $result;
+    }
+
+    public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document, string $property = Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER): array
+    {
+        // TODO FIXME needs update script!!!! the old numberables should be updated to add the division id to the bucket key!
+        $division = Sales_Controller_Division::getInstance()->get($document->getDivisionId());
+        return [
+            Tinebase_Numberable::BUCKETKEY => $this->_modelName . '#' . $property . '#' . $division->getId(),
+            Tinebase_Model_NumberableConfig::FLD_ADDITIONAL_KEY => 'Division - ' . $division->{Sales_Model_Division::FLD_TITLE},
+        ];
     }
 }

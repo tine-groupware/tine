@@ -8,6 +8,7 @@
 Ext.ns('Tine.Sales');
 
 import { BoilerplatePanel } from './BoilerplatePanel'
+import EvaluationDimensionForm from "../../../Tinebase/js/widgets/form/EvaluationDimensionForm";
 
 Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 1240,
@@ -54,6 +55,17 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             return _.delay(_.bind(this.checkStates, this), 250)
         }
 
+        // default category
+        const categoryField = this.getForm().findField('document_category');
+        const category = categoryField.getValue()
+        if (!category) {
+            categoryField.recordProxy.promiseLoadRecord(Tine.Tinebase.configManager.get('documentCategoryDefault', 'Sales'))
+                .then(category => {
+                    categoryField.setValue(category);
+                    categoryField.onSelect(category, 0);
+                });
+        }
+
         const positions = this.getForm().findField('positions').getValue(); //this.record.get('positions')
         const sums = positions.reduce((a, pos) => {
             a['positions_net_sum'] = (a['positions_net_sum'] || 0) + (pos['net_price'] || 0)
@@ -94,8 +106,8 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const booked = statusField.store.getById(statusField.getValue())?.json.booked
         this.getForm().items.each((field) => {
             if (_.get(field, 'initialConfig.readOnly')) return;
-            if ([this.statusFieldName, 'cost_center_id', 'cost_bearer_id', 'description', 'customer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
-            && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)/)) {
+            if ([this.statusFieldName, 'description', 'customer_reference', 'contact_id', 'tags', 'attachments', 'relations'].indexOf(field.name) < 0
+            && !field.name?.match(/(^shared_.*)|(.*_recipient_id$)|(^eval_dim_.*)/)) {
                 field.setReadOnly(booked);
             }
         });
@@ -104,6 +116,16 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     getRecordFormItems: function() {
         const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, config, fieldDefinition) => {
             switch (fieldName) {
+                case 'document_category':
+                    config.listeners = config.listeners || {}
+                    config.listeners.select = (combo, record, index) => {
+                        _.forEach(record?.data, (val, key) => {
+                            if (key.match(/^eval_dim_(.*)/) && this.getForm().findField(key) && val) {
+                                this.getForm().findField(key).setValue(val);
+                            }
+                        });
+                    }
+                    break;
                 case 'customer_id':
                     config.listeners = config.listeners || {}
                     config.listeners.select = (combo, record, index) => {
@@ -126,6 +148,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             fields['document_language'].setValue(record?.get('language'))
                         }
                     }
+                    // more logic in Tine.Sales.AddressSearchCombo
                     break;
                 case 'vat_procedure':
                     config.listeners = config.listeners || {}
@@ -158,7 +181,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             xtype: 'columnform',
             items: [
                 [fields.document_number, fields.document_proforma_number || placeholder, fields[this.statusFieldName], fields.document_category, fields.document_language],
-                _.assign([fields.customer_id, fields.recipient_id, fields.contact_id, _.assign(fields.customer_reference, {columnWidth: 2/5})], {line: 'recipient'}),
+                _.assign([fields.customer_id, _.assign(fields.recipient_id, {columnWidth: 2/5}), fields.contact_id, fields.customer_reference], {line: 'recipient'}),
                 [ _.assign(fields.document_title, {columnWidth: 3/5}), { ...placeholder }, fields.date ],
                 [{xtype: 'textarea', name: 'boilerplate_Pretext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Pretext`}],
                 [fields.positions],
@@ -167,7 +190,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 [{ ...placeholder }, fields.net_sum, fields.vat_procedure, fields.sales_tax, fields.gross_sum],
                 [fields.credit_term, _.assign({ ...placeholder } , {columnWidth: 4/5})],
                 [{xtype: 'textarea', name: 'boilerplate_Posttext', allowBlank: false, enableKeyEvents: true, height: 70, fieldLabel: `${this.app.i18n._('Boilerplate')}: Posttext`}],
-                [fields.cost_center_id, fields.cost_bearer_id, _.assign({ ...placeholder } , {columnWidth: 3/5})]
+                [new EvaluationDimensionForm({recordClass: this.recordClass})]
             ]
         }]
     }

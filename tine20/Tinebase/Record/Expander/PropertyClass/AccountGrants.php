@@ -11,63 +11,39 @@
  *
  */
 
+use Tinebase_ModelConfiguration_Const as MCC;
+
 class Tinebase_Record_Expander_PropertyClass_AccountGrants extends Tinebase_Record_Expander_Sub
 {
-    protected $parentMC;
+    protected Tinebase_ModelConfiguration $parentMC;
 
     public function __construct($_model, $_expanderDefinition, Tinebase_Record_Expander $_rootExpander)
     {
         /** @var Tinebase_Record_Abstract $_model */
-        if (null === ($mc = $_model::getConfiguration())) {
+        if (null === ($this->parentMC = $_model::getConfiguration())) {
             throw new Tinebase_Exception_InvalidArgument($_model . ' doesn\'t have a modelconfig');
         }
-        $this->parentMC = $mc;
 
-        parent::__construct($mc->grantsModel, $_expanderDefinition, $_rootExpander);
+        parent::__construct($this->parentMC->grantsModel, $_expanderDefinition, $_rootExpander);
     }
 
-    // TODO this should use the defered _setData / DataRequest scheme to improve drastically in performance
     protected function _lookForDataToFetch(Tinebase_Record_RecordSet $_records)
     {
-        $containerCache = [];
-        $funcCache = [];
-        $func = function (Tinebase_Record_Interface $record, callable $func) use(&$funcCache) {
-            $mc = $record::getConfiguration();
-            if ($mc->delegateAclField) {
-                $delegateRecord = $record->{$mc->delegateAclField};
-                if (!$delegateRecord instanceof Tinebase_Record_Interface) {
-                    if (!isset($funcCache[$delegateRecord])) {
-                        $funcCache[$delegateRecord] = $mc->fields[$mc->delegateAclField][Tinebase_Record_Abstract::CONFIG][Tinebase_Record_Abstract::CONTROLLER_CLASS_NAME]::getInstance()->get($delegateRecord, null, true, true);
-                    }
-                    $delegateRecord = $funcCache[$delegateRecord];
-                } elseif (!isset($funcCache[$delegateRecord->getId()])) {
-                    $funcCache[$delegateRecord->getId()] = $delegateRecord;
-                }
-                // see comment below
-                $record->setAccountGrants($func($delegateRecord, $func));
-            } else {
-                // this is important, we allow the record to process the account grants here and then inherit that processed grants down the line
-                // the model down the line do not need to know how to process the grants. HR: Division -> Employee (process grants) -> FreeTime (does not need to know!)
-                $record->setAccountGrants(Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $record->{$mc->getContainerProperty()}));
-            }
-            return $record->{Tinebase_ModelConfiguration::FLD_ACCOUNT_GRANTS};
-        };
-        /** @var Tinebase_Record_Interface $record */
-        foreach ($_records as $record) {
-            if (!$record->{Tinebase_Record_Abstract::FLD_ACCOUNT_GRANTS}) {
-                $containerId = $record->getIdFromProperty($this->parentMC->getContainerProperty());
-                if (!isset($containerCache[$containerId])) {
-                    $containerCache[$containerId] = $func($record, $func);
-                }
-                $record->setAccountGrants($containerCache[$containerId]);
-            }
+        if (0 === $_records->count()) {
+            return;
         }
 
-        // TODO add sub expanding!
+        $this->_addRecordsToProcess($_records);
+
+        $this->_rootExpander->_registerDataToFetch(new Tinebase_Record_Expander_DataRequest_AccountGrants(
+            self::DATA_FETCH_PRIO_ACCOUNT_GRANTS,
+            Tinebase_Core::getApplicationInstance($this->parentMC->getAppName() . '_Model_' . $this->parentMC->getModelName(), '', true),
+            $_records,
+            $this->parentMC,
+            function($a) {})
+        );
     }
 
     protected function _setData(Tinebase_Record_RecordSet $_data)
-    {
-
-    }
+    {}
 }

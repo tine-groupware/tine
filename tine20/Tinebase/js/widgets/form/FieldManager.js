@@ -328,7 +328,7 @@ Tine.widgets.form.FieldManager = function() {
                     field.disabled = true;
                     break;
                 case 'json':
-                    field.xtype = 'tw-acefield';
+                    field.xtype = field.xtype || 'tw-acefield';
                     field.mode = 'json';
                     field.height = 150; // 12 lines
                     break;
@@ -366,6 +366,7 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 default:
                     field.xtype = this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
+                    field.emptyValue = field.emptyValue || (fieldDefinition.nullable ? null : '');
                     if (fieldDefinition.length) {
                         field.maxLength = fieldDefinition.length;
                     }

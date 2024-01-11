@@ -2071,6 +2071,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
 
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => Tinebase_Model_NumberableConfig::class,
+            'application_id' => $application,
+            'model' => Tinebase_Model_NumberableConfig::class,
+        )));
+
         if (Tinebase_Config::getInstance()->featureEnabled(
             Tinebase_Config::FEATURE_COMMUNITY_IDENT_NR)
         ) {
@@ -2092,6 +2098,12 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             'id' => Tinebase_Model_CostUnit::class,
             'application_id' => $application,
             'model' => Tinebase_Model_CostUnit::class,
+        )));
+
+        $result->addRecord(new CoreData_Model_CoreData(array(
+            'id' => Tinebase_Model_EvaluationDimension::class,
+            'application_id' => $application,
+            'model' => Tinebase_Model_EvaluationDimension::class,
         )));
 
         $result->addRecord(new CoreData_Model_CoreData(array(

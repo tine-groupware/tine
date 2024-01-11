@@ -1633,8 +1633,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         /* @var $invoice Sales_Model_Invoice */
         $invoice = Sales_Controller_Invoice::getInstance()->create($invoice);
 
-        $customer = new Sales_Model_Customer();
-        $customer->name = 'Test Customer';
+        $customer = new Sales_Model_Customer(['name' => 'Test Customer',
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
+        ]);
         $customer = Sales_Controller_Customer::getInstance()->create($customer);
         
         Tinebase_Relations::getInstance()->setRelations(

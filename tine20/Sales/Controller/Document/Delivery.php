@@ -43,8 +43,8 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
         $this->_documentStatusField = Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS;
         $this->_oldRecordBookWriteableFields = [
             Sales_Model_Document_Delivery::FLD_DELIVERY_STATUS,
-            Sales_Model_Document_Delivery::FLD_COST_CENTER_ID,
-            Sales_Model_Document_Delivery::FLD_COST_BEARER_ID,
+            Sales_Model_Document_Delivery::FLD_EVAL_DIM_COST_CENTER,
+            Sales_Model_Document_Delivery::FLD_EVAL_DIM_COST_BEARER,
             Sales_Model_Document_Delivery::FLD_DESCRIPTION,
             Sales_Model_Document_Delivery::FLD_REVERSAL_STATUS,
             'tags', 'attachments', 'relations',
@@ -56,28 +56,22 @@ class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstr
         parent::__construct();
     }
 
-    /**
-     * @param Sales_Model_Document_Delivery $document
-     * @return array
-     */
-    public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document)
+    public function documentNumberConfigOverride(Sales_Model_Document_Abstract $document, string $property = Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER): array
     {
+        $result = parent::documentNumberConfigOverride($document, $property);
         if (!$document->isBooked()) {
-            return ['skip' => true];
+            $result['skip'] = true;
         }
-        return [];
+        return $result;
     }
 
-    /**
-     * @param Sales_Model_Document_Delivery $document
-     * @return array
-     */
-    public function documentProformaNumberConfigOverride(Sales_Model_Document_Abstract $document)
+    public function documentProformaNumberConfigOverride(Sales_Model_Document_Abstract $document): array
     {
+        $result = parent::documentNumberConfigOverride($document, Sales_Model_Document_Delivery::FLD_DOCUMENT_PROFORMA_NUMBER);
         if ($document->isBooked()) {
-            return ['skip' => true];
+            $result['skip'] = true;
         }
-        return [];
+        return $result;
     }
 
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)

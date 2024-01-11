@@ -1,13 +1,15 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
+
+use Tinebase_ModelConfiguration_Const as TMCC;
 
 /**
  * class for Tinebase initialization
@@ -102,6 +104,72 @@ class Sales_Setup_Initialize extends Setup_Initialize
         Sales_Scheduler_Task::addUpdateProductLifespanTask($scheduler);
         Sales_Scheduler_Task::addCreateAutoInvoicesDailyTask($scheduler);
         Sales_Scheduler_Task::addCreateAutoInvoicesMonthlyTask($scheduler);
+    }
+
+    protected function _initializeTbSystemCFEvaluationDimension(): void
+    {
+        self::createTbSystemCFEvaluationDimension();
+    }
+
+    public static function createTbSystemCFEvaluationDimension(): void
+    {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
+        $appId = Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId();
+
+        Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+            'name' => 'divisions',
+            'application_id' => $appId,
+            'model' => Tinebase_Model_EvaluationDimensionItem::class,
+            'is_system' => true,
+            'definition' => [
+                Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                    TMCC::LABEL             => 'Sales Divisions', // _('Sales Divisions')
+                    TMCC::TYPE              => TMCC::TYPE_RECORDS,
+                    TMCC::CONFIG            => [
+                        TMCC::APP_NAME          => Sales_Config::APP_NAME,
+                        TMCC::MODEL_NAME        => Sales_Model_DivisionEvalDimensionItem::MODEL_NAME_PART,
+                        TMCC::REF_ID_FIELD      => Sales_Model_DivisionEvalDimensionItem::FLD_EVAL_DIMENSION_ITEM_ID,
+                        TMCC::DEPENDENT_RECORDS => true,
+                    ],
+                ],
+            ]
+        ], true));
+    }
+
+    protected function _initializeCostCenterCostBearer()
+    {
+        self::initializeCostCenterCostBearer();
+    }
+
+    public static function initializeCostCenterCostBearer()
+    {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
+            Sales_Model_Product::class,
+            Sales_Model_Document_Category::class,
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+            Sales_Model_DocumentPosition_Invoice::class,
+            Sales_Model_DocumentPosition_Offer::class,
+            Sales_Model_DocumentPosition_Order::class,
+        ]);
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_BEARER, [
+            Sales_Model_Product::class,
+            Sales_Model_Document_Category::class,
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+            Sales_Model_DocumentPosition_Invoice::class,
+            Sales_Model_DocumentPosition_Offer::class,
+            Sales_Model_DocumentPosition_Order::class,
+        ]);
     }
 
     /**
@@ -241,5 +309,42 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 'filters' => array(),
             ))
         ));
+    }
+
+    protected function _initializeDefaultDivision(): void
+    {
+        $division = static::createDefaultDivision();
+        static::createDefaultCategory($division);
+    }
+
+    public static function createDefaultDivision(): Sales_Model_Division
+    {
+        $t = Tinebase_Translation::getTranslation('Sales');
+        $division = Sales_Controller_Division::getInstance()->create(new Sales_Model_Division([
+            Sales_Model_Division::FLD_TITLE => $t->_('Default Division'),
+        ]));
+        Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION} = $division->getId();
+        Tinebase_Container::getInstance()->setGrants($division->container_id,
+            new Tinebase_Record_RecordSet(Sales_Model_DivisionGrants::class, [
+                new Sales_Model_DivisionGrants([
+                    'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                    Sales_Model_DivisionGrants::GRANT_ADMIN => true,
+                ])
+            ]));
+
+        return $division;
+    }
+
+    public static function createDefaultCategory(Sales_Model_Division $division): Sales_Model_Document_Category
+    {
+        $t = Tinebase_Translation::getTranslation('Sales');
+        $category = Sales_Controller_Document_Category::getInstance()->create(new Sales_Model_Document_Category([
+            Sales_Model_Document_Category::FLD_NAME => $t->_('Standard'),
+            Sales_Model_Document_Category::FLD_DIVISION_ID => $division->getId(),
+        ]));
+        Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT} = $category->getId();
+
+        return $category;
+
     }
 }

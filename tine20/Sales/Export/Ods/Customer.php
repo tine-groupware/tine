@@ -110,6 +110,10 @@ class Sales_Export_Ods_Customer extends Sales_Export_Ods_Abstract
     {
         $customers   = $controller->search($filter);
         $customerIds = $customers->id;
+        $debitors = $customers->{Sales_Model_Customer::FLD_DEBITORS};
+        array_walk($debitors, function (Tinebase_Record_RecordSet &$val) {
+            $val = $val->getArrayOfIds();
+        });
         $contactIds  = array_unique(array_merge($customers->cpextern_id, $customers->cpintern_id));
         
         unset($customers);
@@ -118,9 +122,9 @@ class Sales_Export_Ods_Customer extends Sales_Export_Ods_Abstract
 
         $this->_specialFieldDefinitions = array(array('header' => 'Postal Address', 'identifier' => 'postal_address', 'type' => 'postal'));
 
-        foreach (array('billing', 'delivery') as $type) {
+        foreach (array(Sales_Model_Address::TYPE_BILLING, Sales_Model_Address::TYPE_DELIVERY) as $type) {
             $maxAddresses = $be->getMaxAddressesByType($customerIds, $type);
-            $header = $type == 'billing' ? 'Billing Address' : 'Delivery Address';
+            $header = $type == Sales_Model_Address::TYPE_BILLING ? 'Billing Address' : 'Delivery Address';
 
             if ($maxAddresses > 0) {
                 $i = 0;
@@ -131,9 +135,12 @@ class Sales_Export_Ods_Customer extends Sales_Export_Ods_Abstract
             }
         }
 
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array());
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, [], Tinebase_Model_Filter_FilterGroup::CONDITION_OR);
         $filter->addFilter(new Tinebase_Model_Filter_Text(
             array('field' => 'customer_id', 'operator' => 'in', 'value' => $customerIds)
+        ));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(
+            array('field' => Sales_Model_Address::FLD_DEBITOR_ID, 'operator' => 'in', 'value' => $debitors)
         ));
         
         $this->_addresses = $be->search($filter);
@@ -153,14 +160,18 @@ class Sales_Export_Ods_Customer extends Sales_Export_Ods_Abstract
     protected function _getSpecialFieldValue(Tinebase_Record_Interface $_record, $_param, $_key = NULL, &$_cellType = NULL)
     {
         $customerId = $_record->getId();
+        $debitorIds = $_record->{Sales_Model_Customer::FLD_DEBITORS}->getArrayOfIds();
         
         if (! isset($this->_customerAddresses[$customerId])) {
             $all = $this->_addresses->filter('customer_id', $customerId);
+            $all->merge($this->_addresses->filter(function($adr) use($debitorIds) {
+                return in_array($adr->{Sales_Model_Address::FLD_DEBITOR_ID}, $debitorIds);
+            }));
             $this->_addresses->removeRecords($all);
             $this->_customerAddresses[$customerId] = array(
                 'postal'  => $all->filter('type', 'postal')->getFirstRecord(),
-                'billing' => array('records' => $all->filter('type', 'billing'), 'index' => 0),
-                'delivery' => array('records' => $all->filter('type', 'delivery'), 'index' => 0),
+                Sales_Model_Address::TYPE_BILLING => array('records' => $all->filter('type', Sales_Model_Address::TYPE_BILLING), 'index' => 0),
+                Sales_Model_Address::TYPE_DELIVERY => array('records' => $all->filter('type', Sales_Model_Address::TYPE_DELIVERY), 'index' => 0),
             );
         }
 

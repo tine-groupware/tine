@@ -43,8 +43,8 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
         $this->_documentStatusField = Sales_Model_Document_Offer::FLD_OFFER_STATUS;
         $this->_oldRecordBookWriteableFields = [
             Sales_Model_Document_Offer::FLD_OFFER_STATUS,
-            Sales_Model_Document_Offer::FLD_COST_CENTER_ID,
-            Sales_Model_Document_Offer::FLD_COST_BEARER_ID,
+            Sales_Model_Document_Offer::FLD_EVAL_DIM_COST_CENTER,
+            Sales_Model_Document_Offer::FLD_EVAL_DIM_COST_BEARER,
             Sales_Model_Document_Offer::FLD_DESCRIPTION,
             Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_CREATED_STATUS,
             Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS,

@@ -211,4 +211,22 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId(),
         ]));
     }
+
+    protected function _initializeEvaluationDimensions()
+    {
+        Tinebase_Controller_EvaluationDimension::getInstance()->doRightChecks(false);
+        Tinebase_Controller_EvaluationDimension::getInstance()->modlogActive(false);
+        Tinebase_Controller_EvaluationDimension::getInstance()->useNotes(false);
+        Tinebase_Controller_EvaluationDimension::getInstance()->create(new Tinebase_Model_EvaluationDimension([
+            Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_CENTER,
+            Tinebase_Model_EvaluationDimension::FLD_SORTING => 1000,
+        ]));
+        Tinebase_Controller_EvaluationDimension::getInstance()->create(new Tinebase_Model_EvaluationDimension([
+            Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_BEARER,
+            Tinebase_Model_EvaluationDimension::FLD_SORTING => 1010,
+        ]));
+        Tinebase_Controller_EvaluationDimension::getInstance()->doRightChecks(true);
+        Tinebase_Controller_EvaluationDimension::getInstance()->modlogActive(true);
+        Tinebase_Controller_EvaluationDimension::getInstance()->useNotes(true);
+    }
 }

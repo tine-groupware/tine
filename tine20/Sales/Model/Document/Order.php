@@ -104,9 +104,7 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
             ],
         ]);
 
-        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::FORCE_VALUES] = [
-            Sales_Model_Document_Address::FLD_DOCUMENT_FIELD => self::FLD_RECIPIENT_ID,
-        ];
+        $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::FORCE_VALUES][Sales_Model_Document_Address::FLD_DOCUMENT_FIELD] = self::FLD_RECIPIENT_ID;
 
         $_definition[self::FIELDS][self::FLD_RECIPIENT_ID][self::CONFIG][self::ADD_FILTERS] = [
             ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_RECIPIENT_ID],
@@ -127,7 +125,7 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
                     self::FORCE_VALUES          => [
-                        Sales_Model_Document_Address::FLD_DOCUMENT_FIELD => self::FLD_INVOICE_RECIPIENT_ID,
+                        Sales_Model_Document_Address::FLD_DOCUMENT_FIELD    => self::FLD_INVOICE_RECIPIENT_ID,
                     ],
                     self::ADD_FILTERS           => [
                         ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_INVOICE_RECIPIENT_ID],
@@ -147,7 +145,7 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                     self::MODEL_NAME            => Sales_Model_Document_Address::MODEL_NAME_PART,
                     self::REF_ID_FIELD          => Sales_Model_Document_Address::FLD_DOCUMENT_ID,
                     self::FORCE_VALUES          => [
-                        Sales_Model_Document_Address::FLD_DOCUMENT_FIELD => self::FLD_DELIVERY_RECIPIENT_ID,
+                        Sales_Model_Document_Address::FLD_DOCUMENT_FIELD    => self::FLD_DELIVERY_RECIPIENT_ID,
                     ],
                     self::ADD_FILTERS           => [
                         ['field' => Sales_Model_Document_Address::FLD_DOCUMENT_FIELD, 'operator' => 'equals', 'value' => self::FLD_DELIVERY_RECIPIENT_ID],

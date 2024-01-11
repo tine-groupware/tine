@@ -39,6 +39,8 @@
  */
 class Sales_Model_Invoice extends Tinebase_Record_Abstract
 {
+    public const FLD_DEBITOR_ID = 'debitor_id';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -253,6 +255,14 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                     )
                 )
             ),
+            self::FLD_DEBITOR_ID                => [
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Debitor::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
+            ],
             'fulltext' => array(
                 'type'   => 'virtual',
                 'config' => array(

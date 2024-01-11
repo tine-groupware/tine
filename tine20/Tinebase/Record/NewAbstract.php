@@ -311,15 +311,10 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         return self::$_inputFilters[$keyName];
     }
 
-    /**
-     * sets identifier of record
-     *
-     * @param string $_id
-     * @throws Tinebase_Exception_Record_Validation
-     */
-    public function setId($_id)
+    public function setId($_id): self
     {
         $this->__set(static::$_configurationObject->getIdProperty(), $_id);
+        return $this;
     }
 
     /**

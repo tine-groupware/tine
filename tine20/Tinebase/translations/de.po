@@ -3894,9 +3894,6 @@ msgstr "Konfiguriere was mit den Daten gelöschter Benutzer geschehen soll"
 msgid "Delete personal containers"
 msgstr "Lösche persönliche Ordner"
 
-msgid "Personal container"
-msgstr "Persönlicher Ordner"
-
 #: Config.php:953
 msgid "Delete file folders and files"
 msgstr "Dateien und Ordner löschen"
@@ -6477,9 +6474,35 @@ msgstr "Bild in ausgewählter Größe einfügen"
 msgid "Image size"
 msgstr "Bildgröße"
 
-msgid "Following you find a list of all supported import formats."
-msgstr ""
-"Nachfolgend finden Sie eine Liste mit allen unterstützten Import-Formaten."
+msgid "Personal container"
+msgstr "Persönlicher Ordner"
 
 msgid "Reload the application"
 msgstr "Anwendung neu laden"
+
+msgid "Numbering Range"
+msgid_plural "Numbering Ranges"
+msgstr[0] "Nummernkreis"
+msgstr[1] "Nummernkreise"
+
+msgid "GENDER_Numbering Range"
+msgstr "male"
+
+msgid "Property"
+msgstr "Eigenschaft"
+
+msgid "Additional Key"
+msgstr "Schlüssel-Zusatz"
+
+msgid "Numbering Range Start"
+msgstr "Nummernkreis Start"
+
+msgid "Number of Zerofill"
+msgstr "Anzahl Nullauffüllungen"
+
+msgid "Prefix"
+msgstr "Präfix"
+
+msgid "Following you find a list of all supported import formats."
+msgstr ""
+"Nachfolgend finden Sie eine Liste mit allen unterstützten Import-Formaten."

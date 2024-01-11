@@ -25,9 +25,6 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 Sales_Model_Document_Abstract::FLD_CUSTOMER_ID => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'delivery'      => [],
-                        'billing'       => [],
-                        'postal'        => [],
                         'cpextern_id'   => [],
                         'cpintern_id'   => [],
                     ],
@@ -35,12 +32,13 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
                 Sales_Model_Document_Abstract::FLD_RECIPIENT_ID => [],
                 Sales_Model_Document_Abstract::FLD_POSITIONS => [],
                 Sales_Model_Document_Abstract::FLD_BOILERPLATES => [],
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY => [],
             ]
         ]))->expand($this->_records);
 
         /** @var Sales_Model_Document_Abstract $record */
         $record = $this->_records->getFirstRecord();
-        $cat = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY};
+        $cat = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->{Sales_Model_Document_Category::FLD_NAME};
         $lang = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE};
         $this->_locale = new Zend_Locale($lang);
         Sales_Model_DocumentPosition_Abstract::setExportContextLocale($this->_locale);

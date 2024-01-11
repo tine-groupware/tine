@@ -419,11 +419,11 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $customerController = Sales_Controller_Customer::getInstance();
         $offerIds = $offerController->search(null, null, false, true);
         $def = Sales_Model_Document_Offer::getConfiguration()->getFields()[Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER];
-        /** @var Tinebase_Numberable_String $numberable */
-        $numberable = Tinebase_Numberable::getNumberable(Sales_Model_Document_Offer::class,
-            Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER, $def);
         foreach ($offerIds as $offerId) {
             $offer = $offerController->get($offerId);
+            /** @var Tinebase_Numberable_String $numberable */
+            $numberable = Tinebase_Numberable::getNumberable($offer, Sales_Model_Document_Offer::class,
+                Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER, $def);
             $customer = null;
             $newRelations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
             /** @var Tinebase_Model_Relation $relation */

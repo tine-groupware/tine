@@ -5,6 +5,8 @@
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
+
 Ext.ns('Tine.Inventory');
 
 /**
@@ -249,39 +251,26 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             name: 'price',
                             fieldLabel: this.app.i18n._('Price'),
                             columnWidth: 0.5
-                        }, 
-                          (Tine.hasOwnProperty('Sales') && Tine.Tinebase.common.hasRight('view', 'Sales', 'costcenter')) ?
-                            Tine.widgets.form.RecordPickerManager.get('Tinebase', 'CostCenter', {
-                                name: 'costcenter',
-                                allowBlank: true,
-                                fieldLabel: this.app.i18n._('Cost center'),
-                                columnWidth: 0.5
-                            }) : {
-                                    xtype: 'textfield',
-                                    name: 'costcenter',
-                                    disabled: true,
-                                    hidden: true,
-                                    columnWidth: 0.5
-                              }
-                        ],
-                        [{
+                        }], [{
                             xtype: 'textfield',
                             name: 'invoice',
                             fieldLabel: this.app.i18n._('Invoice'),
                             columnWidth: 0.5
-                        },
-                        {
+                        }, {
                             xtype: 'datefield',
                             name: 'invoice_date',
                             fieldLabel: this.app.i18n._('Invoice date'),
                             columnWidth: 0.5
+                        }], [{
+                            xtype: 'checkbox',
+                            hideLabel: true,
+                            boxLabel: this.app.i18n._('Depreciate'),
+                            name: 'deprecated_status'
                         }],
-                        [{
-                                xtype: 'checkbox',
-                                hideLabel: true,
-                                boxLabel: this.app.i18n._('Depreciate'),
-                                name: 'deprecated_status'
-                        }]
+                        [ new EvaluationDimensionForm({
+                            maxItemsPerRow: 2,
+                            recordClass: this.recordClass
+                        })]
                     ]
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({

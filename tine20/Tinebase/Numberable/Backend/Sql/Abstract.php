@@ -25,7 +25,7 @@ class Tinebase_Numberable_Backend_Sql_Abstract extends Tinebase_Backend_Sql_Abst
     protected $_numberableColumn = NULL;
     protected $_stepSize = 1;
     protected $_bucketColumn = NULL;
-    protected $_bucketKey = NULL;
+    protected $_bucketKey = '';
     protected $_start = 1;
 
     /**

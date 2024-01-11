@@ -410,12 +410,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     initialLoadAfterRender: true,
 
     /**
-     * add "create new record" button
-     * 
-     * @type Boolean
-     * @property addButton
+     * @cfg {Bool} allowCreateNew
+     * allow to create new records (local mode only atm.!)
      */
-    addButton: true,
+    allowCreateNew: true,
+
+    /**
+     * @cfg {Bool} allowDelete
+     * allow to delete records
+     */
+    allowDelete: true,
     
     layout: 'border',
     border: false,
@@ -986,7 +990,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             scope: this
         });
 
-        this.action_addInNewWindow = (this.addButton) ? new Ext.Action({
+        this.action_addInNewWindow = (this.allowCreateNew) ? new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(i18n._('Add {0}'), this.i18nRecordName),
@@ -1005,7 +1009,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             allowMultiple: true
         });
 
-        this.initDeleteAction(services);
+        if (this.allowDelete) {
+            this.initDeleteAction(services);
+        }
 
         this.action_move = new Ext.Action({
             requiredGrant: 'editGrant',
@@ -1151,6 +1157,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         Tine.widgets.dialog.ImportDialog.openWindow({
+            openerCt: this,
             appName: this.app.name,
             modelName: this.recordClass.getMeta('modelName'),
             defaultImportContainer: container,
@@ -2561,6 +2568,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         var popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
+                openerCt: this,
                 plugins: Ext.encode(plugins),
                 fixedFields: fixedFields,
                 additionalConfig: Ext.encode(additionalConfig),

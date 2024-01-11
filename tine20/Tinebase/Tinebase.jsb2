@@ -54,10 +54,6 @@
           "path": "js/widgets/form/"
         },
         {
-          "text": "FieldManager.js",
-          "path": "js/widgets/form/"
-        },
-        {
           "text": "AddToRecordPanel.js",
           "path": "js/widgets/dialog/"
         },
@@ -728,6 +724,10 @@
         {
           "text": "PickerGridPanel.js",
           "path": "js/widgets/grid/"
+        },
+        {
+          "text": "FieldManager.js",
+          "path": "js/widgets/form/"
         },
         {
           "text": "MappingPickerGridPanel.js",

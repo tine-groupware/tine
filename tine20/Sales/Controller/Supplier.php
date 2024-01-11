@@ -118,6 +118,8 @@ class Sales_Controller_Supplier extends Sales_Controller_NumberableAbstract
      */
     protected function _inspectDelete(array $_ids)
     {
+        // TODO FIXME !!!! what about this?!?
+
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'in', 'value' => $_ids)));
         

@@ -187,14 +187,13 @@ class Sales_ControllerTest extends TestCase
             'locality' => 'Munich',
             'region' => 'Bavaria',
             'countryname' => 'DE',
-            'custom1' => 'de-234',
             'type' => 'billing',
         );
         
         $i18nTypeString = Tinebase_Translation::getTranslation('Sales')->_('billing');
         
         $result = Sales_Controller_Address::getInstance()->resolveVirtualFields($address);
-        $this->assertEquals($result['fulltext'], "Meister Eder, Brunnengässla 4, 80331 Munich ($i18nTypeString - de-234)");
+        $this->assertEquals($result['fulltext'], "Meister Eder, Brunnengässla 4, 80331 Munich ($i18nTypeString)");
     }
 
     /**
@@ -324,6 +323,10 @@ class Sales_ControllerTest extends TestCase
         
         $customer = Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer(array(
             'name' => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_NAME => '-',
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
         )));
 
         $relationData = [
@@ -352,5 +355,39 @@ class Sales_ControllerTest extends TestCase
         ]))->getFirstRecord();
         
         self::assertEquals($contact->adr_one_locality, $postal->locality);
+    }
+
+    public function testCustomerBillingAddressSearch()
+    {
+        $division1 = Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId();
+        $division2 = Sales_Controller_Division::getInstance()->create(new Sales_Model_Division([
+            Sales_Model_Division::FLD_TITLE => 'test',
+        ]))->getId();
+        Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer(array(
+            'name' => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_NAME => '-',
+                Sales_Model_Debitor::FLD_DIVISION_ID => $division1,
+                Sales_Model_Debitor::FLD_BILLING => [[
+                    Sales_Model_Address::FLD_LOCALITY => 'loco',
+                ]],
+            ], [
+                Sales_Model_Debitor::FLD_NAME => '--',
+                Sales_Model_Debitor::FLD_DIVISION_ID => $division2,
+                Sales_Model_Debitor::FLD_BILLING => [[
+                    Sales_Model_Address::FLD_LOCALITY => 'lupo',
+                ]],
+            ]],
+        )));
+
+        $deliveries = Sales_Controller_Address::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, [
+            ['field' => Sales_Model_Address::FLD_TYPE, 'operator' => 'not', 'value' => 'postal'],
+            ['field' => Sales_Model_Address::FLD_DEBITOR_ID, 'operator' => 'definedBy', 'value' => [
+                ['field' => Sales_Model_Debitor::FLD_NAME, 'operator' => 'equals', 'value' => '-'],
+            ]],
+        ]));
+
+        $this->assertSame(1, $deliveries->count());
+        self::assertEquals('loco', $deliveries->getFirstRecord()->locality);
     }
 }
