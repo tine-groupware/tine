@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.dialog');
 
@@ -236,7 +236,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
      * returns the file panel of this wizard (step 1)
      * 
      * @TODO restrict allowed extensions on definition selection OR
-     *       restirct allowed definitions on file selection
+     *       restrict allowed definitions on file selection
      */
     getFilePanel: function() {
         if (this.filePanel) {
@@ -247,6 +247,10 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             description = def ? this.app.i18n._hidden(def.get('description')) : '',
             options = def ? def.get('plugin_options_json') : null,
             example = options && options.example ? options.example : '';
+
+        const importText = (example !== '')
+            ? i18n._('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title)
+            : i18n._('Following you find a list of all supported import formats.');
             
         return {
             title: i18n._('Choose File and Format'),
@@ -277,16 +281,12 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 baseCls: 'ux-subformpanel',
                 title: i18n._('What should the file you upload look like?'),
                 flex: 1,
-                items: [/*{
-                    xtype: 'label',
-                    cls: 'tb-login-big-label',
-                    html: i18n._('What should the file you upload look like?') + '<br />'
-                },*/ {
+                items: [{
                     xtype: 'label',
                     html: '<p>' + i18n._('Tine 2.0 does not understand all kind of files you might want to upload. You will have to manually adjust your file so Tine 2.0 can handle it.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
                 }, {
                     xtype: 'label',
-                    html: '<p>' + i18n._('Following you find a list of all supported import formats and a sample file, how Tine 2.0 expects your file to look like.').replace(/Tine 2\.0/g, Tine.title) + '</p><br />'
+                    html: '<p>' + importText + '</p><br />'
                 }, {
                     xtype: 'label',
                     html: '<p>' + i18n._('Please select the import format of the file you want to upload').replace(/Tine 2\.0/g, Tine.title) + '</p>'
@@ -313,7 +313,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                     html: example ? ('<p><a href="' + example + '">' + i18n._('Download example file') + '</a></p>') : '<p>&nbsp;</p>'
                 }, {
                     xtype: 'displayfield',
-//                    fieldLabel: i18n._('Import description'),
                     ref: '../../definitionDescription',
                     height: 70,
                     value: description,
@@ -483,13 +482,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             frame: true,
             ref: '../conflictsPanel',
             canonicalName: 'ImportResolveConflicts',
-            items: [/*{
-                xtype: 'label',
-                ref: '../conflictsLabel',
-                rawText: '<p>' + i18n._('There are {0} {1} that might already exist.') + '</p>',
-                html: '<p></p>',
-                height: 20
-            },*/ {
+            items: [{
                 xtype: 'paging',
                 ref: '../conflictPagingToolbar',
                 pageSize: 1,
@@ -661,14 +654,8 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
             return this.summaryPanel;
         }
         var exceptionExpander = new Ext.ux.grid.RowExpander({
-            tpl : new Ext.XTemplate('{[this.showClientRecord(values)]}', { showClientRecord: function(values) {
+            tpl : new Ext.XTemplate('{[this.showClientRecord(values)]}', { function(values) {
                 if (values && values.exception && values.exception.clientRecord) {
-                    // there is no generic detailsPanel retirval yet
-//                    if (Ext.isObject(values.exception.clientRecord)) {
-//                        var detailsPanel = new Tine.Addressbook.ContactGridDetailsPanel({});
-//                        
-//                        return detailsPanel.tpl.apply(values.exception.clientRecord);
-//                    }
                     return Ext.util.Format.htmlEncode(Ext.encode(values.exception.clientRecord));
                 } else {
                     return i18n._('No Detail Informations');
@@ -858,8 +845,7 @@ Tine.widgets.dialog.ImportDialog.openWindow = function (config) {
         height: 600,
         name: Tine.widgets.dialog.ImportDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.dialog.ImportDialog',
-        contentPanelConstructorConfig: config//,
-//        modal: true
+        contentPanelConstructorConfig: config
     });
     return window;
 };

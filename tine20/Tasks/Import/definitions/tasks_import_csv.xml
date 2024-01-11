@@ -8,6 +8,7 @@
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
     <description>Import CSV formatted tasks</description>
+    <example>Tasks/Import/examples/checklist.csv</example>
     <extension>csv</extension>
     <mapping>
         <field>
