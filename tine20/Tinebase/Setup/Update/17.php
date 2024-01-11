@@ -6,7 +6,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  *
  * this is 2024.11 (ONLY!)
@@ -116,6 +116,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                 ]))->getFirstRecord()) {
             $dimension = new Tinebase_Model_EvaluationDimension([
                 Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_CENTER,
+                Tinebase_Model_EvaluationDimension::FLD_SORTING => 1000,
             ]);
 
             if ($this->_backend->tableExists('cost_centers')) {
@@ -139,6 +140,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             ]))->getFirstRecord()) {
             $dimension = new Tinebase_Model_EvaluationDimension([
                 Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_BEARER,
+                Tinebase_Model_EvaluationDimension::FLD_SORTING => 1010,
             ]);
 
             if ($this->_backend->tableExists('cost_bearers')) {
