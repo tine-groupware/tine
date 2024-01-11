@@ -120,6 +120,39 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         $feFilter = $filter->toArray(true);
         $this->assertSame($filterArray, $feFilter);
+
+        $result = Sales_Controller_Document_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Document_Offer::class, [
+                ['field' => 'division_id', 'operator' => 'equals', 'value' => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}],
+            ]
+        ));
+        $this->assertSame(1, $result->count());
+
+        $result = Sales_Controller_Document_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Document_Offer::class, [
+                ['field' => 'division_id', 'operator' => 'not', 'value' => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}],
+            ]
+        ));
+        $this->assertSame(0, $result->count());
+
+        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+        $result = Sales_Controller_Document_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Document_Offer::class, [
+                ['field' => 'division_id', 'operator' => 'definedBy', 'value' => [
+                    ['field' => 'title', 'operator' => 'equals', 'value' => $division->title],
+                ]],
+            ]
+        ));
+        $this->assertSame(1, $result->count());
+
+        $result = Sales_Controller_Document_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Document_Offer::class, [
+                ['field' => 'division_id', 'operator' => 'notDefinedBy', 'value' => [
+                    ['field' => 'title', 'operator' => 'equals', 'value' => $division->title],
+                ]],
+            ]
+        ));
+        $this->assertSame(0, $result->count());
     }
 
     public function testOrderAddresses()
