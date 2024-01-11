@@ -28,7 +28,8 @@ Tine.Tinebase.EncodingHelper = {
         }
 
         value = Ext.util.Format.htmlEncode(value);
-        return Ext.util.Format.nl2br(value);
+        // @TODO for HTMLProxies we should invent some kind of chain we can hook into
+        return value.isExpression ? value : Ext.util.Format.nl2br(value);
     }
 };
 
