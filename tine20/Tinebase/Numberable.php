@@ -103,8 +103,8 @@ class Tinebase_Numberable extends Tinebase_Numberable_Abstract
 
         if (!isset(self::$_numberableCache[$key])) {
             if ($numberableCfg = static::getCreateUpdateNumberableConfig($_class, $_field, $_config)) {
-                $_config[TMCC::CONFIG][Tinebase_Numberable_String::ZEROFILL] = $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ZEROFILL};
-                $_config[TMCC::CONFIG][Tinebase_Numberable_Abstract::START] = $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_START};
+                $_config[TMCC::CONFIG][Tinebase_Numberable_String::ZEROFILL] = (int)$numberableCfg->{Tinebase_Model_NumberableConfig::FLD_ZEROFILL};
+                $_config[TMCC::CONFIG][Tinebase_Numberable_Abstract::START] = (int)$numberableCfg->{Tinebase_Model_NumberableConfig::FLD_START};
                 $_config[TMCC::CONFIG][Tinebase_Numberable_String::PREFIX] = $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_PREFIX};
             }
 
