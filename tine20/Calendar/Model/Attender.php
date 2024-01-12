@@ -347,7 +347,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
 
                 // legacy code
                 if (!empty($modified_attribute)) {
-                    if (in_array($modification->modified_attribute, array('email', 'email_home'))) {
+                    if (in_array($modification->modified_attribute, array_keys(Addressbook_Model_Contact::getEmailFields()))) {
                         if ($modification->old_value) {
                             $emails[] = $modification->old_value;
                         }

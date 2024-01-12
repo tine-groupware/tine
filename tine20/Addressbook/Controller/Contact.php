@@ -570,33 +570,23 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @return array
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function doMailsBelongToAccount($mails) {
-        $contactFilter = new Addressbook_Model_ContactFilter([
-            [
-                'field' => 'type',
-                'operator' => 'equals',
-                'value' => Addressbook_Model_Contact::CONTACTTYPE_USER
-            ],
-            [
-                'condition' => 'OR',
-                'filters' => [
-                    [
-                        'field' => 'email',
-                        'operator' => 'in',
-                        'value' => $mails
-                    ],
-                    [
-                        'field' => 'email_home',
-                        'operator' => 'in',
-                        'value' => $mails
-                    ]
-                ]
+    public function doMailsBelongToAccount($emails) {
+        $contactFilters = [];
+        $queryFilters = array_map(function($email) {return ['field' => 'email_query', 'operator' => 'contains', 'value' => $email];}, $emails);
+        $contactFilters[] = [
+            'condition' => 'OR',
+            'filters' => $queryFilters
+        ];
+        $contactFilters[] = [
+            'condition' => 'AND',
+            'filters' => [
+                ['field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CONTACTTYPE_USER],
             ]
-        ]);
-
+        ];
+        $contactFilter = new Addressbook_Model_ContactFilter($contactFilters);
         $contacts = Addressbook_Controller_Contact::getInstance()->search($contactFilter);
         $usermails = array_filter(array_merge($contacts->email, $contacts->email_home));
-        return array_diff($mails, $usermails);
+        return array_diff($emails, $usermails);
     }
 
     /**
@@ -1432,8 +1422,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             array(
                 'condition' => 'OR',
                 'filters' => array(
-                    array('field' => 'email', 'operator' => 'equals', 'value' => $email),
-                    array('field' => 'email_home', 'operator' => 'equals', 'value' => $email)
+                    array('field' => 'email_query', 'operator' => 'contains', 'value' => $email)
                 )
             ),
         )), new Tinebase_Model_Pagination(array(
@@ -1468,12 +1457,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $types = array_filter($types);
         
         if (count($emails) > 0) {
+            $queryFilters = array_map(function($email) {return ['field' => 'email_query', 'operator' => 'contains', 'value' => $email];}, $emails);
             $contactFilters[] = [
                 'condition' => 'OR',
-                'filters' => [
-                    ['field' => 'email', 'operator' => 'in', 'value' => $emails],
-                    ['field' => 'email_home', 'operator' => 'in', 'value' => $emails]
-                ]
+                'filters' => $queryFilters
             ];
             $listFilters[] = ['field' => 'email', 'operator' => 'in', 'value' => $emails];
         }
@@ -1526,7 +1513,6 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     public function getContactsRecipientToken(array $contacts): array
     {
         $contacts = isset($contacts['id']) ? [$contacts] : $contacts;
-        $mailTypes =  ['email', 'email_home'];
         $possibleAddresses = [];
 
         if (class_exists('GDPR_Controller_DataIntendedPurposeRecord')
@@ -1593,12 +1579,15 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                     "name" => $contact["name"] ?? '',
                     "type" =>  $useAsMailinglist ? 'mailingList' : $contact["type"],
                     "email" => $contact['email'] ?? '',
-                    "email_type" =>  '',
+                    "email_type_field" =>  '',
                     "contact_record" => $contact,
                     "emails" => $listMemberEmails
                 ];
             } else {
-                foreach ($mailTypes as $emailType) {
+                $propDefs = Addressbook_Controller_ContactProperties_Definition::getInstance()->getAll();
+                $emailDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Email::class);
+                foreach ($emailDefs as $emailDef) {
+                    $emailType = $emailDef[Addressbook_Model_ContactProperties_Definition::FLD_NAME];
                     if (empty($contact[$emailType])) {
                         continue;
                     }
@@ -1608,7 +1597,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                         "name" => $contact["n_fn"] ?? '',
                         "type" =>  $contact["type"] ?? '',
                         "email" => $contact[$emailType],
-                        "email_type" =>  $emailType,
+                        "email_type_field" => $emailType,
                         "contact_record" => $contact
                     ];
                 }
@@ -1670,10 +1659,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $emailFields = Addressbook_Model_Contact::getEmailFields();
         $emailDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Email::class);
         foreach ($emailDefs as $emailDef) {
-            $emailFields[$emailDef->{AMCPD::FLD_NAME}] = $emailDef->{AMCPD::FLD_NAME};
+            $emailFields[$emailDef->{AMCPD::FLD_NAME}] = $emailDef;
         }
-        $filterModel['email_query'][TMCC::OPTIONS][TMCC::FIELDS] = array_values($emailFields);
-        foreach ($emailFields as $emailField) {
+        $filterModel['email_query'][TMCC::OPTIONS][TMCC::FIELDS] = array_keys($emailFields);
+        foreach (array_keys($emailFields) as $emailField) {
             if (!in_array($emailField, $filterModel['name_email_query'][TMCC::OPTIONS][TMCC::FIELDS])) {
                 $filterModel['name_email_query'][TMCC::OPTIONS][TMCC::FIELDS][] = $emailField;
             }

@@ -903,7 +903,7 @@ Tine.Tinebase.common = {
         let emailArray = _.map(parsedList, (parsed) => {
             let contact = {
                 'email': parsed.address ?? '',
-                'email_type': '',
+                'email_type_field': '',
                 'type': '',
                 'n_fileas': '',
                 'name': parsed?.name ?? '',

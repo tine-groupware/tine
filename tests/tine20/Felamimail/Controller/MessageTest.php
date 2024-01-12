@@ -903,7 +903,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $oldTransport = Tinebase_Smtp::getDefaultTransport();
         $oldTestTransport = Felamimail_Transport::setTestTransport(null);
         static::resetMailer();
-
+        
         try {
             Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
             Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
@@ -918,7 +918,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
                         "name" => '',
                         "type" =>  '',
                         "n_fileas" => '',
-                        "email_type" =>  '',
+                        "email_type_field" =>  '',
                         "contact_record" => ''
                     ],
                     $this->_personas['sclever']->accountEmailAddress
@@ -932,12 +932,51 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
             Felamimail_Controller_Message_Send::getInstance()->sendMessage($massMailingMessage);
             $messages = static::getMessages();
             static::assertEquals(2, count($messages), 'expected 2 mails send');
-
         } finally {
             Tinebase_Smtp::setDefaultTransport($oldTransport);
             Felamimail_Transport::setTestTransport($oldTestTransport);
             static::resetMailer();
             $pollTest->tearDown();
+        }
+    }
+    
+    public function testMassMailingMessageToPrivateAddress()
+    {
+        $oldTransport = Tinebase_Smtp::getDefaultTransport();
+        $oldTestTransport = Felamimail_Transport::setTestTransport(null);
+        static::resetMailer();
+
+        $contact1 = Addressbook_Controller_Contact::getInstance()->get($this->_personas['sclever']->contact_id);
+        try {
+            Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
+            Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
+
+            $massMailingMessage = new Felamimail_Model_Message([
+                'account_id' => $this->_account->getId(),
+                'subject' => 'test poll mass mailing',
+                'bcc' => [
+                    [
+                        "email" => Tinebase_Core::getUser()->accountEmailAddress,
+                        "name" => '',
+                        "type" =>  '',
+                        "n_fileas" => '',
+                        "email_type_field" =>  '',
+                        "contact_record" => ''
+                    ],
+                    $contact1->email_home
+                ],
+                'body' => 'mass mail to private address',
+                'headers' => ['X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822],
+                'massMailingFlag' => true,
+            ]);
+            static::flushMailer();
+            Felamimail_Controller_Message_Send::getInstance()->sendMessage($massMailingMessage);
+            $messages = static::getMessages();
+            static::assertEquals(1, count($messages), 'expected 1 mails send, private email should be ignored');
+        } finally {
+            Tinebase_Smtp::setDefaultTransport($oldTransport);
+            Felamimail_Transport::setTestTransport($oldTestTransport);
+            static::resetMailer();
         }
     }
 
@@ -963,7 +1002,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
                         "name" => '',
                         "type" =>  '',
                         "n_fileas" => '',
-                        "email_type" =>  '',
+                        "email_type_field" =>  '',
                         "record_id" => ''
                     ],
                     'gdpr@mail.test'

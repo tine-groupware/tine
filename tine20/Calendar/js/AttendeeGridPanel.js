@@ -887,7 +887,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         });
         if (tinebaseApp.featureEnabled('featureShowAccountEmail')) {
             if (typeof name.getPreferredEmail == 'function') {
-                email = name.getPreferredEmail();
+                email = name.getPreferredEmail().email;
             } else if (name.email) {
                 email = name.email;
             } else if (name.accountEmailAddress) {

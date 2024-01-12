@@ -451,15 +451,11 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             'n_fileas' => '',
             'name' => '',
             'type' => 'user',
-            'email_type' => ''
+            'email_type_field' => ''
         ];
         $result = $adbJsonFE->searchContactsByRecipientsToken([$address]);
-        $emails = array_filter($result['results'], function($addressData) {
-            return $addressData['email_type'] === 'email' ? $addressData : null;
-        });
-
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
-        $messageToSend['to'] = $emails;
+        $messageToSend['to'] =$result['results'];
 
         $message = $this->_json->saveMessage($messageToSend);
 
@@ -1472,7 +1468,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
                 "name" => '',
                 "type" =>  '',
                 "n_fileas" => '',
-                "email_type" =>  '',
+                "email_type_field" =>  '',
                 "contact_record" => ''
             ], 'test String <testString@mail.test>',
             'test String 2 <testString2@mail.test>; test String 3 <testString3@mail.test>',

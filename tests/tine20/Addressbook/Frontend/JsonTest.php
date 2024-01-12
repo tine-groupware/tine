@@ -2949,7 +2949,7 @@ Steuernummer 33/111/32212";
                 "name" => Tinebase_Core::getUser()->accountFullName,
                 "type" =>  '',
                 "email" => Tinebase_Core::getUser()->accountEmailAddress,
-                "email_type" =>  '',
+                "email_type_field" =>  '',
             ]
         ];
         $result = $this->_uit->searchContactsByRecipientsToken($recipientData);

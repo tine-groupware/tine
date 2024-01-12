@@ -179,7 +179,7 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
     },
 
     preferredEmailRenderer : function(value,metadata,record) {
-        return record.getPreferredEmail();
+        return record.getPreferredEmail().email;
     },
 
     onRecordLoad: function(editDialog, record) {

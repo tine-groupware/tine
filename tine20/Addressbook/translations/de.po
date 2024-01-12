@@ -615,6 +615,9 @@ msgstr "Pfade"
 msgid "Preferred Address"
 msgstr "Bevorzugte Adresse"
 
+msgid "Preferred E-Mail"
+msgstr "Bevorzugte E-Mail"
+
 #: Model/Contact.php:582 js/ContactGrid.js:221 js/Model.js:32 js/Model.js:175
 msgid "Job Role"
 msgstr "Funktion"
@@ -1387,3 +1390,9 @@ msgstr "Angezeigter Name - Firma / Organisation"
 
 msgid "Salutation Title Last Name (Company / Organisation)"
 msgstr "Anrede Titel Nachname (Firma / Organisation)"
+
+msgid "Preferred"
+msgstr "Bevorzugt"
+
+msgid "Set as preferred E-Mail"
+msgstr "Als bevorzugte E-Mail setzen"

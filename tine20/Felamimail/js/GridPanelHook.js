@@ -267,22 +267,27 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         });
     },
     
-    getRecipientTokenFromContact: function (contact) {
+    getRecipientTokenFromContact: function (contact, field = null) {
         // no exact matches are necessary - use the same regex as in \Tinebase_Mail::EMAIL_ADDRESS_CONTAINED_REGEXP
         const emailRegEx = /([a-z0-9_\+-\.&]+@[a-z0-9-\.]+\.[a-z]{2,63})/i;
-        const email = typeof contact.getPreferredEmail == 'function' ? contact.getPreferredEmail() : null;
-        const emailType = contact.get('email') === email ? 'email' : contact.get('email_home') === email ? 'email_home' : 'email';
+        let preferredEmail = typeof contact.getPreferredEmail == 'function' ? contact.getPreferredEmail() : null;
+        if (field) {
+            preferredEmail = {
+                email: contact.data[field],
+                type: field
+            }
+        }
         let token = null;
         
-        if (email && email.match(emailRegEx)) {
+        if (preferredEmail?.email && preferredEmail.email.match(emailRegEx)) {
             const hasContact = contact.get('id');
             token = {
-                'email': email,
-                'email_type': emailType,
-                'type': hasContact ? contact.get('type') : '',
-                'n_fileas': contact.get('n_fileas') ?? '',
-                'name': contact.get('n_fn') ?? '',
-                'contact_record': hasContact ? contact : null
+                'email': preferredEmail.email,
+                'email_type_field': preferredEmail.type,
+                'type': contact.get('type'),
+                'n_fileas': contact.get('n_fileas'),
+                'name': contact.get('n_fn'),
+                'contact_record': hasContact ? contact.data : null
             };
         }
         
@@ -415,7 +420,7 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         if (action.text ===  this.app.i18n._('Compose email') && this.records.length > 0){
             let hasEmailAddress = false;
             _.each(this.records, (record) => {
-                if ((typeof record.getPreferredEmail == 'function' && record.getPreferredEmail() !== '') ||
+                if ((typeof record.getPreferredEmail == 'function' && record.getPreferredEmail().email !== '') ||
                     (record.get('members') && record.get('members').length > 0) ||
                     (record.get('attendee') && record.get('attendee').length > 0)
                 ){

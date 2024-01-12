@@ -141,8 +141,9 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {Array}
      */
     getColumns: function() {
-        return Tine.Addressbook.ContactGridPanel.getBaseColumns(this.app.i18n)
+        const cols =  Tine.Addressbook.ContactGridPanel.getBaseColumns(this.app.i18n)
             .concat(this.getModlogColumns().concat(this.getCustomfieldColumns()));
+        return cols;
     },
     
     /**
@@ -243,6 +244,18 @@ Tine.Addressbook.ContactGridPanel.preferredAddressRenderer = function(value) {
     }
 };
 
+/**
+ * Column renderer adb preferred_email field
+ * @return {*}
+ * @param data
+ * @param cell
+ * @param record
+ */
+Tine.Addressbook.ContactGridPanel.preferredEmailRenderer = function(data, cell, record) {
+    const field = record.get('preferred_email');
+    return record.data[field] ?? '';
+};
+
 Tine.Addressbook.ContactGridPanel.languageRenderer = function(value) {
     var allLanguages = Locale.getTranslationList('Language');
     return allLanguages[value];
@@ -287,6 +300,7 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
         { id: 'adr_two_postalcode', header: i18n._('Postalcode (private)'), dataIndex: 'adr_two_postalcode' },
         { id: 'adr_two_countryname', header: i18n._('Country (private)'), dataIndex: 'adr_two_countryname', renderer: Tine.Addressbook.ContactGridPanel.countryRenderer },
         { id: 'preferred_address', header: i18n._('Preferred Address'), dataIndex: 'preferred_address', renderer: Tine.Addressbook.ContactGridPanel.preferredAddressRenderer },
+        { id: 'preferred_email', header: i18n._('Preferred E-Mail'), dataIndex: 'preferred_email', renderer: Tine.Addressbook.ContactGridPanel.preferredEmailRenderer },
         { id: 'email', header: i18n._('Email'), dataIndex: 'email', width: 150, hidden: false },
         { id: 'tel_work', header: i18n._('Phone'), dataIndex: 'tel_work', hidden: false },
         { id: 'tel_cell', header: i18n._('Mobile'), dataIndex: 'tel_cell', hidden: false },

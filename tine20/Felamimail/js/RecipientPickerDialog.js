@@ -61,7 +61,7 @@ Ext.namespace('Tine.Felamimail');
             return;
         }
         
-        var subject = (this.record.get('subject') != '') ? this.record.get('subject') : this.app.i18n._('(new message)');
+        const subject = this.record.get('subject') ?? this.app.i18n._('(new message)');
         this.window.setTitle(String.format(this.app.i18n._('Select recipients for "{0}"'), subject));
         
         this.hideLoadMask();

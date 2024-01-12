@@ -41,16 +41,16 @@ class Addressbook_Convert_List_Json extends Tinebase_Convert_Json
             });
 
             $result['members'] = $contactCtrl->search(new Addressbook_Model_ContactFilter([[
-                    'field' => 'id',
-                    'operator' => 'in',
-                    'value' => $result['members']
-                ]]))->toArray();
+                'field' => 'id',
+                'operator' => 'in',
+                'value' => $result['members']
+            ]]))->toArray();
 
             foreach($result['members'] as &$member) {
                 if (!isset($allVisibleMemberIds[$member['id']])) {
                     $member = [
                         'id'    => $member['id'],
-                        'email' => $member['email'] ?? $member['email_home'],
+                        'email' => $member->getPreferredEmailAddress(),
                         'n_fn'  => $member['n_fn'],
                     ];
                 }

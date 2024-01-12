@@ -1512,18 +1512,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 }
             }
         }
-        $emailAddressesFiltered = array_map(function ($address) {
-            return $address['email'];
-        }, $emailAddresses);
-
+        $emailAddressesFilters = array_map(function($address) {return ['field' => 'email_query', 'operator' => 'contains', 'value' => $address['email']];}, $emailAddresses);
         $contactFilter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Addressbook_Model_Contact::class, [
             [
                 'condition' => 'OR',
-                'filters' => [
-                    ['field' => 'email', 'operator' => 'in', 'value' => $emailAddressesFiltered],
-                    ['field' => 'email_home', 'operator' => 'in', 'value' => $emailAddressesFiltered],
-                ]
+                'filters' => $emailAddressesFilters
             ]
         ]);
         return Addressbook_Controller_Contact::getInstance()->search($contactFilter);
