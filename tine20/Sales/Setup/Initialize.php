@@ -137,6 +137,18 @@ class Sales_Setup_Initialize extends Setup_Initialize
                 ],
             ]
         ], true));
+
+        Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+            'name' => 'divisions',
+            'application_id' => $appId,
+            'model' => Tinebase_Model_EvaluationDimension::class,
+            'is_system' => true,
+            'definition' => [
+                Tinebase_Model_CustomField_Config::DEF_HOOK => [
+                    [Sales_Controller_Division::class, 'evalDimModelConfigHook'],
+                ],
+            ],
+        ], true));
     }
 
     protected function _initializeCostCenterCostBearer()
