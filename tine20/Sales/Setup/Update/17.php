@@ -27,6 +27,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE008 = __CLASS__ . '::update008';
     const RELEASE017_UPDATE009 = __CLASS__ . '::update009';
     const RELEASE017_UPDATE010 = __CLASS__ . '::update010';
+    const RELEASE017_UPDATE011 = __CLASS__ . '::update011';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -57,6 +58,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE005          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update005',
+            ],
+            self::RELEASE017_UPDATE011          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update011',
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -400,5 +405,26 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             . Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY . ' = NULL');
         
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.10', self::RELEASE017_UPDATE010);
+    }
+
+    public function update011()
+    {
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME . ' as a JOIN '
+            . SQL_TABLE_PREFIX . Sales_Model_Customer::TABLE_NAME .' AS b ON a.' . Sales_Model_Debitor::FLD_CUSTOMER_ID . ' = b.id SET a.number = b.number');
+
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME . ' as d JOIN '
+            . SQL_TABLE_PREFIX . Sales_Model_Address::TABLE_NAME . ' AS a ON a.' . Sales_Model_Address::FLD_DEBITOR_ID
+            . ' = d.id SET d.number = a.' . Sales_Model_Address::FLD_CUSTOM1 . ' WHERE a.' . Sales_Model_Address::FLD_CUSTOM1 . ' IS NOT NULL AND a.' . Sales_Model_Address::FLD_CUSTOM1 . ' <> ""');
+
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME . ' as d JOIN '
+            . SQL_TABLE_PREFIX . Sales_Model_Customer::TABLE_NAME .' AS c ON d.' . Sales_Model_Debitor::FLD_CUSTOMER_ID
+            . ' = c.id JOIN ' . SQL_TABLE_PREFIX . Sales_Model_Address::TABLE_NAME . ' AS a ON a.' . Sales_Model_Address::FLD_CUSTOMER_ID
+            . ' = c.id SET d.number = a.' . Sales_Model_Address::FLD_CUSTOM1 . ' WHERE a.' . Sales_Model_Address::FLD_CUSTOM1 . ' IS NOT NULL AND a.' . Sales_Model_Address::FLD_CUSTOM1 . ' <> ""');
+
+        $bucket = Sales_Model_Debitor::class . '#' . Sales_Model_Debitor::FLD_NUMBER . '#' . Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION};
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'numberable WHERE bucket = "'. $bucket . '"');
+        $this->getDb()->query('INSERT INTO ' . SQL_TABLE_PREFIX . 'numberable (bucket, number) SELECT "' . $bucket . '", ' . Sales_Model_Debitor::FLD_NUMBER . ' FROM ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.11', self::RELEASE017_UPDATE011);
     }
 }

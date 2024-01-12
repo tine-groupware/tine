@@ -189,11 +189,11 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER => TRUE,
                 self::NULLABLE => TRUE,
             ],
+            // we should drop this column, be aware of upgrade path though!
+            // if you remove it here, Setup/Update/17.php ::update001 will remove it! though it is accessed by later update functions!!!
             self::FLD_CUSTOM1 => [
-                self::LABEL => 'Number Debit', //_('Number Debit')
                 self::TYPE => self::TYPE_STRING,
                 self::NULLABLE => TRUE,
-                self::QUERY_FILTER => TRUE
             ],
             self::FLD_TYPE => [
                 self::TYPE => self::TYPE_STRING,
