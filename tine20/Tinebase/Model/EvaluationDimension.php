@@ -42,6 +42,7 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => true,
         self::HAS_DELETED_TIME_UNIQUE   => true,
+        self::HAS_SYSTEM_CUSTOM_FIELDS  => true,
         self::EXPOSE_JSON_API           => true,
         self::RECORD_NAME               => 'Evaluation Dimension', // gettext('GENDER_Evaluation Dimension')
         self::RECORDS_NAME              => 'Evaluation Dimensions', // ngettext('Evaluation Dimension', 'Evaluation Dimensions', n)

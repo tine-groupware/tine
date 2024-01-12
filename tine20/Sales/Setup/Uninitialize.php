@@ -39,6 +39,13 @@ class Sales_Setup_Uninitialize extends Setup_Uninitialize
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
+
+        $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
+            Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId(),
+            'divisions', Tinebase_Model_EvaluationDimension::class, true);
+        if (null !== $cfc) {
+            Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
+        }
     }
 
     protected function _uninitializeCostCenterCostBearer()

@@ -203,4 +203,14 @@ class Sales_Controller_Division extends Tinebase_Controller_Record_Container
             }
         }
     }
+
+    public static function evalDimModelConfigHook(array &$_fields, Tinebase_ModelConfiguration $mc): void
+    {
+        $expander = $mc->jsonExpander;
+
+        $expander[Tinebase_Record_Expander::EXPANDER_PROPERTIES][Tinebase_Model_EvaluationDimension::FLD_ITEMS]
+            [Tinebase_Record_Expander::EXPANDER_PROPERTIES]['divisions'] = [];
+
+        $mc->setJsonExpander($expander);
+    }
 }
