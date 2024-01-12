@@ -48,7 +48,42 @@ class Sales_ControllerTest extends TestCase
         $this->_backend->setNumberPrefix();
         $this->_backend->setNumberZerofill();
     }
-    
+
+    public function testEvalDimFilter()
+    {
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->getAll()->find(Tinebase_Model_EvaluationDimension::FLD_NAME, Tinebase_Model_EvaluationDimension::COST_CENTER);
+        $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} =
+            new Tinebase_Record_RecordSet(Tinebase_Model_EvaluationDimensionItem::class, [
+                new Tinebase_Model_EvaluationDimensionItem([
+                    Tinebase_Model_EvaluationDimensionItem::FLD_NAME => 'foo',
+                    Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER => '1',
+                ], true),
+                new Tinebase_Model_EvaluationDimensionItem([
+                    Tinebase_Model_EvaluationDimensionItem::FLD_NAME => 'bar',
+                    Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER => '2',
+                    'divisions' => new Tinebase_Record_RecordSet(Sales_Model_DivisionEvalDimensionItem::class, [
+                        new Sales_Model_DivisionEvalDimensionItem([
+                            Sales_Model_DivisionEvalDimensionItem::FLD_DIVISION_ID => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION},
+                        ], true),
+                    ]),
+                ], true),
+            ]);
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+        $foo = $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->find(Tinebase_Model_EvaluationDimensionItem::FLD_NAME, 'foo');
+        $bar = $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->find(Tinebase_Model_EvaluationDimensionItem::FLD_NAME, 'bar');
+
+        $result = Tinebase_Controller_EvaluationDimensionItem::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimensionItem::class, [
+            ['field' => 'divisions', 'operator' => 'definedBy', 'value' => null],
+            ['field' => 'divisions', 'operator' => 'definedBy', 'value' => [
+                ['field' => 'division_id', 'operator' => 'in', 'value' => [Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}]]
+            ]],
+        ], Tinebase_Model_Filter_FilterGroup::CONDITION_OR));
+
+        $this->assertGreaterThanOrEqual(2, $result->count());
+        $this->assertInstanceOf(Tinebase_Model_EvaluationDimensionItem::class, $result->getById($foo->getId()));
+        $this->assertInstanceOf(Tinebase_Model_EvaluationDimensionItem::class, $result->getById($bar->getId()));
+    }
+
     /**
      * tests for the costcenter controller
      */
