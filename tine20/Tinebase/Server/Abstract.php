@@ -169,7 +169,9 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
                     continue;
                 }
             } catch (Exception $e) {
-                Tinebase_Exception::log($e);
+                if (! $e instanceof Tinebase_Exception_AccessDenied) {
+                    Tinebase_Exception::log($e);
+                }
                 continue;
             }
 
