@@ -1986,7 +1986,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                      ] as $folder) {
                 $systemFolderField = $this->_getSystemFolderField($folder);
                 $folderName = $_account->{$systemFolderField};
-                $this->_createSystemFolder($_account, $folderName);
+                if (!empty($folderName)) {
+                    $this->_createSystemFolder($_account, $folderName);
+                }
             }
         } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
