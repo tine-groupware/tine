@@ -10,6 +10,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
         this.app = Tine.Tinebase.appMgr.get('GDPR');
         this.editDialog = editDialog;
         this.recipientGrid = this.editDialog.recipientGrid;
+        if (!this.recipientGrid) return;
         this.record = this.editDialog.record;
         this.manageConsentRecordPicker = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
             fieldLabel: this.app.i18n.gettext('Data Intended purpose of this mass mailing'),
