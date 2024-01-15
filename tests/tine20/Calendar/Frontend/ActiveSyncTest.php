@@ -850,7 +850,7 @@ Zeile 3</AirSyncBase:Data>
         
         $meetingResponse = new Syncroton_Model_MeetingResponse($xml->Request[0]);
         
-        $eventId = $controller->setAttendeeStatus($meetingResponse);
+        $controller->setAttendeeStatus($meetingResponse);
         
         $tevent = Calendar_Controller_Event::getInstance()->get($serverId);
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($tevent->attendee);
@@ -935,24 +935,40 @@ Zeile 3</AirSyncBase:Data>
         
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
         
-        $XMLMeetingResponse = $this->_testXMLMeetingResponse;
-        
-        $thisYear = Tinebase_DateTime::now()->format('Y');
-        $XMLMeetingResponse = str_replace('2012', $thisYear, $XMLMeetingResponse);
-        $XMLMeetingResponse = str_replace('<CollectionId>17</CollectionId>', '<CollectionId>' . $syncrotonFolder->serverId . '</CollectionId>', $XMLMeetingResponse);
-        $XMLMeetingResponse = str_replace('<RequestId>f0c79775b6b44be446f91187e24566aa1c5d06ab</RequestId>', '<RequestId>' . $serverId . '</RequestId>', $XMLMeetingResponse);
-        
-        $xml = new SimpleXMLElement($XMLMeetingResponse);
-        
-        $meetingResponse = new Syncroton_Model_MeetingResponse($xml->Request[0]);
-        
-        $eventId = $controller->setAttendeeStatus($meetingResponse);
+        $meetingResponse = $this->_getMeetingResponse($syncrotonFolder->serverId, $serverId);
+        $controller->setAttendeeStatus($meetingResponse);
         
         $event = Calendar_Controller_MSEventFacade::getInstance()->get($serverId);
         $instance = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($instance->attendee);
         
         $this->assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $ownAttendee->status);
+    }
+
+    /**
+     * returns TENTATIVE meeting response to update with setAttendeeStatus
+     *
+     * @param string $collectionId
+     * @param string $serverId
+     * @param bool $removeInstanceId
+     * @return Syncroton_Model_MeetingResponse
+     * @throws Exception
+     */
+    protected function _getMeetingResponse(string $collectionId, string $serverId, bool $removeInstanceId = false): Syncroton_Model_MeetingResponse
+    {
+        $XMLMeetingResponse = $this->_testXMLMeetingResponse;
+
+        $thisYear = Tinebase_DateTime::now()->format('Y');
+        if ($removeInstanceId) {
+            $XMLMeetingResponse = str_replace('<InstanceId>20121125T130000Z</InstanceId>', '', $XMLMeetingResponse);
+        }
+        $XMLMeetingResponse = str_replace('2012', $thisYear, $XMLMeetingResponse);
+        $XMLMeetingResponse = str_replace('<CollectionId>17</CollectionId>', '<CollectionId>' . $collectionId . '</CollectionId>', $XMLMeetingResponse);
+        $XMLMeetingResponse = str_replace('<RequestId>f0c79775b6b44be446f91187e24566aa1c5d06ab</RequestId>', '<RequestId>' . $serverId . '</RequestId>', $XMLMeetingResponse);
+
+        $xml = new SimpleXMLElement($XMLMeetingResponse);
+
+        return new Syncroton_Model_MeetingResponse($xml->Request[0]);
     }
     
     public function testMeetingResponseWithNewInstanceId()
@@ -975,7 +991,7 @@ Zeile 3</AirSyncBase:Data>
         
         $meetingResponse = new Syncroton_Model_MeetingResponse($xml->Request[0]);
         
-        $eventId = $controller->setAttendeeStatus($meetingResponse);
+        $controller->setAttendeeStatus($meetingResponse);
         
         $event = Calendar_Controller_MSEventFacade::getInstance()->get($serverId);
         $event->exdate->sort('dtstart', 'DESC');
@@ -1576,7 +1592,7 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
 
         $syncTimestamp = Calendar_Controller_Event::getInstance()->get($serverId)->last_modified_time;
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), $syncTimestamp);
-        $serverId = $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEventtoUpdate);
+        $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEventtoUpdate);
 
         $event = Calendar_Controller_Event::getInstance()->get($event->getId());
         static::assertEquals(2, count($event->exdate), 'no exception created');
@@ -1629,14 +1645,14 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
      * 3. Termin im Browser anpassen (Terminort + Teilnehmer ändern).
      * 4. Termin im Handy anpassen(Summary etc.).
      */
-    public function testConcurrentUpdateV2()
+    public function testConcurrentUpdateV2($testMeetingResponse = false)
     {
         $controller = Syncroton_Data_Factory::factory($this->_class, $this->_getDevice(Syncroton_Model_Device::TYPE_IPHONE), Tinebase_DateTime::now()->subDay(1));
         $syncrotonFolder = $this->testCreateFolder();
 
         $container = Tinebase_Container::getInstance()->getContainerById($syncrotonFolder->serverId);
 
-        $event = ActiveSync_TestCase::getTestEvent($container);
+        $event = ActiveSync_TestCase::getTestEvent($container, addScleverAttendee: true);
         $event = Calendar_Controller_Event::getInstance()->create($event);
 
         $serverId = $event->getId();
@@ -1648,14 +1664,30 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAMA
         $updatedEvent = Calendar_Controller_Event::getInstance()->update($event);
 
         self::assertEquals($event->location, $updatedEvent->location);
-        /* @var Syncroton_Model_Event $syncrotonEvent */
-        $syncrotonEvent->subject = 'update on device';
 
-        $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
+        if ($testMeetingResponse) {
+            $meetingResponse = $this->_getMeetingResponse($syncrotonFolder->serverId, $serverId, removeInstanceId: true);
+            $controller->setAttendeeStatus($meetingResponse);
+        } else {
+            /* @var Syncroton_Model_Event $syncrotonEvent */
+            $syncrotonEvent->subject = 'update on device';
+            $controller->updateEntry($syncrotonFolder->serverId, $serverId, $syncrotonEvent);
+        }
 
         $updatedEvent = Calendar_Controller_Event::getInstance()->get($event->getId());
-
-        self::assertEquals('update on device', $updatedEvent->summary);
         self::assertEquals($event->location, $updatedEvent->location);
+
+        if ($testMeetingResponse) {
+            $attender = $updatedEvent->attendee->filter('user_id', Tinebase_Core::getUser()->contact_id)->getFirstRecord();
+            self::assertEquals(Calendar_Model_Attender::STATUS_TENTATIVE, $attender->status,
+                print_r($updatedEvent->toArray(), true));
+        } else {
+            self::assertEquals('update on device', $updatedEvent->summary);
+        }
+    }
+
+    public function testConcurrentUpdateMeetingResponse()
+    {
+        $this->testConcurrentUpdateV2(true);
     }
 }
