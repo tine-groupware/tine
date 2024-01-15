@@ -209,7 +209,11 @@ class Sales_Controller_Division extends Tinebase_Controller_Record_Container
         $expander = $mc->jsonExpander;
 
         $expander[Tinebase_Record_Expander::EXPANDER_PROPERTIES][Tinebase_Model_EvaluationDimension::FLD_ITEMS]
-            [Tinebase_Record_Expander::EXPANDER_PROPERTIES]['divisions'] = [];
+            [Tinebase_Record_Expander::EXPANDER_PROPERTIES]['divisions'] = [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    Sales_Model_DivisionEvalDimensionItem::FLD_DIVISION_ID  => [],
+                ]
+            ];
 
         $mc->setJsonExpander($expander);
     }

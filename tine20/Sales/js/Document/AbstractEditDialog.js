@@ -111,6 +111,27 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 field.setReadOnly(booked);
             }
         });
+
+        // handle eval_dim division subfilter
+        this.getForm().items.each((field) => {
+            if (field.name?.match(/(^eval_dim_.*)/) && !field._documentEditDialogEvalDimBeforeLoadApplied) {
+                field.store.on('beforeload', (store, options) => {
+                    const category = this.getForm().findField('document_category').selectedRecord;
+                    const division = _.get(category, 'data.division_id.id');
+                    store.baseParams.filter = store.baseParams.filter.concat([
+                        { condition: 'OR', filters: [
+                            { field: 'divisions', operator: 'definedBy', value: null },
+                            { field: 'divisions', operator: 'definedBy', value: [
+                                { field: 'division_id', operator: 'equals', value: division }
+                            ]}
+                        ] }
+                    ])
+
+                })
+                field._documentEditDialogEvalDimBeforeLoadApplied = true;
+            }
+        })
+
     },
 
     getRecordFormItems: function() {

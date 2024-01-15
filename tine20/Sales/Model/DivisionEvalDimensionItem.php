@@ -32,6 +32,8 @@ class Sales_Model_DivisionEvalDimensionItem extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => true,
         self::IS_DEPENDENT              => true,
+        self::RECORD_NAME               => 'Division', // gettext('GENDER_Division')
+        self::RECORDS_NAME              => 'Divisions', // ngettext('Division', 'Divisions', n)
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -56,6 +58,7 @@ class Sales_Model_DivisionEvalDimensionItem extends Tinebase_Record_NewAbstract
 
         self::FIELDS                    => [
             self::FLD_DIVISION_ID           => [
+                self::LABEL                     => 'Division', // _('Division')
                 self::TYPE                      => self::TYPE_RECORD,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Sales_Config::APP_NAME,
