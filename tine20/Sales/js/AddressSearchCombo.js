@@ -74,7 +74,8 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
         const customer = customerField?.selectedRecord;
         const customer_id = customer?.json?.original_id || customer?.id;
 
-        const category = editDialog.getForm().findField('document_category').selectedRecord;
+        const category = editDialog.getForm().findField('document_category')?.selectedRecord;
+        const isLegacy = !!editDialog.getForm().findField('contract');
         const division = category?.data?.division_id;
 
         this.setDisabled(!customer_id);
@@ -89,7 +90,7 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
                 // is this case used somewhere???
                 typeRecord = customer.data?.postal;
             } else {
-                const debitors = _.filter(customer.data.debitors, (deb) => { return _.get(deb, 'division_id.id', deb) === division?.id});
+                const debitors = _.filter(customer.data.debitors, (deb) => { return isLegacy || _.get(deb, 'division_id.id', deb) === division?.id});
                 const typeRecords = _.flatten(_.each(_.map(debitors, type), (addrs, idx) => {
                     // have postal addr in each debitor
                     addrs = addrs.concat(customer?.data?.postal ? customer.data.postal : []);

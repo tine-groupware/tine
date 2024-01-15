@@ -281,7 +281,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {Tine.Sales.Model.Contract}
      *            record
      */
-    onAfterContractLoad: function(record, customer) {
+    onAfterContractLoad: async function(record, customer) {
         var record = record ? record : this.record;
         var relations = record.get('relations'), foundCostCenter = false;
         var foundCustomer = customer ? customer : null;
@@ -306,6 +306,7 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         if (foundCustomer) {
+            foundCustomer = await Tine.Sales.getCustomer(foundCustomer.id);
             this.customerPicker.setValue(foundCustomer);
             this.customerPicker.combo.fireEvent('select');
 
