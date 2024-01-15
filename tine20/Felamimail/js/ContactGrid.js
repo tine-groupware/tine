@@ -53,6 +53,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      */
     felamimailApp: null,
     
+    
     /**
      * inits this cmp
      * @private
@@ -71,6 +72,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         
         Tine.Felamimail.ContactGridPanel.superclass.initComponent.call(this);
         
+        this.grid.disableResponsiveLayout =  true;
         this.grid.on('rowdblclick', this.onRowDblClick, this);
         this.grid.on('cellclick', this.onCellClick, this);
         this.store.on('load', this.onContactStoreLoad, this);
@@ -168,12 +170,13 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         if (Ext.isObject(this.messageRecord)) {
             _.each(records, (contact) => {
                 const token = Tine.Felamimail.GridPanelHook.prototype.getRecipientTokenFromContact(contact);
-    
-                _.each(['to', 'cc', 'bcc'], async (type) => {
-                    if (Ext.isArray(this.messageRecord.data[type]) && _.find(this.messageRecord.data[type], {email: token.email})) {
-                        this.setTypeRadio(contact, type);
-                    }
-                });
+                if (token) {
+                    ['to', 'cc', 'bcc'].forEach((type) => {
+                        if (Ext.isArray(this.messageRecord.data[type]) && _.find(this.messageRecord.data[type], {email: token.email})) {
+                            this.setTypeRadio(contact, type);
+                        }
+                    });
+                }
             })
         }
     },
