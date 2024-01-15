@@ -41,16 +41,21 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         ),
     );
 
-    public function createJwtAccessRoute(Zend_Console_Getopt $_opts)
+    public function createJwtAccessRoute(Zend_Console_Getopt $_opts): int
     {
         $this->_checkAdminRight();
 
         $args = $this->_parseArgs($_opts, ['account', 'route']);
 
-        $accountId = Tinebase_User::getInstance()->getFullUserByLoginName($args['account'])->getId();
+        try {
+            $accountId = Tinebase_User::getInstance()->getFullUserByLoginName($args['account'])->getId();
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            echo $tenf->getMessage() . "\n";
+            return 1;
+        }
         $route = (array)$args['route'];
 
-        //create new private and public key
+        // create new private and public key
         $new_key_pair = openssl_pkey_new(array(
             "private_key_bits" => 2048,
             "private_key_type" => OPENSSL_KEYTYPE_RSA,
@@ -76,6 +81,8 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Admin_Controller_JWTAccessRoutes::getInstance()->create($jwtAccessRoute);
 
         echo PHP_EOL . $token . PHP_EOL;
+
+        return 0;
     }
 
     /**
