@@ -100,15 +100,15 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
                     'xtype'                         => 'tw-modelspickers',
                 ]
             ],
-            self::FLD_DEPENDS_ON            => [
-                self::TYPE                      => self::TYPE_RECORD,
-                self::LABEL                     => 'Depends on', // _('Depends on')
-                self::NULLABLE                  => true,
-                self::CONFIG                    => [
-                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME                => Tinebase_Model_EvaluationDimension::MODEL_NAME_PART,
-                ],
-            ],
+//            self::FLD_DEPENDS_ON            => [
+//                self::TYPE                      => self::TYPE_RECORD,
+//                self::LABEL                     => 'Depends on', // _('Depends on')
+//                self::NULLABLE                  => true,
+//                self::CONFIG                    => [
+//                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
+//                    self::MODEL_NAME                => Tinebase_Model_EvaluationDimension::MODEL_NAME_PART,
+//                ],
+//            ],
             self::FLD_SORTING               => [
                 self::TYPE                      => self::TYPE_INTEGER,
                 self::LABEL                     => 'Sorting', // _('Sorting')

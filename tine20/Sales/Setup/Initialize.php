@@ -126,7 +126,7 @@ class Sales_Setup_Initialize extends Setup_Initialize
             'is_system' => true,
             'definition' => [
                 Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    TMCC::LABEL             => 'Sales Divisions', // _('Sales Divisions')
+                    TMCC::LABEL             => 'Limit to Sales Divisions', // _('Limit to Sales Divisions')
                     TMCC::TYPE              => TMCC::TYPE_RECORDS,
                     TMCC::CONFIG            => [
                         TMCC::APP_NAME          => Sales_Config::APP_NAME,
@@ -134,6 +134,11 @@ class Sales_Setup_Initialize extends Setup_Initialize
                         TMCC::REF_ID_FIELD      => Sales_Model_DivisionEvalDimensionItem::FLD_EVAL_DIMENSION_ITEM_ID,
                         TMCC::DEPENDENT_RECORDS => true,
                     ],
+                    TMCC::UI_CONFIG         => [
+                        'searchComboConfig'     => [
+                            'useEditPlugin'         => false,
+                        ],
+                    ]
                 ],
             ]
         ], true));
