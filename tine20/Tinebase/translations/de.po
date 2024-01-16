@@ -2401,6 +2401,9 @@ msgstr "Passwort generieren"
 msgid "What would you like to do?"
 msgstr "Was möchten Sie machen?"
 
+msgid "Please choose an option."
+msgstr "Bitte wählen Sie eine Option aus."
+
 #: js/widgets/dialog/MultiOptionsDialog.js:32
 #: js/widgets/dialog/MultiOptionsDialog.js:179
 #: js/widgets/dialog/FileListDialog.js:32
