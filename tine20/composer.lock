@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "315e3919e3e0b3b9112a74a3adab450d",
+    "content-hash": "2c5da0e586a26fc518316807a871dd23",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -13714,7 +13714,7 @@
             "version": "1.12.20.68",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tine20/zendframework1.git",
+                "url": "https://github.com/tine-groupware/zendframework1.git",
                 "reference": "7903a55cdcd35c877d7dcec3ad3a73c27bc009d4"
             },
             "require": {
