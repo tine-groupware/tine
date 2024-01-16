@@ -1286,7 +1286,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
             'attachments'   => $messageToSend['attachments']
         ));
         Felamimail_Controller_Message_Send::getInstance()->sendMessage($forwardMessage);
-        
+
         $forwardMessage = $this->_searchForMessageBySubject('test forward with attachmnets');
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
         $fullMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($forwardMessage['id']);
@@ -3248,7 +3248,70 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $testFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account, $this->_testFolderName);
         self::assertEquals(1, $testFolder->has_children, 'has_children should be 1');
     }
-    
+
+    /**
+     * 1. Folder "A" unter der Inbox erstellen.
+     * 2. Bei beiden Usern die Ordnerliste aktualisieren.
+     * 3. Bei UserA den Folder "A" löschen.
+     * 4. Bei UserB den Folder "B" unter den Folder "A" erstellen.
+     * 5. Bei beiden Usern die Ordnerliste aktualisieren.
+     *
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function testDeleteFolderWithAnotherUserInSharedAccount()
+    {
+        $parent = 'INBOX';
+        $testFolder = 'subfolder';
+        $jsmith = $this->_personas['jsmith'];
+        $account = $this->_createSharedAccount(true, [
+            'grants' => [
+                [
+                    'readGrant' => true,
+                    'editGrant' => true,
+                    'addGrant' => true,
+                    'account_type' => 'user',
+                    'account_id' => Tinebase_Core::getUser()->getId(),
+                ], [
+                    'readGrant' => true,
+                    'editGrant' => true,
+                    'addGrant' => true,
+                    'account_type' => 'user',
+                    'account_id' => $jsmith->getId(),
+                ]
+            ]
+        ]);
+
+        try {
+            $this->_json->addFolder($parent, '', $account->getId());
+        } catch (Tinebase_Exception_SystemGeneric $tesg) {
+            // already exists
+        }
+        $folder = $this->_json->addFolder($testFolder, $parent, $account->getId());
+        $testFolderGlobalname = $folder['globalname'];
+
+        $this->_json->updateFolderCache($account->getId(), $parent);
+        Tinebase_Core::setUser($jsmith);
+        $this->_json->updateFolderCache($account->getId(), $parent);
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $this->_json->deleteFolder($testFolderGlobalname, $account->getId());
+        Tinebase_Core::setUser($jsmith);
+        try {
+            $this->_json->addFolder('subfolder2', $testFolderGlobalname, $account->getId());
+            $result = $this->_json->updateFolderCache($account->getId(), $parent);
+            $folder = $result[0];
+            self::assertEquals(1, $folder['is_selectable'], 'folder should be selectable (or removed!): '
+                . print_r($folder, true));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            self::assertEquals('Could not create folder: parent folder INBOX.subfolder not found',
+                $tenf->getMessage());
+        }
+    }
+
     public function testRefreshFolder()
     {
         $folder = $this->_getFolder($this->_testFolderName);
