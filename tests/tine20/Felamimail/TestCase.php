@@ -514,17 +514,18 @@ abstract class Felamimail_TestCase extends TestCase
 
     /**
      * @param bool $sendgrant
-     * @return Tinebase_Record_Interface
+     * @return Felamimail_Model_Account
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _createSharedAccount($sendgrant = true)
+    protected function _createSharedAccount(bool $sendgrant = true, array $data = [])
     {
         Tinebase_EmailUser::clearCaches();
-        $sharedAccountData = Admin_Frontend_Json_EmailAccountTest::getSharedAccountData($sendgrant);
+        $sharedAccountData = Admin_Frontend_Json_EmailAccountTest::getSharedAccountData($sendgrant, $data);
+        /* @var Felamimail_Model_Account $sharedAccount */
         $sharedAccount = Admin_Controller_EmailAccount::getInstance()->create(new Felamimail_Model_Account($sharedAccountData));
         // we need to commit so imap user is in imap db
         Tinebase_TransactionManager::getInstance()->commitTransaction($this->_transactionId);
