@@ -94,7 +94,7 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
      * @param array $data
      * @return array
      */
-    public static function getSharedAccountData($sendgrant = true, $data = [])
+    public static function getSharedAccountData(bool $sendgrant = true, array $data = [])
     {
         return array_merge([
             'name' => 'unittest shared account',
