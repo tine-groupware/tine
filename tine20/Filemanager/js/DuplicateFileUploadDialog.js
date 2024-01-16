@@ -6,6 +6,8 @@
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import {PersonaContainer, Personas} from "../../Tinebase/js/ux/vue/PersonaContainer";
+
 Ext.ns('Tine.Filemanager');
 
 Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
@@ -59,7 +61,7 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
         ];
         
         this.initButtons();
-        
+
         this.itemsName = this.id + '-radioItems';
         
         this.items = {
@@ -68,30 +70,25 @@ Tine.Filemanager.DuplicateFileUploadDialog = Ext.extend(Ext.FormPanel, {
             layoutConfig: {
                 align:'stretch'
             },
-            items : [
-                {
-                    border: false,
-                    html: '<div class="x-window-dlg"><div class="ext-mb-icon ext-mb-question"></div></div>',
-                    flex: 0,
-                    width: 45
+            items : [new PersonaContainer({
+                flex: 0,
+                persona: Personas.WARNING
+            }), {
+                border: false,
+                layout: 'vbox',
+                flex: 1,
+                layoutConfig: {
+                    align:'stretch'
                 },
-                {
-                    border: false,
-                    layout: 'vbox',
-                    flex: 1,
-                    layoutConfig: {
-                        align:'stretch'
-                    },
-                    items: [
-                        {
-                            xtype: 'label',
-                            border: false,
-                            cls: 'ext-mb-text',
-                            html: this.questionText
-                        }
-                    ]
-                }
-            ]
+                items: [
+                    {
+                        xtype: 'label',
+                        border: false,
+                        cls: 'ext-mb-text',
+                        html: this.questionText
+                    }
+                ]
+            }]
         };
         
         Tine.Filemanager.DuplicateFileUploadDialog.superclass.initComponent.call(this);
@@ -185,7 +182,7 @@ Tine.Filemanager.DuplicateFileUploadDialog.openWindow =  function (config) {
         closable: false,
         title: this.app.i18n._('Overwrite Existing File?'),
         width: config.width || 400,
-        height: config.height || 150,
+        height: Math.max(config.height || 150, 200),
         name: prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: constructor,
         contentPanelConstructorConfig: config,

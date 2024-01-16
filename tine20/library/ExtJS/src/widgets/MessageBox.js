@@ -45,7 +45,7 @@ Ext.MessageBox = function(){
     let opt, dlg;
 
     const skinShades = ["#ffffff", "#fad9b4", "#fcbf89", "#ec8f2e", "#d97103", "#b75b01", "#924500"]
-    
+
     const __HIDDEN = false // for readability and clarity
     let synchronousVisibilityState = __HIDDEN
     let initialized = false
@@ -247,6 +247,8 @@ Ext.Msg.show({
             synchronousVisibilityState = !__HIDDEN
             Ext.getBody().mask("Loading");
             const {MessageBoxApp, SymbolKeys} = await import(/* webpackChunkName: "Tinebase/js/VueMessageBox"*/'./VueMessageBox')
+            const {default: PersonaContainer } = await import(/* webpackChunkName: "Tinebase/js/PersonaContainer"*/'../../../../Tinebase/js/ux/vue/PersonaContainer/PersonaContainer.vue')
+            const {BootstrapVueNext} = await import(/* webpackChunkName: "Tinebase/js/BootstrapVueNext"*/'bootstrap-vue-next')
 
             // initializing vue stuff
             if(!initialized){
@@ -270,6 +272,7 @@ Ext.Msg.show({
 
                 vueHandle.config.globalProperties.ExtEventBus = vueEmitter;
                 vueHandle.provide(SymbolKeys.ExtEventBusInjectKey, vueEmitter);
+                vueHandle.component('PersonaContainer', PersonaContainer)
                 vueHandle.use(BootstrapVueNext)
 
                 const mp = document.createElement("div");
@@ -287,7 +290,7 @@ Ext.Msg.show({
             if(!vueProps || !vueEmitter || !vueHandle) return
             // setting the prop values to the ones passed in config option
             // only those values are taken whose keys are present in the
-            // defaultOpt, as these are the only ones allowed
+            // defaultOpt as these are the only ones allowed
             Object.keys(opt).forEach(key => {
                 if(key in vueProps.opt){
                     vueProps.opt[key] = opt[key];
@@ -377,6 +380,8 @@ Ext.MessageBox.ERROR
                 modal:true,
                 minWidth: this.minProgressWidth,
                 waitConfig: config,
+                fn: 'fake',
+                icon: this.INFO_WAIT
             });
         },
 

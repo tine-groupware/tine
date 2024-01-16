@@ -6,6 +6,8 @@
  * @copyright   Copyright (c) 2017 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
+import {PersonaContainer, Personas} from "../../ux/vue/PersonaContainer";
+
 Ext.ns('Tine.Tinebase.widgets.dialog');
 
 Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Dialog, {
@@ -96,7 +98,10 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
                         }
                     }], this.additionalFields
                 ]
-            }]
+            }, new PersonaContainer({
+                region: 'west',
+                persona: Personas.QUESTION_INPUT
+            })]
         }];
 
         if (this.questionText) {
@@ -194,10 +199,9 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
             closeAction: 'close',
             modal: true,
             width: 400,
-            height: 130 +
-                (this.hasPwGen ? 20 : 0) +
-                (Math.ceil(this.questionText.length/70) * 20) + 
-                this.additionalFields.length * 30,
+            height: Math.max(130 +
+                (Math.ceil(this.questionText.length/70) * 20) +
+                this.additionalFields.length * 30, 200) + (this.hasPwGen ? 20 : 0),
             layout: 'fit',
             items: this
         }, config));
