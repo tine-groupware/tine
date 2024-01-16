@@ -90,7 +90,6 @@ module.exports = {
     },
     externals: {
         fs: "fs",
-        vue: "vue"
     },
     externalsType: "window",
     output: {
