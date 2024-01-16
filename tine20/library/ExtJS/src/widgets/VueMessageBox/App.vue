@@ -133,7 +133,6 @@ watch(() => props.otherConfigs.visible, newVal => {
 })
 
 onBeforeMount(async () => {
-  await import(/* webpackChunkName: "Tinebase/js/CustomBootstrapVueStyles" */"library/ExtJS/src/widgets/VueMessageBox/styles.scss")
   await init();
 })
 </script>
