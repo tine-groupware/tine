@@ -90,6 +90,9 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
                     columns: 1,
                     name: 'optionGroup',
                     items: this.getItems()
+                }, {
+                    xtype: 'v-alert',
+                    label: i18n._('Please choose an option.')
                 }]
             }]
         }];
