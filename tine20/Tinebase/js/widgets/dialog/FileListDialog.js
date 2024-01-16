@@ -1,3 +1,4 @@
+import {PersonaContainer, Personas} from "../../ux/vue/PersonaContainer";
 
 Ext.ns('Tine.widgets.dialog');
 
@@ -55,7 +56,7 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
     initComponent: function() {
         // init buttons and tbar
         this.initButtons();
-        
+
         this.itemsName = this.id + '-fileListc';
         
         // get items for this dialog
@@ -65,7 +66,10 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
             layoutConfig: {
                 align:'stretch'
             },
-            items: [{
+            items: [new PersonaContainer({
+                persona: Personas.WARNING,
+                flex: 0,
+            }),{
                 border: false,
                 layout: 'fit',
                 flex: 1,
@@ -131,7 +135,7 @@ Ext.extend(Tine.widgets.dialog.FileListDialog, Ext.FormPanel, {
 Tine.widgets.dialog.FileListDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: config.width || 400,
-        height: config.height || 150,
+        height: Math.max(config.height || 150, 200),
         closable: false,
         name: Tine.widgets.dialog.FileListDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.dialog.FileListDialog',
