@@ -90,7 +90,6 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                 ],
                 self::UI_CONFIG                 => [
                     self::READ_ONLY                         => true,
-                    'emptyText'                             => 'Gets assigned automatically' // _('Gets assigned automatically')
                 ],
             ],
             self::FLD_NAME              => [

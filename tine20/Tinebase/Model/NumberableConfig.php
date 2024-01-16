@@ -30,6 +30,7 @@ class Tinebase_Model_NumberableConfig extends Tinebase_Record_NewAbstract
     public const FLD_PREFIX = 'prefix';
     public const FLD_ZEROFILL = 'zerofill';
     public const FLD_START = 'start';
+    public const FLD_EDITABLE = 'editable';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -92,14 +93,10 @@ class Tinebase_Model_NumberableConfig extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_BUCKET_KEY    => [
-//                self::LABEL                 => 'Current Number', // _('Current Number')
                 self::TYPE                  => self::TYPE_STRING,
                 self::LENGTH                => 255,
                 self::DEFAULT_VAL           => '',
                 self::DISABLED              => true,
-//                self::UI_CONFIG             => [
-//                    self::READ_ONLY             => true,
-//                ],
             ],
             self::FLD_START             => [
                 self::LABEL                 => 'Numbering Range Start', // _('Numbering Range Start')
@@ -116,6 +113,11 @@ class Tinebase_Model_NumberableConfig extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_STRING,
                 self::LENGTH                => 100,
                 self::DEFAULT_VAL           => '',
+            ],
+            self::FLD_EDITABLE          => [
+                self::LABEL                 => 'Number is Editable', // _('Number is Editable')
+                self::TYPE                  => self::TYPE_BOOLEAN,
+                self::DEFAULT_VAL           => false,
             ],
         ],
     ];

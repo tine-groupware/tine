@@ -104,6 +104,12 @@ msgid_plural "Texts"
 msgstr[0] "Text"
 msgstr[1] "Texte"
 
+msgid "Gets assigned automatically"
+msgstr "Wird automatisch zugewiesen"
+
+msgid "Number is Editable"
+msgstr "Nummer ist editierbar"
+
 #: Record/Expander/PropertyClass/Grants.php:65 Frontend/Json/Container.php:223
 #: js/widgets/account/PickerGridPanel.js:231
 msgid "Anyone"
