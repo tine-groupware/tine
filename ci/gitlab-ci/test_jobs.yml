@@ -184,7 +184,7 @@ phpcs-analysis:
       allow_failure: false
     - if: $CI_COMMIT_TAG 
       when: never
-  timeout: 20m
+  timeout: 30m
   interruptible: true
 
 test-with-health-check:
