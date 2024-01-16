@@ -4,37 +4,58 @@
  */
 
 const contrastColors = {
-  adjustColors: (element) => {
+  findBackground: (element, brightnesses = [], isRoot = true) => {
     _.forEach(element.children, (c) => {
-      contrastColors.adjustColors(c)
+      if (c.classList.contains('felamimail-body-signature-current')) {
+        return;
+      }
+      if (c.classList.contains('felamimail-body-blockquote')) {
+        // quoted email gets its own background
+        contrastColors.findBackground(c)
+      } else {
+        contrastColors.findBackground(c, brightnesses, false)
+      }
     })
 
     let bgColor = element.style.getPropertyValue('background-color'),
-      fgColor = element.style.getPropertyValue('color')
+        fgColor = element.style.getPropertyValue('color')
 
     if (element.tagName === 'FONT' && fgColor === '') {
-      fgColor = element.getAttribute('color')
+      fgColor = element.getAttribute('color') || ''
     }
 
     if (bgColor === '' && fgColor !== '') {
-      let realFg = window.getComputedStyle(element).getPropertyValue('color'),
-        newBg = contrastColors.getContrastColor(realFg)
-      if (newBg !== '') {
-        element.style.backgroundColor = newBg
-      }
-      return
+      brightnesses.push(contrastColors.getBrightness(fgColor))
     }
 
-    if (fgColor === '' && bgColor !== '') {
-      let realBg = window.getComputedStyle(element).getPropertyValue('background-color'),
-        newFg = contrastColors.getContrastColor(realBg)
-      if (newFg !== '') {
-        element.style.color = newFg
+    if (isRoot) {
+      if (brightnesses.length === 0) {
+        return
+      }
+
+      let count = brightnesses.length
+      let sum = brightnesses.reduce((a, current) => {
+        return a + current
+      }, 0)
+
+      let brightness = sum / count;
+      if (brightness > 128) {
+        if (contrastColors.getBrightness(getComputedStyle(element).backgroundColor) > 128
+          || getComputedStyle(element).backgroundColor === 'rgba(0, 0, 0, 0)')
+        {
+          element.style.backgroundColor = '#171717'
+          element.style.color = '#ffffff'
+        }
+      } else {
+        if (contrastColors.getBrightness(getComputedStyle(element).backgroundColor) <= 128) {
+          element.style.backgroundColor = '#F3F6F7'
+          element.style.color = '#171717'
+        }
       }
     }
   },
 
-  getContrastColor: (color) => {
+  getBrightness: (color) => {
     let r, g, b
     if (color.startsWith('#')) {
       let m = color.substr(1).match(color.length === 7 ? /(\S{2})/g : /(\S{1})/g);
@@ -49,12 +70,7 @@ const contrastColors = {
       g = m[1]
       b = m[2]
     }
-    let brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000
-    if (brightness > 128) {
-      return '#000000'
-    } else {
-      return '#FFFFFF'
-    }
+    return ((r * 299) + (g * 587) + (b * 114)) / 1000
   }
 }
 

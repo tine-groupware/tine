@@ -292,7 +292,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                             Tine.Tinebase.common.linkifyText(Ext.util.Format.wrapEmojis(body), function(linkified) {
                                 const bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
                                 bodyEl.innerHTML = Ext.util.Format.linkSaveHtmlEncodeStepTwo(linkified);
-                                contrastColors.adjustColors(bodyEl);
+                                contrastColors.findBackground(bodyEl);
                                 Ext.fly(bodyEl).update(bodyEl.innerHTML);
                             }, this.panel);
                         }
