@@ -214,12 +214,14 @@ abstract class Felamimail_TestCase extends TestCase
             }
         }
 
+        $aclCheck = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
         foreach ($this->_accountsToClear as $account) {
             try {
                 Felamimail_Controller_Account::getInstance()->delete([$account->getId()]);
             } catch (Exception $e) {
             }
         }
+        Felamimail_Controller_Account::getInstance()->doContainerACLChecks($aclCheck);
 
         parent::tearDown();
 
