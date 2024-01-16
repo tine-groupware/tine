@@ -535,6 +535,8 @@ Tine.Filemanager.nodeActions.Preview = {
 
 /**
  * one node with publish grant
+ * 
+ * - user needs both publishGrant and downloadGrant to execute this action.
  */
 Tine.Filemanager.nodeActions.Publish = {
     app: 'Filemanager',
@@ -584,7 +586,14 @@ Tine.Filemanager.nodeActions.Publish = {
             });
         }, this);
     },
-    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
+    actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
+        Tine.Filemanager.nodeActions.actionUpdater(action, grants, records, isFilterSelect, filteredContainers);
+        
+        const record = records[0];
+        if (record) {
+            action.setDisabled(!record.data?.account_grants?.downloadGrant);
+        }
+    },
 };
 
 /**
