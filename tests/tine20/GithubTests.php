@@ -23,7 +23,6 @@ class GithubTests
         Tinebase_Config::getInstance()->set(Tinebase_Config::USE_NOMINATIM_SERVICE, false);
 
         // addressbook
-        $suite->addTestSuite(Addressbook_Frontend_JsonTest::class);
         $suite->addTest(Addressbook_Frontend_AllTests::suite());
         $suite->addTest(Addressbook_Convert_Contact_VCard_AllTests::suite());
 
