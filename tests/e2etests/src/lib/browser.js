@@ -185,7 +185,7 @@ const priorities = {
             width: 1366,
             height: 768,
         });
-        await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded', timeout: '30000'});
+        await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded', timeout: 30000});
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 
         if (process.env.TEST_MODE !== 'headless' && process.env.TEST_BROWSER_LANGUAGE !== 'de') {
@@ -198,7 +198,7 @@ const priorities = {
             await page.waitForSelector('input[name=locale]');
         }
 
-        await page.waitForSelector('input[name=username]');
+        await page.waitForSelector('input[name=username]', {timeout: 30000});
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
         await expect(page).toMatchElement('input[name=username]');
         await page.waitForFunction('document.activeElement === document.querySelector("input[name=username]")');
