@@ -116,7 +116,9 @@ class Tinebase_Exception extends Exception
             error_log($exception);
         } else {
             self::logExceptionToLogger($exception, $suppressTrace, $additionalData);
-            self::sendExceptionToSentry($exception);
+            if (Setup_Controller::getInstance()->isInstalled()) {
+                self::sendExceptionToSentry($exception);
+            }
         }
     }
 
