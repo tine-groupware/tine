@@ -20,6 +20,7 @@ describe('timeaccount', () => {
             await expect(page).toClick('.tine-mainscreen-centerpanel-west span', {text: 'Zeitkonten'});
         });
         test('open EditDialog', async () => {
+            await page.waitForTimeout(1000);
             editDialog = await lib.getEditDialog('Zeitkonto hinzufügen');
             await editDialog.screenshot({path: 'screenshots/Zeiterfassung/2_zeiterfassung_zeitkonto_neu.png'});
         });
