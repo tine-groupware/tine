@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2022-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -20,6 +20,9 @@
 class Sales_Controller_Document_Delivery extends Sales_Controller_Document_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
+
+    protected static $_adminGrant = Sales_Model_DivisionGrants::GRANT_ADMIN_DOCUMENT_DELIVERY;
+    protected static $_readGrant = Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_DELIVERY;
 
     /**
      * the constructor
