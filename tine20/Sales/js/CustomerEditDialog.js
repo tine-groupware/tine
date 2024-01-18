@@ -179,24 +179,10 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         xtype: 'columnform',
                         labelAlign: 'top',
                         formDefaults: formFieldDefaults,
-                        items: [[{
-                                fieldLabel: this.app.i18n._('Customer Number'),
-                                name: 'number',
-                                allowBlank: true,
-                                nullable: true,
-                                columnWidth: .250,
-                                minValue: 1,
-                                maxValue: 4294967296,
-                                xtype: 'uxspinner',
-                                strategy: new Ext.ux.form.Spinner.NumberStrategy({
-                                    incrementValue : 1,
-                                    alternateIncrementValue: 1,
-                                    minValue: 1,
-                                    maxValue: 4294967296,
-                                }),
-                                allowDecimals : false,
-                                useThousandSeparator : false,
-                            }, {
+                        items: [[
+                            fieldManager('number', {
+                                columnWidth: .250
+                            }), {
                                 columnWidth: .750,
                                 allowBlank: false,
                                 fieldLabel: this.app.i18n._('Name'),

@@ -325,7 +325,8 @@ Tine.widgets.form.FieldManager = function() {
                 case 'numberableStr':
                 case 'numberableInt':
                     field.xtype = 'textfield';
-                    field.disabled = true;
+                    field.disabled = ! _.get(field, 'config.editable');
+                    field.emptyText = window.i18n._('Gets assigned automatically');
                     break;
                 case 'json':
                     field.xtype = field.xtype || 'tw-acefield';

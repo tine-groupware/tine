@@ -1415,6 +1415,15 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
                 case self::TYPE_NUMBERABLE_STRING:
                 case self::TYPE_NUMBERABLE_INT:
+                    if (isset($fieldDef[self::CONFIG][Tinebase_Numberable_Abstract::BUCKETKEY]) && $numberableCfg = Tinebase_Controller_NumberableConfig::getInstance()->search(
+                        Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_NumberableConfig::class, [
+                            [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_MODEL, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $this->_appName . '_Model_' . $this->_modelName],
+                            [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_PROPERTY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $fieldDef['fieldName']],
+                            [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $fieldDef[self::CONFIG][Tinebase_Numberable_Abstract::BUCKETKEY]],
+                        ]))->getFirstRecord()) {
+                        $fieldDef[self::CONFIG][Tinebase_Model_NumberableConfig::FLD_EDITABLE] = $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_EDITABLE};
+                    }
+
                     $this->_autoincrementFields[] = $fieldDef;
                     break;
 
