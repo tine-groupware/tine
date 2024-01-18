@@ -18,7 +18,7 @@ describe('message', () => {
         await popupWindow.waitForTimeout(2000);
         let inputFields = await popupWindow.$$('input');
         await inputFields[2].type(currentUser.accountEmailAddress);
-        await popupWindow.waitForTimeout(500); //musst wait for input!
+        await popupWindow.waitForTimeout(2000); //musst wait for input!
         await popupWindow.waitForSelector('.search-item.x-combo-selected');
         await popupWindow.click('.search-item.x-combo-selected');
         await popupWindow.waitForTimeout(500); //wait for new mail line!
