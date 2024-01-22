@@ -187,8 +187,8 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                     'type'   => 'relation',
                     'label'  => 'Cost Center',    // _('Cost Center')
                     'config' => array(
-                        'appName'   => 'Tinebase',
-                        'modelName' => 'CostCenter',
+                        'appName'   => Tinebase_Config::APP_NAME,
+                        'modelName' => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
                         'type'      => 'COST_CENTER'
                     ),
                     'shy' => TRUE,
@@ -250,7 +250,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
         ),
         array(
             'relatedApp'   => 'Tinebase',
-            'relatedModel' => 'CostCenter',
+            'relatedModel' => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
             'config' => array(
                 array('type' => 'COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '1:0'), // _('Lead Cost Center')
             ),

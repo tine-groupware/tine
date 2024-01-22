@@ -417,6 +417,22 @@ class HumanResources_Setup_Initialize extends Setup_Initialize
         static::addHolidayImports();
     }
 
+    protected function _initializeCostCenter()
+    {
+        static::initializeCostCenterCostBearer();
+    }
+
+    public static function initializeCostCenterCostBearer()
+    {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
+            HumanResources_Model_CostCenter::class,
+        ]);
+    }
+
     public static function addHolidayImports()
     {
         foreach ([

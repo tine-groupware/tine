@@ -37,7 +37,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     /**
      * the costcenter of the contract which is handled by _createAutoInvoicesForContract
      * 
-     * @var Tinebase_Model_CostCenter
+     * @var Tinebase_Model_EvaluationDimensionItem
      */
     protected $_currentBillingCostCenter = NULL;
     
@@ -200,14 +200,14 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     /**
      * finds the costcenter of $this->_currentContract
      * 
-     * @return Tinebase_Model_CostCenter|NULL
+     * @return Tinebase_Model_EvaluationDimensionItem|NULL
      */
     protected function _findCurrentCostCenter()
     {
         $this->_currentBillingCostCenter = NULL;
         
         foreach ($this->_currentBillingContract->relations as $relation) {
-            if ($relation->type == 'LEAD_COST_CENTER' && $relation->related_model == Tinebase_Model_CostCenter::class) {
+            if ($relation->type == 'LEAD_COST_CENTER' && $relation->related_model == Tinebase_Model_EvaluationDimensionItem::class) {
                 $this->_currentBillingCostCenter = $relation->related_record;
             }
         }
@@ -1154,7 +1154,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
                     'address_id'    => $this->_currentBillingContract->billing_address_id,
                     'credit_term'   => $this->_currentBillingCustomer['credit_term'],
                     'customer_id'   => $this->_currentBillingCustomer['id'],
-                    'costcenter_id' => $this->_currentBillingCostCenter->getId(),
+                    'eval_dim_cost_center' => $this->_currentBillingCostCenter->getId(),
                     'start_date'    => $earliestStartDate,
                     'end_date'      => $latestEndDate,
                     'positions'     => $invoicePositions->toArray(),

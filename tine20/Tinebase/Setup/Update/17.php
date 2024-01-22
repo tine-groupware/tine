@@ -22,6 +22,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
+    const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
 
     static protected $_allUpdates = [
        self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -40,6 +41,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
            self::RELEASE017_UPDATE005          => [
                self::CLASS_CONST                   => self::class,
                self::FUNCTION_CONST                => 'update005',
+           ],
+           self::RELEASE017_UPDATE006          => [
+               self::CLASS_CONST                   => self::class,
+               self::FUNCTION_CONST                => 'update006',
            ],
         ],
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -89,7 +94,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     public function update003()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
-
+        
         Setup_SchemaTool::updateSchema([
             Tinebase_Model_NumberableConfig::class,
         ]);
@@ -189,5 +194,22 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'accounts SET login_failures = ' .
             'JSON_OBJECT("JSON-RPC", CAST(login_failures AS INTEGER)) WHERE login_failures IS NOT NULL');
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE005);
+    }
+
+    public function update006()
+    {
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET own_model = "'
+            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE own_model = "Tinebase_Model_CostCenter"');
+
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET related_model = "'
+            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE related_model = "Tinebase_Model_CostCenter"');
+
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET own_model = "'
+            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE own_model = "Tinebase_Model_CostUnit"');
+
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET related_model = "'
+            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE related_model = "Tinebase_Model_CostUnit"');
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.6', self::RELEASE017_UPDATE006);
     }
 }

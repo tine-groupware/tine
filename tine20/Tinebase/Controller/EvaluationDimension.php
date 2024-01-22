@@ -172,7 +172,7 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
 
     public static function removeModelsFromDimension(string $dimensionName, array $models): bool
     {
-        if (null === ($cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+        if (null === ($cc = self::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
                 [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $dimensionName],
             ]))->getFirstRecord())) {
             return false;
@@ -180,13 +180,13 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
 
         $cc->{Tinebase_Model_EvaluationDimension::FLD_MODELS} =
             array_diff($cc->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS), $models);
-        Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+        self::getInstance()->update($cc);
         return true;
     }
 
     public static function addModelsToDimension(string $dimensionName, array $models): bool
     {
-        if (null === ($cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+        if (null === ($cc = self::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
                     [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $dimensionName],
                 ]))->getFirstRecord())) {
             return false;
@@ -194,7 +194,7 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
 
         $cc->{Tinebase_Model_EvaluationDimension::FLD_MODELS} = array_unique(
             array_merge($cc->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS), $models));
-        Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+        self::getInstance()->update($cc);
         return true;
     }
 

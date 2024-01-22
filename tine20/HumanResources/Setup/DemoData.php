@@ -145,9 +145,10 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _onCreate()
     {
-        $controller = Tinebase_Controller_CostCenter::getInstance();
-        
-        $this->_costcenters = new Tinebase_Record_RecordSet(Tinebase_Model_CostCenter::class);
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+            ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
+        ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
+
         $ccs = (static::$_de)
             ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
             : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
@@ -155,22 +156,20 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         $id = 1;
         foreach($ccs as $title) {
-            if ($controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class,
-                    [['field' => 'name', 'operator' => 'equals', 'value' => $title]]))->count() > 0) {
+            if (Tinebase_Controller_EvaluationDimensionItem::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimensionItem::class,
+                    [['field' => 'name', 'operator' => 'equals', 'value' => $title],
+                        ['field' => Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID, 'operator' => 'equals', 'value' => $cc->getId()]]))->count() > 0) {
                 continue;
             }
-            $cc = new Tinebase_Model_CostCenter(
+            $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->addRecord(new Tinebase_Model_EvaluationDimensionItem(
                 array('name' => $title, 'number' => $id)
-            );
-            try {
-                $controller->create($cc);
-            } catch (Zend_Db_Statement_Exception $e) {
-            } catch (Tinebase_Exception_Duplicate $e) {
-            }
+            , true));
 
             $id++;
         }
-        
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+        $this->_costCenters = clone $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS};
+
         $divisionsArray = (static::$_de)
             ? array('Management', 'EDV', 'Marketing', 'Public Relations', 'Produktion', 'Verwaltung')
             : array('Management', 'IT', 'Marketing', 'Public Relations', 'Production', 'Administration')
@@ -251,7 +250,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             // add costcenter
             $scs = $this->_costCenters->getByIndex(0);
             
-            $hrc = array('cost_center_id' => $scs->getId(), 'start_date' => $this->_startDate);
+            $hrc = array('eval_dim_cost_center' => $scs->getId(), 'start_date' => $this->_startDate);
             $employee->costcenters = array($hrc);
             
             // add contract
@@ -266,36 +265,6 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $controller->update($employee);
         }
         HumanResources_Controller_Account::getInstance()->createMissingAccounts();
-    }
-    
-    /**
-     * get cost center
-     * 
-     * @param string
-     * @return Tinebase_Model_CostCenter
-     */
-    protected function _getCostCenter($number = NULL)
-    {
-        if ($number !== NULL) {
-            /** @var Tinebase_Model_CostCenter $c */
-            $c = Tinebase_Controller_CostCenter::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class,
-                array(array(
-                    'field'    => 'number',
-                    'operator' => 'equals',
-                    'value'    => $number,
-                ))))->getFirstRecord();
-            
-            if ($c) {
-                return $c;
-            }
-        }
-        $c = new Tinebase_Model_CostCenter(array(
-            'number' => ($number) ? $number : Tinebase_Record_Abstract::generateUID(),
-            'name' => Tinebase_Record_Abstract::generateUID(),
-        ));
-        
-        return $c;
     }
     
     /**

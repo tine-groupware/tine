@@ -4,7 +4,7 @@
  *
  * @package     HumanResources
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -56,9 +56,14 @@ class HumanResources_TestCase extends TestCase
         $filter = new HumanResources_Model_EmployeeFilter(array());
         HumanResources_Controller_Employee::getInstance()->deleteByFilter($filter);
 
-        Tinebase_Controller_CostCenter::getInstance()->deleteByFilter(
-            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, [])
-        );
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+            ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
+        ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
+
+        if ($cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->count() > 0) {
+            $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->removeAll();
+            Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+        }
         
         parent::setUp();
     }
@@ -172,40 +177,33 @@ class HumanResources_TestCase extends TestCase
         return Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId());
     }
 
-    /**
-     * get sales cost center
-     * 
-     * @param string
-     * @return Tinebase_Model_CostCenter
-     */
     protected function _getTinebaseCostCenter($number = NULL)
     {
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+            ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
+        ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
         if ($number !== NULL) {
-            $c = Tinebase_Controller_CostCenter::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, [[
-                    'field' => 'number', 'operator' => 'equals', 'value' => $number,
+            $c = Tinebase_Controller_EvaluationDimensionItem::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimensionItem::class, [[
+                    'field' => Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER, 'operator' => 'equals', 'value' => $number,
                 ], [
-                    'field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET,
+                    'field' => Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID, 'operator' => 'equals', 'value' => $cc->getId(),
                 ]]))->getFirstRecord();
             
             if ($c) {
-                if ($c->is_deleted) {
-                    Tinebase_Controller_CostCenter::getInstance()->unDelete($c);
-                    $c = Tinebase_Controller_CostCenter::getInstance()->get($c->getId());
-                }
-                /** @var Tinebase_Model_CostCenter $c */
+                /** @var Tinebase_Model_EvaluationDimensionItem $c */
                 return $c;
             }
         }
-        $c = new Tinebase_Model_CostCenter(array(
+        $c = new Tinebase_Model_EvaluationDimensionItem(array(
             'number' => $number ?: Tinebase_Record_Abstract::generateUID(),
             'name' => Tinebase_Record_Abstract::generateUID(),
-        ));
+        ), true);
+        $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->addRecord($c);
 
-        /** @var Tinebase_Model_CostCenter $c */
-        $c = Tinebase_Controller_CostCenter::getInstance()->create($c, FALSE);
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
         
-        return $c;
+        return $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->find('number', $c->number);
     }
 
     /**
@@ -222,7 +220,7 @@ class HumanResources_TestCase extends TestCase
         $tcs = $this->_getTinebaseCostCenter();
         return new HumanResources_Model_CostCenter(array(
             'start_date' => $startDate->toString(), 
-            'cost_center_id' => $tcs->getId()
+            'eval_dim_cost_center' => $tcs->getId()
         ));
     }
     

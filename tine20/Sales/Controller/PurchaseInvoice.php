@@ -138,14 +138,14 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
     /**
      * finds the costcenter of $this->_currentContract
      * 
-     * @return Tinebase_Model_CostCenter|NULL
+     * @return Tinebase_Model_EvaluationDimensionItem|NULL
      */
     protected function _findCurrentCostCenter()
     {
         $this->_currentBillingCostCenter = NULL;
         
         foreach ($this->_currentBillingContract->relations as $relation) {
-            if ($relation->type == 'LEAD_COST_CENTER' && $relation->related_model == Tinebase_Model_CostCenter::class) {
+            if ($relation->type == 'LEAD_COST_CENTER' && $relation->related_model == Tinebase_Model_EvaluationDimensionItem::class) {
                 $this->_currentBillingCostCenter = $relation->related_record;
             }
         }

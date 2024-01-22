@@ -190,28 +190,6 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         }
     }
 
-    public function _initializePF()
-    {
-        $pfe = Tinebase_PersistentFilter::getInstance();
-        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter([
-            'name' => "All Cost Centers", // _('All Cost Centers')
-            'description' => "All cost center records", // _('All cost center records')
-            'filters' => [],
-            'account_id' => NULL,
-            'model' => Tinebase_Model_CostCenter::class,
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId(),
-        ]));
-
-        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter([
-            'name' => "All Cost Units", // _('All Cost Units')
-            'description' => "All cost unit records", // _('All cost unit records')
-            'filters' => [],
-            'account_id' => NULL,
-            'model' => Tinebase_Model_CostUnit::class,
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId(),
-        ]));
-    }
-
     protected function _initializeEvaluationDimensions()
     {
         Tinebase_Controller_EvaluationDimension::getInstance()->doRightChecks(false);

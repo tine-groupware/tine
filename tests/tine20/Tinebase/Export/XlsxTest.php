@@ -483,54 +483,6 @@ class Tinebase_Export_XlsxTest extends TestCase
         unset($raii);
     }
 
-    public function testCostCenterJsonApi()
-    {
-        $cc = Tinebase_Controller_CostCenter::getInstance()->create(new Tinebase_Model_CostCenter([
-                Tinebase_Model_CostCenter::FLD_NAME => 'unittest',
-                Tinebase_Model_CostCenter::FLD_NUMBER => 13462322,
-            ]));
-
-        $definitionId = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
-            'model' => Tinebase_Model_CostCenter::class,
-            'name' => 'tinebase_export_costcenter_xls',
-        ]))->getFirstRecord()->getId();
-
-        ob_start();
-
-        try {
-            (new Tinebase_Frontend_Http)->exportCostCenters([], ['definitionId' => $definitionId]);
-        } finally {
-            $xslx = ob_get_clean();
-        }
-
-        $file = Tinebase_TempFile::getTempPath();
-        $raii = new Tinebase_RAII(function() use ($file) { @unlink($file); });
-        file_put_contents($file, $xslx);
-        unset($xslx);
-
-
-        $sheet = PhpOffice\PhpSpreadsheet\IOFactory::createReader(\PhpOffice\PhpSpreadsheet\IOFactory::READER_XLSX)
-            ->load($file);
-
-        $success = false;
-        $row = $sheet->getWorksheetIterator()->current()->getRowIterator();
-        while ($row->valid()) {
-            $cells = $row->current()->getCellIterator();
-            $cells->setIterateOnlyExistingCells(true);
-            while ($cells->valid()) {
-                if ($cc->name === $cells->current()->getValue()) {
-                    $success = true;
-                }
-                $cells->next();
-            }
-            $row->next();
-        }
-
-        $this->assertTrue($success);
-
-        unset($raii);
-    }
-
     public function testExpressiveApi()
     {
         $definitionId = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [

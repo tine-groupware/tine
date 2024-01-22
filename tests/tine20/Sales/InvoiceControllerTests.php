@@ -78,7 +78,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
                 'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'own_id'                 => NULL,
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model'          => Tinebase_Model_CostCenter::class,
+                'related_model'          => Tinebase_Model_EvaluationDimensionItem::class,
                 'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id'             => $this->_costcenterRecords->getFirstRecord()->getId(),
                 'type'                   => 'LEAD_COST_CENTER'
@@ -1618,10 +1618,15 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->_createCustomers(1);
         }
         
-        $costcenter = new Tinebase_Model_CostCenter();
+        $costcenter = new Tinebase_Model_EvaluationDimensionItem([], true);
         $costcenter->number = 1337;
         $costcenter->name = 'Foobar Costcenter';
-        $costcenter = Tinebase_Controller_CostCenter::getInstance()->create($costcenter);
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+            ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
+        ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
+        $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->addRecord($costcenter);
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+        $costcenter = $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->find(Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER, $costcenter->number);
         
         $invoice = new Sales_Model_Invoice();
         $invoice->description = 'Foobar Rechnung';

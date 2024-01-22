@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -106,7 +106,7 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                 $cellType = $this->_getCellType($field->type);
                 
                 switch ($identifier) {
-                    case 'costcenter_id':
+                    case 'eval_dim_cost_center':
                         $value = $record[$identifier]['number'] . ' - ' . $record[$identifier]['name'];
                         break;
                     case 'customer':

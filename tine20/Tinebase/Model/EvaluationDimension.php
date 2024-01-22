@@ -131,36 +131,42 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
 
         $fldName = 'eval_dim_' . str_replace(' ', '_', strtolower($this->{self::FLD_NAME}));
 
+        $definition = [
+            Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                self::LABEL             => $this->{self::FLD_NAME},
+                self::TYPE              => self::TYPE_RECORD,
+                self::CONFIG            => [
+                    self::APP_NAME          => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME        => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
+                    self::FLD_DEPENDS_ON    => $this->{self::FLD_DEPENDS_ON},
+                ],
+                self::SHY              => true,
+                self::UI_CONFIG         => [
+                    'sorting'              => $this->{self::FLD_SORTING},
+                    'grouping'             => self::RECORDS_NAME,
+                    'additionalFilters'    => [[
+                        'field'     => Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID,
+                        'operator'  => 'equals',
+                        'value'     => $this->id,
+                    ]]
+                ],
+                self::NULLABLE          => true,
+            ],
+            Tinebase_Model_CustomField_Config::DEF_HOOK => [
+                [Tinebase_Controller_EvaluationDimension::class, 'modelConfigHook'],
+            ],
+        ];
+        if (in_array(Tinebase_Model_EvaluationDimensionCFHook::class, class_implements($model))) {
+            /** @var Tinebase_Model_EvaluationDimensionCFHook $model */
+            $model::evalDimCFHook($fldName, $definition);
+        }
+
         return new Tinebase_Model_CustomField_Config([
             'name' => $fldName,
             'application_id' => $appId,
             'model' => $model,
             'is_system' => true,
-            'definition' => [
-                Tinebase_Model_CustomField_Config::DEF_FIELD => [
-                    self::LABEL             => $this->{self::FLD_NAME},
-                    self::TYPE              => self::TYPE_RECORD,
-                    self::CONFIG            => [
-                        self::APP_NAME          => Tinebase_Config::APP_NAME,
-                        self::MODEL_NAME        => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
-                        self::FLD_DEPENDS_ON    => $this->{self::FLD_DEPENDS_ON},
-                    ],
-                    self::SHY              => true,
-                    self::UI_CONFIG         => [
-                        'sorting'              => $this->{self::FLD_SORTING},
-                        'grouping'             => self::RECORDS_NAME,
-                        'additionalFilters'    => [[
-                            'field'     => Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID,
-                            'operator'  => 'equals',
-                            'value'     => $this->id,
-                        ]]
-                    ],
-                    self::NULLABLE          => true,
-                ],
-                Tinebase_Model_CustomField_Config::DEF_HOOK => [
-                    [Tinebase_Controller_EvaluationDimension::class, 'modelConfigHook'],
-                ],
-            ]
+            'definition' => $definition,
         ], true);
     }
 }

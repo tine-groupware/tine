@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -39,6 +39,9 @@
  */
 class Sales_Model_Invoice extends Tinebase_Record_Abstract
 {
+    public const MODEL_NAME_PART = 'Invoice';
+    public const TABLE_NAME = 'sales_sales_invoices';
+
     public const FLD_DEBITOR_ID = 'debitor_id';
 
     /**
@@ -54,6 +57,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        self::VERSION       => 11,
         'recordName'        => 'Invoice', // gettext('GENDER_Invoice')
         'recordsName'       => 'Invoices', // ngettext('Invoice', 'Invoices', n)
         'hasRelations'      => TRUE,
@@ -64,6 +68,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
         'containerProperty' => NULL,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
 
         'titleProperty'     => 'fulltext', //array('%s - %s', array('number', 'title')),
 
@@ -73,6 +78,16 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
         'exposeHttpApi'     => true,
 
         'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
+
+        self::TABLE         => [
+            self::NAME          => self::TABLE_NAME,
+            self::INDEXES       => [
+                'description' => [
+                    self::COLUMNS       => ['description'],
+                    self::FLAGS         => [self::TYPE_FULLTEXT],
+                ],
+            ]
+        ],
         
         'filterModel' => array(
             'contract' => array(
@@ -104,14 +119,26 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
         'fields'            => array(
             'number' => array(
                 'label' => 'Invoice Number', //_('Invoice Number')
+                self::TYPE => self::TYPE_STRING,
+                self::LENGTH => 64,
+                self::NULLABLE => true,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'queryFilter' => TRUE,
             ),
             'description' => array(
                 'label'   => 'Description', // _('Description')
-                'type'    => 'fulltext',
+                self::TYPE => self::TYPE_FULLTEXT,
+                self::LENGTH => 255,
                 'queryFilter' => TRUE,
             ),
+            self::FLD_DEBITOR_ID                => [
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Debitor::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
+            ],
             'address_id'       => array(
                 'label'      => 'Address',    // _('Address')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
@@ -126,7 +153,16 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             'fixed_address' => array(
                 'label'      => 'Address',    // _('Address')
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'label' => NULL
+                'label' => NULL,
+                self::TYPE => self::TYPE_TEXT,
+                self::NULLABLE => true,
+            ),
+            'is_auto' => array(
+                'type' => self::TYPE_BOOLEAN,
+                'label' => NULL,
+                self::DEFAULT_VAL => 0,
+                self::NULLABLE                      => true,
+                self::UNSIGNED => true,
             ),
             'date' => array(
                 'type' => 'date',
@@ -134,70 +170,32 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'uiconfig'  => [
                     'format' => ['medium'],
                 ],
-            ),
-            'start_date' => array(
-                'type' => 'date',
-                'label'      => 'Interval Begins',    // _('Interval Begins')
-                'uiconfig'  => [
-                    'format' => ['medium'],
-                ],
-            ),
-            'end_date' => array(
-                'type' => 'date',
-                'label'      => 'Interval Ends',    // _('Interval Ends')
-                'uiconfig'  => [
-                    'format' => ['medium'],
-                ],
+                self::NULLABLE                      => true,
             ),
             'credit_term' => array(
                 'title' => 'Credit Term', // _('Credit Term')
                 'type'  => 'integer',
-                'default' => 10
-            ),
-            'costcenter_id' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-                'label' => 'Cost Center', //_('Cost Center')
-                'type'  => 'record',
-                'config' => array(
-                    'appName'     => 'Tinebase',
-                    'modelName'   => 'CostCenter',
-                    'idProperty'  => 'id'
-                )
-            ),
-            'cleared' => array(
-                'label' => 'Cleared', //_('Cleared')
-                'default' => 'TO_CLEAR',
-                'type' => 'keyfield',
-                'name' => Sales_Config::INVOICE_CLEARED
-            ),
-            'type' => array(
-                'label' => 'Type', //_('Type')
-                'default' => 'INVOICE',
-                'type' => 'keyfield',
-                'name' => Sales_Config::INVOICE_TYPE
-            ),
-            'is_auto' => array(
-                'type' => self::TYPE_BOOLEAN,
-                'label' => NULL
+                self::NULLABLE => true,
+                self::UNSIGNED => true,
             ),
             'price_net' => array(
                 'label' => 'Price Net', // _('Price Net')
                 'type'  => 'money',
-                'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
+                self::NULLABLE => true,
             ),
             'price_tax' => array(
                 'label' => 'Taxes (VAT)', // _('Taxes (VAT)')
                 'type'  => 'money',
-                'default' => 0,
+                self::NULLABLE => true,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
             ),
             'price_gross' => array(
                 'label' => 'Price Gross', // _('Price Gross')
                 'type'  => 'money',
-                'default' => 0,
+                self::NULLABLE => true,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
             ),
@@ -211,6 +209,8 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 ],
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
+                self::NULLABLE => true,
+                self::UNSIGNED => true,
             ),
             'inventory_change' => array(
                 'label' => 'Inventory Change', // _('Inventory Change')
@@ -218,6 +218,37 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
+                self::NULLABLE => true,
+            ),
+            'cleared' => array(
+                'label' => 'Cleared', //_('Cleared')
+                'default' => 'TO_CLEAR',
+                'type' => 'keyfield',
+                'name' => Sales_Config::INVOICE_CLEARED,
+                self::NULLABLE => true,
+            ),
+            'type' => array(
+                'label' => 'Type', //_('Type')
+                'default' => null,
+                'type' => 'keyfield',
+                'name' => Sales_Config::INVOICE_TYPE,
+                self::NULLABLE => true,
+            ),
+            'start_date' => array(
+                'type' => 'date',
+                'label'      => 'Interval Begins',    // _('Interval Begins')
+                'uiconfig'  => [
+                    'format' => ['medium'],
+                ],
+                self::NULLABLE => true,
+            ),
+            'end_date' => array(
+                'type' => 'date',
+                'label'      => 'Interval Ends',    // _('Interval Ends')
+                'uiconfig'  => [
+                    'format' => ['medium'],
+                ],
+                self::NULLABLE => true,
             ),
             'positions' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
@@ -255,14 +286,6 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                     )
                 )
             ),
-            self::FLD_DEBITOR_ID                => [
-                self::TYPE                          => self::TYPE_RECORD,
-                self::CONFIG                        => [
-                    self::APP_NAME                      => Sales_Config::APP_NAME,
-                    self::MODEL_NAME                    => Sales_Model_Debitor::MODEL_NAME_PART,
-                ],
-                self::NULLABLE                      => true,
-            ],
             'fulltext' => array(
                 'type'   => 'virtual',
                 'config' => array(
