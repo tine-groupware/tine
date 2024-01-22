@@ -746,10 +746,14 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo "Currently installed applications:\n";
         $applications->sort('name');
         foreach ($applications as $application) {
-            $maintenance = Tinebase_Core::getApplicationInstance(
-                $application->name, '', true)->isInMaintenanceMode();
-            echo "* " . $application->name . " (Version: " . $application->version . ") - " . $application->status
-                . ' (maintenance: ' . ($maintenance ? 'on' : 'off') . ")\n";
+            try {
+                $maintenance = Tinebase_Core::getApplicationInstance(
+                    $application->name, '', true)->isInMaintenanceMode();
+                echo "* " . $application->name . " (Version: " . $application->version . ") - " . $application->status
+                    . ' (maintenance: ' . ($maintenance ? 'on' : 'off') . ")\n";
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                echo "* " . $application->name . " - disabled (" . $tead->getMessage() . ")\n";
+            }
         }
         
         return 0;
