@@ -108,7 +108,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             margins: '5',
                             width: 100,
                             xtype: 'label',
-                            text: this.app.i18n._('Event Types')
+                            text: this.app.i18n._('Event Type')
                         }, {
                             flex: 1,
                             xtype:'tinerecordspickercombobox',
