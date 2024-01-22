@@ -412,18 +412,18 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME . ' as a JOIN '
             . SQL_TABLE_PREFIX . Sales_Model_Customer::TABLE_NAME .' AS b ON a.' . Sales_Model_Debitor::FLD_CUSTOMER_ID . ' = b.id SET a.number = b.number');
 
-        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME . ' as d JOIN '
+        $this->_db->query('UPDATE IGNORE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME . ' as d JOIN '
             . SQL_TABLE_PREFIX . Sales_Model_Address::TABLE_NAME . ' AS a ON a.' . Sales_Model_Address::FLD_DEBITOR_ID
             . ' = d.id SET d.number = a.' . Sales_Model_Address::FLD_CUSTOM1 . ' WHERE a.' . Sales_Model_Address::FLD_CUSTOM1 . ' IS NOT NULL AND a.' . Sales_Model_Address::FLD_CUSTOM1 . ' <> ""');
 
-        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME . ' as d JOIN '
+        $this->_db->query('UPDATE IGNORE ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME . ' as d JOIN '
             . SQL_TABLE_PREFIX . Sales_Model_Customer::TABLE_NAME .' AS c ON d.' . Sales_Model_Debitor::FLD_CUSTOMER_ID
             . ' = c.id JOIN ' . SQL_TABLE_PREFIX . Sales_Model_Address::TABLE_NAME . ' AS a ON a.' . Sales_Model_Address::FLD_CUSTOMER_ID
             . ' = c.id SET d.number = a.' . Sales_Model_Address::FLD_CUSTOM1 . ' WHERE a.' . Sales_Model_Address::FLD_CUSTOM1 . ' IS NOT NULL AND a.' . Sales_Model_Address::FLD_CUSTOM1 . ' <> ""');
 
         $bucket = Sales_Model_Debitor::class . '#' . Sales_Model_Debitor::FLD_NUMBER . '#' . Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION};
         $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'numberable WHERE bucket = "'. $bucket . '"');
-        $this->getDb()->query('INSERT INTO ' . SQL_TABLE_PREFIX . 'numberable (bucket, number) SELECT "' . $bucket . '", ' . Sales_Model_Debitor::FLD_NUMBER . ' FROM ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME);
+        $this->getDb()->query('INSERT INTO ' . SQL_TABLE_PREFIX . 'numberable (bucket, number) SELECT "' . $bucket . '", REPLACE(' . Sales_Model_Debitor::FLD_NUMBER . ', "DEB-", "") FROM ' . SQL_TABLE_PREFIX . Sales_Model_Debitor::TABLE_NAME);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.11', self::RELEASE017_UPDATE011);
     }

@@ -45,7 +45,13 @@ class Inventory_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update001()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
         (new Inventory_Setup_Initialize())->initializeCostCenter();
+
+        $this->_db->query('UPDATE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Inventory_Model_InventoryItem::TABLE_NAME)
+            . ' AS ii LEFT JOIN ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Tinebase_Model_EvaluationDimensionItem::TABLE_NAME)
+            . ' AS edi ON ii.eval_dim_cost_center = edi.id SET ii.eval_dim_cost_center = NULL WHERE edi.id IS NULL');
+
         $this->addApplicationUpdate(Inventory_Config::APP_NAME, '17.1', self::RELEASE017_UPDATE001);
     }
 
