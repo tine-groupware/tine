@@ -296,7 +296,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         foreach ($containers['results'] as $container) {
           // Check if the container has no users
-          if ($container['type'] == 'personal')
+          if ($container['type'] == 'personal') {
             try {
               $user = Tinebase_User::getInstance()->getFullUserById($container['owner_id']);
             } catch (Tinebase_Exception_NotFound) {
