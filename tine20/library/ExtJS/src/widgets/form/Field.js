@@ -611,7 +611,7 @@ var form = new Ext.form.FormPanel({
      */
     setValue : function(v){
         this.value = v;
-        if(this.rendered){
+        if(this.rendered && this.el.dom){
             this.el.dom.value = (Ext.isEmpty(v) ? '' : v);
             this.validate();
         }
