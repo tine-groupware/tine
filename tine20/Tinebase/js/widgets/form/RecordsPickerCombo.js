@@ -62,18 +62,10 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     },
 
     getItems: function () {
-        this.pickerGrid = new Tine.widgets.grid.PickerGridPanel({
-            recordClass: this.recordClass,
-            isMetadataModelFor: this.isMetadataModelFor,
-            refIdField: this.refIdField,
+        this.pickerGrid = new Tine.widgets.grid.PickerGridPanel(Ext.copyTo({
             height: this.layerHeight - 40 || 'auto',
             onStoreChange: Ext.emptyFn,
-            store: this.store,
-            additionalFilterSpec: this.additionalFilterSpec,
-            allowDelete: this.allowDelete,
-            allowCreateNew: this.allowCreateNew,
-            editDialogConfig: this.editDialogConfig
-        });
+        }, this, 'recordClass,isMetadataModelFor,refIdField,store,additionalFilterSpec,allowDelete,allowCreateNew,editDialogConfig,searchComboConfig'));
 
         return [this.pickerGrid];
     },
