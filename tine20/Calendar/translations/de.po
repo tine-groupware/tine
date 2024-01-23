@@ -2779,9 +2779,6 @@ msgstr "Wenn aktiviert ist jeder neu erstellte Termin privat."
 msgid "Search for records ..."
 msgstr "Suche nach Einträgen ..."
 
-msgid "Event Type"
-msgstr "Terminart"
-
 msgid ""
 "Do not send invitations notifications for alternatie events in an active "
 "poll."
