@@ -115,6 +115,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             name: 'event_types',
                             recordClass: 'Calendar.EventTypes',
                             refIdField: 'record',
+                            searchComboConfig: {useEditPlugin: false},
                             editDialogConfig: {mode:  'local'},
                             isMetadataModelFor: 'Calendar.EventType',
                             requiredGrant: 'editGrant',

@@ -388,6 +388,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                     self::DEPENDENT_RECORDS         => true,
                 ],
                 self::RECURSIVE_RESOLVING => true,
+                self::UI_CONFIG         => [
+                    'searchComboConfig'     => [
+                        'useEditPlugin'         => false,
+                    ],
+                ],
             ],
             Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => [
                 self::TYPE          => self::TYPE_VIRTUAL,

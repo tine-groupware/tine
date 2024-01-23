@@ -53,6 +53,16 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
         this.currentValue = this.currentValue || [];
         // allow to initialize with string
         this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
+
+        // Autodetect if our record has additional metadata for the refId Record or is only a cross table
+        if (this.refIdField) {
+            const dataFields = _.difference(this.recordClass.getDataFields(), [this.refIdField]);
+
+            this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 /* precisely this is a cross-record */ ? dataFields[0] : null;
+            this.metaDataFields = _.difference(dataFields, [this.isMetadataModelFor]);
+            this.mappingRecordClass = this.isMetadataModelFor ? this.recordClass.getField(this.isMetadataModelFor).getRecordClass() : null;
+        }
+
         Tine.Tinebase.widgets.form.RecordsPickerCombo.superclass.initComponent.call(this);
         this.store = new Ext.data.SimpleStore({
             fields: this.recordClass
@@ -62,18 +72,10 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     },
 
     getItems: function () {
-        this.pickerGrid = new Tine.widgets.grid.PickerGridPanel({
-            recordClass: this.recordClass,
-            isMetadataModelFor: this.isMetadataModelFor,
-            refIdField: this.refIdField,
+        this.pickerGrid = new Tine.widgets.grid.PickerGridPanel(Ext.copyTo({
             height: this.layerHeight - 40 || 'auto',
             onStoreChange: Ext.emptyFn,
-            store: this.store,
-            additionalFilterSpec: this.additionalFilterSpec,
-            allowDelete: this.allowDelete,
-            allowCreateNew: this.allowCreateNew,
-            editDialogConfig: this.editDialogConfig
-        });
+        }, this, 'recordClass,isMetadataModelFor,refIdField,store,additionalFilterSpec,allowDelete,allowCreateNew,editDialogConfig,searchComboConfig'));
 
         return [this.pickerGrid];
     },
@@ -92,6 +94,7 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
      * @return {Ext.form.Field} this
      */
     setValue: function (value) {
+        const me = this;
         value = value || [];
         value = _.isArray(value) ? value : [value];
 
@@ -99,7 +102,8 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
         if (this.rendered) {
             Promise.all(_.map(this.store.data.items, function(record) {
                 return new Promise(resolve => {
-                    const text = record.getTitle();
+                    const text = !me.isMetadataModelFor ? record.getTitle() :
+                        Tine.Tinebase.data.Record.setFromJson(record.get(me.isMetadataModelFor), me.mappingRecordClass).getTitle();
                     if (text && text.registerReplacer) {
                         text.registerReplacer((text) => {
                             resolve(text);
