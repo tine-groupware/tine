@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "907ae52e34c0fc33fa83ff3f85671969",
+    "content-hash": "02e723343927156b1c80fe4226c7e78c",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4779,11 +4779,11 @@
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.2pl5",
+            "version": "1.8.2pl6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PHPExcel.git",
-                "reference": "20f0fcaea20b560fe97c593c715b6d2e755186e9"
+                "reference": "7ed7cbce7365f34e43c236808492614ea28dea9b"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -4830,7 +4830,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2023-06-05T11:43:50+00:00"
+            "time": "2024-01-23T16:59:46+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -13657,7 +13657,7 @@
         },
         {
             "package": "phpoffice/phpexcel",
-            "version": "1.8.2.0-patch5",
+            "version": "1.8.2.0-patch6",
             "alias": "1.8.2",
             "alias_normalized": "1.8.2.0"
         },
@@ -13710,5 +13710,5 @@
         "php": "7.4",
         "ext-filter": "7.4"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
