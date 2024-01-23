@@ -252,6 +252,14 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         }
 
         if(this.enableColors){
+            let colors = [
+                '000000', '993300', '333300', '003300', '003366', '000080', '333399', '333333',
+                '800000', 'FF6600', '808000', '008000', '008080', '0000FF', '666699', '808080',
+                'FF0000', 'FF9900', '99CC00', '339966', '33CCCC', '3366FF', '800080', '969696',
+                'FF00FF', 'FFCC00', 'FFFF00', '00FF00', '00FFFF', '00CCFF', '993366', 'C0C0C0',
+                'FF99CC', 'FFCC99', 'FFFF99', 'CCFFCC', 'CCFFFF', '99CCFF', 'CC99FF', 'FFFFFF',
+                'FFECF6', 'FFF3E7', 'FFFFE7', 'E2FFE2', 'DCFCFF', 'EDF6FF', 'auto', 'picker'
+            ]
             items.push(
                 '-', {
                     itemId:'forecolor',
@@ -264,10 +272,27 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                         allowReselect: true,
                         focus: Ext.emptyFn,
                         value:'000000',
+                        colors: colors,
                         plain:true,
                         listeners: {
                             scope: this,
                             select: function(cp, color){
+                                if (color === null) {
+                                    let container = this.win.getSelection().getRangeAt(0).commonAncestorContainer
+                                    if (container.nodeName === '#text') {
+                                        let element = container.parentElement
+                                        this.removeColor(element)
+                                        return
+                                    }
+                                    let all = container.getElementsByTagName('*')
+                                    _.forEach(all, (element) => {
+                                        if (!this.win.getSelection().containsNode(element, true)) {
+                                            return
+                                        }
+                                        this.removeColor(element)
+                                    })
+                                    return
+                                }
                                 this.execCmd('forecolor', Ext.isWebKit || Ext.isIE ? '#'+color : color);
                                 this.deferFocus();
                             }
@@ -284,11 +309,30 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                     menu : new Ext.menu.ColorMenu({
                         focus: Ext.emptyFn,
                         value:'FFFFFF',
+                        colors: colors,
                         plain:true,
                         allowReselect: true,
                         listeners: {
                             scope: this,
                             select: function(cp, color){
+                                if (color === null) {
+                                    let container = this.win.getSelection().getRangeAt(0).commonAncestorContainer
+                                    if (container.nodeName === '#text') {
+                                        let element = container.parentElement
+                                        this.removeBackground(element)
+                                        return
+                                    }
+                                    let all = container.getElementsByTagName('*')
+                                    _.forEach(all, (element) => {
+                                        if (!this.win.getSelection().containsNode(element, true)) {
+                                            return
+                                        }
+                                        this.removeBackground(element)
+                                    })
+
+                                    return
+                                }
+
                                 if(Ext.isGecko){
                                     this.execCmd('useCSS', false);
                                     this.execCmd('hilitecolor', color);
@@ -363,6 +407,24 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         });
 
         this.tb = tb;
+    },
+
+    removeColor: function (element) {
+        if (element.style.color !== '') {
+            element.style.color = ''
+        }
+        if (element.hasAttribute('color')) {
+            element.removeAttribute('color')
+        }
+    },
+
+    removeBackground: function (element) {
+        if (element.style.backgroundColor !== '') {
+            element.style.backgroundColor = ''
+        }
+        if (element.style.background !== '') {
+            element.style.background = ''
+        }
     },
 
     onDisable: function(){
