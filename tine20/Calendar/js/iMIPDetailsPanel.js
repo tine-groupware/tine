@@ -157,6 +157,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             text: ''
         });
         this.tbar = this.actionToolbar = new Ext.Toolbar({
+            style: 'overflow: auto;',
             items: [{
                     xtype: 'tbitem',
                     cls: 'CalendarIconCls',
