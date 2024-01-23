@@ -1530,7 +1530,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $possibleAddresses = [];
 
         if (class_exists('GDPR_Controller_DataIntendedPurposeRecord')
-            && Tinebase_Application::getInstance()->isInstalled('GDPR')
+            && Tinebase_Application::getInstance()->isInstalled('GDPR', checkEnabled: true)
         ) {
             $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, [
                 Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
