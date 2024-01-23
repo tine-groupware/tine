@@ -16,6 +16,7 @@ class Tasks_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -32,6 +33,10 @@ class Tasks_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE017_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];
@@ -101,5 +106,25 @@ class Tasks_Setup_Update_17 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate(Tasks_Config::APP_NAME, '17.2', self::RELEASE017_UPDATE002);
+    }
+
+    /**
+     * remove obsolete import definition tasks_import_demo_csv
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function update003(): void
+    {
+        try {
+            $def = Tinebase_ImportExportDefinition::getInstance()->getByName('tasks_import_demo_csv');
+            if (! $def->skip_upstream_updates) {
+                Tinebase_ImportExportDefinition::getInstance()->delete($def->getId());
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // do nothing
+        }
+
+        $this->addApplicationUpdate(Tasks_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
     }
 }
