@@ -89,7 +89,7 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
             name: key,
             fieldDefinition: fieldDefinition
         };
-
+        
         if (fieldDefinition.type) {
             // add pre defined type
             field.type = this.types[fieldDefinition.type];
@@ -114,9 +114,15 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
                 || (fieldDefinition.nullable)) {
                 field.defaultValue = null;
             }
+            if (fieldDefinition.hasOwnProperty('validators')) {
+                if (fieldDefinition['validators']['default']) {
+                    field.defaultValue = fieldDefinition['validators']['default'];
+                }
+            }
             if (fieldDefinition.hasOwnProperty('default')) {
                 field.defaultValue = fieldDefinition['default'];
             }
+            
             // allow overwriting date pattern in model
             if (fieldDefinition.hasOwnProperty('dateFormat')) {
                 field.dateFormat = fieldDefinition.dateFormat;
