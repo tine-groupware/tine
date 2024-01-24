@@ -132,7 +132,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 position.set('sales_tax_rate', productTaxRate)
                             } else if (record.id !== 'taxable' && position.get('sales_tax_rate')) {
                                 if (position.get('unit_price_type') === 'gross') {
-                                    position.set('unit_price', position.get('unit_price') - (position.get('sales_tax') || 0))
+                                    position.set('unit_price', position.get('unit_price') - (position.get('sales_tax')/position.get('quantity') || 0))
                                     position.set('unit_price_type', 'net')
                                 }
                                 position.set('sales_tax_rate', 0)
