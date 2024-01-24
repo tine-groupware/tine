@@ -20,6 +20,8 @@ beforeEach(async () => {
     await popupWindow.waitForSelector('.search-item.x-combo-selected');
     await popupWindow.click('.search-item.x-combo-selected');
     await popupWindow.waitForTimeout(1000); //wait for new mail line!
+    await popupWindow.keyboard.press('Tab');
+    await popupWindow.waitForTimeout(1000);
     await popupWindow.click('input[name=subject]');
     await popupWindow.waitForTimeout(1000); //musst wait for input!
     subject = 'test '+ Math.round(Math.random() * 10000000);
@@ -122,7 +124,9 @@ async function sendMail(subject, newWindowPromis, user= false) {
         await popupWindow.click('.search-item.x-combo-selected');
         await popupWindow.waitForTimeout(1000); //wait for new mail line!
     }
-
+    await popupWindow.waitForTimeout(1000); //wait for new mail line!
+    await popupWindow.keyboard.press('Tab');
+    await popupWindow.waitForTimeout(1000);
     await popupWindow.click('input[name=subject]');
     await popupWindow.waitForTimeout(1000);
     await expect(popupWindow).toFill('input[name=subject]', subject);
@@ -139,6 +143,7 @@ async function sendMail(subject, newWindowPromis, user= false) {
             await expect(page).toMatchElement('.x-grid3-cell-inner.x-grid3-col-subject', {text: subject, timeout: 2000});
             break;
         } catch(e){
+            console.warn(`mail with subject ${subject} not received with attempt #${i+1}`)
         }
     }
 }

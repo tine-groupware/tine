@@ -609,7 +609,9 @@ class Tinebase_EmailUser
      */
     public static function sieveBackendSupportsMasterPassword(Felamimail_Model_Account $account = null): bool
     {
-        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP) ||
+            ! Tinebase_EmailUser::manages(Tinebase_Config::SIEVE)
+        ) {
             return false;
         }
 
