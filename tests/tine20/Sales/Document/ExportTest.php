@@ -80,14 +80,14 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
             $data = file_get_contents('zip://' . $tempfile . '#word/document.xml');
             static::assertStringContainsString('root/Standard/de/test.docx', $data);
 
-            rename(__DIR__ . '/files/overwrite/Standard/de/test.docx', __DIR__ . '/files/overwrite/Standard/de/test.docx1');
+            rename(__DIR__ . '/files/overwrite/CATEGORY-Standard--LANG-de--test.docx', __DIR__ . '/files/overwrite/CATEGORY-Standard--LANG-de--test.docx1');
             $pathProp->setValue($doc, __DIR__ . '/files/overwrite/test.docx');
             $doc->generate();
             $doc->save($tempfile);
             $data = file_get_contents('zip://' . $tempfile . '#word/document.xml');
             static::assertStringContainsString('root/Standard/test.docx', $data);
 
-            rename(__DIR__ . '/files/overwrite/Standard/test.docx', __DIR__ . '/files/overwrite/Standard/test.docx1');
+            rename(__DIR__ . '/files/overwrite/CATEGORY-Standard--test.docx', __DIR__ . '/files/overwrite/CATEGORY-Standard--test.docx1');
             $pathProp->setValue($doc, __DIR__ . '/files/overwrite/test.docx');
             $doc->generate();
             $doc->save($tempfile);
@@ -95,9 +95,9 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
             static::assertStringContainsString('root/test.docx', $data);
 
         } finally {
-            unlink($tempfile);
-            @rename(__DIR__ . '/files/overwrite/Standard/de/test.docx1', __DIR__ . '/files/overwrite/Standard/de/test.docx');
-            @rename(__DIR__ . '/files/overwrite/Standard/test.docx1', __DIR__ . '/files/overwrite/Standard/test.docx');
+            @unlink($tempfile);
+            @rename(__DIR__ . '/files/overwrite/CATEGORY-Standard--LANG-de--test.docx1', __DIR__ . '/files/overwrite/CATEGORY-Standard--LANG-de--test.docx');
+            @rename(__DIR__ . '/files/overwrite/CATEGORY-Standard--test.docx1', __DIR__ . '/files/overwrite/CATEGORY-Standard--test.docx');
         }
     }
 

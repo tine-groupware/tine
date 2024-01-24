@@ -4,7 +4,7 @@
  *
  * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Paul Mehrer <p.mehrer@metaways.de>
- * @copyright    Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -33,25 +33,33 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
                 Sales_Model_Document_Abstract::FLD_DEBITOR_ID => [],
                 Sales_Model_Document_Abstract::FLD_POSITIONS => [],
                 Sales_Model_Document_Abstract::FLD_BOILERPLATES => [],
-                Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY => [],
+                Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Document_Category::FLD_DIVISION_ID => [],
+                    ],
+                ],
             ]
         ]))->expand($this->_records);
 
         /** @var Sales_Model_Document_Abstract $record */
         $record = $this->_records->getFirstRecord();
-        $cat = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->{Sales_Model_Document_Category::FLD_NAME};
-        $lang = $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE};
-        $this->_locale = new Zend_Locale($lang);
+        $cats = explode('/', $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->{Sales_Model_Document_Category::FLD_NAME});
+        $division = str_replace('/', '', $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY}->{Sales_Model_Document_Category::FLD_DIVISION_ID}->{Sales_Model_Division::FLD_TITLE});
+        $lang = str_replace('/', '', $record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE});
+        $this->_locale = new Zend_Locale($record->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE});
         Sales_Model_DocumentPosition_Abstract::setExportContextLocale($this->_locale);
         $this->_translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $this->_locale);
         $config = Sales_Config::getInstance();
 
-        if (null !== ($overwriteTemplate = $this->_findOverwriteTemplate($this->_templateFileName, [
-                    $lang => null,
-                    $cat => [
-                        $lang => null,
-                    ],
-                ]))) {
+        $matchData = [
+            'DIVISON-' . $division . '--',
+            'LANG-' . $lang . '--',
+        ];
+        foreach ($cats as $cat) {
+            $matchData[] = 'CATEGORY-' . $cat . '--';
+        }
+
+        if (null !== ($overwriteTemplate = $this->_findOverwriteTemplate($this->_templateFileName, $matchData))) {
             $this->_templateFileName = $overwriteTemplate;
             $this->_createDocument();
         }
