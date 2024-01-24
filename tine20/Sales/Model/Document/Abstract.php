@@ -151,14 +151,14 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::LABEL => 'Division', // _('Division')
                 self::FILTER => Sales_Model_Document_DivisionFilter::class,
                 self::OPTIONS => [
-                    self::MODEL_NAME    => 'xxx',
+                    self::MODEL_NAME    => Sales_Model_Division::MODEL_NAME_PART,
                 ],
                 'jsConfig'          => [
                     'filtertype' => 'foreignrecord',
                     'linkType' => 'foreignId',
-                    'foreignRecordClass' => 'xxx',
+                    'foreignRecordClass' => Sales_Model_Division::class,
                     'multipleForeignRecords' => true,
-                    'defaultOperator' => 'definedBy'
+                    'defaultOperator' => 'equals'
                 ],
             ],
         ],
@@ -444,11 +444,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             )->_(static::$_documentNumberPrefix);
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::CONFIG_OVERRIDE] =
             'Sales_Controller_' . static::MODEL_NAME_PART . '::documentNumberConfigOverride';
-
-        $_definition[self::FILTER_MODEL][Sales_Model_Debitor::FLD_DIVISION_ID][self::OPTIONS][self::MODEL_NAME] =
-            'Sales_Model_' . static::MODEL_NAME_PART;
-        $_definition[self::FILTER_MODEL][Sales_Model_Debitor::FLD_DIVISION_ID]['jsConfig']['foreignRecordClass'] =
-            'Sales_Model_' . static::MODEL_NAME_PART;
     }
 
     public function isBooked(): bool
