@@ -28,7 +28,7 @@ variables:
   JS_E2E_TEST_FILTER: ""
 
   # "Database image used by tests."
-  DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.4.1"
+  DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.9.8"
 
   # "Redis image to use during tests."
   REDIS_IMAGE: "${UTIL_REGISTRY}/redis:6.0.16"
