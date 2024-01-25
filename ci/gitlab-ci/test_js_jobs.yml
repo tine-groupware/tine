@@ -75,6 +75,8 @@
       when: never
     - if: $JS_E2E_TESTS_SOURCE == "false"
       when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /skip-js-e2e-tests-source/
+      when: never
     - if: $JS_E2E_TESTS_SOURCE == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $JS_E2E_TESTS_SOURCE_MERGE_REQUEST != "false"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /js-e2e-tests-source/
