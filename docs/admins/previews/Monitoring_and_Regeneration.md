@@ -16,6 +16,13 @@ Run this CLI function to re-generate missing previews (also deletes previews of 
 php tine20.php --method=Tinebase.fileSystemCheckPreviews
 ~~~
 
+### Regenerate preview of single nodes
+
+~~~
+php tine20.php --method=Tinebase.fileSystemCheckPreviews -- ids=NODE_ID1,NODE_ID2
+~~~
+
+
 Preview Status Report
 =
 
