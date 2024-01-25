@@ -194,7 +194,7 @@ release-packages-to-github:
     - !reference [.lib, script]
     - packaging_push_package_to_github
   rules:
-    - if: $MAJOR_COMMIT_REF_NAME != "main"
+    - if: $MAJOR_COMMIT_REF_NAME != "2023.11"
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
       when: manual
@@ -225,16 +225,10 @@ update-version-check:
   variables:
     TRIGGER_JOBS: update-version
     PACKAGE_STRING: ${CI_COMMIT_TAG}
+    CODE_NAME: ${CODENAME}
   trigger:
     project: tine20/versionCheck
     strategy: depend
-    branch: pu/mm/cicd # only for testing
+    branch: master
   rules:
-    - if: $CI_COMMIT_TAG && $MAJOR_COMMIT_REF_NAME == "tine20.com/2022.11"
-      variables:
-        VERSION: "be"
-        CODE_NAME: ${CODENAME}
-    - if: $CI_COMMIT_TAG && $MAJOR_COMMIT_REF_NAME == "2022.11"
-      variables:
-        VERSION: "org"
-        CODE_NAME: ${MAJOR_COMMIT_REF_NAME}
+    - if: $CI_COMMIT_TAG && $MAJOR_COMMIT_REF_NAME == "2023.11"
