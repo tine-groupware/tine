@@ -2076,17 +2076,28 @@ fi';
 
     /**
      * checks if there are files missing previews and creates them synchronously
-     * that means this can be very time consuming
+     * that means this can be very time-consuming
      * also deletes previews of files that no longer exist
      *
+     * accepts (node) ids=XXXX,YYYY as param
+     *
+     * @param Zend_Console_Getopt $opts
      * @return int
+     * @throws Zend_Db_Statement_Exception
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function fileSystemCheckPreviews()
+    public function fileSystemCheckPreviews(Zend_Console_Getopt $opts): int
     {
         $this->_checkAdminRight();
 
+        $data = $this->_parseArgs($opts);
+        $ids = [];
+        if (isset($data['ids'])) {
+            $ids = explode(',', $data['ids']);
+        }
+
         Tinebase_FileSystem_Previews::getInstance()->resetErrorCount();
-        Tinebase_FileSystem::getInstance()->sanitizePreviews();
+        Tinebase_FileSystem::getInstance()->sanitizePreviews($ids);
 
         return 0;
     }

@@ -3827,10 +3827,12 @@ class Tinebase_FileSystem implements
     /**
      * create preview for files without a preview, delete previews for already deleted files
      *
+     * @param array $ids
      * @return bool
+     * @throws Tinebase_Exception_InvalidArgument
      * @throws Zend_Db_Statement_Exception
      */
-    public function sanitizePreviews(): bool
+    public function sanitizePreviews(array $ids = []): bool
     {
         if (! $this->isPreviewActive()) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Previews are disabled');
@@ -3838,6 +3840,9 @@ class Tinebase_FileSystem implements
         }
 
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Starting to sanitize previews');
+        if (! empty($ids)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ids: ' . print_r($ids, true));
+        }
 
         $treeNodeBackend = $this->_getTreeNodeBackend();
         $previewController = Tinebase_FileSystem_Previews::getInstance();
@@ -3846,17 +3851,27 @@ class Tinebase_FileSystem implements
         $created = 0;
         $deleted = 0;
 
-        foreach ($treeNodeBackend->search(
-                new Tinebase_Model_Tree_Node_Filter([
-                    ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE]
-                ], '', ['ignoreAcl' => true])
-                , null, true) as $id) {
+        $filterData = [[
+            'field' => 'type',
+            'operator' => 'equals',
+            'value' => Tinebase_Model_Tree_FileObject::TYPE_FILE
+        ]];
+        if (! empty($ids)) {
+            $filterData[] = ['field' => 'id', 'operator' => 'in', 'value' => $ids];
+        }
+        $nodeIds = $treeNodeBackend->search(
+            new Tinebase_Model_Tree_Node_Filter($filterData, '', ['ignoreAcl' => true]),
+            null, true);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Found '
+            . count($nodeIds) . ' file nodes');
 
+        foreach ($nodeIds as $id) {
             /** @var Tinebase_Model_Tree_Node $node */
             try {
                 $treeNodeBackend->setRevision(null);
                 $node = $treeNodeBackend->get($id);
             } catch (Tinebase_Exception_NotFound $tenf) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Node not found');
                 continue;
             }
 
@@ -3870,6 +3885,7 @@ class Tinebase_FileSystem implements
                     try {
                         $actualNode = $treeNodeBackend->get($id);
                     } catch (Tinebase_Exception_NotFound $tenf) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Node not found');
                         continue;
                     } finally {
                         $treeNodeBackend->setRevision(null);
@@ -3879,16 +3895,19 @@ class Tinebase_FileSystem implements
                 }
 
                 if (!$previewController->canNodeHavePreviews($actualNode)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Node cannot have previews');
                     continue;
                 }
 
                 if ($previewController->hasPreviews($actualNode)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Node already has preview');
                     $validHashes[$actualNode->hash] = true;
                     continue;
                 }
 
                 try {
                     if (!$previewController->createPreviews($actualNode)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Preview creation failed');
                         continue;
                     }
                 } catch (Tinebase_Exception_QuotaExceeded $teqe) {
@@ -3906,10 +3925,18 @@ class Tinebase_FileSystem implements
         $treeNodeBackend->setRevision(null);
 
         $parents = array();
-        foreach($treeNodeBackend->search(
-                new Tinebase_Model_Tree_Node_Filter([
-                    ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_PREVIEW]
-                ], '', ['ignoreAcl' => true])
+
+        $filterData = [[
+            'field' => 'type',
+            'operator' => 'equals',
+            'value' => Tinebase_Model_Tree_FileObject::TYPE_PREVIEW
+        ]];
+        if (! empty($ids)) {
+            $filterData[] = ['field' => 'id', 'operator' => 'in', 'value' => $ids];
+        }
+
+        foreach ($treeNodeBackend->search(
+                new Tinebase_Model_Tree_Node_Filter($filterData, '', ['ignoreAcl' => true])
                 , null, true) as $id) {
             /** @var Tinebase_Model_Tree_Node $fileNode */
             try {
@@ -3958,14 +3985,31 @@ class Tinebase_FileSystem implements
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' created ' . $created . ' new previews, deleted ' . $deleted . ' previews.');
 
-        // check for empty preview folders and delete them
+        if (empty($ids)) {
+            $this->_removeEmptyPreviewFolders();
+        }
+
+        return true;
+    }
+
+    /**
+     * check for empty preview folders and delete them
+     *
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _removeEmptyPreviewFolders(): void
+    {
+        $treeNodeBackend = $this->_getTreeNodeBackend();
+        $previewController = Tinebase_FileSystem_Previews::getInstance();
+
         $baseNode = $previewController->getBasePathNode();
         foreach($treeNodeBackend->search(
-                new Tinebase_Model_Tree_Node_Filter([
-                    ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER],
-                    ['field' => 'parent_id', 'operator' => 'equals', 'value' => $baseNode->getId()],
-                ], '', ['ignoreAcl' => true])
-                , null, true) as $id) {
+            new Tinebase_Model_Tree_Node_Filter([
+                ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Tree_FileObject::TYPE_FOLDER],
+                ['field' => 'parent_id', 'operator' => 'equals', 'value' => $baseNode->getId()],
+            ], '', ['ignoreAcl' => true])
+            , null, true) as $id) {
             if (count($treeNodeBackend->search(
                     new Tinebase_Model_Tree_Node_Filter([
                         ['field' => 'parent_id', 'operator' => 'equals', 'value' => $id],
@@ -3978,8 +4022,6 @@ class Tinebase_FileSystem implements
                 Tinebase_Lock::keepLocksAlive();
             }
         }
-
-        return true;
     }
 
     /**
