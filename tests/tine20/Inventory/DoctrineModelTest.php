@@ -5,7 +5,7 @@
  * @package     Inventory
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  */
 
@@ -23,7 +23,7 @@ class Inventory_DoctrineModelTest extends Inventory_TestCase
 
     public function testGetMetadataOfInventoryModel()
     {
-        $em = Setup_SchemaTool::getEntityManager('Inventory', array('Inventory_Model_InventoryItem'));
+        $em = Setup_SchemaTool::getEntityManager(array('Inventory_Model_InventoryItem'));
 
         $invItemMetadata = $em->getClassMetadata('Inventory_Model_InventoryItem');
 
@@ -36,7 +36,7 @@ class Inventory_DoctrineModelTest extends Inventory_TestCase
 
     public function testExplicitRenameProblemExists()
     {
-        $em = Setup_SchemaTool::getEntityManager('Inventory');
+        $em = Setup_SchemaTool::getEntityManager();
         $sm = $em->getConnection()->getSchemaManager();
 
         // NOTE: the DBAL schema is stateless and 'just' describes a schema in a plattform independend way
@@ -53,7 +53,7 @@ class Inventory_DoctrineModelTest extends Inventory_TestCase
     public function testExplicitRename()
     {
         $this->markTestSkipped('evaluate concept for explicit field rename with doctrine2 schema tool');
-        $em = Setup_SchemaTool::getEntityManager('Inventory');
+        $em = Setup_SchemaTool::getEntityManager();
         $sm = $em->getConnection()->getSchemaManager();
 
         // NOTE: the DBAL schema is stateless and 'just' describes a schema in a plattform independend way

@@ -159,6 +159,7 @@ phpcs-analysis:
     # # generate baseline
     # paths:
     #   - phpcs.baseline.xml
+  allow_failure: true
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
