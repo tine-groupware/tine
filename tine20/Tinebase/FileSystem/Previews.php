@@ -210,7 +210,6 @@ class Tinebase_FileSystem_Previews
         if ($node->type !== Tinebase_Model_Tree_FileObject::TYPE_FILE
             || empty($node->hash)
             || $node->size == 0
-            || $node->preview_status > 0
             || Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
                 {Tinebase_Config::FILESYSTEM_PREVIEW_MAX_FILE_SIZE} < $node->size
             || Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->
