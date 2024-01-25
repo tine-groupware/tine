@@ -4,7 +4,7 @@
  *
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -80,7 +80,7 @@ class Setup_SchemaTool
      * @return \Doctrine\ORM\Configuration
      * @throws Setup_Exception
      */
-    public static function getConfig()
+    public static function getConfig(array $models = [])
     {
         $mappingDriver = new Tinebase_Record_DoctrineMappingDriver();
         $tableNames = [];
@@ -90,7 +90,7 @@ class Setup_SchemaTool
 
         try {
             /** @var Tinebase_Record_Interface $modelName */
-            foreach ($mappingDriver->getAllClassNames() as $modelName) {
+            foreach ($mappingDriver->getAllClassNames($models) as $modelName) {
                 if (null !== ($modelConfig = $modelName::getConfiguration()) &&
                     null !== ($tblName = $modelConfig->getTableName())) {
                     $tableNames[] = SQL_TABLE_PREFIX . $tblName;
@@ -117,9 +117,9 @@ class Setup_SchemaTool
         return $config;
     }
 
-    public static function getEntityManager()
+    public static function getEntityManager(array $models = [])
     {
-        $em = EntityManager::create(self::getDBParams(), self::getConfig());
+        $em = EntityManager::create(self::getDBParams(), self::getConfig($models));
 
         // needed to prevent runtime reflection that needs private properties ...
         $em->getMetadataFactory()->setReflectionService(new StaticReflectionService());
@@ -127,9 +127,11 @@ class Setup_SchemaTool
         return $em;
     }
 
-    public static function getMetadata(array $modelNames)
+    public static function getMetadata(array $modelNames, ?EntityManager $em = null)
     {
-        $em = self::getEntityManager();
+        if (null === $em) {
+            $em = self::getEntityManager();
+        }
 
         $mappingDriver = new Tinebase_Record_DoctrineMappingDriver();
         $classes = [];
@@ -159,9 +161,9 @@ class Setup_SchemaTool
 
     public static function updateSchema(array $modelNames)
     {
-        $em = self::getEntityManager();
+        $em = self::getEntityManager($modelNames);
         $tool = new SchemaTool($em);
-        $classes = self::getMetadata($modelNames);
+        $classes = self::getMetadata($modelNames, $em);
 
         $tool->updateSchema($classes, true);
         self::updateApplicationTable($modelNames);
@@ -172,7 +174,7 @@ class Setup_SchemaTool
         $em = self::getEntityManager();
         $tool = new SchemaTool($em);
         $allModels = (new Tinebase_Record_DoctrineMappingDriver())->getAllClassNames();
-        $classes = self::getMetadata($allModels);
+        $classes = self::getMetadata($allModels, $em);
 
         $tool->updateSchema($classes, true);
 

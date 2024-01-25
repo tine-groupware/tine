@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -234,12 +234,12 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
      *
      * @return array The names of all mapped classes known to this driver.
      */
-    public function getAllClassNames()
+    public function getAllClassNames(array $models = [])
     {
         $result = [];
 
         /** @var Tinebase_Record_Interface $model */
-        foreach (Tinebase_Application::getInstance()->getModelsOfAllApplications(true) as $model) {
+        foreach ($models ?: Tinebase_Application::getInstance()->getModelsOfAllApplications(true) as $model) {
             if ($this->isTransient($model)) {
                 $result[] = $model;
             }
