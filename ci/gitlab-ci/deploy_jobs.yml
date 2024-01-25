@@ -238,8 +238,9 @@ mkdocs-deploy:
     - if: $MKDOCS_DEPLOY == "false"
       when: never
     - if: $MKDOCS_DEPLOY == "true"
-    - if: $PIPELINE_TYPE =~ /mkdocs-deploy/
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "2023.11"
+    # mkdocs-deploy is triggered by a nightly pipeline and if docs changes. Maybe we only need one of them?
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy/ && $CI_COMMIT_REF_NAME == "2024.11"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "2024.11"
       changes:
         - docs/**/*
   timeout: 20m
