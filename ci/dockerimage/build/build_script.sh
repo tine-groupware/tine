@@ -94,7 +94,7 @@ function cleanupJs() {
 }
 
 function cleanupFiles() {
-    local FILES="images|library|vendor|docs|fonts|CREDITS|LICENSE|PRIVACY|RELEASENOTES|init_plugins.php|favicon.ico"
+    local FILES="images|library|vendor|docs|fonts|CREDITS|LICENSE|PRIVACY|RELEASENOTES.md|init_plugins.php|favicon.ico"
     local FILES="$FILES|config.inc.php.dist|index.php|langHelper.php|setup.php|tine20.php|bootstrap.php|worker.php|status.php"
 
     local APPS_TO_DELETE="ExampleApplication"
@@ -217,7 +217,7 @@ function createArchives()
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase CoreData images library vendor fonts"
                     local FILES="$FILES config.inc.php.dist index.php langHelper.php setup.php tine20.php bootstrap.php worker.php status.php"
-                    local FILES="$FILES CREDITS LICENSE PRIVACY RELEASENOTES init_plugins.php favicon.ico"
+                    local FILES="$FILES CREDITS LICENSE PRIVACY RELEASENOTES.md init_plugins.php favicon.ico"
 
                     # allow to pass files to build as a global var
                     if [ -n "$ADDITIONALRELEASEFILES" ]; then
