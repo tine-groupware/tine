@@ -229,6 +229,13 @@ var myField = new Ext.form.NumberField({
 			this.mon(this.el, 'click', this.autoSize, this);
         }
         if(this.enableKeyEvents){
+            this.initKeyEvents();
+        }
+    },
+
+    initKeyEvents: function() {
+        this.enableKeyEvents = true;
+        if (this.el && !this.keyEventsInitialized) {
             this.mon(this.el, {
                 scope: this,
                 keyup: this.onKeyUp,
@@ -236,9 +243,10 @@ var myField = new Ext.form.NumberField({
                 keydown: this.onKeyDown,
                 keypress: this.onKeyPress
             });
+            this.keyEventsInitialized = true;
         }
     },
-    
+
     onMouseDown: function(e){
         if(!this.hasFocus){
             this.mon(this.el, 'mouseup', Ext.emptyFn, this, { single: true, preventDefault: true });
