@@ -157,25 +157,6 @@ release-to-gitlab:
   timeout: 20m
   interruptible: true
 
-push-to-vpackages:
-  extends: .abstract_jobs.docker
-  stage: deploy
-  before_script:
-    - apk add openssh
-    - eval $(ssh-agent -s)
-    - echo "$VPACKAGES_DEPLOY_KEY" | tr -d '\r' | ssh-add -
-  script:
-    - !reference [.lib, script]
-    - packaging_push_to_vpackages
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /push-to-vpackages/
-      when: manual
-    - if: $PUSH_TO_VPACKAGES != "true"
-      when: never
-    - if: $CI_COMMIT_TAG
-  timeout: 20m
-  interruptible: false
-
 release-packages-to-gitlab:
   extends: .abstract_jobs.docker
   stage: deploy
@@ -257,7 +238,8 @@ mkdocs-deploy:
     - if: $MKDOCS_DEPLOY == "false"
       when: never
     - if: $MKDOCS_DEPLOY == "true"
-    - if: $PIPELINE_TYPE =~ /mkdocs-deploy/
+    # mkdocs-deploy is triggered by a nightly pipeline and if docs changes. Maybe we only need one of them?
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy/ && $CI_COMMIT_REF_NAME == "2024.11"
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "2024.11"
       changes:
         - docs/**/*
@@ -269,16 +251,10 @@ update-version-check:
   variables:
     TRIGGER_JOBS: update-version
     PACKAGE_STRING: ${CI_COMMIT_TAG}
+    CODE_NAME: ${CODENAME}
   trigger:
     project: tine20/versionCheck
     strategy: depend
-    branch: pu/mm/cicd # only for testing
+    branch: master
   rules:
-    - if: $CI_COMMIT_TAG && $MAJOR_COMMIT_REF_NAME == "tine20.com/2022.11"
-      variables:
-        VERSION: "be"
-        CODE_NAME: ${CODENAME}
-    - if: $CI_COMMIT_TAG && $MAJOR_COMMIT_REF_NAME == "2022.11"
-      variables:
-        VERSION: "org"
-        CODE_NAME: ${MAJOR_COMMIT_REF_NAME}
+    - if: $CI_COMMIT_TAG && $MAJOR_COMMIT_REF_NAME == "2023.11"
