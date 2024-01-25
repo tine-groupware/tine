@@ -170,6 +170,8 @@ class Sales_Setup_Initialize extends Setup_Initialize
         Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
             Sales_Model_Invoice::class,
             Sales_Model_Product::class,
+            Sales_Model_Contract::class,
+            Sales_Model_PurchaseInvoice::class,
             Sales_Model_Document_Category::class,
             Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Offer::class,

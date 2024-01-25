@@ -51,6 +51,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'modlogActive'      => TRUE,
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         
         'containerProperty' => 'container_id',
 

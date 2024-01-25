@@ -35,6 +35,7 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
         'recordsName'       => 'Purchase Invoices', // ngettext('Purchase Invoice', 'Purchase Invoices', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         'hasNotes'          => TRUE,
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
