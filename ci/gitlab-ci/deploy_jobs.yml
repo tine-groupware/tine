@@ -132,6 +132,7 @@ release-to-github:
   stage: deploy
   script:
     - !reference [.lib, script]
+    - packaging_push_release_tag_to_github
     - packaging_push_package_to_github
   rules:
     - if: ($BASE_MAJOR_COMMIT_REF_NAME != "2023.11" && $BASE_MAJOR_COMMIT_REF_NAME != "2024.11") || $CUSTOMER_MAJOR_COMMIT_REF_NAME != ""

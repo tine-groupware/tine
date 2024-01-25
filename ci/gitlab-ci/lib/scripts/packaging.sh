@@ -123,12 +123,25 @@ packaging_gitlab_set_current_link() {
     fi
 }
 
+packaging_push_release_tag_to_github() {
+    if test "$CI_COMMIT_TAG"; then
+        echo "no tag to push: '$CI_COMMIT_TAG'"
+        return
+    fi
+
+    cp $DOCKER_GIT_CONFIG ~/.gitconfig
+    git config --global user.email "gitlabci@metaways.de"
+    git config --global user.name "gitlabci"
+    git remote add github https://github.com/tine-groupware/tine.git
+
+    git push github refs/tags/$CI_COMMIT_TAG
+}
+
 packaging_push_package_to_github() {
     customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
     version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
 
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
-    asset_name="tine-$(date '+%Y.%m.%d')-$(git rev-parse --short HEAD)-nightly"
 
     echo curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
     curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
@@ -139,7 +152,7 @@ packaging_push_package_to_github() {
         return 1
     fi
 
-    echo "customer: $customer version: $version asset_name: $asset_name release_json: $release_json"
+    echo "customer: $customer version: $version release_json: $release_json"
 
     github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
 
