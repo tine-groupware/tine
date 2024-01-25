@@ -112,25 +112,6 @@ release-to-gitlab:
   timeout: 20m
   interruptible: true
 
-push-to-vpackages:
-  extends: .abstract_jobs.docker
-  stage: deploy
-  before_script:
-    - apk add openssh
-    - eval $(ssh-agent -s)
-    - echo "$VPACKAGES_DEPLOY_KEY" | tr -d '\r' | ssh-add -
-  script:
-    - !reference [.lib, script]
-    - packaging_push_to_vpackages
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /push-to-vpackages/
-      when: manual
-    - if: $PUSH_TO_VPACKAGES != "true"
-      when: never
-    - if: $CI_COMMIT_TAG
-  timeout: 20m
-  interruptible: false
-
 release-packages-to-gitlab:
   extends: .abstract_jobs.docker
   stage: deploy
