@@ -194,7 +194,7 @@ release-packages-to-github:
     - !reference [.lib, script]
     - packaging_push_package_to_github
   rules:
-    - if: $MAJOR_COMMIT_REF_NAME != "main"
+    - if: $MAJOR_COMMIT_REF_NAME != "2023.11"
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
       when: manual
