@@ -66,8 +66,7 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
 
         // do this after any _createDocument calls! otherwise we lose the watermark
         if (!$record->isBooked()) {
-            $this->_docTemplate->addWaterMark('PROFORMA', 1);
-            $this->_docTemplate->addWaterMark('PROFORMA', 2);
+            $this->_docTemplate->addWaterMark('PROFORMA', null);
         }
 
         $vats = new Tinebase_Record_RecordSet(Tinebase_Config_KeyFieldRecord::class, []);

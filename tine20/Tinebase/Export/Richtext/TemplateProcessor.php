@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -794,6 +794,12 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
 
     public function addWaterMark($text, $headerIndex = 1)
     {
+        if (null === $headerIndex) {
+            foreach (array_keys($this->tempDocumentHeaders) as $hIdx) {
+                $this->addWaterMark($text, $hIdx);
+            }
+            return;
+        }
         if (!isset($this->tempDocumentHeaders[$headerIndex])) {
             throw new Exception('header idnex ' . $headerIndex . ' doesn\'t exist');
             /*
