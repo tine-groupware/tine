@@ -13,6 +13,7 @@ class Tinebase_Model_Tree_FlySystem_AdapterConfig_Local extends Tinebase_Record_
     public const MODEL_NAME_PART = 'Tree_FlySystem_AdapterConfig_Local';
 
     public const FLD_BASE_PATH = 'base_path';
+    public const FLD_NEVER_EMPTY = 'never_empty';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -31,6 +32,9 @@ class Tinebase_Model_Tree_FlySystem_AdapterConfig_Local extends Tinebase_Record_
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
+            self::FLD_NEVER_EMPTY => [
+                self::TYPE          => self::TYPE_BOOLEAN,
+            ],
         ],
     ];
 
@@ -43,6 +47,19 @@ class Tinebase_Model_Tree_FlySystem_AdapterConfig_Local extends Tinebase_Record_
 
     public function getFlySystemAdapter(): \League\Flysystem\FilesystemAdapter
     {
-        return new \League\Flysystem\Local\LocalFilesystemAdapter($this->{self::FLD_BASE_PATH});
+        $adapter = new \League\Flysystem\Local\LocalFilesystemAdapter($this->{self::FLD_BASE_PATH});
+        if ($this->{self::FLD_NEVER_EMPTY}) {
+            $success = false;
+            if ($adapter->directoryExists('/')) {
+                foreach ($adapter->listContents('/', false) as $smth) {
+                    $success = true;
+                    break;
+                }
+            }
+            if (!$success) {
+                throw new Tinebase_Exception_Backend('flysystem must not be empty, but it is');
+            }
+        }
+        return $adapter;
     }
 }
