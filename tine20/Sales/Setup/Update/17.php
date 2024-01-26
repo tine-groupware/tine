@@ -446,22 +446,6 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                 . ' RENAME COLUMN costcenter_id TO eval_dim_cost_center');
         }
 
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET own_model = "'
-            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE own_model = "Tinebase_Model_CostCenter" AND own_backend = "Sql" AND related_model = "'
-            . Sales_Model_PurchaseInvoice::class . '" AND `type` = "COST_CENTER"');
-
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET related_model = "'
-            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE own_model = "' . Sales_Model_PurchaseInvoice::class
-            . '" AND own_backend = "Sql" AND related_model = "Tinebase_Model_CostCenter" AND `type` = "COST_CENTER"');
-
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET own_model = "'
-            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE own_model = "Tinebase_Model_CostCenter" AND own_backend = "Sql" AND related_model = "'
-            . Sales_Model_Contract::class . '" AND `type` = "LEAD_COST_CENTER"');
-
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET related_model = "'
-            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE own_model = "' . Sales_Model_Contract::class
-            . '" AND own_backend = "Sql" AND related_model = "Tinebase_Model_CostCenter" AND `type` = "LEAD_COST_CENTER"');
-
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.12', self::RELEASE017_UPDATE012);
     }
 
@@ -471,9 +455,41 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
         if (!Tinebase_Core::isReplica()) {
             Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
+                    Sales_Model_Contract::class,
                     Sales_Model_Invoice::class,
+                    Sales_Model_PurchaseInvoice::class,
                 ]);
         }
+
+        foreach ($this->_backend->getOwnForeignKeys(Sales_Model_Contract::TABLE_NAME) as $fKey) {
+            $this->_backend->dropForeignKey(Sales_Model_Contract::TABLE_NAME, $fKey['constraint_name']);
+        }
+
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Contract::class,
+            Sales_Model_Invoice::class,
+            Tinebase_Model_EvaluationDimensionItem::class,
+            Tinebase_Model_Container::class,
+        ]);
+
+
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_Contract::TABLE_NAME . ' AS c JOIN '
+            . SQL_TABLE_PREFIX . 'relations AS r ON c.id = r.own_id AND r.own_model = "' . Sales_Model_Contract::class
+            . '" AND r.own_backend = "Sql" AND r.`type` = "LEAD_COST_CENTER" AND related_model = "Tinebase_Model_CostCenter" SET c.eval_dim_cost_center = r.related_id');
+
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE own_model = "Tinebase_Model_CostCenter" AND own_backend = "Sql" AND related_model = "'
+            . Sales_Model_Contract::class . '" AND `type` = "LEAD_COST_CENTER"');
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE related_model = "Tinebase_Model_CostCenter" AND own_backend = "Sql" AND own_model = "'
+            . Sales_Model_Contract::class . '" AND `type` = "LEAD_COST_CENTER"');
+
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Sales_Model_PurchaseInvoice::TABLE_NAME . ' AS c JOIN '
+            . SQL_TABLE_PREFIX . 'relations AS r ON c.id = r.own_id AND r.own_model = "' . Sales_Model_Contract::class
+            . '" AND r.own_backend = "Sql" AND r.`type` = "COST_CENTER" AND related_model = "Tinebase_Model_CostCenter" SET c.eval_dim_cost_center = r.related_id');
+
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE own_model = "Tinebase_Model_CostCenter" AND own_backend = "Sql" AND related_model = "'
+            . Sales_Model_PurchaseInvoice::class . '" AND `type` = "COST_CENTER"');
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE related_model = "Tinebase_Model_CostCenter" AND own_backend = "Sql" AND own_model = "'
+            . Sales_Model_PurchaseInvoice::class . '" AND `type` = "COST_CENTER"');
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.13', self::RELEASE017_UPDATE013);
     }

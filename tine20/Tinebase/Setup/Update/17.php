@@ -34,17 +34,9 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
                self::CLASS_CONST                   => self::class,
                self::FUNCTION_CONST                => 'update002',
            ],
-           self::RELEASE017_UPDATE003          => [
-               self::CLASS_CONST                   => self::class,
-               self::FUNCTION_CONST                => 'update003',
-           ],
            self::RELEASE017_UPDATE005          => [
                self::CLASS_CONST                   => self::class,
                self::FUNCTION_CONST                => 'update005',
-           ],
-           self::RELEASE017_UPDATE006          => [
-               self::CLASS_CONST                   => self::class,
-               self::FUNCTION_CONST                => 'update006',
            ],
         ],
         self::PRIO_TINEBASE_STRUCTURE   => [
@@ -61,6 +53,12 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+        ],
+        (self::PRIO_NORMAL_APP_UPDATE + 1)=> [
+            self::RELEASE017_UPDATE006          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update006',
             ],
         ],
     ];
@@ -198,18 +196,21 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update006()
     {
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET own_model = "'
-            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE own_model = "Tinebase_Model_CostCenter"');
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE own_model = "Tinebase_Model_CostCenter"');
 
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET related_model = "'
-            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE related_model = "Tinebase_Model_CostCenter"');
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE related_model = "Tinebase_Model_CostCenter"');
 
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET own_model = "'
-            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE own_model = "Tinebase_Model_CostUnit"');
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE own_model = "Tinebase_Model_CostUnit"');
 
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET related_model = "'
-            . Tinebase_Model_EvaluationDimensionItem::class . '"  WHERE related_model = "Tinebase_Model_CostUnit"');
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE related_model = "Tinebase_Model_CostUnit"');
 
-        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.6', self::RELEASE017_UPDATE006);
+        if ($this->_backend->tableExists('cost_center')) {
+            $this->_backend->dropTable('cost_center');
+        }
+        if ($this->_backend->tableExists('cost_unit')) {
+            $this->_backend->dropTable('cost_unit');
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE005);
     }
 }

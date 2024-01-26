@@ -251,17 +251,8 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     $contract = $costcenter->name == 'Marketing' ? $this->_contractsMarketing->getByIndex(rand(0, ($this->_contractsMarketing->count() -1))) : $this->_contractsDevelopment->getByIndex(rand(0, ($this->_contractsDevelopment->count() -1)));
                     
                     $ta->budget = $costcenter->name == 'Marketing' ? 100 : NULL;
+                    $ta->eval_dim_cost_center = $costcenter->getId();
                     $ta->relations = array(
-                        array(
-                            'own_model'              => 'Timetracker_Model_Timeaccount',
-                            'own_backend'            => 'SQL',
-                            'own_id'                 => NULL,
-                            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                            'related_model'          => Tinebase_Model_EvaluationDimensionItem::class,
-                            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                            'related_id'             => $costcenter->getId(),
-                            'type'                   => 'COST_CENTER'
-                        ),
                         array(
                             'own_model'              => 'Timetracker_Model_Timeaccount',
                             'own_backend'            => 'SQL',
@@ -275,18 +266,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     $ta->title = (self::$_de ? 'Zeitkonto mit ' : 'Timeaccount for ') . $contract->getTitle();
                 } else {
                     $ta->title = (self::$_de ? 'Zeitkonto mit KST ' : 'Timeaccount for CC ') . $costcenter->getTitle();
-                    $ta->relations = array(
-                        array(
-                            'own_model'              => 'Timetracker_Model_Timeaccount',
-                            'own_backend'            => 'SQL',
-                            'own_id'                 => NULL,
-                            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                            'related_model'          => Tinebase_Model_EvaluationDimensionItem::class,
-                            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                            'related_id'             => $costcenter->getId(),
-                            'type'                   => 'COST_CENTER'
-                        )
-                    );
+                    $ta->eval_dim_cost_center = $costcenter->getId();
                 }
                 
                 $this->_timeAccounts[$costcenter->getId()]->addRecord($this->_taController->create($ta));

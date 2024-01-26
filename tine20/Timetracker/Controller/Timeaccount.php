@@ -259,7 +259,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
      * 
      * @param Tinebase_Model_EvaluationDimensionItem|string $costCenterId
      * @return Tinebase_Record_RecordSet
-     */
+     *
     public function getTimeaccountsByCostCenter($costCenterId)
     {
         $costCenterId = is_string($costCenterId) ? $costCenterId : $costCenterId->getId();
@@ -272,7 +272,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
         ), 'AND');
         
         return Timetracker_Controller_Timeaccount::getInstance()->getMultiple(Tinebase_Relations::getInstance()->search($filter)->own_id);
-    }
+    }*/
     
     /**
      * @param Sales_Model_Contract $contractId

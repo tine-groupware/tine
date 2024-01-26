@@ -638,17 +638,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 Timetracker_Controller_Timesheet::getInstance()->create($timesheet);
             }
 
+            $contract->eval_dim_cost_center = $costcenter->getId();
             $relations = array(
-                array(
-                    'own_model'              => 'Sales_Model_Contract',
-                    'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                    'own_id'                 => NULL,
-                    'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => Tinebase_Model_EvaluationDimensionItem::class,
-                    'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                    'related_id'             => $ccid,
-                    'type'                   => 'LEAD_COST_CENTER'
-                ),
                 array(
                     'own_model'              => 'Sales_Model_Contract',
                     'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,

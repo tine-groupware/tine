@@ -168,4 +168,20 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         ));
         
     }
+
+    protected function _initializeCostCenterCostBearer()
+    {
+        self::initializeCostCenterCostBearer();
+    }
+
+    public static function initializeCostCenterCostBearer()
+    {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
+        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
+            Timetracker_Model_Timeaccount::class,
+        ]);
+    }
 }
