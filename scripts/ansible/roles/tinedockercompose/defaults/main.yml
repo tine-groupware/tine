@@ -1,5 +1,5 @@
 ---
-tinedockercompose_tine_image: "tinegroupware/tine:2022"
+tinedockercompose_tine_image: "tinegroupware/tine:2023"
 tinedockercompose_tinesetupuser: "tinesetup"
 tinedockercompose_tinesetuppw: "movemetovault"
 tinedockercompose_tineloggerprio: "5"
@@ -18,10 +18,11 @@ tinedockercompose_ports: "80:80"
 tinedockercompose_auto_installupdate: false
 tinedockercompose_addtineuser: true
 
+tinedockercompose_db_image: "mariadb:10.6"
 tinedockercompose_db_name: "tine"
 tinedockercompose_db_user: "tine"
 tinedockercompose_db_password: "tine"
-tinedockercompose_db_prefix: "tine20_"
+tinedockercompose_db_prefix: "tine_"
 
 tinedockercompose_docservice_deploy_conf: true
 # tinedockercompose_docservice_version: "2.1"
