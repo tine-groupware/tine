@@ -382,9 +382,11 @@ msgstr "Anzeigeformat"
 
 #: Model/Account.php:264 js/AccountEditDialog.js:534
 msgid "Compose Format"
-msgstr "Schreibformat"
+msgstr "Textformat"
 
 #: Model/Account.php:275 js/AccountEditDialog.js:549
+msgid "Preserve Format"
+msgstr "Format beibehalten"
 
 #: Model/Account.php:286
 msgid "Reply-To"
@@ -1284,8 +1286,8 @@ msgid "Plain Text"
 msgstr "Nur Text"
 
 #: js/AccountEditDialog.js:531
-msgid "Depending on content format"
-msgstr "Abhängig vom Format"
+msgid "Depending on content type (experimental)"
+msgstr "Abhängig vom Content-Typ (experimentell)"
 
 #: js/AccountEditDialog.js:560
 msgid "No"
@@ -2125,8 +2127,8 @@ msgid ""
 "I hereby agree that this mailbox may be converted to a shared mailbox or "
 "transferred to another user."
 msgstr ""
-"Hiermit willige ich ein, dass dieses Postfach zu einem gemeinsamen "
-"Postfach umgewandelt oder einem anderen Benutzer übertragen werden darf."
+"Hiermit willige ich ein, dass dieses Postfach zu einem gemeinsamen Postfach "
+"umgewandelt oder einem anderen Benutzer übertragen werden darf."
 
 msgid "Forward and forwarded email as .eml in attachment"
 msgstr "Weiterleitung und weitergeleitete eMail als .eml im Anhang"
@@ -2142,3 +2144,9 @@ msgstr "Ablageort für gesendete Mails"
 
 msgid "E-mail usage"
 msgstr "E-Mail-Nutzung"
+
+msgid "Size (in byte)"
+msgstr "Größe (in Byte)"
+
+msgid "Depending on content format"
+msgstr "Abhängig vom Format"
