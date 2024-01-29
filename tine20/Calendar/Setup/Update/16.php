@@ -49,6 +49,19 @@ class Calendar_Setup_Update_16 extends Setup_Update_Abstract
         {
             $this->_backend->dropForeignKey(Calendar_Model_Attender::TABLE_NAME, $fKey['constraint_name']);
         }
+        try {
+            $this->_backend->dropIndex(Calendar_Model_Attender::TABLE_NAME, 'tine20_cal_attendee::cal_event_id-cal_events::id');
+        } catch(Exception){}
+        try {
+            $this->_backend->dropIndex(Calendar_Model_Attender::TABLE_NAME, 'cal_attendee::cal_event_id-cal_events::id');
+        } catch(Exception){}
+        try {
+            $this->_backend->dropIndex(Calendar_Model_Attender::TABLE_NAME, 'tine20_cal_attendee::displaycontainer_id--container::id');
+        } catch(Exception){}
+        try {
+            $this->_backend->dropIndex(Calendar_Model_Attender::TABLE_NAME, 'cal_attendee::displaycontainer_id--container::id');
+        } catch(Exception){}
+
         Setup_SchemaTool::updateSchema([
             Tinebase_Model_Container::class,
             Calendar_Model_Attender::class,
