@@ -63,6 +63,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     initComponent: function() {
         Tine.HumanResources.ContractEditDialog.superclass.initComponent.call(this);
+        this.window.confirmLeavSite = false
     },
 
     onRecordLoad: function() {
