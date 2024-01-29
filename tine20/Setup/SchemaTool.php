@@ -91,8 +91,10 @@ class Setup_SchemaTool
         try {
             /** @var Tinebase_Record_Interface $modelName */
             foreach ($mappingDriver->getAllClassNames($models) as $modelName) {
-                if (null !== ($modelConfig = $modelName::getConfiguration()) &&
-                    null !== ($tblName = $modelConfig->getTableName())) {
+                if (
+                    null !== ($modelConfig = $modelName::getConfiguration()) &&
+                    null !== ($tblName = $modelConfig->getTableName())
+                ) {
                     $tableNames[] = SQL_TABLE_PREFIX . $tblName;
                 }
             }
