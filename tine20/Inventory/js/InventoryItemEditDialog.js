@@ -31,6 +31,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     windowHeight: 470,
     windowWidth: 800,
     displayNotes: true,
+    defaultRelationCombo: ['Addressbook', 'Contact'],
     
     /**
      * check validity of activ number field
@@ -299,5 +300,18 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     isMultipleValid: function() {
         return true;
-    }
+    },
+
+    /**
+     * creates the relations panel, if relations are defined
+     */
+    initRelationsPanel: function() {
+        if (! this.hideRelationsPanel && this.recordClass && this.recordClass.hasField('relations')) {
+            // init relations panel before onRecordLoad
+            if (! this.relationsPanel) {
+                this.relationsPanel = new Tine.widgets.relation.GenericPickerGridPanel({ anchor: '100% 100%', editDialog: this, defaultCombo: this.defaultRelationCombo });
+                this.items.items.push(this.relationsPanel);
+            }
+        }
+    },
 });

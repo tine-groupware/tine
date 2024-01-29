@@ -107,6 +107,12 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
     hideRelatedDegree: true,
 
     /**
+     * @cfg {Array|null}
+     * default/initial value, null for any
+     */
+    defaultCombo: null,
+
+    /**
      * @cfg {Number} pos
      * position 200 = 100 + 100*3 -> means third one after app specific tabs
      */
@@ -202,7 +208,14 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
         
         this.store.on('add', this.onAdd, this);
     },
-    
+
+    onAfterRender: function () {
+        if (this.defaultCombo) {
+            this.showSearchCombo(this.defaultCombo[0], this.defaultCombo[1])
+        }
+        Tine.widgets.relation.GenericPickerGridPanel.superclass.onAfterRender.call(this)
+    },
+
     /**
      * is called from onApplyChanges of the edit dialog per save event
      * 
@@ -468,8 +481,15 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
             var data = [];
             var id = 0;
 
+            let defaultIndex = 0
             Ext.each(this.possibleRelations, function(rel) {
                 data.push([id, rel.text, rel.relatedApp, rel.relatedModel]);
+                if (this.defaultCombo &&
+                  rel.relatedApp === this.defaultCombo[0] &&
+                  rel.relatedModel === this.defaultCombo[1] )
+                {
+                    defaultIndex = id
+                }
                 id++;
             }, this);
 
@@ -478,10 +498,9 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                     fields: ['id', 'text', 'appName', 'modelName'],
                     data: data
                 }),
-
                 allowBlank: false,
                 forceSelection: true,
-                value: data.length > 0 ? data[0][0] : null,
+                value: data.length > 0 ? data[defaultIndex][0] : null,
                 displayField: 'text',
                 valueField: 'id',
                 idIndex: 0,
