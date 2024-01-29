@@ -196,7 +196,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
 
         return $foreignKeyNames;
     }
-    
+
     /**
      * Get schema of existing table
      * 
