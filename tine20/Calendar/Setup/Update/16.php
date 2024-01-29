@@ -45,10 +45,10 @@ class Calendar_Setup_Update_16 extends Setup_Update_Abstract
 
     public function update001()
     {
-        // yes, that is the... or at least a... way of doing it
-        Setup_SchemaTool::updateSchema([
-            Calendar_Model_Attender::class,
-        ]);
+        foreach ($this->_backend->getOwnForeignKeys(Calendar_Model_Attender::TABLE_NAME) as $fKey)
+        {
+            $this->_backend->dropForeignKey(Calendar_Model_Attender::TABLE_NAME, $fKey['constraint_name']);
+        }
         Setup_SchemaTool::updateSchema([
             Tinebase_Model_Container::class,
             Calendar_Model_Attender::class,
