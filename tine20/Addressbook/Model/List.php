@@ -49,6 +49,7 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
     const XPROP_SIEVE_FORWARD_ONLY_SYSTEM = 'sieveForwardOnlySystem';
     const XPROP_SIEVE_KEEP_COPY = 'sieveKeepCopy';
     const XPROP_USE_AS_MAILINGLIST = 'useAsMailinglist';
+    const XPROP_SIEVE_REPLY_TO = 'sieveReplyTo';
 
     /**
      * external email user ids (for example in dovecot/postfix sql)

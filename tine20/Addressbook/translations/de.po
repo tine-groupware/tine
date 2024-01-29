@@ -855,6 +855,19 @@ msgstr[1] "Gruppen"
 msgid "Mailing List"
 msgstr "E-Mail-Verteiler"
 
+msgid "Reply to"
+msgstr "Antwortmails an"
+
+#: js/MailinglistPanel.js:38
+msgid "Sender"
+msgstr "Absender"
+
+msgid "Distribution list"
+msgstr "Verteilerliste"
+
+msgid "Sender and Distributor"
+msgstr "Absender und Verteiler"
+
 #: js/MailinglistPanel.js:45
 msgid "This group is a mailing list"
 msgstr "Diese Gruppe ist ein E-Mail-Verteiler"

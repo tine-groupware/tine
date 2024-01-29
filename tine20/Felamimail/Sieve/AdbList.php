@@ -23,21 +23,23 @@ class Felamimail_Sieve_AdbList
     protected $_keepCopy = false;
     protected $_forwardOnlySystem = false;
     protected $_receiverList = [];
+    protected $_replyTo = null;
+    protected $_listEmail = null;
     public static $adbListSieveAuthFailure = false;
 
     public function __toString()
     {
-        $result = 'require ["envelope", "copy", "reject"];' . PHP_EOL;
+        $result = 'require ["envelope", "copy", "reject", "editheader"];' . PHP_EOL;
         $rejectMsg = Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_MAILINGLIST_REJECT_REASON};
         $translation = Tinebase_Translation::getTranslation('Felamimail');
         $rejectMsg = $translation->_($rejectMsg);
+        $this->_addReplyTo($result);
 
         if ($this->_allowExternal) {
             $this->_addReceiverList($result);
             if (!$this->_keepCopy) {
                 $result .= 'discard;' . PHP_EOL;
             }
-
         } else {
             if ($this->_allowOnlyGroupMembers && !empty($this->_receiverList)) {
                 $result .= 'if address :is :all "from" ["' . join('","', $this->_receiverList) . '"] {' . PHP_EOL;
@@ -97,6 +99,37 @@ class Felamimail_Sieve_AdbList
     }
 
     /**
+     * @param string $result
+     * @return void
+     */
+    protected function _addReplyTo(string &$result): void
+    {
+        if (empty($this->_replyTo)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                __LINE__ . 'reply to option is null , skip resoling reply-to header');
+            return;
+        }
+
+        if ($this->_replyTo === 'mailingList' && !empty($this->_listEmail)) {
+            $result .= 'if true {
+    addheader "Reply-To" "' . $this->_listEmail . '";
+}';
+        }
+        if ($this->_replyTo === 'sender') {
+            $result .= 'if header :matches "from" "*" {
+    addheader "Reply-To" "${1}";
+}';
+        }
+        if ($this->_replyTo === 'both') {
+            $mailingList = $this->_listEmail ? ', ' . $this->_listEmail : '';
+            $result .= 'if header :matches "from" "*" {
+    addheader "Reply-To" "${1}' . $mailingList. '";
+}';
+        }
+        $result .= PHP_EOL . PHP_EOL;
+    }
+
+    /**
      * @param Addressbook_Model_List $_list
      * @return Felamimail_Sieve_AdbList
      */
@@ -115,6 +148,7 @@ class Felamimail_Sieve_AdbList
                 ['field' => 'showDisabled', 'operator' => 'equals', 'value' => false],
             ]));
         $sieveRule->_receiverList = [];
+        $sieveRule->_listEmail = $_list->email;
         foreach ($receivers as $receiver) {
             /** @var Addressbook_Model_Contact $receiver */
             $email = $receiver->getPreferredEmailAddress();
@@ -150,6 +184,10 @@ class Felamimail_Sieve_AdbList
             $sieveRule->_forwardOnlySystem = true;
         }
 
+        if (isset($_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_REPLY_TO]) && $_list
+                ->xprops()[Addressbook_Model_List::XPROP_SIEVE_REPLY_TO]) {
+            $sieveRule->_replyTo = $_list->xprops()[Addressbook_Model_List::XPROP_SIEVE_REPLY_TO];
+        }
         return $sieveRule;
     }
 

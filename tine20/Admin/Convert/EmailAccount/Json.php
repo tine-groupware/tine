@@ -30,5 +30,4 @@ class Admin_Convert_EmailAccount_Json extends Felamimail_Convert_Account_Json
 
         return $result;
     }
-
 }

@@ -689,6 +689,10 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Empty::class => self::MESSAGE_COPY_FOLDER_SENT,
                 ],
             ],
+            'adb_list'  => [
+                self::LABEL                 => 'Addressbook list',
+                self::TYPE                  => self::TYPE_VIRTUAL,
+            ],
         ]
     ];
 
