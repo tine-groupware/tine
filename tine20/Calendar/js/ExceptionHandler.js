@@ -39,6 +39,7 @@ Tine.Calendar.handleRequestException = function(exception, callback, callbackSco
     Tine.log.warn(exception);
 
     switch(exception.code) {
+        case 600: // Container already exists
         case 911: // Calendar_Exception_InvalidUrl
             Ext.MessageBox.show(defaults);
             break;

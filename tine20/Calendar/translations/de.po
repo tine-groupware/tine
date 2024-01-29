@@ -2899,3 +2899,6 @@ msgstr "Resource: {name} schon reserviert"
 
 msgid "The resource {name} on floor {floorName} is reserved for selected date: {date} by {name1}."
 msgstr "Die Resource {name} im Stock {floorName} ist von {name1} für den Tag: {date} reserviert."
+
+msgid "The container already exists"
+msgstr "Der Container existiert bereits"

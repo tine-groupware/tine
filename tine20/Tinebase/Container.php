@@ -367,8 +367,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
         }
         $existingContainer = $this->_getExistingContainer($filter);
         if ($existingContainer) {
-            $translation = Tinebase_Translation::getTranslation();
-            throw new Tinebase_Exception_SystemGeneric($translation->_('The container already exists'));
+            throw new Tinebase_Exception_SystemGeneric('The container already exists');
         }
     }
 
