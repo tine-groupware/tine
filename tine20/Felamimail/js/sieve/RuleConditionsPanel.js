@@ -75,7 +75,7 @@ Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel = function(app) {
         {sort: 30, label: app.i18n._('To (Email)'),       field: 'to',       operators: ['contains', 'regex'], emptyText: 'test@example.org'},
         {sort: 40, label: app.i18n._('To (Email CC)'),    field: 'cc',       operators: ['contains', 'regex'], emptyText: 'test@example.org'},
         {sort: 50, label: app.i18n._('Subject'),          field: 'subject',  operators: ['contains', 'regex'], emptyText: app.i18n._('Subject')},
-        {sort: 60, label: app.i18n._('Size'),             field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'},
+        {sort: 60, label: app.i18n._('Size (in byte)'),   field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'},
         {sort: 70, label: app.i18n._('Header contains'),  field: 'header',   operators: ['freeform'], defaultOperator: 'freeform', 
             emptyTextOperator: app.i18n._('Header name'), emptyText: app.i18n._('Header value')},
         {sort: 80, label: app.i18n._('Header regex'),     field: 'headerregex',   operators: ['freeform'], defaultOperator: 'freeform',

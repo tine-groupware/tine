@@ -2144,3 +2144,6 @@ msgstr "Ablageort für gesendete Mails"
 
 msgid "E-mail usage"
 msgstr "E-Mail-Nutzung"
+
+msgid "Size (in byte)"
+msgstr "Größe (in Byte)"
