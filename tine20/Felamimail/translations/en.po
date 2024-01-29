@@ -1986,3 +1986,6 @@ msgstr "Add email accounts"
 #: Acl/Rights.php:111
 msgid "Create new email accounts"
 msgstr "Create new email accounts"
+
+msgid "Size (in byte)"
+msgstr "Size (in byte)"
