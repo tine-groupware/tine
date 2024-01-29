@@ -18,6 +18,7 @@ tinedockercompose_ports: "80:80"
 tinedockercompose_auto_installupdate: false
 tinedockercompose_addtineuser: true
 
+tinedockercompose_db_image: "mariadb:10.9.8"
 tinedockercompose_db_name: "tine"
 tinedockercompose_db_user: "tine"
 tinedockercompose_db_password: "tine"
