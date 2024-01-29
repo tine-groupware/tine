@@ -18,7 +18,7 @@ services:
       - internal_network
 
   web:
-    image: tinegroupware/tine:2022
+    image: tinegroupware/tine:2023
     restart: always
     depends_on:
       - db
@@ -66,12 +66,30 @@ services:
 #      - "traefik.http.services.web.loadbalancer.server.port=80"
 
   cache:
-    image: redis:5.0.5
+    image: redis:6.0.16
     restart: always
     networks:
       - internal_network
 
 ### other optional services
+
+############################################################################
+# docservice
+############
+# to use this in tine, you need to add the following to your config:
+#
+# 'filesystem' => [
+#   'createPreviews' => true,
+#   'previewServiceUrl' => 'http://docservice/v2/documentPreviewService',
+#   'previewServiceVersion' => 2,
+#   [...]
+# ],
+############################################################################
+#  docservice:
+#    image: tinegroupware/document-preview-service:2.1
+#    restart: always
+#    networks:
+#      - internal_network
 
 ############################################################################
 #  broadcasthub
@@ -121,24 +139,6 @@ services:
 #      JWT_SECRET: "change_me_also_define_in_tine_cfg"
 #    networks:
 #      - external_network
-#      - internal_network
-
-############################################################################
-# docservice
-############
-# to use this in tine, you need to add the following to your config:
-#
-# 'filesystem' => [
-#   'createPreviews' => true,
-#   'previewServiceUrl' => 'http://docservice/v2/documentPreviewService',
-#   'previewServiceVersion' => 2,
-#   [...]
-# ],
-############################################################################
-#  documentpreview:
-#    image: tinegroupware/document-preview-service:2.1
-#    restart: always
-#    networks:
 #      - internal_network
 
 #  clamav:
