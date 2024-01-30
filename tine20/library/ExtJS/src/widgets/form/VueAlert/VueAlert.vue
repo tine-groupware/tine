@@ -1,6 +1,6 @@
 <template>
   <div class="bootstrap-scope">
-    <BAlert :model-value="true" variant="primary" class="h-25">{{label}}</BAlert>
+    <BAlert :model-value="true" variant="primary"><span v-html="label"/></BAlert>
   </div>
 </template>
 

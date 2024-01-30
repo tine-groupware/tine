@@ -5,6 +5,8 @@ Ext.form.VueAlert = Ext.extend(Ext.BoxComponent, {
     label: '',
     props: null,
 
+    autoHeight: true,
+
     initComponent: async function() {
         const {createApp, h, reactive} = window.vue
         const {default: VueAlert} = await import(/* webpackChunkName: "Tinebase/vue/VueAlert"*/'./VueAlert.vue')
