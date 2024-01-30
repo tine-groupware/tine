@@ -78,12 +78,11 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
                 border: false,
                 layout: 'fit',
                 flex: 1,
+                autoHeight: true,
                 autoScroll: true,
                 items: [{
-                    xtype: 'label',
-                    border: false,
-                    cls: 'ext-mb-text',
-                    html: this.questionText || i18n._('What would you like to do?')
+                    xtype: 'v-alert',
+                    label: this.questionText || i18n._('What would you like to do?')
                 }, {
                     xtype: this.allowMultiple ? 'checkboxgroup' : 'radiogroup',
                     hideLabel: true,
@@ -91,9 +90,6 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
                     columns: 1,
                     name: 'optionGroup',
                     items: this.getItems()
-                }, {
-                    xtype: 'v-alert',
-                    label: i18n._('Please choose an option.')
                 }]
             }]
         }];
