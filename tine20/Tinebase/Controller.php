@@ -300,7 +300,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                     Tinebase_Exception::log($e);
                 }
             }
-
+            
             $user = $accountsController->getFullUserByLoginName($_username);
             
             $_accessLog->account_id = $user->getId();
@@ -469,15 +469,10 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         }
 
         $loglevel = Zend_Log::INFO;
-        
-        $loginFailureCount = null;
-        $clientType = $accessLog->clienttype ?? 'Unknown';
-        
         if (null !== $user) {
             $accessLog->account_id = $user->getId();
-            $loginFailureCount = $user['loginFailures'][$clientType] ?? 0 ;
             $warnLoginFailures = Tinebase_Config::getInstance()->get(Tinebase_Config::WARN_LOGIN_FAILURES, 4);
-            if ($loginFailureCount >= $warnLoginFailures) {
+            if ($user->loginFailures >= $warnLoginFailures) {
                 $loglevel = Zend_Log::WARN;
             }
         }
@@ -485,7 +480,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         if (Tinebase_Core::isLogLevel($loglevel)) Tinebase_Core::getLogger()->log(
             __METHOD__ . '::' . __LINE__
                 . " Login with username {$accessLog->login_name} from {$accessLog->ip} failed ({$accessLog->result})!"
-                . ($loginFailureCount ? " Auth failure count for client type: $clientType" . $loginFailureCount : ''),
+                . ($user ? ' Auth failure count: ' . $user->loginFailures : ''),
             $loglevel);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Auth result messages: ' . print_r($authResult->getMessages(), TRUE));

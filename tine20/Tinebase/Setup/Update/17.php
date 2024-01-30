@@ -92,7 +92,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     public function update003()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
-        
+
         Setup_SchemaTool::updateSchema([
             Tinebase_Model_NumberableConfig::class,
         ]);
@@ -176,21 +176,6 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update005()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-        if ($this->getTableVersion('accounts') < 20) {
-            $declaration = new Setup_Backend_Schema_Field_Xml('
-                <field>
-                    <name>login_failures</name>
-                    <type>text</type>
-                    <length>4000</length>
-                </field>
-            ');
-            $this->_backend->alterCol('accounts', $declaration);
-            $this->setTableVersion('accounts', 20);
-        }
-
-        Tinebase_Core::getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'accounts SET login_failures = ' .
-            'JSON_OBJECT("JSON-RPC", CAST(login_failures AS INTEGER)) WHERE login_failures IS NOT NULL');
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE005);
     }
 

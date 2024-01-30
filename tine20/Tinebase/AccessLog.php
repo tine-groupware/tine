@@ -305,9 +305,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
             'login_name' => mb_substr($authResult->getIdentity(), 0, 63),
             'user_agent' => mb_substr($userAgent, 0, 254),
         ), true);
-        
-        Tinebase_User::setAccessLog($accessLog);
-        
+
         return $accessLog;
     }
 
