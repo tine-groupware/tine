@@ -8,6 +8,8 @@
  *
  */
  
+import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
+
 Ext.namespace('Tine.Sales');
 
 /**
@@ -305,18 +307,11 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 relationType: 'RESPONSIBLE',
                 relationDegree: 'sibling',
                 modelUnique: true
-            }, {
-                columnWidth: 1/3,
-                editDialog: this,
-                xtype: 'tinerelationpickercombo',
-                fieldLabel: this.app.i18n._('Lead Cost Center'),
-                allowBlank: true,
-                app: 'Tinebase',
-                recordClass: Tine.Tinebase.Model.CostCenter,
-                relationType: 'LEAD_COST_CENTER',
-                relationDegree: 'sibling',
-                modelUnique: true
-            }]];
+            }], [ new EvaluationDimensionForm({
+                columnWidth: 1,
+                maxItemsPerRow: 3,
+                recordClass: this.recordClass
+            })]];
             
         items.push([{
             columnWidth: 1,

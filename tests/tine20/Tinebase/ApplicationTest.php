@@ -472,8 +472,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_BankHoliday::class,
                 Tinebase_Model_BankHolidayCalendar::class,
                 Tinebase_Model_BLConfig::class,
-                Tinebase_Model_CostUnit::class,
-                Tinebase_Model_CostCenter::class,
                 Tinebase_Model_MunicipalityKey::class,
                 Tinebase_Model_Config::class,
                 Tinebase_Model_Container::class,

@@ -319,11 +319,9 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
         // better safe than sorry, we do schema + content updates -> no transaction desired here
         Tinebase_TransactionManager::getInstance()->rollBack();
 
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET `own_model` = "'
-            . Tinebase_Model_CostCenter::class . '" where `own_model` = "Sales_Model_CostCenter"');
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET `own_model` = "Tinebase_Model_CostCenter" where `own_model` = "Sales_Model_CostCenter"');
 
-        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET `related_model` = "'
-            . Tinebase_Model_CostCenter::class . '" where `related_model` = "Sales_Model_CostCenter"');
+        $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'relations SET `related_model` = "Tinebase_Model_CostCenter" where `related_model` = "Sales_Model_CostCenter"');
 
         $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX .
             'filter where `model` = "Sales_Model_CostCenter" or `model` = "Sales_Model_CostCenterFilter"');
@@ -340,13 +338,13 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
             if ($this->_backend->columnExists('deleted_time', 'sales_cost_centers')) {
                 $this->getDb()->update(SQL_TABLE_PREFIX . 'sales_cost_centers', ['deleted_time' => '1970-01-01 00:00:00'], 'deleted_time IS NULL');
             }
-            $this->_backend->renameTable('sales_cost_centers', Tinebase_Model_CostCenter::TABLE_NAME);
+            $this->_backend->renameTable('sales_cost_centers', 'cost_centers');
         }
         Tinebase_Application::getInstance()->removeApplicationTable(
             Tinebase_Application::getInstance()->getApplicationByName(Sales_Config::APP_NAME), 'sales_cost_centers');
-        Setup_SchemaTool::updateSchema([
+        /*Setup_SchemaTool::updateSchema([
             Tinebase_Model_CostCenter::class,
-        ]);
+        ]);*/
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.10', self::RELEASE015_UPDATE010);
     }
 
@@ -379,7 +377,7 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
     {
         Setup_SchemaTool::updateSchema([
             Sales_Model_Product::class,
-            Tinebase_Model_CostCenter::class,
+            //Tinebase_Model_CostCenter::class,
             Sales_Model_ProductLocalization::class,
         ]);
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.14', self::RELEASE015_UPDATE014);
@@ -421,10 +419,10 @@ class Sales_Setup_Update_15 extends Setup_Update_Abstract
 
     public function update018()
     {
-        Setup_SchemaTool::updateSchema([
+        /*Setup_SchemaTool::updateSchema([
             Sales_Model_Product::class,
             Tinebase_Model_CostUnit::class,
-        ]);
+        ]);*/
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '15.18', self::RELEASE015_UPDATE018);
     }
 

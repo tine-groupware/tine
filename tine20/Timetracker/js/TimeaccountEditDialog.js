@@ -8,6 +8,8 @@
  *
  */
  
+import EvaluationDimensionForm from "../../Tinebase/js/widgets/form/EvaluationDimensionForm";
+
 Ext.namespace('Tine.Timetracker');
 
 Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
@@ -126,18 +128,6 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             name: 'cleared_at',
             fieldLabel: this.app.i18n._('Cleared at')
         });
-        
-        secondRow.push({
-            xtype: 'tinerelationpickercombo',
-            fieldLabel: this.app.i18n._('Cost Center'),
-            editDialog: this,
-            allowBlank: true,
-            app: 'Tinebase',
-            recordClass: Tine.Tinebase.Model.CostCenter,
-            relationType: 'COST_CENTER',
-            relationDegree: 'sibling',
-            modelUnique: true
-        });
 
         const lastRow = [{
             columnWidth: 1/3,
@@ -219,7 +209,12 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         xtype: 'textarea',
                         name: 'description',
                         height: 150
-                        }], secondRow, lastRow] 
+                        }], secondRow, lastRow, [ new EvaluationDimensionForm({
+                            columnWidth: 1,
+                            maxItemsPerRow: 3,
+                            recordClass: this.recordClass
+                        })]
+                    ]
                 }, {
                     // activities and tags
                     layout: 'ux.multiaccordion',

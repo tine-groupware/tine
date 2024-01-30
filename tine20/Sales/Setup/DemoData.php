@@ -638,17 +638,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 Timetracker_Controller_Timesheet::getInstance()->create($timesheet);
             }
 
+            $contract->eval_dim_cost_center = $costcenter->getId();
             $relations = array(
-                array(
-                    'own_model'              => 'Sales_Model_Contract',
-                    'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                    'own_id'                 => NULL,
-                    'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => Tinebase_Model_CostCenter::class,
-                    'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                    'related_id'             => $ccid,
-                    'type'                   => 'LEAD_COST_CENTER'
-                ),
                 array(
                     'own_model'              => 'Sales_Model_Contract',
                     'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
@@ -799,8 +790,10 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _onCreate()
     {
-        $controller = Tinebase_Controller_CostCenter::getInstance();
-        $this->_costCenters = new Tinebase_Record_RecordSet(Tinebase_Model_CostCenter::class);
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+            ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
+        ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
+
         $ccs = (static::$_de)
         ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
         : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
@@ -808,17 +801,20 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         $id = 1;
         foreach($ccs as $title) {
-            $cc = new Tinebase_Model_CostCenter(
-                array('name' => $title, 'number' => $id)
-            );
-            try {
-                $controller->create($cc);
-            } catch (Zend_Db_Statement_Exception $e) {
-            } catch (Tinebase_Exception_Duplicate $e) {
+            if (Tinebase_Controller_EvaluationDimensionItem::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimensionItem::class,
+                    [['field' => 'name', 'operator' => 'equals', 'value' => $title],
+                        ['field' => Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID, 'operator' => 'equals', 'value' => $cc->getId()]]))->count() > 0) {
+                continue;
             }
+
+            $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->addRecord(new Tinebase_Model_EvaluationDimensionItem(
+                array('name' => $title, 'number' => $id)
+                , true));
 
             $id++;
         }
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+        $this->_costCenters = clone $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS};
 
         $divisionsArray = (static::$_de)
         ? array('Management', 'EDV', 'Marketing', 'Public Relations', 'Produktion', 'Verwaltung')

@@ -115,12 +115,6 @@ class Sales_InvoiceTestCase extends TestCase
     
     /**
      * 
-     * @var Tinebase_Controller_CostCenter
-     */
-    protected $_costcenterController = NULL;
-    
-    /**
-     * 
      * @var Timetracker_Controller_Timesheet
      */
     protected $_timesheetController = NULL;
@@ -302,25 +296,25 @@ class Sales_InvoiceTestCase extends TestCase
     
     protected function _createCostCenters()
     {
-        $this->_costcenterController = Tinebase_Controller_CostCenter::getInstance();
-        
-        $this->_costcenterRecords = new Tinebase_Record_RecordSet(Tinebase_Model_CostCenter::class);
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+            ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
+        ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
+        $allCC = clone $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS};
+        $this->_costcenterRecords = new Tinebase_Record_RecordSet(Tinebase_Model_EvaluationDimensionItem::class);
         $ccs = array('unittest1', 'unittest2', 'unittest3', 'unittest4');
         
         $id = 1;
         
-        $allCC = $this->_costcenterController->getAll();
-        
         foreach($ccs as $title) {
-            $cc = new Tinebase_Model_CostCenter(
-                array('name' => $title, 'number' => $id)
+            $cc = new Tinebase_Model_EvaluationDimensionItem(
+                array('name' => $title, 'number' => $id, Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID => $cc->getId()), true
             );
             
             try {
-                $this->_costcenterRecords->addRecord($this->_costcenterController->create($cc));
+                $this->_costcenterRecords->addRecord(Tinebase_Controller_EvaluationDimensionItem::getInstance()->create($cc));
             } catch (Tinebase_Exception_Duplicate $e) {
                 $this->_costcenterRecords->addRecord($e->getClientRecord());
-            } catch (Zend_Db_Statement_Exception $e) {
+            } catch (Zend_Db_Statement_Exception) {
                 $this->_costcenterRecords->addRecord($allCC->filter('number', $id)->getFirstRecord());
             }
             
@@ -621,7 +615,7 @@ class Sales_InvoiceTestCase extends TestCase
                     'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'own_id'                 => NULL,
                     'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => Tinebase_Model_CostCenter::class,
+                    'related_model'          => Tinebase_Model_EvaluationDimensionItem::class,
                     'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'related_id'             => $costcenter->getId(),
                     'type'                   => 'LEAD_COST_CENTER'

@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,6 +17,9 @@
  */
 class Sales_Model_Contract extends Tinebase_Record_Abstract
 {
+    public const MODEL_NAME_PART = 'Contract';
+    public const TABLE_NAME = 'sales_contracts';
+
     /**
      * relation type: customer
      *
@@ -42,6 +45,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
+        self::VERSION       => 11,
         'recordName'        => 'Contract', // gettext('GENDER_Contract')
         'recordsName'       => 'Contracts', // ngettext('Contract', 'Contracts', n)
         'hasRelations'      => TRUE,
@@ -51,8 +55,9 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'modlogActive'      => TRUE,
         'hasAttachments'    => TRUE,
         'createModule'      => TRUE,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         
-        'containerProperty' => 'container_id',
+        'containerProperty' => self::FLD_CONTAINER_ID,
 
         'containerName'    => 'Contracts',
         'containersName'    => 'Contracts',
@@ -61,8 +66,32 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
         
         'titleProperty'     => 'fulltext',//array('%s - %s', array('number', 'title')),
-        'appName'           => 'Sales',
-        'modelName'         => 'Contract',
+        'appName'           => Sales_Config::APP_NAME,
+        'modelName'         => self::MODEL_NAME_PART,
+
+        self::TABLE         => [
+            self::NAME          => self::TABLE_NAME,
+            self::INDEXES       => [
+                'description'       => [
+                    self::COLUMNS       => ['description'],
+                    self::FLAGS         => [self::TYPE_FULLTEXT],
+                ],
+            ],
+        ],
+
+        self::ASSOCIATIONS => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                self::FLD_CONTAINER_ID       => [
+                    self::TARGET_ENTITY             => Tinebase_Model_Container::class,
+                    self::FIELD_NAME                => self::FLD_CONTAINER_ID,
+                    self::JOIN_COLUMNS                  => [[
+                        self::NAME                          => self::FLD_CONTAINER_ID,
+                        self::REFERENCED_COLUMN_NAME        => self::ID,
+                        self::ON_DELETE                     => self::CASCADE,
+                    ]],
+                ],
+            ],
+        ],
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
@@ -111,9 +140,21 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         ),
         
         'fields'            => array(
+            'parent_id'       => array(
+                'label'      => NULL,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'type'       => 'record',
+                'config' => array(
+                    'appName'     => 'Sales',
+                    'modelName'   => 'Contract',
+                    'idProperty'  => 'id',
+                ),
+                self::NULLABLE  => true,
+            ),
             'number' => array(
                 'label' => 'Number', //_('Number')
                 'type'  => 'string',
+                self::LENGTH => 64,
                 'queryFilter' => TRUE,
             ),
             'title' => array(
@@ -125,26 +166,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                 'label'   => 'Description', // _('Description')
                 'type'    => 'fulltext',
                 'queryFilter' => TRUE,
-            ),
-            'parent_id'       => array(
-                'label'      => NULL,
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'type'       => 'record',
-                'config' => array(
-                    'appName'     => 'Sales',
-                    'modelName'   => 'Contract',
-                    'idProperty'  => 'id',
-                )
-            ),
-            'billing_address_id' => array(
-                'label'      => 'Billing Address', // _('Billing Address')
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
-                'type'       => 'record',
-                'config' => array(
-                    'appName'     => 'Sales',
-                    'modelName'   => 'Address',
-                    'idProperty'  => 'id',
-                )
+                self::NULLABLE => true,
             ),
             'start_date' => array(
                 'type' => 'date',
@@ -152,6 +174,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                 self::UI_CONFIG => [
                     'format' => ['medium'],
                 ],
+                self::NULLABLE => true,
             ),
             'end_date' => array(
                 'type' => 'date',
@@ -166,6 +189,18 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                 self::UI_CONFIG => [
                     'format' => ['medium'],
                 ],
+                self::NULLABLE => true,
+            ),
+            'billing_address_id' => array(
+                'label'      => 'Billing Address', // _('Billing Address')
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
+                'type'       => 'record',
+                'config' => array(
+                    'appName'     => 'Sales',
+                    'modelName'   => 'Address',
+                    'idProperty'  => 'id',
+                ),
+                self::NULLABLE => true,
             ),
             'customer' => array(
                 'type' => 'virtual',
@@ -209,8 +244,8 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'type' => 'relation',
                     'label' => 'Lead Cost Center',    // _('Lead Cost Center')
                     'config' => array(
-                        'appName'   => 'Tinebase',
-                        'modelName' => 'CostCenter',
+                        'appName'   => Tinebase_Config::APP_NAME,
+                        'modelName' => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
                         'type' => 'LEAD_COST_CENTER'
                     )
                 )
@@ -226,23 +261,12 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     'dependentRecords' => TRUE
                 ),
             ),
-
             'fulltext' => array(
                 'type'   => 'virtual',
                 'config' => array(
                     'type'   => 'string',
                     'sortable' => false
                 )            
-            ),
-
-            // TODO what is the purpose of this field? it is not persisted in the db and does not appear in the client
-            // TODO can't we just remove it?
-            'merge_invoices' => array(
-                'type'    => 'boolean',
-                'label'   => 'Merge', // _('Merge')
-                'default' => false,
-                'sortable' => false,
-                'shy' => TRUE,
             ),
         )
     );
@@ -282,7 +306,7 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             array('type' => 'PRODUCT', 'degree' => 'sibling', 'text' => 'Product', 'max' => '0:0'),
             ), 'defaultType' => ''
         ),
-        array('relatedApp' => 'Tinebase', 'relatedModel' => 'CostCenter', 'config' => array(
+        array('relatedApp' => 'Tinebase', 'relatedModel' => Tinebase_Model_EvaluationDimensionItem::class, 'config' => array(
             array('type' => 'LEAD_COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '1:0'), // _('Lead Cost Center')
             ), 'defaultType' => ''
         ),

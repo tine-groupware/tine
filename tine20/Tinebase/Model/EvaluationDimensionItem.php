@@ -43,6 +43,7 @@ class Tinebase_Model_EvaluationDimensionItem extends Tinebase_Record_NewAbstract
         self::TITLE_PROPERTY            => '{{ number }} - {{ name }}',
         self::EXPOSE_JSON_API           => true,
         self::HAS_SYSTEM_CUSTOM_FIELDS  => true,
+        self::DEFAULT_SORT_INFO         => [self::FIELD => self::FLD_NUMBER],
 
         self::TABLE                     => [
             self::NAME                      => self::TABLE_NAME,

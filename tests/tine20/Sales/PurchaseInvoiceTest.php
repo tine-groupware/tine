@@ -235,23 +235,19 @@ class Sales_PurchaseInvoiceTest extends TestCase
      */
     public function testSearchPurchaseInvoice()
     {
-        $tbJFE = new Tinebase_Frontend_Json();
-        $cc1 = $tbJFE->saveCostCenter(
-            array('number' => '1', 'name' => 'a')
-        );
-        $cc2 = $tbJFE->saveCostCenter(
-            array('number' => '2', 'name' => 'b')
-        );
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+            ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
+        ]))->getFirstRecord();
+        $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} = new Tinebase_Record_RecordSet(Tinebase_Model_EvaluationDimensionItem::class, [
+            new Tinebase_Model_EvaluationDimensionItem(['number' => '1', 'name' => 'a'], true),
+            new Tinebase_Model_EvaluationDimensionItem(['number' => '2', 'name' => 'b'], true),
+        ]);
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+        $cc1 = $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->find('number', 1);
+        $cc2 = $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->find('number', 2);
 
         $purchase = $this->createPurchaseInvoice();
-        $purchase['relations'][1] = [
-            'own_model' => 'Sales_Model_PurchaseInvoice',
-            'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'related_model' => Tinebase_Model_CostCenter::class,
-            'related_id' => $cc1['id'],
-            'related_backend' => 'Sql',
-            'type' => 'COST_CENTER'
-        ];
+        $purchase['eval_dim_cost_center'] = $cc1['id'];
         $purchase['relations'][2] = [
             'own_model' => 'Sales_Model_PurchaseInvoice',
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
@@ -300,6 +296,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
             'price_gross' => 11.9,
             'price_gross2' => 2,
             'price_total' => 13.9,
+            'eval_dim_cost_center' => $cc2['id'],
             'relations' => [[
                 'own_model' => Sales_Model_PurchaseInvoice::class,
                 'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
@@ -307,13 +304,6 @@ class Sales_PurchaseInvoiceTest extends TestCase
                 'related_id' => $supplier->getId(),
                 'related_backend' => 'Sql',
                 'type' => 'SUPPLIER'
-            ],[
-                'own_model' => Sales_Model_PurchaseInvoice::class,
-                'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model' => Tinebase_Model_CostCenter::class,
-                'related_id' => $cc2['id'],
-                'related_backend' => 'Sql',
-                'type' => 'COST_CENTER'
             ],[
                 'own_model' => Sales_Model_PurchaseInvoice::class,
                 'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
@@ -332,7 +322,7 @@ class Sales_PurchaseInvoiceTest extends TestCase
         $this->assertEquals($purchase['number'], $search['results'][0]['number']);
         $this->assertEquals(2, $search['totalcount']);
 
-        $paging['sort'] = 'costcenter';
+        $paging['sort'] = 'eval_dim_cost_center';
         $paging['dir'] = 'DESC';
         $search = $this->_json->searchPurchaseInvoices($this->_getFilter(), $paging);
         $this->assertEquals($purchase2['number'], $search['results'][0]['number']);

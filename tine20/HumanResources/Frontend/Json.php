@@ -271,18 +271,6 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         // TODO: resolve this in controller
-        if (! empty($employee['costcenters']) && is_array($employee['costcenters'])) {
-            $cc = Tinebase_Controller_CostCenter::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, []));
-            for ($i = 0; $i < count($employee['costcenters']); $i++) {
-                $costCenter = $cc->filter('id', $employee['costcenters'][$i]['cost_center_id'])->getFirstRecord();
-                if ($costCenter) {
-                    $employee['costcenters'][$i]['cost_center_id'] = $costCenter->toArray();
-                }
-            }
-        }
-        
-        // TODO: resolve this in controller
         // add feast calendars
         if (! empty($employee['contracts'])) {
             for ($i = 0; $i < count($employee['contracts']); $i++) {
@@ -312,14 +300,10 @@ class HumanResources_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         // sanitize costcenters
         if (! empty($recordData['costcenters'])) {
             for ($i = 0; $i < count($recordData['costcenters']); $i++) {
-                if (is_array($recordData['costcenters'][$i]['cost_center_id'])) {
-                    // flat costcenter id
-                    $recordData['costcenters'][$i]['cost_center_id'] = $recordData['costcenters'][$i]['cost_center_id']['id'];
-                    if ($i == 0) {
-                        // set start date of first costcenter to employee start date if none is given
-                        if (empty($recordData['costcenters'][0]['start_date'])) {
-                            $recordData['costcenters'][0]['start_date'] = $recordData['employment_begin'];
-                        }
+                if ($i == 0) {
+                    // set start date of first costcenter to employee start date if none is given
+                    if (empty($recordData['costcenters'][0]['start_date'])) {
+                        $recordData['costcenters'][0]['start_date'] = $recordData['employment_begin'];
                     }
                 }
             }

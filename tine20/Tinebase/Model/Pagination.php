@@ -272,8 +272,8 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
             } elseif (isset($recordFields[$field]) && isset($recordFields[$field]['config']) &&
                     isset($recordFields[$field]['config']['appName']) &&
                     isset($recordFields[$field]['config']['modelName']) &&
-                    isset($recordFields[$field]['config']['type']) &&
-                    $recordFields[$field]['config']['type'] === 'record') {
+                    isset($recordFields[$field]['type']) &&
+                    $recordFields[$field]['type'] === 'record') {
 
                 ++$joinCount;
                 $db = $_select->getAdapter();
