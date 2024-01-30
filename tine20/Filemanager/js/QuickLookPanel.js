@@ -246,6 +246,5 @@ Tine.Filemanager.QuickLookPanel.openWindow = function (config) {
         contentPanelConstructor: 'Tine.Filemanager.QuickLookPanel',
         contentPanelConstructorConfig: config,
         modal: false,
-        windowType: 'Browser'
     });
 };
