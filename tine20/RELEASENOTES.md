@@ -16,6 +16,11 @@ TINE RELEASENOTES
 
 - The docker image is now based on ubuntu noble instead of alpine.
 
+## Support for MySQL 5.7 dropped
+## Support for mariadb 10.2 / 10.3 dropped
+## New: mysql 8.0.21 + maria 10.4 minimum requirements
+- JSON_VALUE is a built-in function mariadb, and it has been introduced to mysql start from v8.0.21 (see https://dev.mysql.com/doc/refman/8.0/en/json-search-functions.html#function_json-value)
+
 # GENERAL CHANGES (User Interface)
 
 # ADMIN / OPERATION

@@ -99,7 +99,7 @@ and follow the instructions of the repo.
 
 ### Server
 - PHP version 8.1 to 8.2
-- MySQL to version 8.0
-- MariaDB to version 10.9
+- MySQL version 8.0
+- MariaDB 10.4 to version 10.9
 - Nginx to version 1.25
 - Redis to version 6.0
