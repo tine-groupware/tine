@@ -853,7 +853,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     public function update030()
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
-        if ($this->getTableVersion('accounts') < 19) {
+        if (! $this->_backend->columnExists('type', 'accounts')) {
             $this->_backend->addCol('accounts', new Setup_Backend_Schema_Field_Xml('
                 <field>
                     <name>type</name>
@@ -861,7 +861,9 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
                     <length>64</length>
                     <notnull>false</notnull>
                 </field>'));
-            $this->setTableVersion('accounts', 19);
+            if ($this->getTableVersion('accounts') < 19) {
+                $this->setTableVersion('accounts', 19);
+            }
         }
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.30', self::RELEASE015_UPDATE030);
     }
