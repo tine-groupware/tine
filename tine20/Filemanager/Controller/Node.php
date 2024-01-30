@@ -781,7 +781,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
      * create node(s)
      * 
      * @param array $_filenames
-     * @param array $_types directory or file
+     * @param array|string $_types directory or file
      * @param array $_tempFileIds
      * @param boolean $_forceOverwrite
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
