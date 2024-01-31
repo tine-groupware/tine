@@ -15,13 +15,7 @@ repo_get_customer_for_branch () {
                 return 1
         fi
 
-        if [ "$(echo "${branch}" | cut -d. -f1)" -lt 2023 ]; then
-            echo tine20.org
-            return
-        fi
-
-        echo tine20.com
-        return
+        echo tine20.org
     else
         if [ $(echo "${branch}" | awk -F"/" '{print NF-1}') != 1 ]; then
                 return 1
