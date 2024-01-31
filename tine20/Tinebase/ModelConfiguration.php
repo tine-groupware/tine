@@ -407,14 +407,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      */
     protected $_controllerHookBeforeUpdate = [];
 
-    /**
-     * FIXME do we need both?? this might be needed because php 8.2 deprecates dynamic props
-     * FIXME adding this breaks Sales_Document_JsonTest::testOfferBoilerplates
-     *
-     * @var array
-     */
-    // public $controllerHookBeforeUpdate = [];
-
     protected $_jsonFacadeFields = [];
 
     /**
@@ -2555,12 +2547,19 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      *
      * @return array
      */
-    public function getVirtualFields() {
+    public function getVirtualFields()
+    {
         return $this->_virtualFields;
     }
 
-    public function hasField($_field) {
+    public function hasField($_field)
+    {
         return isset($this->_fields[$_field]);
+    }
+
+    public function getControllerHooksBeforeUpdate(): array
+    {
+        return $this->_controllerHookBeforeUpdate;
     }
 
     /**

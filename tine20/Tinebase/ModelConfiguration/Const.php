@@ -33,7 +33,7 @@ class Tinebase_ModelConfiguration_Const {
     public const CONFIG = 'config';
     public const CONTROLLER = 'controller';
     public const CONTROLLER_CLASS_NAME = 'controllerClassName';
-    public const CONTROLLER_HOOK_BEFORE_UPDATE = 'controllerHookBeforeUpdate';
+    public const CONTROLLER_HOOK_BEFORE_UPDATE = '_controllerHookBeforeUpdate';
     public const CONVERTERS = 'converters';
     public const COLUMNS = 'columns';
     public const COPY_OMIT = 'copyOmit';

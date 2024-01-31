@@ -1761,7 +1761,7 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         if (null !== ($mc = $_record::getConfiguration())) {
-            foreach ($mc->{Tinebase_ModelConfiguration_Const::CONTROLLER_HOOK_BEFORE_UPDATE} as $hook) {
+            foreach ($mc->getControllerHooksBeforeUpdate() as $hook) {
                 if (count($hook) > 2) {
                     $params = array_slice($hook, 2);
                     $hook = array_slice($hook, 0, 2);
@@ -1772,7 +1772,7 @@ abstract class Tinebase_Controller_Record_Abstract
                     call_user_func_array($hook, array_merge($params, [$_record, $_oldRecord]));
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                        __METHOD__ . '::' . __LINE__ . ' hook is not callable: ' . print_r($hook, true));
+                        __METHOD__ . '::' . __LINE__ . ' Hook is not callable: ' . print_r($hook, true));
                 }
             }
         }
