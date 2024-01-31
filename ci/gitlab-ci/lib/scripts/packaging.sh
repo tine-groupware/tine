@@ -49,7 +49,7 @@ packaging_push_packages_to_gitlab() {
     version=$1
     release=$2
 
-    customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+    customer=$(release_determin_customer)
 
     curl -S -s \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
@@ -74,7 +74,7 @@ packaging_push_packages_to_gitlab() {
 
 packaging_gitlab_set_ci_id_link() {
     version=$1
-    customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+    customer=$(release_determin_customer)
 
     if ! curl -S -s \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
@@ -98,7 +98,7 @@ packaging_gitlab_get_version_for_pipeline_id() {
 }
 
 packaging_gitlab_set_current_link() {
-    customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+    customer=$(release_determin_customer)
     version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
 
     if echo "$version" | grep "nightly"; then
@@ -120,7 +120,7 @@ packaging_push_package_to_github() {
         return 0
     fi
 
-    customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+    customer=$(release_determin_customer)
     version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
     release=$(echo ${version} | sed sI-I~Ig)
 
@@ -147,7 +147,7 @@ packaging_push_package_to_github() {
 }
 
 packaging_push_to_vpackages() {
-    customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+    customer=$(release_determin_customer)
     version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
     release=$(echo ${version} | sed sI-I~Ig)
 
@@ -169,7 +169,7 @@ packaging() {
     version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(git describe --tags)"}
     release=${version}
 
-    if ! repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME}; then
+    if ! release_determin_customer; then
         echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
         return 1
     fi
