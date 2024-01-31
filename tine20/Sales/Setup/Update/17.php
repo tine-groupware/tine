@@ -439,9 +439,8 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update012()
     {
-        Tinebase_TransactionManager::getInstance()->rollBack();
-
-        if ($this->_backend->columnExists('costcenter_id', Sales_Model_Invoice::TABLE_NAME)) {
+        if ($this->_backend->tableExists(Sales_Model_Invoice::TABLE_NAME) && $this->_backend->columnExists('costcenter_id', Sales_Model_Invoice::TABLE_NAME)) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Invoice::TABLE_NAME)
                 . ' RENAME COLUMN costcenter_id TO eval_dim_cost_center');
         }
