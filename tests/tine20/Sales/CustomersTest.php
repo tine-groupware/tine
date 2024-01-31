@@ -17,7 +17,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
+class Sales_CustomersTest extends TestCase
 {
     protected $_contactController;
     protected $_contractController;
@@ -30,23 +30,12 @@ class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function setUp(): void
-{
-        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+    {
+        parent::setUp();
         
         $this->_contactController = Addressbook_Controller_Contact::getInstance();
         $this->_contractController = Sales_Controller_Contract::getInstance();
         $this->_json = new Sales_Frontend_Json();
-    }
-
-    /**
-     * Tears down the fixture
-     * This method is called after a test is executed.
-     *
-     * @access protected
-     */
-    protected function tearDown(): void
-{
-        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /*
@@ -383,5 +372,36 @@ class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
 
         // TODO assert special relation (TYPE CONTACTCUSTOMER - see \Sales_Controller::createUpdatePostalAddress)
         self::assertCount(1, $customer['relations']);
+    }
+
+    public function testMultiDivisionNoGrants()
+    {
+        $div = Sales_Controller_Division::getInstance()->create(new Sales_Model_Division([
+            Sales_Model_Division::FLD_TITLE => 'unittest',
+            Sales_Model_Division::FLD_GRANTS => [[
+                'account_id'      => Tinebase_Core::getUser()->getId(),
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Sales_Model_DivisionGrants::GRANT_ADMIN => true,
+            ]],
+        ]));
+        $customer = $this->_createCustomer();
+        $customer[Sales_Model_Customer::FLD_DEBITORS] = [[
+            Sales_Model_Debitor::FLD_NAME => 'unittest',
+            Sales_Model_Debitor::FLD_DIVISION_ID => $div->getId(),
+            Sales_Model_Debitor::FLD_BILLING => [[
+                Sales_Model_Address::FLD_NAME => 'a'
+            ],
+        ]]];
+
+        $customer = $this->_json->saveCustomer($customer);
+        $this->assertSame(1, count($customer['debitors']));
+        $this->assertSame('unittest', $customer['debitors'][0]['name'] ?? '?? escape');
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        $result = $this->_json->searchCustomers([
+            ['field' => 'number', 'operator' => 'equals', 'value' => $customer['number']],
+        ], []);
+
+        $this->assertSame(0, $result['totalcount']);
     }
 }
