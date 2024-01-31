@@ -19,10 +19,11 @@ class Tinebase_Model_Filter_DelegatedAcl extends Tinebase_Model_Filter_Abstract 
         }
         $this->init();
 
+        $db = $_backend->getAdapter();
         $_select->join([$this->_joinAlias => $this->_joinTable],
-            $this->_getQuotedFieldName($_backend) . ' = ' . $_backend->getAdapter()->quoteIdentifier(
+            $this->_getQuotedFieldName($_backend) . ' = ' . $db->quoteIdentifier(
                 $this->_joinAlias . '.' . $this->_refIdField
-            ), []);
+            ) . ' AND ' .  $db->quoteIdentifier($this->_joinAlias . '.is_deleted') . ' = 0', []);
 
         $this->_subFilter->appendFilterSql($_select, $_backend);
     }
@@ -47,9 +48,12 @@ class Tinebase_Model_Filter_DelegatedAcl extends Tinebase_Model_Filter_Abstract 
             [Tinebase_ModelConfiguration::RECORD_CLASS_NAME];
         $refMC = $refModel::getConfiguration();
         $this->_joinTable = SQL_TABLE_PREFIX . $refMC->getTableName();
-        $this->_refIdField = isset($mc->fields[$this->getField()][Tinebase_ModelConfiguration::CONFIG]
-            [Tinebase_ModelConfiguration::REF_ID_FIELD]) ? $mc->fields[$this->getField()]
-                [Tinebase_ModelConfiguration::CONFIG][Tinebase_ModelConfiguration::REF_ID_FIELD] : 'id';
+        if ($this->_refIdField =
+                $mc->fields[$this->getField()][Tinebase_ModelConfiguration::CONFIG][Tinebase_ModelConfiguration::REF_ID_FIELD] ?? null) {
+            $this->_field = $mc->getIdProperty();
+        } else {
+            $this->_refIdField = 'id';
+        }
 
         $options = array_merge($this->_options, [
             'tablename' => $this->_joinAlias,

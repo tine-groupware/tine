@@ -2536,6 +2536,11 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (($mc = $_record->getConfiguration()) && $mc->delegateAclField) {
+            if (empty($_record->{$mc->delegateAclField}) && isset($mc->recordsFields[$mc->delegateAclField])) {
+                (new Tinebase_Record_Expander(get_class($_record), [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [$mc->delegateAclField => []]
+                ]))->expand(new Tinebase_Record_RecordSet(get_class($_record), [$_record]));
+            }
             if (empty($_record->{$mc->delegateAclField})) {
                 throw new Tinebase_Exception_AccessDenied('acl delegation field ' . $mc->delegateAclField .
                     ' must not be empty');
@@ -2543,11 +2548,22 @@ abstract class Tinebase_Controller_Record_Abstract
             /** @var Tinebase_Controller_Record_Abstract $ctrl */
             $ctrl = $mc->fields[$mc->delegateAclField][Tinebase_ModelConfiguration::CONFIG][Tinebase_ModelConfiguration::CONTROLLER_CLASS_NAME];
             $ctrl = $ctrl::getInstance();
+            if ($_record->{$mc->delegateAclField} instanceof Tinebase_Record_RecordSet) {
+                foreach ($_record->{$mc->delegateAclField} as $delegateRec) {
+                    if ($ctrl->checkGrant($delegateRec, $_action, false, $_errorMessage, $_oldRecord?->{$mc->delegateAclField}->getById($delegateRec->getId()) ?: null)) {
+                        return true;
+                    }
+                }
+                if ($_throw) {
+                    throw new Tinebase_Exception_AccessDenied($_errorMessage);
+                }
+                return false;
+            }
             return $ctrl->checkGrant(
                 $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
                     $_record->{$mc->delegateAclField} :
                     $ctrl->get($_record->{$mc->delegateAclField}),
-                $_action, $_throw, $_errorMessage, $_oldRecord
+                $_action, $_throw, $_errorMessage, $_oldRecord?->{$mc->delegateAclField}
             );
         }
         

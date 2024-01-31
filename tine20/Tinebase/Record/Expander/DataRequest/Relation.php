@@ -6,7 +6,7 @@
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -27,7 +27,7 @@ class Tinebase_Record_Expander_DataRequest_Relation extends Tinebase_Record_Expa
 
     public function merge(Tinebase_Record_Expander_DataRequest $_dataRequest)
     {
-        $ids = $_dataRequest->ids[$_dataRequest->_model][$_dataRequest->_backend];
+        $ids = $_dataRequest->ids[$_dataRequest->_model][$_dataRequest->_backend] ?? [];
         if (!isset($this->_ids[$_dataRequest->_model])) {
             $this->_ids[$_dataRequest->_model] = [$_dataRequest->_backend => $ids];
         } elseif (!isset($this->_ids[$_dataRequest->_model][$_dataRequest->_backend])) {
