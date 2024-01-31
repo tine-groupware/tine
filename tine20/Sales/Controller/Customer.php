@@ -278,14 +278,12 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
                     $contact->container_id->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK])
                 {
                     Tinebase_Relations::getInstance()->addRelation(new Tinebase_Model_Relation([
-                        'own_model' => Addressbook_Model_Contact::class,
-                        'own_id' => $contact->getId(),
                         'related_degree' => Tinebase_Model_Relation::DEGREE_CHILD,
-                        'related_model' => Sales_Model_Customer::class,
+                        'related_model' => Addressbook_Model_Contact::class,
                         'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                        'related_id' => $customer->getId(),
+                        'related_id' => $contact->getId(),
                         'type' => 'CONTACTCUSTOMER'
-                    ]), $customer);
+                    ], true), $customer);
                 }
             }
         }

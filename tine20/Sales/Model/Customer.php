@@ -77,14 +77,18 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 self::FLD_DEBITORS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Sales_Model_Debitor::FLD_DIVISION_ID  => [],
-                        Sales_Model_Debitor::FLD_BILLING      => [],
-                        Sales_Model_Debitor::FLD_DELIVERY     => [],
-                    ],
-                    Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
-                        Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
+                        Sales_Model_Debitor::FLD_BILLING      => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['relations' => []],
+                        ],
+                        Sales_Model_Debitor::FLD_DELIVERY     => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['relations' => []],
+                        ],
+                        'relations' => [],
                     ],
                 ],
-                'postal'        => [],
+                'postal'        => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['relations' => []],
+                ],
                 'cpextern_id'   => [],
                 'cpintern_id'   => [],
             ],
