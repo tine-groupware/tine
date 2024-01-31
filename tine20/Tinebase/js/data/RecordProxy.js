@@ -416,7 +416,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             // 2017-11-03 cweiss - NOTE: some ext widgets directly work on the paging params.
             //   and don't update eventually existing params.paging properties. So we ALWAYS
             //   NEED to construct a new paging object from the params here!
-            const paging = {
+            params.paging = {
                 sort:  params.sort,
                 dir:   params.dir,
                 start: params.start,
@@ -428,7 +428,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
             delete params.start;
             delete params.limit;
             
-            this.searchRecords(params.filter, paging, {
+            this.searchRecords(params.filter, params.paging, {
                 params: params,
                 scope: this,
                 success: function(records) {
