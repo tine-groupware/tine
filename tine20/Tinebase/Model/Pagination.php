@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -272,8 +272,11 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
             } elseif (isset($recordFields[$field]) && isset($recordFields[$field]['config']) &&
                     isset($recordFields[$field]['config']['appName']) &&
                     isset($recordFields[$field]['config']['modelName']) &&
-                    isset($recordFields[$field]['config']['type']) &&
-                    $recordFields[$field]['config']['type'] === 'record') {
+                    (isset($recordFields[$field]['type']) &&
+                    $recordFields[$field]['type'] === 'record') || ( // because of type 'user' for example :-/
+                        isset($recordFields[$field]['config']['type']) &&
+                        $recordFields[$field]['config']['type'] === 'record'
+                    )) {
 
                 ++$joinCount;
                 $db = $_select->getAdapter();
