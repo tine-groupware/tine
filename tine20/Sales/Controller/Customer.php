@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -43,10 +43,9 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
      */
     private function __construct()
     {
-        $this->_applicationName = 'Sales';
+        $this->_applicationName = Sales_Config::APP_NAME;
         $this->_backend = new Sales_Backend_Customer();
-        $this->_modelName = 'Sales_Model_Customer';
-        $this->_doContainerACLChecks = FALSE;
+        $this->_modelName = Sales_Model_Customer::class;
         // TODO this should be done automatically if model has customfields (hasCustomFields)
         $this->_resolveCustomFields = true;
     }

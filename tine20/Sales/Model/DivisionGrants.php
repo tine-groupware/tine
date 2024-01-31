@@ -85,19 +85,19 @@ class Sales_Model_DivisionGrants extends Tinebase_Model_Grants
             ],
             self::GRANT_READ_DOCUMENT_OFFER => [
                 self::LABEL         => 'Read Offers', // _('Read Offers')
-                self::DESCRIPTION   => 'The grant to read the division\'s offer documents.', // _('The grant to read the division\'s delivery documents.')
+                self::DESCRIPTION   => 'The grant to read the division\'s offer documents.', // _('The grant to read the division\'s offer documents.')
             ],
             self::GRANT_ADMIN_DOCUMENT_OFFER => [
                 self::LABEL         => 'Admin Offers', // _('Admin Offers')
-                self::DESCRIPTION   => 'The grant to administrate the division\'s offer documents.', // _('The grant to administrate the division\'s delivery documents.')
+                self::DESCRIPTION   => 'The grant to administrate the division\'s offer documents.', // _('The grant to administrate the division\'s offer documents.')
             ],
             self::GRANT_READ_DOCUMENT_ORDER => [
                 self::LABEL         => 'Read Orders', // _('Read Orders')
-                self::DESCRIPTION   => 'The grant to read the division\'s order documents.', // _('The grant to read the division\'s delivery documents.')
+                self::DESCRIPTION   => 'The grant to read the division\'s order documents.', // _('The grant to read the division\'s order documents.')
             ],
             self::GRANT_ADMIN_DOCUMENT_ORDER => [
                 self::LABEL         => 'Admin Orders', // _('Admin Orders')
-                self::DESCRIPTION   => 'The grant to administrate the division\'s order documents.', // _('The grant to administrate the division\'s delivery documents.')
+                self::DESCRIPTION   => 'The grant to administrate the division\'s order documents.', // _('The grant to administrate the division\'s order documents.')
             ],
             self::GRANT_READ_DOCUMENT_DELIVERY => [
                 self::LABEL         => 'Read Deliveries', // _('Read Deliveries')
@@ -109,11 +109,11 @@ class Sales_Model_DivisionGrants extends Tinebase_Model_Grants
             ],
             self::GRANT_READ_DOCUMENT_INVOICE => [
                 self::LABEL         => 'Read Invoices', // _('Read Invoices')
-                self::DESCRIPTION   => 'The grant to read the division\'s invoice documents.', // _('The grant to read the division\'s delivery documents.')
+                self::DESCRIPTION   => 'The grant to read the division\'s invoice documents.', // _('The grant to read the division\'s invoice documents.')
             ],
             self::GRANT_ADMIN_DOCUMENT_INVOICE => [
                 self::LABEL         => 'Admin Invoices', // _('Admin Invoices')
-                self::DESCRIPTION   => 'The grant to administrate the division\'s invoice documents.', // _('The grant to administrate the division\'s delivery documents.')
+                self::DESCRIPTION   => 'The grant to administrate the division\'s invoice documents.', // _('The grant to administrate the division\'s invoice documents.')
             ],
             self::GRANT_ADMIN => [
                 self::LABEL         => 'Admin', // _('Admin')
