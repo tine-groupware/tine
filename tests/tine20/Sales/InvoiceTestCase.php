@@ -306,12 +306,12 @@ class Sales_InvoiceTestCase extends TestCase
         $id = 1;
         
         foreach($ccs as $title) {
-            $cc = new Tinebase_Model_EvaluationDimensionItem(
+            $evalDimItem = new Tinebase_Model_EvaluationDimensionItem(
                 array('name' => $title, 'number' => $id, Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID => $cc->getId()), true
             );
             
             try {
-                $this->_costcenterRecords->addRecord(Tinebase_Controller_EvaluationDimensionItem::getInstance()->create($cc));
+                $this->_costcenterRecords->addRecord(Tinebase_Controller_EvaluationDimensionItem::getInstance()->create($evalDimItem));
             } catch (Tinebase_Exception_Duplicate $e) {
                 $this->_costcenterRecords->addRecord($e->getClientRecord());
             } catch (Zend_Db_Statement_Exception) {
@@ -608,18 +608,9 @@ class Sales_InvoiceTestCase extends TestCase
             $i++;
             $contract = new Sales_Model_Contract($cd);
             $contract->setTimezone('UTC');
+            $contract->eval_dim_cost_center = $costcenter->getId();
             
             $contract->relations = array(
-                array(
-                    'own_model'              => Sales_Model_Contract::class,
-                    'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                    'own_id'                 => NULL,
-                    'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                    'related_model'          => Tinebase_Model_EvaluationDimensionItem::class,
-                    'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                    'related_id'             => $costcenter->getId(),
-                    'type'                   => 'LEAD_COST_CENTER'
-                ),
                 array(
                     'own_model'              => Sales_Model_Contract::class,
                     'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
