@@ -53,7 +53,7 @@ packaging_push_packages_to_gitlab() {
     version=$1
     release=$2
 
-    customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+    customer=$(release_determin_customer)
 
     curl -S -s \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
@@ -78,7 +78,7 @@ packaging_push_packages_to_gitlab() {
 
 packaging_gitlab_set_ci_id_link() {
     version=$1
-    customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+    customer=$(release_determin_customer)
 
     echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID customer: $customer version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
 
@@ -92,7 +92,7 @@ packaging_gitlab_set_ci_id_link() {
 }
 
 packaging_gitlab_get_version_for_pipeline_id() {
-    customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+    customer=$(release_determin_customer)
 
     if ! curl \
         --fail \
@@ -104,7 +104,7 @@ packaging_gitlab_get_version_for_pipeline_id() {
 }
 
 packaging_gitlab_set_current_link() {
-    customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+    customer=$(release_determin_customer)
     version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
 
     if echo "$version" | grep "nightly"; then
@@ -135,7 +135,7 @@ packaging_push_release_tag_to_github() {
 }
 
 packaging_push_package_to_github() {
-    customer=$(repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME})
+    customer=$(release_determin_customer)
     version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
 
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
@@ -184,7 +184,7 @@ packaging() {
 
     echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version: $version release: $release MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
 
-    if ! repo_get_customer_for_branch ${MAJOR_COMMIT_REF_NAME}; then
+    if ! release_determin_customer; then
         echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
         return 1
     fi
