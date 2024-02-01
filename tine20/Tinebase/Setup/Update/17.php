@@ -23,6 +23,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
     const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
+    const RELEASE017_UPDATE007 = __CLASS__ . '::update007';
 
     static protected $_allUpdates = [
        self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -53,6 +54,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE017_UPDATE007          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update007',
             ],
         ],
         (self::PRIO_NORMAL_APP_UPDATE + 1)=> [
@@ -196,6 +201,14 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             $this->_backend->dropTable('cost_unit');
         }
 
-        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE005);
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.6', self::RELEASE017_UPDATE006);
+    }
+
+    public function update007()
+    {
+        $this->_backend->getDb()->delete(SQL_TABLE_PREFIX . 'filter', 'model = "Tinebase_Model_CostCenter"');
+        $this->_backend->getDb()->delete(SQL_TABLE_PREFIX . 'filter', 'model = "Tinebase_Model_CostUnit"');
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.7', self::RELEASE017_UPDATE007);
     }
 }
