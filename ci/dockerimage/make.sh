@@ -108,7 +108,7 @@ function build_image_and_dependencies() {
             build_image "base" "${base_image}" '' '' ''  '' '' '' '' "${alpine_branch}" "${alpine_php_package}"
         fi
 
-        if [ 'dependency' == "${target}" ] || [ 'dev' == "${target}" ]; then
+        if [ 'dependency' == "${target}" ] || [ 'dev' == "${target}" ] || [ 'test' == "${target}" ]; then
             build_image "${target}" "${image}" "${base_image}" '' '' '' '' '' '' "${alpine_branch}" "${alpine_php_package}"
             delete_temp_images
             echo "$0: ... building ${target} image. done"
@@ -355,6 +355,7 @@ function help() {
     echo 'tasks:'
     echo '  base'
     echo '  dev'
+    echo '  test'
     echo '  dependency'
     echo '  test-dependency'
     echo '  source'
@@ -426,6 +427,7 @@ shift $(($OPTIND - 1))
 case ${1} in
     base) make_image 'base' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     dev) make_image 'dev' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    test) make_image 'test' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     dependency) make_image 'dependency' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     test-dependency) make_image 'test-source' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     source) make_image 'source' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
@@ -436,7 +438,6 @@ case ${1} in
     built) make_image 'built' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     test-built) make_image 'test-built' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     packaging) make_image 'packaging' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
-    packages) make_packages "${PACKAGING_IMAGE}" "${output_path}";; 
     '')
         help
         exit 0
