@@ -88,7 +88,7 @@ function build_image_and_dependencies() {
             build_image "base" "${base_image}" '' '' '' '' '' "${alpine_branch}" "${alpine_php_package}"
         fi
 
-        if [ 'dependency' == "${target}" ] || [ 'dev' == "${target}" ]; then
+        if [ 'dependency' == "${target}" ] || [ 'dev' == "${target}" ] || [ 'test' == "${target}" ]; then
             build_image "${target}" "${image}" "${base_image}" '' '' '' '' "${alpine_branch}" "${alpine_php_package}"
         else
             if [[ -z "${dependency_image}" ]]; then
@@ -287,6 +287,7 @@ function help() {
     echo 'tasks:'
     echo '  base'
     echo '  dev'
+    echo '  test'
     echo '  dependency'
     echo '  test-dependency'
     echo '  source'
@@ -358,6 +359,7 @@ shift $(($OPTIND - 1))
 case ${1} in
     base) make_image 'base' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     dev) make_image 'dev' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    test) make_image 'test' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     dependency) make_image 'dependency' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     test-dependency) make_image 'test-source' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     source) make_image 'source' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
