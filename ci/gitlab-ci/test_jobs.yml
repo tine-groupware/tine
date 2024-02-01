@@ -40,6 +40,11 @@ phpstan-analysis:
   variables:
     ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
+    KUBERNETES_CPU_REQUEST: 2
+    KUBERNETES_CPU_LIMIT: 2
+    # request and memory limit should be 2Gi(php memory_limit) per cpu
+    KUBERNETES_MEMORY_REQUEST: 4Gi
+    KUBERNETES_MEMORY_LIMIT: 4Gi
   needs:
     - docker_build_source
   script:
