@@ -6,7 +6,6 @@ tinedockercompose_tineloggerprio: "5"
 tinedockercompose_tinesharedkey: "changeme"
 
 tinedockercompose_path: "/srv/tine"
-tinedockercompose_db_path: "/srv/tine/db"
 tinedockercompose_confd_path: "/srv/tine/conf.d"
 tinedockercompose_files_path: "/srv/tine/files"
 tinedockercompose_backup_path: "/srv/tine/backup"
@@ -23,9 +22,16 @@ tinedockercompose_db_name: "tine"
 tinedockercompose_db_user: "tine"
 tinedockercompose_db_password: "tine"
 tinedockercompose_db_prefix: "tine_"
+tinedockercompose_db_path: "/srv/tine/db"
 
 tinedockercompose_docservice_deploy_conf: true
 # tinedockercompose_docservice_version: "2.1"
+
+tinedockercompose_documentserver: true
+tinedockercompose_documentserver_version: "latest"
+tinedockercompose_documentserver_secret: "change_me_also_define_in_tine_cfg"
+
+tinedockercompose_redis_version: "6.0.16"
 
 # tinedockercompose_volumes:
 #   - "tine_clamav

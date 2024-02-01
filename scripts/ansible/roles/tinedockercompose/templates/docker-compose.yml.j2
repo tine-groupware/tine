@@ -86,7 +86,7 @@ services:
 {% endif %}
 
   cache:
-    image: redis:6.0.16
+    image: redis:{{ tinedockercompose_redis_version }}
     restart: always
     networks:
       - internal_network
@@ -99,7 +99,7 @@ services:
       - internal_network
 {% endif %}
 
-{% if tinedockercompose_documentserver is defined %}
+{% if tinedockercompose_broadcasthub is defined %}
   broadcasthub:
     image: tinegroupware/broadcasthub:0.6
     restart: always
@@ -119,15 +119,15 @@ services:
       DEBUG_LOG_TO_FILE: "off"
       DEBUG_LOG_FILE: ../../stdout.log
 {% endif %}
-{% if tinedockercompose_documentserver is defined %}
+{% if tinedockercompose_documentserver is defined and tinedockercompose_documentserver|bool %}
   documentserver:
-    image: onlyoffice/documentserver:latest
+    image: onlyoffice/documentserver:{{ tinedockercompose_documentserver_version }}
     restart: always
     ports:
       - "4020:80"
     environment:
       JWT_ENABLED: "true"
-      JWT_SECRET: "change_me_also_define_in_tine_cfg"
+      JWT_SECRET: "{{ tinedockercompose_documentserver_secret }}"
     networks:
       - external_network
       - internal_network
