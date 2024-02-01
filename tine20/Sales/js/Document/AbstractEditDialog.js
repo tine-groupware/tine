@@ -57,13 +57,10 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
 
         // default category
         const categoryField = this.getForm().findField('document_category');
-        const category = categoryField.getValue()
-        if (!category) {
-            categoryField.recordProxy.promiseLoadRecord(Tine.Tinebase.configManager.get('documentCategoryDefault', 'Sales'))
-                .then(category => {
-                    categoryField.setValue(category);
-                    categoryField.onSelect(category, 0);
-                });
+        if (!categoryField.selectedRecord) {
+            const category = Tine.Tinebase.data.Record.setFromJson(Tine.Tinebase.configManager.get('documentCategoryDefault', 'Sales'), 'Sales.Document_Category');
+            categoryField.setValue(category);
+            categoryField.onSelect(category, 0);
         }
 
         const positions = this.getForm().findField('positions').getValue(); //this.record.get('positions')
