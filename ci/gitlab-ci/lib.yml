@@ -619,6 +619,7 @@
           find $TINE20ROOT/tine20/vendor -mindepth 1 -maxdepth 1 -type d -exec echo "        - '{}'" \; >> excludes;
           sed -i '/tine20\/vendor\*/r excludes' $TINE20ROOT/phpstan.neon;
           sed -i '/tine20\/vendor\/metaways/d' $TINE20ROOT/phpstan.neon;
+          sed -i "s/maximumNumberOfProcesses: 32/maximumNumberOfProcesses: $KUBERNETES_CPU_REQUEST/g" $TINE20ROOT/phpstan.neon
           rm excludes
       
           $TINE20ROOT/tine20/vendor/bin/phpstan --version
