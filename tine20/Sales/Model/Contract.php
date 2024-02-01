@@ -238,18 +238,6 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
                     )
                 )
             ),
-            'costcenter' => array(
-                'type' => 'virtual',
-                'config' => array(
-                    'type' => 'relation',
-                    'label' => 'Lead Cost Center',    // _('Lead Cost Center')
-                    'config' => array(
-                        'appName'   => Tinebase_Config::APP_NAME,
-                        'modelName' => Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
-                        'type' => 'LEAD_COST_CENTER'
-                    )
-                )
-            ),
             'products' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'label'      => 'Products', // _('Products')
@@ -304,10 +292,6 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
         ),
         array('relatedApp' => 'Sales', 'relatedModel' => 'Product', 'config' => array(
             array('type' => 'PRODUCT', 'degree' => 'sibling', 'text' => 'Product', 'max' => '0:0'),
-            ), 'defaultType' => ''
-        ),
-        array('relatedApp' => 'Tinebase', 'relatedModel' => Tinebase_Model_EvaluationDimensionItem::class, 'config' => array(
-            array('type' => 'LEAD_COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '1:0'), // _('Lead Cost Center')
             ), 'defaultType' => ''
         ),
         array('relatedApp' => 'Timetracker', 'relatedModel' => 'Timeaccount', 'config' => array(

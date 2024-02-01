@@ -70,20 +70,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             'start_date' => $this->_referenceDate,
             'end_date' => NULL,
             'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
+            'eval_dim_cost_center' => $this->_costcenterRecords->getFirstRecord()->getId(),
         ));
-        
-        $contract->relations = array(
-            array(
-                'own_model'              => Sales_Model_Contract::class,
-                'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                'own_id'                 => NULL,
-                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'related_model'          => Tinebase_Model_EvaluationDimensionItem::class,
-                'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                'related_id'             => $this->_costcenterRecords->getFirstRecord()->getId(),
-                'type'                   => 'LEAD_COST_CENTER'
-            ),
-        );
         
         $this->_contractRecords->addRecord($this->_contractController->create($contract));
         
