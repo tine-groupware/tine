@@ -89,12 +89,26 @@ class Setup_SchemaTool
         $config->setMetadataDriverImpl($mappingDriver);
 
         try {
+            $additionalModels = [];
             /** @var Tinebase_Record_Interface $modelName */
             foreach ($mappingDriver->getAllClassNames($models) as $modelName) {
                 if (null !== ($modelConfig = $modelName::getConfiguration()) &&
-                    null !== ($tblName = $modelConfig->getTableName())) {
+                        null !== ($tblName = $modelConfig->getTableName())) {
+                    if (!empty($models)) {
+                        foreach ($modelConfig->getAssociations() as $assocType) {
+                            foreach ($assocType as $assoc) {
+                                if (($assoc['targetEntity'] ?? false) && !in_array($assoc['targetEntity'], $models)) {
+                                    $additionalModels[] = $assoc['targetEntity'];
+                                }
+                            }
+                        }
+                    }
                     $tableNames[] = SQL_TABLE_PREFIX . $tblName;
                 }
+            }
+
+            if (!empty($additionalModels)) {
+                return self::getConfig(array_merge($models, $additionalModels));
             }
 
             $config->setFilterSchemaAssetsExpression('/' . implode('|', $tableNames) . '/');
