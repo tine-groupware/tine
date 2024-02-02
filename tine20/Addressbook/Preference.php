@@ -156,8 +156,8 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
                             <label>'. $translate->_('Display Name - Company / Organisation') . '</label>
                         </option>
                         <option>
-                            <value>{% if salutation %}{{ keyField("Addressbook", "contactSalutation", salutation) }} {% endif %}{% if n_family %}{{ n_family }}{% else %}{{ n_fileas }}{% endif %}{% if org_name %} ({{ org_name }}){% endif %}</value>
-                            <label>'. $translate->_('Salutation Last Name (Company / Organisation)') . '</label>
+                            <value>{% if salutation %}{{ keyField("Addressbook", "contactSalutation", salutation) }} {% endif %}{% if n_prefix %}{{ n_prefix }} {% endif %}{% if n_family %}{{ n_family }}{% endif %}{% if org_name %} ({{ org_name }}){% endif %}</value>
+                            <label>'. $translate->_('Salutation Title Last Name (Company / Organisation)') . '</label>
                         </option>
                     </options>';
                 break;

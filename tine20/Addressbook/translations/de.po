@@ -1364,5 +1364,5 @@ msgstr "Angezeigter Name (E-Mail)"
 msgid "Display Name - Company / Organisation"
 msgstr "Angezeigter Name - Firma / Organisation"
 
-msgid "Salutation Last Name (Company / Organisation)"
-msgstr "Anrede Nachname (Firma / Organisation)"
+msgid "Salutation Title Last Name (Company / Organisation)"
+msgstr "Anrede Titel Nachname (Firma / Organisation)"
