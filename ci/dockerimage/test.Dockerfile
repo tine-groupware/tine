@@ -8,10 +8,10 @@
 #   BASE_IMAGE=base
 
 ARG BASE_IMAGE=base
-ARG ALPINE_PHP_PACKAGE=php7
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${BASE_IMAGE} as test
+ARG ALPINE_PHP_PACKAGE=php7
 
 RUN apk add mysql-client jq rsync coreutils git build-base
 RUN if [ "${ALPINE_PHP_PACKAGE}" == "php81" ] || [ "${ALPINE_PHP_PACKAGE}" == "php82" ]; then \
