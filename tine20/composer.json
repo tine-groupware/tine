@@ -182,7 +182,8 @@
       "tine20/composerapploader": true,
       "simplesamlphp/composer-module-installer": true,
       "digitalrevolution/php-codesniffer-baseline": true
-    }
+    },
+    "autoloader-suffix": "stable"
   },
   "scripts": {
     "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",

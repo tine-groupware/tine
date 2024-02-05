@@ -35,20 +35,22 @@ check-php-version:
   interruptible: true
 
 phpstan-analysis:
-  extends: .abstract_jobs.copy_source
   stage: test
+  image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}
+  tags:
+    - custom-cache
   variables:
-    ARG_IMAGE: test-source
-    ARG_COPY_SOURCE: "true"
     KUBERNETES_CPU_REQUEST: 2
     KUBERNETES_CPU_LIMIT: 2
     # request and memory limit should be 2Gi(php memory_limit) per cpu
     KUBERNETES_MEMORY_REQUEST: 4Gi
     KUBERNETES_MEMORY_LIMIT: 4Gi
-  needs:
-    - docker_build_source
+    TINE20ROOT: ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+  needs: []
   script:
     - !reference [.lib, script]
+    - test_prepare_working_dir
+    - test_composer_install
     - phpstan_analyse
   artifacts:
     reports:
@@ -57,9 +59,16 @@ phpstan-analysis:
       - ${CI_PROJECT_DIR}/code-quality-report.json
     expire_in: 1 days
   allow_failure: true
+  # note: composer home cache is as faster than caching the vendor dir. 27s-33s vs 33s-45s
+  # todo: maybe remove this fully or try to improve gitlab cache speed. Saving cache needs time 10s... => policy  pull
+  # design note: composer home cache is custom and more complex, but it is needed any way for custom apps.
+  # cache:
+  #   - key:
+  #       files:
+  #         - tine20/composer.lock
+  #     paths:
+  #       - tine20/vendor
   rules:
-    - if: $RUN_NO_TESTS == "true"
-      when: never
     - if: $PHPSTAN_ANALYSES == "false"
       when: never
     - if: $PHPSTAN_ANALYSES == "true" && $PHPSTAN_ANALYSES_STRICT == "true"

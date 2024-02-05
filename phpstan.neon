@@ -45,3 +45,4 @@ parameters:
         - 'tine20/Voipmanager/Setup/Update/Release10.php'
     parallel:
       maximumNumberOfProcesses: 32
+    tmpDir:
