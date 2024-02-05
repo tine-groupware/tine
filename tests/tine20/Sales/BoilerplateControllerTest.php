@@ -128,8 +128,9 @@ class Sales_BoilerplateControllerTest extends TestCase
         $created = $this->ctrl->create($this->getBoilerplate());
         $created->setId(null);
 
+        $translation = Tinebase_Translation::getTranslation('Sales');
         $this->expectException(Tinebase_Exception_SystemGeneric::class);
-        $this->expectExceptionMessage('Name needs to be unique.');
+        $this->expectExceptionMessage($translation->_('Name needs to be unique.'));
         $this->ctrl->create($created);
     }
 
