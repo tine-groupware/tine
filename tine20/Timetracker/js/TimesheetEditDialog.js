@@ -471,6 +471,9 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                                 disabled: !!this.record.get('workingtime_is_cleared'),
                                 columnWidth: 1,
                                 allowBlank: false,
+                                validator: (v) => {
+                                    return v !== '';
+                                },
                                 height: 150}),
                             ]
                         ]
