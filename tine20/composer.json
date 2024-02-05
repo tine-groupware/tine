@@ -169,7 +169,8 @@
     "allow-plugins": {
       "tine20/composerapploader": true,
       "simplesamlphp/composer-module-installer": true
-    }
+    },
+    "autoloader-suffix": "stable"
   },
   "scripts": {
     "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
