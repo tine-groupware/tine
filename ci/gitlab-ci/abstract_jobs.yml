@@ -83,6 +83,48 @@
     when:
       - runner_system_failure
 
+.abstract_jobs.php_unit_cache:
+  extends: .abstract_jobs.test
+  image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}
+  tags:
+    - custom-cache
+  variables:
+    TINE20ROOT: ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+  needs: []
+  before_script:
+    - !reference [.lib, script]
+    - test_prepare_working_dir
+    - test_prepare_global_configs
+    - test_composer_install
+    - test_npm_install
+    - tine20_await_db
+    - test_prepare_mail_db
+    - tine20_install
+    - supervisord
+  script:
+    - !reference [.lib, script]
+    - test_phpunit
+  # custom-cache is faster
+  # cache:
+  #   - key:
+  #       files:
+  #         - tine20/Tinebase/js/package.json
+  #         - tine20/Tinebase/js/npm-shrinkwrap.json
+  #     paths:
+  #       - tine20/Tinebase/js/node_modules
+  artifacts:
+    paths:
+      - ${CI_PROJECT_DIR}/tine20.log
+      - ${CI_PROJECT_DIR}/phpunit-report.xml
+    expire_in: 1 day
+    when: always
+    reports:
+      junit: ${CI_PROJECT_DIR}/phpunit-report.xml
+  services:
+    - !reference [.lib-services, db_service]
+    - !reference [.lib-services, redis_service]
+    - !reference [.lib-services, mail_service]
+
 # Has a db, redis and installs tine. Then runs a php unit test.
 # $ARG_IMAGE e.g. test-built-commit
 # $ARG_EXCLUDE_GROUP optional e.g. longrunning,needsbuild,nogitlabci
@@ -139,7 +181,7 @@
 
 # extends .abstract_jobs.php_unit with ldap.
 .abstract_jobs.php_unit_ldap:
-  extends: .abstract_jobs.php_unit
+  extends: .abstract_jobs.php_unit_cache
   variables:
     LDAP_ORGANISATION: "Tine20 dev"
     LDAP_DOMAIN: "tine.test"
