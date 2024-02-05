@@ -961,11 +961,6 @@ parameters:
 			path: tine20/Calendar/Controller/Event.php
 
 		-
-			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:hasGrant\\(\\)\\.$#"
-			count: 6
-			path: tine20/Calendar/Controller/Event.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:isRescheduled\\(\\)\\.$#"
 			count: 1
 			path: tine20/Calendar/Controller/Event.php

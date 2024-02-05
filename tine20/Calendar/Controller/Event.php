@@ -45,7 +45,7 @@
  * involved.
  * 
  * NOTE: the backend always fetches full records for grant calculations.
- *       searching ids only does not hlep with performance
+ *       searching ids only does not help with performance
  * 
  * @package Calendar
  */
@@ -2532,36 +2532,47 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @todo use this function in other create + update functions
      * @todo invent concept for simple adding of grants (plugins?) 
      */
-    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
+    protected function _checkGrant($_record, $_action, $_throw = true, $_errorMessage = 'No Permission.', $_oldRecord = null)
     {
-        if (    ! $this->_doContainerACLChecks 
+        if (! $_record instanceof Calendar_Model_Event || ($_oldRecord && ! $_oldRecord instanceof Calendar_Model_Event)) {
+            return false;
+        }
+
+        if (    ! $this->_doContainerACLChecks
             // admin grant includes all others (only if class is PUBLIC)
             ||  (($_record->class === Calendar_Model_Event::CLASS_PUBLIC || $_action === self::ACTION_DELETE)
-                && $_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))
+                && $_record->container_id && Tinebase_Core::getUser()->hasGrant(
+                    $_record->container_id,
+                    Tinebase_Model_Grants::GRANT_ADMIN
+                ))
             // external invitations are in a spechial invitaion calendar. only attendee can see it via displaycal
             ||  $_record->hasExternalOrganizer()
         ) {
             return true;
         }
-        
+
+        $hasGrant = false;
         switch ($_action) {
             case 'get':
                 // NOTE: free/busy is not a read grant!
                 $hasGrant = $_record->hasGrant(Tinebase_Model_Grants::GRANT_READ);
                 break;
             case 'create':
-                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id,
+                    Tinebase_Model_Grants::GRANT_ADD);
                 break;
             case 'update':
                 if ($_oldRecord) {
                     $hasGrant = (bool) $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
 
                     if ($_oldRecord->container_id != $_record->container_id) {
-                        $hasGrant &= Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD)
+                        $hasGrant &= Tinebase_Core::getUser()->hasGrant($_record->container_id,
+                                Tinebase_Model_Grants::GRANT_ADD)
                             && $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_DELETE);
                     }
                 } else {
-                    $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_EDIT) 
+                    $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id,
+                            Tinebase_Model_Grants::GRANT_EDIT)
                         && $_record->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
                 }
                 break;
