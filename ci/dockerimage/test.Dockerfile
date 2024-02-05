@@ -30,6 +30,7 @@ RUN if [ "${ALPINE_PHP_PACKAGE}" == "php81" ] || [ "${ALPINE_PHP_PACKAGE}" == "p
     else \
       apk add --no-cache composer; \
     fi
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.22.12-r0 nodejs=12.22.12-r0
 COPY etc /config
 COPY phpstan.neon ${TINE20ROOT}/phpstan.neon
 COPY phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon
