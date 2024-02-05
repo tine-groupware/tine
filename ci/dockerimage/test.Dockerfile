@@ -8,6 +8,7 @@
 #   BASE_IMAGE=base
 
 ARG BASE_IMAGE=base
+ARG ALPINE_PHP_PACKAGE=php7
 
 #  -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -    -
 FROM ${BASE_IMAGE} as test
