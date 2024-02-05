@@ -2553,11 +2553,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
                 break;
             case 'update':
-                $hasGrant = (bool) $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
-                
-                if ($_oldRecord->container_id != $_record->container_id) {
-                    $hasGrant &= Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD)
-                                 && $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_DELETE);
+                if ($_oldRecord) {
+                    $hasGrant = (bool) $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
+
+                    if ($_oldRecord->container_id != $_record->container_id) {
+                        $hasGrant &= Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD)
+                            && $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_DELETE);
+                    }
+                } else {
+                    $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_EDIT) 
+                        && $_record->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
                 }
                 break;
             case 'delete':
