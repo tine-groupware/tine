@@ -438,6 +438,7 @@ case ${1} in
     built) make_image 'built' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     test-built) make_image 'test-built' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     packaging) make_image 'packaging' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${JSDEPENDENCY_IMAGE}" "${JSBUILD_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
+    packages) make_packages "${PACKAGING_IMAGE}" "${output_path}";;
     '')
         help
         exit 0
