@@ -230,7 +230,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         if (! this.communityPanel) {
             var translationPanel = [],
                 stats = Tine.__translationData.translationStats,
-                version = Tine.clientVersion.packageString.match(/\d+\.\d+\.\d+/),
+                version = String(Tine.clientVersion.packageString).match(/\d+\.\d+\.\d+/),
                 language = Tine.Tinebase.registry.get('locale').language,
                 // TODO make stats work again (currently displays 100% for all langs)
                 //percentageCompleted =  stats ? Math.floor(100 * stats.translated / stats.total) : undefined;
@@ -506,6 +506,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         const exception = _.get(JSON.parse(response.responseText), 'data', {});
         const me = this;
         
+        Ext.MessageBox.hide();
         switch (exception.code) {
             case 630:
                 const mfaDevices = exception.mfaUserConfigs
@@ -528,6 +529,17 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     me.onLoginPress();
                 }});
                 break;
+            case 650: // Auth requires redirect
+                if (String(exception.method).toUpperCase() !== 'POST') {
+                    window.location.href = exception.url;
+                } else {
+                    window.document.body.innerHTML = exception.postFormHTML;
+                    document.getElementsByTagName("form")[0].submit();
+                }
+                break;
+            case 651: // Password required
+                //@TODO
+                break;
             default:
                 return Tine.Tinebase.ExceptionHandler.handleRequestException(response);
                 break;
@@ -535,9 +547,17 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     },
     
     onLoginSuccess: function(response) {
-        var responseData = Ext.util.JSON.decode(response.responseText);
+        const responseData = Ext.util.JSON.decode(response.responseText);
         if (responseData.success === true) {
             Ext.MessageBox.wait(String.format(i18n._('Login successful. Loading {0}...'), Tine.title), i18n._('Please wait!'));
+            
+            if (responseData?.assetHash && Tine.clientVersion.assetHash !== responseData.assetHash) {
+                Tine.Tinebase.common.reload({
+                    keepRegistry: false,
+                    clearCache: true
+                });
+            }
+            
             window.document.title = this.originalTitle;
             response.responseData = responseData;
             this.onLogin.call(this.scope, response);
@@ -552,12 +572,6 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 icon: Ext.MessageBox.ERROR,
                 fn: function () {
                     this.getLoginPanel().getForm().findField('password').focus(true);
-                    if (document.getElementById('useCaptcha')) {
-                        if (typeof responseData.c1 != 'undefined') {
-                            document.getElementById('imgCaptcha').src = 'data:image/png;base64,' + responseData.c1;
-                            document.getElementById('contImgCaptcha').style.visibility = 'visible';
-                        }
-                    }
                 }.createDelegate(this)
             });
         }
@@ -603,23 +617,24 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     onLoginPress: function (additionalParams) {
         var form = this.getLoginPanel().getForm(),
             values = form.getFieldValues();
-            
+        
         if (form.isValid()) {
-            Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'));
-
-            Ext.Ajax.request({
-                scope: this,
-                params : _.assign({
-                    method: this.loginMethod,
-                    username: values.username,
-                    password: values.password
-                }, additionalParams),
-                timeout: 60000, // 1 minute
-                success: this.onLoginSuccess,
-                failure: this.onLoginFail
-            });
+            Ext.MessageBox.wait(i18n._('Logging you in...'), i18n._('Please wait'))
+                .then((r) => {
+                    Ext.Ajax.request({
+                        scope: this,
+                        params: _.assign({
+                            method: this.loginMethod,
+                            username: values.username,
+                            password: values.password
+                        }, additionalParams),
+                        timeout: 60000, // 1 minute
+                        success: this.onLoginSuccess,
+                        failure: this.onLoginFail
+                    });
+                });
         } else {
-
+            
             Ext.MessageBox.alert(i18n._('Errors'), i18n._('Please fix the errors noted.'));
         }
     },

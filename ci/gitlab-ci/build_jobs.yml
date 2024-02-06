@@ -16,9 +16,9 @@
     - !reference [.lib, script]
     - git_repo_clone
     - docker_build_image base $(docker_image_hash base)
-    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
+    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)"
     - docker_build_image dependency $(docker_image_hash dependency)
-    - export DEPENDENCY_IMAGE="${REGISTRY}/dependency:$(docker_image_hash dependency)";
+    - export DEPENDENCY_IMAGE="${REGISTRY}/dependency:$(docker_image_hash dependency)"
     - |
       echo "${REUSE_IMAGES}"
       if [ "${REUSE_IMAGES}" == true ]; then
@@ -81,6 +81,10 @@
       variables:
         REUSE_IMAGES: "false"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab/
+      variables:
+        REUSE_IMAGES: "false"
+    # from release-to-github
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-github/
       variables:
         REUSE_IMAGES: "false"
     # from deploy-images-to-dockerhub:
@@ -159,9 +163,9 @@ docker_build_source_matrix:
   parallel:
     matrix:
       - PHP_VERSION:
-          - "7.4"
           - "8.0"
           - "8.1"
+          - "8.2"
   rules:
     - if: $PIPELINE_TYPE =~ /matrix-tests/
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "matrix"
@@ -238,8 +242,11 @@ docker_build_built:
   stage: build2
   script:
     - !reference [.lib, script]
-    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
-    - export DEPENDENCY_IMAGE="${REGISTRY}/dependency:$(docker_image_hash dependency)";
+    - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)"
+    - export DEPENDENCY_IMAGE="${REGISTRY}/dependency:$(docker_image_hash dependency)"
+    - docker_build_image jsdependency $(docker_image_hash jsdependency)
+    - export JSDEPENDENCY_IMAGE="${REGISTRY}/jsdependency:$(docker_image_hash jsdependency)"
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh jsbuild
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh build
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh built
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh test-built
@@ -276,6 +283,8 @@ docker_build_built:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
     # from push-to-vpackages:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /push-to-vpackages/
+    # from release-to-github
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-github/
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-gitlab/
     - if: $PIPELINE_TYPE =~ /build-nightly/
@@ -362,6 +371,8 @@ docker_build_test:
 docker_build_packages:
   extends: .abstract_jobs.docker
   stage: build3
+  variables:
+    GIT_DEPTH: 100
   script:
     - !reference [.lib, script]
     - packaging
@@ -369,6 +380,8 @@ docker_build_packages:
     - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /push-to-vpackages/
+    # from release-to-github
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-github/
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-gitlab/
     - if: $PIPELINE_TYPE =~ /build-nightly/

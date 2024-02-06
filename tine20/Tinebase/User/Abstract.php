@@ -706,9 +706,10 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * @param  string  $_password
      * @param  bool    $_encrypt encrypt password
      * @param  bool    $_mustChange
+     * @param  bool $ignorePwPolicy
      * @return void
      */
-    abstract public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null);
+    abstract public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false);
     
     /**
      * update user status
@@ -870,4 +871,5 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     abstract public function addUserInSqlBackend(Tinebase_Model_FullUser $_user);
     abstract public function updateUserInSqlBackend(Tinebase_Model_FullUser $_user);
     abstract public function undelete(string $loginname);
+    abstract public function getUsersWithoutPw();
 }

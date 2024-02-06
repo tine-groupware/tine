@@ -81,6 +81,8 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
 
     public static function resolveRelationId(string $id, $record = null);
 
+    public static function isHydratingFromBackend(): bool;
+
     /**
      * sets identifier of record
      * 

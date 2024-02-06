@@ -54,9 +54,16 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
         /** @var Tinebase_Record_Interface $record */
         $record = new $this->_recordClass([], true);
         $record->setFromJsonInUsersTimezone($_blob);
-        if (null !== ($mc = ($this->_recordClass)::getConfiguration()) && $mc
-                ->{Tinebase_ModelConfiguration_Const::RUN_CONVERT_TO_RECORD_FROM_JSON}) {
-            $record->runConvertToRecord();
+        if (null !== ($mc = ($this->_recordClass)::getConfiguration())) {
+            /** @var Tinebase_ModelConfiguration $mc */
+            if ($mc->{Tinebase_ModelConfiguration_Const::RUN_CONVERT_TO_RECORD_FROM_JSON}) {
+                $record->runConvertToRecord();
+            }
+            foreach ($mc->getJsonFacadeFields() as $fieldKey => $def) {
+                if ($record->{$fieldKey} instanceof Tinebase_Record_JsonFacadeInterface) {
+                    $record->{$fieldKey}->jsonFacadeFromJson($record, $def);
+                }
+            }
         }
         return $record;
     }
@@ -780,6 +787,14 @@ class Tinebase_Convert_Json implements Tinebase_Convert_Interface
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                         __METHOD__ . '::' . __LINE__
                         . ' Could not expand ' . $modelName . ': ' . $teni->getMessage());
+                }
+            }
+
+            foreach ($modelConfiguration->getJsonFacadeFields() as $fieldKey => $def) {
+                foreach ($records as $record) {
+                    /** @var Tinebase_Record_JsonFacadeInterface $model */
+                    $model = $def[Tinebase_ModelConfiguration_Const::CONFIG][Tinebase_ModelConfiguration_Const::RECORD_CLASS_NAME];
+                    $model::jsonFacadeToJson($record, $fieldKey, $def);
                 }
             }
         }

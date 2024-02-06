@@ -422,7 +422,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      * @throws Tinebase_Exception
      * @return string
      */
-    public function encryptSharedPassword($password)
+    public static function encryptSharedPassword($password)
     {
         if (empty($_key = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY})) {
             throw new Tinebase_Exception(Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY . ' is not set');
@@ -437,7 +437,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
      * @throws Tinebase_Exception
      * @return string
      */
-    public function decryptSharedPassword($password) 
+    public static function decryptSharedPassword($password)
     {
         if (empty($_key = Tinebase_Config::getInstance()->{Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY})) {
             throw new Tinebase_Exception('config : ' . Tinebase_Config::CREDENTIAL_CACHE_SHARED_KEY . ' is not set');

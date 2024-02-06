@@ -12,9 +12,152 @@ import transliterate from 'util/transliterate'
 
 let twingEnv
 
-export default function getTwingEnv () {
+/**
+ * Expression is a string that does not get quoted in htmlEncode (@see Ext.util.Format.htmlEncode)
+ */
+class Expression extends String {
+  constructor (s, id) {
+    super(s)
+    this.isExpression = true
+  }
+}
+
+let proxyId = 0
+const replaceProxyFns = {}
+const proxyDocuments = [
+  document
+]
+const proxyPromisesCollections = []
+
+/**
+ * HTMLProxy - html proxy snipped that will be replaced with the real content later
+ *
+ * useful in situations where you need to return html directly which gets produces async
+ */
+class HTMLProxy extends Expression {
+  constructor (renderPromise, config = {}) {
+    const id = config.id || `html-proxy-${++proxyId}`
+    const cls = config.cls || 'html-proxy'
+    const tag = config.tag || 'em'
+    super(`<${tag} id="${id}" class="${cls}"></${tag}>`)
+    this.id = id
+    this.cls = cls
+    this.tag = tag
+    Object.assign(this, config)
+    if (renderPromise) {
+      this.setRenderer(renderPromise)
+    }
+    this.isHTMLProxy = true
+  }
+
+  /**
+   * set the render/producer function this HTMLProxy proxies
+   *
+   * @param renderPromise
+   * @returns {Promise}
+   */
+  setRenderer (renderPromise) {
+    this.renderPromise = renderPromise
+
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+    const proxiedPromise = renderPromise.then(async (output) => {
+      for (let i = 0; i < 10; i++) {
+        await sleep(i * 100)
+        if (await this.replaceProxy(output)) break
+      }
+    })
+
+    proxyPromisesCollections.forEach((proxyPromisesCollection) => {
+      proxyPromisesCollection.push(proxiedPromise)
+    })
+
+    return proxiedPromise
+  }
+
+  /**
+   * default implementation to replace proxy in dom
+   *
+   * @param html
+   * @private
+   */
+  replaceDomProxy (html) {
+    let isReplaced = false
+    proxyDocuments.forEach((doc) => {
+      const el = doc.getElementById(this.id)
+      if (el) {
+        el.outerHTML = html
+        isReplaced = true
+        return true
+      }
+    })
+    return isReplaced
+  }
+
+  /**
+   * replace proxy by given html
+   * @param html
+   * @returns {Promise<boolean|void>}
+   */
+  async replaceProxy (html) {
+    // @TODO retry n times, replaceProxy might be registered late!
+    if (replaceProxyFns[this.id]) {
+      if (replaceProxyFns[this.id](html, this.id)) {
+        delete replaceProxyFns[this.id]
+        return true
+      }
+    } else {
+      html = Ext.util.Format.htmlEncode(html)
+      return this.replaceDomProxy(html)
+    }
+  }
+
+  /**
+   * register a custom replacer method for this proxy
+   * @param {Function} fn
+   */
+  registerReplacer (fn) {
+    replaceProxyFns[this.id] = fn
+  }
+
+  /**
+   * get a Promise which resolves with the final content
+   * @returns {Promise<String>}
+   */
+  asString () {
+    return new Promise(resolve => {
+      this.registerReplacer(resolve)
+    })
+  }
+}
+
+// add static functions
+Object.assign(HTMLProxy, {
+  addProxyDocument: function (doc) {
+    proxyDocuments.unshift(doc)
+  },
+
+  removeProxyDocument: function (doc) {
+    const idx = proxyDocuments.indexOf(doc)
+    if (idx >= 0) {
+      proxyDocuments.splice(idx, 1)
+    }
+  },
+
+  addProxyPromisesCollection: function (collection) {
+    proxyPromisesCollections.push(collection)
+  },
+
+  removeProxyPromisesCollection: function (collection) {
+    const idx = proxyPromisesCollections.indexOf(collection)
+    if (idx >= 0) {
+      proxyPromisesCollections.splice(idx, 1)
+    }
+  }
+})
+
+const getTwingEnv = function () {
   if (!twingEnv) {
-    let loader = new TwingLoaderArray([])
+    const loader = new TwingLoaderArray([])
 
     twingEnv = new TwingEnvironment(loader, {
       autoescape: false
@@ -31,13 +174,26 @@ export default function getTwingEnv () {
     twingEnv.addExtension(new TwingExtensionIntl())
 
     twingEnv.addFilter(new TwingFilter('removeSpace', function (string) {
-      return string.replaceAll(' ', '')
+      return Promise.resolve(string.replaceAll(' ', ''))
     }))
 
     twingEnv.addFilter(new TwingFilter('transliterate', function (string) {
-      return transliterate(string)
+      return Promise.resolve(transliterate(string))
     }))
+
+    /**
+     * render proxy which gets replaced after with rendered content
+     *
+     * @param context
+     * @param buffer
+     * @returns {HTMLProxy}
+     */
+    twingEnv.renderProxy = (context, buffer) => {
+      return new HTMLProxy(twingEnv.render(context, buffer))
+    }
   }
 
   return twingEnv
 }
+
+export { getTwingEnv as default, Expression, HTMLProxy }

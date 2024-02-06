@@ -18,7 +18,7 @@
             <h1 class="poll-event">{{poll.event_summary}}</h1>
             <h2 class="poll-name" v-if="poll.name && poll.name.length > 0">{{poll.name}}</h2>
           </div>
-          <div class="col-md-4 col-sm-12 text-right">
+          <div class="col-md-4 col-sm-12 text-end">
             <a :href="poll.config.brandingWeburl">
               <img style="max-width: 300px; max-height: 80px" :src="poll.config.installLogo" :alt="poll.config.brandingTitle"/>
             </a>
@@ -32,7 +32,7 @@
               <span v-if="poll.closed === '1'"><br />{{formatMessage('This poll is closed already')}}</span>
             </p>
           </div>
-          <div class="col-md-6 col-sm-12 text-right">
+          <div class="col-md-6 col-sm-12 text-end">
             <b-btn v-if="activeAttendee.id !== null" @click="onOtherUser" variant="primary">{{formatMessage('I am not {name}', {name: activeAttendee.name})}}</b-btn>
             <b-btn v-else @click="askTineLogin = true" variant="primary">{{formatMessage('Login')}}</b-btn>
           </div>
@@ -47,7 +47,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="attendee in poll.attendee_status" :key="attendee.key" :class="{'row-active': activeAttendee.user_id === attendee.user_id}" v-if="attendee.user_type!= 'group'">
+                <tr v-for="attendee in poll.attendee_status.filter(attendee => attendee.user_type !== 'group')" :key="attendee.key" :class="{'row-active': activeAttendee.user_id === attendee.user_id}" >
                   <td :class="activeAttendee.user_id === attendee.user_id ? 'table-info' : 'table-light'">{{attendee.name}}</td>
                   <td v-for="datestatus in attendee.status" class="icon-cell" :key="datestatus.id"
                     :class="[{'editable': datestatus.status_authkey !== null}, statusList[datestatus.status].cellclass]"
@@ -75,8 +75,7 @@
                            class="form-control email-field" v-bind:class="{highlight: this.highlightEmail}"
                            @input="highlightEmail = false" required />
                   </td>
-                  <td v-for="date in poll.alternative_dates" :key="date.id" class="status-cell icon-cell editable"
-                    v-if="typeof activeAttendee[date.id] !== 'undefined'"
+                  <td v-for="date in poll.alternative_dates.filter(date => {return typeof activeAttendee[date.id] !== 'undefined'})" :key="date.id" class="status-cell icon-cell editable"
                     :class="statusList[activeAttendee[date.id].status].cellclass"
                     @click="nextStatus(activeAttendee[date.id], null)"
                     :title="statusName(activeAttendee[date.id].status)"
@@ -88,8 +87,7 @@
                 </tr>
                 <tr v-if="activeAttendee.user_id !== null && poll.locked == '0' && newAccountContact && poll.closed !== '1'" class="row-active">
                   <td class="table-info">{{activeAttendee.name}}</td>
-                  <td v-for="date in poll.alternative_dates" class="status-cell icon-cell" :key="date.id"
-                    v-if="typeof activeAttendee[date.id] !== 'undefined'"
+                  <td v-for="date in poll.alternative_dates.filter(date => {return typeof activeAttendee[date.id] !== 'undefined'})" class="status-cell icon-cell" :key="date.id"
                     :class="statusList[activeAttendee[date.id].status].cellclass"
                     @click="nextStatus(activeAttendee[date.id], null)"
                     :title="statusName(activeAttendee[date.id].status)"
@@ -120,24 +118,29 @@
         </div>
       </template>
       <div>
-        <b-modal ref="loadMask" :visible="transferingPoll" hide-header hide-footer no-fade no-close-on-esc no-close-on-backdrop centered>
-          <spinner size="medium" :message="formatMessage('Please wait...')"></spinner>
+        <b-modal ref="loadMask" v-model="transferingPoll" hide-header hide-footer no-fade no-close-on-esc no-close-on-backdrop centered>
+          <div class="col-xs-1 text-center">
+            <b-spinner></b-spinner>
+            <br>
+            <span>{{ formatMessage('Please wait...') }}</span>
+            <!-- <spinner size="medium" :message="formatMessage('Please wait...')"></spinner> -->
+          </div>
         </b-modal>
       </div>
       <div>
-        <b-modal ref="gtc" :visible="showGtc" hide-footer centered title="formatMessage('General terms and conditions')" v-model="showGtc">
+        <b-modal ref="gtc" hide-footer centered title="formatMessage('General terms and conditions')" v-model="showGtc">
           {{gtcText}}
         </b-modal>
       </div>
       <div>
-        <b-modal ref="linkInfo" :visible="usePersonalLink" hide-footer centered title="formatMessage('Use your personal link please.')" v-model="usePersonalLink" @hide="usePersonalLink">
+        <b-modal ref="linkInfo" hide-footer centered title="formatMessage('Use your personal link please.')" v-model="usePersonalLink" @hide="usePersonalLink">
           <p>{{formatMessage('Use your personal link please.')}}</p>
           <p>{{formatMessage('We have sent it to your E-Mail account again.')}}</p>
           <p>{{formatMessage('If you did not receive the link, please contact the organiser.')}}</p>
         </b-modal>
       </div>
       <div>
-        <b-modal ref="password" :visible="askPassword" hide-header hide-footer centered no-close-on-esc no-close-on-backdrop>
+        <b-modal ref="password" v-model="askPassword" hide-header hide-footer centered no-close-on-esc no-close-on-backdrop>
           <form>
             <label for="password">{{formatMessage('Password')}}<input id="password" type="password" class="form-control" v-model="password" /></label>
             <b-btn variant="primary" @click.prevent="submitPassword" type="submit">{{formatMessage('Submit')}}</b-btn>
@@ -148,7 +151,7 @@
         </b-modal>
       </div>
       <div>
-        <b-modal ref="tine-login" :visible="askTineLogin" hide-header hide-footer centered no-close-on-esc no-close-on-backdrop>
+        <b-modal ref="tine-login" v-model="askTineLogin" hide-header hide-footer centered no-close-on-esc no-close-on-backdrop>
           <form>
             <h2>{{formatMessage('Please log in')}}</h2>
             <label for="tine-user">{{formatMessage('User name')}}<input id="tine-user" type="text" class="form-control" v-model="login.user" /></label>
@@ -162,7 +165,7 @@
       </div>
       <div>
         <!-- formatMessage('Calendar of {name}', {name: activeAttendee.name}) -->
-        <b-modal class="calendar-window" ref="calendarWindow" :visible="showCalendarModal" @hide="showCalendarModal = false" hide-footer centered size="lg" :title="formatMessage('Calendar of {name}', {name: activeAttendee.name})">
+        <b-modal class="calendar-window" ref="calendarWindow" v-model="showCalendarModal" @hide="showCalendarModal = false" hide-footer centered size="lg" :title="formatMessage('Calendar of {name}', {name: activeAttendee.name})">
           <iframe v-if="showCalendarModal" :src="calendarUrl" class="calendar"></iframe>
         </b-modal>
       </div>
@@ -172,8 +175,8 @@
 
 <script>
 import axios from 'axios'
-import { BModal, BButton, BButtonGroup, BAlert, VBModal } from 'bootstrap-vue'
-import Spinner from 'vue-simple-spinner'
+import { BModal, BButton, BButtonGroup, BAlert, BSpinner/* VBModal */} from 'bootstrap-vue-next'
+// import Spinner from 'vue-simple-spinner'
 import _ from 'lodash'
 
 export default {
@@ -226,17 +229,20 @@ export default {
       }
     }
   },
+  computed: {
+
+  },
 
   components: {
     'b-modal': BModal,
     'b-btn': BButton,
     'b-button-group': BButtonGroup,
-    Spinner,
+    'b-spinner': BSpinner,
     'b-alert': BAlert
   },
 
   directives: {
-    'b-modal': VBModal
+    // 'b-modal': VBModal
   },
 
   mounted () {
@@ -390,7 +396,7 @@ export default {
 
         this.poll = response.data
 
-        this.formatMessage.setup({ locale: this.poll.config.locale || 'en' })
+        this.formatMessage.setup({ locale: this.poll.config.locale.locale || 'en' })
 
         if (this.poll.config.has_gtc === true) {
           this.hidegtcmessage = false
@@ -471,6 +477,7 @@ export default {
 
         this.transferingPoll = false
       }).catch(error => {
+        console.log(error)
         if (error.response.status === 401) {
           if (error.response.data.indexOf('authkey mismatch') > -1) {
             this.askPassword = false
@@ -624,6 +631,9 @@ export default {
 </script>
 
 <style scoped>
+@import 'bootstrap/dist/css/bootstrap.css';
+@import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
+
 #root {
   padding: 10px;
   color: #555;

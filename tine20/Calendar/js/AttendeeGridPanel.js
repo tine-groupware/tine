@@ -562,9 +562,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 handler: function() {
                     const locationField = this.editDialog.getForm().findField('location');
                     const locationRecordField = this.editDialog.getForm().findField('location_record');
-                    const attendeeName = this.renderAttenderName(attender?.data?.user_id,{noIcon: true}, attender);
-                    locationField.setValue(attendeeName);
-                    locationRecordField.setValue(attender?.data?.user_id);
+                    if (attender.get('user_type') == 'resource') {
+                        this.editDialog.setLocationRecord(attender, true);
+                    } else {
+                        const attendeeName = this.renderAttenderName(attender?.data?.user_id,{noIcon: true}, attender);
+                        locationField.setValue(attendeeName);
+                        locationRecordField.setValue(attender?.data?.user_id);
+                    }
                 }
             }, '-'];
             //TODO: use grid panel hook ?
@@ -607,17 +611,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         Tine.Calendar.ResourceEditDialog.openWindow({record: resource});
                     }
                 }));
-
-                if (type?.get('is_location')) {
-                    items = items.concat(new Ext.Action({
-                        text: this.app.i18n._('use as location'),
-                        iconCls: 'cal-resource',
-                        scope: this,
-                        handler: function () {
-                            this.editDialog.setLocationRecord(attender, true);
-                        }
-                    }));
-                }
 
                 var exportAction = Tine.widgets.exportAction.getExportButton(
                     Tine.Calendar.Model.Resource, {

@@ -27,18 +27,25 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
             const fieldName = fieldDefinition.fieldName
             const config = {};
             switch (fieldName) {
+                case 'commissioned_office':
+                    config.allowBlank = true;
+                    config.checkState = function() {
+                        this.allowBlank = this.inheritable;
+                        this.validate();
+                    }
+                    break;
                 case 'paper_file_location':
                     config.checkState = function() {
                         const checked = mflds.is_hybrid.getValue();
                         const value = this.getValue();
-                        if (!checked && value) {
+                        if (!checked && !this.inheritable && value) {
                             this.setValue('');
                             this.lastValue = value;
                         } else if (checked && !value && this.lastValue) {
                             this.setValue(this.lastValue);
                             this.lastValue = undefined;
                         }
-                        this.setDisabled(!checked);
+                        this.setDisabled(!checked && !this.inheritable);
                     }
                     break;
                 case 'final_decree_date':
@@ -58,6 +65,9 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
                             if (mflds.retention_period.getValue() === 'ETERNALLY') {
                                 this.setDisabled(true);
                             }
+                        }
+                        if (fieldName === 'retention_period') {
+                            this.setDisabled(!checked && !this.inheritable);
                         }
                     }
                     if (fieldName === 'retention_period') {
@@ -97,17 +107,25 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
                                 this.setValue('')
                             }
                         }
+                        if (fieldName === 'disposal_type') {
+                            this.setDisabled(!checked && !this.inheritable);
+                        }
                     }
                     break;
             }
 
             this.metadataFields[fieldName] =  Ext.create(metaDataFieldManager(fieldName, config));
         });
-        
+
+        this.inheritableDescription = new Ext.form.Label({
+            text: this.app.i18n._("Metadata entered here is automatically inherited in newly created e-files.")
+        });
+
         this.items = [{
             xtype: 'columnform',
             defaults: {columnWidth: 0.5},
             items: [
+                [this.inheritableDescription],
                 [mflds.duration_start, mflds.duration_end],
                 [_.assign(mflds.commissioned_office, {columnWidth: 2/3})],
                 [_.assign(mflds.is_hybrid, {columnWidth: 2/3})], 
@@ -128,30 +146,30 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
 
     onRecordLoad: async function(editDialog, record) {
         const mflds = this.metadataFields;
-        const tierTypes = _.map(await getTierTypes(), 'tierType');
-        
-        const tierType = record.get('efile_tier_type');
+        const tierTypes = this.tierTypes = _.map(await getTierTypes(), 'tierType');
+
+        const path = record.get('path');
+        const basePaths = Array.from(Tine.Tinebase.configManager.get('basePath', 'EFile'));
+        const tierType = record.get('efile_tier_type') || (basePaths.indexOf(path) > -1 && path !== '/shared/' ? 'masterPlan' : null);;
         const typeIsFileParent = tierType ? _.indexOf(tierTypes, tierType) < _.indexOf(tierTypes, 'file') : undefined;
-        
+        const typeIsFileChild = tierType && _.indexOf(tierTypes, tierType) > _.indexOf(tierTypes, 'file');
+
         // NOTE: have fast UI alignment (before async request starts)
-        this.gotoFileButton[tierType && !typeIsFileParent && tierType !== 'file' ? 'show' : 'hide']();
-        this.ownerCt[(tierType && !typeIsFileParent ? 'un' : '') +'hideTabStripItem'](this);
+        this.gotoFileButton[typeIsFileChild ? 'show' : 'hide']();
+        this.inheritableDescription[typeIsFileParent ? 'show' : 'hide']();
+        this.ownerCt[(tierType /*&& !typeIsFileParent*/ ? 'un' : '') +'hideTabStripItem'](this);
 
         this.fileData = null;
-        if (tierType) {
-            if (typeIsFileParent) {
-                // hide all mflds
-            } else if (tierType === 'file') {
-                this.fileData = record.data;
-            } else {
-                this.fileData = await Tine.Filemanager.getParentNodeByFilter(record.id, [{
-                    field: 'efile_tier_type',
-                    operator: 'equals',
-                    value: 'file'
-                }]);
-            }
+        if (typeIsFileChild) {
+            this.fileData = await Tine.Filemanager.getParentNodeByFilter(record.id, [{
+                field: 'efile_tier_type',
+                operator: 'equals',
+                value: 'file'
+            }]);
+        } else if (tierType) {
+            this.fileData = record.data;
         }
-        
+
         if (this.fileData) {
             const fileMetadata = _.get(this.fileData, 'efile_file_metadata.data', _.get(this.fileData, 'efile_file_metadata'));
             this.metadataRecord = Tine.Tinebase.data.Record.setFromJson(fileMetadata, this.recordClass);
@@ -174,7 +192,9 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
         }
         
         _.each(mflds, (field) => {
-            field.setReadOnly(tierType !== 'file');
+            field.inheritable = typeIsFileParent && ['commissioned_office', 'is_hybrid', 'paper_file_location', 'retention_period', 'disposal_type'].indexOf(field.fieldName) >=0;
+
+            field.setReadOnly(tierType !== 'file' && !field.inheritable);
             field[this.metadataRecord ? 'show' : 'hide']();
         });
     },
@@ -186,9 +206,12 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
 
     onRecordUpdate: function(editDialog, record) {
         const mflds = this.metadataFields;
-        const tierType = record.get('efile_tier_type');
+        const path = record.get('path');
+        const basePaths = Array.from(Tine.Tinebase.configManager.get('basePath', 'EFile'));
+        const tierType = record.get('efile_tier_type') || (basePaths.indexOf(path) > -1 && path !== '/shared/' ? 'masterPlan' : null);
+        const typeIsFileParent = tierType ? _.indexOf(this.tierTypes, tierType) < _.indexOf(this.tierTypes, 'file') : undefined;
         
-        if (tierType === 'file' && this.metadataRecord) {
+        if ((tierType === 'file' || typeIsFileParent) && this.metadataRecord) {
             _.each(mflds, (field, fieldName) => {
                 this.metadataRecord.set(fieldName, field.getValue());
             });
@@ -227,5 +250,3 @@ Ext.ux.ItemRegistry.registerItem('Filemanager-Node-EditDialog-TabPanel',  Ext.ex
     }
     
 }), 5);
-
-

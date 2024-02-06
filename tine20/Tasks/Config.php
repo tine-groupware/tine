@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,13 +15,22 @@
  */
 class Tasks_Config extends Tinebase_Config_Abstract
 {
+    public const APP_NAME = 'Tasks';
+
     /**
      * Tasks Status Available
      * 
      * @var string
      */
     const TASK_STATUS = 'taskStatus';
-    
+
+    /**
+     * Attendee Status Available
+     *
+     * @var string
+     */
+    const ATTENDEE_STATUS = 'attendeeStatus';
+
     /**
      * Tasks Priorities Available
      * 
@@ -69,6 +78,28 @@ class Tasks_Config extends Tinebase_Config_Abstract
                     array('id' => Tasks_Model_Priority::URGENT, 'value' => 'urgent',   'icon' => 'images/icon-set/icon_prio_urgent.svg', 'system' => true), //_('urgent')
                 ),
                 'default' => Tasks_Model_Priority::NORMAL,
+            )
+        ),
+        self::ATTENDEE_STATUS => array(
+            //_('Collaborator Status Available')
+            'label'                 => 'Collaborator Status Available',
+            //_('Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation.')
+            'description'           => 'Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation.',
+            'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
+//            'options'               => array('recordModel' => 'Calendar_Model_AttendeeStatus'),
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'default'               => array(
+                'records' => array(
+                    array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'is_open' => 1, 'icon' => 'images/icon-set/icon_invite.svg',                      'system' => true), //_('No response')
+                    array('id' => 'ACCEPTED',     'value' => 'Accepted',    'is_open' => 1, 'icon' => 'images/icon-set/icon_calendar_attendee_accepted.svg',  'system' => true), //_('Accepted')
+                    array('id' => 'DECLINED',     'value' => 'Declined',    'is_open' => 0, 'icon' => 'images/icon-set/icon_calendar_attendee_cancle.svg',    'system' => true), //_('Declined')
+                    array('id' => 'TENTATIVE',    'value' => 'Tentative',   'is_open' => 1, 'icon' => 'images/icon-set/icon_calendar_attendee_tentative.svg', 'system' => true), //_('Tentative')
+                    array('id' => 'DELEGATED',    'value' => 'Delegated',   'is_open' => 1, 'icon' => 'images/icon-set/icon_calendar_attendee_tentative.svg', 'system' => true), //_('Delegated')
+                    array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1, 'icon' => 'images/icon-set/icon_reload.svg',                      'system' => true), //_('In process')
+                    array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/icon-set/icon_ok.svg',                          'system' => true), //_('Completed')
+                ),
+                'default' => 'NEEDS-ACTION'
             )
         ),
     );

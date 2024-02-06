@@ -1,0 +1,265 @@
+@import './common.less';
+
+// NOTE: we need to use native prefers-color-scheme to prevent white/black flickering on new window
+//       as *-mode cls is appended after js bootstrap which needs some time
+@media (prefers-color-scheme: dark) {
+  body {
+    // note: we can't use brightness or contrast as we can't reverse it!
+    filter: invert(1) hue-rotate(180deg);
+    background-color: black;
+  }
+  .light-mode {
+    filter: none;
+    background-color: white;
+  }
+}
+
+body.dark-mode {
+  filter: invert(1) hue-rotate(180deg);
+  background-color: black;
+}
+
+.color-scheme-dark {
+  background-image: url('../../images/icon-set/icon_moon_light.svg');
+}
+.color-scheme-light {
+  background-image: url('../../images/icon-set/icon_sun_light.svg');
+}
+.dark-mode {
+  ::selection {
+    background: #2196f3;
+  }
+  --selection-color: #8bb1ee;
+  --tab-color: #ffffff;
+  --field-bg-color: #333333;
+  --tip-bg-color: #e0ebf9;
+  --tip-color: #000000;
+  --shadow-color: #e0ebf9;
+
+  .hu-color-picker .saturation,
+  .hu-color-picker .hue,
+  .hu-color-picker .color-show,
+  .dark-reverse {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  .x-color-palette a {
+    border-color: initial;
+  }
+
+  .tine-mainscreen-apptabs .x-tab-strip-wrap ul.x-tab-strip-top,
+  .tine-mainscreen-mainmenu .x-toolbar {
+    background-color: #ddd;
+  }
+  .tine-mainscreen-centerpanel-north {
+    .x-toolbar {
+      background-color: #ffffff;
+      filter: brightness(0.8);
+      #button(#ffffff);
+    }
+    .x-panel-bwrap {
+      background-color: transparent;
+    }
+    input {
+      background-color: transparent;
+      border-bottom: 1px solid white !important;
+    }
+  }
+
+  .tine-mainscreen-apptabs {
+    ul.x-tab-strip {
+      border-bottom: 1px solid var(--selection-color);
+      height: 25px;
+      .x-tab-strip li.x-tab-strip-active {
+        border: 1px solid var(--selection-color);
+      }
+
+      li {
+        &.x-tab-strip-active {
+          border: 1px solid var(--selection-color);
+        }
+        &.x-tab-strip-active,
+        &:hover {
+          background-color: #ffffff !important;
+          filter: brightness(0.8);
+        }
+      }
+    }
+  }
+
+  .x-tab-strip span.x-tab-strip-text:hover,
+  .x-tab-strip-active span.x-tab-strip-text,
+  .x-tab-strip-active .x-tab-strip-close,
+  .tine-mainscreen-mainmenu .x-btn,
+  .tine-mainscreen-apptabs ul.x-tab-strip span.x-tab-strip-text,
+  .tine-mainscreen-apptabs ul.x-tab-strip a.x-tab-strip-close {
+    filter: invert(0) !important;
+  }
+
+  ul.x-tab-strip li {
+    background-color: initial;
+  }
+
+  .x-border-panel .x-tab-panel-header,
+  .x-tab-panel-header-plain .x-tab-strip-spacer,
+  ul.x-tab-strip li.x-tab-strip-active,
+  ul.x-tab-strip li:hover {
+    background-color: var(--selection-color);
+  }
+
+  .x-panel-body,
+  .x-grid3,
+  .x-grid3-scroller,
+  .x-combo-list-inner {
+    background-color: #ddd;
+  }
+
+  /* TOOLBAR */
+  .x-toolbar {
+    background-color: #e2e2e2;
+    #button(#e2e2e2);
+  }
+
+  .x-grid3-row {
+    border-bottom: 0.5px solid white;
+  }
+
+  //.x-form-checkbox {
+  //  filter: invert(1) hue-rotate(180deg);
+  //  accent-color: #222222;
+  //  :checked::before {
+  //    background-color: #222222;
+  //  }
+  //}
+
+  textarea.x-form-field, // wrap-less
+  .x-form-element > .x-form-field, // wrap-less
+  .x-box-inner > .x-form-field, // wrap-less
+  .x-column-inner > .x-form-field, // wrap-less
+  .x-small-editor > .x-form-field, // wrap-less
+  .x-toolbar-cell > .x-form-field, // wrap-less
+  .tw-ftb-frow-field > .x-form-field, // wrap-less
+  .tw-ftb-frow-operator > .x-form-field, // wrap-less
+  .tw-ftb-frow-value > .x-form-field, // wrap-less
+  .ext-webkit .x-form-field-wrap,
+  .x-form-field-wrap {
+    filter: invert(1) hue-rotate(180deg);
+    border-bottom: 1px solid #1b1b1b;
+    &.x-form-invalid {
+      background-color: #1c0c0c !important;
+    }
+  }
+  .x-form-invalid-tip .x-tip-body {
+    filter: none;
+  }
+  .x-form-text, textarea.x-form-field {
+    color: #ffffff;
+  }
+
+  .status-fields {
+    textarea.x-form-field, // wrap-less
+    .x-form-element > .x-form-field, // wrap-less
+    .x-box-inner > .x-form-field, // wrap-less
+    .x-small-editor > .x-form-field, // wrap-less
+    .ext-webkit .x-form-field-wrap,
+    .x-form-field-wrap {
+      background-color: transparent;
+      border-color: lighten(#1b1b1b, 10%) !important;
+      &.x-form-focus,
+      &.x-trigger-wrap-focus {
+        border-color: var(--focus-color) !important;
+      }
+    }
+  }
+
+  .x-form-trigger.x-form-trigger-plugin {
+    filter: none;
+  }
+
+  .ux-imagefield-ct img,
+  .addressbook-search-combo img,
+  .contact-image,
+  .ux-imagefield-text,
+  .tw-window-iframe,
+  .x-form-field-wrap .x-form-trigger,
+  .x-form-trigger.x-form-arrow-trigger,
+  .x-form-trigger
+  .x-form-twin-triggers + .x-form-trigger.x-form-trigger-plugin,
+  .x-toolbar-cell .ux-pp-range,
+  .x-toolbar-cell .ux-pp-controls div,
+  .x-form-field-wrap .ux-pp-field {
+    filter: invert(1) hue-rotate(180deg);
+  }
+
+  .addressbook-search-combo img[src*="undefined_contact"],
+  .addressbook-search-combo img[src*="icon"] {
+    filter: none;
+  }
+
+  .tw-editdialog .status-fields input {
+    background-color: transparent;
+    border-bottom: none;
+  }
+
+  .x-form-field.ace_editor {
+    filter: none;
+    .ace_content {
+      background-color: #dbdbdb;
+    }
+    .ace_gutter-layer {
+      background-color: lighten(#dbdbdb, 5%);
+    }
+    .ace_gutter-layer .ace_gutter-active-line {
+      background-color: darken(#dbdbdb, 5%);
+    }
+    .ace_marker-layer .ace_active-line {
+      background-color: darken(#dbdbdb, 10%);
+    }
+  }
+  .tinebase-editmultipledialog-noneedit,
+  input.tinebase-editmultipledialog-noneedit,
+  textarea.x-form-field.tinebase-editmultipledialog-noneedit {
+    background-color: #4f4021;
+    background-image:none!important;
+  }
+
+  .x-ux-display-background-border {
+    background-color: transparent;
+  }
+  .x-form {
+    .x-panel-tr,
+    .x-panel-tc,
+    .x-panel-tl,
+    .x-panel-mr,
+    .x-panel-mc,
+    .x-panel-ml,
+    .x-panel-br,
+    .x-panel-bc,
+    .x-panel-bl,
+    .x-panel-bwrap {
+      background-color: #ddd;
+    }
+  }
+  .tb-login-panel .x-panel-body.x-form {
+    background-color: #c0ced8;
+  }
+  .attendance-clock-menu-button-clock_in .attendance-clock {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  .attendance-clock-menu-button-clock_out .attendance-clock {
+    background-color: red !important;
+  }
+  a {
+    color: #3e4f55;
+  }
+  .ol-viewport,
+  .emoji,
+  video {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  // Felamimail
+  .is_spam_suspicions td {
+    color: #7a5010;
+  }
+
+}

@@ -38,4 +38,41 @@ class EFile_Controller_FileMetadata extends Tinebase_Controller_Record_Abstract
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
     }
+
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+
+        if (EFile_Model_EFileTierType::TIER_TYPE_FILE !== Tinebase_FileSystem::getInstance()
+                ->get($_record->{EFile_Model_FileMetadata::FLD_NODE_ID})->{EFile_Config::TREE_NODE_FLD_TIER_TYPE}) {
+            return;
+        }
+
+        if (!$_record->{EFile_Model_FileMetadata::FLD_DURATION_START}) {
+            $_record->{EFile_Model_FileMetadata::FLD_DURATION_START} = Tinebase_DateTime::today(Tinebase_Core::getUserTimezone());
+        }
+        if (!$_record->{EFile_Model_FileMetadata::FLD_COMMISSIONED_OFFICE}) {
+            if (null === ($contact = Addressbook_Config::getInstallationRepresentative())) {
+                $_record->{EFile_Model_FileMetadata::FLD_COMMISSIONED_OFFICE} =
+                    Tinebase_Core::getUrl(Tinebase_Core::GET_URL_HOST) ?: 'tine20';
+            } else {
+                $_record->{EFile_Model_FileMetadata::FLD_COMMISSIONED_OFFICE} = $contact->n_fileas;
+            }
+        }
+    }
+
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
+
+        if (EFile_Model_EFileTierType::TIER_TYPE_FILE !== Tinebase_FileSystem::getInstance()
+                ->get($_record->{EFile_Model_FileMetadata::FLD_NODE_ID})->{EFile_Config::TREE_NODE_FLD_TIER_TYPE}) {
+            return;
+        }
+
+        if (!$_record->{EFile_Model_FileMetadata::FLD_DURATION_START}) {
+            $_record->{EFile_Model_FileMetadata::FLD_DURATION_START} =
+                $_oldRecord->{EFile_Model_FileMetadata::FLD_DURATION_START};
+        }
+    }
 }

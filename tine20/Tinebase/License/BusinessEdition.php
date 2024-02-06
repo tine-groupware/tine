@@ -19,43 +19,78 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     /**
      * license filename
      */
-    const LICENSE_FILENAME = 'license.pem';
+    public const LICENSE_FILENAME = 'license.pem';
+
+    protected const LICENSE_CACHE_ID = 'license';
 
     /**
      * ca files
      *
-     * @var array
+     * @var ?array
      */
-    protected $_caFiles = array();
-
-    /**
-     * the constructor
-     */
-    public function __construct()
-    {
-        $this->_license = $this->_readLicenseFromVFS();
-        $this->_caFiles = $this->_getCaFiles();
-    }
+    protected $_caFiles = null;
 
     /**
      * @return array
      */
-    public function getCaFiles()
+
+    /**
+     * @return array|string[]
+     * @throws Tinebase_Exception_NotFound
+     */
+    public function getCaFiles(): array
     {
+        if ($this->_caFiles === null) {
+            $this->_caFiles = $this->_getCaFiles();
+        }
         return $this->_caFiles;
     }
 
+    /**
+     * fetch current license string
+     *
+     * @return string|null
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _getLicense(): ?string
+    {
+        if ($this->_license) {
+            return $this->_license;
+        }
+
+        if (! Setup_Controller::getInstance()->isInstalled()) {
+            return null;
+        }
+
+        $cache = Tinebase_Core::getCache();
+        if ($cache) {
+            if ($cache->test(self::LICENSE_CACHE_ID)) {
+                return $cache->load(self::LICENSE_CACHE_ID);
+            }
+        }
+        $license = $this->_readLicenseFromVFS();
+        if ($cache) {
+            try {
+                $cache->save($license, self::LICENSE_CACHE_ID);
+            } catch (Zend_Cache_Exception $zce) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $zce->getMessage());
+            }
+        }
+        $this->_license = $license;
+        return $license;
+    }
 
     /**
      * reads current license from vfs
      *
-     * @return null|string
+     * @return string|null
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
-    protected function _readLicenseFromVFS()
+    protected function _readLicenseFromVFS(): ?string
     {
-        if (! Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-            return null;
-        }
         try {
             $fs = Tinebase_FileSystem::getInstance();
         } catch (Tinebase_Exception_Backend $teb) {
@@ -161,6 +196,15 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
         }
     }
 
+    public function reset()
+    {
+        parent::reset();
+        $cache = Tinebase_Core::getCache();
+        if ($cache) {
+            $cache->remove(self::LICENSE_CACHE_ID);
+        }
+    }
+
     /**
      * @param string $filename
      * @return string
@@ -211,13 +255,21 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     }
     
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isValid()
+    public function isValid(): bool
     {
-        return $this->_license
-            ? openssl_x509_checkpurpose($this->_license, X509_PURPOSE_SSL_CLIENT, $this->_caFiles)
-            : false;
+        try {
+            $license = $this->_getLicense();
+            return $license
+                ? openssl_x509_checkpurpose($license, X509_PURPOSE_SSL_CLIENT, $this->_getCaFiles())
+                : false;
+        } catch (Tinebase_Exception_InvalidArgument|Tinebase_Exception_NotFound $te) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+        }
+
+        return false;
     }
 
     /**
@@ -258,8 +310,8 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
 
             $this->_certData = $this->getDefaultExpiryDate();
 
-            if ($this->_license !== null) {
-                $certData = $this->getCertDatafromLicenseString($this->_license);
+            if ($this->_getLicense() !== null) {
+                $certData = $this->getCertDatafromLicenseString();
                 if ($certData) {
                     $this->_certData = $certData;
                 } else {
@@ -272,12 +324,13 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
     }
 
     /**
-     * @param string $license
      * @return array|null
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
      */
-    public function getCertDatafromLicenseString($license)
+    public function getCertDatafromLicenseString(): ?array
     {
-        $data = openssl_x509_parse($license);
+        $data = openssl_x509_parse($this->_getLicense());
         if (is_array($data) && array_key_exists('validFrom_time_t', $data)
             && array_key_exists('validTo_time_t', $data)
             && array_key_exists('serialNumber', $data)
@@ -294,12 +347,20 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             }
             $serialNumber = $data['serialNumber'];
             $policies = $this->_parsePolicies($data['extensions']['certificatePolicies']);
+            $organization = $data['subject']['O'] ?? '';
+            $numberOfMaxUsers = $policies[Tinebase_License_BusinessEdition::POLICY_MAX_USERS][1] ?? 0;
+            $features = $policies[Tinebase_License_BusinessEdition::POLICY_LICENSE_FEATURES] ?? [];
+            array_shift($features);
+            
             return array(
                 'validFrom' => $validFrom,
                 'validTo' => $validTo,
                 'serialNumber' => $serialNumber,
                 'policies' => $policies,
                 'contractId' => isset($data['subject']) && isset($data['subject']['CN']) ? $data['subject']['CN'] : '',
+                'organization' => $organization,
+                'maxUsers' => $numberOfMaxUsers,
+                'features' => $features
             );
         } else {
             return null;
@@ -312,8 +373,8 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
      * @return array|boolean
      */
     public function getInstallationData() {
-        if ($this->_license) {
-            return openssl_pkey_get_details(openssl_pkey_get_private($this->_license));
+        if ($this->_getLicense()) {
+            return openssl_pkey_get_details(openssl_pkey_get_private($this->_getLicense()));
         }
 
         return false;
@@ -353,7 +414,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
      */
     protected function _getPolicy($policyIndex, $default = null, $_getAll = false)
     {
-        if ($this->_license) {
+        if ($this->_getLicense()) {
             $certData = $this->getCertificateData();
             if ($_getAll && isset($certData['policies'][$policyIndex])) {
                 return $certData['policies'][$policyIndex];

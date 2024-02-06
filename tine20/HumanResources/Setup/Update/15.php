@@ -538,6 +538,7 @@ class HumanResources_Setup_Update_15 extends Setup_Update_Abstract
 
             $bhCal = new Tinebase_Model_BankHolidayCalendar([
                 Tinebase_Model_BankHolidayCalendar::FLD_NAME => $cal->name,
+                Tinebase_Model_BankHolidayCalendar::FLD_TARGET_CAL_ID => $calId,
                 Tinebase_Model_BankHolidayCalendar::FLD_BANKHOLIDAYS => new Tinebase_Record_RecordSet(Tinebase_Model_BankHoliday::class),
             ]);
 

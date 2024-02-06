@@ -56,7 +56,9 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                     Tinebase_Session::expireSessionCookie();
                 }
             }
-            
+
+            $this->_disallowAppPwdSessions();
+
             Tinebase_Core::initFramework();
             
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ .' Is HTTP request. method: ' . $this->getRequestMethod());
@@ -98,7 +100,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract implements Tinebase_
                 // sessionId got send by client, but we don't use sessions for non authenticated users
                 if (Tinebase_Session::sessionExists()) {
                     // expire session cookie on client
-                    Tinebase_Session::expireSessionCookie();
+                    //Tinebase_Session::expireSessionCookie();
                 }
             }
 

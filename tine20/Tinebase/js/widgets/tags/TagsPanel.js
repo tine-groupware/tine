@@ -132,7 +132,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
         var tagTpl = new Ext.XTemplate(
             '<tpl for=".">',
                '<div class="x-widget-tag-tagitem" id="{id}">',
-                    '<div class="x-widget-tag-tagitem-color" style="background-color: {color};">&#160;</div>', 
+                    '<div class="x-widget-tag-tagitem-color dark-reverse" style="background-color: {color};">&#160;</div>',
                     '<div class="x-widget-tag-tagitem-text" ext:qtip="', 
                         '{[this.encode(values.name)]}', 
                         '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',

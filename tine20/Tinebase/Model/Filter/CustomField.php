@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -131,13 +131,6 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                 $filterClass = Tinebase_Model_Filter_Text::class;
                 break;
             case 'textarea':
-                // TODO is this still needed?
-//        $forceFullText = isset($_fieldOrData['value'][self::OPT_FORCE_FULLTEXT]) ?
-//            (bool)$_fieldOrData['value'][self::OPT_FORCE_FULLTEXT] : false;
-//                if ($forceFullText) {
-//        $filterClass = Tinebase_Model_Filter_FullText::class;
-//                }
-
             $filterClass = Tinebase_Model_Filter_FullText::class;
                 break;
             case 'date' :
@@ -168,6 +161,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
                         'controller'    => get_class(Tinebase_Core::getApplicationInstance($modelName)),
                         'filtergroup'   => $filterGroup,
                     ];
+                    $passThroughData['value'] = $this->_sanitizePassThroughFilter($passThroughData['value']);
                     $this->_passThroughFilter = new Tinebase_Model_Filter_ForeignId($passThroughData);
                 } else {
                     $filterClass = Tinebase_Model_Filter_Id::class;
@@ -176,7 +170,6 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             case 'records':
                 // TODO support recordset
                 throw new Tinebase_Exception_NotImplemented('filter for records type not implemented yet');
-                break;
             case 'keyField':
                 $filterClass = Tinebase_Model_Filter_Id::class;
                 break;
@@ -197,6 +190,21 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
         }
 
         parent::__construct($_fieldOrData, $_operator, $_value, $_options);
+    }
+
+    protected function _sanitizePassThroughFilter(array $value): array
+    {
+        $result = [];
+        foreach ($value as $filterData) {
+            if ($filterData['operator'] === 'AND' && (! isset($filterData['value']) || empty($filterData['value']))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Skip invalid filter: ' . print_r($filterData, true));
+            } else {
+                $result[] = $filterData;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -256,13 +264,17 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Abstract
             $notOperator = strpos($this->_operator, 'not') === 0;
 
             if ($queryForEmpty) {
-                (new Tinebase_Model_Filter_Id(
-                    [
-                        'field' => 'value',
-                        'operator' => $notOperator ? 'notnull' : 'isnull',
-                        'value' => true,
-                        'options' => $this->_valueFilterOptions
-                    ]))->appendFilterSql($_select, $_backend);
+                if (strpos($this->_operator, 'contains')) {
+                    $_select->where('1=1');
+                } else {
+                    (new Tinebase_Model_Filter_Id(
+                        [
+                            'field' => 'value',
+                            'operator' => $notOperator ? 'notnull' : 'isnull',
+                            'value' => true,
+                            'options' => $this->_valueFilterOptions
+                        ]))->appendFilterSql($_select, $_backend);
+                }
             } else {
                 array_walk($value, function (&$val) {
                     if (isset($val['field']) && strpos($val['field'], ':') === 0) {

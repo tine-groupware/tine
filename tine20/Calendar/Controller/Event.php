@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -45,7 +45,7 @@
  * involved.
  * 
  * NOTE: the backend always fetches full records for grant calculations.
- *       searching ids only does not hlep with performance
+ *       searching ids only does not help with performance
  * 
  * @package Calendar
  */
@@ -568,9 +568,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $groupmembers->user_type = Calendar_Model_Attender::USERTYPE_USER;
 
             foreach ($event->attendee as $attender) {
-                // skip declined/transp events
+                // skip declined/transp and canceled events
                 if ($attender->status == Calendar_Model_Attender::STATUS_DECLINED ||
-                    $attender->transp == Calendar_Model_Event::TRANSP_TRANSP) {
+                    $attender->transp == Calendar_Model_Event::TRANSP_TRANSP ||
+                    $event->status == Calendar_Model_Event::STATUS_CANCELED) {
                     continue;
                 }
 
@@ -2014,6 +2015,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if ($_record->location_record && is_string($_record->location_record)) {
             try {
+                /** @var Addressbook_Model_Contact $locationContact */
                 $locationContact = Addressbook_Controller_Contact::getInstance()->get($_record->location_record);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
@@ -2025,12 +2027,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 return $_record;
             }
 
-            if ($locationContact->preferred_address == 0) {
-                $_record->adr_lon = $locationContact->adr_one_lon ?: null;
-                $_record->adr_lat = $locationContact->adr_one_lat ?: null;
-            } else {
-                $_record->adr_lon = $locationContact->adr_two_lon ?: null;
-                $_record->adr_lat = $locationContact->adr_two_lat ?: null;
+            if ($adr = $locationContact->getPreferredAddressObject()) {
+                $_record->adr_lon = $adr->{Addressbook_Model_ContactProperties_Address::FLD_LON};
+                $_record->adr_lat = $adr->{Addressbook_Model_ContactProperties_Address::FLD_LAT};
             }
         }
         
@@ -2533,32 +2532,48 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @todo use this function in other create + update functions
      * @todo invent concept for simple adding of grants (plugins?) 
      */
-    protected function _checkGrant($_record, $_action, $_throw = TRUE, $_errorMessage = 'No Permission.', $_oldRecord = NULL)
+    protected function _checkGrant($_record, $_action, $_throw = true, $_errorMessage = 'No Permission.', $_oldRecord = null)
     {
-        if (    ! $this->_doContainerACLChecks 
+        if (! $_record instanceof Calendar_Model_Event || ($_oldRecord && ! $_oldRecord instanceof Calendar_Model_Event)) {
+            return false;
+        }
+
+        if (    ! $this->_doContainerACLChecks
             // admin grant includes all others (only if class is PUBLIC)
             ||  (($_record->class === Calendar_Model_Event::CLASS_PUBLIC || $_action === self::ACTION_DELETE)
-                && $_record->container_id && Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADMIN))
+                && $_record->container_id && Tinebase_Core::getUser()->hasGrant(
+                    $_record->container_id,
+                    Tinebase_Model_Grants::GRANT_ADMIN
+                ))
             // external invitations are in a spechial invitaion calendar. only attendee can see it via displaycal
             ||  $_record->hasExternalOrganizer()
         ) {
             return true;
         }
-        
+
+        $hasGrant = false;
         switch ($_action) {
             case 'get':
                 // NOTE: free/busy is not a read grant!
                 $hasGrant = $_record->hasGrant(Tinebase_Model_Grants::GRANT_READ);
                 break;
             case 'create':
-                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id,
+                    Tinebase_Model_Grants::GRANT_ADD);
                 break;
             case 'update':
-                $hasGrant = (bool) $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
-                
-                if ($_oldRecord->container_id != $_record->container_id) {
-                    $hasGrant &= Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD)
-                                 && $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_DELETE);
+                if ($_oldRecord) {
+                    $hasGrant = (bool) $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
+
+                    if ($_oldRecord->container_id != $_record->container_id) {
+                        $hasGrant &= Tinebase_Core::getUser()->hasGrant($_record->container_id,
+                                Tinebase_Model_Grants::GRANT_ADD)
+                            && $_oldRecord->hasGrant(Tinebase_Model_Grants::GRANT_DELETE);
+                    }
+                } else {
+                    $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id,
+                            Tinebase_Model_Grants::GRANT_EDIT)
+                        && $_record->hasGrant(Tinebase_Model_Grants::GRANT_EDIT);
                 }
                 break;
             case 'delete':
@@ -2922,18 +2937,18 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _createAttender(Calendar_Model_Attender $attender, Calendar_Model_Event $event, $preserveStatus = FALSE, Tinebase_Model_Container $calendar = NULL)
     {
         // apply defaults
-        $attender->id                = null;
-        $attender->user_type         = isset($attender->user_type) ? $attender->user_type : Calendar_Model_Attender::USERTYPE_USER;
-        $attender->cal_event_id      =  $event->getId();
+        $attender->id = null;
+        $attender->user_type = isset($attender->user_type) ? $attender->user_type : Calendar_Model_Attender::USERTYPE_USER;
+        $attender->cal_event_id = $event->getId();
         $calendar = ($calendar) ? $calendar : Tinebase_Container::getInstance()->getContainerById($event->container_id);
-        
+
         $userAccountId = $attender->getUserAccountId();
-        
+
         // generate auth key
-        if (! $attender->status_authkey) {
+        if (!$attender->status_authkey) {
             $attender->status_authkey = Tinebase_Record_Abstract::generateUID();
         }
-        
+
         // attach to display calendar if attender has/is a useraccount
         if ($userAccountId) {
             if ($calendar->type === Tinebase_Model_Container::TYPE_PERSONAL && Tinebase_Container::getInstance()->hasGrant($userAccountId, $calendar, Tinebase_Model_Grants::GRANT_ADMIN)) {
@@ -2943,7 +2958,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 // allow user to set his own *personal* displ. cal
                 // otherwise set default display container
             } elseif (!$attender->displaycontainer_id || $userAccountId !== Tinebase_Core::getUser()->getId() || !Tinebase_Container::getInstance()->hasGrant($userAccountId, $attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_ADMIN) ||
-                    Tinebase_Container::getInstance()->get($attender->displaycontainer_id)->type !== Tinebase_Model_Container::TYPE_PERSONAL) {
+                Tinebase_Container::getInstance()->get($attender->displaycontainer_id)->type !== Tinebase_Model_Container::TYPE_PERSONAL) {
                 $attender->displaycontainer_id = self::getDefaultDisplayContainerId($userAccountId);
             }
 
@@ -2953,8 +2968,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $oldResourceAclCheck = $resourceController->doContainerACLChecks(false);
             try {
                 $resource = $resourceController->get($attender->user_id);
-                if (! Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser(), $resource->container_id,
-                        Calendar_Model_ResourceGrants::RESOURCE_INVITE)) {
+                if (!Tinebase_Container::getInstance()->hasGrant(Tinebase_Core::getUser(), $resource->container_id,
+                    Calendar_Model_ResourceGrants::RESOURCE_INVITE)) {
                     throw new Tinebase_Exception_AccessDenied('you do not have permission to invite this resource');
                 }
             } finally {
@@ -2962,18 +2977,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
             $attender->displaycontainer_id = $resource->container_id;
         }
-        
-        if ($attender->displaycontainer_id && !$this->_keepAttenderStatus) {
-            // check if user is allowed to set status
-            if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
-                if (! $preserveStatus && !Tinebase_Core::getUser()->hasGrant(
-                                $attender->displaycontainer_id, Calendar_Model_ResourceGrants::RESOURCE_STATUS)) {
-                    //If resource has an default status use this
+
+        if (!$this->_keepAttenderStatus && !$preserveStatus) {
+            if ($attender->displaycontainer_id) {
+                if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE && !Tinebase_Core::getUser()->hasGrant(
+                        $attender->displaycontainer_id, Calendar_Model_ResourceGrants::RESOURCE_STATUS)) {
+                    //If resource has a default status use this
                     $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
-                }
-            } else {
-                if (! $preserveStatus && ! Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
-                    $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+                } else {
+                    if (!Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
+                        $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+                    }
                 }
             }
         }

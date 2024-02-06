@@ -216,6 +216,10 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 $alarm->model = $model;
             }
 
+            if (!$alarm->sent_status) {
+                $alarm->sent_status = Tinebase_Model_Alarm::STATUS_PENDING;
+            }
+
             if ($alarm->id) {
                 try {
                     $this->_backend->update($alarm);

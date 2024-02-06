@@ -37,13 +37,28 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      */
     public function __construct()
     {
+        $this->_fromAddress = self::getFromAddress();
+    }
+
+    static function getFromAddress()
+    {
         $smtpConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::SMTP, new Tinebase_Config_Struct(array()))->toArray();
-        $this->_fromAddress = (isset($smtpConfig['from']) && ! empty($smtpConfig['from'])) ? $smtpConfig['from'] : '';
-        
+        $fromAddress = (isset($smtpConfig['from']) && ! empty($smtpConfig['from'])) ? $smtpConfig['from'] : '';
+
         // try to sanitize sender address
-        if (empty($this->_fromAddress) && isset($smtpConfig['primarydomain']) && ! empty($smtpConfig['primarydomain'])) {
-            $this->_fromAddress = 'noreply@' . $smtpConfig['primarydomain'];
+        if (empty($fromAddress) && isset($smtpConfig['primarydomain']) && ! empty($smtpConfig['primarydomain'])) {
+            $fromAddress = 'noreply@' . $smtpConfig['primarydomain'];
         }
+        return $fromAddress;
+    }
+
+    public static function getNotificationAddress()
+    {
+        $emailNotification = Felamimail_Config::getInstance()->{Felamimail_Config::EMAIL_NOTIFICATION_EMAIL_FROM};
+        if (!$emailNotification || !preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $emailNotification)) {
+            $emailNotification = self::getFromAddress();
+        }
+        return $emailNotification;
     }
     
     /**
@@ -57,7 +72,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
      * @param string|array              $_attachments
      * @throws Zend_Mail_Protocol_Exception
      */
-    public function send($_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL)
+    public function send($_updater, Addressbook_Model_Contact $_recipient, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL, $_fireEvent = false, $_actionLogType = null)
     {
         // create mail object
         $mail = new Tinebase_Mail('UTF-8');
@@ -83,7 +98,11 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         
         if($_updater !== NULL && ! empty($_updater->accountEmailAddress)) {
             $mail->setFrom($_updater->accountEmailAddress, $_updater->accountFullName);
-            $mail->setSender($this->_fromAddress, $this->_fromName);
+            if ($_actionLogType === Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL) {
+                $mail->setSender($_updater->accountEmailAddress, $_updater->accountFullName);
+            } else {
+                $mail->setSender($this->_fromAddress, $this->_fromName);
+            }
         } else {
             $mail->setFrom($this->_fromAddress, $this->_fromName);
         }
@@ -99,6 +118,15 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         foreach ($attachments as $attachment) {
             if ($attachment instanceof Zend_Mime_Part) {
                 $mail->addAttachment($attachment);
+            }  else if ($attachment instanceof Tinebase_Model_Tree_Node) {
+                $content = Tinebase_FileSystem::getInstance()->getNodeContents($attachment);
+                $mail->createAttachment(
+                    $content,
+                    $attachment->contenttype,
+                    Zend_Mime::DISPOSITION_ATTACHMENT,
+                    Zend_Mime::ENCODING_BASE64,
+                    $attachment->name
+                );
             } else if (isset($attachment['filename'])) {
                 $mail->createAttachment(
                     $attachment['rawdata'], 

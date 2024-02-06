@@ -1,2 +1,2 @@
 description,is_auto,date,credit_term,price_net,sales_tax,inventory_change,cleared,type,start_date,end_date,costcenter,contract,customer
-Getränke,0,today,10,200,19,500,TO_CLEAR,INVOICE,monday,nextyear,SE,Getränke,Getränke
+Getränke,0,today,10,200,19,500,TO_CLEAR,INVOICE,monday,+1 year,SE,Getränke,Getränke

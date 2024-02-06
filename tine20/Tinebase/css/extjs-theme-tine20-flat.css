@@ -1013,10 +1013,6 @@ textarea {
     line-height: 16px !important
 }
 
-.ext-strict .x-small-editor .x-form-text {
-    height: 16px !important
-}
-
 .ext-ie6 .x-small-editor .x-form-text, .ext-ie7 .x-small-editor .x-form-text {
 }
 
@@ -1026,10 +1022,6 @@ textarea {
 
 .x-small-editor .x-form-num-field {
     text-align: right
-}
-
-.x-small-editor .x-form-field-wrap .x-form-trigger {
-    height: 19px
 }
 
 .ext-webkit .x-small-editor .x-form-text {
@@ -1068,7 +1060,7 @@ textarea {
 }
 
 .x-form-display-field {
-    padding-top: 2px
+    padding-top: 2px;
 }
 
 .ext-gecko .x-form-display-field, .ext-strict .ext-ie7 .x-form-display-field {
@@ -5295,7 +5287,7 @@ a.x-menu-item {
 }
 
 .x-combo-list .x-combo-selected {
-    border-color: #a3bae9 !important
+    /*border-color: #a3bae9 !important*/
 }
 
 .x-combo-list .x-toolbar {

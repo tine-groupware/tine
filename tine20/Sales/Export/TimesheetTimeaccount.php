@@ -134,7 +134,8 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
                         'operator' => 'equals',
                         'value' => $this->_timeaccount->getId()
                     ],
-                ]
+                ],
+                ['field' => 'is_billable', 'operator' => 'equals', 'value' => true],
             ]
         ]);
         $filter->addFilter(new Tinebase_Model_Filter_Text([

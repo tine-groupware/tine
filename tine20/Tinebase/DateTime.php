@@ -34,7 +34,8 @@ class Tinebase_DateTime extends DateTime
     const MODIFIER_WEEK     = 'week';
     const MODIFIER_MONTH    = 'month';
     const MODIFIER_YEAR     = 'year';
-    
+    public const ISO8601_REGEX = '/^\d{4}(-\d\d(-\d\d([T ]\d\d:\d\d(:\d\d)?(\.\d+)?(([+-]\d\d:\d\d)|Z)?)?)?)?$/i';
+
     /**
      * holds datetime string when being serialised (needed for php < 5.3)
      * @see http://bugs.php.net/bug.php?id=46891
@@ -71,18 +72,20 @@ class Tinebase_DateTime extends DateTime
     /**
      * @see http://bugs.php.net/bug.php?id=46891
      */
-    public function __wakeup(): void {
-        $this->__construct($this->__sDT, new DateTimeZone($this->__sDTZ ? $this->__sDTZ : 'UTC'));
+    public function __wakeup(): void
+    {
+        $this->__construct($this->__sDT, new DateTimeZone($this->__sDTZ ?: 'UTC'));
         $this->__sDT = $this->__sDTZ = NULL;
     }
     
     /**
      * Returns new DateTime object
-     * 
+     *
      * @param string|int|DateTime $_time
      * @param string|DateTimeZone $_timezone
+     * @throws Exception
      */
-    public function __construct($_time = "now", $_timezone = NULL)
+    public function __construct($_time = "now", $_timezone = null)
     {
         // allow to pass instanceof DateTime
         if ($_time instanceof DateTime) {
@@ -350,7 +353,6 @@ class Tinebase_DateTime extends DateTime
         $currValue = $this->_hasTime;
         if (func_num_args() === 1) {
             $paramValue = (bool) func_get_arg(0);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting _hasTime to ' . (int) $paramValue);
             $this->_hasTime = $paramValue;
             
             if ($this->_hasTime === FALSE) {

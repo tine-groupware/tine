@@ -148,8 +148,7 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             /** @var Tinebase_Lock_Mysql $lock */
             $lock = Tinebase_Core::getMultiServerLock($lockId);
             if (!$lock->isLocked()) {
-                while (false === $lock->tryAcquire(5)) {
-                }
+                while (false === $lock->tryAcquire()) {sleep(1);}
                 return $this->get($id);
             }
         } else if (! $te instanceof Tinebase_Exception_UnexpectedValue) {
@@ -163,8 +162,37 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             throw new Tinebase_Exception_NotFound('Could not find source record without ID');
         }
         /* @var Felamimail_Model_AttachmentCache $createdRecord */
-        $createdRecord = $this->create($record);
+        try {
+            $createdRecord = $this->create($record);
+        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
+            throw new Tinebase_Exception_NotFound($teuv);
+        } catch (ErrorException $e) {
+            // email attachment encoding failure
+            if (strpos($e->getMessage(), 'invalid byte sequence')) {
+                if ($stream = fopen('php://memory', 'w+')) {
+                    throw new Tinebase_Exception('could not open memory stream');
+                }
+                try {
+                    $record->attachments->getFirstRecord()->stream = $stream;
+                    return $this->create($record);
+                } finally {
+                    fclose($stream);
+                }
+            } else {
+                throw $e;
+            }
+        }
         return $createdRecord;
+    }
+
+    protected function _handleRecordCreateOrUpdateException(Exception $e)
+    {
+        // email attachment encoding failure
+        if ($e instanceof ErrorException && strpos($e->getMessage(), 'invalid byte sequence')) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw $e;
+        }
+        parent::_handleRecordCreateOrUpdateException($e);
     }
 
     /**
@@ -260,7 +288,7 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             return $fallback;
         }
 
-        return $name;
+        return str_replace('/', '-', $name);
     }
 
     /**

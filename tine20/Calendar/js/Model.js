@@ -8,7 +8,7 @@
 
 // @see https://github.com/ericmorand/twing/issues/332
 // #if process.env.NODE_ENV !== 'unittest'
-import getTwingEnv from "twingEnv";
+import {default as getTwingEnv, Expression } from "twingEnv";
 // #endif
 
 Ext.ns('Tine.Calendar', 'Tine.Calendar.Model');
@@ -44,6 +44,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     { name: 'tags' },
     { name: 'notes'},
     { name: 'attachments'},
+    { name: 'event_types'},
     //{ name: 'contact' },
     //{ name: 'related' },
     //{ name: 'resources' },
@@ -200,7 +201,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
     getTitle: function() {
         if (! this.constructor.titleTwing) {
             const app = Tine.Tinebase.appMgr.get(this.appName);
-            const template = app.getRegistry().get('preferences').get('webEventTitleTemplate');
+            const template = app.getRegistry().get('preferences').get('webEventTitleTemplate') + '{% if poll_id and not poll_id.closed %}\uFFFD{% endif %}';
             const twingEnv = getTwingEnv();
             const loader = twingEnv.getLoader();
 
@@ -212,7 +213,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
             this.constructor.titleTwing = twingEnv;
         }
 
-        return this.constructor.titleTwing.render(this.constructor.getPhpClassName() + 'Title', this.data) + (this.hasPoll() ? '\u00A0\uFFFD' : '');
+        return this.constructor.titleTwing.renderProxy(this.constructor.getPhpClassName() + 'Title', this.data);
     },
 
     isRescheduled: function (event) {
@@ -298,7 +299,7 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
         prefs = app.getRegistry().get('preferences'),
         defaultAttendeeStrategy = prefs.get('defaultAttendeeStrategy') || 'me',// one of['me', 'intelligent', 'calendarOwner', 'filteredAttendee', 'none']
         defaultAttendee = [],
-        calendarResources = app.getRegistry().get('calendarResources');
+        calendarResources = Tine.Tinebase.appMgr.get('Calendar').calendarResources;
         
     // shift -> change intelligent <-> me
     if (Ext.EventObject.shiftKey) {
@@ -370,7 +371,7 @@ Tine.Calendar.Model.Event.getDefaultAttendee = function(organizer, container) {
                     }
                 } else if (filteredContainer.type && filteredContainer.type == 'shared' && calendarResources) {
                     Ext.each(calendarResources, function(calendarResource) {
-                        if (calendarResource.container_id == filteredContainer.id) {
+                        if (calendarResource.container_id.id == filteredContainer.id) {
                             var attendeeData = Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                                 user_type: 'resource',
                                 user_id: calendarResource,
@@ -440,73 +441,78 @@ Tine.Calendar.Model.Event.getDefaultLocationRecord = function(resource) {
 };
 
 Tine.Calendar.Model.Event.getFilterModel = function() {
-    var app = Tine.Tinebase.appMgr.get('Calendar');
+    var app = Tine.Tinebase.appMgr.get('Calendar'),
+        filter = [
+            {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
+            {label: app.i18n._('Summary'), field: 'summary'},
+            {label: app.i18n._('Location'), field: 'location'},
+            {filtertype: 'addressbook.contact', field: 'location_record', label: app.i18n._('Location Contact')},
+            {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
+            // _('GENDER_Calendar')
+            {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Calendar.Model.Event, /*defaultOperator: 'in',*/ defaultValue: {path: Tine.Tinebase.container.getMyNodePath()}},
+            {filtertype: 'calendar.attendee'},
+            {
+                label: app.i18n._('Attendee Status'),
+                gender: app.i18n._('GENDER_Attendee Status'),
+                field: 'attender_status',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: app,
+                keyfieldName: 'attendeeStatus',
+                defaultOperator: 'notin',
+                defaultValue: ['DECLINED']
+            },
+            {
+                label: app.i18n._('Attendee Role'),
+                gender: app.i18n._('GENDER_Attendee Role'),
+                field: 'attender_role',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: app,
+                keyfieldName: 'attendeeRoles'
+            },
+            {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
+            {filtertype: 'tinebase.tag', app: app},
+            {
+                label: app.i18n._('Status'),
+                gender: app.i18n._('GENDER_Status'),
+                field: 'status',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: { name: 'Calendar' },
+                keyfieldName: 'eventStatus',
+                defaultAll: true
+            },
+            {
+                label: app.i18n._('Blocking'),
+                gender: app.i18n._('GENDER_Blocking'),
+                field: 'transp',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: { name: 'Calendar' },
+                keyfieldName: 'eventTransparencies',
+                defaultAll: true
+            },
+            {
+                label: app.i18n._('Classification'),
+                gender: app.i18n._('GENDER_Classification'),
+                field: 'class',
+                filtertype: 'tine.widget.keyfield.filter',
+                app: { name: 'Calendar' },
+                keyfieldName: 'eventClasses',
+                defaultAll: true
+            },
+            {label: i18n._('Last Modified Time'), field: 'last_modified_time', valueType: 'datetime'},
+            //{label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
+            {label: i18n._('Creation Time'), field: 'creation_time', valueType: 'datetime'},
+            //{label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
+            {
+                filtertype: 'calendar.rrule',
+                app: app
+            }
+        ];
+
+    if (app.featureEnabled('featureEventType')) {
+        filter.push({filtertype: 'foreignrecord', linkType: 'foreignId', app: app, foreignRecordClass: Tine.Calendar.Model.EventTypes, ownField: 'event_types', foreignRefIdField: 'eventType'});
+    }
     
-    return [
-        {label: i18n._('Quick Search'), field: 'query', operators: ['contains']},
-        {label: app.i18n._('Summary'), field: 'summary'},
-        {label: app.i18n._('Location'), field: 'location'},
-        {filtertype: 'addressbook.contact', field: 'location_record', label: app.i18n._('Location Contact')},
-        {label: app.i18n._('Description'), field: 'description', operators: ['contains', 'notcontains']},
-        // _('GENDER_Calendar')
-        {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Calendar.Model.Event, /*defaultOperator: 'in',*/ defaultValue: {path: Tine.Tinebase.container.getMyNodePath()}},
-        {filtertype: 'calendar.attendee'},
-        {
-            label: app.i18n._('Attendee Status'),
-            gender: app.i18n._('GENDER_Attendee Status'),
-            field: 'attender_status',
-            filtertype: 'tine.widget.keyfield.filter', 
-            app: app, 
-            keyfieldName: 'attendeeStatus', 
-            defaultOperator: 'notin',
-            defaultValue: ['DECLINED']
-        },
-        {
-            label: app.i18n._('Attendee Role'),
-            gender: app.i18n._('GENDER_Attendee Role'),
-            field: 'attender_role',
-            filtertype: 'tine.widget.keyfield.filter', 
-            app: app, 
-            keyfieldName: 'attendeeRoles'
-        },
-        {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
-        {filtertype: 'tinebase.tag', app: app},
-        {
-            label: app.i18n._('Status'),
-            gender: app.i18n._('GENDER_Status'),
-            field: 'status',
-            filtertype: 'tine.widget.keyfield.filter',
-            app: { name: 'Calendar' },
-            keyfieldName: 'eventStatus',
-            defaultAll: true
-        },
-        {
-            label: app.i18n._('Blocking'),
-            gender: app.i18n._('GENDER_Blocking'),
-            field: 'transp',
-            filtertype: 'tine.widget.keyfield.filter',
-            app: { name: 'Calendar' },
-            keyfieldName: 'eventTransparencies',
-            defaultAll: true
-        },
-        {
-            label: app.i18n._('Classification'),
-            gender: app.i18n._('GENDER_Classification'),
-            field: 'class',
-            filtertype: 'tine.widget.keyfield.filter',
-            app: { name: 'Calendar' },
-            keyfieldName: 'eventClasses',
-            defaultAll: true
-        },
-        {label: i18n._('Last Modified Time'), field: 'last_modified_time', valueType: 'date'},
-        //{label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-        {label: i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
-        //{label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
-        {
-            filtertype: 'calendar.rrule',
-            app: app
-        }
-    ];
+    return filter;
 };
 
 Tine.Calendar.Model.Event.datetimeRenderer = function(dt) {
@@ -1010,7 +1016,7 @@ Ext.extend(Tine.Calendar.Model.AttenderProxy, Tine.Tinebase.data.RecordProxy, {
             return event.getSchedulingData();
         }));
 
-        return Tine.Calendar.Model.AttenderProxy.superclass.searchRecords.apply(this, arguments);
+        return Tine.Calendar.Model.AttenderProxy.superclass.searchRecords.call(this, filter, paging, options);
     },
 
     readRecords : function(resultData){

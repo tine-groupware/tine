@@ -10,157 +10,55 @@
 
 Ext.ns('Tine.Tasks.Model');
 
-// Task model
-Tine.Tasks.Model.TaskArray = Tine.Tinebase.Model.genericFields.concat([
-    { name: 'id' },
-    { name: 'uid' },
-    { name: 'percent', header: 'Percent' },
-    { name: 'completed', type: 'date', dateFormat: Date.patterns.ISO8601Long },
-    { name: 'due', type: 'date', dateFormat: Date.patterns.ISO8601Long },
-    // ical common fields
-    { name: 'class' },
-    { name: 'description' },
-    { name: 'geo' },
-    { name: 'location' },
-    { name: 'organizer' },
-    { name: 'originator_tz' },
-    { name: 'priority' },
-    { name: 'status' },
-    { name: 'summary' },
-    { name: 'url' },
-    // ical common fields with multiple appearance
-    { name: 'attach' },
-    { name: 'attendee' },
-    { name: 'tags' },
-    { name: 'comment' },
-    { name: 'contact' },
-    { name: 'related' },
-    { name: 'resources' },
-    { name: 'rstatus' },
-    // scheduleable interface fields
-    { name: 'dtstart', type: 'date', dateFormat: Date.patterns.ISO8601Long },
-    { name: 'duration', type: 'date', dateFormat: Date.patterns.ISO8601Long },
-    { name: 'recurid' },
-    // scheduleable interface fields with multiple appearance
-    { name: 'exdate' },
-    { name: 'exrule' },
-    { name: 'rdate' },
-    { name: 'rrule' },
-    // tine 2.0 notes field
-    { name: 'notes'},
-    // tine 2.0 alarms field
-    { name: 'alarms'},
-    // relations with other objects
-    { name: 'relations'},
-    { name: 'attachments'}
-]);
+Tine.Tasks.Model.TaskMixin = {
+    statics: {
+        /**
+         * returns default account data
+         *
+         * @namespace Tine.Tasks.Model.Task
+         * @static
+         * @return {Object} default data
+         */
+        getDefaultData: function() {
+            var app = Tine.Tinebase.appMgr.get('Tasks'),
+                prefs = app.getRegistry().get('preferences');
 
-/**
- * Task record definition
- */
-Tine.Tasks.Model.Task = Tine.Tinebase.data.Record.create(Tine.Tasks.Model.TaskArray, {
-    appName: 'Tasks',
-    modelName: 'Task',
-    idProperty: 'id',
-    titleProperty: 'summary',
-    // ngettext('Task', 'Tasks', n); gettext('Tasks');
-    recordName: 'Task',
-    recordsName: 'Tasks',
-    containerProperty: 'container_id',
-    // ngettext('to do list', 'to do lists', n); gettext('to do lists');
-    containerName: 'to do list',
-    containersName: 'to do lists'
-});
+            var data =  {
+                'class': 'PUBLIC',
+                percent: 0,
+                organizer: Tine.Tinebase.registry.get('currentAccount'),
+                container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
+                status: 'NEEDS-ACTION',
+                priority: 200
+            };
 
-/**
- * returns default account data
- *
- * @namespace Tine.Tasks.Model.Task
- * @static
- * @return {Object} default data
- */
-Tine.Tasks.Model.Task.getDefaultData = function() {
-    var app = Tine.Tinebase.appMgr.get('Tasks'),
-        prefs = app.getRegistry().get('preferences');
+            if (prefs.get('defaultalarmenabled')) {
+                data.alarms = [{minutes_before: parseInt(prefs.get('defaultalarmminutesbefore'), 10)}];
+            }
 
-    var data =  {
-        'class': 'PUBLIC',
-        percent: 0,
-        organizer: Tine.Tinebase.registry.get('currentAccount'),
-        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
-        status: 'NEEDS-ACTION',
-        priority: 200
-    };
-
-    if (prefs.get('defaultalarmenabled')) {
-        data.alarms = [{minutes_before: parseInt(prefs.get('defaultalarmminutesbefore'), 10)}];
-    }
-
-    return data;
-};
-
-/**
- * @namespace Tine.Tasks.Model.Task
- *
- * get task filter
- *
- * @return {Array} filter objects
- * @static
- */
-Tine.Tasks.Model.Task.getFilterModel = function() {
-    var app = Tine.Tinebase.appMgr.get('Tasks');
-
-    return [
-        {label: i18n._('Quick Search'),                  field: 'query',    operators: ['contains']},
-        {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Tasks.Model.Task},
-        {label: app.i18n._('Summary'),         field: 'summary' },
-        {label: app.i18n._('Due Date'),        field: 'due', valueType: 'date', operators: ['within', 'before', 'after']},
-        {
-            label: app.i18n._('Status'),
-            field: 'status',
-            filtertype: 'tine.widget.keyfield.filter',
-            app: app,
-            defaultValue: Tine.Tasks.Model.Task.getClosedStatus(),
-            keyfieldName: 'taskStatus',
-            defaultOperator: 'notin'
+            return data;
         },
-        {label: app.i18n._('Responsible'),     field: 'organizer', valueType: 'user'},
-        {filtertype: 'tinebase.tag', app: app},
-        {label: i18n._('Last Modified Time'),                                                field: 'last_modified_time', valueType: 'date'},
-        {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
-        {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'date'},
-        {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'}
-    ];
-};
+        /**
+         * @namespace Tine.Tasks.Model.Task
+         *
+         * get closed status ids
+         *
+         * @return {Array} status ids objects
+         * @static
+         */
+        getClosedStatus: function() {
+            var reqStatus = [];
 
-/**
- * @namespace Tine.Tasks.Model.Task
- *
- * get closed status ids
- *
- * @return {Array} status ids objects
- * @static
- */
-Tine.Tasks.Model.Task.getClosedStatus = function() {
-    var reqStatus = [];
+            Tine.Tinebase.widgets.keyfield.StoreMgr.get('Tasks', 'taskStatus').each(function(status) {
+                if (! status.get('is_open')) {
+                    reqStatus.push(status.get('id'));
+                }
+            }, this);
 
-    Tine.Tinebase.widgets.keyfield.StoreMgr.get('Tasks', 'taskStatus').each(function(status) {
-        if (! status.get('is_open')) {
-            reqStatus.push(status.get('id'));
+            return reqStatus;
         }
-    }, this);
-
-    return reqStatus;
+    }
 };
-
-/**
- * default tasks backend
- */
-Tine.Tasks.taskBackend = Tine.Tasks.JsonBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'Tasks',
-    modelName: 'Task',
-    recordClass: Tine.Tasks.Model.Task
-});
 
 Tine.Tasks.Model.Status = Tine.Tinebase.data.Record.create([
     { name: 'id' },

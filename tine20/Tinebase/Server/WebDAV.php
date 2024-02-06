@@ -56,6 +56,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
     public function handle(\Laminas\Http\Request $request = null, $body = null)
     {
         try {
+            $this->_disallowAppPwdSessions();
+
             $this->_request = $request instanceof \Laminas\Http\Request ? $request : Tinebase_Core::get(Tinebase_Core::REQUEST);
 
             if ($body !== null) {
@@ -97,8 +99,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             $hasIdentity = false;
 
             if (isset($_SERVER['HTTP_USER_AGENT']) &&
-                    (strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft-WebDAV-MiniRedir') === 0 ||
-                        strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft Office') === 0)) {
+                (strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft-WebDAV-MiniRedir') === 0 ||
+                    strpos($_SERVER['HTTP_USER_AGENT'], 'Microsoft Office') === 0)) {
                 try {
                     Tinebase_Core::startCoreSession();
                     Tinebase_Core::initFramework();
@@ -140,20 +142,21 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
             if (!$hasIdentity) {
                 try {
-                    list($loginName, $password) = $this->_getAuthData($this->_request);
+                    $authData = $this->_getAuthData($this->_request);
+                    if (count($authData) === 2) {
+                        list($loginName, $password) = $authData;
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                                . ' Login name or password missing from auth data');
+                        }
+                        $this->_sendUnauthorizedHeader();
+                        return;
+                    }
                     Tinebase_Core::startCoreSession();
                     Tinebase_Core::initFramework();
-                } catch (Zend_Session_Exception $zse) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                            . ' Maintenance mode / other session problem: ' . $zse->getMessage());
-                    }
-                    header('HTTP/1.1 503 Service Unavailable');
-                    return;
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
-                    header('HTTP/1.1 401 Unauthorized');
-
+                    $this->_sendUnauthorizedHeader();
                     return;
                 }
             }
@@ -186,9 +189,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                         $this->_request,
                         self::REQUEST_TYPE
                     ) !== true) {
-                    header('WWW-Authenticate: Basic realm="WebDAV for Tine 2.0"');
-                    header('HTTP/1.1 401 Unauthorized');
-
+                    $this->_sendUnauthorizedHeader();
                     return;
                 }
             } catch (Tinebase_Exception_MaintenanceMode $temm) {
@@ -247,17 +248,17 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             );
 
             $aclPlugin = new Tinebase_WebDav_Plugin_ACL();
-            $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
-            $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
+            $aclPlugin->defaultUsernamePath = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
+            $aclPlugin->principalCollectionSet = array(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
             );
             $aclPlugin->principalSearchPropertySet = array(
-                '{DAV:}displayname'                                                   => 'Display name',
-                '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address'               => 'Email address',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set'  => 'Email addresses',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'         => 'First name',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'          => 'Last name',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-address-set' => 'Calendar user address set',
-                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-type' => 'Calendar user type'
+                '{DAV:}displayname' => 'Display name',
+                '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address' => 'Email address',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set' => 'Email addresses',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => 'First name',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name' => 'Last name',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set' => 'Calendar user address set',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type' => 'Calendar user type'
             );
 
             self::$_server->addPlugin($aclPlugin);
@@ -303,15 +304,34 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             }
 
             Tinebase_Controller::getInstance()->logout();
+        } catch (Tinebase_Exception_Unauthorized $teu) {
+            @header('HTTP/1.1 401 Not authorized');
         } catch (Tinebase_Exception_AccessDenied $tead) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tead->getMessage());
             }
             @header('HTTP/1.1 403 Forbidden');
+        } catch (Zend_Session_Exception $zse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Maintenance mode / session problem: ' . $zse->getMessage());
+            }
+            @header('HTTP/1.1 503 Service Unavailable');
         } catch (Throwable $e) {
             Tinebase_Exception::log($e, false);
             @header('HTTP/1.1 500 Internal Server Error');
         }
+    }
+
+    protected function _sendUnauthorizedHeader()
+    {
+        @header('WWW-Authenticate: Basic realm="' . $this->_getRealm() .  '"');
+        @header('HTTP/1.1 401 Unauthorized');
+    }
+
+    protected function _getRealm(): string
+    {
+        return Tinebase_Core::getTineUserAgent('WebDAV Service');
     }
 
     /**

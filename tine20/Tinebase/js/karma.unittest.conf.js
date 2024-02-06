@@ -9,13 +9,13 @@ module.exports = function (config) {
         basePath: basePath,
 
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['mocha', 'chai', 'chai-as-promised', 'sinon'],
+        frameworks: ['mocha', 'chai', 'chai-as-promised', 'sinon', 'webpack'],
 
         // list of files / patterns to load in the browser
         files: [
             path.resolve(__dirname, "../../library/ExtJS/adapter/ext/ext-base-debug.js"),
             path.resolve(__dirname, "../../library/ExtJS/ext-all-debug.js"),
-            '**/*.spec.js'
+            '**/configManager.spec.js'
         ],
 
         // list of files / patterns to exclude
@@ -23,14 +23,17 @@ module.exports = function (config) {
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+        // NOTE: karma-eslint not working with newer version of karma and eslint
+        // one could use eslint-webpack-plugin in webpack.unittest.js | TODO for later
         preprocessors: {
-            "**/*.js": ["eslint", "webpack", "sourcemap"]
+            "**/*.js": [/*"eslint",*/ "webpack","sourcemap", "coverage"]
         },
 
         // webpack configuration
         webpack: require("./webpack.unittest.js"),
         webpackMiddleware: {
-            stats: "errors-only"
+            stats: "errors-only",
+            // devtool: 'inline-source-map'
         },
 
         eslint: {
@@ -43,16 +46,11 @@ module.exports = function (config) {
 
         // test results reporter to use
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['spec', 'coverage-istanbul', 'junit' /*, 'dots' */],
+        reporters: ['spec', 'coverage', 'junit' /*, 'dots' */],
 
-        coverageIstanbulReporter: {
+        coverageReporter: {
+            type: 'text',
             dir: basePath + '/artefacts/coverage',
-            reports: ['html', 'text', 'text-summary', 'clover'],
-            'report-config': {
-                html: {
-                    subdir: 'html'
-                }
-            }
         },
 
         junitReporter: {

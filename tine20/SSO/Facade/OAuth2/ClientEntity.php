@@ -32,7 +32,8 @@ class SSO_Facade_OAuth2_ClientEntity implements League\OAuth2\Server\Entities\Cl
 
     public function getRedirectUri(): array
     {
-        return $this->relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS};
+        $result = $this->relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS};
+        return is_array($result) ? $result : [$result];
     }
 
     public function isConfidential(): bool

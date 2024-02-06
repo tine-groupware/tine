@@ -80,7 +80,8 @@ class Tinebase_Record_Expander_Factory
                     if (isset($fieldDef[MCC::CONFIG][MCC::REF_ID_FIELD])) {
                         $_definition['fieldDefConfig'] = $fieldDef[MCC::CONFIG];
                         return new Tinebase_Record_Expander_RefIdProperty($propModel, $_property, $_definition,
-                            $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);
+                            $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD,
+                            false);
                     }
                     return new Tinebase_Record_Expander_RecordsProperty($propModel, $_property, $_definition,
                         $_rootExpander, $prio ?: Tinebase_Record_Expander_Abstract::DATA_FETCH_PRIO_DEPENDENTRECORD);

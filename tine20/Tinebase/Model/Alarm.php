@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -26,8 +26,13 @@
  * @property string     sent_message
  * @property string     options
  */
-class Tinebase_Model_Alarm extends Tinebase_Record_Abstract 
+class Tinebase_Model_Alarm extends Tinebase_Record_NewAbstract implements Tinebase_Record_PerspectiveInterface
 {
+    use Tinebase_Record_PerspectiveTrait;
+
+    public const TABLE_NAME = 'alarm';
+    public const MODEL_NAME_PART = 'Alarm';
+
     /**
      * pending status
      *
@@ -60,57 +65,124 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
      * ack ip option
      */
     const OPTION_ACK_IP = 'ack_ip';
+
+    const OPT_SKIP = 'skip';
+    const OPT_ACK = 'ack';
+    const OPT_SNOOZE = 'snooze';
     
     /**
      * default minutes_before value
      */
     const DEFAULT_MINUTES_BEFORE = 15;
-    
+
+    public const FLD_ALARM_TIME = 'alarm_time';
+    public const FLD_MINUTES_BEFORE = 'minutes_before';
+    public const FLD_MODEL = 'model';
+    public const FLD_OPTIONS = 'options';
+    public const FLD_RECORD_ID = 'record_id';
+    public const FLD_SENT_MESSAGE = 'sent_message';
+    public const FLD_SENT_STATUS = 'sent_status';
+    public const FLD_SENT_TIME = 'sent_time';
+    public const FLD_SKIP = 'skip';
+    public const FLD_ACK_TIME = 'ack_time';
+    public const FLD_SNOOZE_TIME = 'snooze_time';
+
     /**
-     * identifier field name
-     *
-     * @var string
-     */
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Tinebase';
-    
-    /**
-     * record validators
+     * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
-    protected $_validators = array(
-        'id'                => array('allowEmpty' => TRUE),
-        'record_id'         => array('allowEmpty' => TRUE, /*'Alnum'*/),
-        'model'             => array('presence' => 'required'),
-        'alarm_time'        => array('presence' => 'required'),
-        'minutes_before'    => array('allowEmpty' => TRUE),
-        'sent_time'         => array('allowEmpty' => TRUE),
-        'sent_status'       => array('presence' => 'required', array('InArray', array(
-            self::STATUS_PENDING, 
-            self::STATUS_FAILURE, 
-            self::STATUS_SUCCESS,
-        )), Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_PENDING),
-        'sent_message'      => array('allowEmpty' => TRUE),
-    // xml field with app/model specific options
-        'options'           => array('allowEmpty' => TRUE),
-    );
-    
+    protected static $_modelConfiguration = [
+        self::VERSION           => 4,
+        self::IS_DEPENDENT      => true,
+        self::RECORD_NAME       => 'Alarm',
+        self::RECORDS_NAME      => 'Alarms', // ngettext('Alarm', 'Alarms', n)
+
+        self::CREATE_MODULE     => false,
+        self::EXPOSE_HTTP_API   => false,
+        self::EXPOSE_JSON_API   => false,
+
+        self::APP_NAME          => Tinebase_Config::APP_NAME,
+        self::MODEL_NAME        => self::MODEL_NAME_PART,
+
+        self::TABLE             => [
+            self::NAME              => self::TABLE_NAME,
+            self::INDEXES           => [
+                'record_id__model'      => [
+                    self::COLUMNS           => [self::FLD_RECORD_ID, self::FLD_MODEL],
+                ],
+            ],
+        ],
+
+        self::FIELDS            => [
+            self::FLD_RECORD_ID     => [
+                self::TYPE              => self::TYPE_STRING,
+                self::LENGTH            => 40,
+            ],
+            self::FLD_MODEL         => [
+                self::TYPE              => self::TYPE_STRING,
+                self::LENGTH            => 40,
+                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+            ],
+            self::FLD_ALARM_TIME    => [
+                self::TYPE              => self::TYPE_DATETIME,
+                self::NULLABLE          => true,
+                self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+            ],
+            self::FLD_MINUTES_BEFORE=> [
+                self::TYPE              => self::TYPE_INTEGER,
+                self::DOCTRINE_IGNORE   => true,
+            ],
+            self::FLD_SENT_TIME     => [
+                self::TYPE              => self::TYPE_DATETIME,
+                self::NULLABLE          => true,
+            ],
+            self::FLD_SENT_STATUS   => [
+                self::TYPE              => self::TYPE_STRING,
+                self::LENGTH            => 32,
+                self::DEFAULT_VAL       => self::STATUS_PENDING,
+                self::VALIDATORS        => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    'presence' => 'required',
+                    ['InArray', [
+                        self::STATUS_PENDING,
+                        self::STATUS_FAILURE,
+                        self::STATUS_SUCCESS,
+                    ]],
+                    Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_PENDING,
+                ],
+            ],
+            self::FLD_SENT_MESSAGE  => [
+                self::TYPE              => self::TYPE_TEXT,
+                self::NULLABLE          => true,
+                self::DEFAULT_VAL       => null,
+            ],
+            self::FLD_OPTIONS       => [
+                self::TYPE              => self::TYPE_TEXT,
+                self::NULLABLE          => true,
+                self::DEFAULT_VAL       => null,
+            ],
+            self::FLD_SKIP          => [
+                self::TYPE              => self::TYPE_BOOLEAN,
+                self::IS_PERSPECTIVE    => true,
+            ],
+            self::FLD_ACK_TIME      => [
+                self::TYPE              => self::TYPE_DATETIME,
+                self::IS_PERSPECTIVE    => true,
+            ],
+            self::FLD_SNOOZE_TIME   => [
+                self::TYPE              => self::TYPE_DATETIME,
+                self::IS_PERSPECTIVE    => true,
+            ],
+        ],
+    ];
+
     /**
-     * datetime fields
+     * holds the configuration object (must be declared in the concrete class)
      *
-     * @var array
+     * @var Tinebase_ModelConfiguration
      */
-    protected $_datetimeFields = array(
-        'alarm_time',
-        'sent_time',
-    );
+    protected static $_configurationObject = null;
     
     /**
      * set alarm time depending on another date with minutes_before
@@ -186,6 +258,6 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
     public function getOption($_key)
     {
         $options = $this->options ? Zend_Json::decode($this->options) : array();
-        return (isset($options[$_key]) || array_key_exists($_key, $options)) ? $options[$_key] : NULL;
+        return $options[$_key] ?? null;
     }
 }

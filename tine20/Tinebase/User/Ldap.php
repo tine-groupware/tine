@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -137,25 +137,27 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     {
         parent::__construct($_options);
         
-        if(empty($_options['userUUIDAttribute'])) {
+        if (empty($_options['userUUIDAttribute'])) {
             $_options['userUUIDAttribute'] = 'entryUUID';
         }
-        if(empty($_options['groupUUIDAttribute'])) {
+        if (empty($_options['groupUUIDAttribute'])) {
             $_options['groupUUIDAttribute'] = 'entryUUID';
         }
-        if(empty($_options['baseDn'])) {
+        if (empty($_options['baseDn'])) {
             $_options['baseDn'] = $_options['userDn'];
         }
-        if(empty($_options['userFilter'])) {
+        if (empty($_options['userFilter'])) {
             $_options['userFilter'] = 'objectclass=posixaccount';
         }
-        if(empty($_options['userSearchScope'])) {
+        if (empty($_options['userSearchScope'])) {
             $_options['userSearchScope'] = Zend_Ldap::SEARCH_SCOPE_SUB;
         }
-        if(empty($_options['groupFilter'])) {
+        if (empty($_options['groupFilter'])) {
             $_options['groupFilter'] = 'objectclass=posixgroup';
         }
-
+        if (empty($_options[Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL])) {
+            $_options[Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL] = false;
+        }
         if (isset($_options['requiredObjectClass'])) {
             $this->_requiredObjectClass = (array)$_options['requiredObjectClass'];
         }
@@ -372,7 +374,23 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * @return  void
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
+
+    /**
+     * set the password for given account
+     *
+     * @param string|Tinebase_Model_User|Tinebase_Model_FullUser $_userId
+     * @param   string  $_password
+     * @param   bool    $_encrypt encrypt password
+     * @param   bool    $_mustChange
+     * @param   bool $ignorePwPolicy
+     * @return void
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_PasswordPolicyViolation
+     * @throws Zend_Db_Adapter_Exception
+     * @throws Zend_Ldap_Exception
+     */
+    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false)
     {
         if ($this->_isReadOnlyBackend) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
@@ -381,42 +399,48 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
         
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
-        
-        Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
+
+        if (! $ignorePwPolicy) {
+            Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
+        }
         
         $metaData = $this->_getMetaData($user);
 
-        $encryptionType = isset($this->_options['pwEncType']) ? $this->_options['pwEncType'] : Tinebase_User_Abstract::ENCRYPT_SSHA;
+        $encryptionType = $this->_options['pwEncType'] ?? Tinebase_User_Abstract::ENCRYPT_SSHA;
         $userpassword = ($_encrypt && $encryptionType !== Tinebase_User_Abstract::ENCRYPT_PLAIN)
             ? Hash_Password::generate($encryptionType, $_password)
             : $_password;
         
         $ldapData = array(
             'userpassword'     => $userpassword,
-            'shadowlastchange' => floor(Tinebase_DateTime::now()->getTimestamp() / 86400)
         );
+
+        if (! in_array('sambaSamAccount', $metaData['objectclass'])) {
+            $ldapData['shadowlastchange'] = floor(Tinebase_DateTime::now()->getTimestamp() / 86400);
+        }
 
         foreach ($this->_ldapPlugins as $plugin) {
             $plugin->inspectSetPassword($user, $_password, $_encrypt, $_mustChange, $ldapData);
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' $dn: ' . $metaData['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' $ldapData: ' . print_r($ldapData, true));
 
         $this->_ldap->update($metaData['dn'], $ldapData);
         
-        // update last modify timestamp in sql backend too
-        $values = array(
-            'last_password_change' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-            'password_must_change' => 0,
-        );
-        
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId())
-        );
-        
-        $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $values, $where);
-        
+        if ($this->_options[Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL]) {
+            $this->_updatePasswordProperties($user->getId(), $_password, $_encrypt, $_mustChange);
+        } else {
+            try {
+                // update last modify timestamp in sql backend too
+                $this->_setAccountPasswordProperties($user->getId());
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf);
+            }
+        }
         $this->_setPluginsPassword($user, $_password, $_encrypt);
     }
 

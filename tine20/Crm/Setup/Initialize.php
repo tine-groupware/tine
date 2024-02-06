@@ -62,19 +62,60 @@ class Crm_Setup_Initialize extends Setup_Initialize
                 ))
             )),
         ))));
+    }
 
-        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "Leads with overdue tasks", // _("Leads with overdue tasks")
-            'description'       => "Leads with overdue tasks",
-            'filters'           => array(array(
-                'field'     => 'task',
-                'operator'  => 'AND',
-                'value'     => array(array(
-                    'field'     => 'due',
-                    'operator'  => 'before',
-                    'value'     => 'dayThis',
-                ))
-            )),
-        ))));
+    protected function _initializeTasksCoupling()
+    {
+        if (class_exists('Tasks_Config') && Tinebase_Application::getInstance()->isInstalled(Tasks_Config::APP_NAME)) {
+            static::applicationInstalled(Tinebase_Application::getInstance()->getApplicationByName(Tasks_Config::APP_NAME));
+        }
+    }
+
+    public static function applicationInstalled(Tinebase_Model_Application $app): void
+    {
+        if (class_exists('Tasks_Config') && Tasks_Config::APP_NAME === $app->name) {
+            if (!Tinebase_Core::isReplica()) {
+                Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+                    'application_id' => $app->getId(),
+                    'model' => Tasks_Model_Task::class,
+                    'is_system' => true,
+                    'name' => 'CrmTasksCoupling',
+                    'definition' => [
+                        Tinebase_Model_CustomField_Config::DEF_HOOK => [
+                            [Crm_Controller::class, 'tasksMCHookFun'],
+                        ],
+                    ]
+                ]));
+            }
+
+            $pfe = Tinebase_PersistentFilter::getInstance();
+            $crmAppId = Tinebase_Application::getInstance()->getApplicationByName(Crm_Config::APP_NAME)->getId();
+            if (!$pfe->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_PersistentFilterFilter::class, [
+                        ['field' => 'account_id', 'operator' => 'isnull', 'value' =>  true],
+                        ['field' => 'application_id', 'operator' => 'equals', 'value' =>  $crmAppId],
+                        ['field' => 'model', 'operator' => 'equals', 'value' =>  Crm_Model_LeadFilter::class],
+                        ['field' => 'name', 'operator' => 'equals', 'value' =>  'Leads with overdue tasks'],
+                    ]))->getFirstRecord()) {
+                // mainly for testing, uninstalling / installing in the same php process
+                Crm_Model_Lead::resetConfiguration();
+
+                $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter([
+                    'account_id' => NULL,
+                    'application_id' => $crmAppId,
+                    'model' => Crm_Model_LeadFilter::class,
+                    'name' => "Leads with overdue tasks", // _("Leads with overdue tasks")
+                    'description' => "Leads with overdue tasks",
+                    'filters' => array(array(
+                        'field' => 'tasks',
+                        'operator' => 'definedBy',
+                        'value' => array(array(
+                            'field' => 'due',
+                            'operator' => 'before',
+                            'value' => 'dayThis',
+                        ))
+                    )),
+                ]));
+            }
+        }
     }
 }

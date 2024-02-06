@@ -46,7 +46,7 @@ Tine.Addressbook.ListEditDialogRoleGridPanel = Ext.extend(Tine.widgets.grid.Grid
             columns: this.getColumns()
         });
 
-        this.title = this.app.i18n._('List Functions')
+        this.title = this.app.i18n._('Group Functions')
 
         Tine.Addressbook.ListEditDialogRoleGridPanel.superclass.initComponent.call(this);
     },

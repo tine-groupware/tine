@@ -127,7 +127,28 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
                 return this.grid.getSelectionModel();
             },
             print: function() {
-                Ext.ux.Printer.print(this.grid);
+                const renderer = new Ext.ux.Printer.GridPanelRenderer({
+                    getAdditionalHeaders: () => {
+                        // @TODO: we should load complete calendar.css but printer does not support loading multiple css cls yet
+                        return `
+<style>
+    .cal-status-TENTATIVE,
+    .cal-status-TENTATIVE .x-grid3-cell-inner {
+        font-style: italic !important;
+    }
+    
+    .cal-status-CANCELED,
+    .cal-status-CANCELED .cal-daysviewpanel-event-body,
+    .cal-status-CANCELED .cal-daysviewpanel-event-header-inner,
+    .cal-status-CANCELED .x-grid3-cell-inner {
+        text-decoration: line-through !important;
+        opacity: 0.7;
+    }
+</style>
+                        `;
+                    }
+                });
+                renderer.print(this.grid);
             },
             getRowClass: this.getViewRowClass
         }));
@@ -184,7 +205,7 @@ Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
         },
         columns: additionalColumns.concat([{
             id: 'attachments',
-            header: window.i18n._('Attachments'),
+            header: '<div class="action_attach tine-grid-row-action-icon"></div>',
             tooltip: window.i18n._('Attachments'),
             dataIndex: 'attachments',
             width: 20,

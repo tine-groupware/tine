@@ -73,11 +73,11 @@ class Calendar_Import_Resource_Csv extends Tinebase_Import_Csv_Abstract
                     $result['relations'] = [
                         [
                             'own_model' => 'Calendar_Model_Resource',
-                            'own_backend' => Tasks_Backend_Factory::SQL,
+                            'own_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                             'own_id' => null,
                             'related_degree' => Tinebase_Model_Relation::DEGREE_CHILD,
                             'related_model' => 'Addressbook_Model_Contact',
-                            'related_backend' => Tasks_Backend_Factory::SQL,
+                            'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                             'related_id' => $contract['id'],
                             'type' => 'SITE'
                         ]];

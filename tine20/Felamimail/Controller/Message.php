@@ -549,7 +549,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $subject = preg_replace('/[\/\\\]+/', '_', $message->subject);
         $subjectAndMail = $message->from_email . '_' . $subject;
         $fileName = Tinebase_Model_Tree_Node::sanitizeName(str_replace(' ', '_', $message->received->toString('Y-m-d'))
-            . '_' . mb_substr($subjectAndMail, 0, 245)
+            . '_' . mb_substr($subjectAndMail, 0, 200)
             . '_' . mb_substr(md5($message->messageuid
             . $message->folder_id), 0, 10)
             . '.eml');

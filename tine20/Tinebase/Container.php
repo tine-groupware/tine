@@ -479,6 +479,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
                             'Using application name is deprecated and no default model found. Use the classname of the model itself.');
                     }
                 case 3:
+                case 4:
                     $ret['appName'] = $split[0];
                     $ret['recordClass'] = $_recordClass;
                     break;
@@ -753,7 +754,20 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
             if ($application instanceof Tinebase_Application_Container_Interface && method_exists($application, 'createPersonalFolder')) {
                 return $application->createPersonalFolder($accountId);
             } else if ($meta['recordClass']) {
-                $containersData = array($this->createDefaultContainer($meta['recordClass'], $meta['appName'], $accountId));
+                try {
+                    $containersData = [$this->createDefaultContainer($meta['recordClass'], $meta['appName'], $accountId)];
+                } catch (Zend_Db_Statement_Exception $zdse) {
+                    if (Tinebase_Exception::isDbDuplicate($zdse)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+                        // try again with different name
+                        $translation = Tinebase_Translation::getTranslation();
+                        $containerName = $translation->_("Personal container");
+                        $containersData = [$this->createDefaultContainer(
+                            $meta['recordClass'], $meta['appName'], $accountId, $containerName)];
+                    } else {
+                        throw $zdse;
+                    }
+                }
             }
         }
 

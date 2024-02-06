@@ -137,57 +137,7 @@ vacation_template_test
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Creating email notification template in vfs ...');
-
-        try {
-            $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
-                'Felamimail',
-                Tinebase_FileSystem::FOLDER_TYPE_SHARED
-            );
-            $node = Tinebase_FileSystem::getInstance()->createAclNode($basepath . '/Email Notification Templates');
-            Felamimail_Config::getInstance()->set(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID, $node->getId());
-
-            if (false === ($fh = Tinebase_FileSystem::getInstance()->fopen($basepath . '/Email Notification Templates/defaultForwarding.sieve', 'w'))) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                    . ' Could not create defaultForwarding.sieve file');
-                return;
-            }
-
-            fwrite($fh, <<<'sieveFile'
-require ["enotify", "variables", "copy", "body"];
-
-if header :contains "Return-Path" "<>" {
-    if body :raw :contains "X-Tine20-Type: Notification" {
-        notify :message "there was a notification bounce"
-              "mailto:ADMIN_BOUNCE_EMAIL";
-    }
-} elsif header :contains "X-Tine20-Type" "Notification" {
-    redirect :copy "USER_EXTERNAL_EMAIL"; 
-} else {
-    if header :matches "Subject" "*" {
-        set "subject" "${1}";
-    }
-    if header :matches "From" "*" {
-        set "from" "${1}";
-    }
-    set :encodeurl "message" "TRANSLATE_SUBJECT${from}: ${subject}";
-    
-    notify :message "TRANSLATE_SUBJECT${from}: ${subject}"
-              "mailto:USER_EXTERNAL_EMAIL?body=${message}";
-}
-sieveFile
-            );
-
-            if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                    . ' Could not create defaultForwarding.sieve file');
-                return;
-            }
-
-        } catch (Tinebase_Exception_Backend $teb) {
-            Tinebase_Exception::log($teb);
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . ' Could not create email notification template folder: ' . $teb);
-        }
+        Felamimail_Controller_Sieve::getInstance()->addDefaultNotificationTemplate();
     }
 
     /**

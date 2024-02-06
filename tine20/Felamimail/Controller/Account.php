@@ -508,7 +508,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
                             $contact = Addressbook_Controller_Contact::getInstance()->get($emailAccount->contact_id);
                             if ($contact->type !== Addressbook_Model_Contact::CONTACTTYPE_USER) {
                                 // hard delete contact in admin module
-                                $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                                $contactsBackend = new Addressbook_Backend_Sql();
                                 if ($hardDelete) {
                                     $contactsBackend->delete($contact->getId());
                                 } else {
@@ -1044,6 +1044,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             'sieve_notification_email',
             'sieve_notification_move',
             'sieve_notification_move_folder',
+            'sieve_custom',
             'sieve_vacation',
             'sieve_rules',
             'sent_folder',

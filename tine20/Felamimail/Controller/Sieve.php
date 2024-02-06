@@ -130,9 +130,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * get sieve script for account
      * 
      * @param string|Felamimail_Model_Account $_accountId
-     * @return NULL|Felamimail_Sieve_Backend_Abstract
+     * @return ?Felamimail_Sieve_Backend_Abstract
      */
-    public function getSieveScript($_accountId)
+    public function getSieveScript($_accountId): ?Felamimail_Sieve_Backend_Abstract
     {
         $script = NULL;
         if ($this->_scriptDataBackend === 'Sql') {
@@ -151,6 +151,43 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         return $script;
     }
+
+    /**
+     * get sieve custom script  for account
+     *
+     * @param string $_accountId
+     * @return Felamimail_Model_Sieve_ScriptPart of Felamimail_Model_Sieve_Rule
+     */
+    public function getSieveCustomScript($_accountId): ?Felamimail_Model_Sieve_ScriptPart
+    {
+        $script = $this->getSieveScript($_accountId);
+        $result = null;
+        if ($script !== NULL) {
+            foreach ($script->getScriptParts() as $scriptPart) {
+                if ($scriptPart->type === 'custom') {
+                    $partRequires = is_array($scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES))
+                        ? $scriptPart->xprops(Felamimail_Model_Sieve_ScriptPart::XPROPS_REQUIRES)
+                        : (is_array($scriptPart->requires) ? $scriptPart->requires : []);
+                    if (!empty($partRequires)) {
+                        $header = 'require [' . implode(',', $partRequires) .'];';
+                        $scriptPart->script = $header . $scriptPart->script;
+                    }
+                    $result = $scriptPart;
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result->toArray(), TRUE));
+                }
+            }
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Sieve script empty or could not parse it.');
+        }
+        
+        if (!$result) {
+            $this->setCustomScript($_accountId, '');
+            $result = $this->getSieveCustomScript($_accountId);
+        }
+        return $result;
+    }
+    
+    
     
     /**
      * get sieve script from sieve server
@@ -764,11 +801,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $this->setNotificationScripts($_accountId, $scriptParts);
             return;
         }
-
-        if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
-            throw new Tinebase_Exception_UnexpectedValue($_email . ' is not a valid email address');
-        }
-
+        
         $fileSystem = Tinebase_FileSystem::getInstance();
         $translate = Tinebase_Translation::getTranslation('Felamimail');
         $locale = Tinebase_Core::getLocale();
@@ -782,6 +815,14 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $adminBounceEmail = $firstAdminUser->accountEmailAddress;
         }
 
+        $notificationEmailAddress = Tinebase_Notification_Backend_Smtp::getNotificationAddress();
+        if(!($notificationEmailAddress)) {
+            $notificationEmailAddress = '';
+        }
+        if($notificationEmailAddress !== '' && preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $notificationEmailAddress)) {
+            $notificationEmailAddress = ':from "' . $notificationEmailAddress . '"' . "\n\t\t";
+        }
+
         /** @var Tinebase_Model_Tree_Node $sieveNode */
         foreach ($fileSystem->getTreeNodeChildren(Felamimail_Config::getInstance()->
                 get(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID)) as $sieveNode) {
@@ -789,10 +830,31 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                 continue;
             }
             $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($fileSystem->getPathOfNode($sieveNode, true));
+            if (strpos($path->name, '.') === 0) {
+                // do nothing with dotfiles
+                continue;
+            }
             $sieveScript = file_get_contents($path->streamwrapperpath);
-            $sieveScript = str_replace('USER_EXTERNAL_EMAIL', $_email, $sieveScript);
+            $notifyScript = '';
+            $redirectScript = '';
+            $emails = explode(',', $_email);
+            
+            foreach ($emails as $email) {
+                if (!preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $email)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                            . $email . ' is not a valid email address - skipping');
+                    }
+                    continue;
+                }
+                $notifyScript .= "\n\t" . 'notify ' . $notificationEmailAddress . ':message "' . $subject. '${from}: ${subject}"' . "\n\t\t" . '"mailto:' . $email .'?body=${message}";' . "\n";
+                $redirectScript .= "\n\t" . 'redirect :copy "' . $email . '";';
+            }
+
             $sieveScript = str_replace('TRANSLATE_SUBJECT', $subject, $sieveScript);
             $sieveScript = str_replace('ADMIN_BOUNCE_EMAIL', $adminBounceEmail, $sieveScript);
+            $sieveScript = str_replace('REDIRECT_EMAILS_SCRIPT', $redirectScript, $sieveScript);
+            $sieveScript = str_replace('NOTIFY_EMAILS_SCRIPT', $notifyScript, $sieveScript);
             $scriptParts->addRecord(Felamimail_Model_Sieve_ScriptPart::createFromString(
                 Felamimail_Model_Sieve_ScriptPart::TYPE_NOTIFICATION, $sieveNode->name, $sieveScript));
         }
@@ -824,23 +886,33 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                 . $type);
         }
         $_scriptParts->account_id = $_accountId;
-
+        if ($type === Felamimail_Model_Sieve_ScriptPart::TYPE_CUSTOM) {
+            Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_scriptName . '-custom');
+        }
         $script = $this->getSieveScript($_accountId);
+        $cloneOldScript = clone $script;
 
         try {
             $script->readScriptData();
         } catch(Tinebase_Exception_NotFound $tenf) {}
-
-        $oldScripParts = $script->getScriptParts();
-        $oldScripParts->removeRecords($oldScripParts->filter('type', $type));
-        $oldScripParts->merge($_scriptParts);
-
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Put updated rules SIEVE script ' .
                 $this->_scriptName);
         }
 
-        $this->_putScript($_accountId, $script);
+        $oldScripParts = $script->getScriptParts();
+        $oldScripParts->removeRecords($oldScripParts->filter('type', $type));
+        $oldScripParts->merge($_scriptParts);
+        
+        try {
+            $this->_putScript($_accountId, $script);
+        } catch (Felamimail_Exception_SievePutScriptFail $fespsf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $fespsf->getTraceAsString());
+            $this->_putScript($_accountId, $cloneOldScript);
+            throw new Felamimail_Exception_SievePutScriptFail($fespsf->getMessage());
+        }
+
     }
 
     /**
@@ -904,5 +976,81 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart');
         $scriptParts->addRecord($_scriptPart);
         $this->_updateScriptParts($_account, $scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST);
+    }
+    public function addDefaultNotificationTemplate() {
+        try {
+            $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
+                'Felamimail',
+                Tinebase_FileSystem::FOLDER_TYPE_SHARED
+            );
+            $node = Tinebase_FileSystem::getInstance()->createAclNode($basepath . '/Email Notification Templates');
+            Felamimail_Config::getInstance()->set(Felamimail_Config::EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID, $node->getId());
+
+            if (false === ($fh = Tinebase_FileSystem::getInstance()->fopen($basepath . '/Email Notification Templates/defaultForwarding.sieve', 'w'))) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not create defaultForwarding.sieve file');
+                return;
+            }
+
+            fwrite($fh, <<<'sieveFile'
+require ["enotify", "variables", "copy", "body"];
+
+if header :contains "Return-Path" "<>" {
+    if body :raw :contains "X-Tine20-Type: Notification" {
+        notify :message "there was a notification bounce"
+              "mailto:ADMIN_BOUNCE_EMAIL";
+    }
+} elsif header :contains "X-Tine20-Type" "Notification" {
+    REDIRECT_EMAILS_SCRIPT
+} else {
+    if header :matches "Subject" "*" {
+        set "subject" "${1}";
+    }
+    if header :matches "From" "*" {
+        set "from" "${1}";
+    }
+    set :encodeurl "message" "TRANSLATE_SUBJECT${from}: ${subject}";
+
+    NOTIFY_EMAILS_SCRIPT
+}
+sieveFile
+            );
+
+            if (true !== Tinebase_FileSystem::getInstance()->fclose($fh)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                    . ' Could not create defaultForwarding.sieve file');
+                return;
+            }
+
+        } catch (Tinebase_Exception_Backend $teb) {
+            Tinebase_Exception::log($teb);
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                . ' Could not create email notification template folder: ' . $teb);
+        }
+    }
+    
+    /**
+     * set custom script for account
+     *
+     * @param $_accountId
+     * @param $script
+     * @throws Felamimail_Exception_SievePutScriptFail
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    public function setCustomScript($_accountId, $script, $checkGrant = true)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
+        if ($checkGrant) {
+            $this->_checkAccountEditGrant($account);
+        }
+        $scriptParts = new Tinebase_Record_RecordSet('Felamimail_Model_Sieve_ScriptPart');
+        $record = Felamimail_Model_Sieve_ScriptPart::createFromString(
+            Felamimail_Model_Sieve_ScriptPart::TYPE_CUSTOM, $account->getId(), $script);
+        $record->account_id = $account;
+        $scriptParts->addRecord($record);
+        $this->_updateScriptParts($account, $scriptParts, Felamimail_Model_Sieve_ScriptPart::TYPE_CUSTOM);
+
+        $script = Felamimail_Controller_Sieve::getInstance()->getSieveScript($_accountId);
+        return $script->getSieve();
     }
 }

@@ -278,6 +278,12 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             'Addressbook' => array(
                 Addressbook_Model_Contact::class,
+                Addressbook_Model_ContactProperties_Address::class,
+                Addressbook_Model_ContactProperties_Definition::class,
+                Addressbook_Model_ContactProperties_Email::class,
+                Addressbook_Model_ContactProperties_InstantMessenger::class,
+                Addressbook_Model_ContactProperties_Phone::class,
+                Addressbook_Model_ContactProperties_Url::class,
                 Addressbook_Model_Industry::class,
                 Addressbook_Model_List::class,
                 Addressbook_Model_ListGrants::class,
@@ -308,6 +314,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Calendar_Model_ResourceGrants::class,
                 Calendar_Model_ResourceType::class,
                 Calendar_Model_Rrule::class,
+                Calendar_Model_EventType::class,
+                Calendar_Model_EventTypes::class,
             ),
             'CoreData' => array(
                 CoreData_Model_CoreData::class,
@@ -429,11 +437,13 @@ class Tinebase_ApplicationTest extends TestCase
                 SimpleFAQ_Model_Config::class,
                 SimpleFAQ_Model_Faq::class,
             ),
-            'Tasks' => array(
+            Tasks_Config::APP_NAME => array(
+                Tasks_Model_Attendee::class,
                 Tasks_Model_Pagination::class,
                 Tasks_Model_Priority::class,
                 Tasks_Model_Status::class,
                 Tasks_Model_Task::class,
+                Tasks_Model_TaskDependency::class,
             ),
             'Timetracker' => array(
                 Timetracker_Model_Timeaccount::class,
@@ -446,6 +456,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_ActionLog::class,
                 Tinebase_Model_Alarm::class,
                 Tinebase_Model_Application::class,
+                Tinebase_Model_AppPassword::class,
                 Tinebase_Model_AreaLockConfig::class,
                 Tinebase_Model_AreaLockState::class,
                 Tinebase_Model_AsyncJob::class,
@@ -495,8 +506,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_ModificationLog::class,
                 Tinebase_Model_Note::class,
                 Tinebase_Model_NoteType::class,
-                Tinebase_Model_OpenId_Association::class,
-                Tinebase_Model_OpenId_TrustedSite::class,
                 Tinebase_Model_Pagination::class,
                 Tinebase_Model_Path::class,
                 Tinebase_Model_PersistentFilterGrant::class,
@@ -523,6 +532,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_UserPassword::class,
                 Tinebase_Model_WebauthnPublicKey::class,
                 Tinebase_Model_WebDavLock::class,
+                Tinebase_Model_BankAccount::class,
             ),
             'Voipmanager' => array(
                 Voipmanager_Model_Asterisk_Context::class,

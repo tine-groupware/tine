@@ -432,7 +432,7 @@ msgstr[1] "Kontakte"
 
 #: Model/Contact.php:186
 msgid "Show Disabled"
-msgstr "Zeige geschlossene"
+msgstr "Zeige deaktivierte"
 
 #: Model/Contact.php:194
 msgid "Path"
@@ -669,6 +669,15 @@ msgstr "Pager"
 msgid "Phone"
 msgstr "Telefon"
 
+msgid "Phone Numbers"
+msgstr "Telefonnummmern"
+
+msgid "Emails"
+msgstr "E-Mails"
+
+msgid "Name/Emails"
+msgstr "Name/E-Mails"
+
 #: Model/Contact.php:772 Model/List.php:143 js/ListGrid.js:100
 #: js/contactListsGridPanel.js:56 js/ContactGrid.js:200 js/Model.js:187
 msgid "Type"
@@ -730,6 +739,8 @@ msgstr ""
 "Dies ist eine Systemgruppe. Um Änderungen vorzunehmen, benötigen Sie das "
 "Recht 'Benutzerkonten verwalten'"
 
+msgid "Contact Properties"
+msgstr "Kontakt-Felder"
 #: Setup/Initialize.php:126 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
 msgstr "Alle Kontakte für die ich Lese-Rechte habe"
@@ -835,9 +846,10 @@ msgstr "Mitglieder E-Mails"
 msgid "System Group"
 msgstr "Systemgruppe"
 
-#: js/ListGrid.js:148
 msgid "Group"
-msgstr "Gruppe"
+msgid_plural "Groups"
+msgstr[0] "Gruppe"
+msgstr[1] "Gruppen"
 
 #: js/MailinglistPanel.js:38
 msgid "Mailing List"
@@ -1253,6 +1265,9 @@ msgstr ""
 msgid "All Contacts"
 msgstr "Alle Kontakte"
 
+msgid "GENDER_Addressbook"
+msgstr "other"
+
 msgid "GENDER_Contact"
 msgstr "male"
 
@@ -1294,13 +1309,45 @@ msgid "Group Member"
 msgstr "Gruppenmitglied"
 
 msgid "You do not have the required private grant to view history."
-msgstr "Sie verfügen nicht über das benötigte Privat-Recht um die Historie anzuzeigen."
+msgstr ""
+"Sie verfügen nicht über das benötigte Privat-Recht um die Historie "
+"anzuzeigen."
 
-msgid "This field is automatically taken from the email account and therefore cannot be edited here."
-msgstr "Dieses Feld wird automatisch aus dem Email konto übernommen und kann daher hier nicht bearbeitet werden."
+msgid ""
+"This field is automatically taken from the email account and therefore "
+"cannot be edited here."
+msgstr ""
+"Dieses Feld wird automatisch aus dem Email konto übernommen und kann daher "
+"hier nicht bearbeitet werden."
 
 msgid "E-Mail (all)"
 msgstr "E-Mail (alle)"
 
 msgid "Company / Organisation"
 msgstr "Firma / Organisation"
+
+msgid "Excel current columns"
+msgstr "Excel - Aktuelle Spalten"
+
+msgid "Group Functions"
+msgstr "Gruppenfunktionen"
+
+msgid "Select Group"
+msgstr "Gruppe auswählen"
+
+msgid "Group Function"
+msgid_plural "Group Functions"
+msgstr[0] "Gruppenfunktion"
+msgstr[1] "Gruppenfunktionen"
+
+msgid "Group Information"
+msgstr "Gruppeninformationen"
+
+msgid "GENDER_Group"
+msgstr "female"
+
+msgid "GENDER_Group Function"
+msgstr "female"
+
+msgid "Mailing Group Member"
+msgstr "E-Mail-Verteiler Mitglieder"

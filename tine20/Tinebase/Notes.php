@@ -262,7 +262,22 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
      * @param  boolean $_onlyNonSystemNotes get only non-system notes per default
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Note
      */
-    public function getNotesOfRecord($_model, $_id, $_backend = 'Sql', $_onlyNonSystemNotes = TRUE)
+
+    /**
+     * get all notes of a given record (calls searchNotes)
+     *
+     * @param  string $_model     model of record
+     * @param  string $_id        id of record
+     * @param  string $_backend   backend of record
+     * @param  boolean $_onlyNonSystemNotes get only non-system notes per default
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Note
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function getNotesOfRecord(string $_model,
+                                     string $_id,
+                                     string $_backend = self::DEFAULT_RECORD_BACKEND,
+                                     bool $_onlyNonSystemNotes = true)
     {
         $backend = ucfirst(strtolower($_backend));
 
@@ -274,9 +289,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             'dir'   => 'DESC'
         ));
         
-        $result = $this->searchNotes($filter, $pagination);
-            
-        return $result;
+        return $this->searchNotes($filter, $pagination);
     }
     
     /**
@@ -504,12 +517,6 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
             $diff = new Tinebase_Record_Diff(json_decode($modification->new_value, true));
             $return = '';
             foreach ($diff->diff as $attribute => $value) {
-
-                if (isset($mc->fields[$attribute]['specialType']) && $mc->fields[$attribute]['specialType'] === "password") {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                        __METHOD__ . '::' . __LINE__ . ' hidden value from password field: ' . $attribute);
-                    $value = '********';
-                }
 
                 if (is_array($value) && isset($value['model']) && isset($value['added'])) {
                     $tmpDiff = new Tinebase_Record_RecordSetDiff($value);
@@ -937,5 +944,157 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     public function has(array $_ids, $_getDeleted = false)
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' is not implemented');
+    }
+
+    /**
+     * @param bool $purge
+     * @param int $offset
+     * @param bool|null $dryrun
+     * @return int
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function removeObsoleteData(bool $purge = false, int $offset = 0, ?bool $dryrun = null): int
+    {
+        $limit = 1000;
+
+        $controllers = [];
+        $models = [];
+        $deleteIds = [];
+        $deletedCount = 0;
+
+        $oneMonthBefore = Tinebase_DateTime::now()->subMonth(1);
+
+        $purgeCountCreated = 0;
+        $purgeCountEmptyUpdate = 0;
+
+        do {
+            $notes = $this->getAllNotes('id ASC', $limit, $offset);
+            $offset += $limit;
+
+            /** @var Tinebase_Model_Note $note */
+            foreach ($notes as $note) {
+                if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN) {
+                    // we only keep the avscan notes of last month
+                    if ($note->creation_time->isEarlier($oneMonthBefore)) {
+                        $deleteIds[] = $note->getId();
+                        continue;
+                    }
+                }
+
+                if (!isset($controllers[$note->record_model])) {
+                    if (str_starts_with($note->record_model, 'Tinebase')) {
+                        continue;
+                    }
+                    try {
+                        /* @var Tinebase_Controller_Record_Abstract $recordController */
+                        $recordController = Tinebase_Core::getApplicationInstance($note->record_model);
+                        if (! $recordController instanceof Tinebase_Controller_Record_Abstract) {
+                            // make phpstan happy
+                            continue;
+                        }
+                        $controllers[$note->record_model] = $recordController;
+                    } catch (Tinebase_Exception_AccessDenied $e) {
+                        // TODO log
+                        continue;
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $deleteIds[] = $note->getId();
+                        continue;
+                    }
+                    $oldACLCheckValue = $recordController->doContainerACLChecks(false);
+                    $oldRightCheckValue = $recordController->doRightChecks(false);
+                    $models[$note->record_model] = array(
+                        0 => new $note->record_model(),
+                        1 => ($note->record_model !== 'Filemanager_Model_Node' && class_exists($note->record_model . 'Filter')),
+                        2 => $note->record_model . 'Filter',
+                        3 => $oldACLCheckValue,
+                        4 => $oldRightCheckValue,
+                    );
+                }
+                $recordController = $controllers[$note->record_model];
+                $model = $models[$note->record_model];
+
+                if ($model[1]) {
+                    $filter = new $model[2](array(
+                        array(
+                            'field' => $model[0]->getIdProperty(),
+                            'operator' => 'equals',
+                            'value' => $note->record_id
+                        )
+                    ));
+                    if ($model[0]->has('is_deleted')) {
+                        $filter->addFilter(new Tinebase_Model_Filter_Int(array(
+                            'field' => 'is_deleted',
+                            'operator' => 'notnull',
+                            'value' => null
+                        )));
+                    }
+                    $result = $recordController->searchCount($filter);
+
+                    if (is_bool($result) || (is_string($result) && $result === ((string)intval($result)))) {
+                        $result = (int)$result;
+                    }
+
+                    if (!is_int($result)) {
+                        if (is_array($result) && isset($result['totalcount'])) {
+                            $result = (int)$result['totalcount'];
+                        } elseif (is_array($result) && isset($result['count'])) {
+                            $result = (int)$result['count'];
+                        } else {
+                            // todo log
+                            // dummy line, remove!
+                            $result = 1;
+                        }
+                    }
+
+                    if ($result === 0) {
+                        $deleteIds[] = $note->getId();
+                    } else if ($purge) {
+                        if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED) {
+                            $deleteIds[] = $note->getId();
+                            $purgeCountCreated++;
+                        } else if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED
+                            && strpos($note->note, '|') === false)
+                        {
+                            $deleteIds[] = $note->getId();
+                            $purgeCountEmptyUpdate++;
+                        }
+                    }
+                } else {
+                    try {
+
+                        $recordController->get($note->record_id, null, false, true);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        $deleteIds[] = $note->getId();
+                    }
+                }
+            }
+            if (count($deleteIds) > 0) {
+                $deletedCount += count($deleteIds);
+                if ($dryrun) {
+                    $offset -= count($deleteIds);
+                } else {
+                    $offset -= $this->purgeNotes($deleteIds);
+                }
+                if ($offset < 0) {
+                    $offset = 0;
+                }
+                $deleteIds = [];
+            }
+        } while ($notes->count() === $limit);
+
+        foreach ($controllers as $model => $controller) {
+            $controller->doContainerACLChecks($models[$model][3]);
+            $controller->doRightChecks($models[$model][4]);
+        }
+
+        if ($purge && Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Purged ' . $purgeCountEmptyUpdate . ' system notes with empty updates');
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Purged ' . $purgeCountCreated . ' create system notes');
+        }
+
+        return $deletedCount;
     }
 }

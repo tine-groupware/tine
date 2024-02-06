@@ -134,6 +134,17 @@
     background-color: #EBF3FD;
 }
 
+.dark-mode .cal-daysviewpanel-dayheader-today,
+.dark-mode .cal-daysviewpanel-dayheader-day-wrap:hover,
+.dark-mode .cal-daysviewpanel-body-daycolumn-today {
+    background-color: #CCCCCC;
+}
+.dark-mode.cal-daysviewpanel-daycolumn-row:hover {
+    background-color:#CCCCCC !important;
+    color: #999999;
+    /*cursor: pointer; see ticket #1484*/
+}
+
 .cal-daysviewpanel-body-daycolumn-inner {
     border-left: 3px double #EDEDED;
     height:100%;
@@ -152,11 +163,7 @@
     font-weight:normal;
     line-height:normal;
     white-space:nowrap;
-    color: #FFFFFF;
-}
-
-.cal-daysviewpanel-body-daycolumn-today .cal-daysviewpanel-daycolumn-row {
-    color: #EBF3FD;
+    color: transparent;
 }
 
 .cal-daysviewpanel-daycolumn-row:hover {
@@ -380,7 +387,6 @@
 /*}*/
 
 .cal-daysviewpanel-event-header-inner {
-    color: white;
     position: absolute;
     top: 2px;
     left: 2px;

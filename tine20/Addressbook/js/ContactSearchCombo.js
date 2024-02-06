@@ -74,7 +74,7 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
 
         if (this.recordClass === null) {
             this.recordClass = Tine.Addressbook.Model.Contact;
-            this.recordProxy = Tine.Addressbook.contactBackend;
+            // this.recordProxy = Tine.Addressbook.contactBackend;
         }
 
         this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : (this.userOnly ?
@@ -82,10 +82,7 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
             this.app.i18n._('Search for Contacts ...')
         ));
 
-        this.plugins = this.plugins || [];
-        if (! this.useAccountRecord && !this.additionalFilterSpec && !this.additionalFilters && !this.noEditPlugin) {
-            this.plugins.push(new RecordEditFieldTriggerPlugin(this.recordEditPluginConfig || {}));
-        }
+        this.useEditPlugin = this.hasOwnProperty('useEditPlugin') ? this.useEditPlugin : (!this.userOnly && !this.useAccountRecord && !this.noEditPlugin);
 
         this.initTemplate();
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);
@@ -169,7 +166,7 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
     getValue: function() {
         if (this.useAccountRecord) {
             if (this.selectedRecord) {
-                return this.selectedRecord.get('account_id');
+                return this.selectedRecord.get('account_id') || this.selectedRecord.get('accountId');
             } else {
                 return this.accountId;
             }
@@ -183,14 +180,14 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
             if (value) {
                 if(value.accountId) {
                     // account object
+                    this.selectedRecord = this.selectedAccount = Tine.Tinebase.data.Record.setFromJson(value, Tine.Tinebase.Model.User);
                     this.accountId = value.accountId;
                     value = value.accountDisplayName;
-                    this.selectedAccount = Tine.Tinebase.data.Record.setFromJson(value, Tine.Tinebase.Model.Account);
                 } else if (typeof(value.get) == 'function') {
                     // account record
+                    this.selectedRecord = this.selectedAccount = value;
                     this.accountId = value.get('id');
                     value = value.get('name');
-                    this.selectedAccount = value;
                 }
             } else {
                 this.accountId = null;

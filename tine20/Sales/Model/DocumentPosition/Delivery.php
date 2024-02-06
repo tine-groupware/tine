@@ -37,6 +37,7 @@ class Sales_Model_DocumentPosition_Delivery extends Sales_Model_DocumentPosition
             Sales_Model_Document_Delivery::MODEL_NAME_PART;
 
         // remove all moneytary fields, this is a delivery document, no money here
+        unset($_definition[self::FIELDS][self::FLD_UNIT_PRICE_TYPE]);
         unset($_definition[self::FIELDS][self::FLD_UNIT_PRICE]);
         unset($_definition[self::FIELDS][self::FLD_POSITION_PRICE]);
         unset($_definition[self::FIELDS][self::FLD_POSITION_DISCOUNT_TYPE]);

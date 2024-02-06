@@ -42,17 +42,19 @@ class Bookmarks_Controller extends Tinebase_Controller_Event
     public function openBookmark($id)
     {
         $bc = Bookmarks_Controller_Bookmark::getInstance();
+
         try {
             $bookmark = $bc->get($id);
+            $url = $bookmark->url = trim($bookmark->url);
             $response = new \Zend\Diactoros\Response('php://memory', 307, [
                 'Referrer-Policy'   => 'no-referrer',
-                'location'          => $bookmark->url
+                'location'          => $url,
             ]);
-            $response->getBody()->write("location: {$bookmark->url}");
+            $response->getBody()->write("location: {$url}");
             
             $hooks = Bookmarks_Config::getInstance()->get(Bookmarks_Config::OPEN_BOOKMARK_HOOKS, []);
             foreach ($hooks as $pattern => $hookClass) {
-                if (preg_match($pattern, $bookmark->url)) {
+                if (preg_match($pattern, $url)) {
                     if (! class_exists($hookClass)) {
                         @include($hookClass . '.php');
                     }

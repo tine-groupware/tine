@@ -1004,6 +1004,11 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         if (null === $conf) {
             return;
         }
+        if ($conf->hasPerspectives) {
+            /** @var Tinebase_Record_PerspectiveInterface $this */
+            // we need to store perspective data in case we have any
+            $this->setPerspectiveTo($this->getPerspectiveRecord());
+        }
         foreach ($conf->getConverters() as $key => $converters) {
             foreach ($converters as $converter) {
                 if (isset($this->_data[$key])) {
@@ -1021,6 +1026,11 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         $conf = self::getConfiguration();
         if (null === $conf) {
             return;
+        }
+        if ($conf->hasPerspectives) {
+            /** @var Tinebase_Record_PerspectiveInterface $this */
+            // we need to store perspective data in case we have any
+            $this->setPerspectiveTo($this->getPerspectiveRecord());
         }
         foreach ($conf->getConverters() as $key => $converters) {
             foreach ($converters as $converter) {
@@ -1229,15 +1239,13 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
         foreach ($data as $key => $value) {
             $this->_data[$key] = $value;
         }
-
-        /** @var Tinebase_Model_Converter_Interface $converter */
-        foreach (static::$_configurationObject->getConverters() as $key => $converters) {
-            if (isset($this->_data[$key])) {
-                foreach ($converters as $converter) {
-                    $this->_data[$key] = $converter->convertToRecord($this, $key, $this->_data[$key]);
-                }
-            }
+        $raii = null;
+        if (!static::$_isHydratingFromBackend) {
+            $raii = new Tinebase_RAII(fn () => static::doneHydratingFromBackend());
+            static::$_isHydratingFromBackend = true;
         }
+        $this->runConvertToRecord();
+        unset($raii);
     }
 
     /**
@@ -1651,6 +1659,56 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function unsetFieldsBeforeConvertingToJson()
     {
+    }
+
+    public function applyFieldGrants(string $action, Tinebase_Record_Interface $oldRecord = null)
+    {
+        $mc = static::getConfiguration();
+        if (!$mc || empty($grantProtectedFields = $mc->grantProtectedFields)) {
+            return;
+        }
+        if (!isset($grantProtectedFields[$action])) {
+            if (!isset($grantProtectedFields[Tinebase_Controller_Record_Abstract::ACTION_ALL])) {
+                return;
+            }
+            $grantProtectedFields = $grantProtectedFields[Tinebase_Controller_Record_Abstract::ACTION_ALL];
+        } else {
+            $grantProtectedFields = $grantProtectedFields[$action];
+        }
+        /** @var Tinebase_Controller_Record_Abstract $ctrl */
+        $ctrl = Tinebase_Core::getApplicationInstance(static::class, '', true);
+
+        $access = [];
+        $deny = [];
+        foreach ($grantProtectedFields as $acl => $fields) {
+            if ($ctrl->checkGrant($this, $acl, false)) {
+                $access = array_unique(array_merge($access, $fields));
+            } else {
+                $deny = array_unique(array_merge($deny, $fields));
+            }
+        }
+        if (empty($denyProperties = array_diff($deny, $access))) {
+            return;
+        }
+
+        if (null === $oldRecord) {
+            $bypassFilters = $this->bypassFilters;
+            $this->bypassFilters = true;
+            try {
+                foreach ($denyProperties as $denyProperty) {
+                    unset($this->{$denyProperty});
+                }
+            } finally {
+                $this->bypassFilters = $bypassFilters;
+            }
+            if (true !== $this->bypassFilters) {
+                $this->isValid(true);
+            }
+        } else {
+            foreach ($denyProperties as $denyProperty) {
+                $this->{$denyProperty} = $oldRecord->{$denyProperty};
+            }
+        }
     }
 
     public function setAccountGrants(Tinebase_Record_Interface $grants)

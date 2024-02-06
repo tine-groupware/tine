@@ -44,6 +44,8 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
      * @var array
      */
     protected $_emptyArray;
+
+    protected $_cpDefs;
     
     /**
      * @param  string|null $_version  the version of the client
@@ -58,6 +60,8 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' maxPhotoSize set to ' . $this->_maxPhotoSize);
         }
+
+        $this->_cpDefs = Addressbook_Controller_ContactProperties_Definition::getInstance()->getAll();
     }
     
     /**
@@ -109,33 +113,29 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
                     break;
                     
                 case 'ADR':
-                    $type = null;
-
+                    $types = [];
                     if (isset($property['TYPE']) && (is_array($property['TYPE']) || $property['TYPE'] instanceof Traversable)) {
                         foreach ($property['TYPE'] as $typeProperty) {
-                            $typeProperty = strtolower($typeProperty);
-
-                            if (in_array($typeProperty, array('home', 'work'))) {
-                                $type = $typeProperty;
-                                break;
-                            }
+                            $types[] = strtoupper($typeProperty);
                         }
                     }
+                    if (empty($types)) {
+                        break;
+                    }
 
-                    if ($type) {
+                    foreach ($this->_cpDefs->filter(Addressbook_Model_ContactProperties_Definition::FLD_MODEL, Addressbook_Model_ContactProperties_Address::class) as $cpDef) {
+                        $vcardMap = $cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_VCARD_MAP};
+                        if (empty($vcardMap) || !isset($vcardMap['TYPE']) || empty(array_intersect((array)$vcardMap['TYPE'], $types))) {
+                            continue;
+                        }
+
                         $parts = $property->getParts();
                         $partsIndex = 1;
-
-                        if ($type == 'home') {
-                            // home address
-                            $addressFields = array('adr_two_street2', 'adr_two_street', 'adr_two_locality', 'adr_two_region', 'adr_two_postalcode', 'adr_two_countryname');
-                        } elseif ($type == 'work') {
-                            // work address
-                            $addressFields = array('adr_one_street2', 'adr_one_street', 'adr_one_locality', 'adr_one_region', 'adr_one_postalcode', 'adr_one_countryname');
+                        $arr = [];
+                        foreach (['street2', 'street', 'locality', 'region', 'postalcode', 'countryname'] as $field) {
+                            $arr[$field] = $parts[$partsIndex++];
                         }
-                        foreach ($addressFields as $field) {
-                            $data[$field] = $parts[$partsIndex++];
-                        }
+                        $data[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}] = $arr;
                     }
 
                     break;
@@ -310,6 +310,12 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
         }
 
         $contact->setFromArray($data);
+
+        foreach ($contact::getConfiguration()->getJsonFacadeFields() as $fieldKey => $def) {
+            if (is_object($contact->{$fieldKey})) {
+                $contact->{$fieldKey}->jsonFacadeFromJson($contact, $def);
+            }
+        }
 
         if (isset($jpegphoto)) {
             $contact->setSmallContactImage($jpegphoto, $this->_maxPhotoSize);

@@ -56,7 +56,7 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
             });
             Ext.StoreMgr.add('Countries', store);
         }
-        
+
         var countryList = Locale.getTranslationList('CountryList');
         if (countryList) {
             var storeData = {results: []};

@@ -556,10 +556,10 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($customerCalculated) {
             $recordData['relations'] = array_merge($recordData['relations'], array(array(
                 "own_model"              => "Sales_Model_Invoice",
-                "own_backend"            => Tasks_Backend_Factory::SQL,
+                "own_backend"            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Sales_Model_Customer',
-                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id'             => $foundCustomer,
                 'type'                   => 'CUSTOMER'
             )));
@@ -690,6 +690,103 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }*/
 
         return $this->_save($recordData, Sales_Controller_PurchaseInvoice::getInstance(), 'PurchaseInvoice', 'id', array($duplicateCheck));
+    }
+
+    /**
+     * export purchase invoice to Datev email
+     *
+     * - support multiple invoices
+     * - add action log
+     *
+     * @param string $modelName
+     * @param $invoiceData
+     * @return array
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    public function exportInvoicesToDatevEmail(string $modelName, $invoiceData)
+    {
+        $controller = $modelName === 'PurchaseInvoice' ? Sales_Controller_PurchaseInvoice::getInstance() 
+            : Sales_Controller_Document_Invoice::getInstance();
+        $configName = $modelName === 'PurchaseInvoice' ? Sales_Config::DATEV_SENDER_EMAIL_PURCHASE_INVOICE
+            : Sales_Config::DATEV_SENDER_EMAIL_INVOICE;
+        
+        $invalidInvoiceIds = [];
+        $validInvoiceIds = [];
+        $errorMessage = null;
+
+        $senderEmail = Sales_Config::getInstance()->get($configName);
+        $sender = !empty($senderEmail) ? Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $senderEmail) 
+            : Tinebase_Core::getUser();
+
+        $recipientEmails = Sales_Config::getInstance()->get(Sales_Config::DATEV_RECIPIENT_EMAILS);
+        if (sizeof($recipientEmails) === 0) {
+            throw new Tinebase_Exception_SystemGeneric('recipient email is not configured');
+        }
+        
+        foreach ($invoiceData as $invoiceId => $attachmentIds) {
+            if (sizeof($attachmentIds) === 0) {
+                $invalidInvoiceIds[] = $invoiceId;
+            } else {
+                $validInvoiceIds[] = $invoiceId;
+            }
+        }
+        
+        if (sizeof($invalidInvoiceIds) > 0) {
+            foreach ($controller->getMultiple($invalidInvoiceIds) as $invoice) {
+                $errorMessage .= PHP_EOL . $invoice->number . ': ' . $invoice->title . ' attachment size: ' . sizeof($invoiceData[$invoice->id]);
+            }
+            $exception = new Tinebase_Exception_SystemGeneric($errorMessage);
+            $exception->setTitle('invoices with invalid attachments');
+            throw $exception;
+        } 
+        
+        $lastDatevSendTime = Tinebase_DateTime::now();
+        $records = $controller->getMultiple($validInvoiceIds);
+        Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($records);
+
+        foreach ($records as $invoice) {
+            $attachments = $invoice->attachments;
+            
+            if ($attachments) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Found ' .
+                $attachments->count() . ' attachments for ' . $modelName . ' : ' . $invoice['name']);
+            
+            $recipients = array_map(function ($recipientEmail) {return new Addressbook_Model_Contact(['email' => $recipientEmail], true);}, $recipientEmails);
+            $messageBody = PHP_EOL . 'Model  : ' . $modelName . ', ID     : ' . $invoice['id']
+                . PHP_EOL . 'Number : ' . $invoice['number'] . ', Title  : ' . $invoice->getTitle()
+                . PHP_EOL . 'Datev Sent Date : ' . $lastDatevSendTime->toString();
+            
+            Tinebase_Notification::getInstance()->send($sender, $recipients, 'Datev notification', $messageBody, null,
+                $attachments->asArray(), false, Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL);
+        }
+
+        $model = Sales_Config::APP_NAME . '_Model_' . $modelName;
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($model, [
+            ['field' => 'id', 'operator' => 'in', 'value' => $validInvoiceIds]
+        ]);
+        $result = [];
+        if ($model === Sales_Model_PurchaseInvoice::class) {
+            $result = $controller->updateMultiple($filter, ['last_datev_send_date' => $lastDatevSendTime->getIso()]);
+            $result = $result['results'];
+        }
+        if ($model === Sales_Model_Document_Invoice::class) {
+            $expander = new Tinebase_Record_Expander($model, Sales_Model_Document_Invoice::getConfiguration()->jsonExpander);
+            $expander->expand($records);
+            foreach ($records as $validInvoice) {
+                $validInvoice['last_datev_send_date'] = $lastDatevSendTime;
+                $controller->update($validInvoice);
+            }
+            $result = $controller->getMultiple($validInvoiceIds);
+        }
+        
+        return [
+            'totalcount' => sizeof($result),
+            'results' => $result->toArray(),
+        ];
     }
     
     /**

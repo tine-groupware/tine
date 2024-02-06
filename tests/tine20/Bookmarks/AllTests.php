@@ -4,12 +4,10 @@
  * 
  * @package     Bookmarks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2012-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  * 
  */
-
-
 
 class Bookmarks_AllTests
 {
@@ -20,11 +18,10 @@ class Bookmarks_AllTests
     
     public static function suite()
     {
-        $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Bookmarks All Tests');
+        $suite = new \PHPUnit\Framework\TestSuite('Bookmarks All Tests');
         
-        //$suite->addTestSuite('Bookmarks_JsonTest');
+        $suite->addTestSuite('Bookmarks_JsonTest');
         $suite->addTestSuite('Bookmarks_ImportTest');
-        //$suite->addTestSuite('Bookmarks_ControllerTest');
         return $suite;
     }
 }

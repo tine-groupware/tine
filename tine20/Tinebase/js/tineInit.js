@@ -43,12 +43,12 @@ Ext.namespace('Tine');
  * @type {Object}
  */
 Tine.clientVersion = {};
-Tine.clientVersion.buildType        = 'none';
-Tine.clientVersion.buildDate        = 'none';
-Tine.clientVersion.buildRevision    = 'none';
-Tine.clientVersion.codeName         = 'none';
-Tine.clientVersion.packageString    = 'none';
-Tine.clientVersion.releaseTime      = 'none';
+Tine.clientVersion.buildType        = BUILD_TYPE;
+Tine.clientVersion.buildDate        = BUILD_DATE;
+Tine.clientVersion.buildRevision    = BUILD_REVISION;
+Tine.clientVersion.codeName         = CODE_NAME;
+Tine.clientVersion.packageString    = PACKAGE_STRING;
+Tine.clientVersion.releaseTime      = RELEASE_TIME;
 
 Tine.__appLoader = require('./app-loader!app-loader.js');
 Tine.__onAllAppsLoaded = new Promise( (resolve) => {
@@ -225,16 +225,19 @@ Tine.Tinebase.tineInit = {
             }
             
             if (target && href && href !== '#') {
+                target.set({
+                    href: decodeURI(href),
+                    rel: "noreferrer",
+                    target: "_blank"
+                });
+
                 // open internal links in same window (use router)
                 if (window.isMainWindow === true) {
-                    if (target.getAttribute('target') === '_blank') {
-
-                        if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
-                            target.set({
-                                href: decodeURI(href),
-                                target: "_self"
-                            });
-                        }
+                    if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
+                        target.set({
+                            href: decodeURI(href),
+                            target: "_self"
+                        });
                     }
                 } else {
                     e.preventDefault();
@@ -366,15 +369,11 @@ Tine.Tinebase.tineInit = {
 
     async getEmailContextMenu(target, email, name, type = 'contact') {
         // store click position, make sure menuItem diaplay around the link
-        if (! Tine.Addressbook  ||  ! email) {
-            return;
-        }
+        if (! Tine.Addressbook  ||  ! email) return;
         
-        const contextMenu = new Ext.menu.Menu({
-            items: []
-        });
-    
+        const contextMenu = new Ext.menu.Menu({items: []});
         let items = [];
+        
         if (type === 'group' || type ===  'mailingList' || type ===  'list') {
             items = await this.getListContextMenuItems(email, name);
         } else {
@@ -1390,7 +1389,7 @@ Tine.Tinebase.tineInit = {
         require('Locale');
         require('Locale/Gettext');
 
-        await waitFor( function() { return Tine.__translationData.__isLoaded; });
+        await waitFor( function() { return Tine.__translationData?.__isLoaded; });
         Tine.__applyExtTranslations();
 
         _.each(Tine.__translationData.msgs, function(msgs, category) {

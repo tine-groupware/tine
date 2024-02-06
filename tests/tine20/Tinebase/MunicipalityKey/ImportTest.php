@@ -36,4 +36,19 @@ class Tinebase_MunicipalityKey_ImportTest extends ImportTestCase
         $this->assertNotEmpty($updatedRecord->relations, 'No relation Found!');
         $this->assertEquals('IMPORTFILE', $updatedRecord->relations->getFirstRecord()->type, 'Importfile relation is missing!');
     }
+
+    public function testXlsUpdate()
+    {
+        $this->testXlsImport();
+
+        $this->_filename = __DIR__ . '/files/gemeindeNr3.xlsx';
+        $definition = 'tinebase_import_municipalitykey';
+        $result = $this->_doImport([], $definition);
+
+        $flensburg = $result['results']->filter('arsCombined', '010010000000')->getFirstRecord();
+        self::assertNotNull($flensburg);
+        self::assertEquals(33333, $flensburg->bevoelkerungGesamt);
+        self::assertEquals('2022-03-31 00:00:00', $flensburg->gebietsstand->toString());
+        self::assertEquals('2022-12-31 00:00:00', $flensburg->bevoelkerungsstand->toString());
+    }
 }

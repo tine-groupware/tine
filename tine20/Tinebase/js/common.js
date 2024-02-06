@@ -1,6 +1,6 @@
 /*
  * Tine 2.0
- * 
+ *
  * @package     Tine
  * @subpackage  Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -76,11 +76,11 @@ Tine.Tinebase.common = {
         if (! Ext.debug) {
             var head = document.getElementsByTagName("head")[0],
                 scriptTag = document.createElement("script");
-            
+
             scriptTag.setAttribute("src", 'library/ExtJS/src/debug.js');
             scriptTag.setAttribute("type", "text/javascript");
             head.appendChild(scriptTag);
-            
+
             var scriptEl = Ext.get(scriptTag);
             scriptEl.on('load', function () {
                 Ext.log('debug console initialised');
@@ -92,7 +92,7 @@ Tine.Tinebase.common = {
             Ext.log('debug console reactivated');
         }
     },
-    
+
     /**
      * Returns emails from string or recipient token
      * @param emails
@@ -105,10 +105,10 @@ Tine.Tinebase.common = {
         }
         return emails;
     },
-    
+
     /**
      * Returns localised date and time string
-     * 
+     *
      * @param {mixed} $_iso8601
      * @see Ext.util.Format.date
      * @return {String} localised date and time
@@ -126,7 +126,7 @@ Tine.Tinebase.common = {
 
     /**
      * Returns localised date string
-     * 
+     *
      * @param {mixed} date
      * @see Ext.util.Format.date
      * @return {String} localised date
@@ -145,14 +145,14 @@ Tine.Tinebase.common = {
                 Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key));
             }).join(' ') : '';
     },
-    
+
     /**
      * Returns localised number string with two digits if no format is given
-     * 
+     *
      * @param {Number} v The number to format.
      * @param {String} format The way you would like to format this text.
      * @see Ext.util.Format.number
-     * 
+     *
      * @return {String} The formatted number.
      */
     floatRenderer: function(v, format) {
@@ -162,39 +162,39 @@ Tine.Tinebase.common = {
         }
         return Ext.util.Format.number(v, format);
     },
-    
+
     /**
      * Renders a float or integer as percent
-     * 
+     *
      * @param {Number} v The number to format.
      * @see Ext.util.Format.number
-     * 
+     *
      * @return {String} The formatted number.
      */
     percentRenderer: function(v, type, nullable) {
         if (['', null, undefined].indexOf(v) >= 0 && nullable) {
             return '';
         }
-        
+
         if (! Ext.isNumber(v)) {
-            v = 0;
+            v = parseInt(v, 10) || 0;
         }
-        
+
         v = Ext.util.Format.number(v, (type == 'float' ? '0.00' : '0'));
-        
+
         if (type == 'float') {
             var decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator');
             if (decimalSeparator == ',') {
                 v = v.replace(/\./, ',');
             }
         }
-        
+
         return v + ' %';
     },
-    
+
     /**
      * Returns localised time string
-     * 
+     *
      * @param {mixed} date
      * @see Ext.util.Format.date
      * @return {String} localised time
@@ -212,9 +212,9 @@ Tine.Tinebase.common = {
             return Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', key));
         }).join(' ') : '';
     },
-    
+
     /**
-     * renders bytes for filesize 
+     * renders bytes for filesize
      * @param {Integer} value
      * @param {Object} metadata
      * @param {Tine.Tinebase.data.Record} record
@@ -240,9 +240,11 @@ Tine.Tinebase.common = {
         value = parseInt(value, 10);
         decimals = Ext.isNumber(decimals) ? decimals : 2;
         var decimalSeparator = Tine.Tinebase.registry.get('decimalSeparator'),
-            suffix = ['Bytes', 'Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+            suffix = useDecimalValues ?
+                ['Bytes', 'Bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'] :
+                ['Bytes', 'Bytes', 'kiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'] ,
             divisor = useDecimalValues ? 1000 : 1024;
-            
+
         if (forceUnit) {
             var i = suffix.indexOf(forceUnit);
             i = (i == -1) ? 0 : i;
@@ -255,17 +257,17 @@ Tine.Tinebase.common = {
 
         return String(value).replace('.', decimalSeparator);
     },
-    
+
     /**
      * Returns rendered tags for grids
-     * 
+     *
      * @param {mixed} tags
      * @return {String} tags as colored squares with qtips
-     * 
+     *
      * TODO add style for tag divs
      */
     tagsRenderer: function (tags) {
-        var result = '';
+        let result = '';
         if (tags) {
             for (var i = 0; i < tags.length; i += 1) {
                 if (tags[i] && tags[i].name) {
@@ -276,29 +278,29 @@ Tine.Tinebase.common = {
                     if (tags[i].occurrence) {
                         qtipText += ' (' + i18n._('Usage:&#160;') + tags[i].occurrence + ')';
                     }
-                    result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:' + (tags[i].color ? tags[i].color : '#fff') + ';">&#160;</div>';
+                    result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags dark-reverse" style="background-color:' + (tags[i].color ? tags[i].color : '#fff') + ';">&#160;</div>';
                 }
             }
         }
-        
+
         return result;
     },
-    
+
     /**
      * render single tag
-     * 
+     *
      * @param {Tine.Tinebase.Model.Tag} tag
      */
     tagRenderer: function(tag) {
         if (! Tine.Tinebase.common.tagRenderer.tpl) {
             Tine.Tinebase.common.tagRenderer.tpl = new Ext.XTemplate(
-                '<div class="tb-grid-tags" style="background-color:{values.color};">&#160;</div>',
-                '<div class="x-widget-tag-tagitem-text" ext:qtip="', 
-                    '{[this.encode(values.name)]}', 
+                '<div class="tb-grid-tags dark-reverse" style="background-color:{values.color};">&#160;</div>',
+                '<div class="x-widget-tag-tagitem-text" ext:qtip="',
+                    '{[this.encode(values.name)]}',
                     '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
                     '</i>&nbsp;[{occurrence}]',
                     '<tpl if="description != null && description.length &gt; 1"><hr>{[this.encode(values.description)]}</tpl>" >',
-                    
+
                     '&nbsp;{[this.encode(values.name)]}',
                     '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',
                 '</div>',
@@ -312,9 +314,9 @@ Tine.Tinebase.common = {
                 }
             }).compile();
         }
-        
+
         var result =  i18n._('No Information');
-        
+
         if (tag && Ext.isFunction(tag.beginEdit)) {
             // support records
             tag = tag.data;
@@ -322,22 +324,22 @@ Tine.Tinebase.common = {
             // support grid renderers
             tag = arguments[2].data;
         }
-        
+
         // non objects are treated as ids and -> No Information
         if (Ext.isObject(tag)) {
             result = Tine.Tinebase.common.tagRenderer.tpl.apply(tag);
         }
-        
+
         return result;
     },
-    
+
     /**
      * Returns rendered containers
-     * 
+     *
      * @TODO show qtip with grants
-     * 
+     *
      * @param {mixed} container
-     * @return {String} 
+     * @return {String}
      */
     containerRenderer: function(container, metaData) {
         // lazy init tempalte
@@ -350,19 +352,19 @@ Tine.Tinebase.common = {
                 '</div>'
             ).compile();
         }
-        
+
         var result =  i18n._('No Information');
-        
+
         // support container records
         if (container && Ext.isFunction(container.beginEdit)) {
             container = container.data;
         }
-        
+
         // non objects are treated as ids and -> No Information
         if (Ext.isObject(container)) {
             var name = Ext.isFunction(container.beginEdit) ? container.get('name') : container.name,
                 color = Ext.isFunction(container.beginEdit) ? container.get('color') : container.color;
-            
+
             if (name) {
                 result = Tine.Tinebase.common.containerRenderer.tpl.apply({
                     name: Ext.util.Format.htmlEncode(name).replace(/ /g,"&nbsp;"),
@@ -372,7 +374,7 @@ Tine.Tinebase.common = {
                 metaData.css = 'x-form-empty-field';
             }
         }
-        
+
         return result;
     },
 
@@ -396,7 +398,7 @@ Tine.Tinebase.common = {
             for (var i = 0; i < relations.length; i += 1) {
                 if (relations[i]) {
                     var qtipText = Tine.Tinebase.common.doubleEncode(relations[i].type);
-                    result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:white"' + ';">&#160;</div>';
+                    result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags dark-reverse" style="background-color:white"' + ';">&#160;</div>';
                 }
             }
         }
@@ -405,7 +407,7 @@ Tine.Tinebase.common = {
 
     /**
      * Returns prettyfied minutes
-     * 
+     *
      * @param  {Number} minutes
      * @param  {String} format -> {0} will be replaced by Hours, {1} with minutes
      * @param  {String} leadingZeros add leading zeros for given item {i|H}
@@ -416,7 +418,7 @@ Tine.Tinebase.common = {
             i = minutes % 60,
             H = Math.floor(minutes / 60),
             Hs;
-        
+
         if (leadingZeros && (Ext.isString(leadingZeros) || leadingZeros === true)) {
             if (leadingZeros === true || (leadingZeros.match(/i/) && String(i).length === 1)) {
                 i = '0' + String(i);
@@ -425,65 +427,65 @@ Tine.Tinebase.common = {
                 H = '0' + String(H);
             }
         }
-        
+
         if (! format || ! Ext.isString(format)) {
             s = String.format(i18n.ngettext('{0} minute', '{0} minutes', i), i);
             Hs = String.format(i18n.ngettext('{0} hour', '{0} hours', H), H);
             //var ds = String.format(i18n.ngettext('{0} workday', '{0} workdays', d), d);
-            
+
             if (i === 0) {
                 s = Hs;
             } else {
                 s = H ? Hs + ', ' + s : s;
             }
             //s = d ? ds + ', ' + s : s;
-            
+
             return s;
         }
-        
+
         return String.format(format, H, i);
     },
 
     /**
      * Returns prettyfied seconds
-     * 
+     *
      * @param  {Number} seconds
      * @return {String}
      */
     secondsRenderer: function (seconds) {
-        
+
         var s = seconds % 60,
             m = Math.floor(seconds / 60),
             result = '';
-        
+
         var secondResult = String.format(i18n.ngettext('{0} second', '{0} seconds', s), s);
-        
+
         if (m) {
             result = Tine.Tinebase.common.minutesRenderer(m);
         }
-        
+
         if (s) {
             if (result !== '') {
                 result += ', ';
             }
             result += secondResult;
         }
-        
+
         return result;
     },
-    
+
     /**
      * Returns the formated username
-     * 
-     * @param {object} account object 
+     *
+     * @param {object} account object
      * @return {string} formated user display name
      */
     usernameRenderer: function (accountObject) {
         var result = (accountObject) ? accountObject.accountDisplayName : '';
-        
+
         return Ext.util.Format.htmlEncode(result);
     },
-    
+
     /**
      * Returns a username or groupname with according icon in front
      */
@@ -520,30 +522,30 @@ Tine.Tinebase.common = {
             type = record.data.account_type;
             displayName = _.get(record, 'data.account_name.name', record.data.account_name);
         }
-        
+
         if (displayName == 'Anyone') {
             displayName = i18n._(displayName);
             type = 'group';
         }
-        
+
         iconCls = 'tine-grid-row-action-icon renderer renderer_account' + Ext.util.Format.capitalize(type) + 'Icon';
         return '<div class="' + iconCls  + '">&#160;</div>' + Ext.util.Format.htmlEncode(displayName || '');
     },
-    
+
     /**
      * Returns account type icon
-     * 
+     *
      * @return String
      */
     accountTypeRenderer: function (type) {
         var iconCls = 'tine-grid-row-action-icon ' + (type === 'user' ? 'renderer_accountUserIcon' : 'renderer_accountGroupIcon');
-        
+
         return '<div style="background-position: 0px" class="' + iconCls  + '">&#160;</div>';
     },
-    
+
     /**
      * Returns dropdown hint icon for editor grid columns with comboboxes
-     * 
+     *
      * @return String
      */
     cellEditorHintRenderer: function (value) {
@@ -552,13 +554,13 @@ Tine.Tinebase.common = {
 
     /**
      * return yes or no in the selected language for a boolean value
-     * 
+     *
      * @param {string} value
      * @return {string}
      */
     booleanRenderer: function (value) {
         var translationString = String.format("{0}",(Boolean(value) && value !== "0") ? Locale.getTranslationData('Question', 'yes') : Locale.getTranslationData('Question', 'no'));
-        
+
         return translationString.substr(0, translationString.indexOf(':'));
     },
 
@@ -600,7 +602,7 @@ Tine.Tinebase.common = {
 
     /**
      * sorts account/user objects
-     * 
+     *
      * @param {Object|String} user_id
      * @return {String}
      */
@@ -618,7 +620,7 @@ Tine.Tinebase.common = {
 
     /**
      * sorts records
-     * 
+     *
      * @param {Object} record
      * @return {String}
      */
@@ -631,20 +633,20 @@ Tine.Tinebase.common = {
             return record;
         }
     },
-    
+
     /**
      * check whether given value can be interpreted as true
-     * 
+     *
      * @param {String|Integer|Boolean} value
      * @return {Boolean}
      */
     isTrue: function (value) {
         return value === 1 || value === '1' || value === true || value === 'true';
     },
-    
+
     /**
      * check whether object is empty (has no property)
-     * 
+     *
      * @param {Object} obj
      * @return {Boolean}
      */
@@ -656,10 +658,10 @@ Tine.Tinebase.common = {
         }
         return true;
     },
-    
+
     /**
      * clone function
-     * 
+     *
      * @param {Object/Array} o Object or array to clone
      * @return {Object/Array} Deep clone of an object or an array
      */
@@ -667,14 +669,14 @@ Tine.Tinebase.common = {
         if (! o || 'object' !== typeof o) {
             return o;
         }
-        
+
         if ('function' === typeof o.clone) {
             return o.clone();
         }
-        
+
         var c = '[object Array]' === Object.prototype.toString.call(o) ? [] : {},
             p, v;
-            
+
         for (p in o) {
             if (o.hasOwnProperty(p)) {
                 v = o[p];
@@ -688,10 +690,10 @@ Tine.Tinebase.common = {
         }
         return c;
     },
-    
+
     /**
      * assert that given object is comparable
-     * 
+     *
      * @param {mixed} o
      * @return {mixed} o
      */
@@ -700,26 +702,26 @@ Tine.Tinebase.common = {
         if (Ext.isObject(o) || Ext.isArray(o)) {
             Tine.Tinebase.common.applyComparableToString(o);
         }
-        
+
         return o;
     },
-    
+
     /**
      * apply Ext.encode as toString functino to given object
-     * 
+     *
      * @param {mixed} o
      */
     applyComparableToString: function(o) {
         o.toString = function() {return Ext.encode(o)};
     },
-    
+
     /**
      * check if user has right to view/manage this application/resource
-     * 
+     *
      * @param   {String}      right (view, admin, manage)
      * @param   {String}      application
      * @param   {String}      resource (for example roles, accounts, ...)
-     * @returns {Boolean} 
+     * @returns {Boolean}
      */
     hasRight: function (right, application, resource) {
 
@@ -744,32 +746,32 @@ Tine.Tinebase.common = {
         }
 
         var result = false;
-        
+
         for (var i = 0; i < userRights.length; i += 1) {
             if (userRights[i] === 'admin') {
                 result = true;
                 break;
             }
-            
+
             if (right === 'view' && (userRights[i] === 'view_' + resource || userRights[i] === 'manage_' + resource)) {
                 result = true;
                 break;
             }
-            
+
             if (right === 'manage' && userRights[i] === 'manage_' + resource) {
                 result = true;
                 break;
             }
-            
+
             if (right === userRights[i]) {
                 result = true;
                 break;
             }
         }
-    
+
         return result;
     },
-    
+
     /**
      * returns random integer number
      * @param {Integer} min
@@ -822,8 +824,8 @@ Tine.Tinebase.common = {
      * @param {Ext.Element|Function} cb
      */
     linkifyText: function(text, cb, scope) {
-        require.ensure(["linkifyjs", "linkifyjs/html"], function() {
-            const linkifyHtml = require('linkifyjs/html');
+        require.ensure(["linkifyjs", "linkify-html"], function() {
+            const { default: linkifyHtml } = require('linkify-html');
             let linkifyed = linkifyHtml(text);
 
             if (Ext.isFunction(cb)) {
@@ -833,7 +835,7 @@ Tine.Tinebase.common = {
             }
         }, 'Tinebase/js/linkify');
     },
-    
+
     /**
      * find record from target
      *
@@ -847,7 +849,7 @@ Tine.Tinebase.common = {
             recordClass = target.dom.dataset.recordClass;
             recordId = target.dom.dataset.recordId;
         }
-    
+
         // find record from deeplink
         const urlRegex = '^' + _.escapeRegExp(Tine.Tinebase.common.getUrl());
         const recordRegex = '#\/(?<appName>[a-zA-Z]+)\/(?<modelName>[a-zA-Z]+)\/(?<recordId>[a-z0-9]+)';
@@ -857,7 +859,7 @@ Tine.Tinebase.common = {
             recordClass = `${matches.groups.appName}_Model_${matches.groups.modelName}`;
             recordId = matches.groups.recordId;
         }
-        
+
         return [recordClass, recordId];
     },
 
@@ -871,7 +873,7 @@ Tine.Tinebase.common = {
         const matches = text.match(/(:(?<email>[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+))(:(?<name>.*))?/mi);
         return matches?.groups ?? null;
     },
-    
+
     /**
      * find contacts by email string
      *
@@ -881,17 +883,23 @@ Tine.Tinebase.common = {
      */
     findContactsByEmailString: async function (addresses) {
         const result = [];
-        
+
         if (!addresses || addresses === '') {
             return result;
         }
-        
+
         addresses = addresses.replaceAll(';', ',');
         addresses = addresses.replace(/['"]+/g, '');
+        addresses = _.compact(addresses.split(','));
         
-        const addressParser = await import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses');
-        const parsedList = addressParser.parseAddressList(addresses);
-        
+        const {default: addrs} = await import(/* webpackChunkName: "Tinebase/js/email-addresses" */ 'email-addresses')
+
+        const parsedList = [];
+        addresses.forEach((address) => {
+            address = addrs.parseOneAddress(address);
+            if (address) parsedList.push(address);
+        })
+
         let emailArray = _.map(parsedList, (parsed) => {
             let contact = {
                 'email': parsed.address ?? '',
@@ -899,28 +907,28 @@ Tine.Tinebase.common = {
                 'type': '',
                 'n_fileas': '',
                 'name': parsed?.name ?? '',
-                'record_id': ''
+                'contact_record': ''
             };
-            
+
             if (contact['email'] !== '') {
                 return contact;
             }
         });
         emailArray = _.filter(emailArray);
-        
+
         const {results: contacts} = await Tine.Addressbook.searchContactsByRecipientsToken(emailArray);
-        
+
         _.each(emailArray, (address) => {
             const existingAddress = _.find(contacts, function (contact) {
                 return address.email === contact['email'];
             });
-            
+
             address = existingAddress ?? address;
             if (address) {
                 result.push(address);
             }
         });
-        
+
         return result;
     },
 
@@ -967,39 +975,39 @@ Tine.Tinebase.common = {
      */
     checkEmailDomain: function(email) {
         const allowedDomains = this.getAllowedDomains();
-    
+
         if (! email || ! allowedDomains) {
             if (! email) {
                 Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - no mail given');
             }
             return true;
         }
-        
+
         Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - email: ' + email);
-        
+
         const emailDomain = email.split('@')[1];
         return (allowedDomains.indexOf(emailDomain) !== -1);
     },
-    
+
     getAllowedDomains: function() {
         if (! Tine.Tinebase.registry.get('primarydomain')) {
             Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - no primarydomain config found');
             return null;
         }
-    
+
         let allowedDomains = [Tine.Tinebase.registry.get('primarydomain')];
-    
+
         if (Ext.isString(Tine.Tinebase.registry.get('secondarydomains'))) {
             allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('secondarydomains').split(','));
         }
-    
+
         if (Ext.isString(Tine.Tinebase.registry.get('additionaldomains'))) {
             allowedDomains = allowedDomains.concat(Tine.Tinebase.registry.get('additionaldomains').split(','));
         }
-    
+
         Tine.log.debug('Tine.Tinebase.common.checkEmailDomain - allowedDomains:');
         Tine.log.debug(allowedDomains);
-        
+
         return allowedDomains;
     },
 

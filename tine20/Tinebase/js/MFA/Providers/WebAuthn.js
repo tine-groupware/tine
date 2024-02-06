@@ -19,7 +19,7 @@ class WebAuthn extends Abstract {
     }
 
     async unlock (opts) {
-        const rfc4648 = await import(/* webpackChunkName: "Tinebase/js/rfc4648" */ 'rfc4648');
+        const rfc4648 = await import('rfc4648');
         const publicKeyOptions = await Tine.Tinebase.getWebAuthnAuthenticateOptionsForMFA(this.username, this.mfaDevice.id);
         const accountid = publicKeyOptions.extensions.userHandle;
         publicKeyOptions.challenge = rfc4648.base64url.parse(publicKeyOptions.challenge, { loose: true });

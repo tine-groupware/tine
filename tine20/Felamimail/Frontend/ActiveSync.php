@@ -367,6 +367,50 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
         );
         
         $subject = $incomingMessage->headerExists('subject') ? $incomingMessage->getHeader('subject') : null;
+
+        $fmailMessage = null;
+        try {
+            if ($incomingMessage->headerExists('In-Reply-To')) {
+                $inReplyTo = $incomingMessage->getHeader('In-Reply-To');
+                $cacheBackend = new Felamimail_Backend_Cache_Sql_Message();
+                $systemFolders = Felamimail_Controller_Folder::getInstance()->getSystemFolders($account);
+
+                $userAccountIds = Felamimail_Controller_Account::getInstance()->search(
+                    Felamimail_Controller_Account::getVisibleAccountsFilterForUser(), NULL, FALSE, TRUE);
+                $result =  $cacheBackend->search(new Felamimail_Model_MessageFilter([
+                    array('field' => 'message_id', 'operator' => 'equals', 'value' => $inReplyTo),
+                    array('field' => 'account_id', 'operator' => 'in', 'value' => $userAccountIds)
+                ]));
+
+                //we might have multiple messages with same header 'In-Reply-To', atm we save copy to all of their folder
+                //eg : incoming message from inbox to inbox.f1 and inbox.f2, we save copy to both folders
+                $blacklist = array_merge($systemFolders, [
+                    'inbox.spam',
+                    'inbox.ham'
+                ]);
+                $folders = [];
+                foreach ($result as $message) {
+                    $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
+                    $fmailMessage = $message;
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . " Found source Message from folder : " . $folder['globalname']);
+
+                    if (!in_array(strtolower((string)$folder['globalname']), $blacklist)) {
+                        array_push($folders, $folder);
+                    }
+                }
+                
+                if (count($folders) > 0) {
+                    $fmailMessage['sent_copy_folder'] = array_map(function($folder) {return $folder['id'];},  $folders);
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . " set sent copy folders : " . print_r(array_map(function($folder) {return $folder['globalname'];}, $folders), true));
+                }
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . " Could not find original message : " . $tenf);
+        }
         
         if (Tinebase_Mail::isiMIPMail($incomingMessage)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -377,7 +421,7 @@ class Felamimail_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract implem
 
             $mail = Tinebase_Mail::createFromZMM($incomingMessage, null, $account->signature, $account->signature_position);
         
-            Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent);
+            Felamimail_Controller_Message_Send::getInstance()->sendZendMail($account, $mail, (bool)$saveInSent, $fmailMessage);
         }
     }
     

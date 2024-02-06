@@ -10,6 +10,8 @@
  *
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 use League\OAuth2\Server\AuthorizationValidators\BearerTokenValidator;
 use SAML2\AuthnRequest;
 use SAML2\Binding;
@@ -29,6 +31,8 @@ class SSO_Controller extends Tinebase_Controller_Event
     use Tinebase_Controller_SingletonTrait;
 
     public const WEBFINGER_REL = 'http://openid.net/specs/connect/1.0/issuer';
+    public const OIDC_AUTH_REQUEST_TYPE = 'oidc_auth';
+    public const OIDC_AUTH_CLIENT_REQUEST_TYPE = 'oidc_auth_client';
 
     protected $_applicationName = SSO_Config::APP_NAME;
 
@@ -44,6 +48,10 @@ class SSO_Controller extends Tinebase_Controller_Event
         ]))->toArray());
 
         $r->addGroup('/sso', function (\FastRoute\RouteCollector $routeCollector) {
+            $routeCollector->addRoute(['GET'], '/oid/auth/response', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'publicOidAuthResponse', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
+            ]))->toArray());
             $routeCollector->addRoute(['GET', 'POST'], '/oauth2/authorize', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'publicAuthorize', [
                 Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
@@ -156,6 +164,17 @@ class SSO_Controller extends Tinebase_Controller_Event
         return $response;
     }
 
+    protected static function getLoginFakeRequest(string $url): Tinebase_Http_Request
+    {
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        $request = Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class);
+
+        return Tinebase_Http_Request::fromString(
+            "POST $url HTTP/1.1\r\n"
+            . (($line = $request->getHeaderLine('USER-AGENT')) ? 'USER-AGENT: ' . $line . "\r\n" : '')
+            . "\r\n\r\n")->setServer(new \Laminas\Stdlib\Parameters([$request->getServerParams()]));
+    }
+
     // TODO FIX ME
     // 3.1.2.6.  Authentication Error Response
     public static function publicAuthorize(): \Psr\Http\Message\ResponseInterface
@@ -179,34 +198,24 @@ class SSO_Controller extends Tinebase_Controller_Event
             return new \Laminas\Diactoros\Response('php://memory', 401);
         }
 
-        try {
-            Tinebase_Core::startCoreSession();
-        } catch (Zend_Session_Exception $zse) {
-            // expire session cookie for client
-            Tinebase_Session::expireSessionCookie();
-            return new \Laminas\Diactoros\Response('php://memory', 500);
-        }
-
-        if (isset($request->getParsedBody()['username']) && isset($request->getParsedBody()['password'])) {
-            Tinebase_Controller::getInstance()->login($request->getParsedBody()['username'],
-                $request->getParsedBody()['password'], Tinebase_Http_Request::fromString('POST /sso/authorize HTTP/1.1' . "\r\n\r\n"), 'openid connect flow');
-        }
-
-        // TODO FIXME
-        // 3.1.2.3.  Authorization Server Authenticates End-User
-        // The Authentication Request contains the prompt parameter with the value login. In this case, the Authorization Server MUST reauthenticate the End-User even if the End-User is already authenticated.
-
-        if ($user = Tinebase_Core::getUser()) {
-
-            $accessLog = new Tinebase_Model_AccessLog(['clienttype' => Tinebase_Frontend_Json::REQUEST_TYPE], true);
-            Tinebase_Controller::getInstance()->forceUnlockLoginArea();
-            Tinebase_Controller::getInstance()->setRequestContext(array(
-                'MFAPassword' => isset($request->getParsedBody()['MFAPassword']) ? $request->getParsedBody()['MFAPassword'] : null,
-                'MFAId'       => isset($request->getParsedBody()['MFAUserConfigId']) ? $request->getParsedBody()['MFAUserConfigId'] : null,
-            ));
+        if (isset($request->getParsedBody()['username'])) {
             try {
-                Tinebase_Controller::getInstance()->_validateSecondFactor($accessLog, $user);
-            } catch (Tinebase_Exception_AreaUnlockFailed | Tinebase_Exception_AreaLocked $tea) { // 630 + 631
+                if (!empty($request->getParsedBody()['password'] ?? null)) {
+                    Tinebase_Controller::getInstance()->forceUnlockLoginArea();
+                    try {
+                        Tinebase_Controller::getInstance()->login($request->getParsedBody()['username'],
+                            $request->getParsedBody()['password'],
+                            static::getLoginFakeRequest('/sso/oauth2/authorize'),
+                            self::OIDC_AUTH_REQUEST_TYPE);
+                    } finally {
+                        Tinebase_Controller::getInstance()->forceUnlockLoginArea(false);
+                    }
+                } else {
+                    Tinebase_Session::getSessionNamespace()->sso_oid_authRequest = $authRequest;
+                    static::passwordLessLogin($request->getParsedBody()['username']);
+                }
+            } catch (Tinebase_Exception_AreaUnlockFailed | Tinebase_Exception_AreaLocked
+                    | Tinebase_Exception_Auth_PwdRequired | Tinebase_Exception_Auth_Redirect $tea) { // 630 + 631 + 650 + 651
                 $response = (new \Laminas\Diactoros\Response())->withHeader('content-type', 'application/json');
                 $response->getBody()->write(json_encode([
                     'jsonrpc' => '2.0',
@@ -219,13 +228,19 @@ class SSO_Controller extends Tinebase_Controller_Event
                 ]));
                 return $response;
             }
+        }
 
+        // TODO FIXME
+        // 3.1.2.3.  Authorization Server Authenticates End-User
+        // The Authentication Request contains the prompt parameter with the value login. In this case, the Authorization Server MUST reauthenticate the End-User even if the End-User is already authenticated.
+
+        if ($user = Tinebase_Core::getUser()) {
             $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($user));
             $authRequest->setAuthorizationApproved(true);
             $response = $server->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
             if ($request->hasHeader('x-requested-with') && $request->getHeader('x-requested-With')[0] === 'XMLHttpRequest') {
                 // our login client
-                $response->getBody()->write('{ "Location": "' . $response->getHeader('Location')[0] . '" }');
+                $response->getBody()->write('{ "method":"GET", "url": "' . $response->getHeader('Location')[0] . '" }');
                 return $response->withoutHeader('Location');
             } else {
                 return $response;
@@ -266,9 +281,7 @@ class SSO_Controller extends Tinebase_Controller_Event
         }
 
         $response = new \Laminas\Diactoros\Response('php://memory', 200, ['Content-Type' => 'application/json']);
-
         $serverUrl = rtrim(Tinebase_Core::getUrl(), '/');
-
         $config = [
             'issuer'                                            => static::getOAuthIssuer(),
             'authorization_endpoint'                            => $serverUrl . '/sso/oauth2/authorize',
@@ -293,113 +306,8 @@ class SSO_Controller extends Tinebase_Controller_Event
                 'RS256',
             ],
         ];
-        /**
-        {
-        "response_types_supported": [
-        "code",
-        "token",
-        "id_token",
-        "code token",
-        "code id_token",
-        "token id_token",
-        "code token id_token",
-        "none"
-        ],
-        "subject_types_supported": [
-        "public"
-        ],
-        "id_token_signing_alg_values_supported": [
-        "RS256"
-        ],
-        "scopes_supported": [
-        "openid",
-        "email",
-        "profile"
-        ],
-        "token_endpoint_auth_methods_supported": [
-        "client_secret_post",
-        "client_secret_basic"
-        ],
-        "claims_supported": [
-        "aud",
-        "email",
-        "email_verified",
-        "exp",
-        "family_name",
-        "given_name",
-        "iat",
-        "iss",
-        "locale",
-        "name",
-        "picture",
-        "sub"
-        ],
-        "code_challenge_methods_supported": [
-        "plain",
-        "S256"
-        ],
-        "grant_types_supported": [
-        "authorization_code",
-        "refresh_token",
-        "urn:ietf:params:oauth:grant-type:device_code",
-        "urn:ietf:params:oauth:grant-type:jwt-bearer"
-        ]
-        }
 
-         */
-        /**
-         *
-        "userinfo_endpoint":
-        "https://server.example.com/connect/userinfo",
-        "check_session_iframe":
-        "https://server.example.com/connect/check_session",
-        "end_session_endpoint":
-        "https://server.example.com/connect/end_session",
-        "jwks_uri":
-        "https://server.example.com/jwks.json",
-        "scopes_supported":
-        ["openid", "profile", "email", "address",
-        "phone", "offline_access"],
-        "response_types_supported":
-        ["code", "code id_token", "id_token", "token id_token"],
-        "acr_values_supported":
-        ["urn:mace:incommon:iap:silver",
-        "urn:mace:incommon:iap:bronze"],
-        "subject_types_supported":
-        ["public", "pairwise"],
-        "userinfo_signing_alg_values_supported":
-        ["RS256", "ES256", "HS256"],
-        "userinfo_encryption_alg_values_supported":
-        ["RSA1_5", "A128KW"],
-        "userinfo_encryption_enc_values_supported":
-        ["A128CBC-HS256", "A128GCM"],
-        "id_token_signing_alg_values_supported":
-        ["RS256", "ES256", "HS256"],
-        "id_token_encryption_alg_values_supported":
-        ["RSA1_5", "A128KW"],
-        "id_token_encryption_enc_values_supported":
-        ["A128CBC-HS256", "A128GCM"],
-        "request_object_signing_alg_values_supported":
-        ["none", "RS256", "ES256"],
-        "display_values_supported":
-        ["page", "popup"],
-        "claim_types_supported":
-        ["normal", "distributed"],
-        "claims_supported":
-        ["sub", "iss", "auth_time", "acr",
-        "name", "given_name", "family_name", "nickname",
-        "profile", "picture", "website",
-        "email", "email_verified", "locale", "zoneinfo",
-        "http://example.info/claims/groups"],
-        "claims_parameter_supported":
-        true,
-        "service_documentation":
-        "http://server.example.com/connect/service_documentation.html",
-        "ui_locales_supported":
-        ["en-US", "en-GB", "en-CA", "fr-FR", "fr-CA"]
-         */
         $response->getBody()->write(json_encode($config));
-
         return $response;
     }
 
@@ -704,30 +612,7 @@ class SSO_Controller extends Tinebase_Controller_Event
             }
         } catch (SSO_Facade_SAML_RedirectException $e) {
             $response = new \Laminas\Diactoros\Response();
-            $response->getBody()->write('<html>
-<body>
-<p class="pulsate">'.Tinebase_Translation::getTranslation()->translate('redirecting ...').'</p>
-<form method="post" action="' . $e->redirectUrl . '">');
-            foreach ($e->data as $name => $value) {
-                $response->getBody()->write('<input type="hidden" name="' . htmlspecialchars($name, ENT_HTML5 | ENT_COMPAT)
-                    . '" value="' . htmlspecialchars($value, ENT_HTML5 | ENT_COMPAT) . '"/>');
-            }
-            $response->getBody()->write('
-    <input type="submit" value="continue" style="display: none;"/>
-    <script type="text/javascript">window.onload = function() { document.getElementsByTagName("form")[0].submit() };</script>
-    <style>
-        .pulsate {
-            animation: pulsate 1s ease-out;
-            animation-iteration-count: infinite; 
-        }
-        @keyframes pulsate {
-            0% { opacity: 0.5; }
-            50% { opacity: 1.0; }
-            100% { opacity: 0.5; }
-        }
-</style>
-</form>
-</html>');
+            $response->getBody()->write(\Tinebase_Helper::createFormHTML($e->redirectUrl, $e->data));
         }
 
         return $response;
@@ -749,25 +634,38 @@ class SSO_Controller extends Tinebase_Controller_Event
         return static::renderLoginPage($rp, $data);
     }
 
-    protected static function renderLoginPage(SSO_Model_RelyingParty $rp, array $data)
+    protected static function renderLoginPage(SSO_Model_RelyingParty $rp, array $data, ?string $url = null, ?Tinebase_Exception_SystemGeneric $mfaEx = null)
     {
         $locale = Tinebase_Core::getLocale();
 
         $jsFiles = ['SSO/js/login.js'];
         $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=all";
 
-        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+        $initialData = [
+            'sso' => $data,
+            'relyingParty' => [
+                SSO_Model_RelyingParty::FLD_LABEL => $rp->{SSO_Model_RelyingParty::FLD_LABEL},
+                SSO_Model_RelyingParty::FLD_DESCRIPTION => $rp->{SSO_Model_RelyingParty::FLD_DESCRIPTION},
+                SSO_Model_RelyingParty::FLD_LOGO => $rp->{SSO_Model_RelyingParty::FLD_LOGO},
+            ],
+        ];
+        if ($mfaEx) {
+            $initialData['mfa'] = [
+                'message' => $mfaEx->getMessage(),
+                'data' => $mfaEx->toArray(),
+            ];
+        }
+
+        $data = [
             'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
             'lang' => $locale,
-            'initialData' => json_encode([
-                'sso' => $data,
-                'relyingParty' => [
-                    SSO_Model_RelyingParty::FLD_LABEL => $rp->{SSO_Model_RelyingParty::FLD_LABEL},
-                    SSO_Model_RelyingParty::FLD_DESCRIPTION => $rp->{SSO_Model_RelyingParty::FLD_DESCRIPTION},
-                    SSO_Model_RelyingParty::FLD_LOGO => $rp->{SSO_Model_RelyingParty::FLD_LOGO},
-                ],
-            ])
-        ]);
+            'initialData' => json_encode($initialData),
+        ];
+        if ($url) {
+            $data['url'] = $url;
+        }
+
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', $data);
     }
     
     protected static function getOpenIdConnectServer(): \League\OAuth2\Server\AuthorizationServer
@@ -839,5 +737,184 @@ class SSO_Controller extends Tinebase_Controller_Event
         \SimpleSAML\Configuration::setPreLoadedConfig(new \SimpleSAML\Configuration([
             'tine20' => [SSO_Facade_SAML_AuthSourceFactory::class]
         ], 'authsources.php'), 'authsources.php');
+    }
+
+    public static function passwordLessLogin(string $username): bool
+    {
+        try {
+            if (Tinebase_Application::ENABLED !== Tinebase_Application::getInstance()
+                    ->getApplicationByName(SSO_Config::APP_NAME)->status) {
+                return false;
+            }
+        } catch (Tinebase_Exception_NotFound) {
+            return false;
+        }
+
+        $idp = null;
+        switch(SSO_Config::getInstance()->{SSO_Config::PWD_LESS_LOGIN}) {
+            case SSO_Config::PWD_LESS_LOGIN_BOTH:
+            case SSO_Config::PWD_LESS_LOGIN_ONLY_LOCAL:
+                $account = null;
+                try {
+                    $account = Tinebase_User::getInstance()->getFullUserByLoginName($username);
+                } catch (Tinebase_Exception_NotFound) {}
+                if ($account?->openid && ($pos = strpos($account->openid, ':'))) {
+                    try {
+                        $idp = SSO_Controller_ExternalIdp::getInstance()->get(substr($account->openid, 0, $pos));
+                        break;
+                    } catch(Tinebase_Exception_NotFound $tenf) {
+                        $tenf->setLogLevelMethod('notice');
+                        $tenf->setLogToSentry(false);
+                        Tinebase_Exception::log($tenf);
+                    }
+                }
+
+                if (SSO_Config::PWD_LESS_LOGIN_ONLY_LOCAL === SSO_Config::getInstance()->{SSO_Config::PWD_LESS_LOGIN}) {
+                    break;
+                }
+            case SSO_Config::PWD_LESS_LOGIN_ONLY_PROXY:
+                // search for idp....
+                // eventually we only have one, fix idp?
+                // for now @ notation
+                if (false === ($pos = strrpos($username, '@')) || '' === ($idpDomain = substr($username, $pos + 1))) {
+                    return false;
+                }
+
+                $idp = SSO_Controller_ExternalIdp::getInstance()->search(
+                    Tinebase_Model_Filter_FilterGroup::getFilterForModel(SSO_Model_ExternalIdp::class, [
+                        [TMFA::FIELD => SSO_Model_ExternalIdp::FLD_DOMAINS, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                            // this filter is case INsensitive, so no worries here
+                            [TMFA::FIELD => SSO_Model_ExIdpDomain::FLD_DOMAIN, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $idpDomain],
+                        ]],
+                ]))->getFirstRecord();
+                break;
+        }
+
+        /** @var ?SSO_Model_ExternalIdp $idp */
+        Tinebase_Session::getSessionNamespace()->sso_idp = $idp?->getId();
+        return $idp?->{SSO_Model_ExternalIdp::FLD_CONFIG}->initAuthProcess() ?? false;
+    }
+
+    public static function publicOidAuthResponseErrorRedirect(?\League\OAuth2\Server\RequestTypes\AuthorizationRequest $authRequest): \Psr\Http\Message\ResponseInterface
+    {
+        Tinebase_Session::destroyAndRemoveCookie();
+        if ($authRequest) {
+            return new \Laminas\Diactoros\Response('php://memory', 302, ['Location' => $authRequest->getRedirectUri()]);
+        }
+        return (new Tinebase_Frontend_Http())->mainScreen();
+    }
+
+    public static function publicOidAuthResponse(): \Psr\Http\Message\ResponseInterface
+    {
+        /** @var \League\OAuth2\Server\RequestTypes\AuthorizationRequest $authRequest */
+        $authRequest = Tinebase_Session::getSessionNamespace()->sso_oid_authRequest;
+
+        if (empty($ssoIdp = Tinebase_Session::getSessionNamespace()->sso_idp)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()
+                ->notice(__METHOD__ . '::' . __LINE__ . ' session does not have a sso_idp');
+            return static::publicOidAuthResponseErrorRedirect($authRequest);
+        }
+        try {
+            $ssoIdp = SSO_Controller_ExternalIdp::getInstance()->get($ssoIdp);
+        } catch (Tinebase_Exception) {
+            return static::publicOidAuthResponseErrorRedirect($authRequest);
+        }
+
+        /** @var Tinebase_Auth_OpenIdConnect $oidc */
+        $oidc = Tinebase_Auth_Factory::factory(Tinebase_Auth_OpenIdConnect::TYPE, [
+            Tinebase_Auth_OpenIdConnect::IDP_CONFIG => $ssoIdp->{SSO_Model_ExternalIdp::FLD_CONFIG},
+        ]);
+        $client = $oidc->_getClient();
+        $redirectUrl = rtrim(Tinebase_Core::getUrl(), '/') . '/sso/oid/auth/response';
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Set provider redirect url: ' . $redirectUrl);
+        $client->setRedirectURL($redirectUrl);
+        $client->addScope(['openid', 'email', 'profile']);
+
+        if ($client->authenticate()) {
+            $data = $client->requestUserInfo();
+
+            if (!isset($data->sub)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()
+                    ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an sub to work with');
+                return static::publicOidAuthResponseErrorRedirect($authRequest);
+            }
+            try {
+                $account = Tinebase_User::getInstance()->getUserByPropertyFromSqlBackend('openid', $ssoIdp->getId() . ':' . $data->sub, Tinebase_Model_FullUser::class);
+            } catch (Tinebase_Exception_NotFound) {
+                // TODO FIXME check if we should create!
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()
+                    ->notice(__METHOD__ . '::' . __LINE__ . ' create from extern idp not yet supported');
+                return static::publicOidAuthResponseErrorRedirect($authRequest);
+                /*
+                if (!isset($data->email) || !($pos = strpos($data->email, '@'))) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()
+                        ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an email address to work with');
+                    return static::publicOidAuthResponseErrorRedirect($authRequest);
+                }
+                $loginName = substr($data->email, 0, $pos);
+
+                $oldValue = Admin_Controller_User::getInstance()->doRightChecks(false);
+                try {
+                    $user = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
+                    Tinebase_Core::setUser($user);
+
+                    // TODO FIXME without password email user cant be created, needs to be disabled
+                    $account = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array_merge([
+                        'accountLoginName'      => $loginName,
+                        'accountEmailAddress'   => $data->email,
+                        'openid'                => $ssoIdp->getId() . ':' . $data->sub,
+                        'accountLastName'       => $data->name ?? $loginName,
+                        'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
+                    ])), '', '');
+                } catch (Tinebase_Exception $e) {
+                    $e->setLogLevelMethod('notice');
+                    $e->setLogToSentry(false);
+                    Tinebase_Exception::log($e);
+                    return static::publicOidAuthResponseErrorRedirect($authRequest);
+                } finally {
+                    Admin_Controller_User::getInstance()->doRightChecks($oldValue);
+                    Tinebase_Core::unsetUser();
+                }*/
+            }
+
+            Tinebase_Auth::destroyInstance();
+            Tinebase_Auth::setBackendType('OidcMock');
+            try {
+
+                /* TODO FIXME!!! Tinebase_Controller::getInstance()->setRequestContext(array(
+                    'MFAPassword' => $MFAPassword,
+                    'MFAId'       => $MFAUserConfigId
+                ));*/
+                Tinebase_Controller::getInstance()->forceUnlockLoginArea();
+                if (!Tinebase_Controller::getInstance()->login($account->accountLoginName, '',
+                        static::getLoginFakeRequest('/sso/oid/auth/response'),
+                        self::OIDC_AUTH_CLIENT_REQUEST_TYPE)) {
+                    Tinebase_Exception::log(new Tinebase_Exception('login did not work unexpectedly'));
+                    return static::publicOidAuthResponseErrorRedirect($authRequest);
+                }
+
+            } catch (Tinebase_Exception_AreaLocked | Tinebase_Exception_AreaUnlockFailed $teal) {
+                /** @var SSO_Facade_OAuth2_ClientEntity $client */
+                $client = $authRequest?->getClient();
+                if (!($relyingParty = $client?->getRelyingPart())) {
+                    $relyingParty = new SSO_Model_RelyingParty([], true);
+                }
+                return static::renderLoginPage($relyingParty, [], $redirectUrl, $teal);
+            } finally {
+                Tinebase_Auth::destroyInstance();
+                Tinebase_Auth::setBackendType(null);
+            }
+
+            if ($authRequest) {
+                $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($account));
+                $authRequest->setAuthorizationApproved(true);
+                return static::getOpenIdConnectServer()->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
+            }
+            return new \Laminas\Diactoros\Response('php://memory', 302, ['Location' => Tinebase_Core::getUrl()]);
+        }
+
+        return static::publicOidAuthResponseErrorRedirect($authRequest);
     }
 }

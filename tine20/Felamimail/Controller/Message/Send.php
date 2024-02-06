@@ -99,7 +99,12 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         try {
             $this->_resolveOriginalMessage($_message);
             $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
-            $this->_sendMailViaTransport($mail, $account, $_message);
+            
+            $saveInSent = $account->message_sent_copy_behavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SENT
+            || $account->message_sent_copy_behavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SOURCE
+            || sizeof($_message->sent_copy_folder) > 0;
+
+            $this->_sendMailViaTransport($mail, $account, $_message, $saveInSent);
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $e);
             $translation = Tinebase_Translation::getTranslation('Felamimail');
@@ -129,16 +134,43 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      */
     protected function _sendMassMailing(Felamimail_Model_Message $_message)
     {
+        $locale = Tinebase_Translation::getLocale(Tinebase_Core::getLocale());
+        $translation = Tinebase_Translation::getTranslation('Felamimail');
+        $twig = new Tinebase_Twig($locale, $translation);
+        
+        $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
+        $from = $this->_getSenderName($_message, $account);
+        $twig->getEnvironment()->addGlobal('sender', $from);
+
+        $contacts = Felamimail_Controller_Message_File::getInstance()->getRecipientContactsOfMessage($_message)->toArray();
+        $possibleAddresses = Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts);
         foreach ($_message->bcc as $to) {
-            $clonedMessage = clone $_message;
-            $clonedMessage->to = [$to];
-            $clonedMessage->cc = [];
-            $clonedMessage->bcc = [];
-            $clonedMessage->massMailingFlag = false;
-
-            $this->_runMassMailingPlugins($clonedMessage);
-
-            $this->sendMessage($clonedMessage);
+            $emailTo = $to['email'] ?? $to;
+            $contacts = array_values(array_filter($possibleAddresses, function($contact) use ($emailTo) { 
+                return $emailTo === $contact['email'] && $contact['email_type'] !== 'email_home';
+            }));
+            
+            if (sizeof($contacts) === 0) {
+                $contacts[] = [
+                    "n_fileas" => $emailTo,
+                    "name" => $emailTo,
+                    "type" => '',
+                    "email" => $emailTo,
+                    "email_type" =>  '',
+                    "contact_record" => null,
+                ];
+            }
+            foreach ($contacts as $contact) {
+                $clonedMessage = clone $_message;
+                $clonedMessage->to = [$contact];
+                $clonedMessage->cc = [];
+                $clonedMessage->bcc = [];
+                $clonedMessage->massMailingFlag = false;
+                
+                $twig->getEnvironment()->addGlobal('recipient', $contact['n_fileas']);
+                $this->_runMassMailingPlugins($clonedMessage, $twig);
+                $this->sendMessage($clonedMessage);
+            }
         }
     }
 
@@ -147,16 +179,17 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      *
      * @param Felamimail_Model_Message $_message
      */
-    protected function _runMassMailingPlugins(Felamimail_Model_Message $_message)
+    protected function _runMassMailingPlugins(Felamimail_Model_Message $_message, Tinebase_Twig $_twig)
     {
         if (null === $this->_massMailingPlugins) {
             $this->_initMassMailingPlugins();
         }
-
+        
         /** @var Felamimail_Controller_MassMailingPluginInterface $plugin */
         foreach ($this->_massMailingPlugins as $plugin) {
-            $plugin->prepareMassMailingMessage($_message);
+            $plugin->prepareMassMailingMessage($_message, $_twig);
         }
+        $_message->body = $_twig->getEnvironment()->createTemplate($_message->body)->render();
     }
 
     /**
@@ -349,22 +382,51 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Sending successful.');
-
+        
         if ($_saveInSent) {
-            // TODO legacy handling - refactor this
-            $sentFolder = $this->_saveInSent($transport, $_account, $this->_getAdditionalHeaders($_message));
-            $this->_fileSentMessage($_message, $sentFolder);
-        } else if ($_message) {
-            if ((!isset($_message['sent_copy_folder']) || sizeof($_message['sent_copy_folder']) === 0) && $_account->message_sent_copy_behavior !== Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SKIP) {
-                $sentFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($_account, Felamimail_Model_Folder::FOLDER_SENT);
-                $_message['sent_copy_folder'] = [$sentFolder->getId()];
-            }
+            $sentFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($_account, Felamimail_Model_Folder::FOLDER_SENT);
 
-            if (isset($_message['sent_copy_folder']) && sizeof($_message['sent_copy_folder']) > 0) {
-                $fileMessageInFolder = $this->_saveMessageCopyToImapFolders($transport, $_account, $_message)->getFirstRecord();
-                if ($fileMessageInFolder) {
-                    $this->_fileSentMessage($_message, $fileMessageInFolder);
+            if ($_message) {
+                $messageSentCopyBehavior = $_account->message_sent_copy_behavior;
+                
+                if (empty($_message['sent_copy_folder']) || sizeof($_message['sent_copy_folder']) === 0 && $sentFolder) {
+                    if ($messageSentCopyBehavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SOURCE) {
+                        if (!empty($_message->folder_id)) {
+                            $_message['sent_copy_folder'] = [$_message->folder_id];
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                                __METHOD__ . '::' . __LINE__ .
+                                ' Found source folder from original message, saving message copy in source folders ...');
+                        } else {
+                            $_message['sent_copy_folder'] = [$sentFolder->getId()];
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                                __METHOD__ . '::' . __LINE__ .
+                                ' No source imap folder found, saving message copy in configured sent folders ...');
+                        }
+                    }
+                    if ($messageSentCopyBehavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SENT) {
+                        $_message['sent_copy_folder'] = [$sentFolder->getId()];
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ .
+                            ' Should save message copy in configured sent folders ...');
+                    }
+                    if ($messageSentCopyBehavior === Felamimail_Model_Account::MESSAGE_COPY_FOLDER_SKIP) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__
+                            . ' Should skip saving message copy in configured sent folders ...');
+                    }
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' No valid sent folder found.');
                 }
+                if (!empty($_message['sent_copy_folder']) && sizeof($_message['sent_copy_folder']) > 0) {
+                    $this->_saveMessageCopyToImapFolders($transport, $_account, $this->_getAdditionalHeaders($_message), $_message['sent_copy_folder']);
+                    $folder = Felamimail_Controller_Folder::getInstance()->get($_message['sent_copy_folder'][0]);
+                    $this->_fileSentMessage($_message, $folder);
+                }
+            } else {
+                $this->_saveMessageCopyToImapFolders($transport, $_account, [], [$sentFolder->getId()]);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                    ' original message is not found, saving message copy in configured sent folder ...');
             }
         }
 
@@ -480,22 +542,30 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     /**
      * append mail to send folder
      *
-     * @param Felamimail_Transport $_transport
+     * @param Felamimail_Transport_Interface $_transport
      * @param Felamimail_Model_Account $_account
-     * @param Felamimail_Model_Message $_message
-     * @throws Felamimail_Exception_IMAPInvalidCredentials
-     * @throws Zend_Mail_Transport_Exception
+     * @param array $_additionalHeaders
+     * @param array $_imapFolderIds
      * @return Tinebase_Record_RecordSet
+     * @throws Felamimail_Exception_IMAPInvalidCredentials
      */
-    protected function _saveMessageCopyToImapFolders(Felamimail_Transport_Interface $_transport, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message)
+    protected function _saveMessageCopyToImapFolders(Felamimail_Transport_Interface $_transport,
+                                                     Felamimail_Model_Account $_account,
+                                                     $_additionalHeaders,
+                                                     $_imapFolderIds): Tinebase_Record_RecordSet
     {
-        $additionalHeaders = $this->_getAdditionalHeaders($_message);
-        $mailAsString = $_transport->getRawMessage(NULL, $additionalHeaders);
-        $imapFolderIds = $_message['sent_copy_folder'];
-        $folders = Felamimail_Controller_Folder::getInstance()->getMultiple($imapFolderIds);
+        $mailAsString = $_transport->getRawMessage(NULL, $_additionalHeaders);
+        $folders = Felamimail_Controller_Folder::getInstance()->getMultiple($_imapFolderIds);
+        // sent folder should be allowed
+        $blacklist =  ['inbox', 'drafts', 'templates', 'junk', 'trash', 'inbox.spam', 'inbox.ham'];
         
         foreach ($folders as $targetFolder) {
             try {
+                if (in_array(strtolower((string)$targetFolder['globalname']), $blacklist)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
+                        ' skip saving message to system folder (' . $targetFolder->globalname . ') ...');
+                    continue;
+                }
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
                     ' About to save message in folder (' . $targetFolder->globalname . ') ...');
                 
@@ -503,6 +573,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                     $mailAsString,
                     Felamimail_Model_Folder::encodeFolderName($targetFolder->globalname)
                 );
+                
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' Saved sent message in "' . $targetFolder->globalname . '".'
                 );

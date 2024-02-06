@@ -163,15 +163,18 @@ class Tinebase_Export_CsvNew extends Tinebase_Export_Abstract implements Tinebas
      *
      * @param resource $filePointer
      * @param array $dataArray
-     * @param char $delimiter
-     * @param char $enclosure
-     * @param char $escapeEnclosure
+     * @param string $delimiter
+     * @param string $enclosure
+     * @param string $escapeEnclosure
      */
     public static function fputcsv($filePointer, $dataArray, $delimiter = ',', $enclosure = '"', $escapeEnclosure = '"', $charset = 'utf-8')
     {
         $string = "";
         $writeDelimiter = false;
-        foreach($dataArray as $dataElement) {
+        foreach ($dataArray as $dataElement) {
+            if ($dataElement === null) {
+                $dataElement = '';
+            }
             if ($charset != 'utf8') {
                 $dataElement = iconv('utf-8', $charset, $dataElement);
             }

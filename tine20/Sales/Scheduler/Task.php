@@ -24,18 +24,12 @@ class Sales_Scheduler_Task extends Tinebase_Scheduler_Task
      */
     public static function addUpdateProductLifespanTask(Tinebase_Scheduler $_scheduler)
     {
-        if ($_scheduler->hasTask('Sales_Controller_Product::updateProductLifespan')) {
-            return;
-        }
-
-        $task = self::_getPreparedTask('Sales_Controller_Product::updateProductLifespan', self::TASK_TYPE_HOURLY, [[
-            self::CONTROLLER    => 'Sales_Controller_Product',
-            self::METHOD_NAME   => 'updateProductLifespan',
-        ]]);
-        $_scheduler->create($task);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Saved task Sales_Controller_Product::updateProductLifespan in scheduler.');
+        self::_addTaskIfItDoesNotExist(
+            Sales_Controller_Product::class,
+            'updateProductLifespan',
+            self::TASK_TYPE_HOURLY,
+            $_scheduler,
+        );
     }
 
     /**
@@ -49,5 +43,63 @@ class Sales_Scheduler_Task extends Tinebase_Scheduler_Task
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Removed task Sales_Controller_Product::updateProductLifespan from scheduler.');
+    }
+
+    /**
+     * add create auto invoices daily task to scheduler
+     *
+     * @param Tinebase_Scheduler $_scheduler
+     */
+    public static function addCreateAutoInvoicesDailyTask(Tinebase_Scheduler $_scheduler)
+    {
+        self::_addTaskIfItDoesNotExist(
+            Sales_Controller_Invoice::class,
+            'createAutoInvoicesTask',
+            '30 8 1 * * ',
+            $_scheduler,
+            'createAutoInvoicesDailyTask'
+        );
+    }
+
+    /**
+     * remove create auto invoices daily task from scheduler
+     *
+     * @param Tinebase_Scheduler $_scheduler
+     */
+    public static function removeCreateAutoInvoicesDailyTask(Tinebase_Scheduler $_scheduler)
+    {
+        $_scheduler->removeTask('Sales_Controller_Invoice::createAutoInvoicesTask');
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed task Sales_Controller_Invoice::createAutoInvoicesTask from scheduler.');
+    }
+
+    /**
+     * add create auto invoices monthly task to scheduler
+     *
+     * @param Tinebase_Scheduler $_scheduler
+     */
+    public static function addCreateAutoInvoicesMonthlyTask(Tinebase_Scheduler $_scheduler)
+    {
+        self::_addTaskIfItDoesNotExist(
+            Sales_Controller_Invoice::class,
+            'createAutoInvoicesTask',
+            '55 5 2-31 * *',
+            $_scheduler,
+            'createAutoInvoicesMonthlyTask'
+        );
+    }
+
+    /**
+     * remove create auto invoices monthly task from scheduler
+     *
+     * @param Tinebase_Scheduler $_scheduler
+     */
+    public static function removeCreateAutoInvoicesMonthlyTask(Tinebase_Scheduler $_scheduler)
+    {
+        $_scheduler->removeTask('Sales_Controller_Invoice::createAutoInvoicesTask');
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            . ' Removed task Sales_Controller_Invoice::createAutoInvoicesTask from scheduler.');
     }
 }

@@ -83,11 +83,75 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
         static::assertSame(1, $result->count());
     }
 
+    public function testPerspective()
+    {
+        /** @var ExampleApplication_Model_ExampleRecord $exampleRecord */
+        $exampleRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->create($this->_getExampleRecord());
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $this->assertNull($exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT});
+        $exampleRecord->setPerspectiveTo($this->_personas['sclever']);
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $this->assertNull($exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT});
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(ExampleApplication_Model_ExampleRecord::class, [
+            ['field' => 'id', 'operator' => 'equals', 'value' => $exampleRecord->getId()],
+        ]);
+        /** @var ExampleApplication_Model_ExampleRecord $exampleRecord */
+        $exampleRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($exampleRecord);
+        $this->assertSame([], $exampleRecord->getPerspectiveData(ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE));
+        $this->assertSame([$exampleRecord->getId() => null],
+            ExampleApplication_Controller_ExampleRecord::getInstance()->search($filter, null, false,
+                ['id', ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE]));
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $this->assertNull($exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT});
+        $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE} = true;
+        $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT} = '';
+        $exampleRecord->setPerspectiveTo($this->_personas['sclever']);
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $this->assertNull($exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT});
+        $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE} = true;
+
+        /** @var ExampleApplication_Model_ExampleRecord $exampleRecord */
+        $exampleRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($exampleRecord);
+        $this->assertSame([], $exampleRecord->getPerspectiveData(ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE));
+        $this->assertSame([$exampleRecord->getId() => null],
+            ExampleApplication_Controller_ExampleRecord::getInstance()->search($filter, null, false,
+                ['id', ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE]));
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $this->assertNull($exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT});
+        $exampleRecord->setPerspectiveTo($this->_personas['sclever']);
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $this->assertNull($exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT});
+        $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE} = false;
+        $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT} = Tinebase_DateTime::now();
+        $exampleRecord->setPerspectiveTo($this->_personas['jmcblack']);
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $this->assertNull($exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT});
+
+        /** @var ExampleApplication_Model_ExampleRecord $exampleRecord */
+        $exampleRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->update($exampleRecord);
+        $this->assertSame([
+            $exampleRecord->getPerspectiveKey($this->_personas['sclever']) => false,
+        ], $exampleRecord->getPerspectiveData(ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE));
+        $this->assertSame([$exampleRecord->getId() => json_encode([
+                $exampleRecord->getPerspectiveKey($this->_personas['sclever']) => false,
+            ])], ExampleApplication_Controller_ExampleRecord::getInstance()->search($filter, null, false,
+                ['id', ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE]));
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $this->assertNull($exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT});
+        $exampleRecord->setPerspectiveTo($this->_personas['sclever']);
+        $this->assertSame(false, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $this->assertInstanceOf(Tinebase_DateTime::class, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT});
+        $exampleRecord->setPerspectiveTo($this->_personas['jmcblack']);
+        $this->assertSame(true, $exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSPECTIVE});
+        $this->assertNull($exampleRecord->{ExampleApplication_Model_ExampleRecord::FLD_PERSP_DT});
+    }
+
     public function testOneToOne()
     {
         $record = $this->_getExampleRecord();
         $record->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE} = [
-            ExampleApplication_Model_OneToOne::FLD_NAME => 'unittest'
+            ExampleApplication_Model_OneToOne::FLD_NAME => 'unittestone2one'
         ];
 
         $createdRecord = ExampleApplication_Controller_ExampleRecord::getInstance()->create($record);
@@ -103,6 +167,16 @@ class ExampleApplication_ControllerTest extends ExampleApplication_TestCase
         static::assertNull($createdRecord
             ->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
             ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD});
+
+        $this->assertSame(1, ExampleApplication_Controller_ExampleRecord::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(ExampleApplication_Model_ExampleRecord::class, [
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'one2one'],
+            ]))->count());
+
+        $this->assertSame(1, ExampleApplication_Controller_OneToOne::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(ExampleApplication_Model_OneToOne::class, [
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'minimal'],
+            ]))->count());
 
         $createdRecord->{ExampleApplication_Model_ExampleRecord::FLD_ONE_TO_ONE}
             ->{ExampleApplication_Model_OneToOne::FLD_ADB_RECORD} = Addressbook_Controller_Contact::getInstance()

@@ -94,6 +94,11 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
 
         //if($this->_options['demoData']) $data = $this->_getDay($data, $this->_additionalOptions['dates']);
 
+        if (isset($data['TASK'])) {
+            $data['tasks'] = [['summary' => $data['TASK']]];
+            unset($data['TASK']);
+        }
+
         return $data;
     }
 
@@ -131,17 +136,8 @@ class Crm_Import_Csv extends Tinebase_Import_Csv_Abstract
             'summary'   => $translate->_('Edit new lead'),
             'due'       => Tinebase_DateTime::now()->addHour(2),
             'status'    => 'IN-PROCESS',
-            'relations' => array(array(
-                'own_model'              => 'Tasks_Model_Task',
-                'own_backend'            => 'Sql',
-                'own_id'                 => 0,
-                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                'type'                   => 'TASK',
-                'related_record'         => $lead,
-                'related_id'             => $lead->getId(),
-                'related_model'          => 'Crm_Model_Lead',
-                'related_backend'        => 'Sql'
-            )),
+            'source'    => $lead->getId(),
+            'source_model' => Crm_Model_Lead::class,
         ));
 
         foreach ($responsibles as $responsible) {

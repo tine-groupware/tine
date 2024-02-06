@@ -69,7 +69,11 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('Name'), id: 'name', dataIndex: 'name', hidden: false, width: 75},
             { header: this.app.i18n._('Type'), id: 'xtype', dataIndex: 'definition', hidden: false, width: 75, renderer: this.typeRenderer.createDelegate(this)},
             { header: this.app.i18n._('Application'), id: 'application_id', dataIndex: 'application_id', hidden: false, width: 100, renderer: this.appRenderer.createDelegate(this)},
-            { header: this.app.i18n._('Model'), id: 'model', dataIndex: 'model', hidden: false, width: 100}
+            { header: this.app.i18n._('Model'), id: 'model', dataIndex: 'model', hidden: false, width: 100},
+            { header: this.app.i18n._('UI Config'), id: 'definition', dataIndex: 'definition', hidden: false, width: 100, renderer: (definition) => {
+                return Tine.widgets.grid.jsonRenderer(JSON.stringify(definition.uiconfig));
+            }}
+
         ];
     },
     

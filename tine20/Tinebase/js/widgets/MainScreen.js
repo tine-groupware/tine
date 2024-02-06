@@ -50,7 +50,8 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
     
     layout: 'border',
     border: false,
-    stateful: true, 
+    stateful: true,
+    xtype: 'Tine.widgets.MainScreen',
 
     initComponent: function() {
         var registeredContentTypes = _.get(Tine.widgets.MainScreen.registerContentType, 'registry.' + this.app.appName, []);
@@ -67,7 +68,51 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         }
         
         this.stateId = this.app.appName + '-mainScreen';
+
+        this.on('resize', this.applyResponsiveLayout, this);
+
+        this.tbar = {
+            hidden: true,
+            items:
+                [{
+                    iconCls: 'action_menu',
+                    handler: () => {
+                        this.layout.west.slideOut()
+                    }
+                }, '->', {
+                    text: '...',
+                    handler: (btn) => {
+                        const tbar = _.get(_.get(this.northCardPanel, 'layout.activeItem'), 'items.items[0]');
+                        if (tbar) {
+                            tbar.layout.initMore();
+                            const moreMenu = tbar.layout.moreMenu;
+                            moreMenu.showAll = true;
+                            moreMenu[new Date().getTime() - moreMenu.lastVisible < 100 ? 'hide' : 'show'](btn.el);
+                            moreMenu.showAll = false;
+                        }
+                    }
+                }]
+        }
+
         Tine.widgets.MainScreen.superclass.initComponent.apply(this, arguments);
+    },
+
+    applyResponsiveLayout: function(me, width, height) {
+        // @TODO centralize breakpoints / have more breakpoints
+        if (!this._initResponsiveLayout) {
+            this.northCardPanel.on('beforeshow', () => {
+                return  1024 < this.getWidth();
+            })
+            this._initResponsiveLayout = true
+        }
+
+        const isSmall = width < 1024;
+        this.westRegionPanel.afterIsRendered().then((panel) => { panel[isSmall ? 'collapse' : 'expand']() });
+        this.northCardPanel.afterIsRendered().then((panel) => {panel.setVisible(!isSmall) });
+        this.westRegionPanel.on('click', () => { })
+
+        this.getTopToolbar().setVisible(isSmall);
+        _.defer(_.bind(this.doLayout, this), true);
     },
 
     onDestroy: function() {
@@ -246,31 +291,38 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
      */
     getCenterPanel: function(contentType) {
         contentType = contentType || this.getActiveContentType();
+        // if (!contentType) return;
 
         var def = this.getContentTypeDefinition(contentType) || {},
             suffix = def && def.xtype ? '' : this.centerPanelClassNameSuffix;
 
         if (! this[contentType + suffix]) {
-            try {
-                this[contentType + suffix] = def && def.xtype ? Ext.create(def) :
-                    new Tine[def.appName || this.app.appName][contentType + suffix](Object.assign({
+            // try {
+                if (def && def.xtype) {
+                    this[contentType + suffix] = Ext.create(def);
+                } else if (Tine[def.appName || this.app.appName][contentType + suffix]) {
+                    this[contentType + suffix] = new Tine[def.appName || this.app.appName][contentType + suffix](_.merge({
                         app: def.appName ? Tine.Tinebase.appMgr.get(def.appName) : this.app,
+                        mainScreen: this,
                         plugins: (() => {
                             const wp = this.getWestPanel();
                             return wp && wp.getFilterPlugin ? [wp.getFilterPlugin(contentType)] : []
                         })()
-                    }, def));
+                    }, def?.config || {}));
+                } else {
+                    return null;
+                }
 
                 if (this[contentType + suffix].cls) {
                     this[contentType + suffix].cls = this[contentType + suffix].cls + ' t-contenttype-' + contentType.toLowerCase();
                 } else {
                     this[contentType + suffix].cls = 't-contenttype-' + contentType.toLowerCase();
                 }
-            } catch (e) {
-                Tine.log.error('Could not create centerPanel "Tine.' + this.app.appName + '.' + contentType + suffix + '"');
-                Tine.log.error(e.stack ? e.stack : e);
-                this[contentType + suffix] = new Ext.Panel({html: 'ERROR'});
-            }
+            // } catch (e) {
+            //     Tine.log.error('Could not create centerPanel "Tine.' + this.app.appName + '.' + contentType + suffix + '"');
+            //     Tine.log.error(e.stack ? e.stack : e);
+            //     this[contentType + suffix] = new Ext.Panel({html: 'ERROR'});
+            // }
         }
         
         return this[contentType + suffix];
@@ -316,7 +368,8 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         if (! this.moduleTreePanel) {
             if (this.useModuleTreePanel) {
                 this.moduleTreePanel = new Tine.widgets.ContentTypeTreePanel({
-                    app: this.app, 
+                    app: this.app,
+                    mainScreen: this,
                     contentTypes: this.contentTypes,
                     contentType: this.getActiveContentType()
                 });
@@ -357,6 +410,7 @@ Tine.widgets.MainScreen = Ext.extend(Ext.Panel, {
         if (! this[wpName]) {
             var wpconfig = {
                     app: app,
+                    mainScreen: this,
                     contentTypes: this.contentTypes,
                     contentType: contentType,
                     listeners: {

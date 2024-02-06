@@ -22,10 +22,10 @@ class FieldTriggerPlugin {
         this.field = field
 
         await field.afterIsRendered()
-        const wrap = field.el.parent('.tw-relpickercombocmp') ||
+        const wrap = field.el.parent('.x-form-field-wrap') ||
+            field.el.parent('.tw-relpickercombocmp') ||
             field.el.parent('.x-form-element') ||
-            field.el.parent('.x-grid-editor') ||
-            field.el.parent('.x-form-field-wrap')
+            field.el.parent('.x-grid-editor');
 
         if (wrap) {
             this.#trigger = wrap.createChild(this.triggerConfig ||

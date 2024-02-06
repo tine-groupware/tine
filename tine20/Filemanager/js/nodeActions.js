@@ -185,7 +185,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                 let text = localRecord.get('name');
                 
                 if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
-                    Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + forbidden);
+                    Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + text);
                     return;
                 }
                 
@@ -292,7 +292,8 @@ Tine.Filemanager.nodeActions.Rename = {
             nodeName = record.get('type') == 'folder' ?
                 Tine.Filemanager.Model.Node.getContainerName() :
                 Tine.Filemanager.Model.Node.getRecordName();
-
+        const treePanel = this.initialConfig.selectionModel.tree;
+        const grid = treePanel ? treePanel.getFilterPlugin().getGridPanel() : this.initialConfig.selectionModel.grid;
         Ext.MessageBox.show({
             title: String.format(i18n._('Rename {0}'), nodeName),
             msg: String.format(i18n._('Please enter the new name of the {0}:'), nodeName),
@@ -306,11 +307,16 @@ Tine.Filemanager.nodeActions.Rename = {
                     }
                     
                     if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
-                        Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + forbidden);
+                        Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + text);
                         return;
                     }
 
                     this.initialConfig.executor(record, text);
+                    
+                    if (treePanel && grid?.filterToolbar) {
+                        const parent = Tine.Filemanager.Model.Node.dirname(record.get('path'));
+                        grid.filterToolbar.setValue([{field: 'path', operator: 'equals', value: `${parent}${text}`}]);
+                    }
                 }
             },
             scope: this,
@@ -484,13 +490,12 @@ Tine.Filemanager.nodeActions.Download = {
         this.hidden = this.hidden || !Tine.Tinebase.configManager.get('downloadsAllowed');
     },
     handler: function() {
-        Tine.Filemanager.downloadFile(this.initialConfig.selections[0]);
+        Tine.Filemanager.downloadNode(this.initialConfig.selections[0]);
     },
     actionUpdater: function(action, grants, records, isFilterSelect) {
         const isQuarantined = !action.initialConfig.allowQuarantined && records[0] && !!+records[0].get('is_quarantined');
         const enabled = !isFilterSelect
             && records && records.length === 1
-            && records[0].get('type') !== 'folder'
             && (
                 String(_.get(records, '[0].data.path', '')).match(/^\/records/)
                 || _.get(records, '[0].data.account_grants.downloadGrant', false)
@@ -530,6 +535,8 @@ Tine.Filemanager.nodeActions.Preview = {
 
 /**
  * one node with publish grant
+ * 
+ * - user needs both publishGrant and downloadGrant to execute this action.
  */
 Tine.Filemanager.nodeActions.Publish = {
     app: 'Filemanager',
@@ -579,7 +586,14 @@ Tine.Filemanager.nodeActions.Publish = {
             });
         }, this);
     },
-    actionUpdater: Tine.Filemanager.nodeActions.actionUpdater
+    actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
+        Tine.Filemanager.nodeActions.actionUpdater(action, grants, records, isFilterSelect, filteredContainers);
+        
+        const record = records[0];
+        if (record) {
+            action.setDisabled(!record.data?.account_grants?.downloadGrant);
+        }
+    },
 };
 
 /**

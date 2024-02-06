@@ -45,3 +45,8 @@ msgstr "Seite nicht gefunden"
 msgid "UserManual"
 msgstr "Handbuch"
 
+msgid "Show Canonical Path"
+msgstr "Zeige den Kanonischen Pfad"
+
+msgid "Canonical Path"
+msgstr "Kanonischer Pfad"

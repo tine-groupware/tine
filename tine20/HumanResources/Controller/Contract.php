@@ -87,6 +87,23 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         return parent::_checkGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
     }
 
+    protected $_employee = null;
+    public function setEmployee(HumanResources_Model_Employee $employee): void
+    {
+        $this->_employee = $employee;
+    }
+
+    protected function _inspectEmploymentEnd(HumanResources_Model_Contract $contract)
+    {
+        $employee = $contract->employee_id;
+        if (is_string($employee)) {
+            $employee = HumanResources_Controller_Employee::getInstance()->get($employee);
+        }
+
+        if ($employee->employment_end && (!$contract->end_date || $employee->employment_end->isEarlier($contract->end_date))) {
+            $contract->end_date = clone $employee->employment_end;
+        }
+    }
 
     /**
      * inspect update of one record (before update)
@@ -97,55 +114,11 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        $diff = $_record->diff($_oldRecord, array(
-            'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'notes', 'end_date', 'seq', 'tags', 'account_grants', 'is_editable'
-        ))->diff;
-
-        if (! empty($diff)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . " Contract diff:" . print_r($diff, true));
-
-            if (!$this->_inspectBookedResources($_oldRecord)) {
-                throw new HumanResources_Exception_ContractNotEditable();
-            }
-        }
-
-        if ($_record->end_date && (!$_oldRecord->end_date || $_record->end_date->isEarlier($_oldRecord->end_date))) {
-            $ftCtrl = HumanResources_Controller_FreeTime::getInstance();
-            $ftRaii = new Tinebase_RAII($ftCtrl->assertPublicUsage());
-            $dwtrCtrl = HumanResources_Controller_DailyWTReport::getInstance();
-            $dwtrRaii = new Tinebase_RAII($dwtrCtrl->assertPublicUsage());
-
-            if ($ftCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                        HumanResources_Model_FreeTime::class, array_merge([
-                        ['field' => 'lastday_date', 'operator' => 'after', 'value' => $_record->end_date],
-                        ['field' => 'employee_id', 'operator' => 'equals', 'value' => $_oldRecord->employee_id],
-                        ['field' => HumanResources_Model_FreeTime::FLD_PROCESS_STATUS, 'operator' => 'equals', 'value' => HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED],
-                    ], $_oldRecord->end_date ? [
-                        ['field' => 'firstday_date', 'operator' => 'before_or_equals', 'value' => $_oldRecord->end_date],
-                    ] : []))) > 0) {
-                throw new Tinebase_Exception_SystemGeneric('can\'t set end_date as there are booked freetimes after new end_date');
-            }
-
-            if ($dwtrCtrl->searchCount(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                    HumanResources_Model_DailyWTReport::class, array_merge([
-                    ['field' => 'date', 'operator' => 'after', 'value' => $_record->end_date],
-                    ['field' => 'employee_id', 'operator' => 'equals', 'value' => $_oldRecord->employee_id],
-                    ['field' => 'is_cleared', 'operator' => 'equals', 'value' => true],
-                ], $_oldRecord->end_date ? [
-                    ['field' => 'date', 'operator' => 'before_or_equals', 'value' => $_oldRecord->end_date],
-                ] : []))) > 0) {
-                throw new Tinebase_Exception_SystemGeneric('can\'t set end_date as there are booked wtrs after new end_date');
-            }
-
-            unset($dwtrRaii);
-            unset($ftRaii);
-        }
-        
+        $this->_inspectEmploymentEnd($_record);
         $this->_checkDates($_record);
 
-        if (!empty($_record->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME})) {
-            $oldWts = $_oldRecord->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME} ?: null;
+        if (!empty($_record->{HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME})) {
+            $oldWts = $_oldRecord->{HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME} ?: null;
             $this->_inspectWorkingTimeScheme($_record, $oldWts);
         }
 
@@ -235,6 +208,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->_inspectEmploymentEnd($_record);
         $this->_checkDates($_record);
 
         if (empty($_record->start_date)) {
@@ -265,7 +239,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
 
         $this->_checkDateOverlap($_record);
 
-        if (!empty($_record->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME})) {
+        if (!empty($_record->{HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME})) {
             $this->_inspectWorkingTimeScheme($_record);
         }
     }
@@ -299,7 +273,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         /** @var HumanResources_Model_Contract $contract */
         foreach ($this->getMultiple($_ids, true) as $contract) {
             if (!$this->_inspectBookedResources($contract)) {
-                unset($_ids[array_search($contract->getId(), $_ids)]);
+                throw new HumanResources_Exception_ContractNotEditable('the contract ' . $contract->getTitle() . ' has booked freetimes or working time reports and can not be deleted');
             }
         }
 
@@ -310,7 +284,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     {
         parent::_inspectAfterDelete($record);
 
-        if (!empty($wtsId = $record->getIdFromProperty(HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME))) {
+        if (!empty($wtsId = $record->getIdFromProperty(HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME))) {
             try {
                 $wts = HumanResources_Controller_WorkingTimeScheme::getInstance()->get($wtsId);
                 if (HumanResources_Model_WorkingTimeScheme::TYPES_INDIVIDUAL === $wts->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE}) {
@@ -323,7 +297,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
     protected function _inspectWorkingTimeScheme(HumanResources_Model_Contract $_record, $_oldWTS = null)
     {
         /** @var HumanResources_Model_WorkingTimeScheme $recordWts */
-        $recordWts = $_record->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME};
+        $recordWts = $_record->{HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME};
         $wtsId = null;
         if (is_array($recordWts)) {
             if (isset($recordWts['id'])) {
@@ -345,7 +319,7 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
                 }
                 if ($wts->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE} ===
                     HumanResources_Model_WorkingTimeScheme::TYPES_SHARED) {
-                    $_record->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME} = $wtsId;
+                    $_record->{HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME} = $wtsId;
                     $recordWts = null;
                 } elseif ($wts->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE} ===
                     HumanResources_Model_WorkingTimeScheme::TYPES_TEMPLATE) {
@@ -379,10 +353,10 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
                     $wtsController->update($recordWts);
                 }
             }
-            $_record->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME} = $recordWts->getId();
+            $_record->{HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME} = $recordWts->getId();
         }
 
-        if (null !== $_oldWTS && $_oldWTS !== $_record->{HumanResources_Model_Contract::FLDS_WORKING_TIME_SCHEME}) {
+        if (null !== $_oldWTS && $_oldWTS !== $_record->{HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME}) {
             $wts = $wtsController->get($_oldWTS);
             if ($wts->{HumanResources_Model_WorkingTimeScheme::FLDS_TYPE} ===
                     HumanResources_Model_WorkingTimeScheme::TYPES_INDIVIDUAL) {
@@ -598,10 +572,10 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $subFilter2 = new HumanResources_Model_ContractFilter(array(), 'OR');
         
         $subFilter21 = new HumanResources_Model_ContractFilter(array(), 'AND');
-        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $period['until'])));
-        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after', 'value' =>  $period['from'])));
+        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $period['until'])));
+        $subFilter21->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after_or_equals', 'value' =>  $period['from'])));
         $subFilter22 = new HumanResources_Model_ContractFilter(array(), 'AND');
-        $subFilter22->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $period['until'])));
+        $subFilter22->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $period['until'])));
         $subFilter22->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'end_date', 'operator' => 'isnull', 'value' => TRUE)));
         $subFilter2->addFilterGroup($subFilter21);
         $subFilter2->addFilterGroup($subFilter22);
@@ -617,43 +591,23 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
      * 
      * @param string $_employeeId
      * @param Tinebase_DateTime $_firstDayDate
-     * @throws Tinebase_Exception_InvalidArgument
-     * @throws HumanResources_Exception_NoCurrentContract
-     * @throws Tinebase_Exception_Duplicate
-     * @return HumanResources_Model_Contract
+     * @return ?HumanResources_Model_Contract
      */
-    public function getValidContract($_employeeId, $_firstDayDate = NULL)
+    public function getValidContract(string $_employeeId, ?Tinebase_DateTime $_firstDayDate = null): ?HumanResources_Model_Contract
     {
-        if (! $_employeeId) {
-            throw new Tinebase_Exception_InvalidArgument('You have to set an account id at least');
-        }
-        $_firstDayDate = $_firstDayDate ? new Tinebase_DateTime($_firstDayDate) : new Tinebase_DateTime();
+        $_firstDayDate = $_firstDayDate ?: Tinebase_DateTime::now();
         
         $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
-        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before', 'value' => $_firstDayDate)));
+        $filter->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'start_date', 'operator' => 'before_or_equals', 'value' => $_firstDayDate)));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
         $endDate = new Tinebase_Model_Filter_FilterGroup(array(), 'OR');
-        $endDate->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after', 'value' =>  $_firstDayDate)));
+        $endDate->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'after_or_equals', 'value' =>  $_firstDayDate)));
+        $endDate->addFilter(new Tinebase_Model_Filter_Date(array('field' => 'end_date', 'operator' => 'isnull', 'value' =>  true)));
         $filter->addFilterGroup($endDate);
-        
-        $contracts = $this->search($filter);
-        
-        if ($contracts->count() < 1) {
-            $filter = new HumanResources_Model_ContractFilter(array(), 'AND');
-            $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_employeeId)));
-            $contracts = $this->search($filter);
-            if ($contracts->count() > 0) {
-                $e = new HumanResources_Exception_NoCurrentContract();
-                $e->addRecord($contracts->getFirstRecord());
-                throw $e;
-            } else {
-                throw new HumanResources_Exception_NoContract();
-            }
-        } else if ($contracts->count() > 1) {
-            throw new Tinebase_Exception_Duplicate('There are more than one valid contracts for this employee!');
-        }
 
-        return $contracts->getFirstRecord();
+        /** @var ?HumanResources_Model_Contract $result */
+        $result = $this->search($filter)->getFirstRecord();
+        return $result;
     }
     
     /**
@@ -671,49 +625,5 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $recs = $this->search($filter, $pagination);
         
         return $recs;
-    }
-    
-    /**
-     * resolves virtual field "is_editable"
-     * 
-     * @param array $resultSet
-     */
-    public function getEditableState($resultSet)
-    {
-        if (isset($resultSet['id'])) {
-            $resultSet = [$resultSet];
-        }
-        for ($i = 0; $i < count($resultSet); $i++) {
-            
-            $sDate = new Tinebase_DateTime($resultSet[$i]['start_date']);
-            $sDate->setTimezone(Tinebase_Core::getUserTimezone());
-            
-            $eDate = NULL;
-            
-            if ($resultSet[$i]['end_date']) {
-                $eDate = new Tinebase_DateTime($resultSet[$i]['end_date']);
-                $eDate->setTimezone(Tinebase_Core::getUserTimezone());
-            }
-            
-            $freeTimeFilter = new HumanResources_Model_FreeTimeFilter(array(
-                array('field' => 'firstday_date', 'operator' => 'after', 'value' => $sDate),
-                array('field' => 'type', 'operator' => 'equals', 'value' => 'vacation'),
-            ));
-            
-            if ($eDate) {
-                $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Date(
-                    array('field' => 'firstday_date', 'operator' => 'before', 'value' => $eDate)
-                ));
-            }
-            
-            $freeTimeFilter->addFilter(new Tinebase_Model_Filter_Text(
-                array('field' => 'employee_id', 'operator' => 'equals', 'value' => $resultSet[$i]['employee_id'])
-            ));
-            
-            $freeTimeController = HumanResources_Controller_FreeTime::getInstance();
-            $resultSet[$i]['is_editable'] = ($freeTimeController->search($freeTimeFilter)->count() > 0) ? FALSE : TRUE;
-        }
-        
-        return $resultSet;
     }
 }

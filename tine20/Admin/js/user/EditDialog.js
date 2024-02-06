@@ -643,20 +643,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return [];
         }
         
-        let commonConfig = {
-            autoExpandColumn: 'email',
-            quickaddMandatory: 'email',
-            frame: false,
-            useBBar: true,
-            height: 200,
-            columnWidth: 0.5,
-            recordClass: Ext.data.Record.create([
-                { name: 'email' }
-            ])
-        };
-        
-        this.initAliasesGrid(commonConfig);
-        this.initForwardsGrid(commonConfig);
+        this.initAliasesGrid();
+        this.initForwardsGrid();
 
         return [
             [this.aliasesGrid, this.forwardsGrid],
@@ -669,10 +657,24 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }]
         ];
     },
+
+    getCommonConfig() {
+        return {
+            autoExpandColumn: 'email',
+            quickaddMandatory: 'email',
+            frame: false,
+            useBBar: true,
+            height: 200,
+            columnWidth: 0.5,
+            recordClass: Ext.data.Record.create([
+                { name: 'email' }
+            ])
+        };
+    },
     
     // can other email accounts process aliasse and forward too ? check request
     // how to init them in email account edit dialog ?
-    initAliasesGrid: function(commonConfig) {
+    initAliasesGrid: function(additionConfig) {
         let smtpPrimarydomain = Tine.Tinebase.registry.get('primarydomain');
         let smtpSecondarydomains = Tine.Tinebase.registry.get('secondarydomains');
 
@@ -712,6 +714,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             cm.push(this.aliasesDispatchCheckColumn);
             gridPlugins.push(this.aliasesDispatchCheckColumn);
         }
+        const config = _.assign(this.getCommonConfig(), additionConfig);
 
         this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
@@ -740,16 +743,16 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 },
                 cm: new Ext.grid.ColumnModel(cm),
                 plugins: gridPlugins
-            }, commonConfig)
+            },config)
         );
-        this.aliasesGrid.render(document.body);
         return this.aliasesGrid;
     },
 
-    initForwardsGrid: function(commonConfig) {
+    initForwardsGrid: function(additionConfig) {
         let aliasesStore = this.aliasesGrid.getStore();
         const app = Tine.Tinebase.appMgr.get('Admin');
-        let record = this.record ?? commonConfig.record;
+        let record = this.record ?? additionConfig.record;
+        const config = _.assign(this.getCommonConfig(), additionConfig);
 
         this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
             Ext.apply({
@@ -779,9 +782,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }),
                     editor: new Ext.form.TextField({allowBlank: false})
                 }])
-            }, commonConfig)
+            }, config)
         );
-        this.forwardsGrid.render(document.body);
         
         return this.forwardsGrid;
     },
@@ -877,7 +879,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.MFAPanel = new MFAPanel({
             app: this.app,
-            height: 100,
+            height: 130,
             title: false,
             account: this.record,
             editDialog: this,

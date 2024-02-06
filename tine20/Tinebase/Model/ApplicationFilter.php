@@ -33,7 +33,7 @@ class Tinebase_Model_ApplicationFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'query' => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name'))),
+        'query' => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name'), 'modelName' => Tinebase_Model_Application::class)),
         'name'  => array('filter' => 'Tinebase_Model_Filter_Text')
     );
 }

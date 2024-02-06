@@ -5,9 +5,31 @@
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import { HTMLProxy } from "../../../Tinebase/js/twingEnv.es6";
 Ext.ns('Tine.Timetracker.Model');
 
 Tine.Timetracker.Model.TimesheetMixin = {
+    getTitle: function() {
+        return new HTMLProxy(new Promise(async (resolve) => {
+            let timeaccount = this.get('timeaccount_id');
+            const description = Ext.util.Format.ellipsis(this.get('description'), 30, true);
+            let timeaccountTitle = '';
+
+            if (timeaccount) {
+                if (typeof(timeaccount.get) !== 'function') {
+                    timeaccount = new Tine.Timetracker.Model.Timeaccount(timeaccount);
+                }
+                timeaccountTitle = timeaccount.getTitle();
+                if (timeaccountTitle.asString) {
+                    timeaccountTitle = await timeaccountTitle.asString();
+                }
+                timeaccountTitle = timeaccountTitle ? '[' + timeaccountTitle + '] ' : '';
+            }
+
+            resolve(timeaccountTitle + description);
+        }));
+    },
+
     statics: {
         getDefaultData(defaults) {
             // dd from modelConfig

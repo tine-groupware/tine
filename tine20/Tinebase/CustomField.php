@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  CustomField
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add join to cf config to value backend to get name
@@ -53,6 +53,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @var array (app id + modelname => Tinebase_Record_RecordSet with cfs)
      */
     protected $_cfByApplicationCache = array();
+
+    protected string $_modelName;
 
     /**
      * holds the instance of the singleton
@@ -120,7 +122,10 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             } finally {
                 $this->_backendConfig->setNoSystemCFs();
             }
-            $this->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
+
+            $this->setGrants($result, empty($_record['grants']) ?
+                Tinebase_Model_CustomField_Grant::getAllGrants()
+                : $_record['grants']);
             $result->grants = $this->getGrants($result);
             $this->_writeModLog($result, null);
 
@@ -165,8 +170,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         $this->_clearCache();
         $this->_backendConfig->setAllCFs();
         try {
+            $oldRecord = $this->_backendConfig->get($_record->getId());
+            $oldRecord->grants = $this->getGrants($oldRecord);
+
             /** @var Tinebase_Model_CustomField_Config $result */
             $result = $this->_backendConfig->update($_record);
+            $result->grants = $this->getGrants($result);
+            $this->_writeModLog($result, $oldRecord);
+
             if ($result->is_system) {
                 Tinebase_Application::getInstance()->getApplicationById($result->application_id);
                 /** @var Tinebase_Record_Interface $model */
@@ -207,8 +218,11 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param bool $ignoreAcl (default false)
      * @return Tinebase_Model_CustomField_Config|null
      */
-    public function getCustomFieldByNameAndApplication($applicationId, $customFieldName, $modelName = null, $getSystemCFs = false, $ignoreAcl = false)
+    public function getCustomFieldByNameAndApplication($applicationId, $customFieldName, $modelName, $getSystemCFs = false, $ignoreAcl = false)
     {
+        if (!$modelName) {
+            throw new Tinebase_Exception_UnexpectedValue('modelName is mandatory due to uniqueness');
+        }
         $allAppCustomfields = $this->getCustomFieldsForApplication($applicationId, $modelName,
             Tinebase_Model_CustomField_Grant::GRANT_READ, $getSystemCFs, $ignoreAcl);
         return $allAppCustomfields->find('name', $customFieldName);
@@ -361,7 +375,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $model = $_customField->model;
             $model::resetConfiguration();
 
-            Setup_SchemaTool::updateAllSchema();
+            if ((new Tinebase_Record_DoctrineMappingDriver())->isTransient($model)) {
+                Setup_SchemaTool::updateSchema([$model]);
+            }
         }
     }
     
@@ -611,7 +627,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         }
 
         // check if customfield value is the record itself
-        if ($value && get_class($_record) == $modelName && strpos($value, $_record->getId()) !== false) {
+        if ($value && $_record->getId() && get_class($_record) == $modelName && strpos($value, $_record->getId()) !== false) {
             throw new Tinebase_Exception_Record_Validation('It is not allowed to add the same record as customfield record!');
         }
 

@@ -41,6 +41,7 @@ Ext.namespace('Tine.Felamimail');
     evalGrants: false,
     mode: 'local',
     hideAttachmentsPanel: true,
+    needsUpdateEvent: true,
     
     bodyStyle:'padding:0px',
     
@@ -109,7 +110,9 @@ Ext.namespace('Tine.Felamimail');
             additionalItems: [ new Tine.Felamimail.RecipientPickerFavoritePanel({
                 app: this.app,
                 grid: this.contactGrid
-            })]
+            })],
+            getFavoritesPanel: function() { return this.ContactFilterPanel; },
+            getContainerTreePanel: function() { return this.ContactTreePanel; }
         });
         
         return {

@@ -23,6 +23,8 @@ class Tinebase_FileSystem_StreamWrapperTest extends \PHPUnit\Framework\TestCase
      */
     protected $objects = array();
 
+    protected string $_basePath;
+
     /**
      * Runs the test methods of this class.
      *

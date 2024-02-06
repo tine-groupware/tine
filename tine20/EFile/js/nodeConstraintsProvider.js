@@ -14,7 +14,7 @@ validatorFactory().then((validator) => {
                 const nodeType = _.get(node, 'data.type', _.get(node, 'type'));
                 const nodeTierType = _.get(node, 'data.efile_tier_type', _.get(node, 'efile_tier_type'))
                     || nodeType === 'file' ? 'document' : ''
-                    || nodeType === 'folder' && action === 'move' ? 'documentDir' : '';
+                    || nodeType === 'folder' ? 'documentDir' : '';
                 
                 return allowed && !!validator.validate({
                     parent: targetNode.data,

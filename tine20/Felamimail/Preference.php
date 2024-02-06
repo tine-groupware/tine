@@ -169,7 +169,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     public function getApplicationPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $preference = $this->_getDefaultBasePreference($_preferenceName);
-        
+
         switch($_preferenceName) {
             case self::USEINADB:
                 $preference->value      = 1;
@@ -209,12 +209,22 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                     </options>';
                 break;
             case self::EML_FORWARD:
-                // FIXME this should be a boolean! but we need to use the string here because of the check in
-                //       MessageEditDialog.js - when the pref is changed by the user, it is also a string value
-                $preference->value      = '0';
+                $translate = Tinebase_Translation::getTranslation($this->_application);
+                $preference->value      = 'message';
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
-                        <special>' . Tinebase_Preference_Abstract::YES_NO_OPTIONS . '</special>
+                        <option>
+                            <label>' . $translate->_('Forward') . '</label>
+                            <value>message</value>
+                        </option>
+                        <option>
+                            <label>' . $translate->_('Forward and forwarded email as .eml in attachment') . '</label>
+                            <value>messageAndAsAttachment</value>
+                        </option>
+                        <option>
+                            <label>' . $translate->_('Only forwarded email as .eml in attachment') . '</label>
+                            <value>onlyAsAttachment</value>
+                        </option>
                     </options>';
                 break;
             case self::DEFAULT_FONT:

@@ -5,16 +5,9 @@
  * @package     Tinebase
  * @subpackage  Account
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
- * @todo make testLoginAndLogout work (needs to run in separate process)
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Controller
@@ -457,5 +450,17 @@ class Tinebase_ControllerTest extends TestCase
         self::assertEquals(Tinebase_Core::getUser()->getId(), $actionLogs->getFirstRecord()->{Tinebase_Model_ActionLog::FLD_USER});
 
         return $actionLogs;
+    }
+
+    public function testRemoveObsoleteData()
+    {
+        $result = $this->_instance->removeObsoleteData();
+        self::assertTrue($result);
+
+        $result = $this->_instance->removeObsoleteData(Tinebase_DateTime::now());
+        self::assertTrue($result);
+
+        $result = $this->_instance->removeObsoleteData(null, ['addressbook', 'cal_events']);
+        self::assertTrue($result);
     }
 }

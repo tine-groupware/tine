@@ -9,6 +9,10 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
+use Symfony\Component\Intl\Countries;
+use Symfony\Component\Intl\Locales;
+
+
 /**
  * primary class to handle translations
  *
@@ -135,7 +139,7 @@ class Tinebase_Translation
         
         //try lazy loading of translated country list
         if (empty(self::$_countryLists[$language])) {
-            $countries = Zend_Locale::getTranslationList('territory', $locale, 2);
+            $countries = Countries::getNames($locale);
             asort($countries);
             foreach($countries as $shortName => $translatedName) {
                 $results[] = array(
@@ -551,5 +555,153 @@ class Tinebase_Translation
             return $date->toString($part, $locale);
         }
 
+    }
+
+    public function generateTranslationLists($_locale = null, $_path = null)
+    {
+        $defaultDir = dirname(__FILE__) . '/js/Locale/static/';
+        $path = $_path ? $_path : $defaultDir;
+
+        $localelist = $_locale ? [$_locale] : Locales::getLocales();
+
+        foreach ($localelist as $locale) {
+            try {
+                $js = $this->createJsTranslationLists($locale);
+                file_put_contents($path . "generic-$locale.js", $js);
+            } catch (Exception $e) {
+                echo "WARNING: could not create translation file for '$locale': '{$e->getMessage()}'\n";
+            }
+        }
+    }
+
+    /**
+     * creates translation lists js files for locale with js object
+     *
+     * @param   string $_locale
+     * @return  string the file contents
+     */
+     public function createJsTranslationLists($_locale) {
+        $jsContent = "Tine.__translationData.TranslationLists={";
+
+        $types = array(
+            'Date'           => array('path' => 'Date'),
+            'Time'           => array('path' => 'Time'),
+            'DateTime'       => array('path' => 'DateTime'),
+            'Month'          => array('path' => 'Month'),
+            'Day'            => array('path' => 'Day'),
+            'Symbols'        => array('path' => 'Symbols'),
+            'Question'       => array('path' => 'Question'),
+            'Language'       => array('path' => 'Language'),
+            'CountryList'    => array('path' => 'Territory', 'value' => 2),
+            'Territory'      => array('path' => 'Territory', 'value' => 1),
+            'CityToTimezone' => array('path' => 'CityToTimezone'),
+        );
+
+        $zendLocale = new Zend_Locale($_locale);
+
+        foreach ( $types as $name => $path) {
+            if ($name == 'CountryList') {
+                $countries = Countries::getNames($_locale);
+                if ( is_array($countries) ) {
+                    $jsContent .= "$name:{";
+                    asort($countries);
+                    foreach ($countries as $key => $value) {
+                        $value = preg_replace("/\"/", '\"', $value);
+                        $jsContent .= "'$key':\"$value\",";
+                    }
+                    // remove last comma
+                    $jsContent = chop($jsContent, ",");
+                    $jsContent .= "},";
+                }
+            } else {
+                $list = $zendLocale->getTranslationList($path['path'], $_locale, array_key_exists('value', $path) ? $path['value'] : false);
+                //print_r ( $list );
+
+                if ( is_array($list) ) {
+                    $jsContent .= "$name:{";
+
+                    foreach ( $list as $key => $value ) {
+                        // convert ISO -> PHP for date formats
+                        if ( in_array($name, array('Date', 'Time', 'DateTime')) ) {
+                            $value = self::convertIsoToPhpFormat($value);
+                        }
+                        $value = preg_replace("/\"/", '\"', $value);
+                        $jsContent .= "'$key':\"$value\",";
+                    }
+                    // remove last comma
+                    $jsContent = chop($jsContent, ",");
+                    $jsContent .= "},";
+                }
+            }
+        }
+        $jsContent = chop($jsContent, ",");
+
+        $jsContent .= "};";
+        return $jsContent;
+    }
+
+    /**
+     * Converts a format string from ISO to PHP format
+     * reverse the functionality of Zend's convertPhpToIsoFormat()
+     *
+     * @param  string  $format  Format string in PHP's date format
+     * @return string           Format string in ISO format
+     */
+    public function convertIsoToPhpFormat($format) {
+        $convert = array(
+            'c' => '/yyyy-MM-ddTHH:mm:ssZZZZ/',
+            '$1j$2' => '/([^d])d([^d])/',
+            'j$1' => '/^d([^d])/',
+            '$1j' => '/([^d])d$/',
+            't' => '/ddd/',
+            'd' => '/dd/',
+            'l' => '/EEEE/',
+            'D' => '/EEE/',
+            'S' => '/SS/',
+            'w' => '/eee/',
+            'N' => '/e/',
+            'z' => '/D/',
+            'W' => '/w/',
+            '$1n$2' => '/([^M])M([^M])/',
+            'n$1' => '/^M([^M])/',
+            '$1n' => '/([^M])M$/',
+            'F' => '/MMMM/',
+            'M' => '/MMM/',
+            'm' => '/MM/',
+            'L' => '/l/',
+            'o' => '/YYYY/',
+            'Y' => '/yyyy/',
+            'y' => '/yy/',
+            'a' => '/a/',
+            'A' => '/a/',
+            'B' => '/B/',
+            'h' => '/hh/',
+            'g' => '/h/',
+            '$1G$2' => '/([^H])H([^H])/',
+            'G$1' => '/^H([^H])/',
+            '$1G' => '/([^H])H$/',
+            'H' => '/HH/',
+            'i' => '/mm/',
+            's' => '/ss/',
+            'e' => '/zzzz/',
+            'I' => '/I/',
+            'P' => '/ZZZZ/',
+            'O' => '/Z/',
+            'T' => '/z/',
+            'Z' => '/X/',
+            'r' => '/r/',
+            'U' => '/U/',
+        );
+
+        //echo "pre:".$format."\n";
+
+        $patterns = array_values($convert);
+        $replacements = array_keys($convert);
+        $format = preg_replace($patterns, $replacements, $format);
+
+        //echo "post:".$format."\n";
+        //echo "---\n";
+
+        return $format;
     }
 }

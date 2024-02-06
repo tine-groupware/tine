@@ -1,3 +1,5 @@
+import { HTMLProxy } from "twingEnv";
+
 /**
  * @class Ext.ux.Printer.BaseRenderer
  * @extends Object
@@ -27,7 +29,6 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
   
     constructor: function(config) {
         Ext.apply(this, config);
-
         Ext.ux.Printer.BaseRenderer.superclass.constructor.call(this, config);
     },
 
@@ -76,11 +77,18 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
              : "print";
 
         var win = window.open('', name);
+        HTMLProxy.addProxyDocument(win.document);
+        const proxyPromisesCollection = [];
+        HTMLProxy.addProxyPromisesCollection(proxyPromisesCollection);
 
         var me = this;
-        return me.generateHTML(component).then(function(html) {
+        return me.generateHTML(component).then(async function(html) {
             win.document.write(html);
             win.document.close();
+
+            await Promise.allSettled(proxyPromisesCollection);
+            HTMLProxy.removeProxyDocument(win.document);
+            HTMLProxy.removeProxyPromisesCollection(proxyPromisesCollection);
 
             // gecko looses its document after document.close(). but fortunally waits with printing till css is loaded itself
             me.doPrint(win);
@@ -93,45 +101,52 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
      */
     iframePrint: function(component) {
         var me = this;
-        return me.generateHTML(component).then(function(html) {
-            var id = Ext.id(),
-                frame = document.createElement('iframe'),
-                style = {
-                    position: 'absolute',
-                    'background-color': '#FFFFFF',
-                    width: '210mm',
-                    height: '297mm',
-                    top: '-10000px',
-                    left: '-10000px'
-                };
+        var id = Ext.id(),
+            frame = document.createElement('iframe'),
+            style = {
+                position: 'absolute',
+                'background-color': '#FFFFFF',
+                width: '210mm',
+                height: '297mm',
+                top: '-10000px',
+                left: '-10000px'
+            };
 
-            if (this.debug) {
-                Ext.apply(style, {
-                    top: '0px',
-                    left: '0px',
-                    'z-index': 10000000
-                });
-            }
-
-            Ext.fly(frame).set({
-                id: id,
-                name: id,
-                style: style
+        if (this.debug) {
+            Ext.apply(style, {
+                top: '0px',
+                left: '0px',
+                'z-index': 10000000
             });
+        }
 
-            document.body.appendChild(frame);
+        Ext.fly(frame).set({
+            id: id,
+            name: id,
+            style: style
+        });
 
-            Ext.fly(frame).set({
-                src : Ext.SSL_SECURE_URL
-            });
+        document.body.appendChild(frame);
 
-            var doc = frame.contentWindow.document || frame.contentDocument || WINDOW.frames[id].document;
+        Ext.fly(frame).set({
+            src : Ext.SSL_SECURE_URL
+        });
 
-            doc.open();
+        var doc = frame.contentWindow.document || frame.contentDocument || WINDOW.frames[id].document;
+
+        doc.open();
+        HTMLProxy.addProxyDocument(doc);
+        const proxyPromisesCollection = [];
+        HTMLProxy.addProxyPromisesCollection(proxyPromisesCollection);
+        return me.generateHTML(component).then(async function(html) {
             doc.write(html);
             doc.close();
-
             // resize to full height as browser might print only the visible area
+
+            await Promise.allSettled(proxyPromisesCollection);
+            HTMLProxy.removeProxyDocument(doc);
+            HTMLProxy.removeProxyPromisesCollection(proxyPromisesCollection);
+
             var totalHeight = Ext.fly(doc.body).getHeight();
             Ext.fly(frame).setStyle('height', totalHeight+'px');
 
@@ -172,7 +187,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
         return new Promise(function (fulfill, reject) {
             if (me.useHtml2Canvas) {
                 require.ensure(["html2canvas"], function() {
-                    var html2canvas = require ("html2canvas");
+                    var html2canvas = require ("html2canvas").default;
 
                     html2canvas(win.document.body, {
                         grabMouse: false,
@@ -212,7 +227,15 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
         var me = this;
         return new Promise(function (fulfill, reject) {
             me.prepareData(component).then(function(data) {
-                me.generateBody(component, data).then(function(bodyHtml) {
+                me.generateBody(component, data).then(async function(bodyHtml) {
+                    let title = me.getTitle(component);
+                    if (title.asString) {
+                        title = await title.asString();
+                    }
+                    if (Ext.isThenable(title)) {
+                        title = await title;
+                    }
+
                     fulfill(new Ext.XTemplate(
                         '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
                         '<html>',
@@ -220,7 +243,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
                         '<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />',
                         '<x-additional-headers />',
                         '<link href="' + me.stylesheetPath + '?' + new Date().getTime() + '" rel="stylesheet" type="text/css" media="screen,print" />',
-                        '<title>' + me.getTitle(component) + '</title>',
+                        '<title>' + title + '</title>',
                         '</head>',
                         '<body>',
                         '<div id="csscheck"></div>',

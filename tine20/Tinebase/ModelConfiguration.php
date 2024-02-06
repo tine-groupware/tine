@@ -5,9 +5,11 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Tinebase_ModelConfiguration
@@ -64,6 +66,7 @@
  * @property array      $fieldKeys holds the keys of all fields
  * @property array      $timeFields holds the time fields
  * @property array      $modlogOmitFields holds the fields which will be omitted in the modlog
+ * @property array      $pwFields holds the fields which are passwords
  * @property array      $readOnlyFields these fields will just be readOnly
  * @property array      $datetimeFields holds the datetime fields
  * @property array      $dateFields holds the date fields (maybe we use Tinebase_Date sometimes)
@@ -97,6 +100,8 @@
  * @property string     $delegateAclField
  * @property array|null $grantProtectedFields
  * @property array      $languagesAvailable
+ * @property bool       $runConvertToRecordFromJson
+ * @property bool       $hasPerspectives
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -114,6 +119,20 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var string
      */
     protected $_idProperty = 'id';
+
+    /**
+     * the module name
+     *
+     * @var string
+     */
+    protected $_moduleName;
+
+    /**
+     * frontend property
+     *
+     * TODO add type
+     */
+    protected $_copyNoAppendTitle;
 
     /**
      * table definition
@@ -261,6 +280,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      */
     protected $_hasSystemCustomFields = NULL;
 
+    /** @var bool */
+    protected $_hasPerspectives = false;
+
     /**
      * If this is true, the record has notes
      *
@@ -383,6 +405,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      * @var array
      */
     protected $_controllerHookBeforeUpdate = [];
+
+    protected $_jsonFacadeFields = [];
 
     /**
      * Holds the field definitions in an associative array where the key
@@ -655,6 +679,13 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_modlogOmitFields = array();
 
     /**
+     * holds the fields which will be replaced in the notes
+     *
+     * @var array
+     */
+    protected $_pwFields = [];
+
+    /**
      * these fields will just be readOnly
      *
      * @var array
@@ -780,7 +811,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
         'multipleEdit', 'multipleEditRequiredRight', 'languagesAvailable',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
-        'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasAttachments', 'hasAlarms',
+        'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasNotes', 'hasAttachments', 'hasAlarms',
         'idProperty', 'splitButton', 'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields',
         'group', 'multipleEdit', 'multipleEditRequiredRight', 'copyNoAppendTitle', 'denormalizationOf', 'isMetadataModelFor'
     );
@@ -858,6 +889,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         'numberableInt'         => Tinebase_Model_Filter_Int::class,
         'hexcolor'              => Tinebase_Model_Filter_Text::class,
         self::TYPE_MODEL        => Tinebase_Model_Filter_Text::class,
+        self::TYPE_LANGUAGE     => Tinebase_Model_Filter_Text::class,
     );
 
     /**
@@ -1016,6 +1048,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 $definition = $cfc->definition->toArray();
                 if (isset($definition[Tinebase_Model_CustomField_Config::DEF_FIELD])) {
                     $this->_fields[$cfc->name] = $definition[Tinebase_Model_CustomField_Config::DEF_FIELD];
+                    $this->_fields[$cfc->name][self::SYSTEM_CF] = true;
                 }
 
                 if (isset($definition[Tinebase_Model_CustomField_Config::DEF_HOOK])) {
@@ -1188,10 +1221,18 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         }
 
         if ($this->_hasAlarms) {
-            $this->_fields['alarms'] = array(
-                'label' => NULL,
-                'type'  => 'alarms'
-            );
+            $this->_fields['alarms'] = [
+                self::LABEL     => null,
+                self::TYPE      => self::TYPE_RECORDS,
+                self::CONFIG    => [
+                    self::APP_NAME      => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME    => Tinebase_Model_Alarm::MODEL_NAME_PART,
+                    self::REF_ID_FIELD  => Tinebase_Model_Alarm::FLD_RECORD_ID,
+                    self::ADD_FILTERS   => [
+                        [TMFA::FIELD => Tinebase_Model_Alarm::FLD_MODEL, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $recordClass]
+                    ],
+                ],
+            ];
         }
 
         if ($this->_hasXProps) {
@@ -1327,89 +1368,124 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
             // the property name
             $fieldDef['key'] = $fieldKey;
 
-            if ($fieldDef[self::TYPE] === 'keyfield') {
-                $fieldDef['length'] = 40;
-                $keyFieldAppName = isset($fieldDef['config']['application']) ? $fieldDef['config']['application']
-                    : $this->_applicationName;
-                if (Tinebase_Application::getInstance()->isInstalled($keyFieldAppName)) {
-                    $appConfig = Tinebase_Config::getAppConfig($keyFieldAppName);
-                    $keyField = null;
-                    if (!isset($fieldDef['name']) || ($appConfig && ! ($keyField =
-                                $appConfig->get($fieldDef['name'])) instanceof Tinebase_Config_KeyField)) {
-                        throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
-                            $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
+            switch($fieldDef[self::TYPE]) {
+                case self::TYPE_KEY_FIELD:
+                    $fieldDef['length'] = 40;
+                    $keyFieldAppName = isset($fieldDef['config']['application']) ? $fieldDef['config']['application']
+                        : $this->_applicationName;
+                    if (Tinebase_Application::getInstance()->isInstalled($keyFieldAppName)) {
+                        $appConfig = Tinebase_Config::getAppConfig($keyFieldAppName);
+                        $keyField = null;
+                        if (!isset($fieldDef['name']) || ($appConfig && ! ($keyField =
+                                    $appConfig->get($fieldDef['name'])) instanceof Tinebase_Config_KeyField)) {
+                            throw new Tinebase_Exception_Record_DefinitionFailure('bad keyfield configuration: ' .
+                                $this->_modelName . ' ' . $fieldKey . ' ' . print_r($fieldDef, true));
 
-                        // yes array_key_exists, as you should be able to set default to null
-                    } elseif ($keyField && !array_key_exists(self::DEFAULT_VAL, $fieldDef) && is_scalar($keyField->default)) {
-                        $fieldDef[self::DEFAULT_VAL] = $keyField->default;
-                    }
-                }
-            } elseif ($fieldDef[self::TYPE] === 'virtual') {
-                if (!isset($fieldDef['modlogOmit'])) {
-                    $fieldDef['modlogOmit'] = true;
-                }
-                $fieldDef['config']['sortable'] = isset($fieldDef['config']['sortable']) ? $fieldDef['config']['sortable'] :
-                    isset($fieldDef['config'][self::TYPE]) && $fieldDef['config'][self::TYPE] === self::TYPE_RELATION;
-                $virtualField = $fieldDef['config'];
-                $virtualField['key'] = $fieldKey;
-                if ((isset($virtualField['default']))) {
-                    // @todo: better handling of virtualfields
-                    $this->_defaultData[$fieldKey] = $virtualField['default'];
-                }
-                $this->_virtualFields[$fieldKey] = $virtualField;
-            } elseif ($fieldDef[self::TYPE] === 'numberableStr' || $fieldDef[self::TYPE] === 'numberableInt') {
-                $this->_autoincrementFields[] = $fieldDef;
-            }  elseif ($fieldDef[self::TYPE] === 'image') {
-                $fieldDef['label'] = 'Image'; // _('Image')
-            } elseif ($fieldDef[self::TYPE] === self::TYPE_STRING_AUTOCOMPLETE) {
-                $fieldDef[self::CONFIG] = isset($fieldDef[self::CONFIG]) && is_array($fieldDef[self::CONFIG]) ? $fieldDef[self::CONFIG] : [];
-                $fieldDef[self::CONFIG][self::APP_NAME] = $this->_appName;
-                $fieldDef[self::CONFIG][self::MODEL_NAME] = $this->_modelName;
-            } elseif ($fieldDef[self::TYPE] === self::TYPE_LOCALIZED_STRING) {
-                $fieldDef[self::TYPE] = self::TYPE_RECORDS;
-                if (!isset($fieldDef[self::CONFIG])) {
-                    $fieldDef[self::CONFIG] = [];
-                }
-                $fieldDef[self::CONFIG][self::SPECIAL_TYPE] = self::TYPE_LOCALIZED_STRING;
-                if (!array_key_exists(self::APP_NAME, $fieldDef[self::CONFIG])) {
-                    $fieldDef[self::CONFIG][self::APP_NAME] = $this->_appName;
-                }
-                if (!array_key_exists(self::MODEL_NAME, $fieldDef[self::CONFIG])) {
-                    $fieldDef[self::CONFIG][self::MODEL_NAME] = $this->_modelName . 'Localization';
-                }
-                if (!array_key_exists(self::REF_ID_FIELD, $fieldDef[self::CONFIG])) {
-                    $fieldDef[self::CONFIG][self::REF_ID_FIELD] = Tinebase_Record_PropertyLocalization::FLD_RECORD_ID;
-                }
-                if (!array_key_exists(self::DEPENDENT_RECORDS, $fieldDef[self::CONFIG])) {
-                    $fieldDef[self::CONFIG][self::DEPENDENT_RECORDS] = true;
-                }
-                if (!array_key_exists(self::ADD_FILTERS, $fieldDef[self::CONFIG])) {
-                    $fieldDef[self::CONFIG][self::ADD_FILTERS] = [[
-                        'field' => Tinebase_Record_PropertyLocalization::FLD_TYPE,
-                        'operator' => 'equals',
-                        'value' => $fieldKey,
-                    ]];
-                }
-                if (!array_key_exists(self::FORCE_VALUES, $fieldDef[self::CONFIG])) {
-                    $fieldDef[self::CONFIG][self::FORCE_VALUES] = [
-                        Tinebase_Record_PropertyLocalization::FLD_TYPE => $fieldKey,
-                    ];
-                }
-                if (!array_key_exists(self::JSON_EXPANDER, $modelClassConfiguration) && !is_array($this->_jsonExpander)) {
-                    $this->_jsonExpander = [];
-                }
-                while (is_array($this->_jsonExpander)) {
-                    if (!array_key_exists(Tinebase_Record_Expander::EXPANDER_PROPERTIES, $this->_jsonExpander)) {
-                        $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES] = [];
-                    }
-                    if (!is_array($this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES])) {
-                        break;
-                    }
-                    if (!array_key_exists($fieldKey, $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES])) {
-                        $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES][$fieldKey] = [];
+                            // yes array_key_exists, as you should be able to set default to null
+                        } elseif ($keyField && !array_key_exists(self::DEFAULT_VAL, $fieldDef) && is_scalar($keyField->default)) {
+                            $fieldDef[self::DEFAULT_VAL] = $keyField->default;
+                        }
                     }
                     break;
+
+                case self::TYPE_VIRTUAL:
+                    if (!isset($fieldDef['modlogOmit'])) {
+                        $fieldDef['modlogOmit'] = true;
+                    }
+                    $fieldDef['config']['sortable'] = $fieldDef['config']['sortable'] ??
+                        (($fieldDef['config'][self::TYPE] ?? null) === self::TYPE_RELATION);
+                    $virtualField = $fieldDef['config'];
+                    $virtualField['key'] = $fieldKey;
+                    if ((isset($virtualField['default']))) {
+                        // @todo: better handling of virtualfields
+                        $this->_defaultData[$fieldKey] = $virtualField['default'];
+                    }
+                    $this->_virtualFields[$fieldKey] = $virtualField;
+                    break;
+
+                case self::TYPE_NUMBERABLE_STRING:
+                case self::TYPE_NUMBERABLE_INT:
+                    $this->_autoincrementFields[] = $fieldDef;
+                    break;
+
+                case 'image':
+                    $fieldDef['label'] = 'Image'; // _('Image')
+                    break;
+
+                case self::TYPE_STRING_AUTOCOMPLETE:
+                    $fieldDef[self::CONFIG] = isset($fieldDef[self::CONFIG]) && is_array($fieldDef[self::CONFIG]) ? $fieldDef[self::CONFIG] : [];
+                    $fieldDef[self::CONFIG][self::APP_NAME] = $this->_appName;
+                    $fieldDef[self::CONFIG][self::MODEL_NAME] = $this->_modelName;
+                    break;
+
+                case self::TYPE_LOCALIZED_STRING:
+                    $fieldDef[self::TYPE] = self::TYPE_RECORDS;
+                    if (!isset($fieldDef[self::CONFIG])) {
+                        $fieldDef[self::CONFIG] = [];
+                    }
+                    $fieldDef[self::CONFIG][self::SPECIAL_TYPE] = self::TYPE_LOCALIZED_STRING;
+                    if (!array_key_exists(self::APP_NAME, $fieldDef[self::CONFIG])) {
+                        $fieldDef[self::CONFIG][self::APP_NAME] = $this->_appName;
+                    }
+                    if (!array_key_exists(self::MODEL_NAME, $fieldDef[self::CONFIG])) {
+                        $fieldDef[self::CONFIG][self::MODEL_NAME] = $this->_modelName . 'Localization';
+                    }
+                    if (!array_key_exists(self::REF_ID_FIELD, $fieldDef[self::CONFIG])) {
+                        $fieldDef[self::CONFIG][self::REF_ID_FIELD] = Tinebase_Record_PropertyLocalization::FLD_RECORD_ID;
+                    }
+                    if (!array_key_exists(self::DEPENDENT_RECORDS, $fieldDef[self::CONFIG])) {
+                        $fieldDef[self::CONFIG][self::DEPENDENT_RECORDS] = true;
+                    }
+                    if (!array_key_exists(self::ADD_FILTERS, $fieldDef[self::CONFIG])) {
+                        $fieldDef[self::CONFIG][self::ADD_FILTERS] = [[
+                            'field' => Tinebase_Record_PropertyLocalization::FLD_TYPE,
+                            'operator' => 'equals',
+                            'value' => $fieldKey,
+                        ]];
+                    }
+                    if (!array_key_exists(self::FORCE_VALUES, $fieldDef[self::CONFIG])) {
+                        $fieldDef[self::CONFIG][self::FORCE_VALUES] = [
+                            Tinebase_Record_PropertyLocalization::FLD_TYPE => $fieldKey,
+                        ];
+                    }
+                    if (!array_key_exists(self::JSON_EXPANDER, $modelClassConfiguration) && !is_array($this->_jsonExpander)) {
+                        $this->_jsonExpander = [];
+                    }
+                    while (is_array($this->_jsonExpander)) {
+                        if (!array_key_exists(Tinebase_Record_Expander::EXPANDER_PROPERTIES, $this->_jsonExpander)) {
+                            $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES] = [];
+                        }
+                        if (!is_array($this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES])) {
+                            break;
+                        }
+                        if (!array_key_exists($fieldKey, $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES])) {
+                            $this->_jsonExpander[Tinebase_Record_Expander::EXPANDER_PROPERTIES][$fieldKey] = [];
+                        }
+                        break;
+                    }
+                    break;
+            }
+
+            if ($fieldDef[self::IS_PERSPECTIVE] ?? false) {
+                $this->_hasPerspectives = true;
+                if (! class_implements($recordClass)[Tinebase_Record_PerspectiveInterface::class] ?? false) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('perspective trait/interface not used in ' . $recordClass);
                 }
+                $fieldDef[self::DOCTRINE_MAPPING_TYPE] = self::TYPE_JSON;
+                if (isset($fieldDef[self::DEFAULT_VAL])) {
+                    throw new Tinebase_Exception_Record_DefinitionFailure('perspective property need to use perspective default, not default_val');
+                }
+                if (!isset($fieldDef[self::PERSPECTIVE_DEFAULT])) {
+                    $fieldDef[self::PERSPECTIVE_DEFAULT] = null;
+                }
+
+                if (!array_key_exists(self::CONVERTERS, $fieldDef)) {
+                    $fieldDef[self::CONVERTERS] = [Tinebase_Model_Converter_Perspective::class];
+                }
+                if (($this->_converterDefaultMapping[$fieldDef[self::TYPE]] ?? false) && !array_key_exists(self::PERSPECTIVE_CONVERTERS, $fieldDef)) {
+                    $fieldDef[self::PERSPECTIVE_CONVERTERS] = $this->_converterDefaultMapping[$fieldDef[self::TYPE]];
+                }
+                $fieldDef[self::NULLABLE] = true;
             }
 
             if (isset($fieldDef[self::IS_VIRTUAL])) {
@@ -1485,11 +1561,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     $this->_filters[$fieldKey][] = $if ? new $if($val) : new $val();
                 }
             }
-            
-            // add field to modlog omit, if configured and modlog is used
-            if ($this->_modlogActive && isset($fieldDef['modlogOmit']) && $fieldDef['modlogOmit']) {
-                $this->_modlogOmitFields[] = $fieldKey;
-            }
+
+            $this->_addToModlogOmit($fieldDef, $fieldKey);
+            $this->_addToPasswordFields($fieldDef, $fieldKey);
 
             // set converters
             foreach ((isset($fieldDef['converters']) && is_array($fieldDef['converters'])) ? $fieldDef['converters'] :
@@ -1527,6 +1601,34 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         $this->_fieldKeys = array_keys($this->_fields);
 
         self::$createdModels[] = $recordClass;
+    }
+
+    /**
+     * add field to modlog omit, if configured and modlog is used OR field is password
+     *
+     * @param array $fieldDef
+     * @param string $fieldKey
+     * @return void
+     */
+    protected function _addToModlogOmit(array $fieldDef, string $fieldKey): void
+    {
+        if ($this->_modlogActive && isset($fieldDef['modlogOmit']) && $fieldDef['modlogOmit']) {
+            $this->_modlogOmitFields[] = $fieldKey;
+        }
+    }
+
+    /**
+     * add field to modlog omit, if configured and modlog is used OR field is password
+     *
+     * @param array $fieldDef
+     * @param string $fieldKey
+     * @return void
+     */
+    protected function _addToPasswordFields(array $fieldDef, string $fieldKey): void
+    {
+        if (isset($fieldDef[self::SPECIAL_TYPE]) && $fieldDef[self::SPECIAL_TYPE] === self::SPECIAL_TYPE_PASSWORD) {
+            $this->_pwFields[] = $fieldKey;
+        }
     }
 
     /**
@@ -1583,6 +1685,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
                     // set id filter controller
                     if ($type === self::TYPE_RECORD || $type === self::TYPE_RECORDS) {
+                        if ($type === self::TYPE_RECORD && ($config[self::REF_ID_FIELD] ?? false)) {
+                            $this->_filterModel[$fieldKey]['filter'] = $this->_filterModelMapping[self::TYPE_RECORDS];
+                        }
                         $this->_filterModel[$fieldKey]['options']['filtergroup'] =
                             ($config['recordClassName'] ?? ($config['appName'] . '_Model_' . $config['modelName'])) . 'Filter';
                         $this->_filterModel[$fieldKey]['options']['controller']  =
@@ -1746,6 +1851,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     public function getModelName()
     {
         return $this->_modelName;
+    }
+
+    public function setFilterModel(array $fm): void
+    {
+        $this->_filterModel = $fm;
     }
 
     public function getFieldModel($field)
@@ -1926,6 +2036,9 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 }
                 if ($deNormOf) {
                     $this->_denormalizedFields[$fieldKey] = $fieldDef;
+                }
+                if (isset($fieldDef[self::CONFIG][self::JSON_FACADE])) {
+                    $this->_jsonFacadeFields[$fieldKey] = $fieldDef;
                 }
                 break;
             case self::TYPE_DYNAMIC_RECORD:
@@ -2161,6 +2274,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     public function setJsonExpander(?array $expander)
     { // used by crewscheduling gdpr should be refaactored to use it too
         $this->_jsonExpander = $expander;
+    }
+
+    public function getJsonFacadeFields(): array
+    {
+        return $this->_jsonFacadeFields;
     }
 
     /**
@@ -2400,12 +2518,19 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      *
      * @return array
      */
-    public function getVirtualFields() {
+    public function getVirtualFields()
+    {
         return $this->_virtualFields;
     }
 
-    public function hasField($_field) {
+    public function hasField($_field)
+    {
         return isset($this->_fields[$_field]);
+    }
+
+    public function getControllerHooksBeforeUpdate(): array
+    {
+        return $this->_controllerHookBeforeUpdate;
     }
 
     /**

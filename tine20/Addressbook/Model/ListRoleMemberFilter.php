@@ -60,7 +60,7 @@ class Addressbook_Model_ListRoleMemberFilter extends Tinebase_Model_Filter_Forei
                 /* table  */ [$correlationName => $_backend->getTablePrefix() . 'adb_list_m_role'],
                 /* on     */ $db->quoteIdentifier($correlationName . '.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id')
                     . ($this->_valueIsNull ? '' : ' AND ' . $this->_getQuotedFieldName($_backend) . $db->quoteInto(' IN (?)', $this->_foreignIds)),
-                /* select */ ['id']
+                /* select */ []
             );
         } else {
             $_select->joinLeft(

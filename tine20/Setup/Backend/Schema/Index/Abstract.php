@@ -4,10 +4,9 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
-
 
 abstract class Setup_Backend_Schema_Index_Abstract extends Setup_Backend_Schema_Abstract
 {
@@ -59,14 +58,14 @@ abstract class Setup_Backend_Schema_Index_Abstract extends Setup_Backend_Schema_
      *
      * @var string
      */
-    public $referencetable;
+    public $referenceTable;
     
     /**
      * name of referenced table field/column of foreign key
      *
      * @var string
      */
-    public $referencefield;
+    public $referenceField;
     
     /**
      * defines behaviour of foreign key
@@ -81,73 +80,21 @@ abstract class Setup_Backend_Schema_Index_Abstract extends Setup_Backend_Schema_
      * @var boolean
      */
     public $referenceOnUpdate;
-    
+
     /**
      * lenght of index 
      * 
      * @var integer
      */
     public $length = NULL;
-    
+
+    public $fulltext;
+    public $ondelete;
+
     abstract protected function _setIndex($_declaration);
 
     public function setForeignKey($_foreign)
     {
         $this->foreign = 'true';
     }
-
-//    
-//    /**
-//     * set index from declaration 
-//    * @param stdClass $_declaration
-//     * NOT IMPLEMENTED YET
-//     */  
-//    public function addIndex($_definition)
-//    {
-//        foreach ($this->declaration['index'] as $index) {
-//            if ($index->field['name'] == $_definition['COLUMN_NAME']) {
-//                if ($_definition['CONSTRAINT_NAME'] == 'PRIMARY') {
-//                    $index->setName($_definition['COLUMN_NAME']);
-//                } else {
-//                    $index->setName($_definition['CONSTRAINT_NAME']);
-//                }
-//            }
-//        }
-//    }
-//    
-//    /**
-//     * set index from declaration 
-//    * @param stdClass $_declaration
-//     * NOT IMPLEMENTED YET
-//     */     
-//    public function setIndex($_definition)
-//    {
-//        foreach ($this->declaration['index'] as $index) {
-//            if ($index->field['name'] == $_definition['COLUMN_NAME']) {
-//                if ($_definition['CONSTRAINT_NAME'] == 'PRIMARY') {
-//                    $index->setName($_definition['COLUMN_NAME']);
-//                } else {
-//                    $index->setName($_definition['CONSTRAINT_NAME']);
-//                }
-//            }
-//        }
-//    }
-//    
-//    /**
-//     * set index from declaration 
-//    * @param stdClass $_declaration
-//     * NOT IMPLEMENTED YET
-//     */  
-//    public function setForeign($_definition)
-//    {
-//        foreach ($this->declaration['index'] as $index) {
-//            //// auto shutup by cweiss: echo "<h1>"  . substr($_definition['CONSTRAINT_NAME'], strlen(SQL_TABLE_PREFIX)) . "/" .$index->field->name.  "</h1>";
-//            
-//            //if ($index->field->name == substr($_definition['CONSTRAINT_NAME'], strlen(SQL_TABLE_PREFIX)))
-//            //{
-//                $index->setForeignKey($_definition);
-//            //}
-//        }
-//    }
-    
 }

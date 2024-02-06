@@ -114,6 +114,11 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      */
     denormalizationRecordClass: null,
 
+    /**
+     * @cfg {Boolean} useEditPlugin
+     */
+    useEditPlugin: false,
+
     triggerAction: 'all',
     pageSize: 50,
     forceSelection: true,
@@ -140,7 +145,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 preserveJsonProps: 'original_id',
                 qtip: window.i18n._('Edit copy'),
                 editDialogMode: 'local'
-            }))
+            }));
+            this.useEditPlugin = false;
         }
 
         this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
@@ -156,7 +162,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.sortBy = this.sortBy || this.recordClass.getModelConfiguration()?.defaultSortInfo?.field;
         this.pageSize = parseInt(Tine.Tinebase.registry.get('preferences').get('pageSize'), 10) || this.pageSize;
 
-        this.store = new Tine.Tinebase.data.RecordStore({
+        this.store = this.store || new Tine.Tinebase.data.RecordStore({
             remoteSort: true,
             readOnly: true,
             proxy: this.recordProxy || undefined,
@@ -170,6 +176,13 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
 
         this.additionalFilters = expandFilter(this.additionalFilterSpec, this.additionalFilters);
 
+        this.plugins = this.plugins || [];
+        if (this.useEditPlugin) {
+            this.plugins.push(new RecordEditFieldTriggerPlugin(Ext.applyIf(this.recordEditPluginConfig || {}, {
+                allowCreateNew: !(this.additionalFilterSpec || this.additionalFilters?.length >0)
+            })));
+        }
+
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initComponent.call(this);
     },
 
@@ -177,10 +190,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initList.apply(this, arguments);
         this.ownLangPicker = getLocalizedLangPicker(this.recordClass);
         if (this.ownLangPicker && this.pageTb) {
-            const localizedLangPicker = this.localizedLangPicker || this.findParentBy((c) => {return c.localizedLangPicker})?.localizedLangPicker
-            if (localizedLangPicker) {
-                this.ownLangPicker.setValue(localizedLangPicker.getValue())
-                localizedLangPicker.on('change', (picker, lang) => { this.ownLangPicker.setValue(lang) })
+            if (this.localizedLangPicker) {
+                this.ownLangPicker.setValue(this.localizedLangPicker.getValue())
+                this.localizedLangPicker.on('change', (picker, lang) => {
+                    this.lastQuery = null
+                    this.ownLangPicker.setValue(lang)
+                })
             }
 
             this.ownLangPicker.on('select', (picker, lang) => {
@@ -219,6 +234,16 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 }).createDelegate(this)
             })
         }
+    },
+
+    initValue: function() {
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.initValue.call(this);
+        this.originalSelectedRecord = this.selectedRecord;
+    },
+
+    reset: function() {
+        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.reset.call(this);
+        this.selectedRecord = this.originalSelectedRecord;
     },
 
     getListItemQtip(record) {
@@ -307,6 +332,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         });
 
         this.relayEvents(c, ['contextmenu']);
+
+        this.localizedLangPicker = this.localizedLangPicker || this.findParentBy((c) => {return c.localizedLangPicker})?.localizedLangPicker
     },
 
     /**
@@ -367,7 +394,9 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             description = '';
 
         if (r){
-            text = (typeof r.getComboBoxTitle === "function") ? r.getComboBoxTitle() : r.getTitle();
+            text = (typeof r.getComboBoxTitle === "function") ? r.getComboBoxTitle() : r.getTitle({
+                language: this.localizedLangPicker?.getValue()
+            });
             description = r.get('description') || description;
             this.selectedRecord = r;
             if (this.allowLinkingItself === false) {
@@ -390,7 +419,19 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         if (this.hiddenField){
             this.hiddenField.value = Ext.value(value, '');
         }
-        Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue.call(this, text);
+
+        const setValue = _.bind(Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.setValue, this);
+        if (text && text.registerReplacer) {
+            text.registerReplacer((text) => {
+                // check if value is still valid
+                if (value === this.value) {
+                    setValue(text);
+                    this.value = value;
+                }
+            });
+        } else {
+            setValue(text);
+        }
 
         var el = this.getEl();
         if (el) {
@@ -415,7 +456,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             value.original_id = this.selectedRecord.json.original_id || value[this.valueField];
         }
 
-        return value;
+        if (this.inEditor && this.selectedRecord) {
+            // NOTE: in editorGrids we need the data to show render the title
+            value = { ...this.selectedRecord.data };
+        }
+
+        return Tine.Tinebase.common.assertComparable(value);
     },
 });
 Ext.reg('tinerecordpickercombobox', Tine.Tinebase.widgets.form.RecordPickerComboBox);

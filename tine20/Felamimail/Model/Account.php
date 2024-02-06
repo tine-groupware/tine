@@ -569,13 +569,14 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 ],
             ],
             'sieve_notification_email' => [
-                self::TYPE => self::TYPE_STRING,
-                self::LENGTH => 255,
+                self::TYPE => self::TYPE_TEXT,
+                self::LENGTH => 16000,
                 self::SYSTEM => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
+                self::INPUT_FILTERS             => [],
                 self::NULLABLE                  => true,
             ],
             'sieve_notification_move' => [
@@ -612,6 +613,15 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                     Zend_Filter_Input::DEFAULT_VALUE => null,
                 ],
                 self::NULLABLE                  => true
+            ],
+            'sieve_custom' => [
+                self::TYPE => self::TYPE_VIRTUAL,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                ],
+                self::OMIT_MOD_LOG              => true,
+                self::SYSTEM                    => true,
+                self::SHY => true,
             ],
             'all_folders_fetched' => [
                 self::TYPE => self::TYPE_BOOLEAN,
@@ -652,10 +662,10 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE =>               self::TYPE_STRING,
                 self::SYSTEM => true,
                 self::VALIDATORS => [
-                    Zend_Validate_InArray::class => [
+                    [Zend_Validate_InArray::class, [
                         self::VISIBILITY_HIDDEN,
                         self::VISIBILITY_DISPLAYED,
-                    ],
+                    ]],
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::DEFAULT_VALUE => self::VISIBILITY_HIDDEN
                 ],
@@ -676,11 +686,11 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::TYPE =>               self::TYPE_STRING,
                 self::SYSTEM => true,
                 self::VALIDATORS => [
-                    Zend_Validate_InArray::class => [
+                    [Zend_Validate_InArray::class, [
                         self::MESSAGE_COPY_FOLDER_SKIP,
                         self::MESSAGE_COPY_FOLDER_SENT,
                         self::MESSAGE_COPY_FOLDER_SOURCE,
-                    ],
+                    ]],
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::DEFAULT_VALUE => self::MESSAGE_COPY_FOLDER_SENT
                 ],
@@ -711,8 +721,8 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
      */
     public function getImapConfig()
     {
-        $this->resolveCredentials(FALSE);
-        
+        $this->resolveCredentials(false);
+
         $result = array();
         foreach (array('host', 'port', 'user', 'password') as $field) {
             $result[$field] = $this->{$field};

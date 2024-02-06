@@ -191,14 +191,18 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
                 this.constructor.titleTwing = twingEnv;
             }
 
-            return this.constructor.titleTwing.render(this.constructor.getPhpClassName() + 'Title', this.data);
+            return this.constructor.titleTwing.renderProxy(this.constructor.getPhpClassName() + 'Title', this.data);
         } else if (_.get(this.fields.get(this.titleProperty), 'fieldDefinition.config.specialType') === 'localizedString') {
             // const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(this.constructor, this.titleProperty);
             const languagesAvailableDef = _.get(this.constructor.getModelConfiguration(), 'languagesAvailable')
             const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinition(_.get(languagesAvailableDef, 'config.appName', this.appName), languagesAvailableDef.name)
-            const language = options?.language || keyFieldDef.default
+            let language = options?.language || keyFieldDef.default;
             const value = this.get(this.titleProperty);
-            return _.get(_.find(value, { language }) || _.get(value, '[0]'), 'text', '');
+            const preferredLanguage = Tine.Tinebase.registry.get('preferences')?.get('locale');
+            if (preferredLanguage !== 'auto') {
+                language = preferredLanguage;
+            }
+            return _.get(_.find(value, { language }), 'text', '') || _.find(value, (r) => {return r.text})?.text || i18n._('Translation not found')
         } else {
             var s = this.titleProperty ? this.titleProperty.split('.') : [null];
             return (s.length > 0 && this.get(s[0]) && this.get(s[0])[s[1]]) ? this.get(s[0])[s[1]] : s[0] ? this.get(this.titleProperty) : '';
@@ -379,6 +383,12 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     f.hasField = function(n) {
         return p.fields.indexOfKey(n) >= 0;
     };
+    f.getDataFields = function() {
+        const systemFields = _.map(Tine.Tinebase.Model.genericFields, 'name')
+            .concat(f.getMeta('idProperty'))
+            .concat(p.modelConfiguration?.hasNotes ? [] : 'notes');
+        return _.difference(p.modelConfiguration?.fieldKeys, systemFields);
+    };
     f.getRecordName = function() {
         var app = Tine.Tinebase.appMgr.get(p.appName),
             i18n = app && app.i18n ? app.i18n : window.i18n;
@@ -387,8 +397,7 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
     };
     f.getModuleName = function () {
         var app = Tine.Tinebase.appMgr.get(p.appName),
-            i18n = app && app.i18n ? app.i18n : window.i18n,
-            moduleName;
+            i18n = app && app.i18n ? app.i18n : window.i18n;
 
         if (p.modelConfiguration && p.modelConfiguration.moduleName) {
             return i18n._(p.modelConfiguration.moduleName);
@@ -408,6 +417,14 @@ Tine.Tinebase.data.Record.create = function(o, meta) {
             msgId = 'GENDER_' + p.recordName,
             gender = i18n._hidden(msgId);
         
+        return gender !== msgId ? gender : 'other';
+    };
+    f.getContainerGender = function () {
+        var app = Tine.Tinebase.appMgr.get(p.appName),
+            i18n = app && app.i18n ? app.i18n : window.i18n,
+            msgId = 'GENDER_' + p.containerName,
+            gender = i18n._hidden(msgId);
+
         return gender !== msgId ? gender : 'other';
     };
     f.getContainerName = function() {
@@ -536,7 +553,7 @@ Tine.Tinebase.data.RecordManager = Ext.extend(Ext.util.MixedCollection, {
             return modelName;
         }
         if (! appName) return;
-        if (Ext.isFunction(appName.getMeta)) {
+        if (Ext.isFunction(appName.getField)) {
             return appName;
         }
         if (! modelName && appName.modelName) {

@@ -58,6 +58,37 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         Tinebase_Record_Expander::expandRecord($storno);
         $this->assertSame(-2, (int)$storno->{Sales_Model_Document_Invoice::FLD_NET_SUM});
+        $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID}, $storno->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID});
+    }
+
+    public function testCustomerFilterForDocuments()
+    {
+        $customer = $this->_createCustomer();
+
+        Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_RECEIVED,
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->postal,
+        ]));
+
+        $result = Sales_Controller_Customer::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Customer::class, [
+                ['field' => 'document_order', 'operator' => 'definedBy', 'value' => [
+                    ['field' => Sales_Model_Document_Order::FLD_ORDER_STATUS, 'operator' => 'equals', 'value' => Sales_Model_Document_Order::STATUS_RECEIVED],
+                ]],
+            ]));
+        $this->assertSame(1, $result->count());
+
+        $result = Sales_Controller_Customer::getInstance()->search($filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Customer::class, $filterArray = [
+            ['field' => 'document_order', 'operator' => 'definedBy', 'value' => [
+                ['field' => Sales_Model_Document_Order::FLD_ORDER_STATUS, 'operator' => 'equals', 'value' => Sales_Model_Document_Order::STATUS_DONE],
+            ]],
+        ]));
+        $this->assertSame(0, $result->count());
+
+        $feFilter = $filter->toArray(true);
+        $this->assertSame($filterArray, $feFilter);
     }
 
     public function testOrderAddresses()

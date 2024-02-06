@@ -9,6 +9,8 @@
  * 
  */
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 /**
  * Test class for Sales Invoice Controller
  */
@@ -73,11 +75,11 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $contract->relations = array(
             array(
                 'own_model'              => Sales_Model_Contract::class,
-                'own_backend'            => Tasks_Backend_Factory::SQL,
+                'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'own_id'                 => NULL,
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => Tinebase_Model_CostCenter::class,
-                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id'             => $this->_costcenterRecords->getFirstRecord()->getId(),
                 'type'                   => 'LEAD_COST_CENTER'
             ),
@@ -104,7 +106,6 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
     public function testFullAutoInvoice()
     {
         $this->markTestSkipped('0010492: fix failing invoices and timetracker tests');
-        
         $this->_createFullFixtures();
         $this->_createFailingContracts();
         
@@ -139,7 +140,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->_invoiceController->createAutoInvoices($date);
         
         $all = $this->_invoiceController->getAll();
-        
+
         $cc1 = $this->_costcenterRecords->filter('name', 'unittest1')->getFirstRecord();
         $cc2 = $this->_costcenterRecords->filter('name', 'unittest2')->getFirstRecord();
         $cc3 = $this->_costcenterRecords->filter('name', 'unittest3')->getFirstRecord();
@@ -292,13 +293,13 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $contract->relations = array_merge($contract->relations->toArray(), [[
             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Timetracker_Model_Timeaccount',
-            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'related_id'             => $ta1->getId(),
             'type'                   => 'TIME_ACCOUNT'
         ],[
         'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Timetracker_Model_Timeaccount',
-            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'related_id'             => $ta2->getId(),
             'type'                   => 'TIME_ACCOUNT'
         ]]);
@@ -1726,5 +1727,83 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
      
         static::assertInstanceOf(Sales_Model_Invoice::class, $invoice);
         static::assertEquals(3, Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($invoice)->count());
+    }
+
+    /**
+     *
+     * @throws Exception
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
+    public function testGenerateTimesheetForAutoInvoice()
+    {
+        $this->_createFullFixtures();
+        $date = clone $this->_referenceDate;
+        $date->addMonth(4);
+        $from = $date->setTime(0,0,0)->toString();
+        $until = $date->addMonth(1)->toString();
+        $dateFilter = ['field' => 'start_date', 'operator' => 'within', 'value' => [
+            'from' => $from,
+            'until' => $until,
+        ]];
+        
+        $customer3Timeaccount = $this->_timeaccountRecords->filter('title', 'TA-for-Customer3')->getFirstRecord();
+        $timeaccountFilter = ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $customer3Timeaccount->getId()];
+        $tsFilter = new Timetracker_Model_TimesheetFilter([$dateFilter, $timeaccountFilter]);
+        $timesheets = $this->_timesheetController->search($tsFilter);
+        foreach ($timesheets as $idx => $timeSheet) {
+            $timeSheet['is_billable'] = $idx % 2;
+            $this->_timesheetController->update($timeSheet);
+        }
+        
+        $i = 0;
+        // the whole year, 12 months
+        $date2 = clone $this->_referenceDate;
+        while ($i < 12) {
+            $this->_invoiceController->createAutoInvoices($date2);
+            $date2->addMonth(1);
+            $i++;
+        }
+        
+        $timesheets = $this->_timesheetController->search($tsFilter);
+        static::assertEquals(2, $timesheets->count());
+        $billableTimesheets = $timesheets->filter('is_billable', 1);
+        static::assertEquals(1, $billableTimesheets->count());
+        $billableTimesheet = $billableTimesheets->getFirstRecord();
+        
+        $invoice = $this->_invoiceController->get($billableTimesheet['invoice_id']);
+        $definition = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
+            'model' => Sales_Model_Invoice::class,
+            'name' => 'invoice_timesheet_xlsx'
+        ]))->getFirstRecord()->getId();
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Invoice::class,[
+            ['field' => 'id', 'operator' => 'equals', 'value' => $invoice->getId()]
+        ]);
+        $export = new Sales_Export_TimesheetTimeaccount($filter, null, [
+            'definitionId' => $definition, 'timeaccount' => $customer3Timeaccount, 'invoice' => $invoice
+        ]);
+        
+        try {
+            // @todo caching breaks it all, we should fix caching instead of busting it
+            $export->registerTwigExtension(new Tinebase_Export_TwigExtensionCacheBust(
+                Tinebase_Record_Abstract::generateUID()));
+            $export->generate();
+            $xlsx = Tinebase_TempFile::getTempPath();
+            $export->save($xlsx);
+            $reader = IOFactory::createReader('Xlsx');
+            $doc = $reader->load($xlsx);
+            $arrayData = $doc->getActiveSheet()->rangeToArray('A1:H10');
+
+            static::assertEquals($customer3Timeaccount['title'], $arrayData[0][2]);
+            static::assertEquals($billableTimesheet['description'], $arrayData[4][1]);
+            static::assertEquals(null, $arrayData[5][1]);
+        } finally {
+            @unlink($xlsx);
+        }
     }
 }

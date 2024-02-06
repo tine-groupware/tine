@@ -27,6 +27,10 @@
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
     - !reference [.lib-services, mail_service]
+    - name: node:18.9.0-alpine
+      alias: webpack
+      entrypoint:
+        !reference [.lib, entry_points, tine_as_a_service_webpack]
     - name: ${REGISTRY}/${ARG_IMAGE}-commit:${IMAGE_TAG}
       alias: tine
       entrypoint:
@@ -47,12 +51,7 @@
     - if [ -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_demo_data_install_failed ]; then echo "demo data install failed"; exit 1; fi
   script:
     - env
-    - |
-      if [ "${TINE20_BUILDTYPE}" == "DEVELOPMENT" ]; then
-        export TEST_URL=http://tine:10443;
-      else
-        export TEST_URL=http://tine:80;
-      fi
+    - export TEST_URL=http://tine:10443;
     - while ! wget $TEST_URL; do sleep 1; done
     - echo TEST_URL=${TEST_URL}
     - export TEST_ENVIROMENT=""
@@ -114,15 +113,15 @@ js-e2e-tests-source-php-version-matrix:
   variables:
     IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}
   needs:
-    - 'docker_build_source_matrix: [7.4]'
     - 'docker_build_source_matrix: [8.0]'
     - 'docker_build_source_matrix: [8.1]'
+    - 'docker_build_source_matrix: [8.2]'
   parallel:
     matrix:
       - PHP_VERSION:
-          - "7.4"
           - "8.0"
           - "8.1"
+          - "8.2"
   rules:
     - if: $PIPELINE_TYPE =~ /matrix-tests/
     - if: $JS_E2E_TESTS_SOURCE_TYPE != "matrix"

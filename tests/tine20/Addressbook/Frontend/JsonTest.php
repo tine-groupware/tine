@@ -459,7 +459,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
      */
     public function testGetPrivateContactData()
     {
-        $originalUser = Tinebase_Core::getUser();
         $contact = $this->_addContact();
 
         $this->assertTrue(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
@@ -467,12 +466,13 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         $this->_setPersonaGrantsForTestContainer($contact['container_id'], 'sclever');
         Tinebase_Core::setUser($this->_personas['sclever']);
+        Tinebase_Container::getInstance()->resetClassCache();
         $this->assertFalse(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
 
         $contactWithoutPrivate = $this->_uit->getContact($contact['id']);
         $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate);
-
-        Tinebase_Core::setUser($originalUser);
+        $this->assertArrayNotHasKey('tel_cell_private_normalized', $contactWithoutPrivate);
+        $this->assertArrayNotHasKey('bday', $contactWithoutPrivate);
     }
 
     /**
@@ -484,7 +484,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
      */
     public function testGetPrivateContactDataOfOwnContact()
     {
-        $originalUser = Tinebase_Core::getUser();
         $internalContainer = Tinebase_Container::getInstance()->getContainerByName(
             Addressbook_Model_Contact::class, 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
 
@@ -495,8 +494,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         $contactWithoutPrivate = $this->_uit->getContact(Tinebase_Core::getUser()->contact_id);
         $this->assertArrayHasKey('tel_cell_private', $contactWithoutPrivate);
-
-        Tinebase_Core::setUser($originalUser);
     }
 
     /**
@@ -506,7 +503,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
      */
     public function testSearchPrivateContactData()
     {
-        $originalUser = Tinebase_Core::getUser();
         $contact = $this->_addContact();
 
         $paging = $this->objects['paging'];
@@ -525,8 +521,6 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         $contactWithoutPrivate = $this->_uit->searchContacts($filter, $paging);
         $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate['results'][0]);
-
-        Tinebase_Core::setUser($originalUser);
     }
 
     /**
@@ -592,12 +586,50 @@ class Addressbook_Frontend_JsonTest extends TestCase
 
         // check invalid data
         $changes = array(
-            array('name' => 'type', 'value' => 'Z'),
+            array('name' => 'tz', 'value' => 'looooongtextwithmorethaneightcharacters'),
         );
         $result = $json->updateMultipleRecords('Addressbook', 'Contact', $changes, $filter);
 
         $this->assertEquals(3, $result['failcount'], 'failcount does not show the correct number');
         $this->assertEquals(0, $result['totalcount'], 'totalcount does not show the correct number');
+    }
+
+    public function testAdditionalAddressProperty()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        $this->_transactionId = null;
+
+        $cpDef = Addressbook_Controller_ContactProperties_Definition::getInstance()->create(
+            new Addressbook_Model_ContactProperties_Definition([
+                Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'unittest_adr',
+                Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_Address::class,
+                Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => Addressbook_Model_ContactProperties_Definition::LINK_TYPE_RECORD,
+            ])
+        );
+
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+
+        try {
+            $savedContact = $this->_uit->saveContact([
+                'n_fn' => 'n_fn',
+                $cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME} => [
+                    Addressbook_Model_ContactProperties_Address::FLD_STREET => 'street name',
+                ],
+            ], false);
+
+            $this->assertArrayHasKey($cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}, $savedContact);
+            $this->assertIsArray($savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}]);
+            $this->assertSame('street name', $savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][Addressbook_Model_ContactProperties_Address::FLD_STREET]);
+
+            $savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][Addressbook_Model_ContactProperties_Address::FLD_STREET] = 'update';
+            $savedContact = $this->_uit->saveContact($savedContact, false);
+            $this->assertSame('update', $savedContact[$cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_NAME}][Addressbook_Model_ContactProperties_Address::FLD_STREET]);
+        } finally {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Addressbook_Controller_ContactProperties_Definition::getInstance()->delete($cpDef->getId());
+            Addressbook_Model_Contact::resetConfiguration();
+            Tinebase_Record_Expander_DataRequest::clearCache();
+        }
     }
 
     /**
@@ -2849,7 +2881,7 @@ Steuernummer 33/111/32212";
     public function testSearchEmailAddresss()
     {
         $list = Addressbook_Controller_List::getInstance()->getAll()->getFirstRecord();
-        $hasListContact = false;
+        $hasListMembers = false;
         
         if (empty($list->email)) {
             $list->email = 'somelistemail@' . TestServer::getPrimaryMailDomain();
@@ -2864,7 +2896,7 @@ Steuernummer 33/111/32212";
             ))), NULL, FALSE, TRUE);
             
             if (count($allVisibleMemberIds) > 0) {
-                $hasListContact = true;
+                $hasListMembers = true;
             }
         }
         
@@ -2872,13 +2904,13 @@ Steuernummer 33/111/32212";
         $result = $this->_uit->searchEmailAddresss([
             ["condition" => "OR", "filters" => [["condition" => "AND", "filters" => [
                 ["field" => "query", "operator" => "contains", "value" => ""],
-                ["field" => "email_query", "operator" => "contains", "value" => "@"]
+                ["field" => "name_email_query", "operator" => "contains", "value" => $list['name']]
             ]], ["field" => "path", "operator" => "contains", "value" => ""]]]
         ], ["sort" => "name", "dir" => "ASC", "start" => 0, "limit" => 50]);
 
         static::assertGreaterThan(0, $result['totalcount'], 'no results found');
         
-        if ($hasListContact) {
+        if ($hasListMembers) {
             static::assertTrue(isset($result['results'][count($result['results']) - 1]['emails']),
                 'last entry should be a list that has emails: ' . print_r($result['results'],
                     true));

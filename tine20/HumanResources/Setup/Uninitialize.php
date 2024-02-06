@@ -26,7 +26,7 @@ class HumanResources_Setup_Uninitialize extends Setup_Uninitialize
         try {
             $appId = Tinebase_Application::getInstance()->getApplicationByName(Timetracker_Config::APP_NAME)->getId();
             $customfield = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
-                HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON, null, true);
+                HumanResources_Model_FreeTimeType::TT_TS_SYSCF_CLOCK_OUT_REASON, Timetracker_Model_Timesheet::class, true);
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }

@@ -103,6 +103,24 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }]
                     }, {
                         layout: 'hbox',
+                        hidden: !this.app.featureEnabled('featureEventType'),
+                        items: [{
+                            margins: '5',
+                            width: 100,
+                            xtype: 'label',
+                            text: this.app.i18n._('Event Types')
+                        }, {
+                            flex: 1,
+                            xtype:'tinerecordspickercombobox',
+                            name: 'event_types',
+                            recordClass: 'Calendar.EventTypes',
+                            refIdField: 'record',
+                            editDialogConfig: {mode:  'local'},
+                            isMetadataModelFor: 'Calendar.EventType',
+                            requiredGrant: 'editGrant',
+                        }]
+                    }, {
+                        layout: 'hbox',
                         items: [{
                             margins: '5',
                             width: 100,
@@ -150,7 +168,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         blurOnSelect: true,
                                         selectOnFocus: true,
                                         readOnly: false,
-                                        maxLength: 40,
+                                        maxLength: 1024,
                                         recordEditPluginConfig: {allowCreateNew: false,},
                                         listeners: {
                                             scope: this,
@@ -238,7 +256,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                                 if (btn === 'yes') {
                                                     combo.setValue(status.id);
                                                 }
-                                            }, this).setIcon(Ext.MessageBox.QUESTION);
+                                            }, this);
                                         return false;
                                     }
                                 }
@@ -302,6 +320,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     header: false,
                     margins: '0 5 0 5',
                     border: true,
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-editDialog-eastPanel'
+                    }],
                     items: [
                         new Ext.Panel({
                             // @todo generalise!
@@ -613,7 +635,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             var dtEndField = this.getForm().findField('dtend'),
                 dtEnd = dtEndField.getValue();
                 
-            if (Ext.isDate(dtEnd) && dtEnd.format('H:i') != '23:59') {
+            if (Ext.isDate(dtEnd)) {
                 var duration = dtEnd.getTime() - oldValue.getTime(),
                     newDtEnd = newValue.add(Date.MILLI, duration);
                 dtEndField.setValue(newDtEnd);
@@ -638,12 +660,28 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // BUT: add Grant is container based!
         this.record.set('addGrant', _.get(this.record, 'data.container_id.account_grants.addGrant', false));
 
+        if (this.record.get('status') == 'CANCELED') {
+            this.record.set('status', 'CONFIRMED')
+        }
+
         Tine.Calendar.EventEditDialog.superclass.doCopyRecord.call(this);
-        
-        // remove attender ids
-        Ext.each(this.record.data.attendee, function(attender) {
-            delete attender.id;
-        }, this);
+
+        const attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(this.record.data.attendee);
+        const ownAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord(attendeeStore);
+        const allAttendee = Tine.Tinebase.common.assertComparable([]);
+
+
+        attendeeStore.each(attendee => {
+            if(attendee !== ownAttendee) {
+                attendee.set('status', 'NEEDS-ACTION');
+            }
+
+            allAttendee.push(Object.assign({... attendee.data}, {id: null}));
+        });
+
+
+        this.record.set('attendee', allAttendee);
+
 
         Tine.log.debug('Tine.Calendar.EventEditDialog::doCopyRecord() -> record:');
         Tine.log.debug(this.record);
@@ -763,9 +801,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Date}
      */
     adjustTimeToUserPreference: function(dateValue, prefKey) {
-        var userPreferenceDate = dateValue;
-            prefs = this.app.getRegistry().get('preferences'),
-            hour = prefs.get(prefKey).split(':')[0];
+        let userPreferenceDate = dateValue;
+        const prefs = this.app.getRegistry().get('preferences');
+        const hour = prefs.get(prefKey).split(':')[0];
         
         // adjust date to user preference
         userPreferenceDate.setHours(hour);

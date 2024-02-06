@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -81,8 +81,8 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'recordName'        => 'List', // gettext('GENDER_List')
-        'recordsName'       => 'Lists', // ngettext('List', 'Lists', n)
+        'recordName'        => 'Group', // gettext('GENDER_Group')
+        'recordsName'       => 'Groups', // ngettext('Group', 'Groups', n)
         'hasRelations'      => true,
         'hasCustomFields'   => true,
         'hasNotes'          => true,
@@ -94,13 +94,14 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
 
         'containerProperty' => 'container_id',
 
-        'containerName'     => 'List', // gettext('GENDER_List')
-        'containersName'    => 'Lists', // ngettext('List', 'Lists', n)
-        'containerUsesFilter' => true, // TODO true?
+        'containerName'     => 'Addressbook',
+        'containersName'    => 'Addressbooks', // ngettext('Addressbook', 'Addressbooks', n)
+        'containerUsesFilter' => true,
 
         'titleProperty'     => 'name',//array('%s - %s', array('number', 'title')),
         'appName'           => 'Addressbook',
         'modelName'         => 'List',
+        'moduleName'        => 'Groups',  // ngettext('Group', 'Groups', n)
 
         'filterModel'       => array(
             'path'              => array(
@@ -129,7 +130,8 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                     'fields'            => [
                         'name',
                         'email',
-                    ]
+                    ],
+                    'modelName' => self::class,
                 ],
             ],
             'email_query'           => [
@@ -138,7 +140,8 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                 'options'           => [
                     'fields'            => [
                         'email',
-                    ]
+                    ],
+                    'modelName' => self::class,
                 ],
             ],
         ),

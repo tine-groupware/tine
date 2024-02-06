@@ -83,7 +83,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     autoScroll: true,
     layout: 'card',
     activeItem: 0,
-    
+    contextMenuItems: [],
     /**
      * get panel for default information
      * 
@@ -113,7 +113,8 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
 
             if (this.recordClass) {
                 this.singleRecordPanel = new Tine.widgets.display.RecordDisplayPanel({
-                    recordClass : this.recordClass
+                    recordClass : this.recordClass,
+                    boxLayout: this.isSmall ? 'vbox' : 'hbox',
                 });
                 this.defaultHeight = Math.max(this.defaultHeight, this.singleRecordPanel.defaultHeight);
             } else {
@@ -139,6 +140,24 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      * inits this details panel
      */
     initComponent: function() {
+        if (!this.tbar) {
+            this.tbar = [
+                new Ext.Action({
+                    text: i18n._('Back'),
+                    iconCls: 'action_previous',
+                    scope: this,
+                    handler: this.onClose
+                }),
+                '->',
+                new Ext.Action({
+                    text: i18n._('Edit'),
+                    iconCls: 'action_edit',
+                    scope: this,
+                    handler: this.onEdit
+                })
+            ]
+            this.useResponsiveTbar = true;
+        }
 
         this.items = [
             this.getDefaultInfosPanel(),
@@ -154,14 +173,66 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
                 layout: 'fit'
             });
         }, this);
-
+        
         if (this.listenMessageBus && this.recordClass) {
             this.initMessageBus();
         }
-
+        this.afterIsRendered().then(() => {
+            this.el.on('contextmenu', (e) => {
+                if (!this.menu) {
+                    this.menu = new Ext.menu.Menu({
+                        items:this.contextMenuItems,
+                        plugins: [{
+                            ptype: 'ux.itemregistry',
+                            key:   this.singleRecordPanel.appName + '-' + this.singleRecordPanel.modelName + '-DetailsPanel'
+                        }, {
+                            ptype: 'ux.itemregistry',
+                            key:   'Tinebase-MainContextMenu'
+                        }]
+                    });
+                }
+                const target = e.getTarget('a', 1 , true) ||
+                    e.getTarget('input[type=text]', 1 , true) ||
+                    e.getTarget('textarea', 1, true);
+                
+                 if (this.menu.items.length > 0 && window.getSelection().toString() === '' && !target) {
+                    e.stopEvent();
+                    this.menu.showAt(e.getXY());
+                 }
+            });
+        });
+        
         Tine.widgets.grid.DetailsPanel.superclass.initComponent.apply(this, arguments);
+        
+        if (this.useResponsiveTbar) {
+            this.topToolbar.on('resize', this.onToolbarResize, this);
+        }
+    },
+    
+    onClose(e) {
+        if (!this.gridpanel) return;
+        this.gridpanel.setFullScreen(false);
     },
 
+    onEdit(e) {
+        if (!this.gridpanel) return;
+        this.gridpanel.onEditInNewWindow.call(this.gridpanel, {
+            actionType: 'edit'
+        });
+    },
+    
+    onToolbarResize() {
+        let isSmall = false;
+        if (this.gridpanel) {
+            isSmall = !!this.isInFullScreenMode && this.gridpanel.isSmallLayout();
+        }
+        if (isSmall) {
+            this.topToolbar.show();
+        } else {
+            this.topToolbar.hide();
+        }
+    },
+    
     onDestroy: function() {
         _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
         return this.supr().onDestroy.call(this);
@@ -260,11 +331,15 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
             this.showDefault(this.getDefaultInfosPanel().body);
             this.record = null;
         } else if (count === 1) {
-            this.layout.setActiveItem(this.getSingleRecordPanel());
+            if(this.layout && Ext.isFunction(this.layout.setActiveItem)) {
+                this.layout.setActiveItem(this.getSingleRecordPanel());
+            }
             this.record = sm.getSelected();
             this.updateDetails(this.record, this.getSingleRecordPanel().body);
         } else if (count > 1) {
-            this.layout.setActiveItem(this.getMultiRecordsPanel());
+            if(this.layout && Ext.isFunction(this.layout.setActiveItem)) {
+                this.layout.setActiveItem(this.getMultiRecordsPanel());
+            }
             this.record = sm.getSelected();
             this.showMulti(sm, this.getMultiRecordsPanel().body);
         }
@@ -310,7 +385,8 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
                     defaults:{
                         margins:'0 5 0 0'
                     },
-                    items: [{
+                    items: [
+                        {
                         flex: 2,
                         layout: 'ux.display',
                         labelWidth: labelWidth,

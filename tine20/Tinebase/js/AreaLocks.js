@@ -121,7 +121,7 @@ class AreaLocks extends Ext.util.Observable {
       selectedDevice = _.find(mfaDevices, {
         id: await Tine.widgets.dialog.MultiOptionsDialog.getOption({
           title: window.i18n._('Choose MFA Deivce'),
-          questionText: window.i18n._('This area is locked. Which device should be used to unlock.'),
+          questionText: window.i18n._('This area is locked. Which device should be used to unlock?'),
           height: 100 + mfaDevices.length * 30,
           allowCancel: true,
           options: _.map(mfaDevices, (mfaDevice) => {
@@ -379,7 +379,7 @@ class AreaLocks extends Ext.util.Observable {
         Ext.MessageBox.show({
           title: window.i18n._('MFA device missing'),
           msg: window.i18n._('No matching MFA device for this area found. Configure a matching device please.'),
-          icon: Ext.MessageBox.INFO,
+          icon: Ext.MessageBox.INFO_FAILURE,
           buttons: Ext.MessageBox.OK
         });
         return resolve();

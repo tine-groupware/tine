@@ -45,7 +45,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @property detailsPanel
      */
     detailsPanel: null,
-    
+
+    /**
+     * default panel region
+     *
+     * @property detailsPanelRegion
+     */
+    detailsPanelRegion: 'south',
+
     /**
      * transaction id of current delete message request
      * @type Number
@@ -84,7 +91,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         autoExpandColumn: 'subject',
         // drag n dropfrom
         enableDragDrop: true,
-        ddGroup: 'mailToTreeDDGroup'
+        ddGroup: 'mailToTreeDDGroup',
     },
     // we don't want to update the preview panel on context menu
     updateDetailsPanelOnCtxMenu: false,
@@ -108,18 +115,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var className = '';
         
         if (record.hasFlag('\\Flagged')) {
-            className += ' flag_flagged';
+            className += 'flag_flagged ';
         }
         if (record.hasFlag('\\Deleted')) {
-            className += ' flag_deleted';
+            className += 'flag_deleted ';
         }
         if (! record.hasFlag('\\Seen')) {
-            className += ' flag_unread';
+            className += 'flag_unread ';
         }
         if (record.get('is_spam_suspicions')) {
-            className += ' is_spam_suspicions';
+            className += 'is_spam_suspicions ';
         }
-        
         return className;
     },
     
@@ -128,13 +134,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initComponent: function() {
-        
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.i18nEmptyText = this.app.i18n._('No Messages found.');
-        
         this.recordProxy = Tine.Felamimail.messageBackend;
-        
+        this.gridConfig.cm = new Ext.grid.ColumnModel({
+            defaults: {
+                resizable: true
+            },
+            columns: this.getColumns()
+        });
         this.gridConfig.columns = this.getColumns();
+        
         this.initDetailsPanel();
         
         this.pagingConfig = {
@@ -167,15 +177,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.QuickTips.init();
         
         this.quotaBar = new Ext.Component({
+            displayPriority: 50,
             style: {
-                marginTop: '3px',
+                margin: '3px 10px',
                 width: '100px',
                 height: '16px'
             }
         });
-
         this.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
-        this.pagingToolbar.insert(12, this.quotaBar);
+        this.pagingToolbar.insert(13, this.quotaBar);
     },
     
     /**
@@ -618,7 +628,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             hidden: true
         }, {
             id: 'content_type',
-            header: this.app.i18n._("Attachments"),
+            header: '<div class="action_attach tine-grid-row-action-icon"></div>',
+            tooltip: this.app.i18n._("Attachments"),
             width: 12,
             sortable: true,
             dataIndex: 'has_attachment',
@@ -714,7 +725,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     attachmentRenderer: function(value, metadata, record) {
-        var result = '';
+        let result = '';
         
         if (value == 1) {
             result = '<div class="action_attach tine-grid-row-action-icon" />';
@@ -725,40 +736,24 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     /**
      * get flag icon
-     * 
-     * @param {String} flags
-     * @return {String}
+     *
      * @private
-     * 
+     *
      * TODO  use spacer if first flag(s) is/are not set?
+     * @param value
+     * @param metadata
+     * @param record
+     * @param value
+     * @param metadata
+     * @param record
      */
     flagRenderer: function(value, metadata, record) {
-        var icons = [],
-            result = '',
-            i18n = Tine.Tinebase.appMgr.get('Felamimail').i18n;
-            
-        if (record.hasFlag('\\Answered')) {
-            icons.push({src: 'images/icon-set/icon_email_answer.svg', qtip: i18n._('Answered')});
-        }   
-        if (record.hasFlag('Passed')) {
-            icons.push({src: 'images/icon-set/icon_email_forward.svg', qtip: i18n._('Forwarded')});
-        }
+        let   result = '';
+        const i18n = Tine.Tinebase.appMgr.get('Felamimail').i18n;
+        const icons = record.getFlagIcons();
         
-        if (record.get('is_spam_suspicions')) {
-            icons.push({src: 'images/icon-set/icon_spam.svg', qtip: i18n._('This message might be SPAM')});
-        }
-
-        if (record.hasFlag('Tine20')) {
-            const icon = record.getTine20Icon();
-            icons.push({src: icon, qtip: i18n._('Tine20')});
-        }
-
-        if (record.get('content_type') === 'multipart/encrypted') {
-            icons.push({src: 'images/icon-set/icon_lock.svg', qtip: i18n._('Encrypted Message')});
-        }
-
         Ext.each(icons, function(icon) {
-            result += '<img class="FelamimailFlagIcon" src="' + icon.src + '" ext:qtip="' + Ext.util.Format.htmlEncode(icon.qtip) + '">';
+            result += '<img class="FelamimailFlagIcon ' + (icon.cls || "") + '" src="' + icon.src + '" ext:qtip="' + Ext.util.Format.htmlEncode(icon.qtip) + '">';
         }, this);
 
         let fileLocations = record.get('fileLocations');
@@ -802,6 +797,126 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
 
         return result;
+    },
+    
+    /**
+     * responsive content Renderer
+     *
+     * @param {String} folderId
+     * @param {Object} metadata
+     * @param {Folder|Account} record
+     * @return {String}
+     */
+    responsiveRenderer: function(folderId, metadata, record) {
+        const block = document.createElement('div');
+        
+        const flagIcons = record.getFlagIcons();
+        const flagIconEls = flagIcons.map((icon) => {
+            const iconEl = document.createElement('img');
+            iconEl.id = icon.name;
+            iconEl.className = 'felamimail-message-icon ' + (icon?.cls || "");
+            iconEl.src = (icon?.src || '');
+            iconEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(icon?.qtip || ''));
+            if (icon?.visibility) iconEl.style.visibility = icon.visibility;
+            return iconEl;
+        });
+        
+        // unread icon
+        let unreadIconEl = flagIconEls.find((item) => item.id === 'seen');
+        if (!unreadIconEl) {
+            unreadIconEl = document.createElement('img');
+            unreadIconEl.id = 'empty';
+            unreadIconEl.className = 'felamimail-message-icon ';
+            unreadIconEl.src = 'images/icon-set/empty.svg';
+        }
+        
+        // sender
+        const senderEl = document.createElement('div');
+        senderEl.innerHTML = Ext.util.Format.htmlEncode(record.data.from_name ?? record.data.from_email);
+        senderEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.from_email));
+        
+        // recipient
+        const recipientEl = document.createElement('div');
+        const recipients = record.data.to.map((to) => { return to?.n_fileas || to?.email || to;});
+        const extra = recipients.length > 2 ? ' ...' : '';
+        recipientEl.innerHTML =  Ext.util.Format.htmlEncode(recipients.slice(0, 2).join(' & ') + extra);
+        
+        // attachment
+        const attachmentEl = document.createElement('div');
+        attachmentEl.innerHTML = '<div class="felamimail-message-icon action_attach tine-grid-row-action-icon"/>';
+        attachmentEl.style.visibility = record?.data?.has_attachment ? 'visible' : 'hidden';
+        
+        // receivedDate
+        const receivedDateEl = document.createElement('div');
+        const date = record.data?.received ?? '';
+        let formattedDate = date;
+        let qtip = date;
+        if (Ext.isFunction(date.format)) {
+            const isToday = date.format('Y-m-d') === new Date().format('Y-m-d');
+            const isThisWeek = date.between(new Date().add(Date.DAY, -7), new Date());
+            const isThisYear = date.format('Y') === new Date().format('Y');
+            formattedDate = date.format('l').substr(0,2) + Ext.util.Format.date(date, ' d/m');
+            if (isThisWeek) formattedDate = date.format('l').substr(0,2) + Ext.util.Format.date(date, ' d/m H:i');
+            if (isToday) formattedDate = Ext.util.Format.date(date, 'H:i');
+            if (!isThisYear) formattedDate = Ext.util.Format.date(date, 'd.m.Y');
+            qtip = date.format('H:i:s d/m/y');
+        }
+        receivedDateEl.innerHTML = formattedDate;
+        receivedDateEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(qtip));
+        
+        // subject
+        const subjectEl = document.createElement('div');
+        subjectEl.innerHTML = Ext.util.Format.htmlEncode(record.data.subject);
+        subjectEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.subject));
+        
+        
+        // flags
+        const displayIcons = ['answered', 'passed', 'spam', 'encrypted', 'tine20'];
+        const flags = flagIconEls.filter((iconEl) => displayIcons.includes(iconEl.id));
+        
+        // tags
+        const tagsEl = document.createElement('div');
+        tagsEl.innerHTML =  Tine.Tinebase.common.tagsRenderer(record.data.tags);
+        
+        const row1 =  document.createElement('div');
+        const row1Left = document.createElement('div');
+        const row1Right =  document.createElement('div');
+        row1.className = 'felamimail-message-title';
+        row1Left.className = 'felamimail-message-title-row';
+        row1Right.className = 'felamimail-message-title-row';
+        senderEl.className = 'felamimail-message-title-text-small';
+        recipientEl.className = 'felamimail-message-title-text-small';
+        row1Left.appendChild(unreadIconEl);
+        
+        if (this.sentFolderSelected) {
+            row1Left.appendChild(recipientEl);
+        } else {
+            row1Left.appendChild(senderEl);
+        }
+        row1Right.appendChild(receivedDateEl);
+        
+        const row2 = document.createElement('div');
+        const row2Left = document.createElement('div');
+        const row2Right =  document.createElement('div');
+        row2.className = 'felamimail-message-title';
+        row2Left.className = 'felamimail-message-title-row';
+        row2Right.className = 'felamimail-message-title-row';
+        row2Right.style.minWidth = '50px';
+        subjectEl.className = 'felamimail-message-title-text-medium';
+        
+        row2Left.appendChild(attachmentEl);
+        row2Left.appendChild(subjectEl);
+        row2Right.appendChild(tagsEl);
+        flags.forEach((flagEl) => row2Right.appendChild(flagEl));
+        
+        row1.appendChild(row1Left);
+        row1.appendChild(row1Right);
+        row2.appendChild(row2Left);
+        row2.appendChild(row2Right);
+        block.appendChild(row1);
+        block.appendChild(row2);
+        
+        return  block.outerHTML;
     },
 
     /**
@@ -1292,10 +1407,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Tine.log.debug(record);
 
             if (Tine.Felamimail.registry.get('preferences').get('markEmailRead') === 1) {
-                record.addFlag('\\Seen');
-                record.mtime = new Date().getTime();
-                Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
-                this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+                setTimeout( ()=>  {
+                    record.addFlag('\\Seen');
+                    record.mtime = new Date().getTime();
+                    Tine.Felamimail.messageBackend.addFlags(record.id, '\\Seen');
+                    this.app.getMainScreen().getTreePanel().decrementCurrentUnreadCount();
+                }, 2000);
             }
             
             if (record.get('headers')['disposition-notification-to']) {
@@ -1474,36 +1591,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // do request
         Tine.Felamimail.messageBackend[action+ 'Flags'](filter, flag);
     },
- 
-    /**
-     * TODO: make quick filter search "to" in be , and remove all the filter switch in fe
-     * add custom filter before or after store load
-     *
-     * @param params
-     * @param isSentFolder
-     *
-     */
-    updateDefaultfilter: function (params, isSentFolder) {
-        return; // not longer needed as the query filter now contains 'to' as well
-        let targetFilters = params?.filter?.[0].filters?.[0].filters;
-        if (!targetFilters) return;
-
-        const defaultFilterField = isSentFolder ? 'to' : 'query';
-        const existingDefaultFilter =  _.find(targetFilters, {field: defaultFilterField});
-
-        if (!existingDefaultFilter) {
-            targetFilters.push({ field: defaultFilterField, operator: 'contains', value: ''});
-        }
-
-        params.filter[0].filters[0].filters = targetFilters;
-    },
     
     /**
      * called before store queries for data
      */
     onStoreBeforeload: function(store, options) {
         this.supr().onStoreBeforeload.call(this, store, options);
-        
+
         if (! Ext.isEmpty(this.deleteQueue)) {
             options.params.filter.push({field: 'id', operator: 'notin', value: this.deleteQueue});
         }
@@ -1511,7 +1605,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // make sure, our handler is called just before the request is sent
         this.onStoreBeforeLoadFolderChange(store, options);
     },
-    
+
     onStoreBeforeLoadFolderChange: function (store, options) {
         this.updateGridState();
         this.updateDefaultfilter(options.params, this.sentFolderSelected);
@@ -1547,6 +1641,29 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     /**
+     * TODO: make quick filter search "to" in be , and remove all the filter switch in fe
+     * add custom filter before or after store load
+     *
+     * @param params
+     * @param isSentFolder
+     *
+     */
+    updateDefaultfilter: function (params, isSentFolder) {
+        return; // not longer needed as the query filter now contains 'to' as well
+        let targetFilters = params?.filter?.[0]?.filters?.[0]?.filters;
+        if (!targetFilters) return;
+
+        const defaultFilterField = isSentFolder ? 'to_list' : 'query';
+        const existingDefaultFilter =  _.find(targetFilters, {field: defaultFilterField});
+        
+        if (!existingDefaultFilter) {
+            targetFilters.push({ field: defaultFilterField, operator: 'contains', value: ''});
+        }
+
+        params.filter[0].filters[0].filters = targetFilters;
+    },
+
+    /**
      * // if send, draft, template folders are selected, do the following:
      * // - hide from email + name columns from grid
      * // - show to column in grid
@@ -1555,24 +1672,36 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      *
      * // if switched from send, draft, template to "normal" folder
      * // - switch to default state
-     *
-     *
-     * @param stateId
      */
-    updateGridState: function (stateId) {
+    updateGridState: function () {
         this.resolveSendFolderPath();
-        stateId = this.sentFolderSelected ? this.sendFolderGridStateId : this.gridConfig.stateId;
-
+        let stateId = this.sentFolderSelected ? this.sendFolderGridStateId : this.gridConfig.stateId;
+        const isEastLayout = this.detailsPanelRegion === 'east';
+        if (isEastLayout && !stateId.includes('_DetailsPanel_East')) stateId = stateId + '_DetailsPanel_East';
         const isStateIdChanged = this.grid.stateId !== stateId;
         if (!Ext.state.Manager.get(stateId)) this.grid.saveState();
         this.grid.stateId = stateId;
         
-        const stateIdDefault = this.gridConfig.stateId;
+        const stateIdDefault = isEastLayout ? stateId : this.gridConfig.stateId;
         const stateStored = Ext.state.Manager.get(stateIdDefault);
         const stateCurrent = this.grid.getState();
         let stateCloned = stateStored;
         if (!isStateIdChanged || !stateStored) stateCloned = stateCurrent;
         let stateClonedResolved = JSON.parse(JSON.stringify(stateCloned));
+        
+        if (stateClonedResolved?.columns && isEastLayout) {
+            const stateClonedResolvedVisibleColumns = stateClonedResolved.columns.filter((col) => { return !col.hidden;});
+            if (stateClonedResolvedVisibleColumns.length === 0) {
+                const restoreStateId = stateId.replace('_DetailsPanel_East', '');
+                const restoreState = Ext.state.Manager.get(restoreStateId);
+                const restoreStateVisibleColumns = restoreState.columns.filter((col) => { return !col.hidden;});
+                if (restoreStateVisibleColumns === 0) {
+                    stateClonedResolved.columns.forEach((c) => {c.hidden = c.id === 'responsive';})
+                } else {
+                    stateClonedResolved.columns.forEach((c, idx) => {c.hidden = restoreState.columns[idx].hidden ?? false;})
+                }
+            }
+        }
         
         if (stateId.includes(this.sendFolderGridStateId)) {
             let refState = Ext.state.Manager.get(stateId);
@@ -1599,7 +1728,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
             })
         }
-        
+
         if (!isStateIdChanged) {
             stateClonedResolved.sort = this.store.getSortState();
         }
@@ -1643,7 +1772,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     updateQuotaBar: function(accountInbox) {
         var accountId = this.extractAccountIdFromFilter();
-        
+
         if (accountId === null) {
             Tine.log.debug('No or multiple account ids in filter. Resetting quota bar.');
             this.quotaBar.hide();

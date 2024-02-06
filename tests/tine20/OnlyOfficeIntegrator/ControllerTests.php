@@ -97,7 +97,7 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
 
         $editorCfg = $this->_jsonTest->testGetEditorConfigForNodeId(false);
 
-        file_put_contents('tine20:///Tinebase/folders/shared/ootest/test.txt', 'blurb');
+        file_put_contents('tine20:///Tinebase/folders/shared/ootest/testü.txt', 'blurb');
 
         $token = @end(explode('/', $editorCfg['document']['url']));
         $accessToken = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
@@ -422,7 +422,7 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
         $parts = explode('/', $editorCfg['document']['url']);
         $token = $parts[count($parts) - 1];
 
-        file_put_contents('tine20:///Tinebase/folders/shared/ootest/test.txt', 'bla');
+        file_put_contents('tine20:///Tinebase/folders/shared/ootest/testü.txt', 'bla');
 
         Tinebase_Core::getContainer()->set(RequestInterface::class,
             (new \Zend\Diactoros\ServerRequest([], [], 'http://unittest/shalala?blub=bla'))
@@ -463,7 +463,7 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
     {
         $editorCfg = $this->_jsonTest->testGetEditorConfigForNodeId(false);
         $token = @end(explode('/', $editorCfg['document']['url']));
-        Tinebase_FileSystem::getInstance()->unlink('/Tinebase/folders/shared/ootest/test.txt');
+        Tinebase_FileSystem::getInstance()->unlink('/Tinebase/folders/shared/ootest/testü.txt');
 
         Tinebase_Core::getContainer()->set(RequestInterface::class,
             (new \Zend\Diactoros\ServerRequest([], [], 'http://unittest/shalala?blub=bla'))
@@ -512,9 +512,9 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
 
         static::assertInstanceOf(\Zend\Diactoros\Response::class, $response);
         static::assertSame(['error' => 0], json_decode((string)$response->getBody(), true));
-        static::assertFalse(Tinebase_FileSystem::getInstance()->fileExists('/Tinebase/folders/shared/ootest/test.txt'),
+        static::assertFalse(Tinebase_FileSystem::getInstance()->fileExists('/Tinebase/folders/shared/ootest/testü.txt'),
             'expect file to be renamed');
-        static::assertSame('blubblub', file_get_contents('tine20:///Tinebase/folders/shared/ootest/test.docx'));
+        static::assertSame('blubblub', file_get_contents('tine20:///Tinebase/folders/shared/ootest/testü.docx'));
         static::assertSame(2, ($allTokens = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
                 ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN, 'operator' => 'equals', 'value' => $token],
@@ -522,7 +522,7 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
                     Tinebase_Model_Filter_Bool::VALUE_NOTSET],
             ])))->count());
 
-        $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/test.docx');
+        $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/testü.docx');
         foreach ($allTokens as $token) {
             static::assertSame($node->getId(), $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
             static::assertSame($node->revision, $token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION});
@@ -539,10 +539,10 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
             'limit' => 2,
         ]));
 
-        $first = strpos($notes->getFirstRecord()->note, 'test.txt') === false ? $notes->getFirstRecord() : $notes->getLastRecord();
-        $last = strpos($notes->getFirstRecord()->note, 'test.txt') !== false ? $notes->getFirstRecord() : $notes->getLastRecord();
-        static::assertStringContainsString('ame (test.txt -> test.docx)', $last->note);
-        static::assertStringNotContainsString('ame (test.txt -> test.docx)', $first->note);
+        $first = strpos($notes->getFirstRecord()->note, 'testü.txt') === false ? $notes->getFirstRecord() : $notes->getLastRecord();
+        $last = strpos($notes->getFirstRecord()->note, 'testü.txt') !== false ? $notes->getFirstRecord() : $notes->getLastRecord();
+        static::assertStringContainsString('ame (testü.txt -> testü.docx)', $last->note);
+        static::assertStringNotContainsString('ame (testü.txt -> testü.docx)', $first->note);
         $_ = Tinebase_Translation::getTranslation(Tinebase_Config::APP_NAME, Tinebase_Core::getLocale());
         static::assertStringContainsString(' ' . $_->_('size') . ' (', $first->note);
         
@@ -590,7 +590,7 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
 
         static::assertInstanceOf(\Zend\Diactoros\Response::class, $response);
         static::assertSame(['error' => 0], json_decode((string)$response->getBody(), true));
-        static::assertSame('blubblub', file_get_contents('tine20:///Tinebase/folders/shared/ootest/test.txt'));
+        static::assertSame('blubblub', file_get_contents('tine20:///Tinebase/folders/shared/ootest/testü.txt'));
         static::assertNull(OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
                 ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN, 'operator' => 'equals', 'value' => $token],
@@ -611,7 +611,7 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
             ],
             OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN . ' = "' . $token . '"');
 
-        $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/test.txt');
+        $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/testü.txt');
         (new OnlyOfficeIntegrator_Frontend_Json())->getEditorConfigForNodeId($node->getId(), (string)$node->revision);
 
         $fh = fopen('php://memory', 'rw');
@@ -631,8 +631,8 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
 
         static::assertInstanceOf(\Zend\Diactoros\Response::class, $response);
         static::assertSame(['error' => 0], json_decode((string)$response->getBody(), true));
-        static::assertTrue(Tinebase_FileSystem::getInstance()->fileExists('/Tinebase/folders/shared/ootest/test.txt'));
-        static::assertSame('blubblub', file_get_contents('tine20:///Tinebase/folders/shared/ootest/test-' .
+        static::assertTrue(Tinebase_FileSystem::getInstance()->fileExists('/Tinebase/folders/shared/ootest/testü.txt'));
+        static::assertSame('blubblub', file_get_contents('tine20:///Tinebase/folders/shared/ootest/testü-' .
             Tinebase_Translation::getTranslation(OnlyOfficeIntegrator_Config::APP_NAME)->_('conflict') . '.txt'));
         static::assertNull(OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
@@ -666,6 +666,7 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
                     OnlyOfficeIntegrator_Config::getInstance()->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256'))
             ->withBody(new \Zend\Diactoros\Stream($fh)));
 
+        $this->flushMailer();
         try {
             $this->_uit->updateStatus($token);
         } catch (Tinebase_Exception_Expressive_HttpStatus $e) {
@@ -676,6 +677,14 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
             $this->assertSame(1, $files->count());
             $this->assertSame('test', file_get_contents('tine20:///Filemanager/folders/shared/OOIQuarantine/' .
                 $files->getFirstRecord()->name));
+
+            $messages = $this->getMessages();
+            $this->assertCount(2, $messages);
+            $this->assertSame('=?UTF-8?Q?Fehler=20beim=20Speichern=20von=20"test=C3=BC.txt"?=', $messages[0]->getSubject());
+            $this->assertSame('=?UTF-8?Q?Fehler=20beim=20Speichern=20von=20"test=C3=BC.txt"?=', $messages[1]->getSubject());
+
+            $this->assertStringNotContainsString('folders/shared/OOIQuarantine', $messages[0]->getBodyText(true));
+            $this->assertStringContainsString('folders/shared/OOIQ', $messages[1]->getBodyText(true));
 
             return;
         }
@@ -904,14 +913,14 @@ class OnlyOfficeIntegrator_ControllerTests extends TestCase
     public function testUpdateStatusDeletedFile()
     {
         $editorCfg = $this->_jsonTest->testGetEditorConfigForNodeId(false);
-        Tinebase_FileSystem::getInstance()->unlink('/Tinebase/folders/shared/ootest/test.txt');
+        Tinebase_FileSystem::getInstance()->unlink('/Tinebase/folders/shared/ootest/testü.txt');
         $token = @end(explode('/', $editorCfg['document']['url']));
 
         $fh = fopen('php://memory', 'rw');
         fwrite($fh, json_encode($reqBody = [
             'status' => 2,
             'key' => $editorCfg['document']['key'],
-            'url' => 'tine20:///Tinebase/folders/shared/ootest/test.txt',
+            'url' => 'tine20:///Tinebase/folders/shared/ootest/testü.txt',
         ]));
         rewind($fh);
 

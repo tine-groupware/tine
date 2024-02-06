@@ -416,8 +416,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         this.ctxNode = node;
 
         //@TODO implement selection vs ctxNode if multiselect is allowed
-        var record = new this.recordClass(node.attributes.nodeRecord.data);
-        this.actionUpdater.updateActions([record]);
+        this.actionUpdater.updateActions(node);
 
         this.ctxMenu.showAt(event.getXY());
     },
@@ -435,16 +434,14 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         // this.updateActions(sm, node);
         var grid = this.app.getMainScreen().getCenterPanel(),
             gridSelectionModel = grid.selectionModel,
-            actionUpdater = grid.actionUpdater,
-            record = node ? new this.recordClass(window.lodash.get(node, 'attributes.nodeRecord.data')) : null,
-            selection = record ? [record] : [];
+            actionUpdater = grid.actionUpdater;
 
         if (this.hasGrid && gridSelectionModel) {
             gridSelectionModel.clearSelections();
         }
 
         if (actionUpdater) {
-            actionUpdater.updateActions(selection);
+            actionUpdater.updateActions(node);
         }
 
         Tine.Filemanager.NodeTreePanel.superclass.onSelectionChange.call(this, sm, node);
@@ -621,7 +618,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             Ext.MessageBox.alert(
                 i18n._('Upload Failed'),
                 app.i18n._('It is not permitted to store files in this folder!')
-            ).setIcon(Ext.MessageBox.ERROR);
+            );
 
             return;
         }

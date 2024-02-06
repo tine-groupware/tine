@@ -78,4 +78,36 @@ class Tinebase_Controller_ActionLog extends Tinebase_Controller_Record_Abstract
         ]);
         $this->create($actionLog);
     }
+
+    /**
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Exception
+     */
+    public function addActionLogDatevEmail($_updater, $recipients, $_subject, $_messagePlain, $_messageHtml, $_attachments)
+    {
+        $recipients = array_map(function($recipient) {return $recipient['email'];}, $recipients);
+        $attachments = array_map(function($attachment) {return $attachment['name'];}, $_attachments);
+        $date = Tinebase_DateTime::now();
+        
+        if (preg_match('/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', $_messagePlain, $matches)) {
+            $date = new Tinebase_DateTime($matches[0]);
+        }
+
+        $this->create(new Tinebase_Model_ActionLog([
+            Tinebase_Model_ActionLog::FLD_ACTION_TYPE =>  Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL,
+            Tinebase_Model_ActionLog::FLD_USER => Tinebase_Core::getUser()->getId(),
+            Tinebase_Model_ActionLog::FLD_DATETIME => $date,
+            Tinebase_Model_ActionLog::FLD_DATA => json_encode([
+                'sender'    => $_updater->accountEmailAddress,
+                'messagePlain' => $_messagePlain,
+                'recipients' => $recipients,
+                'subject'   => $_subject,
+                'attachments' => $attachments,
+            ]),
+        ]));
+    }
 }

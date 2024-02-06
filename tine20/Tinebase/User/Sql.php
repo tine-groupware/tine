@@ -499,19 +499,22 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * set the password for given account
      *
-     * @param   string $_userId
+     * @param   string|Tinebase_Model_User|Tinebase_Model_FullUser $_userId
      * @param   string $_password
      * @param   bool $_encrypt encrypt password
-     * @param   bool $_mustChange
+     * @param   bool|null $_mustChange
+     * @param   bool $ignorePwPolicy
      * @throws Tinebase_Exception_NotFound
      */
-    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
+    public function setPassword($_userId, $_password, $_encrypt = true, $_mustChange = null, $ignorePwPolicy = false)
     {
         $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
         $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($userId);
-        Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
+        if (! $ignorePwPolicy) {
+            Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
+        }
 
-        $accountData = $this->_updatePasswordProperty($userId, $_password, 'password', $_encrypt, $_mustChange);
+        $accountData = $this->_updatePasswordProperties($userId, $_password, $_encrypt, $_mustChange);
         $this->_setPluginsPassword($user, $_password, $_encrypt);
 
         // fire needed events
@@ -529,36 +532,48 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * @param string $_userId
      * @param string $_password
-     * @param string $_property
      * @param boolean $_encrypt
      * @param boolean|null $_mustChange user needs to change pw next time
      * @return array $accountData
+     * @throws Tinebase_Exception
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _updatePasswordProperty($_userId, $_password, $_property = 'password', $_encrypt = true, $_mustChange = null)
+    protected function _updatePasswordProperties($_userId, $_password, $_encrypt = true, $_mustChange = null)
+    {
+        $accountData = array();
+        $accountData['password'] = ($_encrypt) ? Hash_Password::generate('SSHA256', $_password) : $_password;
+        $accountData['password_must_change'] = $_mustChange ? 1 : 0;
+        if (Tinebase_Auth_NtlmV2::isEnabled()) {
+            $accountData['ntlmv2hash'] = Tinebase_Auth_CredentialCache::encryptData(
+                Tinebase_Auth_NtlmV2::getPwdHash($_password),
+                Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_ENCRYPTION_KEY});
+        }
+
+        return $this->_setAccountPasswordProperties($_userId, $accountData);
+    }
+
+    /**
+     * @param string $userId
+     * @param array $accountData
+     * @return array mixed
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _setAccountPasswordProperties(string $userId, array $accountData = []): array
     {
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . $this->_tableName));
-
-        $accountData = array();
-        $accountData[$_property] = ($_encrypt) ? Hash_Password::generate('SSHA256', $_password) : $_password;
-        if ($_property === 'password') {
-            if (Tinebase_Auth_NtlmV2::isEnabled()) {
-                $accountData['ntlmv2hash'] = Tinebase_Auth_CredentialCache::encryptData(
-                    Tinebase_Auth_NtlmV2::getPwdHash($_password),
-                    Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_NTLMV2_ENCRYPTION_KEY});
-            }
-            $accountData['last_password_change'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
-            $accountData['password_must_change'] = $_mustChange ? 1 : 0;
+        $accountData['last_password_change'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        if (! isset($accountData['password_must_change'])) {
+            $accountData['password_must_change'] = 0;
         }
 
         $where = array(
-            $accountsTable->getAdapter()->quoteInto($accountsTable->getAdapter()->quoteIdentifier('id') . ' = ?', $_userId)
+            $accountsTable->getAdapter()->quoteInto($accountsTable->getAdapter()->quoteIdentifier('id') . ' = ?', $userId)
         );
 
         $result = $accountsTable->update($accountData, $where);
 
         if ($result != 1) {
-            throw new Tinebase_Exception_NotFound('Unable to update password! account not found in authentication backend.');
+            throw new Tinebase_Exception_NotFound('Unable to update password! Account not found in accounts backend.');
         }
 
         return $accountData;
@@ -842,6 +857,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function updateUser(Tinebase_Model_FullUser $_user)
     {
+        $oldUser = $this->getFullUserById($_user->getId());
+
         $visibility = $_user->visibility;
 
         if ($this instanceof Tinebase_User_Interface_SyncAble) {
@@ -862,6 +879,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             // update user xprops if necessary (plugin user with xprops might have been updated)
             $updatedUser = $this->updateUserInSqlBackend($updatedUser);
         }
+
+        $this->_writeModLog($updatedUser, $oldUser);
 
         return $updatedUser;
     }
@@ -1076,11 +1095,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw($e);
         }
         
-        $newUser = $this->getUserById($accountId, 'Tinebase_Model_FullUser');
-
-        $this->_writeModLog($newUser, $oldUser);
-
-        return $newUser;
+        return $this->getUserById($accountId, 'Tinebase_Model_FullUser');
     }
     
     /**
@@ -1118,7 +1133,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $addedUser = $this->updateUserInSqlBackend($addedUser);
         }
 
+        $this->_writeModLog($addedUser, null);
+
         return $addedUser;
+    }
+
+    public function writeModLog($_newRecord, $_oldRecord)
+    {
+        $this->_writeModLog($_newRecord, $_oldRecord);
     }
     
     /**
@@ -1172,8 +1194,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             __METHOD__ . '::' . __LINE__ . ' Adding user to SQL backend: ' . $_user->accountLoginName);
         
         $accountsTable->insert($accountData);
-
-        $this->_writeModLog($_user, null);
 
         // we don't need the data from the plugins yet
         $createdUser = $this->getUserByPropertyFromSqlBackend('accountId', $_user->getId(), 'Tinebase_Model_FullUser');
@@ -1293,18 +1313,21 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         return $user;
     }
 
-    protected function _softDelete($user)
+    protected function _softDelete(Tinebase_Model_FullUser $user)
     {
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId()),
         );
-        $accountsTable->update(array('deleted_by' => Tinebase_Core::getUser()->getId(),
+        $deleteUser = is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : Tinebase_Core::getUser();
+        $accountsTable->update([
+            'deleted_by' => $deleteUser,
             'deleted_time' => Tinebase_DateTime::now()->toString(),
             'is_deleted' => 1,
             'seq' => $user->seq + 1,
             'status' => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
-            'visibility' => Tinebase_Model_User::VISIBILITY_HIDDEN), $where);
+            'visibility' => Tinebase_Model_User::VISIBILITY_HIDDEN
+        ], $where);
         $user->seq = $user->seq + 1;
         $this->_writeModLog(null, $user);
     }
@@ -1630,7 +1653,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             return true;
         }
         
-        $select = $select = $this->_db->select()
+        $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 'login_name')
             ->where($this->_db->quoteIdentifier('login_name') . " not in (?)", Tinebase_User::getSystemUsernames())
             ->order('creation_time ASC')
@@ -1661,5 +1684,17 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         list($userPart, /*$domainPart*/) = explode('@', $user->accountEmailAddress);
         $user->accountEmailAddress = $userPart . '@' . $config['primarydomain'];
+    }
+
+    public function getUsersWithoutPw(): array
+    {
+        $select = $this->_db->select()
+            ->from(SQL_TABLE_PREFIX . 'accounts', 'login_name')
+            ->where($this->_db->quoteIdentifier('password') . " = '' OR " . $this->_db->quoteIdentifier('password') . " IS NULL")
+            ->where($this->_db->quoteIdentifier('status') . " = 'enabled'")
+            ->order('creation_time ASC');
+
+        $stmt = $select->query();
+        return $stmt->fetchAll(Zend_Db::FETCH_NUM);
     }
 }

@@ -28,11 +28,17 @@ class GDPR_Frontend_JsonTest extends TestCase
 
         $this->_dataIntendedPurpose1 = GDPR_Controller_DataIntendedPurpose::getInstance()->create(
             new GDPR_Model_DataIntendedPurpose([
-                'name' => 'unittest1',
+                'name' =>   [[
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'unittest1',
+                ]],
             ], true));
         $this->_dataIntendedPurpose2 = GDPR_Controller_DataIntendedPurpose::getInstance()->create(
             new GDPR_Model_DataIntendedPurpose([
-                'name' => 'unittest2',
+                'name' =>                 [[
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
+                    GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'unittest2',
+                ]],
             ], true));
     }
 
@@ -103,7 +109,7 @@ class GDPR_Frontend_JsonTest extends TestCase
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME]), 'resolving did not work');
         static::assertCount(2, $updatedContact[
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME], 'expect 2 intended purposes');
-        static::assertTrue(is_array($createdContact[
+        static::assertTrue(is_array($updatedContact[
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME][0]['intendedPurpose']),
             'expect resolved intended purposes');
 
@@ -280,5 +286,44 @@ class GDPR_Frontend_JsonTest extends TestCase
             ]}]}]', true);
         $result = $adbJsonFE->searchContacts($filter, []);
         static::assertCount(0, $result['results']);
+    }
+
+    function testAdbDecodedFilter()
+    {
+        GDPR_Config::getInstance()->set(GDPR_Config::ADB_CONTACT_DATA_PROVENANCE_MANDATORY,
+            GDPR_Config::ADB_CONTACT_DATA_PROVENANCE_MANDATORY_DEFAULT);
+        Addressbook_Model_Contact::resetConfiguration();
+
+        $contact = new Addressbook_Model_Contact([
+            'n_given' => 'unittest',
+            'email' => Tinebase_Record_Abstract::generateUID() . '@unittest.de',
+            GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME => [
+                new GDPR_Model_DataIntendedPurposeRecord([
+                    'intendedPurpose' => $this->_dataIntendedPurpose1->getId(),
+                    'agreeDate' => Tinebase_DateTime::now(),
+                    'agreeComment' => 'well, I talked the contact into it',
+                ], true),
+                new GDPR_Model_DataIntendedPurposeRecord([
+                    'intendedPurpose' => $this->_dataIntendedPurpose2->getId(),
+                    'agreeDate' => Tinebase_DateTime::now(),
+                    'agreeComment' => 'well, I talked the contact into that too',
+                    'withdrawDate' => Tinebase_DateTime::now(),
+                ], true)
+            ]
+        ], true);
+
+        $adbJsonFE = new Addressbook_Frontend_Json();
+        $adbJsonFE->saveContact($contact->toArray());
+
+        $filter = json_decode('[{"condition":"AND","filters":
+        [{"field": "GDPR_DataIntendedPurposeRecord","operator": "definedBy?condition=and&setOperator=oneOf",
+        "value": [
+            {"field": "intendedPurpose","operator": "equals",
+                "value": "' . $this->_dataIntendedPurpose1->getId() . '"}
+            ]}]}]', true);
+        $result = $adbJsonFE->searchContacts($filter, []);
+        static::assertCount(1, $result['results']);
+        $decodedFilter = $result['filter'][0]['filters'][0]['value'][0]['value'];
+        static::assertEquals('unittest1', $decodedFilter['name'][0]['text']);
     }
 }

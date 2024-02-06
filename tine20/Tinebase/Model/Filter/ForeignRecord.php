@@ -130,7 +130,8 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
         }
         $this->_foreignIds = NULL;
         $this->_valueIsNull = empty($_value) || (is_array($_value) && count($_value) === 1 && isset($_value[0]) &&
-                is_array($_value[0]) && array_key_exists('value', $_value[0]) && empty($_value[0]['value']));
+                is_array($_value[0]) && array_key_exists('value', $_value[0]) && empty($_value[0]['value']) &&
+                'query' !== $_value[0]['field']);
 
         // id(s) is/are to be provided directly as value
         if ($this->_operator === 'equals' || $this->_operator === 'in' || $this->_operator === 'not' ||
@@ -339,7 +340,7 @@ abstract class Tinebase_Model_Filter_ForeignRecord extends Tinebase_Model_Filter
 
         try {
             if (method_exists($controller, 'get')) {
-                $recordArray = $controller->get($value, /* $_containerId = */ null, /* $_getRelatedData = */ false)->toArray();
+                $recordArray = $controller->get($value, /* $_containerId = */ null, /* $_getRelatedData = */ true)->toArray();
             } else {
                 Tinebase_Core::getLogger()->NOTICE(__METHOD__ . '::' . __LINE__ . ' Controller ' . get_class($controller) . ' has no get method');
                 return $value;

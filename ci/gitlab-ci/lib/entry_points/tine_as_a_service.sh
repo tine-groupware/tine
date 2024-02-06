@@ -16,10 +16,6 @@ $TINE20ROOT/ci/scripts/install_custom_app.sh
 
 touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_php_deps_installed
 
-# install js deps
-npm --prefix $TINE20ROOT/tine20/Tinebase/js/ install;
-touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_js_deps_installed
-
 # setup configs
 /usr/sbin/confd -onetime -backend env;
 

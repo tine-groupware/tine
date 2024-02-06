@@ -18,14 +18,21 @@ class GDPR_Controller_DataIntendedPurposeTest extends TestCase
     public function testCreateUpdateSearchDelete()
     {
         $dataIntendedPurpose = new GDPR_Model_DataIntendedPurpose([
-            'name'          => 'test',
-        ], true);
+            'name' =>                 [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'test',
+            ]],
+            'description'   => [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en', 
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'test description'
+            ]],
+        ]);
 
 
         /*** TEST CREATE ***/
-        /** @var GDPR_Model_DataProvenance $createdIntendedPurpose */
+        /** @var GDPR_Model_DataIntendedPurpose $createdIntendedPurpose */
         $createdIntendedPurpose = GDPR_Controller_DataIntendedPurpose::getInstance()->create($dataIntendedPurpose);
-        static::assertEquals($dataIntendedPurpose->name, $createdIntendedPurpose->name);
+        static::assertEquals($dataIntendedPurpose['name'][0]['text'], $createdIntendedPurpose['name'][0]['text']);
 
 
         /*** TEST GET ***/
@@ -36,16 +43,15 @@ class GDPR_Controller_DataIntendedPurposeTest extends TestCase
         /*** TEST SEARCH ***/
         static::assertEquals($createdIntendedPurpose->getId(),
             GDPR_Controller_DataIntendedPurpose::getInstance()->search(new GDPR_Model_DataIntendedPurposeFilter([
-                ['field' => 'name'      , 'operator' => 'equals', 'value' => $dataIntendedPurpose->name],
+                ['field' => 'id'      , 'operator' => 'equals', 'value' => $dataIntendedPurpose['id']],
             ]))->getFirstRecord()->getId());
 
 
         /*** TEST UPDATE ***/
-        $createdIntendedPurpose->name = 'testUpated';
+        $createdIntendedPurpose['name'][0]['text'] = 'testUpated';
         /** @var GDPR_Model_DataProvenance $updatedIntendedPurpose */
         $updatedIntendedPurpose = GDPR_Controller_DataIntendedPurpose::getInstance()->update($createdIntendedPurpose);
-        static::assertEquals($createdIntendedPurpose->name, $updatedIntendedPurpose->name);
-
+        static::assertEquals($createdIntendedPurpose['name'][0]['text'], $updatedIntendedPurpose['name'][0]['text']);
 
         /*** TEST DELETE ***/
         GDPR_Controller_DataIntendedPurpose::getInstance()->delete($updatedIntendedPurpose);
@@ -55,7 +61,7 @@ class GDPR_Controller_DataIntendedPurposeTest extends TestCase
         } catch (Tinebase_Exception_NotFound $tenf) {}
         static::assertEquals(0,
             GDPR_Controller_DataIntendedPurpose::getInstance()->search(new GDPR_Model_DataIntendedPurposeFilter([
-                ['field' => 'name'      , 'operator' => 'equals', 'value' => $dataIntendedPurpose->name],
+                ['field' => 'name'      , 'operator' => 'equals', 'value' => $dataIntendedPurpose['name'][0]['text']],
             ]))->count());
         // get deleted record should still work
         static::assertEquals($createdIntendedPurpose->getId(), GDPR_Controller_DataIntendedPurpose::getInstance()
@@ -69,7 +75,10 @@ class GDPR_Controller_DataIntendedPurposeTest extends TestCase
         $this->testCreateUpdateSearchDelete();
 
         $dataIntendedPurpose = new GDPR_Model_DataIntendedPurpose([
-            'name'          => 'test2',
+            'name' =>                 [[
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_LANGUAGE => 'en',
+                GDPR_Model_DataIntendedPurposeLocalization::FLD_TEXT => 'test2',
+            ]],
         ], true);
 
         $createdIntendedPurpose = GDPR_Controller_DataIntendedPurpose::getInstance()->create($dataIntendedPurpose);
@@ -82,10 +91,14 @@ class GDPR_Controller_DataIntendedPurposeTest extends TestCase
 
         static::assertEquals($createdIntendedPurpose->getId(),
             GDPR_Controller_DataIntendedPurpose::getInstance()->search(new GDPR_Model_DataIntendedPurposeFilter([
-                ['field' => 'name'      , 'operator' => 'equals', 'value' => $dataIntendedPurpose->name],
+                ['field' => 'id'      , 'operator' => 'equals', 'value' => $dataIntendedPurpose['id']],
             ]))->getFirstRecord()->getId());
 
-        $dataIntendedPurpose->name = 'test3';
+        $dataIntendedPurpose->name =  [
+            Tinebase_Record_PropertyLocalization::FLD_LANGUAGE => 'en',
+            Tinebase_Record_PropertyLocalization::FLD_TEXT => 'test3',
+        ];
+        
         try {
             GDPR_Controller_DataIntendedPurpose::getInstance()->create($dataIntendedPurpose);
             static::fail('without admin and manage right, creating should not be possible');

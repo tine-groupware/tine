@@ -189,7 +189,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         Ext.MessageBox.alert(
             i18n._('Upload Failed'),
             i18n._('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size:') + ' ' + parseInt(dataSize, 10) / 1048576 + ' MB'
-        ).setIcon(Ext.MessageBox.ERROR);
+        );
 
         this.getStore().remove(fileRecord);
         if (this.loadMask) this.loadMask.hide();
@@ -455,7 +455,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (Ext.isObject(tempFile)) {
             this.downloadTempFile(tempFile.id);
         } else {
-            this.downloadNode(recordId, fileRow.id)
+            this.downloadRecordAttachment(recordId, fileRow.id)
         }
     },
 
@@ -726,7 +726,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },
 
-    downloadNode: function (recordId, id) {
+    downloadRecordAttachment: function (recordId, id) {
         new Ext.ux.file.Download({
             params: {
                 method: 'Tinebase.downloadRecordAttachment',

@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import {getLocalizedLangPicker} from "../form/LocalizedLangPicker";
+import { getCls } from "../../util/responsiveLayout"
 
 Ext.ns('Tine.widgets.grid');
 
@@ -35,6 +36,14 @@ Tine.widgets.grid.GridPanel = function(config) {
     this.defaultPaging = this.defaultPaging || {
         start: 0,
         limit: 50
+    };
+
+    // screen is of widthClass if width <= px
+    this.widthClasses = {
+        small: 300,
+        medium: 800,
+        big: 1600,
+        large: Infinity
     };
 
     // allow to initialize with string
@@ -81,6 +90,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * Config object for the Ext.grid.GridPanel
      */
     gridConfig: null,
+    /**
+     * @cfg {Object} detailsPanelRegionConfig
+     * Config object for the Ext.grid.GridPanel
+     */
+    detailsPanelRegion: 'south',
+
     /**
      * @cfg {Array} customColumnData
      * Config Array for customizing column model columns
@@ -412,7 +427,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * Makes the grid readonly, this means, no dialogs, no actions, nothing else than selection, no dbclick
      */
     readOnly: false,
-
+    
     /**
      * extend standard initComponent chain
      * 
@@ -450,7 +465,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.initStore();
         
         this.initGrid();
-
         // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({
             recordClass: this.recordClass,
@@ -473,9 +487,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }, this);
         }
 
-        if (this.detailsPanel) {
-            this.on('resize', this.onContentResize, this, {buffer: 100});
-        }
+        this.on('resize', this.onContentResize, this, {buffer: 100});
 
         this.areaLockSelector = this.recordClass.getPhpClassName().replace('_Model_', '.');
         this.initMessageBus();
@@ -567,15 +579,41 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
     onContentResize: function() {
         // make sure details panel doesn't hide grid
-        if (this.detailsPanel && this.grid) {
-            var gridHeight = this.grid.getHeight(),
-                detailsHeight = this.detailsPanel.getHeight();
-
-            if (detailsHeight/2 > gridHeight) {
-                var newDetailsHeight = this.getHeight() *.4;
-                this.layout.south.panel.setHeight(newDetailsHeight);
-                this.doLayout();
+        const layout = this.layout[this.detailsPanelRegion] ?? null;
+        
+        if (this.detailsPanel && layout) {
+            const isSmall = this.isSmallLayout();
+            if (isSmall) {
+                this.layout['south'].panel.setVisible(false);
+                this.layout['east'].panel.setVisible(false);
+            } else {
+                if (!layout.panel.isVisible()) {
+                    layout.panel.setVisible(true);
+                    layout.items.add(this.detailsPanel);
+                }
+                if (!layout.isCollapsed) {
+                    if (this.detailsPanelRegion === 'south') {
+                        const detailsHeight = this.detailsPanel.getHeight();
+                        const gridHeight = this.getHeight();
+                        if (!!Ext.isTouchDevice) {
+                            layout.panel.setHeight(gridHeight * .5);
+                        } else {
+                            if (gridHeight / detailsHeight < 1.3) layout.panel.setHeight(gridHeight * .4);
+                        }
+                    }
+                    if (this.detailsPanelRegion === 'east') {
+                        const detailsWidth = this.detailsPanel.getWidth();
+                        const gridWidth = this.getWidth();
+                        if (!!Ext.isTouchDevice) {
+                            layout.panel.setWidth(gridWidth * .6);
+                        } else {
+                            if (gridWidth / detailsWidth < 1.3) layout.panel.setWidth(gridWidth * .6);
+                        }
+                    }
+                }
             }
+            if (this.action_layout) this.action_layout.setHidden(isSmall);
+            this.doLayout();
         }
     },
 
@@ -607,7 +645,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             _.assign(this.gridConfig, this.initGenericColumnModel());
         }
     },
-    
     /**
      * initialises the filter panel 
      * 
@@ -643,18 +680,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initGenericColumnModel: function() {
         const gridConfig = {};
-        
+
         if (this.modelConfig) {
-            var columns = [],
-                appName = this.recordClass.getMeta('appName'),
-                modelName = this.recordClass.getMeta('modelName');
+            let columns = [];
+            const appName = this.recordClass.getMeta('appName');
+            const modelName = this.recordClass.getMeta('modelName');
 
             Ext.each(this.columns || this.modelConfig.fieldKeys, function(key) {
                 if (! Ext.isString(key)) {
                     columns.push(key);
                     return;
                 }
-                var config = Tine.widgets.grid.ColumnManager.get(appName, modelName, key, 'mainScreen');
+                const config = Tine.widgets.grid.ColumnManager.get(appName, modelName, key, 'mainScreen');
                 
                 // @todo thats just a hotfix!
                 if (['relations', 'customfields'].indexOf(key) !== -1) {
@@ -755,7 +792,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         return columns;
     },
-    
+
     /**
      * @private
      * 
@@ -773,29 +810,67 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             tbar: this.pagingToolbar,
             items: this.grid
         }];
-
-
+        
         // add detail panel
         if (this.detailsPanel) {
-
+            // register additional context menu actions
+            this.action_layout = new Ext.Action({
+                text: i18n._('Move Details Panel To'),
+                iconCls: 'action_layout_menu',
+                scope: this,
+                menu: {
+                    items: [
+                        new Ext.Action({
+                            direction: 'south',
+                            text: i18n._('Bottom'),
+                            iconCls: 'action_layout_split_down',
+                            scope: this,
+                            handler: (e) => {
+                                this.expandDetailsPanelRegion(e.direction);
+                            },
+                        }),
+                        new Ext.Action({
+                            direction: 'east',
+                            text: i18n._('Right'),
+                            iconCls: 'action_layout_split_right',
+                            scope: this,
+                            handler: (e) => {
+                                this.expandDetailsPanelRegion(e.direction);
+                            },
+                        }),
+                    ]
+                }
+            });
+            this.detailsPanel.contextMenuItems = [this.action_layout];
             // just in case it's a config only
             this.detailsPanel = Ext.ComponentMgr.create(this.detailsPanel);
-
-            this.items.push({
-                ref: 'southPanel',
-                region: 'south',
-                border: false,
-                collapsible: true,
-                collapseMode: 'mini',
-                header: false,
-                split: true,
-                layout: 'fit',
-                height: this.detailsPanel.defaultHeight ? this.detailsPanel.defaultHeight : 125,
-                items: this.detailsPanel,
-                canonicalName: 'DetailsPanel'
-
-            });
+            const regionCfg = (region) => {
+                return {
+                    ref: `${region}Panel`,
+                    region: region,
+                    stateId:`${this.recordClass.prototype.appName}_${region}Panel`,
+                    stateEvents: ['resize'],
+                    items: new Ext.Panel({
+                        items: this.detailsPanelRegion === region ? this.detailsPanel : [],
+                        layout: 'fit',
+                        border: false
+                    }),
+                    height: this.detailsPanel.defaultHeight ? this.detailsPanel.defaultHeight : 600,
+                    width: this.detailsPanel.defaultWidth ? this.detailsPanel.defaultWidth : 500,
+                    hidden: this.detailsPanelRegion !== region,
+                    border: false,
+                    collapsible: true,
+                    collapseMode: 'mini',
+                    header: false,
+                    split: true,
+                    layout: 'fit',
+                    canonicalName: 'DetailsPanel',
+                };
+            }
+            this.items.push(regionCfg('south'));
+            this.items.push(regionCfg('east'));
             this.detailsPanel.doBind(this.grid);
+            this.detailsPanel.gridpanel = this;
         }
 
         // add filter toolbar
@@ -827,6 +902,37 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
         }
 
+    },
+    
+    expandDetailsPanelRegion: function(target) {
+        if (!this.detailsPanel) return;
+        target = target ?? this.detailsPanelRegion;
+        const source = this.detailsPanelRegion;
+        if (!this.layout[target] || !this.layout[source]) return;
+        
+        if (!this.layout[target].panel.isVisible()) {
+            this.detailsPanel.ownerCt.remove(0, false);
+            this.layout[target].panel.setVisible(true);
+            this.layout[target].items.add(this.detailsPanel);
+            this.layout[target].panel.expand();
+        }
+        
+        if (source !== target) {
+            if (this.layout[source].panel.isVisible()) {
+                this.layout[source].panel.setVisible(false);
+                window.test = this.layout[source].panel;
+                this.layout[source].panel.collapse(false); // this might take some time ? the glitch might come from animation
+            }
+        }
+
+        if (this.detailsPanelRegion !== target) {
+            this.detailsPanelRegion = target;
+            Ext.state.Manager.set(this.regionStateId, target);
+            this.updateGridState();
+            this.doLayout(false, true);
+            // fetch details panel depends on new region width, otherwise the details panel still have the old layout after switch region.
+            this.detailsPanel.onDetailsUpdate(this.grid.getSelectionModel());
+        }
     },
 
     gridPrintRenderer: function() {
@@ -1033,7 +1139,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Button} btn
      */
     onImport: function(btn) {
-        var treePanel = this.treePanel || this.app.getMainScreen().getWestPanel().getContainerTreePanel(),
+        var treePanel = this.treePanel || this.getMainScreen().getWestPanel().getContainerTreePanel(),
             _ = window.lodash;
 
         var container = _.get(this.modelConfig, 'import.defaultImportContainerRegistryKey', false);
@@ -1378,6 +1484,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // fix nasty paging tb
         Ext.applyIf(options.params, this.defaultPaging);
     },
+    
+    updateGridState() {
+        if (!this.stateful) return;
+        this.grid.stateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
+        if (!Ext.state.Manager.get(this.grid.stateId)) {
+            this.grid.saveState();
+        }
+        const defaultState = Ext.state.Manager.get(this.grid.stateId) ?? this.grid.getState();
+        if (defaultState) {
+            this.grid.applyState(defaultState);
+            this.grid.saveState();
+        }
+    },
 
     /**
      * called after a new set of Records has been loaded
@@ -1528,6 +1647,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.store.clearData();
     },
 
+    getMainScreen: function() {
+        return this.mainScreen
+            || this.findParentBy((c) => { return c.xtype === 'Tine.widgets.MainScreen' })
+            || this.app.getMainScreen();
+    },
+
     /**
      * perform the initial load of grid data
      */
@@ -1535,14 +1660,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(
                 this.app.appName, this.recordClass.prototype.modelName
             ),
-            favoritesPanel  = this.app.getMainScreen()
-            && typeof this.app.getMainScreen().getWestPanel === 'function'
-            && typeof this.app.getMainScreen().getWestPanel().getFavoritesPanel === 'function'
-            && this.hasFavoritesPanel
-                ? this.app.getMainScreen().getWestPanel().getFavoritesPanel()
-                : null;
+            mainScreen = this.getMainScreen(),
+            favoritesPanel = mainScreen
+                && typeof mainScreen.getWestPanel === 'function'
+                && typeof mainScreen.getWestPanel().getFavoritesPanel === 'function'
+                && this.hasFavoritesPanel
+                    ? mainScreen.getWestPanel().getFavoritesPanel()
+                    : null;
 
-        if (defaultFavorite && favoritesPanel) {
+        if (defaultFavorite && favoritesPanel && favoritesPanel.recordClass === this.recordClass) {
             favoritesPanel.selectFilter(defaultFavorite);
         } else {
             if (! (this.editDialog && this.editDialogRecordProperty)) {
@@ -1600,7 +1726,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         this.selectionModel.on('selectionchange', function(sm) {
             this.actionUpdater.updateActions(sm, this.getFilteredContainers());
-
+            this.latestSelection = sm;
             this.ctxNode = this.selectionModel.getSelections();
             if (this.updateOnSelectionChange && this.detailsPanel) {
                 this.detailsPanel.onDetailsUpdate(sm);
@@ -1619,11 +1745,44 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 disableSelectAllPages: this.disableSelectAllPages,
                 nested: this.editDialog ? true : false
             }, this.pagingConfig));
+            const columns = this.gridConfig?.cm?.columns ?? this.gridConfig?.columns;
+            const sortActions = columns
+                .filter((col) => col.sortable === true)
+                .map((column) => {
+                    return new Ext.Action({
+                        text: column.header,
+                        dataIndex: column.dataIndex,
+                        scope: this,
+                        handler: (action)=> {
+                            this.store.sort(action.dataIndex);
+                        }
+                    });
+                })
+            this.sortingMenu = new Ext.Action({
+                xtype: 'tbsplit',
+                iconCls: 'action_sort',
+                menu: new Ext.menu.Menu({ items: sortActions}),
+                hidden: true,
+                displayPriority: 0,
+                handler: (action)=> {
+                    const sortState = this.store.getSortState();
+                    sortActions.forEach((action) => {
+                        if (sortState.field === action.initialConfig.dataIndex) {
+                            const icls = sortState.direction === 'ASC' ? 'action_sort_asc' : 'action_sort_desc';
+                            action.setIconClass(icls);
+                        } else {
+                            action.setIconClass('');
+                        }
+                    })
+                }
+            });
+            this.pagingToolbar.insert(11, this.sortingMenu);
+            
             // mark next grid refresh as paging-refresh
             this.pagingToolbar.on('beforechange', function() {
                 this.grid.getView().isPagingRefresh = true;
             }, this);
-
+            
             if (this.recordClass) {
                 this.localizedLangPicker = getLocalizedLangPicker(this.recordClass)
                 if (this.localizedLangPicker) {
@@ -1652,12 +1811,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // activate grid header menu for column selection
         this.gridConfig.plugins = this.gridConfig.plugins ? this.gridConfig.plugins : [];
         this.gridConfig.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
-
         if (this.stateful) {
             this.gridConfig.stateful = true;
             this.gridConfig.stateId  = this.stateId + '-Grid' + this.stateIdSuffix;
+            
+            this.regionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
+            this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
+            this.stateIdDetailPanelEast = !this.gridConfig.stateId.includes('_DetailsPanel_East') ? this.gridConfig.stateId + '_DetailsPanel_East' : this.gridConfig.stateId;
+            const StoredStateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
+            const state = Ext.state.Manager.get(StoredStateId);
+            if (state) this.defaultSortInfo = state.sort;
         }
-
+        
         this.grid = new Grid(Ext.applyIf(this.gridConfig, {
             border: false,
             store: this.store,
@@ -1667,7 +1832,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             recordClass: this.recordClass,
             getDragDropText: this.getDragDropText.createDelegate(this)
         }));
-
+        this.grid.store.sortInfo = this.defaultSortInfo;
+        
         // init various grid / sm listeners
         this.grid.on('keydown',     this.onKeyDown,         this);
         this.grid.on('rowclick',    this.onRowClick,        this);
@@ -1676,7 +1842,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.grid.on('headerclick', this.onHeaderClick,   this);
 
         this.grid.on('rowcontextmenu', this.onRowContextMenu, this);
-
     },
 
     getDragDropText: function() {
@@ -1748,8 +1913,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         _.each(Tine.Tinebase.areaLocks.getLocks(this.areaLockSelector), (areaLock) => {
             Tine.Tinebase.areaLocks.manageMask(areaLock);
         });
+
         if (this.initialLoadAfterRender) {
             this.initialLoad();
+            this.afterIsRendered().then(() => {
+                this.updateGridState();
+                this.expandDetailsPanelRegion();
+            });
         }
     },
 
@@ -1789,9 +1959,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     getActionToolbar: function() {
         if (! this.actionToolbar) {
-            var additionalItems = this.getActionToolbarItems();
-
-            var items = [];
+            let additionalItems = this.getActionToolbarItems();
+            
+            const items = [];
             
             if (this.action_addInNewWindow) {
                 if (this.splitAddButton) {
@@ -1850,8 +2020,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     })
                 );
             }
-
-            var importExportButtons = [];
+    
+            const importExportButtons = [];
 
             if (this.actions_export) {
                 importExportButtons.push(Ext.apply(new Ext.Button(this.actions_export), {
@@ -1931,7 +2101,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Array/Object}
      */
     getActionToolbarItems: function() {
-        var items = this.actionToolbarItems || [];
+        const items = this.actionToolbarItems || [];
 
         if (! Ext.isEmpty(items)) {
             // legacy handling! subclasses should register all actions when initializing actions
@@ -2011,18 +2181,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
 
             items.push(this.addToRecordAction);
+            
+            const plugins = [{
+                ptype: 'ux.itemregistry',
+                key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   'Tinebase-MainContextMenu'
+            }]
 
             this.contextMenu = new Ext.menu.Menu({
                 ownerCt: this,
                 items: items,
-                plugins: [{
-                    ptype: 'ux.itemregistry',
-                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-GridPanel-ContextMenu'
-                }, {
-                    ptype: 'ux.itemregistry',
-                    key:   'Tinebase-MainContextMenu'
-                }]
+                plugins: plugins
             });
+
             this.contextMenu.doLayout(false, true);
             
             this.actionUpdater.addActions(this.contextMenu.items);
@@ -2266,7 +2439,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         title: i18n._('Grid Panel Key Bindings'),
                         msg: helpText,
                         buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.INFO
+                        icon: Ext.MessageBox.INFO_INSTRUCTION
                     });
                     e.stopEvent();
                 }
@@ -2278,8 +2451,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * 
      */
     onRowClick: function(grid, row, e) {
-        var _ = window.lodash,
-            sm = grid.getSelectionModel();
+        const sm = grid.getSelectionModel();
 
         /* TODO check if we need this in IE
         // hack to get percentage editor working
@@ -2296,7 +2468,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         // fix selection of one record if shift/ctrl key is not pressed any longer
         if (e.button === 0 && !e.shiftKey && !e.ctrlKey && !e.getTarget('.x-grid3-row-checker')) {
-            if (sm.getCount() == 1 && sm.isSelected(row)) {
+            if (sm.getCount() === 1 && sm.isSelected(row)) {
                 // return;
             } else {
                 sm.clearSelections();
@@ -2313,6 +2485,38 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     sm: sm
                 });
             }
+        }
+        if (this?.isSmallLayout?.() && !e.getTarget('.x-grid3-row-checker')) {
+            if (this.isSmallLayout()) {
+                this.setFullScreen(true);
+            } else {
+                this.expandDetailsPanelRegion();
+            }
+        }
+    },
+    
+    isSmallLayout() {
+        if (this.grid.getView().disableResponsiveLayout) return false;
+        const isWidthSmall = this.getWidth() < 700;
+        const isHeightSmall = this.getHeight() < 500;
+        return isWidthSmall || isHeightSmall;
+    },
+    
+    setFullScreen(fullScreen = true) {
+        if (!this.detailsPanel) return;
+        this.detailsPanel.isInFullScreenMode = fullScreen;
+        if (!fullScreen) {
+            Tine.Tinebase.viewport.tineViewportMaincardpanel.remove(this.detailsPanel, false);
+            const latestActive = Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem;
+            Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.setActiveItem(latestActive);
+            this.originalOwner.add(this.detailsPanel);
+            this.originalOwner.doLayout();
+        } else {
+            this.originalOwner = this.detailsPanel.ownerCt;
+            this.originalOwner.remove(this.detailsPanel, false);
+            Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem = Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.activeItem;
+            Tine.Tinebase.viewport.tineViewportMaincardpanel.add(this.detailsPanel);
+            Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.setActiveItem(this.detailsPanel);
         }
     },
     
@@ -2621,7 +2825,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 title: i18n._('Not Allowed'),
                 msg: i18n._('You are not allowed to delete all pages at once'),
                 buttons: Ext.Msg.OK,
-                icon: Ext.MessageBox.INFO
+                icon: Ext.MessageBox.ERROR_MILD
             });
 
             return;
@@ -2644,11 +2848,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.app.i18n.n_hidden(this.i18nDeleteQuestion[0], this.i18nDeleteQuestion[1], records.length) :
                 String.format(i18n.ngettext('Do you really want to delete the selected record ({0})?',
                     'Do you really want to delete the selected records ({0})?', records.length), recordNames);
-            Ext.MessageBox.confirm(i18n._('Confirm'), i18nQuestion, function(btn) {
-                if (btn == 'yes') {
-                    this.deleteRecords(sm, records);
+            Ext.MessageBox.show({
+                title: i18n._('Confirm'),
+                msg: i18nQuestion,
+                buttons: Ext.MessageBox.YESNO,
+                icon: Ext.MessageBox.QUESTION_WARN,
+                scope:this,
+                fn: function(btn) {
+                    if (btn == 'yes') {
+                        this.deleteRecords(sm, records);
+                    }
                 }
-            }, this);
+            });
         }
     },
 

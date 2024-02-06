@@ -97,7 +97,7 @@ Dieses Buch ist das offizielle Benutzerhandbuch für {branch}. In diesem Buch fi
 
 Weitere Informationen, besonders die Installation von {branch} betreffend, erhalten Sie auf https://www.tine-groupware.de. Dort finden Sie detaillierte Installationsanleitungen für alle unterstützten Betriebssysteme.
 
-Als Softwareentwickler haben Sie über https://github.com/tine20/tine20 den Zugang zu einer regen Community, in der Sie sich mit anderen Entwicklern und Anwendern austauschen können.
+Als Softwareentwickler haben Sie über https://github.com/tine-groupware/tine den Zugang zu einer regen Community, in der Sie sich mit anderen Entwicklern und Anwendern austauschen können.
 
 [[sec.vorwort.ueberdiesesbuch.wielesen]]
 ==== Wie Sie dieses Buch lesen sollten ====

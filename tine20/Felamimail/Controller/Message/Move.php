@@ -94,25 +94,42 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             $result = $this->processMoveIteration($messages, $targetFolder, $keepOriginalMessages, $checkCopyPreventionConfig);
         }
 
+        if ($targetFolder !== Felamimail_Model_Folder::FOLDER_TRASH) {
+            $this->_triggerTargetFolderCacheUpdate($targetFolder);
+        }
+
         return $result;
     }
-    
+
+    protected function _triggerTargetFolderCacheUpdate(Felamimail_Model_Folder $targetFolder): void
+    {
+        // TODO do we also need a source folder cache update?
+
+        Felamimail_Controller_Cache_Message::getInstance()->updateCache($targetFolder);
+    }
+
     /**
-     * move messages
-     * 
+     * move messages to target folder
+     *
      * @param Tinebase_Record_RecordSet $_messages
-     * @param  mixed  $_targetFolder can be one of: Felamimail_Model_Folder or Felamimail_Model_Folder::FOLDER_TRASH (constant)
-     * @param boolean $keepOriginalMessages
-     * @param boolean $checkCopyPreventionConfig
+     * @param Felamimail_Model_Folder|string $_targetFolder can be one of: Felamimail_Model_Folder or Felamimail_Model_Folder::FOLDER_TRASH (constant)
+     * @param bool $keepOriginalMessages
+     * @param bool $checkCopyPreventionConfig
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
+     * @throws Felamimail_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_SystemGeneric
      */
-    public function processMoveIteration($_messages, $_targetFolder, $keepOriginalMessages = false, $checkCopyPreventionConfig = true)
+    public function processMoveIteration(
+        Tinebase_Record_RecordSet $_messages,
+        $_targetFolder,
+        bool $keepOriginalMessages = false,
+        bool $checkCopyPreventionConfig = true): Tinebase_Record_RecordSet
     {
         $folderName = ($_targetFolder instanceof Felamimail_Model_Folder ? $_targetFolder->globalname : $_targetFolder);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' About to move ' . count($_messages) . ' messages to ' . $folderName);
-        
-        $_messages->addIndices(array('folder_id'));
         
         foreach (array_unique($_messages->folder_id) as $folderId) {
             $movedMessages = $this->_moveMessagesByFolder($_messages,
@@ -123,38 +140,13 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             );
 
             if ($movedMessages && ! $keepOriginalMessages) {
-                if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) {
-                    $folderId = Felamimail_Controller_Account::getInstance()->getSystemFolder(
-                        $_messages->getFirstRecord()->account_id,
-                        Felamimail_Model_Folder::FOLDER_TRASH
-                    )->getId();
-                } else {
-                    $folderId = $_targetFolder instanceof Felamimail_Model_Folder ? $_targetFolder->getId() : $_targetFolder;
-                }
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Update messages in local cache: move them to target folder');
-                try {
-                    $this->_backend->updateMultiple($_messages->getArrayOfIds(), [
-                        'folder_id' => $folderId
-                    ]);
-                } catch (Zend_Db_Statement_Exception $zdse) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                        __METHOD__ . '::' . __LINE__ . ' Could not move messages: ' . $zdse->getMessage());
-                    try {
-                        $number = $this->_backend->delete($_messages->getArrayOfIds());
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                            __METHOD__ . '::' . __LINE__ . ' Deleted ' . $number . ' messages from cache');
-                    } catch (Zend_Db_Statement_Exception $zdse) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                            ' Error deleting cached messages from folder ' . $folderName . ': ' . $zdse->getMessage());
-                    }
-                }
+                $this->_removeMessagesFromCacheAfterMove($_messages);
             }
         }
 
         return $this->_updateCountsAfterMove($_messages);
     }
-        
+
     /**
      * move messages from one folder to another
      * 
@@ -205,7 +197,24 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         
         return $result;
     }
-    
+
+    /**
+     * @param Tinebase_Record_RecordSet $messages
+     * @return void
+     * @throws Felamimail_Exception
+     */
+    protected function _removeMessagesFromCacheAfterMove(Tinebase_Record_RecordSet $messages)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' Update messages in local cache: remove them and trigger cache update of target folder');
+
+        $number = $this->_backend->delete($messages->getArrayOfIds());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Deleted ' . $number . ' messages from cache');
+
+        // we update the target folder cache after the move
+    }
+
     /**
      * move messages to trash
      * 

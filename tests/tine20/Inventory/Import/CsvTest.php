@@ -132,19 +132,20 @@ class Inventory_Import_CsvTest extends \PHPUnit\Framework\TestCase
         $this->_deletePersonalInventoryItems = TRUE;
         
         // There are two test entries, so check for 2 imported entries
-        $this->assertEquals(2, $result['totalcount']);
+        self::assertEquals(2, $result['totalcount']);
         
         $translation = Tinebase_Translation::getTranslation('Tinebase');
         $translatedString = sprintf($translation->_("The following fields weren't imported: %s"), "\n");
         
-        $this->assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
-        $this->assertEquals($result['results'][0]['added_date']->setTimezone('Europe/Berlin')->toString(), '2013-01-11 00:00:00');
-        $this->assertNotEquals($result['results'][0]['inventory_id'], '');
-        $this->assertStringContainsString($translatedString, $result['results'][0]['description']);
+        self::assertEquals($result['results'][0]['name'], 'Tine 2.0 für Einsteiger');
+        self::assertInstanceOf(Tinebase_DateTime::class, $result['results'][0]['added_date']);
+        self::assertEquals($result['results'][0]['added_date']->setTimezone('Europe/Berlin')->toString(), '2013-01-11 00:00:00');
+        self::assertNotEquals($result['results'][0]['inventory_id'], '');
+        self::assertStringContainsString($translatedString, $result['results'][0]['description']);
         
-        $this->assertEquals($result['results'][1]['name'], 'Tine 2.0 für Profis');
-        $this->assertEquals($result['results'][1]['added_date']->setTimezone('Europe/Berlin')->toString(), '2012-01-11 00:00:00');
-        $this->assertEquals($result['results'][1]['inventory_id'], '1333431667');
+        self::assertEquals($result['results'][1]['name'], 'Tine 2.0 für Profis');
+        self::assertEquals($result['results'][1]['added_date']->setTimezone('Europe/Berlin')->toString(), '2012-01-11 00:00:00');
+        self::assertEquals($result['results'][1]['inventory_id'], '1333431667');
     }
     
      /**

@@ -34,3 +34,4 @@ RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/m
 COPY etc /config
 COPY phpstan.neon ${TINE20ROOT}/phpstan.neon
 COPY phpstan-baseline.neon ${TINE20ROOT}/phpstan-baseline.neon
+COPY etc/php/30_opcache.ini /etc/php/conf.d/30_opcache.ini

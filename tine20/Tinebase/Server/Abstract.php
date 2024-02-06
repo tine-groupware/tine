@@ -5,10 +5,12 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
 
 /**
  * Server Abstract with handle function
@@ -167,7 +169,9 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
                     continue;
                 }
             } catch (Exception $e) {
-                Tinebase_Exception::log($e);
+                if (! $e instanceof Tinebase_Exception_AccessDenied) {
+                    Tinebase_Exception::log($e);
+                }
                 continue;
             }
 
@@ -216,6 +220,92 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
     }
 
     /**
+     * @return void
+     * @throws Tinebase_Exception_Unauthorized
+     * @throws Zend_Session_Exception
+     */
+    final protected function _disallowAppPwdSessions(): void
+    {
+        if (Tinebase_Session::sessionExists()) {
+            if (!Tinebase_Session::isStarted()) {
+                try {
+                    Tinebase_Core::startCoreSession();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                            . ' ' . $tenf->getMessage());
+                    }
+                    throw new Tinebase_Exception_Unauthorized('User not found');
+                }
+            }
+
+            if (Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class}) {
+                throw new Tinebase_Exception_Unauthorized('Session not allowed for this api');
+            }
+        }
+    }
+
+    final protected function _handleAppPwdAuth()
+    {
+        $authValue = $this->_request->getHeader('Authorization')->getFieldValue();
+        if (strpos($authValue, 'Basic ') !== 0 || false === ($authValue = base64_decode(substr($authValue, 6), true))
+                || 2 !== count($authValue = explode(':', $authValue, 2))) {
+            return false;
+        }
+
+        $appPwd = $authValue[1];
+        if (strlen($appPwd) !== Tinebase_Controller_AppPassword::PWD_LENGTH || strpos($appPwd, Tinebase_Controller_AppPassword::PWD_SUFFIX) !== Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH) {
+            return false;
+        }
+
+        try {
+            $user = Tinebase_User::getInstance()->getUserByLoginName($authValue[0], Tinebase_Model_FullUser::class);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return false;
+        }
+        try {
+            $encryptedPwd = sha1($appPwd);
+        } catch (Tinebase_Exception $e) {
+            return false;
+        }
+
+        $oldValue = Tinebase_Controller_AppPassword::getInstance()->doContainerACLChecks(false);
+        try {
+            $appPwd = Tinebase_Controller_AppPassword::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_AppPassword::class, [
+                    [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_ACCOUNT_ID, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $user->getId()],
+                    [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_AUTH_TOKEN, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $encryptedPwd],
+                    [TMFA::FIELD => Tinebase_Model_AppPassword::FLD_VALID_UNTIL, TMFA::OPERATOR => 'after', TMFA::VALUE => ''],
+                ])
+            )->getFirstRecord();
+        } finally {
+            Tinebase_Controller_AppPassword::getInstance()->doContainerACLChecks($oldValue);
+        }
+
+        if (null !== $appPwd) {
+            if (!Tinebase_Session::sessionExists()) {
+                try {
+                    Tinebase_Core::startCoreSession();
+                } catch (Zend_Session_Exception $zse) {
+                    $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
+
+                    // expire session cookie for client
+                    Tinebase_Session::expireSessionCookie();
+
+                    return $exception;
+                }
+            }
+
+            $session = Tinebase_Session::getSessionNamespace();
+            $session->{Tinebase_Model_AppPassword::class} = $appPwd;
+            $session->currentAccount = $user;
+            Tinebase_Core::setUser($user);
+        }
+
+        return false;
+    }
+
+    /**
      * checks whether either no area_login lock is set or if it is unlocked already
      */
     final static public function checkLoginAreaLock(): bool
@@ -234,6 +324,25 @@ abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
                 $teal->setArea($cfg->{Tinebase_Model_AreaLockConfig::FLD_AREA_NAME});
                 $teal->setMFAUserConfigs($cfg->getUserMFAIntersection(Tinebase_Core::getUser()));
                 throw $teal;
+            }
+        }
+    }
+
+    final static protected function _checkRateLimit($_method)
+    {
+        $rateLimit = new Tinebase_Server_RateLimit();
+        $user = Tinebase_Core::isRegistered(Tinebase_Core::USER) ? Tinebase_Core::getUser()->accountLoginName : 'anon';
+        if ($rateLimit->hasRateLimit($user, $_method)) {
+            if (! $rateLimit->check($user, $_method)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    $definition = $rateLimit->getLimitDefinition($user, $_method);
+                    Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' User ' . $user . ' hit rate limit: '
+                        .  print_r($definition, true));
+                }
+
+                $terl = new Tinebase_Exception_RateLimit('Method is rate-limited: ' . $_method);
+                throw $terl;
             }
         }
     }

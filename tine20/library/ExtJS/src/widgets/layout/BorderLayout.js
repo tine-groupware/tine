@@ -438,10 +438,18 @@ Ext.layout.BorderLayout.Region.prototype = {
         this.el = p.el;
 
         var gs = p.getState, ps = this.position;
+        
+        if(ps === 'west' || ps === 'east'){
+            this.state.width = this.panel.lastSize.width;
+        } else {
+            this.state.height = this.panel.lastSize.height;
+        }
+        
         p.getState = function(){
             return Ext.apply(gs.call(p) || {}, this.state);
         }.createDelegate(this);
-
+        
+        
         if(ps != 'center'){
             p.allowQueuedExpand = false;
             p.on({
@@ -538,7 +546,7 @@ Ext.layout.BorderLayout.Region.prototype = {
     onCollapse : function(animate){
         this.panel.el.setStyle('z-index', 1);
         if(this.lastAnim === false || this.panel.animCollapse === false){
-            this.getCollapsedEl().dom.style.visibility = 'visible';
+            this.getCollapsedEl().dom.style.visibility = this.isVisible() ? 'visible' : 'hidden';
         }else{
             this.getCollapsedEl().slideIn(this.panel.slideAnchor, {duration:.2});
         }
@@ -553,7 +561,7 @@ Ext.layout.BorderLayout.Region.prototype = {
         }
         var c = this.getCollapsedEl();
         this.el.show();
-        if(this.position == 'east' || this.position == 'west'){
+        if(this.position === 'east' || this.position === 'west'){
             this.panel.setSize(undefined, c.getHeight());
         }else{
             this.panel.setSize(c.getWidth(), undefined);
@@ -1118,12 +1126,12 @@ Ext.extend(Ext.layout.BorderLayout.SplitRegion, Ext.layout.BorderLayout.Region, 
     onSplitMove : function(split, newSize){
         var s = this.panel.getSize();
         this.lastSplitSize = newSize;
-        if(this.position == 'north' || this.position == 'south'){
-            this.panel.setSize(s.width, newSize);
+        if(this.position === 'north' || this.position === 'south'){
             this.state.height = newSize;
+            this.panel.setSize(s.width, newSize);
         }else{
-            this.panel.setSize(newSize, s.height);
             this.state.width = newSize;
+            this.panel.setSize(newSize, s.height);
         }
         this.layout.layout();
         this.panel.saveState();

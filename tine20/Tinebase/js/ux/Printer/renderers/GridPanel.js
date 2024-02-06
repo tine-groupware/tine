@@ -34,7 +34,7 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
 
             //use the headerTpl and bodyTpl XTemplates to create the main XTemplate below
             var headings = me.headerTpl.apply(columns);
-            var body = me.bodyTpl.apply(columns);
+            var body = me.bodyTpl.apply(columns).replace('___rowCls', 'class = "{___rowCls}"');
 
             var installLogoImg = Tine.Tinebase.common.getUrl('full') && Tine.Tinebase.registry.get('installLogo') ? '<img src="' + Tine.Tinebase.registry.get('installLogo') + '" />' : null;
 
@@ -88,9 +88,9 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
         var columns = this.getColumns(grid),
             data = [];
 
-        Ext.each(records, function (item) {
+        Ext.each(records, function (item, idx) {
             var convertedData = {};
-
+            convertedData['___rowCls'] = grid && _.isFunction(grid.getView().getRowClass) ? grid.getView().getRowClass(item, idx): '';
 
             Ext.each(columns, function (column) {
                 var key = column.dataIndex,
@@ -141,7 +141,7 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
      * are then applied (see the escaped dataIndex attribute here - this ends up as "{dataIndex}")
      */
     bodyTpl: new Ext.XTemplate(
-        '<tr>',
+        '<tr ___rowCls>',
         '<tpl for=".">',
         '<td>\{{dataIndex}\}</td>',
         '</tpl>',

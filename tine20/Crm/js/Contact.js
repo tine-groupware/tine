@@ -277,7 +277,7 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var response = {
             responseText: contact
         };
-        contact = Tine.Addressbook.contactBackend.recordReader(response);
+        contact = Tine.Tinebase.data.Record.setFromJson(response?.results, Tine.Addressbook.Model.Contact);
         
         Tine.log.debug('Tine.Crm.Contact.GridPanel::onUpdate - Contact has been updated:');
         Tine.log.debug(contact);

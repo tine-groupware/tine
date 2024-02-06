@@ -49,7 +49,7 @@ Ext.ux.form.BytesField = Ext.extend(Ext.form.NumberField, {
             me = this,
             parts = String(value).match(this.validateRe),
             number = parts ? parts[1] : value,
-            suffix = parts ? parts[2] : this.suffixes[this.basePow],
+            suffix = parts ? String(parts[2]).replace('i', '') : this.suffixes[this.basePow],
             pow = suffix ? this.suffixes.indexOf(suffix.toLowerCase()) : 0;
 
         if(!this.supr().validateValue.call(this, number)) {
@@ -70,7 +70,7 @@ Ext.ux.form.BytesField = Ext.extend(Ext.form.NumberField, {
     parseValue : function(value){
         var parts = String(value).match(this.validateRe),
             number = parts ? parts[1] : value,
-            suffix = parts ? parts[2] : this.suffixes[this.basePow],
+            suffix = parts ? String(parts[2]).replace('i', '') : this.suffixes[this.basePow],
             pow = suffix ? this.suffixes.indexOf(suffix.toLowerCase()) : 0;
 
         if (value === '' || value === null) return null;

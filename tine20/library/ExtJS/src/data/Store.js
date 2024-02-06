@@ -770,7 +770,8 @@ sortInfo: {
      * @return {Number} The index of the Record. Returns -1 if not found.
      */
     indexOfId : function(id){
-        return this.data.indexOfKey(String(id));
+        const index = this.data.indexOfKey(String(id));
+        return index === -1 ? this.data.indexOfKey(id) : index;
     },
 
     /**
@@ -1376,7 +1377,7 @@ myStore.reload(lastOptions);
     // private
     sortData : function(f, direction){
         direction = direction || 'ASC';
-        var st = this.fields.get(f).sortType;
+        var st = this.fields.get(f)?.sortType || Ext.emptyFn;
         var locale = Tine.Tinebase.registry.get('locale').locale;
         var fn = st !== Ext.data.SortTypes.asUCString ? function(r1, r2){
             var v1 = st(r1.data[f]), v2 = st(r2.data[f]);
@@ -1734,6 +1735,22 @@ myStore.setBaseParam('foo', {bar:3});
     setBaseParam : function (name, value){
         this.baseParams = this.baseParams || {};
         this.baseParams[name] = value;
+    },
+
+    getClone: function() {
+        const clone = new Ext.data.Store({
+           fields: this.fields,
+            // data: this.data.clone().items,
+           // proxy: this.proxy,
+           replaceRecord: function(o, n) {
+               var r = this.getById(o.id); // refetch record as it might be outdated in the meantime
+               var idx = this.indexOf(r);
+               this.remove(r);
+               this.insert(idx, n);
+           }
+        });
+        clone.data = this.data.clone();
+        return clone;
     }
 });
 

@@ -13,6 +13,7 @@ Ext.namespace('Tine.Felamimail');
 require('./SignatureGridPanel');
 require('./sieve/VacationPanel');
 import waitFor from "util/waitFor.es6";
+
 /**
  * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.AccountEditDialog
@@ -264,7 +265,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
     },
-    
+
     checkAccountEditRight(account) {
         if (this.asAdminModule) {
             return Tine.Tinebase.common.hasRight('manage_emailaccounts', 'Admin');
@@ -327,28 +328,20 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.emailImapUser = [];
         this.aliasesGrid = [];
         this.forwardsGrid = [];
-        
+
+        const additionConfig = {
+            scope: this,
+            record: this.record,
+        };
+
         if (this.asAdminModule) {
             this.saveInAdbFields = Tine.Admin.UserEditDialog.prototype.getSaveInAddessbookFields(this, this.record.get('type') === 'system');
             this.emailImapUser = this.record.data?.email_imap_user || [];
-    
-            const commonConfig = {
-                autoExpandColumn: 'email',
-                quickaddMandatory: 'email',
-                frame: false,
-                useBBar: true,
-                height: 200,
-                columnWidth: 0.5,
-                recordClass: Ext.data.Record.create([
-                    { name: 'email' }
-                ]),
-                scope: this,
-                record: this.record,
-            };
-            
-            this.aliasesGrid = Tine.Admin.UserEditDialog.prototype.initAliasesGrid(commonConfig);
-            this.forwardsGrid = Tine.Admin.UserEditDialog.prototype.initForwardsGrid(commonConfig);
+            this.aliasesGrid = Tine.Admin.UserEditDialog.prototype.initAliasesGrid(additionConfig);
+            this.forwardsGrid = Tine.Admin.UserEditDialog.prototype.initForwardsGrid(additionConfig);
         }
+
+        this.sieveNotifyGrid = Tine.Felamimail.sieve.NotificationDialog.prototype.initSieveEmailNotifyGrid(additionConfig);
 
         var commonFormDefaults = {
             xtype: 'textfield',
@@ -357,7 +350,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             maxLength: 256,
             columnWidth: 1
         };
-        
+
         return {
             xtype: 'tabpanel',
             name: 'accountEditPanel',
@@ -533,7 +526,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             if (this.record.id === 0) {
                                 return reject('none existing account');
                             }
-                            
+
                             Ext.Msg.confirm(this.app.i18n._('Reveal Password?'),
                                 this.app.i18n._('You are about to reveal the password. This action will be logged. Proceed?'),
                                 async (button) => {
@@ -729,14 +722,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     checkState: function() {
                         this.setDisabled(me.isSystemAccount());
                     }
-                }], [{
-                    fieldLabel: this.app.i18n._('Notification Email'),
-                    name: 'sieve_notification_email',
-                    vtype: 'email',
-                    checkState: function() {
-                        this.setDisabled(! me.isSystemAccount());
-                    }
-                }], [{
+                }], [
+                    this.sieveNotifyGrid
+                ], [{
                     fieldLabel: this.app.i18n._('Auto-move notifications'),
                     name: 'sieve_notification_move',
                     xtype: 'widget-keyfieldcombo',
@@ -760,6 +748,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         await this.showSieveScriptWindow();
                     },
                     hidden: ! this.asAdminModule
+                }), new Ext.Button({
+                    text: this.app.i18n._('Edit Sieve custom script'),
+                    handler: async () => {
+                        await this.showEditSieveScriptWindow();
+                    },
+                    hidden: !this.checkAccountEditRight(this.record)
                 })]
                 ]
             }, {
@@ -770,31 +764,35 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 xtype: 'columnform',
                 formDefaults: commonFormDefaults,
                 items: [[{
-                    hideLabel: true,
-                    xtype: 'checkbox',
-                    boxLabel: this.app.i18n._('Save copy of sent mail on mail server'),
-                    name: 'save_sent_mail_copy',
-                    checked: me.record.get('message_sent_copy_behavior') !== 'skip',
-                    listeners: {
-                        'check': (checkbox, value) => {
-                            const mode = value ? 'sent' : 'skip';
-                            me.record.set('message_sent_copy_behavior', mode);
-                            this.getForm().findField('sent_folder').setDisabled(!value);
-                            this.getForm().findField('save_sent_mail_to_source').setDisabled(!value);
+                    xtype: 'fieldset',
+                    title: this.app.i18n.gettext('Behavior of sent mails'),
+                    items: [[{
+                        hideLabel: true,
+                        xtype: 'checkbox',
+                        boxLabel: this.app.i18n._('Save copy of sent mail on mail server.'),
+                        name: 'save_sent_mail_copy',
+                        checked: me.record.get('message_sent_copy_behavior') !== 'skip',
+                        listeners: {
+                            'check': (checkbox, value) => {
+                                const mode = value ? 'sent' : 'skip';
+                                me.record.set('message_sent_copy_behavior', mode);
+                                this.getForm().findField('sent_folder').setDisabled(!value);
+                                this.getForm().findField('save_sent_mail_to_source').setDisabled(!value);
+                            },
                         },
-                    },
-                }], [{
-                    hideLabel: true,
-                    xtype: 'checkbox',
-                    name: 'save_sent_mail_to_source',
-                    boxLabel: this.app.i18n._('Folder of the source mail if it is no system folder.'),
-                    checked: me.record.get('message_sent_copy_behavior') === 'source',
-                    listeners: {
-                        'check': (checkbox, value) => {
-                            const mode = value ? 'source' : 'sent';
-                            me.record.set('message_sent_copy_behavior', mode);
+                    }, {
+                        hideLabel: true,
+                        xtype: 'checkbox',
+                        name: 'save_sent_mail_to_source',
+                        boxLabel: this.app.i18n._('Folder of the source mail if it is no system folder.'),
+                        checked: me.record.get('message_sent_copy_behavior') === 'source',
+                        listeners: {
+                            'check': (checkbox, value) => {
+                                const mode = value ? 'source' : 'sent';
+                                me.record.set('message_sent_copy_behavior', mode);
+                            },
                         },
-                    },
+                    }]]
                 }], [{
                     fieldLabel: this.app.i18n._('Sent Folder Name'),
                     name: 'sent_folder',
@@ -974,20 +972,21 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * Show window for script reading
      */
     showSieveScriptWindow: async function () {
-        const script = await Tine.Admin.getSieveScript(this.record.data.id);
+        const script = this.asAdminModule ? await Tine.Admin.getSieveScript(this.record.data.id) 
+            : await Tine.Felamimail.getSieveScript(this.record.data.id);
         const windowTitle = this.app.i18n._('Explore Sieve script');
-
         const dialog = new Tine.Tinebase.dialog.Dialog({
             items: [{
                 cls: 'x-ux-display-background-border',
                 xtype: 'ux.displaytextarea',
                 type: 'code/folding/mixed',
+                height: 300,
                 value: script,
                 listeners: {
                     render: async (cmp) => {
                         // wait ace editor
                         await waitFor(() => {
-                           return cmp.el.child('.ace_content');
+                            return cmp.el.child('.ace_content');
                         });
 
                         cmp.el.setStyle({'overflow': null});
@@ -1010,16 +1009,87 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 Tine.Tinebase.dialog.Dialog.superclass.initComponent.call(this);
             },
 
-            /**
-             * Creates a new pop up dialog/window (acc. configuration)
-             *
-             * @returns {null}
-             * TODO can we put this in the Tine.Tinebase.dialog.Dialog?
-             */
             openWindow: function (config) {
                 if (this.window) {
                     return this.window;
                 }
+
+                config = config || {};
+                this.window = Tine.WindowFactory.getWindow(Ext.apply({
+                    resizable:false,
+                    title: windowTitle,
+                    closeAction: 'close',
+                    modal: true,
+                    width: 550 ,
+                    height: 400,
+                    items: [this],
+                    fbar: ['->']
+                }, config));
+
+                return this.window;
+            },
+        });
+
+        dialog.openWindow();
+    },
+
+    /**
+     * Show custom sieve script window
+     */
+    showEditSieveScriptWindow: async function () {
+        const accountId = this.record.data.id;
+        const asAdminModule = this.asAdminModule;
+        const result = asAdminModule ? await Tine.Admin.getSieveCustomScript(accountId)
+            : await Tine.Felamimail.getSieveCustomScript(accountId);
+        const windowTitle =  this.app.i18n._('Edit Sieve custom script');
+        const script = result?.script;
+        const dialog = new Tine.Tinebase.dialog.Dialog({
+            items: [{
+                xtype: 'tw-acefield',
+                mode: 'sieve',
+                fieldLabel: 'custom script',
+                id: 'sieve_custom_script',
+                allowBlank: true,
+                height: 200,
+                value: script,
+            }],
+
+            initComponent: function() {
+                this.fbar = [
+                    '->',
+                    {
+                        text: i18n._('Cancel'),
+                        minWidth: 70,
+                        ref: '../buttonApply',
+                        scope: this,
+                        handler: async () => {
+                            this.onButtonApply();
+                        },
+                        iconCls: 'action_cancel'
+                    },
+                    {
+                        text: i18n._('Ok'),
+                        minWidth: 70,
+                        ref: '../buttonApply',
+                        scope: this,
+                        handler: async () => {
+                            try {
+                                const script = dialog.getForm().findField('sieve_custom_script').getValue();
+                                const sieveCustomScript = asAdminModule ? await Tine.Admin.saveSieveCustomScript(accountId, script)
+                                    : await Tine.Felamimail.saveSieveCustomScript(accountId, script);
+                                this.onButtonApply();
+                            } catch (e) {
+                                Ext.MessageBox.alert(i18n._('Errors'), e.message);
+                            }
+                        },
+                        iconCls: 'action_saveAndClose'
+                    }
+                ];
+                Tine.Tinebase.dialog.Dialog.superclass.initComponent.call(this);
+            },
+
+            openWindow: function (config) {
+                if (this.window) return this.window;
 
                 config = config || {};
                 this.window = Tine.WindowFactory.getWindow(Ext.apply({
@@ -1177,10 +1247,12 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this['connectLoadMask' + server].hide();
 
             if (showDialog) {
-                Ext.MessageBox.alert(
-                    this.app.formatMessage('{server} Connection Status',{server : server}),
-                    message
-                ).setIcon(result ? Ext.MessageBox.INFO : Ext.MessageBox.WARNING);
+                Ext.MessageBox.show({
+                    title: this.app.formatMessage('{server} Connection Status',{server : server}),
+                    msg: message,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.INFO
+                });
             }
         }
 
@@ -1233,6 +1305,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
 
         me.getForm().loadRecord(me.ruleRecords);
+
+        // load sieve notification emails
+        const data = this.record.data.sieve_notification_email.split(',');
+        this.sieveNotifyGrid.setStoreFromArray(data.map((e) => {return {'email': e}}));
     },
 
     /**
@@ -1324,6 +1400,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.record.set('sieve_rules', rules);
         this.record.set('sieve_vacation', this.vacationRecord);
+
+        // update sieve notification emails
+        const notifyEmails = this.sieveNotifyGrid.getFromStoreAsArray();
+        this.record.set('sieve_notification_email', notifyEmails.filter(e => e?.email).map(e => e?.email).join());
     },
 
     /**

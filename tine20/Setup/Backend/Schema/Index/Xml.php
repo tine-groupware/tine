@@ -4,10 +4,9 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  */
-
 
 class Setup_Backend_Schema_Index_Xml extends Setup_Backend_Schema_Index_Abstract
 {

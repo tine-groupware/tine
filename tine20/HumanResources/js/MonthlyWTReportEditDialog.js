@@ -36,6 +36,10 @@ Tine.HumanResources.MonthlyWTReportEditDialog = Ext.extend(Tine.widgets.dialog.E
         Tine.HumanResources.MonthlyWTReportEditDialog.superclass.initButtons.apply(this, arguments);
     },
 
+    saveAndCloseActionUpdater: function() {
+        this.action_saveAndClose.setDisabled(! _.get(this.record, 'data.account_grants.updateTimeDataGrant'));
+    },
+
     recalculateReport: function() {
         const force = Ext.EventObject.hasModifier();
         const employeeId = this.record.get('employee_id');

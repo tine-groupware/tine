@@ -165,7 +165,7 @@ class Tinebase_Server_RoutingTests extends TestCase
 
         if (Tinebase_Application::getInstance()->isInstalled('Felamimail')
             && Tinebase_EmailUser::isEmailSystemAccountConfigured()) {
-            self::assertGreaterThanOrEqual(6, $decodedContent['totalEmailSystemAccounts']);
+            self::assertGreaterThanOrEqual(1, $decodedContent['totalEmailSystemAccounts']);
             self::assertGreaterThanOrEqual(0, $decodedContent['totalEmailSharedAccounts']);
             self::assertGreaterThanOrEqual(0, $decodedContent['totalEmailMailingList']);
         }

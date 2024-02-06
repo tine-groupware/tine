@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 use Jumbojett\OpenIDConnectClient;
 
@@ -15,12 +15,22 @@ use Jumbojett\OpenIDConnectClient;
  */
 class Tinebase_Auth_OpenIdConnect extends Tinebase_Auth_Adapter_Abstract
 {
-    protected $_client = null;
-    protected $_oidcResponse = null;
+    public const TYPE = 'OpenIdConnect';
+    public const IDP_CONFIG = 'idpConfig';
+
+    protected ?OpenIDConnectClient $_client = null;
+    protected ?SSO_Model_ExIdp_OIdConfig $_idpConfig = null;
+    protected ?string $_oidcResponse = null;
     protected $_userInfo = null;
     protected $_user = null;
 
-    public function setOICDResponse($oidcResponse)
+    public function __construct($options, $username = null, $password = null)
+    {
+        parent::__construct($options, $username, $password);
+        $this->_idpConfig = $options[self::IDP_CONFIG] ?? null;
+    }
+
+    public function setOICDResponse(string $oidcResponse): void
     {
         $this->_oidcResponse = $oidcResponse;
     }
@@ -65,11 +75,8 @@ class Tinebase_Auth_OpenIdConnect extends Tinebase_Auth_Adapter_Abstract
 
     /**
      * send auth request to provider - request gets redirected to tine20 login page
-     *
-     * @return bool success
-     * @throws Tinebase_Exception
      */
-    public function providerAuthRequest()
+    public function providerAuthRequest(): bool
     {
         $oidc = $this->_getClient();
 
@@ -77,28 +84,33 @@ class Tinebase_Auth_OpenIdConnect extends Tinebase_Auth_Adapter_Abstract
 
         $redirectUrl = $ssoConfig->{Tinebase_Config::SSO_REDIRECT_URL};
         if (empty($redirectUrl)) {
-            $redirectUrl = Tinebase_Core::getUrl();
+            $redirectUrl = rtrim(Tinebase_Core::getUrl(), '/') . '/sso/oid/auth/response';
         }
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Set provider redirect url: ' . $redirectUrl);
         $oidc->setRedirectURL($redirectUrl);
 
         $oidc->addScope('openid email');
-        $oidc->setResponseTypes(array('id_token', 'token'));
+        $oidc->setResponseTypes(array('code'));
         $oidc->setAllowImplicitFlow(true);
 
         // TODO add this (if configured)
         //$oidc->setCertPath('/path/to/my.cert');
 
         try {
-            $oidc->authenticate();
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Auth request successful.');
-            return true;
+            $oidc->resetClient();
+            if (false === $oidc->authenticate() && null !== ($getRedirectUrl = $oidc->didRedirectOccur())) {
+                $e = (new Tinebase_Exception_Auth_Redirect())->setUrl($getRedirectUrl);
+            } else {
+                Tinebase_Exception::log(new Tinebase_Exception('should not happen'));
+                return false;
+            }
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
             return false;
         }
+
+        throw $e;
     }
 
     /**
@@ -125,7 +137,7 @@ class Tinebase_Auth_OpenIdConnect extends Tinebase_Auth_Adapter_Abstract
         return $user;
     }
 
-    protected function _getClient()
+    public function _getClient(): SSO_Facade_OpenIdConnect_Client
     {
         if ($this->_client === null) {
             $ssoConfig = Tinebase_Config::getInstance()->{Tinebase_Config::SSO};
@@ -133,16 +145,25 @@ class Tinebase_Auth_OpenIdConnect extends Tinebase_Auth_Adapter_Abstract
                 throw new Tinebase_Exception('sso client config inactive');
             }
 
-            $provider_url = $ssoConfig->{Tinebase_Config::SSO_PROVIDER_URL};
-            $client_id = $ssoConfig->{Tinebase_Config::SSO_CLIENT_ID};
-            $client_secret = $ssoConfig->{Tinebase_Config::SSO_CLIENT_SECRET};
+            if (null === $this->_idpConfig) {
+                $provider_url = $ssoConfig->{Tinebase_Config::SSO_PROVIDER_URL};
+                $client_id = $ssoConfig->{Tinebase_Config::SSO_CLIENT_ID};
+                $client_secret = $ssoConfig->{Tinebase_Config::SSO_CLIENT_SECRET};
+                $issuer = null;
+            } else {
+                $provider_url = $this->_idpConfig->{SSO_Model_ExIdp_OIdConfig::FLD_PROVIDER_URL};
+                $client_id = $this->_idpConfig->{SSO_Model_ExIdp_OIdConfig::FLD_CLIENT_ID};
+                $client_secret = $this->_idpConfig->getClientSecret();
+                $issuer = $this->_idpConfig->{SSO_Model_ExIdp_OIdConfig::FLD_ISSUER};
+            }
 
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Set provider url: ' . $provider_url);
 
-            $this->_client = new OpenIDConnectClient($provider_url,
+            $this->_client = new SSO_Facade_OpenIdConnect_Client($provider_url,
                 $client_id,
-                $client_secret);
+                $client_secret,
+                $issuer);
         }
 
         return $this->_client;

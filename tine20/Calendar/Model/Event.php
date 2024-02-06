@@ -89,7 +89,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         self::VERSION       => 19,
         'containerName'     => 'Calendar',
         'containersName'    => 'Calendars', // ngettext('Calendar', 'Calendars', n)
-        'recordName'        => self::MODEL_PART_NAME,
+        'recordName'        => self::MODEL_PART_NAME, // gettext('GENDER_Event')
         'recordsName'       => 'Events', // ngettext('Event', 'Events', n)
         'hasRelations'      => true,
         'copyRelations'     => false,
@@ -158,6 +158,12 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                         'referencedColumnName'  => 'id'
                     ]],
                 ],
+            ],
+        ],
+
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'event_types'      => [],
             ],
         ],
 
@@ -367,6 +373,21 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                     Zend_Filter_Input::DEFAULT_VALUE => false,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+            ],
+            'event_types' => [
+                self::TYPE       => self::TYPE_RECORDS,
+                self::IS_VIRTUAL => true,
+                self::NULLABLE   => true,
+                self::LABEL     => 'Event Types', // _('Event Types')
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                self::CONFIG => [
+                    self::APP_NAME                  => 'Calendar',
+                    self::MODEL_NAME                => 'EventTypes',
+                    self::REF_ID_FIELD              => 'record',
+                    self::DEPENDENT_RECORDS         => true,
+                ],
+                self::RECURSIVE_RESOLVING => true,
             ],
             Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => [
                 self::TYPE          => self::TYPE_VIRTUAL,
@@ -1004,7 +1025,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if (isset($_data['attendee']) && is_array($_data['attendee'])) {
             $_data['attendee'] = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_data['attendee'], $this->bypassFilters, $this->convertDates);
         }
-        
+
         if (isset($_data['rrule']) && ! empty($_data['rrule']) && ! $_data['rrule'] instanceof Calendar_Model_Rrule) {
             // rrule can be array or string
             $_data['rrule'] = new Calendar_Model_Rrule($_data['rrule'], $this->bypassFilters, $this->convertDates);

@@ -39,6 +39,13 @@ class Addressbook_Config extends Tinebase_Config_Abstract
     const CONTACT_HIDDEN_CRITERIA = 'contactHiddenCriteria';
 
     /**
+     * fields for contact types
+     *
+     * @var string
+     */
+    const CONTACT_TYPES = 'contactTypes';
+
+    /**
      * fields for contact salutations
      * 
      * @var string
@@ -237,6 +244,35 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'clientRegistryInclude' => false,
             'default'               => 'disabled'
         ),
+        self::CONTACT_TYPES => [
+            self::LABEL                 => 'Contact types available', // _('Contact types available')
+            self::DESCRIPTION           => 'Possible contact types', // _('Possible contact types')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => Addressbook_Model_Contact::CONTACTTYPE_USER,
+                        'value' => 'User', //_('User')
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => Addressbook_Model_Contact::CONTACTTYPE_CONTACT,
+                        'value' => 'Contact', //_('Contact')
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => Addressbook_Model_Contact::CONTACTTYPE_EMAIL_ACCOUNT,
+                        'value' => 'Email Account', //_('Email Account')
+                        'icon' => null,
+                        'system' => true,
+                    ],
+                ],
+                self::DEFAULT_STR => Addressbook_Model_Contact::CONTACTTYPE_CONTACT,
+            ],
+        ],
         self::CONTACT_SALUTATION => array(
         //_('Contact salutations available')
             'label'                 => 'Contact salutations available',

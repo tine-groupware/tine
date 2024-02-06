@@ -4,6 +4,7 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+
 /**
  * @class Ext.MessageBox
  * <p>Utility class for generating different styles of message boxes.  The alias Ext.Msg can also be used.<p/>
@@ -23,6 +24,7 @@ Ext.Msg.prompt('Name', 'Please enter your name:', function(btn, text){
     }
 });
 
+
 // Show a dialog using config options:
 Ext.Msg.show({
    title:'Save Changes?',
@@ -36,178 +38,96 @@ Ext.Msg.show({
  * @singleton
  */
 Ext.MessageBox = function(){
-    var dlg, opt, mask, waitTimer,
-        bodyEl, msgEl, textboxEl, textareaEl, progressBar, pp, iconEl, spacerEl,
-        buttons, activeTextEl, bwidth, bufferIcon = '', iconCls = '',
-        buttonNames = ['ok', 'yes', 'no', 'cancel'];
+    let opt, dlg;
+
+    const skinShades = ["#ffffff", "#fad9b4", "#fcbf89", "#ec8f2e", "#d97103", "#b75b01", "#924500"]
+    
+    // start vue properties
+    let vueHandle, vueProps, vueEmitter;
+    const defaultConfigs = Object.freeze({
+        animEl: null,
+        buttons: null,
+        closable: true,
+        cls: "",
+        defaultTextAreaHeight: 3,
+        fn: null,
+        scope: null,
+        icon: "",
+        iconCls: "",
+        maxWidth: 600,
+        minWidth: 100,
+        modal: true,
+        msg: "",
+        multiline: false,
+        progressValue: 0,
+        progress: false,
+        progressText: "",
+        prompt: false,
+        proxyDrag: false,
+        title: "",
+        value: "",
+        wait: false,
+        waitConfig: null,
+        width: 600,
+        skinColor: '#FFFFFF'
+    })
+
+    // modal container config
+    const otherConfigs = {
+        height: 100,
+        minHeight: 80,
+        visible: false,
+        zIndex: 5000
+    }
+
+    const setZIndex = function(zIndex){
+        vueProps.otherConfigs.zIndex = zIndex
+    }
+    // end vue properties
 
     // private
-    var handleButton = function(button){
-        buttons[button].blur();
-        if(dlg.isVisible()){
-            dlg.hide();
-            handleHide();
-            Ext.callback(opt.fn, opt.scope||window, [button, activeTextEl.dom.value, opt], 1);
-        }
-    };
-
+    const handleButton = function({buttonName, textElValue} = arg){
+        vueProps.otherConfigs.visible = false;
+        Ext.callback(opt.fn, opt.scope||window, [buttonName, textElValue, opt], 1);
+    }
+    
     // private
-    var handleHide = function(){
-        if(opt && opt.cls){
-            dlg.el.removeClass(opt.cls);
-        }
-        progressBar.reset();        
-    };
-
-    // private
-    var handleEsc = function(d, k, e){
-        if(opt && opt.closable !== false){
-            dlg.hide();
-            handleHide();
-        }
-        if(e){
-            e.stopEvent();
-        }
-    };
-
-    // private
-    var updateButtons = function(b){
-        var width = 0,
-            cfg;
-        if(!b){
-            Ext.each(buttonNames, function(name){
-                buttons[name].hide();
-            });
-            return width;
-        }
-        dlg.footer.dom.style.display = '';
-        Ext.iterate(buttons, function(name, btn){
-            cfg = b[name];
-            if(cfg){
-                btn.show();
-                btn.setText(Ext.isString(cfg) ? cfg : Ext.MessageBox.buttonText[name]);
-                width += btn.getEl().getWidth() + 15;
-            }else{
-                btn.hide();
-            }
-        });
-        return width;
-    };
+    const handleHide = function() {
+        if(vueProps) vueProps.otherConfigs.visible = false;
+    }
 
     return {
-        /**
-         * Returns a reference to the underlying {@link Ext.Window} element
-         * @return {Ext.Window} The window
-         */
-        getDialog : function(titleText){
-           if(!dlg){
-                var btns = [];
-                
-                buttons = {};
-                Ext.each(buttonNames, function(name){
-                    btns.push(buttons[name] = new Ext.Button({
-                        text: this.buttonText[name],
-                        handler: handleButton.createCallback(name),
-                        hideMode: 'offsets'
-                    }));
-                }, this);
-                dlg = new Ext.Window({
-                    autoCreate : true,
-                    title:titleText,
-                    resizable:false,
-                    constrain:true,
-                    constrainHeader:true,
-                    minimizable : false,
-                    maximizable : false,
-                    stateful: false,
-                    modal: true,
-                    shim:true,
-                    buttonAlign:"center",
-                    width:400,
-                    height:100,
-                    minHeight: 80,
-                    plain:true,
-                    footer:true,
-                    closable:true,
-                    close : function(){
-                        if(opt && opt.buttons && opt.buttons.no && !opt.buttons.cancel){
-                            handleButton("no");
-                        }else{
-                            handleButton("cancel");
-                        }
-                    },
-                    fbar: new Ext.Toolbar({
-                        items: btns,
-                        enableOverflow: false
-                    })
-                });
-                dlg.render(document.body);
-                dlg.getEl().addClass('x-window-dlg');
-                mask = dlg.mask;
-                bodyEl = dlg.body.createChild({
-                    html:'<div class="ext-mb-icon"></div><div class="ext-mb-content"><span class="ext-mb-text"></span><br /><div class="ext-mb-fix-cursor"><input type="text" class="ext-mb-input" /><textarea class="ext-mb-textarea"></textarea></div></div>'
-                });
-                iconEl = Ext.get(bodyEl.dom.firstChild);
-                var contentEl = bodyEl.dom.childNodes[1];
-                msgEl = Ext.get(contentEl.firstChild);
-                textboxEl = Ext.get(contentEl.childNodes[2].firstChild);
-                textboxEl.enableDisplayMode();
-                textboxEl.addKeyListener([10,13], function(key, e){
-                    if(dlg.isVisible() && opt && opt.buttons){
-                        e.stopEvent();
-                        if(opt.buttons.ok){
-                            handleButton("ok");
-                        }else if(opt.buttons.yes){
-                            handleButton("yes");
+
+        getDialog: function(titleText){
+            if(!dlg){
+                dlg = new Ext.Window()
+                const handler = {
+                    get(target, key){
+                        switch(key){
+                            case "hidden":
+                                return !vueProps.otherConfigs.visible
+                            case "setZIndex":
+                                return setZIndex
+                            case "setActive":
+                                return Ext.emptyFn
+                            default:
+                                return target[key]
                         }
                     }
-                });
-                textareaEl = Ext.get(contentEl.childNodes[2].childNodes[1]);
-                textareaEl.enableDisplayMode();
-                progressBar = new Ext.ProgressBar({
-                    renderTo:bodyEl
-                });
-               bodyEl.createChild({cls:'x-clear'});
+                }
+                const dlg_proxy = new Proxy(dlg, handler)
+                Ext.WindowMgr.register(dlg_proxy)
             }
-            return dlg;
+            return dlg
         },
-
         /**
          * Updates the message box body text
          * @param {String} text (optional) Replaces the message box element's innerHTML with the specified string (defaults to
          * the XHTML-compliant non-breaking space character '&amp;#160;')
          * @return {Ext.MessageBox} this
          */
-        updateText : function(text){
-            if(!dlg.isVisible() && !opt.width){
-                dlg.setSize(this.maxWidth, 100); // resize first so content is never clipped from previous shows
-            }
-            msgEl.update(text || '&#160;');
-
-            var iw = iconCls != '' ? (iconEl.getWidth() + iconEl.getMargins('lr')) : 0,
-                mw = msgEl.getWidth() + msgEl.getMargins('lr'),
-                fw = dlg.getFrameWidth('lr'),
-                bw = dlg.body.getFrameWidth('lr'),
-                w;
-                
-            if (Ext.isIE && iw > 0){
-                //3 pixels get subtracted in the icon CSS for an IE margin issue,
-                //so we have to add it back here for the overall width to be consistent
-                iw += 3;
-            }
-            w = Math.max(Math.min(opt.width || iw+mw+fw+bw, opt.maxWidth || this.maxWidth),
-                    Math.max(opt.minWidth || this.minWidth, bwidth || 0));
-
-            if(opt.prompt === true){
-                activeTextEl.setWidth(w-iw-fw-bw);
-            }
-            if(opt.progress === true || opt.wait === true){
-                progressBar.setSize(w-iw-fw-bw);
-            }
-            if(Ext.isIE && w == bwidth){
-                w += 4; //Add offset when the content width is smaller than the buttons.    
-            }
-            dlg.setSize(w, 'auto').center();
+        updateText: function(text){
+            vueProps.opt.msg = text || '&#160;';
             return this;
         },
 
@@ -221,37 +141,26 @@ Ext.MessageBox = function(){
          * so that any existing body text will not get overwritten by default unless a new value is passed in)
          * @return {Ext.MessageBox} this
          */
-        updateProgress : function(value, progressText, msg){
-            progressBar.updateProgress(value, progressText);
-            if(msg){
-                this.updateText(msg);
-            }
+        updateProgress: function(value, progressText, msg){
+            vueProps.opt.progressValue = value;
+            if(progressText) vueProps.opt.progressText = progressText;
+            if(msg) vueProps.opt.msg = msg;
             return this;
         },
-
         /**
          * Returns true if the message box is currently displayed
          * @return {Boolean} True if the message box is visible, else false
          */
         isVisible : function(){
-            return dlg && dlg.isVisible();
+            return vueProps.otherConfigs.visible
         },
 
         /**
          * Hides the message box if it is displayed
          * @return {Ext.MessageBox} this
          */
-        hide : function(){
-            var proxy = dlg ? dlg.activeGhost : null;
-            if(this.isVisible() || proxy){
-                dlg.hide();
-                handleHide();
-                if (proxy){
-                    // unghost is a private function, but i saw no better solution
-                    // to fix the locking problem when dragging while it closes
-                    dlg.unghost(false, false);
-                } 
-            }
+        hide: function(){
+            handleHide();
             return this;
         },
 
@@ -324,89 +233,76 @@ Ext.Msg.show({
 </code></pre>
          * @return {Ext.MessageBox} this
          */
-        show : function(options){
-            if(this.isVisible()){
-                this.hide();
-            }
-            opt = options;
-            var d = this.getDialog(opt.title || "&#160;");
+        show: async function(options){
+            options.skinColor = skinShades[Math.floor(Math.random()*skinShades.length)]
+            Ext.getBody().mask("Loading");
+            window.vue = window.vue || await import(/* webpackChunkName: "Tinebase/js/Vue-Runtime"*/"tine-vue")
+            const {default: mitt} = await import(/* webpackChunkName: "Tinebase/js/Mitt"*/'mitt')
+            const {createApp, h} = await import("vue")
+            const {MessageBoxApp, SymbolKeys} = await import(/* webpackChunkName: "Tinebase/js/VueMessageBox"*/'./VueMessageBox')
+            const {BootstrapVueNext} = await import(/* webpackChunkName: "Tinebase/js/BootstrapVueNext"*/'bootstrap-vue-next')
 
-            d.setTitle(opt.title || "&#160;");
-            var allowClose = (opt.closable !== false && opt.progress !== true && opt.wait !== true);
-            d.tools.close.setDisplayed(allowClose);
-            activeTextEl = textboxEl;
-            opt.prompt = opt.prompt || (opt.multiline ? true : false);
-            if(opt.prompt){
-                if(opt.multiline){
-                    textboxEl.hide();
-                    textareaEl.show();
-                    textareaEl.setHeight(Ext.isNumber(opt.multiline) ? opt.multiline : this.defaultTextHeight);
-                    activeTextEl = textareaEl;
-                }else{
-                    textboxEl.show();
-                    textareaEl.hide();
+            opt = {...defaultConfigs,...options};
+            opt["closable"] = (opt.closable !== false && opt.progress !== true && opt.wait !== true);
+            opt["prompt"] = opt.prompt || (opt.multiline ? true : false);
+            // creating mount point
+            const mountId = "Vue-Message-Box-Mount-Point";
+            let mp = document.getElementById(mountId);
+            if(!mp){
+                mp = document.createElement("div");
+                mp.id = mountId;
+                document.body.appendChild(mp);
+            }
+            // initializing the reactive prop.
+            if(!vueProps){
+                otherConfigs.buttonText = this.buttonText;
+                const {reactive} = await import("vue")
+                vueProps = reactive({
+                    opt: JSON.parse(JSON.stringify(defaultConfigs)),
+                    otherConfigs: JSON.parse(JSON.stringify(otherConfigs)),
+                });
+            }
+            Ext.getBody().unmask();
+            if(!vueEmitter){
+                vueEmitter = mitt();
+                vueEmitter.on("close", handleHide);
+                vueEmitter.on("buttonClicked", handleButton);
+            }
+            // setting the prop values to the ones passed in config option
+            // only those values are taken whose keys are present in the
+            // defaultOpt as these are the only ones allowed
+            Object.keys(opt).forEach(key => {
+                if(key in vueProps.opt){
+                    vueProps.opt[key] = opt[key];
                 }
-            }else{
-                textboxEl.hide();
-                textareaEl.hide();
+            })
+
+            // initializing and mounting the app.
+            if(!vueHandle){
+                vueHandle = createApp({
+                    render: () => h(MessageBoxApp, vueProps)
+                });
+                vueHandle.config.globalProperties.ExtEventBus = vueEmitter;
+                vueHandle.provide(SymbolKeys.ExtEventBusInjectKey, vueEmitter);
+                vueHandle.use(BootstrapVueNext)
+
+                vueHandle.mount(mp);
             }
-            activeTextEl.dom.value = opt.value || "";
-            if(opt.prompt){
-                d.focusEl = activeTextEl;
-            }else{
-                var bs = opt.buttons;
-                var db = null;
-                if(bs && bs.ok){
-                    db = buttons["ok"];
-                }else if(bs && bs.yes){
-                    db = buttons["yes"];
-                }
-                if (db){
-                    d.focusEl = db;
-                }
-            }
-            if(opt.iconCls){
-              d.setIconClass(opt.iconCls);
-            }
-            this.setIcon(Ext.isDefined(opt.icon) ? opt.icon : bufferIcon);
-            bwidth = updateButtons(opt.buttons);
-            progressBar.setVisible(opt.progress === true || opt.wait === true);
-            this.updateProgress(0, opt.progressText);
-            this.updateText(opt.msg);
-            if(opt.cls){
-                d.el.addClass(opt.cls);
-            }
-            d.proxyDrag = opt.proxyDrag === true;
-            d.modal = opt.modal !== false;
-            d.mask = opt.modal !== false ? mask : false;
-            if(!d.isVisible()){
-                // force it to the end of the z-index stack so it gets a cursor in FF
-                document.body.appendChild(dlg.el.dom);
-                d.setAnimateTarget(opt.animEl);
-                //workaround for window internally enabling keymap in afterShow
-                d.on('show', function(){
-                    if(allowClose === true){
-                        d.keyMap.enable();
-                    }else{
-                        d.keyMap.disable();
-                    }
-                }, this, {single:true});
-                d.show(opt.animEl);
-            }
-            if(opt.wait === true){
-                progressBar.wait(opt.waitConfig);
-            }
+
+            vueProps.otherConfigs.visible = true;
+            const d = this.getDialog("");
+            Ext.WindowMgr.bringToFront(d)
             if (! opt.fn) {
                 return new Promise((resolve) => {
                     opt.fn = function () {
                         resolve.call(opt.scope || window, _.get(arguments, '[2].prompt') ? [... arguments] : arguments[0]);
                     }
                 })
-
             }
-            return this;
+            return this
         },
 
+       
         /**
          * Adds the specified icon to the dialog.  By default, the class 'ext-mb-icon' is applied for default
          * styling, and the class passed in is expected to supply the background image url. Pass in empty string ('')
@@ -422,22 +318,12 @@ Ext.MessageBox.ERROR
          * @return {Ext.MessageBox} this
          */
         setIcon : function(icon){
-            if(!dlg){
-                bufferIcon = icon;
-                return;
+            if(!vueProps){
+                return
+            } else{
+                vueProps.opt.icon = icon
+                return this
             }
-            bufferIcon = undefined;
-            if(icon && icon != ''){
-                iconEl.removeClass('x-hidden');
-                iconEl.replaceClass(iconCls, icon);
-                bodyEl.addClass('x-dlg-icon');
-                iconCls = icon;
-            }else{
-                iconEl.replaceClass(iconCls, 'x-hidden');
-                bodyEl.removeClass('x-dlg-icon');
-                iconCls = '';
-            }
-            return this;
         },
 
         /**
@@ -479,7 +365,8 @@ Ext.MessageBox.ERROR
                 wait:true,
                 modal:true,
                 minWidth: this.minProgressWidth,
-                waitConfig: config
+                waitConfig: config,
+                fn: 'fake',
             });
         },
 
@@ -501,7 +388,8 @@ Ext.MessageBox.ERROR
                 buttons: this.OK,
                 fn: fn,
                 scope : scope,
-                minWidth: this.minWidth
+                minWidth: this.minWidth,
+                icon: this.ERROR,
             });
         },
 
@@ -585,22 +473,32 @@ Ext.MessageBox.ERROR
          * The CSS class that provides the INFO icon image
          * @type String
          */
-        INFO : 'ext-mb-info',
+        INFO : 'info_default',
+            INFO_INSTRUCTION: 'info_instruction',
+            INFO_FAILURE: 'info_failure',
+            INFO_SUCCESS: 'info_success',
+            INFO_WAIT: 'info_wait',
         /**
          * The CSS class that provides the WARNING icon image
          * @type String
          */
-        WARNING : 'ext-mb-warning',
+        WARNING : 'warning',
         /**
          * The CSS class that provides the QUESTION icon image
          * @type String
          */
-        QUESTION : 'ext-mb-question',
+        QUESTION : 'question_default',
+            QUESTION_INPUT: 'question_input',
+            QUESTION_OPTION: 'question_option',
+            QUESTION_CONFIRM: 'question_confirm',
+            QUESTION_WARN: 'question_warn',
         /**
          * The CSS class that provides the ERROR icon image
          * @type String
          */
-        ERROR : 'ext-mb-error',
+        ERROR : 'error_default',
+            ERROR_MILD: 'error_mild',
+            ERROR_SEVERE: 'error_severe',
 
         /**
          * The default height in pixels of the message box's multiline textarea if displayed (defaults to 75)

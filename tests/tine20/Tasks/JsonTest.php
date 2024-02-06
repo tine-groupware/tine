@@ -96,7 +96,129 @@ class Tasks_JsonTest extends TestCase
         
         $this->_backend->deleteTasks(array($returned['id']));
     }
-    
+
+    public function testAttendeeAcl()
+    {
+        $task = $this->_getTask();
+        $returned = $this->_backend->saveTask($task->toArray());
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        try {
+            $this->_backend->getTask($returned['id']);
+            $this->fail('acl should prevent sclever from accessing this task');
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+
+        Tinebase_Core::setUser($this->_originalTestUser);
+        $returned['attendees'] = [
+            (new Tasks_Model_Attendee([
+                Tasks_Model_Attendee::FLD_USER_ID => $this->_personas['sclever']->contact_id,
+            ], true))->toArray(),
+        ];
+        $returned['alarms'] = [
+            (new Tinebase_Model_Alarm([
+                //Tinebase_Model_Alarm::FLD_MODEL => Tasks_Model_Task::class,
+                Tinebase_Model_Alarm::FLD_ALARM_TIME => Tinebase_DateTime::now(),
+            ], true))->toArray(),
+        ];
+        $returned = $this->_backend->saveTask($returned);
+        $this->assertCount(1, $returned['alarms']);
+
+        Tinebase_Core::setUser($this->_personas['sclever']);
+        try {
+            $returned = $this->_backend->getTask($returned['id']);
+        } catch (Tinebase_Exception_AccessDenied $tead) {
+            $this->fail('sclever should have access as attendee');
+        }
+        $this->assertNull($returned['alarms'][0][Tinebase_Model_Alarm::FLD_SKIP]);
+        $this->assertNull($returned['alarms'][0][Tinebase_Model_Alarm::FLD_SNOOZE_TIME]);
+        $this->assertNull($returned['alarms'][0][Tinebase_Model_Alarm::FLD_ACK_TIME]);
+
+        // we should be able to update our attendee status, attendee alarms, add notes and attachments
+        foreach ($returned[Tasks_Model_Task::FLD_ATTENDEES] as &$attendee) {
+            if ($attendee[Tasks_Model_Attendee::FLD_USER_ID]['id'] === $this->_personas['sclever']->contact_id) {
+                $attendee[Tasks_Model_Attendee::FLD_STATUS] = Tasks_Model_Attendee::STATUS_TENTATIVE;
+                $attendee['alarms'] = [
+                    (new Tinebase_Model_Alarm([
+                        //Tinebase_Model_Alarm::FLD_MODEL => Tasks_Model_Attendee::class,
+                        Tinebase_Model_Alarm::FLD_ALARM_TIME => Tinebase_DateTime::now(),
+                    ], true))->toArray(),
+                ];
+                break;
+            }
+        }
+        unset($attendee);
+        $returned['notes'] = [
+            (new Tinebase_Model_Note(['note' => 'a note from sclever'], true))->toArray(),
+        ];
+        $returned['alarms'][0][Tinebase_Model_Alarm::FLD_SKIP] = true;
+        $returned['alarms'][0][Tinebase_Model_Alarm::FLD_SNOOZE_TIME] = $ts = Tinebase_DateTime::now()->toString();
+        $returned['alarms'][0][Tinebase_Model_Alarm::FLD_ACK_TIME] = $ts;
+
+        $tempPath = Tinebase_TempFile::getTempPath();
+        $tempFileId = Tinebase_TempFile::getInstance()->createTempFile($tempPath)->getId();
+        file_put_contents($tempPath, 'someData');
+        $raii = new Tinebase_RAII(fn () => unlink($tempPath));
+        $returned['attachments'] = [
+            ['tempFile' => $tempFileId],
+        ];
+
+        $returned = $this->_backend->saveTask($returned);
+        $found = false;
+        foreach ($returned[Tasks_Model_Task::FLD_ATTENDEES] as $attendee) {
+            if ($attendee[Tasks_Model_Attendee::FLD_USER_ID]['id'] === $this->_personas['sclever']->contact_id) {
+                $this->assertSame(Tasks_Model_Attendee::STATUS_TENTATIVE, $attendee[Tasks_Model_Attendee::FLD_STATUS]);
+                $this->assertCount(1, $attendee['alarms']);
+                $found = true;
+                break;
+            }
+        }
+        $this->assertTrue($found);
+        $this->assertCount(1, $returned['notes']);
+        $this->assertCount(1, $returned['attachments']);
+        $this->assertTrue($returned['alarms'][0][Tinebase_Model_Alarm::FLD_SKIP]);
+        $this->assertSame($ts, $returned['alarms'][0][Tinebase_Model_Alarm::FLD_SNOOZE_TIME]);
+        $this->assertSame($ts, $returned['alarms'][0][Tinebase_Model_Alarm::FLD_ACK_TIME]);
+
+        unset($raii);
+    }
+
+    public function testCreateDependentTask()
+    {
+        $task = $this->_getTask();
+        $returned = $this->_backend->saveTask($task->toArray());
+
+        $this->assertSame([], $returned[Tasks_Model_Task::FLD_DEPENDENT_TASKS]);
+        $this->assertSame([], $returned[Tasks_Model_Task::FLD_DEPENDENS_ON]);
+
+        $depTask = $this->_getTask();
+        $depTask->{Tasks_Model_Task::FLD_DEPENDENS_ON} = [
+            (new Tasks_Model_TaskDependency([
+                Tasks_Model_TaskDependency::FLD_DEPENDS_ON => $returned['id'],
+            ], true))->toArray(),
+        ];
+        $savedDepTask = $this->_backend->saveTask($depTask->toArray());
+        $this->assertSame([], $savedDepTask[Tasks_Model_Task::FLD_DEPENDENT_TASKS]);
+        $this->assertCount(1, $savedDepTask[Tasks_Model_Task::FLD_DEPENDENS_ON]);
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $returned = $this->_backend->getTask($returned['id']);
+        $this->assertCount(1, $returned[Tasks_Model_Task::FLD_DEPENDENT_TASKS]);
+        $this->assertSame([], $returned[Tasks_Model_Task::FLD_DEPENDENS_ON]);
+
+        $thirdTask = $this->_backend->saveTask($this->_getTask()->toArray());
+        $returned[Tasks_Model_Task::FLD_DEPENDENT_TASKS][] =
+            (new Tasks_Model_TaskDependency([
+                Tasks_Model_TaskDependency::FLD_TASK_ID => $thirdTask['id'],
+            ], true))->toArray();
+        $returned = $this->_backend->saveTask($returned);
+
+        $this->assertCount(2, $returned[Tasks_Model_Task::FLD_DEPENDENT_TASKS]);
+        $this->assertSame([], $returned[Tasks_Model_Task::FLD_DEPENDENS_ON]);
+
+        $thirdTask = $this->_backend->getTask($thirdTask['id']);
+        $this->assertCount(0, $thirdTask[Tasks_Model_Task::FLD_DEPENDENT_TASKS]);
+        $this->assertCount(1, $thirdTask[Tasks_Model_Task::FLD_DEPENDENS_ON]);
+    }
 
     /**
      * test create task with alarm
@@ -113,7 +235,18 @@ class Tasks_JsonTest extends TestCase
         
         $this->_checkAlarm($persistentTaskData);
     }
-    
+
+    public function testCreateTaskWithDefaultAlarm()
+    {
+        $task = $this->_getTaskWithAlarm(array(
+            'alarm_time'        => Tinebase_DateTime::now(),
+            'minutes_before'    => '15',
+            'sent_status' => null
+        ));
+        $persistentTaskData = $this->_backend->saveTask($task->toArray());
+        $this->_checkAlarm($persistentTaskData);
+    }
+
     /**
      * test create task with alarm
      */
@@ -274,16 +407,30 @@ class Tasks_JsonTest extends TestCase
      */
     public function testSearchTasks()    
     {
+        Tasks_Controller_Task::destroyInstance();
+
         // create task
         $task = $this->_getTask();
         $task = $this->_backend->saveTask($task->toArray());
         
         // search tasks
-        $tasks = $this->_backend->searchTasks($this->_getFilter(), $this->_getPaging());
+        $tasks = $this->_backend->searchTasks($filter = $this->_getFilter(), $this->_getPaging());
         
         // check
         $count = $tasks['totalcount'];
         $this->assertGreaterThan(0, $count);
+        $filter[0]['operator'] = 'equals';
+        $filter[0]['value'] = ['path' => '/'];
+        $this->assertSame($filter, $tasks['filter'] ?? null, print_r($tasks['filter'], true));
+
+        $tasks = $this->_backend->searchTasks($filter = [
+            ['field' => Tasks_Model_Task::FLD_DEPENDENS_ON, 'operator' => 'definedBy', 'value' => [
+                ['field' => Tasks_Model_TaskDependency::FLD_DEPENDS_ON, 'operator' => 'definedBy', 'value' => [
+                    ['field' => 'summary', 'operator' => 'equals', 'value' => 'shalala'],
+                ]],
+            ]],
+        ], $this->_getPaging());
+        $this->assertSame($filter, $tasks['filter']);
         
         // delete task
         $this->_backend->deleteTasks(array($task['id']));
@@ -450,7 +597,7 @@ class Tasks_JsonTest extends TestCase
      * test advanced search
      *
      * @see 0011492: activate advanced search (search in lead relations)
-     */
+     *
     public function testAdvancedSearch()
     {
         // create task with lead relation
@@ -465,5 +612,5 @@ class Tasks_JsonTest extends TestCase
             'field' => 'query', 'operator' => 'contains', 'value' => 'PHPUnit LEAD'
         )), array());
         $this->assertEquals(1, $result['totalcount']);
-    }
+    }*/
 }

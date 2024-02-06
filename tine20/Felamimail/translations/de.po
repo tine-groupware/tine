@@ -641,12 +641,6 @@ msgstr "Ordner als gelesen markieren"
 msgid "Update Folder List"
 msgstr "Ordnerliste aktualisieren"
 
-msgid "Update Folder"
-msgstr "Ordner aktualisieren"
-
-msgid "Folder cache has been cleared!"
-msgstr "Der Ordner Cache wurde geleert!"
-
 #: js/TreeContextMenu.js:252 js/AccountEditDialog.js:288
 msgid "Approve Migration"
 msgstr "Migration freigeben"
@@ -868,6 +862,12 @@ msgstr "Bcc:"
 #: js/RecipientGrid.js:393
 msgid "Remove"
 msgstr "Entfernen"
+
+msgid "The following recipients will be removed from this mass mail"
+msgstr "Die folgenden Empfänger werden von dieser Massen Mail entfernt"
+
+msgid "Send message to individual list members instead"
+msgstr "Sende eigene Kopie der E-Mail zu jeden Empfänger"
 
 #: js/sieve/RuleConditionsPanel.js:70 js/Model.js:220 js/GridPanel.js:516
 msgid "From (Email)"
@@ -2098,8 +2098,52 @@ msgstr "Ordner der Ursprungsmail wenn dieser kein Systemordner ist."
 msgid "Reveal Password?"
 msgstr "Passwort anzeigen?"
 
-msgid "You are about to reveal the password. This action will be logged. Proceed?"
-msgstr "Sie sind im Begriff, das Passwort anzeigen. Diese Aktion wird protokolliert. Wollen sie fortfahren?"
+msgid ""
+"You are about to reveal the password. This action will be logged. Proceed?"
+msgstr ""
+"Sie sind im Begriff, das Passwort anzeigen. Diese Aktion wird protokolliert. "
+"Wollen sie fortfahren?"
 
 msgid "Save To All Recipients"
 msgstr "An allen Empfängern speichern"
+
+msgid "Update Folder"
+msgstr "Ordner aktualisieren"
+
+msgid "Folder cache has been cleared!"
+msgstr "Der Ordner Cache wurde geleert!"
+
+msgid "Subject/From"
+msgstr "Betreff/Von"
+
+msgid "Edit Sieve custom script"
+msgstr "Benutzerdefniertes Sieve-Skript bearbeiten"
+
+msgid "Agree that this account can be transferred to other users"
+msgstr ""
+"Zustimmen, dass dieses Konto zu anderen Benutzern übertragen werden darf"
+
+msgid ""
+"I hereby agree that this mailbox may be converted to a shared mailbox or "
+"transferred to another user."
+msgstr ""
+"Hiermit willige ich ein, dass dieses Postfach zu einem gemeinsamen "
+"Postfach umgewandelt oder einem anderen Benutzer übertragen werden darf."
+
+msgid "Forward and forwarded email as .eml in attachment"
+msgstr "Weiterleitung und weitergeleitete eMail als .eml im Anhang"
+
+msgid "Only forwarded email as .eml in attachment"
+msgstr "Nur weitergeleitete email als .eml im Anhang"
+
+msgid "Save copy of sent mail on mail server."
+msgstr "Kopie von gesendeter Mail auf dem Mailserver speichern."
+
+msgid "Behavior of sent mails"
+msgstr "Ablageort für gesendete Mails"
+
+msgid "E-mail usage"
+msgstr "E-Mail-Nutzung"
+
+msgid "Size (in byte)"
+msgstr "Größe (in Byte)"

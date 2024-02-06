@@ -83,11 +83,11 @@ class Sales_Import_Contract_Csv extends Tinebase_Import_Csv_Abstract
                     $result['relations'] = array(
                         array(
                             'own_model' => 'Sales_Model_Contract',
-                            'own_backend' => Tasks_Backend_Factory::SQL,
+                            'own_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                             'own_id' => NULL,
                             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                             'related_model' => 'Sales_Model_Customer',
-                            'related_backend' => Tasks_Backend_Factory::SQL,
+                            'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                             'related_id' => $customer_id,
                             'type' => 'CUSTOMER'
                         ));
@@ -120,11 +120,11 @@ class Sales_Import_Contract_Csv extends Tinebase_Import_Csv_Abstract
                     $result['relations'][] =
                         array(
                             'own_model' => Sales_Model_Contract::class,
-                            'own_backend' => Tasks_Backend_Factory::SQL,
+                            'own_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                             'own_id' => NULL,
                             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                             'related_model' => Tinebase_Model_CostCenter::class,
-                            'related_backend' => Tasks_Backend_Factory::SQL,
+                            'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                             'related_id' => $costCenter['id'],
                             'type' => 'LEAD_COST_CENTER'
                         );
@@ -149,11 +149,11 @@ class Sales_Import_Contract_Csv extends Tinebase_Import_Csv_Abstract
                 if ($user['n_fileas'] == $result['contract_ex']) {
                     $result['relations'][] = array(
                         'own_model' => 'Sales_Model_Contract',
-                        'own_backend' => Tasks_Backend_Factory::SQL,
+                        'own_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                         'own_id' => NULL,
                         'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                         'related_model' => 'Addressbook_Model_Contact',
-                        'related_backend' => Tasks_Backend_Factory::SQL,
+                        'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                         'related_id' => $user['id'],
                         'type' => 'CUSTOMER'
                     );
@@ -161,11 +161,11 @@ class Sales_Import_Contract_Csv extends Tinebase_Import_Csv_Abstract
                 if ($user['n_fileas'] == $result['contract_in']) {
                     $result['relations'][] = array(
                         'own_model' => 'Sales_Model_Contract',
-                        'own_backend' => Tasks_Backend_Factory::SQL,
+                        'own_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                         'own_id' => NULL,
                         'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
                         'related_model' => 'Addressbook_Model_Contact',
-                        'related_backend' => Tasks_Backend_Factory::SQL,
+                        'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                         'related_id' => $user['id'],
                         'type' => 'RESPONSIBLE'
                     );

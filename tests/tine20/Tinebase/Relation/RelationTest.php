@@ -104,7 +104,7 @@ class Tinebase_Relation_RelationTest extends TestCase
                 'own_id'                 => $this->_crmId['id'],
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Tasks_Model_Task',
-                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id'             => Tinebase_Record_Abstract::generateUID(),
                 'type'                   => 'CRM_TASK'
             ),
@@ -397,7 +397,7 @@ class Tinebase_Relation_RelationTest extends TestCase
      */
     public function testRemoveRelationsByAppACL()
     {
-        Tasks_Controller_Task::unsetInstance();
+        Tasks_Controller_Task::destroyInstance();
         Tinebase_Core::clearAppInstanceCache();
         $this->_removeRoleRight('Tasks', Crm_Acl_Rights::RUN);
         $relations = $this->_object->getRelations($this->_crmId['model'], $this->_crmId['backend'], $this->_crmId['id']);

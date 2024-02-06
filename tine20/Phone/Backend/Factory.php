@@ -5,7 +5,7 @@
  * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,13 +15,6 @@
  */
 class Phone_Backend_Factory
 {
-    /**
-     * object instance
-     *
-     * @var Addressbook_Backend_Factory
-     */
-    private static $_instance = NULL;
-    
     /**
      * backend object instances
      */

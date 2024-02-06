@@ -574,6 +574,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
     public function setMasterPassword($username, $password, $type = 'sieve')
     {
         $this->checkMasterUserTable();
+
         $data = [
             'username' => $username,
             'password' => Hash_Password::generate($this->_config['emailScheme'], $password),
@@ -581,9 +582,15 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
         ];
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-            . __LINE__ . ' Add new ' . $type . ' master user: ' . $username);
+            . __LINE__ . ' Add new "' . $type . '" master user: ' . $username);
 
-        $this->_db->insert($this->_masterUserTable, $data);
+        $select = $this->_db->select()->from(array($this->_masterUserTable), 'username')->where('username = ?', $username);
+        $result = $select->query()->fetchAll(Zend_Db::FETCH_COLUMN, 0);
+        if (count($result) === 1) {
+            $this->_db->update($this->_masterUserTable, $data,  $this->_db->quoteInto($this->_db->quoteIdentifier('username') . ' = ?', $username));
+        } else {
+            $this->_db->insert($this->_masterUserTable, $data);
+        }
     }
 
     public function removeMasterPassword($username)
@@ -593,8 +600,12 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Sql implements 
             $this->_db->quoteInto($this->_db->quoteIdentifier('username') . ' = ?', $username)
         );
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-            . __LINE__ . ' Remove master user: ' . $username);
+        try {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                . __LINE__ . ' Remove master user: ' . $username);
+        } catch (Throwable $t) {
+            // logger writers might already been shut down
+        }
 
         $this->_db->delete($this->_masterUserTable, $where);
     }

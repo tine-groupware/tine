@@ -24,12 +24,15 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
                 ],
             ],
             Admin_Model_SchedulerTask::FLD_CRON         => '* * * * *',
+            Admin_Model_SchedulerTask::FLD_EMAILS       => Tinebase_Core::getUser()->accountEmailAddress,
         ]);
         $createdTask = Admin_Controller_SchedulerTask::getInstance()->create($task);
 
         $this->assertSame($task->{Admin_Model_SchedulerTask::FLD_CRON}, $createdTask->{Admin_Model_SchedulerTask::FLD_CRON});
         $this->assertSame($task->{Admin_Model_SchedulerTask::FLD_CONFIG_CLASS}, $createdTask->{Admin_Model_SchedulerTask::FLD_CONFIG_CLASS});
         $this->assertSame($createdTask->getId(), $createdTask->{Admin_Model_SchedulerTask::FLD_CONFIG}->{Admin_Model_SchedulerTask_Abstract::FLD_PARENT_ID});
+        $this->assertSame($task->{Admin_Model_SchedulerTask::FLD_EMAILS}, $createdTask->{Admin_Model_SchedulerTask::FLD_EMAILS});
+
         $this->assertNull($createdTask->last_run);
         $this->assertEquals('0', $createdTask->failure_count);
 
@@ -41,5 +44,14 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
         $runTask = Admin_Controller_SchedulerTask::getInstance()->get($createdTask->getId());
         $this->assertNotNull($runTask->last_run, print_r($runTask->toArray(), true));
         $this->assertEquals('0', $runTask->failure_count);
+    }
+    
+    public function testSearchSchedulerTask()
+    {
+        $result = Admin_Controller_SchedulerTask::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Admin_Model_SchedulerTask::class, [
+            ['field' => 'query', 'operator' => 'contains', 'value' => 'task']
+        ]), new Tinebase_Model_Pagination(['sort' => 'name', 'dir' => 'desc']));
+        $this->assertNotNull($result);
     }
 }

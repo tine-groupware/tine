@@ -49,16 +49,19 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
         let editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(this.field.recordClass);
 
         if (editDialogClass) {
-            const record = this.field.selectedRecord || Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.field.recordClass.getDefaultData(), await this.getRecordDefaults()), this.field.recordClass);
-            const mode = this.editDialogMode ?? editDialogClass.prototype.mode;
+            const record = this.field.selectedRecord || Object.assign(Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.field.recordClass.getDefaultData(), await this.getRecordDefaults()), this.field.recordClass), {phantom: true});
+            const mode = this.editDialogMode ?? this.editDialogConfig?.mode ?? editDialogClass.prototype.mode;
 
             if (!this.field.selectedRecord && mode === 'remote') {
                 // prevent loading non existing remote record
                 record.setId(0);
             }
-
-            editDialogClass.openWindow({mode, record,
+            if (this.attachments) {
+                record.set('attachments', this.attachments);
+            }
+            editDialogClass.openWindow(Object.assign({mode, record,
                 recordId: record.getId(),
+                needsUpdateEvent: true,
                 listeners: {
                     scope: this,
                     'update': (updatedRecord) => {
@@ -82,7 +85,7 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
                         }, 100);
                     }
                 }
-            });
+            }, this.editDialogConfig || {}));
         }
     }
 }

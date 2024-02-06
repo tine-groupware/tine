@@ -45,6 +45,7 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
         $this->_locale = new Zend_Locale($lang);
         Sales_Model_DocumentPosition_Abstract::setExportContextLocale($this->_locale);
         $this->_translate = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME, $this->_locale);
+        $config = Sales_Config::getInstance();
 
         if (null !== ($overwriteTemplate = $this->_findOverwriteTemplate($this->_templateFileName, [
                     $lang => null,
@@ -76,6 +77,13 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
             'VATS' => $vats,
             'POSTVATS' => $this->_records,
         ];
+
+
+        if ($record->has(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE) &&
+            $record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} === Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE) {
+            $templates = $config->{Sales_Config::REVERSE_CHANGE_TEMPLATE};
+            $record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} = $templates[$lang] ?? $templates[$config->{Sales_Config::LANGUAGES_AVAILABLE}->default];
+        }
 
         parent::_loadTwig();
     }

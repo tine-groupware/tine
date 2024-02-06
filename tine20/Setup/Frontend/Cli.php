@@ -96,7 +96,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $this->_installDump($_opts);
         } elseif(isset($_opts->maintenance_mode)) {
             $this->_maintenanceMode($_opts);
-        } elseif(isset($_opts->list)) {
+        } elseif(isset($_opts->list) || isset($_opts->version)) {
             $result = $this->_listInstalled();
         } elseif(isset($_opts->sync_accounts_from_ldap)) {
             $this->_importAccounts($_opts);
@@ -132,6 +132,8 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $this->_deleteLicense();
         } elseif(isset($_opts->compare)) {
             $this->_compare($_opts);
+        } elseif(isset($_opts->createmissingtables)) {
+            $this->_createmissingtables($_opts);
         } elseif(isset($_opts->mysql)) {
             $this->_mysqlClient($_opts);
         } elseif(isset($_opts->setpassword)) {
@@ -301,7 +303,6 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         Setup_Backend_Factory::clearCache();
         Tinebase_User::destroyInstance();
         Setup_Core::set(Setup_Core::USER, 'setupuser');
-        Addressbook_Backend_Factory::clearCache();
         Addressbook_Controller_Contact::destroyInstance();
         $dbConfig['driver'] = 'pdo_mysql';
         $dbConfig['user']   = $dbConfig['username'];
@@ -737,10 +738,22 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         echo 'Version: "' . TINE20_CODENAME . '" ' . TINE20_PACKAGESTRING . ' (Build: ' . TINE20_BUILDTYPE . ")\n";
+        if (Tinebase_Core::inMaintenanceModeAll()) {
+            echo 'Maintenance Mode : ALL' . PHP_EOL;
+        } else if (Tinebase_Core::inMaintenanceMode()) {
+            echo 'Maintenance Mode : ON' . PHP_EOL;
+        }
         echo "Currently installed applications:\n";
         $applications->sort('name');
         foreach ($applications as $application) {
-            echo "* " . $application->name . " (Version: " . $application->version . ") - " . $application->status . "\n";
+            try {
+                $maintenance = Tinebase_Core::getApplicationInstance(
+                    $application->name, '', true)->isInMaintenanceMode();
+                echo "* " . $application->name . " (Version: " . $application->version . ") - " . $application->status
+                    . ' (maintenance: ' . ($maintenance ? 'on' : 'off') . ")\n";
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                echo "* " . $application->name . " - disabled (" . $tead->getMessage() . ")\n";
+            }
         }
         
         return 0;
@@ -1194,7 +1207,16 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $flags = (array)($options[Tinebase_Config::MAINTENANCE_MODE_FLAGS] ?? []);
 
-        if (!in_array(Tinebase_Config::MAINTENANCE_MODE_FLAG_SKIP_APPS, $flags)) {
+        $licenseProblem = false;
+        try {
+            Tinebase_License::getInstance()->isLicenseAvailable();
+        } catch (Exception $e) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            $licenseProblem = true;
+        }
+
+        if (! $licenseProblem && !in_array(Tinebase_Config::MAINTENANCE_MODE_FLAG_SKIP_APPS, $flags)) {
             $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
             if (isset($options['apps'])) {
                 $apps = (array)$options['apps'];
@@ -1245,7 +1267,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (Setup_Controller::getInstance()->setMaintenanceMode($options)) {
             echo PHP_EOL . 'set maintenance mode to: ' . $options['mode'] . PHP_EOL;
         } else {
-            echo PHP_EOL . 'failed to set maintance mode to: ' . $options['mode'] . PHP_EOL;
+            echo PHP_EOL . 'failed to set maintenance mode to: ' . $options['mode'] . PHP_EOL;
         }
 
         return 0;
@@ -1305,7 +1327,8 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public static function parseConfigValue($_value)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, TRUE));
         
         // check value is json encoded
         if (Tinebase_Helper::is_json($_value)) {
@@ -1633,21 +1656,11 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @param Zend_Console_Getopt $_opts
      * @return int
      *
-     * TODO add more platforms?
      * TODO use .my.cnf file? needs to be deleted afterwards (like in backup/restore)
      * TODO use better process control library? i.e. https://symfony.com/doc/current/components/process.html
      */
     protected function _mysqlClient(Zend_Console_Getopt $_opts)
     {
-        $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
-        if (! empty($options['platform'])) {
-            switch ($options['platform']) {
-                case 'docker': // maybe add "alpine"?
-                    // install mysql client if not available
-                    system('apk add mysql-client');
-            }
-        }
-
         $dbConf = Tinebase_Core::getConfig()->database;
         $command ='mysql -h ' . $dbConf->host . ' -p' . $dbConf->password . ' -u ' . $dbConf->username
             . ' ' . $dbConf->dbname;
@@ -1677,5 +1690,33 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         fclose($pipes[1]);
         fclose($pipes[2]);
         return proc_close($process);
+    }
+
+    /**
+     * create missing tables (for example cache tables that weren't restored from a dump)
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     * @throws Setup_Exception_NotFound
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    protected function _createmissingtables(Zend_Console_Getopt $_opts)
+    {
+        // run Schema tool -> should already create tables that might be missing
+        Setup_SchemaTool::updateAllSchema();
+
+        $setup = Setup_Controller::getInstance();
+        foreach (Tinebase_Application::getInstance()->getApplications() as $application) {
+            $xml = $setup->getSetupXml($application->name);
+            $tables = $setup->createXmlTables($xml);
+            if (count($tables) > 0) {
+                echo "Re-created tables for app " . $application->name . ":\n";
+                foreach ($tables as $table) {
+                    echo "- " . $table->name ."\n";
+                }
+            }
+        }
+
+        return 0;
     }
 }

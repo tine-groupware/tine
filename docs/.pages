@@ -1,0 +1,7 @@
+nav:
+  - index.md
+  - users
+  - admins
+  - operators
+  - developers
+  - ...

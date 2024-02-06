@@ -49,7 +49,7 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
         }
     },
 
-    init: function() {
+    init: async function() {
         this.updateIcon();
         Tine.Calendar.Application.superclass.init.apply(this.arguments);
 
@@ -67,12 +67,23 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
                 Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel().autoRefreshTask.delay(0);
             }
         }));
+
+        // We need to get all resources and store them in memory for default Data Creation
+        const searchResources = await Tine.Calendar.searchResources(null, 100);
+        this.calendarResources = searchResources.results.length > 0 ? searchResources.results : null;
     },
 
     registerCoreData: function() {
+        this.app = Tine.Tinebase.appMgr.get('Calendar');
+
         Tine.CoreData.Manager.registerGrid('cal_resources', Tine.Calendar.ResourceGridPanel, {
             ownActionToolbar: false,
         });
+
+
+        if (this.app.featureEnabled('featureEventType')) {
+            Tine.CoreData.Manager.registerGrid('cal_event_types', Tine.Calendar.EventTypeGridPanel);
+        }
     },
 
     updateIcon: function() {

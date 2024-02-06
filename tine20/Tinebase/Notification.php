@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Notification
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -85,9 +85,9 @@ class Tinebase_Notification
      * 
      * @todo improve exception handling: collect all messages / exceptions / failed email addresses / ...
      */
-    public function send($_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL, $_fireEvent = false)
+    public function send($_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachments = NULL, $_fireEvent = false, $_actionLogType = null)
     {
-        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $contactsBackend = new Addressbook_Backend_Sql();
         
         $exception = NULL;
         $sentContactIds = array();
@@ -107,7 +107,7 @@ class Tinebase_Notification
                     continue;
                 }
                 if (! in_array($recipient->getId(), $sentContactIds)) {
-                    $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachments);
+                    $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachments, $_fireEvent, $_actionLogType);
                     if ($recipient->getId()) {
                         $sentContactIds[] = $recipient->getId();
                     }
@@ -137,6 +137,10 @@ class Tinebase_Notification
             $event->messagePlain = $_messagePlain;
 
             Tinebase_Event::fireEvent($event);
+        }
+        
+        if ($_actionLogType === Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL) {
+            Tinebase_Controller_ActionLog::getInstance()->addActionLogDatevEmail($_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml, $_attachments);
         }
     }
 }

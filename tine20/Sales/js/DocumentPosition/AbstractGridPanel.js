@@ -16,9 +16,6 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
 
     allowCreateNew: true,
     enableBbar: true,
-    editDialogConfig: {
-        mode: 'local'
-    },
 
     ddSortCol: 'sorting',
     sortInc: 10000,
@@ -54,7 +51,9 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.on('afteredit', this.onAfterEditPosition, this);
         this.on('update', this.onUpdatePosition, this);
         this.on('beforeaddrecord', this.onNewProduct, this);
+        this.on('beforeeditrecord', (r) => { return r !== this.quickaddRecord}, this);
         this.on('beforeremoverecord', this.onBeforeRemovePosition, this);
+        this.on('beforecontextmenu', (grid, row) => { const r = this.store.getAt(row); return r !== this.quickaddRecord}, this);
 
         this.store.on('add', this.checkGroupingState, this, { buffer: 100 });
         this.store.on('update', this.checkGroupingState, this, { buffer: 100 });
@@ -81,6 +80,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             if (! _.isString(productData)) { // manual position
                 position.setFromProduct(productData, lang, this.editDialog.record);
             }
+
             position.setId(Tine.Tinebase.data.Record.generateUID());
             if (!position.get('grouping')) {
                 position.set('grouping', this.quickaddRecord.get('grouping'));
@@ -101,7 +101,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                     const subposition = new this.recordClass({}, Tine.Tinebase.data.Record.generateUID());
                     // NOTE: need to create record to do conversions (string -> int) here!
                     const product = Tine.Tinebase.data.Record.setFromJson(subproductMapping.product_id, Tine.Sales.Model.Product);
-                    subposition.setFromProduct(product.data, lang);
+                    subposition.setFromProduct(product.data, lang, this.editDialog.record);
                     subposition.set('quantity', subproductMapping.quantity);
                     subposition.computePrice();
                     subposition.set('parent_id', position.id);
@@ -341,6 +341,10 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         if (!this.editDialog) {
             this.editDialog = editDialog
             this.getProductPicker().localizedLangPicker = this.editDialog.getForm().findField('document_language')
+            Object.assign(this.editDialogConfig, {
+                documentEditDialog: editDialog,
+                localizedLangPicker: editDialog.fields.document_language
+            })
         }
     },
     /* needed for isFormField cycle */

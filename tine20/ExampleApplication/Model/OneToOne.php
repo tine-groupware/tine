@@ -96,6 +96,7 @@ class ExampleApplication_Model_OneToOne extends Tinebase_Record_NewAbstract
             self::FLD_EXAMPLE_RECORD        => [
                 self::TYPE                      => self::TYPE_RECORD,
                 self::LENGTH                    => 40,
+                self::QUERY_FILTER              => true,
                 self::VALIDATORS                => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED

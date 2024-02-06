@@ -99,12 +99,13 @@ Tine.widgets.grid.RendererManager = function() {
                             var foreignRecordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
 
                             if (foreignRecordClass && value) {
-                                const record = Tine.Tinebase.data.Record.setFromJson(value, foreignRecordClass);
-                                const titleProperty = foreignRecordClass.getMeta('titleProperty');
-                                value = _.isFunction(_.get(record, 'getTitle')) ? record.getTitle() : _.get(record, titleProperty, '');
-
-                                if (!!+_.get(record, 'data.is_deleted')) {
-                                    value = '<span style="text-decoration: line-through;">' + value + '</span>';
+                                if (typeof value !== 'string') {
+                                    const record = Tine.Tinebase.data.Record.setFromJson(value, foreignRecordClass);
+                                    const titleProperty = foreignRecordClass.getMeta('titleProperty');
+                                    value = _.isFunction(_.get(record, 'getTitle')) ? record.getTitle() : _.get(record, titleProperty, '');
+                                    if (!!+_.get(record, 'data.is_deleted')) {
+                                        value = '<span style="text-decoration: line-through;">' + value + '</span>';
+                                    }
                                 }
                             }
                             return value;
@@ -174,6 +175,10 @@ Tine.widgets.grid.RendererManager = function() {
                         });
 
                     }
+                    break;
+                case 'text':
+                case 'fulltext':
+                    renderer = Ext.ux.display.DisplayField.prototype.renderer;
                     break;
                 case 'user':
                     renderer = Tine.Tinebase.common.usernameRenderer;
@@ -245,10 +250,26 @@ Tine.widgets.grid.RendererManager = function() {
                     };
                     break;
                 case 'dynamicRecord':
+                    const foreignFieldDefinition = _.get(recordClass?.getModelConfiguration(), `fields.${fieldName}.config`, {});
+                    const isJSONStorage = _.toUpper(_.get(foreignFieldDefinition, `config.storage`, '')) === 'JSON';
+                    const dependentRecords = _.get(foreignFieldDefinition, `config.dependentRecords`, false);
+
                     const classNameField = fieldDefinition.config.refModelField;
                     renderer = (configRecord, metaData, record) => {
-                        const configRcordClass = Tine.Tinebase.data.RecordMgr.get(record.get(classNameField));
-                        return configRcordClass ? Tine.Tinebase.data.Record.setFromJson(configRecord, configRcordClass).getTitle() : '';
+                        const configRecordClass = Tine.Tinebase.data.RecordMgr.get(record.get(classNameField));
+                        if (! configRecordClass) return '';
+
+                        const hasNoAPI = !_.get(Tine, `${configRecordClass.getMeta('appName')}.search${_.upperFirst(configRecordClass.getMeta('modelName'))}s`);
+                        const isDependent = configRecordClass.getModelConfiguration()?.isDependent;
+
+                        const titleHTML = `<span class="tine-recordclass-gridicon ${configRecordClass.getIconCls()}">&nbsp;</span>${Ext.util.Format.htmlEncode(Tine.Tinebase.data.Record.setFromJson(configRecord, configRecordClass).getTitle())} (${configRecordClass.getRecordName()})`;
+                        return isJSONStorage || dependentRecords || hasNoAPI || isDependent ? titleHTML : `<a href="#" data-record-class="${configRecordClass.getPhpClassName()}" data-record-id="${configRecord.id}">${titleHTML}</a>`;
+                    };
+                    break;
+                case 'language':
+                    const allLanguages = Locale.getTranslationList('Language');
+                    renderer = (value, metaData, record) => {
+                        return allLanguages[value];
                     };
                     break;
                 case 'localizedString':
@@ -256,7 +277,7 @@ Tine.widgets.grid.RendererManager = function() {
                     const languagesAvailableDef = _.get(recordClass.getModelConfiguration(), 'languagesAvailable')
                     const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinition(_.get(languagesAvailableDef, 'config.appName', appName), languagesAvailableDef.name)
                     const translationList = Locale.getTranslationList('Language')
-
+                    
                     renderer = function renderer(value, metaData, record, rowIndex, colIndex, store) {
                         const lang = store?.localizedLang || keyFieldDef.default
                         const localized = _.find(value, { language: lang })
@@ -265,9 +286,22 @@ Tine.widgets.grid.RendererManager = function() {
                         const qtip = i18n._('This is a multilingual field:') + '<br />' + _.reduce(value, (text, localized) => {
                             return text + '<br />' + translationList[localized.language] + ': ' + Ext.util.Format.htmlEncode(localized.text)
                         }, '')
-
+                        const row =  document.createElement('div');
+                        row.className = 'tine-grid-cell-action-fit';
+                        
+                        const row1Left = document.createElement('div');
+                        row1Left.innerHTML = text;
+                        
+                        const row1Right =  document.createElement('div');
+                        row1Right.innerHTML = langCode;
+                        row1Right.className = 'tine-grid-cell-action tine-grid-cell-localized';
+                        row1Right.setAttribute('ext:qtip',  qtip);
+                        
+                        row.appendChild(row1Left);
+                        row.appendChild(row1Right);
+                        
                         metaData.css = 'tine-grid-cell-action-wrap'
-                        return  `${text}<div ext:qtip="${Ext.util.Format.htmlEncode(qtip)}" class="tine-grid-cell-action tine-grid-cell-localized">${langCode}</div>`
+                        return  row.outerHTML;
                     }
                     break;
                 case 'records':

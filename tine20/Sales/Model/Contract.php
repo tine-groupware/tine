@@ -156,6 +156,13 @@ class Sales_Model_Contract extends Tinebase_Record_Abstract
             'end_date' => array(
                 'type' => 'date',
                 'label' => 'End Date',    // _('End Date')
+                self::FILTER_DEFINITION         => [
+                    self::FILTER                    => Tinebase_Model_Filter_Date::class,
+                    self::OPTIONS                   => [
+                        Tinebase_Model_Filter_Date::BEFORE_OR_IS_NULL => false,
+                        Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL  => true,
+                    ]
+                ],
                 self::UI_CONFIG => [
                     'format' => ['medium'],
                 ],

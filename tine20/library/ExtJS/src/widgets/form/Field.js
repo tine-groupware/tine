@@ -457,11 +457,33 @@ var form = new Ext.form.FormPanel({
      * @param {String} msg (optional) The validation message (defaults to {@link #invalidText})
      */
     markInvalid : function(msg){
+        function findParentTab(fromElement) {
+            const tabpanel = fromElement.findParentByType('tabpanel');
+            let tabPanelEl = null;
+            if (tabpanel) {
+                if (fromElement?.el) {
+                    const tabpanelId = _.find(tabpanel.items.keys, (id)=>{return fromElement.el.up(`#${id}`)}) // Finde das richtige Tab
+                    tabPanelEl = tabpanel.getTabEl(tabpanelId);
+                } else {
+                    const parent = fromElement.findParentBy(function(p){return p.tabEl;});
+                    tabPanelEl = parent?.tabEl;
+                }
+                if (tabPanelEl) {
+                    Ext.fly(tabPanelEl).setStyle('background','#ff7870')
+                    tabPanelEl.dataset.invalidfield  = fromElement.id;
+                }
+                findParentTab(tabpanel)
+            }
+        }
+        if (!this.preventMark) {
+            findParentTab(this);
+        }
         if(!this.rendered || this.preventMark){ // not rendered
             return;
         }
         msg = msg || this.invalidText;
 
+        this.wrap?.addClass(this.invalidClass);
         var mt = this.getMessageHandler();
         if(mt){
             mt.mark(this, msg);
@@ -481,14 +503,39 @@ var form = new Ext.form.FormPanel({
      * Clear any invalid styles/messages for this field
      */
     clearInvalid : function(){
-        if(!this.rendered || this.preventMark){ // not rendered
-            return;
-        }
-        this.el.removeClass(this.invalidClass);
         var mt = this.getMessageHandler();
         if(mt){
             mt.clear(this);
-        }else if(this.msgTarget){
+
+            function findParentTab(fromElement) {
+                const tabpanel = fromElement.findParentByType('tabpanel');
+                let tabPanelEl = null;
+                if (tabpanel) {
+                    if (fromElement?.el) {
+                        const tabpanelId = _.find(tabpanel.items.keys, (id)=>{return fromElement.el.up(`#${id}`)}) // Finde das richtige Tab
+                        tabPanelEl = tabpanel.getTabEl(tabpanelId);
+                    } else {
+                        const parent = fromElement.findParentBy(function(p){return p.tabEl;});
+                        tabPanelEl = parent?.tabEl;
+                    }
+                    if (tabPanelEl.dataset.invalidfield == fromElement.id) {
+                        Ext.fly(tabPanelEl).setStyle('background', null)
+                        tabPanelEl.dataset.invalidfield = '';
+                        findParentTab(tabpanel)
+                    }
+                }
+            }
+            findParentTab(this);
+
+        }
+
+        if(!this.rendered || this.preventMark){ // not rendered
+            return;
+        }
+        this.wrap?.removeClass(this.invalidClass);
+        this.el.removeClass(this.invalidClass);
+
+        if(!mt && this.msgTarget){
             this.el.removeClass(this.invalidClass);
             var t = Ext.getDom(this.msgTarget);
             if(t){
@@ -609,7 +656,7 @@ Ext.form.MessageTargets = {
             }
         },
         clear: function(field){
-            field.el.removeClass(field.invalidClass);
+            field.el?.removeClass(field.invalidClass);
             if (field?.dom?.dom) field.el.dom.qtip = '';
         }
     },

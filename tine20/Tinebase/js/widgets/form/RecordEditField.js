@@ -61,9 +61,15 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         this.recordData = _.get(v, 'data', v);
         this.assertRecordClass(owningRecord);
     
-        let valueRecord = this.recordClass && this.recordData ? Tine.Tinebase.data.Record.setFromJson(this.recordData, this.recordClass) : null;
-        Tine.Tinebase.widgets.form.RecordEditField.superclass.setValue.call(this, valueRecord ? valueRecord.getTitle() || '...' : '');
-        
+        const valueRecord = this.recordClass && this.recordData ? Tine.Tinebase.data.Record.setFromJson(this.recordData, this.recordClass) : null;
+        Promise.resolve().then(async () => {
+            let text = valueRecord ? valueRecord.getTitle() || '...' : '';
+            if (text && text.asString) {
+                text = await text.asString();
+            }
+            Tine.Tinebase.widgets.form.RecordEditField.superclass.setValue.call(this, text);
+        });
+
         if (this.trigger_delete && this.enableDelete === true ) {
             const visible = !!valueRecord;
             this.trigger_delete.setVisible(visible);
@@ -106,6 +112,7 @@ Tine.Tinebase.widgets.form.RecordEditField = Ext.extend(Ext.form.TriggerField, {
         editDialogClass.openWindow({
             mode: 'local',
             record: this.recordData,
+            needsUpdateEvent: true,
             listeners: {
                 scope: me,
                 'update': (updatedRecord) => {

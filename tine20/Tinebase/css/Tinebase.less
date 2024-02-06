@@ -112,9 +112,60 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
     background-image:url(../../images/icon-set/icon_copy_to_new.svg) !important;
 }
 
-
 .action_system_link {
     background-image: url(../../images/icon-set/icon_system_link.svg) !important;
+}
+
+.action_layout_menu {
+    background-image: url(../../images/icon-set/icon_menu.svg) !important;
+}
+
+.action_layout_split_bottom_left {
+    background-image: url(../../images/icon-set/icon_split_bottom_left.svg) !important;
+}
+
+.action_layout_split_bottom_right {
+    background-image: url(../../images/icon-set/icon_split_bottom_right.svg) !important;
+}
+
+.action_layout_split_down {
+    background-image: url(../../images/icon-set/icon_split_down.svg) !important;
+}
+
+.action_layout_split_left_bottom {
+    background-image: url(../../images/icon-set/icon_split_left_bottom.svg) !important;
+}
+
+.action_layout_split_left_top {
+    background-image: url(../../images/icon-set/icon_split_left_top.svg) !important;
+}
+
+.action_layout_split_right {
+    background-image: url(../../images/icon-set/icon_split_right.svg) !important;
+}
+
+.action_layout_split_right_bottom {
+    background-image: url(../../images/icon-set/icon_split_right_bottom.svg) !important;
+}
+
+.action_layout_split_top_left {
+    background-image: url(../../images/icon-set/icon_split_top_left.svg) !important;
+}
+
+.action_layout_split_top_right {
+    background-image: url(../../images/icon-set/icon_split_top_right.svg) !important;
+}
+
+.action_sort{
+    background-image: url('../../images/icon-set/icon_sort_z-to-a.svg');
+}
+
+.action_sort_asc {
+    background-image: url('../../images/icon-set/icon_sort_asc.svg');
+}
+
+.action_sort_desc {
+    background-image: url('../../images/icon-set/icon_sort_desc.svg');
 }
 
 /* START svg fixes */
@@ -292,6 +343,14 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
 
 .clipboard {
     background-image:url(../../images/icon-set/icon_copy_to_clipboard.svg) !important;
+}
+
+.maximize {
+    background-image:url(../../images/icon-set/icon_maximize.svg) !important;
+}
+
+.minimize {
+    background-image:url(../../images/icon-set/icon_minimize.svg) !important;
 }
 
 .info {
@@ -472,12 +531,18 @@ td.sort-desc .x-grid3-hd-inner, td.sort-asc .x-grid3-hd-inner, td.x-grid3-hd-ove
     max-height: 80px;
 }
 .tb-about-version {
-    margin-top: 50px;
+    margin-top: 30px;
     font-weight: bold;
 }
 .tb-about-build {
     font-size: smaller;
 }
+
+.tb-about-subscription {
+    margin-top: 30px;
+    font-weight: bold;
+}
+
 .tb-about-copyright {
     margin-top: 50px;
 }
@@ -786,6 +851,7 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
     background-size: 16px 16px;
     background-repeat: no-repeat;
     height: 16px;
+    width: 16px;
     margin: -2px;
 }
 
@@ -793,11 +859,17 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
     position: relative;
 }
 
+.tine-grid-cell-action-fit {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .tine-grid-cell-action {
-    position: absolute;
     right: 4px;
     top: 2px;
     display: inline;
+    margin-left: 3px;
 }
 
 .tine-grid-cell-localized {
@@ -827,6 +899,17 @@ ul.x-tab-strip li.tine-mainscreen-apptabspanel-menu-tabel:hover {
     right: 2px;
 }
 
+.dark-mode {
+    .x-form-trigger.x-form-localized-field.x-form-localized-picker {
+        border-color: #666666 !important;
+        color: #666666 !important;
+    }
+
+    .tine-grid-cell-localized {
+        border: 1px solid #666666 !important;
+        color: #666666 !important;
+    }
+}
 /******* grid cell classes *********/
 
 .tine-grid-cell-hint {
@@ -989,7 +1072,7 @@ span:hover.tinebase-showheaders-link {
 }*/
 
 .search-item {
-    border: 1px solid white
+    padding: 3px;
 }
 
 .search-combo-col td {
@@ -1187,6 +1270,7 @@ textarea.x-form-field.tinebase-editmultipledialog-noneedit {
 
 .tine-tinebase-recorddisplaypanel-displayfield .x-form-display-field {
     display: inline-block;
+    min-width: 80px;
 }
 
 .x-tree-node-expanded .x-tree-node-icon {
@@ -1422,6 +1506,11 @@ div.x-btn-wait,
 
 .x-combo-list-inner .loading-indicator {
     background: none;
+}
+
+.x-combo-list-item .html-proxy {
+    height: 13px;
+    display: block;
 }
 
 /* Models */

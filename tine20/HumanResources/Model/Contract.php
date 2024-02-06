@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -23,7 +23,12 @@
  */
 class HumanResources_Model_Contract extends Tinebase_Record_Abstract
 {
-    const FLDS_WORKING_TIME_SCHEME = 'working_time_scheme';
+    public const MODEL_NAME_PART = 'Contract';
+    public const TABLE_NAME = 'humanresources_contract';
+
+    public const FLD_WORKING_TIME_SCHEME = 'working_time_scheme';
+    public const FLD_VACATION_ENTITLEMENT_DAYS = 'vacation_entitlement_days';
+    public const FLD_VACATION_ENTITLEMENT_BASE =  'vacation_entitlement_base';
 
     /**
      * holds the configuration object (must be set in the concrete class)
@@ -38,7 +43,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'         => 5,
+        'version'         => 6,
         'recordName'      => 'Contract', // ngettext('Contract', 'Contracts', n)
         'recordsName'     => 'Contracts', // gettext('GENDER_Contract')
         'hasRelations'    => FALSE,
@@ -69,7 +74,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
         ],
 
         'table'             => array(
-            'name'    => 'humanresources_contract',
+            'name'    => self::TABLE_NAME,
             'indexes' => array(
                 'employee_id' => array(
                     'columns' => array('employee_id'),
@@ -116,6 +121,20 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'sortable'   => FALSE,
                 'showInDetailsPanel' => TRUE,
             ),
+            self::FLD_VACATION_ENTITLEMENT_BASE => [
+                self::LABEL => 'Vacation Days Base',    // _('Vacation Days Base')
+                self::TYPE => self::TYPE_INTEGER,
+                self::DEFAULT_VAL => 27,
+                'sortable'   => false,
+                'showInDetailsPanel' => true,
+            ],
+            self::FLD_VACATION_ENTITLEMENT_DAYS => [
+                self::LABEL => 'Vacations weekly working days',    // _('Vacations weekly working days')
+                self::TYPE => self::TYPE_INTEGER,
+                self::DEFAULT_VAL => 5,
+                'sortable'   => false,
+                'showInDetailsPanel' => true,
+            ],
             'feast_calendar_id' => array(
                 'label' => 'Feast Calendar',    // _('Feast Calendar')
                 'type'  => self::TYPE_RECORD,
@@ -131,7 +150,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'nullable' => true,
             ),
-            self::FLDS_WORKING_TIME_SCHEME => [
+            self::FLD_WORKING_TIME_SCHEME => [
                 self::TYPE              => self::TYPE_RECORD,
                 self::LENGTH            => 40,
                 self::CONFIG            => [
@@ -141,15 +160,6 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Working time scheme', // _('Working time scheme')
             ],
-            'is_editable' => array(
-                'label' => NULL,
-                'type' => 'virtual',
-                'config' => array(
-                    'sortable'   => FALSE,
-                    'type' => 'boolean',
-                    'function' => array('HumanResources_Controller_Contract' => 'getEditableState'),
-                )
-            )
         )
     );
     
@@ -160,11 +170,11 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
      */
     public function getWorkingTimeJson()
     {
-        if (!$this->{self::FLDS_WORKING_TIME_SCHEME} instanceof HumanResources_Model_WorkingTimeScheme) {
-            $this->{self::FLDS_WORKING_TIME_SCHEME} = HumanResources_Controller_WorkingTimeScheme::getInstance()
-                ->get($this->{self::FLDS_WORKING_TIME_SCHEME});
+        if (!$this->{self::FLD_WORKING_TIME_SCHEME} instanceof HumanResources_Model_WorkingTimeScheme) {
+            $this->{self::FLD_WORKING_TIME_SCHEME} = HumanResources_Controller_WorkingTimeScheme::getInstance()
+                ->get($this->{self::FLD_WORKING_TIME_SCHEME});
         }
-        return $this->{self::FLDS_WORKING_TIME_SCHEME}->{HumanResources_Model_WorkingTimeScheme::FLDS_JSON};
+        return $this->{self::FLD_WORKING_TIME_SCHEME}->{HumanResources_Model_WorkingTimeScheme::FLDS_JSON};
     }
     
     /**

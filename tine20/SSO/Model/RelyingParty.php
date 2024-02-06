@@ -7,7 +7,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -17,7 +17,7 @@
  * @package     SSO
  * @subpackage  Model
  */
-class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
+class SSO_Model_RelyingParty extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'RelyingParty';
     public const TABLE_NAME = 'sso_relying_party';
@@ -95,11 +95,19 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
             self::FLD_CONFIG_CLASS      => [
                 self::TYPE                  => self::TYPE_MODEL,
                 self::FILTER_DEFINITION     => [self::FILTER => Tinebase_Model_Filter_Text::class],
-                self::CONFIG                    => [
-                    self::AVAILABLE_MODELS              => [
+                self::CONFIG                => [
+                    self::AVAILABLE_MODELS      => [
                         SSO_Model_OAuthOIdRPConfig::class,
                         SSO_Model_Saml2RPConfig::class,
                     ],
+                ],
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => false,
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    [Zend_Validate_InArray::class, [
+                        SSO_Model_OAuthOIdRPConfig::class,
+                        SSO_Model_Saml2RPConfig::class,
+                    ]],
                 ],
             ],
             self::FLD_CONFIG            => [
@@ -107,6 +115,11 @@ class SSO_Model_RelyingParty extends Tinebase_Record_Abstract
                 self::CONFIG                => [
                     self::REF_MODEL_FIELD       => self::FLD_CONFIG_CLASS,
                     self::PERSISTENT            => true,
+                ],
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY  => false,
+                    Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
+                    [Tinebase_Record_Validator_SubValidate::class],
                 ],
             ],
         ]

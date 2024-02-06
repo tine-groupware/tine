@@ -47,7 +47,7 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION => 1,
+        self::VERSION => 2,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT => true,
 
@@ -55,8 +55,8 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
         self::ASSOCIATIONS => [
-            // this morphs into a one_to_one since node_id is unique too
             ClassMetadataInfo::MANY_TO_ONE => [
+                // this morphs into a one_to_one since node_id is unique too
                 self::FLD_NODE_ID => [
                     'targetEntity' => Tinebase_Model_Tree_Node::class,
                     'fieldName' => self::FLD_NODE_ID,
@@ -65,10 +65,8 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
                         'referencedColumnName' => 'id',
                         'onDelete' => 'CASCADE',
                     ]],
-                ]
-            ],
-            // a real many to one
-            ClassMetadataInfo::MANY_TO_ONE => [
+                ],
+                // a real many to one
                 self::FLD_FINAL_DECREE_BY => [
                     'targetEntity' => Addressbook_Model_Contact::class,
                     'fieldName' => self::FLD_FINAL_DECREE_BY,
@@ -106,12 +104,12 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
                 self::CONFIG => [
                     self::APP_NAME => Tinebase_Config::APP_NAME,
                     self::MODEL_NAME => 'Tree_Node',
-                    self::IS_DEPENDENT => true,
                 ]
             ],
             self::FLD_DURATION_START => [
                 self::TYPE => self::TYPE_DATE,
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::NULLABLE => true,
                 self::LABEL => 'Duration Start', // _('Duration Start')
             ],
             self::FLD_DURATION_END => [
@@ -123,10 +121,8 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
             self::FLD_COMMISSIONED_OFFICE => [
                 self::TYPE => self::TYPE_STRING,
                 self::LENGTH => 255,
-                self::VALIDATORS => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
-                ],
+                self::NULLABLE => true,
+                self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL => 'Commissioned Office', // _('Commissioned Office')
             ],
             self::FLD_IS_HYBRID => [

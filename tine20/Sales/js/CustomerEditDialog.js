@@ -121,6 +121,10 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
+        const fieldManager = _.bind(Tine.widgets.form.FieldManager.get,
+            Tine.widgets.form.FieldManager, this.recordClass.getMeta('appName'), this.recordClass.getMeta('modelName'), _,
+            Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
+
         var formFieldDefaults = {
             xtype:'textfield',
             anchor: '100%',
@@ -250,18 +254,9 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             [{
                                 name: 'vatid',
                                 fieldLabel: this.app.i18n._('VAT ID')
-                            }, {
-                                name: 'credit_term',
-                                fieldLabel: this.app.i18n._('Credit Term (days)'),
-                                xtype: 'uxspinner',
-                                strategy: new Ext.ux.form.Spinner.NumberStrategy({
-                                    incrementValue : 1,
-                                    alternateIncrementValue: 1,
-                                    minValue: 0,
-                                    maxValue: 1024,
-                                }),
-                                allowDecimals : false,
-                            }], [{
+                            },
+                                fieldManager('vat_procedure')
+                            ], [{
                                 name: 'currency',
                                 fieldLabel: this.app.i18n._('Currency'),
                                 value: currency
@@ -295,6 +290,17 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 allowDecimals : true,
                                 decimalPrecision: 1,
                                 decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator')
+                            }, {
+                                name: 'credit_term',
+                                fieldLabel: this.app.i18n._('Credit Term (days)'),
+                                xtype: 'uxspinner',
+                                strategy: new Ext.ux.form.Spinner.NumberStrategy({
+                                    incrementValue : 1,
+                                    alternateIncrementValue: 1,
+                                    minValue: 0,
+                                    maxValue: 1024,
+                                }),
+                                allowDecimals : false,
                             }
                         ]]
                     }]

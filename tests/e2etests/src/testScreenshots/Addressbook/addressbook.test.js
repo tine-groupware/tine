@@ -137,7 +137,7 @@ describe('Contacts', () => {
 
         test('test Tags', async () => {
             await page.waitForTimeout(1000);
-            await expect(page).toClick('.x-grid3-row.x-grid3-row-last', {button: 'right'});
+            await expect(page).toClick('.x-grid3-row.x-grid3-row-first', {button: 'right'});
             await expect(page).toClick('.action_tag.x-menu-item-icon');
             await expect(page).toClick('.x-window .x-form-arrow-trigger');
             await page.waitForSelector('.x-widget-tag-tagitem-text');
@@ -193,12 +193,16 @@ describe('Contacts', () => {
             await page.screenshot({path: 'screenshots/StandardBedienhinweise/3_standardbedienhinweise_adresse_berechtigungen.png'});
         });
 
-        test.skip('permissions dialog', async () => {
-            // NOTE: in debug mode screenshot removes focus so menu closes
-            await expect(page).toClick('#Addressbook_Contact_Tree span', {
-                text: process.env.TEST_USER + 's persönliches Adressbuch',
-                button: 'right'
-            });
+        test('permissions dialog', async () => {
+            try {
+                await page.waitForSelector('.x-menu-item-icon.action_managePermissions', {timeout: 100});
+            } catch (e) {
+                // NOTE: in debug mode screenshot removes focus so menu closes
+                await expect(page).toClick('#Addressbook_Contact_Tree span', {
+                    text: process.env.TEST_USER + 's persönliches Adressbuch',
+                    button: 'right'
+                });
+            }
             await page.click('.x-menu-item-icon.action_managePermissions');
             await page.screenshot({path: 'screenshots/StandardBedienhinweise/4_standardbedienhinweise_adressbuch_berechtigungen_verwalten.png'});
             await page.keyboard.press('Escape');
@@ -227,9 +231,15 @@ describe('Contacts', () => {
             await expect(popupWindow).toFill('input[name=org_unit]', 'Personalwesen');
             //await expect(popupWindow).toFill('input[name=title]', 'CEO');
             await expect(popupWindow).toFill('input[name=bday]', '12.03.1956');
-            await expect(popupWindow).toFill('input[name=tel_work]', '040734662533');
-            await expect(popupWindow).toFill('input[name=tel_cell]', '0179461021');
-            //await expect(popupWindow).toFill('input[name=adr_one_region]', 'Hamburg');
+
+            const tel = await popupWindow.$x("//div[contains(text(), 'Telefon')]");
+            tel[0].click();
+            await expect(popupWindow).toFill('input[class*=x-grid-editor-tel_work]', '040734662533');
+
+            const tel_cel = await popupWindow.$x("//div[contains(text(), 'Handy')]");
+            tel_cel[0].click();
+            await expect(popupWindow).toFill('input[class*=x-grid-editor-tel_cell]', '0179461021');
+
             await expect(popupWindow).toFill('input[name=adr_one_postalcode]', '20475');
             await expect(popupWindow).toFill('input[name=adr_one_street]', 'Pickhuben');
             await expect(popupWindow).toFill('input[name=adr_one_locality]', 'Hamburg');

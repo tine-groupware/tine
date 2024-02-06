@@ -5,6 +5,6 @@
     <type>export</type>
     <plugin>Sales_Export_DocumentPdf</plugin>
     <description>Offer PDF</description>
-    <scope>system</scope>
+    <scope>hidden</scope>
     <template>tine20:///Tinebase/folders/shared/export/templates/Sales/sales_document_offer.docx</template>
 </config>

@@ -127,7 +127,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
 
     onRender: function () {
         var me = this;
-
+        
         if (me.enableFileDialog) {
             me.component.on('enable', this.onEnable, this);
             me.component.on('disable', this.onDisable, this);
@@ -148,11 +148,14 @@ Ext.ux.file.BrowsePlugin.prototype = {
             } else {
                 me.dropEl = me.component.el;
             }
-
-            me.dropEl.on('dragleave', me.onDragLeave, me);
-            me.dropEl.on('dragover', me.onDragOver, me);
-            me.dropEl.on('drop', me.onDrop, me);
+            this.initEvents(me.dropEl);
         }
+    },
+    
+    initEvents: function (dropEl) {
+        dropEl.on('dragleave', this.onDragLeave, this);
+        dropEl.on('dragover', this.onDragOver, this);
+        dropEl.on('drop', this.onDrop, this);
     },
 
     /**

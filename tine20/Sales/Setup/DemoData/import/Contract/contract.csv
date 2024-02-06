@@ -1,4 +1,4 @@
 title,customers,costcenter,contract_ex,contract_in,product,description,start_date,end_date
-Hosting der Webseite,Elbphilharmonie,SE,"Tanja, Bar","Admin Account, Tine 2.0",Server Hosting,DemoData Import,monday,nextyear
-Hosting der Webseite,Schloss Schönbrun,SE,"Julia, Metzger","Admin Account, Tine 2.0",Server Hosting,DemoData Import,today,next2year
-Getränke,Getränke,SE,,,Getränke,DemoData Import,friday,next2year
+Hosting der Webseite,Elbphilharmonie,SE,"Tanja, Bar","Admin Account, Tine 2.0",Server Hosting,DemoData Import,monday,+1 year
+Hosting der Webseite,Schloss Schönbrun,SE,"Julia, Metzger","Admin Account, Tine 2.0",Server Hosting,DemoData Import,today,+2 year
+Getränke,Getränke,SE,,,Getränke,DemoData Import,friday,+2 year

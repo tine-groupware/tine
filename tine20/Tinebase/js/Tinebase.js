@@ -11,6 +11,11 @@
 // safari < 15.4
 require('broadcastchannel-polyfill');
 
+// @TODO should be imported/required in twing
+// use https://github.com/Richienb/node-polyfill-webpack-plugin ?
+// window.process = require('process/browser');
+// window.Buffer = require('buffer').Buffer;
+
 // message bus
 var postal = require('postal');
 require('postal.federation');
@@ -38,6 +43,7 @@ require('./widgets/CountryFilter');
 require('node-waves');
 require('node-waves/src/less/waves.less');
 require('../css/flat.less');
+require('../css/darkmode.less');
 
 // other libs
 var lodash = require('lodash');

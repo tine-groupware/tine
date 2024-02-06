@@ -146,12 +146,51 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
                 //limit the window size
                 this.width = Math.min(screen.availWidth, this.width);
                 this.height = Math.min(screen.availHeight, this.height);
-                
-                this.popup = this.openWindow(this.name, this.url, this.width, this.height);
-                
-                if (this.noParent) {
-                    this.popup.opener = null;
+
+                if (this.asIframe) {
+                    this.popup = document.createElement('iframe');
+
+                    Ext.fly(this.popup).set({
+                        width: '100%',
+                        height: '100%',
+                        class: 'tw-window-iframe',
+                        style: 'border: 0;',
+                        id: this.name,
+                        name: this.name,
+                        src: this.url
+                    });
+
+                } else {
+                    this.popup = this.openWindow(this.name, this.url, this.width, this.height);
+
+                    if (this.noParent) {
+                        this.popup.opener = null;
+                    }
+
+                    // closing properly or prevent close otherwise
+                    this.popup.addEventListener('beforeunload', _.bind((e) => {
+                        if(!this.forceClose && this.fireEvent("beforeclose", this) === false){
+                            e.preventDefault();
+                            e.returnValue = '';
+                        }
+                    }, this));
+
+                    // NOTE: 'beforeunload' in Chrome does not work and there is no event to detect window moves,
+                    //       so we frequently check for state updates
+                    this.popup.setInterval(() => {
+                        if (_.reduce(this.getState(), (save, value, key) => {
+                            // save state if difference > 5% (to suppress annoying window manager effects)
+                            if (Math.max(value, this[key])/Math.min(value, this[key]) > 1.05) {
+                                this[key] = value;
+                                save = true;
+                            }
+                            return save;
+                        }, false)) {
+                            this.saveState();
+                        }
+                    }, 2000);
                 }
+
             } catch (e) {
                 this.popup = null;
             }
@@ -169,29 +208,6 @@ Ext.extend(Ext.ux.PopupWindow, Ext.Component, {
         
         //. register window ( in fact register complete PopupWindow )
         this.windowManager.register(this);
-
-        // closing properly or prevent close otherwise
-        this.popup.addEventListener('beforeunload', _.bind((e) => {
-            if(!this.forceClose && this.fireEvent("beforeclose", this) === false){
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        }, this));
-
-        // NOTE: 'beforeunload' in Chrome does not work and there is no event to detect window moves,
-        //       so we frequently check for state updates
-        this.popup.setInterval(() => {
-            if (_.reduce(this.getState(), (save, value, key) => {
-                // save state if difference > 5% (to suppress annoying window manager effects)
-                if (Math.max(value, this[key])/Math.min(value, this[key]) > 1.05) {
-                    this[key] = value;
-                    save = true;
-                }
-                return save;
-            }, false)) {
-                this.saveState();
-            }
-        }, 2000);
     },
 
     /**

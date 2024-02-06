@@ -512,6 +512,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (! Tine.Tinebase.configManager.get('filesystem.index_content', 'Tinebase')) {
             this.hideColumns.push('isIndexed');
         }
+        this.on('resize', this.onContentResize, this, {buffer: 100});
     },
 
     /**
@@ -572,8 +573,9 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 height: '16px'
             }
         });
-        this.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
-        this.pagingToolbar.insert(12, this.quotaBar);
+        const idx = _.indexOf(this.pagingToolbar.items.items, _.find(this.pagingToolbar.items.items, {constructor: Ext.Toolbar.Fill})) +1;
+        this.pagingToolbar.insert(idx, new Ext.Toolbar.Separator());
+        this.pagingToolbar.insert(idx, this.quotaBar);
         this.pagingToolbar.doLayout();
     },
 
@@ -739,7 +741,15 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.folderContextMenu = Tine.Filemanager.nodeContextMenu.getMenu({
             nodeName: Tine.Filemanager.Model.Node.getContainerName(),
-            actions: [this.action_deleteRecord, 'rename', this.action_moveRecord, this.action_editFile, this.action_publish, this.action_systemLink],
+            actions: [
+                this.action_deleteRecord, 
+                'rename', 
+                this.action_moveRecord,
+                this.action_download,
+                this.action_editFile, 
+                this.action_publish, 
+                this.action_systemLink
+            ],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -788,6 +798,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     onDataSafeToggle: function(button, e) {
+        if (typeof button.pressed === 'undefined') {
+            button.pressed = button.checked
+        }
+
         button.toggle(!button.pressed);
 
         const areaLocks = Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName);
@@ -1130,7 +1144,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 Ext.MessageBox.alert(
                     i18n._('Upload Failed'),
                     app.i18n._('It is not permitted to store files in this folder!')
-                ).setIcon(Ext.MessageBox.ERROR);
+                );
         
                 return;
             }
@@ -1166,17 +1180,19 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.redirectToParent = false;
 
         const quota = _.get(store, 'reader.jsonData.quota', false);
-            
-        if (quota) {
-            var qhtml = Tine.widgets.grid.QuotaRenderer(quota.effectiveUsage, quota.effectiveQuota, /*use SoftQuota*/ true);
-            this.quotaBar.show();
-            if (this.quotaBar.rendered) {
-                this.quotaBar.update(qhtml);
+
+        if (this.quotaBar) {
+            if (quota) {
+                var qhtml = Tine.widgets.grid.QuotaRenderer(quota.effectiveUsage, quota.effectiveQuota, /*use SoftQuota*/ true);
+                this.quotaBar.show();
+                if (this.quotaBar.rendered) {
+                    this.quotaBar.update(qhtml);
+                } else {
+                    this.quotaBar.html = qhtml;
+                }
             } else {
-                this.quotaBar.html = qhtml;
+                this.quotaBar.hide();
             }
-        } else {
-            this.quotaBar.hide();
         }
     },
 

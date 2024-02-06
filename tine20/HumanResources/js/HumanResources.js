@@ -11,6 +11,7 @@
 Ext.namespace('Tine.HumanResources');
 
 import './DailyWTReportGridPanel'
+import './DailyWTReportEditDialog'
 import './MonthlyWTReportGridPanel'
 import './MonthlyWTReportEditDialog'
 import './WTRCorrectionPicker'

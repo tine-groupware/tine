@@ -201,9 +201,11 @@ EOS
         Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_ADAPTER} = 'OpenIdConnectMock';
 
         $credentials = $this->getTestCredentials();
+        Tinebase_Core::setUser($this->getAccountByName($credentials['username']));
         $user = Tinebase_User::getInstance()->getFullUserByLoginName($credentials['username']);
         $user->openid = 'test@example.org';
         Tinebase_User::getInstance()->updateUser($user);
+        Tinebase_Core::unsetUser();
 
         $oidcResponse = 'access_token=somethingabcde12344';
 

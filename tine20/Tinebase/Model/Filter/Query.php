@@ -32,6 +32,8 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
     protected $_operator;
     protected $_clientOptions;
 
+    protected static $_recursionProtection = [];
+
     /**
      * constructs a new filter group
      *
@@ -44,6 +46,8 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
      */
     public function __construct(array $_data = array(), $_condition = '', $_options = array())
     {
+        $recursionProtection = static::$_recursionProtection;
+
         if (count($_options) > 0) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
                 ' Given options are not used ... put options in $_data[\'options\']');
@@ -58,6 +62,11 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
         parent::__construct(array(),
             $condition,
             $_data['options']);
+
+        if (isset(static::$_recursionProtection[$this->_options['modelName']])) {
+            throw new Tinebase_Exception_QueryFilterRecursion();
+        }
+        static::$_recursionProtection[$this->_options['modelName']] = true;
 
         if (isset($_data['id'])) {
             $this->setId($_data['id']);
@@ -87,6 +96,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
                 case 'equals':
                 case 'not':
                 case 'startswith':
+                case 'wordstartswith':
                 case 'endswith':
                     foreach ($queries as $query) {
                         $subGroup = $this->_getSubfilterGroup($parentFilterGroup, $query, $condition);
@@ -111,6 +121,8 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
                 }
             }
         }
+
+        static::$_recursionProtection = $recursionProtection;
     }
 
     /**
@@ -123,7 +135,11 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
     {
         $subGroup = new Tinebase_Model_Filter_FilterGroup(array(), $condition);
         foreach ($this->_options['fields'] as $field) {
-            $filter = $parentFilterGroup->createFilter(['field' => $field, 'operator' => $this->_operator, 'value' => $query, 'clientOptions' => $this->_clientOptions]);
+            try {
+                $filter = $parentFilterGroup->createFilter(['field' => $field, 'operator' => $this->_operator, 'value' => $query, 'clientOptions' => $this->_clientOptions]);
+            } catch (Tinebase_Exception_QueryFilterRecursion) {
+                continue;
+            }
             $this->_addFilterToGroup($subGroup, $filter);
         }
 
@@ -142,7 +158,11 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
         Tinebase_Model_Filter_FilterGroup $innerGroup)
     {
         foreach ($this->_options['fields'] as $field) {
-            $filter = $parentFilterGroup->createFilter(['field' => $field, 'operator' => $this->_operator, 'value' => $queries, 'clientOptions' => $this->_clientOptions]);
+            try {
+                $filter = $parentFilterGroup->createFilter(['field' => $field, 'operator' => $this->_operator, 'value' => $queries, 'clientOptions' => $this->_clientOptions]);
+            } catch (Tinebase_Exception_QueryFilterRecursion) {
+                continue;
+            }
             $this->_addFilterToGroup($innerGroup, $filter);
         }
     }
@@ -153,23 +173,13 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_FilterGroup
      */
     protected function _addFilterToGroup(Tinebase_Model_Filter_FilterGroup $group, Tinebase_Model_Filter_Abstract $filter)
     {
-        if (in_array($this->_operator, $filter->getOperators())
-            || $filter instanceof Tinebase_Model_Filter_ForeignRecord
-        ) {
-            if ($filter instanceof Tinebase_Model_Filter_FullText) {
-                if (! $filter->isQueryFilterEnabled()) {
-                    return;
-                }
-            }
-
-            $group->addFilter($filter);
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
-                    ' field: ' . $this->_field . ' => filter: ' . get_class($filter)
-                    . ' doesn\'t support operator: ' . $this->_operator . ' => not applying filter!');
+        if ($filter instanceof Tinebase_Model_Filter_FullText) {
+            if (! $filter->isQueryFilterEnabled() && !($this->_options['ignoreFullTextConfig'] ?? false)) {
+                return;
             }
         }
+
+        $group->addFilter($filter);
     }
 
     /**

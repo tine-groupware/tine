@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -148,6 +148,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             'groupFilter' => 'objectclass=posixgroup',
             'groupSearchScope' => Zend_Ldap::SEARCH_SCOPE_SUB,
             'pwEncType' => 'SSHA',
+            'writePwToSql' => false,
             'minUserId' => '10000',
             'maxUserId' => '29999',
             'minGroupId' => '11000',
@@ -181,6 +182,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
             self::DEFAULT_USER_GROUP_NAME_KEY  => 'Domain Users',
             self::DEFAULT_ADMIN_GROUP_NAME_KEY => 'Domain Admins',
             'readonly' => false,
+            'writePwToSql' => false,
          )
     );
     
@@ -614,6 +616,8 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     $syncedUser = $userBackend->updateUserInSqlBackend($syncedUser);
                     $userBackend->updatePluginUser($syncedUser, $user);
                 }
+
+                $userBackend->writeModLog($syncedUser, null);
             }
 
             Tinebase_Group::syncMemberships($syncedUser);
@@ -992,7 +996,7 @@ class Tinebase_User implements Tinebase_Controller_Interface
                             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                                 . ' Deleting user contact of ' . $user->accountLoginName);
 
-                            $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                            $contactsBackend = new Addressbook_Backend_Sql();
                             $contactsBackend->delete($user->contact_id);
                         }
                     } else {
@@ -1294,10 +1298,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 if ($e instanceof Zend_Db_Statement_Exception && Tinebase_Exception::isDbDuplicate($e)) {
                     // user might have been deleted -> undelete
                     try {
-                        $systemUser = $userBackend->getUserByLoginName($accountLoginName);
+                        $systemUser = $userBackend->getUserByLoginName($accountLoginName, Tinebase_Model_FullUser::class);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         $userBackend->undelete($accountLoginName);
-                        $systemUser = $userBackend->getUserByLoginName($accountLoginName);
+                        $systemUser = $userBackend->getUserByLoginName($accountLoginName, Tinebase_Model_FullUser::class);
                     }
                 } else {
                     $systemUser = $userBackend->addUserInSqlBackend($systemUser);
@@ -1338,16 +1342,20 @@ class Tinebase_User implements Tinebase_Controller_Interface
      * generate random password
      *
      * @param int $length
-     * @param boolean $useSpecialChar
+     * @param int $numSpecialChar
+     * @param int $upperCase
      * @return string
+     *
+     * TODO should have a param "usePWPolicy"
      */
-    public static function generateRandomPassword($length = 10, $useSpecialChar = true)
+    public static function generateRandomPassword($length = 12, $numSpecialChar = 1, $upperCase = 1)
     {
         $symbolsGeneral = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+        $symbolsUpper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $symbolsSpecialChars = '!?~@#-_+<>[]{}';
 
         $used_symbols = $symbolsGeneral;
-        $symbols_length = strlen($used_symbols) - 1; //strlen starts from 0 so to get number of characters deduct 1
+        $symbols_length = strlen($used_symbols) - 1; // strlen starts from 0 so to get number of characters deduct 1
 
         $pass = '';
 
@@ -1355,10 +1363,14 @@ class Tinebase_User implements Tinebase_Controller_Interface
             $pass .= $used_symbols[rand(0, $symbols_length)];
         }
 
-        if ($useSpecialChar) {
+        for ($i = 0; $i < $upperCase; $i++) {
+            $pass = substr($pass, 1) ;
+            $pass .= $symbolsUpper[rand(0, strlen($symbolsUpper) - 1)];
+        }
+
+        for ($i = 0; $i < $numSpecialChar; $i++) {
             $pass = substr($pass, 1) ;
             $pass .= $symbolsSpecialChars[rand(0, strlen($symbolsSpecialChars) - 1)];
-
         }
 
         return str_shuffle($pass);

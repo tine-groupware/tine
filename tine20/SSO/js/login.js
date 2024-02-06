@@ -37,7 +37,9 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
                 const values = form.getFieldValues();
                 const formData = new FormData();
                 formData.append('username', values.username);
-                formData.append('password', values.password);
+                if (values.password) {
+                    formData.append('password', values.password);
+                }
                 Object.keys(window.initialData.sso).forEach((key) => {formData.append(key, window.initialData.sso[key])});
                 if (additionalParams !== window) {
                     Object.keys(additionalParams || {}).forEach((key) => {formData.append(key, additionalParams[key])});
@@ -52,12 +54,22 @@ import(/* webpackChunkName: "Tinebase/js/Tinebase" */ 'Tinebase.js').then(functi
                         document.getElementsByTagName("form")[0].submit();
                     } else {
                         if (isJSON) {
-                            const response = JSON.parse(xhr.responseText);
+                            let response = JSON.parse(xhr.responseText);
                             if (response?.error?.data) {
-                                return this.onLoginFail({responseText: JSON.stringify(response.error)});
-                            } else if (response?.Location) {
-                                // oidc redirect (xhr redirects don't work as rp's often have no cors headers)
-                                return window.location.href = response.Location;
+                                if (response.error.data.method) {
+                                    response = response.error.data;
+                                } else {
+                                    return this.onLoginFail({responseText: JSON.stringify(response.error)});
+                                }
+                            }
+                            if (response?.method) {
+                                if (String(response?.method).toUpperCase() !== 'POST') {
+                                    window.location.href = response.url;
+                                } else {
+                                    window.document.body.innerHTML = response.postFormHTML;
+                                    document.getElementsByTagName("form")[0].submit();
+                                }
+                                return;
                             }
                         }
                         Ext.MessageBox.show({

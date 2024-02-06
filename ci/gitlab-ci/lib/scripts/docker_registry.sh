@@ -66,7 +66,7 @@ docker_registry_release_image() {
 
     if [ -z "$CI_COMMIT_TAG" ]; then
         echo "pushing nightly"
-        docker_registry_push "${from}" "${desitination}:dev-$(git describe --tags)"
+        docker_registry_push "${from}" "${desitination}:dev-$(git describe --tags 2> /dev/null || git fetch --unshallow --quiet && git describe --tags)"
         return
     fi
 

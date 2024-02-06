@@ -143,7 +143,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.imageCt = img;
         this.textCt.setVisible(this.value === this.defaultImage);
         this.imageCt.setOpacity(this.value === this.defaultImage ? 0.2 : 1);
-        
+
         img.on('load', function () {
             if (this.value === this.defaultImage) {
                 this.imageCt.setStyle({
@@ -151,11 +151,15 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
                     top: ((this.height - this.imageCt.getHeight()) /2)+ 'px',
                     left: ((this.width - this.imageCt.getWidth()) /2) + 'px'
                 });
+            } else {
+                this.imageCt.setStyle({
+                    filter: 'none'
+                });
             }
             this.loadMask.hide();
         }, this);
         img.on('error', function () {
-            Ext.MessageBox.alert(i18n._('Image Failed'), i18n._('Could not load image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
+            Ext.MessageBox.alert(i18n._('Image Failed'), i18n._('Could not load image. Please notify your Administrator'));
             this.loadMask.hide();
         }, this);
     },
@@ -177,7 +181,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
      */
     onFileSelect: function (fileSelector) {
         if (! fileSelector.isImage()) {
-            Ext.MessageBox.alert(i18n._('Not An Image'), i18n._('Please select an image file (gif/png/jpeg)')).setIcon(Ext.MessageBox.ERROR);
+            Ext.MessageBox.alert(i18n._('Not An Image'), i18n._('Please select an image file (gif/png/jpeg)'));
             return;
         }
         
@@ -220,7 +224,7 @@ Ext.ux.form.ImageField = Ext.extend(Ext.form.Field, {
         this.uploader.un('uploadcomplete', this.onUploadComplete, this);
         this.uploader.un('uploadfailure', this.onUploadFail, this);
         
-        Ext.MessageBox.alert(i18n._('Upload Failed'), i18n._('Could not upload image. Please notify your Administrator')).setIcon(Ext.MessageBox.ERROR);
+        Ext.MessageBox.alert(i18n._('Upload Failed'), i18n._('Could not upload image. Please notify your Administrator'));
     },
     /**
      * executed on image contextmenu
@@ -378,4 +382,3 @@ Ext.ux.util.ImageURL.prototype.parseURL = function (url) {
     }
     return new Ext.ux.util.ImageURL(params);
 };
-

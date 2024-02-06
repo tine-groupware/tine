@@ -173,14 +173,32 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * clean timemachine_modlog for records that have been pruned (not deleted!)
+     *  - accepts optional param date=YYYY-MM-DD to delete all modlogs before this date
+     *  - accepts optional param instanceseq=NUMBER to delete all modlogs before this instance_seq
+     *
+     * @param Zend_Console_Getopt|null $_opts
+     * @return int
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function cleanModlog()
+    public function cleanModlog(?Zend_Console_Getopt $_opts = null): int
     {
         $this->_checkAdminRight();
 
-        $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean();
+        $args = $_opts ? $this->_parseArgs($_opts, array()) : [];
 
-        echo "\ndeleted $deleted modlogs records\n";
+        $before = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
+        $beforeSeq = $args['instanceseq'] ?? null;
+
+        if ($beforeSeq || $before) {
+            $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clearTable($before, $beforeSeq);
+        } else {
+            $deleted = Tinebase_Timemachine_ModificationLog::getInstance()->clean();
+        }
+
+        echo "\nDeleted $deleted modlogs records\n";
+
+        return 0;
     }
 
     /**
@@ -501,49 +519,36 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * purge deleted records
      *
-     * if param date is given (for example: date=2010-09-17), all records before this date are deleted (if the table has a date field)
-     * if table names are given, purge only records from this tables
+     * If param date is given (for example: date=2010-09-17), all records before this date are deleted
+     * (if the table has a date field). If table names are given, purge only records from these tables.
+     * We also remove all modification log records before the given date (with param modlog=purge)!
+     *      - modlog can be skipped with skip=modlog
      *
-     * @param $_opts
-     * @return boolean success
-     *
-     * TODO move purge logic to applications, purge Tinebase tables at the end
+     * @param Zend_Console_Getopt $_opts
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function purgeDeletedRecords(Zend_Console_Getopt $_opts)
+    public function purgeDeletedRecords(Zend_Console_Getopt $_opts): int
     {
         $this->_checkAdminRight();
 
         $args = $this->_parseArgs($_opts, array(), 'tables');
-        $doEverything = false;
+        $date = isset($args['date']) ? new Tinebase_DateTime($args['date']) : null;
+        $tables = isset($args['tables']) ? (array) $args['tables'] : [];
+        $skip = $args['skip'] ?? null;
 
-        if (! (isset($args['tables']) || array_key_exists('tables', $args)) || empty($args['tables'])) {
-            echo "No tables given.\nPurging records from all tables!\n";
-            $args['tables'] = $this->_getAllApplicationTables();
-            $doEverything = true;
-        }
+        echo "\nPurging obsolete data from tables...";
+        $result = Tinebase_Controller::getInstance()->removeObsoleteData($date, $tables, false);
 
-        $db = Tinebase_Core::getDb();
-
-        if ((isset($args['date']) || array_key_exists('date', $args))) {
-            echo "\nRemoving all deleted entries before {$args['date']} ...";
-            $where = array(
-                $db->quoteInto($db->quoteIdentifier('deleted_time') . ' < ?', $args['date'])
-            );
-        } else {
-            echo "\nRemoving all deleted entries ...";
-            $where = array();
-        }
-        $where[] = $db->quoteInto($db->quoteIdentifier('is_deleted') . ' = ?', 1);
-
-        $orderedTables = $this->_orderTables($args['tables']);
-        $this->_purgeTables($orderedTables, $where);
-
-        if ($doEverything) {
+        if (empty($tables)) {
+            // TODO move to \Tinebase_Controller::removeObsoleteData
             echo "\nCleaning relations...";
             $this->cleanRelations();
 
-            echo "\nCleaning modlog...";
-            $this->cleanModlog();
+            if ('modlog' !== $skip) {
+                echo "\nCleaning modlog...";
+                $this->cleanModlog(isset($args['modlog']) && $args['modlog'] === 'purge' ? $_opts : null);
+            }
 
             echo "\nCleaning customfields...";
             $this->cleanCustomfields();
@@ -558,13 +563,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             Tinebase_Path_Backend_Sql::optimizePathsTable();
         }
 
-        echo "\n\n";
-
-        return TRUE;
+        return $result ? 0 : 1;
     }
 
     /**
-     * cleanNotes: removes notes of records that have been deleted
+     * cleanNotes: removes notes of records that have been deleted and old avscans
      *
      * -- purge=1 param also removes redundant notes (empty updates + create notes)
      * supports dry run (-d)
@@ -575,129 +578,16 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $args = $this->_parseArgs($_opts, array(), 'cleanNotesOffset');
 
-        $notesController = Tinebase_Notes::getInstance();
-        $limit = 1000;
         $offset = (isset($args['cleanNotesOffset']) ? $args['cleanNotesOffset'] : 0);
-        $controllers = array();
-        $models = array();
-        $deleteIds = array();
-        $deletedCount = 0;
         $purge = isset($args['purge']) ? $args['purge'] : false;
-        $purgeCountCreated = 0;
-        $purgeCountEmptyUpdate = 0;
 
-        do {
-            echo "\noffset $offset...";
-
-            $notes = $notesController->getAllNotes('id ASC', $limit, $offset);
-            $offset += $limit;
-
-            /** @var Tinebase_Model_Note $note */
-            foreach ($notes as $note) {
-                if (!isset($controllers[$note->record_model])) {
-                    if (strpos($note->record_model, 'Tinebase') === 0) {
-                        continue;
-                    }
-                    try {
-                        $controllers[$note->record_model] = Tinebase_Core::getApplicationInstance($note->record_model);
-                    } catch (Tinebase_Exception_AccessDenied $e) {
-                        // TODO log
-                        continue;
-                    } catch (Tinebase_Exception_NotFound $tenf) {
-                        $deleteIds[] = $note->getId();
-                        continue;
-                    }
-                    $oldACLCheckValue = $controllers[$note->record_model]->doContainerACLChecks(false);
-                    $models[$note->record_model] = array(
-                        0 => new $note->record_model(),
-                        1 => ($note->record_model !== 'Filemanager_Model_Node' ? class_exists($note->record_model . 'Filter') : false),
-                        2 => $note->record_model . 'Filter',
-                        3 => $oldACLCheckValue
-                    );
-                }
-                $controller = $controllers[$note->record_model];
-                $model = $models[$note->record_model];
-
-                if ($model[1]) {
-                    $filter = new $model[2](array(
-                        array(
-                            'field' => $model[0]->getIdProperty(),
-                            'operator' => 'equals',
-                            'value' => $note->record_id
-                        )
-                    ));
-                    if ($model[0]->has('is_deleted')) {
-                        $filter->addFilter(new Tinebase_Model_Filter_Int(array(
-                            'field' => 'is_deleted',
-                            'operator' => 'notnull',
-                            'value' => null
-                        )));
-                    }
-                    $result = $controller->searchCount($filter);
-
-                    if (is_bool($result) || (is_string($result) && $result === ((string)intval($result)))) {
-                        $result = (int)$result;
-                    }
-
-                    if (!is_int($result)) {
-                        if (is_array($result) && isset($result['totalcount'])) {
-                            $result = (int)$result['totalcount'];
-                        } elseif (is_array($result) && isset($result['count'])) {
-                            $result = (int)$result['count'];
-                        } else {
-                            // todo log
-                            // dummy line, remove!
-                            $result = 1;
-                        }
-                    }
-
-                    if ($result === 0) {
-                        $deleteIds[] = $note->getId();
-                    } else if ($purge) {
-                        if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CREATED) {
-                            $deleteIds[] = $note->getId();
-                            $purgeCountCreated++;
-                        } else if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED && strpos($note->note, '|') === false) {
-                            $deleteIds[] = $note->getId();
-                            $purgeCountEmptyUpdate++;
-                        }
-                    }
-                } else {
-                    try {
-                        $controller->get($note->record_id, null, false, true);
-                    } catch (Tinebase_Exception_NotFound $tenf) {
-                        $deleteIds[] = $note->getId();
-                    }
-                }
-            }
-            if (count($deleteIds) > 0) {
-                $deletedCount += count($deleteIds);
-                if ($_opts->d) {
-                    $offset -= count($deleteIds);
-                } else {
-                    $offset -= $notesController->purgeNotes($deleteIds);
-                }
-                if ($offset < 0) {
-                    $offset = 0;
-                }
-                $deleteIds = [];
-            }
-            echo ' done';
-        } while ($notes->count() === $limit);
-
-        foreach($controllers as $model => $controller) {
-            $controller->doContainerACLChecks($models[$model][3]);
-        }
+        $deletedCount = Tinebase_Notes::getInstance()->removeObsoleteData($purge, $offset, $_opts->d);
 
         if ($_opts->d) {
             echo "\nDRY RUN!";
         }
 
-        if ($purge) {
-            echo "\npurged " . $purgeCountEmptyUpdate . " system notes with empty updates";
-            echo "\npurged " . $purgeCountCreated . " create system notes";
-        }
-        echo "\ndeleted " . $deletedCount . " notes\n";
+        echo "\nDeleted " . $deletedCount . " notes\n";
     }
 
     /**
@@ -798,122 +688,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
-     * get all app tables
-     *
-     * @return array
-     */
-    protected function _getAllApplicationTables()
-    {
-        $result = array();
-
-        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
-        foreach ($enabledApplications as $application) {
-            $result = array_merge($result, Tinebase_Application::getInstance()->getApplicationTables($application));
-        }
-
-        return $result;
-    }
-
-    /**
-     * order tables for purging deleted records in a defined order
-     *
-     * @param array $tables
-     * @return array
-     *
-     * TODO could be improved by using usort
-     */
-    protected function _orderTables($tables)
-    {
-        // tags + tree_nodes should be deleted first
-        // containers should be deleted last
-
-        $orderedTables = array();
-        $lastTables = array();
-        foreach($tables as $table) {
-            switch ($table) {
-                case 'container':
-                    $lastTables[] = $table;
-                    break;
-                case Timetracker_Model_Timeaccount::TABLE_NAME:
-                    array_unshift($lastTables, $table);
-                    break;
-                case 'tags':
-                case 'tree_nodes': // delete them before tree_objects
-                case 'cal_attendee': // delete them before events
-                    array_unshift($orderedTables, $table);
-                    break;
-                default:
-                    $orderedTables[] = $table;
-            }
-        }
-        $orderedTables = array_merge($orderedTables, $lastTables);
-
-        return $orderedTables;
-    }
-
-    /**
-     * purge tables
-     *
-     * @param $orderedTables
-     * @param $where
-     */
-    protected function _purgeTables($orderedTables, $where)
-    {
-        foreach ($orderedTables as $table) {
-            try {
-                $schema = Tinebase_Db_Table::getTableDescriptionFromCache(SQL_TABLE_PREFIX . $table);
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                echo "\nCould not get schema (" . $zdse->getMessage() . "). Skipping table $table";
-                continue;
-            }
-            if (!(isset($schema['is_deleted']) || array_key_exists('is_deleted', $schema)) || !(isset($schema['deleted_time']) || array_key_exists('deleted_time', $schema))) {
-                continue;
-            }
-
-
-            $deleteCount = 0;
-            try {
-                if ($table === 'tree_nodes') {
-                    $deleteCount = $this->_purgeTreeNodes($where);
-                } else {
-                    $deleteCount = Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . $table, $where);
-                }
-            } catch (Zend_Db_Statement_Exception $zdse) {
-                echo "\nFailed to purge deleted records for table $table. " . $zdse->getMessage();
-            }
-            if ($deleteCount > 0) {
-                echo "\nCleared table $table (deleted $deleteCount records).";
-            }
-            // TODO this should only be echoed with --verbose or written to the logs
-            else {
-                echo "\nNothing to purge from $table";
-            }
-        }
-    }
-
-    protected function _purgeTreeNodes($where)
-    {
-        Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
-
-        array_walk($where, function (&$item) {
-            $item = 'n.' . $item;
-        });
-        $table = SQL_TABLE_PREFIX . 'tree_nodes';
-        $idsQuery = 'SELECT n.id from ' . $table . ' as n LEFT JOIN ' . $table . ' as '
-            . 'child on n.id = child.parent_id WHERE child.id is NULL AND ' . implode(' AND ', $where);
-        $deleteQuery = 'DELETE FROM ' . $table . ' WHERE id IN (?)';
-        $deleteCount = 0;
-
-        do {
-            $ids = Tinebase_Core::getDb()->query($idsQuery)->fetchAll(Zend_Db::FETCH_COLUMN, 0);
-            $deleteCount += count($ids);
-        } while (!empty($ids) && Tinebase_Core::getDb()->query(Tinebase_Core::getDb()->quoteInto($deleteQuery, $ids))
-            ->rowCount() > 0);
-
-        return $deleteCount;
-    }
-
-    /**
      * add new customfield config
      *
      * example:
@@ -979,14 +753,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $data[$key] = $value;
         }
 
-        if (! isset($data['grants']) || ! isset($data['name'])) {
-            throw new Tinebase_Exception_InvalidArgument('grants and name params are required');
+        if (! isset($data['grants']) || ! isset($data['name']) || ! isset($data['model'])) {
+            throw new Tinebase_Exception_InvalidArgument('grants, name, model params are required');
         }
 
         $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             $data['application_id'],
             $data['name'],
-            null,
+            $data['model'],
             false,
             true
         );
@@ -1843,6 +1617,26 @@ fi';
         return 0;
     }
 
+    public function actionQueueRestoreDeadLetter(Zend_Console_Getopt $opts): int
+    {
+        $this->_checkAdminRight();
+
+        if (Tinebase_ActionQueue_Backend_Redis::class !== Tinebase_ActionQueue::getInstance()->getBackendType()) {
+            echo 'only works with redis backend' . PHP_EOL;
+            return 1;
+        }
+
+        $data = $this->_parseArgs($opts, array('jobId'));
+
+        if (Tinebase_ActionQueue::getInstance()->restoreDeadletter($data['jobId'])) {
+            echo 'restore succeeded' . PHP_EOL;
+        } else {
+            echo 'restore failed' . PHP_EOL;
+        }
+
+        return 0;
+    }
+
     /**
      * undo changes to records defined by certain criteria (user, date, fields, ...)
      * 
@@ -2685,6 +2479,25 @@ fi';
     {
         $this->_checkAdminRight();
         Tinebase_FileSystem::getInstance()->repairTreeIsDeletedState();
+    }
+
+    /**
+     * Generates new js Translation List files for given locale and path
+     * If no locales is given all available locales are generated
+     *
+     * @param $opts
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function generateTranslationLists($opts)
+    {
+        $this->_checkAdminRight();
+        $args = $this->_parseArgs($opts);
+        $locale = isset($args['locale']) ? $args['locale'] : null;
+        $path = isset($args['path']) ? $args['path'] : null;
+
+        $translations = new Tinebase_Translation();
+        $translations->generateTranslationLists($locale, $path);
     }
 }
 

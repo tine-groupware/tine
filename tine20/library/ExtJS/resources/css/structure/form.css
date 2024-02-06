@@ -292,10 +292,6 @@ textarea {
     line-height:16px !important;
 }
 
-.ext-strict .x-small-editor .x-form-text {
-    height:16px !important;
-}
-
 .ext-ie6 .x-small-editor .x-form-text, .ext-ie7 .x-small-editor .x-form-text {
     height:20px;
     line-height:16px;
@@ -313,10 +309,6 @@ textarea {
 
 .x-small-editor .x-form-num-field {
     text-align:right;
-}
-
-.x-small-editor .x-form-field-wrap .x-form-trigger{
-    height:19px;
 }
 
 .ext-webkit .x-small-editor .x-form-text{padding-top:3px;font-size:100%;}

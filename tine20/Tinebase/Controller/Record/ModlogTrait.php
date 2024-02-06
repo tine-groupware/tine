@@ -93,13 +93,11 @@ trait Tinebase_Controller_Record_ModlogTrait
             return NULL;
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Writing modlog for ' . get_class($notNullRecord));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Writing modlog for ' . get_class($notNullRecord));
 
-        $currentMods = Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName,
+        return Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($_newRecord, $_oldRecord, $this->_modelName,
             $this->_getBackendType(), $notNullRecord->getId());
-
-        return $currentMods;
     }
 
     /**

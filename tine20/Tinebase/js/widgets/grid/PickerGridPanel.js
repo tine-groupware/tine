@@ -7,6 +7,7 @@
  */
 
 require('../../../css/widgets/PickerGridPanel.css');
+const { getLocalizedLangPicker } = require("../form/LocalizedLangPicker");
 
 Ext.ns('Tine.widgets.grid');
 
@@ -51,7 +52,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @cfg {bool}
      * enable top toolbar (with search combo)
      */
-    enableTbar: true,
+    enableTbar: null,
 
     /**
      * store to hold records
@@ -86,6 +87,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     searchRecordClass: null,
 
     isMetadataModelFor: null,
+
+    metaDataFields: null,
     
     /**
      * search combo config
@@ -176,22 +179,46 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         this.autoExpandColumn = this.autoExpandColumn? this.autoExpandColumn : this.labelField;
 
+        const modelConf = (this.recordClass.getModelConfiguration ? this.recordClass.getModelConfiguration() : {}) || {};
+
+        // Autodetect if our record has additional metadata for the refId Record or is only a cross table
+        if (this.refIdField) {
+            const dataFields = _.difference(this.recordClass.getDataFields(), [this.refIdField]);
+
+            this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 /* precisely this is a cross-record */ ? dataFields[0] : null;
+            this.metaDataFields = _.difference(dataFields, [this.isMetadataModelFor]);
+            this.columns = this.columns || (this.isMetadataModelFor ? [this.isMetadataModelFor].concat(this.metaDataFields) : null);
+        }
+
+        this.on('afterrender', this.onAfterRender, this);
+        this.initComponentMixin();
+        Tine.widgets.grid.PickerGridPanel.superclass.initComponent.call(this);
+    },
+
+    // NOTE: shared with Tine.widgets.grid.QuickaddGridPanel
+    initComponentMixin: function () {
         this.initStore();
         this.initGrid();
         this.initActionsAndToolbars();
 
-        this.on('afterrender', this.onAfterRender, this);
-        this.on('rowdblclick', this.onRowDblClick, this);
+
+        this.on('celldblclick', this.onRowDblClick, this);
 
         if (! this.editDialogConfig?.mode) {
             this.editDialogConfig = this.editDialogConfig || {};
-            this.editDialogConfig.mode = (!this.refIdField || !this.recordClass.getModelConfiguration().fields[this.refIdField]?.config?.dependentRecords) ? 'remote' : 'local';
+            const modelConfig = _.isFunction(this.recordClass?.getModelConfiguration) ? this.recordClass.getModelConfiguration() : null;
+            const refConfig = _.get(modelConfig, `fields.${this.refIdField}.config`, {});
+            const foreignFieldDefinition = _.get(Tine.Tinebase.data.RecordMgr.get(refConfig.appName, refConfig.modelName)?.getModelConfiguration(), `fields.${refConfig.foreignField}`, {});
+            const dependentRecords = _.get(foreignFieldDefinition, `config.dependentRecords`, false);
+            const isJSONStorage = _.toUpper(_.get(foreignFieldDefinition, `config.storage`, '')) === 'JSON';
+            const hasNoAPI = _.isFunction(this.recordClass.getMeta) && !_.get(Tine, `${this.recordClass.getMeta('appName')}.search${_.upperFirst(this.recordClass.getMeta('modelName'))}s`)
+
+            this.editDialogConfig.mode = hasNoAPI || isJSONStorage || modelConfig?.isDependent || dependentRecords ? 'local' : 'remote';
         }
-        Tine.widgets.grid.PickerGridPanel.superclass.initComponent.call(this);
     },
 
     onAfterRender: function() {
-        this.parentEditDialog = this.findParentBy(function (c) {
+        this.parentEditDialog = this.parentEditDialog || this.findParentBy(function (c) {
             return c instanceof Tine.widgets.dialog.EditDialog
         });
 
@@ -222,6 +249,13 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         // pickerCombos doesn´t show
         this.doLayout();
+    },
+
+    onBeforeEdit: function(o) {
+        if (this.isMetadataModelFor && this.isMetadataModelFor === o.field) {
+            o.cancel = true;
+        }
+        return Tine.widgets.grid.PickerGridPanel.superclass.onBeforeEdit.apply(this, arguments);
     },
 
     /**
@@ -269,10 +303,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * init actions and toolbars
      */
     initActionsAndToolbars: function() {
+        const hasEditDialog = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
+        const useEditDialog = !this.isMetadataModelFor || !this.metaDataFields || _.isArray(this.metaDataFields) && this.metaDataFields.length;
 
         this.actionCreate = new Ext.Action({
             text: String.format(i18n._('Create {0}'), this.recordName),
-            hidden: !this.recordClass || !this.allowCreateNew,
+            hidden: !hasEditDialog || !this.allowCreateNew || !useEditDialog,
             scope: this,
             handler: this.onCreate,
             iconCls: 'action_add'
@@ -280,7 +316,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.actionEdit = new Ext.Action({
             text: String.format(i18n._('Edit {0}'), this.recordName),
-            hidden: !this.recordClass || !(this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass)),
+            hidden: !hasEditDialog || !useEditDialog,
             scope: this,
             disabled: true,
             actionUpdater: function(action, grants, records) {
@@ -346,7 +382,20 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     this.actionRemove
                 ].concat(this.contextMenuItems || [])
             });
+            if (_.isFunction(this.recordClass?.getModelConfiguration)) {
+                this.localizedLangPicker = getLocalizedLangPicker(this.recordClass)
+                if (this.localizedLangPicker) {
+                    this.store.localizedLang = this.localizedLangPicker.getValue()
+                    this.localizedLangPicker.on('change', (picker, lang) => {
+                        this.store.localizedLang = lang
+                        this.getView().refresh()
+                    })
+                    this.bbar.add('->', this.localizedLangPicker);
+                }
+            }
         }
+
+        this.enableTbar = _.isBoolean(this.enableTbar) ? this.enableTbar : (!this.refIdField || this.isMetadataModelFor);
 
         if (this.enableTbar) {
             this.initTbar();
@@ -413,11 +462,6 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         // on rowcontextmenu handler
         this.on('rowcontextmenu', this.onRowContextMenu.createDelegate(this), this);
-
-        this.viewConfig = {
-            autoFill: true,
-            forceFit: true
-        };
     },
 
     /**
@@ -440,11 +484,16 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.columns = [labelColumn];
             } else {
                 // convert string cols
+                const fieldManager = _.bind(Tine.widgets.form.FieldManager.get,
+                    Tine.widgets.form.FieldManager, me.recordClass.getMeta('appName'), me.recordClass.getMeta('modelName'), _,
+                    Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID);
+
                 _.each(me.columns, function(col, idx) {
                     if (_.isString(col)) {
                         var config = Tine.widgets.grid.ColumnManager.get(me.recordClass.getMeta('appName'), me.recordClass.getMeta('modelName'), col, 'editDialog');
                         if (config) {
                             me.columns[idx] = config;
+                            config.editor = fieldManager(col);
                         }
                     }
                 });
@@ -459,6 +508,10 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             });
         }
 
+        this.hideHeaders = this.hasOwnProperty('hideHeaders') ? this.hideHeaders : (!this.columns || this.columns.length < 2);
+        if (this.columns && this.autoExpandColumn && !_.find(this.columns, {dataIndex: this.autoExpandColumn})) {
+            this.autoExpandColumn = this.columns[0]?.dataIndex;
+        }
         return this.colModel;
     },
 
@@ -471,7 +524,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     onRowContextMenu: function(grid, row, e) {
         e.stopEvent();
 
-        this.fireEvent('beforecontextmenu', grid, row, e);
+        if (this.fireEvent('beforecontextmenu', grid, row, e) === false) return;
 
         var selModel = grid.getSelectionModel();
         if(!selModel.isSelected(row)) {
@@ -486,15 +539,17 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     getSearchCombo: function() {
         if (! this.searchCombo) {
-            if (this.isMetadataModelFor !== null) {
+            const searchComboConfig = {... this.searchComboConfig || {}};
+
+            if (this.isMetadataModelFor) {
                 var mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor),
-                    mappingRecordClass = mappingFieldDef.getRecordClass()
-                    this.searchRecordClass = mappingRecordClass;
+                    mappingRecordClass = mappingFieldDef.getRecordClass();
+                this.searchRecordClass = mappingRecordClass;
+                searchComboConfig.useEditPlugin = true;
             }
             
             var recordClass = (this.searchRecordClass !== null) ? Tine.Tinebase.data.RecordMgr.get(this.searchRecordClass) : this.recordClass,
                 appName = recordClass.getMeta('appName');
-                //model = recordClass.getModel();
 
             this.searchCombo = Tine.widgets.form.RecordPickerManager.get(appName, recordClass, Ext.apply({
                 blurOnSelect: true,
@@ -502,7 +557,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     scope: this,
                     select: this.onAddRecordFromCombo
                 }
-            }, this.searchComboConfig));
+            }, searchComboConfig));
         }
 
         return this.searchCombo;
@@ -520,18 +575,33 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
            return;
         }
         
-        if (this.isMetadataModelFor !== null) {
+        if (this.isMetadataModelFor) {
             var recordData = this.getRecordDefaults();
-            recordData[this.isMetadataModelFor] = recordToAdd;
-            var record = new this.recordClass(recordData);
+            recordData[this.isMetadataModelFor] = recordToAdd.getData();
+            var record =  Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
+
+            // check if already in
+            const existingRecord = this.store.findBy(function (r) {
+                const metaData = r.get(this.isMetadataModelFor) ?? '';
+                if (metaData && metaData.id === record.get(this.isMetadataModelFor).id) {
+                    return true;
+                }
+            }, this);
+            if (existingRecord === -1) {
+                if (this.fireEvent('beforeaddrecord', record, this) !== false) {
+                    this.store.add([record]);
+                    this.fireEvent('add', this, [record]);
+                }
+            }
         } else {
             var record = new this.recordClass(Ext.applyIf(recordToAdd.data, this.getRecordDefaults()), recordToAdd.id);
-        }
-
-        // check if already in
-        if (! this.store.getById(record.id)) {
-            this.store.add([record]);
-            this.fireEvent('add', this, [record]);
+            // check if already in
+            if (! this.store.getById(record.id)) {
+                if (this.fireEvent('beforeaddrecord', record, this) !== false) {
+                    this.store.add([record]);
+                    this.fireEvent('add', this, [record]);
+                }
+            }
         }
 
         picker.reset();
@@ -539,17 +609,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     onCreate: function() {
         const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.recordClass.getDefaultData(), this.getRecordDefaults()), this.recordClass);
+        record.phantom = true;
         const editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
         const mode = this.editDialogConfig?.mode || editDialogClass.prototype.mode;
 
-        if (mode === 'remote') {
-            // prevent loading non existing remote record
-            record.setId(0);
-        }
-
         editDialogClass.openWindow(_.assign({
-            record: Ext.encode(record.data),
+            record: Ext.encode(record.getData()),
             recordId: record.getId(),
+            needsUpdateEvent: true,
             listeners: {
                 scope: this,
                 update: this.onEditDialogRecordUpdate
@@ -560,7 +627,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     getRecordDefaults: function() {
         const defaults = {...this.recordDefaults || {} };
         if (this.refIdField) {
-            defaults[this.refIdField] = this.parentEditDialog.record.getId();
+            defaults[this.refIdField] = this.parentEditDialog?.record?.getId();
         }
 
         return defaults;
@@ -670,21 +737,38 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     validate: function() { return true; },
 
     // NOTE: shared with Tine.widgets.grid.QuickaddGridPanel
-    onRowDblClick: function(grid, row, col) {
+    onRowDblClick: function(grid, row, col, e) {
         var me = this,
             editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(me.recordClass),
-            record = me.store.getAt(row);
+            record = me.store.getAt(row),
+            editDialogConfig = { ... this.editDialogConfig || {} },
+            updateFn = me.onEditDialogRecordUpdate;
+
+        // in case of metadataFor / simple cross tables we might edit the metadataFor / referenced record
+        if(this.isMetadataModelFor && this.isMetadataModelFor === this.colModel.getColumnAt(col).dataIndex) {
+            const recordClass = this.recordClass.getField(this.isMetadataModelFor).getRecordClass();
+            editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
+            record = Tine.Tinebase.data.Record.setFromJson(record.get(this.isMetadataModelFor), recordClass);
+            editDialogConfig.mode = record.phantom ? 'local' : 'remote';
+            updateFn = (updatedRecordData) => {
+                const updatedRecord = Tine.Tinebase.data.Record.setFromJson(updatedRecordData, recordClass);
+                me.store.getAt(row).set(this.isMetadataModelFor, updatedRecord.getData());
+                me.store.getAt(row).commit();
+            }
+        }
+
+        if (this.fireEvent('beforeeditrecord', record, this) === false) return;
 
         if (editDialogClass) {
             editDialogClass.openWindow(_.assign({
-                record: JSON.stringify(record.data),
+                record: JSON.stringify(record.getData()),
                 recordId: record.getId(),
                 fixedFields: this.readOnly ? JSON.stringify(Object.assign(Object.fromEntries(record.constructor.getFieldNames().map((k, i) => [k, null])), record.data)) : null,
                 listeners: {
                     scope: me,
-                    update: me.onEditDialogRecordUpdate
+                    update: updateFn
                 }
-            }, this.editDialogConfig || {}));
+            }, editDialogConfig));
         }
     },
     

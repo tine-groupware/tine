@@ -40,27 +40,6 @@ msgstr ""
 msgid "Check"
 msgstr "Teste"
 
-msgid "No valid license"
-msgstr "Keine aktive Lizenz"
-
-msgid "License Information"
-msgstr "Lizenzinformation"
-
-msgid "License Configuration"
-msgstr "Lizenzkonfiguration"
-
-msgid "Contract ID"
-msgstr "Vertragsnummer"
-
-msgid "Valid from"
-msgstr "Gültig ab"
-
-msgid "Serial Number"
-msgstr "Seriennummer"
-
-msgid "Valid to"
-msgstr "Gültig bis"
-
 #: js/EnvCheckGridPanel.js:161
 msgid "Result"
 msgstr "Ergebnis"
@@ -914,3 +893,39 @@ msgstr "Maximale Benutzerzahl (0=Unbegrenzt)"
 
 msgid "Updating {0} Applications."
 msgstr "Aktualisiere {0} Anwendungen."
+
+msgid "No valid license"
+msgstr "Keine aktive Lizenz"
+
+msgid "License Information"
+msgstr "Lizenzinformation"
+
+msgid "License Configuration"
+msgstr "Lizenzkonfiguration"
+
+msgid "Contract ID"
+msgstr "Vertragsnummer"
+
+msgid "Valid from"
+msgstr "Gültig ab"
+
+msgid "Serial Number"
+msgstr "Seriennummer"
+
+msgid "Valid to"
+msgstr "Gültig bis"
+
+msgid "Select file containing your Subscription key"
+msgstr "Wählen Sie die Datei, die Ihren Subskription enthält"
+
+msgid "Your Subscription is not valid."
+msgstr "Sie haben keine gültige Subskription."
+
+msgid "Subscription Configuration"
+msgstr "Subskription Konfiguration"
+
+msgid "Subscription Information"
+msgstr "Subskription Informationen"
+
+msgid "Delete current Subscription"
+msgstr "Aktuelle Subskription löschen"

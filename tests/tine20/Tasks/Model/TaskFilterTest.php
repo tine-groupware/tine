@@ -28,7 +28,7 @@ class Tasks_Model_TaskFilterTest extends \PHPUnit\Framework\TestCase
         $user = Tinebase_Core::getUser();
         $container = Tinebase_Container::getInstance()->getPersonalContainer($user, Tasks_Model_Task::class, $user, Tinebase_Model_Grants::GRANT_ADMIN);
         $container_id = $container[0]->getId();
-        $backend = new Tasks_Backend_Sql();
+        $backend = Tasks_Controller_Task::getInstance()->getBackend();
         
         $testTask1 = new Tasks_Model_Task(array(
             // Tine 2.0 record fields
@@ -79,7 +79,7 @@ class Tasks_Model_TaskFilterTest extends \PHPUnit\Framework\TestCase
 {
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
         $pfe->deleteByProperty('All my tasks', 'description');
-        $backend = new Tasks_Backend_Sql();
+        $backend = Tasks_Controller_Task::getInstance()->getBackend();
         $backend->deleteByProperty("Test Task", "description");
     }
     
@@ -88,7 +88,7 @@ class Tasks_Model_TaskFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testSearchByContainerFilter() 
     {
-        $backend = new Tasks_Backend_Sql();
+        $backend = Tasks_Controller_Task::getInstance()->getBackend();
         $filter = new Tasks_Model_TaskFilter(array(
              array('field' => 'container_id', 'operator' => 'equals', 'value' => '/personal/' . Tinebase_Model_User::CURRENTACCOUNT)
         ));
@@ -101,7 +101,7 @@ class Tasks_Model_TaskFilterTest extends \PHPUnit\Framework\TestCase
      */
     public function testSearchByUserFilter() 
     {
-        $backend = new Tasks_Backend_Sql();
+        $backend = Tasks_Controller_Task::getInstance()->getBackend();
         $filter = new Tasks_Model_TaskFilter(array(
              array('field' => 'organizer', 'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT)
         ));

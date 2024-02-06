@@ -165,7 +165,7 @@ class Felamimail_Sieve_AdbList
             throw new Tinebase_Exception_NotFound('account of list ' . $list->getId() . ' not found');
         }
 
-        if ($account instanceof Felamimail_Model_Account && Tinebase_EmailUser::sieveBackendSupportsMasterPassword($account)) {
+        if ($account instanceof Felamimail_Model_Account && Tinebase_EmailUser::backendSupportsMasterPassword($account)) {
             $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($account->getId());
             $sieveAdminAccessActivated = true;
         } else {
@@ -189,7 +189,7 @@ class Felamimail_Sieve_AdbList
         }
 
         if ($sieveAdminAccessActivated) {
-            Tinebase_EmailUser::removeSieveAdminAccess();
+            Tinebase_EmailUser::removeAdminAccess();
         }
         unset($raii);
 

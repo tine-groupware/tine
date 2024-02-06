@@ -2,10 +2,13 @@
 
 module.exports = {
   root: true,
+  // TODO: `parserOptions` had to be set in webpack.common.js
+  /*
   parserOptions: {
     sourceType: 'module',
     parser: 'babel-eslint'
   },
+  */
   env: {
     browser: true
   },
@@ -14,15 +17,21 @@ module.exports = {
     Ext: true,
     _: true
   },
+  // TODO: `extends` had to be set in webpack.common.js
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
+  /*
   extends: [
-    'standard',
-    'plugin:vue/essential'
+    './Tinebase/js/node_modules/eslint-config-standard',
+    './Tinebase/js/node_modules/eslint-plugin-vue/lib/configs/essential.js'
   ],
+  */
   // required to lint *.vue files
+  // TODO: `plugins` had to be set in webpack.common.js
+  /*
   plugins: [
-    'notice', 'vue'
+    './Tinebase/js/node_modules/eslint-plugin-notice', require('./Tinebase/js/node_modules/eslint-plugin-vue')
   ],
+  */
   // add your custom rules here
   'rules': {
     // allow paren-less arrow functions

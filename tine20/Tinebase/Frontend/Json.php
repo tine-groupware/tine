@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  */
@@ -52,6 +52,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_DynamicRecordWrapper::MODEL_NAME_PART,
         Tinebase_Model_CostCenter::MODEL_NAME_PART,
         Tinebase_Model_CostUnit::MODEL_NAME_PART,
+        Tinebase_Model_BankAccount::MODEL_NAME_PART,
         Tinebase_Model_BankHolidayCalendar::MODEL_NAME_PART,
         Tinebase_Model_BankHoliday::MODEL_NAME_PART,
     ];
@@ -597,6 +598,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             );
         }
 
+        if (empty($password)) {
+            if (SSO_Controller::passwordLessLogin($username)) {
+                return $this->_getLoginSuccessResponse($username);
+            }
+            throw new Tinebase_Exception_Auth_PwdRequired();
+        }
+
         Tinebase_Controller::getInstance()->forceUnlockLoginArea();
         Tinebase_Controller::getInstance()->setRequestContext(array(
             'MFAPassword' => $MFAPassword,
@@ -654,6 +662,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'jsonKey' => Tinebase_Core::get('jsonKey'),
             'welcomeMessage' => "Welcome to Tine 2.0!"
         );
+
+        try {
+            $response['assetHash'] = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
+        } catch (Exception $e) {}
+        
         if (Tinebase_Core::get(Tinebase_Core::SESSION)->encourage_mfa) {
             $response['encourage_mfa'] = true;
         }
@@ -775,7 +788,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $registryData = $this->_getAnonymousRegistryData();
+        $registryData = Tinebase_Core::getCoreRegistryData();
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             if (Tinebase_AreaLock::getInstance()->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) &&
@@ -802,104 +815,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $registryData;
     }
-
-    /**
-     * get anonymous registry
-     *
-     * @return array
-     * @throws Tinebase_Exception
-     * @throws Exception
-     */
-    protected function _getAnonymousRegistryData()
-    {
-        $locale = Tinebase_Core::get('locale');
-        $tbFrontendHttp = new Tinebase_Frontend_Http();
-        
-        // default credentials
-        if (isset(Tinebase_Core::getConfig()->login)) {
-            $loginConfig = Tinebase_Core::getConfig()->login;
-            $defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
-            $defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
-        } else {
-            $defaultUsername = '';
-            $defaultPassword = '';
-        }
-        
-        $symbols = Zend_Locale::getTranslationList('symbols', $locale);
-        try {
-            $assetHash = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
-        } catch (Exception $e) {
-            // unittests
-            $assetHash = Tinebase_Record_Abstract::generateUID(8);
-        }
-
-        $registryData =  array(
-            'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
-
-            // sso
-            'sso'               => Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_ACTIVE},
-
-            'serviceMap'       => $tbFrontendHttp->getServiceMap(),
-            'locale'           => array(
-                'locale'   => $locale->toString(),
-                'language' => Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale),
-                'region'   => Zend_Locale::getTranslation($locale->getRegion(), 'country', $locale),
-            ),
-            'version'          => array(
-                'buildType'     => TINE20_BUILDTYPE,
-                'codeName'      => TINE20_CODENAME,
-                'packageString' => TINE20_PACKAGESTRING,
-                'releaseTime'   => TINE20_RELEASETIME,
-                'assetHash'     => $assetHash,
-            ),
-            'setupRequired'     => Setup_Controller::getInstance()->setupRequired(),
-            'defaultUsername'   => $defaultUsername,
-            'defaultPassword'   => $defaultPassword,
-            'allowBrowserPasswordManager'=> Tinebase_Config::getInstance()->get(Tinebase_Config::ALLOW_BROWSER_PASSWORD_MANAGER),
-            'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
-            'titlePostfix'      => Tinebase_Config::getInstance()->get(Tinebase_Config::PAGETITLEPOSTFIX),
-            'redirectUrl'       => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL),
-            'helpUrl'           => Tinebase_Core::getConfig()->helpUrl,
-            'maxFileUploadSize' => Tinebase_Helper::convertToBytes(ini_get('upload_max_filesize')),
-            'maxPostSize'       => Tinebase_Helper::convertToBytes(ini_get('post_max_size')),
-            'thousandSeparator' => $symbols['group'],
-            'decimalSeparator'  => $symbols['decimal'],
-            'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
-            'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
-            'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
-            'brandingLogo'      => 'logo',
-            'brandingFaviconSvg' => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG),
-            'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
-            'brandingDescription'=> Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_DESCRIPTION),
-            'brandingHelpUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_HELPURL),
-            'brandingShopUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_SHOPURL),
-            'brandingBugsUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_BUGSURL),
-            'installLogo'       => 'logo/i',
-            'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
-            'fulltextAvailable' => Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX),
-        );
-        $licenseRegistryData = $this->_getLicenseRegistry();
-        $registryData += $licenseRegistryData;
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
-            . ' Anonymous registry: ' . print_r($registryData, TRUE));
-        
-        return $registryData;
-    }
-
-    /**
-     * get license registry data
-     *
-     * @return array
-     */
-    protected function _getLicenseRegistry()
-    {
-        $license = Tinebase_License::getInstance();
-        return array(
-            'licenseStatus'     => $license->getStatus(),
-            'licenseData'       => $license->getCertificateData(),
-        );
-    }
-
+    
     /**
      * get user registry
      *
@@ -1676,7 +1592,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             Tinebase_Model_AuthToken::class, [
                 ['field' => Tinebase_Model_AuthToken::FLD_AUTH_TOKEN, 'operator' => 'equals', 'value' => $token]
             ]
-        ))->filter(Tinebase_Model_AuthToken::FLD_AUTH_TOKEN, $token,)->getFirstRecord();
+        ))->getFirstRecord();
 
         if ($t && in_array($channel, $t->{Tinebase_Model_AuthToken::FLD_CHANNELS})) {
             return $t->toArray();

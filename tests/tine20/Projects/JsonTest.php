@@ -32,6 +32,57 @@ class Projects_JsonTest extends TestCase
         $this->_json = new Projects_Frontend_Json();
     }
 
+    public function testAddProjectTasksDependingOnEach()
+    {
+        $project = $this->_getProjectData();
+        $id1 = Tinebase_Record_Abstract::generateUID();
+        $id2 = Tinebase_Record_Abstract::generateUID();
+        $id3 = Tinebase_Record_Abstract::generateUID();
+        $project[Projects_Model_Project::FLD_TASKS] = [
+            ['id' => $id1, 'summary' => 'task1', 'completed' => '1970-01-01 00:00:00', 'due' => '1970-01-01 00:00:00',
+                'description' => '', 'location' => '', 'status' => 'a', 'url' => '', 'etag' => '', 'attach' => '',
+                'attendee' => '', 'comment' => '', 'contact' => '', 'related' => '', 'resources' => '', 'rstatus' => '',
+                'dtstart' => '1970-01-01 00:00:00', 'duration' => '', 'recurid' => '', 'exdate' => '1970-01-01 00:00:00', 'exrule' => '', 'rdate' => '1970-01-01 00:00:00',
+                'rrule' => '', 'geo' => '1',
+                Tasks_Model_Task::FLD_DEPENDENS_ON => [[
+                    Tasks_Model_TaskDependency::FLD_DEPENDS_ON => $id2,
+                ]],
+                Tasks_Model_Task::FLD_DEPENDENT_TASKS => [[
+                    Tasks_Model_TaskDependency::FLD_TASK_ID => $id3,
+                ]]
+            ],
+            ['id' => $id2, 'summary' => 'task2', 'completed' => '1970-01-01 00:00:00', 'due' => '1970-01-01 00:00:00',
+                'description' => '', 'location' => '', 'status' => 'a', 'url' => '', 'etag' => '', 'attach' => '',
+                'attendee' => '', 'comment' => '', 'contact' => '', 'related' => '', 'resources' => '', 'rstatus' => '',
+                'dtstart' => '1970-01-01 00:00:00', 'duration' => '', 'recurid' => '', 'exdate' => '1970-01-01 00:00:00', 'exrule' => '', 'rdate' => '1970-01-01 00:00:00',
+                'rrule' => '', 'geo' => '1'],
+            ['id' => $id3, 'summary' => 'task3', 'completed' => '1970-01-01 00:00:00', 'due' => '1970-01-01 00:00:00',
+                'description' => '', 'location' => '', 'status' => 'a', 'url' => '', 'etag' => '', 'attach' => '',
+                'attendee' => '', 'comment' => '', 'contact' => '', 'related' => '', 'resources' => '', 'rstatus' => '',
+                'dtstart' => '1970-01-01 00:00:00', 'duration' => '', 'recurid' => '', 'exdate' => '1970-01-01 00:00:00', 'exrule' => '', 'rdate' => '1970-01-01 00:00:00',
+                'rrule' => '', 'geo' => '1'],
+        ];
+        $projectData = $this->_json->saveProject($project);
+
+        $this->assertCount(3, $projectData[Projects_Model_Project::FLD_TASKS]);
+        foreach ($projectData[Projects_Model_Project::FLD_TASKS] as $task) {
+            switch($task['id']) {
+                case $id1:
+                    $this->assertSame($id2, $task[Tasks_Model_Task::FLD_DEPENDENS_ON][0][Tasks_Model_TaskDependency::FLD_DEPENDS_ON]);
+                    $this->assertSame($id3, $task[Tasks_Model_Task::FLD_DEPENDENT_TASKS][0][Tasks_Model_TaskDependency::FLD_TASK_ID]);
+                    break;
+                case $id2:
+                    $this->assertSame($id1, $task[Tasks_Model_Task::FLD_DEPENDENT_TASKS][0][Tasks_Model_TaskDependency::FLD_TASK_ID]);
+                    break;
+                case $id3:
+                    $this->assertSame($id1, $task[Tasks_Model_Task::FLD_DEPENDENS_ON][0][Tasks_Model_TaskDependency::FLD_DEPENDS_ON]);
+                    break;
+                default:
+                    $this->fail('unexpected task id');
+            }
+        }
+    }
+
     /**
      * try to add a Project
      * @group nodockerci
@@ -39,6 +90,18 @@ class Projects_JsonTest extends TestCase
     public function testAddProject()
     {
         $project = $this->_getProjectData();
+        $project[Projects_Model_Project::FLD_TASKS] = [
+            ['summary' => 'task1', 'completed' => '1970-01-01 00:00:00', 'due' => '1970-01-01 00:00:00',
+                'description' => '', 'location' => '', 'status' => 'a', 'url' => '', 'etag' => '', 'attach' => '',
+                'attendee' => '', 'comment' => '', 'contact' => '', 'related' => '', 'resources' => '', 'rstatus' => '',
+                'dtstart' => '1970-01-01 00:00:00', 'duration' => '', 'recurid' => '', 'exdate' => '1970-01-01 00:00:00', 'exrule' => '', 'rdate' => '1970-01-01 00:00:00',
+                'rrule' => '', 'geo' => '1'],
+            ['summary' => 'task2', 'completed' => '1970-01-01 00:00:00', 'due' => '1970-01-01 00:00:00',
+                'description' => '', 'location' => '', 'status' => 'a', 'url' => '', 'etag' => '', 'attach' => '',
+                'attendee' => '', 'comment' => '', 'contact' => '', 'related' => '', 'resources' => '', 'rstatus' => '',
+                'dtstart' => '1970-01-01 00:00:00', 'duration' => '', 'recurid' => '', 'exdate' => '1970-01-01 00:00:00', 'exrule' => '', 'rdate' => '1970-01-01 00:00:00',
+                'rrule' => '', 'geo' => '1'],
+        ];
         $projectData = $this->_json->saveProject($project);
         
         // checks
@@ -47,9 +110,65 @@ class Projects_JsonTest extends TestCase
         // created by should be resolved
         $this->assertTrue(is_array($projectData['created_by']), 'Created by has not been resolved.');
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $projectData['created_by']['accountId']);
+
+        $this->assertCount(2, $projectData[Projects_Model_Project::FLD_TASKS]);
+        $this->assertStringStartsWith('task', $projectData[Projects_Model_Project::FLD_TASKS][0]['summary']);
+
+        $task = ($tasksFE = new Tasks_Frontend_Json())
+            ->getTask($projectData[Projects_Model_Project::FLD_TASKS][0]['id']);
+        $this->assertSame(Projects_Model_Project::class, $task['source_model']);
+        $this->assertIsArray($task['source']);
+        $this->assertSame($projectData['id'], $task['source']['id']);
+
+        $searchResult = $this->_json->searchProjects([
+            ['field' => Projects_Model_Project::FLD_TASKS, 'operator' => 'definedBy', 'value' => [
+                ['field' => 'summary', 'operator' => 'equals', 'value' => 'task1'],
+            ]],
+        ], null);
+        $this->assertSame(1, $searchResult['totalcount']);
+        $this->assertSame($projectData['id'], $searchResult['results'][0]['id']);
+
+        $searchResult = $this->_json->searchProjects([
+            ['field' => Projects_Model_Project::FLD_TASKS, 'operator' => 'definedBy', 'value' => [
+                ['field' => 'summary', 'operator' => 'equals', 'value' => 'task3'],
+            ]],
+        ], null);
+        $this->assertSame(0, $searchResult['totalcount']);
+
+        $searchResult = $tasksFE->searchTasks([
+            ['field' => 'source:Projects_Model_Project', 'operator' => 'definedBy', 'value' => [
+                ['field' => 'title', 'operator' => 'equals', 'value' => $projectData['title']],
+            ]],
+        ], null);
+        $this->assertSame(2, $searchResult['totalcount']);
+        $this->assertSame($projectData['id'], $searchResult['results'][0]['source']['id']);
+        $this->assertTrue(in_array($searchResult['results'][0]['id'], [
+            $projectData['tasks'][0]['id'],
+            $projectData['tasks'][1]['id']
+        ]));
+        $this->assertTrue(in_array($searchResult['results'][1]['id'], [
+            $projectData['tasks'][0]['id'],
+            $projectData['tasks'][1]['id']
+        ]));
+
+        $searchResult = $tasksFE->searchTasks([
+            ['field' => 'source:Projects_Model_Project', 'operator' => 'definedBy', 'value' => [
+                ['field' => 'title', 'operator' => 'equals', 'value' => 'titleFOOO'],
+            ]],
+        ], null);
+        $this->assertSame(0, $searchResult['totalcount']);
         
         // cleanup
         $this->_json->deleteProjects($projectData['id']);
+
+        try {
+            Tasks_Controller_Task::getInstance()->get($projectData[Projects_Model_Project::FLD_TASKS][0]['id']);
+            $this->fail('dependend tasks not deleted');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
+        try {
+            Tasks_Controller_Task::getInstance()->get($projectData[Projects_Model_Project::FLD_TASKS][1]['id']);
+            $this->fail('dependend tasks not deleted');
+        } catch (Tinebase_Exception_NotFound $tenf) {}
 
         // check if it got deleted
         $this->expectException('Tinebase_Exception_NotFound');

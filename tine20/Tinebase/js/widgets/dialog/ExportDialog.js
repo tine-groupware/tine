@@ -215,7 +215,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     title: window.i18n._('Choose Export Location'),
                     questionText: window.i18n._('How would you like to save your export?'),
                     height: 200,
-                    allowCancel: false,
+                    allowCancel: true,
                     options: locationOptions
                 })
             }

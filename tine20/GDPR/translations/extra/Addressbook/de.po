@@ -28,3 +28,6 @@ msgstr "DSGVO Datenherkunft"
 #: js/Addressbook/Model.js:25
 msgid "GDPR Data Editing Reason"
 msgstr "DSGVO Bearbeitungsgrund"
+
+msgid "GDPR Data Expiry Date"
+msgstr "DSGVO Datenablaufdatum"

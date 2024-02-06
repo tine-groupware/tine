@@ -5,13 +5,15 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * sql backend class for tree nodes
  *
  * @package     Tinebase
+ *             //string|Tinebase_Record_Interface
+ * @method get(mixed $_id, boolean $_getDeleted = false): Tinebase_Model_Tree_Node
  *
  * TODO refactor to Tinebase_Tree_Backend_Node
  */
@@ -236,6 +238,11 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         return $createdRecord;
     }
 
+    public function writeModLog(?Tinebase_Model_Tree_Node $_newRecord, ?Tinebase_Model_Tree_Node $_oldRecord): ?Tinebase_Record_RecordSet
+    {
+        return $this->_writeModLog($_newRecord, $_oldRecord);
+    }
+
     /**
      * Updates existing entry
      *
@@ -256,6 +263,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $newRecord = parent::update($_record);
 
         if (true === $_doModLog) {
+            if (isset($_record->grants)) {
+                $newRecord->grants = $_record->grants;
+                Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($oldRecord);
+            }
             Tinebase_Timemachine_ModificationLog::getInstance()
                 ->setRecordMetaData($newRecord, (bool)$newRecord->is_deleted === (bool)$oldRecord->is_deleted ?
                     Tinebase_Controller_Record_Abstract::ACTION_UPDATE : ($newRecord->is_deleted ?

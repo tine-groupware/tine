@@ -39,6 +39,9 @@ Ext.menu.TextItem = Ext.extend(Ext.menu.BaseItem, {
         var s = document.createElement("span");
         s.className = this.itemCls;
         s.innerHTML = this.text;
+        if (this.qtip) {
+            setAttributeNS("ext", "qtip", a.qtip);
+        }
         this.el = s;
         Ext.menu.TextItem.superclass.onRender.apply(this, arguments);
     }

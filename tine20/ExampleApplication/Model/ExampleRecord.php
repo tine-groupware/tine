@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -17,8 +17,10 @@
  * @subpackage  Model
  * @property Tinebase_DateTime datetime
  */
-class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_NewAbstract
+class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_NewAbstract implements Tinebase_Record_PerspectiveInterface
 {
+    use Tinebase_Record_PerspectiveTrait;
+
     const FLD_CONTAINER_ID = 'container_id';
     const FLD_DATETIME = 'datetime';
     const FLD_DESCRIPTION = 'description';
@@ -26,6 +28,8 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_NewAbstract
     const FLD_NUMBER_INT = 'number_int';
     const FLD_NUMBER_STR = 'number_str';
     const FLD_ONE_TO_ONE = 'one_to_one';
+    const FLD_PERSPECTIVE = 'perspective';
+    const FLD_PERSP_DT = 'persp_dt';
     const FLD_REASON = 'reason';
     const FLD_STATUS = 'status';
 
@@ -168,14 +172,23 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_NewAbstract
                 self::DOCTRINE_IGNORE           => true,
                 self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true,],
                 self::NULLABLE                  => true,
+                self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
-                    self::APPLICATION               => ExampleApplication_Config::APP_NAME,
                     self::APP_NAME                  => ExampleApplication_Config::APP_NAME,
                     self::MODEL_NAME                => ExampleApplication_Model_OneToOne::MODEL_NAME_PART,
                     self::REF_ID_FIELD              => ExampleApplication_Model_OneToOne::FLD_EXAMPLE_RECORD,
                     self::DEPENDENT_RECORDS         => true,
                 ],
-            ]
+            ],
+            self::FLD_PERSPECTIVE           => [
+                self::TYPE                      => self::TYPE_BOOLEAN,
+                self::IS_PERSPECTIVE            => true,
+                self::PERSPECTIVE_DEFAULT       => true,
+            ],
+            self::FLD_PERSP_DT              => [
+                self::TYPE                      => self::TYPE_DATETIME,
+                self::IS_PERSPECTIVE            => true,
+            ],
         ]
     ];
 }

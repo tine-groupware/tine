@@ -4,7 +4,7 @@
  * @package     SimpleFAQ
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Patrick Ryser <patrick.ryser@gmail.com>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.SimpleFAQ');
@@ -19,42 +19,6 @@ Tine.SimpleFAQ.FaqEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.SimpleFAQ.faqBackend,
     showContainerSelector: true,
     displayNotes: true,
-
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     * @private
-     */
-    updateToolbars: function() {
-    },
-
-    /**
-     * executed when a record ist loaded
-     * @private
-     */
-    onRecordLoad: function() {
-        if(!this.rendered) {
-            this.onRecordLoad.defer(250, this);
-            return;
-        }
-
-        Tine.SimpleFAQ.FaqEditDialog.superclass.onRecordLoad.apply(this, arguments);
-    },
-
-    /**
-     * executed when a when a record ist updated
-     * 
-     */
-    onRecordUpdate: function() {
-        Tine.SimpleFAQ.FaqEditDialog.superclass.onRecordUpdate.apply(this, arguments);
-    },
-
-    /**
-     * handling for the completed fields
-     *
-     */
-    handlingCompletedData: function() {
-        
-    },
 
     /**
      * returns dialog
@@ -85,13 +49,15 @@ Tine.SimpleFAQ.FaqEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'columnform',
                     labelAlign: 'top',
                     formDefaults: {
-                        xtype:'htmleditor',
+                        xtype:'textarea',
                         anchor: '100%',
                         labelSeparator: '',
                         columnWidth: .5,
-                        enableFont: false,
-                        enableFontSize: false,
-                        enableLinks: false
+                        // TODO make htmleditor work again?
+                        // xtype:'htmleditor',
+                        // enableFont: false,
+                        // enableFontSize: false,
+                        // enableLinks: false
                     },
                     items: [[{
                             columnWidth: 1,

@@ -121,11 +121,23 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
             allCfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName);
 
         _.each(allCfConfigs, _.bind(function (fields) {
-            if(_.get(fields, 'data.definition.uiconfig.key')) {
-                var pos = _.get(fields, 'data.definition.uiconfig.order');
-                Ext.ux.ItemRegistry.registerItem(_.get(fields, 'data.definition.uiconfig.key'),
-                    Tine.widgets.customfields.Field.get(this.app, fields, {}, this.editDialog)
-                    , pos ? pos : '0/0');
+            const key = _.get(fields, 'data.definition.uiconfig.key');
+            if(key) {
+                const pos = _.get(fields, 'data.definition.uiconfig.order');
+                const config = {};
+                if (key.match(/eastPanel$/)) {
+                    Object.assign(config, {
+                        labelSeparator: '',
+                        hideLabel: true,
+                        grow: false,
+                        preventScrollbars:false,
+                        anchor:'100% 100%',
+                    });
+                }
+                const field = Tine.widgets.customfields.Field.get(this.app, fields, config, this.editDialog);
+
+                Ext.ux.ItemRegistry.registerItem(key, (key.match(/eastPanel$/) ?
+                    {layout: 'form', items: field, title: field.fieldLabel} : field),pos ? pos : '0/0');
             }
         }, this));
     },
@@ -185,6 +197,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
     addCFTab: function(cfConfigs, tabName) {
         var _ = window.lodash,
             groups = _.groupBy(cfConfigs, 'data.definition.uiconfig.group'),
+            allFields = [];
             items = [];
 
         _.each(groups, _.bind(function(fields, groupName) {
@@ -192,6 +205,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
             fields = _.sortBy(fields, 'data.definition.uiconfig.order');
 
             var fieldObjects = _.map(fields, _.bind(Tine.widgets.customfields.Field.get, this, this.app, _, {anchor: '95%'}, this.editDialog));
+            allFields = allFields.concat(fieldObjects);
             if (groupName) {
                 items.push(new Ext.form.FieldSet({
                     title: i18n._hidden(groupName),
@@ -207,7 +221,7 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
             }
         }, this));
 
-        this.getTabPanel().add(new Ext.Panel({
+        const panel = new Ext.Panel({
             title: (!tabName || tabName == 'customfields') ? i18n._('Custom Fields') : i18n._hidden(tabName),
             pos: this.tabPanelPosition,
             layout: 'form',
@@ -220,8 +234,15 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
                 anchor: '100%',
                 labelSeparator: ''
             }
-        }));
+        });
+        this.getTabPanel().add(panel);
 
+        Promise.all(allFields.map((field) => { return field.afterIsRendered() })).then(() => {
+            const itemsHeight = panel.items.items.reduce((height, item) => {return height + item.getHeight()}, 0);
+            if (itemsHeight > panel.getHeight()) {
+                panel.items.items.forEach((item) => { item.collapse() });
+            }
+        })
         this.tabPanelPosition++;
     }
 };

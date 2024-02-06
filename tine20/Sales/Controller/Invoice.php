@@ -189,10 +189,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
     {
         return array(
             'own_model'              => 'Sales_Model_Invoice',
-            'own_backend'            => Tasks_Backend_Factory::SQL,
+            'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'own_id'                 => NULL,
             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'type'                   => 'INVOICE_ITEM'
         );
     }
@@ -501,11 +501,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         // add contract relation
         $relations[] = array(
             'own_model'              => 'Sales_Model_Invoice',
-            'own_backend'            => Tasks_Backend_Factory::SQL,
+            'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'own_id'                 => NULL,
             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Sales_Model_Contract',
-            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'related_id'             => $this->_currentBillingContract->getId(),
             'related_record'         => $this->_currentBillingContract->toArray(),
             'type'                   => 'CONTRACT',
@@ -514,11 +514,11 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         // add customer relation
         $relations[] = array(
             'own_model'              => 'Sales_Model_Invoice',
-            'own_backend'            => Tasks_Backend_Factory::SQL,
+            'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'own_id'                 => NULL,
             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Sales_Model_Customer',
-            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'related_id'             => $this->_currentBillingCustomer['id'],
             'related_record'         => $this->_currentBillingCustomer,
             'type'                   => 'CUSTOMER'
@@ -1237,8 +1237,25 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
      * @param Sales_Model_Contract $contract
      * @param boolean $merge
      */
-    public function createAutoInvoices(Tinebase_DateTime $currentDate, Sales_Model_Contract $contract = NULL, $merge = false)
+    public function createAutoInvoices(Tinebase_DateTime $currentDate = NULL, Sales_Model_Contract $contract = NULL, $merge = false, $checkUpdate = false)
     {
+        if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
+            return false;
+        }
+        
+        if (!$currentDate) {
+            $currentDate = Tinebase_DateTime::now();
+            $currentDate->setTimezone(Tinebase_Core::getUserTimezone());
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating invoices for ' . $currentDate->toString());
+        }
+        
+        if ($checkUpdate) {
+            Sales_Controller_Invoice::getInstance()->checkForContractOrInvoiceUpdates($contract);
+        }
+        
         $this->_autoInvoiceIterationResults  = array();
         $this->_autoInvoiceIterationDetailResults = array();
         $this->_autoInvoiceIterationFailures = array();
@@ -1270,6 +1287,10 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             'created'        => $this->_autoInvoiceIterationResults,
             'created_count'  => count($this->_autoInvoiceIterationResults)
         );
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . print_r($result, true));
+        }
         
         return $result;
     }
@@ -1834,5 +1855,13 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
         file_put_contents($mergedPdf, Tinebase_Core::getPreviewService()->mergePdfFiles($files, true));
 
         return $mergedPdf;
+    }
+
+    public function createAutoInvoicesTask() {
+        if ($this->createAutoInvoices(null, null, false, true)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

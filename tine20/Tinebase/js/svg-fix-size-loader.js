@@ -6,8 +6,7 @@
  * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-var DOMParser = require('xmldom').DOMParser;
-var XMLSerializer = require('xmldom').XMLSerializer;
+const { DOMParser, XMLSerializer } = require('@xmldom/xmldom')
 
 module.exports = function(content) {
     this.cacheable && this.cacheable();

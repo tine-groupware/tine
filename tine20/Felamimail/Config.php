@@ -151,7 +151,14 @@ class Felamimail_Config extends Tinebase_Config_Abstract
     const EMAIL_NOTIFICATION_TEMPLATES_CONTAINER_ID = 'emailNotificationTemplatesContainerId';
 
     /**
-     * the email address to notifify about notification bounces
+     * set from emailadress for notification emails
+     *
+     * @var string
+     */
+    const EMAIL_NOTIFICATION_EMAIL_FROM = 'emailNotificationEmailFrom';
+
+    /**
+     * the email address to notify about notification bounces
      *
      * @var string
      */
@@ -241,6 +248,15 @@ class Felamimail_Config extends Tinebase_Config_Abstract
             //_('Email Notification Templates Node ID')
             self::LABEL                 => 'Email Notification Templates Node ID',
             self::DESCRIPTION           => 'Email Notification Templates Node ID',
+            self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => FALSE,
+            self::SETBYADMINMODULE      => FALSE,
+            self::SETBYSETUPMODULE      => FALSE,
+        ),
+        self::EMAIL_NOTIFICATION_EMAIL_FROM => array(
+            //_('Email Notification from E-Mailadress')
+            self::LABEL                 => 'Email Notification from E-Mailadress',
+            self::DESCRIPTION           => 'Email Notification from E-Mailadress',
             self::TYPE                  => Tinebase_Config_Abstract::TYPE_STRING,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE      => FALSE,

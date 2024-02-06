@@ -233,4 +233,20 @@ class GDPR_Controller_DataProvenanceTest extends TestCase
         static::assertStringContainsString(GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME,
             $notes->getFirstRecord()->note);
     }
+
+    public function testAdbSearch()
+    {
+        try {
+            (new Addressbook_Frontend_Json())->searchContacts([
+                ['field' => GDPR_Controller_DataProvenance::ADB_CONTACT_REASON_CUSTOM_FIELD_NAME, 'operator' => 'equals', 'value' => 'a'],
+            ], []);
+            $this->fail('should not work');
+        } catch (Tinebase_Exception_Record_DefinitionFailure) {}
+        try {
+            (new Addressbook_Frontend_Json())->searchContacts([
+                ['field' => GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME, 'operator' => 'equals', 'value' => 'a'],
+            ], []);
+            $this->fail('should not work');
+        } catch (Tinebase_Exception_Record_DefinitionFailure) {}
+    }
 }

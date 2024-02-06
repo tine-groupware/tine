@@ -32,14 +32,14 @@ class OnlyOfficeIntegrator_Setup_Uninitialize extends Setup_Uninitialize
     {
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId(),
-            OnlyOfficeIntegrator_Config::FM_NODE_EDITING_CFNAME, null, true);
+            OnlyOfficeIntegrator_Config::FM_NODE_EDITING_CFNAME, Tinebase_Model_Tree_Node::class, true);
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
 
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId(),
-            OnlyOfficeIntegrator_Config::FM_NODE_EDITORS_CFNAME, null, true);
+            OnlyOfficeIntegrator_Config::FM_NODE_EDITORS_CFNAME, Tinebase_Model_Tree_Node::class, true);
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }

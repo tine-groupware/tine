@@ -113,16 +113,12 @@ class Tinebase_Frontend_CliTest extends TestCase
         $opts = $this->_getOpts('addressbook');
         $deletedRecord = $this->_addAndDeleteContact();
         
-        ob_start();
-        $this->_cli->purgeDeletedRecords($opts);
-        $out = ob_get_clean();
-        
-        $this->assertStringContainsString('Removing all deleted entries before', $out);
-        $this->assertStringContainsString('Cleared table addressbook (deleted ', $out);
+        $result = $this->_cli->purgeDeletedRecords($opts);
+        self::assertEquals(0, $result);
 
-        $contactBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $contactBackend = new Addressbook_Backend_Sql();
         $this->expectException('Tinebase_Exception_NotFound');
-        $contactBackend->get($deletedRecord->getId(), TRUE);
+        $contactBackend->get($deletedRecord->getId(), true);
     }
 
     /**
@@ -146,7 +142,7 @@ class Tinebase_Frontend_CliTest extends TestCase
         $deletedLead = $this->_addAndDeleteLead();
 
         // test deleted contact is still there
-        $contactBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $contactBackend = new Addressbook_Backend_Sql();
         $contacts = $contactBackend->getMultipleByProperty($deletedContact->getId(), 'id', TRUE);
         $this->assertEquals(1, count($contacts));
 
@@ -154,22 +150,18 @@ class Tinebase_Frontend_CliTest extends TestCase
         Tinebase_Tags::getInstance()->deleteTags($deletedContact->tags->getFirstRecord()->getId());
         
         ob_start();
-        $this->_cli->purgeDeletedRecords($opts);
+        $result = $this->_cli->purgeDeletedRecords($opts);
+        // TODO check $out?
         $out = ob_get_clean();
 
-        if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
-            $this->assertStringContainsString('Cleared table tree_nodes (deleted ', $out);
-            $this->assertStringContainsString('Cleared table tree_fileobjects (deleted ', $out);
+        self::assertEquals(0, $result);
 
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_MODLOGACTIVE}) {
             static::assertSame(0, Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->getMultipleByProperty(
                 $deletedFile->getId(), 'id', true)->count());
             static::assertSame(0, Tinebase_FileSystem::getInstance()->getFileObjectBackend()->getMultipleByProperty(
                 $deletedFile->object_id, 'id', true)->count());
         }
-        $this->assertStringContainsString('Removing all deleted entries before', $out);
-        $this->assertStringContainsString('Cleared table addressbook (deleted ', $out);
-        $this->assertStringContainsString('Cleared table metacrm_lead (deleted ', $out);
-        $this->assertStringNotContainsString('Failed to purge', $out);
 
         // test deleted contact is gone
         $contacts = $contactBackend->getMultipleByProperty($deletedContact->getId(), 'id', TRUE);
@@ -283,6 +275,8 @@ class Tinebase_Frontend_CliTest extends TestCase
                 'Tinebase_TempFileCleanup',
                 'Tinebase_FileSystem::repairTreeIsDeletedState',
                 'Tinebase_User/Group::syncUsers/Groups',
+                'createAutoInvoicesDailyTask', // skip because invoice might not installed
+                'createAutoInvoicesMonthlyTask', // skip because invoice might not installed
             ])) {
                 // FIXME skip those checks as they fail at random (?)
                 continue;

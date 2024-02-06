@@ -9,6 +9,7 @@ parameters:
       - Tinebase_Preference_Abstract
       - Tinebase_Record_Interface
       - Tinebase_Record_RecordSet
+      - Zend_Config
       - Zend_Config_Xml
       - Zend_Console_Getopt
       - Zend_Session_Namespace

@@ -29,6 +29,7 @@ class Tinebase_FileSystemTest extends TestCase
     protected $_rmDir = array();
 
     protected $_transactionId = null;
+    protected string $_basePath;
 
     /**
      * Sets up the fixture.

@@ -204,15 +204,20 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
             iconCls: 'x-tbar-page-first',
             disabled: true,
             handler: this.moveFirst,
-            scope: this
+            scope: this,
+            displayPriority: 90,
         }), this.prev = new T.Button({
             tooltip: this.prevText,
             overflowText: this.prevText,
             iconCls: 'x-tbar-page-prev',
             disabled: true,
             handler: this.movePrevious,
-            scope: this
-        }), '-', this.beforePageText,
+            scope: this,
+            displayPriority: 60,
+        }), '-', this.beforePageTextItem = new T.TextItem({
+            text: this.beforePageText,
+            displayPriority: 80,
+        }),
         this.inputItem = new Ext.form.NumberField({
             cls: 'x-tbar-page-number',
             allowDecimals: false,
@@ -224,29 +229,34 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
                 scope: this,
                 keydown: this.onPagingKeyDown,
                 blur: this.onPagingBlur
-            }
+            },
+            displayPriority: 70,
         }), this.afterTextItem = new T.TextItem({
-            text: String.format(this.afterPageText, 1)
+            text: String.format(this.afterPageText, 1),
+            displayPriority: 80,
         }), '-', this.next = new T.Button({
             tooltip: this.nextText,
             overflowText: this.nextText,
             iconCls: 'x-tbar-page-next',
             disabled: true,
             handler: this.moveNext,
-            scope: this
+            scope: this,
+            displayPriority: 60,
         }), this.last = new T.Button({
             tooltip: this.lastText,
             overflowText: this.lastText,
             iconCls: 'x-tbar-page-last',
             disabled: true,
             handler: this.moveLast,
-            scope: this
+            scope: this, 
+            displayPriority: 90,
         }), '-', this.refresh = new T.Button({
             tooltip: this.refreshText,
             overflowText: this.refreshText,
             iconCls: 'x-tbar-loading',
             handler: this.doRefresh,
-            scope: this
+            scope: this,
+            displayPriority: 0,
         })];
 
 
@@ -258,8 +268,10 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
         }
         delete this.buttons;
         if(this.displayInfo){
-            this.items.push('->');
-            this.items.push(this.displayItem = new T.TextItem({}));
+            this.items.push(new Ext.Toolbar.Fill());
+            this.items.push(this.displayItem = new T.TextItem({
+                displayPriority: 100,
+            }));
         }
         Ext.PagingToolbar.superclass.initComponent.call(this);
         this.addEvents(
@@ -294,8 +306,37 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
             'beforechange'
         );
         this.on('afterlayout', this.onFirstLayout, this, {single: true});
+        this.on('resize', this.onResize, this, {buffer: 250});
+        
         this.cursor = 0;
         this.bindStore(this.store, true);
+    },
+    
+    onResize() {
+        const toolbarWidth = this.getWidth();
+        if (toolbarWidth < 25) return;
+        let totalVisibleWidth = 0;
+        const spacing = 50;
+        const items = [];
+        this.items.each((item) => {
+            const priority = item.displayPriority ?? 0;
+            if (!items[priority]) items[priority] = [];
+            items[priority].push(item);
+            item.setVisible(true);
+            const width = item?.el?.dom?.offsetWidth ?? 0;
+            totalVisibleWidth += width;
+        })
+        const sortedItems = Object.keys(items).sort(function(a,b){return b-a});
+        if (toolbarWidth >= totalVisibleWidth + spacing) return;
+        
+        sortedItems.forEach((priority) => {
+            if (toolbarWidth >= totalVisibleWidth + spacing) return;
+            items[priority].forEach((item) => {
+                const width = item?.el?.dom?.offsetWidth ?? 0;
+                item.setVisible(false);
+                totalVisibleWidth -= width;
+            })
+        })
     },
 
     // private
@@ -317,6 +358,7 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
                 );
             this.displayItem.setText(msg);
         }
+        this.onResize();
     },
 
     // private
@@ -326,7 +368,7 @@ Ext.PagingToolbar = Ext.extend(Ext.Toolbar, {
             return;
         }
         var p = this.getParams();
-        this.cursor = (o.params && o.params[p.start]) ? o.params[p.start] : 0;
+        this.cursor = (o?.params?.paging && o?.params.paging[p.start]) ? o.params.paging[p.start] : 0;
         var d = this.getPageData(), ap = d.activePage, ps = d.pages;
 
         this.afterTextItem.setText(String.format(this.afterPageText, d.pages));

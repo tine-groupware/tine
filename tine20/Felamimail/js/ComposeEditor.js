@@ -52,9 +52,12 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
                     + 'padding-left: 10px;'
                     + 'border-left: 2px solid #000088;'
                 + '} '
+                + '.dark-mode img {'
+                + '   filter: invert(1) hue-rotate(180deg);'
+                + '} '
             + '</style>'
             + '</head>'
-            + '<body style="padding: 5px 0px 0px 5px; margin: 0px">'
+            + '<body style="padding: 5px 0px 0px 5px; margin: 0px" class="' + String(Ext.getBody().dom.classList.value).trim() + '">'
             + '</body></html>';
 
         return markup;
@@ -64,18 +67,23 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
      * @private
      */
     initComponent: function() {
-        
         this.plugins = [
             new Ext.ux.form.HtmlEditor.IndentOutdent(),  
             new Ext.ux.form.HtmlEditor.RemoveFormat(),
             new Ext.ux.form.HtmlEditor.EndBlockquote(),
             new Ext.ux.form.HtmlEditor.SpecialKeys(),
+            new Ext.ux.form.HtmlEditor.SelectImage(),
+            new Ext.ux.file.BrowsePlugin({
+                multiple: true,
+                scope: this,
+                handler: this.onFileSelect,
+                enableFileDialog: false,
+            }),
             new Ext.ux.form.HtmlEditor.PlainText()
         ];
-        
         Tine.Felamimail.ComposeEditor.superclass.initComponent.call(this);
     },
-         
+
     // *Fix* Overridding the onRender method, in order to
     // unset the height and width property, so that the
     // layout manager won't consider this field to be of
@@ -84,7 +92,12 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
         Tine.Felamimail.ComposeEditor.superclass.onRender.apply(this, arguments);
         delete this.height;
         delete this.width;
-    }
+    },
+    
+    async onFileSelect(fileSelector, e) {
+        const files = await fileSelector.getFileList()
+        await Ext.ux.form.HtmlEditor.MidasCommand.prototype.onImageSelected(files[0], this)
+    },
 });
 
 Ext.namespace('Ext.ux.form.HtmlEditor');

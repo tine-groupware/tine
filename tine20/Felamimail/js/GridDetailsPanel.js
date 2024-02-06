@@ -31,7 +31,9 @@ Ext.ns('Tine.Felamimail');
     currentId: null,
     record: null,
     app: null,
-    i18n: null,
+    i18n: null, 
+     cls: 'x-ux-display',
+
     
     fetchBodyTransactionId: null,
     
@@ -79,7 +81,7 @@ Ext.ns('Tine.Felamimail');
         if (! this.singleRecordPanel) {
             this.singleRecordPanel = new Tine.Felamimail.MailDetailsPanel({
                 hasTopToolbar: false,
-                grid: this.grid
+                grid: this.grid,
             });
         }
         return this.singleRecordPanel;

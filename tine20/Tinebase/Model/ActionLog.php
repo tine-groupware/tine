@@ -32,6 +32,7 @@ class Tinebase_Model_ActionLog extends Tinebase_Record_NewAbstract
     const TYPE_DELETION = 'deletion';
     const TYPE_EMAIL_NOTIFICATION = 'emailNotification';
     const TYPE_SUPPORT_REQUEST = 'supportRequest';
+    const TYPE_DATEV_EMAIL = 'datevEmail';
 
     /**
      * holds the configuration object (must be declared in the concrete class)

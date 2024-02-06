@@ -29,10 +29,10 @@ class Addressbook_Model_ListRole extends Tinebase_Record_NewAbstract
         self::APP_NAME => Addressbook_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
-        // ngettext('List Function', 'List Functions', n)
-        // _('GENDER_List Function')
-        self::RECORD_NAME => 'List Function',
-        self::RECORDS_NAME => 'List Functions',
+        // ngettext('Group Function', 'Group Functions', n)
+        // _('GENDER_Group Function')
+        self::RECORD_NAME => 'Group Function',
+        self::RECORDS_NAME => 'Group Functions',
         self::TITLE_PROPERTY => 'name',
 
         self::EXPOSE_HTTP_API => true,

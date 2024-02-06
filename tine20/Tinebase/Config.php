@@ -21,7 +21,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var int
      */
-    const TINEBASE_VERSION = 15;
+    const TINEBASE_VERSION = 16;
 
     /**
      * access log rotation in days
@@ -111,6 +111,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const CACHE = 'caching';
     const CREDENTIAL_CACHE_SHARED_KEY = 'credentialCacheSharedKey';
+
     const DBLOGGER = 'dblogger';
 
     /**
@@ -136,6 +137,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * default user role
      */
     const DEFAULT_ADMIN_ROLE_NAME = 'defaulAdminRoleName';
+
+    /**
+     * DELETED_DATA_RETENTION_TIME
+     *
+     * @var string
+     */
+    const DELETED_DATA_RETENTION_TIME = 'deletedDataRetentionTime';
 
     /**
      * @var string
@@ -172,6 +180,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const IMAP_USE_SYSTEM_ACCOUNT = 'useSystemAccount';
+
+    /**
+     * RATE_LIMITS
+     *
+     * @var string
+     */
+    const RATE_LIMITS = 'rateLimits';
 
     /**
      * default sales tax
@@ -220,6 +235,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SYNCOPTIONS = 'syncOptions';
+
+    /**
+     * user backend writes user pw to sql
+     *
+     * @var string
+     */
+    const USERBACKEND_WRITE_PW_TO_SQL = 'writePwToSql';
 
     /**
      * user backend type config
@@ -1615,6 +1637,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'type'                      => Tinebase_Config::TYPE_STRING,
                     'default'                   => 'mail',
                 ),
+                self::USERBACKEND_WRITE_PW_TO_SQL => [
+                    self::TYPE                  => Tinebase_Config::TYPE_BOOL,
+                    self::DEFAULT_STR           => false,
+                ],
                 self::SYNCOPTIONS           => array(
                     'type'                      => 'object',
                     'class'                     => 'Tinebase_Config_Struct',
@@ -1764,6 +1790,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             'default'               => 'user role'
         ),
+        self::DELETED_DATA_RETENTION_TIME => [
+            self::LABEL                 => 'Deleted Data Retention Time', // _('Deleted Data Retention Time')
+            self::DESCRIPTION           => 'Deleted Data Retention Time (in months)',
+            self::TYPE                  => self::TYPE_INT,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => 12,
+        ],
         self::CRON_DISABLED => [
             //_('Cronjob Disabled')
             'label'                 => 'Cronjob Disabled',
@@ -1954,7 +1989,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'description'           => 'Map Service URL',
             'type'                  => Tinebase_Config_Abstract::TYPE_STRING,
             'clientRegistryInclude' => true,
-            'setByAdminModule'      => false,
+            'setByAdminModule'      => true,
             'setBySetupModule'      => true,
             'default'               => 'https://tile.openstreetmap.org/',
         ],
@@ -1983,6 +2018,26 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'setBySetupModule'      => true,
             'default'               => array()
         ),
+        /**
+         * Configure rate limits by user and method
+         *
+         * example:
+         *
+         * ['LOGIN_NAME' => [
+         *   'method' => 'Felamimail.searchMessages',
+         *   'maxrequests' => 100,
+         *   'period' => 3600, // per hour
+         * ]]
+         */
+        self::RATE_LIMITS => [
+            self::LABEL                 => 'Rate Limits',
+            self::DESCRIPTION           => 'Configure rate limits by user and method',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [],
+        ],
         self::SALES_TAX => array(
             //_('Sales Tax Default')
             'label'                 => 'Sales Tax Default',

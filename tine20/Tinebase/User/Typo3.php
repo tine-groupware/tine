@@ -78,7 +78,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      * @param bool   $_encrypt encrypt password
      * @return void
      */
-    public function setPassword($_loginName, $_password, $_encrypt = TRUE, $_mustChange = null)
+    public function setPassword($_loginName, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false)
     {
         throw new Tinebase_Exception_AccessDenied();
     }
@@ -188,7 +188,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
             
             // import contactdata(phone, address, fax, birthday. photo)
             //$contact = $this->_getContactFromBackend($user);
-            //Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL)->update($contact);
+            //Addressbook_Backend_Factory::factory(Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND)->update($contact);
         }
     }
     

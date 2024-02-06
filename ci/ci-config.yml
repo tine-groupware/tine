@@ -2,10 +2,10 @@
 variables:
   # The major commit ref name is mainly used for ci caching. Non feature branches should be there own major. The major of feature branches should be the branch the will be merged into.
   # The major commit ref name is configures in to parts, the base and and the customer specific part.
-  BASE_MAJOR_COMMIT_REF_NAME: "2022.11"
+  BASE_MAJOR_COMMIT_REF_NAME: "2023.11"
   # The customer part must end with an /. eg "ecclesias/" (This is a limitation of templateing and is required to allow branches with out a customer. 
   CUSTOMER_MAJOR_COMMIT_REF_NAME: "saas/"
-  
+
   # DO NOT CHANGE MANUAL: needs to be, in the main variables section CUSTOMER_MAJOR_COMMIT_REF_NAME and BASE_MAJOR_COMMIT_REF_NAME are not set jet
   MAJOR_COMMIT_REF_NAME: "${CUSTOMER_MAJOR_COMMIT_REF_NAME}${BASE_MAJOR_COMMIT_REF_NAME}"
 
@@ -37,10 +37,10 @@ variables:
   PHPUNIT_FILTER: ""
   
   # "Php version to use."
-  PHP_VERSION: "8.0"
+  PHP_VERSION: "8.1"
 
   # "Codename for build"
-  CODENAME: "Pino"
+  CODENAME: "Ellie"
 
   # "Try to reuse source images" 
   REUSE_IMAGES: "true"

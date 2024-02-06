@@ -462,6 +462,17 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
             )));
         }
 
+        if (Tinebase_Core::getUser()->hasRight($application, Calendar_Acl_Rights::MANAGE_EVENT_TYPES) &&
+            Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_EVENT_TYPE)
+        ) {
+            $result->addRecord(new CoreData_Model_CoreData(array(
+                'id' => 'cal_event_types',
+                'application_id' => $application,
+                'model' => 'Calendar_Model_EventType',
+                'label' => 'Event Types' // _('Event Types')
+            )));
+        }
+
         return $result;
     }
 
@@ -469,10 +480,10 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
      * @param Felamimail_Model_Message $_message
      * @return null
      */
-    public function prepareMassMailingMessage(Felamimail_Model_Message $_message)
+    public function prepareMassMailingMessage(Felamimail_Model_Message $_message, Tinebase_Twig $_twig)
     {
         if (Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_POLLS)) {
-            Calendar_Controller_Poll::getInstance()->prepareMassMailingMessage($_message);
+            Calendar_Controller_Poll::getInstance()->prepareMassMailingMessage($_message, $_twig);
         }
         return;
     }
@@ -483,8 +494,9 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
      */
     public static function addFastRoutes(\FastRoute\RouteCollector $routeCollector)
     {
-        if (Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_POLLS)) {
-            $routeCollector->addGroup('/Calendar', function (\FastRoute\RouteCollector $routeCollector) {
+
+        $routeCollector->addGroup('/Calendar', function (\FastRoute\RouteCollector $routeCollector) {
+            if (Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_POLLS)) {
                 $routeCollector->get('/view/pollagb', (new Tinebase_Expressive_RouteHandler(
                     Calendar_Controller_Poll::class, 'publicApiGetAGB', [
                     Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
@@ -505,9 +517,46 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                     Calendar_Controller_Poll::class, 'publicApiAddAttendee', [
                     Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
                 ]))->toArray());
-            });
-        }
+            }
+            $routeCollector->get('/view/floorplan[/{floorplan}]', (new Tinebase_Expressive_RouteHandler(
+                self::class, 'floorplanMainScreen', [
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => false
+            ]))->toArray());
+        });
 
         return null;
+    }
+
+    public function floorplanMainScreen($floorplan=0)
+    {
+        $locale = Tinebase_Core::getLocale();
+
+        $jsFiles[] = "index.php?method=Tinebase.getJsTranslations&locale={$locale}&app=Calendar";
+        $jsFiles[] = 'Calendar/js/floorplan/src/index.es6.js';
+
+        $user = Tinebase_Core::getUser();
+        $userContactArray = array();
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+            try {
+                $userContactArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray();
+            } catch (Addressbook_Exception_NotFound $aenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) /** @noinspection PhpUndefinedMethodInspection */
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' User not found in Addressbook: ' . $user->accountDisplayName);
+            }
+        }
+
+        return Tinebase_Frontend_Http_SinglePageApplication::getClientHTML($jsFiles, 'Tinebase/views/singlePageApplication.html.twig', [
+            'base' => Tinebase_Core::getUrl(Tinebase_Core::GET_URL_PATH),
+            'lang' => $locale,
+            'initialData' => json_encode([
+                'floorplans' => Calendar_Config::getInstance()->{Calendar_Config::FLOORPLANS},
+                'resources' => Calendar_Controller_Resource::getInstance()->getAll()->toArray(),
+                'currentContact' => $userContactArray,
+                'jsonKey' => Tinebase_Core::get('jsonKey'),
+                'locale' => $locale->toString(),
+                'broadcasthubConfig' => Tinebase_Config::getInstance()->getClientRegistryConfig()['Tinebase']['broadcasthub']['value']
+            ])
+        ]);
     }
 }

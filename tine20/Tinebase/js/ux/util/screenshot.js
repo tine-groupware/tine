@@ -25,7 +25,7 @@ Ext.ux.screenshot.get = function(win, options) {
 
     return new Promise(function (fulfill, reject) {
             require.ensure(["html2canvas"], function() {
-                var html2canvas = require ("html2canvas");
+                var html2canvas = require ("html2canvas").default;
 
                 html2canvas(win.document.body, {
                     grabMouse: options.grabMouse,

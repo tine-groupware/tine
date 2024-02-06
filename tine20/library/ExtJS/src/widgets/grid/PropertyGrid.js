@@ -41,6 +41,7 @@ Ext.grid.PropertyRecord = Ext.data.Record.create([
 Ext.grid.PropertyStore = Ext.extend(Ext.util.Observable, {
     
     constructor : function(grid, source){
+        Object.assign(this, grid.storeConfig);
         this.grid = grid;
         this.store = new Ext.data.Store({
             recordType : Ext.grid.PropertyRecord
@@ -185,13 +186,14 @@ Ext.grid.PropertyColumnModel = Ext.extend(Ext.grid.ColumnModel, {
 
     // private
     isCellEditable : function(colIndex, rowIndex){
-        return colIndex == 1;
+        return colIndex === 1 || colIndex === 2;
     },
 
     // private
     getRenderer : function(col){
-        return col == 1 ?
-            this.renderCellDelegate : this.renderPropDelegate;
+        return col === 0 ? this.renderPropDelegate 
+            : col === 1 ? this.renderCellDelegate 
+            : Ext.grid.PropertyColumnModel.superclass.getRenderer.call(this, col);
     },
 
     // private
@@ -245,7 +247,7 @@ Ext.grid.PropertyColumnModel = Ext.extend(Ext.grid.ColumnModel, {
         for(var ed in this.editors){
             Ext.destroy(this.editors[ed]);
         }
-    }
+    },
 });
 
 /**
@@ -335,6 +337,7 @@ var grid = new Ext.grid.PropertyGrid({
     viewConfig : {
         forceFit:true
     },
+    disableResponsiveLayout: true,
 
     // private
     initComponent : function(){
@@ -383,7 +386,6 @@ var grid = new Ext.grid.PropertyGrid({
     // private
     onRender : function(){
         Ext.grid.PropertyGrid.superclass.onRender.apply(this, arguments);
-
         this.getGridEl().addClass('x-props-grid');
     },
 
@@ -441,7 +443,7 @@ grid.setSource({
      */
     removeProperty : function(prop){
         this.propStore.remove(prop);
-    }
+    },
 
     /**
      * @cfg store

@@ -18,7 +18,7 @@ Ext.ns('Tine.Addressbook');
  */
 Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, {
 
-    recordClass: Tine.Addressbook.Model.Contact,
+    recordClass: 'Addressbook.Model.Contact',
     clicksToEdit: 1,
     enableHdMenu: false,
     autoExpandColumn: 'n_fileas',

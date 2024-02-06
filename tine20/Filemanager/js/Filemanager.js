@@ -82,14 +82,37 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
  * register additional action for genericpickergridpanel
  */
 Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
+    text: 'Show in Filemanager',   // i18n._('Show in Filemanager')
+    iconCls: 'FilemanagerIconCls',
+    requiredGrant: 'readGrant',
+    allowMultiple: false,
+    handler: function(action) {
+        const nodeData = action.grid.store.getAt(action.gridIndex).get('related_record');
+        const node = Tine.Tinebase.data.Record.setFromJson(nodeData, Tine.Filemanager.Model.Node);
+        const url = node.getSystemLink();
+        const  mainWindow = Ext.ux.PopupWindowMgr.getMainWindow()
+        mainWindow.location = url;
+        mainWindow.focus();
+
+
+    },
+    actionUpdater: function(action, grants, records) {
+
+    }
+});
+
+Tine.widgets.relation.MenuItemManager.register('Filemanager', 'Node', {
     text: 'Save locally',   // i18n._('Save locally')
     iconCls: 'action_filemanager_save_all',
     requiredGrant: 'readGrant',
     actionType: 'download',
     allowMultiple: false,
     handler: function(action) {
-        var node = action.grid.store.getAt(action.gridIndex).get('related_record');
-        Tine.Filemanager.downloadFile(node);
+        const record = action.grid.store.getAt(action.gridIndex).get('related_record');
+        Tine.Filemanager.downloadNode(record);
+    },
+    actionUpdater: function(action, grants, records) {
+        action.setDisabled(_.get(records, '[0].data.related_record.type') !== 'file');
     }
 });
 
@@ -122,40 +145,13 @@ Tine.Filemanager.NodeFilterPanel = Ext.extend(Tine.widgets.persistentfilter.Pick
 });
 
 /**
- * download file into browser
+ * download file/folder into browser
  *
- * @param {String|Tine.Filemanager.Model.Node}
+ * @param record
  * @param revision
- * @param appName deprecated
  * @returns {Ext.ux.file.Download}
  *
  */
-Tine.Filemanager.downloadFile = function(path, revision, appName) {
-    return new Ext.ux.file.Download(!_.isString(path) ? {
-        url: Tine.Filemanager.Model.Node.getDownloadUrl(path, revision)
-    } : {
-        // deprecated usage
-        params: {
-            method: `${appName || 'Filemanager'}.downloadFile`,
-            requestType: 'HTTP',
-            id: '',
-            path: path,
-            revision: revision
-        }
-    }).start();
-};
-
-
-/**
- * download file into browser with base64 (btoa) encoded path
- *
- * @param {String} encodedpath
- * @param revision
- * @param appName
- * @returns {Ext.ux.file.Download}
- *
- * @refactor: we should only need one downloadFile fn
- */
-Tine.Filemanager.downloadFileByEncodedPath = function(encodedpath, revision, appName) {
-    return Tine.Filemanager.downloadFile(atob(encodedpath), revision, appName);
+Tine.Filemanager.downloadNode = function(record, revision) {
+    return new Ext.ux.file.Download({url: Tine.Filemanager.Model.Node.getDownloadUrl(record, revision)}).start();
 };

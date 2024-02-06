@@ -5,18 +5,19 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2014-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * 
- *
  * @package     Tinebase
  * @subpackage  Backend
+ * @property string $table_prefix
  */
 class Tinebase_Backend_Sql_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
 {
+    public string $table_prefix;
+
     /**
      * Creates a PDO object and connects to the database.
      *

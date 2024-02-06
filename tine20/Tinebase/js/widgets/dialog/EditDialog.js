@@ -28,10 +28,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     app: null,
     /**
-     * @cfg {String} mode
+     * @cfg {String} mode (remote|local|load(remote):save(local)
      * Set to 'local' if the EditDialog only operates on this.record (defaults to 'remote' which loads and saves using the recordProxy)
      */
-    mode : 'remote',
+    mode: 'remote',
     /**
      * @cfg {Array} tbarItems
      * additional toolbar items (defaults to false)
@@ -203,6 +203,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * @cfg {String} canonicalName
      */
     canonicalName: 'EditDialog',
+
+    descriptionFieldName: 'description',
 
     // private
     bodyStyle:'padding:5px',
@@ -487,7 +489,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 ptype: 'ux.itemregistry',
                 key:   [this.app.appName, this.recordClass.getMeta('modelName'), 'EditDialog-TabPanel'].join('-')
             }],
-            items:[
+            items:_.concat([
                 {
                     title: this.i18nRecordName,
                     autoScroll: true,
@@ -506,19 +508,19 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             columnWidth: 1/2
                         },
                     })].concat(this.getEastPanel())
-                }, this.activitiesTabPanel = new Tine.widgets.activities.ActivitiesTabPanel({
+                }, _.get(this.recordClass.getModelConfiguration(), 'modlogActive') ? this.activitiesTabPanel = new Tine.widgets.activities.ActivitiesTabPanel({
                     app: this.appName,
-                    record_id: this.record.id,
+                    getRecordId: () => {return this.record.id },
                     record_model: this.modelName
-                })
-            ]
+                }) : []
+            ])
         };
     },
 
     getEastPanel: function() {
         var items = [];
-        if (this.recordClass.hasField('description')) {
-            const field = Tine.widgets.form.FieldManager.get(this.app, this.recordClass, 'description', 'editDialog');
+        if (this.recordClass.hasField(this.descriptionFieldName)) {
+            const field = Tine.widgets.form.FieldManager.get(this.app, this.recordClass, this.descriptionFieldName, 'editDialog');
 
             items.push(new Ext.Panel({
                 title: field.fieldLabel, //i18n._('Description'),
@@ -526,11 +528,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 layout: 'form',
                 labelAlign: 'top',
                 border: false,
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   this.app.appName + '-' + this.recordClass.prototype.modelName + '-editDialog-eastPanel'
+                }],
                 items: [Object.assign({
                     style: 'margin-top: -4px; border 0px;',
                     labelSeparator: '',
                     xtype: 'textarea',
-                    name: 'description',
+                    name: this.descriptionFieldName,
                     hideLabel: true,
                     grow: false,
                     preventScrollbars: false,
@@ -619,7 +625,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * call checkState for every field
      */
     checkStates: function() {
-        if (this.isDestroyed) return;
+        if (this.isDestroyed || !this.record) return;
 
         if(this.loadRequest){
             return _.delay(_.bind(this.checkStates, this), 250);
@@ -676,6 +682,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     initActions: function() {
         this.action_saveAndClose = new Ext.Action({
+            hidden: this.readOnly,
             requiredGrant: this.requiredSaveGrant,
             text: (this.saveAndCloseButtonText != '') ? this.app.i18n._(this.saveAndCloseButtonText) : i18n._('Ok'),
             minWidth: 70,
@@ -688,6 +695,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         });
 
         this.action_applyChanges = new Ext.Action({
+            hidden: this.readOnly,
             requiredGrant: this.requiredSaveGrant,
             text: i18n._('Apply'),
             minWidth: 70,
@@ -698,7 +706,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         });
 
         this.action_cancel = new Ext.Action({
-            text: (this.cancelButtonText != '') ? this.app.i18n._(this.cancelButtonText) : i18n._('Cancel'),
+            text: (this.cancelButtonText != '') ? this.app.i18n._(this.cancelButtonText) :
+                (this.readOnly ? i18n._('Close') : i18n._('Cancel')),
             minWidth: 70,
             scope: this,
             handler: this.onCancel,
@@ -742,7 +751,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.action_delete
         ]);
 
-        if (this.recordClass) {
+        if (this.recordClass && !this.localizedLangPicker) {
             this.localizedLangPicker = getLocalizedLangPicker(this.recordClass);
             if (this.localizedLangPicker) {
                 this.tbarItems = this.tbarItems || [];
@@ -881,7 +890,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // To bypass this you can set recordFromJson === true, then the dialog wouldn't load the record from server!
         // But to make this work you need to pass a json encoded record to the editdialog as string!
         // NOTE: we only load records with id from remote, new records (id === 0/null/undefined) are local
-        if (this.mode !== 'local' && this.recordFromJson !== true && [null, undefined, 0, '0'].indexOf(this.record?.id) < 0) {
+        if (!this.record.phantom && (this.mode !== 'local' || this.mode.match(/load\(remote\)/)) && this.recordFromJson !== true && [null, undefined, 0, '0'].indexOf(this.record?.id) < 0) {
+            this.initialRecord = this.record;
             this.loadRemoteRecord();
         } else {
             this.onRecordLoad.defer(10, this);
@@ -897,6 +907,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             scope: this,
             success: function(record) {
                 this.record = record;
+                // apply modifications from initial Record
+                _.forEach(this.initialRecord?.modified, (val, field) => {
+                    this.record.set(field, this.initialRecord.get(field));
+                });
                 this.onRecordLoad();
             }
         });
@@ -1039,8 +1053,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                     recordName: this.i18nRecordName
                 }));
             } else {
-                this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
-                
+                (async () => {
+                    let title = this.record.getTitle();
+                    if (title && title.asString) {
+                        title = await title.asString();
+                    }
+                    this.window.setTitle(String.format(i18n._('Edit {0} "{1}"'), this.i18nRecordName, title));
+                })();
+
                 if (! this.el.findParent('.x-window')) {
                     if (_.get(Tine.Tinebase.router.routes, `${this.appName}.${this.recordClass.getMeta('recordName')}`)) {
                         Tine.Tinebase.router.setRoute(`${this.appName}/${this.recordClass.getMeta('recordName')}/${this.record.get(this.recordClass.getMeta('idProperty'))}`);
@@ -1056,6 +1076,15 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         wrapTicket();
     },
 
+    setReadOnly: function(readOnly) {
+        this.readOnly = true;
+        this.action_saveAndClose.setHidden(readOnly);
+        if (! this.cancelButtonText) {
+            this.action_cancel.setText(readOnly ? i18n._('Close') : i18n._('Cancel'));
+        }
+        this.onAfterRecordLoad();
+    },
+
     // finally load the record into the form
     onAfterRecordLoad: function() {
         var _ = window.lodash,
@@ -1063,7 +1092,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         if (form) {
             form.loadRecord(this.record);
-            form.clearInvalid();
+            form.isValid();
         }
 
         if (this.record && this.record.hasOwnProperty('data') && Ext.isObject(this.record.data[this.recordClass.getMeta('containerProperty')])) {
@@ -1077,10 +1106,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
 
         // apply grants to fields with requiredGrant prop
-        if (this.evalGrants) {
+        if (this.evalGrants || this.readOnly) {
             this.getForm().items.each(function (f) {
                 const recordGrants = _.get(this.record, this.recordClass.getMeta('grantsPath'));
-                let hasRequiredGrants = true;
+                let hasRequiredGrants = !this.readOnly && true;
 
                 const requiredGrants = _.get(this.modelConfig, `fields[${f.fieldName}].requiredGrants`);
                 if (requiredGrants) {
@@ -1102,6 +1131,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         (function() {
             this.checkStates();
+            // otherwise we would get modifications in a normal roundtrip record->form->record
             this.record.commit();
         }).defer(100, this);
 
@@ -1294,7 +1324,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
 
         isValid.then(function () {
-            if (me.mode !== 'local') {
+            if (me.mode !== 'local' && !me.mode.match(/save\(local\)/)) {
                 me.recordProxy.saveRecord(me.record, {
                     scope: me,
                     success: function (record) {
@@ -1302,11 +1332,20 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         me.record = record;
                         me.afterIsRendered()
                             .then(me.onRecordLoad.bind(me))
-                            .then(() => {
+                            .then(async () => {
                                 let ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]);
                                 let wrapTicket = ticketFn();
 
-                                me.fireEvent('update', Ext.util.JSON.encode(me.record.data), me.mode, me, ticketFn);
+                                try {
+                                    me.fireEvent('update', Ext.util.JSON.encode(me.record.getData()), me.mode, me, ticketFn);
+                                } catch(e) {
+                                    this.forceClose = true;
+                                } finally {
+                                    if (me.loadMask) {
+                                        await me.hideLoadMask();
+                                    }
+                                }
+
                                 wrapTicket();
                             });
 
@@ -1316,10 +1355,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }, me.getAdditionalSaveParams(me));
             } else {
                 me.afterIsRendered().then(function() {
-                    me.onRecordLoad();
                     const ticketFn = me.onAfterApplyChanges.deferByTickets(me, [closeWindow]);
                     const wrapTicket = ticketFn();
-                    const recordData = {...me.record.data};
+                    const recordData = {...me.record.getData()};
 
                     // NOTE: update event in local mode should have resolved data (like in remote mode)
                     this.getForm().items.items.forEach((field) => {
@@ -1334,8 +1372,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             // @TODO recordsPickers & pickerGrids?
                         }
                     });
-
-                    me.fireEvent('update', Ext.util.JSON.encode(recordData), me.mode, me, ticketFn);
+                    me.onRecordLoad();
+                    // skip unnecessary server updates
+                    if(me.needsUpdateEvent || Object.keys(me.record.getChanges()).length || !me.record.getId()
+                        || (me.record.constructor.hasField('creation_time') && !me.record.creation_time)) {
+                        me.fireEvent('update', Ext.util.JSON.encode(recordData), me.mode, me, ticketFn);
+                    }
                     wrapTicket();
                 }.bind(me));
 
@@ -1359,15 +1401,18 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         };
     },
 
-    onAfterApplyChanges: function(closeWindow) {
-        this.window.rename(this.windowNamePrefix + this.record.id);
+    onAfterApplyChanges: async function (closeWindow) {
+        await this.hideLoadMask();
         this.saving = false;
-
+        
+        if (this.window.popup) this.window.rename(this.windowNamePrefix + this.record.id);
+        
         if (closeWindow) {
             this.window.fireEvent('saveAndClose');
+            if (this.forceClose || !this.window.popup.opener) {
+                this.window.popup.close();
+            }
             this.window.close(true);
-        } else {
-            this.hideLoadMask();
         }
     },
 

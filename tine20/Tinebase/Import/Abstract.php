@@ -108,7 +108,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     public function importFile($_filename, $_clientRecordData = array())
     {
         if (preg_match('/^win/i', PHP_OS)) {
-           $_filename = utf8_decode($_filename);
+           $_filename = Tinebase_Helper::mbConvertTo($_filename);
         }
         if (! file_exists($_filename)) {
             throw new Tinebase_Exception_NotFound("File $_filename not found.");
@@ -448,7 +448,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * @param array $_data
      * @return array
      * 
-     * @todo add date and other conversions
      * @todo add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
      */
     protected function _doConversions($_data)
@@ -458,14 +457,33 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         } else {
             $data = $_data;
         }
-        
+
+        if (isset($this->_additionalOptions['dates'])) {
+            $data = $this->_convertDates($data);
+        }
+
         foreach ($data as $key => $value) { 
             $data[$key] = $this->_convertEncoding($value);
         }
         
         return $data;
     }
-    
+
+    protected function _convertDates($data)
+    {
+        foreach ($this->_additionalOptions['dates'] as $date) {
+            if (!isset($data[$date]) || $data[$date] instanceof Tinebase_DateTime || preg_match(Tinebase_DateTime::ISO8601_REGEX, $data[$date])) {
+                continue;
+            }
+            if (!empty($data[$date]) && $data[$date] != 'today') {
+                $data[$date] = new Tinebase_DateTime($data[$date]);
+            } else {
+                $data[$date] = new Tinebase_DateTime();
+            }
+        }
+        return $data;
+    }
+
     /**
      * convert encoding
      * NOTE: always do encoding with //IGNORE as we do not know the actual encoding in some cases
@@ -527,18 +545,28 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      *
      * @param array $_data
      * @return array
+     * @throws Exception
      */
-    protected function _doMappingConversion($_data)
+    protected function _doMappingConversion(array $_data): array
     {
         $data = $_data;
-        foreach ($this->_options['mapping']['field'] as $index => $field) {
-            if (! (isset($field['destination']) || array_key_exists('destination', $field)) || $field['destination'] == '' || ! isset($_data[$field['destination']])) {
+        foreach ($this->_options['mapping']['field'] as $field) {
+            if (! isset($field['destination'])
+                || is_scalar($field)
+                || ! array_key_exists('destination', $field)
+                || $field['destination'] == ''
+                || ! isset($_data[$field['destination']])
+            ) {
                 continue;
             }
-        
+
             $key = $field['destination'];
-        
-            if (isset($field['replace'])) {
+
+            if ($key === 'alarm_minutes_before') {
+                $data['alarms'] = [
+                    'minutes_before' => (int) $_data[$key],
+                ];
+            } else if (isset($field['replace'])) {
                 if ($field['replace'] === '\n') {
                     $data[$key] = str_replace("\\n", "\r\n", $_data[$key]);
                 }
@@ -568,7 +596,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                         $data[$key] = (string) $_data[$key];
                         break;
                     case 'datetime':
-                        if (isset($_data[$key])) {
+                        if (isset($_data[$key]) && ! $_data[$key] instanceof Tinebase_DateTime) {
                             $datetime = isset($field["datetime_pattern"]) ?
                                 DateTime::createFromFormat($field["datetime_pattern"], $_data[$key]) :
                                 new DateTime($_data[$key]);

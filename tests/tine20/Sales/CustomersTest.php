@@ -4,7 +4,7 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * 
  */
@@ -81,16 +81,23 @@ class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
     }
     
     /**
-     * 
+     * @param Tinebase_Model_Container|null $adbContainer
      * @return array
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _createCustomer()
+    protected function _createCustomer(?Tinebase_Model_Container $adbContainer = null): array
     {
-        $container = Tinebase_Container::getInstance()->getSharedContainer(
-            Tinebase_Core::getUser()->getId(),
-            Addressbook_Model_Contact::class,
-            'WRITE'
-        );
+        if (! $adbContainer) {
+            $adbContainer = Tinebase_Container::getInstance()->getSharedContainer(
+                Tinebase_Core::getUser()->getId(),
+                Addressbook_Model_Contact::class,
+                'WRITE'
+            )->getFirstRecord();
+        }
         
         $containerContracts = Tinebase_Container::getInstance()->getSharedContainer(
             Tinebase_Core::getUser()->getId(),
@@ -98,13 +105,11 @@ class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
             'WRITE'
         );
         
-        $container = $container->getFirstRecord();
-        
         $contact1 = $this->_contactController->create(new Addressbook_Model_Contact(
-            array('n_given' => 'Yiting', 'n_family' => 'Huang', 'container_id' => $container->getId()))
+            array('n_given' => 'Yiting', 'n_family' => 'Huang', 'container_id' => $adbContainer->getId()))
         );
         $contact2 = $this->_contactController->create(new Addressbook_Model_Contact(
-            array('n_given' => 'Hans Friedrich', 'n_family' => 'Ochs', 'container_id' => $container->getId()))
+            array('n_given' => 'Hans Friedrich', 'n_family' => 'Ochs', 'container_id' => $adbContainer->getId()))
         );
         
         $contract = $this->_contractController->create(new Sales_Model_Contract(
@@ -329,8 +334,7 @@ class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
         $customer['billing'] = array();
         $this->_json->saveCustomer($customer);
     }
-    
-        
+
     /**
      * tests setting a debitor number of a billing address
      */
@@ -352,5 +356,22 @@ class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1406708670499, $customer['billing'][0]['id']);
         $this->assertEquals('4219832435', $customer['billing'][0]['custom1']);
         $this->assertEquals(0, count($customer['delivery']));
+    }
+
+    public function testAutoCustomerContactRelation()
+    {
+        // create contact (in container with $container->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK]
+        // create customer
+        $container = Tinebase_Container::getInstance()->getSharedContainer(
+            Tinebase_Core::getUser()->getId(),
+            Addressbook_Model_Contact::class,
+            'WRITE'
+        )->getFirstRecord();
+        $container->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK] = true;
+        Tinebase_Container::getInstance()->update($container);
+        $customer = $this->_createCustomer();
+
+        // TODO assert special relation (TYPE CONTACTCUSTOMER - see \Sales_Controller::createUpdatePostalAddress)
+        self::assertCount(1, $customer['relations']);
     }
 }

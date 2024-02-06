@@ -562,12 +562,12 @@ var grid = new Ext.grid.GridPanel({
     },
     /**
      * Sets if a column is hidden.
-     <pre><code>
-     myGrid.getColumnModel().setHidden(0, true); // hide column 0 (0 = the first column).
-     </code></pre>
+<pre><code>
+myGrid.getColumnModel().setHidden(0, true); // hide column 0 (0 = the first column).
+</code></pre>
      * @param {Number} colIndex The column index
      * @param {Boolean} hidden True if the column is hidden
-     * @param suppressEvent
+     * @param {Boolean} suppressEvent True to suppress firing the <code>{@link #widthchange}</code>
      */
     setHidden : function(colIndex, hidden, suppressEvent){
         var c = this.config[colIndex];
@@ -576,7 +576,7 @@ var grid = new Ext.grid.GridPanel({
             this.totalWidth = null;
             if (!suppressEvent) {
                 this.fireEvent("hiddenchange", this, colIndex, hidden);
-            }        
+            }
         }
     },
 

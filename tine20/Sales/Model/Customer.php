@@ -15,12 +15,14 @@
  * @package     Sales
  * @subpackage  Model
  *
- * @property String name_shorthand    
+ * @property string $name_shorthand
+ * @property string $cpextern_id
  */
-
 class Sales_Model_Customer extends Tinebase_Record_Abstract
 {
     public const MODEL_NAME_PART = 'Customer';
+
+    const FLD_VAT_PROCEDURE = 'vat_procedure';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -61,6 +63,68 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'postal'        => [],
                 'cpextern_id'   => [],
                 'cpintern_id'   => [],
+            ],
+        ],
+        self::FILTER_MODEL => [
+            'document_offer' => [
+                self::LABEL => 'Has Offers', // _('Has Offers')
+                self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => Sales_Model_Document_Offer::MODEL_NAME_PART,
+
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Document_Offer::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+            'document_order' => [
+                self::LABEL => 'Has Orders', // _('Has Orders')
+                self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => Sales_Model_Document_Order::MODEL_NAME_PART,
+
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Document_Order::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+            'document_invoice' => [
+                self::LABEL => 'Has Invoices', // _('Has Invoices')
+                self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => Sales_Model_Document_Invoice::MODEL_NAME_PART,
+
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Document_Invoice::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+            'document_delivery' => [
+                self::LABEL => 'Has Deliveries', // _('Has Deliveries')
+                self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => Sales_Model_Document_Delivery::MODEL_NAME_PART,
+
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Document_Delivery::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
             ],
         ],
 
@@ -138,6 +202,14 @@ class Sales_Model_Customer extends Tinebase_Record_Abstract
                 'shy'     => TRUE,
                 self::NULLABLE => true,
             ),
+            self::FLD_VAT_PROCEDURE => [
+                self::LABEL => 'VAT Procedure', // _('VAT Procedure')
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::NAME => Sales_Config::VAT_PROCEDURES,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+            ],
             'credit_term' => array (
                 'label'   => 'Credit Term (days)', // _('Credit Term (days)')
                 'type'    => 'integer',

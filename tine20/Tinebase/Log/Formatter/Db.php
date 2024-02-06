@@ -28,12 +28,13 @@ class Tinebase_Log_Formatter_Db extends Tinebase_Log_Formatter
     public function format($event)
     {
         $data = $this->getLogData($event);
+
         $data['id'] = Tinebase_Record_Abstract::generateUID();
         $data['user'] = is_object(Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : self::NOUSERID;
 
         $timestamp = new Tinebase_DateTime($data['timestamp']);
         $data['timestamp'] = $timestamp->toString();
-        
+
         return $data;
     }
 }

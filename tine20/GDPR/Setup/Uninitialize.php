@@ -32,28 +32,28 @@ class GDPR_Setup_Uninitialize extends Setup_Uninitialize
 
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME, null, true);
+            GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
 
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            GDPR_Controller_DataProvenance::ADB_CONTACT_REASON_CUSTOM_FIELD_NAME, null, true);
+            GDPR_Controller_DataProvenance::ADB_CONTACT_REASON_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
 
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME, null, true);
+            GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
 
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
-            GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_BLACKLIST_CUSTOM_FIELD_NAME, null, true);
+            GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_BLACKLIST_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }

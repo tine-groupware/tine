@@ -79,6 +79,8 @@ deploy-built-image-to-dockerhub:
 deploy-customer-image-to-registry:
   extends: .abstract_jobs.docker
   stage: deploy
+  variables:
+    GIT_DEPTH: 100
   script:
     - !reference [.lib, script]
     - docker login --username $CUSTOMER_IMAGE_REGISTRY_USERNAME --password $CUSTOMER_IMAGE_REGISTRY_PASSWORD $CUSTOMER_IMAGE_REGISTRY_REPO
@@ -125,16 +127,17 @@ release-packages-to-gitlab:
   timeout: 20m
   interruptible: false
 
-release-packages-to-github:
+release-to-github:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
     - !reference [.lib, script]
+    - packaging_push_release_tag_to_github
     - packaging_push_package_to_github
   rules:
     - if: ($BASE_MAJOR_COMMIT_REF_NAME != "2023.11" && $BASE_MAJOR_COMMIT_REF_NAME != "2024.11") || $CUSTOMER_MAJOR_COMMIT_REF_NAME != ""
       when: never
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-github/
       when: manual
     - if: $CI_COMMIT_TAG
   timeout: 20m
@@ -155,6 +158,30 @@ trigger-release:
       when: never
     - if: $TRIGGER_RELEASE == "true"
     - if: $PIPELINE_TYPE =~ /trigger-release/
+  timeout: 20m
+  interruptible: false
+
+mkdocs-deploy:
+  stage: deploy
+  image: ${UTIL_REGISTRY}/mkdocs:ci-r1
+  needs: []
+  script:
+    - cd tine20
+    - composer install --ignore-platform-reqs
+    - vendor/bin/phpdoc-md
+    - cd ..
+    - mkdocs build
+    - s3cmd --access_key=${DOCS_S3_ACCESS_KEY} --secret_key=${DOCS_S3_SECRET_KEY} --host ${DOCS_S3_HOST} --host-bucket "%(bucket)s.${DOCS_S3_HOST}" --acl-public --delete-removed --no-mime-magic sync ./site/ s3://${DOCS_S3_BUCKET}
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /mkdocs-deploy/
+    - if: $MKDOCS_DEPLOY == "false"
+      when: never
+    - if: $MKDOCS_DEPLOY == "true"
+    # mkdocs-deploy is triggered by a nightly pipeline and if docs changes. Maybe we only need one of them?
+    - if: $PIPELINE_TYPE =~ /mkdocs-deploy/ && $CI_COMMIT_REF_NAME == "2024.11"
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME == "2024.11"
+      changes:
+        - docs/**/*
   timeout: 20m
   interruptible: false
 

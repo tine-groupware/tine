@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -16,7 +16,7 @@
 class Calendar_Controller_EventTests extends Calendar_TestCase
 {
     /**
-     * @var Calendar_Controller_Event controller unter test
+     * @var Calendar_Controller_Event
      */
     protected $_controller;
 
@@ -963,7 +963,18 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedPersistentEvent = $this->_controller->update($persistentEvent);
         $this->assertEquals(1, count($updatedPersistentEvent->attendee));
     }
-    
+
+    /**
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Zend_Exception
+     * @group nodockerci
+     *        fails with:
+     * Tinebase_Exception_NotFound: Tinebase_Model_Tree_Node record with id = b4ab92dd51c4c7ff7efdbd4cf86d1efe935c3309 not found!
+     * (Tinebase_ActionQueue::getInstance()->processQueue(10000);)
+     */
     public function testAttendeeGroupMembersChange()
     {
         $defaultAdminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
@@ -1041,7 +1052,19 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ->filter('user_id', $this->_getPersonasContacts('pwulf')->getId());
         $this->assertEquals(0, count($pwulf), 'pwulf is attender of event, but not should be');
     }
-    
+
+    /**
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Confirmation
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
+     * @group nodockerci
+     *        fails with:
+     * Tinebase_Exception_NotFound: Tinebase_Model_Tree_Node record with id = b4ab92dd51c4c7ff7efdbd4cf86d1efe935c3309 not found!
+     * (Tinebase_ActionQueue::getInstance()->processQueue(10000);)
+     */
     public function testAttendeeGroupMembersAddUser()
     {
         try {
@@ -2740,6 +2763,39 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event = $this->_controller->get($event->getId());
 
         $this->assertEquals(0, count($event->attendee->_listOfRecords));
+    }
 
+    public function testEventTypeFilter()
+    {
+        $eventType1 = Calendar_Controller_EventType::getInstance()->create(new Calendar_Model_EventType(['name' => 'foo']));
+        $eventType2 = Calendar_Controller_EventType::getInstance()->create(new Calendar_Model_EventType(['name' => 'bar']));
+
+        $filter = new Calendar_Model_EventTypeFilter([
+            ['field' => 'name', 'operator' => 'equals', 'value' => 'foo']
+        ]);
+
+        $eventTypeFound = Calendar_Controller_EventType::getInstance()->search($filter);
+        $this->assertEquals(1, count($eventTypeFound), 'no EventType "foo" was found');
+
+        $event = $this->_getEvent();
+        $event = $this->_controller->create($event);
+
+        $event->event_types = new Tinebase_Record_RecordSet('Calendar_Model_EventTypes', array(
+            array('record' => $event->getId(), 'eventType' => $eventType1->getId()),
+            array('record' => $event->getId(), 'eventType' => $eventType2->getId()),
+        ));
+
+        $event = $this->_controller->update($event);
+
+        self::assertCount(2, $event->event_types);
+
+        $filter = new Calendar_Model_EventFilter([
+            ['field' => 'container_id', 'operator' => 'equals', 'value' => $this->_getTestCalendar()->getId()],
+            ['field' => 'event_types', 'operator' => 'definedBy', 'value' => [
+                ['field' => Calendar_Model_EventTypes::FLD_EVENT_TYPE, 'operator' => 'in', 'value' => [$eventType1->getId()]],
+            ]]
+        ]);
+        $eventsFound = $this->_controller->search($filter);
+        $this->assertEquals(1, count($eventsFound), 'no Event with the EventType "foo" was found');
     }
 }

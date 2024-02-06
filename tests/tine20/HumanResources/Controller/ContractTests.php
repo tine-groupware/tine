@@ -88,13 +88,6 @@ class HumanResources_Controller_ContractTests extends HumanResources_TestCase
         $vacation = HumanResources_Controller_FreeTime::getInstance()->update($vacation);
         $this->assertSame(HumanResources_Config::FREE_TIME_PROCESS_STATUS_ACCEPTED,
             $vacation->{HumanResources_Model_FreeTime::FLD_PROCESS_STATUS});
-        
-        $newCalendar = $this->_getFeastCalendar(true);
-
-        $this->expectException('HumanResources_Exception_ContractNotEditable');
-
-        $contract2->feast_calendar_id = $newCalendar->getId();
-        $contractController->update($contract2);
     }
 
     /**

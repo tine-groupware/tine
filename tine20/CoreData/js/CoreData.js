@@ -84,6 +84,7 @@ Tine.CoreData.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
                 // show some information text or remove this as mainscreen is responsibilty of core data models/apps
                 this[contentType + this.centerPanelClassNameSuffix] = new Ext.Panel({
                     // TODO improve wording/styling
+                    border: false,
                     html: this.app.i18n._('Please select core data from tree ...')
                 });
             } else {

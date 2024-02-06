@@ -156,15 +156,6 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
 
         //Do not update Address Records with a relation to a contact from type CONTACTADDRESS
-        $addressFields = [
-            'name',
-            'street',
-            'postalcode',
-            'locality',
-            'countryname',
-            'prefix1',
-            'language',
-        ];
         $relations = $_record->relations;
 
         if (!$relations) {
@@ -172,12 +163,7 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         }
         foreach ($relations as $relation) {
             if ($relation['type'] == 'CONTACTADDRESS') {
-                $diff = $_record->diff($_oldRecord)->diff;
-                foreach ($diff as $key => $value) {
-                    if (in_array($key, $addressFields) && $value !== null) {
-                        throw new Tinebase_Exception_AccessDenied('It is not allowed to change an address that is linked to a contact.');
-                    }
-                }
+                throw new Tinebase_Exception_AccessDenied('It is not allowed to change an address that is linked to a contact. Please update the contact instead.');
             }
         }
     }
@@ -245,7 +231,7 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
     {
         $language = Sales_Controller::getInstance()->getContactDefaultLanguage($contact);
         $customer = Sales_Controller_Customer::getInstance()->get($address->customer_id);
-        $fullName = $this->getContactFullName($contact);
+        $fullName = $this->getContactFullName($contact, $language);
         
         //Update Address
         $address->name =  $customer->name;
@@ -258,6 +244,7 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $address->prefix2 = $contact->org_unit;
         $address->prefix3 = $fullName;
         $address->language = $language;
+        $address->email = $contact->email;
 
         return Sales_Controller_Address::getInstance()->update($address);
     }
@@ -266,7 +253,7 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
      * @param Addressbook_Model_Contact $contact
      * @return string
      */
-    public function getContactFullName(Addressbook_Model_Contact $contact): string
+    public function getContactFullName(Addressbook_Model_Contact $contact, $language = 'en'): string
     {
         $fullName = $contact->n_given . ' ' . $contact->n_family;
         
@@ -274,7 +261,13 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
             $fullName = $contact->n_prefix . ' ' . $fullName;
         }
         if ($contact->salutation) {
-            $fullName = $contact->salutation . ' ' . $fullName;
+            $locale = new Zend_Locale($language);
+            $translation = Tinebase_Translation::getTranslation('Addressbook', $locale);
+            $salutations = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_SALUTATION, NULL);
+            if ($salutations && $salutations->records instanceof Tinebase_Record_RecordSet) {
+                $salutationRecord = $salutations->records->getById($contact->salutation);
+                $fullName = $translation->_($salutationRecord->value) . ' ' . $fullName;
+            }
         }
         return $fullName;
     }

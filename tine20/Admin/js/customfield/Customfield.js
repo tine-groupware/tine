@@ -43,8 +43,29 @@ Tine.Admin.Model.Customfield = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
     titleProperty: 'name',
     // ngettext('Customfield', 'Customfields', n);
     recordName: 'Customfield',
-    recordsName: 'Customfields'
+    recordsName: 'Customfields',
+
 });
+
+/**
+ * get default data for a new customfield
+ *
+ * @return {Object} default data
+ * @static
+ */
+Tine.Admin.Model.Customfield.getDefaultData = function() {
+    let grants= {
+        account_id: "0",
+            account_type: "anyone",
+            account_name: i18n._('Anyone'),
+            readGrant: true,
+            writeGrant: true
+    }
+
+    return {
+        grants: grants
+    };
+};
 
 /************** backend *****************/
 

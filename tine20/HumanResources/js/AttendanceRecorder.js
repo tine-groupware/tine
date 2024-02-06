@@ -194,44 +194,46 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
                     })],
                     getColumnModel: function() {
                         const colModel = Tine.widgets.grid.PickerGridPanel.prototype.getColumnModel.call(this);
-                        colModel.columns.unshift({
-                            width: 40,
-                            id: 'buttons',
-                            renderer: (value, metaData, record) => {
-                                const type = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.type', TYPE_CLOCK_OUT);
-
-                                return `<div class="tine-row-action-icons">
+                        if (colModel.columns) {
+                            colModel.columns.unshift({
+                                width: 58,
+                                id: 'buttons',
+                                renderer: (value, metaData, record) => {
+                                    const type = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.type', TYPE_CLOCK_OUT);
+                                    
+                                    return `<div class="tine-row-action-icons" style="width: 58px;">
                                             <div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_IN ? 'x-item-disabled' : ''} project-clock-in" data-action="clockIn" ext:qtip="${me.app.i18n._('Start')}">&nbsp;</div>
                                             <div class="tine-recordclass-gridicon ${!me.ptAllowPause || type !== TYPE_CLOCK_IN ? 'x-item-disabled' : ''} ${true || me.ptAllowPause ? '' : 'x-hidden'} project-clock-pause" data-action="clockPause" ext:qtip="${me.app.i18n._('Pause')}">&nbsp;</div>
                                             <div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_OUT ? 'x-item-disabled' : ''} project-clock-out" data-action="clockOut" ext:qtip="${me.app.i18n._('Stop')}">&nbsp;</div>
                                         </div>`;
-                            }
-                        }, {
-                            width: 35,
-                            // reziseable: false,
-                            renderer: (value, metaData, record) => {
-                                const type = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.type', TYPE_CLOCK_OUT);
-                                if (type === TYPE_CLOCK_OUT) return `--:--`;
-
-                                const {time, lastClockIn} = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.records', []).reduce((a, record) => {
-                                    const lastClockIn = record[FLD_TYPE] === TYPE_CLOCK_IN ? record[FLD_TIMESTAMP] : a.lastClockIn;
-                                    return Object.assign(a, {
-                                        lastClockIn: lastClockIn,
-                                        time: a.time + (record[FLD_TYPE] !== TYPE_CLOCK_IN ? Date.parseDate(record[FLD_TIMESTAMP], Date.patterns.ISO8601Long).getTime() - Date.parseDate(lastClockIn, Date.patterns.ISO8601Long).getTime() : 0)
-                                    });
-                                }, {time: 0, lastClockIn: 0});
-                                const duration = time + (type === TYPE_CLOCK_IN ? (me.getServerDate().getTime() - Date.parseDate(lastClockIn, Date.patterns.ISO8601Long).getTime()) : 0);
-
-                                window.setTimeout(() => {
-                                    me.menu.timeAccountPickerGrid.view.refresh()
-                                }, 60000 - Math.floor(duration)%60000);
-
-                                return `<div class="tine-row-action-icons"><div style="float: left;">` + Ext.ux.form.DurationSpinner.durationRenderer(duration, { baseUnit: 'milliseconds' }).replace(':',
+                                }
+                            }, {
+                                width: 35,
+                                // reziseable: false,
+                                renderer: (value, metaData, record) => {
+                                    const type = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.type', TYPE_CLOCK_OUT);
+                                    if (type === TYPE_CLOCK_OUT) return `--:--`;
+                                    
+                                    const {time, lastClockIn} = _.get(record, 'data.xprops.HumanResources_Model_AttendanceRecord.records', []).reduce((a, record) => {
+                                        const lastClockIn = record[FLD_TYPE] === TYPE_CLOCK_IN ? record[FLD_TIMESTAMP] : a.lastClockIn;
+                                        return Object.assign(a, {
+                                            lastClockIn: lastClockIn,
+                                            time: a.time + (record[FLD_TYPE] !== TYPE_CLOCK_IN ? Date.parseDate(record[FLD_TIMESTAMP], Date.patterns.ISO8601Long).getTime() - Date.parseDate(lastClockIn, Date.patterns.ISO8601Long).getTime() : 0)
+                                        });
+                                    }, {time: 0, lastClockIn: 0});
+                                    const duration = time + (type === TYPE_CLOCK_IN ? (me.getServerDate().getTime() - Date.parseDate(lastClockIn, Date.patterns.ISO8601Long).getTime()) : 0);
+                                    
+                                    window.setTimeout(() => {
+                                        me.menu.timeAccountPickerGrid.view.refresh()
+                                    }, 60000 - Math.floor(duration)%60000);
+                                    
+                                    return `<div class="tine-row-action-icons"><div style="float: left;">` + Ext.ux.form.DurationSpinner.durationRenderer(duration, { baseUnit: 'milliseconds' }).replace(':',
                                         `<span style="font-weight: bolder;" class="${type === TYPE_CLOCK_IN ? 'attendance-clock-blink' : 'attendance-clock-stale'}">\u2236</span>`) + `
                                         </div><div class="tine-recordclass-gridicon ${type === TYPE_CLOCK_OUT ? 'x-item-disabled' : ''} action_pencil" data-action="editTimesheet" ext:qtip="${me.app.i18n._('Edit Timesheet')}">&nbsp;</div>
                                     </div>`;
-                            }
-                        })
+                                }
+                            })
+                        }
                         return colModel;
                     },
                     listeners: { change: (pgp, value, old) => {
@@ -510,6 +512,9 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
     },
 
     showClock() {
+        this.menu.el.setActive = Ext.emptyFn
+        Ext.WindowMgr.register(this.menu.el)
+        Ext.WindowMgr.bringToFront(this.menu.el)
         const date = this.getServerDate();
         let wtStatus = this.wtType === TYPE_CLOCK_PAUSED ? `${this.app.i18n._('Away')}: ${this.app.i18n._hidden(this.freeTimeType.name)}`  : (this.wtType === TYPE_CLOCK_IN ?  this.app.i18n._('Clocked-in') : this.app.i18n._('Clocked-out'));
         this.menu.displayPanel.update(`
@@ -520,6 +525,7 @@ const attendanceRecorder = Ext.extend(Ext.Button, {
     },
 
     hideClock() {
+        Ext.WindowMgr.unregister(this.menu.el)
         this.menu.displayPanel.update('');
         if (this.clockTimeout) {
             window.clearTimeout(this.clockTimeout);

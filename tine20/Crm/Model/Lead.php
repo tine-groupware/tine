@@ -6,8 +6,12 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+use Tinebase_Model_Filter_Abstract as TMFA;
+
+
 class Crm_Model_Lead extends Tinebase_Record_NewAbstract
 {
     const MODEL_NAME_PART = 'Lead';
@@ -78,6 +82,12 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
         'appName'           => 'Crm',
         'modelName'         => self::MODEL_NAME_PART, // _('GENDER_Lead')
 
+        self::JSON_EXPANDER => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'tasks' => [],
+            ],
+        ],
+
         'filterModel'       => [
             'showClosed'      => [
                 'filter'            => Crm_Model_LeadClosedFilter::class,
@@ -95,10 +105,6 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
             'product'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
                 'related_model'     => 'Sales_Model_Product',
                 'filtergroup'    => 'Sales_Model_ProductFilter'
-            )),
-            'task'           => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
-                'related_model'     => 'Tasks_Model_Task',
-                'filtergroup'    => 'Tasks_Model_TaskFilter'
             )),
         ],
         'fields'            => [
@@ -161,6 +167,22 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
                 self::TYPE                  => self::TYPE_BOOLEAN,
                 self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
             ],
+            'tasks' => [
+                self::LABEL => 'Tasks', // _('Tasks')
+                self::TYPE => self::TYPE_RECORDS,
+                self::CONFIG => [
+                    self::APP_NAME      => Tasks_Config::APP_NAME,
+                    self::MODEL_NAME    => Tasks_Model_Task::MODEL_NAME_PART,
+                    self::REF_ID_FIELD  => 'source',
+                    self::DEPENDENT_RECORDS => true,
+                    self::ADD_FILTERS   => [
+                        [TMFA::FIELD => 'source_model', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => self::class],
+                    ],
+                    self::FORCE_VALUES  => [
+                        'source_model' => self::class,
+                    ],
+                ],
+            ],
         ]
     ];
 
@@ -175,11 +197,6 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
             ),
             'default' => array('type' => 'CUSTOMER', 'related_degree' => 'parent')
         ),
-        // a lead may have many tasks, but a task may have one lead, no more
-        array('relatedApp' => 'Tasks', 'relatedModel' => 'Task', 'config' => array(
-            array('type' => 'TASK', 'degree' => 'sibling', 'text' => 'Task', 'max' => '0:1'), // _('Task')
-            ),
-        )
     );
 
     /**
@@ -271,7 +288,7 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
                         'related_id'             => (isset($relation['related_id'])) ? $relation['related_id'] : NULL,
                         'remark'                 => (isset($relation['remark'])) ? $relation['remark'] : NULL,
                         'related_model'          => (isset($relation['related_model'])) ? $relation['related_model'] : NULL,
-                        'related_backend'        => (isset($relation['related_backend'])) ? $relation['related_backend'] : Addressbook_Backend_Factory::SQL
+                        'related_backend'        => (isset($relation['related_backend'])) ? $relation['related_backend'] : Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND
                     );
                     
                     // set id from related record (if it didn't got set in javascript frontend)
@@ -285,11 +302,7 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
                         case 'CUSTOMER':
                         case 'PARTNER':
                             $data['related_model'] = 'Addressbook_Model_Contact';
-                            $data['related_backend'] = Addressbook_Backend_Factory::SQL;
-                            break;
-                        case 'TASK':
-                            $data['related_model'] = 'Tasks_Model_Task';
-                            $data['related_backend'] = Tasks_Backend_Factory::SQL;
+                            $data['related_backend'] = Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND;
                             break;
                         case 'PRODUCT':
                             $data['related_model'] = 'Sales_Model_Product';
@@ -304,9 +317,9 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
                         if (! isset($relation['related_record']['container_id']) || empty($relation['related_record']['container_id'])) {
                             // use default container for app
                             $data['related_record']['container_id'] = Tinebase_Container::getInstance()->getDefaultContainer(
-                                ($relation['type'] == 'TASK') ? Tasks_Model_Task::class : Addressbook_Model_Contact::class,
+                                Addressbook_Model_Contact::class,
                                 NULL,
-                                ($relation['type'] == 'TASK') ? Tasks_Preference::DEFAULTTASKLIST : Addressbook_Preference::DEFAULTADDRESSBOOK
+                                Addressbook_Preference::DEFAULTADDRESSBOOK
                             )->getId();
                         } elseif (is_array($relation['related_record']['container_id'])) {
                             $data['related_record']['container_id'] = $relation['related_record']['container_id']['id'];

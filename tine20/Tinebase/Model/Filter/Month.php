@@ -18,7 +18,17 @@
  */
 class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
 {
-    protected $_operators = array('within', 'before', 'after', 'equals', 'before_or_equals', 'after_or_equals', 'contains');
+    protected $_operators = array('within', 'before', 'after', 'equals', 'before_or_equals', 'after_or_equals', 'contains', 'in');
+
+    public function setValue($_value)
+    {
+        if ('in' !== $this->_operator) {
+            parent::setValue($_value);
+        } else {
+            $this->_orgValue = $_value;
+            $this->_value = $_value;
+        }
+    }
 
     /**
      * appends sql to given select statement
@@ -103,6 +113,8 @@ class Tinebase_Model_Filter_Month extends Tinebase_Model_Filter_Date
                 $like = '0000-00-00';
             }
             $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " LIKE (?)", $like));
+        } elseif ($this->_operator === 'in') {
+            $_select->where($db->quoteInto($this->_getQuotedFieldName($_backend) . " IN (?)", (array)$this->_value));
         } else {
             
             $date = new Tinebase_DateTime($this->_value);

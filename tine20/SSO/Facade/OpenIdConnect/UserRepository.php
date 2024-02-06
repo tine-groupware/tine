@@ -28,6 +28,9 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
                 case 'sub':
                     $result['sub'] = $userEntity->getTineUser()->accountEmailAddress;
                     break;
+                case 'preferred_username':
+                    $result['preferred_username'] = $userEntity->getTineUser()->accountLoginName;
+                    break;
                 case 'name':
                     $result['name'] = $userEntity->getTineUser()->accountFullName;
                     break;
@@ -56,5 +59,10 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
         } catch (Tinebase_Exception_NotFound $tenf) {
             return null;
         }
+    }
+
+    public function getUserInfoAttributes(\League\OAuth2\Server\Entities\UserEntityInterface $userEntity, $claims, $scopes)
+    {
+        return $this->getAttributes($userEntity, $claims, $scopes);
     }
 }

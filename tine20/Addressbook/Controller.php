@@ -216,7 +216,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                 'id' => 'adb_lists',
                 'application_id' => $application,
                 'model' => 'Addressbook_Model_List',
-                'label' => 'Lists' // _('Lists')
+                'label' => 'Groups' // _('Groups')
             )));
         }
 
@@ -225,7 +225,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                 'id' => 'adb_list_roles',
                 'application_id' => $application,
                 'model' => 'Addressbook_Model_ListRole',
-                'label' => 'List Functions' // _('List Functions')
+                'label' => 'Group Functions' // _('Group Functions')
             )));
         }
 
@@ -237,6 +237,7 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
                     'label' => 'Industries' // _('Industries')
             )));
         }
+
         return $result;
     }
 

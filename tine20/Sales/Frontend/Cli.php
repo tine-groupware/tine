@@ -64,7 +64,6 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     public function create_auto_invoices($_opts)
     {
         if (!Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
-            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' create_auto_invoices ran allthoug feature ' . Sales_Config::FEATURE_INVOICES_MODULE . ' is disabled');
             return false;
         }
 
@@ -478,6 +477,31 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             } catch (Exception $e) {
                 echo "Doc offer creation failed: " . $e->getMessage() . "\n";
                 // Tinebase_Exception::log($e);
+            }
+        }
+    }
+
+    /**
+     * addEmailToSalesAddress
+     */
+    public function addEmailToSalesAddress()
+    {
+        $adbController = Addressbook_Controller_Contact::getInstance();
+        $filter = new Tinebase_Model_RelationFilter(array(
+            array('field' => 'related_model', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::class),
+            array('field' => 'own_model', 'operator' => 'equals', 'value' => Sales_Model_Address::class),
+            array('field' => 'type', 'operator' => 'equals', 'value' => 'CONTACTADDRESS'),
+        ), 'AND');
+
+        // TODO no need to fetch complete records here - we should only get the related_id + record_id (via $_cols)
+        // TODO use backend here (Tinebase_Relation_Backend_Sql)
+        // TODO only update if email is is not set in Address
+        $existingRelations = Tinebase_Relations::getInstance()->search($filter);
+
+        foreach ($existingRelations as $relation) {
+            $contact = $adbController->get($relation->related_id);
+            if ($contact->email) {
+                $adbController->update($contact);
             }
         }
     }

@@ -270,7 +270,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         method    : 'Admin.resetPassword',
                         account   : accountObject,
                         password  : _text,
-                        mustChange: false
+                        mustChange: true
                     },
                     scope: this,
                     callback : function(_options, _success, _response) {
@@ -307,6 +307,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
     },
 
+    //shared with Tine.Felamimail.admin.showAccountGridPanel
     emailQuotaRenderer: function(_value) {
         var quota = _value['emailMailQuota'] ? _value['emailMailQuota'] : 0,
             size = _value['emailMailSize'] ? _value['emailMailSize'] : 0;

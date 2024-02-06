@@ -29,6 +29,11 @@
     background-image:url(../../images/icon-set/icon_calendar_strahl_transparent.svg) !important;
 }
 
+.cal-floorplan-view-type {
+    background-image:url(../../images/icon-set/icon_resource_homeoffice.svg) !important;
+
+}
+
 .cal-print-loose-leaf {
     background-image:url(../../images/icon-set/icon_looseleaf.svg) !important;
 }
@@ -317,4 +322,9 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 
 .t-contenttype-event .action_import {
     background-image:url(../../images/icon-set/icon_meeting_import.svg) !important;
+}
+
+.dark-mode .bymonthdayday .x-form-field,
+.dark-mode .x-hide-label .x-form-element .x-form-check-group .x-form-check-wrap label.x-form-cb-label {
+    filter: invert(1) hue-rotate(180deg);
 }

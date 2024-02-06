@@ -136,8 +136,11 @@ Ext.form.FieldSet = Ext.extend(Ext.Panel, {
         if(this.checkbox){
             this.checkbox.dom.checked = false;
         }
-        Ext.form.FieldSet.superclass.onCollapse.call(this, doAnim, animArg);
+        const numValues = this.el.select('input').elements.reduce((num, input) => { return num + (Ext.getCmp(input.id)?.getValue?.() ? 1 : 0) }, 0);
+        this.expandedTitle = this.title;
+        this.setTitle(`${this.expandedTitle} (${numValues})`);
 
+        Ext.form.FieldSet.superclass.onCollapse.call(this, doAnim, animArg);
     },
 
     // private
@@ -145,6 +148,7 @@ Ext.form.FieldSet = Ext.extend(Ext.Panel, {
         if(this.checkbox){
             this.checkbox.dom.checked = true;
         }
+        this.setTitle(this.expandedTitle);
         Ext.form.FieldSet.superclass.onExpand.call(this, doAnim, animArg);
     },
 

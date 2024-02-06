@@ -9,6 +9,8 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
+use Psr\Http\Message\RequestInterface;
+
 /**
  * Test class for Tinebase_Server_Json
  * 
@@ -16,6 +18,7 @@
  */
 class Tinebase_Server_JsonTests extends TestCase
 {
+    protected bool $_resetRateLimitConfig = false;
     protected $_imapConf = null;
 
     /**
@@ -23,12 +26,77 @@ class Tinebase_Server_JsonTests extends TestCase
      */
     protected function tearDown(): void
     {
+        if ($this->_resetRateLimitConfig) {
+            $rateLimit = new Tinebase_Server_RateLimit();
+            $rateLimit->purge(Tinebase_Core::getUser()->accountLoginName, 'Inventory.searchInventoryItems');
+            Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, []);
+        }
         if ($this->_imapConf !== null) {
             Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $this->_imapConf);
             Tinebase_EmailUser::clearCaches();
             Tinebase_EmailUser::destroyInstance();
         }
+
         parent::tearDown();
+    }
+
+    /**
+     * @param bool $success
+     * @return void
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Json_Exception
+     * @throws Zend_Session_Exception
+     *
+     * @group ServerTests
+     */
+    public function testLoginMFA(bool $success = true)
+    {
+        if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
+            $this->markTestSkipped('LDAP backend enabled');
+        }
+
+        $totp = $this->_prepTOTP();
+
+        $user = Tinebase_Core::getUser();
+        $mfaId = $user->mfa_configs->getFirstRecord()->getId();
+        $credentials = TestServer::getInstance()->getTestCredentials();
+        $loginData = [
+            'username' => $credentials['username'],
+            'password' => $credentials['password'],
+            'MFAUserConfigId' => $mfaId,
+            'MFAPassword' => $success ? $totp->now() : '000000',
+        ];
+        $resultString = $this->_handleRequest('Tinebase.login', $loginData, !$success);
+
+        $result = Tinebase_Helper::jsonDecode($resultString);
+        if ($success) {
+            self::assertArrayHasKey('success', $result['result']);
+            self::assertEquals($success, $result['result']['success'], print_r($result, true));
+        } else {
+            $accessLog = Tinebase_AccessLog::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Tinebase_Model_AccessLog::class, [[
+                    'field' => 'user_agent', 'operator' => 'equals', 'value' => 'Unit Test Client',
+                    'field' => 'clienttype', 'operator' => 'equals', 'value' => 'JSON-RPC',
+                ]]
+            ), new Tinebase_Model_Pagination(['sort' => 'li', 'dir' => 'desc']))->getFirstRecord();
+            self::assertNotNull($accessLog);
+            self::assertNotEquals(Tinebase_Auth::SUCCESS, $accessLog->result,
+                print_r($accessLog->toArray(), true));
+        }
+    }
+
+    /**
+     * @throws Tinebase_Exception_SystemGeneric
+     * @throws Zend_Json_Exception
+     * @throws Zend_Session_Exception
+     *
+     * @group ServerTests
+     */
+    public function testLoginMFAFail()
+    {
+        // wait 1 sec to make sure we get the correct access log
+        sleep(1);
+        $this->testLoginMFA(false);
     }
 
     /**
@@ -45,6 +113,7 @@ class Tinebase_Server_JsonTests extends TestCase
             'Inventory.deleteInventoryItems',
             'Inventory.getInventoryItem',
             'Inventory.importInventoryItems',
+            'Tasks.importTasks',
         );
 
         foreach ($expectedFunctions as $function) {
@@ -148,6 +217,118 @@ class Tinebase_Server_JsonTests extends TestCase
     /**
      * @group ServerTests
      */
+    public function testGetAppPwdServiceMap()
+    {
+        $appPwd = Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
+            Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $this->_originalTestUser->getId(),
+            Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => Tinebase_Record_Abstract::generateUID(),
+            Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(10),
+            Tinebase_Model_AppPassword::FLD_CHANNELS => [
+                'Addressbook.saveContact' => true,
+                'Crm.saveLead' => true,
+                'HumanResources.getAttendanceRecorderDeviceStates' => true,
+            ],
+        ]));
+
+        $session = Tinebase_Session::getSessionNamespace();
+        try {
+            $session->{Tinebase_Model_AppPassword::class} = $appPwd;
+
+            $smd = Tinebase_Server_Json::getServiceMap();
+            $smdArray = $smd->toArray();
+            $msg = print_r($smdArray, true);
+            $this->assertCount(3, $smdArray['services'], $msg);
+            $this->assertArrayHasKey('Addressbook.saveContact', $smdArray['services'], $msg);
+            $this->assertArrayHasKey('Crm.saveLead', $smdArray['services'], $msg);
+            $this->assertArrayHasKey('HumanResources.getAttendanceRecorderDeviceStates', $smdArray['services'], $msg);
+
+        } finally {
+            $session->{Tinebase_Model_AppPassword::class} = null;
+        }
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testAppPwdApiCall()
+    {
+        $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH, 'a')) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
+        $appPwd = Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
+            Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $this->_originalTestUser->getId(),
+            Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $pwd,
+            Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(10),
+            Tinebase_Model_AppPassword::FLD_CHANNELS => [
+                'Addressbook.searchContacts' => true,
+            ],
+        ]));
+
+        $session = Tinebase_Session::getSessionNamespace();
+        try {
+            $session->currentAccount = null;
+            $session->{Tinebase_Model_AppPassword::class} = $appPwd;
+            Tinebase_Core::unsetUser();
+
+            $resultString = $this->_handleRequest('Addressbook.searchContacts', [[], []], false,
+                'Authorization: Basic ' . base64_encode($this->_originalTestUser->accountLoginName . ':' . $pwd) . "\r\n");
+            $result = Tinebase_Helper::jsonDecode($resultString);
+            $this->assertArrayHasKey('results', $result['result']);
+            $this->assertGreaterThan(0, count($result['result']['results']));
+
+            Tinebase_Core::unsetUser();
+            $session->currentAccount = null;
+            $session->{Tinebase_Model_AppPassword::class} = null;
+            $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH, 'b')) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
+            $resultString = $this->_handleRequest('Addressbook.searchContacts', [[], []], true,
+                'Authorization: Basic ' . base64_encode($this->_originalTestUser->accountLoginName . ':' . $pwd) . "\r\n", true);
+            $result = Tinebase_Helper::jsonDecode($resultString);
+            $this->assertArrayHasKey('error', $result);
+            $this->assertSame(401, ($result['error']['data']['code']));
+
+        } finally {
+            $session->{Tinebase_Model_AppPassword::class} = null;
+            $session->currentAccount = $this->_originalTestUser;
+            Tinebase_Core::setUser($this->_originalTestUser);
+        }
+    }
+
+    /**
+     * @group ServerTests
+     */
+    public function testAppPwdApiCall1()
+    {
+        $this->_createAreaLockConfig();
+        $pwd = join('', array_fill(0, Tinebase_Controller_AppPassword::PWD_LENGTH - Tinebase_Controller_AppPassword::PWD_SUFFIX_LENGTH, 'a')) . Tinebase_Controller_AppPassword::PWD_SUFFIX;
+        $appPwd = Tinebase_Controller_AppPassword::getInstance()->create(new Tinebase_Model_AppPassword([
+            Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => $this->_originalTestUser->getId(),
+            Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => $pwd,
+            Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(10),
+            Tinebase_Model_AppPassword::FLD_CHANNELS => [
+                'HumanResources.getAttendanceRecorderDeviceStates' => true,
+            ],
+        ]));
+
+        $session = Tinebase_Session::getSessionNamespace();
+        try {
+            $session->currentAccount = null;
+            $session->{Tinebase_Model_AppPassword::class} = $appPwd;
+            Tinebase_Core::unsetUser();
+
+            $resultString = $this->_handleRequest('HumanResources.getAttendanceRecorderDeviceStates', [], false,
+                'Authorization: Basic ' . base64_encode($this->_originalTestUser->accountLoginName . ':' . $pwd) . "\r\n");
+            $result = Tinebase_Helper::jsonDecode($resultString);
+            $this->assertArrayHasKey('results', $result['result']);
+            $this->assertCount(0, $result['result']['results']);
+
+        } finally {
+            $session->{Tinebase_Model_AppPassword::class} = null;
+            $session->currentAccount = $this->_originalTestUser;
+            Tinebase_Core::setUser($this->_originalTestUser);
+        }
+    }
+
+    /**
+     * @group ServerTests
+     */
     public function testGetAnonServiceMap()
     {
         // unset registry (and the user object)
@@ -196,13 +377,38 @@ class Tinebase_Server_JsonTests extends TestCase
     }
 
     /**
+     * @group ServerTests
+     */
+    public function testRateLimit()
+    {
+        $this->_resetRateLimitConfig = true;
+        $config = [
+            Tinebase_Core::getUser()->accountLoginName => [[
+                'method' => 'Inventory.searchInventoryItems',
+                'maxrequests' => 1,
+                'period' => 3600, // per hour
+            ]]
+        ];
+        Tinebase_Config::getInstance()->set(Tinebase_Config::RATE_LIMITS, $config);
+
+        $params = [
+            'filter' => [],
+            'paging' => [],
+        ];
+        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params);
+        self::assertStringContainsString('{"result":{"totalcount":', $response);
+        $response = $this->_handleRequest('Inventory.searchInventoryItems', $params, true);
+        self::assertStringContainsString('{"error":{"code":-32000,"message":"Method is rate-limited: Inventory.searchInventoryItems"', $response);
+    }
+
+    /**
      * @param string $method
      * @param array $params
      * @throws Tinebase_Exception_SystemGeneric
      * @throws Zend_Session_Exception
      * @return string
      */
-    protected function _handleRequest(string $method, array $params)
+    protected function _handleRequest(string $method, array $params, bool $allowError = false, string $additionalHeaders = '', bool $allow401 = false)
     {
         // handle jsonkey check
         $jsonkey = 'myawsomejsonkey';
@@ -222,6 +428,7 @@ class Tinebase_Server_JsonTests extends TestCase
             . 'Referer: http://tine20.vagrant/' . "\r\n"
             . 'Accept-Encoding: gzip, deflate' . "\r\n"
             . 'Accept-Language: en-US,en;q=0.8,de-DE;q=0.6,de;q=0.4' . "\r\n"
+            . $additionalHeaders
             . "\r\n"
             . '{"jsonrpc":"2.0","method":"' . $method . '","params":' . json_encode($params) . ',"id":6}' . "\r\n"
         );
@@ -230,12 +437,16 @@ class Tinebase_Server_JsonTests extends TestCase
         $out = ob_get_clean();
         //echo $out;
         $this->assertTrue(! empty($out), 'request should not be empty');
-        $this->assertStringNotContainsString('Not Authorised', $out);
+        if (!$allow401) {
+            $this->assertStringNotContainsString('Not Authorised', $out);
+        }
         $this->assertStringNotContainsString('Method not found', $out);
         $this->assertStringNotContainsString('No Application Controller found', $out);
-        $this->assertStringNotContainsString('"error"', $out);
+        if (! $allowError) {
+            $this->assertStringNotContainsString('"error"', $out);
+            $this->assertStringContainsString('"result"', $out);
+        }
         $this->assertStringNotContainsString('PHP Fatal error', $out);
-        $this->assertStringContainsString('"result"', $out);
 
         return $out;
     }
@@ -278,11 +489,14 @@ class Tinebase_Server_JsonTests extends TestCase
 
         $this->_imapConf = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
         $newConf = $this->_imapConf->toArray();
-        $newConf['dovecot']['host'] = 'somethingelse';
+        $newConf['dovecot']['host'] = 'www.tine-groupware.de';
         Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $newConf);
         Tinebase_EmailUser::clearCaches();
         Tinebase_EmailUser::destroyInstance();
 
+        $before = Tinebase_DateTime::now();
         $this->testLogin();
+        self::assertTrue($before->isLater(Tinebase_DateTime::now()->subSecond(5))
+            , 'login took longer than 4-5 secs!');
     }
 }

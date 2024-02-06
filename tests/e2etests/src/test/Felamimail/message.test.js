@@ -18,6 +18,7 @@ describe('message', () => {
         await popupWindow.waitForTimeout(2000);
         let inputFields = await popupWindow.$$('input');
         await inputFields[2].type(currentUser.accountEmailAddress);
+        await popupWindow.waitForTimeout(2000); //musst wait for input!
         await popupWindow.waitForSelector('.search-item.x-combo-selected');
         await popupWindow.click('.search-item.x-combo-selected');
         await popupWindow.waitForTimeout(500); //wait for new mail line!
@@ -116,9 +117,38 @@ describe('message', () => {
         await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER});
         await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, clickCount: 2});
         await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'attachment.txt'});
+        await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
+        await expect(page).toClick('.x-menu-item-text', {text: 'Felamimail'});
+        await page.waitForSelector('a span',{text: "Posteingang"});
+        await expect(page).toClick('a span',{text: "Posteingang"});
+        await page.waitForTimeout(2000);
+    });
+    
+    test.skip('overwrite email attachment in filemanager from MailDetailsPanel', async () => {
+        await page.waitForTimeout(2000);
+        await saveAttachment(page);
+        await page.waitForTimeout(10000); //wait for save email.
+        await saveAttachment(page);
+        await page.waitForTimeout(1000);
+        await page.waitForSelector('.x-window.x-window-plain.x-window-dlg');
+        await expect(page).toClick('button', {text: 'Ja'});
     });
 });
 
 afterAll(async () => {
     browser.close();
 });
+
+async function saveAttachment(page) {
+    await page.waitForSelector('.tinebase-download-link');
+    let attachment = await page.$$('.tinebase-download-link');
+    await attachment[1].hover();
+    await attachment[1].click('tinebase-download-link-wait');
+    await page.waitForTimeout(2000);
+    await expect(page).toClick('.x-menu-item-text', {text: 'Speichern als', visible: true});
+    await page.waitForTimeout(1000);
+    await expect(page).toClick('.x-menu-item-text', {text: 'Datei (im Dateimanager) ...', visible: true});
+    await page.waitForSelector('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER});
+    await expect(page).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, clickCount: 1});
+    await expect(page).toClick('button', {text: 'Ok'});
+}

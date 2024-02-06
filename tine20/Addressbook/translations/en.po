@@ -200,9 +200,10 @@ msgstr "Description"
 msgid "Enter description"
 msgstr "Enter description"
 
-#: js/ContactEditDialog.js:440 js/Model.js:84 Model/Contact.php:452
-msgid "Groups"
-msgstr "Groups"
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Group"
+msgstr[1] "Groups"
 
 #: js/ContactEditDialog.js:521 js/ContactEditDialog.js:563
 msgid "Parse address"
@@ -356,8 +357,8 @@ msgstr[0] "List Personal Grant"
 msgstr[1] "List Personal Grants"
 
 #: js/ListEditDialog.js:69
-msgid "List Information"
-msgstr "List Information"
+msgid "Group Information"
+msgstr "Group Information"
 
 #: js/ListEditDialog.js:96 js/ListGrid.js:104 Model/List.php:169
 #: tempExtract/387d9e8b99a45281ace2d2678e8a4910/xl/sharedStrings.xml:2
@@ -374,8 +375,8 @@ msgid "{0} must be given"
 msgstr "{0} must be given"
 
 #: js/ListRoleGridPanel.js:50 js/Model.js:354 Controller.php:239
-msgid "List Functions"
-msgstr "List Functions"
+msgid "Group Functions"
+msgstr "Group Functions"
 
 #: js/Model.js:23 Model/Contact.php:534
 msgid "Suffix"
@@ -527,14 +528,14 @@ msgid "Quick search"
 msgstr "Quick search"
 
 #: js/Model.js:354
-msgid "List Function"
-msgid_plural "List Functions"
-msgstr[0] "List Function"
-msgstr[1] "List Functions"
+msgid "Group Function"
+msgid_plural "Group Functions"
+msgstr[0] "Group Function"
+msgstr[1] "Group Functions"
 
 #: js/Model.js:355
-msgid "GENDER_List Function"
-msgstr "GENDER_List Function"
+msgid "GENDER_Group Function"
+msgstr "GENDER_Group Function"
 
 #: js/Model.js:385 Controller.php:248
 msgid "Industries"
@@ -640,8 +641,8 @@ msgid "Geo"
 msgstr "Geo"
 
 #: js/ListGridDetailsPanel.js:60
-msgid "Select list"
-msgstr "Select list"
+msgid "Select Group"
+msgstr "Select Group"
 
 #: js/ContactSearchCombo.js:73
 msgid "Search for users ..."
@@ -666,10 +667,6 @@ msgstr "Member E-Mails"
 #: js/ListGrid.js:148 Model/List.php:214
 msgid "System Group"
 msgstr "System Group"
-
-#: js/ListGrid.js:148 Model/List.php:212
-msgid "Group"
-msgstr "Group"
 
 #: js/StructurePanel.js:57
 msgid "Select record to see its details"
@@ -1086,8 +1083,8 @@ msgid "Contact import from Google address book"
 msgstr "Contact import from Google address book"
 
 #: Model/List.php:81
-msgid "GENDER_List"
-msgstr "GENDER_List"
+msgid "GENDER_Group"
+msgstr "GENDER_Group"
 
 #: Model/List.php:124 Model/Contact.php:260
 msgid "Name/Email"
@@ -1106,12 +1103,8 @@ msgid "Path"
 msgstr "Path"
 
 #: Model/Contact.php:197
-msgid "List Member"
-msgstr "List Member"
-
-#: Model/Contact.php:203
-msgid "List Role Member"
-msgstr "List Role Member"
+msgid "Group Member"
+msgstr "Group Member"
 
 #: Model/Contact.php:209
 msgid "Telephone"

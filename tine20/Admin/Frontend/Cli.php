@@ -392,7 +392,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * set passwords for given user accounts (csv with email addresses or username) - random pw is generated if not in csv
      *
-     * usage: method=Admin.setPasswords [-d] [-v] userlist.csv [-- pw=password sendmail=1 pwlist=pws.csv updateaccount=1]
+     * usage: method=Admin.setPasswords [-d] [-v] [userlist1.csv] [userlist2.csv] [-- pw=password sendmail=1 pwlist=pws.csv updateaccount=1 ignorepolicy=1]
      *
      * - sendmail=1 -> sends mail to user with pw
      * - pwlist=pws.csv -> creates csv file with the users and their new pws
@@ -410,12 +410,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $args = $this->_parseArgs($opts, array(), 'userlist_csv');
 
-        // input csv/user list
-        if (! isset($args['userlist_csv'])) {
-            echo "userlist file param required or file not found. usage: method=Admin.setPasswords [-d] userlist.csv\n";
-            return 2;
-        }
-
         if (isset($args['pwlist'])) {
             $pw = $this->_readCsv($args['pwlist'], true);
             if ($pw && $opts->v) {
@@ -425,23 +419,62 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $pw = $args['pw'] ?? null;
         }
 
-        foreach ($args['userlist_csv'] as $csv) {
-            $users = $this->_readCsv($csv);
-            if (! $users) {
-                echo "no users found in file\n";
-                break;
-            }
+        $sendmail = isset($args['sendmail']) && $args['sendmail'];
+        $updateaccount = isset($args['updateaccount']) && $args['updateaccount'];
+        $ignorepolicy = isset($args['ignorepolicy']) && $args['ignorepolicy'];
 
-            if ($opts->v) {
-                print_r($args);
-                print_r($users);
+        // input csv/user list
+        if (! isset($args['userlist_csv'])) {
+            echo "Userlist file param not found.\n";
+            if ( ! Tinebase_User::getInstance() instanceof Tinebase_User_Ldap
+                || Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)
+                    ->{Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL}) {
+                echo "Setting PW for all users that do not have one.\n";
+                $users = Tinebase_User::getInstance()->getUsersWithoutPw();
+                $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount, $ignorepolicy);
             }
+        } else {
+            foreach ($args['userlist_csv'] as $csv) {
+                $users = $this->_readCsv($csv);
+                if (! $users) {
+                    echo "no users found in file\n";
+                    break;
+                }
 
-            $sendmail = isset($args['sendmail']) && (bool) $args['sendmail'];
-            $updateaccount = isset($args['updateaccount']) && (bool) $args['updateaccount'];
-            $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount);
+                $this->_setPasswordsForUsers($opts, $users, $pw, $sendmail, $updateaccount, $ignorepolicy);
+            }
         }
 
+        return 0;
+    }
+
+    /**
+     * @return int
+     * @throws Zend_Db_Adapter_Exception
+     */
+    public function repairOccurenceTag(Zend_Console_Getopt $_opts)
+    {
+        $db = Tinebase_Core::getDb();
+        $filter = new Tinebase_Model_TagFilter([]);
+        $tags = Tinebase_Tags::getInstance()->searchTags($filter, null, true);
+        echo "Found " . count($tags) . " tags\n";
+        foreach ($tags as $tag) {
+            $select = $db->select()
+                ->from(array('tagging' => SQL_TABLE_PREFIX . 'tagging'), 'count(*)')
+                ->where($db->quoteIdentifier('tag_id') . ' = ?', $tag->getId());
+            $count = $db->fetchCol($select)[0];
+            if ($count !== $tag->occurrence)
+            {
+                echo "Found wrong occurrence for the tag " . $tag->getId() . "\n";
+                if (!$_opts->d) {
+                    $db->update(SQL_TABLE_PREFIX . 'tags', ['occurrence' => $count],
+                        $db->quoteInto($db->quoteIdentifier('id') . ' = ?', $tag->getId()));
+                    echo "Update occurrence from " . $tag->occurrence . " to " . $count . "\n";
+                } else {
+                    echo "--DRYRUN-- will updating occurrence from " . $tag->occurrence . " to " . $count . "\n";
+                }
+            }
+        }
         return 0;
     }
 
@@ -482,13 +515,19 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * @param string|array $pw
      * @param boolean $sendmail
      * @param boolean $updateaccount
+     * @param boolean $ignorepolicy
      *
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      */
-    protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null, bool $sendmail = false, bool $updateaccount = false)
+    protected function _setPasswordsForUsers(Zend_Console_Getopt $opts, $users, $pw = null, bool $sendmail = false, bool $updateaccount = false, $ignorepolicy = false)
     {
+        if ($opts->v) {
+            echo "Setting PW for users:\n";
+            print_r($users);
+        }
+
         $pwCsv = '';
 
         foreach ($users as $userdata) {
@@ -510,11 +549,20 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 }
             }
 
+            $pwPolicyConf = Tinebase_Config::getInstance()->get(Tinebase_Config::USER_PASSWORD_POLICY);
             if (is_array($pw) && isset($pw[$fullUser->accountLoginName])) {
                 // list of user pws
                 $newPw = $pw[$fullUser->accountLoginName];
+            } else if ($pw) {
+                $newPw = $pw;
+            } else if ($pwPolicyConf->{Tinebase_Config::PASSWORD_POLICY_ACTIVE}) {
+                $newPw = Tinebase_User::generateRandomPassword(
+                    $pwPolicyConf->{Tinebase_Config::PASSWORD_POLICY_MIN_LENGTH},
+                    $pwPolicyConf->{Tinebase_Config::PASSWORD_POLICY_MIN_SPECIAL_CHARS},
+                    $pwPolicyConf->{Tinebase_Config::PASSWORD_POLICY_MIN_UPPERCASE_CHARS}
+                );
             } else {
-                $newPw = $pw ?? Tinebase_User::generateRandomPassword(8);
+                $newPw = Tinebase_User::generateRandomPassword();
             }
 
             if ($updateaccount) {
@@ -525,7 +573,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 }
             } else {
                 if (! $opts->d) {
-                    Tinebase_User::getInstance()->setPassword($fullUser, $newPw);
+                    Tinebase_User::getInstance()->setPassword($fullUser, $newPw, true, true, $ignorepolicy);
                 } else {
                     echo "--DRYRUN-- setting pw for user " . $username . "\n";
                 }
@@ -550,8 +598,10 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
         }
 
-        echo "\nNEW PASSWORDS:\n\n";
-        echo $pwCsv;
+        if ($opts->v) {
+            echo "\nNEW PASSWORDS:\n\n";
+            echo $pwCsv;
+        }
     }
 
     /**
@@ -591,14 +641,16 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 // copy pw from email backend
                 $systemEmailUser = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($user);
                 $userInBackend = $emailUserBackend->getRawUserById($systemEmailUser);
-                if ($opts->d) {
-                    echo "--DRY RUN-- copy pw of user " . $userInBackend['loginname'] . ": " . $userInBackend['password'] ."\n";
-                } else {
-                    $db->update(SQL_TABLE_PREFIX . 'accounts', [
-                        'password' => $userInBackend['password'],
-                    ], $db->quoteInto('id = ?', $account->user_id));
+                if ($userInBackend) {
+                    if ($opts->d) {
+                        echo "--DRY RUN-- copy pw of user " . $userInBackend['loginname'] . ": " . $userInBackend['password'] . "\n";
+                    } else {
+                        $db->update(SQL_TABLE_PREFIX . 'accounts', [
+                            'password' => $userInBackend['password'],
+                        ], $db->quoteInto('id = ?', $account->user_id));
+                    }
+                    $updateCount++;
                 }
-                $updateCount++;
 
             } catch (Tinebase_Exception_NotFound $tenf) {
                 // not found - ignore
@@ -683,35 +735,13 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function updateNotificationScripts(Zend_Console_Getopt $opts)
     {
-        $backend = Admin_Controller_EmailAccount::getInstance();
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-            ['field' => 'sieve_notification_email', 'operator' => 'not', 'value' => NULL],
-            ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_EmailUser_Model_Account::TYPE_SYSTEM]
-        ]);
-        $mailAccounts = $backend->search($filter);
-
-        if (count($mailAccounts) === 0) {
-            return 0;
-        }
         if ($opts->d) {
             echo "--DRY RUN--\n";
         }
-        echo "Found " . count($mailAccounts) . " system email accounts to update\n";
 
-        $updated = 0;
-        foreach ($mailAccounts as $record) {
-            if (!$opts->d && Tinebase_EmailUser::sieveBackendSupportsMasterPassword($record)) {
-                $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($record->getId());
-                Felamimail_Controller_Sieve::getInstance()->setNotificationEmail($record->getId(),
-                    $record->sieve_notification_email);
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                    . __LINE__ . 'Sieve script updated from record: ' . $record->getId());
-                Tinebase_EmailUser::removeSieveAdminAccess();
-                unset($raii);
-            }
-            $updated++;
-        }
-        echo "Updated notification script for " . $updated . " email accounts\n";
+        $updated = Admin_Controller_EmailAccount::getInstance()->updateNotificationScripts(null, $opts->d);
+
+        echo "Updated notification script for " . count($updated) . " email accounts\n";
         return 0;
     }
 

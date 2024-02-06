@@ -214,8 +214,27 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         $this->_duplicateCheck($_record);
         $this->_checkContractsOverlap($_record);
         $this->_recordArraysToId($_record);
+        HumanResources_Controller_Contract::getInstance()->setEmployee($_record);
     }
-    
+
+    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
+
+        if ($updatedRecord->employment_end && $updatedRecord->employment_end !== $currentRecord->employment_end) {
+            if (($contract = HumanResources_Controller_Contract::getInstance()->getValidContract($updatedRecord->employment_end)) &&
+                    (!$contract->end_date || $updatedRecord->employment_end->isEarlier($contract->end_date))) {
+                $contract->end_date = clone $updatedRecord->employment_end;
+                HumanResources_Controller_Contract::getInstance()->update($contract);
+            }
+            HumanResources_Controller_Account::getInstance()->deleteByFilter(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Account::class, [
+                    ['field' => 'employee_id', 'operator' => 'equals', 'value' => $updatedRecord->getId()],
+                    ['field' => 'year', 'operator' => 'greater', 'value' => $updatedRecord->employment_end->format('Y')],
+                ]));
+        }
+    }
+
     /**
      * delete linked objects (notes, relations, ...) of record
      *
@@ -224,8 +243,6 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     protected function _deleteLinkedObjects(Tinebase_Record_Interface $_record)
     {
         // use textfilter for employee_id 
-        $eFilter = new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getId()));
-        
         // delete accounts
         $filter = new HumanResources_Model_AccountFilter(array());
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'employee_id', 'operator' => 'equals', 'value' => $_record->getId())));

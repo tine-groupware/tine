@@ -34,7 +34,7 @@ class Tasks_Import_DemoDataTest extends TestCase
         $this->_importContainer = $this->_getTestContainer('Tasks', 'Tasks_Model_Task');
         $importer = new Tinebase_Setup_DemoData_Import('Tasks_Model_Task', [
             'container_id' => $this->_importContainer->getId(),
-            'definition' => 'tasks_import_demo_csv',
+            'definition' => 'tasks_import_csv',
             'file' => 'task.csv'
         ]);
         $importer->importDemodata();
@@ -44,5 +44,16 @@ class Tasks_Import_DemoDataTest extends TestCase
         ]);
         $result = Tasks_Controller_Task::getInstance()->search($filter);
         self::assertGreaterThanOrEqual(2, count($result), print_r($result->toArray(), true));
+        $abgabe = $result->filter('summary', 'Abgabe Zulassung')->getFirstRecord();
+        self::assertNotNull($abgabe);
+        $abgabe = Tasks_Controller_Task::getInstance()->get($abgabe);
+        self::assertNotEmpty($abgabe->alarms);
+        self::assertEquals(15, $abgabe->alarms[0]->minutes_before);
+        $now = Tinebase_DateTime::now();
+        self::assertEquals($now->get('Y-m-d'), $abgabe->due->get('Y-m-d'));
+        $einkauf = $result->filter('summary', 'Einkauf Bürobedarf')->getFirstRecord();
+        self::assertNotNull($einkauf);
+        $nextMonday = new Tinebase_DateTime(strtotime('monday'));
+        self::assertEquals($nextMonday->get('Y-m-d'), $einkauf->due->get('Y-m-d'));
     }
 }

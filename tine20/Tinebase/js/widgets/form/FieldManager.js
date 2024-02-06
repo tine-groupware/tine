@@ -7,8 +7,7 @@
  */
 Ext.ns('Tine.widgets.form');
 
-import 'widgets/form/JsonField';
-import 'widgets/form/XmlField';
+import 'widgets/form/AceField';
 import 'widgets/form/ModelPicker';
 import 'widgets/form/LanguagePicker';
 import 'widgets/form/RecordEditField';
@@ -73,7 +72,7 @@ Tine.widgets.form.FieldManager = function() {
             fieldDefinition.appName = appName;
             fieldDefinition.fieldName = fieldName;
 
-            if (_.get(fieldDefinition, 'disabled')) {
+            if (_.get(fieldDefinition, 'disabled') || _.get(fieldDefinition, 'uiconfig.disabled')) {
                 return null;
             }
 
@@ -95,7 +94,9 @@ Tine.widgets.form.FieldManager = function() {
                 fieldType = fieldDefinition.config.type || 'textfield';
                 fieldDefinition = _.merge({}, fieldDefinition, fieldDefinition.config);
             }
-
+            if (fieldType === 'text' && fieldDefinition.length && fieldDefinition.length <= 256) {
+                fieldType = 'textfield';
+            }
             if (_.get(fieldDefinition, 'config.specialType') === 'localizedString') {
                 fieldType = fieldDefinition.type = 'localizedString';
             }
@@ -127,6 +128,9 @@ Tine.widgets.form.FieldManager = function() {
                     if (fieldDefinition.format) {
                         field.format = fieldDefinition.format;
                     }
+                    if (fieldDefinition.nullable) {
+                        field.xtype = 'extuxclearabledatefield';
+                    }
                     break;
                 case 'time':
                     field.xtype = 'timefield';
@@ -138,7 +142,7 @@ Tine.widgets.form.FieldManager = function() {
                 case 'boolean':
                     if (category === 'editDialog') {
                         field.xtype = 'checkbox';
-                        field.boxLabel = _.get(fieldDefinition, 'boxLabel', field.fieldLabel);
+                        field.boxLabel = i18n._hidden(_.get(fieldDefinition, 'boxLabel', field.fieldLabel));
                         field.checked = field['default'];
                         field.hideLabel = !_.get(fieldDefinition, 'boxLabel');
                         field.blurOnChange = true;
@@ -254,23 +258,24 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'records':
                     if (category === 'editDialog') {
-                        field.xtype = 'wdgt.pickergrid';
+                        Ext.apply(field, config);
+                        field.xtype = field.xtype || 'wdgt.pickergrid';
                         field.fieldLabel = field.fieldLabel ? field.fieldLabel :
                             Tine.Tinebase.data.RecordMgr.get(fieldDefinition.config.appName, fieldDefinition.config.modelName)?.getRecordsName();
                         field.recordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
                         field.isFormField = true;
                         field.fieldName = fieldDefinition.fieldName;
-                        field.hideHeaders = true;
+                        // NOTE: it's hard to compute height here as enableTbar, hideHeaders is calculated on runtime
                         field.height = 80 /* 4 records */ + (field.enableTbar || 0) * 26  +  26 /* 2 toolbars */
                         if (_.get(fieldDefinition, 'config.dependentRecords', false)) {
                             // @TODO use different widget here (e.g. quickadd gird)
-                            var modelConf = field.recordClass.getModelConfiguration();
+                            var modelConf = field.recordClass.getModelConfiguration() || {};
                             if (modelConf.isMetadataModelFor) {
                                 field.isMetadataModelFor = modelConf.isMetadataModelFor;
+                                field.height = field.height + 26; // picker
                             }
                             field.allowCreateNew = true;
                             field.refIdField = _.get(fieldDefinition, 'config.refIdField', undefined);
-                            field.enableTbar = !!field.isMetadataModelFor;
                             _.set(field, 'editDialogConfig.mode', 'local');
                         }
                         if (fieldDefinition.config.additionalFilterSpec) {
@@ -323,11 +328,13 @@ Tine.widgets.form.FieldManager = function() {
                     field.disabled = true;
                     break;
                 case 'json':
-                    field.xtype = 'tw-jsonfield';
+                    field.xtype = 'tw-acefield';
+                    field.mode = 'json';
                     field.height = 150; // 12 lines
                     break;
                 case 'xml':
-                    field.xtype = 'tw-xmlfield';
+                    field.xtype = 'tw-acefield';
+                    field.mode = 'xml';
                     field.height = 150; // 12 lines
                     break;
                 case 'container':

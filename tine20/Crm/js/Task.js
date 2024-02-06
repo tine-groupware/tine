@@ -306,7 +306,7 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
         var response = {
             responseText: task
         };
-        task = Tine.Tasks.JsonBackend.recordReader(response);
+        task = Tine.Tasks.taskBackend.recordReader(response);
         
         Tine.log.debug('Tine.Crm.Task.GridPanel::onUpdate - Task has been updated:');
         Tine.log.debug(task);

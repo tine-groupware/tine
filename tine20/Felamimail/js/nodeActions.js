@@ -167,7 +167,7 @@ Tine.Felamimail.nodeActions.EmptyFolderAction = {
                 folder.set('cache_unreadcount', 0);
             }
         } catch (e) {
-            Tine.Felamimail.folderBackend.handleRequestException(e);
+            Tine.Felamimail.folderBackend.handleRequestException(e.data);
         }
     },
     actionUpdater: Tine.Felamimail.nodeActions.actionUpdater,
@@ -342,7 +342,7 @@ Tine.Felamimail.nodeActions.UpdateFolderCacheAction = {
                 treePanel.selectInbox(account);
             }, this);
         } catch (e) {
-            Tine.Felamimail.folderBackend.handleRequestException(e);
+            Tine.Felamimail.folderBackend.handleRequestException(e.data);
         } finally {
             selectedNode.getUI().removeClass("x-tree-node-loading");
         }
@@ -374,7 +374,7 @@ Tine.Felamimail.nodeActions.ApproveMigrationAction = {
                 await Tine.Felamimail.approveAccountMigration(account.id);
                 account.set('migration_approved', 1);
             } catch (e) {
-                Tine.Felamimail.folderBackend.handleRequestException(e);
+                Tine.Felamimail.folderBackend.handleRequestException(e.data);
             } finally {
                 selectedNode.getUI().removeClass("x-tree-node-loading");
             }
@@ -432,7 +432,7 @@ Tine.Felamimail.nodeActions.MoveFolderAction = {
                             treePanel.getNodeById(selectedNode.id).select();
                         });
                     } catch (e) {
-                        Tine.Felamimail.folderBackend.handleRequestException(e);
+                        Tine.Felamimail.folderBackend.handleRequestException(e.data);
                     } finally {
                         selectedNode.getUI().removeClass("x-tree-node-loading");
                         newParentNode.getUI().removeClass("x-tree-node-loading");
@@ -467,7 +467,7 @@ Tine.Felamimail.nodeActions.RefreshFolderAction = {
                 scope: this
             });
         } catch (e) {
-            Tine.Felamimail.folderBackend.handleRequestException(e);
+            Tine.Felamimail.folderBackend.handleRequestException(e.data);
         } finally {
             selectedNode.getUI().removeClass("x-tree-node-loading");
         }

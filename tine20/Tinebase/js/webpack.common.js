@@ -2,28 +2,65 @@ var fs = require('fs');
 var _ = require('lodash');
 var path = require('path');
 var webpack = require('webpack');
+
+// @TODO: replace by https://github.com/shellscape/webpack-manifest-plugin ?
 var AssetsPlugin = require('assets-webpack-plugin');
 var assetsPluginInstance = new AssetsPlugin({
     // path: 'Tinebase/js',
     // fullPath: false,
-    keepInMemory: true,
+    removeFullPathAutoPrefix: true,
+    keepInMemory: global.mode !== 'production',
     filename: 'webpack-assets-FAT.json',
     prettyPrint: true
 });
-var VueLoaderPlugin = require('vue-loader/lib/plugin');
+var {VueLoaderPlugin} = require('vue-loader');
 var ChunkNamePlugin = require('./webpack.ChunkNamePlugin');
+var ESLintPlugin = require('eslint-webpack-plugin');
 
-var baseDir  = path.resolve(__dirname , '../../'),
+var eslintPluginInstance = new ESLintPlugin({
+    formatter: require('eslint-friendly-formatter'),
+    extensions: ['mjs', 'es6.js', 'vue'],
+    quiet: true,
+    overrideConfig: {
+        extends: ["standard", "plugin:vue/essential"],
+        plugins: ["notice", "vue"],
+        parserOptions: {
+            parser: "@babel/eslint-parser",
+            requireConfigFile: false
+        }
+    },
+})
+
+// use https://github.com/Richienb/node-polyfill-webpack-plugin ?
+// the plugin just does the following.
+// it's better to do this ourselves, instead of relying on the plugin
+// to prevent possible lib conflicts later on.
+var providePlugin = new webpack.ProvidePlugin({
+    Buffer: [require.resolve('buffer/'), 'Buffer'],
+    process: require.resolve('process/browser')
+})
+
+var definePlugin = new webpack.DefinePlugin({
+    BUILD_DATE:     JSON.stringify(process.env.BUILD_DATE),
+    BUILD_REVISION: JSON.stringify(process.env.BUILD_REVISION),
+    CODE_NAME:      JSON.stringify(process.env.CODE_NAME),
+    PACKAGE_STRING: JSON.stringify(process.env.PACKAGE_STRING),
+    RELEASE_TIME: JSON.stringify(process.env.RELEASE_TIME),
+    __VUE_OPTIONS_API__: true,
+    __VUE_PROD_DEVTOOLS__: true
+});
+
+var baseDir = path.resolve(__dirname, '../../'),
     entryPoints = {};
 
 // find all entry points
-fs.readdirSync(baseDir).forEach(function(baseName) {
+fs.readdirSync(baseDir).forEach(function (baseName) {
     // if (baseName !== 'Filemanager') return;
     try {
         // try npm package.json
         var pkgDef = JSON.parse(fs.readFileSync(baseDir + '/' + baseName + '/js/package.json').toString());
 
-        _.each(_.get(pkgDef, 'tine20.entryPoints', []), function(entryPoint) {
+        _.each(_.get(pkgDef, 'tine20.entryPoints', []), function (entryPoint) {
             entryPoints[baseName + '/js/' + entryPoint] = baseDir + '/' + baseName + '/js/' + entryPoint;
         });
 
@@ -33,8 +70,9 @@ fs.readdirSync(baseDir).forEach(function(baseName) {
 });
 
 module.exports = {
+    target: ['web', 'es6'],
     entry: entryPoints,
-    optimization:{
+    optimization: {
         /**
          * NOTE: there are some problems with auto/common chunk splitting atm
          *    i) common chunks might be placed in an application dir and the application might not be installed
@@ -52,31 +90,40 @@ module.exports = {
     },
     externals: {
         fs: "fs",
+        vue: "vue"
     },
+    externalsType: "window",
     output: {
         path: baseDir + '/',
-        // avoid public path, see #13430.
-        // publicPath: '/',
-        filename: '[name]-[hash]-FAT.js',
+        publicPath: 'auto',
+        filename: '[name]-[fullhash]-FAT.js',
         chunkFilename: "[name]-[chunkhash]-FAT.js",
-        libraryTarget: "umd"
+        libraryTarget: "umd",
+        clean: {
+            keep(asset) {
+                return !asset.includes('-FAT.') || asset.includes('webpack-assets-FAT.json');
+            },
+        }
     },
     plugins: [
+        definePlugin,
         assetsPluginInstance,
         new VueLoaderPlugin(),
-        new ChunkNamePlugin()
+        new ChunkNamePlugin(),
+        providePlugin,
+        eslintPluginInstance
     ],
     module: {
         rules: [
-            {
-                test: /\.(mjs|es6\.js|vue)$/,
-                loader: 'eslint-loader',
-                enforce: "pre",
-                exclude: /node_modules/,
-                options: {
-                    formatter: require('eslint-friendly-formatter')
-                }
-            },
+            // {
+            //     test: /\.(mjs|es6\.js|vue)$/,
+            //     loader: 'eslint-loader',
+            //     enforce: "pre",
+            //     exclude: /node_modules/,
+            //     options: {
+            //         formatter: require('eslint-friendly-formatter')
+            //     }
+            // },
             {
                 test: /\.vue$/,
                 loader: 'vue-loader'
@@ -90,12 +137,10 @@ module.exports = {
                 options: {
                     plugins: [
                         "@babel/plugin-transform-runtime",
-                        "@babel/plugin-syntax-dynamic-import",
                         ["@babel/plugin-proposal-decorators", { "decoratorsBeforeExport": false }],
-                        "@babel/plugin-proposal-class-properties"
                     ],
                     presets: [
-                        ["@babel/preset-env", { "modules": true }]
+                        "@babel/preset-env"
                     ]
                 }
             },
@@ -108,35 +153,35 @@ module.exports = {
                 options: {
                     plugins: [
                         "@babel/plugin-transform-runtime",
-                        "@babel/plugin-syntax-dynamic-import",
                         ["@babel/plugin-proposal-decorators", { "legacy": true }],
-                        "@babel/plugin-proposal-class-properties"
                     ],
                     presets: [
-                        ["@babel/preset-env"/*, { "modules": false }*/]
+                        "@babel/preset-env"
                     ]
                 }
             },
             {
-                test: /\.js$/,
-                include: [
-                    require.resolve("bootstrap-vue"), // white-list bootstrap-vue
-                ],
-                loader: "babel-loader"
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                // exclude: /node_modules/,
             },
+            // {
+            //     test: /\.js$/,
+            //     include: [
+            //         require.resolve("bootstrap-vue"), // white-list bootstrap-vue
+            //     ],
+            //     loader: "babel-loader"
+            // },
 
             // use script loader for old library classes as some of them the need to be included in window context
-            {test: /\.js$/, include: [baseDir + '/library'], exclude: [baseDir + '/library/ExtJS'],  enforce: "pre", use: [{loader: "script-loader"}]},
-            {test: /\.jsb2$/, use: [{loader: "./jsb2-loader"}]},
-            {test: /\.css$/, use: [{loader: "style-loader"}, {loader: "css-loader"}]},
-            {test: /\.scss$/, use: ['vue-style-loader','css-loader','sass-loader']},
-            {test: /\.less$/, use: [{loader: "style-loader"}, {loader: "css-loader"}, {loader: "less-loader", options: {noIeCompat: true,}}]},
-            {test: /\.png/, use: [{loader: "url-loader", options: {limit: 100000}}]},
-            {test: /\.gif/, use: [{loader: "url-loader", options: {limit: 100000}}]},
-            {test: /\.svg/, use: [{loader: "svg-url-loader"},{loader: "./svg-fix-size-loader"}]},
+            { test: /\.js$/, include: [baseDir + '/library'], exclude: [baseDir + '/library/ExtJS'], enforce: "pre", use: [{ loader: "script-loader" }] },
+            { test: /\.jsb2$/, use: [{ loader: "./jsb2-loader" }] },
+            { test: /\.css$/, use: [{ loader: "style-loader" }, { loader: "css-loader" }] },
+            { test: /\.scss$/, use: ['style-loader','css-loader', 'sass-loader'] },
+            { test: /\.less$/, use: [{ loader: "style-loader" }, { loader: "css-loader" }, { loader: "less-loader", options: { lessOptions: { noIeCompat: true, } } }] },
             {
-                test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-                use: [{loader: "url-loader", options: {limit: 100000}}]
+                test: /\.(woff2?|eot|ttf|otf|png|gif|svg)(\?.*)?$/,
+                type: 'asset/inline'
             },
         ]
     },
@@ -144,7 +189,7 @@ module.exports = {
         modules: [path.resolve(__dirname, "node_modules")]
     },
     resolve: {
-        extensions: [".js", ".es6.js"],
+        extensions: [".tsx", ".ts", ".js", ".es6.js"],
         // add browserify which is used by some libs (e.g. director)
         mainFields: ["browser", "browserify", "module", "main"],
         // we need an absolut path here so that apps can resolve modules too
@@ -152,6 +197,18 @@ module.exports = {
             path.resolve(__dirname, "../.."),
             __dirname,
             path.resolve(__dirname, "node_modules")
-        ]
+        ],
+        fallback: {
+            'crypto': require.resolve("crypto-browserify"),
+            'path': require.resolve("path-browserify"),
+            'buffer': require.resolve('buffer'),
+            'util': require.resolve("util/"),
+            'process': require.resolve('process/browser'),
+            'stream': require.resolve("stream-browserify"),
+        },
+        alias: {
+            // convinence alias
+            "tine-vue$": path.resolve(__dirname, "node_modules/vue/dist/vue.runtime.esm-bundler.js"),
+        }
     }
 };

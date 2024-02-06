@@ -159,6 +159,9 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
                 exit;
             }
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Download path: ' . $$path);
+
             $this->_setDownloadLinkOwnerAsUser($download);
             
             $node = Filemanager_Controller_DownloadLink::getInstance()->getNode($download, $splittedPath);
@@ -185,11 +188,9 @@ class Filemanager_Frontend_Download extends Tinebase_Frontend_Http_Abstract
      * @param  string $id
      * @return Filemanager_Model_DownloadLink
      */
-    protected function _getDownloadLink($id)
+    protected function _getDownloadLink(string $id): Filemanager_Model_DownloadLink
     {
-        $download = Filemanager_Controller_DownloadLink::getInstance()->get($id);
-        
-        return $download;
+        return Filemanager_Controller_DownloadLink::getInstance()->get($id);
     }
     
     /**

@@ -38,6 +38,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     const FLD_QUANTITY = 'quantity'; // Anzahl - aus produkt übernehmen, standard 1
     const FLD_USE_ACTUAL_QUANTITY  = 'use_actual_quantity'; // boolean, wenn true muss es eine verknüpfung mit n leistungsnachweisen (accountables) geben
     const FLD_UNIT = 'unit'; // Einheit - aus product übernehmen
+    const FLD_UNIT_PRICE_TYPE = 'unit_price_type'; // unit price is net or gross
     const FLD_UNIT_PRICE = 'unit_price'; // Einzelpreis - aus product übernehmen
     const FLD_POSITION_PRICE = 'position_price'; // Preis - anzahl * einzelpreis
 
@@ -185,6 +186,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     //self::MODEL_NAME                    => Sales_Model_Document_Abstract::MODEL_PART_NAME,
+                    self::FOREIGN_FIELD                 => Sales_Model_Document_Abstract::FLD_POSITIONS,
                 ],
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => false,
@@ -289,6 +291,13 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_KEY_FIELD,
                 self::NULLABLE                      => true,
                 self::NAME                          => Sales_Config::PRODUCT_UNIT,
+            ],
+            self::FLD_UNIT_PRICE_TYPE     => [
+                self::LABEL                         => 'Price Type', //_('Price Type')
+                self::TYPE                          => self::TYPE_KEY_FIELD,
+                self::NAME                          => Sales_Config::PRICE_TYPE,
+                self::NULLABLE                      => true,
+                self::DEFAULT_VAL                   => Sales_Config::PRICE_TYPE_NET
             ],
             self::FLD_UNIT_PRICE                => [
                 self::LABEL                         => 'Unit Price', // _('Unit Price')
@@ -563,12 +572,23 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         } else {
             $discount = 0;
         }
-        $this->{self::FLD_NET_PRICE} = is_null($this->{self::FLD_POSITION_PRICE}) ? null
+
+        $total = is_null($this->{self::FLD_POSITION_PRICE}) ? null
             : $this->{self::FLD_POSITION_PRICE} - $discount;
-        $this->{self::FLD_SALES_TAX} = is_null($this->{self::FLD_SALES_TAX_RATE}) ? null
-            : ($this->{self::FLD_NET_PRICE} / 100) * (float)$this->{self::FLD_SALES_TAX_RATE};
-        $this->{self::FLD_GROSS_PRICE} = is_null($this->{self::FLD_NET_PRICE}) ? null
-            : $this->{self::FLD_NET_PRICE} + $this->{self::FLD_SALES_TAX};
+
+        if ($this->{self::FLD_UNIT_PRICE_TYPE} === Sales_Config::PRICE_TYPE_GROSS) {
+            $this->{self::FLD_GROSS_PRICE} = $total;
+            // tax = total - total * 100/(100+taxRate);
+            $this->{self::FLD_SALES_TAX} = is_null($this->{self::FLD_SALES_TAX_RATE}) ? null
+                : $this->{self::FLD_GROSS_PRICE} - ($this->{self::FLD_GROSS_PRICE} * 100) / (100 + (float)$this->{self::FLD_SALES_TAX_RATE});
+            $this->{self::FLD_NET_PRICE} = $this->{self::FLD_GROSS_PRICE} - $this->{self::FLD_SALES_TAX};
+        } else {
+            $this->{self::FLD_NET_PRICE} = $total;
+            $this->{self::FLD_SALES_TAX} = is_null($this->{self::FLD_SALES_TAX_RATE}) ? null
+                : ($this->{self::FLD_NET_PRICE} / 100) * (float)$this->{self::FLD_SALES_TAX_RATE};
+            $this->{self::FLD_GROSS_PRICE} = is_null($this->{self::FLD_NET_PRICE}) ? null
+                : $this->{self::FLD_NET_PRICE} + $this->{self::FLD_SALES_TAX};
+        }
     }
 
     /**

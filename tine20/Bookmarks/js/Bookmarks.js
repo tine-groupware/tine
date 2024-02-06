@@ -9,6 +9,7 @@
 
 require('../styles/bookmarks.less')
 require('./BookmarkGridPanel');
+require('./Model');
 
 Tine.widgets.grid.RendererManager.register('Bookmarks', 'Bookmark', 'url', (url, metadata, record) => {
     const link = Tine.Tinebase.common.getUrl() + '/Bookmarks/openBookmark/' + record.getId()

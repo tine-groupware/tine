@@ -76,21 +76,14 @@
 }
 
 .x-fieldset {
-    padding: 5px 5px 0px 5px;
-    margin: 0px;
-    margin-bottom: 5px;
+    box-sizing: border-box;
+    padding: 0px 0px 0px 5px;
+    margin: 0px 0px 0px 0px;
 }
 
-.x-form-field-wrap .x-form-trigger {
-    height: 18px;
-}
-
-.ext-webkit .x-form-field-wrap .x-form-trigger {
-    height: 18px;
-}
-
-.ext-webkit .x-small-editor .x-form-trigger {
-    height: 17px;
+.x-fieldset-body {
+    padding: 5px 5px 5px 0px;
+    box-sizing: border-box;
 }
 
 .ext-webkit .x-small-editor .x-form-text {

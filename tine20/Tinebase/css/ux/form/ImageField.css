@@ -1,5 +1,6 @@
 .ux-imagefield-ct {
-     border:1px solid #B5B8C8;
+    border: 1px solid #B5B8C8 !important;
+    background-color: transparent !important;
 }
 .ux-imagefield-button{
      position:absolute;

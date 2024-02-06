@@ -42,7 +42,7 @@ class Tinebase_Model_PersistentFilterFilter extends Tinebase_Model_Filter_Grants
      */
     protected $_filterModel = array(
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name'))),
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name'), 'modelName' => Tinebase_Model_PersistentFilter::class)),
         'application_id' => array('filter' => 'Tinebase_Model_Filter_Id'),
         'account_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
         'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),

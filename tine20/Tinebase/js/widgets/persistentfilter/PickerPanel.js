@@ -68,6 +68,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         this.store = this.store || Tine.widgets.persistentfilter.store.getPersistentFilterStore();
 
         var appName = this.recordClass ? this.recordClass.getMeta('appName') : this.app.appName,
+            app = Tine.Tinebase.appMgr.get(appName),
             modelName = this.recordClass ? this.recordClass.getMeta('modelName') : window.lodash.upperFirst(this.contentType),
             filterModelName = this.filterModel || (appName + '_Model_' + modelName),
             state = Ext.state.Manager.get(this.stateId, {});
@@ -77,7 +78,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         }
 
         this.recordCollection = this.store.queryBy(function(record, id) {
-            if (record.get('application_id') == this.app.id) {
+            if (record.get('application_id') == app.id) {
                 if(this.contentType || this.filterModel) {
                     return [filterModelName, `${filterModelName}Filter`].indexOf(record.get('model')) >=0;
                 } else {
@@ -87,10 +88,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             return false;
         }, this);
         // sort filters by translated name
-        var self = this;
         this.recordCollection.sort('ASC', function (obj1, obj2) {
-            var name1 = Ext.util.Format.htmlEncode(self.app.i18n._hidden(obj1.get('name'))),
-                name2 = Ext.util.Format.htmlEncode(self.app.i18n._hidden(obj2.get('name')));
+            var name1 = Ext.util.Format.htmlEncode(app.i18n._hidden(obj1.get('name'))),
+                name2 = Ext.util.Format.htmlEncode(app.i18n._hidden(obj2.get('name')));
             
             return name1 > name2 ? 1: -1;
         });
@@ -106,7 +106,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         }, this);
                 
         this.loader = new Tine.widgets.persistentfilter.PickerTreePanelLoader({
-            app : this.app,
+            app : app,
             recordCollection : this.recordCollection,
             contentType: this.contentType
         });
@@ -271,6 +271,12 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         return this.filterToolbar;
     },
 
+    getMainScreen: function() {
+        return this.mainScreen
+            || this.findParentBy((c) => { return c.xtype === 'Tine.widgets.MainScreen' })
+            || this.app.getMainScreen();
+    },
+
     /**
      * get grid
      * 
@@ -278,7 +284,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      */
     getGrid : function() {
         if (!this.grid) {
-            this.grid = this.app.getMainScreen().getCenterPanel();
+            this.grid = this.getMainScreen().getCenterPanel();
         }
 
         return this.grid;
@@ -563,7 +569,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     
     getNewEmptyRecord: function() {
         var model = this.filterModel,
-            ftb = this.getFilterToolbar();
+            ftb = this.getFilterToolbar(),
+            appName = appName = this.recordClass ? this.recordClass.getMeta('appName') : this.app.appName,
+            app = Tine.Tinebase.appMgr.get(appName);
             
         if (!model) {
             var recordClass = this.recordClass || (this.treePanel ? this.treePanel.recordClass : ftb.store.reader.recordType);
@@ -571,7 +579,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         }
 
         var record = new Tine.widgets.persistentfilter.model.PersistentFilter({
-            application_id : this.app.id,
+            application_id : app.id,
             account_id : Tine.Tinebase.registry.get('currentAccount').accountId,
             model : model,
             filters : null,

@@ -676,7 +676,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         if (isset($this->_config->exportFilename) && $this->_hasTwig()) {
             $this->_twig->addLoader(new Twig_Loader_Array(['fileNameTmpl' => $this->_config->exportFilename]));
             $twigTmpl = $this->_twig->load('fileNameTmpl');
-            return $twigTmpl->render($this->_getTwigContext([]));
+            return $twigTmpl->render($this->_getTwigContext(['record' => $this->_currentRecord]));
         }
 
         $model = '';

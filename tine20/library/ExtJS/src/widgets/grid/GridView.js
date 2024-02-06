@@ -164,7 +164,7 @@ viewConfig: {
     /**
      * @cfg {Number} rowSelectorDepth The number of levels to search for rows in event delegation (defaults to <tt>10</tt>)
      */
-    rowSelectorDepth : 10,
+    rowSelectorDepth : 20,
     
     /**
      * @cfg {Number} rowBodySelectorDepth The number of levels to search for row bodies in event delegation (defaults to <tt>10</tt>)
@@ -342,10 +342,7 @@ viewConfig: {
 
         this.mainWrap = new E(cs[0]);
         this.mainHd = new E(this.mainWrap.dom.firstChild);
-
-        if(this.grid.hideHeaders){
-            this.mainHd.setDisplayed(false);
-        }
+        this.mainHd.setDisplayed(!this.grid.hideHeaders);
 
         this.innerHd = this.mainHd.dom.firstChild;
         this.scroller = new E(this.mainWrap.dom.childNodes[1]);
@@ -555,89 +552,47 @@ viewConfig: {
 
     // private
     updateSortIcon : function(col, dir){
-        var sc = this.sortClasses;
-        var hds = this.mainHd.select('td').removeClass(sc);
-        hds.item(col).addClass(sc[dir == 'DESC' ? 1 : 0]);
+        const sc = this.sortClasses;
+        const hds = this.mainHd.select('td').removeClass(sc);
+        if (hds.item(col))  hds.item(col).addClass(sc[dir === 'DESC' ? 1 : 0]);
     },
 
     // private
     updateAllColumnWidths : function(){
-        var tw = this.getTotalWidth(),
-            clen = this.cm.getColumnCount(),
-            ws = [],
-            len,
-            i;
-        for(i = 0; i < clen; i++){
-            ws[i] = this.getColumnWidth(i);
-        }
+        const tw = this.getTotalWidth();
         this.innerHd.firstChild.style.width = this.getOffsetWidth();
         this.innerHd.firstChild.firstChild.style.width = tw;
         this.mainBody.dom.style.width = tw;
-        for(i = 0; i < clen; i++){
-            var hd = this.getHeaderCell(i);
-            hd.style.width = ws[i];
-        }
-
-        var ns = this.getRows(), row, trow;
-        for(i = 0, len = ns.length; i < len; i++){
-            row = ns[i];
-            row.style.width = tw;
-            if(row.firstChild){
-                row.firstChild.style.width = tw;
-                trow = row.firstChild.rows[0];
-                for (var j = 0; j < clen; j++) {
-                   trow.childNodes[j].style.width = ws[j];
-                }
-            }
-        }
-
+        const ws = [];
+        
+        this.cm.config.forEach((col, idx) => {
+            ws[idx] = this.getColumnWidth(idx);
+            this.updateColumnStyle(idx, {'width': ws[idx]})
+        })
+        
         this.onAllColumnWidthsUpdated(ws, tw);
     },
 
     // private
     updateColumnWidth : function(col, width){
-        var w = this.getColumnWidth(col);
-        var tw = this.getTotalWidth();
+        const tw = this.getTotalWidth();
         this.innerHd.firstChild.style.width = this.getOffsetWidth();
         this.innerHd.firstChild.firstChild.style.width = tw;
         this.mainBody.dom.style.width = tw;
-        var hd = this.getHeaderCell(col);
-        hd.style.width = w;
-
-        var ns = this.getRows(), row;
-        for(var i = 0, len = ns.length; i < len; i++){
-            row = ns[i];
-            row.style.width = tw;
-            if(row.firstChild){
-                row.firstChild.style.width = tw;
-                row.firstChild.rows[0].childNodes[col].style.width = w;
-            }
-        }
-
+        const w = this.getColumnWidth(col);
+        this.updateColumnStyle(col, {'width': w});
         this.onColumnWidthUpdated(col, w, tw);
     },
 
     // private
     updateColumnHidden : function(col, hidden){
-        var tw = this.getTotalWidth();
+        const tw = this.getTotalWidth();
         this.innerHd.firstChild.style.width = this.getOffsetWidth();
         this.innerHd.firstChild.firstChild.style.width = tw;
         this.mainBody.dom.style.width = tw;
-        var display = hidden ? 'none' : '';
-
-        var hd = this.getHeaderCell(col);
-        hd.style.display = display;
-
-        var ns = this.getRows(), row;
-        for(var i = 0, len = ns.length; i < len; i++){
-            row = ns[i];
-            row.style.width = tw;
-            if(row.firstChild){
-                row.firstChild.style.width = tw;
-                row.firstChild.rows[0].childNodes[col].style.display = display;
-            }
-        }
-
+        const display = hidden ? 'none' : '';
+        
+        this.updateColumnStyle(col, {'display': display});
         this.onColumnHiddenUpdated(col, hidden, tw);
         delete this.lastViewWidth; // force recalc
         this.layout();
@@ -709,6 +664,7 @@ viewConfig: {
             }          
         }
         // add first/last-row classes
+        if (!rows[0]) return;
         if(startRow === 0){
             Ext.fly(rows[0]).addClass(this.firstRowCls);
         }
@@ -821,7 +777,8 @@ viewConfig: {
         var c = g.getGridEl();
         var csize = c.getSize(true);
         var vw = csize.width;
-
+        
+        if (this.mainHd) this.mainHd.setDisplayed(!g.hideHeaders);
         if(!g.hideHeaders && (vw < 20 || csize.height < 20)){ // display: none?
             return;
         }
@@ -842,8 +799,9 @@ viewConfig: {
                 this.innerHd.style.width = (vw)+'px';
             }
         }
+        this.handleResponsive();
         if(this.forceFit){
-            if(this.lastViewWidth != vw){
+            if(this.lastViewWidth !== vw) {
                 this.fitColumns(false, false);
                 this.lastViewWidth = vw;
             }
@@ -852,6 +810,45 @@ viewConfig: {
             this.syncHeaderScroll();
         }
         this.onLayout(vw, vh);
+    },
+    
+    handleResponsive() {
+        if (!this.grid.hideHeaders) {
+            if (this.mainHd) this.mainHd.setDisplayed(!this.isResponsive());
+        }
+        this.cm.config.forEach((col, idx) => {
+            const hidden = this.isResponsive() ? col.id !== 'responsive' : (col?.hidden || col.id === 'responsive');
+            const display = hidden ? 'none' : '';
+            this.updateColumnStyle(idx, {
+                'display': display,
+                'width': this.getColumnWidth(idx),
+            });
+        });
+    },
+    
+    isResponsive() {
+        if (this.disableResponsiveLayout) return false;
+        let width = this.grid?.getWidth?.() ?? 0;
+        if (width === 0 && this.grid?.lastSize) {
+            width = this.grid.lastSize.width;
+        }
+        return width > 0 && (width < 576 || this.cm.config.length === 1);
+    },
+    
+    updateColumnStyle(col, styles) {
+        const tw = this.getTotalWidth();
+        _.each(styles, (value, key) => {
+            const hd = this.getHeaderCell(col);
+            hd.style[key] = value;
+            const ns = this.getRows();
+            ns.forEach((row) => {
+                row.style.width = tw;
+                if(row.firstChild){
+                    row.firstChild.style.width = tw;
+                    row.firstChild.rows[0].childNodes[col].style[key] = value;
+                }
+            })
+        })
     },
 
     // template functions for subclasses and plugins
@@ -884,7 +881,7 @@ viewConfig: {
     // private
     init : function(grid){
         this.grid = grid;
-
+        this.disableResponsiveLayout = this.grid.disableResponsiveLayout ?? false;
         this.initTemplates();
         this.initData(grid.store, grid.colModel);
         this.initUI(grid);
@@ -913,7 +910,7 @@ viewConfig: {
             p = {},
             len = cm.getColumnCount(),
             last = len - 1;
-            
+        
         for(var i = 0; i < len; i++){
             p.id = cm.getColumnId(i);
             p.value = cm.getColumnHeader(i) || '';
@@ -994,7 +991,7 @@ viewConfig: {
             colCount = cm.getColumnCount(),
             cellEl;
         if(!(hscroll === false && col === 0)){
-            while(col < colCount && cm.isHidden(col)){
+            while(col < colCount && cm.isHidden(col) && cm.config[col].id !== 'responsive'){
                 col++;
             }
             cellEl = this.getCell(row, col);
@@ -1121,7 +1118,8 @@ viewConfig: {
     getColumnStyle : function(col, isHeader){
         var style = !isHeader ? (this.cm.config[col].css || '') : '';
         style += 'width:'+this.getColumnWidth(col)+';';
-        if(this.cm.isHidden(col)){
+        const hidden = this.isResponsive() ? this.cm.config[col].id !== 'responsive' : (this.cm.config[col]?.hidden || this.cm.config[col].id === 'responsive');
+        if (hidden){
             style += 'display:none;';
         }
         var align = this.cm.config[col].align;
@@ -1142,10 +1140,12 @@ viewConfig: {
 
     // private
     getTotalWidth : function(){
+        if (this.grid.hideHeaders) return (this.cm.getTotalWidth() + this.getScrollOffset()) +'px';
         return this.cm.getTotalWidth()+'px';
     },
     
     fitColumns : function(preventRefresh, onlyExpand, omitColumn){
+        if (!this.mainBody) return;
         const cm = this.cm;
         const widthCurrentVisibleTotal = cm.getTotalWidth(false);
         if (!widthCurrentVisibleTotal) return;
@@ -1162,7 +1162,7 @@ viewConfig: {
             const next = cm.config.indexOf(_.find(cm.config, (c, i) => { return i > colIdxOmitColumn && !c.hidden; }));
             if (next) {
                 cm.setColumnWidth(next, cm.getColumnWidth(next) - widthExtra, false);
-                widthExtra = 0;
+                widthExtra = 0; 
             }
         }
         
@@ -1194,10 +1194,10 @@ viewConfig: {
         // handle columns fractional resizing
         const widthToResolve = colsToResolve.reduce((acc, col) => {return acc + col.width;}, 0);
         const colIdxDefaultAutoExpand = this.autoExpand && this.grid.autoExpandColumn ? cm.getIndexById(this.grid.autoExpandColumn) : -1;
-        const fraction = isOmitColumnValid
+        const fraction = isOmitColumnValid 
             ? (widthToResolve - widthExtra) / widthToResolve
             : widthResizedGrid / widthToResolve;
-        
+
         colsToResolve.forEach((col) => {
             const width = cm.isFixed(col.index) ? col.width : col.width * fraction;
             let widthResolved = Math.max(this.grid.minColumnWidth, Math.floor(width));
@@ -1219,6 +1219,8 @@ viewConfig: {
                 cm.setColumnWidth(colIdxResolvedAutoExpand, Math.max(this.grid.minColumnWidth,  width + diff), true);
             }
         }
+
+        this.grid.saveState();
         
         if (preventRefresh !== true) this.updateAllColumnWidths();
         return true;
@@ -1234,7 +1236,7 @@ viewConfig: {
                 var ci = cm.getIndexById(g.autoExpandColumn);
                 var currentWidth = cm.getColumnWidth(ci);
                 var cw = Math.min(Math.max(((aw-tw)+currentWidth), g.autoExpandMin), g.autoExpandMax);
-                if(cw != currentWidth){
+                if(cw != currentWidth && ci >= 0){
                     cm.setColumnWidth(ci, cw, true);
                     if(preventUpdate !== true){
                         this.updateColumnWidth(ci, cw);
@@ -1317,8 +1319,13 @@ viewConfig: {
         if (!this.grid) {
             return;
         }
+        
         this.fireEvent('beforerefresh', this);
-        this.grid.stopEditing(true);
+        if (this.grid.activeEditor?.record) {
+            this.grid.activeEditor.record.store = this.grid.store;
+        } else {
+            this.grid.stopEditing(true);
+        }
 
         var result = this.renderBody();
         this.mainBody.update(result).setWidth(this.getTotalWidth());
@@ -1342,7 +1349,7 @@ viewConfig: {
     // private
     updateHeaderSortState : function(){
         var state = this.ds.getSortState();
-        if(!state){
+        if(!state || !this.grid){
             return;
         }
         if(!this.sortState || (this.sortState.field != state.field || this.sortState.direction != state.direction)){
@@ -1520,8 +1527,86 @@ viewConfig: {
                 hiddenchange: this.onHiddenChange,
                 columnmoved: this.onColumnMove
             });
+            const hasResponsive = cm.config.find(c => { return c.id === 'responsive';});
+            if (!hasResponsive && !this.disableResponsiveLayout) {
+                const source = this.grid?.parentScope ?? this.grid;
+                cm.config.push({
+                    id: 'responsive',
+                    header: " Title ",
+                    sortable: false,
+                    dataIndex: 'responsive',
+                    hidden: true,
+                    renderer: source && Ext.isFunction(source.responsiveRenderer) ?
+                        source.responsiveRenderer.createDelegate(this) :
+                        this.responsiveRenderer.createDelegate(this)
+                });
+                cm.setConfig(cm.config, true);
+            }
         }
         this.cm = cm;
+    },
+
+    /**
+     * responsive content Renderer
+     *
+     * @param {Object} metadata
+     * @param {Folder|Account} record
+     * @return {String}
+     */
+    responsiveRenderer: function(recordId, metadata, record, rowIndex, colIndex, store) {
+        if (this?.grid?.stateId) {
+            const stateIdDefault = this.grid.stateId;
+            if (!Ext.state.Manager.get(stateIdDefault)) this.grid.saveState();
+        }
+        const block =  document.createElement('div');
+        block.className = 'responsive-title';
+
+        if (Ext.isFunction(record.getTitle)) {
+            const row =  document.createElement('div');
+            row.className = 'responsive-grid-row';
+            
+            const titleEl = document.createElement('div');
+            titleEl.className = 'responsive-grid-text-medium';
+            titleEl.innerHTML = Tine.Tinebase.EncodingHelper.encode(record.getTitle());
+            
+            row.appendChild(titleEl);
+            block.appendChild(row);
+        } else {
+            const metaDataCopy = {...metadata};
+            
+            this.cm.config.forEach((col, idx) => {
+                //idx = stateStored?.columns ? _.findIndex(stateStored.columns, {id: col.id}) : idx;
+                const hidden = col?.hidden;
+                if (col.dataIndex !== 'responsive' && !hidden) {
+                    const row =  document.createElement('div');
+                    row.className = 'responsive-grid-row';
+                    
+                    const row1Left = document.createElement('div');
+                    row1Left.className = 'responsive-grid-row-left';
+                    
+                    const headerEl = document.createElement('div');
+                    headerEl.innerHTML = col.header;
+                    headerEl.className = 'responsive-grid-text-small';
+                    headerEl.style.fontWeight = 'bold';
+                    row1Left.appendChild(headerEl);
+                    
+                    const row1Right =  document.createElement('div');
+                    row1Right.className = 'responsive-grid-row-right';
+                    const renderer = this.cm.getRenderer(idx);
+                    const content = renderer.call(col.scope, record.data[col.dataIndex], metaDataCopy, record, rowIndex, colIndex, store);
+                    
+                    const contentEl = document.createElement('div');
+                    contentEl.innerHTML = content;
+                    row1Right.appendChild(contentEl);
+                    
+                    if (!content) row.innerHTML = record.data[col.dataIndex] ?? '';
+                    row.appendChild(row1Left);
+                    row.appendChild(row1Right);
+                    block.appendChild(row);
+                }
+            })
+        }
+        return  block.outerHTML;
     },
 
     // private
@@ -1717,7 +1802,7 @@ viewConfig: {
         var cm = this.cm,  colCount = cm.getColumnCount();
         this.colMenu.removeAll();
         for(var i = 0; i < colCount; i++){
-            if(cm.config[i].fixed !== true && cm.config[i].hideable !== false){
+            if(cm.config[i].fixed !== true && cm.config[i].hideable !== false && cm.config[i].id !== 'responsive'){
                 this.colMenu.add(new Ext.menu.CheckItem({
                     itemId: 'col-'+cm.getColumnId(i),
                     text: cm.getColumnHeader(i),

@@ -2,6 +2,8 @@ packaging_build_packages() {
     version=$1
     release=$2
 
+    echo "packaging_build_packages() version: $version release: $release"
+
     CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
     MAJOR_COMMIT_REF_NAME_ESCAPED=$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)
 
@@ -18,6 +20,8 @@ packaging_build_packages() {
     export BASE_IMAGE="${REGISTRY}/base-commit:${IMAGE_TAG}"
     export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${IMAGE_TAG}"
     export SOURCE_IMAGE="${REGISTRY}/source-commit:${IMAGE_TAG}"
+    export JSDEPENDENCY_IMAGE="${REGISTRY}/jsdependency-commit:${IMAGE_TAG}"
+    export JSBUILD_IMAGE="${REGISTRY}/jsbuild-commit:${IMAGE_TAG}"
     export BUILD_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
     export BUILT_IMAGE="${REGISTRY}/built-commit:${IMAGE_TAG}"
     export REVISION=0
@@ -76,6 +80,8 @@ packaging_gitlab_set_ci_id_link() {
     version=$1
     customer=$(release_determin_customer)
 
+    echo "packaging_gitlab_set_ci_id_link() CI_PIPELINE_ID: $CI_PIPELINE_ID customer: $customer version: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+
     if ! curl -S -s \
         --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
         -XPUT --data "${version}" \
@@ -86,7 +92,7 @@ packaging_gitlab_set_ci_id_link() {
 }
 
 packaging_gitlab_get_version_for_pipeline_id() {
-    customer=$1
+    customer=$(release_determin_customer)
 
     if ! curl \
         --fail \
@@ -114,30 +120,38 @@ packaging_gitlab_set_current_link() {
     matrix_send_message $MATRIX_ROOM "🟢 Package for ${version} is ready."
 }
 
-packaging_push_package_to_github() {
-    if [ "$MAJOR_COMMIT_REF_NAME" != "main" ]; then
-        echo "skip pushing to github: $MAJOR_COMMIT_REF_NAME"
-        return 0
+packaging_push_release_tag_to_github() {
+    if test "$CI_COMMIT_TAG"; then
+        echo "no tag to push: '$CI_COMMIT_TAG'"
+        return
     fi
 
+    cp $DOCKER_GIT_CONFIG ~/.gitconfig
+    git config --global user.email "gitlabci@metaways.de"
+    git config --global user.name "gitlabci"
+    git remote add github https://github.com/tine-groupware/tine.git
+
+    git push github refs/tags/$CI_COMMIT_TAG
+}
+
+packaging_push_package_to_github() {
     customer=$(release_determin_customer)
     version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
-    release=$(echo ${version} | sed sI-I~Ig)
 
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
-    asset_name="tine-$(date '+%Y.%m.%d')-$(git rev-parse --short HEAD)-nightly"
 
-    curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${release}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${release}.tar.bz2"
+    echo curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
+    curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
 
-    release_json=$(github_create_release "$GITHUB_RELEASE_REPO_OWNER" "$GITHUB_RELEASE_REPO" "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
+    release_json=$(github_create_release "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
     if [ "$?" != "0" ]; then
         echo "$release_json"
         return 1
     fi
 
-    echo "$release"
+    echo "customer: $customer version: $version release_json: $release_json"
 
-    github_release_add_asset "$release_json" "$asset_name" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${release}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
+    github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
 
     matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
 
@@ -146,28 +160,29 @@ packaging_push_package_to_github() {
     fi
 }
 
-packaging_push_to_vpackages() {
-    customer=$(release_determin_customer)
-    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
-    release=$(echo ${version} | sed sI-I~Ig)
-
-    echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
-
-    if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data curl ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar -o /tmp/${release}-source-${customer}.tar"; then
-        echo "Failed to download packages to vpackages"
-        return 1
+packaging_get_version() {
+    if test "$CI_COMMIT_TAG"; then
+        echo "$CI_COMMIT_TAG"
+        return
     fi
 
-    if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data /srv/packages.tine20.com/www/scripts/importTine20Repo.sh /tmp/${release}-source-${customer}.tar; sudo -u www-data rm -f /tmp/${release}-source-${customer}.tar"; then
-        echo "Failed to import package to repo"
-        return 1
+    description=$(git describe --tags 2> /dev/null)
+
+    if test -z "$description"; then
+         git fetch --unshallow --quiet > /dev/null 2> /dev/null
+         description=$(git describe --tags 2> /dev/null)
     fi
+
+    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+
+    echo nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$description
 }
 
 packaging() {
-    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
-    version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(git describe --tags)"}
+    version=$(packaging_get_version)
     release=${version}
+
+    echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version: $version release: $release MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
 
     if ! release_determin_customer; then
         echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
@@ -197,6 +212,3 @@ packaging() {
         return 1
     fi
 }
-
-
-

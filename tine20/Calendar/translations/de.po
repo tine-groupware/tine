@@ -1034,6 +1034,12 @@ msgstr "Rolle"
 msgid "Select Role"
 msgstr "Rolle wählen"
 
+msgid "%s away"
+msgstr "%s abwesend"
+
+msgid "%s is away"
+msgstr "%s ist abwesend"
+
 #: js/AddToEventPanel.js:101 js/Model.js:404 js/AttendeeGridPanel.js:265
 #: js/EventEditDialog.js:197 js/ContactEventsGridPanel.js:126
 #: Model/Event.php:435
@@ -1125,9 +1131,6 @@ msgstr "Teilnehmerstatus"
 
 #: js/Model.js:385 js/Model.js:395
 msgid "GENDER_Attendee Status"
-msgstr "male"
-
-msgid "GENDER_Event"
 msgstr "male"
 
 #: js/Model.js:394 js/Model.js:404
@@ -1905,7 +1908,7 @@ msgstr "Erforderlich"
 
 #: Config.php:413
 msgid "Optional"
-msgstr "Freiwillig"
+msgstr "Optional"
 
 #: Config.php:419
 msgid "Organizer has implicit edit grant"
@@ -2308,6 +2311,9 @@ msgstr "Word - Details"
 msgid "Excel all data"
 msgstr "Excel - Alle Daten"
 
+msgid "Excel current columns"
+msgstr "Excel - Aktuelle Spalten"
+
 #: Export/definitions/cal_shared_calendar_csv.xml:5
 msgid "Shared Calendar CSV"
 msgstr ""
@@ -2556,7 +2562,7 @@ msgstr "Dies ist eine Terminserienausnahme"
 
 #: views/eventNotification.php:25
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr "%1$s wurde von  \"%2$s\" auf \"%3$s\" geändert"
+msgstr "%1$s wurde von \"%2$s\" auf \"%3$s\" geändert"
 
 #: views/eventNotification.php:32
 msgid "%1$s has been invited"
@@ -2853,11 +2859,43 @@ msgstr "Thema - Lokalität"
 msgid "Summary ⏎ Organizer ⏎ Location"
 msgstr "Thema ⏎ Organisator ⏎ Lokalität"
 
-msgid "The email address of the resource. It is needed to identify the resource on external calendar applications and synchronised devices. Therefore the email Address needs to be unique. It does not have to be an actual existing Address though."
-msgstr "E-Mail Adresse der Ressource. Diese wird benötigt um die Ressource auf externen Kalendern und Sync-Devices zu identifizieren. Die E-Mail Adresse muss daher eindeutig sein. Es ist nicht notwendig, dass die Adresse tatsächlich existiert."
+msgid ""
+"The email address of the resource. It is needed to identify the resource on "
+"external calendar applications and synchronised devices. Therefore the email "
+"Address needs to be unique. It does not have to be an actual existing "
+"Address though."
+msgstr ""
+"E-Mail Adresse der Ressource. Diese wird benötigt um die Ressource auf "
+"externen Kalendern und Sync-Devices zu identifizieren. Die E-Mail Adresse "
+"muss daher eindeutig sein. Es ist nicht notwendig, dass die Adresse "
+"tatsächlich existiert."
 
 msgid "Remove all filters on change selection"
 msgstr "Entferne alle Filter bei Kalenderselektion"
 
 msgid "On Calendar Change will remove all filters"
 msgstr "Beim Wechsel des Kalenders werden alle weiteren Filter entfernt"
+
+msgid "GENDER_Event"
+msgstr "male"
+
+msgid "Resource notification"
+msgstr "Ressourcen Notifikation"
+
+msgid "Reserve Resource: %1$s"
+msgstr "Reserviere Resource: %1$s"
+
+msgid "Do you want to reserve the resource {name} on floor {floorName} for {date} ?"
+msgstr "Wollen Sie die Resource {name} im Stock {floorName} für den Tag {date} reservieren ?"
+
+msgid "Resource: {name} reserved by you"
+msgstr "Resource: {name} ist von Ihnen reserviert"
+
+msgid "Do you want to delete your reservation ?"
+msgstr "Wollen Sie Ihre Reservierung löschen ?"
+
+msgid "Resource: {name} already reserved"
+msgstr "Resource: {name} schon reserviert"
+
+msgid "The resource {name} on floor {floorName} is reserved for selected date: {date} by {name1}."
+msgstr "Die Resource {name} im Stock {floorName} ist von {name1} für den Tag: {date} reserviert."

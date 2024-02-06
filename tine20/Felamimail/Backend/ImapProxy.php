@@ -63,6 +63,15 @@ class Felamimail_Backend_ImapProxy
             $params = (object)$params;
         }
 
+        if (Tinebase_Controller::getInstance()->userAccountChanged()
+            && Tinebase_EmailUser::backendSupportsMasterPassword($account)
+        ) {
+            $masterLogin = Tinebase_Core::getUser()->accountLoginName;
+            Tinebase_EmailUser::setAccountMasterPassword($account, $masterLogin, 'all');
+            $params->password = $account->password;
+            $params->user = $account->user . '*' . $masterLogin;
+        }
+
         if (!isset($params->user)) {
             throw new Felamimail_Exception_IMAPInvalidCredentials('Need at least user in params.');
         }
@@ -76,7 +85,7 @@ class Felamimail_Backend_ImapProxy
         $this->_params = $params;
         $this->_backend = new Felamimail_Backend_Imap($params);
     }
-    
+
     /**
      * route all function calls to the imap backend (try noop first and relogin if fail)
      *
@@ -94,5 +103,11 @@ class Felamimail_Backend_ImapProxy
         }
         
         return call_user_func_array(array($this->_backend, $_name), $_arguments);
+    }
+
+    public function __destruct()
+    {
+        $this->_backend->close();
+        Tinebase_EmailUser::removeAdminAccess();
     }
 }

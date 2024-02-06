@@ -32,8 +32,8 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * record class
      * @cfg {Tine.Addressbook.Model.Contact} recordClass
      */
-    recordClass: Tine.Addressbook.Model.Contact,
-    
+    recordClass: 'Addressbook.Model.Contact',
+
     /**
      * grid specific
      * @private
@@ -59,7 +59,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initComponent: function() {
-        this.recordProxy = Tine.Addressbook.contactBackend;
+        // this.recordProxy = Tine.Addressbook.contactBackend;
         
         // check if felamimail is installed and user has run right and wants to use felamimail in adb
         if (Tine.Felamimail && Tine.Tinebase.common.hasRight('run', 'Felamimail') && Tine.Felamimail.registry.get('preferences').get('useInAdb')) {
@@ -70,8 +70,52 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (this.hasDetailsPanel) {
             this.detailsPanel = this.getDetailsPanel();
         }
-
+        
         Tine.Addressbook.ContactGridPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * responsive content Renderer
+     *
+     * @param {String} folderId
+     * @param {Object} metadata
+     * @param {Folder|Account} record
+     * @return {String}
+     */
+    responsiveRenderer: function(folderId, metadata, record) {
+        const block =  document.createElement('div');
+        block.className = 'responsive-title';
+        
+        const iconEl = document.createElement('img');
+        iconEl.src = (record.data.jpegphoto || '');
+        iconEl.className = 'contact-image';
+        
+        // nameEl
+        const nameEl = document.createElement('div');
+        nameEl.innerText = record.data.n_fileas;
+        nameEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.n_fileas));
+        
+        // companyEl
+        const companyEl = document.createElement('div');
+        companyEl.innerText = record.data.org_name;
+        companyEl.setAttribute('ext:qtip',  Ext.util.Format.htmlEncode(record.data.org_name));
+        
+        const row1 =  document.createElement('div');
+        const row1Left = document.createElement('div');
+        const row1Right =  document.createElement('div');
+        row1.className = 'responsive-grid-row ';
+        row1Left.className = 'responsive-grid-row-left';
+        row1Right.className = 'responsive-grid-row-right';
+        nameEl.className = 'responsive-grid-text-medium';
+        companyEl.className = 'responsive-grid-text-small';
+        row1Left.appendChild(iconEl);
+        row1Right.appendChild(nameEl);
+        row1Right.appendChild(companyEl);
+        
+        row1.appendChild(row1Left);
+        row1.appendChild(row1Right);
+        block.appendChild(row1);
+        return  block.outerHTML;
     },
     
     /**
@@ -140,6 +184,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getDetailsPanel: function() {
         return new Tine.Addressbook.ContactGridDetailsPanel({
+            recordClass: this.recordClass,
             gridpanel: this,
             il8n: this.app.i18n,
             felamimail: this.felamimail
@@ -210,7 +255,7 @@ Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
     var columns = [
         { id: 'type', header: i18n._('Type'), tooltip: i18n._('Type'), dataIndex: 'type', width: 20, renderer: Tine.Addressbook.ContactGridPanel.contactTypeRenderer.createDelegate(this), hidden: false },
         { id: 'jpegphoto', header: i18n._('Contact Image'), tooltip: i18n._('Contact Image'), dataIndex: 'jpegphoto', width: 20, sortable: false, resizable: false, renderer: Tine.widgets.grid.imageRenderer, hidden: false },
-        { id: 'attachments', header: window.i18n._('Attachments'), tooltip: window.i18n._('Attachments'), dataIndex: 'attachments', width: 20, sortable: false, resizable: false, renderer: Tine.widgets.grid.attachmentRenderer, hidden: false },
+        { id: 'attachments', header: '<div class="action_attach tine-grid-row-action-icon"></div>', tooltip: window.i18n._('Attachments'), dataIndex: 'attachments', width: 20, sortable: false, resizable: false, renderer: Tine.widgets.grid.attachmentRenderer, hidden: false },
         { id: 'tags', header: i18n._('Tags'), dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false, hidden: false  },
         { id: 'salutation', header: i18n._('Salutation'), dataIndex: 'salutation', renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Addressbook', 'contactSalutation') },
         {

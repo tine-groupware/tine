@@ -150,44 +150,45 @@ phpcs-analysis:
   image: composer
   needs: []
   before_script:
-    - composer require squizlabs/php_codesniffer
-    - composer require micheh/phpcs-gitlab
+    - composer require squizlabs/php_codesniffer --no-interaction
+    - composer require micheh/phpcs-gitlab --no-interaction
+    - composer config --no-plugins allow-plugins.digitalrevolution/php-codesniffer-baseline true
+    - composer require digitalrevolution/php-codesniffer-baseline --no-interaction
   script:
     - if test "${CI_PROJECT_NAME}" == "tine20"; then dir=./tine20; else dir=./lib; fi
-    - ./vendor/bin/phpcs -s --report=full --standard=PSR12
-      --report-\\Micheh\\PhpCodeSniffer\\Report\\Gitlab=${CI_PROJECT_DIR}/phpcs-report.json $dir
+    # # generate baseline
+    # # localy: php tine20/vendor/bin/phpcs -s --standard=PSR12 --report=\\DR\\CodeSnifferBaseline\\Reports\\Baseline --report-file=phpcs.baseline.xml --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration --extensions=php --ignore=vendor,library --basepath=. ./tine20
+    # # or:
+    # - >
+    #   php vendor/bin/phpcs -s --standard=PSR12 --report=\\DR\\CodeSnifferBaseline\\Reports\\Baseline --report-file=phpcs.baseline.xml
+    #   --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration
+    #   --extensions=php --ignore=vendor,library  --basepath=. $dir || true
+    - >
+      php vendor/bin/phpcs -s --standard=PSR12 --report=full --report-\\Micheh\\PhpCodeSniffer\\Report\\Gitlab=${CI_PROJECT_DIR}/phpcs-report.json
       --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration
-      --extensions=php
+      --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=. $dir
   artifacts:
     reports:
       codequality: ${CI_PROJECT_DIR}/phpcs-report.json
+    # # generate baseline
+    # paths:
+    #   - phpcs.baseline.xml
   allow_failure: true
   rules:
     - if: $RUN_NO_TESTS == "true"
       when: never
     - if: $PHPCS_ANALYSIS == "false"
       when: never
-    - if: $PHPCS_ANALYSIS == "true" && $PHPCS_ANALYSIS_STRICT == "true"
-      allow_failure: false
     - if: $PHPCS_ANALYSIS == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHPCS_ANALYSIS_MERGE_REQUEST == "true" && $PHPCS_ANALYSIS_STRICT == "true"
-      allow_failure: false
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHPCS_ANALYSIS_MERGE_REQUEST == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpcs-analysis/ && $PHPCS_ANALYSIS_STRICT == "true"
-      allow_failure: false
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHPCS_ANALYSIS_MERGE_REQUEST != "false"
+      changes:
+        paths:
+          - "**/*.php"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpcs-analysis/
-    - if: $PIPELINE_TYPE =~ /default-tests/ && $PHPCS_ANALYSIS_STRICT == "true"
-      allow_failure: false
     - if: $PIPELINE_TYPE =~ /default-tests/
-      when: never
-    - if: $PIPELINE_TYPE =~ /mr-tests/ && $PHPCS_ANALYSIS_STRICT == "true"
-      allow_failure: false
     - if: $PIPELINE_TYPE =~ /mr-tests/
-      when: never
-    - if: $CI_COMMIT_TAG && $PHPCS_ANALYSIS_STRICT == "true"
-      allow_failure: false
-    - if: $CI_COMMIT_TAG 
-      when: never
+    - if: $CI_COMMIT_TAG
+      allow_failure: true
   timeout: 20m
   interruptible: true
 

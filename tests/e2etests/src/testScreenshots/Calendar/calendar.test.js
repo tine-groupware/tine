@@ -102,6 +102,7 @@ describe('editDialog', () => {
             path: 'screenshots/Kalender/8_kalender_teilnehmer_hinzu.png',
             clip: {x: 0, y: viewport.height * 1 / 3, width: viewport.width, height: viewport.height * 2 / 3}
         });
+        await newPage.waitForSelector('.x-grid3-row.x-cal-add-attendee-row.x-grid3-row-last .x-grid3-cell-inner.x-grid3-col-user_type');
         await newPage.click('.x-grid3-row.x-cal-add-attendee-row.x-grid3-row-last .x-grid3-cell-inner.x-grid3-col-user_type');
         await newPage.waitForSelector('.x-combo-list-item ');
         await newPage.screenshot({

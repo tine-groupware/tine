@@ -42,7 +42,7 @@ function buildLangStats()
     echo "done"
 }
 
-function buildClient()
+function buildTranslations()
 {
     cd ${TINE20ROOT}/tine20/ && ls vendor/bin && vendor/bin/phing build
 }
@@ -54,7 +54,6 @@ function removeComposerDevDependencies() {
 function cleanup() {
     cleanupTinebase
     cleanupCss
-    cleanupJs
     cleanupFiles
 }
 
@@ -84,8 +83,8 @@ function cleanupJs() {
         if [ -d "${TINE20ROOT}/tine20/${FILE}/translations" ] || [ -d "${TINE20ROOT}/tine20/${FILE}/Setup" ]; then
             echo "+ ${FILE}"
             if [ -d "${TINE20ROOT}/tine20/${FILE}/js" ]; then
-                (cd ${TINE20ROOT}/tine20/$FILE/js;  rm -rf $(ls | grep -v "FAT" | grep -v "\-lang\-" | grep -v "empty\.js"  | grep -v "\.map" | grep -v "pollClient" | grep -v "Locale" | grep -v "ux" | grep -v "node_modules"))
-            fi
+                (cd ${TINE20ROOT}/tine20/$FILE/js;  rm -rf $(ls | grep -v "Locale" | grep -v "ux" | grep -v "pollClient"  | grep -v "plugin" | grep -v "empty\.js" ))
+            fi 
         fi
     done
 
@@ -94,29 +93,8 @@ function cleanupJs() {
     (cd ${TINE20ROOT}/tine20/Tinebase/js/ux;  rm -rf $(ls | grep -v Printer | grep -v data))
 }
 
-function cleanupJsWithAssetsJson()
-{
-    echo "cleanup js files in:"
-
-    for FILE in `ls "${TINE20ROOT}/tine20"`; do
-        # tine20 app needs translations OR Setup dir
-        if [ -d "${TINE20ROOT}/tine20/${FILE}/translations" ] || [ -d "${TINE20ROOT}/tine20/${FILE}/Setup" ]; then
-            echo "+ ${FILE}"
-            if [ -d "${TINE20ROOT}/tine20/${FILE}/js" ]; then
-                for JSFILE in `ls "${TINE20ROOT}/tine20/${FILE}/js/"`; do
-                    if [ "${FILE}/js/${JSFILE}" != "Tinebase/js/webpack-assets-FAT.json" ]; then
-                        if ! grep -q "\"${FILE}/js/${JSFILE}\"" "${TINE20ROOT}/tine20/Tinebase/js/webpack-assets-FAT.json"; then
-                            rm -rf "${TINE20ROOT}/tine20/${FILE}/js/${JSFILE}"
-                        fi
-                    fi
-                done
-            fi
-        fi
-    done
-}
-
 function cleanupFiles() {
-    local FILES="images|library|vendor|docs|fonts|CREDITS|LICENSE|PRIVACY|RELEASENOTES|init_plugins.php|favicon.ico"
+    local FILES="images|library|vendor|docs|fonts|CREDITS|LICENSE|PRIVACY|RELEASENOTES.md|init_plugins.php|favicon.ico"
     local FILES="$FILES|config.inc.php.dist|index.php|langHelper.php|setup.php|tine20.php|bootstrap.php|worker.php|status.php"
 
     local APPS_TO_DELETE="ExampleApplication"
@@ -237,9 +215,9 @@ function createArchives()
                 Tinebase)
                     echo " $FILE"
                     echo -n "building "
-                    local FILES="Addressbook Admin Setup Tinebase CoreData images library vendor docs fonts"
+                    local FILES="Addressbook Admin Setup Tinebase CoreData images library vendor fonts"
                     local FILES="$FILES config.inc.php.dist index.php langHelper.php setup.php tine20.php bootstrap.php worker.php status.php"
-                    local FILES="$FILES CREDITS LICENSE PRIVACY RELEASENOTES init_plugins.php favicon.ico"
+                    local FILES="$FILES CREDITS LICENSE PRIVACY RELEASENOTES.md init_plugins.php favicon.ico"
 
                     # allow to pass files to build as a global var
                     if [ -n "$ADDITIONALRELEASEFILES" ]; then

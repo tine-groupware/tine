@@ -149,7 +149,7 @@ const imageRenderer = function (jpegphoto, metadata, record) {
 
     var url = getImageUrl(jpegphoto, 90, 113, record);
 
-    return '<img src="' + url + '" />';
+    return '<img src="' + url + '" class="'+ (String(url).match(/\.svg/) ? '' : 'dark-reverse') +'" />';
 };
 
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'image', imageRenderer, 'displayPanel');
@@ -174,6 +174,9 @@ const avatarRenderer = function(n_short, metadata, record) {
         let names = _.compact([record.get('n_family'), record.get('n_middle'), record.get('n_given')]);
         if (!names.length && fullName) {
             names = fullName.split(' ');
+        }
+        if (!names.length) {
+            names = _.compact([record.get('accountLastName'), record.get('accountFirstName')]);
         }
         if (names.length > 1) {
             shortName = _.map(names, (n) => { return n.substring(0, 1).toUpperCase() }).join('');

@@ -42,9 +42,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected $_modelName = 'Filemanager_Model_Node';
 
     /**
+     * we do modlog in Tinebase! NOT here
+     *
      * @var boolean
      */
-    protected $_omitModLog = false;
+    protected $_omitModLog = true;
     
     /**
      * holds the total count of the last recursive search
@@ -217,6 +219,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         // reset node acl value to prevent spoofing
         $_record->acl_node = $aclNode;
+        $_record->grants = null;
     }
 
     /**
@@ -349,7 +352,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
 
         $record->notes = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $record->getId());
 
-
         $record->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($nodePath->flatpath, $this->_applicationName);
         $this->resolveGrants($record);
 
@@ -451,6 +453,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
     protected function _searchNodesRecursive($_filter, $_pagination)
     {
         $_filter->removeFilter('type');
+        // TODO should also find folders? - may need an ui change, to remove recursive filter on folder-dblclick
+        // $_filter->addFilter($_filter->createFilter('type', 'in', [Tinebase_Model_Tree_FileObject::TYPE_FILE, Tinebase_Model_Tree_FileObject::TYPE_LINK, , Tinebase_Model_Tree_FileObject::TYPE_FOLDER]]));
         $_filter->addFilter($_filter->createFilter('type', 'in', [Tinebase_Model_Tree_FileObject::TYPE_FILE, Tinebase_Model_Tree_FileObject::TYPE_LINK]));
         $filter = clone $_filter;
         // prepend base path to original $_filter object! it is required for toArray() in the response array

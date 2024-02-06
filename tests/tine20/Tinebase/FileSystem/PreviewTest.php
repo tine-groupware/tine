@@ -4,7 +4,7 @@
  *
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Milan Mertens <m.mertens@metaways.de>
  */
 
@@ -28,11 +28,14 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
 
     protected $_basePath;
 
+    protected $_oldFileSystemConfig;
 
     protected $_rmDir = array();
 
+    protected $_oldQuota;
+
     protected function setUp(): void
-{
+    {
         if (empty(Tinebase_Core::getConfig()->filesdir)) {
             $this->markTestSkipped('filesystem base path not found');
         }
@@ -59,7 +62,7 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
     }
 
     protected function tearDown(): void
-{
+    {
         Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM} = $this->_oldFileSystemConfig;
         Tinebase_Config::getInstance()->{Tinebase_Config::QUOTA} = $this->_oldQuota;
 
@@ -118,6 +121,29 @@ class Tinebase_FileSystem_PreviewTest extends TestCase
         self::assertTrue(
             $this->_previews->hasPreviews($node)
         );
+        return $node;
+    }
+
+    public function testRecreatePreviews()
+    {
+        $node = $this->testCreatePreviewsFormNodeSuccess();
+        $basePath = Tinebase_FileSystem::getInstance()->getPathOfNode($this->_previews->getBasePathNode(), true);
+        $thumbNode = Tinebase_FileSystem::getInstance()->stat($basePath . '/' . substr($node->hash, 0, 3) . '/' .
+            substr($node->hash, 3) . '/thumbnail_0.jpg');
+        $this->_previews->deletePreviews([$node->hash]);
+        $deletedThumbNode = Tinebase_FileSystem::getInstance()->get($thumbNode->getId(), true);
+        $this->assertTrue(1 == $deletedThumbNode->is_deleted);
+        $this->assertGreaterThan($thumbNode->seq, $deletedThumbNode->seq);
+
+        $this->_previewService->setReturnValueGetPreviewsForFile(['thumbnail' => ['blub'], 'previews' => ['blub1', 'blub2', 'blub3']]);
+        $this->_previews->createPreviewsFromNode($node);
+
+        $newThumbNode = Tinebase_FileSystem::getInstance()->stat($basePath . '/' . substr($node->hash, 0, 3) . '/' .
+            substr($node->hash, 3) . '/thumbnail_0.jpg');
+
+        $this->assertGreaterThan($deletedThumbNode->seq, $newThumbNode->seq);
+        $this->assertSame($thumbNode->getId(), $newThumbNode->getId());
+        $this->assertSame($thumbNode->object_id, $newThumbNode->object_id);
     }
 
     public function testCreatePreviewsFormNodeFailPreviewCreationFailed()

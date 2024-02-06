@@ -118,6 +118,11 @@
             isFilterSelect = records.isFilterSelect;
             selectionModel = records;
             records = records.getSelections() || [];
+        } else if (records?.ownerTree) {
+            // tree node doesnt support multi selection
+            selectionModel = records.ownerTree.selModel;
+            const record = records?.attributes?.nodeRecord ?? null
+            records = record ? [record] : [];
         } else if (typeof(records.beginEdit) == 'function') {
             records = [records];
         }
@@ -254,6 +259,7 @@
 
             // custom grants model
             for (grant in recordGrants) {
+                if(!grant.match(/.*Grant$/)) continue;
                 grants[grant] = _.get(grants, grant, defaultGrant) && _.get(recordGrants, grant, false);
             }
         }

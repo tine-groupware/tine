@@ -919,7 +919,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
                         "type" =>  '',
                         "n_fileas" => '',
                         "email_type" =>  '',
-                        "record_id" => ''
+                        "contact_record" => ''
                     ],
                     $this->_personas['sclever']->accountEmailAddress
                 ],
@@ -938,6 +938,56 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
             Felamimail_Transport::setTestTransport($oldTestTransport);
             static::resetMailer();
             $pollTest->tearDown();
+        }
+    }
+
+    /**
+     * @see 0013618: Felamimail Message - introduce mass mailing and plugins for it
+     */
+    public function testGDPRMassMailingMessage()
+    {
+        $oldTransport = Tinebase_Smtp::getDefaultTransport();
+        $oldTestTransport = Felamimail_Transport::setTestTransport(null);
+        static::resetMailer();
+        
+        try {
+            Tinebase_Smtp::setDefaultTransport(new Felamimail_Transport_Array());
+            Felamimail_Transport::setTestTransport(Tinebase_Smtp::getDefaultTransport());
+
+            $massMailingMessage = new Felamimail_Model_Message([
+                'account_id' => $this->_account->getId(),
+                'subject' => 'test GDPR mass mailing',
+                'bcc' => [
+                    [
+                        "email" => Tinebase_Core::getUser()->accountEmailAddress,
+                        "name" => '',
+                        "type" =>  '',
+                        "n_fileas" => '',
+                        "email_type" =>  '',
+                        "record_id" => ''
+                    ],
+                    'gdpr@mail.test'
+                ],
+                'body' => 'Dear {{ recipient }} {{ manageconstentlink }} {{ sender }}',
+                'headers' => ['X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822],
+                'massMailingFlag' => true,
+            ]);
+            
+            static::flushMailer();
+            Felamimail_Controller_Message_Send::getInstance()->sendMessage($massMailingMessage);
+            $messages = static::getMessages();
+            static::assertEquals(2, count($messages), 'expected 3 mails send');
+            
+            foreach($messages as $message) {
+                $body = $message->getBodytext()->getRawContent();
+                static::assertStringContainsString('/GDPR/view', $body);
+                static::assertStringNotContainsString('recipient', $body);
+                static::assertStringNotContainsString('sender', $body);
+            }
+        } finally {
+            Tinebase_Smtp::setDefaultTransport($oldTransport);
+            Felamimail_Transport::setTestTransport($oldTestTransport);
+            static::resetMailer();
         }
     }
 
@@ -1541,7 +1591,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
     
     /**
      * helper function
-     * - appends message from file
+     * - appends message from filesearchAndCacheMessage
      * - adds appended message to cache
      *
      * @param string $_filename

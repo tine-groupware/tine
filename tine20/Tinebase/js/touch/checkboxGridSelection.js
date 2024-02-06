@@ -13,14 +13,13 @@
  */
 if (Ext.isTouchDevice) {
     Ext.grid.GridPanel.prototype.initComponent = Ext.grid.GridPanel.prototype.initComponent.createSequence(function() {
-        var cm = this.getColumnModel(),
-            sm = this.getSelectionModel(),
-            cols = cm.columns || cm.config || [],
-            hasCheckboxSelModel = false;
+        let hasCheckboxSelModel = false;
+        const cm = this.getColumnModel()
+        const cols = cm.columns || cm.config || [];
+        if (cm instanceof Ext.grid.PropertyColumnModel) return;
 
-        if (! (sm instanceof Ext.grid.RowSelectionModel)) {
-            return;
-        }
+        const sm = this.getSelectionModel();
+        if (! (sm instanceof Ext.grid.RowSelectionModel))  return;
 
         Ext.each(cols, function (col) {
             hasCheckboxSelModel = hasCheckboxSelModel || col.dataIndex == 'checked' || col.id == 'checked';

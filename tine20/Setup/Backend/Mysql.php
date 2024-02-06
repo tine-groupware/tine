@@ -161,7 +161,42 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         
         return $foreignKeyNames;
     }
-    
+
+    /**
+     * return list of all foreign key names for given table
+     *
+     * @param string $tableName
+     * @return array list of foreignkey names
+     */
+    public function getOwnForeignKeys($tableName)
+    {
+        $select = $this->_db->select()
+            ->from(array('table_constraints' => 'INFORMATION_SCHEMA.TABLE_CONSTRAINTS'), array('TABLE_NAME', 'CONSTRAINT_NAME'))
+            ->join(
+                array('key_column_usage' => 'INFORMATION_SCHEMA.KEY_COLUMN_USAGE'),
+                $this->_db->quoteIdentifier('table_constraints.CONSTRAINT_NAME') . '=' . $this->_db->quoteIdentifier('key_column_usage.CONSTRAINT_NAME'),
+                array()
+            )
+            ->where($this->_db->quoteIdentifier('table_constraints.CONSTRAINT_SCHEMA')    . ' = ?', $this->_config->database->dbname)
+            ->where($this->_db->quoteIdentifier('table_constraints.TABLE_SCHEMA')         . ' = ?', $this->_config->database->dbname)
+            ->where($this->_db->quoteIdentifier('key_column_usage.TABLE_SCHEMA')          . ' = ?', $this->_config->database->dbname)
+            ->where($this->_db->quoteIdentifier('table_constraints.CONSTRAINT_TYPE')      . ' = ?', 'FOREIGN KEY')
+            ->where($this->_db->quoteIdentifier('key_column_usage.TABLE_NAME') . ' = ?', SQL_TABLE_PREFIX . $tableName);
+
+        $foreignKeyNames = array();
+
+        $stmt = $select->query();
+        while ($row = $stmt->fetch()) {
+            $foreignKeyNames[$row['CONSTRAINT_NAME']] = array(
+                'table_name'      => substr($row['TABLE_NAME'], strlen(SQL_TABLE_PREFIX)),
+                'constraint_name' => (strpos($row['CONSTRAINT_NAME'], SQL_TABLE_PREFIX) === 0 ?
+                    substr($row['CONSTRAINT_NAME'], strlen(SQL_TABLE_PREFIX)) : $row['CONSTRAINT_NAME'])
+            );
+        }
+
+        return $foreignKeyNames;
+    }
+
     /**
      * Get schema of existing table
      * 
@@ -505,14 +540,14 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
     /**
      * Restore Database
      *
-     * @param $backupDir
+     * @param string $backupDir
      * @throws Exception
      */
     public function restore($backupDir)
     {
         $mysqlBackupFile = $backupDir . '/tine20_mysql.sql.bz2';
-        if (! file_exists($mysqlBackupFile)) {
-            throw new Exception("$mysqlBackupFile not found");
+        if (! file_exists($mysqlBackupFile) || ! is_readable($mysqlBackupFile)) {
+            throw new Exception("$mysqlBackupFile not found or not readable");
         }
 
         // hide password from shell via my.cnf
@@ -526,8 +561,20 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
         if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
             ' restore cmd: ' . $cmd);
 
-        exec($cmd);
-        unlink($mycnf);
+        $error = false;
+        try {
+            exec($cmd, $output, $result);
+        } catch (ErrorException $ee) {
+            $error = true;
+            if (Setup_Core::isLogLevel(Zend_Log::ERR)) Setup_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . ' ' . $ee->getMessage());
+        } finally {
+            unlink($mycnf);
+        }
+
+        if ($error || $result > 0) {
+            throw new Exception('restore command failed: '. $output);
+        }
     }
 
     /**

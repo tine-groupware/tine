@@ -407,19 +407,22 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'name' => 'ELKO Elektronik und Söhne',
                 'url' => 'www.elko-elektronik.de',
                 'discount' => 0,
-                'name_shorthand' => 'ELKO'
+                'name_shorthand' => 'ELKO',
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
             ),
             array(
                 'name' => 'Reifenlieferant Gebrüder Platt',
                 'url' => 'www.platt-reifen.de',
                 'discount' => 0,
-                'name_shorthand' => 'PLATT'
+                'name_shorthand' => 'PLATT',
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
             ),
             array(
                 'name' => 'Frische Fische Gmbh & Co. KG',
                 'url' => 'www.frische-fische-hamburg.de',
                 'discount' => 15.2,
-                'name_shorthand' => 'FrischeFische'
+                'name_shorthand' => 'FrischeFische',
+                'vat_procedure' => Sales_Config::VAT_PROCEDURE_TAXABLE,
             ),
         );
 
@@ -596,11 +599,11 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
                 $timeaccountRelation = array(
                     'own_model'              => Sales_Model_Contract::class,
-                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'own_id'                 => NULL,
                     'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'related_model'          => Timetracker_Model_Timeaccount::class,
-                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'related_id'             => $timeaccount->getId(),
                     'type'                   => 'TIME_ACCOUNT'
                 );
@@ -622,21 +625,21 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $relations = array(
                 array(
                     'own_model'              => 'Sales_Model_Contract',
-                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'own_id'                 => NULL,
                     'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'related_model'          => Tinebase_Model_CostCenter::class,
-                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'related_id'             => $ccid,
                     'type'                   => 'LEAD_COST_CENTER'
                 ),
                 array(
                     'own_model'              => 'Sales_Model_Contract',
-                    'own_backend'            => Tasks_Backend_Factory::SQL,
+                    'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'own_id'                 => NULL,
                     'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                     'related_model'          => 'Sales_Model_Customer',
-                    'related_backend'        => Tasks_Backend_Factory::SQL,
+                    'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                     'related_id'             => $customer->getId(),
                     'type'                   => 'CUSTOMER'
                 ),
@@ -701,11 +704,11 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         foreach($contracts as $contract) {
             $relations = array(array(
                 'own_model'              => 'Sales_Model_OrderConfirmation',
-                'own_backend'            => Tasks_Backend_Factory::SQL,
+                'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'own_id'                 => NULL,
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Sales_Model_Contract',
-                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id'             => $contract->getId(),
                 'type'                   => 'CONTRACT'
             ));
@@ -738,20 +741,20 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $i++;
             $relations = array(array(
                 'own_model'              => 'Sales_Model_Offer',
-                'own_backend'            => Tasks_Backend_Factory::SQL,
+                'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'own_id'                 => NULL,
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Sales_Model_Customer',
-                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id'             => $customer->getId(),
                 'type'                   => 'OFFER'
             ), array(
                 'own_model'              => 'Sales_Model_Offer',
-                'own_backend'            => Tasks_Backend_Factory::SQL,
+                'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'own_id'                 => NULL,
                 'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
                 'related_model'          => 'Sales_Model_OrderConfirmation',
-                'related_backend'        => Tasks_Backend_Factory::SQL,
+                'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
                 'related_id'             => $oc->getId(),
                 'type'                   => 'OFFER'
             ));

@@ -672,7 +672,6 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
 
             $filter = new Timetracker_Model_TimesheetFilter(array(
                 array('field' => 'is_cleared', 'operator' => 'equals', 'value' => FALSE),
-                array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
             ), 'AND');
             // NOTE: using text filter here for id (operator equals is not defined in default timeaccount_id filter)
             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $this->getId())));

@@ -164,9 +164,12 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
     protected function _getCallingArgs($func_args, $request)
     {
         $calling_args = array();
+        /** @var ReflectionParameter $arg */
         foreach ($func_args as $arg) {
             if (isset($request[strtolower($arg->getName())])) {
                 $calling_args[] = $request[strtolower($arg->getName())];
+            } elseif ($arg->isDefaultValueAvailable()) {
+                $calling_args[] = $arg->getDefaultValue();
             }
         }
 

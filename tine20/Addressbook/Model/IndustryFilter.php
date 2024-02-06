@@ -35,7 +35,7 @@ class Addressbook_Model_IndustryFilter extends Tinebase_Model_Filter_FilterGroup
         ),
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array('name'))
+            'options' => array('fields' => array('name'), 'modelName' => Addressbook_Model_Industry::class)
         ),
         'name'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
     );

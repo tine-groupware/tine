@@ -221,12 +221,16 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
 
             case Tinebase_Timemachine_ModificationLog::UPDATED:
                 $diff = new Tinebase_Record_Diff(json_decode($_modification->new_value, true));
+                $this->setAllCFs();
                 $record = $this->get($_modification->record_id, true);
                 $record->applyDiff($diff);
                 if (Tinebase_Core::getPrimaryTinebaseId() === $record->application_id) {
                     $record->application_id = Tinebase_Core::getTinebaseId();
                 }
-                Admin_Controller_Customfield::getInstance()->update($record);
+                if (is_array($record->grants) || $record->grants instanceof Tinebase_Record_RecordSet) {
+                    Tinebase_CustomField::getInstance()->setGrants($record, $record->grants);
+                }
+                Tinebase_CustomField::getInstance()->updateCustomField($record);
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:

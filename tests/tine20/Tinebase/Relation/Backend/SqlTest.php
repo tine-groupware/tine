@@ -40,7 +40,7 @@ class Tinebase_Relation_Backend_SqlTest extends \PHPUnit\Framework\TestCase
             'own_id'                 => '268d586e46aad336de8fa2530b5b8faf921e494d',
             'related_degree'         => Tinebase_Model_Relation::DEGREE_PARENT,
             'related_model'          => 'Tasks_Model_Task',
-            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'related_id'             => '8a572723e867dd73dd68d1740dd94f586eff5432',
             'type'                   => 'CRM_TASK'
         ),
@@ -50,17 +50,17 @@ class Tinebase_Relation_Backend_SqlTest extends \PHPUnit\Framework\TestCase
             'own_id'                 => '268d586e46aad336de8fa2530b5b8faf921e494d',
             'related_degree'         => Tinebase_Model_Relation::DEGREE_PARENT,
             'related_model'          => 'Addressbook_Model_Contact',
-            'related_backend'        => Addressbook_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'related_id'             => 'ad59dd6d2e75aa0aca0abf2ab46b55bdcb0d6b18',
             'type'                   => 'PARTNER'
         ),
         array(
             'own_model'              => 'Tasks_Model_Task',
-            'own_backend'            => Tasks_Backend_Factory::SQL,
+            'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'own_id'                 => '8a572723e867dd73dd68d1740dd94f586eff5432',
             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Addressbook_Model_Contact',
-            'related_backend'        => Addressbook_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
             'related_id'             => 'ad59dd6d2e75aa0aca0abf2ab46b55bdcb0d6b18',
             'type'                   => Tinebase_Model_Relation::TYPE_MANUAL,
             'remark'                 => 'Manually created relation by PHPUNIT'

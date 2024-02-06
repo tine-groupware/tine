@@ -8,11 +8,4 @@
     <dryrun>0</dryrun>
     <delimiter>,</delimiter>
     <extension>csv</extension>
-    <mapping>
-        <field>
-            <source>title</source>
-            <destination>title</destination>
-        </field>
-    </mapping>
 </config>
-

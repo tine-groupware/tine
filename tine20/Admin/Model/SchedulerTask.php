@@ -32,6 +32,7 @@ class Admin_Model_SchedulerTask extends Tinebase_Model_SchedulerTask
 
     public const FLD_CONFIG_CLASS = 'config_class';
     public const FLD_CRON = 'cron';
+    public const FLD_EMAILS = 'emails';
 
     public static function inheritModelConfigHook(array &$_definition)
     {
@@ -68,6 +69,16 @@ class Admin_Model_SchedulerTask extends Tinebase_Model_SchedulerTask
             ]
         ]);
 
+        Tinebase_Helper::arrayInsertAfterKey($_definition[self::FIELDS], self::FLD_CONFIG_CLASS, [
+            self::FLD_EMAILS => [
+                self::TYPE      => self::TYPE_STRING,
+                self::LABEL     => 'Emails', // _('Emails')
+                self::VALIDATORS    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+            ]
+        ]);
+
         $_definition[self::FIELDS][self::FLD_CONFIG] = [
             self::TYPE      => self::TYPE_DYNAMIC_RECORD,
             self::LABEL     => 'Task config', // _('Task config')
@@ -92,6 +103,7 @@ class Admin_Model_SchedulerTask extends Tinebase_Model_SchedulerTask
     {
         $config = json_decode($data[self::FLD_CONFIG], true);
         $data[self::FLD_CRON] = $config[self::FLD_CRON];
+        $data[self::FLD_EMAILS] = $config[self::FLD_EMAILS];
         if (isset($config['config'])) {
             $data[self::FLD_CONFIG] = $config['config'];
         }

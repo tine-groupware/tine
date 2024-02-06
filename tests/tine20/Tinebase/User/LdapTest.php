@@ -20,6 +20,8 @@ class Tinebase_User_LdapTest extends TestCase
      * @var Tinebase_User_LDAP
      */
     protected $_backend = NULL;
+
+    protected $objects;
         
     /**
      * Sets up the fixture.
@@ -28,7 +30,7 @@ class Tinebase_User_LdapTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP) {
             $this->markTestSkipped('LDAP backend not enabled');
         }
@@ -190,7 +192,6 @@ class Tinebase_User_LdapTest extends TestCase
     
     /**
      * try to set password
-     *
      */
     public function testSetPassword()
     {
@@ -202,7 +203,35 @@ class Tinebase_User_LdapTest extends TestCase
         
         $this->assertNotEquals($user->accountLastPasswordChange, $testUser->accountLastPasswordChange);
     }
-    
+
+    /**
+     * try to set password with writeToSql option
+     */
+    public function testSetPasswordWriteToSql()
+    {
+        // TODO save the current config state and restore it after test?
+
+        $user = $this->testAddUser();
+        $db = Tinebase_Core::getDb();
+        $select = $db->select()->from(SQL_TABLE_PREFIX . 'accounts')->where($db->quoteInto('id = ?', $user->getId()));
+        $dbUser = $db->query($select)->fetchObject();
+        self::assertEmpty($dbUser->password, print_r($dbUser, true));
+
+        Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)
+            ->{Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL} = true;
+
+        // need to destroy user backend after cfg change
+        Tinebase_User::destroyInstance();
+        $ldapUserBackend = Tinebase_User::factory(Tinebase_User::LDAP);
+        $ldapUserBackend->setPassword($user, Tinebase_Record_Abstract::generateUID());
+
+        Tinebase_Config::getInstance()->get(Tinebase_Config::USERBACKEND)
+            ->{Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL} = false;
+
+        $dbUser = $db->query($select)->fetchObject();
+        self::assertNotEmpty($dbUser->password, print_r($dbUser, true));
+    }
+
     /**
      * try to set the expirydate
      *

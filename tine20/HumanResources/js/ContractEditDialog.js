@@ -63,6 +63,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      */
     initComponent: function() {
         Tine.HumanResources.ContractEditDialog.superclass.initComponent.call(this);
+        this.window.confirmLeavSite = false
     },
 
     onRecordLoad: function() {
@@ -177,16 +178,16 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     onRecordUpdate: function() {
-        var _ = window.lodash,
-            working_time_scheme = this.record.get('working_time_scheme');
+        const working_time_scheme = this.record.get('working_time_scheme');
 
-        // NOTE: this reduces working_time_scheme to id...
         Tine.HumanResources.ContractEditDialog.superclass.onRecordUpdate.call(this);
-        
-        this.record.set('feast_calendar_id', this.getForm().findField('feast_calendar_id').selectedContainer);
+
         this.record.set('working_time_scheme', working_time_scheme);
         this.blConfigPanel.onRecordUpdate(this, this.record);
         _.set(this.record, 'data.working_time_scheme.json', this.getJsonData());
+
+        // NOTE: we need to overwrite the selectedRecord as it gets applied in abstract code to preserve local data
+        this.getForm().findField('working_time_scheme').selectedRecord.data = _.get(this.record, 'data.working_time_scheme');
     },
     
     /**

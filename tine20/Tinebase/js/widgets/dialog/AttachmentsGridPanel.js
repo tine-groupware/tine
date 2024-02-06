@@ -199,7 +199,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
 
     // NOTE: this method is mixed in Tine.Filemanager.NodeGridPanel
     onRowDbClick: function (grid, row, e) {
-        const rowRecord = grid.getStore().getAt(row);
+        const rowRecord = grid.constructor === Tine.Filemanager.Model.Node ? grid : grid.getStore().getAt(row);
 
         if (rowRecord.data.type === 'folder') {
             this.expandFolder(rowRecord);

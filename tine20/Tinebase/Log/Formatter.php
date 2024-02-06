@@ -78,7 +78,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
      * @var string
      */
     protected static $_username = NULL;
-    
+
     /**
      * search strings
      * 
@@ -113,7 +113,7 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
     public function __construct($format = null)
     {
         parent::__construct($format);
-        
+
         if (!self::$_requestId || self::$_requestId === '-') {
             $this->setRequestId();
         }

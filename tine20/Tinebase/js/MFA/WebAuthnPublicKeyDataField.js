@@ -64,7 +64,7 @@ const WebAuthnPublicKeyDataField = Ext.extend(Ext.form.FieldSet, {
 
     async register() {
         await this.afterIsRendered();
-        const rfc4648 = await import(/* webpackChunkName: "Tinebase/js/rfc4648" */ 'rfc4648');
+        const rfc4648 = await import('rfc4648');
         const accountId = this.editDialog.blConfigPanel.account.getId();
         const mfaId = this.editDialog.configWrapper.get('mfa_config_id');
         const publicKeyOptions = await Tine.Tinebase.getWebAuthnRegisterPublicKeyOptionsForMFA(mfaId, accountId);

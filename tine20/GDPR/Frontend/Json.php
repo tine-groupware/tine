@@ -33,6 +33,7 @@ class GDPR_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         GDPR_Model_DataProvenance::MODEL_NAME_PART,
         GDPR_Model_DataIntendedPurpose::MODEL_NAME_PART,
         GDPR_Model_DataIntendedPurposeRecord::MODEL_NAME_PART,
+        GDPR_Model_DataIntendedPurposeLocalization::MODEL_NAME_PART,
     ];
 
     /**

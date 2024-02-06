@@ -34,7 +34,7 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'uid'                   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'etag'                  => array('filter' => 'Tinebase_Model_Filter_Text'),
         'container_id'          => array('filter' => 'Calendar_Model_CalendarFilter', 'options' => array('modelName' => Calendar_Model_Event::class)),
-        'query'                 => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description', 'location'))),
+        'query'                 => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('summary', 'description', 'location'), 'modelName' => Calendar_Model_Event::class)),
         'period'                => array('filter' => 'Calendar_Model_PeriodFilter'),
         'attender'              => array('filter' => 'Calendar_Model_AttenderFilter'),
         'attender_status'       => array('filter' => 'Calendar_Model_AttenderStatusFilter'),
@@ -72,5 +72,10 @@ class Calendar_Model_EventFilter extends Tinebase_Model_Filter_FilterGroup
         'customfield'           => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array(
             'idProperty' => 'cal_events.id'
         )),
+        'event_types' => ['filter' => Tinebase_Model_Filter_ForeignRecords::class, 'options' => [
+            'controller' => Calendar_Controller_EventTypes::class,
+            'recordClassName' => Calendar_Model_EventTypes::class,
+            'refIdField' => 'record',
+        ]],
     );
 }

@@ -47,6 +47,191 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const XPROP_REPLY_DTSTAMP  = 'replyDtstamp';
     const XPROP_REPLY_SEQUENCE = 'replySequence';
 
+    const TRANSP_TRANSP        = 'TRANSPARENT';
+    const TRANSP_OPAQUE        = 'OPAQUE';
+
+    const FLD_CAL_EVENT_ID = 'cal_event_id';
+    const FLD_USER_ID = 'user_id';
+    const FLD_USER_TYPE = 'user_type';
+    const FLD_ROLE = 'role';
+    const FLD_QUANTITY = 'quantity';
+    const FLD_STATUS = 'status';
+    const FLD_STATUS_AUTHKEY = 'status_authkey';
+    const FLD_DISPLAYCONTAINER_ID = 'displaycontainer_id';
+    const FLD_TRANSP = 'transp';
+
+    const MODEL_NAME_PART = 'Attender';
+    const TABLE_NAME = 'cal_attendee';
+
+    /**
+     * application the record belongs to
+     *
+     * @var string
+     */
+    protected $_application = Calendar_Config::APP_NAME;
+
+    /**
+     * holds the configuration object (must be declared in the concrete class)
+     *
+     * @var Tinebase_ModelConfiguration
+     */
+    protected static $_configurationObject = NULL;
+
+    /**
+
+    /**
+     * Holds the model configuration (must be assigned in the concrete class)
+     *
+     * @var array
+     */
+    protected static $_modelConfiguration = [
+        self::VERSION           => 9,
+        self::RECORD_NAME       => 'Attendee',
+        self::RECORDS_NAME       => 'Attendees', // ngettext('Attendee', 'Attendees', n)
+        self::CONTAINER_PROPERTY => NULL,
+        self::TITLE_PROPERTY     => self::FLD_USER_ID,
+        self::HAS_RELATIONS      => FALSE,
+        self::HAS_CUSTOM_FIELDS   => FALSE,
+        self::HAS_SYSTEM_CUSTOM_FIELDS => TRUE,
+        self::HAS_NOTES          => FALSE,
+        self::HAS_TAGS          => FALSE,
+        self::HAS_ATTACHMENTS   => FALSE,
+        self::MODLOG_ACTIVE      => TRUE,
+        self::HAS_XPROPS        => TRUE,
+
+        self::CREATE_MODULE      => FALSE,
+
+        self::EXPOSE_HTTP_API     => FALSE,
+        self::EXPOSE_JSON_API     => FALSE,
+
+        self::APP_NAME           => Calendar_Config::APP_NAME,
+        self::MODEL_NAME         => self::MODEL_NAME_PART,
+
+        self::TABLE            => [
+            self::NAME    => self::TABLE_NAME,
+            self::INDEXES       => [
+                'user_id'             => [
+                    self::COLUMNS               => ['user_id'],
+                ],
+                'user_type'                      => [
+                    self::COLUMNS               => ['user_type'],
+                ],
+                'status'               => [
+                    self::COLUMNS               => ['status'],
+                ],
+                'status_authkey'                     => [
+                    self::COLUMNS               => ['status_authkey'],
+                ],
+            ],
+        ],
+
+        'associations' => [
+            \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
+                'cal_attendee::cal_event_id-cal_events::id' => [
+                    'targetEntity' => Calendar_Model_Event::class,
+                    'fieldName' => self::FLD_CAL_EVENT_ID,
+                    'joinColumns' => [[
+                        'name' => self::FLD_CAL_EVENT_ID,
+                        'referencedColumnName'  => 'id',
+                        self::ON_DELETE                 => 'CASCADE',
+                    ]],
+                ],
+                'cal_attendee::displaycontainer_id--container::id' => [
+                    'targetEntity' => Tinebase_Model_Container::class,
+                    'fieldName' => self::FLD_DISPLAYCONTAINER_ID,
+                    'joinColumns' => [[
+                        'name' => self::FLD_DISPLAYCONTAINER_ID,
+                        'referencedColumnName'  => 'id'
+                    ]],
+                ],
+            ],
+        ],
+
+
+        self::FIELDS          => [
+            self::FLD_USER_ID => [
+                self::TYPE       => self::TYPE_STRING,
+                self::LENGTH     => 40,
+                self::NULLABLE   => false,
+                self::VALIDATORS  => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+                self::LABEL      => 'User', // _('User')
+                self::QUERY_FILTER => TRUE
+            ],
+            self::FLD_CAL_EVENT_ID => [
+                self::TYPE       => self::TYPE_STRING,
+                self::LENGTH     => 40,
+                self::NULLABLE   => false,
+                self::VALIDATORS  => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::LABEL      => 'Event Id', // _('Event Id')
+                self::QUERY_FILTER => TRUE
+            ],
+            self::FLD_USER_TYPE     => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 32,
+                self::DEFAULT_VAL   => self::USERTYPE_USER,
+                self::NULLABLE      => false,
+                self::VALIDATORS    => [
+                    ['InArray', [self::USERTYPE_ANY, self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE]],
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::USERTYPE_USER
+                ],
+            ],
+            self::FLD_ROLE     => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 32,
+                self::DEFAULT_VAL   => self::ROLE_REQUIRED,
+                self::NULLABLE      => false,
+                self::VALIDATORS    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::ROLE_REQUIRED
+                ],
+            ],
+            self::FLD_TRANSP     => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 40,
+                self::DEFAULT_VAL   => self::TRANSP_OPAQUE,
+                self::NULLABLE      => true,
+                self::VALIDATORS    => [
+                    ['InArray', [self::TRANSP_OPAQUE, self::TRANSP_TRANSP]],
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::TRANSP_OPAQUE
+                ],
+            ],
+            self::FLD_DISPLAYCONTAINER_ID => [
+                self::TYPE       => self::TYPE_STRING,
+                self::LENGTH     => 40,
+                self::NULLABLE   => true,
+                self::VALIDATORS  => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            self::FLD_STATUS_AUTHKEY => [
+                self::TYPE       => self::TYPE_STRING,
+                self::LENGTH     => 40,
+                self::NULLABLE   => false,
+                self::VALIDATORS  => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            ],
+            self::FLD_STATUS => [
+                self::TYPE       => self::TYPE_STRING,
+                self::LENGTH     => 40,
+                self::NULLABLE   => false,
+                self::DEFAULT_VAL   => self::STATUS_NEEDSACTION,
+                self::VALIDATORS    => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Input::DEFAULT_VALUE => self::STATUS_NEEDSACTION
+                ],
+            ],
+            self::FLD_QUANTITY => [
+                self::TYPE       => self::TYPE_INTEGER,
+                self::NULLABLE   => false,
+                self::VALIDATORS  => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::DEFAULT_VAL   => 1,
+            ],
+        ]
+    ];
+
+
+
+
+
     /**
      * cache for already resolved attendee
      * 
@@ -61,67 +246,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     );
 
     protected static $_resolveAttendeeCustomfield;
-    
-    /**
-     * key in $_validators/$_properties array for the filed which 
-     * represents the identifier
-     * 
-     * @var string
-     */
-    protected $_identifier = 'id';
-    
-    /**
-     * application the record belongs to
-     *
-     * @var string
-     */
-    protected $_application = 'Calendar';
-    
-    /**
-     * validators
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        // tine record fields
-        'id'                   => array('allowEmpty' => true,  'Alnum'),
-        'created_by'           => array('allowEmpty' => true          ),
-        'creation_time'        => array('allowEmpty' => true          ),
-        'last_modified_by'     => array('allowEmpty' => true          ),
-        'last_modified_time'   => array('allowEmpty' => true          ),
-        'is_deleted'           => array('allowEmpty' => true          ),
-        'deleted_time'         => array('allowEmpty' => true          ),
-        'deleted_by'           => array('allowEmpty' => true          ),
-        'seq'                  => array('allowEmpty' => true,  'Int'  ),
-        
-        'cal_event_id'         => array('allowEmpty' => true/*,  'Alnum'*/),
-        'user_id'              => array('allowEmpty' => false,        ),
-        'user_type'            => array(
-            'allowEmpty' => true,
-            array('InArray', array(self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE))
-        ),
-        'role'                 => array('allowEmpty' => true          ),
-        'quantity'             => array('allowEmpty' => true, 'Int'   ),
-        'status'               => array('allowEmpty' => true          ),
-        'status_authkey'       => array('allowEmpty' => true, 'Alnum' ),
-        'displaycontainer_id'  => array('allowEmpty' => true ),
-        'transp'               => array(
-            'allowEmpty' => true,
-            array('InArray', array(Calendar_Model_Event::TRANSP_TRANSP, Calendar_Model_Event::TRANSP_OPAQUE))
-        ),
-        'xprops'               => array('allowEmpty' => true          ),
-    );
 
-    /**
-     * datetime fields
-     *
-     * @var array
-     */
-    protected $_datetimeFields = array(
-        'creation_time',
-        'last_modified_time',
-        'deleted_time',
-    );
 
     /**
      * returns accountId of this attender if present
@@ -687,24 +812,27 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     }
     
     /**
-     * resolves group members and adds/removes them if nesesary
-     * 
-     * NOTE: If a user is listed as user and as groupmember, we suppress the groupmember
-     * 
+     * resolves group members and adds/removes them if necessary
+     *
+     * NOTE: If a user is listed as user and as group member, we suppress the group member
+     *
      * NOTE: The role to assign to a new group member is not always clear, as multiple groups
      *       might be the 'source' of the group member. To deal with this, we take the role of
      *       the first group when we add new group members
-     *       
+     *
      * @param Tinebase_Record_RecordSet $_attendee
      * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public static function resolveGroupMembers($_attendee)
+    public static function resolveGroupMembers($_attendee): void
     {
         if (! $_attendee instanceof Tinebase_Record_RecordSet) {
             return;
         }
-        $_attendee->addIndices(array('user_type'));
-        
+
         // flatten user_ids (not groups for group/list handling bellow)
         foreach($_attendee as $attendee) {
             if ($attendee->user_type != Calendar_Model_Attender::USERTYPE_GROUP && $attendee->user_id instanceof Tinebase_Record_Interface) {
@@ -731,23 +859,27 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $list = Addressbook_Controller_List::getInstance()->get($groupAttender->user_id);
                     $listId = $list->getId();
                 } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
                     // let's try group
                     try {
                         $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
                         if (!empty($group->list_id)) {
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' fixme: depricated use of  group id');
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                                . ' FIXME: deprecated use of group id');
                             $groupAttender->user_id = $listId = $group->list_id;
                         }
                     } catch (Tinebase_Exception_Record_NotDefined $ternd) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__
                             . ' ' . $ternd->getMessage());
                     }
                 }
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                    . ' Group attender ID missing');
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' ' . print_r($groupAttender->toArray(), TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' Group attender ID missing');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . print_r($groupAttender->toArray(), TRUE));
             }
             
             if ($listId !== null) {
@@ -767,7 +899,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         }
         
         $toDel = array_diff($allCurrGroupMembersContactIds, $allGroupMembersContactIds);
-        foreach ($toDel as $idx => $contactId) {
+        foreach ($toDel as $contactId) {
             $attender = $allCurrGroupMembers->find('user_id', $contactId);
             $_attendee->removeRecord($attender);
         }
@@ -775,13 +907,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         // calculate double members (groupmember + user)
         $groupmembers = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER);
         $users        = $_attendee->filter('user_type', Calendar_Model_Attender::USERTYPE_USER);
-        $doublicates = array_intersect($users->user_id, $groupmembers->user_id);
-        foreach ($doublicates as $user_id) {
+        $duplicates = array_intersect($users->user_id, $groupmembers->user_id);
+        foreach ($duplicates as $user_id) {
             $attender = $groupmembers->find('user_id', $user_id);
             $_attendee->removeRecord($attender);
         }
     }
-    
+
     /**
      * get own attender
      * 

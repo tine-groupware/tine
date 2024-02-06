@@ -18,6 +18,9 @@ msgstr ""
 msgid "Jump to File"
 msgstr "Zur Akte springen"
 
+msgid "Metadata entered here is automatically inherited in newly created e-files."
+msgstr "Hier erfasste Metadaten vererben sich automatisch in neu angelegte E-Akten."
+
 #: js/nodeEFileHookPanel.js:25 Setup/setup.xml:4
 msgid "eFile"
 msgstr "eAkte"

@@ -430,12 +430,16 @@ Tine.widgets.dialog.DuplicateResolveStore = Ext.extend(Ext.data.GroupingStore, {
         var recordsToAdd = [];
         Ext.each(fieldDefinitions.concat(cfDefinitions), function(field) {
             
-            if (field.omitDuplicateResolving) {
+            if (field.fieldDefinition?.uiconfig?.omitDuplicateResolving || field.uiconfig?.omitDuplicateResolving || field.omitDuplicateResolving
+                || field.fieldDefinition?.system || field.fieldDefinition?.disabled
+                || _.find(Tine.Tinebase.Model.genericFields, { name: field.name })?.omitDuplicateResolving
+                || ['id', 'jpegphoto'].indexOf(field.name) >= 0
+                ) {
                 return;
             }
 
             var fieldName = field.name,
-                fieldGroup = field.uiconfig ? field.uiconfig.group : field.group,
+                fieldGroup = field.fieldDefinition?.uiconfig?.group || field.uiconfig?.group || field.group,
                 recordData = {
                     fieldName: fieldName,
                     fieldDef: field,

@@ -102,7 +102,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     
                     if (in_array($uri->getHost(), $allowedOrigins)) {
                         header('Access-Control-Allow-Methods: POST');
-                        header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type, x-tine20-jsonkey');
+                        header('Access-Control-Allow-Headers: x-requested-with, x-tine20-request-type, content-type, x-tine20-jsonkey, authorization');
                         header('Access-Control-Max-Age: 3600'); // cache result of OPTIONS request for 1 hour
                         
                     } else {
@@ -122,14 +122,14 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         if (Tinebase_Session::sessionExists()) {
             try {
                 Tinebase_Core::startCoreSession();
-            } catch (Zend_Session_Exception $zse) {
+            } catch (Tinebase_Exception_NotFound | Zend_Session_Exception $e) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .' Starting session failed: ' .
+                    get_class($e) . ' ' . $e->getMessage());
                 $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
-                
-                // expire session cookie for client
                 Tinebase_Session::expireSessionCookie();
             }
         }
-        
+
         if ($exception === false) {
             try {
                 Tinebase_Core::initFramework();
@@ -138,6 +138,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     get_class($e) . ' ' . $e->getMessage());
                 $exception = $e;
             }
+        }
+
+        if (false === $exception && null === Tinebase_Core::getUser() && $this->_request->getHeader('Authorization')) {
+            $exception = $this->_handleAppPwdAuth();
         }
         
         $json = $this->_request->getContent();
@@ -299,6 +303,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
      */
     protected static function _getServer($classes = null)
     {
+        $appPwd = Tinebase_Session::isStarted() ?
+            Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class} : null;
+
         // setup cache if available and we are in production mode
         if (
             is_array($classes)
@@ -322,8 +329,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                     'logger'                    => Tinebase_Core::getCache()->getOption('logger'),
                 ));
                 $cache->setBackend(Tinebase_Core::getCache()->getBackend());
+
                 $cacheId = Tinebase_Helper::convertCacheId('_handle_' . sha1(Zend_Json_Encoder::encode($classes)) . '_' .
-                    (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : 'anon'));
+                    (self::userIsRegistered() ? Tinebase_Core::getUser()->getId() : 'anon') .
+                    ($appPwd ? $appPwd->getId() : ''));
 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . " Get server from cache");
@@ -345,6 +354,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         $server = new Tinebase_Server_ZendJsonWrapper();
         $server->setAutoEmitResponse(false);
         $server->setAutoHandleExceptions(false);
+        if ($appPwd) {
+            $server->setAllowList($appPwd->{Tinebase_Model_AppPassword::FLD_CHANNELS});
+        }
         
         if (is_array($classes)) {
             foreach ($classes as $class => $namespace) {
@@ -358,8 +370,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
         }
 
-        if (self::userIsRegistered()) {
+        if (self::userIsRegistered() || $appPwd) {
             $definitions = self::_getModelConfigMethods('Tinebase_Server_Json');
+            if ($appPwd) {
+                $definitions = array_intersect_key($definitions, $appPwd->{Tinebase_Model_AppPassword::FLD_CHANNELS});
+            }
             $server->loadFunctions($definitions);
         }
         
@@ -388,10 +403,10 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
                 $_SERVER['HTTP_X_TINE20_CLIENTASSETHASH'] != Tinebase_Frontend_Http_SinglePageApplication::getAssetHash()) {
                 throw new Tinebase_Exception_ClientOutdated();
             }
-
-
-            $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
-            $this->_checkJsonKey($method, $jsonKey);
+            if (!Tinebase_Session::isStarted() || !Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class}) {
+                $jsonKey = (isset($_SERVER['HTTP_X_TINE20_JSONKEY'])) ? $_SERVER['HTTP_X_TINE20_JSONKEY'] : '';
+                $this->_checkJsonKey($method, $jsonKey);
+            }
             
             if (empty($method)) {
                 // SMD request
@@ -399,6 +414,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
             }
 
             self::_checkAreaLock($method);
+            self::_checkRateLimit($method);
             
             $this->_methods[] = $method;
 
@@ -504,7 +520,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
 
         $classes['Tinebase_Frontend_Json'] = 'Tinebase';
         // only load restricted apis if no area_login lock is set or if it is unlocked already
-        if (self::userIsRegistered()) {
+        if (self::userIsRegistered() || (Tinebase_Session::isStarted() && Tinebase_Session::getSessionNamespace()->{Tinebase_Model_AppPassword::class})) {
             $classes['Tinebase_Frontend_Json_Container'] = 'Tinebase_Container';
             $classes['Tinebase_Frontend_Json_PersistentFilter'] = 'Tinebase_PersistentFilter';
             $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_AreaLock';
@@ -526,6 +542,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         } elseif (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             $classes['Tinebase_Frontend_Json_AreaLock'] = 'Tinebase_AreaLock';
         }
+
 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
             . ' Got frontend classes: ' . print_r($classes, true));

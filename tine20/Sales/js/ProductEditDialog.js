@@ -40,7 +40,7 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 [fields.name, _.assign(fields.shortcut, {columnWidth: 1/3})],
                 // [fields.description],
                 [fields.manufacturer, _.assign(fields.purchaseprice, {columnWidth: 1/3})],
-                [fields.unit, fields.salesprice, fields.salestaxrate],
+                [fields.unit, fields.salesprice_type, fields.salesprice, fields.salestaxrate],
                 [fields.subproducts],
                 [fields.unfold_type, fields.default_sorting, fields.default_grouping],
                 [fields.lifespan_start, fields.lifespan_end],
@@ -64,7 +64,9 @@ Tine.widgets.form.FieldManager.register('Sales', 'Product', 'accountable', {
     initComponent() {
         var data = [];
         var id = 0;
-
+        this.app = Tine.Tinebase.appMgr.get('Sales');
+        this.fieldLabel = this.app.i18n._('Accountable');
+        
         Ext.each(Tine.Sales.AccountableRegistry.getArray(), function(rel) {
             const rc = Tine.Tinebase.data.RecordMgr.get(rel.appName, rel.modelName);
             const label = rc.getAppName() + ' ' + rc.getRecordsName();

@@ -211,7 +211,7 @@ Ext.layout.ToolbarLayout = Ext.extend(Ext.layout.ContainerLayout, {
         m.removeAll();
         for(var i = 0; i < len; i++){
             c = h[i];
-            if(c.xtbHidden){
+            if(c.xtbHidden || m.showAll){
                 if(prev && (needsSep(c, prev) || needsSep(prev, c))){
                     m.add('-');
                 }

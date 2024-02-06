@@ -75,13 +75,24 @@ class Sales_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const PRODUCT_NUMBER_ZEROFILL = 'productNumberZeroFill';
-    
+
+    /**
+     * container xprop to update related customer contacts
+     *
+     * @const string XPROP_CUSTOMER_ADDRESSBOOK
+     */
+    public const XPROP_CUSTOMER_ADDRESSBOOK = 'customer_addressbook';
+
     /**
      * Invoice Type
      * 
      * @var string
      */
     const INVOICE_TYPE = 'invoiceType';
+
+    const PRICE_TYPE = 'priceType';
+    const PRICE_TYPE_NET = 'net';
+    const PRICE_TYPE_GROSS = 'gross';
 
     const INVOICE_DISCOUNT_TYPE = 'invoiceDiscountType';
     const INVOICE_DISCOUNT_PERCENTAGE = 'PERCENTAGE';
@@ -114,6 +125,13 @@ class Sales_Config extends Tinebase_Config_Abstract
     const LANGUAGES_AVAILABLE = 'languagesAvailable';
 
     const VARIABLE_POSITION_FLAG = 'subProductPositionFlag';
+
+    const VAT_PROCEDURES = 'vatProcedures';
+    const VAT_PROCEDURE_TAXABLE = 'taxable';
+    const VAT_PROCEDURE_NON_TAXABLE = 'nonTaxable';
+    const VAT_PROCEDURE_REVERSE_CHARGE = 'reverseCharge';
+
+    const REVERSE_CHANGE_TEMPLATE = 'reverseChargeTemplate';
 
     /**
      * followup status
@@ -162,6 +180,15 @@ class Sales_Config extends Tinebase_Config_Abstract
      */
     public const DOCUMENT_INVOICE_STATUS = 'documentInvoiceStatus';
     public const DOCUMENT_INVOICE_STATUS_TRANSITIONS = 'documentInvoiceStatusTransitions';
+
+    /**
+     * sender and recipient emails for datev
+     *
+     * @var string
+     */
+    public const DATEV_SENDER_EMAIL_PURCHASE_INVOICE = 'datevSenderEmailPurchaseInvoice';
+    public const DATEV_SENDER_EMAIL_INVOICE = 'datevSenderEmailInvoice';
+    public const DATEV_RECIPIENT_EMAILS = 'datevRecipientEmails';
 
 
     /**
@@ -704,6 +731,19 @@ class Sales_Config extends Tinebase_Config_Abstract
                 'default' => 'INVOICE'
             )
         ),
+        self::PRICE_TYPE => [
+            self::LABEL                 => 'Price Type', //_('Price Type')
+            self::DESCRIPTION           => 'Price is net or gross. Calculation is based on net or gross.', //_('Price is net or gross. Calculation is based on net or gross.')
+            self::TYPE                  => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::DEFAULT_STR           => [
+                self::RECORDS               => [
+                    ['id' => self::PRICE_TYPE_NET,   'value' => 'Net',   'system' => true], // _('Net')
+                    ['id' => self::PRICE_TYPE_GROSS, 'value' => 'Gross', 'system' => true], // _('Gross')
+                ],
+                self::DEFAULT_STR => self::PRICE_TYPE_NET,
+            ],
+        ],
         self::INVOICE_DISCOUNT_TYPE => [
             self::LABEL                 => 'Invoice Discount Type', //_('Invoice Discount Type')
             self::DESCRIPTION           => 'Invoice Discount Type', //_('Invoice Discount Type')
@@ -900,6 +940,81 @@ class Sales_Config extends Tinebase_Config_Abstract
                 'default' => 'TO_CLEAR'
             )
         ),
+        self::DATEV_SENDER_EMAIL_PURCHASE_INVOICE                 => [
+            self::LABEL                     => 'Datev sender email purchase invoice', //_('Datev sender email purchase invoice')
+            self::DESCRIPTION               => 'Datev sender email for purchase invoice' , //_('Datev sender email purchase invoice')
+            self::TYPE                      => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => true,
+            self::DEFAULT_STR               => '',
+        ],
+        self::DATEV_SENDER_EMAIL_INVOICE                 => [
+            self::LABEL                     => 'Datev sender email invoice', //_('Datev sender email for invoice')
+            self::DESCRIPTION               => 'Datev sender email for invoice', //_('Datev sender email for invoice')
+            self::TYPE                      => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => true,
+            self::DEFAULT_STR               => '',
+        ],
+        self::DATEV_RECIPIENT_EMAILS                 => [
+            self::LABEL                     => 'Datev recipient emails', //_('Datev recipient emails')
+            self::DESCRIPTION               => 'Datev recipient emails', //_('Datev recipient emails')
+            self::TYPE                      => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => true,
+            self::DEFAULT_STR               => [],
+        ],
+        self::VAT_PROCEDURES => [
+            //_('VAT Procedures')
+            self::LABEL              => 'VAT Procedures',
+            //_('Possible VAT Procedures')
+            self::DESCRIPTION        => 'Possible VAT Procedures',
+            self::TYPE               => self::TYPE_KEYFIELD_CONFIG,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                self::RECORDS => [
+                    [
+                        'id' => self::VAT_PROCEDURE_TAXABLE,
+                        //_('Taxable')
+                        'value' => 'Taxable',
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::VAT_PROCEDURE_NON_TAXABLE,
+                        //_('Non taxable')
+                        'value' => 'Non taxable',
+                        'icon' => null,
+                        'system' => true,
+                    ], [
+                        'id' => self::VAT_PROCEDURE_REVERSE_CHARGE,
+                        //_('Reverse charge')
+                        'value' => 'Reverse charge',
+                        'icon' => null,
+                        'system' => true,
+                    ],
+                ],
+                self::DEFAULT_STR => self::VAT_PROCEDURE_TAXABLE,
+            ],
+        ],
+        self::REVERSE_CHANGE_TEMPLATE => [
+            //_('Reverse Charge Template')
+            self::LABEL                 => 'Reverse Charge Template',
+            //_('Enabled Features in Sales Application.')
+            self::DESCRIPTION           => 'Reverse Charge Templates in multiple languages.',
+            self::TYPE                  => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+            self::DEFAULT_STR           => [
+                'de' => 'Steuerschuldnerschaft des Leistungsempfangers gemaß §13b UStG. Reverse-Charge-Verfahren.
+USt.-ID des Leistungsempfangers: { vatid }',
+                'en' => 'Tax liability of the recipient of the service according to §13b UStG. Reverse charge procedure.
+VAT ID of the service recipient: { vatid }',
+            ],
+        ],
+
         /**
          * enabled Sales features
          * 

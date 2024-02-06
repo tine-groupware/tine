@@ -48,8 +48,13 @@ msgid "Current Usage"
 msgstr "Aktuelle Nutzung"
 
 #: js/UsagePanel.js:64
-msgid "The quota applies recursively to files and subfolders. Please note, the effective quota can differ if a parent folder has set a lower quota."
-msgstr "Das Kontingent gilt rekursiv für Dateien und Unterordner. Achtung: Das effektive Kontingent kann abweichen wenn ein übergeordneter Ordner eine geringeres Kontingent gesetzt hat."
+msgid ""
+"The quota applies recursively to files and subfolders. Please note, the "
+"effective quota can differ if a parent folder has set a lower quota."
+msgstr ""
+"Das Kontingent gilt rekursiv für Dateien und Unterordner. Achtung: Das "
+"effektive Kontingent kann abweichen wenn ein übergeordneter Ordner eine "
+"geringeres Kontingent gesetzt hat."
 
 #: js/UsagePanel.js:84
 msgid "Revision Size"
@@ -81,8 +86,12 @@ msgstr "Dienst nicht verfügbar"
 
 #: js/ExceptionHandler.js:33
 #, python-brace-format
-msgid "The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 Admin FAQ{1} for configuration advice or contact your administrator."
-msgstr "Der Dateimanager ist nicht korrekt konfiguriert. Bitte kontaktieren sie ihren Administrator oder ziehen sie die {0}Tine 2.0 Dokumentation{1} zu Rate."
+msgid ""
+"The Filemanager is not configured correctly. Please refer to the {0}Tine 2.0 "
+"Admin FAQ{1} for configuration advice or contact your administrator."
+msgstr ""
+"Der Dateimanager ist nicht korrekt konfiguriert. Bitte kontaktieren sie "
+"ihren Administrator oder ziehen sie die {0}Tine 2.0 Dokumentation{1} zu Rate."
 
 #: js/ExceptionHandler.js:55
 msgid "File(s) already exists"
@@ -108,6 +117,9 @@ msgstr "Dateimanager"
 msgid "Save locally"
 msgstr "Lokal speichern"
 
+msgid "Show in Filemanager"
+msgstr "Im Dateimanager anzeigen"
+
 #: js/QuickLookPanel.js:62
 msgid "Close"
 msgstr "Schließen"
@@ -129,8 +141,13 @@ msgid "Remove record"
 msgstr "Eintrag entfernen"
 
 #: js/DownloadLinkGridPanel.js:151 js/nodeActions.js:496
-msgid "Download links can be protected with a password. If no password is specified, anyone who knows the link can access the selected files."
-msgstr "Download Links können mit einem Passwort geschützt werden. Wenn kein Passwort angegeben ist, kann jeder der den Link kennt auf die selektierten Dateien zugreifen."
+msgid ""
+"Download links can be protected with a password. If no password is "
+"specified, anyone who knows the link can access the selected files."
+msgstr ""
+"Download Links können mit einem Passwort geschützt werden. Wenn kein "
+"Passwort angegeben ist, kann jeder der den Link kennt auf die selektierten "
+"Dateien zugreifen."
 
 #: js/DownloadLinkGridPanel.js:158
 msgid "Creating new Download Link..."
@@ -299,7 +316,9 @@ msgstr "System Link"
 
 #: js/nodeActions.js:309
 msgid "Use this link to share the entry with other system users"
-msgstr "Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer zu teilen"
+msgstr ""
+"Verwende diesen Link um den Eintrag mit einem anderen Systembenutzer zu "
+"teilen"
 
 #: js/nodeActions.js:327
 msgid "Delete"
@@ -456,8 +475,13 @@ msgid "Confirm Changing of Folder Grants"
 msgstr "Ordner Berechtigungen werden geändert"
 
 #: js/Model.js:323
-msgid "You are about to move a folder which has own grants. These grants will be lost and the folder will inherit its grants from its new parent folder."
-msgstr "Sie sind im Begriff einen Ordner zu verschieben der eigene Berechtigungen enthält. Diese gehen verloren und es werden die Berechtigungen des neuen übergeordneten Ordners geerbt."
+msgid ""
+"You are about to move a folder which has own grants. These grants will be "
+"lost and the folder will inherit its grants from its new parent folder."
+msgstr ""
+"Sie sind im Begriff einen Ordner zu verschieben der eigene Berechtigungen "
+"enthält. Diese gehen verloren und es werden die Berechtigungen des neuen "
+"übergeordneten Ordners geerbt."
 
 #: js/Model.js:339
 msgid "Please wait"
@@ -466,7 +490,9 @@ msgstr "Bitte warten"
 #: js/Model.js:574
 #, python-brace-format
 msgid "Error while uploading \"{fileName}\". Please try again later."
-msgstr "Fehler beim Hochladen von „{fileName}“ . Bitte versuchen Sie es später noch einmal."
+msgstr ""
+"Fehler beim Hochladen von „{fileName}“ . Bitte versuchen Sie es später noch "
+"einmal."
 
 #: js/Model.js:631
 msgid "Download Link"
@@ -486,16 +512,24 @@ msgid "Grants are inherited from {locationsHtml} as follows"
 msgstr "Berechtigungen geerbt von {locationsHtml} wie folgt"
 
 #: js/GrantsPanel.js:40
-msgid "Grants of a folder also apply recursively to all sub folders unless they have their own grants."
-msgstr "Rechte eines Ordners gelten auch rekursiv für alle Unterordner, es sei denn, sie verfügen über eigene Rechte."
+msgid ""
+"Grants of a folder also apply recursively to all sub folders unless they "
+"have their own grants."
+msgstr ""
+"Rechte eines Ordners gelten auch rekursiv für alle Unterordner, es sei denn, "
+"sie verfügen über eigene Rechte."
 
 #: js/GrantsPanel.js:45
 msgid "This folder is part of the data safe"
 msgstr "Dieser Ordner ist Teil des Datentresors"
 
 #: js/GrantsPanel.js:48
-msgid "If the data safe is activated, this folder and its contents can only be accessed when the data safe is open."
-msgstr "Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
+msgid ""
+"If the data safe is activated, this folder and its contents can only be "
+"accessed when the data safe is open."
+msgstr ""
+"Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen Inhalt "
+"nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
 
 #: js/FilePickerDialog.js:94
 msgid "Select a file"
@@ -578,7 +612,8 @@ msgstr "Beschreibung eingeben"
 
 #: js/DocumentPreview.js:153
 msgid "Sorry, Tine 2.0 would have liked to show you the contents of the file."
-msgstr "Schade, gerne hätte Tine 2.0 Ihnen jetzt den Inhalt der Datei angezeigt."
+msgstr ""
+"Schade, gerne hätte Tine 2.0 Ihnen jetzt den Inhalt der Datei angezeigt."
 
 #: js/DocumentPreview.js:154
 msgid "This is possible for .doc, .jpg, .pdf and even more file formats."
@@ -593,18 +628,27 @@ msgid "We would be happy to make you a non-binding offer."
 msgstr "Wir machen Ihnen gerne ein unverbindliches Angebot."
 
 #: js/DocumentPreview.js:161
-msgid "This file has no contents. The Upload has failed or has not yet finished."
-msgstr "Diese Datei hat keinen Inhalt. Der Upload ist entweder fehlgeschlagen oder noch nicht fertig."
+msgid ""
+"This file has no contents. The Upload has failed or has not yet finished."
+msgstr ""
+"Diese Datei hat keinen Inhalt. Der Upload ist entweder fehlgeschlagen oder "
+"noch nicht fertig."
 
 #: js/DocumentPreview.js:163
 msgid "No preview available yet - Please try again in a few minutes."
-msgstr "Leider noch keine Vorschau verfügbar - Bitte versuchen Sie es in einigen Minuten erneut."
+msgstr ""
+"Leider noch keine Vorschau verfügbar - Bitte versuchen Sie es in einigen "
+"Minuten erneut."
 
 msgid "No preview available."
 msgstr "Keine Vorschau verfügbar."
 
-msgid "File named {0} already exist in this location. Do you want to replace it with the current one?"
-msgstr "Eine Datei mit dem Namen {0} ist bereits vorhanden. Möchten Sie diese durch die aktuelle Datei ersetzen?"
+msgid ""
+"File named {0} already exist in this location. Do you want to replace it "
+"with the current one?"
+msgstr ""
+"Eine Datei mit dem Namen {0} ist bereits vorhanden. Möchten Sie diese durch "
+"die aktuelle Datei ersetzen?"
 
 msgid "Replace"
 msgstr "Ersetzen"
@@ -629,8 +673,13 @@ msgstr "Bestehende Datei Überschreiben?"
 msgid "Do you really want to overwrite the existing files?"
 msgstr "Wollen Sie wirklich die bestehende Datei überschreiben?"
 
-msgid "{attachmentCount, plural, one {Do you really want to overwrite the existing file?} other {Do you really want to overwrite the existing files?}}"
-msgstr "{attachmentCount, plural, one {Wollen Sie die bestehende Datei wirklich überschreiben?} other {Wollen Sie die bestehenden Dateien wirklich überschreiben?}}"
+msgid ""
+"{attachmentCount, plural, one {Do you really want to overwrite the existing "
+"file?} other {Do you really want to overwrite the existing files?}}"
+msgstr ""
+"{attachmentCount, plural, one {Wollen Sie die bestehende Datei wirklich "
+"überschreiben?} other {Wollen Sie die bestehenden Dateien wirklich "
+"überschreiben?}}"
 
 #: js/FilePicker.js:497
 msgid "Content type"
@@ -641,24 +690,36 @@ msgid "Public Download URL"
 msgstr "Öffentliche Download URL"
 
 #: Config.php:29
-msgid "Deliver anonymous downloads from another URL. Make sure the rewrite rules are adjusted accordingly."
-msgstr "Liefern Sie anonyme Downloads von einer anderen URL. Stellen Sie sicher, dass die Umschreiberegeln entsprechend angepasst sind."
+msgid ""
+"Deliver anonymous downloads from another URL. Make sure the rewrite rules "
+"are adjusted accordingly."
+msgstr ""
+"Liefern Sie anonyme Downloads von einer anderen URL. Stellen Sie sicher, "
+"dass die Umschreiberegeln entsprechend angepasst sind."
 
 #: Exception/DestinationIsSameNode.php:26
 msgid "Destination has the same Path"
 msgstr "Ziel hat den gleichen Pfad"
 
 #: Exception/DestinationIsSameNode.php:31
-msgid "The destination has the same path as the source. No action has been performed."
-msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausgeführt."
+msgid ""
+"The destination has the same path as the source. No action has been "
+"performed."
+msgstr ""
+"Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht "
+"ausgeführt."
 
 #: Exception/DestinationIsOwnChild.php:26
 msgid "Destination is a Subfolder"
 msgstr "Ziel ist ein Unterordner"
 
 #: Exception/DestinationIsOwnChild.php:31
-msgid "The destination is a subfolder. It is not allowed to copy or move a folder into one of its subfolders."
-msgstr "Das Ziel ist ein Unterordner. Es ist nicht erlaubt einen Ordner in einen seiner Unterordner zu kopieren oder zu verschieben."
+msgid ""
+"The destination is a subfolder. It is not allowed to copy or move a folder "
+"into one of its subfolders."
+msgstr ""
+"Das Ziel ist ein Unterordner. Es ist nicht erlaubt einen Ordner in einen "
+"seiner Unterordner zu kopieren oder zu verschieben."
 
 #: Controller/Node.php:300
 msgid "you can't remove your own admin grant"
@@ -760,89 +821,8 @@ msgstr "Uploads Fortschritt"
 msgid "Total Uploads : "
 msgstr "Gesamt-Uploads : "
 
-#~ msgid "Default behavior when double-clicking on a Row"
-#~ msgstr "Standardverhalten beim Doppelklicken auf eine Zeile"
-
-#~ msgid "Defines which action should be executed by default when double-clicked."
-#~ msgstr "Legt fest, welche Aktion bei einem Doppelklick standardmäßig ausgeführt werden soll."
-
-#~ msgid "Invalid Filename"
-#~ msgstr "Ungültiger Dateiname"
-
-#~ msgid "Tags"
-#~ msgstr "Tags"
-
-#~ msgid "Quick Search"
-#~ msgstr "Schnellsuche"
-
-#~ msgid "Content Type"
-#~ msgstr "Inhaltstyp"
-
 msgid "File Contents"
 msgstr "Dateiinhalt"
-
-#~ msgid "Contenttype"
-#~ msgstr "Inhalts Typ"
-
-#~ msgid "If the data safe is activated, this folder and its contents can only be accessed if the data safe is open."
-#~ msgstr "Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
-
-#~ msgid "Send as E-Mail"
-#~ msgstr "Sende als E-Mail"
-
-#~ msgid "Files already exists"
-#~ msgstr "Datei(en) schon vorhanden"
-
-#~ msgid "Failure on create folder"
-#~ msgstr "Fehler beim anlegen des Ordners"
-
-#~ msgid "If data safe protection is activated, this folder and its contents can only be accessed if the data safe is open."
-#~ msgstr "Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
-
-#~ msgid "Public download links can be password protected. If left blank anyone who knows the link can download the selected files."
-#~ msgstr "Download Links können mit einem Passwort geschützt werden. Wenn kein Passwort angegeben ist, kann jeder der den Link kennt auf die selektierten Dateien zugreifen."
-
-#~ msgid "Allow to see, add and delete download links of files and folders"
-#~ msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
-
-#~ msgid "The destination has the same path the source. No action has been performed."
-#~ msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausgeführt."
-
-#~ msgid "Putting files in this folder is not allowed!"
-#~ msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
-
-#~ msgid "Url"
-#~ msgstr "URL"
-
-#~ msgid "This folder has own grants"
-#~ msgstr "Diese Ordner hat eigene Berechtigungen"
-
-#~ msgid "Grants of a folder also apply recursively for all of its sub folders as long they don't have own grants itself."
-#~ msgstr "Berechtigungen gelten ebenfalls rekursiv für alle Unterordner sofern diese nicht über eigene Berechtigungen verfügen."
-
-#~ msgid "If data safe protection is enabled, this folder and all it's contents is only shown if the data safe is opened."
-#~ msgstr "Wenn der Datentresor Schutz aktiviert ist, kann auf diesen Ordner und seine Inhalte nur zugegriffen werden wenn der Datentresor geöffnet ist."
-
-#~ msgid "Sorry, Tine 2.0 would like to show you the contents of the file displayed."
-#~ msgstr "Schade, gerne hätte Tine 2.0 Ihnen jetzt den Inhalt der Datei angezeigt."
-
-#~ msgid "We are happy make you a non-binding offer."
-#~ msgstr "Wir machen Ihnen gerne ein unverbindliches Angebot."
-
-#~ msgid "The Quota applies recursively for files and subfolders. Please note, the Effective Quota differs wehn a parent folder has set a lower quota."
-#~ msgstr "Das Kontingent gilt rekursiv für Dateien und Unterordner. Achtung: Das effektive Kontingent kann abweichen wenn ein übergeordneter Ordner eine geringeres Kontingent gesetzt hat."
-
-#~ msgid "Row double click default"
-#~ msgstr "Standardverhalten bei Doppelklick auf Zeile"
-
-#~ msgid "Defines which action should be executed on double click by default?"
-#~ msgstr "Legt fest, welche Aktion bei einem Doppelklick standardmäßig ausgeführt werden soll."
-
-#~ msgid "Serve anonymous downloads from a different URL. Make sure to setup proper rewrite rules."
-#~ msgstr "Anonyme Downloads von einer anderen URL ausliefern. Stellen sie sicher dass die rewrite Regeln entsprechend angepasst sind."
-
-#~ msgid "The destination has the same path the source has. No action has been performed."
-#~ msgstr "Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht ausgeführt."
 
 msgid "Copy Public Link"
 msgstr "Öffentlichen Link kopieren"
@@ -850,8 +830,12 @@ msgstr "Öffentlichen Link kopieren"
 msgid "Do you want to restart the failed uploads?"
 msgstr "Möchten Sie die nicht erfolgreich Datei(en) erneut hochladen?"
 
-msgid "You have unfinished uploads, Please check upload monitor and restart the failed uploads again."
-msgstr "Sie haben fehlgeschlagen Uploads, Bitte überprüfen Sie den Uploads Fortschritt und starten Sie die fehlgeschlagenen Uploads erneut."
+msgid ""
+"You have unfinished uploads, Please check upload monitor and restart the "
+"failed uploads again."
+msgstr ""
+"Sie haben fehlgeschlagen Uploads, Bitte überprüfen Sie den Uploads "
+"Fortschritt und starten Sie die fehlgeschlagenen Uploads erneut."
 
 msgid "Processing files..."
 msgstr "Dateien verarbeiten..."
@@ -867,3 +851,138 @@ msgstr "Komplette Uploads"
 
 msgid "Failed   Uploads"
 msgstr "Fehlgeschlagene Uploads"
+
+msgid "Default behavior when double-clicking on a Row"
+msgstr "Standardverhalten beim Doppelklicken auf eine Zeile"
+
+msgid ""
+"Defines which action should be executed by default when double-clicked."
+msgstr ""
+"Legt fest, welche Aktion bei einem Doppelklick standardmäßig ausgeführt "
+"werden soll."
+
+msgid "Invalid Filename"
+msgstr "Ungültiger Dateiname"
+
+msgid "Tags"
+msgstr "Tags"
+
+msgid "Quick Search"
+msgstr "Schnellsuche"
+
+msgid "Content Type"
+msgstr "Inhaltstyp"
+
+msgid "Contenttype"
+msgstr "Inhalts Typ"
+
+msgid ""
+"If the data safe is activated, this folder and its contents can only be "
+"accessed if the data safe is open."
+msgstr ""
+"Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen "
+"Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
+
+msgid "Send as E-Mail"
+msgstr "Sende als E-Mail"
+
+msgid "Files already exists"
+msgstr "Datei(en) schon vorhanden"
+
+msgid "Failure on create folder"
+msgstr "Fehler beim anlegen des Ordners"
+
+msgid ""
+"If data safe protection is activated, this folder and its contents can "
+"only be accessed if the data safe is open."
+msgstr ""
+"Wenn der Datenschutz aktiviert ist, kann auf diesen Ordner und seinen "
+"Inhalt nur zugegriffen werden, wenn der Datenschutz geöffnet ist."
+
+msgid ""
+"Public download links can be password protected. If left blank anyone who "
+"knows the link can download the selected files."
+msgstr ""
+"Download Links können mit einem Passwort geschützt werden. Wenn kein "
+"Passwort angegeben ist, kann jeder der den Link kennt auf die "
+"selektierten Dateien zugreifen."
+
+msgid "Allow to see, add and delete download links of files and folders"
+msgstr "Anzeigen, Hinzufügen und Löschen von Download Links erlauben"
+
+msgid ""
+"The destination has the same path the source. No action has been "
+"performed."
+msgstr ""
+"Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht "
+"ausgeführt."
+
+msgid "Putting files in this folder is not allowed!"
+msgstr "In diesem Ordner dürfen keine Dateien abgelegt werden!"
+
+msgid "Url"
+msgstr "URL"
+
+msgid "This folder has own grants"
+msgstr "Diese Ordner hat eigene Berechtigungen"
+
+msgid ""
+"Grants of a folder also apply recursively for all of its sub folders as "
+"long they don't have own grants itself."
+msgstr ""
+"Berechtigungen gelten ebenfalls rekursiv für alle Unterordner sofern "
+"diese nicht über eigene Berechtigungen verfügen."
+
+msgid ""
+"If data safe protection is enabled, this folder and all it's contents is "
+"only shown if the data safe is opened."
+msgstr ""
+"Wenn der Datentresor Schutz aktiviert ist, kann auf diesen Ordner und "
+"seine Inhalte nur zugegriffen werden wenn der Datentresor geöffnet ist."
+
+msgid ""
+"Sorry, Tine 2.0 would like to show you the contents of the file displayed."
+msgstr ""
+"Schade, gerne hätte Tine 2.0 Ihnen jetzt den Inhalt der Datei angezeigt."
+
+msgid "We are happy make you a non-binding offer."
+msgstr "Wir machen Ihnen gerne ein unverbindliches Angebot."
+
+msgid ""
+"The Quota applies recursively for files and subfolders. Please note, the "
+"Effective Quota differs wehn a parent folder has set a lower quota."
+msgstr ""
+"Das Kontingent gilt rekursiv für Dateien und Unterordner. Achtung: Das "
+"effektive Kontingent kann abweichen wenn ein übergeordneter Ordner eine "
+"geringeres Kontingent gesetzt hat."
+
+msgid "Row double click default"
+msgstr "Standardverhalten bei Doppelklick auf Zeile"
+
+msgid "Defines which action should be executed on double click by default?"
+msgstr ""
+"Legt fest, welche Aktion bei einem Doppelklick standardmäßig ausgeführt "
+"werden soll."
+
+msgid ""
+"Serve anonymous downloads from a different URL. Make sure to setup proper "
+"rewrite rules."
+msgstr ""
+"Anonyme Downloads von einer anderen URL ausliefern. Stellen sie sicher "
+"dass die rewrite Regeln entsprechend angepasst sind."
+
+msgid ""
+"The destination has the same path the source has. No action has been "
+"performed."
+msgstr ""
+"Das Ziel hat den selben Pfad wie die Quelle. Die Aktion wurde nicht "
+"ausgeführt."
+
+msgid "Do you really want to overwrite the selected file?"
+msgstr "Wollen Sie wirklich die ausgewählten Dateien überschreiben?"
+
+msgid "Manage shared filemanager favorites"
+msgstr "Gemeinsame Dateimanager-Favoriten verwalten"
+
+msgid "Create or update shared filemanager favorites'"
+msgstr "Gemeinsame Dateimanager-Favoriten erstellen oder bearbeiten"

@@ -94,7 +94,7 @@ class GDPR_Controller_DataProvenance extends Tinebase_Controller_Record_Abstract
         parent::_checkRight($_action);
     }
 
-    public static function modelConfigHook(array &$_fields)
+    public static function modelConfigHook(array &$_fields, Tinebase_ModelConfiguration $mc): void
     {
         if (GDPR_Config::ADB_CONTACT_DATA_PROVENANCE_MANDATORY_DEFAULT ===
                 GDPR_Config::getInstance()->{GDPR_Config::ADB_CONTACT_DATA_PROVENANCE_MANDATORY}) {
@@ -111,6 +111,20 @@ class GDPR_Controller_DataProvenance extends Tinebase_Controller_Record_Abstract
             $_fields[GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME][TMCC::VALIDATORS]
                 [Zend_Filter_Input::ALLOW_EMPTY] = true;
         }
+
+        $expanderDef = $mc->jsonExpander;
+        $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES]
+            [GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME] = [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    GDPR_Model_DataIntendedPurposeRecord::FLD_INTENDEDPURPOSE => [
+                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                            GDPR_Model_DataIntendedPurpose::FLD_NAME            => [],
+                            GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION     => [],
+                        ]
+                    ]
+                ]
+            ];
+        $mc->setJsonExpander($expanderDef);
     }
 
     public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $_modification)

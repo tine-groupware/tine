@@ -25,6 +25,8 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
 
     public const FLD_IS_SHARED = 'is_shared';
 
+    public const FLD_LAST_DATEV_SEND_DATE = 'last_datev_send_date';
+
     /**
      * invoice status
      */
@@ -45,7 +47,7 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Invoice'; // gettext('GENDER_Invoice')
         $_definition[self::RECORDS_NAME] = 'Invoices'; // ngettext('Invoice', 'Invoices', n)
 
-        $_definition[self::VERSION] = 1;
+        $_definition[self::VERSION] = 2;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
             self::NAME                      => self::TABLE_NAME,
@@ -93,6 +95,13 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
                         Sales_Controller_Document_Invoice::class . '::documentProformaNumberConfigOverride',
                 ],
             ],
+            self::FLD_LAST_DATEV_SEND_DATE       => [
+                self::LABEL                 => 'Last Datev send date', // _('Last Datev send date')
+                self::TYPE                  => self::TYPE_DATETIME,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                self::NULLABLE              => true,
+                self::SHY                   => true,
+            ],
         ]);
 
         $_definition[self::FIELDS][self::FLD_IS_SHARED] = [
@@ -118,9 +127,16 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
     {
         parent::transitionFrom($transition);
 
-        $this->{self::FLD_RECIPIENT_ID} = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}
-            ->getFirstRecord()->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
-            ->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID};
+        $sourceDoc = $transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->getFirstRecord();
+        switch ($sourceDoc->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL}) {
+            case Sales_Model_Document_Order::class:
+                $this->{self::FLD_RECIPIENT_ID} = $sourceDoc->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+                    ->{Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID};
+            case Sales_Model_Document_Invoice::class:
+                break;
+            default:
+                throw new Tinebase_Exception_SystemGeneric('transition from ' . $sourceDoc->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL} . ' to ' . static::class . ' not allowed');
+        }
 
         if (Sales_Config::INVOICE_DISCOUNT_SUM === $this->{self::FLD_INVOICE_DISCOUNT_TYPE}) {
             $this->_checkProductPrecursorPositionsComplete();

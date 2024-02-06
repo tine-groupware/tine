@@ -46,6 +46,8 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
+    public const TABLE_NAME = 'tree_nodes';
+
     // forbidden in windows, @see #202420
     const FILENAME_FORBIDDEN_CHARS_EXP = '/[\/\\\:*?"<>|]/';
 
@@ -111,7 +113,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 
         'idProperty'        => 'id',
         'table'             => [
-            'name'              => 'tree_nodes',
+            'name'              => self::TABLE_NAME,
             self::UNIQUE_CONSTRAINTS => [
                 'object_id'             => [
                     self::COLUMNS           => ['object_id', 'parent_id']
@@ -420,7 +422,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 ]
             ],
             'account_grants'                => [
-                self::OMIT_MOD_LOG              => false,
+                self::OMIT_MOD_LOG              => true,
                 self::DOCTRINE_IGNORE           => true,
                 self::TYPE                      => self::TYPE_VIRTUAL,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],

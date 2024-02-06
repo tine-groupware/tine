@@ -107,7 +107,7 @@ Tine.widgets.tags.TagToggleBox = Ext.extend(Ext.form.FormPanel, {
             '<tpl for=".">', 
                 '<div class="x-combo-list-item">',
                     '<input class="tagcheckel" type="checkbox" style="margin-right:5px" id="{values.id}" />' +
-                    '<div class="tb-grid-tags" style="margin-top:2px;background-color:{values.color};">&#160;</div>',
+                    '<div class="tb-grid-tags dark-reverse" style="margin-top:2px;background-color:{values.color};">&#160;</div>',
                     '<div class="x-widget-tag-tagitem-text" style="margin-top:1px" ext:qtip="',
                         '{[this.encode(values.name)]}',
                         '<tpl if="type == \'personal\' ">&nbsp;<i>(' + i18n._('personal') + ')</i></tpl>',

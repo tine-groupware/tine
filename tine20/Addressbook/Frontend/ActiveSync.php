@@ -126,6 +126,24 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
     protected $_defaultContainerPreferenceName = Addressbook_Preference::DEFAULTADDRESSBOOK;
 
     /**
+     * the constructor
+     *
+     * @param Tinebase_DateTime $_syncTimeStamp
+     */
+    public function __construct(Syncroton_Model_IDevice $_device, DateTime $_syncTimeStamp)
+    {
+        parent::__construct($_device, $_syncTimeStamp);
+
+        foreach (Addressbook_Controller_ContactProperties_Definition::getInstance()->getAll() as $cpDef) {
+            if (isset($cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP})) {
+                foreach ($cpDef->{Addressbook_Model_ContactProperties_Definition::FLD_ACTIVE_SYNC_MAP} as $key => $val) {
+                    $this->_mapping[$key] = $val;
+                }
+            }
+        }
+    }
+
+    /**
      * Search command handler
      * 
      * the search command is only a stub to make the AS Search command happy
@@ -155,21 +173,35 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
             __METHOD__ . '::' . __LINE__ . " contact data " . print_r($entry->toArray(), TRUE));
         
         $syncrotonContact = new Syncroton_Model_Contact();
-        
+
+        foreach ($entry::getConfiguration()->getJsonFacadeFields() as $fieldKey => $def) {
+            /** @var Tinebase_Record_JsonFacadeInterface $model */
+            $model = $def[Tinebase_ModelConfiguration_Const::CONFIG][Tinebase_ModelConfiguration_Const::RECORD_CLASS_NAME];
+            $model::jsonFacadeToJson($entry, $fieldKey, $def);
+        }
+
         foreach ($this->_mapping as $syncrotonProperty => $tine20Property) {
-            if ($this->_isEmptyValue($entry->$tine20Property)) {
+            $val = $entry;
+            foreach (explode('.', $tine20Property) as $pathPart) {
+                $val = $val->{$pathPart};
+                if (!is_object($val)) {
+                    break;
+                }
+            }
+
+            if ($this->_isEmptyValue($val)) {
                 // skip empty values
                 continue;
             }
             
-            switch($tine20Property) {
-                case 'adr_one_countryname':
-                case 'adr_two_countryname':
-                    $syncrotonContact->$syncrotonProperty = Tinebase_Translation::getCountryNameByRegionCode($entry->$tine20Property);
+            switch($syncrotonProperty) {
+                case 'businessAddressCountry':
+                case 'homeAddressCountry':
+                    $syncrotonContact->$syncrotonProperty = Tinebase_Translation::getCountryNameByRegionCode($val);
                     
                     break;
                     
-                case 'bday':
+                case 'birthday':
                     $syncrotonContact->$syncrotonProperty = $entry->$tine20Property;
                     
                    if ($this->_device->devicetype == Syncroton_Model_Device::TYPE_BLACKBERRY && version_compare($this->_device->getMajorVersion(), '10', '>=')) {
@@ -179,7 +211,7 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                     
                     break;
                     
-                case 'note':
+                case 'body':
                     $syncrotonContact->$syncrotonProperty = new Syncroton_Model_EmailBody(array(
                         'type' => Syncroton_Model_EmailBody::TYPE_PLAINTEXT,
                         'data' => $entry->$tine20Property
@@ -187,7 +219,7 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                     
                     break;
                     
-                case 'jpegphoto':
+                case 'picture':
                     try {
                         $syncrotonContact->$syncrotonProperty = $entry->getSmallContactImage();
                     } catch (Exception $e) {
@@ -196,14 +228,8 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                     
                     break;
                     
-                // @todo validate tags are working
-                case 'tags':
-                    $syncrotonContact->$syncrotonProperty = $entry->$tine20Property->name;
-                    
-                    break;
-                    
                 default:
-                    $syncrotonContact->$syncrotonProperty = $entry->$tine20Property;
+                    $syncrotonContact->$syncrotonProperty = $val;
                     
                     break;
             }
@@ -228,19 +254,37 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
         }
         unset($contact->jpegphoto);
         $mc = Addressbook_Model_Contact::getConfiguration();
-        $fields = $mc->getFields();
+        $contactFields = $mc->getFields();
 
         foreach ($this->_mapping as $fieldName => $value) {
+
+            $propPart2 = null;
+            @[$propPart1, $propPart2] = explode('.', $value);
+            if (null !== $propPart2) {
+                $property = $propPart2;
+                if (null === ($obj = $contact->$propPart1)) {
+                    if (Tinebase_ModelConfiguration_Const::TYPE_RECORD !== $contactFields[$propPart1][Tinebase_ModelConfiguration_Const::TYPE]) {
+                        throw new Tinebase_Exception_NotImplemented('field ' . $propPart1 . ' is not of type record');
+                    }
+                    $obj = new $contactFields[$propPart1][Tinebase_ModelConfiguration_Const::CONFIG][Tinebase_ModelConfiguration_Const::RECORD_CLASS_NAME]([], true);
+                    $contact->$propPart1 = $obj;
+                }
+                $fields = $obj::getConfiguration()->getFields();
+            } else {
+                $obj = $contact;
+                $property = $propPart1;
+                $fields = $contactFields;
+            }
+
             if (!isset($data->$fieldName)) {
-                $contact->$value = null;
-                
+                $obj->$property = null;
                 continue;
             }
 
-            $maxLength = isset($fields[$value]['length']) ? $fields[$value]['length'] : null;
-            
-            switch ($value) {
-                case 'jpegphoto':
+            $maxLength = $fields[$property]['length'] ?? null;
+
+            switch ($fieldName) {
+                case 'picture':
                     if(!empty($data->$fieldName)) {
                         $devicePhoto = $data->$fieldName;
                         $contact->setSmallContactImage($devicePhoto);
@@ -252,76 +296,71 @@ class Addressbook_Frontend_ActiveSync extends ActiveSync_Frontend_Abstract imple
                     
                     break;
                     
-                case 'bday':
-                    $contact->$value = new Tinebase_DateTime($data->$fieldName);
+                case 'birthday':
+                    $obj->$property = new Tinebase_DateTime($data->$fieldName);
                     
                     if ($this->_device->devicetype == Syncroton_Model_Device::TYPE_IPHONE && $this->_device->getMajorVersion() < 800) {
                         // iOS < 4 & webos < 2.1 send birthdays to the entered date, but the time the birthday got entered on the device
                         // actually iOS < 4 sometimes sends the bday at noon but the timezone is not clear
                         // -> we don't trust the time part and set the birthdays timezone to the timezone the user has set in tine
                         $userTimezone = Tinebase_Core::getUserTimezone();
-                        $contact->$value = new Tinebase_DateTime($contact->bday->setTime(0,0,0)->format(Tinebase_Record_Abstract::ISO8601LONG), $userTimezone);
-                        $contact->$value->setTimezone('UTC');
+                        $obj->$property = new Tinebase_DateTime($obj->$property->setTime(0,0,0)->format(Tinebase_Record_Abstract::ISO8601LONG), $userTimezone);
+                        $obj->$property->setTimezone('UTC');
                     } elseif ($this->_device->devicetype == Syncroton_Model_Device::TYPE_BLACKBERRY && version_compare($this->_device->getMajorVersion(), '10', '>=')) {
                         // BB 10+ expects birthday to be at noon
-                        $contact->$value->subHour(12);
+                        $obj->$property->subHour(12);
                     }
                     
                     break;
                     
-                case 'adr_one_countryname':
-                case 'adr_two_countryname':
-                    $contact->$value = Tinebase_Translation::getRegionCodeByCountryName($data->$fieldName);
-                    break;
-
-                case 'adr_one_street':
-                case 'adr_two_street':
-                case 'title':
-                    $this->_truncateField($contact, $value, $data->$fieldName, $maxLength);
+                case 'businessAddressCountry':
+                case 'homeAddressCountry':
+                    $obj->$property = Tinebase_Translation::getRegionCodeByCountryName($data->$fieldName);
                     break;
                     
-                case 'email':
-                case 'email_home':
+                case 'email1Address':
+                case 'email2Address':
+                case 'email3Address':
                     // android sends email address as
                     // Lars Kneschke <l.kneschke@metaways.de>
                     if (preg_match('/(.*)<(.+@[^@]+)>/', $data->$fieldName, $matches)) {
-                        $contact->$value = trim($matches[2]);
+                        $obj->$property = trim($matches[2]);
                     } else {
-                        $contact->$value = $data->$fieldName;
+                        $obj->$property = $data->$fieldName;
                     }
                     
                     break;
                 
-                case 'note':
+                case 'body':
                     // @todo check $data->$fieldName->Type and convert to/from HTML if needed
                     if ($data->$fieldName instanceof Syncroton_Model_EmailBody) {
-                        $contact->$value = $data->$fieldName->data;
+                        $obj->$property = $data->$fieldName->data;
                     } else {
-                        $contact->$value = null;
+                        $obj->$property = null;
                     }
                     
                     break;
                     
-                case 'url':
+                case 'webPage':
                     // remove facebook urls
                     if (! preg_match('/^fb:\/\//', $data->$fieldName)) {
-                        $contact->$value = $data->$fieldName;
+                        $obj->$property = $data->$fieldName;
                     }
                     
                     break;
                     
                 default:
-                    $this->_truncateField($contact, $value, $data->$fieldName, $maxLength);
+                    $this->_truncateField($obj, $property, $data->$fieldName, $maxLength);
                     break;
             }
 
-            if (in_array($fields[$value]['type'], [
+            if (in_array($fields[$property]['type'], [
                 Tinebase_Record_NewAbstract::TYPE_STRING,
                 Tinebase_Record_NewAbstract::TYPE_STRING_AUTOCOMPLETE,
                 Tinebase_Record_NewAbstract::TYPE_FULLTEXT,
                 Tinebase_Record_NewAbstract::TYPE_TEXT,
             ])) {
-                $contact->$value = Tinebase_Core::filterInputForDatabase($contact->$value);
+                $obj->$property = Tinebase_Core::filterInputForDatabase($obj->$property);
             }
         }
 

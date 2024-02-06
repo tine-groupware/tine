@@ -1038,7 +1038,11 @@ abstract class Tinebase_Config_Abstract implements Tinebase_Config_Interface
      */
     public static function isReady()
     {
-        $configFile = @file_get_contents('config.inc.php', FILE_USE_INCLUDE_PATH);
+        try {
+            $configFile = @file_get_contents('config.inc.php', FILE_USE_INCLUDE_PATH);
+        } catch (ErrorException $e) {
+            return false;
+        }
         
         return !! $configFile;
     }

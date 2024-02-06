@@ -52,6 +52,11 @@ class Setup_Controller
      * @var array
      */
     protected $_emailConfigKeys = array();
+
+    /**
+     * @var Zend_Db_Adapter_Abstract|null
+     */
+    protected ?Zend_Db_Adapter_Abstract $_db;
     
     /**
      * number of updated apps
@@ -121,7 +126,7 @@ class Setup_Controller
             $this->_db = Setup_Core::getDb();
             $this->_backend = Setup_Backend_Factory::factory();
         } else {
-            $this->_db = NULL;
+            $this->_db = null;
         }
         
         $this->_emailConfigKeys = array(
@@ -2093,7 +2098,7 @@ class Setup_Controller
             }
             $application = new Tinebase_Model_Application($appData);
 
-            if ('Tinebase' !== $application->name) {
+            if (Tinebase_Config::APP_NAME !== $application->name) {
                 $application = Tinebase_Application::getInstance()->addApplication($application);
             }
 
@@ -2101,19 +2106,9 @@ class Setup_Controller
             $this->_createModelConfigSchema($_xml->name);
 
             // traditional xml declaration
-            $createdTables = [];
-            if (isset($_xml->tables)) {
-                foreach ($_xml->tables[0] as $tableXML) {
-                    $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
-                    if ($this->_createTable($table) !== true) {
-                        // table was gracefully not created, maybe due to missing requirements, just continue
-                        continue;
-                    }
-                    $createdTables[] = $table;
-                }
-            }
+            $createdTables = $this->createXmlTables($_xml);
 
-            if ('Tinebase' === $application->name) {
+            if (Tinebase_Config::APP_NAME === $application->name) {
                 $application = Tinebase_Application::getInstance()->addApplication($application);
                 $tbInstance = Setup_Core::getApplicationInstance($application->name, '', true);
                 Setup_SchemaTool::updateApplicationTable($tbInstance->getModels(true /* MCv2only */));
@@ -2178,10 +2173,44 @@ class Setup_Controller
                         Tinebase_Application::STATE_UPDATES, json_encode($state));
                 }
             }
+
+            if (Tinebase_Config::APP_NAME !== $application->name) {
+                foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
+                    if ($app->name === $application->name) continue;
+
+                    /** @var Setup_Initialize $classname */
+                    $classname = "{$app->name}_Setup_Initialize";
+                    if (class_exists($classname)) {
+                        $classname::applicationInstalled($application);
+                    }
+                }
+            }
         } catch (Exception $e) {
             Tinebase_Exception::log($e, /* suppress trace */ false);
             throw $e;
         }
+    }
+
+    /**
+     * @param SimpleXMLElement $xml
+     * @return array
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    public function createXmlTables(SimpleXMLElement $xml): array
+    {
+        $createdTables = [];
+        if (isset($xml->tables)) {
+            foreach ($xml->tables[0] as $tableXML) {
+                $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
+                if ($this->_backend->tableExists($table->name) || $this->_createTable($table) !== true) {
+                    Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Table exists or was gracefully not created, maybe due to missing requirements.');
+                    continue;
+                }
+                $createdTables[] = $table;
+            }
+        }
+        return $createdTables;
     }
 
     protected function _createModelConfigSchema(string $appName): void
@@ -2196,9 +2225,15 @@ class Setup_Controller
         }
     }
 
-    protected function _createTable($table)
+    /**
+     * @param Setup_Backend_Schema_Table_Xml $table
+     * @return bool return true on success, false in case of graceful failure, due to missing requirements for example
+     * @throws Tinebase_Exception_Backend_Database
+     */
+    protected function _createTable(Setup_Backend_Schema_Table_Xml $table): bool
     {
-        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating table: ' . $table->name);
+        if (Setup_Core::isLogLevel(Zend_Log::INFO)) Setup_Core::getLogger()->info(
+            __METHOD__ . '::' . __LINE__ . ' Creating table: ' . $table->name);
 
         try {
             $result = $this->_backend->createTable($table);
@@ -2422,7 +2457,7 @@ class Setup_Controller
             }
         }
         
-        if ($_application->name != 'Tinebase') {
+        if ($_application->name !== Tinebase_Config::APP_NAME) {
             if (!$uninstallAll) {
                 Tinebase_Relations::getInstance()->removeApplication($_application->name);
 
@@ -2439,6 +2474,16 @@ class Setup_Controller
             
             // remove application from table of installed applications
             Tinebase_Application::getInstance()->deleteApplication($_application);
+
+            foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
+                if ($app->name === $_application->name) continue;
+
+                /** @var Setup_Uninitialize $classname */
+                $classname = "{$app->name}_Setup_Uninitialize";
+                if (class_exists($classname)) {
+                    $classname::applicationUninstalled($_application);
+                }
+            }
         }
 
         try {
@@ -2883,7 +2928,9 @@ class Setup_Controller
             $tables[] = SQL_TABLE_PREFIX . 'felamimail_attachmentcache';
         }
 
-        // TODO add UserManual content tables?
+        $tables[] = SQL_TABLE_PREFIX . 'logentries';
+
+        // TODO add UserManual content tables? need to re-fetch usermanual content after restore
 
         return $tables;
     }

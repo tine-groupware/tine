@@ -66,6 +66,7 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
             });
             
             this.getValue = () => {
+                // we only change value once user update the password
                 if (this.revealedPassword && this.value === this.revealedPassword) {
                     this.value = '';
                 }
@@ -140,6 +141,9 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
     },
 
     onTrigger1Click: async function () {
+        if(this.readOnly || this.disabled){
+            return;
+        }
         this.triggers[0][(this.locked ? 'remove' : 'add') + 'Class']('locked');
         
         if (this.allowBrowserPasswordManager) {
@@ -163,6 +167,9 @@ Tine.Tinebase.widgets.form.PasswordTriggerField = Ext.extend(Ext.form.TwinTrigge
 
     onTrigger2Click: function () {
         // NOTE: password fields can not be copied
+        if(this.readOnly || this.disabled){
+            return;
+        }
         var type = this.el.dom.type;
         this.el.dom.type = 'text';
         this.el.dom.select();

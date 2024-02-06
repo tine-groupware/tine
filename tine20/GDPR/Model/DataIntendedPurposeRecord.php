@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -26,6 +26,7 @@
 class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
 {
     const MODEL_NAME_PART = 'DataIntendedPurposeRecord';
+    public const FLD_INTENDEDPURPOSE = 'intendedPurpose';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -40,7 +41,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version' => 1,
+        'version' => 2,
         'recordName' => 'Data intended purpose',
         'recordsName' => 'Data intended purposes', // ngettext('Data intended purpose', 'Data intended purposes', n)
         'titleProperty' => 'id',
@@ -65,7 +66,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
 
         self::TABLE => [
             self::NAME      => 'gdpr_dataintendedpurposerecords',
-            self::UNIQUE_CONSTRAINTS   => [
+            self::INDEXES   => [
                 'intendedPurpose'       => [
                     self::COLUMNS           => ['intendedPurpose', 'record'],
                 ],
@@ -88,8 +89,27 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
             ],
         ],
 
+        self::LANGUAGES_AVAILABLE => [
+            self::TYPE => self::TYPE_KEY_FIELD,
+            self::NAME => GDPR_Config::LANGUAGES_AVAILABLE,
+            self::CONFIG => [
+                self::APP_NAME => GDPR_Config::APP_NAME,
+            ],
+        ],
+        
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_INTENDEDPURPOSE => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        GDPR_Model_DataIntendedPurpose::FLD_NAME            => [],
+                        GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION     => [],
+                    ]
+                ]
+            ],
+        ],
+
         self::FIELDS => [
-            'intendedPurpose'       => [
+            self::FLD_INTENDEDPURPOSE       => [
                 self::TYPE              => self::TYPE_RECORD,
                 self::LENGTH            => 40,
                 self::CONFIG            => [
@@ -107,7 +127,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::DISABLED          => true,
             ],
             'agreeDate' => [
-                self::TYPE              => self::TYPE_DATE,
+                self::TYPE              => self::TYPE_DATETIME,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Agreement date', // _('Agreement date')
             ],
@@ -119,10 +139,17 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::LABEL             => 'Agreement comment', // _('Agreement comment')
             ],
             'withdrawDate' => [
-                self::TYPE              => self::TYPE_DATE,
+                self::TYPE              => self::TYPE_DATETIME,
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL             => 'Withdraw date', // _('Withdraw date')
+                self::FILTER_DEFINITION => [
+                    self::FILTER            => Tinebase_Model_Filter_Date::class,
+                    self::OPTIONS           => [
+                        Tinebase_Model_Filter_Date::BEFORE_OR_IS_NULL => true,
+                        Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL  => true,
+                    ]
+                ],
             ],
             'withdrawComment' => [
                 self::TYPE              => self::TYPE_STRING,

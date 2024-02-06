@@ -36,6 +36,8 @@
 Ext.data.Record = function(data, id){
     // if no id, call the auto id method
     this.id = (id || id === 0) ? id : Ext.data.Record.id(this);
+    Object.assign(this, data.__meta || {});
+    delete(data.__meta);
     this.data = data || {};
 };
 
@@ -172,6 +174,8 @@ Ext.data.Record.prototype = {
      */
     phantom : false,
 
+    __metaFields : ['dirty', 'editing', 'error', 'modified', 'phantom'],
+
     // private
     join : function(store){
         /**
@@ -182,6 +186,29 @@ Ext.data.Record.prototype = {
         this.store = store;
     },
 
+    getData: function() {
+        return Object.assign({__meta: {
+            dirty: this.dirty,
+            editing: this.editing,
+            error: this.error,
+            modified: this.modified,
+            phantom: this.phantom
+        }}, this.data);
+    },
+
+    setData: function(data) {
+        _.forEach(data, (v,k) => {
+            if (k === '__meta') {
+                _.forEach(this.__metaFields, (m) => {
+                    if (v.hasOwnProperty(m)) {
+                        this[m] = v[m];
+                    }
+                });
+            } else {
+                this.set(v, k);
+            }
+        })
+    },
     /**
      * Set the {@link Ext.data.Field#name named field} to the specified value.  For example:
      * <pre><code>
@@ -217,6 +244,7 @@ rec.{@link #commit}(); // updates the view
      * @param {String/Object/Array} value The value to set the field to.
      */
     set : function(name, value){
+        Tine.Tinebase.common.assertComparable(value);
         var encode = Ext.isPrimitive(value) ? String : Ext.encode;
         if(encode(this.data[name]) == encode(value)) {
             return;
@@ -232,6 +260,14 @@ rec.{@link #commit}(); // updates the view
         if(!this.editing){
             this.afterEdit();
         }
+    },
+
+    /**
+     * sets the id of the record
+     */
+    setId: function(id) {
+        this.id = id;
+        return this.set('id', id);
     },
 
     // private
@@ -341,7 +377,8 @@ rec.{@link #commit}(); // updates the view
     getChanges : function(){
         var m = this.modified, cs = {};
         for(var n in m){
-            if(m.hasOwnProperty(n)){
+            const encode = Ext.isPrimitive(this.modified[n]) ? String : Ext.encode;
+            if(m.hasOwnProperty(n) && encode(this.modified[n]) !== encode(this.data[n])){
                 cs[n] = this.data[n];
             }
         }

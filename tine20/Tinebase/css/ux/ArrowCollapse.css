@@ -5,14 +5,14 @@
 }
 
 .ux-arrowcollapse .x-tool-toggle {
-    background:#fff url(../../../library/ExtJS/resources/images/default/tree/arrows.gif) no-repeat -18px 0;
+    background:transparent url(../../../library/ExtJS/resources/images/default/tree/arrows.gif) no-repeat -18px 0;
     position: relative;
     top: 8px;
     float: left;
 }
 
 .ux-arrowcollapse-plain .x-tool-toggle {
-    background-color: #DFE8F6;
+    background-color: transparent;
 }
 
 .x-panel-collapsed .ux-arrowcollapse-header .x-tool-toggle {

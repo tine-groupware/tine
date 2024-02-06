@@ -147,7 +147,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
             
             const visibleColumns = [];
             _.each(this.cm.columns, function(column){ 
-                if(column.hidden == false) {
+                if(column.hidden != true) {
                     visibleColumns.push({'identifier': column.dataIndex, 'header': column.header})
                 }
             });
@@ -201,7 +201,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
                     title: window.i18n._('Choose Export Location'),
                     questionText: window.i18n._('How would you like to save your export?'),
                     height: 200,
-                    allowCancel: false,
+                    allowCancel: true,
                     options: locationOptions
                 })
                 switch (location) {

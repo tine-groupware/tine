@@ -66,6 +66,8 @@ class HumanResources_Controller_FreeTimeTests extends HumanResources_TestCase
                 ['field' => 'container_id', 'operator' => 'equals', 'value' => $division->{HumanResources_Model_Division::FLD_FREE_TIME_CAL}],
             ]));
         $this->assertSame(2, $events->count());
+
+        $this->assertSame(Calendar_Model_Attender::STATUS_ACCEPTED, $events->getFirstRecord()->attendee->getFirstRecord()->status);
     }
 
     public function testGetRemainingVacationDays()

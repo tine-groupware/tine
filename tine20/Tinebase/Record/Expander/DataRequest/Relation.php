@@ -6,7 +6,7 @@
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -14,6 +14,7 @@ class Tinebase_Record_Expander_DataRequest_Relation extends Tinebase_Record_Expa
 {
     protected $_model;
     protected $_backend;
+    protected $_ids;
 
     public function __construct($_model, $_backend, $_ids, $_callback)
     {

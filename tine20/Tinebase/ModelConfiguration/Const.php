@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  ModelConfiguration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -17,69 +17,72 @@
  */
 
 class Tinebase_ModelConfiguration_Const {
-    const ADD_FILTERS = 'addFilters';
-    const APPLICATION = 'application';
-    const APP_NAME = 'appName';
-    const ASSOCIATIONS = 'associations';
-    const AUTOINCREMENT = 'autoincrement';
-    const AVAILABLE_MODELS = 'availableModels';
+    public const ADD_FILTERS = 'addFilters';
+    public const APPLICATION = 'application';
+    public const APP_NAME = 'appName';
+    public const ASSOCIATIONS = 'associations';
+    public const AUTOINCREMENT = 'autoincrement';
+    public const AVAILABLE_MODELS = 'availableModels';
 
     /**
      * additional boxLabel for checkboxes
      */
-    const BOX_LABEL = 'boxLabel';
+    public const BOX_LABEL = 'boxLabel';
 
-    const CASCADE = 'CASCADE';
-    const CONFIG = 'config';
-    const CONTROLLER = 'controller';
-    const CONTROLLER_CLASS_NAME = 'controllerClassName';
-    const CONTROLLER_HOOK_BEFORE_UPDATE = 'controllerHookBeforeUpdate';
-    const CONVERTERS = 'converters';
-    const COLUMNS = 'columns';
-    const COPY_OMIT = 'copyOmit';
-    const COPY_RELATIONS = 'copyRelations';
-    const CREATE_MODULE = 'createModule';
-    const CURRENT_TIMESTAMP = 'CURRENT_TIMESTAMP';
+    public const CASCADE = 'CASCADE';
+    public const CONFIG = 'config';
+    public const CONTROLLER = 'controller';
+    public const CONTROLLER_CLASS_NAME = 'controllerClassName';
+    public const CONTROLLER_HOOK_BEFORE_UPDATE = '_controllerHookBeforeUpdate';
+    public const CONVERTERS = 'converters';
+    public const COLUMNS = 'columns';
+    public const COPY_OMIT = 'copyOmit';
+    public const COPY_RELATIONS = 'copyRelations';
+    public const CREATE_MODULE = 'createModule';
+    public const CURRENT_TIMESTAMP = 'CURRENT_TIMESTAMP';
 
-    const DB_COLUMNS = 'dbColumns';
+    public const DB_COLUMNS = 'dbColumns';
     /**
      * default sort info
      *
      * example: ['field' => 'number', 'direction' => 'DESC']
      */
-    const DEFAULT_SORT_INFO = 'defaultSortInfo';
-    const DEFAULT_VAL = 'default';
+    public const DEFAULT_SORT_INFO = 'defaultSortInfo';
+    public const DEFAULT_VAL = 'default';
     /**
      * config for default value
      */
-    const DEFAULT_VAL_CONFIG = 'defaultValConfig';
-    const DEGREE = 'degree';
-    const DELEGATED_ACL_FIELD = 'delegateAclField';
-    const DENORMALIZATION_CONFIG = 'denormalizationConfig';
-    const DENORMALIZATION_OF = 'denormalizationOf';
+    public const DEFAULT_VAL_CONFIG = 'defaultValConfig';
+    public const DEGREE = 'degree';
+    public const DELEGATED_ACL_FIELD = 'delegateAclField';
+    public const DENORMALIZATION_CONFIG = 'denormalizationConfig';
+    public const DENORMALIZATION_OF = 'denormalizationOf';
     /**
      * valid vor type 'records' - means records are governed (not independent)
      */
-    const DEPENDENT_RECORDS = 'dependentRecords';
-    const DESCRIPTION = 'description'; // e.g. Tinebase_Model_Grants
+    public const DEPENDENT_RECORDS = 'dependentRecords';
+    public const DELAY_DEPENDENT_RECORDS = 'delayDependentRecords';
+    public const DESCRIPTION = 'description'; // e.g. Tinebase_Model_Grants
     /**
      * UI ONLY - If this is set to true, the field can't be updated and will not be shown in the frontend
      */
-    const DISABLED = 'disabled';
-    const DOCTRINE_IGNORE = 'doctrineIgnore';
+    public const DISABLED = 'disabled';
+    public const DOCTRINE_IGNORE = 'doctrineIgnore';
+    /** use this type for doctrine mapping instead of normal type */
+    public const DOCTRINE_MAPPING_TYPE = 'doctrineMapType';
 
-    const EXPORT = 'export';
-    const EXPOSE_HTTP_API = 'exposeHttpApi';
-    const EXPOSE_JSON_API = 'exposeJsonApi';
-    const EXTENDS_CONTAINER = 'extendsContainer';
+    public const EXPORT = 'export';
+    public const EXPOSE_HTTP_API = 'exposeHttpApi';
+    public const EXPOSE_JSON_API = 'exposeJsonApi';
+    public const EXTENDS_CONTAINER = 'extendsContainer';
 
-    const FIELD = 'field';
-    const FIELDS = 'fields';
-    const FIELD_NAME = 'fieldName';
-    const FILTER = 'filter';
-    const FILTER_CLASS_NAME = 'filterClassName';
-    const FILTER_DEFINITION = 'filterDefinition';
-    const FILTER_GROUP = 'filtergroup';
+    public const FIELD = 'field';
+    public const FIELDS = 'fields';
+    public const FIELD_NAME = 'fieldName';
+    public const FILTER = 'filter';
+    public const FILTER_CLASS_NAME = 'filterClassName';
+    public const FILTER_DEFINITION = 'filterDefinition';
+    public const FILTER_GROUP = 'filtergroup';
     /**
      * holds additional filters for the record
      *
@@ -93,165 +96,186 @@ class Tinebase_ModelConfiguration_Const {
                 ]],
             ],
      */
-    const FILTER_MODEL = 'filterModel';
-    const FILTER_OPTIONS = 'filterOptions';
-    const FLAGS = 'flags';
-    const FLD_ACCOUNT_GRANTS = 'account_grants';
-    const FLD_CONTAINER_ID = 'container_id';
-    const FLD_DELETED_TIME = 'deleted_time';
-    const FLD_GRANTS = 'grants';
-    const FLD_LOCALLY_CHANGED = 'locally_changed';
-    const FLD_ORIGINAL_ID = 'original_id';
-    const FLD_TAGS = 'tags';
-    const FORCE_VALUES = 'forceValues';
-    const FUNCTION = 'function';
+    public const FILTER_MODEL = 'filterModel';
+    public const FILTER_OPTIONS = 'filterOptions';
+    public const FLAGS = 'flags';
+    public const FLD_ACCOUNT_GRANTS = 'account_grants';
+    public const FLD_CONTAINER_ID = 'container_id';
+    public const FLD_DELETED_TIME = 'deleted_time';
+    public const FLD_GRANTS = 'grants';
+    public const FLD_LOCALLY_CHANGED = 'locally_changed';
+    public const FLD_ORIGINAL_ID = 'original_id';
+    public const FLD_TAGS = 'tags';
+    public const FORCE_VALUES = 'forceValues';
+    /**
+     * valid for the config of fields of type record(s). Defines virtual field in foreign record which holds own record(s)
+     */
+    public const FOREIGN_FIELD = 'foreignField';
+    public const FUNCTION = 'function';
 
-    const GRANTS_MODEL = 'grantsModel';
-    const GROUP = 'group';
+    public const GRANTS_MODEL = 'grantsModel';
+    public const GROUP = 'group';
 
-    const HAS_ATTACHMENTS = 'hasAttachments';
-    const HAS_CUSTOM_FIELDS = 'hasCustomFields';
-    const HAS_DELETED_TIME_UNIQUE = 'hasDeletedTimeUnique';
-    const HAS_NOTES = 'hasNotes';
-    const CONTAINER_PROPERTY = 'containerProperty';
-    const HAS_PERSONAL_CONTAINER = 'hasPersonalContainer';
-    const CONTAINER_NAME = 'containerName';
-    const CONTAINERS_NAME = 'containersName';
-    const HAS_RELATIONS = 'hasRelations';
-    const HAS_SYSTEM_CUSTOM_FIELDS = 'hasSystemCustomFields';
-    const HAS_TAGS = 'hasTags';
-    const HAS_XPROPS = 'hasXProps';
+    public const HAS_ALARMS = 'hasAlarms';
+    public const HAS_ATTACHMENTS = 'hasAttachments';
+    public const HAS_CUSTOM_FIELDS = 'hasCustomFields';
+    public const HAS_DELETED_TIME_UNIQUE = 'hasDeletedTimeUnique';
+    public const HAS_NOTES = 'hasNotes';
+    public const CONTAINER_PROPERTY = 'containerProperty';
+    public const HAS_PERSONAL_CONTAINER = 'hasPersonalContainer';
+    public const CONTAINER_NAME = 'containerName';
+    public const CONTAINERS_NAME = 'containersName';
+    public const HAS_RELATIONS = 'hasRelations';
+    public const HAS_SYSTEM_CUSTOM_FIELDS = 'hasSystemCustomFields';
+    public const HAS_TAGS = 'hasTags';
+    public const HAS_XPROPS = 'hasXProps';
 
-    const ID = 'id';
-    const ID_GENERATOR_TYPE = 'idGeneratorType';
-    const IGNORE_ACL = 'ignoreACL';
-    const INDEXES = 'indexes';
-    const INPUT_FILTERS = 'inputFilters';
-    const IS_DEPENDENT = 'isDependent';
+    public const ID = 'id';
+    public const ID_GENERATOR_TYPE = 'idGeneratorType';
+    public const IGNORE_ACL = 'ignoreACL';
+    public const INDEXES = 'indexes';
+    public const INPUT_FILTERS = 'inputFilters';
+    public const IS_DEPENDENT = 'isDependent';
     /**
      * flags a model as metadata model for the configured field in the own model
      * this configured field is a record which gets additional information/metadata
      */
-    const IS_METADATA_MODEL_FOR = 'isMetadataModelFor';
-    const IS_PARENT = 'isParent';
-    const IS_VIRTUAL = 'isVirtual';
+    public const IS_METADATA_MODEL_FOR = 'isMetadataModelFor';
+    /**
+     * valid vor type record - means the configured model is the parent of this record
+     */
+    public const IS_PARENT = 'isParent';
+    public const IS_PERSPECTIVE = 'isPerspective';
+    public const IS_VIRTUAL = 'isVirtual';
 
-    const JOIN_COLUMNS = 'joinColumns';
-    const JSON_EXPANDER = 'jsonExpander';
+    public const JOIN_COLUMNS = 'joinColumns';
+    public const JSON_EXPANDER = 'jsonExpander';
+    public const JSON_FACADE = 'jsonFacade';
 
-    const LABEL = 'label';
-    const LANGUAGES_AVAILABLE = 'languagesAvailable';
-    const LENGTH = 'length';
+    public const LABEL = 'label';
+    public const LANGUAGES_AVAILABLE = 'languagesAvailable';
+    public const LENGTH = 'length';
 
-    const MAPPED_BY = 'mappedBy';
-    const MODEL_NAME = 'modelName';
-    const MODLOG_ACTIVE = 'modlogActive';
+    public const MAPPED_BY = 'mappedBy';
+    public const MODEL_NAME = 'modelName';
+    public const MODLOG_ACTIVE = 'modlogActive';
 
-    const NAME = 'name';
-    const NORESOLVE = 'noResolve';
-    const NULLABLE = 'nullable';
+    public const NAME = 'name';
+    public const NORESOLVE = 'noResolve';
+    public const NULLABLE = 'nullable';
 
-    const OMIT_MOD_LOG = 'modlogOmit';
-    const ON_DELETE = 'onDelete';
-    const ON_UPDATE = 'onUpdate';
-    const OPTIONS = 'options';
-    const ORDER = 'order';
+    public const OMIT_MOD_LOG = 'modlogOmit';
+    public const ON_DELETE = 'onDelete';
+    public const ON_UPDATE = 'onUpdate';
+    public const OPTIONS = 'options';
+    public const ORDER = 'order';
     // used for example by system customfields. Tells the receiving model, that this property originates from a different app
     // relevant for translation, keyfields, etc.
-    const OWNING_APP = 'owningApp';
+    public const OWNING_APP = 'owningApp';
 
-    const PAGING = 'paging';
-    const PERSISTENT = 'persistent';
+    public const PAGING = 'paging';
+    public const PERSISTENT = 'persistent';
+    public const PERSPECTIVE_CONVERTERS = 'perspectiveConverters';
+    public const PERSPECTIVE_DEFAULT = 'perspectiveDefault';
 
-    const QUERY_FILTER = 'queryFilter';
+    public const QUERY_FILTER = 'queryFilter';
 
     /**
      * If this is set to true, the field can't be updated in BE and will be shown as readOnly in the frontend
+     * if set bellow self::UI_CONFIG server can update field
      */
-    const READ_ONLY = 'readOnly';
-    const REFERENCED_COLUMN_NAME = 'referencedColumnName';
-    const REF_ID_FIELD = 'refIdField';
-    const REF_MODEL_FIELD = 'refModelField';
-    const RECORD_CLASS_NAME = 'recordClassName';
-    const RECORD_NAME = 'recordName';
-    const RECORDS_NAME = 'recordsName';
-    const RECURSIVE_RESOLVING = 'recursiveResolving';
-    const REQUIRED_GRANTS = 'requiredGrants';
+    public const READ_ONLY = 'readOnly';
+    public const REFERENCED_COLUMN_NAME = 'referencedColumnName';
+    /**
+     * valid for the config of fields of type record(s). Defines field in foreign record which holds id to own record(s)
+     */
+    public const REF_ID_FIELD = 'refIdField';
+    public const REF_MODEL_FIELD = 'refModelField';
+    public const RECORD_CLASS_NAME = 'recordClassName';
+    public const RECORD_NAME = 'recordName';
+    public const RECORDS_NAME = 'recordsName';
+    public const RECURSIVE_RESOLVING = 'recursiveResolving';
+    public const REQUIRED_GRANTS = 'requiredGrants';
     /**
      * UI only -> required right to see/use module
      */
-    const REQUIRED_RIGHT = 'requiredRight';
-    const RESOLVE_DELETED = 'resolveDeleted';
-    const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
+    public const REQUIRED_RIGHT = 'requiredRight';
+    public const RESOLVE_DELETED = 'resolveDeleted';
+    public const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 
     /**
      * frontends do not show this field in grids per default
      */
-    const SHY = 'shy';
-    const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
-    const SPECIAL_TYPE = 'specialType';
-    const SPECIAL_TYPE_DISCOUNT = 'discount';
-    const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
-    const SPECIAL_TYPE_PASSWORD = 'password';
-    const SPECIAL_TYPE_PERCENT = 'percent';
-    const STORAGE = 'storage';
-    const SUPPORTED_FORMATS = 'supportedFormats';
-    const SYSTEM = 'system';
+    public const SHY = 'shy';
+    public const SINGULAR_CONTAINER_MODE = 'singularContainerMode';
+    public const SPECIAL_TYPE = 'specialType';
+    public const SPECIAL_TYPE_DISCOUNT = 'discount';
+    public const SPECIAL_TYPE_DURATION_SEC = 'durationSec';
+    public const SPECIAL_TYPE_PASSWORD = 'password';
+    public const SPECIAL_TYPE_PERCENT = 'percent';
+    public const STORAGE = 'storage';
+    public const SUPPORTED_FORMATS = 'supportedFormats';
+    /**
+     * legacy - field is not included in export (but not respected by all exports)
+     */
+    public const SYSTEM = 'system';
+    public const SYSTEM_CF = 'systemCF'; // this property was created by a system custom field
 
-    const TAB = 'tab';
-    const TABLE = 'table';
-    const TARGET_ENTITY = 'targetEntity';
-    const TITLE_PROPERTY = 'titleProperty';
-    const TOOLTIP = 'tooltip';
-    const TRACK_CHANGES = 'trackChanges';
-    const TYPE = 'type';
-    const TYPE_ATTACHMENTS = 'attachments';
-    const TYPE_BIGINT = 'bigint';
-    const TYPE_BLOB = 'blob';
-    const TYPE_BOOLEAN = 'boolean';
-    const TYPE_CONTAINER = 'container';
-    const TYPE_DATETIME = 'datetime';
-    const TYPE_DATE = 'date';
-    const TYPE_DYNAMIC_RECORD = 'dynamicRecord';
-    const TYPE_FLOAT = 'float';
-    const TYPE_FULLTEXT = 'fulltext';
+    public const TAB = 'tab';
+    public const TABLE = 'table';
+    public const TARGET_ENTITY = 'targetEntity';
+    public const TITLE_PROPERTY = 'titleProperty';
+    public const TOOLTIP = 'tooltip';
+    public const TRACK_CHANGES = 'trackChanges';
+    public const TYPE = 'type';
+    public const TYPE_ATTACHMENTS = 'attachments';
+    public const TYPE_BIGINT = 'bigint';
+    public const TYPE_BLOB = 'blob';
+    public const TYPE_BOOLEAN = 'boolean';
+    public const TYPE_CONTAINER = 'container';
+    public const TYPE_DATETIME = 'datetime';
+    public const TYPE_DATE = 'date';
+    public const TYPE_DYNAMIC_RECORD = 'dynamicRecord';
+    public const TYPE_FLOAT = 'float';
+    public const TYPE_FULLTEXT = 'fulltext';
 
     /**
      * Colour in the web standard hexadecimal format (#000000 to #FFFFFF)
      */
-    const TYPE_HEX_COLOR = 'hexcolor';
+    public const TYPE_HEX_COLOR = 'hexcolor';
 
-    const TYPE_INTEGER = 'integer';
-    const TYPE_JSON = 'json';
-    const TYPE_JSON_REFID = 'jsonRefId';
-    const TYPE_KEY_FIELD = 'keyfield';
-    const TYPE_LABEL = 'label';
+    public const TYPE_INTEGER = 'integer';
+    public const TYPE_JSON = 'json';
+    public const TYPE_JSON_REFID = 'jsonRefId';
+    public const TYPE_KEY_FIELD = 'keyfield';
+    public const TYPE_LABEL = 'label';
+    public const TYPE_LANGUAGE = 'language';
     /**
      * TODO comment
      */
-    const TYPE_LOCALIZED_STRING = 'localizedString';
-    const TYPE_MODEL = 'model';
-    const TYPE_MONEY = 'money';
-    const TYPE_NOTE = 'note';
-    const TYPE_NUMBERABLE_INT = 'numberableInt';
-    const TYPE_NUMBERABLE_STRING = 'numberableStr';
-    const TYPE_RECORD = 'record';
-    const TYPE_RECORDS = 'records';
-    const TYPE_RELATION = 'relation';
-    const TYPE_RELATIONS = 'relations';
-    const TYPE_STRICTFULLTEXT = 'strictFulltext';
-    const TYPE_STRING = 'string';
-    const TYPE_STRING_AUTOCOMPLETE = 'stringAutocomplete';
-    const TYPE_TAG = 'tag';
-    const TYPE_TEXT = 'text';
-    const TYPE_TIME = 'time';
-    const TYPE_USER = 'user';
-    const TYPE_VIRTUAL = 'virtual';
+    public const TYPE_LOCALIZED_STRING = 'localizedString';
+    public const TYPE_MODEL = 'model';
+    public const TYPE_MONEY = 'money';
+    public const TYPE_NOTE = 'note';
+    public const TYPE_NUMBERABLE_INT = 'numberableInt';
+    public const TYPE_NUMBERABLE_STRING = 'numberableStr';
+    public const TYPE_RECORD = 'record';
+    public const TYPE_RECORDS = 'records';
+    public const TYPE_RELATION = 'relation';
+    public const TYPE_RELATIONS = 'relations';
+    public const TYPE_STRICTFULLTEXT = 'strictFulltext';
+    public const TYPE_STRING = 'string';
+    public const TYPE_STRING_AUTOCOMPLETE = 'stringAutocomplete';
+    public const TYPE_TAG = 'tag';
+    public const TYPE_TEXT = 'text';
+    public const TYPE_TIME = 'time';
+    public const TYPE_USER = 'user';
+    public const TYPE_VIRTUAL = 'virtual';
 
-    const UNIQUE_CONSTRAINTS = 'uniqueConstraints';
-    const UNSIGNED = 'unsigned';
-    const UI_CONFIG = 'uiconfig';
+    public const UNIQUE_CONSTRAINTS = 'uniqueConstraints';
+    public const UNSIGNED = 'unsigned';
+    public const UI_CONFIG = 'uiconfig';
 
-    const VALIDATORS = 'validators';
-    const VERSION = 'version';
+    public const VALIDATORS = 'validators';
+    public const VERSION = 'version';
 }

@@ -166,9 +166,14 @@ class Tinebase_TagsTest extends TestCase
         $tag = $this->_createSharedTag(['system_tag' => true]);
         $contact->tags = [$tag];
 
-        $this->_instance->addSystemTag($contact, $tag);
+        $this->_instance->attachSystemTag($contact, $tag);
 
-        $this->assertEquals(1, count($contact->tags), 'Tag not found in contact ' . $contact->n_fn);
+        self::assertEquals(1, count($contact->tags), 'Tag not found in contact ' . $contact->n_fn);
+
+        $this->_instance->detachSystemTag($contact, $tag);
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
+        self::assertEquals(0, count($contact->tags), 'Tag should not be found in contact '
+            . $contact->n_fn);
 
         Addressbook_Controller_Contact::getInstance()->delete([$contact->getId()]);
     }

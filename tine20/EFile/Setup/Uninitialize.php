@@ -31,7 +31,7 @@ class EFile_Setup_Uninitialize extends Setup_Uninitialize
 
         try {
             $customfield = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
-                EFile_Config::TREE_NODE_FLD_TIER_TYPE, null, true);
+                EFile_Config::TREE_NODE_FLD_TIER_TYPE, Tinebase_Model_Tree_Node::class, true);
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }
@@ -42,7 +42,7 @@ class EFile_Setup_Uninitialize extends Setup_Uninitialize
         }
         try {
             $customfield = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($fmAppId,
-                EFile_Config::TREE_NODE_FLD_TIER_TYPE, null, true);
+                EFile_Config::TREE_NODE_FLD_TIER_TYPE, Filemanager_Model_Node::class, true);
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }
@@ -54,7 +54,7 @@ class EFile_Setup_Uninitialize extends Setup_Uninitialize
 
         try {
             $customfield = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
-                EFile_Config::TREE_NODE_FLD_TIER_TOKEN, null, true);
+                EFile_Config::TREE_NODE_FLD_TIER_TOKEN, Tinebase_Model_Tree_Node::class, true);
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }
@@ -65,7 +65,7 @@ class EFile_Setup_Uninitialize extends Setup_Uninitialize
         }
         try {
             $customfield = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($fmAppId,
-                EFile_Config::TREE_NODE_FLD_TIER_TOKEN, null, true);
+                EFile_Config::TREE_NODE_FLD_TIER_TOKEN, Filemanager_Model_Node::class, true);
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }
@@ -77,7 +77,7 @@ class EFile_Setup_Uninitialize extends Setup_Uninitialize
 
         try {
             $customfield = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
-                EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER, null, true);
+                EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER, Tinebase_Model_Tree_Node::class, true);
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }
@@ -88,7 +88,7 @@ class EFile_Setup_Uninitialize extends Setup_Uninitialize
         }
         try {
             $customfield = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($fmAppId,
-                EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER, null, true);
+                EFile_Config::TREE_NODE_FLD_TIER_REF_NUMBER, Filemanager_Model_Node::class, true);
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }
@@ -100,7 +100,7 @@ class EFile_Setup_Uninitialize extends Setup_Uninitialize
 
         try {
             $customfield = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
-                EFile_Config::TREE_NODE_FLD_TIER_COUNTER, null, true);
+                EFile_Config::TREE_NODE_FLD_TIER_COUNTER, Tinebase_Model_Tree_Node::class, true);
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }
@@ -111,7 +111,7 @@ class EFile_Setup_Uninitialize extends Setup_Uninitialize
         }
         try {
             $customfield = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($fmAppId,
-                EFile_Config::TREE_NODE_FLD_TIER_COUNTER, null, true);
+                EFile_Config::TREE_NODE_FLD_TIER_COUNTER, Filemanager_Model_Node::class, true);
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }
@@ -123,7 +123,7 @@ class EFile_Setup_Uninitialize extends Setup_Uninitialize
 
         try {
             $customfield = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($appId,
-                EFile_Config::TREE_NODE_FLD_FILE_METADATA, null, true);
+                EFile_Config::TREE_NODE_FLD_FILE_METADATA, Tinebase_Model_Tree_Node::class, true);
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }
@@ -134,7 +134,7 @@ class EFile_Setup_Uninitialize extends Setup_Uninitialize
         }
         try {
             $customfield = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($fmAppId,
-                EFile_Config::TREE_NODE_FLD_FILE_METADATA, null, true);
+                EFile_Config::TREE_NODE_FLD_FILE_METADATA, Filemanager_Model_Node::class, true);
             if ($customfield) {
                 Tinebase_CustomField::getInstance()->deleteCustomField($customfield);
             }

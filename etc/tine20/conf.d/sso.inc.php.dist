@@ -2,6 +2,7 @@
 
 return [
     'SSO' => [
+        'pwdLessLogin' => 'both',
         'oauth2' => [
             'enabled' => true,
             'keys' => [

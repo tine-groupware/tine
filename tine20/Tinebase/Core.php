@@ -267,7 +267,6 @@ class Tinebase_Core
         }
 
         $server = self::getDispatchServer($request);
-        
         $server->handle($request);
         $method = get_class($server) . '::' . $server->getRequestMethod();
         self::set(self::METHOD, $method);
@@ -650,7 +649,7 @@ class Tinebase_Core
         
         if (isset($coreSession->currentAccount)) {
             $coreSession->currentAccount = Tinebase_User::getInstance()->getFullUserById($coreSession->currentAccount);
-            self::set(self::USER, $coreSession->currentAccount);
+            self::setUser($coreSession->currentAccount);
         }
         
         if (!isset($coreSession->jsonKey)) {
@@ -1151,7 +1150,7 @@ class Tinebase_Core
      * 
      * @param array $dbConfigArray
      * @param string $dbBackend
-     * @return Zend_Db_Adapter_Abstract
+     * @return Tinebase_Backend_Sql_Adapter_Pdo_Mysql
      * @throws Tinebase_Exception_Backend_Database
      * @throws Tinebase_Exception_UnexpectedValue
      */
@@ -1208,6 +1207,7 @@ class Tinebase_Core
                     "SET SQL_MODE = 'STRICT_ALL_TABLES'",
                     "SET SESSION group_concat_max_len = 4294967295"
                 );
+                /* @var Tinebase_Backend_Sql_Adapter_Pdo_Mysql $db */
                 $db = Zend_Db::factory('Pdo_Mysql', $dbConfigArray);
 
                 if (! isset($dbConfigArray['useUtf8mb4'])) {
@@ -1234,34 +1234,10 @@ class Tinebase_Core
 
                 break;
                 
-            case self::PDO_OCI:
-                $db = Zend_Db::factory('Pdo_Oci', $dbConfigArray);
-                break;
-                
-            case self::ORACLE:
-                $db = Zend_Db::factory(self::ORACLE, $dbConfigArray);
-                /** @noinspection PhpUndefinedMethodInspection */
-                $db->supportPositionalParameters(true);
-                /** @noinspection PhpUndefinedMethodInspection */
-                $db->setLobAsString(true);
-                break;
-                
-            case self::PDO_PGSQL:
-                unset($dbConfigArray['adapter']);
-                unset($dbConfigArray['tableprefix']);
-                if (empty($dbConfigArray['port'])) {
-                    $dbConfigArray['port'] = 5432;
-                }
-                $dbConfigArray['options']['init_commands'] = array(
-                    "SET timezone = '+0:00'"
-                );
-                $db = Zend_Db::factory('Pdo_Pgsql', $dbConfigArray);
-                
-                break;
-                
             default:
-                throw new Tinebase_Exception_UnexpectedValue('Invalid database adapter defined. Please set adapter to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.inc.php.');
-                break;
+                throw new Tinebase_Exception_UnexpectedValue(
+                    'Invalid database adapter defined. Please set adapter to ' . self::PDO_MYSQL
+                    . ' in config.inc.php.');
         }
 
         return $db;
@@ -1787,6 +1763,91 @@ class Tinebase_Core
     {
         Zend_Registry::set(self::USER, null);
         Tinebase_Log_Formatter::resetUsername();
+    }
+
+    /**
+     * get anonymous registry
+     *
+     * @return array
+     * @throws Tinebase_Exception
+     * @throws Exception
+     */
+    public static function getCoreRegistryData(): array
+    {
+        $locale = Tinebase_Core::get('locale');
+        $tbFrontendHttp = new Tinebase_Frontend_Http();
+        
+        // default credentials
+        if (isset(Tinebase_Core::getConfig()->login)) {
+            $loginConfig = Tinebase_Core::getConfig()->login;
+            $defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
+            $defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
+        } else {
+            $defaultUsername = '';
+            $defaultPassword = '';
+        }
+        
+        $symbols = Zend_Locale::getTranslationList('symbols', $locale);
+        
+        try {
+            $assetHash = Tinebase_Frontend_Http_SinglePageApplication::getAssetHash();
+        } catch (Exception $e) {
+            // unittests
+            $assetHash = Tinebase_Record_Abstract::generateUID(8);
+        }
+
+        $registryData =  [
+            'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
+            // sso
+            'sso'               => Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_ACTIVE},
+            'serviceMap'       => $tbFrontendHttp->getServiceMap(),
+            'locale'           => [
+                'locale'   => $locale->toString(),
+                'language' => Zend_Locale::getTranslation($locale->getLanguage(), 'language', $locale),
+                'region'   => Zend_Locale::getTranslation($locale->getRegion(), 'country', $locale),
+            ],
+            'version'          => [
+                'buildType'     => defined('TINE20_BUILDTYPE') ? TINE20_BUILDTYPE : 'none',
+                'codeName'      => defined('TINE20_CODENAME') ? TINE20_CODENAME : 'none',
+                'packageString' => defined('TINE20_PACKAGESTRING') ? TINE20_PACKAGESTRING : 'none',
+                'releaseTime'   => defined('TINE20_RELEASETIME') ? TINE20_RELEASETIME : 'none',
+                'assetHash'     => $assetHash,
+            ],
+            'setupRequired'     => Setup_Controller::getInstance()->setupRequired(),
+            'defaultUsername'   => $defaultUsername,
+            'defaultPassword'   => $defaultPassword,
+            'allowBrowserPasswordManager'=> Tinebase_Config::getInstance()->get(Tinebase_Config::ALLOW_BROWSER_PASSWORD_MANAGER),
+            'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
+            'titlePostfix'      => Tinebase_Config::getInstance()->get(Tinebase_Config::PAGETITLEPOSTFIX),
+            'redirectUrl'       => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL),
+            'helpUrl'           => Tinebase_Core::getConfig()->helpUrl,
+            'maxFileUploadSize' => Tinebase_Helper::convertToBytes(ini_get('upload_max_filesize')),
+            'maxPostSize'       => Tinebase_Helper::convertToBytes(ini_get('post_max_size')),
+            'thousandSeparator' => $symbols['group'],
+            'decimalSeparator'  => $symbols['decimal'],
+            'currencySymbol'    => Tinebase_Config::getInstance()->get(Tinebase_Config::CURRENCY_SYMBOL),
+            'filesystemAvailable' => Tinebase_Core::isFilesystemAvailable(),
+            'brandingWeburl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_WEBURL),
+            'brandingLogo'      => 'logo',
+            'brandingFaviconSvg' => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_FAVICON_SVG),
+            'brandingTitle'     => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE),
+            'brandingDescription'=> Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_DESCRIPTION),
+            'brandingHelpUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_HELPURL),
+            'brandingShopUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_SHOPURL),
+            'brandingBugsUrl'    => Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_BUGSURL),
+            'installLogo'       => 'logo/i',
+            'websiteUrl'        => Tinebase_Config::getInstance()->get(Tinebase_Config::WEBSITE_URL),
+            'fulltextAvailable' => Tinebase_Config::getInstance()->featureEnabled(Tinebase_Config::FEATURE_FULLTEXT_INDEX),
+            'is_anonymous'      => Tinebase_Core::getUser()->accountLoginName == 'anonymoususer',
+            'jsonKey'           => Tinebase_Core::get('jsonKey'),
+            'licenseStatus'     => Tinebase_License::getInstance()->getStatus(),
+            'licenseData'       => Tinebase_License::getInstance()->getCertificateData(),
+        ];
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+            . ' Anonymous registry: ' . print_r($registryData, TRUE));
+
+        return $registryData;
     }
 
     /**

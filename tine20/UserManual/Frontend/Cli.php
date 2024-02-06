@@ -6,14 +6,14 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2017-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
- * cli frontend for humanresources
+ * cli frontend for UserManual
  *
- * This class handles cli requests for the humanresources
+ * This class handles cli requests for the UserManual
  *
  * @package     UserManual
  * @subpackage  Frontend
@@ -27,81 +27,13 @@ class UserManual_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected $_applicationName = 'UserManual';
 
     protected $_help = array(
-        // TODO add importManualContext + importHandbookBuild
-        'importManualPages' => array(
+        'importHandbookBuild' => array(
             'description'   => 'Import Manual Pages from file or url',
             'params' => array(
-                'clear' => 'Clear Database before import if clear=1'
-                // TODO add filename/url?
+                'filename' => 'path / url to handbook build'
             )
         ),
     );
-
-    /**
-     * import manual pages from file or url
-     * 
-     * @param Zend_Console_Getopt $opts
-     * @return integer
-     *
-     * @deprecated use importHandbookBuild
-     */
-    public function importManualPages(Zend_Console_Getopt $opts)
-    {
-        if (! $this->_checkAdminRight()) {
-            return 2;
-        }
-
-        $args = $this->_parseArgs($opts, array(), 'filename');
-
-        if (! isset($args['filename'])) {
-            echo "Filename required\n";
-            return 2;
-        } else {
-            $filename = $args['filename'][0];
-        }
-
-        $clearTable = isset($args['clear']) ? $args['clear'] : false;
-
-        $result = UserManual_Controller_ManualPage::getInstance()->import($filename, $clearTable);
-        
-        if (! $result) {
-            return 2;
-        }
-
-        return 0;
-    }
-
-    /**
-     * import context
-     *
-     * @param Zend_Console_Getopt $opts
-     * @return int
-     *
-     * @deprecated use importHandbookBuild
-     */
-    public function importManualContext(Zend_Console_Getopt $opts)
-    {
-        if (! $this->_checkAdminRight()) {
-            return 2;
-        }
-
-        $args = $this->_parseArgs($opts, array(), 'filename');
-
-        if (! isset($args['filename'])) {
-            echo "Filename required\n";
-            return 2;
-        } else {
-            $filename = $args['filename'][0];
-        }
-
-        $result = UserManual_Controller_ManualContext::getInstance()->import($filename);
-
-        if (! $result) {
-            return 2;
-        }
-
-        return 0;
-    }
 
     /**
      * import handbook build

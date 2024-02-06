@@ -98,6 +98,9 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         if (this.ownRecordClass) {
             this.ownRecordClass = Tine.Tinebase.data.RecordMgr.get(this.ownRecordClass);
         }
+        if (!this.ownRecordClass) {
+            this.ownRecordClass = Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
+        }
         
         if (this.foreignRecordClass) {
             this.foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(this.foreignRecordClass);
@@ -195,8 +198,35 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             }
         }
 
-        // get operators from registry
+
         if (this.ownRecordClass) {
+            if (!this.independentRecords && _.get(this.ownRecordClass.getField(this.field), 'fieldDefinition.config.dependentRecords')) {
+                const dataFields = _.difference(this.foreignRecordClass.getDataFields(), [_.get(this.ownRecordClass.getField(this.field), 'fieldDefinition.config.refIdField')]);
+
+                if (dataFields.length === 1) {
+                    // cross-records: skip cross-record level completely, have all operators
+                    this.crossRecordClass = this.foreignRecordClass;
+                    this.crossRecordForeignField = dataFields[0];
+                    const foreignRecordConfig = _.get(this.foreignRecordClass.getField(dataFields[0]), 'fieldDefinition.config');
+                    this.foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(foreignRecordConfig.appName, foreignRecordConfig.modelName);
+                } else if (this.foreignRecordClass.getModelConfiguration()?.isMetadataModelFor) {
+                    // metadata-records: equals should work on metadata-field-record, definedBy should work on metadata-record (as is)
+                    this.metaDataRecordClass = this.foreignRecordClass;
+                    this.metaDataForField = this.metaDataRecordClass.getModelConfiguration().isMetadataModelFor;
+                    const metaDataForRecordConfig = _.get(this.metaDataRecordClass.getField(this.metaDataForField), 'fieldDefinition.config');
+                    this.foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(metaDataForRecordConfig.appName, metaDataForRecordConfig.modelName);
+                } else if (this.foreignRecordClass.getModelConfiguration()?.denormalizationOf) {
+                    // denormalization -> filter for original model
+                    this.denormalizationRecordClass = this.foreignRecordClass;
+                    this.foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(this.foreignRecordClass.getModelConfiguration().denormalizationOf);
+                } else {
+                    // we have no api's to pick foreign records - and it makes no sense
+                    this.operators = ['definedBy'];
+                    this.defaultOperator = 'definedBy';
+                }
+            }
+
+            // get operators from registry
             Ext.each(Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.get(this.ownRecordClass), function (def) {
                 // translate label
                 var foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(def.foreignRecordClass),
@@ -299,7 +329,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     }
                 }, this);
             }
-            
+            if (this.crossRecordClass) {
+                value = [{'field': this.crossRecordForeignField, operator: 'definedBy?condition=and&setOperator=one0f', value: value}]
+            } else if (this.metaDataForField && operator !== 'definedBy') {
+                value = [{'field': this.metaDataForField, operator: 'definedBy?condition=and&setOperator=one0f', value: value}]
+            }
         }
         
         return value;
@@ -352,7 +386,16 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             
         } else {
             if (! Ext.isArray(value)) return;
-            
+
+            if (this.crossRecordForeignField && value[0].field === this.crossRecordForeignField) {
+                value = value[0].value;
+                filter.formFields.operator.setValue(value[0].operator);
+            } else if (this.metaDataForField && value[0].field === this.metaDataForField && operator !== 'definedBy') {
+                value = value[0].value;
+                filter.formFields.operator.setValue(value[0].operator);
+                filter.set('operator', value[0].operator);
+            }
+
             // explicit chose right operator /equals / in /definedBy: left sided values create (multiple) subfilters in filterToolbar
             var foreignRecordDefinition = filter.foreignRecordDefinition,
                 foreignRecordClass = foreignRecordDefinition.foreignRecordClass,
@@ -465,10 +508,14 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 filterModels = filterModels.concat(this.getSubFilters());
             }
 
+            const defaultFilter = foreignRecordClass.getMeta('defaultFilter');
+            const filterModel = foreignRecordClass.getModelConfiguration()?.filterModel;
+
             filter.toolbar = new Tine.widgets.grid.FilterToolbar({
                 recordClass: foreignRecordClass,
+                title: this.crossRecordForeignField || this.metaDataForField ? this.label : null,
                 filterModels: filterModels,
-                defaultFilter: foreignRecordClass.getMeta('defaultFilter') ? foreignRecordClass.getMeta('defaultFilter') : 'query'
+                defaultFilter: filterModel ? (filterModel[defaultFilter] ? defaultFilter : Object.keys(filterModel)[0]) : (defaultFilter || 'query')
             });
             
             ftb.addFilterSheet(filter.toolbar);
@@ -486,7 +533,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * @param {Ext.Element} element to render to 
      */
     operatorRenderer: function (filter, el) {
-        var operator;
+        var operator,
+            me = this;
         
         // init operator value
         filter.set('operator', filter.get('operator') ? filter.get('operator') : this.defaultOperator);
@@ -545,6 +593,11 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                     allOf: 'definedBy?condition=and&setOperator=allOf'
                 };
 
+            if (_.isFunction(me.getCustomOperators)) {
+                me.getCustomOperators().map((def) => {
+                    opMap[def.operator] = def.opValue || def.operator;
+                })
+            }
             return opMap[op] || 'definedBy?condition=and&setOperator=oneOf';
         };
         
@@ -564,8 +617,16 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         if (this.isGeneric) {
             filter.foreignRecordDefinition = newOperator;
         }
-        
+
         const oldOperator = filter.get('operator');
+
+        if (this.metaDataForField) {
+            filter.foreignRecordDefinition.foreignRecordClass = newOperator === 'definedBy' ? this.metaDataRecordClass : this.foreignRecordClass;
+            if (newOperator !== oldOperator) {
+                filter.set('value', null);
+            }
+        }
+
         if (oldOperator != newOperator) {
             if (filter.toolbar) {
                 filter.toolbar.destroy();
@@ -624,7 +685,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             case 'allOf':
                 //@TODO find it
                 var pickerRecordClass = this.foreignRecordClass;
-                if (this.foreignRefIdField) {
+                if (this.foreignRefIdField && !this.denormalizationRecordClass) {
                     // many 2 many relation
                     var foreignRecordConfig = _.get(this.foreignRecordClass.getModelConfiguration(), 'fields.' + this.foreignRefIdField + '.config');
                     pickerRecordClass = Tine.Tinebase.data.RecordMgr.get(foreignRecordConfig.appName, foreignRecordConfig.modelName);

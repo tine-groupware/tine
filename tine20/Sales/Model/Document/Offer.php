@@ -44,7 +44,7 @@ class Sales_Model_Document_Offer extends Sales_Model_Document_Abstract
         $_definition[self::RECORD_NAME] = 'Offer'; // gettext('GENDER_Offer')
         $_definition[self::RECORDS_NAME] = 'Offers'; // ngettext('Offer', 'Offers', n)
         
-        $_definition[self::VERSION] = 2;
+        $_definition[self::VERSION] = 3;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE] = [
             self::NAME                      => self::TABLE_NAME,

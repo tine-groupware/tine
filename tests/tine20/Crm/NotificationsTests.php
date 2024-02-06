@@ -61,7 +61,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
             'own_backend' => 'Sql',
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model' => 'Addressbook_Model_Contact',
-            'related_backend' => Tasks_Backend_Factory::SQL,
+            'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
         ), TRUE));
 
         $savedLead = $this->_leadController->create($lead);
@@ -92,7 +92,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
             'own_backend'            => 'Sql',
             'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model'          => 'Addressbook_Model_Contact',
-            'related_backend'        => Tasks_Backend_Factory::SQL,
+            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
         ), TRUE));
         $this->_leadController->create($lead);
         
@@ -167,7 +167,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
            'own_backend' => 'Sql',
            'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
            'related_model' => 'Addressbook_Model_Contact',
-           'related_backend' => Tasks_Backend_Factory::SQL,
+           'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
        ), TRUE));
 
        $this->_leadController->create($lead);
@@ -229,7 +229,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
             'own_backend' => 'Sql',
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model' => 'Addressbook_Model_Contact',
-            'related_backend' => Tasks_Backend_Factory::SQL,
+            'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
         ), TRUE));
         $savedLead = $this->_leadController->create($lead);
 
@@ -284,7 +284,7 @@ class Crm_NotificationsTests extends Crm_AbstractTest
             'own_backend' => 'Sql',
             'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
             'related_model' => 'Addressbook_Model_Contact',
-            'related_backend' => Tasks_Backend_Factory::SQL,
+            'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
         ), TRUE));
 
         $savedLead = $this->_leadController->create($lead);

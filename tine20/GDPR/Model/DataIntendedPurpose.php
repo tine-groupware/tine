@@ -15,13 +15,13 @@
  *
  * @package     GDPR
  * @subpackage  Model
- * 
- * @property    string              $id
- * @property    string              $name
  */
-class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_Abstract
+class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_NewAbstract
 {
-    const MODEL_NAME_PART = 'DataIntendedPurpose';
+    public const TABLE_NAME = 'gdpr_dataintendedpurposes';
+    public const MODEL_NAME_PART = 'DataIntendedPurpose';
+    public const FLD_NAME = 'name';
+    public const FLD_DESCRIPTION = 'description';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -29,52 +29,76 @@ class GDPR_Model_DataIntendedPurpose extends Tinebase_Record_Abstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = null;
-
+    
     /**
      * Holds the model configuration (must be assigned in the concrete class)
      *
      * @var array
      */
     protected static $_modelConfiguration = [
-        'version' => 1,
-        'recordName' => 'Data intended purpose',
-        'recordsName' => 'Data intended purposes', // ngettext('Data intended purpose', 'Data intended purposes', n)
-        'titleProperty' => 'name',
-        'hasRelations' => false,
-        'hasCustomFields' => false,
-        'hasNotes' => false,
-        'hasTags' => false,
-        'modlogActive' => true,
-        'hasAttachments' => false,
-        'exposeJsonApi' => true,
-        'exposeHttpApi' => true,
-
-        'singularContainerMode' => false,
-        'hasPersonalContainer' => false,
+        self::VERSION => 2,
+        self::MODLOG_ACTIVE => true,
+        
+        self::APP_NAME => GDPR_Config::APP_NAME,
+        self::MODEL_NAME => self::MODEL_NAME_PART,
+        
+        self::RECORD_NAME => 'Data intended purpose',
+        self::RECORDS_NAME => 'Data intended purposes', // ngettext('Data intended purpose', 'Data intended purposes', n)
+        self::TITLE_PROPERTY => self::FLD_NAME,
+        
+        self::HAS_RELATIONS => false,
+        self::HAS_CUSTOM_FIELDS => false,
+        self::HAS_NOTES => false,
+        self::HAS_TAGS => false,
+        self::HAS_ATTACHMENTS => false,
+        
+        self::EXPOSE_HTTP_API => true,
+        self::EXPOSE_JSON_API => true,
+        self::CREATE_MODULE => false,
+        
+        self::SINGULAR_CONTAINER_MODE => false,
+        self::HAS_PERSONAL_CONTAINER => false,
 
         'copyEditAction' => true,
         'multipleEdit' => false,
-        
-        'createModule' => false,
-        'appName' => GDPR_Config::APP_NAME,
-        self::MODEL_NAME => self::MODEL_NAME_PART,
 
         self::TABLE => [
-            self::NAME => 'gdpr_dataintendedpurposes',
-            self::UNIQUE_CONSTRAINTS   => [
-                'name'                  => [
-                    self::COLUMNS           => ['name'],
-                ],
-            ],
+            self::NAME => self::TABLE_NAME,
+            self::INDEXES => [],
         ],
 
+        self::LANGUAGES_AVAILABLE => [
+            self::TYPE => self::TYPE_KEY_FIELD,
+            self::NAME => GDPR_Config::LANGUAGES_AVAILABLE,
+            self::CONFIG => [
+                self::APP_NAME => GDPR_Config::APP_NAME,
+            ],
+        ],
+        
         self::FIELDS => [
-            'name' => [
-                'type' => 'string',
-                'length' => 255,
-                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
-                'label' => 'Data intended purpose', // _('Data intended purpose')
-                'queryFilter' => true
+            self::FLD_NAME => [
+                self::TYPE => self::TYPE_LOCALIZED_STRING,
+                self::CONFIG => [
+                    self::TYPE => self::TYPE_STRING,
+                    self::LENGTH => 255,
+                ],
+                self::QUERY_FILTER => true,
+                self::LABEL => 'Data intended purpose', // _('Data intended purpose')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => false,
+                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
+                ]
+            ],
+            self::FLD_DESCRIPTION => [
+                self::TYPE => self::TYPE_LOCALIZED_STRING,
+                self::CONFIG => [
+                    self::TYPE => self::TYPE_FULLTEXT,
+                ],
+                self::QUERY_FILTER => true,
+                self::LABEL => 'Description', // _('Description')
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ]
             ],
         ]
     ];

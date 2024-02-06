@@ -24,6 +24,12 @@
  */
 class Tinebase_Model_Note extends Tinebase_Record_Abstract
 {
+    public const FLD_NOTE_TYPE_ID = 'note_type_id';
+    public const FLD_NOTE = 'note';
+    public const FLD_RECORD_ID = 'record_id';
+    public const FLD_RECORD_MODEL = 'record_model';
+    public const FLD_RECORD_BACKEND = 'record_backend';
+
     /**
      * system note type: note
      *
@@ -121,34 +127,34 @@ class Tinebase_Model_Note extends Tinebase_Record_Abstract
 
         'filterModel'       => [],
 
-        'fields'            => [
-            'note_type_id'                  => [
-                'type'    => self::TYPE_KEY_FIELD,
-                'name'    => Tinebase_Config::NOTE_TYPE,
-                'validators'                    => [
+        'fields' => [
+            self::FLD_NOTE_TYPE_ID => [
+                'type' => self::TYPE_KEY_FIELD,
+                'name' => Tinebase_Config::NOTE_TYPE,
+                'validators' => [
                     'presence' => 'required',
                     Zend_Filter_Input::ALLOW_EMPTY => false
                 ]
             ],
-            'note'                          => [
-                'type'                          => 'string',
-                'validators'                    => [
+            self::FLD_NOTE => [
+                'type' => 'string',
+                'validators' => [
                     'presence' => 'required',
                     Zend_Filter_Input::ALLOW_EMPTY => false
                 ],
-                'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+                'inputFilters' => [Zend_Filter_StringTrim::class => null],
             ],
-            'record_id'                     => [
-                'type'                          => 'string',
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            self::FLD_RECORD_ID => [
+                'type' => 'string',
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
-            'record_model'                  => [
-                'type'                          => 'string',
-                'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+            self::FLD_RECORD_MODEL => [
+                'type' => 'string',
+                'validators' => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
-            'record_backend'                => [
-                'type'                          => 'string',
-                'validators'                    => [
+            self::FLD_RECORD_BACKEND => [
+                'type' => 'string',
+                'validators' => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => 'Sql'
                 ],

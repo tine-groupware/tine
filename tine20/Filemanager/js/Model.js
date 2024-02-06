@@ -138,24 +138,34 @@ Tine.Filemanager.Model.NodeMixin = {
         },
 
         getDownloadUrl: function(record, revision) {
+            if (_.isString(record)) record = {path: record, revision: revision, type: 'file'};
             record = record.data ? record : Tine.Tinebase.data.Record.setFromJson(record, Tine.Filemanager.Model.Node);
-
+            
             const path = record.get('path');
+            const type = record.get('type');
             const [,root,modelName, recordId ] = String(path).split('/');
-
-            return  Ext.urlEncode(Object.assign({
-                frontend: 'http'
-            }, root === 'records' ? {
-                method: 'Tinebase.downloadRecordAttachment',
-                nodeId: record.get('id'),
-                recordId,
-                modelName
-            } : {
-                method: 'Filemanager.downloadFile',
-                path: record.get('path'),
-                id: record.get('id'),
+            const httpRequest = {
+                frontend: 'http',
                 revision: revision ?? record.get('revision')
-            }), Tine.Tinebase.tineInit.requestUrl + '?');
+            };
+            if (root === 'records') {
+                httpRequest.method = 'Tinebase.downloadRecordAttachment';
+                httpRequest.nodeId = record.get('id');
+                httpRequest.recordId = recordId;
+                httpRequest.modelName = modelName;
+            } else {
+                httpRequest.path = path;
+                if (type === 'file') {
+                    httpRequest.method = 'Filemanager.downloadFile';
+                    httpRequest.id = record.get('id');
+                }
+                if (type === 'folder') {
+                    httpRequest.method = 'Filemanager.downloadFolder';
+                    httpRequest.recursive = true;
+                    httpRequest.revision = null;
+                }
+            }
+            return  Ext.urlEncode(httpRequest, Tine.Tinebase.tineInit.requestUrl + '?');
         },
 
         getDefaultData: function (defaults) {
@@ -194,13 +204,13 @@ Tine.widgets.grid.RendererManager.register('Tinebase', 'Tree_Node', 'revision', 
     revision = parseInt(revision, 10);
     var revisionString = Tine.Tinebase.appMgr.get('Filemanager').i18n._('Revision') + " " + revision,
         availableRevisions = record.get('available_revisions');
-
     // NOTE we have to encode the path here because it might contain quotes or other bad chars
     if (Ext.isArray(availableRevisions) && availableRevisions.indexOf(String(revision)) >= 0) {
        /* if (revision.is_quarantined == '1') {
             return '<img src="images/icon-set/icon_virus.svg" >' + revisionString; @ToDo needs field revision_quarantine
         }*/
-        return '<a href="#"; onclick="Tine.Filemanager.downloadFileByEncodedPath(\'' + btoa(record.get('path')) + '\',' + revision
+        const path =  atob(btoa(record.get('path')));
+        return '<a href="#"; onclick="Tine.Filemanager.downloadNode(\'' + path + '\',' + revision
             + '); return false;">' + revisionString + '</a>';
 
     }else {
@@ -380,21 +390,16 @@ Tine.Filemanager.nodeBackendMixin = {
                 message = app.i18n._('Moving data .. {0}');
             }
         }
-        
-        this.loadMask = new Ext.LoadMask(app.getMainScreen().getCenterPanel().getEl(), {msg: String.format(i18n._('Please wait')) + '. ' + String.format(message, '' )});
-        app.getMainScreen().getWestPanel().setDisabled(true);
-        app.getMainScreen().getNorthPanel().setDisabled(true);
-        this.loadMask.show();
-        
+
+        Ext.MessageBox.wait(i18n._('Please wait'), i18n._('Please wait'));
+
         Ext.Ajax.request({
             params: params,
             timeout: 300000, // 5 minutes
             scope: this,
             success: function(result, request){
-                
-                this.loadMask.hide();
-                app.getMainScreen().getWestPanel().setDisabled(false);
-                app.getMainScreen().getNorthPanel().setDisabled(false);
+
+                Ext.MessageBox.hide();
 
                 // send updates
                 var _ = window.lodash,
@@ -448,11 +453,9 @@ Tine.Filemanager.nodeBackendMixin = {
             failure: function(response, request) {
                 var nodeData = Ext.util.JSON.decode(response.responseText),
                     request = Ext.util.JSON.decode(request.jsonData);
-                
-                this.loadMask.hide();
-                app.getMainScreen().getWestPanel().setDisabled(false);
-                app.getMainScreen().getNorthPanel().setDisabled(false);
-                
+
+                Ext.MessageBox.hide();
+
                 Tine.Filemanager.nodeBackend.handleRequestException(nodeData.data, request);
             }
         });

@@ -22,18 +22,6 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends \PHPUnit\Framework\TestC
      * @var array test objects
      */
     protected $objects = array();
-    
-    /**
-     * Runs the test methods of this class.
-     *
-     * @access public
-     * @static
-     */
-    public static function main()
-    {
-        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Tasks WebDAV EM Client Task Tests');
-        PHPUnit_TextUI_TestRunner::run($suite);
-    }
 
     /**
      * Sets up the fixture.
@@ -103,14 +91,6 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends \PHPUnit\Framework\TestC
         $vcalendar = str_replace('STATUS:IN-PROCESS', 'STATUS:NEEDS-ACTION', $vcalendar);
         $task = $converter->toTine20Model($vcalendar);
         $this->assertEquals('NEEDS-ACTION', $task->status);
-        return;
-        $vcalendar = str_replace('STATUS:CONFIRMED', 'STATUS:TENTATIVE', $vcalendar);
-        $task = $converter->toTine20Model($vcalendar);
-        $this->assertEquals(Tasks_Model_Task::STATUS_TENTATIVE, $task->status);
-        
-        $vcalendar = str_replace('STATUS:TENTATIVE', 'STATUS:CANCELED', $vcalendar);
-        $task = $converter->toTine20Model($vcalendar);
-        $this->assertEquals(Tasks_Model_Task::STATUS_CANCELED, $task->status);
     }
     
     /**
@@ -145,7 +125,7 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends \PHPUnit\Framework\TestC
         $task = $this->testConvertToTine20Model();
         $task->creation_time      = new Tinebase_DateTime('2011-11-11 11:11', 'UTC');
         $task->last_modified_time = new Tinebase_DateTime('2011-11-11 12:12', 'UTC');
-        $task->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
+        $task->attendees = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         
         $converter = Tasks_Convert_Task_VCalendar_Factory::factory(Tasks_Convert_Task_VCalendar_Factory::CLIENT_EMCLIENT);
         

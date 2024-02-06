@@ -21,7 +21,9 @@ class Tinebase_Frontend_JsonTest extends TestCase
      * @var array test objects
      */
     protected $_objects = array();
-    
+
+    protected $_originalRoleRights;
+
     /**
      * set up tests
      *
@@ -732,6 +734,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
             // no smtp config found
         }
 
+        self::assertArrayHasKey('Sales.createPaperSlip', $registryData['Tinebase']['serviceMap']['services']);
         self::assertSame(60, $registryData['Tinebase']['serviceMap']['services']['Sales.createPaperSlip']['apiTimeout']);
 
         self::assertLessThan(2500000, strlen(json_encode($registryData)), 'registry size got too big');
@@ -1108,6 +1111,19 @@ class Tinebase_Frontend_JsonTest extends TestCase
         }
         
         return $result;
+    }
+
+    public function testAppPwd()
+    {
+        $result = $this->_instance->saveAppPassword([
+            Tinebase_Model_AppPassword::FLD_ACCOUNT_ID => Tinebase_Core::getUser()->getId(),
+            Tinebase_Model_AppPassword::FLD_VALID_UNTIL => Tinebase_DateTime::now()->addYear(10),
+            Tinebase_Model_AppPassword::FLD_AUTH_TOKEN => 'foo',
+            Tinebase_Model_AppPassword::FLD_CHANNELS => [0=>0],
+        ]);
+
+        $this->assertArrayHasKey('id', $result);
+        $this->assertSame('foo', $result[Tinebase_Model_AppPassword::FLD_AUTH_TOKEN]);
     }
 
     /**

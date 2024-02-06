@@ -13,6 +13,10 @@
  */
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
+use OTPHP\TOTP;
+use OTPHP\TOTPInterface;
+use ParagonIE\ConstantTime\Base32;
+
 /**
  * Abstract test class
  * 
@@ -151,6 +155,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
             $u->mfa_configs->removeById('userpin');
         }
         if ($this->_originalTestUser instanceof Tinebase_Model_User) {
+            if ($this->_originalTestUser instanceof Tinebase_Model_FullUser) {
+                Tinebase_Core::unsetUser();
+            }
             Tinebase_Core::setUser($this->_originalTestUser);
         }
 
@@ -179,6 +186,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         }
         if (null !== $this->_oldAreaLockCfg) {
             Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS} = $this->_oldAreaLockCfg;
+            Tinebase_AreaLock::destroyInstance();
         }
 
         if ($this->_originalSmtpConfig) {
@@ -965,6 +973,39 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         ]);
     }
 
+    protected function _prepTOTP(): TOTPInterface
+    {
+        $secret = Base32::encodeUpperUnpadded(random_bytes(64));
+
+        $this->_originalTestUser->mfa_configs = new Tinebase_Record_RecordSet(
+            Tinebase_Model_MFA_UserConfig::class, [[
+            Tinebase_Model_MFA_UserConfig::FLD_ID => 'TOTPunittest',
+            Tinebase_Model_MFA_UserConfig::FLD_MFA_CONFIG_ID => 'unittest',
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG_CLASS =>
+                Tinebase_Model_MFA_TOTPUserConfig::class,
+            Tinebase_Model_MFA_UserConfig::FLD_CONFIG =>
+                new Tinebase_Model_MFA_TOTPUserConfig([
+                    Tinebase_Model_MFA_TOTPUserConfig::FLD_SECRET => $secret,
+                ]),
+        ]]);
+
+        $this->_createAreaLockConfig([
+            Tinebase_Model_AreaLockConfig::FLD_MFAS => ['unittest'],
+        ], [
+            Tinebase_Model_MFA_Config::FLD_ID => 'unittest',
+            Tinebase_Model_MFA_Config::FLD_USER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_TOTPUserConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG_CLASS =>
+                Tinebase_Model_MFA_TOTPConfig::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CLASS =>
+                Tinebase_Auth_MFA_HTOTPAdapter::class,
+            Tinebase_Model_MFA_Config::FLD_PROVIDER_CONFIG => []
+        ]);
+
+        $this->_originalTestUser = Tinebase_User::getInstance()->updateUser($this->_originalTestUser);
+        return TOTP::create($secret);
+    }
+
     /**
      * @param array $config
      */
@@ -1190,15 +1231,6 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $this->_usernamesToDelete[] = $account->accountLoginName;
 
         return $account;
-    }
-
-    protected function _skipIfXpropsUserIdDeactivated()
-    {
-        if (! Tinebase_EmailUser::isEmailSystemAccountConfigured()
-            || ! Tinebase_Config::getInstance()->{Tinebase_Config::EMAIL_USER_ID_IN_XPROPS})
-        {
-            self::markTestSkipped('imap systemaccount and EMAIL_USER_ID_IN_XPROPS config required');
-        }
     }
 
     /**

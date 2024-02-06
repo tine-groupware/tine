@@ -34,7 +34,8 @@ class Voipmanager_Model_Asterisk_VoicemailFilter extends Tinebase_Model_Filter_F
         'query'         => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array(
-                'fields' => array('mailbox', 'fullname', 'email', 'pager')
+                'fields' => array('mailbox', 'fullname', 'email', 'pager'),
+                'modelName' => Voipmanager_Model_Asterisk_Voicemail::class,
             )
         ),
         'context_id'    => array('filter' => 'Tinebase_Model_Filter_Text'),

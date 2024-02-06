@@ -5,38 +5,46 @@
  * @author      Cornelius Weiß <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+import {colorLegend} from "../FreeTimePlanningWestPanel";
 
 Tine.Tinebase.ApplicationStarter.isInitialised().then(() => {
     const app = Tine.Tinebase.appMgr.get('HumanResources');
 
     const defaults = {
         appName: 'HumanResources',
-        hideColumnsMode: 'hide',
         group: app.i18n._('Workingtime Tracking'),
         groupIconCls: 'HumanResourcesTimetrackerHooks',
-        stateIdSuffix: '-timetrackerhook'
+        config: {
+            hideColumnsMode: 'hide',
+            stateIdSuffix: '-timetrackerhook',
+        }
     };
 
-    Tine.widgets.MainScreen.registerContentType('Timetracker', Object.assign({
+    Tine.widgets.MainScreen.registerContentType('Timetracker', _.merge({
         modelName: 'DailyWTReport',
-        showColumns: ['tags', 'employee_id', 'date', 'working_time_target', 'working_time_actual', 'working_time_correction',
-            'working_time_total', 'working_time_balance']
+        config: {
+            showColumns: ['tags', 'employee_id', 'date', 'working_time_target', 'working_time_actual', 'working_time_correction',
+                'working_time_total', 'working_time_balance']
+        }
     }, defaults));
 
-    Tine.widgets.MainScreen.registerContentType('Timetracker', Object.assign({
+    Tine.widgets.MainScreen.registerContentType('Timetracker', _.merge({
         modelName: 'MonthlyWTReport',
-        showColumns: ['tags', 'employee_id', 'month', 'working_time_balance_previous', 'working_time_target', 'working_time_correction',
-            'working_time_actual', 'working_time_balance']
+        config: {
+            showColumns: ['tags', 'employee_id', 'month', 'working_time_balance_previous', 'working_time_target', 'working_time_correction',
+                'working_time_actual', 'working_time_balance']
+        }
     }, defaults));
 
-    Tine.widgets.MainScreen.registerContentType('Timetracker', Object.assign({
+    Tine.widgets.MainScreen.registerContentType('Timetracker', _.merge({
         modelName: 'FreeTime',
     }, defaults));
 
-    Tine.widgets.MainScreen.registerContentType('Timetracker', Object.assign({
+    Tine.widgets.MainScreen.registerContentType('Timetracker', _.merge({
         contentType: 'FreeTimePlanning',
         text: app.i18n._('Free Time Planning'),
         xtype: 'humanresources.freetimeplanning',
     }, defaults));
 
+    Ext.ux.ItemRegistry.registerItem('Tine.Timetracker.FreeTimePlanning.WestPanelPortalColumn', colorLegend);
 });

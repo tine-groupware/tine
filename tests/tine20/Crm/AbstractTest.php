@@ -27,7 +27,7 @@ class Crm_AbstractTest extends TestCase
     protected function tearDown(): void
     {
         if ($this->_cfcName) {
-            $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication('Crm', $this->_cfcName);
+            $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication('Crm', $this->_cfcName, Crm_Model_Lead::class);
             Tinebase_CustomField::getInstance()->deleteCustomField($cf);
         }
         parent::tearDown();
@@ -201,7 +201,6 @@ class Crm_AbstractTest extends TestCase
                 'related_id' => $responsible->getId(),
                 'remark' => [],
             ],
-            array('type'  => 'TASK',    'related_id' => $task->getId()),
             array('type'  => 'PARTNER', 'related_id' => $contact->getId()),
             array('type'  => 'PRODUCT', 'related_id' => $product->getId(), 'remark' => array('price' => $price, 'quantity' => 3)),
         ];
@@ -210,6 +209,9 @@ class Crm_AbstractTest extends TestCase
             'note'              => 'phpunit test note',
         );
         $leadData['notes'] = array($note);
+        $leadData['tasks'] = [
+            $task->toArray(),
+        ];
 
         return $leadData;
     }

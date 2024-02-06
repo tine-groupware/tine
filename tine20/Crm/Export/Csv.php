@@ -118,6 +118,7 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
         'deleted_time'          ,
         'deleted_by'            ,
         'relations'             ,
+        'tasks'                 ,
     );
         
     /**
@@ -131,5 +132,35 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
     {
         $keyFieldName = preg_replace('/_id/', 's', $_fieldName);
         return Crm_Config::getInstance()->get($keyFieldName)->getTranslatedValue($_record->$_fieldName);
+    }
+
+    /**
+     * add relation values from related records
+     *
+     * @param Tinebase_Record_Interface $record
+     * @param string $relationType
+     * @param string $recordField
+     * @param boolean $onlyFirstRelation
+     * @param string $keyfield
+     * @param string $application
+     * @return string
+     */
+    protected function _addRelations(Tinebase_Record_Interface $record, $relationType, $recordField = NULL, $onlyFirstRelation = FALSE, $keyfield = NULL, $application = NULL)
+    {
+        if ('TASK' === $relationType) {
+            return $record->tasks instanceof Tinebase_Record_RecordSet ? join(';', $record->tasks->summary): '';
+        }
+        return parent::_addRelations($record, $relationType, $recordField, $onlyFirstRelation, $keyfield, $application);
+    }
+
+    /**
+     * resolve records and prepare for export (set user timezone, ...)
+     *
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
+    {
+        Tinebase_Record_Expander::expandRecords($_records);
+        parent::_resolveRecords($_records);
     }
 }

@@ -96,25 +96,22 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * inits this west panel
      */
     initComponent: function() {
-        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
+        this.contentTypeDefinition = Tine.widgets.MainScreen.prototype.getContentTypeDefinition.call(this, this.contentType) || {};
+
+        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass || this.contentTypeDefinition.recordClass
+            || `${this.contentTypeDefinition.appName}.${this.contentTypeDefinition.modelName}`);
+
         if (! this.app && this.recordClass) {
             this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         }
+
         this.stateId = this.app.appName + this.getContentType() + '-mainscreen-westpanel';
         this.canonicalName = this.canonicalName ? this.canonicalName : this.getContentType();
-        var fpcn = this.getContentType() + this.favoritesPanelClassName;
-        this.hasFavoritesPanel = Ext.isBoolean(this.hasFavoritesPanel) ? this.hasFavoritesPanel : !! Tine[this.app.appName][fpcn];
-        
-        if (this.hasContainerTreePanel === null) {
-            this.hasContainerTreePanel = true;
 
-            if (this.contentTypes) {
-                var def = Tine.widgets.MainScreen.prototype.getContentTypeDefinition.call(this, this.contentType);
-                if (def && def.singularContainerMode) {
-                    this.hasContainerTreePanel = false;
-                }
-            }
-        }
+        this.hasFavoritesPanel = Ext.isBoolean(this.hasFavoritesPanel) ? this.hasFavoritesPanel : this.getFavoritesPanelConstructor();
+
+        this.hasContainerTreePanel = Ext.isBoolean(this.hasContainerTreePanel) ? this.hasContainerTreePanel :
+            this.contentTypeDefinition.singularContainerMode ? false : true;
 
         this.items = this.getPortalColumn();
         Tine.widgets.mainscreen.WestPanel.superclass.initComponent.apply(this, arguments);
@@ -211,7 +208,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * @return {Tine.Tinebase.widgets.ContainerTreePanel}
      */
     getContainerTreePanel: function(contentType) {
-        contentType = contentType || this.app.getMainScreen().getActiveContentType();
+        contentType = contentType || this.contentType;
         const panelName = contentType + 'TreePanel';
 
         if (! this[panelName]) {
@@ -238,12 +235,13 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * 
      * @return {Ext.Panel}
      */
+    getFavoritesPanelConstructor: function() {
+        return Tine[this.recordClass ? this.recordClass.getMeta('appName') : this.app.appName][this.getContentType() + this.favoritesPanelClassName];
+    },
+
     getFavoritesPanel: function() {
-        var ct = this.app.getMainScreen().getActiveContentType(),
-            panelName = window.lodash.upperFirst(ct + 'FilterPanel');
-        
         try {
-            if(!this[panelName]) {
+            if(!this[this.contentType + 'FilterPanel']) {
                 var fpConfig = {
                     
                     rootVisible : false,
@@ -257,7 +255,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                     baseCls: 'ux-arrowcollapse',
                     
                     app: this.app,
-                    contentType: ct,
+                    contentType: this.contentType,
                     recordClass: this.recordClass,
                     // needs for filterToolBar in EditDialog
                     grid: this.gridPanel,
@@ -280,17 +278,14 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
                         }
                     }
                 };
-                if (Tine[this.app.name].hasOwnProperty(panelName)) {
-                    this[panelName] = new Tine[this.app.appName][panelName](fpConfig);
-                } else {
-                    this[panelName] = new Tine.widgets.persistentfilter.PickerPanel(fpConfig);
-                }
+                const Panel = this.getFavoritesPanelConstructor() || Tine.widgets.persistentfilter.PickerPanel;
+                this[this.contentType + 'FilterPanel'] = new Panel(fpConfig)
             }
         } catch(e) {
             Tine.log.info('No Favorites Panel created');
         }
         
-        return this[panelName];
+        return this[this.contentType + 'FilterPanel'];
     },
     
     /**

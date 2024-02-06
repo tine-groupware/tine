@@ -53,16 +53,14 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
     parentRecordField: null,
 
     /**
-     * @cfg {String} dataField
-     * @deprecated
-     * use this (single) field as data instead of whole data object
-     */
-    dataField: null,
-
-    /**
      * @cfg {Bool} useBBar
      */
     useBBar: false,
+
+    /**
+     * @cfg {Bool} enableTbar
+     */
+    enableTbar: false,
 
     /**
      * @cfg {Bool} readOnly
@@ -87,37 +85,17 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             'onRemove',
             'actionRemoveUpdater',
             'onRowDblClick',
-            'onEditDialogRecordUpdate'
+            'onEditDialogRecordUpdate',
+            'initComponentMixin'
             // 'setReadOnly' // see setReadOnly above
         ]);
 
+        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
         this.modelConfig = this.modelConfig ||
             _.get(this, 'recordClass.getModelConfiguration') ? this.recordClass.getModelConfiguration() : null;
-
         this.recordName = this.recordName ? this.recordName : (this.recordClass && this.recordClass.getRecordName ? this.recordClass.getRecordName() || i18n._('Record') : i18n._('Record'));
-
-        this.defaultSortInfo = this.defaultSortInfo || {};
-
-        this.initGrid();
-
+        this.labelField = this.labelField ? this.labelField : (this.recordClass && this.recordClass.getMeta ? this.recordClass.getMeta('titleProperty') : null);
         this.enableBbar = Ext.isBoolean(this.enableBbar) ? this.enableBbar : this.useBBar;
-        this.initActionsAndToolbars();
-
-        this.on('rowcontextmenu', this.onRowContextMenu, this);
-        this.on('rowdblclick', this.onRowDblClick, this);
-
-        if (! this.store) {
-            // create basic store
-            this.store = new Ext.data.Store({
-                // explicitly create reader
-                sortInfo: this.defaultSortInfo,
-                reader: new Ext.data.ArrayReader({
-                        idIndex: 0  // id for each record will be the first element
-                    },
-                    this.recordClass
-                )
-            });
-        }
 
         const parent = this.findParentBy(function(c){return !!c.record})
             || this.findParentBy(function(c) {return c.editDialog});
@@ -130,9 +108,23 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
         }
 
-        Tine.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
+        this.initComponentMixin();
 
+        Tine.widgets.grid.QuickaddGridPanel.superclass.initComponent.call(this);
+        this.on('rowcontextmenu', this.onRowContextMenu, this);
         this.on('newentry', this.onNewentry, this);
+    },
+
+    initStore: function() {
+        if (!this.store) {
+            this.store = new Ext.data.SimpleStore({
+                sortInfo: this.defaultSortInfo || {
+                    field: this.labelField,
+                    direction: 'DESC'
+                },
+                fields: this.recordClass
+            });
+        }
     },
 
     setReadOnly: function(readOnly) {
@@ -205,8 +197,9 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
     onNewentry: function(recordData) {
         const defaultData = Ext.isFunction(this.recordClass.getDefaultData) ?
                 this.recordClass.getDefaultData() : {};
-        // @TODO shouldn't have all new (remote) records 0|"0" as id?
+
         const newRecord = new this.recordClass(defaultData, recordData.id ?? defaultData.id ?? Tine.Tinebase.data.Record.generateUID());
+        newRecord.phantom = true;
 
         _.each(recordData, function(val, key) {
             if (val) {
@@ -243,22 +236,13 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * get values from store (as array)
      *
      * @param {Array}
-     *
-     * TODO improve this
      */
     setStoreFromArray: function(data) {
         this.store.removeAll();
-
-        for (var i = data.length-1; i >=0; --i) {
-            var recordData = {}
-            if (this.dataField === null) {
-                recordData = data[i];
-            } else {
-                recordData[this.dataField] = data[i];
-            }
-
-            this.store.insert(0, new this.recordClass(recordData));
-        }
+        _.each(data, (recordData) => {
+            const record = Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
+            this.store.addSorted(record);
+        });
     },
 
     /**
@@ -269,7 +253,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
     getFromStoreAsArray: function(deleteAutoIds) {
         var result = Tine.Tinebase.common.assertComparable([]);
         this.store.each(function(record) {
-            var data = (this.dataField === null) ? record.data : record.get(this.dataField);
+            var data = record.data;
             if (deleteAutoIds && String(data.id).match(/ext-gen/)) {
                 delete data.id;
             }

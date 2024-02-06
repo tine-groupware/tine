@@ -51,6 +51,8 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     initComponent: function () {
         this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : i18n._('Search for records ...'));
         this.currentValue = this.currentValue || [];
+        // allow to initialize with string
+        this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
         Tine.Tinebase.widgets.form.RecordsPickerCombo.superclass.initComponent.call(this);
         this.store = new Ext.data.SimpleStore({
             fields: this.recordClass
@@ -62,11 +64,15 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     getItems: function () {
         this.pickerGrid = new Tine.widgets.grid.PickerGridPanel({
             recordClass: this.recordClass,
+            isMetadataModelFor: this.isMetadataModelFor,
+            refIdField: this.refIdField,
             height: this.layerHeight - 40 || 'auto',
             onStoreChange: Ext.emptyFn,
             store: this.store,
             additionalFilterSpec: this.additionalFilterSpec,
             allowDelete: this.allowDelete,
+            allowCreateNew: this.allowCreateNew,
+            editDialogConfig: this.editDialogConfig
         });
 
         return [this.pickerGrid];
@@ -86,19 +92,30 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
      * @return {Ext.form.Field} this
      */
     setValue: function (value) {
-        var _ = window.lodash;
-
         value = value || [];
+        value = _.isArray(value) ? value : [value];
+
         this.setStoreFromArray(value);
         if (this.rendered) {
-            var text = _.reduce(this.store.data.items, function(result, record) {
-                return result.concat(record.getTitle());
-            }, []).join(', ');
-            this.setRawValue(text || this.emptyText);
-            this.el[(text ? 'remove' : 'add') + 'Class'](this.emptyClass);
+            Promise.all(_.map(this.store.data.items, function(record) {
+                return new Promise(resolve => {
+                    const text = record.getTitle();
+                    if (text && text.registerReplacer) {
+                        text.registerReplacer((text) => {
+                            resolve(text);
+                        });
+                    } else {
+                        resolve(text);
+                    }
+                });
+            })).then(texts => {
+                const text = texts.join(', ');
+                this.setRawValue(text || this.emptyText);
+                this.el[(text ? 'remove' : 'add') + 'Class'](this.emptyClass);
+            });
         }
 
-        var oldValue = this.currentValue;
+        const oldValue = this.currentValue;
         this.currentValue = value;
         this.value = value;
         Tine.Tinebase.common.assertComparable(this.currentValue);

@@ -109,6 +109,12 @@
     font-weight: bold;
 }
 
+.unread-flag-dot {
+    -webkit-mask-image:url(../../images/icon-set/icon_sticky_dot.svg) !important;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4e79b2;
+}
+
 .flag_flagged {
     color: #ff0000;
 }
@@ -120,6 +126,10 @@
 
 .is_spam_suspicions td {
     color: #D8A45B;
+}
+
+.is_spam_suspicions_toolbar {
+    background-color: #D8A45B;
 }
 
 .FelamimailFlagIcon {
@@ -142,12 +152,35 @@
 .preview-panel-felamimail-headers {
     background-color: #dddddd;
     overflow: auto;
+    padding: 5px;
+}
+
+.preview-panel-felamimail-header-row {
+    display: flex;
+    padding-top: 3px;
+}
+
+.preview-panel-felamimail-header-row-left {
+    font-weight: bold;
+    min-width: 50px;
+    text-align: right;
+}
+
+.preview-panel-felamimail-header-row-right {
+    padding-left: 10px;
+    display: flex;
+    text-align: left;
+    flex-wrap: wrap;
+}
+
+.preview-panel-felamimail-header-longtext {
+    white-space: nowrap;
 }
 
 .preview-panel-felamimail-attachments {
     margin-top: 5px;
+    padding: 3px;
     background-color: #e8e8e8;
-    width: 100%;
 }
 
 /* note: el tyle of html areas underling textarea are copied to iframe*/
@@ -155,6 +188,7 @@
 .preview-panel-felamimail-body {
     overflow: auto;
     font-size: 13px;
+    padding: 10px;
 }
 
 .preview-panel-felamimail-body ul {
@@ -369,6 +403,7 @@
 .preview-panel-felamimail-filelocations,
 .felamimail-compose-info .x-panel-body {
     background-color: #ffffaa;
+    border-radius: 5px;
 }
 
 .felamimail-location {
@@ -384,4 +419,52 @@
     background-repeat: no-repeat;
     display: inline-block;
     vertical-align: middle;
+}
+
+.dark-mode .is_spam_suspicions td {
+    color: #7a5010;
+}
+
+.dark-mode .preview-panel-felamimail-body img {
+    filter: invert(1) hue-rotate(180deg);
+}
+
+.felamimail-message-title {
+    margin: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.felamimail-message-title-row {
+    display: flex;
+    min-width: 16px;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 16px;
+}
+
+.felamimail-message-title-text-small{
+    font-size: 12px;
+    padding: 0 5px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    opacity: 0.7;
+}
+
+.felamimail-message-title-text-medium {
+    font-size: 14px;
+    padding: 0 5px;
+    white-space: nowrap;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
+
+.felamimail-message-icon {
+    width: 16px;
+    height: 16px;
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    margin: 0 2px;
 }

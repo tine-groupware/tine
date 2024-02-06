@@ -42,6 +42,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
     layoutConfig: {
         align:'stretch'
     },
+
     border: false,
 
     record: null,
@@ -179,16 +180,8 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         this.tpl = new Ext.XTemplate(
             '{[this.showSpamToolbar(values)]}',
             '<div class="preview-panel-felamimail">',
-            '<div class="preview-panel-felamimail-headers">',
-            '<b>' + this.i18n._('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
-            '<b>' + this.i18n._('From') + ':</b>',
-            ' {[this.showFrom(values.from_email, values.from_name, "' + this.i18n._('Add') + '", "'
-            + this.i18n._('Add contact to addressbook') + '")]}<br/>',
-            '<b>' + this.i18n._('Date') + ':</b> {[this.showDate(values.sent, values)]}',
-            '{[this.showRecipients(values.headers)]}',
-            '{[this.showHeaders("' + this.i18n._('Show or hide header information') + '")]}',
-            '</div>',
-            '<div class="preview-panel-felamimail-attachments">{[this.showAttachments(values.attachments, values)]}</div>',
+            '{[this.showInfo(values)]}',
+            '{[this.showAttachments(values.attachments, values)]}',
             '<div class="preview-panel-felamimail-filelocations">{[this.showFileLocations(values)]}</div>',
             '<div class="preview-panel-felamimail-preparedPart"></div>',
             '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values)]}</div>',
@@ -197,11 +190,10 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 panel: this,
                 encode: function(value) {
                     if (value) {
-                        var encoded = Ext.util.Format.htmlEncode(value);
-                        encoded = Ext.util.Format.nl2br(encoded);
                         // it should be enough to replace only 2 or more spaces
-                        encoded = encoded.replace(/ /g, '&nbsp;');
-
+                        value = value.replace(/\s{2,}/g, ' ');
+                        let encoded = Ext.util.Format.htmlEncode(value);
+                        encoded = Ext.util.Format.nl2br(encoded);
                         return encoded;
                     } else {
                         return '';
@@ -224,8 +216,39 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 },
                 linkifyEmail(name, email) {
                     const id = Ext.id() + ':' + email + Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(name));
-                    const address = name.length ? `${name} < ${email} >` : email;
-                    return `<a id="${id}" class="tinebase-email-link">${address}</a>`;
+                    const address = name ? `${name} < ${email} >` : email;
+                    const link =  document.createElement('div');
+                    link.className = 'preview-panel-felamimail-header-longtext';
+                    link.innerHTML = `<a id="${id}" class="tinebase-email-link">${address}</a>`;
+                    return link.outerHTML;
+                },
+                showInfo(values) {
+                    const app = Tine.Tinebase.appMgr.get('Felamimail');
+                    const items = ['subject', 'date', 'from', 'to', 'cc', 'bcc', 'extra'];
+                    const headerBlock =  document.createElement('div');
+                    headerBlock.className = 'preview-panel-felamimail-headers';
+                    items.forEach((header) => {
+                        let value = '';
+                        let headerValue = app.i18n._hidden(Ext.util.Format.capitalize(header));
+                        if (header === 'subject') value = this.encode(values.subject);
+                        if (header === 'from') value = this.showFrom(values.from_email, values.from_name);
+                        if (header === 'date') value = this.showDate(values.sent, values);
+                        if (header === 'extra') headerValue = this.panel.showExtraHeaderButton();
+
+                        if (['to', 'cc', 'bcc'].includes(header)) {
+                            if (!values.headers.hasOwnProperty(header)) return;
+                            const emails = this.panel.record.get(header);
+                            if (emails.length === 0) return;
+                            //TODO: bcc only store email in \Zend_Mail::addBcc($email), do we want to change it ?
+                            emails.forEach((emailData, idx) => {
+                                if (idx > 0) value += ',&nbsp';
+                                value += this.linkifyEmail(emailData?.name, emailData?.email);
+                            })
+                        }
+                        const row = this.panel.renderHeader(headerValue, value);
+                        headerBlock.appendChild(row);
+                    })
+                    return headerBlock.outerHTML;
                 },
                 showDate: function (sent, recordData) {
                     var date = sent
@@ -233,7 +256,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         : Date.parseDate(recordData.received, Date.patterns.ISO8601Long);
                     return date ? date.format('l') + ', ' + Tine.Tinebase.common.dateTimeRenderer(date) : '';
                 },
-                showFrom: function(email, name, addText, qtip) {
+                showFrom: function(email, name) {
                     if (! name) return '';
                     const emails = this.panel.record.get('from');
                     const fromEmail = emails[0] ?? [];
@@ -262,54 +285,35 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                 body + '</textarea>';
                         } else if (messageData.body_content_type != 'text/html' || messageData.body_content_type_of_body_property_of_this_record == 'text/plain') {
                             // message content is text and account format non-text
-                            body = Ext.util.Format.nl2br(body);
+                            body = Ext.util.Format.nl2br(Ext.util.Format.wrapEmojis(body));
                         } else {
-                            Tine.Tinebase.common.linkifyText(body, function(linkified) {
+                            Ext.util.Format.linkSaveHtmlEncodeStepOne(body);
+                            Tine.Tinebase.common.linkifyText(Ext.util.Format.wrapEmojis(body), function(linkified) {
                                 var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
-                                Ext.fly(bodyEl).update(linkified);
+                                Ext.fly(bodyEl).update(Ext.util.Format.linkSaveHtmlEncodeStepTwo(linkified));
                             }, this.panel);
                         }
                     }
                     return body;
                 },
-
-                showHeaders: function(qtip) {
-                    var result = ' <span ext:qtip="' + Tine.Tinebase.common.doubleEncode(qtip) + '" id="' + Ext.id() + ':show" class="tinebase-showheaders-link">[...]</span>';
-                    return result;
-                },
-
-                showRecipients: function(value) {
-                    if (!value) return '';
-                    
-                    const i18n = Tine.Tinebase.appMgr.get('Felamimail').i18n;
-                    let result = '';
-                    for (const header in value) {
-                        if (value.hasOwnProperty(header) && ['to', 'cc', 'bcc'].includes(header)) {
-                            result += '<br/><b>' + i18n._hidden(Ext.util.Format.capitalize(header)) + ':</b> ';
-                            const emails = this.panel.record.get(header);
-                            //TODO: bcc only store email in \Zend_Mail::addBcc($email), do we want to change it ?
-                            emails.forEach((emailData, idx) => {
-                                if (idx > 0) result += ', ';
-                                result += this.linkifyEmail(emailData?.name, emailData?.email);
-                            })
-                        }
-                    }
-                    return result;
-                },
-
                 showAttachments: function(attachments, messageData) {
                     const idPrefix = Ext.id();
                     const attachmentsStr = this.app.i18n._('Attachments');
-                    if (!attachments) return '';
-                    let result = (attachments.length > 0) ? `<span id=${idPrefix}:all class="tinebase-download-link tinebase-download-all"><b>${attachmentsStr}:</b><div class="tinebase-download-link-wait"></div></span>` : '';
+                    if (!attachments || attachments.length === 0) return '';
+                    const attachmentBlock =  document.createElement('div');
+                    attachmentBlock.className = 'preview-panel-felamimail-attachments';
+
+                    let result = `<span id=${idPrefix}:all style="padding-left:5px;" class="tinebase-download-link tinebase-download-all"><b>${attachmentsStr}:</b><div class="tinebase-download-link-wait"></div></span>`;
 
                     for (var i=0, id, cls; i < attachments.length; i++) {
-                        result += `<span id="${idPrefix}:${i}" class="tinebase-download-link">`
+                        result += `<span id="${idPrefix}:${i}" style="padding-left:5px;" class="tinebase-download-link">`
                             + '<i>' + attachments[i].filename + '</i>'
-                            + ' (' + Ext.util.Format.fileSize(attachments[i].size) + ')<div class="tinebase-download-link-wait"></div></span> ';
+                            // NOTE: size is 'transfer size' (base64 encoded) here.
+                            // @TODO replace size from message cache size when it's loaded?
+                            + ' (' + Ext.util.Format.fileSize(Math.round(attachments[i].size / 1.333)) + ')<div class="tinebase-download-link-wait"></div></span> ';
                     }
-
-                    return result;
+                    attachmentBlock.innerHTML = result;
+                    return attachmentBlock.outerHTML;
                 },
 
                 showFileLocations: function(messageData) {
@@ -459,23 +463,18 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 var html = '';
                 if (action === 'show') {
                     const recordHeaders = this.record.get('headers');
-
                     for (let header in recordHeaders) {
                         if (recordHeaders.hasOwnProperty(header) && (header !== 'to' || header !== 'cc' || header !== 'bcc')) {
-                            html += '<br/><b>' + header + ':</b> '
-                                + Ext.util.Format.htmlEncode(recordHeaders[header]);
+                            const row = this.renderHeaderRaw(header,  Ext.util.Format.htmlEncode(recordHeaders[header]));
+                            html += row.outerHTML;
                         }
                     }
 
                     target.id = targetId + ':' + 'hide';
-
                 } else {
-                    html = ' <span ext:qtip="' + Ext.util.Format.htmlEncode(this.i18n._('Show or hide header information')) + '" id="'
-                        + Ext.id() + ':show" class="tinebase-showheaders-link">[...]</span>'
+                    html = this.showExtraHeaderButton();
                 }
-
                 target.innerHTML = html;
-
                 break;
             case 'a[href^=#]':
                 e.stopEvent();
@@ -525,7 +524,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                         return resolve({
                             cache: new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]),
                             createPreviewInstantly: createPreviewInstantly,
-                            isPreviewReady: !!+cache.attachments[0].preview_count,
+                            isPreviewReady: cache.attachments[0].preview_count !== 0,
                         });
                     })
                     .catch((e) => {
@@ -586,6 +585,45 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         }
 
         return result;
+    },
+
+    renderHeader(header, value) {
+        const row =  document.createElement('div');
+        row.className = 'preview-panel-felamimail-header-row';
+        const rowLeft = document.createElement('div');
+        rowLeft.className = 'preview-panel-felamimail-header-row-left';
+        const rowRight =  document.createElement('div');
+        rowRight.className = 'preview-panel-felamimail-header-row-right';
+        rowLeft.innerHTML = header;
+        rowRight.innerHTML = value;
+        row.appendChild(rowLeft);
+        row.appendChild(rowRight);
+        return row;
+    },
+
+    renderHeaderRaw(header, value) {
+        const row =  document.createElement('div');
+        row.style.display = 'flex';
+        row.style.margin = '5px';
+        row.style.textAlign = 'left';
+        const rowLeft = document.createElement('div');
+        rowLeft.textContent = header;
+        rowLeft.style.minWidth = '60px';
+        const rowRight =  document.createElement('div');
+        rowRight.innerHTML = value;
+
+        if (header.length > 10 || value.length > 50) {
+            row.style.flexDirection = 'column';
+            rowRight.style.paddingLeft = '55px';
+        }
+        row.appendChild(rowLeft);
+        row.appendChild(rowRight);
+        return row;
+    },
+
+    showExtraHeaderButton() {
+        const qtip = this.app.i18n._('Show or hide header information');
+        return ' <span ext:qtip="' + Tine.Tinebase.common.doubleEncode(qtip) + '" id="' + Ext.id() + ':show" class="tinebase-showheaders-link">[...]</span>';
     },
 });
 

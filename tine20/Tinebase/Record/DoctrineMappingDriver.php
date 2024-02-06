@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2016-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -51,6 +51,7 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         MCC::TYPE_BOOLEAN               => 'boolean',
         MCC::TYPE_MONEY                 => 'float',
         MCC::TYPE_HEX_COLOR             => 'string',
+        MCC::TYPE_LANGUAGE               => 'string',
         // TODO replace that with a single type 'datetime_separated'?
 //        'datetime_separated' => 'date',
         'datetime_separated_date' => 'date',
@@ -195,14 +196,19 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
         $defaultDoctrineIgnore = isset($config['doctrineIgnore']) ? $config['doctrineIgnore'] : false;
 
         $config['doctrineIgnore'] = true;
-        if (isset(self::$_typeMap[$config[self::TYPE]])) {
-            if ($config[self::TYPE] === self::TYPE_CONTAINER) {
+        $type = $config[self::DOCTRINE_MAPPING_TYPE] ?? $config[self::TYPE];
+        if (isset(self::$_typeMap[$type])) {
+            if ($type === self::TYPE_CONTAINER) {
                 $config[self::LENGTH] = 40;
             }
-            if ($config[self::TYPE] === self::TYPE_HEX_COLOR) {
+            if ($type === self::TYPE_HEX_COLOR) {
                 $config[self::LENGTH] = 7;
             }
-            $config[self::TYPE] = self::$_typeMap[$config[self::TYPE]];
+            if ($type === self::TYPE_LANGUAGE) {
+                $config[self::LENGTH] = 6;
+            }
+
+            $config[self::TYPE] = self::$_typeMap[$type];
             $config['doctrineIgnore'] = $defaultDoctrineIgnore;
             if (isset($config[self::UNSIGNED])) {
                 if (!isset($config[self::OPTIONS])) {
@@ -228,12 +234,12 @@ class Tinebase_Record_DoctrineMappingDriver extends Tinebase_ModelConfiguration_
      *
      * @return array The names of all mapped classes known to this driver.
      */
-    public function getAllClassNames()
+    public function getAllClassNames(array $models = [])
     {
         $result = [];
 
         /** @var Tinebase_Record_Interface $model */
-        foreach (Tinebase_Application::getInstance()->getModelsOfAllApplications(true) as $model) {
+        foreach ($models ?: Tinebase_Application::getInstance()->getModelsOfAllApplications(true) as $model) {
             if ($this->isTransient($model)) {
                 $result[] = $model;
             }

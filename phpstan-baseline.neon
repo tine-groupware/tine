@@ -186,11 +186,6 @@ parameters:
 			path: tine20/Addressbook/Controller/Contact.php
 
 		-
-			message: "#^Variable \\$countryname in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: tine20/Addressbook/Controller/Contact.php
-
-		-
 			message: "#^Access to an undefined property Zend_Config\\:\\:\\$rules\\.$#"
 			count: 1
 			path: tine20/Addressbook/Convert/Contact/String.php
@@ -963,11 +958,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:hasExternalOrganizer\\(\\)\\.$#"
 			count: 1
-			path: tine20/Calendar/Controller/Event.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:hasGrant\\(\\)\\.$#"
-			count: 6
 			path: tine20/Calendar/Controller/Event.php
 
 		-
@@ -4492,7 +4482,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:dump\\(\\)\\.$#"
-			count: 1
+			count: 2
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
 		-
@@ -4532,7 +4522,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Zend_RedisProxy\\:\\:multi\\(\\)\\.$#"
-			count: 2
+			count: 3
 			path: tine20/Tinebase/ActionQueue/Backend/Redis.php
 
 		-
@@ -5519,51 +5509,6 @@ parameters:
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$records$#"
 			count: 1
 			path: tine20/Tinebase/Export/Richtext/Doc.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$application\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$currency\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$field\\.$#"
-			count: 3
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$identifier\\.$#"
-			count: 29
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$isMatrixField\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$keyfield\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$separateColumns\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$type\\.$#"
-			count: 7
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\|Zend_Config\\:\\:\\$identifier\\.$#"
-			count: 1
-			path: tine20/Tinebase/Export/Spreadsheet/Abstract.php
 
 		-
 			message: "#^Call to an undefined method DateTime\\:\\:toString\\(\\)\\.$#"
@@ -7521,11 +7466,6 @@ parameters:
 			path: tine20/Tinebase/Model/SchedulerTask.php
 
 		-
-			message: "#^PHPDoc tag @property has invalid value \\(Tinebase_Scheduler_Task    config\\)\\: Unexpected token \"config\", expected variable at offset 170$#"
-			count: 1
-			path: tine20/Tinebase/Model/SchedulerTask.php
-
-		-
 			message: "#^PHPDoc tag @property has invalid value \\(int                        failure_count\\)\\: Unexpected token \"failure_count\", expected variable at offset 470$#"
 			count: 1
 			path: tine20/Tinebase/Model/SchedulerTask.php
@@ -8304,41 +8244,6 @@ parameters:
 			message: "#^Method Tinebase_SambaSAM\\:\\:factory\\(\\) has invalid return type Tinebase_SambaSAM_Abstract\\.$#"
 			count: 1
 			path: tine20/Tinebase/SambaSAM.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:cleanZombieTasks\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:deleteByProperty\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getDueTask\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getLastRun\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:getTaskForUpdate\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:hasTask\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
-
-		-
-			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:markTaskRunning\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Scheduler.php
 
 		-
 			message: "#^Method Tinebase_Server_Abstract\\:\\:_getBasicAuthData\\(\\) should return array but return statement is missing\\.$#"
