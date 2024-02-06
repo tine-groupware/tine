@@ -3,16 +3,17 @@
     GIT_STRATEGY: none
     MERGENONINTERACTIVE: "true" # "false" is also true! Runs not interactive if the variable exists.
     pushOptSkipCi: "true" # "false" is also true! Runs not interactive if the variable exists.
-  image: dockerregistry.metaways.net/tine20/tine20/composer:2.4 #composer:2.4
+  image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}
   needs: []
+  tags:
+    - custom-cache
   before_script:
     - !reference [.lib, script]
     - cp $DOCKER_GIT_CONFIG ~/.gitconfig
-    - git_repo_clone
+    - git_repo_clone_cached
     - git config --global user.email "gitlabci@metaways.de"
     - git config --global user.name "gitlabci"
-    - cd ${CI_BUILDS_DIR}
-    - git clone https://gitlab.metaways.net/tine20/tine20.git merge
+    - git_repo_clone_cached ${CI_BUILDS_DIR}/merge
     - cd ${CI_BUILDS_DIR}/merge
     - git config merge.pofile.name "merge po-files driver"
     - git config merge.pofile.driver "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/git/merge-po-files %A %O %B"
@@ -23,11 +24,9 @@
     - git remote add github https://github.com/tine-groupware/tine.git
     - cd ${CI_BUILDS_DIR}/merge/tine20
     
+# todo move custom merge to .abstract.merge and then delete this job
 .abstract.merge_on_source_image:
   extends: .abstract.merge
-  image: ${REGISTRY}/test-source-commit:${IMAGE_TAG}
-  needs: 
-    - docker_build_source
 
 include:
   - local: '/ci/gitlab-ci/custom_merge_jobs.yml'
@@ -41,8 +40,8 @@ merge:
     # BE changes < 2023.11 (TODO remove that when 2022.11 is obsolete)
     - merge_merge_upwards tine20.com/2022.11-custom 2023.11
     - merge_merge_upwards 2023.11 2024.11
-    - merge_merge_mirror origin 2024.11 github main
-    - merge_merge_mirror github main origin 2024.11
+    - merge_merge_mirror customers 2024.11 github main
+    - merge_merge_mirror github main customers 2024.11
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE == "never"
