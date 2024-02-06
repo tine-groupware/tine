@@ -163,7 +163,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'event_types'      => [],
+                'event_types'      => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'eventType' => [],
+                    ],
+                ],
             ],
         ],
 
