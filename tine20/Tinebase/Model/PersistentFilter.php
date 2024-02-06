@@ -81,11 +81,26 @@ class Tinebase_Model_PersistentFilter extends Tinebase_Record_Abstract
     public function setFromArray(array &$_data)
     {
         if (isset($_data['filters']) && ! $_data['filters'] instanceof Tinebase_Model_Filter_FilterGroup) {
-            try {
-                $_data['filters'] = $this->getFilterGroup($_data['model'], $_data['filters']);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . ' Sort out missing ' . $_data['model'] . ' filter: ' . $tenf->getMessage());
+            $errorMessage = 'Sort out missing ' . $_data['model'] . ' (no model and filter found)';
+            if (
+                ! class_exists($_data['model'])
+                && ! class_exists(preg_replace('/Filter$/', '', $_data['model']))
+            ) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                    Tinebase_Core::getLogger()->err(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $errorMessage
+                    );
+                }
+            } else {
+                try {
+                    $_data['filters'] = $this->getFilterGroup($_data['model'], $_data['filters']);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(
+                            __METHOD__ . '::' . __LINE__ . ' ' . $errorMessage
+                        );
+                    }
+                }
             }
         }
         

@@ -841,12 +841,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         try {
             $persistentFilters = Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters();
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                . " Failed to fetch persistent filters. Exception: \n" . $tenf);
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
+                __METHOD__ . '::' . __LINE__ . " Failed to fetch persistent filters. Exception:" . $tenf);
             $persistentFilters = array();
-        } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . " Failed to fetch persistent filters. Exception: \n" . $e);
+        } catch (Throwable $t) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                __METHOD__ . '::' . __LINE__ . " Failed to fetch persistent filters. Error:" . $t);
             $persistentFilters = array();
         }
 
