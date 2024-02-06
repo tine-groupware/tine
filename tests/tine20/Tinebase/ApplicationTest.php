@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -401,6 +401,10 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_Config::class,
                 Sales_Model_Contract::class,
                 Sales_Model_Customer::class,
+                Sales_Model_Debitor::class,
+                Sales_Model_Division::class,
+                Sales_Model_DivisionEvalDimensionItem::class,
+                Sales_Model_DivisionGrants::class,
                 Sales_Model_DocumentPosition_Delivery::class,
                 Sales_Model_DocumentPosition_Invoice::class,
                 Sales_Model_DocumentPosition_TransitionSource::class,
@@ -408,7 +412,9 @@ class Tinebase_ApplicationTest extends TestCase
                 Sales_Model_DocumentPosition_Order::class,
                 Sales_Model_Document_Address::class,
                 Sales_Model_Document_Boilerplate::class,
+                Sales_Model_Document_Category::class,
                 Sales_Model_Document_Customer::class,
+                Sales_Model_Document_Debitor::class,
                 Sales_Model_Document_Delivery::class,
                 Sales_Model_Document_Invoice::class,
                 Sales_Model_Document_Transition::class,
@@ -439,6 +445,7 @@ class Tinebase_ApplicationTest extends TestCase
             ),
             Tasks_Config::APP_NAME => array(
                 Tasks_Model_Attendee::class,
+                Tasks_Model_AttendeeStatus::class,
                 Tasks_Model_Pagination::class,
                 Tasks_Model_Priority::class,
                 Tasks_Model_Status::class,
@@ -465,8 +472,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_BankHoliday::class,
                 Tinebase_Model_BankHolidayCalendar::class,
                 Tinebase_Model_BLConfig::class,
-                Tinebase_Model_CostUnit::class,
-                Tinebase_Model_CostCenter::class,
                 Tinebase_Model_MunicipalityKey::class,
                 Tinebase_Model_Config::class,
                 Tinebase_Model_Container::class,
@@ -481,6 +486,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_EmailUser::class,
                 Tinebase_Model_EmailUser_Alias::class,
                 Tinebase_Model_EmailUser_Forward::class,
+                Tinebase_Model_EvaluationDimension::class,
+                Tinebase_Model_EvaluationDimensionItem::class,
                 Tinebase_Model_FilterSyncToken::class,
                 Tinebase_Model_FullUser::class,
                 Tinebase_Model_Grants::class,
@@ -506,6 +513,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_ModificationLog::class,
                 Tinebase_Model_Note::class,
                 Tinebase_Model_NoteType::class,
+                Tinebase_Model_NumberableConfig::class,
                 Tinebase_Model_Pagination::class,
                 Tinebase_Model_Path::class,
                 Tinebase_Model_PersistentFilterGrant::class,
@@ -525,6 +533,7 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_TempFile::class,
                 Tinebase_Model_Tree_FileLocation::class,
                 Tinebase_Model_Tree_FileObject::class,
+                Tinebase_Model_Tree_FlySystem::class,
                 Tinebase_Model_Tree_Node::class,
                 Tinebase_Model_Tree_RefLog::class,
                 Tinebase_Model_UpdateMultipleException::class,

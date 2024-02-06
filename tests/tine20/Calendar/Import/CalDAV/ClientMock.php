@@ -180,8 +180,8 @@ END:VCALENDAR
         return array (
           '/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/' => 
                array(
-                  '{DAV:}resourcetype' => new Sabre\DAV\Property\ResourceType(array('{DAV:}collection')),
-                  '{DAV:}acl' => new Sabre\DAVACL\Property\Acl(array(
+                  '{DAV:}resourcetype' => new Tine20\DAV\Property\ResourceType(array('{DAV:}collection')),
+                  '{DAV:}acl' => new Tine20\DAVACL\Property\Acl(array(
                     array (
                       'principal' => '/principals/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/',
                       'protected' => true,
@@ -220,7 +220,7 @@ END:VCALENDAR
                 )),
                 '{DAV:}displayname' => 'User1 Test',
                 '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' => new
-                    Sabre\CalDAV\Property\SupportedCalendarComponentSet(array(
+                    Tine20\CalDAV\Property\SupportedCalendarComponentSet(array(
                         0 => 'VEVENT',
                         1 => 'VTODO',
                         2 => 'VTIMEZONE',
@@ -231,12 +231,12 @@ END:VCALENDAR
             '/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/' =>
             array (
                 '{DAV:}resourcetype' =>
-                new Sabre\DAV\Property\ResourceType(array(
+                new Tine20\DAV\Property\ResourceType(array(
                     0 => '{DAV:}collection',
                     1 => '{urn:ietf:params:xml:ns:caldav}calendar',
                 )),
                 '{DAV:}acl' =>
-                new Sabre\DAVACL\Property\Acl(array(
+                new Tine20\DAVACL\Property\Acl(array(
                     array (
                         'principal' => '/principals/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/',
                         'protected' => true,
@@ -275,7 +275,7 @@ END:VCALENDAR
                 )),
                 '{DAV:}displayname' => 'calendar',
                 '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set' =>
-                new Sabre\CalDAV\Property\SupportedCalendarComponentSet(array(
+                new Tine20\CalDAV\Property\SupportedCalendarComponentSet(array(
                     0 => 'VEVENT',
                     1 => 'VTODO',
                     2 => 'VTIMEZONE',

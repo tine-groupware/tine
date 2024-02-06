@@ -12,6 +12,19 @@ release_tag() {
     curl -H "Authorization: Bearer $GITLAB_TOKEN" -XPOST "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/tags?tag_name=$tag&ref=$CI_COMMIT_SHA&message=version+$tag"
 }
 
+release_weekly_tag() {
+    tag_prefix="weekly-$(date '+%Y.%V.')"
+
+    last_counter="$(curl -H "Authorization: Bearer $GITLAB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/tags?search=^$tag_prefix" | jq -r '.[].name' | sort --version-sort | tail -n 1 | awk -F '.' '{print $NF}')"
+    counter="$((${last_counter:-0}+1))"
+
+    tag="$tag_prefix$counter"
+
+    echo "tag: $tag"
+
+    curl -H "Authorization: Bearer $GITLAB_TOKEN" -XPOST "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/tags?tag_name=$tag&ref=$CI_COMMIT_SHA&message=version+$tag"
+}
+
 release_to_gitlab() {
     tag="${CI_COMMIT_TAG}"
     customer="$(release_determin_customer)"

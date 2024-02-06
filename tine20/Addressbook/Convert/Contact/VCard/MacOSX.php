@@ -87,7 +87,7 @@ class Addressbook_Convert_Contact_VCard_MacOSX extends Addressbook_Convert_Conta
      * converts Addressbook_Model_Contact to vcard
      * 
      * @param  Addressbook_Model_Contact  $_record
-     * @return \Sabre\VObject\Component\VCard
+     * @return \Tine20\VObject\Component\VCard
      */
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {

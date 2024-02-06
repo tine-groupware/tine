@@ -144,7 +144,10 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                 allowCreateNew: false,
                 preserveJsonProps: 'original_id',
                 qtip: window.i18n._('Edit copy'),
-                editDialogMode: 'local'
+                editDialogConfig: {
+                    mode: 'local',
+                    denormalizationRecordClass: this.denormalizationRecordClass
+                }
             }));
             this.useEditPlugin = false;
         }
@@ -154,7 +157,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
         this.valueField = this.recordClass.getMeta('idProperty');
         this.disableClearer = ! this.allowBlank;
 
-        this.emptyText = this.emptyText ||
+        this.emptyText = _.isString(this.emptyText) ? this.emptyText :
             (this.readOnly || this.disabled ? '' : String.format(i18n._('Search for {0} ...'), this.recordClass.getRecordName() || _('Record')));
 
         this.loadingText = i18n._('Searching...');

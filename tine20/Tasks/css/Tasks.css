@@ -43,3 +43,10 @@
 .t-contenttype-task .action_delete {
     background-image: url(../../images/icon-set/icon_task_clear.svg) !important;
 }
+
+.tasks-dependency-source {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 50px;
+    display: inline-grid;
+}

@@ -50,8 +50,10 @@ class Addressbook_Config extends Tinebase_Config_Abstract
      * 
      * @var string
      */
-    const CONTACT_SALUTATION = 'contactSalutation';
-    
+    public const CONTACT_SALUTATION = 'contactSalutation';
+
+    public const FILE_AS_TEMPLATE = 'fileAsTemplate';
+
     /**
      * fields for list type
      *
@@ -332,6 +334,17 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             'setByAdminModule'      => FALSE,
             'setBySetupModule'      => FALSE,
         ),
+        self::FILE_AS_TEMPLATE => [
+            //_('Template for file_as field')
+            self::LABEL                 => 'Template for file_as field',
+            //_('Template for file_as field')
+            self::DESCRIPTION           => 'Template for file_as field',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => '{% if n_family %}{% set n = n_family %}{% elseif org_name %}{% set n = org_name %}{% endif %}{% if n %}{{ n }}{% endif %}{% if n_given and n_given != n %}{% if n %}, {% endif %}{{ n_given }}{% endif %}',
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+        ],
         self::LIST_TYPE => array(
                 //_('List types available')
                 'label'                 => 'List types available',

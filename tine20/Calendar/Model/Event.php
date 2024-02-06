@@ -163,7 +163,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'event_types'      => [],
+                'event_types'      => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        'eventType' => [],
+                    ],
+                ],
             ],
         ],
 
@@ -388,6 +392,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                     self::DEPENDENT_RECORDS         => true,
                 ],
                 self::RECURSIVE_RESOLVING => true,
+                self::UI_CONFIG         => [
+                    'searchComboConfig'     => [
+                        'useEditPlugin'         => false,
+                    ],
+                ],
             ],
             Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => [
                 self::TYPE          => self::TYPE_VIRTUAL,

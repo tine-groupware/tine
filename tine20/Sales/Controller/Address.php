@@ -99,10 +99,6 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         
         $ft .= $i18n->_($type);
         
-        if ($type == 'billing') {
-            $ft .= ' - ' . $address['custom1'];
-        }
-        
         $ft .= ')';
         
         $address['fulltext'] = $ft;
@@ -150,10 +146,17 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
     
         return $_ids;
     }
-    
+
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+        $this->_validateParentAndType($_record);
+    }
+
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         parent::_inspectBeforeUpdate($_record, $_oldRecord);
+        $this->_validateParentAndType($_record);
 
         //Do not update Address Records with a relation to a contact from type CONTACTADDRESS
         $relations = $_record->relations;
@@ -165,6 +168,23 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
             if ($relation['type'] == 'CONTACTADDRESS') {
                 throw new Tinebase_Exception_AccessDenied('It is not allowed to change an address that is linked to a contact. Please update the contact instead.');
             }
+        }
+    }
+
+    protected function _validateParentAndType(Sales_Model_Address $address): void
+    {
+        if (!$address->{Sales_Model_Address::FLD_CUSTOMER_ID} && !$address->{Sales_Model_Address::FLD_DEBITOR_ID}) {
+            throw new Tinebase_Exception_Record_Validation('either ' . Sales_Model_Address::FLD_CUSTOMER_ID . ' or '
+                . Sales_Model_Address::FLD_DEBITOR_ID . ' need to be set');
+        }
+        if ($address->{Sales_Model_Address::FLD_CUSTOMER_ID} && $address->{Sales_Model_Address::FLD_DEBITOR_ID}) {
+            throw new Tinebase_Exception_Record_Validation('only one of ' . Sales_Model_Address::FLD_CUSTOMER_ID
+                . ' and ' . Sales_Model_Address::FLD_DEBITOR_ID . ' must be set');
+        }
+        if ($address->{Sales_Model_Address::FLD_CUSTOMER_ID} && $address->{Sales_Model_Address::FLD_TYPE} &&
+                Sales_Model_Address::TYPE_POSTAL !== $address->{Sales_Model_Address::FLD_TYPE}) {
+            throw new Tinebase_Exception_Record_Validation('if ' . Sales_Model_Address::FLD_CUSTOMER_ID . ' is set '
+                . Sales_Model_Address::FLD_TYPE . ' needs to be ' . Sales_Model_Address::TYPE_POSTAL);
         }
     }
 
@@ -230,7 +250,14 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
     public function contactToCustomerAddress(Sales_Model_Address $address, Addressbook_Model_Contact $contact)
     {
         $language = Sales_Controller::getInstance()->getContactDefaultLanguage($contact);
-        $customer = Sales_Controller_Customer::getInstance()->get($address->customer_id);
+        if ($address->customer_id) {
+            $customer = Sales_Controller_Customer::getInstance()->get($address->customer_id);
+        } else {
+            $customer = Sales_Controller_Customer::getInstance()->get(
+                Sales_Controller_Debitor::getInstance()->get($address->{Sales_Model_Address::FLD_DEBITOR_ID})
+                    ->{Sales_Model_Debitor::FLD_CUSTOMER_ID}
+            );
+        }
         $fullName = $this->getContactFullName($contact, $language);
         
         //Update Address

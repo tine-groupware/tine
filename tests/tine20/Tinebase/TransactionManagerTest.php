@@ -145,15 +145,21 @@ class Tinebase_TransactionManagerTest extends \PHPUnit\Framework\TestCase
     public function testNestedTransactions()
     {
         $c1 = Sales_Controller_Contract::getInstance();
-        $c2 = Tinebase_Controller_CostCenter::getInstance();
+        $c2 = Tinebase_Controller_EvaluationDimensionItem::getInstance();
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+            ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
+        ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
+
         $tm = Tinebase_TransactionManager::getInstance();
         
         $tm->startTransaction(Tinebase_Core::getDb());
 
         try {
             // create cost center
-            $costCenter = $c2->create(new Tinebase_Model_CostCenter(array('number' => 123, 'name' => 'unittest123')));
-            
+            $costCenter = $c2->create(new Tinebase_Model_EvaluationDimensionItem(
+                array('name' => 'unittest123', 'number' => 123, Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID => $cc->getId())
+            ));
+
             // exception should be thrown (title needed)
             $c1->create(new Sales_Model_Contract(array()));
             

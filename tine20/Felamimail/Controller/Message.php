@@ -1434,9 +1434,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $messageFactory = new MAPI\MapiMessageFactory(new Felamimail_MAPI_Factory());
             $documentFactory = new Pear\DocumentFactory();
             
-            $hashFile = Tinebase_FileSystem::getInstance()->getRealPathForHash($node->hash);
+            $stream = Tinebase_FileSystem::getInstance()->fopen($nodePath, 'r');
             try {
-                $ole = $documentFactory->createFromFile($hashFile);
+                $ole = $documentFactory->createFromStream($stream);
                 $parsedMessage = $messageFactory->parseMessage($ole);
                 $content = $parsedMessage->toMimeString();
             } catch (Throwable $t) {
@@ -1446,6 +1446,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' ' . $t->getTraceAsString());
                 throw new Tinebase_Exception_SystemGeneric($message);
+            } finally {
+                Tinebase_FileSystem::getInstance()->fclose($stream);
             }
 
             // write it to cache

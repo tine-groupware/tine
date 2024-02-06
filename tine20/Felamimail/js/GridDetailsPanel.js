@@ -145,7 +145,7 @@ Ext.ns('Tine.Felamimail');
             Tine.Felamimail.messageBackend.abort(this.fetchBodyTransactionId);
         }
         Tine.log.debug('Tine.Felamimail.GridDetailsPanel::refetchBody -> calling fetchBody');
-        this.fetchBodyTransactionId = Tine.Felamimail.messageBackend.fetchBody(record, 'configured', callback);
+        this.fetchBodyTransactionId = Tine.Felamimail.messageBackend.fetchBody(record, 'display_format', callback);
     },
     
     /**

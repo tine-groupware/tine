@@ -1,9 +1,0 @@
-$primary: #0062a7; // setting the primary color
-@import 'global_bs'; // global bs styles needed for modal
-@import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'; // bs-Vue styles
-
-.bootstrap-scope{
-    @import "scoped_bs";
-    font-size: 1.1em;
-    font-family: arial, tahoma, helvetica, sans-serif; // this seems to be the default font stack in tine
-}

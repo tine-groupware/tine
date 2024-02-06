@@ -410,12 +410,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     initialLoadAfterRender: true,
 
     /**
-     * add "create new record" button
-     * 
-     * @type Boolean
-     * @property addButton
+     * @cfg {Bool} allowCreateNew
+     * allow to create new records (local mode only atm.!)
      */
-    addButton: true,
+    allowCreateNew: true,
+
+    /**
+     * @cfg {Bool} allowDelete
+     * allow to delete records
+     */
+    allowDelete: true,
     
     layout: 'border',
     border: false,
@@ -656,9 +660,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (! this.filterToolbar && ! this.editDialog) {
             var filterModels = [];
             if (this.modelConfig) {
-                filterModels = this.getCustomfieldFilters();
+                filterModels = Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters(this.recordClass);
             } else if (Ext.isFunction(this.recordClass.getFilterModel)) {
-                filterModels = this.recordClass.getFilterModel().concat(this.getCustomfieldFilters());
+                filterModels = this.recordClass.getFilterModel().concat(Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters(this.recordClass));
             }
             this.filterToolbar = new Tine.widgets.grid.FilterPanel(Ext.apply({}, {
                 app: this.app,
@@ -986,7 +990,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             scope: this
         });
 
-        this.action_addInNewWindow = (this.addButton) ? new Ext.Action({
+        this.action_addInNewWindow = (this.allowCreateNew) ? new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
             text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(i18n._('Add {0}'), this.i18nRecordName),
@@ -1005,7 +1009,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             allowMultiple: true
         });
 
-        this.initDeleteAction(services);
+        if (this.allowDelete) {
+            this.initDeleteAction(services);
+        }
 
         this.action_move = new Ext.Action({
             requiredGrant: 'editGrant',
@@ -1151,6 +1157,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         Tine.widgets.dialog.ImportDialog.openWindow({
+            openerCt: this,
             appName: this.app.name,
             modelName: this.recordClass.getMeta('modelName'),
             defaultImportContainer: container,
@@ -2265,53 +2272,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
 
     /**
-     * get custom field filter for filter toolbar
-     * 
-     * @return {Array}
-     */
-    getCustomfieldFilters: function() {
-        var modelName = this.recordClass.getMeta('appName') + '_Model_' + this.recordClass.getMeta('modelName'),
-            cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
-            result = [];
-        Ext.each(cfConfigs, function(cfConfig) {
-            try {
-                var cfDefinition = cfConfig.get('definition');
-                switch (cfDefinition.type) {
-                    case 'record':
-                        if (_.get(window, cfDefinition.recordConfig.value.records)) {
-                            result.push({
-                                filtertype: 'foreignrecord',
-                                label: cfDefinition.label,
-                                app: this.app,
-                                ownRecordClass: this.recordClass,
-                                foreignRecordClass: eval(cfDefinition.recordConfig.value.records),
-                                linkType: 'foreignId',
-                                ownField: 'customfield:' + cfConfig.id,
-                                pickerConfig: cfDefinition.recordConfig.additionalFilterSpec ? {
-                                    additionalFilterSpec: cfDefinition.recordConfig.additionalFilterSpec
-                                } : null
-                            });
-                        }
-                        break;
-                    case 'keyField':
-                        result.push({filtertype:'tine.widget.keyfield.filter',field:'customfield:' + cfConfig.id, app: this.app, keyfieldName: cfConfig.get('name') , label:cfDefinition.label});
-                        break;
-                    default:
-                        result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
-                        break;
-                }
-
-            } catch (e) {
-                Tine.log.warn('CustomfieldFilters ' + cfDefinition.label + ' doesnt create');
-
-            }
-        }, this);
-
-
-        return result;
-    },
-
-    /**
      * returns filter toolbar
      * @private
      * @deprecated
@@ -2325,7 +2285,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         return new Tine.widgets.grid.FilterPanel(Ext.apply(config, {
             app: this.app,
             recordClass: this.recordClass,
-            filterModels: this.recordClass.getFilterModel().concat(this.getCustomfieldFilters()),
+            filterModels: this.recordClass.getFilterModel(),
             defaultFilter: 'query',
             filters: this.defaultFilters || []
         }));
@@ -2608,6 +2568,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         var popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
+                openerCt: this,
                 plugins: Ext.encode(plugins),
                 fixedFields: fixedFields,
                 additionalConfig: Ext.encode(additionalConfig),
@@ -2630,7 +2591,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @returns {Tine.Tinebase.data.Record}
      */
     createNewRecord: function() {
-        return new this.recordClass(this.recordClass.getDefaultData(), 0);
+        const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.recordClass.getDefaultData(), this.getRecordDefaults()), this.recordClass);
+        record.phantom = true;
+
+        // legacy should be removed some day
+        record.setId(0);
+
+        return record;
+    },
+
+    getRecordDefaults: function() {
+        const defaults = {...this.recordDefaults || {} };
+
+        return defaults;
     },
 
     /**

@@ -12,12 +12,12 @@
  * @author     Cornelius Weiss <c.weiss@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Calendar_Frontend_CalDAV_PluginPrivateEvents extends \Sabre\DAV\ServerPlugin
+class Calendar_Frontend_CalDAV_PluginPrivateEvents extends \Tine20\DAV\ServerPlugin
 {
     /**
      * Reference to server object
      *
-     * @var \Sabre\DAV\Server
+     * @var \Tine20\DAV\Server
      */
     protected $server;
 
@@ -35,7 +35,7 @@ class Calendar_Frontend_CalDAV_PluginPrivateEvents extends \Sabre\DAV\ServerPlug
      * Returns a plugin name.
      *
      * Using this name other plugins will be able to access other plugins
-     * using \Sabre\DAV\Server::getPlugin
+     * using \Tine20\DAV\Server::getPlugin
      *
      * @return string
      */
@@ -47,10 +47,10 @@ class Calendar_Frontend_CalDAV_PluginPrivateEvents extends \Sabre\DAV\ServerPlug
     /**
      * Initializes the plugin
      *
-     * @param \Sabre\DAV\Server $server
+     * @param \Tine20\DAV\Server $server
      * @return void
      */
-    public function initialize(\Sabre\DAV\Server $server)
+    public function initialize(\Tine20\DAV\Server $server)
     {
         $this->server = $server;
     }

@@ -34,12 +34,12 @@ Tine.widgets.form.RecordPickerManager = function() {
             var appName = Ext.isString(appName) ? appName : appName.appName,
                 modelName = Ext.isFunction(modelName) ? modelName.getMeta('modelName') : modelName,
                 key = appName+modelName+(config.allowMultiple ? 's' : '');
-
+            
             if(items[key]) {   // if registered
                 if(Ext.isString(items[key])) { // xtype
                     return Ext.ComponentMgr.create(config, items[key]);
                 } else {
-                    return new items[key](config);
+                    return config.xtype ? Ext.create(config) : new items[key](config);
                 }
             } else {    // not registered, create default
                 const pickerClass = config.allowMultiple ?
@@ -59,7 +59,7 @@ Tine.widgets.form.RecordPickerManager = function() {
 
                 Ext.apply(defaultconfig, config);
 
-                return new pickerClass(defaultconfig);
+                return defaultconfig.xtype ? Ext.create(defaultconfig) : new pickerClass(defaultconfig);
             }
         },
 

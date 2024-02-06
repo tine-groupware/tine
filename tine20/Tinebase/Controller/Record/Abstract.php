@@ -859,7 +859,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 continue;
             }
 
-            if (!($numberable = $this->_getNumberable($_record, $className, $fieldDef['fieldName'], $fieldDef))) {
+            if (!($numberable = Tinebase_Numberable::getNumberable($_record, $className, $fieldDef['fieldName'], $fieldDef))) {
                 if (null !== $_oldRecord) {
                     $_record->{$fieldDef['fieldName']} = $_oldRecord->{$fieldDef['fieldName']};
                 }
@@ -908,30 +908,6 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _inspectAutoincrement($_record, $_oldRecord, $numberable, $fieldDef, $createNewValue)
     {
         return $createNewValue;
-    }
-
-    /**
-     * get record numberable value for given field
-     *
-     * @param Tinebase_Record_Interface $_record
-     * @param string $className
-     * @param string $fieldName
-     * @param array $fieldConfig
-     * @return ?Tinebase_Numberable_Abstract
-     */
-    protected function _getNumberable($_record, $className, $fieldName, $fieldConfig)
-    {
-        if (isset($fieldConfig['config'][Tinebase_Numberable::CONFIG_OVERRIDE])) {
-            list($objectClass, $method) = explode('::', $fieldConfig['config'][Tinebase_Numberable::CONFIG_OVERRIDE]);
-            $object = call_user_func($objectClass . '::getInstance');
-            if (method_exists($object, $method)) {
-                $configOverride = call_user_func_array([$object, $method], [$_record]);
-                $fieldConfig['config'] = array_merge($fieldConfig['config'], $configOverride);
-                $fieldName .= Tinebase_Helper::arrayHash($fieldConfig['config']);
-            }
-        }
-
-        return Tinebase_Numberable::getNumberable($className, $fieldName, $fieldConfig);
     }
 
     /**
@@ -1091,16 +1067,16 @@ abstract class Tinebase_Controller_Record_Abstract
             try {
                 /** @var Tinebase_Controller_Record_Abstract $ctrl */
                 $ctrl = Tinebase_Core::getApplicationInstance($definition[TMCC::CONFIG][TMCC::DENORMALIZATION_OF]);
-                $originalRecord = $ctrl->get($record->{TMCC::FLD_ORIGINAL_ID} ?: $record->getId());
+                $originalRecord = $ctrl->get(_id: $record->{TMCC::FLD_ORIGINAL_ID} ?: $record->getId(), _getRelatedData:  false, _getDeleted: true);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 $record->setId(null);
             }
         }
         if (!$record->{TMCC::FLD_ORIGINAL_ID}) {
+            // this may be null, if the denormalized record in fact is not denormalized! it may also be just a local instance
             $record->{TMCC::FLD_ORIGINAL_ID} = $record->getId();
         }
 
-        // this may be null, if the denormalized record infact is not denormalized! it may also be just a local instance
         if ((isset($record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES]) &&
                 $record::getConfiguration()->denormalizationConfig[TMCC::TRACK_CHANGES])) {
             if (null === $originalRecord || !$this->_denormalizedDiff($record, $originalRecord)->isEmpty()) {
@@ -1110,7 +1086,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
 
-        $record->setId(null);
+        $record->setId(Tinebase_Record_Abstract::generateUID());
     }
 
     /**
@@ -1463,8 +1439,10 @@ abstract class Tinebase_Controller_Record_Abstract
             . ' Doing ACL check ...');
         
         if (($_currentRecord->has('container_id') && Tinebase_Record_Abstract::convertId($_currentRecord->container_id) != Tinebase_Record_Abstract::convertId($_record->container_id)) ||
-            (($mc = $_record::getConfiguration()) && ($daf = $mc->delegateAclField) &&
-                $_currentRecord->getIdFromProperty($daf) !== $_record->getIdFromProperty($daf))) {
+            (($mc = $_record::getConfiguration()) && ($daf = $mc->delegateAclField) && (
+                $mc->getFields()[$daf][TMCC::TYPE] === TMCC::TYPE_RECORDS ?
+                    (($migration = $_currentRecord->{$daf}->getMigration($_record->{$daf}->getArrayOfIds())) && (count($migration['toDeleteIds']) > 0 || count($migration['toCreateIds']) > 0))
+                    : ($_currentRecord->getIdFromProperty($daf) !== $_record->getIdFromProperty($daf))))) {
             $this->_checkGrant($_record, self::ACTION_CREATE);
             $this->_checkRight(self::ACTION_CREATE);
             // NOTE: It's not yet clear if we have to demand delete grants here or also edit grants would be fine

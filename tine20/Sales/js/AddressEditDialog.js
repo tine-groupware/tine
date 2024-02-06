@@ -62,19 +62,6 @@ Tine.Sales.AddressEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         ].join(Tine.Tinebase.CanonicalPath.separator);
     },
 
-    
-    /**
-     * executed when record gets updated from form
-     * 
-     * @private
-     */
-    onRecordUpdate: function() {
-        Tine.Sales.AddressEditDialog.superclass.onRecordUpdate.call(this);
-        
-        this.record.set('type',        String(this.fixedFields.get('type')).toLowerCase());
-        this.record.set('customer_id', this.fixedFields.get('customer_id'));
-    },
-    
     /**
      * returns dialog
      * 

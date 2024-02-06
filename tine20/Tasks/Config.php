@@ -46,21 +46,25 @@ class Tasks_Config extends Tinebase_Config_Abstract
         self::TASK_STATUS => array(
                                    //_('Tasks status available')
             'label'                 => 'Tasks status available',
-                                   //_('Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation.')
-            'description'           => 'Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation.',
+                                   //_('Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or synchronisation.')
+            'description'           => 'Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or synchronisation.',
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Tasks_Model_Status'),
             'clientRegistryInclude' => true,
             'setByAdminModule'      => true,
-            'default'               => array(
-                'records' => array(
-                    array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'is_open' => 1,  'icon' => 'images/icon-set/icon_invite.svg', 'system' => true), //_('No response')
-                    array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0,  'icon' => 'images/icon-set/icon_ok.svg',                   'system' => true), //_('Completed')
-                    array('id' => 'CANCELLED',    'value' => 'Cancelled',   'is_open' => 0,  'icon' => 'images/icon-set/icon_stop.svg',        'system' => true), //_('Cancelled')
-                    array('id' => 'IN-PROCESS',   'value' => 'In process',  'is_open' => 1,  'icon' => 'images/icon-set/icon_reload.svg',         'system' => true), //_('In process')
-                ),
-                'default' => 'NEEDS-ACTION'
-            )
+            'default'               => [
+                'records' => [
+                    ['id' => Tasks_Model_Task::TASK_STATUS_NEEDS_ACTION, 'value' => 'No response', 'is_open' => 1,
+                        'icon' => 'images/icon-set/icon_invite.svg', 'system' => true], //_('No response')
+                    ['id' => Tasks_Model_Task::TASK_STATUS_COMPLETED, 'value' => 'Completed', 'is_open' => 0,
+                        'icon' => 'images/icon-set/icon_ok.svg', 'system' => true], //_('Completed')
+                    ['id' => Tasks_Model_Task::TASK_STATUS_CANCELLED, 'value' => 'Cancelled', 'is_open' => 0,
+                        'icon' => 'images/icon-set/icon_stop.svg', 'system' => true], //_('Cancelled')
+                    ['id' => Tasks_Model_Task::TASK_STATUS_IN_PROCESS, 'value' => 'In process', 'is_open' => 1,
+                        'icon' => 'images/icon-set/icon_reload.svg', 'system' => true], //_('In process')
+                ],
+                'default' => 'NEEDS-ACTION',
+            ]
         ),
         self::TASK_PRIORITY => array(
                                    //_('Task priorities available')
@@ -86,7 +90,7 @@ class Tasks_Config extends Tinebase_Config_Abstract
             //_('Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation.')
             'description'           => 'Possible task collaborator status. Please note that additional collaborator status might impact other task systems on export or synchronisation.',
             'type'                  => Tinebase_Config_Abstract::TYPE_KEYFIELD_CONFIG,
-//            'options'               => array('recordModel' => 'Calendar_Model_AttendeeStatus'),
+            'options'               => array('recordModel' => Tasks_Model_AttendeeStatus::class),
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
             'default'               => array(

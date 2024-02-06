@@ -69,8 +69,8 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
          * @param {String}              keyFieldName 
          * @return Ext.data.Store
          */
-        render: function(app, keyFieldName, id) {
-            var renderer = this.get(app, keyFieldName);
+        render: function(app, keyFieldName, id, what) {
+            var renderer = this.get(app, keyFieldName, what);
             
             return renderer(id);
         },

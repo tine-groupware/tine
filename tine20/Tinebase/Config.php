@@ -21,7 +21,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      *
      * @var int
      */
-    const TINEBASE_VERSION = 16;
+    const TINEBASE_VERSION = 17;
 
     /**
      * access log rotation in days
@@ -50,6 +50,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const MFA_ENCOURAGE = 'mfa_encourage';
+
+    const MFA_BYPASS_NETMASKS = 'mfa_bypass_netmasks';
 
     /**
      * authentication backend config
@@ -1064,6 +1066,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ]]
             ],
         ),
+        self::MFA_BYPASS_NETMASKS => [
+            self::LABEL             => 'MFA Bypass Netmasks', // _('MFA Bypass Netmasks')
+            self::DESCRIPTION       => 'MFA Bypass Netmasks', // _('MFA Bypass Netmasks')
+            self::TYPE              => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYSETUPMODULE  => true,
+            self::SETBYADMINMODULE  => true,
+            self::DEFAULT_STR       => [],
+        ],
         self::MFA => array(
             //_('MFA')
             'label'                 => 'MFA',

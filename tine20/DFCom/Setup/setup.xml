@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>DFCom</name>
-    <version>16.0</version>
+    <version>17.0</version>
     <order>80</order>
     <depends>
         <application>Addressbook</application>

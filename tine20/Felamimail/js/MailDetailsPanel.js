@@ -12,6 +12,7 @@ import waitFor from "../../Tinebase/js/util/waitFor.es6";
 Ext.ns('Tine.Felamimail');
 
 import getFileAttachmentAction from './AttachmentFileAction';
+import {contrastColors} from "../../Tinebase/js/util/contrastColors";
 
 /**
  * @param config
@@ -267,8 +268,8 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     body = body || '';
                     if (body) {
                         var account = this.app.getActiveAccount();
-                        if (account && (account.get('display_format') == 'plain' ||
-                                (account.get('display_format') == 'content_type' && messageData.body_content_type == 'text/plain'))
+                        if (account && (account.get('display_format') === 'plain' ||
+                                (account.get('display_format') === 'content_type' && messageData.body_content_type === 'text/plain'))
                         ) {
                             var width = this.panel.body.getWidth()-25,
                                 height = this.panel.body.getHeight()-90,
@@ -283,14 +284,16 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                 'style="width: ' + width + 'px; height: ' + height + 'px; " ' +
                                 'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +
                                 body + '</textarea>';
-                        } else if (messageData.body_content_type != 'text/html' || messageData.body_content_type_of_body_property_of_this_record == 'text/plain') {
+                        } else if (messageData.body_content_type !== 'text/html' || messageData.body_content_type_of_body_property_of_this_record === 'text/plain') {
                             // message content is text and account format non-text
                             body = Ext.util.Format.nl2br(Ext.util.Format.wrapEmojis(body));
                         } else {
                             Ext.util.Format.linkSaveHtmlEncodeStepOne(body);
                             Tine.Tinebase.common.linkifyText(Ext.util.Format.wrapEmojis(body), function(linkified) {
-                                var bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
-                                Ext.fly(bodyEl).update(Ext.util.Format.linkSaveHtmlEncodeStepTwo(linkified));
+                                const bodyEl = this.getMessageRecordPanel().getEl().query('div[class=preview-panel-felamimail-body]')[0];
+                                bodyEl.innerHTML = Ext.util.Format.linkSaveHtmlEncodeStepTwo(linkified);
+                                contrastColors.findBackground(bodyEl);
+                                Ext.fly(bodyEl).update(bodyEl.innerHTML);
                             }, this.panel);
                         }
                     }

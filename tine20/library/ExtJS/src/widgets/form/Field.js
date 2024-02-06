@@ -518,7 +518,7 @@ var form = new Ext.form.FormPanel({
                         const parent = fromElement.findParentBy(function(p){return p.tabEl;});
                         tabPanelEl = parent?.tabEl;
                     }
-                    if (tabPanelEl.dataset.invalidfield == fromElement.id) {
+                    if (tabPanelEl?.dataset.invalidfield == fromElement.id) {
                         Ext.fly(tabPanelEl).setStyle('background', null)
                         tabPanelEl.dataset.invalidfield = '';
                         findParentTab(tabpanel)
@@ -611,7 +611,7 @@ var form = new Ext.form.FormPanel({
      */
     setValue : function(v){
         this.value = v;
-        if(this.rendered){
+        if(this.rendered && this.el.dom){
             this.el.dom.value = (Ext.isEmpty(v) ? '' : v);
             this.validate();
         }

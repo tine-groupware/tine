@@ -161,6 +161,25 @@ trigger-release:
   timeout: 20m
   interruptible: false
 
+trigger-weekly-release:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: none
+  image: ${UTIL_REGISTRY}/docker:19.03.1-r3
+  needs: []
+  script:
+    - !reference [.lib, script]
+    - release_weekly_tag
+  rules:
+    - if: $BASE_MAJOR_COMMIT_REF_NAME != "2024.11" || $CUSTOMER_MAJOR_COMMIT_REF_NAME != ""
+      when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /trigger-weekly-release/
+    - if: $TRIGGER_WEEKLY_RELEASE == "false"
+      when: never
+    - if: $PIPELINE_TYPE =~ /trigger-weekly-release/
+  timeout: 20m
+  interruptible: false
+
 mkdocs-deploy:
   stage: deploy
   image: ${UTIL_REGISTRY}/mkdocs:ci-r1

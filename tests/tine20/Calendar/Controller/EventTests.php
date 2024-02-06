@@ -1404,7 +1404,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 
         $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
 
-        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $this->_personas['sclever']->contact_id, true);
+        $collection = new Calendar_Frontend_WebDAV(\Tine20\CalDAV\Plugin::CALENDAR_ROOT . '/' . $this->_personas['sclever']->contact_id, true);
 
         $changes = $collection->getChild($this->_getPersonasDefaultCals('sclever')->id)->getChanges(-1);
 
@@ -1435,7 +1435,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         Tinebase_Core::setUser($this->_personas['sclever']);
         $_SERVER['HTTP_USER_AGENT'] = 'Mac_OS_X/10.9 (13A603) CalendarAgent/174';
 
-        $collection = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $this->_personas['sclever']->contact_id, true);
+        $collection = new Calendar_Frontend_WebDAV(\Tine20\CalDAV\Plugin::CALENDAR_ROOT . '/' . $this->_personas['sclever']->contact_id, true);
 
         $changes = $collection->getChild($this->_getPersonasDefaultCals('sclever')->id)->getChanges(-1);
 

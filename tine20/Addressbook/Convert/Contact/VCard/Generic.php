@@ -23,7 +23,7 @@ class Addressbook_Convert_Contact_VCard_Generic extends Addressbook_Convert_Cont
      * converts Addressbook_Model_Contact to vcard
      * 
      * @param  Addressbook_Model_Contact  $_record
-     * @return Sabre\VObject\Component
+     * @return Tine20\VObject\Component
      */
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {

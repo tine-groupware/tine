@@ -397,6 +397,9 @@ class Sales_JsonTest extends TestCase
                 'name' => Tinebase_Record_Abstract::generateUID(),
                 'cpextern_id' => $contact->getId(),
                 'bic' => 'SOMEBIC',
+                Sales_Model_Customer::FLD_DEBITORS => [[
+                    Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+                ]],
             ]));
             $i++;
         }
@@ -542,6 +545,9 @@ class Sales_JsonTest extends TestCase
     {
         $customer = $this->_instance->saveCustomer(array(
             'name'      => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
         ));
         
         $customer['postal']['prefix1'] = 'test';
@@ -560,6 +566,9 @@ class Sales_JsonTest extends TestCase
     {
         $customer = $this->_instance->saveCustomer(array(
             'name'      => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
             'postal' => [
                 'street' => '11212stree',
                 'postalcode' => '1111',
@@ -568,8 +577,8 @@ class Sales_JsonTest extends TestCase
         ));
 
         // assert invoice address (same as postal address)
-        self::assertTrue(is_array($customer['billing']), print_r($customer, true));
-        self::assertCount(1, $customer['billing'], print_r($customer, true));
+        self::assertTrue(is_array($customer[Sales_Model_Customer::FLD_DEBITORS][0]['billing']), print_r($customer, true));
+        self::assertCount(1, $customer[Sales_Model_Customer::FLD_DEBITORS][0]['billing'], print_r($customer, true));
     }
     
     /**
@@ -604,6 +613,9 @@ class Sales_JsonTest extends TestCase
     {
         $customer = $this->_instance->saveCustomer(array(
             'name'      => Tinebase_Record_Abstract::generateUID(),
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
         ));
 
         $ctrl = Sales_Controller_Boilerplate::getInstance();
@@ -709,65 +721,6 @@ class Sales_JsonTest extends TestCase
         return array(
             array('field' => 'query',           'operator' => 'contains',       'value' => 'PHPUnit'),
         );
-    }
-    
-    /**
-     * tests CostCenter CRUD Methods
-     */
-    public function testAllCostCenterMethods()
-    {
-        $name = Tinebase_Record_Abstract::generateUID(10);
-        $number = Tinebase_DateTime::now()->getTimestamp();
-
-        $this->_instance = new Tinebase_Frontend_Json();
-        $cc = $this->_instance->saveCostCenter(
-            array('number' => $number, 'name' => $name)
-        );
-        
-        $this->assertEquals(40, strlen($cc['id']));
-        
-        $cc = $this->_instance->getCostCenter($cc['id']);
-        
-        $this->assertEquals($number, $cc['number']);
-        $this->assertEquals($name, $cc['name']);
-        
-        $cc['name'] = $cc['name'] . '_unittest';
-        $cc['number'] = $number - 5000;
-        
-        $cc = $this->_instance->saveCostCenter($cc);
-        
-        $this->assertEquals($name . '_unittest', $cc['name']);
-        $this->assertEquals($number - 5000, $cc['number']);
-        
-        $accountId = Tinebase_Core::getUser()->getId();
-
-        $this->assertEquals($accountId, $cc['created_by']['accountId']);
-        $this->assertEquals($accountId, $cc['last_modified_by']['accountId']);
-        $this->assertEquals(NULL, $cc['deleted_by']);
-        $this->assertEquals(NULL, $cc['deleted_time']);
-        $this->assertEquals(2, $cc['seq']);
-        $this->assertEquals(0, $cc['is_deleted']);
-        
-        $ccs = $this->_instance->searchCostCenters(array(array('field' => 'name', 'operator' => 'equals', 'value' => $name . '_unittest')), array());
-        
-        $this->assertEquals(1, $ccs['totalcount']);
-        $this->assertEquals($name . '_unittest', $ccs['results'][0]['name']);
-        
-        $this->_instance->deleteCostCenters($cc['id']);
-        
-        $ccs = $this->_instance->searchCostCenters(array(array('field' => 'number', 'operator' => 'equals', 'value' => $number - 5000)), array());
-        
-        $this->assertEquals(0, $ccs['totalcount']);
-        
-        $be = Tinebase_Controller_CostCenter::getInstance()->getBackend();
-        $be->setModlogActive(FALSE);
-
-        $result = $be->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, [
-            ['field' => 'number', 'operator' => 'equals', 'value' => $number - 5000]
-        ]));
-        
-        $this->assertEquals(1, $result->count());
-        $this->assertEquals(1, $result->getFirstRecord()->is_deleted);
     }
     
     /**

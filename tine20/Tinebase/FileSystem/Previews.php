@@ -238,20 +238,36 @@ class Tinebase_FileSystem_Previews
             return true;
         }
 
-        $path = $this->_fsController->getRealPathForHash($node->hash);
-        if (!is_file($path)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' file ' . $node->getId() . ' '
-                    . $node->name . ' is not present in filesystem: ' . $path);
+        $flySystem = $node->flysystem ? Tinebase_Controller_Tree_FlySystem::getFlySystem($node->flysystem) : null;
+        if (!$flySystem) {
+            $path = $this->_fsController->getRealPathForHash($node->hash);
+            if (!is_file($path)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' file ' . $node->getId() . ' '
+                        . $node->name . ' is not present in filesystem: ' . $path);
+                }
+                return false;
             }
-            return false;
         }
 
         $ext = pathinfo($node->name, PATHINFO_EXTENSION);
 
         try {
             $tempPath = Tinebase_TempFile::getTempPath() . '.' . $ext;
-            if (false === copy($path, $tempPath)) {
+            if ($flySystem) {
+                $tmpFh = null;
+                try {
+                    if (!($tmpFh = fopen($tempPath, 'w')) || !stream_copy_to_stream($flySystem->readStream($node->flypath), $tmpFh)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not copy file '
+                                . $node->getId() . ' ' . $node->name . ' ' . $node->flypath . ' to temp path: ' . $tempPath);
+                        }
+                        return false;
+                    }
+                } finally {
+                    if ($tmpFh) @fclose($tmpFh);
+                }
+            } elseif (false === copy($path, $tempPath)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' could not copy file '
                         . $node->getId() . ' ' . $node->name . ' ' . $path . ' to temp path: ' . $tempPath);

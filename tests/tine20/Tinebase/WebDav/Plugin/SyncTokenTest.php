@@ -115,7 +115,7 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
                      </A:prop>
                  </A:propfind>';
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->objects['initialContainer']->id,
             'HTTP_DEPTH'     => '0',
@@ -143,7 +143,7 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
             </sync-collection>';
 
         $uri = '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_personas['jmcblack']->getId());
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'REPORT',
             'REQUEST_URI' => $uri,
         ));
@@ -171,7 +171,7 @@ class Tinebase_WebDav_Plugin_SyncTokenTest extends Tinebase_WebDav_Plugin_Abstra
                     </A:prop>
                 </A:sync-collection>';
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'REPORT',
             'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->objects['initialContainer']->id,
             'HTTP_DEPTH'     => '1',

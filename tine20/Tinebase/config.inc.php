@@ -1,6 +1,6 @@
 <?php
 return array (
-    Tinebase_Config::VERSION_CHECK => true,
+    Tinebase_Config::VERSION_CHECK => false,
     'features' => array(
         Tinebase_Config::FEATURE_SHOW_ADVANCED_SEARCH => false,
         Tinebase_Config::FEATURE_SHOW_ACCOUNT_EMAIL => false,

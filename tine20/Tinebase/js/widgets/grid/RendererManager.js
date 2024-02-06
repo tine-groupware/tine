@@ -94,6 +94,7 @@ Tine.widgets.grid.RendererManager = function() {
             }
             switch (fieldType) {
                 case 'record':
+                case 'records':
                     if (Tine.Tinebase.common.hasRight('view', fieldDefinition.config.appName, fieldDefinition.config.modelName.toLowerCase())) {
                         renderer = function (value, row, record) {
                             var foreignRecordClass = Tine[fieldDefinition.config.appName].Model[fieldDefinition.config.modelName];
@@ -110,6 +111,13 @@ Tine.widgets.grid.RendererManager = function() {
                             }
                             return value;
                         };
+                        if (fieldType === 'records') {
+                            // @TODO cope with cross and metadata records
+                            const rr = renderer;
+                            renderer = (rs) => {
+                                return _.join(_.map(rs, rr), ', ' );
+                            }
+                        }
                     } else {
                         renderer = null;
                     }
@@ -304,9 +312,6 @@ Tine.widgets.grid.RendererManager = function() {
                         return  row.outerHTML;
                     }
                     break;
-                case 'records':
-                case 'recodList':
-                    //@Todo add records/list renderer!
             }
 
             return renderer;

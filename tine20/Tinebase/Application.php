@@ -772,6 +772,26 @@ class Tinebase_Application
         return $this->_db;
     }
 
+    public function getInheritedModels(array $models, $recursive = true, ?array $allModels = null): array
+    {
+        if (null === $allModels) {
+            $allModels = $this->getModelsOfAllApplications();
+        }
+
+        $subModels = [];
+        foreach ($allModels as $subModel) {
+            if (is_array($parents = class_parents($subModel)) && !empty(array_intersect($models, $parents))) {
+                $subModels[] = $subModel;
+            }
+        }
+
+        if ($recursive && !empty($subModels)) {
+            $subModels = array_merge($subModels, $this->getInheritedModels($subModels, true, $allModels));
+        }
+
+        return $subModels;
+    }
+
     /**
      * returns the Models of all enabled (or all installed) applications
      * uses Tinebase_Application::getApplicationsByState

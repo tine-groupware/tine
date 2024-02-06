@@ -253,6 +253,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
             }
         }
 
+        $previewNode = null;
         try {
             $previewNode = Tinebase_FileSystem_Previews::getInstance()->getPreviewForNode($_node, $_type, $_num);
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -279,7 +280,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
 
         $this->_prepareHeader($previewNode->name, $previewNode->contenttype, 'inline', $previewNode->size, $additionalHeader);
 
-        $handle = fopen($fileSystem->getRealPathForHash($previewNode->hash), 'r');
+        $handle = $fileSystem->fopen($fileSystem->getPathOfNode($previewNode, true), 'r', $previewNode->revision);
 
         if (false === $handle) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__

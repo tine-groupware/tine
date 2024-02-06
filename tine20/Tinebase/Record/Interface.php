@@ -62,7 +62,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      *
      * @return Tinebase_ModelConfiguration|NULL
      */
-    public static function getConfiguration();
+    public static function getConfiguration(): ?Tinebase_ModelConfiguration;
 
     /**
      * resetConfiguration
@@ -88,7 +88,7 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
      * 
      * @param string $_id
      */
-    public function setId($_id);
+    public function setId($_id): self;
     
     /**
      * gets identifier of record
@@ -410,11 +410,15 @@ interface Tinebase_Record_Interface extends ArrayAccess, IteratorAggregate
 
     public function setAccountGrants(Tinebase_Record_Interface $grants);
 
-    public function isDirty();
+    public function isDirty(): bool;
+
+    public function unsetDirty(): void;
 
     public function byPassFilters(): bool;
 
     public static function touchOnRelated(Tinebase_Model_Relation $relation): bool;
 
     public function notifyBroadcastHub(): bool;
+
+    public function getPasswordFromProperty(string $field): ?string;
 }
