@@ -68,6 +68,9 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return {
             xtype: 'tabpanel',
             plugins: [{
+                ptype: 'ux.itemregistry',
+                key: 'Calendar-Event-EditDialog-TabPanel'
+            }, {
                 ptype : 'ux.tabpanelkeyplugin'
             }],
             defaults: {
