@@ -37,6 +37,7 @@ class Sales_Model_Document_Category extends Tinebase_Record_NewAbstract
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         self::EXPOSE_JSON_API => true,
         self::TITLE_PROPERTY => "{{ name }}{% if division_id.title %} ({{ division_id.title }}){% endif %}",
+        self::DEFAULT_SORT_INFO => [self::FIELD => self::FLD_NAME],
         self::CONTAINER_PROPERTY => null,
 
         self::TABLE => [

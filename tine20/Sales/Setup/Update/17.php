@@ -144,6 +144,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         $debitorCtrl = Sales_Controller_Debitor::getInstance();
         $db = $this->getDb();
 
+        Sales_Controller_Customer::getInstance()->doContainerACLChecks(false);
         foreach (Sales_Controller_Customer::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Sales_Model_Customer::class), null, false, true) as $customerId) {
             $debitor = $debitorCtrl->create(new Sales_Model_Debitor([
@@ -158,6 +159,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             ], Sales_Model_Address::FLD_CUSTOMER_ID . $db->quoteInto(' = ? AND ', $customerId)
                 . Sales_Model_Address::FLD_TYPE . ' != "' . Sales_Model_Address::TYPE_POSTAL . '"');
         }
+        Sales_Controller_Customer::getInstance()->doContainerACLChecks(true);
 
         $categories = Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY};
 
