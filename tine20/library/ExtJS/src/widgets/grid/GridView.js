@@ -1321,7 +1321,11 @@ viewConfig: {
         }
         
         this.fireEvent('beforerefresh', this);
-        this.grid.stopEditing(true);
+        if (this.grid.activeEditor?.record) {
+            this.grid.activeEditor.record.store = this.grid.store;
+        } else {
+            this.grid.stopEditing(true);
+        }
 
         var result = this.renderBody();
         this.mainBody.update(result).setWidth(this.getTotalWidth());
