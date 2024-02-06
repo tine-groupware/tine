@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Expressive
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -59,53 +59,72 @@ class Tinebase_Expressive_Middleware_CheckRouteAuth implements MiddlewareInterfa
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::'
                 . __LINE__ . ' in an auth route');
 
-            if (null === ($user = Tinebase_Core::getUser()) && $request->hasHeader('Authorization')) {
-                foreach ($request->getHeader('Authorization') as $authHeader) {
-                    if (strpos($authHeader, 'Bearer ') === 0) {
-                        $token = substr($authHeader, 7);
-                        try {
-                            Admin_Controller_JWTAccessRoutes::doRouteAuth($routeHandler->getName(), $token);
-                            $user = Tinebase_Core::getUser();
-                        } catch (Tinebase_Exception_AccessDenied $tead) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ .
-                                '::' . __LINE__ . ' returning with HTTP 401 unauthorized: ' . $tead->getMessage());
+            $unauthorized = true;
+            do {
+                if (null === ($user = Tinebase_Core::getUser()) && $request->hasHeader('Authorization')) {
+                    foreach ($request->getHeader('Authorization') as $authHeader) {
+                        if (strpos($authHeader, 'Bearer ') === 0) {
+                            $token = substr($authHeader, 7);
+                            try {
+                                Admin_Controller_JWTAccessRoutes::doRouteAuth($routeHandler->getName(), $token);
+                                $user = Tinebase_Core::getUser();
+                                $unauthorized = false;
+                                break 2;
+                            } catch (Tinebase_Exception_AccessDenied $tead) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ .
+                                    '::' . __LINE__ . ' returning with HTTP 401 unauthorized: ' . $tead->getMessage());
 
-                            // unauthorized
-                            return new Response('php://memory', 401);
-                        } catch (Tinebase_Exception $te) {
-                            // something went wrong -> 500
-                            throw $te;
-                        } catch (Exception $e) {
-                            // these are jwt fails, so basically bad requests ... yet we return 401
-                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ .
-                                '::' . __LINE__ . ' returning with HTTP 401 unauthorized: ' . $e->getMessage());
+                                break;
+                            } catch (Tinebase_Exception $te) {
+                                // something went wrong -> 500
+                                throw $te;
+                            } catch (Exception $e) {
+                                // these are jwt fails, so basically bad requests ... yet we return 401
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ .
+                                    '::' . __LINE__ . ' returning with HTTP 401 unauthorized: ' . $e->getMessage());
 
-                            // unauthorized
-                            return new Response('php://memory', 401);
+                                break;
+                            }
                         }
                     }
                 }
-            }
 
-            if (null === $user) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                    . __LINE__ . ' returning with HTTP 401 unauthorized');
+                if (null === $user) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                        . __LINE__ . ' returning with HTTP 401 unauthorized');
 
-                // unauthorized
+                    break;
+                }
+                if (!Tinebase_Server_Abstract::checkLoginAreaLock()) {
+                    $areaLock = Tinebase_AreaLock::getInstance();
+                    $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
+                    foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
+                        $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
+                    }
+
+                    // user has 2FA config -> currently its sort of optional -> only then we 401
+                    if (count($userConfigIntersection->mfa_configs) > 0) {
+                        break;
+                    }
+                }
+
+                $unauthorized = false;
+            } while (false);
+
+            if ($unauthorized) {
+                if ($routeHandler->unauthorizedRedirectLogin()) {
+                    $uri = $request->getUri();
+                    $path = Tinebase_Core::getUrl(Tinebase_Core::GET_URL_NOPATH) . $uri->getPath() . ($uri->getQuery() ? '?' . $uri->getQuery() : '') .
+                        ($uri->getFragment() ? '#' . $uri->getFragment() : '');
+
+                    return new Response('php://memory', 302, [
+                        'Location' => Tinebase_Core::getUrl() . '#initialData/' . urlencode(json_encode(['afterLoginRedirect' => [
+                                'method' => 'GET',
+                                'url' => $path,
+                            ]])),
+                    ]);
+                }
                 return new Response('php://memory', 401);
-            }
-            if (!Tinebase_Server_Abstract::checkLoginAreaLock()) {
-                $areaLock = Tinebase_AreaLock::getInstance();
-                $userConfigIntersection = new Tinebase_Record_RecordSet(Tinebase_Model_MFA_UserConfig::class);
-                foreach ($areaLock->getAreaConfigs(Tinebase_Model_AreaLockConfig::AREA_LOGIN) as $areaConfig) {
-                    $userConfigIntersection->mergeById($areaConfig->getUserMFAIntersection($user));
-                }
-
-                // user has 2FA config -> currently its sort of optional -> only then we 401
-                if ( count($userConfigIntersection->mfa_configs) > 0) {
-                    // unauthorized
-                    return new Response('php://memory', 401);
-                }
             }
 
             if (! $user->hasRight($routeHandler->getApplicationName(), Tinebase_Acl_Rights_Abstract::RUN)) {

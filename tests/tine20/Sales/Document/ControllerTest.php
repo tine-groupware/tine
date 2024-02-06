@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2021-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -22,7 +22,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $invoice = Sales_Controller_Document_Invoice::getInstance()->create(new Sales_Model_Document_Invoice([
             Sales_Model_Document_Invoice::FLD_CUSTOMER_ID => $customer,
             Sales_Model_Document_Invoice::FLD_INVOICE_STATUS => Sales_Model_Document_Invoice::STATUS_PROFORMA,
-            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Invoice::FLD_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
             Sales_Model_Document_Invoice::FLD_POSITIONS => [
                 new Sales_Model_DocumentPosition_Invoice([
                     Sales_Model_DocumentPosition_Invoice::FLD_TITLE => 'pos 1',
@@ -40,6 +40,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         ]));
 
         Tinebase_Record_Expander::expandRecord($invoice);
+
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
 
@@ -59,6 +60,36 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         Tinebase_Record_Expander::expandRecord($storno);
         $this->assertSame(-2, (int)$storno->{Sales_Model_Document_Invoice::FLD_NET_SUM});
         $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID}, $storno->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID});
+    }
+
+    public function testCategoryEvalDimensionCopy()
+    {
+        $customer = $this->_createCustomer();
+        $cat = Sales_Controller_Document_Category::getInstance()->getAll()->getFirstRecord();
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->getAll()->find(Tinebase_Model_EvaluationDimension::FLD_NAME, Tinebase_Model_EvaluationDimension::COST_CENTER);
+        $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} = new Tinebase_Record_RecordSet(Tinebase_Model_EvaluationDimensionItem::class, [
+            new Tinebase_Model_EvaluationDimensionItem([
+                Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER => '01',
+                Tinebase_Model_EvaluationDimensionItem::FLD_NAME => 'foo',
+            ], true),
+        ]);
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+
+        $cat->eval_dim_cost_center = $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->getFirstRecord()->getId();
+        Sales_Controller_Document_Category::getInstance()->update($cat);
+
+        $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_RECEIVED,
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Order::FLD_DOCUMENT_CATEGORY => $cat->getId(),
+        ]));
+
+        $this->assertSame($cat->eval_dim_cost_center, $order->eval_dim_cost_center->getId());
+
+        Tinebase_Record_Expander::expandRecord($order);
+        $this->assertNotNull($order->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID});
+        $this->assertSame($customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId(), $order->{Sales_Model_Document_Abstract::FLD_DEBITOR_ID}->{Sales_Model_Document_Debitor::FLD_ORIGINAL_ID});
     }
 
     public function testCustomerFilterForDocuments()
@@ -89,6 +120,39 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         $feFilter = $filter->toArray(true);
         $this->assertSame($filterArray, $feFilter);
+
+        $result = Sales_Controller_Document_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Document_Offer::class, [
+                ['field' => 'division_id', 'operator' => 'equals', 'value' => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}],
+            ]
+        ));
+        $this->assertSame(1, $result->count());
+
+        $result = Sales_Controller_Document_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Document_Offer::class, [
+                ['field' => 'division_id', 'operator' => 'not', 'value' => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}],
+            ]
+        ));
+        $this->assertSame(0, $result->count());
+
+        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+        $result = Sales_Controller_Document_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Document_Offer::class, [
+                ['field' => 'division_id', 'operator' => 'definedBy', 'value' => [
+                    ['field' => 'title', 'operator' => 'equals', 'value' => $division->title],
+                ]],
+            ]
+        ));
+        $this->assertSame(1, $result->count());
+
+        $result = Sales_Controller_Document_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Sales_Model_Document_Offer::class, [
+                ['field' => 'division_id', 'operator' => 'notDefinedBy', 'value' => [
+                    ['field' => 'title', 'operator' => 'equals', 'value' => $division->title],
+                ]],
+            ]
+        ));
+        $this->assertSame(0, $result->count());
     }
 
     public function testOrderAddresses()

@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-use Sabre\DAV\URLUtil;
+use Tine20\DAV\URLUtil;
 
 /**
  * object tree for the sabre server to work with
@@ -17,7 +17,7 @@ use Sabre\DAV\URLUtil;
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-class Tinebase_WebDav_ObjectTree extends \Sabre\DAV\ObjectTree
+class Tinebase_WebDav_ObjectTree extends \Tine20\DAV\ObjectTree
 {
     /**
      * Moves a file from one location to another
@@ -47,12 +47,12 @@ class Tinebase_WebDav_ObjectTree extends \Sabre\DAV\ObjectTree
             $destinationParentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($destinationParent->getPath());
             if ($destinationParentPath->isSystemPath() || ($destinationParentPath->isToplevelPath() &&
                     $sourceNode instanceof Tinebase_Frontend_WebDAV_File)) {
-                throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file to: ' . $destinationPath);
+                throw new Tine20\DAV\Exception\Forbidden('Forbidden to rename file to: ' . $destinationPath);
             }
             try {
                 $sourceNode->rename($destinationParent->getPath() . '/' . $destinationName);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
+                throw new Tine20\DAV\Exception\NotFound($tenf->getMessage());
             }
         } else {
             $this->copy($sourcePath,$destinationPath);

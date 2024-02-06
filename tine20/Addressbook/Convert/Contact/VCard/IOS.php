@@ -80,7 +80,7 @@ class Addressbook_Convert_Contact_VCard_IOS extends Addressbook_Convert_Contact_
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseTel()
      */
-    protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
+    protected function _toTine20ModelParseTel(&$data, \Tine20\VObject\Property $property)
     {
         $telField = null;
         
@@ -104,7 +104,7 @@ class Addressbook_Convert_Contact_VCard_IOS extends Addressbook_Convert_Contact_
      * converts Addressbook_Model_Contact to vcard
      * 
      * @param  Addressbook_Model_Contact  $_record
-     * @return \Sabre\VObject\Component\VCard
+     * @return \Tine20\VObject\Component\VCard
      */
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {

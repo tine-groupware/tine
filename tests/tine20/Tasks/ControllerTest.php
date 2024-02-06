@@ -70,7 +70,7 @@ class Tasks_ControllerTest extends TestCase
             'description'          => str_pad('',1000,'.'),
             'geo'                  => 0.2345,
             'location'             => 'here and there',
-            'organizer'            => 4,
+            'organizer'            => Tinebase_Core::getUser()->getId(),
             'priority'             => 2,
             'status'               => 'NEEDS-ACTION',
             'summary'              => 'our first test task',
@@ -317,5 +317,72 @@ class Tasks_ControllerTest extends TestCase
         $task = $this->_controller->update($resolvableConcurrencyTask);
         
         $this->assertEquals('description'. "\n", $task->description);
+    }
+
+    public function testFilterNotDefinedBy()
+    {
+        $this->_controller->create(new Tasks_Model_Task([
+            'summary'       => 'minimal task by PHPUnit::Tasks_ControllerTest',
+            'due'           => Tinebase_DateTime::now(),
+            'organizer'     => Tinebase_Core::getUser()->getId(),
+            Tasks_Model_Task::FLD_DEPENDENS_ON => new Tinebase_Record_RecordSet(Tasks_Model_TaskDependency::class, [[
+                Tasks_Model_TaskDependency::FLD_DEPENDS_ON => $this->_persistantTestTask1->getId(),
+            ]], true),
+        ]));
+
+        $searchResult = $this->_controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
+            ['field' => Tasks_Model_Task::FLD_DEPENDENS_ON, 'operator' => 'notDefinedBy', 'value' => [
+                ['field' => Tasks_Model_TaskDependency::FLD_DEPENDS_ON, 'operator' => 'definedBy', 'value' => [
+                    ['field' => 'summary', 'operator' => 'equals', 'value' => $this->_persistantTestTask1->summary],
+                ]],
+            ]],
+        ]));
+
+        $this->assertSame(1, $searchResult->count());
+        $this->assertSame($this->_persistantTestTask1->getId(), $searchResult->getFirstRecord()->getId());
+    }
+
+    public function testTasksDueFilter()
+    {
+        $this->_controller->create(new Tasks_Model_Task([
+            'summary'       => 'minimal task by PHPUnit::Tasks_ControllerTest',
+            'due'           => Tinebase_DateTime::now()->subDay(1),
+            'organizer'     => Tinebase_Core::getUser()->getId(),
+            Tasks_Model_Task::FLD_DEPENDENS_ON => new Tinebase_Record_RecordSet(Tasks_Model_TaskDependency::class, [[
+                Tasks_Model_TaskDependency::FLD_DEPENDS_ON => $this->_persistantTestTask1->getId(),
+            ]], true),
+        ]));
+
+        $searchResult = $this->_controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
+            ['field' => 'tasksDue', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id],
+        ]));
+
+        // persistant *sic* test task has no attendees, so we as organizer are responsible for it
+        $this->assertSame(1, $searchResult->count());
+        $this->assertSame($this->_persistantTestTask1->getId(), $searchResult->getFirstRecord()->getId());
+
+        $this->_persistantTestTask1 = $this->_controller->get($this->_persistantTestTask1->getId());
+        $this->_persistantTestTask1->{Tasks_Model_Task::FLD_ATTENDEES} =
+            new Tinebase_Record_RecordSet(Tasks_Model_Attendee::class, [[
+                Tasks_Model_Attendee::FLD_USER_ID => $this->_personas['sclever']->contact_id,
+            ]], true);
+        $this->_persistantTestTask1 = $this->_controller->update($this->_persistantTestTask1);
+
+        $searchResult = $this->_controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
+            ['field' => 'tasksDue', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id],
+        ]));
+        $this->assertSame(0, $searchResult->count());
+
+        $this->_persistantTestTask1->{Tasks_Model_Task::FLD_ATTENDEES}->getFirstRecord()
+            ->{Tasks_Model_Attendee::FLD_STATUS} = 'DECLINED';
+        $this->_persistantTestTask1 = $this->_controller->update($this->_persistantTestTask1);
+        $this->assertSame('DECLINED', $this->_persistantTestTask1->{Tasks_Model_Task::FLD_ATTENDEES}->getFirstRecord()
+            ->{Tasks_Model_Attendee::FLD_STATUS});
+
+        $searchResult = $this->_controller->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tasks_Model_Task::class, [
+            ['field' => 'tasksDue', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->contact_id],
+        ]));
+        $this->assertSame(1, $searchResult->count());
+        $this->assertSame($this->_persistantTestTask1->getId(), $searchResult->getFirstRecord()->getId());
     }
 }

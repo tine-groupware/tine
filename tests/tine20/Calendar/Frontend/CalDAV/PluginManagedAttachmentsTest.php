@@ -12,7 +12,7 @@
 /**
  * Test helper
  */
-require_once __DIR__ . '/../../../../../tine20/vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
+require_once __DIR__ . '/../../../../../tine20/vendor/tine20/sabredav/tests/Sabre/HTTP/ResponseMock.php';
 
 /**
  * Test class for Calendar_Frontend_CalDAV_PluginManagedAttachments
@@ -21,7 +21,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
 {
     /**
      * 
-     * @var Sabre\DAV\Server
+     * @var Tine20\DAV\Server
      */
     protected $server;
     
@@ -42,14 +42,14 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $this->originalHostname = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
         $_SERVER['HTTP_HOST'] = $this->hostname;
         
-        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new Tine20\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
         
         $this->plugin = new Calendar_Frontend_CalDAV_PluginManagedAttachments();
         
         $this->server->addPlugin($this->plugin);
         
         
-        $this->response = new Sabre\HTTP\ResponseMock();
+        $this->response = new Tine20\HTTP\ResponseMock();
         $this->server->httpResponse = $this->response;
     }
 
@@ -80,7 +80,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
                </A:prop>
              </A:propfind>';
     
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
                 'REQUEST_METHOD' => 'PROPFIND',
                 'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id
         ));
@@ -108,7 +108,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     {
         $event = $this->calDAVTests->testCreateRepeatingEventAndPutExdate();
         
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'HTTP_CONTENT_TYPE' => 'text/plain',
             'HTTP_CONTENT_DISPOSITION' => $disposition,
             'REQUEST_METHOD' => 'POST',
@@ -161,7 +161,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
 
         $event = $this->calDAVTests->createEventWithAttachment();
         
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
                 'HTTP_CONTENT_TYPE' => 'text/plain',
                 'HTTP_CONTENT_DISPOSITION' => 'attachment;filename="agenda.html"',
                 'REQUEST_METHOD' => 'POST',
@@ -194,7 +194,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $event = $this->calDAVTests->createEventWithAttachment();
         $attachmentNode = $event->getRecord()->attachments->getFirstRecord();
         
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'HTTP_CONTENT_TYPE' => 'text/plain',
             'HTTP_CONTENT_DISPOSITION' => 'attachment;filename=agenda.txt',
             'REQUEST_METHOD' => 'POST',
@@ -223,7 +223,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $event = $this->calDAVTests->createEventWithAttachment();
         $attachmentNode = $event->getRecord()->attachments->getFirstRecord();
         
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
                 'HTTP_CONTENT_TYPE' => 'text/plain',
                 'HTTP_CONTENT_DISPOSITION' => 'attachment;filename=agenda.txt',
                 'REQUEST_METHOD' => 'POST',
@@ -245,7 +245,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     /**
      * exec request and get vcalendar
      *
-     * @param Sabre\HTTP\Request $request
+     * @param Tine20\HTTP\Request $request
      * @return string
      */
     protected function _execAndGetVCalendarFromRequest($request)
@@ -294,7 +294,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $event = $this->calDAVTests->testCreateEventWithInternalOrganizer();
         
         $body = '';
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
                 'REQUEST_METHOD' => 'MKCOL',
                 'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/dropbox/' . 
                     $event->getRecord()->getId() . '.dropbox'
@@ -312,7 +312,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     {
         $event = $this->calDAVTests->testCreateEventWithInternalOrganizer();
     
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
                 'REQUEST_METHOD' => 'PUT',
                 'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/dropbox/' .
                 $event->getRecord()->getId() . '.dropbox/agenda.txt'

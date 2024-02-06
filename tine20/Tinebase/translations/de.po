@@ -104,6 +104,12 @@ msgid_plural "Texts"
 msgstr[0] "Text"
 msgstr[1] "Texte"
 
+msgid "Gets assigned automatically"
+msgstr "Wird automatisch zugewiesen"
+
+msgid "Number is Editable"
+msgstr "Nummer ist editierbar"
+
 #: Record/Expander/PropertyClass/Grants.php:65 Frontend/Json/Container.php:223
 #: js/widgets/account/PickerGridPanel.js:231
 msgid "Anyone"
@@ -2401,6 +2407,9 @@ msgstr "Passwort generieren"
 msgid "What would you like to do?"
 msgstr "Was möchten Sie machen?"
 
+msgid "Please choose an option."
+msgstr "Bitte wählen Sie eine Option aus."
+
 #: js/widgets/dialog/MultiOptionsDialog.js:32
 #: js/widgets/dialog/MultiOptionsDialog.js:179
 #: js/widgets/dialog/FileListDialog.js:32
@@ -2479,9 +2488,6 @@ msgid ""
 msgstr ""
 "Nachfolgend finden Sie eine Liste mit allen Import-Formaten und eine "
 "Beispieldatei, anhand derer Sie sehen, wir die Datei aussehen sollte."
-
-msgid "Following you find a list of all supported import formats."
-msgstr "Nachfolgend finden Sie eine Liste mit allen unterstützten Import-Formaten."
 
 #: js/widgets/dialog/ImportDialog.js:292
 #: js/widgets/dialog/SimpleImportDialog.js:191
@@ -3896,9 +3902,6 @@ msgstr "Konfiguriere was mit den Daten gelöschter Benutzer geschehen soll"
 #: Config.php:946
 msgid "Delete personal containers"
 msgstr "Lösche persönliche Ordner"
-
-msgid "Personal container"
-msgstr "Persönlicher Ordner"
 
 #: Config.php:953
 msgid "Delete file folders and files"
@@ -6342,8 +6345,8 @@ msgstr "Maximale Anzahl von Benutzern erreicht."
 
 #, python-brace-format
 msgid ""
-"{gender, select, male {No {containerName} added} female {No "
-"{containerName} added} other {No {containerName} added}}"
+"{gender, select, male {No {containerName} added} female {No {containerName} "
+"added} other {No {containerName} added}}"
 msgstr ""
 "{gender, select, male {Kein {containerName} hinzugefügt} female {Keine "
 "{containerName} hinzugefügt} other {Kein {containerName} hinzugefügt}}"
@@ -6355,22 +6358,21 @@ msgid ""
 "{containerName} name!}}"
 msgstr ""
 "{gender, select, male {Sie müssen einen Namen für den {containerName} "
-"angeben!} female {Sie müssen einen Namen für die {containerName} "
-"angeben!} other {Sie müssen einen Namen für das {containerName} angeben!}}"
+"angeben!} female {Sie müssen einen Namen für die {containerName} angeben!} "
+"other {Sie müssen einen Namen für das {containerName} angeben!}}"
 
 #, python-brace-format
 msgid ""
 "{gender, select, male {New {containerName}} female {New {containerName}} "
 "other {New {containerName}}}"
 msgstr ""
-"{gender, select, male {Neuer {containerName}} female {Neue "
-"{containerName}} other {Neues {containerName}}}"
+"{gender, select, male {Neuer {containerName}} female {Neue {containerName}} "
+"other {Neues {containerName}}}"
 
 msgid ""
-"{gender, select, male {Please enter the name for the new "
-"{containerName}:} female {Please enter the name for the new "
-"{containerName}:} other {Please enter the name for the new "
-"{containerName}:}}"
+"{gender, select, male {Please enter the name for the new {containerName}:} "
+"female {Please enter the name for the new {containerName}:} other {Please "
+"enter the name for the new {containerName}:}}"
 msgstr ""
 "{gender, select, male {Bitte geben sie den Namen für den neuen "
 "{containerName} ein:} female {Bitte geben sie den Namen für die neue "
@@ -6381,14 +6383,13 @@ msgid ""
 "{gender, select, male {Rename {containerName}} female {Rename "
 "{containerName}} other {Rename {containerName}}}"
 msgstr ""
-"{gender, select, male {{containerName} umbenennen} female "
-"{{containerName} umbenennen} other {{containerName} umbenennen}}"
+"{gender, select, male {{containerName} umbenennen} female {{containerName} "
+"umbenennen} other {{containerName} umbenennen}}"
 
 msgid ""
-"{gender, select, male {Please enter the new name for the "
-"{containerName}:} female {Please enter the new name for the "
-"{containerName}:} other {Please enter the new name for the "
-"{containerName}:}}"
+"{gender, select, male {Please enter the new name for the {containerName}:} "
+"female {Please enter the new name for the {containerName}:} other {Please "
+"enter the new name for the {containerName}:}}"
 msgstr ""
 "{gender, select, male {Bitte geben sie den neuen Namen für den "
 "{containerName} ein:} female {Bitte geben sie den neuen Namen für die "
@@ -6447,8 +6448,8 @@ msgstr "Ihr Subskription ist ungültig"
 
 msgid "This area is locked. Which device should be used to unlock?"
 msgstr ""
-"Dieser Bereich ist gesperrt. Welches Gerät soll verwendet werden um ihn "
-"zu entsperren?"
+"Dieser Bereich ist gesperrt. Welches Gerät soll verwendet werden um ihn zu "
+"entsperren?"
 
 msgid "Bank Account"
 msgid_plural "Bank Accounts"
@@ -6481,3 +6482,36 @@ msgstr "Bild in ausgewählter Größe einfügen"
 
 msgid "Image size"
 msgstr "Bildgröße"
+
+msgid "Personal container"
+msgstr "Persönlicher Ordner"
+
+msgid "Reload the application"
+msgstr "Anwendung neu laden"
+
+msgid "Numbering Range"
+msgid_plural "Numbering Ranges"
+msgstr[0] "Nummernkreis"
+msgstr[1] "Nummernkreise"
+
+msgid "GENDER_Numbering Range"
+msgstr "male"
+
+msgid "Property"
+msgstr "Eigenschaft"
+
+msgid "Additional Key"
+msgstr "Schlüssel-Zusatz"
+
+msgid "Numbering Range Start"
+msgstr "Nummernkreis Start"
+
+msgid "Number of Zerofill"
+msgstr "Anzahl Nullauffüllungen"
+
+msgid "Prefix"
+msgstr "Präfix"
+
+msgid "Following you find a list of all supported import formats."
+msgstr ""
+"Nachfolgend finden Sie eine Liste mit allen unterstützten Import-Formaten."

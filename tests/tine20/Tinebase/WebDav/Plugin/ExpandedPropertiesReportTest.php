@@ -36,7 +36,7 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReportTest extends Tinebase_WebDa
                   </A:property>
                 </A:expand-property>';
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'REPORT',
             'REQUEST_URI'    => '/principals/groups/' . $list->list_id . '/'
         ));

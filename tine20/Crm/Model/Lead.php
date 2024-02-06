@@ -84,7 +84,19 @@ class Crm_Model_Lead extends Tinebase_Record_NewAbstract
 
         self::JSON_EXPANDER => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'tasks' => [],
+                'tasks' => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Tasks_Model_Task::FLD_DEPENDENS_ON => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                Tasks_Model_TaskDependency::FLD_DEPENDS_ON => [
+                                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                        'organizer' => [],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ],
 

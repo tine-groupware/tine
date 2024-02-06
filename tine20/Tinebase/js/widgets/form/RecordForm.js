@@ -46,13 +46,14 @@ Tine.widgets.form.RecordForm = Ext.extend(Ext.ux.form.ColumnFormPanel, {
         this.editDialog.recordForm = this;
 
         Ext.each(fieldDefinitions, function(fieldDefinition) {
+            const fieldsToExclude = _.get(this, 'editDialog.fieldsToExclude', this.fieldsToExclude);
+            if (_.isArray(fieldsToExclude) && _.indexOf(fieldsToExclude, fieldDefinition.fieldName) >=0) return;
 
             var field = Tine.widgets.form.FieldManager.get(app, this.recordClass, fieldDefinition.fieldName, 'editDialog');
             if (field) {
                 // apply basic layout
                 field.columnWidth = 1;
                 // add edit dialog
-                // TODO do this for all fields??
                 if (this.editDialog) {
                     field.editDialog = this.editDialog;
                 }
@@ -79,13 +80,17 @@ Tine.widgets.form.RecordForm.getFieldDefinitions = function(recordClass) {
     Ext.each(Tine.Tinebase.Model.genericFields, function(field) {fieldsToExclude.push(field.name)});
     fieldsToExclude.push(recordClass.getMeta('idProperty'));
 
-    return _.reduce(fieldNames, function(fieldDefinitions, fieldName) {
-        var fieldDefinition = modelConfig.fields[fieldName];
+    let fieldDefs = _.sortBy(_.reduce(fieldNames, function(fieldDefinitions, fieldName) {
+        var fieldDefinition = _.cloneDeep(modelConfig.fields[fieldName]);
         if (fieldsToExclude.indexOf(fieldDefinition.fieldName) < 0) {
+            _.set(fieldDefinition, 'uiconfig.sorting', _.get(fieldDefinition, 'uiconfig.sorting', fieldDefinitions.length * 10));
             fieldDefinitions.push(fieldDefinition);
         }
         return fieldDefinitions;
-    }, []);
+    }, []), (field) => {return _.get(field, 'uiconfig.sorting')});
+
+
+    return fieldDefs;
 };
 
 Tine.widgets.form.RecordForm.getFormFields = function(recordClass, configInterceptor) {
@@ -94,7 +99,7 @@ Tine.widgets.form.RecordForm.getFormFields = function(recordClass, configInterce
         Tine.widgets.form.FieldManager, recordClass.getMeta('appName'), recordClass.getMeta('modelName'), _,
         Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
 
-    return _.reduce(Tine.widgets.form.RecordForm.getFieldDefinitions(recordClass), function(formFields, fieldDefinition) {
+    return _.reduce(fieldDefinitions, function(formFields, fieldDefinition) {
         const fieldName = fieldDefinition.fieldName;
         const config = {};
         if (configInterceptor) {
@@ -111,7 +116,7 @@ Tine.widgets.form.RecordForm.getFormFields = function(recordClass, configInterce
 Tine.widgets.form.RecordForm.getFormHeight = function(recordClass) {
     var dlgConstructor = Tine.widgets.dialog.EditDialog.getConstructor(recordClass),
         fieldDefinitions = Tine.widgets.form.RecordForm.getFieldDefinitions(recordClass),
-        formHeight = 38+23+15; // btnfooter + tabpanel + paddings
+        formHeight = 38+23+30; // btnfooter + tabpanel + paddings
 
     if (dlgConstructor) {
         // toolbar

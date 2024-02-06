@@ -1,0 +1,13 @@
+$primary: #0062a7; // setting the primary color
+
+$alert-padding-y: 5px;
+$alert-margin-bottom: 2px;
+
+@import 'global_bs'; // global bs styles needed for modal
+@import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'; // bs-Vue styles
+
+.bootstrap-scope{
+  @import './scopable_bs';
+  font-family: arial, tahoma, helvetica, sans-serif;
+  font-size: 1.1em;
+}

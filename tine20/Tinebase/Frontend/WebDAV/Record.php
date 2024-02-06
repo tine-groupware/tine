@@ -14,7 +14,7 @@
  * 
  * @package     Tinebase
  */
-class Tinebase_Frontend_WebDAV_Record implements Sabre\DAV\ICollection
+class Tinebase_Frontend_WebDAV_Record implements Tine20\DAV\ICollection
 {
     protected $_record = null;
     protected $_appName = null;
@@ -24,7 +24,7 @@ class Tinebase_Frontend_WebDAV_Record implements Sabre\DAV\ICollection
      * the constructor
      * 
      * @param string $_path
-     * @throws Sabre\DAV\Exception\NotFound
+     * @throws Tine20\DAV\Exception\NotFound
      */
     public function __construct($path) 
     {
@@ -32,14 +32,14 @@ class Tinebase_Frontend_WebDAV_Record implements Sabre\DAV\ICollection
             . ' Record path: ' . $path);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' ' . print_r(Sabre\DAV\URLUtil::splitPath($path), true));
+            . ' ' . print_r(Tine20\DAV\URLUtil::splitPath($path), true));
         
         try {
-            list($appModel, $id) = Sabre\DAV\URLUtil::splitPath($path);
+            list($appModel, $id) = Tine20\DAV\URLUtil::splitPath($path);
             list($appName, $records, $model) = explode('/', $appModel);
             $this->_record = Tinebase_Core::getApplicationInstance($appName, $model)->get($id);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Sabre\DAV\Exception\NotFound('Record ' . $path . ' not found');
+            throw new Tine20\DAV\Exception\NotFound('Record ' . $path . ' not found');
         }
         
         $this->_appName   = $appName;
@@ -69,7 +69,7 @@ class Tinebase_Frontend_WebDAV_Record implements Sabre\DAV\ICollection
      * get child by name
      * 
      * @param  string $name
-     * @throws Sabre\DAV\Exception\NotFound
+     * @throws Tine20\DAV\Exception\NotFound
      * @return Tinebase_Frontend_WebDAV_File
      */
     public function getChild($path) 
@@ -136,7 +136,7 @@ class Tinebase_Frontend_WebDAV_Record implements Sabre\DAV\ICollection
      */
     function getName()
     {
-        list(, $basename) = Sabre\DAV\URLUtil::splitPath($this->_path);
+        list(, $basename) = Tine20\DAV\URLUtil::splitPath($this->_path);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' name: ' . $basename);

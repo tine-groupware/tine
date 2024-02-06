@@ -2,7 +2,7 @@
 variables:
   # The major commit ref name is mainly used for ci caching. Non feature branches should be there own major. The major of feature branches should be the branch the will be merged into.
   # The major commit ref name is configures in to parts, the base and and the customer specific part.
-  BASE_MAJOR_COMMIT_REF_NAME: "2023.11"
+  BASE_MAJOR_COMMIT_REF_NAME: "2024.11"
   # The customer part must end with an /. eg "ecclesias/" (This is a limitation of templateing and is required to allow branches with out a customer. 
   CUSTOMER_MAJOR_COMMIT_REF_NAME: "saas/"
 
@@ -28,10 +28,10 @@ variables:
   JS_E2E_TEST_FILTER: ""
 
   # "Database image used by tests."
-  DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.4.1"
+  DATABASE_IMAGE: "${UTIL_REGISTRY}/mariadb:10.9.8"
 
-  # "Rdis image to use druing tests."
-  REDIS_IMAGE: "${UTIL_REGISTRY}/redis:5.0.5"
+  # "Redis image to use during tests."
+  REDIS_IMAGE: "${UTIL_REGISTRY}/redis:6.0.16"
 
   # "Add a php unit filter to all php unit test jobs e.g. CashBook. This is used for customapp tests."
   PHPUNIT_FILTER: ""
@@ -40,7 +40,7 @@ variables:
   PHP_VERSION: "8.1"
 
   # "Codename for build"
-  CODENAME: "Ellie"
+  CODENAME: "2024.11"
 
   # "Try to reuse source images" 
   REUSE_IMAGES: "true"

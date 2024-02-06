@@ -13,12 +13,12 @@
  * @author     Lars Kneschke <l.kneschke@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Tinebase_WebDav_Plugin_PrincipalSearch extends \Sabre\DAV\ServerPlugin {
+class Tinebase_WebDav_Plugin_PrincipalSearch extends \Tine20\DAV\ServerPlugin {
 
     /**
      * Reference to server object
      *
-     * @var \Sabre\DAV\Server
+     * @var \Tine20\DAV\Server
      */
     protected $server;
 
@@ -34,7 +34,7 @@ class Tinebase_WebDav_Plugin_PrincipalSearch extends \Sabre\DAV\ServerPlugin {
 
     /**
      * (non-PHPdoc)
-     * @see \Sabre\DAV\ServerPlugin::getPluginName()
+     * @see \Tine20\DAV\ServerPlugin::getPluginName()
      */
     public function getPluginName() 
     {
@@ -43,36 +43,36 @@ class Tinebase_WebDav_Plugin_PrincipalSearch extends \Sabre\DAV\ServerPlugin {
     
     /**
      * (non-PHPdoc)
-     * @see \Sabre\DAV\ServerPlugin::getSupportedReportSet()
+     * @see \Tine20\DAV\ServerPlugin::getSupportedReportSet()
      */
     public function getSupportedReportSet($uri) 
     {
         return array(
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}calendarserver-principal-search'
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}calendarserver-principal-search'
         );
 
     }
     /**
      * Initializes the plugin 
      * 
-     * @param \Sabre\DAV\Server $server 
+     * @param \Tine20\DAV\Server $server 
      * @return void
      */
-    public function initialize(\Sabre\DAV\Server $server) 
+    public function initialize(\Tine20\DAV\Server $server) 
     {
         $this->server = $server;
 
-        $server->xmlNamespaces[\Sabre\CalDAV\Plugin::NS_CALDAV] = 'cal';
-        $server->xmlNamespaces[\Sabre\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
+        $server->xmlNamespaces[\Tine20\CalDAV\Plugin::NS_CALDAV] = 'cal';
+        $server->xmlNamespaces[\Tine20\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
 
         #$server->subscribeEvent('beforeGetProperties',array($this,'beforeGetProperties'));
         $server->subscribeEvent('report',array($this,'report'));
         
         array_push($server->protectedProperties,
             // CalendarServer extensions
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'
         );
     }
     
@@ -89,14 +89,14 @@ class Tinebase_WebDav_Plugin_PrincipalSearch extends \Sabre\DAV\ServerPlugin {
      * @param array $returnedProperties
      * @return void
      */
-    #public function beforeGetProperties($path, \Sabre\DAV\INode $node, &$requestedProperties, &$returnedProperties) 
+    #public function beforeGetProperties($path, \Tine20\DAV\INode $node, &$requestedProperties, &$returnedProperties) 
     #{
-    #    if ($node instanceof \Sabre\DAVACL\IPrincipal) {var_dump($path);
+    #    if ($node instanceof \Tine20\DAVACL\IPrincipal) {var_dump($path);
     #        // schedule-outbox-URL property
-    #        #'{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'        => 'GROUP',
-    #        $property = '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type';
+    #        #'{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'        => 'GROUP',
+    #        $property = '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type';
     #        if (in_array($property,$requestedProperties)) {
-    #            list($prefix, $nodeId) = Sabre\DAV\URLUtil::splitPath($path);
+    #            list($prefix, $nodeId) = Tine20\DAV\URLUtil::splitPath($path);
     #            
     #            unset($requestedProperties[array_search($property, $requestedProperties)]);
     #            $returnedProperties[200][$property] = ($prefix == Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS) ? 'GROUP' : 'INDIVIDUAL';
@@ -115,7 +115,7 @@ class Tinebase_WebDav_Plugin_PrincipalSearch extends \Sabre\DAV\ServerPlugin {
     public function report($reportName, $dom) 
     {
         switch($reportName) {
-            case '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}calendarserver-principal-search':
+            case '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}calendarserver-principal-search':
                 $this->_principalSearchReport($dom);
                 return false;
         }
@@ -123,7 +123,7 @@ class Tinebase_WebDav_Plugin_PrincipalSearch extends \Sabre\DAV\ServerPlugin {
     
     protected function _principalSearchReport(\DOMDocument $dom) 
     {
-        $requestedProperties = array_keys(\Sabre\DAV\XMLUtil::parseProperties($dom->firstChild));
+        $requestedProperties = array_keys(\Tine20\DAV\XMLUtil::parseProperties($dom->firstChild));
         
         $searchTokens = $dom->firstChild->getElementsByTagName('search-token');
 

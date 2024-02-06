@@ -109,6 +109,8 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
     protected $_readModificationLogFromMasterLockId = null;
 
+    protected static ?string $_accountId = null;
+
     /**
      * the singleton pattern
      *
@@ -1352,7 +1354,14 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
                 ' from ' . ($newRecord->seq - 1) . ' to ' . $newRecord->seq);
         }
     }
-    
+
+    public static function setCurrentAccountId(?string $accountId): ?string
+    {
+        $oldValue = static::$_accountId;
+        static::$_accountId = $accountId;
+        return $oldValue;
+    }
+
     /**
      * returns current account id and time
      * 
@@ -1361,7 +1370,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
     public static function getCurrentAccountIdAndTime()
     {
         $currentAccount   = Tinebase_Core::getUser();
-        $currentAccountId = $currentAccount instanceof Tinebase_Record_Interface ? $currentAccount->getId(): NULL;
+        $currentAccountId = static::$_accountId ?? ($currentAccount instanceof Tinebase_Record_Interface ? $currentAccount->getId(): null);
         $currentTime      = new Tinebase_DateTime();
 
         return array($currentAccountId, $currentTime);

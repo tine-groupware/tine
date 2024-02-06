@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tasks_Setup_Update_16
  *
@@ -26,10 +27,10 @@
  */
 class Tasks_Setup_Update_16 extends Setup_Update_Abstract
 {
-    const RELEASE016_UPDATE000 = __CLASS__ . '::update000';
-    const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
-    const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
-    const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
+    protected const RELEASE016_UPDATE000 = __CLASS__ . '::update000';
+    protected const RELEASE016_UPDATE001 = __CLASS__ . '::update001';
+    protected const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
+    protected const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -85,7 +86,8 @@ class Tasks_Setup_Update_16 extends Setup_Update_Abstract
         Tinebase_TransactionManager::getInstance()->rollBack();
 
         $this->getDb()->update(
-            SQL_TABLE_PREFIX . Tasks_Model_Task::TABLE_NAME, ['percent' => 0],
+            SQL_TABLE_PREFIX . Tasks_Model_Task::TABLE_NAME,
+            ['percent' => 0],
             '`percent` is null'
         );
 
@@ -111,12 +113,14 @@ class Tasks_Setup_Update_16 extends Setup_Update_Abstract
 
         Tinebase_PersistentFilter::getInstance()->deleteByFilter(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(
-                Tinebase_Model_PersistentFilterFilter::class, [
+                Tinebase_Model_PersistentFilterFilter::class,
+                [
                 ['field' => 'model', 'operator' => 'equals', 'value' => 'Tasks_Model_TaskFilter'],
                 ['field' => 'application_id', 'operator' => 'equals', 'value' =>
                     Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId()],
                 ['field' => 'name', 'operator' => 'startswith', 'value' => 'To be done for me'],
-                ], _options: ['ignoreAcl' => true]
+                ],
+                _options: ['ignoreAcl' => true]
             )
         );
 

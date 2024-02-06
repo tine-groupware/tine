@@ -1199,19 +1199,25 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 }
             }
         }
-        
-        // always update fileas and fn
-        $_data['n_fileas'] = (!empty($_data['n_family'])) ? $_data['n_family']
-            : ((! empty($_data['org_name'])) ? $_data['org_name']
-            : ((isset($_data['n_fileas'])) ? $_data['n_fileas'] : ''));
 
-        if (!empty($_data['n_given']) && $_data['n_given'] !== $_data['n_fileas']) {
-            if (!empty($_data['n_fileas'])) {
-                $_data['n_fileas'] .= ', ';
+        if (empty($_data['n_fileas'])) {
+            $name = 'n_fileas';
+            $template = Addressbook_Config::getInstance()->{Addressbook_Config::FILE_AS_TEMPLATE};
+
+            $locale = Tinebase_Core::getLocale();
+            if (! $locale) {
+                $locale = Tinebase_Translation::getLocale();
             }
-            $_data['n_fileas'] .= $_data['n_given'];
+            $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(), [
+                Tinebase_Twig::TWIG_LOADER =>
+                    new Tinebase_Twig_CallBackLoader(__METHOD__ . $name, time() - 1, function () use ($template) {
+                        return $template;
+                    })
+            ]);
+            $_data['n_fileas'] = $twig->load(__METHOD__ . $name)->render($_data);
         }
 
+        // always update fn
         if (!empty($_data['n_given'])) {
             $_data['n_fn'] = $_data['n_given'] . (!empty($_data['n_family']) ? ' ' . $_data['n_family'] : '');
         } else {
@@ -1491,12 +1497,14 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
             'note'        => true,
             'email'       => true,
             'email_home'  => true,
+            'salutation'  => true,
             'n_family'    => true,
             'n_given'     => true,
             'n_fileas'    => true,
             'n_fn'        => true,
             'n_short'     => true,
             'account_id'  => true,
+            'org_name'    => true,
         ]);
     }
 

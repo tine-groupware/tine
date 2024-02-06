@@ -23,6 +23,7 @@ abstract class Tinebase_Record_Expander_Abstract
 
     const DATA_FETCH_PRIO_DEPENDENTRECORD = 100;
     const DATA_FETCH_PRIO_CONTAINER = 950;
+    const DATA_FETCH_PRIO_ACCOUNT_GRANTS = 951; // after container
     const DATA_FETCH_PRIO_USER = 1000;
     const DATA_FETCH_PRIO_RELATION = 800;
     const DATA_FETCH_PRIO_AFTER_RELATION = 801;

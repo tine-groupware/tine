@@ -112,7 +112,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
         
         this.title = this.hasOwnProperty('title') ? this.title : this.app.i18n._('Attendee');
-        this.plugins = this.plugins || [];
+
+        Ext.ux.pluginRegistry.addRegisteredPlugins(this, 'Calendar.AttendeeGridPanel');
+
         if (! this.showNamesOnly) {
             this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
         }
@@ -853,10 +855,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var result = "",
             email = "";
 
-        if (typeof name.get == 'function' && name.get('n_fileas')) {
-            result = name.get('n_fileas');
+        if (typeof name.getTitle == 'function') {
+            result = name.getTitle();
         } else if (name.n_fileas) {
-            result = name.n_fileas;
+            result = Tine.Tinebase.data.Record.setFromJson(name, Tine.Addressbook.Model.Contact).getTitle();
         } else if (name.accountDisplayName) {
             result = name.accountDisplayName;
         } else if (Ext.isString(name) && ! name.match('^[0-9a-f-]{40,}$') && ! parseInt(name, 10)) {

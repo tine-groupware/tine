@@ -1351,3 +1351,18 @@ msgstr "female"
 
 msgid "Mailing Group Member"
 msgstr "E-Mail-Verteiler Mitglieder"
+
+msgid "Contact Title Template"
+msgstr "Kontakt Titel Template"
+
+msgid "How to build contact titles."
+msgstr "Wie Kontakte betitelt werden."
+
+msgid "Display Name (email)"
+msgstr "Angezeigter Name (E-Mail)"
+
+msgid "Display Name - Company / Organisation"
+msgstr "Angezeigter Name - Firma / Organisation"
+
+msgid "Salutation Title Last Name (Company / Organisation)"
+msgstr "Anrede Titel Nachname (Firma / Organisation)"

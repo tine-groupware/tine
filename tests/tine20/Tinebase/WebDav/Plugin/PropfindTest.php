@@ -12,7 +12,7 @@
 /**
  * Test helper
  */
-require_once 'vendor/sabre/dav/tests/Sabre/DAV/Auth/Backend/Mock.php';
+require_once 'vendor/tine20/sabredav/tests/Sabre/DAV/Auth/Backend/Mock.php';
 
 /**
  *
@@ -33,10 +33,10 @@ class Tinebase_WebDav_Plugin_PropfindTest extends Tinebase_WebDav_Plugin_Abstrac
 
         parent::setUp();
 
-        $mockBackend = new Sabre\DAV\Auth\Backend\Mock();
+        $mockBackend = new Tine20\DAV\Auth\Backend\Mock();
         $mockBackend->defaultUser = Tinebase_Core::getUser()->contact_id;
 
-        $plugin = new Sabre\DAV\Auth\Plugin($mockBackend,'realm');
+        $plugin = new Tine20\DAV\Auth\Plugin($mockBackend,'realm');
         $this->server->addPlugin($plugin);
 
         $aclPlugin = new Tinebase_WebDav_Plugin_ACL();
@@ -45,18 +45,18 @@ class Tinebase_WebDav_Plugin_PropfindTest extends Tinebase_WebDav_Plugin_Abstrac
         );
         $aclPlugin->principalSearchPropertySet = array(
             '{DAV:}displayname' => 'Display name',
-            '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address' => 'Email address',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set' => 'Email addresses',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => 'First name',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name' => 'Last name',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set' => 'Calendar user address set',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type' => 'Calendar user type'
+            '{' . \Tine20\DAV\Server::NS_SABREDAV . '}email-address' => 'Email address',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set' => 'Email addresses',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => 'First name',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name' => 'Last name',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set' => 'Calendar user address set',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type' => 'Calendar user type'
         );
 
         $this->server->addPlugin($aclPlugin);
 
-        $this->server->addPlugin(new \Sabre\CalDAV\Plugin());
-        $this->server->addPlugin(new \Sabre\CalDAV\SharingPlugin());
+        $this->server->addPlugin(new \Tine20\CalDAV\Plugin());
+        $this->server->addPlugin(new \Tine20\CalDAV\SharingPlugin());
 
         $this->plugin = new Tinebase_WebDav_Plugin_PrincipalSearch();
         $this->server->addPlugin($this->plugin);
@@ -85,7 +85,7 @@ class Tinebase_WebDav_Plugin_PropfindTest extends Tinebase_WebDav_Plugin_Abstrac
                 </prop>
             </propfind>';
 
-        $request = new Sabre\HTTP\Request(array(
+        $request = new Tine20\HTTP\Request(array(
             'REQUEST_METHOD' => 'PROPFIND',
             'REQUEST_URI'    => '/principals/users/' . Tinebase_Core::getUser()->contact_id . '/'
         ));

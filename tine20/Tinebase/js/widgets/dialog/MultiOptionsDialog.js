@@ -1,3 +1,4 @@
+import {PersonaContainer, Personas} from "../../ux/vue/PersonaContainer";
 
 Ext.ns('Tine.widgets.dialog');
 
@@ -54,11 +55,13 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
     deferredRender: false,
     buttonAlign: null,
     bufferResize: 500,
+
+    persona: Personas.QUESTION_OPTION,
     
     initComponent: function() {
         // init buttons and tbar
         this.initButtons();
-        
+
         this.itemsName = this.id + '-radioItems';
         
         // get items for this dialog
@@ -68,21 +71,18 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
             layoutConfig: {
                 align:'stretch'
             },
-            items: [{
-                border: false,
-                html: '<div class="x-window-dlg"><div class="ext-mb-icon ext-mb-question"></div></div>',
+            items: [new PersonaContainer({
+                persona: this.persona,
                 flex: 0,
-                width: 45
-            }, {
+            }), {
                 border: false,
                 layout: 'fit',
                 flex: 1,
+                autoHeight: true,
                 autoScroll: true,
                 items: [{
-                    xtype: 'label',
-                    border: false,
-                    cls: 'ext-mb-text',
-                    html: this.questionText || i18n._('What would you like to do?')
+                    xtype: 'v-alert',
+                    label: this.questionText || i18n._('What would you like to do?')
                 }, {
                     xtype: this.allowMultiple ? 'checkboxgroup' : 'radiogroup',
                     hideLabel: true,
@@ -173,6 +173,7 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
             }) : null;
         } else {
             option = selected ? selected.getGroupValue() : null;
+            option = _.find(this.options, {name: option})?.value || option;
         }
 
         if (! option) {
@@ -205,7 +206,7 @@ Tine.widgets.dialog.MultiOptionsDialog.getOption = function(config) {
 Tine.widgets.dialog.MultiOptionsDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: config.width || 400,
-        height: config.height || 150,
+        height: Math.max(config.height || 150, 200),
         closable: false,
         name: Tine.widgets.dialog.MultiOptionsDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.dialog.MultiOptionsDialog',

@@ -188,12 +188,17 @@ import './DependencyPanel'
                             fieldLabel: this.app.i18n._('Due date'),
                             name: 'due',
                             listeners: {scope: this, change: this.validateDue},
-                        }), 
+                            columnWidth: 1/3,
+                        }),
+                        this.fieldManager('estimated_duration', {
+                            columnWidth: 1/6
+                        }),
                         new Tine.Tinebase.widgets.keyfield.ComboBox({
                             fieldLabel: this.app.i18n._('Priority'),
                             name: 'priority',
                             app: 'Tasks',
                             keyFieldName: 'taskPriority',
+                            columnWidth: 1/6,
                         }),
                         Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                             userOnly: true,
@@ -201,7 +206,8 @@ import './DependencyPanel'
                             emptyText: i18n._('Add Responsible ...'),
                             useAccountRecord: true,
                             name: 'organizer',
-                            allowBlank: true
+                            allowBlank: true,
+                            columnWidth: 1/3,
                         })
                     ], [{
                         columnWidth: 1,

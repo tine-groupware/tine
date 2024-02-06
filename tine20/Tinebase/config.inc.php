@@ -6,6 +6,7 @@ return array (
         Tinebase_Config::ACCOUNT_DELETION_DELETE_EMAIL_ACCOUNTS => true,
         Tinebase_Config::ACCOUNT_DELETION_ADDITIONAL_TEXT => ''
     ],
+    Tinebase_Config::VERSION_CHECK => false,
     'features' => array(
         Tinebase_Config::FEATURE_SHOW_ADVANCED_SEARCH => false,
         Tinebase_Config::FEATURE_SHOW_ACCOUNT_EMAIL => false,

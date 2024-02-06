@@ -335,7 +335,7 @@ class Calendar_Controller_ResourceTest extends Calendar_TestCase
     {
         $this->_prepareTestResourceAcl();
 
-        $calendarShared = \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/shared';
+        $calendarShared = \Tine20\CalDAV\Plugin::CALENDAR_ROOT . '/shared';
         if (isset($_SERVER['REQUEST_URI'])) {
             $oldRequestUri = $_SERVER['REQUEST_URI'];
         } else {

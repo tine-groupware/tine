@@ -8,6 +8,7 @@
  */
 
 /*global Ext, Tine*/
+import getTwingEnv from "twingEnv";
 import { getAddressPanels } from "./AddressPanel";
 import contactPropertiesGrid from "./ContactPropertiesGrid";
 
@@ -206,10 +207,9 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     !Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry') ?
                         {
                             columnWidth: 0.64,
-                            xtype: 'combo',
+                            xtype: 'textfield',
                             fieldLabel: this.app.i18n._('Display Name'),
-                            name: 'n_fn',
-                            disabled: true
+                            name: 'n_fileas'
                         } :
                         (
                             new Tine.Addressbook.IndustrySearchCombo({
@@ -398,6 +398,33 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             frame: false
         });
         Tine.Addressbook.ContactEditDialog.superclass.initComponent.apply(this, arguments);
+
+        // init suggestions
+        this.twingEnv = getTwingEnv();
+        const loader = this.twingEnv.getLoader();
+        loader.setTemplate('n_fileas', Tine.Tinebase.configManager.get('fileAsTemplate', 'Addressbook'));
+        this.getForm().items.each((field) => {
+            if (field.initKeyEvents) {
+                field.initKeyEvents();
+            }
+            field.on('keyup', this.suggestFields, this);
+        });
+    },
+
+    suggestFields: async function() {
+        const fieldName = 'n_fileas';
+        const field = this.getForm().findField(fieldName);
+        const value = field?.getValue();
+        if (field && (!value || value === field.suggestedValue)) {
+            this.onRecordUpdate();
+            // @FIXME twing can't cope with null values yet, remove this once twing fixed it
+            const data = JSON.parse(JSON.stringify(this.record.data).replace(/:null([,}])/g, ':""$1'));
+            const suggestion = await this.twingEnv.render(fieldName, data);
+
+            field.setValue(suggestion);
+            this.record.set(fieldName, suggestion);
+            field.suggestedValue = suggestion;
+        }
     },
 
     /**
@@ -537,6 +564,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         if(Tine.Tinebase.registry.get('currentAccount').contact_id == this.record.id) {
             this.enableOwnPrivateFields();
         }
+
+        this.suggestFields();
     },
 
     /**

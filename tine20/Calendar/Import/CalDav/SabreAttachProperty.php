@@ -1,6 +1,6 @@
 <?php
 
-class Calendar_Import_CalDav_SabreAttachProperty extends Sabre\VObject\Property\Binary
+class Calendar_Import_CalDav_SabreAttachProperty extends Tine20\VObject\Property\Binary
 {
     protected $isValueBinary = true;
     

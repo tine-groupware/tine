@@ -92,13 +92,6 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     protected $_contractsMarketing;
     
     /**
-     * cc controller
-     * 
-     * @var Tinebase_Controller_CostCenter
-     */
-    protected $_ccController;
-    
-    /**
      * The contract controller
      * 
      * @var Sales_Controller_Contract
@@ -168,7 +161,6 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _beforeCreate()
     {
-        $this->_ccController  = Tinebase_Controller_CostCenter::getInstance();
         $this->_taController  = Timetracker_Controller_Timeaccount::getInstance();
         $this->_taController->sendNotifications(FALSE);
         $this->_tsController  = Timetracker_Controller_Timesheet::getInstance();
@@ -259,17 +251,8 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     $contract = $costcenter->name == 'Marketing' ? $this->_contractsMarketing->getByIndex(rand(0, ($this->_contractsMarketing->count() -1))) : $this->_contractsDevelopment->getByIndex(rand(0, ($this->_contractsDevelopment->count() -1)));
                     
                     $ta->budget = $costcenter->name == 'Marketing' ? 100 : NULL;
+                    $ta->eval_dim_cost_center = $costcenter->getId();
                     $ta->relations = array(
-                        array(
-                            'own_model'              => 'Timetracker_Model_Timeaccount',
-                            'own_backend'            => 'SQL',
-                            'own_id'                 => NULL,
-                            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                            'related_model'          => Tinebase_Model_CostCenter::class,
-                            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                            'related_id'             => $costcenter->getId(),
-                            'type'                   => 'COST_CENTER'
-                        ),
                         array(
                             'own_model'              => 'Timetracker_Model_Timeaccount',
                             'own_backend'            => 'SQL',
@@ -283,18 +266,7 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     $ta->title = (self::$_de ? 'Zeitkonto mit ' : 'Timeaccount for ') . $contract->getTitle();
                 } else {
                     $ta->title = (self::$_de ? 'Zeitkonto mit KST ' : 'Timeaccount for CC ') . $costcenter->getTitle();
-                    $ta->relations = array(
-                        array(
-                            'own_model'              => 'Timetracker_Model_Timeaccount',
-                            'own_backend'            => 'SQL',
-                            'own_id'                 => NULL,
-                            'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
-                            'related_model'          => Tinebase_Model_CostCenter::class,
-                            'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                            'related_id'             => $costcenter->getId(),
-                            'type'                   => 'COST_CENTER'
-                        )
-                    );
+                    $ta->eval_dim_cost_center = $costcenter->getId();
                 }
                 
                 $this->_timeAccounts[$costcenter->getId()]->addRecord($this->_taController->create($ta));
@@ -315,21 +287,28 @@ class Timetracker_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         $ts = new Timetracker_Model_Timesheet($data);
         return $this->_tsController->create($ts);
     }
-    
-    /**
-     * returns the cost center for the current account
-     *
-     * @return HumanResources_Model_CostCenter|Tinebase_Model_CostCenter
-     */
-    protected function _getCurrentUsersCostCenter()
+
+    protected function _getCurrentUsersCostCenter(): Tinebase_Model_EvaluationDimensionItem
     {
         $employee = $this->_getCurrentUsersEmployee();
         if (! $employee) {
             throw new Tinebase_Exception_UnexpectedValue('current employee not found! did you delete any contacts?');
         }
 
-        $salesCC = HumanResources_Controller_CostCenter::getInstance()->getValidCostCenter($employee->getId(), NULL, TRUE);
-        return $salesCC;
+        $result = HumanResources_Controller_CostCenter::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_CostCenter::class, [
+                ['field' => 'employee_id', 'operator' => 'equals', 'value' => $employee->getId()],
+                ['field' => 'start_date', 'operator' => 'before', 'value' => Tinebase_DateTime::today()],
+            ]), new Tinebase_Model_Pagination([
+                'sort' => 'start_date',
+                'dir' => 'DESC',
+                'limit' => 1,
+            ])
+        )->getFirstRecord();
+
+        /** @var Tinebase_Model_EvaluationDimensionItem $cc */
+        $cc = Tinebase_Controller_EvaluationDimensionItem::getInstance()->get($result->eval_dim_cost_center);
+        return $cc;
     }
     
     /**

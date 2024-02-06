@@ -55,16 +55,16 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         Tinebase_Group::getInstance()->addGroupMember($group->getId(), Tinebase_Core::getUser()->getId());
         Tinebase_Core::getDb()->delete(SQL_TABLE_PREFIX . 'addressbook_lists', 'id = "' . $group->list_id . '"');
 
-        $server = new Sabre\DAV\Server(new Tinebase_WebDav_Root());
+        $server = new Tine20\DAV\Server(new Tinebase_WebDav_Root());
         $server->debugExceptions = true;
 
-        require_once 'vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
+        require_once 'vendor/tine20/sabredav/tests/Sabre/HTTP/ResponseMock.php';
 
-        $response = new Sabre\HTTP\ResponseMock();
+        $response = new Tine20\HTTP\ResponseMock();
         $server->httpResponse = $response;
 
         $server->addPlugin(
-            new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
+            new \Tine20\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
         );
 
         $aclPlugin = new Tinebase_WebDav_Plugin_ACL();
@@ -73,18 +73,18 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         );
         $aclPlugin->principalSearchPropertySet = array(
             '{DAV:}displayname'                                                   => 'Display name',
-            '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address'               => 'Email address',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set'  => 'Email addresses',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'         => 'First name',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'          => 'Last name',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-address-set' => 'Calendar user address set',
-            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-type' => 'Calendar user type'
+            '{' . \Tine20\DAV\Server::NS_SABREDAV . '}email-address'               => 'Email address',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set'  => 'Email addresses',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name'         => 'First name',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'          => 'Last name',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-address-set' => 'Calendar user address set',
+            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV         . '}calendar-user-type' => 'Calendar user type'
         );
 
         $server->addPlugin($aclPlugin);
         $server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
         $server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPlugin); // this plugin must be loaded before CalDAV plugin
-        $server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin()); // replacement for new \Sabre\CalDAV\Plugin());
+        $server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin()); // replacement for new \Tine20\CalDAV\Plugin());
 
         $body = '<?xml version="1.0" encoding="UTF-8"?>
 <A:expand-property xmlns:A="DAV:">
@@ -101,7 +101,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
 </A:expand-property>
 ';
 
-        $request = new Sabre\HTTP\Request([
+        $request = new Tine20\HTTP\Request([
             'REQUEST_METHOD' => 'REPORT',
             'REQUEST_URI'    => '/principals/users/' . Tinebase_Core::getUser()->contact_id . '/',
         ]);
@@ -218,7 +218,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         }
 
         $uris = $this->_backend->searchPrincipals(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, array(
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => Tinebase_Core::getUser()->accountFirstName)
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => Tinebase_Core::getUser()->accountFirstName)
         );
         
         $this->assertEquals(1, count($uris), 'could not find user by first name ' . Tinebase_Core::getUser()->accountFirstName);
@@ -228,7 +228,7 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
     public function testSearchPrincipalsByLastName()
     {
         $uris = $this->_backend->searchPrincipals(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, array(
-            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name' => Tinebase_Core::getUser()->accountLastName)
+            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name' => Tinebase_Core::getUser()->accountLastName)
         );
         
         $this->assertEquals(1, count($uris), 'could not find user by email address ' . Tinebase_Core::getUser()->accountEmailAddress);

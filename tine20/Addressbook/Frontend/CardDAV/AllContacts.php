@@ -1,6 +1,6 @@
 <?php
 
-use Sabre\VObject;
+use Tine20\VObject;
 
 /**
  * Tine 2.0
@@ -19,7 +19,7 @@ use Sabre\VObject;
  * @package     Addressbook
  * @subpackage  Frontend
  */
-class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection implements Sabre\DAV\IProperties, Sabre\DAVACL\IACL, Sabre\CardDAV\IAddressBook
+class Addressbook_Frontend_CardDAV_AllContacts extends Tine20\DAV\Collection implements Tine20\DAV\IProperties, Tine20\DAVACL\IACL, Tine20\CardDAV\IAddressBook
 {
     const NAME = 'contacts';
     
@@ -60,12 +60,12 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
             'id'                                     => self::NAME,
             'uri'                                    => self::NAME,
             '{DAV:}resource-id'                      => 'urn:uuid:' . self::NAME,
-            '{DAV:}owner'                            => new Sabre\DAVACL\Property\Principal(Sabre\DAVACL\Property\Principal::HREF, 'principals/users/' . $this->_user->contact_id),
+            '{DAV:}owner'                            => new Tine20\DAVACL\Property\Principal(Tine20\DAVACL\Property\Principal::HREF, 'principals/users/' . $this->_user->contact_id),
             '{DAV:}displayname'                      => $this->_containerName,
              
             #'principaluri'      => $principalUri,
-            '{' . Sabre\CardDAV\Plugin::NS_CARDDAV . '}addressbook-description'    => 'Addressbook ' . $this->_containerName,
-            '{' . Sabre\CardDAV\Plugin::NS_CARDDAV . '}supported-addressbook-data' => new Sabre\CardDAV\Property\SupportedAddressData(array(array('contentType' => 'text/vcard', 'version' => '3.0')))
+            '{' . Tine20\CardDAV\Plugin::NS_CARDDAV . '}addressbook-description'    => 'Addressbook ' . $this->_containerName,
+            '{' . Tine20\CardDAV\Plugin::NS_CARDDAV . '}supported-addressbook-data' => new Tine20\CardDAV\Property\SupportedAddressData(array(array('contentType' => 'text/vcard', 'version' => '3.0')))
         );
 
         $response = array();
@@ -97,11 +97,11 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
     }
 
     /**
-     * @see Sabre\DAV\Collection::getChild()
+     * @see Tine20\DAV\Collection::getChild()
      *
      * @param string $_name
      * @return Addressbook_Frontend_WebDAV_Contact
-     * @throws \Sabre\DAV\Exception\NotFound
+     * @throws \Tine20\DAV\Exception\NotFound
      */
     public function getChild($_name)
     {
@@ -121,7 +121,7 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
             $object = Addressbook_Controller_Contact::getInstance()->search($filter, null, false, false, 'sync')->getFirstRecord();
     
             if ($object == null) {
-                throw new Sabre\DAV\Exception\NotFound('Object not found');
+                throw new Tine20\DAV\Exception\NotFound('Object not found');
             }
         }
         
@@ -217,12 +217,12 @@ class Addressbook_Frontend_CardDAV_AllContacts extends Sabre\DAV\Collection impl
 
     public function setACL(array $acl)
     {
-        throw new Sabre\DAV\Exception\MethodNotAllowed("Properties of meta addressbook 'All Contacts' can't be changed");
+        throw new Tine20\DAV\Exception\MethodNotAllowed("Properties of meta addressbook 'All Contacts' can't be changed");
     }
 
     public function updateProperties($mutations)
     {
-        throw new Sabre\DAV\Exception\MethodNotAllowed("Properties of meta addressbook 'All Contacts' can't be changed");
+        throw new Tine20\DAV\Exception\MethodNotAllowed("Properties of meta addressbook 'All Contacts' can't be changed");
     }
 
     /**

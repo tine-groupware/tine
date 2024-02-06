@@ -26,6 +26,13 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     public const FLD_DEPENDENS_ON = 'dependens_on';
     public const FLD_DEPENDENT_TASKS = 'dependent_taks';
     public const FLD_DUE = 'due';
+    public const FLD_ESTIMATED_DURATION = 'estimated_duration';
+    public const FLD_STATUS = 'status';
+
+    public const TASK_STATUS_NEEDS_ACTION = 'NEEDS-ACTION';
+    public const TASK_STATUS_COMPLETED = 'COMPLETED';
+    public const TASK_STATUS_CANCELLED = 'CANCELLED';
+    public const TASK_STATUS_IN_PROCESS = 'IN-PROCESS';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -40,7 +47,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        self::VERSION       => 12,
+        self::VERSION       => 13,
         'recordName'        => 'Task',  // gettext('GENDER_Task')
         'recordsName'       => 'Tasks', // ngettext('Task', 'Tasks', n)
         'hasRelations'      => true,
@@ -61,7 +68,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         'containersName'    => 'Tasks',
         'containerUsesFilter' => true,
 
-        'titleProperty'     => 'summary',//array('%s - %s', array('number', 'title')),
+        'titleProperty'     => 'summary',
         'appName'           => 'Tasks',
         'modelName'         => 'Task',
 
@@ -95,17 +102,36 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 ],
                 self::FLD_DEPENDENS_ON => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Tasks_Model_TaskDependency::FLD_DEPENDS_ON => [],
+                        Tasks_Model_TaskDependency::FLD_DEPENDS_ON => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                'organizer' => [],
+                                'source' => [],
+                            ],
+                        ],
                     ],
                 ],
                 self::FLD_DEPENDENT_TASKS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Tasks_Model_TaskDependency::FLD_TASK_ID => [],
+                        Tasks_Model_TaskDependency::FLD_TASK_ID => [
+                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                'organizer' => [],
+                            ],
+                        ],
                     ],
                 ],
             ],
         ],
-        
+
+        'filterModel'       => array(
+            'tasksDue'          => [
+                self::FILTER        => Tasks_Model_TasksDueFilter::class,
+                self::LABEL         => 'To be done for', // _('To be done for')
+                'jsConfig'          => [
+                    'filtertype' => 'tasks.tasksdue',
+                ],
+            ],
+        ),
+
         'fields'            => array(
             'summary'           => array(
                 'label'             => 'Summary', //_('Summary'),
@@ -141,7 +167,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 'default'           => 0,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
-            'status'            => array(
+            self::FLD_STATUS    => array(
                 'label'             => 'Status', //_('Status')
                 self::TYPE          => self::TYPE_KEY_FIELD,
                 self::NAME          => Tasks_Config::TASK_STATUS,
@@ -275,6 +301,13 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                     self::REF_ID_FIELD      => Tasks_Model_Attendee::FLD_TASK_ID,
                 ],
             ],
+            self::FLD_ESTIMATED_DURATION => [
+                self::LABEL                 => 'Estimated Duration', // _('Estimated Duration')
+                self::TYPE                  => self::TYPE_INTEGER,
+                self::UNSIGNED              => true,
+                self::SPECIAL_TYPE          => self::SPECIAL_TYPE_DURATION_SEC,
+                self::NULLABLE              => true,
+            ]
         ),
     );
 

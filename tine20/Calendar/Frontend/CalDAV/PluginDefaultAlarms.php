@@ -22,12 +22,12 @@
  * @author     Lars Kneschke <l.kneschke@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Sabre\DAV\ServerPlugin 
+class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Tine20\DAV\ServerPlugin
 {
     /**
      * Reference to server object
      *
-     * @var \Sabre\DAV\Server
+     * @var \Tine20\DAV\Server
      */
     protected $server;
 
@@ -45,7 +45,7 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Sabre\DAV\ServerPlug
      * Returns a plugin name.
      * 
      * Using this name other plugins will be able to access other plugins
-     * using \Sabre\DAV\Server::getPlugin 
+     * using \Tine20\DAV\Server::getPlugin
      * 
      * @return string 
      */
@@ -57,16 +57,16 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Sabre\DAV\ServerPlug
     /**
      * Initializes the plugin 
      * 
-     * @param \Sabre\DAV\Server $server 
+     * @param \Tine20\DAV\Server $server
      * @return void
      */
-    public function initialize(\Sabre\DAV\Server $server) 
+    public function initialize(\Tine20\DAV\Server $server)
     {
         $this->server = $server;
 
         $server->subscribeEvent('beforeGetProperties', array($this, 'beforeGetProperties'));
 
-        $server->xmlNamespaces[\Sabre\CalDAV\Plugin::NS_CALDAV] = 'cal';
+        $server->xmlNamespaces[\Tine20\CalDAV\Plugin::NS_CALDAV] = 'cal';
     }
     
     /**
@@ -77,17 +77,17 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Sabre\DAV\ServerPlug
      * properties.
      *
      * @param string $path
-     * @param \Sabre\DAV\INode $node
+     * @param \Tine20\DAV\INode $node
      * @param array $requestedProperties
      * @param array $returnedProperties
      * @return void
      */
-    public function beforeGetProperties($path, \Sabre\DAV\INode $node, &$requestedProperties, &$returnedProperties) 
+    public function beforeGetProperties($path, \Tine20\DAV\INode $node, &$requestedProperties, &$returnedProperties)
     {
-        if ($node instanceof \Sabre\CalDAV\ICalendar || $node instanceof Calendar_Frontend_WebDAV) {
-            $vcalendar = new \Sabre\VObject\Component\VCalendar();
+        if ($node instanceof \Tine20\CalDAV\ICalendar || $node instanceof Calendar_Frontend_WebDAV) {
+            $vcalendar = new \Tine20\VObject\Component\VCalendar();
             
-            $property = '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-datetime';
+            $property = '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-datetime';
             if (in_array($property, $requestedProperties)) {
                 unset($requestedProperties[array_search($property, $requestedProperties)]);
                 
@@ -100,7 +100,7 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Sabre\DAV\ServerPlug
                 $returnedProperties[200][$property] = str_replace("\r","", $valarm->serialize()); 
             }
             
-            $property = '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-date';
+            $property = '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-date';
             if (in_array($property, $requestedProperties)) {
                 unset($requestedProperties[array_search($property, $requestedProperties)]);
                 
@@ -116,7 +116,7 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Sabre\DAV\ServerPlug
                 $returnedProperties[200][$property] = str_replace("\r","", $valarm->serialize()); 
             }
             
-            $property = '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-datetime';
+            $property = '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-datetime';
             if (in_array($property, $requestedProperties)) {
                 unset($requestedProperties[array_search($property, $requestedProperties)]);
                 
@@ -129,7 +129,7 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Sabre\DAV\ServerPlug
                 $returnedProperties[200][$property] = str_replace("\r","", $valarm->serialize()); 
             }
             
-            $property = '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-date';
+            $property = '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-date';
             if (in_array($property, $requestedProperties)) {
                 unset($requestedProperties[array_search($property, $requestedProperties)]);
                 

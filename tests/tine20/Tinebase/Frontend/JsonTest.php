@@ -502,7 +502,7 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         // check results
         $this->assertTrue(isset($results['results']));
-        $this->assertEquals(4, $results['totalcount']);
+        $this->assertEquals(5, $results['totalcount']);
 
         $this->assertEquals( 'user', $results['results'][0]['account_type']);
 

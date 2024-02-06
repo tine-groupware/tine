@@ -198,7 +198,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
         // TODO test that msg send to external server contains proper recurid
         $iMIP->preconditionsChecked = true;
         $this->_iMIPFrontend->prepareComponent($iMIP);
-        /** @var \Sabre\VObject\Component\VCalendar $vcalendar */
+        /** @var \Tine20\VObject\Component\VCalendar $vcalendar */
         $vcalendar = Calendar_Convert_Event_VCalendar_Factory::factory('')->fromTine20Model($iMIP->getEvent());
         $vCalBlob = $vcalendar->serialize();
         static::assertStringContainsString('RECURRENCE-ID:20180906T110000', $vCalBlob);
@@ -1342,7 +1342,7 @@ class Calendar_Frontend_iMIPTest extends TestCase
      * @throws Tinebase_Exception_InvalidArgument
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_Record_NotDefined
-     * @throws \Sabre\DAV\Exception\PreconditionFailed
+     * @throws \Tine20\DAV\Exception\PreconditionFailed
      * @group nodockerci
      *        fails with:
      * Failed asserting that two strings are identical.

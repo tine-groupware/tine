@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -271,7 +271,7 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
     /**
      * returns employees currently belonging to the given cost center (id)
      * 
-     * @param string|Tinebase_Model_CostCenter $costCenterId
+     * @param string|Tinebase_Model_EvaluationDimensionItem $costCenterId
      * @return Tinebase_Record_RecordSet|NULL
      */
     public function getEmployeesByCostCenter($costCenterId) {
@@ -329,7 +329,9 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
         $nextNumber = $lastNumber + 1;
         
         $countCreated = 0;
-        
+
+        $division = HumanResources_Controller_Division::getInstance()->getAll()->getFirstRecord();
+
         foreach ($accounts as $account) {
             $filter = new HumanResources_Model_EmployeeFilter(array(array(
                 'field' => 'account_id', 'operator' => 'equals', 'value' => $account->account_id
@@ -355,7 +357,8 @@ class HumanResources_Controller_Employee extends Tinebase_Controller_Record_Abst
                     'n_fn'                => $account->n_fn,
                     'bday'                => $account->bday,
                     'bank_account_holder' => $account->n_fn,
-                    'employment_begin'    => Tinebase_DateTime::now()->subYear(1)
+                    'employment_begin'    => Tinebase_DateTime::now()->subYear(1),
+                    'division_id'         => $division->getId(),
                 ));
                 
                 if ($_feastCalendarId && $_workingTimeModelId && $_vacationDays) {

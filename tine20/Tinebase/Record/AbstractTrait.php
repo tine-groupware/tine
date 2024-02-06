@@ -12,6 +12,8 @@
 /**
  * @package     Tinebase
  * @subpackage  Record
+ *
+ * @method static Tinebase_ModelConfiguration getConfiguration()
  */
 trait Tinebase_Record_AbstractTrait
 {
@@ -53,9 +55,14 @@ trait Tinebase_Record_AbstractTrait
      *
      * @return boolean
      */
-    public function isDirty()
+    public function isDirty(): bool
     {
         return $this->_isDirty;
+    }
+
+    public function unsetDirty(): void
+    {
+        $this->_isDirty = false;
     }
 
     /**
@@ -141,5 +148,29 @@ trait Tinebase_Record_AbstractTrait
     public function notifyBroadcastHub(): bool
     {
         return true;
+    }
+
+    public function getPasswordFromProperty(string $field): ?string
+    {
+        $fieldConf = static::getConfiguration()->getFields()[$field];
+        if (self::TYPE_PASSWORD !== $fieldConf[self::TYPE]) {
+            throw new Tinebase_Exception($field . ' is not of type ' . self::TYPE_PASSWORD);
+        }
+        if (!isset($fieldConf[self::CONFIG][self::REF_ID_FIELD])) {
+            throw new Tinebase_Exception_Record_DefinitionFailure($field . ' is missing ' . self::REF_ID_FIELD);
+        }
+
+        if (!($ccId = $this->{$fieldConf[self::CONFIG][self::REF_ID_FIELD]})) {
+            return null;
+        }
+        try {
+            /** @var Tinebase_Model_CredentialCache $cc */
+            $cc = Tinebase_Auth_CredentialCache::getInstance()->get($ccId);
+        } catch (Tinebase_Exception_NotFound) {
+            return null;
+        }
+        $cc->key = Tinebase_Auth_CredentialCache_Adapter_Shared::getKey();
+        Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($cc);
+        return $cc->password;
     }
 }

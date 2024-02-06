@@ -79,7 +79,7 @@ class Addressbook_Convert_Contact_VCard_WebDAVCollaborator extends Addressbook_C
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseEmail()
      */
-    protected function _toTine20ModelParseEmail(&$data, \Sabre\VObject\Property $property, \Sabre\VObject\Component\VCard $vcard)
+    protected function _toTine20ModelParseEmail(&$data, \Tine20\VObject\Property $property, \Tine20\VObject\Component\VCard $vcard)
     {
         if ($vcard->{'X-OUTLOOK-EMAIL-2'} && $vcard->{'X-OUTLOOK-EMAIL-2'}->getValue() == $property->getValue()) {
             $data['email_home'] = $property->getValue();

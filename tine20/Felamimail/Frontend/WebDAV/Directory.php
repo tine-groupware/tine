@@ -1,6 +1,6 @@
 <?php
 
-use Sabre\DAV;
+use Tine20\DAV;
 
 /**
  * Tine 2.0
@@ -38,7 +38,7 @@ class Felamimail_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Dire
     * Creates a new subdirectory
     *
     * @param string $name
-    * @throws Sabre\DAV\Exception\Forbidden
+    * @throws Tine20\DAV\Exception\Forbidden
     * @return void
     */
     public function createDirectory($name)

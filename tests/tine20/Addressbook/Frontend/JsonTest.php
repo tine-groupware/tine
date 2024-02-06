@@ -459,6 +459,8 @@ class Addressbook_Frontend_JsonTest extends TestCase
      */
     public function testGetPrivateContactData()
     {
+        Addressbook_Controller_Contact::destroyInstance();
+        
         $contact = $this->_addContact();
 
         $this->assertTrue(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
@@ -467,7 +469,18 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $this->_setPersonaGrantsForTestContainer($contact['container_id'], 'sclever');
         Tinebase_Core::setUser($this->_personas['sclever']);
         Tinebase_Container::getInstance()->resetClassCache();
+        Tinebase_Core::clearAppInstanceCache();
         $this->assertFalse(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA));
+        $this->assertFalse(Tinebase_Core::getUser()->hasGrant($contact['container_id'], Addressbook_Model_ContactGrants::GRANT_ADMIN));
+        $contact = Addressbook_Controller_Contact::getInstance()->get($contact['id']);
+        $this->assertFalse($contact->account_id && is_object(Tinebase_Core::getUser()) &&
+            $contact->getIdFromProperty('account_id') === Tinebase_Core::getUser()->getId(), print_r($contact->toArray(false), true));
+        $this->assertTrue($contact->has('container_id'));
+        $this->assertTrue(Addressbook_Controller_Contact::getInstance()->doContainerACLChecks());
+        $this->assertFalse(Addressbook_Controller_Contact::getInstance()->checkGrant($contact,
+            Addressbook_Model_ContactGrants::GRANT_PRIVATE_DATA, false));
+        $this->assertFalse(Addressbook_Controller_Contact::getInstance()->checkGrant($contact,
+            Addressbook_Model_ContactGrants::GRANT_ADMIN, false));
 
         $contactWithoutPrivate = $this->_uit->getContact($contact['id']);
         $this->assertArrayNotHasKey('tel_cell_private', $contactWithoutPrivate);

@@ -257,22 +257,22 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
     }
     /**
      * 
-     * @param Tinebase_Model_CostCenter|string $costCenterId
+     * @param Tinebase_Model_EvaluationDimensionItem|string $costCenterId
      * @return Tinebase_Record_RecordSet
-     */
+     *
     public function getTimeaccountsByCostCenter($costCenterId)
     {
         $costCenterId = is_string($costCenterId) ? $costCenterId : $costCenterId->getId();
         
         $filter = new Tinebase_Model_RelationFilter(array(
-            array('field' => 'related_model', 'operator' => 'equals', 'value' => Tinebase_Model_CostCenter::class),
+            array('field' => 'related_model', 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimensionItem::class),
             array('field' => 'related_id', 'operator' => 'equals', 'value' => $costCenterId),
             array('field' => 'own_model', 'operator' => 'equals', 'value' => Timetracker_Model_Timeaccount::class),
             array('field' => 'type', 'operator' => 'equals', 'value' => 'COST_CENTER'),
         ), 'AND');
         
         return Timetracker_Controller_Timeaccount::getInstance()->getMultiple(Tinebase_Relations::getInstance()->search($filter)->own_id);
-    }
+    }*/
     
     /**
      * @param Sales_Model_Contract $contractId

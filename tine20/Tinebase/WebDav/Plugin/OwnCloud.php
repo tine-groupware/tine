@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
+class Tinebase_WebDav_Plugin_OwnCloud extends Tine20\DAV\ServerPlugin
 {
 
     const NS_OWNCLOUD = 'http://owncloud.org/ns';
@@ -38,17 +38,17 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
     /**
      * Reference to server object
      *
-     * @var Sabre\DAV\Server
+     * @var Tine20\DAV\Server
      */
     private $server;
 
     /**
      * Initializes the plugin
      *
-     * @param Sabre\DAV\Server $server
+     * @param Tine20\DAV\Server $server
      * @return void
      */
-    public function initialize(Sabre\DAV\Server $server)
+    public function initialize(Tine20\DAV\Server $server)
     {
         $this->server = $server;
 
@@ -72,7 +72,7 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
      * Adds ownCloud specific properties
      *
      * @param string $path
-     * @param \Sabre\DAV\INode $node
+     * @param \Tine20\DAV\INode $node
      * @param array $requestedProperties
      * @param array $returnedProperties
      * @return void
@@ -80,7 +80,7 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
      */
     public function beforeGetProperties(
         $path,
-        Sabre\DAV\INode $node,
+        Tine20\DAV\INode $node,
         array &$requestedProperties,
         array &$returnedProperties
     ) {

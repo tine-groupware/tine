@@ -292,7 +292,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
         Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->sendNotifications(false);
         Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->useNotes(false);
-        Sabre\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
+        Tine20\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
         
         $this->decorator->initCalendarImport();
         
@@ -631,7 +631,7 @@ class Calendar_Import_CalDav_Client extends Tinebase_Import_CalDav_Client
         
         Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->sendNotifications(false);
         Tinebase_Core::getApplicationInstance($this->appName, $this->modelName)->useNotes(false);
-        Sabre\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
+        Tine20\VObject\Component\VCalendar::$propertyMap['ATTACH'] = '\\Calendar_Import_CalDav_SabreAttachProperty';
         
         $this->decorator->initCalendarImport();
         

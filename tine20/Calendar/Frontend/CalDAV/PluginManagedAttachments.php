@@ -20,12 +20,12 @@
  * @author     Cornelius Weiss <c.weiss@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\ServerPlugin 
+class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Tine20\DAV\ServerPlugin 
 {
     /**
      * Reference to server object
      *
-     * @var \Sabre\DAV\Server
+     * @var \Tine20\DAV\Server
      */
     protected $server;
 
@@ -43,7 +43,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
      * Returns a plugin name.
      * 
      * Using this name other plugins will be able to access other plugins
-     * using \Sabre\DAV\Server::getPlugin 
+     * using \Tine20\DAV\Server::getPlugin 
      * 
      * @return string 
      */
@@ -55,10 +55,10 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
     /**
      * Initializes the plugin 
      * 
-     * @param \Sabre\DAV\Server $server 
+     * @param \Tine20\DAV\Server $server 
      * @return void
      */
-    public function initialize(\Sabre\DAV\Server $server) 
+    public function initialize(\Tine20\DAV\Server $server) 
     {
         $this->server = $server;
 
@@ -66,9 +66,9 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
         
         $server->subscribeEvent('beforeGetProperties', array($this, 'beforeGetProperties'));
         
-        $server->xmlNamespaces[\Sabre\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
+        $server->xmlNamespaces[\Tine20\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
         
-        $server->resourceTypeMapping['\\Sabre\\CalDAV\\ICalendar'] = '{urn:ietf:params:xml:ns:caldav}calendar';
+        $server->resourceTypeMapping['\\Tine20\\CalDAV\\ICalendar'] = '{urn:ietf:params:xml:ns:caldav}calendar';
         
     }
     
@@ -80,22 +80,22 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
      * properties.
      *
      * @param string $path
-     * @param \Sabre\DAV\INode $node
+     * @param \Tine20\DAV\INode $node
      * @param array $requestedProperties
      * @param array $returnedProperties
      * @return void
      */
-    public function beforeGetProperties($path, \Sabre\DAV\INode $node, &$requestedProperties, &$returnedProperties)
+    public function beforeGetProperties($path, \Tine20\DAV\INode $node, &$requestedProperties, &$returnedProperties)
     {
-        if ($node instanceof \Sabre\DAVACL\IPrincipal) {
+        if ($node instanceof \Tine20\DAVACL\IPrincipal) {
             // dropbox-home-URL property
-            $scheduleProp = '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}dropbox-home-URL';
+            $scheduleProp = '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}dropbox-home-URL';
             if (in_array($scheduleProp,$requestedProperties)) {
                 $principalId = $node->getName();
-                $dropboxPath = \Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $principalId . '/dropbox';
+                $dropboxPath = \Tine20\CalDAV\Plugin::CALENDAR_ROOT . '/' . $principalId . '/dropbox';
                 
                 unset($requestedProperties[array_search($scheduleProp, $requestedProperties)]);
-                $returnedProperties[200][$scheduleProp] = new \Sabre\DAV\Property\Href($dropboxPath);
+                $returnedProperties[200][$scheduleProp] = new \Tine20\DAV\Property\Href($dropboxPath);
             }
         }
     }
@@ -205,7 +205,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
                 });
                 
                 if (! $eventsToUpdate) {
-                    throw new Sabre\DAV\Exception\PreconditionFailed("no attachment with id $managedId found");
+                    throw new Tine20\DAV\Exception\PreconditionFailed("no attachment with id $managedId found");
                 }
                 
                 $node->update($node->getRecord());
@@ -222,7 +222,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\Serve
                 });
                 
                 if (! $eventsToUpdate) {
-                    throw new Sabre\DAV\Exception\PreconditionFailed("no attachment with id $managedId found");
+                    throw new Tine20\DAV\Exception\PreconditionFailed("no attachment with id $managedId found");
                 }
                     
                 $node->update($node->getRecord());
