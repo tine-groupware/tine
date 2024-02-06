@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -428,6 +428,9 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
      */
     public function isReplicable()
     {
+        if (is_a($this->model, Tinebase_Container_NotReplicable::class, true)) {
+            return false;
+        }
         return true;
     }
 

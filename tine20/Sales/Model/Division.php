@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -13,7 +13,7 @@
  *
  * @package     Sales
  */
-class Sales_Model_Division extends Tinebase_Record_NewAbstract
+class Sales_Model_Division extends Tinebase_Record_NewAbstract implements Tinebase_Container_NotReplicable
 {
     public const MODEL_NAME_PART    = 'Division';
     public const TABLE_NAME         = 'sales_division';
