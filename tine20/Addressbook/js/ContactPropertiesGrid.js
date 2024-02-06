@@ -63,9 +63,13 @@ export default (config) => {
     });
 
     const onRecordLoad = (editDialog, record) => {
+        const recordGrants = _.get(record, record.constructor.getMeta('grantsPath'));
         propertyGrid.setSource(config.fields.reduce((source, field, idx) => {
-            const name = `${_.padStart( String(idx), 3, '0')}_${field.fieldName}`;
-            source[name] = record.get(field.fieldName);
+            const requiredGrants = field.requiredGrants; // NOTE: at the moment this means rw!
+            if (! requiredGrants || recordGrants.adminGrant || requiredGrants.some((requiredGrant) => { return recordGrants[requiredGrant] })) {
+                const name = `${_.padStart(String(idx), 3, '0')}_${field.fieldName}`;
+                source[name] = record.get(field.fieldName);
+            }
             return source;
         }, {}));
 
