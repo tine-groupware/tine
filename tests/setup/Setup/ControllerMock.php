@@ -58,7 +58,8 @@ class Setup_ControllerMock extends Setup_Controller
 
         // required for update path to Adb 12.7 ... can be removed once we drop updatability from < 12.7 to 12.7+
         Tinebase_Group_Sql::doJoinXProps(false);
-        
+
+        Tinebase_ModelConfiguration::resetAvailableApps();
         $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
         if (null === ($oldUser = Tinebase_Core::getUser())) {
             Tinebase_Core::set(Tinebase_Core::USER, $setupUser);
