@@ -133,26 +133,19 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
     setValue: function(value) {
         value = Ext.isArray(value) ? value : [value];
         this.attendeeData = value;
-        const currentValue = this.currentValue = [];
-        const attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(value);
-
-        Promise.all(_.map(attendeeStore.data.items, function(attendee) {
-            currentValue.push(attendee.data);
-            return new Promise(resolve => {
-                const name = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, attendee.get('user_id'), {noIcon: true}, attendee);
-                if (name && name.registerReplacer) {
-                    name.registerReplacer((name) => {
-                        resolve(name);
-                    });
-                } else {
-                    resolve(name);
-                }
-            });
-        })).then(names => {
-            const value = names.join(', ');
-            this.setRawValue(value || this.emptyText);
-            this.el[(value ? 'remove' : 'add') + 'Class'](this.emptyClass);
-        });
+        this.currentValue = [];
+        
+        var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(value);
+        
+        var a = [];
+        attendeeStore.each(function(attender) {
+            this.currentValue.push(attender.data);
+            var name = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, attender.get('user_id'), {noIcon: true}, attender);
+            //var status = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderStatus.call(Tine.Calendar.AttendeeGridPanel.prototype, attender.get('status'), {}, attender);
+            a.push(name/* + ' (' + status + ')'*/);
+        }, this);
+        
+        this.setRawValue(a.join(', '));
         return this;
         
     },

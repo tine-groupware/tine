@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * class to hold InventoryItem data
  * 
@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Stefanie Stamer <s.stamer@metaways.de>
- * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -20,8 +20,6 @@
  */
 class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
 {
-    public const TABLE_NAME = 'inventory_item';
-
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -35,7 +33,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'           => 13,
+        'version'           => 12,
         'recordName'        => 'Inventory item',
         'recordsName'       => 'Inventory items', // ngettext('Inventory item', 'Inventory items', n)
         'containerProperty' => 'container_id',
@@ -49,7 +47,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'modlogActive'      => true,
         'hasAttachments'    => true,
         'copyNoAppendTitle' => true,
-        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         
         'exposeJsonApi'     => true,
 
@@ -59,7 +56,7 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         'modelName'         => 'InventoryItem',
 
         'table'             => array(
-            'name'    => self::TABLE_NAME,
+            'name'    => 'inventory_item',
             'indexes' => array(
                 'container_id' => array(
                     'columns' => array('container_id')
@@ -155,6 +152,18 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'label'        => 'Price', // _('Price')
                 'hidden'       => true,
                 'inputFilters' => array('Zend_Filter_Empty' => null),
+            ),
+            'costcenter' => array(
+                'label'      => 'Cost center', // _('Cost Center')
+                'hidden'     => true,
+                'type'       => 'record',
+                'nullable'   => true,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => null),
+                'config' => array(
+                    'appName'     => Tinebase_Config::APP_NAME,
+                    'modelName'   => Tinebase_Model_CostCenter::MODEL_NAME_PART,
+                    'idProperty'  => 'id',
+                ),
             ),
             'warranty' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),

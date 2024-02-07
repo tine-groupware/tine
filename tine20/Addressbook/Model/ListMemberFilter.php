@@ -36,9 +36,6 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_ForeignRe
      */
     protected function _setFilterGroup()
     {
-        if ($this->_valueIsNull) {
-            return;
-        }
         if ($this->_field === 'contact') {
             $this->_options['filtergroup'] = Addressbook_Model_Contact::class;
         } else {

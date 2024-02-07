@@ -259,7 +259,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
      *
      * @return Tinebase_ModelConfiguration|NULL
      */
-    public static function getConfiguration(): ?Tinebase_ModelConfiguration
+    public static function getConfiguration()
     {
         if (! isset (static::$_modelConfiguration)) {
             return NULL;
@@ -316,11 +316,23 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             }
         }
     }
-
-    public function setId($_id): self
+    
+    /**
+     * sets identifier of record
+     * 
+     * @param int $_id
+     * @return void
+     */
+    public function setId($_id)
     {
-        $this->__set($this->_identifier, $_id);
-        return $this;
+        // set internal state to "not validated"
+        $this->_isValidated = false;
+        
+        if ($this->bypassFilters === true) {
+            $this->_properties[$this->_identifier] = $_id;
+        } else {
+            $this->__set($this->_identifier, $_id);
+        }
     }
     
     /**
@@ -1355,9 +1367,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
             $twig = new Tinebase_Twig(Tinebase_Core::getLocale(), $translation);
             $templateString = $translation->translate($c->titleProperty);
             $template = $twig->getEnvironment()->createTemplate($templateString);
-            $data = is_array($this->_properties) ? $this->_properties : [];
-            $data['record'] = $this;
-            return $template->render($data);
+            return $template->render(is_array($this->_properties) ? $this->_properties : []);
         } else {
             return $this->{$c->titleProperty};
         }

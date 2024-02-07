@@ -17,12 +17,12 @@
  * @author     Paul Mehrer <p.mehrer@metaways.de>
  * @license    http://sabre.io/license/ Modified BSD License
  */
-class Tinebase_WebDav_Plugin_SyncToken extends \Tine20\DAV\ServerPlugin
+class Tinebase_WebDav_Plugin_SyncToken extends \Sabre\DAV\ServerPlugin
 {
     /**
      * Reference to server object
      *
-     * @var \Tine20\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     protected $server;
 
@@ -42,7 +42,7 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Tine20\DAV\ServerPlugin
      * Returns a plugin name.
      * 
      * Using this name other plugins will be able to access other plugins
-     * using \Tine20\DAV\Server::getPlugin
+     * using \Sabre\DAV\Server::getPlugin 
      * 
      * @return string 
      */
@@ -54,10 +54,10 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Tine20\DAV\ServerPlugin
     /**
      * Initializes the plugin 
      * 
-     * @param \Tine20\DAV\Server $server
+     * @param \Sabre\DAV\Server $server 
      * @return void
      */
-    public function initialize(\Tine20\DAV\Server $server)
+    public function initialize(\Sabre\DAV\Server $server) 
     {
         $this->server = $server;
 
@@ -108,7 +108,7 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Tine20\DAV\ServerPlugin
          */
         $node = $this->server->tree->getNodeForPath($uri);
         if (!($node instanceof Tinebase_WebDav_Container_Abstract) || !$node->supportsSyncToken()) {
-            throw new Tine20\DAV\Exception\ReportNotSupported('The {DAV:}sync-collection REPORT is not supported on this url.');
+            throw new Sabre\DAV\Exception\ReportNotSupported('The {DAV:}sync-collection REPORT is not supported on this url.');
         }
 
         // getting the sync token send with the request
@@ -120,7 +120,7 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Tine20\DAV\ServerPlugin
         if (strlen($syncToken) > 0 ) {
             // Sync-token must start with our prefix
             if (substr($syncToken, 0, strlen(self::SYNCTOKEN_PREFIX)) !== self::SYNCTOKEN_PREFIX || strlen($syncToken) <= strlen(self::SYNCTOKEN_PREFIX)) {
-                throw new Tine20\DAV\Exception\BadRequest('Invalid or unknown sync token');
+                throw new Sabre\DAV\Exception\BadRequest('Invalid or unknown sync token');
             }
             $syncToken = substr($syncToken, strlen(self::SYNCTOKEN_PREFIX));
         } else {
@@ -128,12 +128,12 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Tine20\DAV\ServerPlugin
         }
 
         // get the list of properties the client requested
-        $properties = array_keys(Tine20\DAV\XMLUtil::parseProperties($report->documentElement));
+        $properties = array_keys(Sabre\DAV\XMLUtil::parseProperties($report->documentElement));
 
         // get changes since client sync token
         $changeInfo = $node->getChanges($syncToken);
         if (is_null($changeInfo)) {
-            throw new Tine20\DAV\Exception\BadRequest('Invalid or unknown sync token');
+            throw new Sabre\DAV\Exception\BadRequest('Invalid or unknown sync token');
         }
 
         // Encoding the response
@@ -167,7 +167,7 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Tine20\DAV\ServerPlugin
                 $resolvedProperties[$fullPath] = $this->server->getPropertiesForPath($fullPath, $properties);
 
                 // in case the user doesnt have access to this
-            } catch (Tine20\DAV\Exception\NotFound $e) {
+            } catch (Sabre\DAV\Exception\NotFound $e) {
                 unset($resolvedProperties[$fullPath]);
             }
         }
@@ -199,8 +199,8 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Tine20\DAV\ServerPlugin
             if (count($entries) === 0) { //404
                 $response = $dom->createElement('d:response');
                 // Make sure the URI sent is equal to the one sent by a
-                // Tine20\DAV\Property\Response.
-                $href = Tine20\DAV\URLUtil::encodePath($href);
+                // Sabre\DAV\Property\Response.
+                $href = Sabre\DAV\URLUtil::encodePath($href);
                 $href = $this->server->getBaseUri() . $href;
                 $href = $dom->createElement('d:href', $href);
                 $response->appendChild($href);
@@ -212,7 +212,7 @@ class Tinebase_WebDav_Plugin_SyncToken extends \Tine20\DAV\ServerPlugin
                     $ehref = $entry['href'];
                     unset($entry['href']);
 
-                    $response = new Tine20\DAV\Property\Response($ehref, $entry);
+                    $response = new Sabre\DAV\Property\Response($ehref, $entry);
                     $response->serialize($this->server, $multiStatus);
                 }
             }

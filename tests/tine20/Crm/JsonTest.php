@@ -422,7 +422,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $diff = new Tinebase_Record_Diff(json_decode($modifications->getFirstRecord()->new_value, true));
         $changedAttributes = Tinebase_Timemachine_ModificationLog::getModifiedAttributes($modifications);
 
-        $this->assertEquals(3, count($changedAttributes), 'expected 3 modifications: ' . print_r($modifications->toArray(), TRUE));
+        $this->assertEquals(4, count($changedAttributes), 'expected 3 modifications: ' . print_r($modifications->toArray(), TRUE));
         foreach ($changedAttributes as $attribute) {
             switch ($attribute) {
                 case 'customfields':
@@ -442,6 +442,12 @@ class Crm_JsonTest extends Crm_AbstractTest
                     $this->assertEquals(1, count($diffSet->added));
                     $this->assertEquals(0, count($diffSet->removed));
                     $this->assertEquals(0, count($diffSet->modified), 'tags modified mismatch: ' . print_r($diffSet->toArray(), TRUE));
+                    break;
+                case 'tasks':
+                    $diffSet = new Tinebase_Record_RecordSetDiff($diff->diff['tasks']);
+                    $this->assertEquals(0, count($diffSet->added));
+                    $this->assertEquals(0, count($diffSet->removed));
+                    $this->assertEquals(1, count($diffSet->modified), 'tasks modified mismatch: ' . print_r($diffSet->toArray(), TRUE));
                     break;
                 default:
                     $this->fail('Invalid modification: ' . print_r($diff->toArray(), TRUE));

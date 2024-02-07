@@ -18,7 +18,7 @@
  * @package     Calendar
  * @subpackage  Frontend
  */
-class Calendar_Frontend_CalDAV_Dropbox extends \Tine20\DAV\Collection
+class Calendar_Frontend_CalDAV_Dropbox extends \Sabre\DAV\Collection
 {
     /**
      * @var Tinebase_Model_FullUser
@@ -34,7 +34,7 @@ class Calendar_Frontend_CalDAV_Dropbox extends \Tine20\DAV\Collection
     
     /**
      * (non-PHPdoc)
-     * @see Tine20\DAV\Collection::createDirectory()
+     * @see Sabre\DAV\Collection::createDirectory()
      */
     public function createDirectory($name)
     {
@@ -43,7 +43,7 @@ class Calendar_Frontend_CalDAV_Dropbox extends \Tine20\DAV\Collection
     
     /**
      * (non-PHPdoc)
-     * @see Tine20\DAV\Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($_name)
     {
@@ -54,7 +54,7 @@ class Calendar_Frontend_CalDAV_Dropbox extends \Tine20\DAV\Collection
     }
     
     /**
-     * @see Tine20\DAV\Collection::getChildren()
+     * @see Sabre\DAV\Collection::getChildren()
      */
     function getChildren()
     {

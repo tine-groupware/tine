@@ -3,13 +3,13 @@
  * Principals Collection
  *
  * This collection represents a list of users.
- * The users are instances of Tine20\DAVACL\Principal
+ * The users are instances of Sabre\DAVACL\Principal
  *
  * @copyright Copyright (C) 2007-2013 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Tinebase_WebDav_PrincipalCollection extends Tine20\DAVACL\AbstractPrincipalCollection
+class Tinebase_WebDav_PrincipalCollection extends Sabre\DAVACL\AbstractPrincipalCollection
 {
     protected $principalPrefix;
 
@@ -21,7 +21,7 @@ class Tinebase_WebDav_PrincipalCollection extends Tine20\DAVACL\AbstractPrincipa
      * supplied by the authentication backend.
      *
      * @param array $principal
-     * @return \Tine20\DAV\INode
+     * @return \Sabre\DAV\INode
      */
     public function getChildForPrincipal(array $principal) 
     {

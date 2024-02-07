@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -520,8 +520,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
             }
             $routeCollector->get('/view/floorplan[/{floorplan}]', (new Tinebase_Expressive_RouteHandler(
                 self::class, 'floorplanMainScreen', [
-                Tinebase_Expressive_RouteHandler::IS_PUBLIC => false,
-                Tinebase_Expressive_RouteHandler::UNAUTHORIZED_REDIRECT_LOGIN => true,
+                Tinebase_Expressive_RouteHandler::IS_PUBLIC => false
             ]))->toArray());
         });
 

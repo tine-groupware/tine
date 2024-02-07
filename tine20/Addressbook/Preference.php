@@ -42,13 +42,6 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
      * @var string
      */
     const DEFAULT_CONTACT_XLS_EXPORTCONFIG = 'defaultContactXLSExportconfig';
-
-    /**
-     * contact title template
-     *
-     * @var string
-     */
-    const CONTACT_TITLE_TEMPLATE = 'contactTitleTemplate';
     
     /**
      * @var string application
@@ -68,8 +61,7 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTADDRESSBOOK,
             self::DEFAULTPERSISTENTFILTER,
             self::DEFAULT_CONTACT_ODS_EXPORTCONFIG,
-            self::DEFAULT_CONTACT_XLS_EXPORTCONFIG,
-            self::CONTACT_TITLE_TEMPLATE,
+            self::DEFAULT_CONTACT_XLS_EXPORTCONFIG
         );
         
         return $allPrefs;
@@ -101,10 +93,6 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Contacts XLS export configuration'),
                 'description'   => $translate->_('Use this configuration for the contact XLS export.'),
             ),
-            self:: CONTACT_TITLE_TEMPLATE => [
-                'label'         => $translate->_('Contact Title Template'),
-                'description'   => $translate->_('How to build contact titles.'),
-            ],
         );
         
         return $prefDescriptions;
@@ -134,32 +122,6 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::DEFAULT_CONTACT_XLS_EXPORTCONFIG:
                 $preference->value      = 'adb_default_xls';
-                break;
-            case self::CONTACT_TITLE_TEMPLATE:
-                $translate = Tinebase_Translation::getTranslation($this->_application);
-                $preference->uiconfig = [
-                    self::CLIENT_NEEDS_RELOAD => true
-                ];
-                $preference->value      = '{{ n_fileas }}';
-                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <option>
-                            <value>{{ n_fileas }}</value>
-                            <label>'. $translate->_('Display Name') . '</label>
-                        </option>
-                        <option>
-                            <value>{{ n_fileas }}{% if record.getPreferredEmail() %} ({{ record.getPreferredEmail() }}){% endif %}</value>
-                            <label>'. $translate->_('Display Name (email)') . '</label>
-                        </option>
-                        <option>
-                            <value>{{ n_fileas }}{% if org_name %} - {{ org_name }}{% endif %}</value>
-                            <label>'. $translate->_('Display Name - Company / Organisation') . '</label>
-                        </option>
-                        <option>
-                            <value>{% if salutation %}{{ keyField("Addressbook", "contactSalutation", salutation) }} {% endif %}{% if n_prefix %}{{ n_prefix }} {% endif %}{% if n_family %}{{ n_family }}{% endif %}{% if org_name %} ({{ org_name }}){% endif %}</value>
-                            <label>'. $translate->_('Salutation Title Last Name (Company / Organisation)') . '</label>
-                        </option>
-                    </options>';
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');

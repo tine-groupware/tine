@@ -29,7 +29,7 @@ Tine.ActiveSync.SyncDevicesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     gridConfig: {
         autoExpandColumn: 'deviceid'
     },
-    allowCreateNew: false,
+    addButton: false,
     asAdminModule: false,
     
     /**

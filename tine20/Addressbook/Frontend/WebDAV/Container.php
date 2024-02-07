@@ -1,6 +1,6 @@
 <?php
-use Tine20\DAVACL;
-use Tine20\CardDAV;
+use Sabre\DAVACL;
+use Sabre\CardDAV;
 
 /**
  * Tine 2.0
@@ -19,7 +19,7 @@ use Tine20\CardDAV;
  * @package     Addressbook
  * @subpackage  Frontend
  */
-class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements Tine20\CardDAV\IAddressBook
+class Addressbook_Frontend_WebDAV_Container extends Tinebase_WebDav_Container_Abstract implements Sabre\CardDAV\IAddressBook
 {
     protected $_applicationName = 'Addressbook';
     

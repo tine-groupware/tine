@@ -83,38 +83,18 @@ class Tinebase_Fulltext_TextExtract
         }
         
         $tempFileName = Tinebase_TempFile::getTempPath();
+        $blobFileName = $_fileObject->getFilesystemPath();
+        
+        if (! is_readable($blobFileName) || ($fSize = filesize($blobFileName)) === 0 || false === $fSize) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Tika does not like empty or unreadable files - skipping!');
+            return $tempFileName;
+        }
 
-        if ($_fileObject->flysystem) {
-            $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($_fileObject->flysystem);
-            try {
-                if ($flySystem->mimeType($_fileObject->flypath) === 'application/encrypted') {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' Tika does not like encrypted files - skipping!');
-                    return $tempFileName;
-                }
-            } catch (League\Flysystem\UnableToRetrieveMetadata $e) {}
-            $blobFileName = Tinebase_TempFile::getTempPath();
-            $raii = new Tinebase_RAII(fn() => @unlink($blobFileName));
-            $tmpFh = null;
-            try {
-                stream_copy_to_stream($flySystem->readStream($_fileObject->flypath), ($tmpFh = fopen($blobFileName, 'w')));
-            } finally {
-                if ($tmpFh) @fclose($tmpFh);
-            }
-        } else {
-            $blobFileName = $_fileObject->getFilesystemPath();
-
-            if (!is_readable($blobFileName) || ($fSize = filesize($blobFileName)) === 0 || false === $fSize) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Tika does not like empty or unreadable files - skipping!');
-                return $tempFileName;
-            }
-
-            if (mime_content_type($blobFileName) === 'application/encrypted') {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Tika does not like encrypted files - skipping!');
-                return $tempFileName;
-            }
+        if (mime_content_type($blobFileName) === 'application/encrypted') {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Tika does not like encrypted files - skipping!');
+            return $tempFileName;
         }
 
         // we create a job specific tempdir as tika plugins might drop large tempfiles there
@@ -153,8 +133,7 @@ class Tinebase_Fulltext_TextExtract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Tika success!');
         }
-
-        unset($raii);
+        
         return $tempFileName;
     }
 }

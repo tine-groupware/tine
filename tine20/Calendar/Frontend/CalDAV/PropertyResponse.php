@@ -1,7 +1,7 @@
 <?php
 
 
-class Calendar_Frontend_CalDAV_PropertyResponse implements Tine20\DAV\Property\IHref
+class Calendar_Frontend_CalDAV_PropertyResponse implements Sabre\DAV\Property\IHref
 {
     /**
      * Url for the response
@@ -56,11 +56,11 @@ class Calendar_Frontend_CalDAV_PropertyResponse implements Tine20\DAV\Property\I
     /**
      * serialize
      *
-     * @param Tine20\DAV\Server $server
+     * @param Sabre\DAV\Server $server
      * @param \DOMElement $dom
      * @return void
      */
-    public function serialize(Tine20\DAV\Server $server, DOMElement $dom) {
+    public function serialize(Sabre\DAV\Server $server, DOMElement $dom) {
 
         $document = $dom->ownerDocument;
         $properties = $this->responseProperties;
@@ -68,7 +68,7 @@ class Calendar_Frontend_CalDAV_PropertyResponse implements Tine20\DAV\Property\I
         $xresponse = $document->createElement('d:response');
         $dom->appendChild($xresponse);
 
-        $uri = Tine20\DAV\URLUtil::encodePath($this->href);
+        $uri = Sabre\DAV\URLUtil::encodePath($this->href);
 
         // Adding the baseurl to the beginning of the url
         $uri = $server->getBaseUri() . $uri;
@@ -137,10 +137,10 @@ class Calendar_Frontend_CalDAV_PropertyResponse implements Tine20\DAV\Property\I
                 if (is_scalar($propertyValue)) {
                     $text = $document->createTextNode($propertyValue);
                     $currentProperty->appendChild($text);
-                } elseif ($propertyValue instanceof Tine20\DAV\PropertyInterface) {
+                } elseif ($propertyValue instanceof Sabre\DAV\PropertyInterface) {
                     $propertyValue->serialize($server,$currentProperty);
                 } elseif (!is_null($propertyValue)) {
-                    throw new Tine20\DAV\Exception('Unknown property value type: ' . gettype($propertyValue) . ' for property: ' . $propertyName);
+                    throw new Sabre\DAV\Exception('Unknown property value type: ' . gettype($propertyValue) . ' for property: ' . $propertyName);
                 }
 
             }

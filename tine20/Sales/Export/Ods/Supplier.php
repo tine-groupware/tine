@@ -179,7 +179,7 @@ class Sales_Export_Ods_Supplier extends Sales_Export_Ods_Abstract
         
         $ret = array();
 
-        foreach(array('prefix1', 'prefix2', 'street', 'postalcode', 'locality', 'region', 'countryname', 'pobox') as $prop) {
+        foreach(array('prefix1', 'prefix2', 'street', 'postalcode', 'locality', 'region', 'countryname', 'pobox', 'custom1') as $prop) {
             if (isset($address->{$prop})) {
                 $ret[] = $address->{$prop};
             }

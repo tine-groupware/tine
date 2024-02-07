@@ -4,7 +4,7 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * 
  */
@@ -17,8 +17,20 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Group
  */
-class Sales_CustomersTest extends TestCase
+class Sales_CustomersTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Runs the test methods of this class.
+     *
+     * @access public
+     * @static
+     */
+    public static function main()
+    {
+        $suite  = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales Controller Tests');
+        PHPUnit_TextUI_TestRunner::run($suite);
+    }
+    
     protected $_contactController;
     protected $_contractController;
     protected $_json;
@@ -30,12 +42,23 @@ class Sales_CustomersTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-    {
-        parent::setUp();
+{
+        Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $this->_contactController = Addressbook_Controller_Contact::getInstance();
         $this->_contractController = Sales_Controller_Contract::getInstance();
         $this->_json = new Sales_Frontend_Json();
+    }
+
+    /**
+     * Tears down the fixture
+     * This method is called after a test is executed.
+     *
+     * @access protected
+     */
+    protected function tearDown(): void
+{
+        Tinebase_TransactionManager::getInstance()->rollBack();
     }
     
     /*
@@ -118,49 +141,44 @@ class Sales_CustomersTest extends TestCase
                 'countryname' => 'China',
                 'pobox'   => '7777777',
             ],
-
-            Sales_Model_Customer::FLD_DEBITORS => [
-                [
-                    Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION},
-                    Sales_Model_Debitor::FLD_BILLING => [[
-                        // setting id here (id is needed in fe store)
-                        'id' => '1406708670499',
-                        'prefix1' => 'no prefix1',
-                        'prefix2' => 'no prefix2',
-                        'street' => 'Mao st. 1',
-                        'postalcode' => '2345425',
-                        'locality' => 'Shenzen',
-                        'region' => 'Sichuan',
-                        'countryname' => 'China',
-                        'pobox'   => '999999999',
-                        'type' => 'billing',
-                        'relations' => array(
-                            array(
-                                'own_model' => 'Sales_Model_Address',
-                                'own_backend' => 'Sql',
-                                'related_degree' => 'sibling',
-                                'remark' => 'phpunit test',
-                                'related_model' => 'Sales_Model_Contract',
-                                'related_backend' => 'Sql',
-                                'related_id' => $contract->getId(),
-                                'type' => 'CONTRACT'
-                            )
-                        )
-                    ]],
-                    Sales_Model_Debitor::FLD_DELIVERY => [[
-                        'id' => '1406708670491',
-                        'prefix1' => 'no prefix 1',
-                        'prefix2' => 'no prefix 2',
-                        'street' => 'Mao st. 2',
-                        'postalcode' => '1',
-                        'locality' => 'Peking',
-                        'region' => 'Peking',
-                        'countryname' => 'China',
-                        'pobox'   => '888888888',
-                        'type' => 'delivery'
-                    ]],
-                ]
-            ],
+        
+            'billing' => array(array(
+                // setting id here (id is needed in fe store)
+                'id' => '1406708670499',
+                'prefix1' => 'no prefix1',
+                'prefix2' => 'no prefix2',
+                'street' => 'Mao st. 1',
+                'postalcode' => '2345425',
+                'locality' => 'Shenzen',
+                'region' => 'Sichuan',
+                'countryname' => 'China',
+                'pobox'   => '999999999',
+                'type' => 'billing',
+                'relations' => array(
+                    array(
+                        'own_model' => 'Sales_Model_Address',
+                        'own_backend' => 'Sql',
+                        'related_degree' => 'sibling',
+                        'remark' => 'phpunit test',
+                        'related_model' => 'Sales_Model_Contract',
+                        'related_backend' => 'Sql',
+                        'related_id' => $contract->getId(),
+                        'type' => 'CONTRACT'
+                    )
+                )
+            )),
+            'delivery' => array(array(
+                'id' => '1406708670491',
+                'prefix1' => 'no prefix 1',
+                'prefix2' => 'no prefix 2',
+                'street' => 'Mao st. 2',
+                'postalcode' => '1',
+                'locality' => 'Peking',
+                'region' => 'Peking',
+                'countryname' => 'China',
+                'pobox'   => '888888888',
+                'type' => 'delivery'
+            ))
         );
         
         return $this->_json->saveCustomer($customerData);
@@ -181,47 +199,42 @@ class Sales_CustomersTest extends TestCase
         $this->assertEquals('Hans Friedrich', $retVal['cpintern_id']['n_given']);
         $this->assertEquals('Ochs', $retVal['cpintern_id']['n_family']);
 
-        // test billing and delivery addresses get resolved
-        $this->assertTrue(is_array($retVal['debitors'][0]['delivery']));
-        $this->assertEquals(1, count($retVal['debitors'][0]['delivery']));
-        $this->assertEquals('Peking', $retVal['debitors'][0]['delivery'][0]['locality']);
-        $this->assertEquals('China', $retVal['debitors'][0]['delivery'][0]['countryname']);
-
-        $this->assertTrue(is_array($retVal['debitors'][0]['billing']));
-        $this->assertEquals(1, count($retVal['debitors'][0]['billing']));
-        $this->assertEquals('Shenzen', $retVal['debitors'][0]['billing'][0]['locality']);
-        $this->assertEquals('China', $retVal['debitors'][0]['billing'][0]['countryname']);
-
         // @see: 0009378: create a test for resolving dependent records recursively
-        $this->assertEquals('Sales_Model_Contract', $retVal['debitors'][0]['billing'][0]['relations'][0]['related_model']);
-        $this->assertEquals('Testing', $retVal['debitors'][0]['billing'][0]['relations'][0]['related_record']['title']);
+        $this->assertEquals('Sales_Model_Contract', $retVal['billing'][0]['relations'][0]['related_model']);
+        $this->assertEquals('Testing', $retVal['billing'][0]['relations'][0]['related_record']['title']);
 
-        $this->assertArrayHasKey('fulltext', $retVal['debitors'][0]['billing'][0]);
+        $this->assertArrayHasKey('fulltext', $retVal['billing'][0]);
+        
+        // @see: 0009378: create a test for resolving dependent records recursively
+        $this->assertEquals('Sales_Model_Contract', $retVal['billing'][0]['relations'][0]['related_model']);
+        $this->assertEquals('Testing', $retVal['billing'][0]['relations'][0]['related_record']['title']);
+        
+        // test billing and delivery addresses get resolved
+        $this->assertTrue(is_array($retVal['delivery']));
+        $this->assertEquals(1, count($retVal['delivery']));
+        $this->assertEquals('Peking', $retVal['delivery'][0]['locality']);
+        $this->assertEquals('China', $retVal['delivery'][0]['countryname']);
+        
+        $this->assertTrue(is_array($retVal['billing']));
+        $this->assertEquals(1, count($retVal['billing']));
+        $this->assertEquals('Shenzen', $retVal['billing'][0]['locality']);
+        $this->assertEquals('China', $retVal['billing'][0]['countryname']);
         
         // delete record (set deleted=1) of customer and assigned addresses
         $this->_json->deleteCustomers(array($retVal['id']));
         
         $customerBackend = new Sales_Backend_Customer();
-        $deletedCustomer = $customerBackend->get($retVal['id'], true);
+        $deletedCustomer = $customerBackend->get($retVal['id'], TRUE);
         $this->assertEquals(1, $deletedCustomer->is_deleted);
         
         $addressBackend = new Sales_Backend_Address();
-        $deletedAddresses = $addressBackend->getMultipleByProperty($retVal['id'], 'customer_id', true);
+        $deletedAddresses = $addressBackend->getMultipleByProperty($retVal['id'], 'customer_id', TRUE);
 
-        $this->assertEquals(1, $deletedAddresses->count());
+        $this->assertEquals(3, $deletedAddresses->count());
         
         foreach($deletedAddresses as $address) {
             $this->assertEquals(1, $address->is_deleted);
         }
-
-        $deletedAddresses = $addressBackend->getMultipleByProperty($retVal['debitors'][0]['id'], 'debitor_id', true);
-
-        $this->assertEquals(2, $deletedAddresses->count());
-
-        foreach($deletedAddresses as $address) {
-            $this->assertEquals(1, $address->is_deleted);
-        }
-
         $this->expectException('Tinebase_Exception_NotFound');
         
         return $this->_json->getCustomer($retVal['id']);
@@ -234,50 +247,38 @@ class Sales_CustomersTest extends TestCase
     {
         $controller = Sales_Controller_Customer::getInstance();
     
-        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto1',
-            Sales_Model_Customer::FLD_DEBITORS => [[
-                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
-            ]],
-        )));
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto1')));
     
         $this->assertEquals(1, $record->number);
     
-        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto2',
-            Sales_Model_Customer::FLD_DEBITORS => [[
-                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
-            ]],
-        )));
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto2')));
     
         $this->assertEquals(2, $record->number);
     
         // set number to 4, should return the formatted number
-        $record = $controller->create(new Sales_Model_Customer(array('name' => 'manu1', 'number' => 4,
-            Sales_Model_Customer::FLD_DEBITORS => [[
-                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
-            ]],
-        )));
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'manu1', 'number' => 4)));
         $this->assertEquals(4, $record->number);
     
         // the next number should be a number after the manual number
-        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto3',
-            Sales_Model_Customer::FLD_DEBITORS => [[
-                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
-            ]],
-        )));
+        $record = $controller->create(new Sales_Model_Customer(array('name' => 'auto3')));
         $this->assertEquals(5, $record->number);
     }
-
+    
+    /**
+     * on search we need the billing address, but not the delivery address
+     * used in search combo of the contract edit dialog
+     */
     public function testResolvingBillingAddressesOnSearch()
     {
         $customer = $this->_createCustomer();
         
-        $this->assertEquals(1, count($customer['debitors'][0]['billing']));
-        $this->assertEquals(1, count($customer['debitors'][0]['delivery']));
+        $this->assertEquals(1, count($customer['billing']));
+        $this->assertEquals(1, count($customer['delivery']));
         
         $customers = $this->_json->searchCustomers(array(), array());
         
-        $this->assertEquals(1, count($customers['results'][0]['debitors'][0]['billing']));
-        $this->assertEquals(1, count($customers['results'][0]['debitors'][0]['delivery']));
+        $this->assertEquals(1, count($customers['results'][0]['billing']));
+        $this->assertFalse(isset($customers['results'][0]['delivery']));
     }
     
     /**
@@ -287,15 +288,15 @@ class Sales_CustomersTest extends TestCase
     {
         $customer = $this->_createCustomer();
         
-        $this->assertEquals(1, count($customer['debitors'][0]['billing']));
-        $this->assertEquals(1, count($customer['debitors'][0]['delivery']));
+        $this->assertEquals(1, count($customer['billing']));
+        $this->assertEquals(1, count($customer['delivery']));
         
-        $customer['debitors'][0]['billing'] = array();
+        $customer['billing'] = array();
         $this->_json->saveCustomer($customer);
         
         $customer = $this->_json->getCustomer($customer['id']);
         
-        $this->assertTrue(empty($customer['debitors'][0]['billing']));
+        $this->assertTrue(empty($customer['billing']));
     }
     
     /**
@@ -317,20 +318,20 @@ class Sales_CustomersTest extends TestCase
             'description' => 'test123', 
             'container_id' => $containerContracts->getId(),
             'start_date' => Tinebase_DateTime::now(),
-            'billing_address_id' => $customer['debitors'][0]['billing'][0]['id'],
+            'billing_address_id' => $customer['billing'][0]['id'],
         )));
 
         // if the property is set to null, no handling of this dependent records must be done
-        $customer['debitors'][0]['billing'] = NULL;
+        $customer['billing'] = NULL;
         $customer = $this->_json->saveCustomer($customer);
-        $this->assertEquals(1, count($customer['debitors'][0]['billing']));
+        $this->assertEquals(1, count($customer['billing']));
         
         // if the property is set to an empty array, all (in this case the last) dependent record(s) should 
         // be deleted (in this case deleting should fail, because the billing address is used in a contract)
         
         $this->expectException('Sales_Exception_DeleteUsedBillingAddress');
         
-        $customer['debitors'][0]['billing'] = array();
+        $customer['billing'] = array();
         $this->_json->saveCustomer($customer);
     }
 
@@ -340,19 +341,21 @@ class Sales_CustomersTest extends TestCase
     public function testChangeDebitorNumber()
     {
         $customer = $this->_createCustomer();
-        $customer['debitors'][0]['delivery'] = array();
+        $customer['delivery'] = array();
         $customer = $this->_json->saveCustomer($customer);
         
-        //$this->assertEquals(1406708670499, $customer['debitors'][0]['billing'][0]['id']);
-        $this->assertEquals(1, count($customer['debitors'][0]['billing']));
-        $this->assertEquals(0, count($customer['debitors'][0]['delivery']));
+        $this->assertEquals(1406708670499, $customer['billing'][0]['id']);
+        $this->assertEquals(1, count($customer['billing']));
+        $this->assertEquals(0, count($customer['delivery']));
         
         $customer = $this->_json->getCustomer($customer['id']);
-        $customer['debitors'][0]['delivery'] = NULL;
+        $customer['billing'][0]['custom1'] = '4219832435';
+        $customer['delivery'] = NULL;
         $customer = $this->_json->saveCustomer($customer);
     
-        //$this->assertEquals(1406708670499, $customer['debitors'][0]['billing'][0]['id']);
-        $this->assertEquals(0, count($customer['debitors'][0]['delivery']));
+        $this->assertEquals(1406708670499, $customer['billing'][0]['id']);
+        $this->assertEquals('4219832435', $customer['billing'][0]['custom1']);
+        $this->assertEquals(0, count($customer['delivery']));
     }
 
     public function testAutoCustomerContactRelation()
@@ -365,43 +368,10 @@ class Sales_CustomersTest extends TestCase
             'WRITE'
         )->getFirstRecord();
         $container->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK] = true;
-        $container = Tinebase_Container::getInstance()->update($container);
-        Tinebase_Container::getInstance()->resetClassCache();
-        Tinebase_Record_Expander_DataRequest::clearCache();
-        $customer = $this->_createCustomer($container);
+        Tinebase_Container::getInstance()->update($container);
+        $customer = $this->_createCustomer();
 
         // TODO assert special relation (TYPE CONTACTCUSTOMER - see \Sales_Controller::createUpdatePostalAddress)
         self::assertCount(1, $customer['relations']);
-    }
-
-    public function testMultiDivisionNoGrants()
-    {
-        $div = Sales_Controller_Division::getInstance()->create(new Sales_Model_Division([
-            Sales_Model_Division::FLD_TITLE => 'unittest',
-            Sales_Model_Division::FLD_GRANTS => [[
-                'account_id'      => Tinebase_Core::getUser()->getId(),
-                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                Sales_Model_DivisionGrants::GRANT_ADMIN => true,
-            ]],
-        ]));
-        $customer = $this->_createCustomer();
-        $customer[Sales_Model_Customer::FLD_DEBITORS] = [[
-            Sales_Model_Debitor::FLD_NAME => 'unittest',
-            Sales_Model_Debitor::FLD_DIVISION_ID => $div->getId(),
-            Sales_Model_Debitor::FLD_BILLING => [[
-                Sales_Model_Address::FLD_NAME => 'a'
-            ],
-        ]]];
-
-        $customer = $this->_json->saveCustomer($customer);
-        $this->assertSame(1, count($customer['debitors']));
-        $this->assertSame('unittest', $customer['debitors'][0]['name'] ?? '?? escape');
-
-        Tinebase_Core::setUser($this->_personas['sclever']);
-        $result = $this->_json->searchCustomers([
-            ['field' => 'number', 'operator' => 'equals', 'value' => $customer['number']],
-        ], []);
-
-        $this->assertSame(0, $result['totalcount']);
     }
 }

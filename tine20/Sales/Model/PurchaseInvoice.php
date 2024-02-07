@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2015-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,8 +18,6 @@
 
 class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
 {
-    public const MODEL_NAME_PART = 'PurchaseInvoice';
-    public const TABLE_NAME = 'sales_purchase_invoices';
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -33,12 +31,10 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        self::VERSION       => 7,
         'recordName'        => 'Purchase Invoice',
         'recordsName'       => 'Purchase Invoices', // ngettext('Purchase Invoice', 'Purchase Invoices', n)
         'hasRelations'      => TRUE,
         'hasCustomFields'   => TRUE,
-        self::HAS_SYSTEM_CUSTOM_FIELDS => true,
         'hasNotes'          => TRUE,
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
@@ -47,21 +43,11 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
         'containerProperty' => NULL,
         'titleProperty'     => '{{number}} - {{supplier.name}}',
         'appName'           => 'Sales',
-        'modelName'         => self::MODEL_NAME_PART,
+        'modelName'         => 'PurchaseInvoice',
 
         'exposeHttpApi'     => true,
 
         'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
-
-        self::TABLE         => [
-            self::NAME          => self::TABLE_NAME,
-            self::INDEXES       => [
-                'description'       => [
-                    self::COLUMNS       => ['description'],
-                    self::FLAGS         => [self::TYPE_FULLTEXT],
-                ],
-            ],
-        ],
         
         'filterModel' => array(
             'supplier' => array(
@@ -93,8 +79,6 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
         'fields'            => array(
             'number' => array(
                 'label' => 'Invoice Number',    // _('Invoice Number')
-                self::TYPE  => self::TYPE_STRING,
-                self::LENGTH => 64,
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 'queryFilter' => TRUE,
             ),
@@ -103,7 +87,6 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 self::TYPE          => self::TYPE_STRICTFULLTEXT,
                 self::VALIDATORS    => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE),
                 self::QUERY_FILTER  => TRUE,
-                self::NULLABLE      => true,
             ),
             'date' => array(
                 'type'  => 'date',
@@ -111,14 +94,13 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 self::UI_CONFIG => [
                     'format' => ['medium'],
                 ],
-                self::NULLABLE      => true,
             ),
             'due_in' => array(
                 'title' => 'Due in',            // _('Due in')
                 'type'  => 'integer',
                 'label' => 'Due in',            // _('Due in')
+                'default' => 10,
                 'shy' => TRUE,
-                self::UNSIGNED => true,
             ),
             'due_at' => array(
                 'type'  => 'date',
@@ -127,52 +109,25 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                     'format' => ['medium'],
                 ],
             ),
-            'pay_at' => array(
-                'type'  => 'date',
-                'label' => 'Pay at',            // _('Pay at')
-                self::NULLABLE      => true,
-            ),
-            'overdue_at' => array(
-                'type'  => 'date',
-                'label' => 'Overdue at',            // _('Overdue at')
-                self::NULLABLE      => true,
-            ),
-            'is_payed' => array(
-                'type'  => self::TYPE_BOOLEAN,
-                'label' => 'Is payed',            // _('Is payed')
-                self::NULLABLE      => true,
-                self::DEFAULT_VAL   => 0,
-                self::UNSIGNED => true,
-            ),
             'payed_at' => array(
                 'type'  => 'date',
                 'label' => 'Payed at',          // _('Payed at')
                 self::UI_CONFIG => [
                     'format' => ['medium'],
                 ],
-                self::NULLABLE      => true,
-            ),
-            'dunned_at' => array(
-                'type'  => 'date',
-                'label' => 'Dunned at',          // _('Dunned at')
-                self::UI_CONFIG => [
-                    'format' => ['medium'],
-                ],
-                self::NULLABLE      => true,
             ),
             'payment_method' => array(
                 'label'   => 'Payment Method', //_('Payment Method')
-                'default' => null, //'BANK TRANSFER',
+                'default' => 'BANK TRANSFER',
                 'type'    => 'keyfield',
                 'name'    => Sales_Config::PAYMENT_METHODS,
                 'shy'     => TRUE,
-                self::NULLABLE      => true,
             ),
             'discount' => array(
                 'label'   => 'Discount (%)', // _('Discount (%)')
-                'type'    => self::TYPE_INTEGER,
-                self::UNSIGNED => true,
+                'type'    => 'float',
                 'specialType' => 'percent',
+                'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy'     => TRUE,
             ),
@@ -180,60 +135,64 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 'type'  => 'date',
                 'label' => 'Discount until',    // _('Discount until')
                 'shy' => TRUE,
-                self::NULLABLE      => true,
-            ),
-            'is_approved' => array(
-                'type'  => self::TYPE_BOOLEAN,
-                'label' => 'Is approved',            // _('Is approved')
-                self::NULLABLE      => true,
-                self::DEFAULT_VAL   => 0,
-                self::UNSIGNED => true,
             ),
             'price_net' => array(
                 'label' => 'Price Net', // _('Price Net')
                 'type'  => 'money',
+                'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
-                self::NULLABLE      => true,
             ),
             'price_gross' => array(
                 'label' => 'Price Gross', // _('Price Gross')
                 'type'  => 'money',
+                'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
-                self::NULLABLE      => true,
             ),
             'price_gross2' => array(
                 'label' => 'Additional Price Gross', // _('Additional Price Gross')
                 'type'  => 'money',
+                'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
-                self::NULLABLE      => true,
             ),
             'price_tax' => array(
                 'label' => 'Taxes (VAT)', // _('Taxes (VAT)')
                 'type'  => 'money',
+                'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
                 'shy' => TRUE,
-                self::NULLABLE      => true,
             ),
             'sales_tax' => array(
                 'label' => 'Sales Tax', // _('Sales Tax')
                 'type'  => 'float',
                 'specialType' => 'percent',
-                self::UNSIGNED      => true,
                 self::NULLABLE => true,
-                /*self::DEFAULT_VAL_CONFIG => [
+                self::DEFAULT_VAL_CONFIG => [
                     self::APP_NAME  => Tinebase_Config::APP_NAME,
                     self::CONFIG => Tinebase_Config::SALES_TAX
-                ],*/
+                ],
                 'shy' => TRUE,
             ),
             'price_total' => array(
                 'label' => 'Total Price', // _('Total Price')
                 'type'  => 'money',
-                self::NULLABLE => true,
+                'default' => 0,
                 'inputFilters' => array('Zend_Filter_Empty' => 0),
+            ),
+            'costcenter' => array(
+                'type'   => 'virtual',
+                'config' => array(
+                    'type'   => 'relation',
+                    'label'  => 'Cost Center',    // _('Cost Center')
+                    'config' => array(
+                        'appName'   => 'Tinebase',
+                        'modelName' => 'CostCenter',
+                        'type'      => 'COST_CENTER'
+                    ),
+                    'shy' => TRUE,
+                ),
             ),
             'approver' => array(
                 'type'   => 'virtual',
@@ -288,6 +247,14 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
                 array('type' => 'APPROVER', 'degree' => 'sibling', 'text' => 'Approver', 'max' => '1:0'), // _('Approver')
             ),
             'defaultType'  => 'APPROVER'
+        ),
+        array(
+            'relatedApp'   => 'Tinebase',
+            'relatedModel' => 'CostCenter',
+            'config' => array(
+                array('type' => 'COST_CENTER', 'degree' => 'sibling', 'text' => 'Lead Cost Center', 'max' => '1:0'), // _('Lead Cost Center')
+            ),
+            'defaultType'  => 'COST_CENTER'
         ),
     );
 }

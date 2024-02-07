@@ -63,7 +63,7 @@ class Addressbook_Convert_Contact_VCard_DavDroid extends Addressbook_Convert_Con
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseTel()
      */
-    protected function _toTine20ModelParseTel(&$data, \Tine20\VObject\Property $property)
+    protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
     {
         $telField = null;
         
@@ -105,7 +105,7 @@ class Addressbook_Convert_Contact_VCard_DavDroid extends Addressbook_Convert_Con
      * Convert from tine to model
      *
      * @param Tinebase_Record_Interface $_record
-     * @return \Tine20\VObject\Component
+     * @return \Sabre\VObject\Component
      */
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {

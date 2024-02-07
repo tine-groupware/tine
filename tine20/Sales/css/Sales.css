@@ -20,7 +20,7 @@
     background-image:url(../../images/icon-set/icon_products.svg) !important;
 }
 
-.SalesCustomer, .SalesDebitor {
+.SalesCustomer {
     background-image:url(../../images/icon-set/icon_client.svg) !important;
 }
 
@@ -32,7 +32,7 @@
     background-image:url(../../images/icon-set/icon_addressbook.svg) !important;
 }
 
-.SalesDocument_Invoice, .SalesInvoice, .SalesDocumentPosition_Invoice {
+.SalesDocument_Invoice, .SalesInvoice {
     background-image:url(../../images/icon-set/icon_invoice.svg) !important;
 }
 
@@ -88,7 +88,7 @@
     color: #404040;
 }
 
-.SalesDocument_Order, .SalesOrderConfirmation, .SalesDocumentPosition_Order {
+.SalesDocument_Order, .SalesOrderConfirmation {
     background-image:url(../../images/icon-set/icon_order_confirmation.svg) !important;
 }
 
@@ -96,7 +96,7 @@
     background-image:url(../../images/icon-set/icon_undo.svg) !important;
 }
 
-.SalesDocument_Offer, .SalesOffer, .SalesDocumentPosition_Offer {
+.SalesDocument_Offer, .SalesOffer {
     background-image:url(../../images/icon-set/icon_offer.svg) !important;
 }
 
@@ -104,7 +104,7 @@
     background-image:url(../../images/icon-set/icon_undo.svg) !important;
 }
 
-.SalesDocument_Delivery, .SalesDocumentPosition_Delivery {
+.SalesDocument_Delivery {
     background-image:url(../../images/icon-set/icon_resource_trolly.svg) !important;
 }
 

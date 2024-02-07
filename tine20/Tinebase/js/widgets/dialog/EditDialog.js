@@ -1108,7 +1108,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         // apply grants to fields with requiredGrant prop
         if (this.evalGrants || this.readOnly) {
             this.getForm().items.each(function (f) {
-                if (f.initialConfig.disabled) return;
                 const recordGrants = _.get(this.record, this.recordClass.getMeta('grantsPath'));
                 let hasRequiredGrants = !this.readOnly && true;
 

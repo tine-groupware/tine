@@ -4,7 +4,7 @@
  *
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  */
 
@@ -23,26 +23,24 @@ class Sales_AllTests
     public static function suite ()
     {
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Sales All Tests');
-        $suite->addTestSuite(Sales_Backend_ContractTest::class);
-        $suite->addTestSuite(Sales_Backend_NumberTest::class);
+        $suite->addTestSuite('Sales_Backend_ContractTest');
+        $suite->addTestSuite('Sales_Backend_NumberTest');
+        $suite->addTestSuite('Sales_ControllerTest');
+        $suite->addTestSuite('Sales_JsonTest');
+        $suite->addTestSuite('Sales_SuppliersTest');
+        $suite->addTestSuite('Sales_PurchaseInvoiceTest');
+        $suite->addTestSuite('Sales_CustomFieldTest');
+        $suite->addTestSuite('Sales_InvoiceControllerTests');
+        $suite->addTestSuite('Sales_InvoiceJsonTests');
+        $suite->addTestSuite('Sales_InvoiceExportTests');
+        $suite->addTestSuite('Sales_OrderConfirmationControllerTests');
+        $suite->addTestSuite('Sales_OfferControllerTests');
+        $suite->addTestSuite('Sales_Import_AllTests');
         $suite->addTestSuite(Sales_BoilerplateControllerTest::class);
-        $suite->addTestSuite(Sales_ControllerTest::class);
-        $suite->addTestSuite(Sales_CustomersTest::class);
-        $suite->addTestSuite(Sales_CustomFieldTest::class);
         $suite->addTestSuite(Sales_Document_ControllerTest::class);
         $suite->addTestSuite(Sales_Document_ExportTest::class);
         $suite->addTestSuite(Sales_Document_JsonTest::class);
-        $suite->addTestSuite(Sales_Export_DebitorTest::class);
         $suite->addTestSuite(Sales_Export_ProductTest::class);
-        $suite->addTestSuite(Sales_Import_AllTests::class);
-        $suite->addTestSuite(Sales_InvoiceControllerTests::class);
-        $suite->addTestSuite(Sales_InvoiceExportTests::class);
-        $suite->addTestSuite(Sales_InvoiceJsonTests::class);
-        $suite->addTestSuite(Sales_JsonTest::class);
-        $suite->addTestSuite(Sales_OfferControllerTests::class);
-        $suite->addTestSuite(Sales_OrderConfirmationControllerTests::class);
-        $suite->addTestSuite(Sales_PurchaseInvoiceTest::class);
-        $suite->addTestSuite(Sales_SuppliersTest::class);
 
         return $suite;
     }

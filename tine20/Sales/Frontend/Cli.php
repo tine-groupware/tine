@@ -35,7 +35,7 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         'Sales_Model_Supplier' => 'sales_import_supplier_csv',
         'Sales_Model_Invoice' => 'sales_import_invoice_csv',
         'Sales_Model_PurchaseInvoice' => 'sales_import_purchaseinvoice_csv',
-        Tinebase_Model_EvaluationDimensionItem::class => 'tinebase_import_costcenter_csv',
+        'Tinebase_Model_CostCenter' => 'tinebase_import_costcenter_csv',
         'Sales_Model_Offer' => 'sales_import_offer_csv',
         'Sales_Model_OrderConfirmation' => 'sales_import_orderconfirmation'
     ];
@@ -419,11 +419,11 @@ class Sales_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $customerController = Sales_Controller_Customer::getInstance();
         $offerIds = $offerController->search(null, null, false, true);
         $def = Sales_Model_Document_Offer::getConfiguration()->getFields()[Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER];
+        /** @var Tinebase_Numberable_String $numberable */
+        $numberable = Tinebase_Numberable::getNumberable(Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER, $def);
         foreach ($offerIds as $offerId) {
             $offer = $offerController->get($offerId);
-            /** @var Tinebase_Numberable_String $numberable */
-            $numberable = Tinebase_Numberable::getNumberable($offer, Sales_Model_Document_Offer::class,
-                Sales_Model_Document_Offer::FLD_DOCUMENT_NUMBER, $def);
             $customer = null;
             $newRelations = new Tinebase_Record_RecordSet(Tinebase_Model_Relation::class);
             /** @var Tinebase_Model_Relation $relation */

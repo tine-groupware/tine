@@ -56,8 +56,6 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected $_models = array('product', 'customer', 'contract', 'invoice', 'orderconfirmation', 'offer');
 
-    protected ?Sales_Model_Division $_division;
-
     /**
      * the constructor
      *
@@ -66,7 +64,6 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
         $this->_productController     = Sales_Controller_Product::getInstance();
         $this->_contractController    = Sales_Controller_Contract::getInstance();
-        $this->_division = Sales_Controller_Division::getInstance()->getAll()->getFirstRecord();
 
         $this->_loadCostCentersAndDivisions();
     }
@@ -452,12 +449,6 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             $customer['credit_term'] = 30;
             $customer['currency'] = 'EUR';
             $customer['currency_trans_rate'] = 1;
-            $customer[Sales_Model_Customer::FLD_DEBITORS] =
-                new Tinebase_Record_RecordSet(Sales_Model_Debitor::class, [[
-                    Sales_Model_Debitor::FLD_DIVISION_ID => $this->_division->getId(),
-                    Sales_Model_Debitor::FLD_NAME        => 'Demo Debitor'
-                ]], true);
-
             try {
                 $customerRecords->addRecord($customerController->create(new Sales_Model_Customer($customer)));
             } catch (Tinebase_Exception_Duplicate $e) {
@@ -473,8 +464,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             foreach(array('postal', 'billing', 'delivery', 'billing', 'delivery') as $type) {
                 $caddress = $addresses->getByIndex($i);
                 $address = new Sales_Model_Address(array(
-                    'customer_id' => 'postal' === $type ? $customer->getId() : null,
-                    Sales_Model_Address::FLD_DEBITOR_ID => 'postal' !== $type ? $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId() : null,
+                    'customer_id' => $customer->getId(),
                     'type'        => $type,
                     'prefix1'     => $caddress->title,
                     'prefix2'     => $caddress->n_fn,
@@ -483,6 +473,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                     'locality'    => $caddress->adr_two_locality,
                     'region'      => $caddress->adr_two_region,
                     'countryname' => $caddress->adr_two_countryname,
+                    'custom1'     => ($type == 'billing') ? Tinebase_Record_Abstract::generateUID(5) : NULL
                 ));
 
                 $addressController->create($address);
@@ -492,8 +483,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
             // the last customer gets plus one delivery address
             $caddress = $addresses->getByIndex($i);
             $address = new Sales_Model_Address(array(
-                'customer_id' => 'postal' === $type ? $customer->getId() : null,
-                Sales_Model_Address::FLD_DEBITOR_ID => 'postal' !== $type ? $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->getId() : null,
+                'customer_id' => $customer->getId(),
                 'type'        => $type,
                 'prefix1'     => $caddress->title,
                 'prefix2'     => $caddress->n_fn,
@@ -502,6 +492,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 'locality'    => $caddress->adr_two_locality,
                 'region'      => $caddress->adr_two_region,
                 'countryname' => $caddress->adr_two_countryname,
+                'custom1'     => NULL
             ));
 
             $addressController->create($address);
@@ -510,14 +501,7 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
         if (static::$_createFullData) {
             $i=0;
             while ($i < 200) {
-                $customerController->create(new Sales_Model_Customer(array(
-                    'name' => Tinebase_Record_Abstract::generateUID(),
-                    Sales_Model_Customer::FLD_DEBITORS =>
-                        new Tinebase_Record_RecordSet(Sales_Model_Debitor::class, [[
-                            Sales_Model_Debitor::FLD_DIVISION_ID => $this->_division->getId(),
-                            Sales_Model_Debitor::FLD_NAME        => 'Demo Debitor '. $i
-                        ]], true),
-                )));
+                $customerController->create(new Sales_Model_Customer(array('name' => Tinebase_Record_Abstract::generateUID())));
                 $i++;
             }
         }
@@ -638,8 +622,17 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
                 Timetracker_Controller_Timesheet::getInstance()->create($timesheet);
             }
 
-            $contract->eval_dim_cost_center = $costcenter->getId();
             $relations = array(
+                array(
+                    'own_model'              => 'Sales_Model_Contract',
+                    'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                    'own_id'                 => NULL,
+                    'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
+                    'related_model'          => Tinebase_Model_CostCenter::class,
+                    'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                    'related_id'             => $ccid,
+                    'type'                   => 'LEAD_COST_CENTER'
+                ),
                 array(
                     'own_model'              => 'Sales_Model_Contract',
                     'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
@@ -790,10 +783,8 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
      */
     protected function _onCreate()
     {
-        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
-            ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
-        ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
-
+        $controller = Tinebase_Controller_CostCenter::getInstance();
+        $this->_costCenters = new Tinebase_Record_RecordSet(Tinebase_Model_CostCenter::class);
         $ccs = (static::$_de)
         ? array('Management', 'Marketing', 'Entwicklung', 'Produktion', 'Verwaltung',     'Controlling')
         : array('Management', 'Marketing', 'Development', 'Production', 'Administration', 'Controlling')
@@ -801,20 +792,17 @@ class Sales_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
 
         $id = 1;
         foreach($ccs as $title) {
-            if (Tinebase_Controller_EvaluationDimensionItem::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimensionItem::class,
-                    [['field' => 'name', 'operator' => 'equals', 'value' => $title],
-                        ['field' => Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID, 'operator' => 'equals', 'value' => $cc->getId()]]))->count() > 0) {
-                continue;
-            }
-
-            $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->addRecord(new Tinebase_Model_EvaluationDimensionItem(
+            $cc = new Tinebase_Model_CostCenter(
                 array('name' => $title, 'number' => $id)
-                , true));
+            );
+            try {
+                $controller->create($cc);
+            } catch (Zend_Db_Statement_Exception $e) {
+            } catch (Tinebase_Exception_Duplicate $e) {
+            }
 
             $id++;
         }
-        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
-        $this->_costCenters = clone $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS};
 
         $divisionsArray = (static::$_de)
         ? array('Management', 'EDV', 'Marketing', 'Public Relations', 'Produktion', 'Verwaltung')

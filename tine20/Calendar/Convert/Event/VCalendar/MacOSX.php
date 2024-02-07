@@ -54,18 +54,12 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     );
 
     /**
-     * convert Tinebase_Record_RecordSet to Tine20\VObject\Component
+     * convert Tinebase_Record_RecordSet to Sabre\VObject\Component
      *
-     * @return Tine20\VObject\Component
-     * @param ?Tinebase_Record_RecordSet $_records
-     * @param ?Tinebase_Model_Filter_FilterGroup $_filter
-     * @param ?Tinebase_Model_Pagination $_pagination
-     *
-     * @throws Tinebase_Exception_NotImplemented
+     * @param  Tinebase_Record_RecordSet  $_records
+     * @return Sabre\VObject\Component
      */
-    public function fromTine20RecordSet(?Tinebase_Record_RecordSet $_records = null,
-                                        ?Tinebase_Model_Filter_FilterGroup $_filter = null,
-                                        ?Tinebase_Model_Pagination $_pagination = null)
+    public function fromTine20RecordSet(Tinebase_Record_RecordSet $_records)
     {
         $oldGroupValue = static::$cutypeMap[Calendar_Model_Attender::USERTYPE_GROUP];
 
@@ -83,10 +77,10 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     /**
      * get attendee array for given contact
      * 
-     * @param  \Tine20\VObject\Property\ICalendar\CalAddress  $calAddress  the attendee row from the vevent object
+     * @param  \Sabre\VObject\Property\ICalendar\CalAddress  $calAddress  the attendee row from the vevent object
      * @return array
      */
-    protected function _getAttendee(\Tine20\VObject\Property\ICalendar\CalAddress $calAddress)
+    protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress)
     {
         $newAttendee = parent::_getAttendee($calAddress);
 
@@ -116,10 +110,10 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     /**
      * add event attendee to VEVENT object
      *
-     * @param \Tine20\VObject\Component\VEvent $vevent
+     * @param \Sabre\VObject\Component\VEvent $vevent
      * @param Calendar_Model_Event            $event
      */
-    protected function _addEventAttendee(\Tine20\VObject\Component\VEvent $vevent, Calendar_Model_Event $event)
+    protected function _addEventAttendee(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event)
     {
         parent::_addEventAttendee($vevent, $event);
 
@@ -162,10 +156,10 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     /**
      * do version specific magic here
      *
-     * @param \Tine20\VObject\Component\VCalendar $vcalendar
-     * @return \Tine20\VObject\Component\VCalendar | null
+     * @param \Sabre\VObject\Component\VCalendar $vcalendar
+     * @return \Sabre\VObject\Component\VCalendar | null
      */
-    protected function _findMainEvent(\Tine20\VObject\Component\VCalendar $vcalendar)
+    protected function _findMainEvent(\Sabre\VObject\Component\VCalendar $vcalendar)
     {
         $return = parent::_findMainEvent($vcalendar);
 
@@ -182,11 +176,11 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     /**
      * parse VEVENT part of VCALENDAR
      *
-     * @param  \Tine20\VObject\Component\VEvent  $vevent  the VEVENT to parse
+     * @param  \Sabre\VObject\Component\VEvent  $vevent  the VEVENT to parse
      * @param  Calendar_Model_Event             $event   the Tine 2.0 event to update
      * @param  array                            $options
      */
-    protected function _convertVevent(\Tine20\VObject\Component\VEvent $vevent, Calendar_Model_Event $event, $options)
+    protected function _convertVevent(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event, $options)
     {
 
         $return = parent::_convertVevent($vevent, $event, $options);

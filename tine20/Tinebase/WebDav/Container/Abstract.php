@@ -16,7 +16,7 @@
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-abstract class Tinebase_WebDav_Container_Abstract extends \Tine20\DAV\Collection implements \Tine20\DAV\IProperties, \Tine20\DAVACL\IACL
+abstract class Tinebase_WebDav_Container_Abstract extends \Sabre\DAV\Collection implements \Sabre\DAV\IProperties, \Sabre\DAVACL\IACL
 {
     /**
      * the current application object
@@ -73,27 +73,27 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Tine20\DAV\Collection
     
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\Node::delete()
+     * @see \Sabre\DAV\Node::delete()
      */
     public function delete()
     {
         try {
             Tinebase_Container::getInstance()->deleteContainer($this->_container);
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            throw new Tine20\DAV\Exception\Forbidden('Permission denied to delete node');
+            throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete node');
         } catch (Tinebase_Exception_Record_SystemContainer $ters) {
-            throw new Tine20\DAV\Exception\Forbidden('Permission denied to delete system container');
+            throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete system container');
         } catch (Exception $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' failed to delete container ' .$this->_container->getId() . "\n$e" );
 
-            throw new \Tine20\DAV\Exception($e->getMessage());
+            throw new \Sabre\DAV\Exception($e->getMessage());
         }
     }
     
     /**
      * (non-PHPdoc)
-     * @see Tine20\DAV\Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($_name)
     {
@@ -118,7 +118,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Tine20\DAV\Collection
             $object = $this->_getController()->search($filter, null, false, false, 'sync')->getFirstRecord();
             
             if ($object == null) {
-                throw new Tine20\DAV\Exception\NotFound('Object not found');
+                throw new Sabre\DAV\Exception\NotFound('Object not found');
             }
         }
         
@@ -134,7 +134,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Tine20\DAV\Collection
     /**
      * Returns an array with all the child nodes
      *
-     * @return Tine20\DAV\INode[]
+     * @return Sabre\DAV\INode[]
      */
     public function getChildren()
     {
@@ -437,7 +437,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Tine20\DAV\Collection
      */
     public function setACL(array $acl)
     {
-        throw new Tine20\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
     
     /**
@@ -478,7 +478,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Tine20\DAV\Collection
     public function updateProperties($mutations) 
     {
         if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_ADMIN)) {
-            throw new \Tine20\DAV\Exception\Forbidden('permission to update container denied');
+            throw new \Sabre\DAV\Exception\Forbidden('permission to update container denied');
         }
 
         $result = array(
@@ -511,8 +511,8 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Tine20\DAV\Collection
                     $result[200][$key] = null;
                     break;
                     
-                case '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-description':
-                case '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone':
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description':
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone':
                     // fake success
                     $result[200][$key] = null;
                     break;
@@ -579,7 +579,7 @@ abstract class Tinebase_WebDav_Container_Abstract extends \Tine20\DAV\Collection
             : Tinebase_Application::getInstance()->getApplicationByName($applicationName); 
         
         // create vcalendar object with timezone information
-        $vcalendar = new \Tine20\VObject\Component\VCalendar(array(
+        $vcalendar = new \Sabre\VObject\Component\VCalendar(array(
             'PRODID'   => "-//tine20.org//Tine 2.0 {$application->name} V{$application->version}//EN",
             'VERSION'  => '2.0',
             'CALSCALE' => 'GREGORIAN'

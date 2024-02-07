@@ -42,11 +42,11 @@
     },
     {
       "type": "git",
-      "url": "https://github.com/tine20/sabrevobject.git"
+      "url": "https://github.com/tine20/vobject.git"
     },
     {
       "type": "git",
-      "url": "https://github.com/tine20/sabredav.git"
+      "url": "https://github.com/tine20/dav.git"
     },
     {
       "type": "git",
@@ -79,7 +79,6 @@
     "ext-SimpleXML": "*",
     "ext-bcmath": "*",
     "ext-ctype": "*",
-    "ext-curl": "*",
     "ext-date": "*",
     "ext-dom": "*",
     "ext-gd": "*",
@@ -107,12 +106,9 @@
     "laminas/laminas-stdlib": "^3.5",
     "laminas/laminas-stratigility": "^3.2",
     "laminas/laminas-zendframework-bridge": "^1.6",
-    "league/flysystem": "^3.0",
-    "league/flysystem-webdav": "^3.0",
     "league/oauth2-server": "8.3.5pl1 as 8.3.5",
     "metaways/opendocument": "1.*",
     "metaways/timezoneconvert": "1.*",
-    "mlocati/ip-lib": "^1.18",
     "mtdowling/cron-expression": "^1.2 | ^2.0",
     "nikic/fast-route": "^1.2",
     "nl.idaas/openid-server": "0.*",
@@ -125,6 +121,8 @@
     "psr/http-server-middleware": "^1.0",
     "ramsey/collection": "^1.2",
     "ramsey/uuid": "^4.7",
+    "sabre/dav": "1.8.12pl1 as 1.8.12",
+    "sabre/vobject": "3.5.3pl6 as 2.1.0",
     "sentry/sentry": "^3",
     "simplesamlphp/simplesamlphp": "v1.19.*",
     "spomky-labs/otphp": "^10.0",
@@ -132,12 +130,10 @@
     "symfony/cache": "^5.3",
     "symfony/config": "^4",
     "symfony/dependency-injection": "^4",
-    "symfony/http-client": "5.2 - 7",
+    "symfony/http-client": "^4",
     "symfony/intl": "^5.4",
     "syncroton/syncroton": "^1.5",
     "tine20/composerapploader": "1.0.*",
-    "tine20/sabredav": "1.8.12pl3",
-    "tine20/sabrevobject": "3.5.3pl7",
     "twig/extensions": "^1.5",
     "twig/twig": "v2.15.5",
     "validator/livr": "dev-master#6309697f926a20e1267cc15ee5b847b5c6ecdbcd",
@@ -192,8 +188,7 @@
   "scripts": {
     "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
     "phpunit": "./vendor/bin/phing phpunit-prepare phpunit-exec",
-    "build": "./vendor/bin/phing",
-    "phpcs": "./vendor/bin/phpcs -s --standard=PSR12 --report=full --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover,Tinebase/js,config.inc.php --basepath=. ."
+    "build": "./vendor/bin/phing"
   },
   "support": {
     "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",

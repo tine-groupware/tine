@@ -97,7 +97,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
             }
         }
 
-        // prevents problems with missing request uri (@see Tine20\HTTP\Request->getUri())
+        // prevents problems with missing request uri (@see Sabre\HTTP\Request->getUri())
         if (! isset($_SERVER['REQUEST_URI'])) {
             $_SERVER['REQUEST_URI'] = '';
         }

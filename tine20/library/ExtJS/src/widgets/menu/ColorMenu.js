@@ -51,14 +51,8 @@
      * An id to assign to the underlying color palette. Defaults to <tt>null</tt>.
      */
     paletteId : null,
-
-   /**
-    * @cfg {Array} color
-    * Color values for use in {@link Ext.ColorPalette}
-    */
-    colors: null,
-
-    /**
+    
+    /** 
      * @cfg {Number} maxHeight
      * @hide 
      */
@@ -84,16 +78,12 @@
      */
     
     initComponent : function(){
-        let cfg = {
-          id: this.paletteId
-        }
-        if (this.colors) {
-          cfg.colors = this.colors
-        }
         Ext.apply(this, {
             plain: true,
             showSeparator: false,
-            items: this.palette = new Ext.ColorPalette(Ext.applyIf(cfg, this.initialConfig))
+            items: this.palette = new Ext.ColorPalette(Ext.applyIf({
+                id: this.paletteId
+            }, this.initialConfig))
         });
         this.palette.purgeListeners();
         Ext.menu.ColorMenu.superclass.initComponent.call(this);

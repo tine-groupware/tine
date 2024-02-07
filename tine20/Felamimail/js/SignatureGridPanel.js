@@ -89,7 +89,7 @@ Tine.Felamimail.SignatureGridPanel = Ext.extend(Ext.grid.GridPanel, {
 
     onRecordLoad: function(ed, record) {
         const signatures = _.get(record, 'data.signatures', []);
-        this.store.loadData(signatures || {});
+        this.store.loadData(signatures);
         
         const idx = this.store.find('is_default', true);
         if (idx === -1 && this.store.totalLength > 0) {

@@ -39,7 +39,6 @@ class Tinebase_ModelConfiguration_Const {
     public const COPY_OMIT = 'copyOmit';
     public const COPY_RELATIONS = 'copyRelations';
     public const CREATE_MODULE = 'createModule';
-    public const CREDENTIAL_CACHE = 'credential_cache';
     public const CURRENT_TIMESTAMP = 'CURRENT_TIMESTAMP';
 
     public const DB_COLUMNS = 'dbColumns';
@@ -260,7 +259,6 @@ class Tinebase_ModelConfiguration_Const {
     public const TYPE_NOTE = 'note';
     public const TYPE_NUMBERABLE_INT = 'numberableInt';
     public const TYPE_NUMBERABLE_STRING = 'numberableStr';
-    public const TYPE_PASSWORD = 'password';
     public const TYPE_RECORD = 'record';
     public const TYPE_RECORDS = 'records';
     public const TYPE_RELATION = 'relation';

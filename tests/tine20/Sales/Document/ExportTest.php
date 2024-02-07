@@ -29,6 +29,7 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
 
         $customerData = $customer->toArray();
         $document = new Sales_Model_Document_Offer([
+            Sales_Model_Document_Offer::FLD_DOCUMENT_CATEGORY => Sales_Config::DOCUMENT_CATEGORY_DEFAULT,
             Sales_Model_Document_Offer::FLD_DOCUMENT_LANGUAGE => 'de',
             Sales_Model_Document_Offer::FLD_CUSTOMER_ID => $customerData,
             Sales_Model_Document_Offer::FLD_RECIPIENT_ID => $customerData['postal'],
@@ -78,16 +79,16 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
             $doc->generate();
             $doc->save($tempfile);
             $data = file_get_contents('zip://' . $tempfile . '#word/document.xml');
-            static::assertStringContainsString('root/Standard/de/test.docx', $data);
+            static::assertStringContainsString('root/STANDARD/de/test.docx', $data);
 
-            rename(__DIR__ . '/files/overwrite/CATEGORY-Standard--LANG-de--test.docx', __DIR__ . '/files/overwrite/CATEGORY-Standard--LANG-de--test.docx1');
+            rename(__DIR__ . '/files/overwrite/STANDARD/de/test.docx', __DIR__ . '/files/overwrite/STANDARD/de/test.docx1');
             $pathProp->setValue($doc, __DIR__ . '/files/overwrite/test.docx');
             $doc->generate();
             $doc->save($tempfile);
             $data = file_get_contents('zip://' . $tempfile . '#word/document.xml');
-            static::assertStringContainsString('root/Standard/test.docx', $data);
+            static::assertStringContainsString('root/STANDARD/test.docx', $data);
 
-            rename(__DIR__ . '/files/overwrite/CATEGORY-Standard--test.docx', __DIR__ . '/files/overwrite/CATEGORY-Standard--test.docx1');
+            rename(__DIR__ . '/files/overwrite/STANDARD/test.docx', __DIR__ . '/files/overwrite/STANDARD/test.docx1');
             $pathProp->setValue($doc, __DIR__ . '/files/overwrite/test.docx');
             $doc->generate();
             $doc->save($tempfile);
@@ -95,9 +96,9 @@ class Sales_Document_ExportTest extends Sales_Document_Abstract
             static::assertStringContainsString('root/test.docx', $data);
 
         } finally {
-            @unlink($tempfile);
-            @rename(__DIR__ . '/files/overwrite/CATEGORY-Standard--LANG-de--test.docx1', __DIR__ . '/files/overwrite/CATEGORY-Standard--LANG-de--test.docx');
-            @rename(__DIR__ . '/files/overwrite/CATEGORY-Standard--test.docx1', __DIR__ . '/files/overwrite/CATEGORY-Standard--test.docx');
+            unlink($tempfile);
+            @rename(__DIR__ . '/files/overwrite/STANDARD/de/test.docx1', __DIR__ . '/files/overwrite/STANDARD/de/test.docx');
+            @rename(__DIR__ . '/files/overwrite/STANDARD/test.docx1', __DIR__ . '/files/overwrite/STANDARD/test.docx');
         }
     }
 

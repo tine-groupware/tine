@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Configuration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  */
 
@@ -102,7 +102,6 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  * @property array      $languagesAvailable
  * @property bool       $runConvertToRecordFromJson
  * @property bool       $hasPerspectives
- * @property bool       $hasSystemCustomFields
  */
 
 class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
@@ -810,7 +809,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     protected $_frontendProperties = array(
         'containerProperty', 'extendsContainer', 'containersName', 'containerName', 'grantsModel', 'defaultSortInfo', 'fieldKeys', 'filterModel',
         'defaultFilter', 'requiredRight', 'singularContainerMode', 'fields', 'defaultData', 'titleProperty',
-        'multipleEdit', 'multipleEditRequiredRight', 'languagesAvailable', 'uiconfig',
+        'multipleEdit', 'multipleEditRequiredRight', 'languagesAvailable',
         'copyEditAction', 'copyOmitFields', 'recordName', 'recordsName', 'appName', 'modelName', 'createModule', 'moduleName',
         'isDependent', 'hasCustomFields', 'hasSystemCustomFields', 'modlogActive', 'hasNotes', 'hasAttachments', 'hasAlarms',
         'idProperty', 'splitButton', 'attributeConfig', 'hasPersonalContainer', 'import', 'export', 'virtualFields',
@@ -924,7 +923,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
      */
     protected $_converterDefaultMapping = array(
         'json'      => [Tinebase_Model_Converter_Json::class],
-        self::TYPE_PASSWORD => [Tinebase_Model_Converter_Password::class],
     );
 
     /**
@@ -1407,15 +1405,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
 
                 case self::TYPE_NUMBERABLE_STRING:
                 case self::TYPE_NUMBERABLE_INT:
-                    if (isset($fieldDef[self::CONFIG][Tinebase_Numberable_Abstract::BUCKETKEY]) && $numberableCfg = Tinebase_Controller_NumberableConfig::getInstance()->search(
-                        Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_NumberableConfig::class, [
-                            [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_MODEL, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $this->_appName . '_Model_' . $this->_modelName],
-                            [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_PROPERTY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $fieldDef['fieldName']],
-                            [TMFA::FIELD => Tinebase_Model_NumberableConfig::FLD_BUCKET_KEY, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $fieldDef[self::CONFIG][Tinebase_Numberable_Abstract::BUCKETKEY]],
-                        ]))->getFirstRecord()) {
-                        $fieldDef[self::CONFIG][Tinebase_Model_NumberableConfig::FLD_EDITABLE] = $numberableCfg->{Tinebase_Model_NumberableConfig::FLD_EDITABLE};
-                    }
-
                     $this->_autoincrementFields[] = $fieldDef;
                     break;
 
@@ -1849,11 +1838,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
         return $this->_table;
     }
 
-    public function setTable(array $table)
-    {
-        $this->_table = $table;
-    }
-
     public function getVersion()
     {
         return $this->_version;
@@ -1994,9 +1978,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                         break;
                     }
                 }
-                $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
-                $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
-
                 // resolve self or circular references
                 static::$deNormalizationCache[$this->_appName . '_Model_' . $this->_modelName] = $this->_denormalizationOf ?: false;
                 $deNormOf = null;
@@ -2004,28 +1985,23 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     unset($fieldDef[self::CONFIG][self::DENORMALIZATION_OF]);
                 } elseif (isset(static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]])) {
                     if (static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]]) {
-                        $deNormOf = static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]];
+                        $deNormOf = $fieldDef[self::CONFIG][self::DENORMALIZATION_OF] = static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]];
                     } else {
                         unset($fieldDef[self::CONFIG][self::DENORMALIZATION_OF]);
                     }
                 } elseif (($mc = $fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]::getConfiguration()) && $deNormOf = $mc->denormalizationOf) {
+                    $fieldDef[self::CONFIG][self::DENORMALIZATION_OF] = $deNormOf;
                     static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]] = $deNormOf;
                 } else {
                     unset($fieldDef[self::CONFIG][self::DENORMALIZATION_OF]);
                     static::$deNormalizationCache[$fieldDef[self::CONFIG][self::RECORD_CLASS_NAME]] = false;
                 }
-                if ($deNormOf && array_key_exists(self::DENORMALIZATION_OF, $fieldDef[self::CONFIG]) &&
-                        null === $fieldDef[self::CONFIG][self::DENORMALIZATION_OF]) {
-                    $deNormOf = null;
-                }
+                $fieldDef['config']['controllerClassName'] = isset($fieldDef['config']['controllerClassName']) ? $fieldDef['config']['controllerClassName'] : $this->_getPhpClassName($fieldDef['config'], 'Controller');
+                $fieldDef['config']['filterClassName']     = isset($fieldDef['config']['filterClassName'])     ? $fieldDef['config']['filterClassName']     : $this->_getPhpClassName($fieldDef['config']) . 'Filter';
                 if ($deNormOf) {
-                    $fieldDef[self::CONFIG][self::DENORMALIZATION_OF] = $deNormOf;
                     $fieldDef[self::CONFIG][self::DEPENDENT_RECORDS] = true;
                     $fieldDef[self::DOCTRINE_IGNORE] = true;
                     if (self::TYPE_RECORD === $fieldDef[self::TYPE] && !isset($fieldDef[self::FILTER_DEFINITION])) {
-                        if (!isset($fieldDef[self::CONFIG][self::REF_ID_FIELD])) {
-                            throw new Tinebase_Exception_Record_DefinitionFailure($this->_modelName . '::' . $fieldKey . ' is missing the ' . self::REF_ID_FIELD);
-                        }
                         $fieldDef[self::FILTER_DEFINITION] = [
                             self::FILTER                => Tinebase_Model_Filter_ForeignRecords::class,
                             self::OPTIONS => [
@@ -2285,11 +2261,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
     public function getAssociations()
     {
         return $this->_associations;
-    }
-
-    public function setAssociations(array $assoc)
-    {
-        $this->_associations = $assoc;
     }
 
     /**

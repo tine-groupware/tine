@@ -9,8 +9,6 @@
 
 /*global Ext, Tine, window*/
 
-import { PersonaContainer, Personas } from "./ux/vue/PersonaContainer";
-
 Ext.ns('Tine', 'Tine.Tinebase');
  
  /**
@@ -133,6 +131,7 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
      */
     getReportForm: function () {
         this.initButtons();
+        
         this.reportForm = new Ext.FormPanel({
             id: 'tb-exceptiondialog-frompanel',
             bodyStyle: 'padding:5px;',
@@ -142,59 +141,36 @@ Tine.Tinebase.ExceptionDialog = Ext.extend(Ext.Window, {
             buttons: this.reportButtons,
             items: [{
                 xtype: 'panel',
-                layout: 'hbox',
                 border: false,
-                layoutConfig: {
-                    align: 'stretchmax'
-                },
-                items: [
-                    new PersonaContainer({
-                        persona: Personas.ERROR_SEVERE,
-                        flex: 0,
-                        width: 100,
-                        height: 200
-                    }),
-                    {
-                        border: false,
-                        flex: 1,
-                        layout: 'form',
-                        items: [
-                            {
-                                xtype: 'panel',
-                                border: false,
-                                html: '<div class="tb-exceptiondialog-text">' +
-                                    '<p>' + i18n._('An error occurred, the program ended abnormal.') + '</p>' +
-                                    '<p>' + i18n._('The last action you made was potentially not performed correctly.') + '</p>' +
-                                    '<p>' + i18n._('Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred.') + '</p>' +
-                                    '</div>'
-                            }, {
-                                id: 'tb-exceptiondialog-description',
-                                height: 60,
-                                xtype: 'textarea',
-                                fieldLabel: i18n._('Description'),
-                                name: 'description',
-                                anchor: '95%',
-                                readOnly: false
-                            }, {
-                                xtype: 'fieldset',
-                                id: 'tb-exceptiondialog-send-contact',
-                                anchor: '95%',
-                                title: i18n._('Send Contact Information'),
-                                autoHeight: true,
-                                checkboxToggle: true,
-                                items: [{
-                                    id: 'tb-exceptiondialog-contact',
-                                    xtype: 'textfield',
-                                    hideLabel: true,
-                                    anchor: '100%',
-                                    name: 'contact',
-                                    value: (this.currentAccount) ? this.currentAccount.accountFullName + ' ' + this.currentAccount.accountEmailAddress : 'unknown'
-                                }]
-                            },
-                        ]
-                    }
-                ]
-            },{
+                html: '<div class="tb-exceptiondialog-text">' + 
+                        '<p>' + i18n._('An error occurred, the program ended abnormal.') + '</p>' +
+                        '<p>' + i18n._('The last action you made was potentially not performed correctly.') + '</p>' +
+                        '<p>' + i18n._('Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred.') + '</p>' +
+                    '</div>'
+            }, {
+                id: 'tb-exceptiondialog-description',
+                height: 60,
+                xtype: 'textarea',
+                fieldLabel: i18n._('Description'),
+                name: 'description',
+                anchor: '95%',
+                readOnly: false
+            }, {
+                xtype: 'fieldset',
+                id: 'tb-exceptiondialog-send-contact',
+                anchor: '95%',
+                title: i18n._('Send Contact Information'),
+                autoHeight: true,
+                checkboxToggle: true,
+                items: [{
+                    id: 'tb-exceptiondialog-contact',
+                    xtype: 'textfield',
+                    hideLabel: true,
+                    anchor: '100%',
+                    name: 'contact',
+                    value: (this.currentAccount) ? this.currentAccount.accountFullName + ' ' + this.currentAccount.accountEmailAddress : 'unknown'
+                }]
+            }, {
                 xtype: 'panel',
                 width: '95%',
                 layout: 'form',

@@ -325,11 +325,10 @@ Tine.widgets.form.FieldManager = function() {
                 case 'numberableStr':
                 case 'numberableInt':
                     field.xtype = 'textfield';
-                    field.disabled = ! _.get(field, 'config.editable');
-                    field.emptyText = window.i18n._('Gets assigned automatically');
+                    field.disabled = true;
                     break;
                 case 'json':
-                    field.xtype = field.xtype || 'tw-acefield';
+                    field.xtype = 'tw-acefield';
                     field.mode = 'json';
                     field.height = 150; // 12 lines
                     break;
@@ -366,9 +365,7 @@ Tine.widgets.form.FieldManager = function() {
                     field.xtype = 'label';
                     break;
                 default:
-                    field.xtype = field.xtype || this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
-                    field.emptyValue = field.emptyValue || (fieldDefinition.nullable ? null : '');
-
+                    field.xtype = this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
                     if (fieldDefinition.length) {
                         field.maxLength = fieldDefinition.length;
                     }

@@ -12,7 +12,7 @@
 /**
  * Test helper
  */
-require_once __DIR__ . '/../../../../../tine20/vendor/tine20/sabredav/tests/Sabre/HTTP/ResponseMock.php';
+require_once __DIR__ . '/../../../../../tine20/vendor/sabre/dav/tests/Sabre/HTTP/ResponseMock.php';
 
 /**
  * Test class for Tinebase_WebDav_Plugin_OwnCloud
@@ -21,7 +21,7 @@ class Calendar_Frontend_CalDAV_FixMultiGet404PluginTest extends Calendar_TestCas
 {
     /**
      *
-     * @var Tine20\DAV\Server
+     * @var Sabre\DAV\Server
      */
     protected $server;
 
@@ -48,13 +48,13 @@ class Calendar_Frontend_CalDAV_FixMultiGet404PluginTest extends Calendar_TestCas
 
         parent::setUp();
 
-        $this->server = new Tine20\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
 
         $this->plugin = new Calendar_Frontend_CalDAV_FixMultiGet404Plugin();
 
         $this->server->addPlugin($this->plugin);
 
-        $this->response = new Tine20\HTTP\ResponseMock();
+        $this->response = new Sabre\HTTP\ResponseMock();
         $this->server->httpResponse = $this->response;
     }
 
@@ -98,7 +98,7 @@ class Calendar_Frontend_CalDAV_FixMultiGet404PluginTest extends Calendar_TestCas
                     </B:calendar-multiget>';
 
         $uri = '/calendars/' . Tinebase_Core::getUser()->contact_id . '/' . $this->_personasDefaultCals['jmcblack']->getId();
-        $request = new Tine20\HTTP\Request(array(
+        $request = new Sabre\HTTP\Request(array(
             'REQUEST_METHOD' => 'REPORT',
             'REQUEST_URI'    => $uri,
         ));

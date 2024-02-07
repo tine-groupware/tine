@@ -23,7 +23,7 @@
  * @deprecated remove this
  */
 
-class Tinebase_WebDav_Plugin_Inverse extends Tine20\DAV\ServerPlugin {
+class Tinebase_WebDav_Plugin_Inverse extends Sabre\DAV\ServerPlugin {
 
     const NS_INVERSE = 'urn:inverse:params:xml:ns:inverse-dav';
  
@@ -32,7 +32,7 @@ class Tinebase_WebDav_Plugin_Inverse extends Tine20\DAV\ServerPlugin {
     /**
      * Reference to server object 
      * 
-     * @var Tine20\DAV\Server 
+     * @var Sabre\DAV\Server 
      */
     private $server;
 
@@ -58,20 +58,20 @@ class Tinebase_WebDav_Plugin_Inverse extends Tine20\DAV\ServerPlugin {
     /**
      * Initializes the plugin 
      * 
-     * @param Tine20\DAV\Server $server 
+     * @param Sabre\DAV\Server $server 
      * @return void
      */
-    public function initialize(Tine20\DAV\Server $server) 
+    public function initialize(Sabre\DAV\Server $server) 
     {
         $this->server = $server;
         
         $server->subscribeEvent('unknownMethod', array($this, 'unknownMethod'));
         $server->subscribeEvent('report',        array($this, 'report'));
 
-        $server->xmlNamespaces[Tine20\CalDAV\Plugin::NS_CALDAV]         = 'cal';
-        $server->xmlNamespaces[Tine20\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
+        $server->xmlNamespaces[Sabre\CalDAV\Plugin::NS_CALDAV]         = 'cal';
+        $server->xmlNamespaces[Sabre\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
 
-        $server->resourceTypeMapping['Tine20\CalDAV\ICalendar'] = '{urn:ietf:params:xml:ns:caldav}calendar';
+        $server->resourceTypeMapping['Sabre\CalDAV\ICalendar'] = '{urn:ietf:params:xml:ns:caldav}calendar';
 
         /*array_push($server->protectedProperties,
 
@@ -138,12 +138,12 @@ class Tinebase_WebDav_Plugin_Inverse extends Tine20\DAV\ServerPlugin {
             case 'POST' :
                 $body = $this->server->httpRequest->getBody(true);
                 try {
-                    $dom = \Tine20\DAV\XMLUtil::loadDOMDocument($body);
-                } catch (\Tine20\DAV\Exception\BadRequest $sdavebr) {
+                    $dom = \Sabre\DAV\XMLUtil::loadDOMDocument($body);
+                } catch (\Sabre\DAV\Exception\BadRequest $sdavebr) {
                     return;
                 }
                 
-                $reportName = \Tine20\DAV\XMLUtil::toClarkNotation($dom->firstChild);
+                $reportName = \Sabre\DAV\XMLUtil::toClarkNotation($dom->firstChild);
 
                 switch($reportName) { 
                     case '{' . self::NS_INVERSE . '}acl-query' :
@@ -158,7 +158,7 @@ class Tinebase_WebDav_Plugin_Inverse extends Tine20\DAV\ServerPlugin {
      * resolve contactId to Addressbook_Model_Contact model
      * 
      * @param  string $contactId
-     * @throws \Tine20\DAV\Exception\NotFound
+     * @throws \Sabre\DAV\Exception\NotFound
      * @return Addressbook_Model_Contact
      */
     protected function _resolveContactId($contactId)
@@ -181,7 +181,7 @@ class Tinebase_WebDav_Plugin_Inverse extends Tine20\DAV\ServerPlugin {
             ->getFirstRecord();
         
         if (! $contact instanceof Addressbook_Model_Contact) {
-            throw new \Tine20\DAV\Exception\NotFound("user $contactId not found");
+            throw new \Sabre\DAV\Exception\NotFound("user $contactId not found");
         } 
         
         return $contact;
@@ -195,7 +195,7 @@ class Tinebase_WebDav_Plugin_Inverse extends Tine20\DAV\ServerPlugin {
      */
     public function aclQueryPost(DOMDocument $dom, $uri)
     {
-        list(/*$parent*/, $containerId) = Tine20\DAV\URLUtil::splitPath($uri);
+        list(/*$parent*/, $containerId) = Sabre\DAV\URLUtil::splitPath($uri);
         
         // handle add-user
         $adduser = $dom->getElementsByTagNameNS(self::NS_INVERSE, 'add-user');
@@ -222,7 +222,7 @@ class Tinebase_WebDav_Plugin_Inverse extends Tine20\DAV\ServerPlugin {
             try {
                 Tinebase_Container::getInstance()->setGrants($containerId, $grants);
             } catch (Tinebase_Exception_AccessDenied $tead) {
-                throw new \Tine20\DAV\Exception\Forbidden($tead->getMessage());
+                throw new \Sabre\DAV\Exception\Forbidden($tead->getMessage());
             }
             
             $this->server->httpResponse->sendStatus(201);
@@ -246,7 +246,7 @@ class Tinebase_WebDav_Plugin_Inverse extends Tine20\DAV\ServerPlugin {
             try {
                 Tinebase_Container::getInstance()->setGrants($containerId, $grants);
             } catch (Tinebase_Exception_AccessDenied $tead) {
-                throw new \Tine20\DAV\Exception\Forbidden($tead->getMessage());
+                throw new \Sabre\DAV\Exception\Forbidden($tead->getMessage());
             }
             
             $this->server->httpResponse->sendStatus(201);
@@ -307,7 +307,7 @@ class Tinebase_WebDav_Plugin_Inverse extends Tine20\DAV\ServerPlugin {
             try {
                 Tinebase_Container::getInstance()->setGrants($containerId, $grants);
             } catch (Tinebase_Exception_AccessDenied $tead) {
-                throw new \Tine20\DAV\Exception\Forbidden($tead->getMessage());
+                throw new \Sabre\DAV\Exception\Forbidden($tead->getMessage());
             }
             
             $this->server->httpResponse->sendStatus(201);
@@ -324,7 +324,7 @@ class Tinebase_WebDav_Plugin_Inverse extends Tine20\DAV\ServerPlugin {
      */
     public function aclQueryReport(DOMDocument $dom, $uri)
     {
-        list($parent, $containerId) = Tine20\DAV\URLUtil::splitPath($uri);
+        list($parent, $containerId) = Sabre\DAV\URLUtil::splitPath($uri);
         
         // handle user-list
         $userlists = $dom->getElementsByTagNameNS(self::NS_INVERSE, 'user-list');

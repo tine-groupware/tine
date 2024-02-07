@@ -1,16 +1,16 @@
 <?php
 
-class Tinebase_WebDav_Plugin_ACL extends \Tine20\DAVACL\Plugin
+class Tinebase_WebDav_Plugin_ACL extends \Sabre\DAVACL\Plugin
 {
     /**
      * Returns a list of privileges the current user has
      * on a particular node.
      *
-     * Either a uri or a \Tine20\DAV\INode may be passed.
+     * Either a uri or a \Sabre\DAV\INode may be passed.
      *
      * null will be returned if the node doesn't support ACLs.
      *
-     * @param string|\Tine20\DAV\INode $node
+     * @param string|\Sabre\DAV\INode $node
      * @return array
      */
     public function getCurrentUserPrivilegeSet($node) {
@@ -115,10 +115,10 @@ class Tinebase_WebDav_Plugin_ACL extends \Tine20\DAVACL\Plugin
 
             try {
                 $node = $this->server->tree->getNodeForPath($principal);
-            } catch (\Tine20\DAV\Exception\NotFound $e) {
+            } catch (\Sabre\DAV\Exception\NotFound $e) {
                 continue;
             }
-            if ($node instanceof \Tine20\DAVACL\IPrincipal) {
+            if ($node instanceof \Sabre\DAVACL\IPrincipal) {
                 foreach($node->getGroupMembership() as $groupMember) {
 
                     if (!in_array($groupMember, $principals)) {

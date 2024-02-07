@@ -14,10 +14,9 @@ class Tinebase_Frontend_Http_SinglePageApplication {
      *
      * @param string|array  $entryPoint
      * @param string        $template
-     * @param array         $context
-     * @return \Laminas\Diactoros\Response\HtmlResponse
+     * @return \Laminas\Diactoros\Response
      */
-    public static function getClientHTML($entryPoint, $template = 'Tinebase/views/singlePageApplication.html.twig', $context = []): \Laminas\Diactoros\Response\HtmlResponse
+    public static function getClientHTML($entryPoint, $template = 'Tinebase/views/singlePageApplication.html.twig', $context = [])
     {
         $entryPoints = is_array($entryPoint) ? $entryPoint : [$entryPoint];
 

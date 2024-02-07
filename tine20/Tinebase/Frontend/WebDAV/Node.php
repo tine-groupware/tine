@@ -16,7 +16,7 @@
  * 
  * @todo extend Tinebase_Frontend_WebDAV_Record? or maybe add a common ancestor
  */
-abstract class Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\INode, \Tine20\DAV\IProperties,
+abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\DAV\IProperties,
     Tinebase_Frontend_WebDAV_IRenamable
 {
     protected $_path;
@@ -45,7 +45,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\INode, \Tine2
         } catch (Tinebase_Exception_NotFound $tenf) {}
         
         if (! $this->_node) {
-            throw new Tine20\DAV\Exception\NotFound('Filesystem path: ' . $_path . ' not found');
+            throw new Sabre\DAV\Exception\NotFound('Filesystem path: ' . $_path . ' not found');
         }
     }
     
@@ -56,7 +56,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\INode, \Tine2
     
     public function getName() 
     {
-        list(, $basename) = Tine20\DAV\URLUtil::splitPath($this->_path);
+        list(, $basename) = Sabre\DAV\URLUtil::splitPath($this->_path);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' name: ' . $basename);
@@ -85,8 +85,8 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\INode, \Tine2
     /**
      * Renames the node
      * 
-     * @throws Tine20\DAV\Exception\Forbidden
-     * @throws Tine20\DAV\Exception\NotFound
+     * @throws Sabre\DAV\Exception\Forbidden
+     * @throws Sabre\DAV\Exception\NotFound
      * @param string $name The new name
      * @return void
      */
@@ -94,20 +94,20 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\INode, \Tine2
     {
         self::checkForbiddenFile($name);
 
-        list($dirname,) = Tine20\DAV\URLUtil::splitPath($this->_path);
+        list($dirname,) = Sabre\DAV\URLUtil::splitPath($this->_path);
 
         if (!Tinebase_FileSystem::getInstance()->checkPathACL($parentPath = Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
                 , 'add', true, false, $path = Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path)) ||
             !Tinebase_FileSystem::getInstance()->checkPathACL($parentPath, 'delete', true, false, $path)) {
-            throw new Tine20\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
         }
 
         try {
             if (!($result = Tinebase_FileSystem::getInstance()->rename($this->_path, $dirname . '/' . $name))) {
-                throw new Tine20\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+                throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Tine20\DAV\Exception\NotFound($tenf->getMessage());
+            throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
         }
         $this->_node = $result;
         $this->_path = $result->path;
@@ -115,25 +115,25 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\INode, \Tine2
 
     public function rename(string $newPath)
     {
-        list($dirname,) = Tine20\DAV\URLUtil::splitPath($this->_path);
+        list($dirname,) = Sabre\DAV\URLUtil::splitPath($this->_path);
 
         if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath($dirname)
                 , 'delete', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($this->_path))) {
-            throw new Tine20\DAV\Exception\Forbidden('Forbidden to move file: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to move file: ' . $this->_path);
         }
 
         if (!Tinebase_FileSystem::getInstance()->checkPathACL(Tinebase_Model_Tree_Node_Path::createFromStatPath(dirname($newPath))
                 , 'add', true, false, Tinebase_Model_Tree_Node_Path::createFromStatPath($newPath))) {
-            throw new Tine20\DAV\Exception\Forbidden('Forbidden to create file: ' . $newPath);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $newPath);
         }
 
         try {
             $result = Tinebase_FileSystem::getInstance()->rename($this->_path, $newPath);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Tine20\DAV\Exception\NotFound($tenf->getMessage());
+            throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
         }
         if (! $result) {
-            throw new Tine20\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to rename file: ' . $this->_path);
         }
         $this->_node = $result;
         $this->_path = $result->path;
@@ -157,14 +157,14 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\INode, \Tine2
     * checks if filename is acceptable
     *
     * @param  string $name
-    * @throws Tine20\DAV\Exception\Forbidden
+    * @throws Sabre\DAV\Exception\Forbidden
     */
     public static function checkForbiddenFile($name)
     {
         if (in_array($name, self::$_forbiddenNames)) {
-            throw new Tine20\DAV\Exception\Forbidden('forbidden name');
+            throw new Sabre\DAV\Exception\Forbidden('forbidden name');
         } else if (substr($name, 0, 2) == '._') {
-            throw new Tine20\DAV\Exception\Forbidden('no resource files accepted');
+            throw new Sabre\DAV\Exception\Forbidden('no resource files accepted');
         }
     }
 

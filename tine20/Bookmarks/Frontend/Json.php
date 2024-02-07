@@ -35,12 +35,7 @@ class Bookmarks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $user = Tinebase_Core::getUser();
         try {
-            $defaultBookmarksContainers = Tinebase_Container::getInstance()->getPersonalContainer(
-                $user,
-                Bookmarks_Model_Bookmark::class,
-                $user,
-                Tinebase_Model_Grants::GRANT_ADMIN
-            );
+            $defaultBookmarksContainers = Tinebase_Container::getInstance()->getPersonalContainer($user, Bookmarks_Model_Bookmark::class, $user, Tinebase_Model_Grants::GRANT_ADMIN);
         } catch (Tinebase_Exception_NotFound $e) {
             return [];
         }

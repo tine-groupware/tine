@@ -52,8 +52,8 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     const FLD_SALES_TAX = 'sales_tax'; // Mehrwertssteuer
     const FLD_GROSS_PRICE= 'gross_price'; // Bruttopreis - berechnen
 
-    const FLD_EVAL_DIM_COST_CENTER = 'eval_dim_cost_center'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat und ob user überschreiben kann
-    const FLD_EVAL_DIM_COST_BEARER = 'eval_dim_cost_bearer'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat, und ob user überschreiben kann
+    const FLD_COST_CENTER_ID = 'payment_cost_center_id'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat und ob user überschreiben kann
+    const FLD_COST_BEARER_ID = 'payment_cost_bearer_id'; // aus document od. item übernehmen, config bestimmt wer vorfahrt hat, und ob user überschreiben kann
     const FLD_REVERSAL = 'reversal';
     const FLD_IS_REVERSED = 'is_reversed';
 
@@ -156,7 +156,6 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         self::MODLOG_ACTIVE                 => true,
         self::HAS_XPROPS                    => true,
         self::EXPOSE_JSON_API               => true,
-        self::HAS_SYSTEM_CUSTOM_FIELDS      => true,
 
         self::TABLE                         => [
             self::INDEXES                       => [
@@ -376,6 +375,26 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::UI_CONFIG                     => [
                     self::READ_ONLY                     => true,
                 ],
+            ],
+            self::FLD_COST_BEARER_ID            => [
+                self::LABEL                         => 'Cost Bearer', // _('Cost Bearer')
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                    => Tinebase_Model_CostUnit::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
+                self::SHY                           => true,
+            ],
+            self::FLD_COST_CENTER_ID            => [
+                self::LABEL                         => 'Costcenter', // _('Costcenter')
+                self::TYPE                          => self::TYPE_RECORD,
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME                    => Tinebase_Model_CostCenter::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
+                self::SHY                           => true,
             ],
             self::FLD_REVERSAL                  => [
                 self::TYPE                          => self::TYPE_BOOLEAN,

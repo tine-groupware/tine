@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Christian Feitl<c.feitl@metaways.de>
- * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -31,13 +31,6 @@ class Sales_Import_Customers_Csv extends Tinebase_Import_Csv_Abstract
     protected $_postc;
     protected $_local;
     protected $_ort;
-    protected $_divisionId;
-
-    public function __construct(array $_options = array())
-    {
-        $this->_divisionId = Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId();
-        parent::__construct($_options);
-    }
 
     /**
      * add some more values (container id)
@@ -47,9 +40,6 @@ class Sales_Import_Customers_Csv extends Tinebase_Import_Csv_Abstract
     protected function _addData()
     {
         $result['container_id'] = $this->_options['container_id'];
-        $result[Sales_Model_Customer::FLD_DEBITORS] = [[
-            Sales_Model_Debitor::FLD_DIVISION_ID => $this->_divisionId,
-        ]];
         return $result;
     }
 

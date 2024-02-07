@@ -478,6 +478,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 break;
             case 'user':
                 value = new Tine.Addressbook.SearchCombo(Ext.apply(commonOptions, {
+                    listWidth: 350,
                     emptyText: i18n._('Search Account ...'),
                     userOnly: true,
                     name: 'organizer',

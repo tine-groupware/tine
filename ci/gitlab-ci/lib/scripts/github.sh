@@ -12,18 +12,12 @@ github_create_release() {
         draft="true"
     fi
 
-    if ! echo "$version" | grep "weekly" > /dev/null; then
-        prerelease="false"
-    else
-        prerelease="true"
-    fi
-
     curl -s \
         -X POST \
         -u "$user:$token" \
         -H "accept: application/vnd.github.v3+json" \
         "https://api.github.com/repos/tine-groupware/tine/releases" \
-        -d '{"name":"'"$tag"'", "tag_name":"'"$tag"'", "body":'"$body"', "draft":'$draft', "prerelease":'$prerelease'}'
+        -d '{"name":"'"$tag"'", "tag_name":"'"$tag"'", "body":'"$body"', "draft":'$draft'}'
 }
 
 github_release_add_asset() {

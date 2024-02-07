@@ -66,7 +66,7 @@ Ext.extend(Ext.ux.grid.ActionColumnPlugin, Ext.util.Observable, {
      */
     init : function(grid) {
         this.gridPanel = grid;
-        this.grid = _.isFunction(grid.getGrid) ? grid.getGrid() : grid;
+        this.grid = grid.getGrid();
         this.initTemplate();
         this.width = 60;
 
@@ -74,9 +74,6 @@ Ext.extend(Ext.ux.grid.ActionColumnPlugin, Ext.util.Observable, {
         
         this.renderer = this.renderColumn.createDelegate(this);
         this.grid.on('click', this.onClick, this);
-        if (!_.find(this.grid.colModel.config, (c) => {return c instanceof this.constructor})) {
-            this.grid.colModel.config.push(this);
-        }
     },
     
     /**

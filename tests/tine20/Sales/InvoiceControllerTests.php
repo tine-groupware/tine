@@ -70,8 +70,20 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             'start_date' => $this->_referenceDate,
             'end_date' => NULL,
             'billing_address_id' => $this->_addressRecords->filter('customer_id', $this->_customerRecords->filter('name', 'Customer3')->getFirstRecord()->getId())->filter('type', 'billing')->getFirstRecord()->getId(),
-            'eval_dim_cost_center' => $this->_costcenterRecords->getFirstRecord()->getId(),
         ));
+        
+        $contract->relations = array(
+            array(
+                'own_model'              => Sales_Model_Contract::class,
+                'own_backend'            => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                'own_id'                 => NULL,
+                'related_degree'         => Tinebase_Model_Relation::DEGREE_SIBLING,
+                'related_model'          => Tinebase_Model_CostCenter::class,
+                'related_backend'        => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                'related_id'             => $this->_costcenterRecords->getFirstRecord()->getId(),
+                'type'                   => 'LEAD_COST_CENTER'
+            ),
+        );
         
         $this->_contractRecords->addRecord($this->_contractController->create($contract));
         
@@ -1606,15 +1618,10 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             $this->_createCustomers(1);
         }
         
-        $costcenter = new Tinebase_Model_EvaluationDimensionItem([], true);
+        $costcenter = new Tinebase_Model_CostCenter();
         $costcenter->number = 1337;
         $costcenter->name = 'Foobar Costcenter';
-        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
-            ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
-        ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
-        $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->addRecord($costcenter);
-        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
-        $costcenter = $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->find(Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER, $costcenter->number);
+        $costcenter = Tinebase_Controller_CostCenter::getInstance()->create($costcenter);
         
         $invoice = new Sales_Model_Invoice();
         $invoice->description = 'Foobar Rechnung';
@@ -1626,11 +1633,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         /* @var $invoice Sales_Model_Invoice */
         $invoice = Sales_Controller_Invoice::getInstance()->create($invoice);
 
-        $customer = new Sales_Model_Customer(['name' => 'Test Customer',
-            Sales_Model_Customer::FLD_DEBITORS => [[
-                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
-            ]],
-        ]);
+        $customer = new Sales_Model_Customer();
+        $customer->name = 'Test Customer';
         $customer = Sales_Controller_Customer::getInstance()->create($customer);
         
         Tinebase_Relations::getInstance()->setRelations(

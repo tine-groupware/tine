@@ -12,7 +12,7 @@
 /**
  * Test helper
  */
-require_once 'vendor/tine20/sabredav/tests/Sabre/DAV/Auth/Backend/Mock.php';
+require_once 'vendor/sabre/dav/tests/Sabre/DAV/Auth/Backend/Mock.php';
 
 /**
  * Test class for Tinebase_WebDav_Plugin_OwnCloud
@@ -33,19 +33,19 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends Tinebase_WebDav_Plugin_
 
         parent::setUp();
         
-        $mockBackend = new Tine20\DAV\Auth\Backend\Mock();
+        $mockBackend = new Sabre\DAV\Auth\Backend\Mock();
         $mockBackend->defaultUser = Tinebase_Core::getUser()->contact_id;
         
-        $plugin = new Tine20\DAV\Auth\Plugin($mockBackend,'realm');
+        $plugin = new Sabre\DAV\Auth\Plugin($mockBackend,'realm');
         $this->server->addPlugin($plugin);
 
-        $aclPlugin = new \Tine20\DAVACL\Plugin();
+        $aclPlugin = new \Sabre\DAVACL\Plugin();
         $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
         $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS);
         $this->server->addPlugin($aclPlugin);
         
-        $this->server->addPlugin(new \Tine20\CalDAV\Plugin());
-        $this->server->addPlugin(new \Tine20\CalDAV\SharingPlugin());
+        $this->server->addPlugin(new \Sabre\CalDAV\Plugin());
+        $this->server->addPlugin(new \Sabre\CalDAV\SharingPlugin());
         
         $this->plugin = new Tinebase_WebDav_Plugin_PrincipalSearch();
         $this->server->addPlugin($this->plugin);
@@ -81,7 +81,7 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends Tinebase_WebDav_Plugin_
                     </B:prop>
                 </A:calendarserver-principal-search>';
 
-        $request = new Tine20\HTTP\Request(array(
+        $request = new Sabre\HTTP\Request(array(
             'REQUEST_METHOD' => 'REPORT',
             'REQUEST_URI'    => '/principals'
         ));

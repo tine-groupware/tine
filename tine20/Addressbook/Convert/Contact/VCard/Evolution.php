@@ -76,7 +76,7 @@ class Addressbook_Convert_Contact_VCard_Evolution extends Addressbook_Convert_Co
      * 
      * @todo return all supported fields in correct format see http://forge.tine20.org/mantisbt/view.php?id=5346
      * @param  Addressbook_Model_Contact  $_record
-     * @return \Tine20\VObject\Component\VCard
+     * @return \Sabre\VObject\Component\VCard
      */
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
@@ -145,7 +145,7 @@ class Addressbook_Convert_Contact_VCard_Evolution extends Addressbook_Convert_Co
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseOther()
      */
-    protected function _toTine20ModelParseOther(&$data, \Tine20\VObject\Property $property) {
+    protected function _toTine20ModelParseOther(&$data, \Sabre\VObject\Property $property) {
 
          $otherField = null;
 
@@ -192,7 +192,7 @@ class Addressbook_Convert_Contact_VCard_Evolution extends Addressbook_Convert_Co
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseTel()
      */
-    protected function _toTine20ModelParseTel(&$data, \Tine20\VObject\Property $property)
+    protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
     {
         $telField = null;
         

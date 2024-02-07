@@ -39,7 +39,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         'ImportExportDefinition',
         'LogEntry',
         'Tree_Node',
-        Tinebase_Model_NumberableConfig::MODEL_NAME_PART,
         Tinebase_Model_User::MODEL_NAME_PART,
         Tinebase_Model_MFA_HOTPUserConfig::MODEL_NAME_PART,
         Tinebase_Model_MFA_TOTPUserConfig::MODEL_NAME_PART,
@@ -51,11 +50,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_Model_MunicipalityKey::MODEL_NAME_PART,
         Tinebase_Model_AuthToken::MODEL_NAME_PART,
         Tinebase_Model_DynamicRecordWrapper::MODEL_NAME_PART,
+        Tinebase_Model_CostCenter::MODEL_NAME_PART,
+        Tinebase_Model_CostUnit::MODEL_NAME_PART,
         Tinebase_Model_BankAccount::MODEL_NAME_PART,
         Tinebase_Model_BankHolidayCalendar::MODEL_NAME_PART,
         Tinebase_Model_BankHoliday::MODEL_NAME_PART,
-        Tinebase_Model_EvaluationDimension::MODEL_NAME_PART,
-        Tinebase_Model_EvaluationDimensionItem::MODEL_NAME_PART,
     ];
     
     public function __construct()

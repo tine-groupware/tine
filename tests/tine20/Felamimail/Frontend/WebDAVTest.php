@@ -18,7 +18,7 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
     /**
      * Tree
      *
-     * @var Tine20\DAV\ObjectTree
+     * @var Sabre\DAV\ObjectTree
      */
     protected $_webdavTree;
     
@@ -33,7 +33,7 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
         
         $children = $node->getChildren();
         
-        $this->expectException('Tine20\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/');
     }
@@ -42,7 +42,7 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
     {
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav');
         
-        $this->assertInstanceOf('\Tine20\DAV\SimpleCollection', $node, 'wrong node class');
+        $this->assertInstanceOf('\Sabre\DAV\SimpleCollection', $node, 'wrong node class');
         
         $this->assertEquals('webdav', $node->getName());
         
@@ -50,7 +50,7 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
         
         $this->assertInstanceOf('Tinebase_WebDav_Collection_AbstractContainerTree', $children[0], 'wrong child class');
         
-        $this->expectException('Tine20\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav');
     }
@@ -68,14 +68,14 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
         $this->assertEquals(1, count($children));
         $this->assertInstanceOf('Felamimail_Frontend_WebDAV', $children[0], 'wrong node class');
         
-        $this->expectException('Tine20\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Felamimail');
     }
     
     public function testgetNodeForPath_webdav_felamimail_personal()
     {
-        $this->expectException('Tine20\DAV\Exception\NotFound');
+        $this->expectException('Sabre\DAV\Exception\NotFound');
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Felamimail/personal');
     }
@@ -90,7 +90,7 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
         
         $children = $node->getChildren();
         
-        $this->expectException('Tine20\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $this->_getWebDAVTree()->delete('/webdav/Felamimail/shared');
     }
@@ -151,19 +151,19 @@ class Felamimail_Frontend_WebDAVTest extends TestCase
     
         $this->_getWebDAVTree()->delete('/webdav/Felamimail/shared/unittestdirectory/tine_logo.png');
     
-        $this->expectException('Tine20\DAV\Exception\NotFound');
+        $this->expectException('Sabre\DAV\Exception\NotFound');
         
         $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Felamimail/shared/unittestdirectory/tine_logo.png');
     }
     
     /**
      * 
-     * @return \Tine20\DAV\ObjectTree
+     * @return \Sabre\DAV\ObjectTree
      */
     protected function _getWebDAVTree()
     {
-        if (! $this->_webdavTree instanceof \Tine20\DAV\ObjectTree) {
-            $this->_webdavTree = new \Tine20\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        if (! $this->_webdavTree instanceof \Sabre\DAV\ObjectTree) {
+            $this->_webdavTree = new \Sabre\DAV\ObjectTree(new Tinebase_WebDav_Root());
         }
         
         return $this->_webdavTree;

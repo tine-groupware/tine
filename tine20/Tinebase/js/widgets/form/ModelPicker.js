@@ -25,16 +25,14 @@ Tine.Tinebase.widgets.form.ModelPicker = Ext.extend(Ext.form.ComboBox, {
         const availableModels = this.availableModels?.map((model) => { return Tine.Tinebase.data.RecordMgr.get(model) });
         const availableModelsRegExp = this.availableModelsRegExp ? new RegExp(this.availableModelsRegExp.replaceAll('/','')) : null;
 
-        this.emptyText = i18n._('Search for Model...');
-
         this.store = new Ext.data.ArrayStore({
             fields: ['className', 'modelName'],
             data: Tine.Tinebase.data.RecordMgr.items.reduce((models, recordClass) => {
-                const className = recordClass.getPhpClassName();
                 let name = recordClass.getRecordsName();
-
                 name = !name || name === 'records'? recordClass.getMeta('modelName') : name;
-                const label = (this.includeAppName ? recordClass.getAppName() + ' ' : '') + name + (this.includeClassName ? ` (${className})` : '');
+
+                const label = (this.includeAppName ? recordClass.getAppName() + ' ' : '') + name;
+                const className = recordClass.getPhpClassName();
 
                 if ((!availableModels || availableModels.indexOf(recordClass) >= 0)
                     && (!availableModelsRegExp || availableModelsRegExp.test(className))) {
@@ -66,32 +64,3 @@ window.setTimeout(() => {
         xtype: 'admin-schedulertask-modelpicker'
     }, Tine.widgets.form.FieldManager.CATEGORY_EDITDIALOG);
 }, 500);
-
-
-
-Ext.reg('tw-modelspickers', Ext.extend(Tine.widgets.grid.PickerGridPanel, {
-    searchComboConfig: {
-        xtype: 'tw-modelpicker',
-        allowBlank: true,
-        includeClassName: true
-    },
-    recordClass: Tine.Tinebase.data.Record.create([
-        { name: 'model' },
-        { name: 'modelName' },
-        { name: 'className' },
-    ], {
-        appName: 'Tinebase',
-        modelName: 'Models',
-        idProperty: 'className',
-        titleProperty: 'modelName',
-        recordName: 'Model', // gettext('GENDER_Model')
-        recordsName: 'Models' // ngettext('Model', 'Models', n)
-    }),
-    isFormField: true,
-    getValue: function() {
-        return _.map(this.supr().getValue.call(this), 'className');
-    },
-    setValue: function(value) {
-        return this.supr().setValue.call(this, _.map(value, v => { return _.isString(v) ? { className: v, modelName: `${Tine.Tinebase.data.RecordMgr.get(v).getRecordsName()} (${v})` } : v }));
-    }
-}));

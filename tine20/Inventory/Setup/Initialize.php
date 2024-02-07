@@ -9,8 +9,6 @@
  *
  */
 
-use Tinebase_Model_Filter_Abstract as TMFA;
-
 /**
  * class for Inventory initialization
  * 
@@ -37,15 +35,5 @@ class Inventory_Setup_Initialize extends Setup_Initialize
             'description'       => "All existing Inventory Items", // _("All existing Inventory Items")
             'filters'           => array(),
         ))));
-    }
-
-    public function initializeCostCenter()
-    {
-        $this->_initializeCostCenter();
-    }
-
-    protected function _initializeCostCenter()
-    {
-        Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [Inventory_Model_InventoryItem::class]);
     }
 }

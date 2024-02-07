@@ -413,22 +413,10 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     public function createTempFileFromNode(Tinebase_Model_Tree_Node $node)
     {
         $path = self::getTempPath();
-        if ($node->flysystem) {
-            $tmpFh = null;
-            try {
-                stream_copy_to_stream(
-                    Tinebase_Controller_Tree_FlySystem::getFlySystem($node->flysystem)->readStream($node->flypath),
-                    ($tmpFh = fopen($path, 'w'))
-                );
-            } finally {
-                if ($tmpFh) @fclose($tmpFh);
-            }
-        } else {
-            if (!copy($node->getFilesystemPath(), $path)) {
-                Tinebase_Core::getLogger()->err('could not copy node ' . $node->getId() . ' ' . $node->getFilesystemPath()
-                    . ' to temppath ' . $path);
-                throw new Tinebase_Exception_Backend('could not copy node to tempPath');
-            }
+        if (!copy($node->getFilesystemPath(), $path)) {
+            Tinebase_Core::getLogger()->err('could not copy node ' . $node->getId() . ' ' . $node->getFilesystemPath()
+                . ' to temppath ' . $path);
+            throw new Tinebase_Exception_Backend('could not copy node to tempPath');
         }
 
         return $this->createTempFile($path, $node->name, $node->contenttype, $node->size);

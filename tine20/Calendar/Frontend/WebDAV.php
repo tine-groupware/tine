@@ -21,21 +21,21 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
 
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\IExtendedCollection::createExtendedCollection()
-     * @throws \Tine20\DAV\Exception\Forbidden
+     * @see \Sabre\DAV\IExtendedCollection::createExtendedCollection()
+     * @throws \Sabre\DAV\Exception\Forbidden
      */
     public function createExtendedCollection($name, array $resourceType, array $properties)
     {
         if (count($this->_getPathParts()) === 2 && isset($properties['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'])) {
             $componentSet = $properties['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'];
 
-            if ($componentSet instanceof \Tine20\CalDAV\Property\SupportedCalendarComponentSet &&
+            if ($componentSet instanceof \Sabre\CalDAV\Property\SupportedCalendarComponentSet &&
                 in_array('VTODO', $componentSet->getValue())) {
 
                 if (Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN)) {
                     $tasks = new Tasks_Frontend_WebDAV('tasks/' . $this->getName(), $this->_useIdAsName);
                 } else {
-                    throw new  \Tine20\DAV\Exception\Forbidden('Tasks not allowed for user');
+                    throw new  \Sabre\DAV\Exception\Forbidden('Tasks not allowed for user');
                 }
                 
                 return $tasks->createExtendedCollection($name, $resourceType, $properties);
@@ -64,7 +64,7 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
                     break;
                     
                 case 'outbox':
-                    $child = new \Tine20\CalDAV\Schedule\Outbox('principals/users/' . Tinebase_Core::getUser()->contact_id);
+                    $child = new \Sabre\CalDAV\Schedule\Outbox('principals/users/' . Tinebase_Core::getUser()->contact_id);
                     break;
                     
                 case 'dropbox':

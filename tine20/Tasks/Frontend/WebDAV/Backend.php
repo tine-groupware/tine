@@ -14,7 +14,7 @@
  * @todo fix namespace - move to Tasks/Frontend/CalDAV ?
  * @todo refactor: why does this return calendars/events??
  */
-class Tasks_Frontend_CalDAV_Backend extends Tine20\CalDAV\Backend\AbstractBackend
+class Tasks_Frontend_CalDAV_Backend extends Sabre\CalDAV\Backend\AbstractBackend
 {
     /**
      * Returns a list of calendars for a principal.
@@ -45,7 +45,7 @@ class Tasks_Frontend_CalDAV_Backend extends Tine20\CalDAV\Backend\AbstractBacken
             $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), Calendar_Model_Event::class, $owner, Tinebase_Model_Grants::GRANT_READ);
             $containers->sort('name');
         } else {
-            throw new Tine20\DAV\Exception\PreconditionFailed('unsupported pricipalUri');
+            throw new Sabre\DAV\Exception\PreconditionFailed('unsupported pricipalUri');
         }
         
         $calendars = array();
@@ -61,7 +61,7 @@ class Tasks_Frontend_CalDAV_Backend extends Tine20\CalDAV\Backend\AbstractBacken
                 'principaluri'      => $principalUri,
                 '{DAV:}displayname' => $container->name,
                 '{http://apple.com/ns/ical/}calendar-color' => $container->color,
-                '{' . Tine20\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Tine20\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
+                '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
             );
         }
         
@@ -84,7 +84,7 @@ class Tasks_Frontend_CalDAV_Backend extends Tine20\CalDAV\Backend\AbstractBacken
      */
     public function createCalendar($principalUri,$calendarUri,array $properties)
     {
-        throw new Tine20\DAV\Exception\MethodNotAllowed('createCalendar');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('createCalendar');
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' $principalUri: ' . $principalUri . ' $calendarUri: ' . $calendarUri . ' $properties' . print_r($properties, TRUE));
@@ -110,7 +110,7 @@ class Tasks_Frontend_CalDAV_Backend extends Tine20\CalDAV\Backend\AbstractBacken
             
             $container = Tinebase_Container::getInstance()->addContainer($container);
         } else {
-            throw new Tine20\DAV\Exception\PreconditionFailed('unsupported pricipalUri');
+            throw new Sabre\DAV\Exception\PreconditionFailed('unsupported pricipalUri');
         }
         
         return $container->getId();
@@ -154,7 +154,7 @@ class Tasks_Frontend_CalDAV_Backend extends Tine20\CalDAV\Backend\AbstractBacken
      */
     public function updateCalendar($calendarId, array $properties)
     {
-        throw new Tine20\DAV\Exception\MethodNotAllowed('updateCalendar');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('updateCalendar');
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' $calendarId: ' . $calendarId . ' $properties' . print_r($properties, TRUE));
@@ -187,7 +187,7 @@ class Tasks_Frontend_CalDAV_Backend extends Tine20\CalDAV\Backend\AbstractBacken
      */
     public function deleteCalendar($calendarId)
     {
-        throw new Tine20\DAV\Exception\MethodNotAllowed('deleteCalendar');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('deleteCalendar');
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' $calendarId: ' . $calendarId);
@@ -280,7 +280,7 @@ class Tasks_Frontend_CalDAV_Backend extends Tine20\CalDAV\Backend\AbstractBacken
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' $calendarId: ' . $calendarId . ' $objectUri: ' . $objectUri. ' $calendarData: '. print_r($calendarData, TRUE));
         
-        throw new Tine20\DAV\Exception\MethodNotAllowed('createCalendarObject');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('createCalendarObject');
     }
 
     /**
@@ -293,7 +293,7 @@ class Tasks_Frontend_CalDAV_Backend extends Tine20\CalDAV\Backend\AbstractBacken
      */
     public function updateCalendarObject($calendarId,$objectUri,$calendarData)
     {
-        throw new Tine20\DAV\Exception\MethodNotAllowed('updateCalendarObject');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('updateCalendarObject');
     }
 
     /**
@@ -305,6 +305,6 @@ class Tasks_Frontend_CalDAV_Backend extends Tine20\CalDAV\Backend\AbstractBacken
      */
     public function deleteCalendarObject($calendarId,$objectUri)
     {
-        throw new Tine20\DAV\Exception\MethodNotAllowed('deleteCalendarObject');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('deleteCalendarObject');
     }
 }

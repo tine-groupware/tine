@@ -451,7 +451,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         for (var i=0; i < nonPluginColumns.length; i++) {
             this.configColumns.remove(nonPluginColumns[i]);
         }
-        this.plugins = (this.plugins || []).concat(this.configColumns);
+        this.plugins = this.configColumns;
         this.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}))
 
         // // on selectionchange handler
@@ -539,30 +539,25 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     getSearchCombo: function() {
         if (! this.searchCombo) {
-            const searchComboConfig = {...this.searchComboConfig || {}};
+            const searchComboConfig = {... this.searchComboConfig || {}};
 
             if (this.isMetadataModelFor) {
                 var mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor),
                     mappingRecordClass = mappingFieldDef.getRecordClass();
                 this.searchRecordClass = mappingRecordClass;
-                searchComboConfig.useEditPlugin = searchComboConfig.hasOwnProperty('useEditPlugin') ? searchComboConfig.useEditPlugin : true;
+                searchComboConfig.useEditPlugin = true;
             }
+            
+            var recordClass = (this.searchRecordClass !== null) ? Tine.Tinebase.data.RecordMgr.get(this.searchRecordClass) : this.recordClass,
+                appName = recordClass.getMeta('appName');
 
-            Ext.apply(searchComboConfig, {
+            this.searchCombo = Tine.widgets.form.RecordPickerManager.get(appName, recordClass, Ext.apply({
                 blurOnSelect: true,
                 listeners: {
                     scope: this,
                     select: this.onAddRecordFromCombo
                 }
-            });
-
-            if (searchComboConfig.xtype) {
-                this.searchCombo = Ext.create(searchComboConfig);
-            } else {
-                const recordClass = (this.searchRecordClass !== null) ? Tine.Tinebase.data.RecordMgr.get(this.searchRecordClass) : this.recordClass;
-                const appName = recordClass.getMeta('appName');
-                this.searchCombo = Tine.widgets.form.RecordPickerManager.get(appName, recordClass, searchComboConfig);
-            }
+            }, searchComboConfig));
         }
 
         return this.searchCombo;
@@ -619,7 +614,6 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         const mode = this.editDialogConfig?.mode || editDialogClass.prototype.mode;
 
         editDialogClass.openWindow(_.assign({
-            openerCt: this,
             record: Ext.encode(record.getData()),
             recordId: record.getId(),
             needsUpdateEvent: true,
@@ -767,7 +761,6 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         if (editDialogClass) {
             editDialogClass.openWindow(_.assign({
-                openerCt: this,
                 record: JSON.stringify(record.getData()),
                 recordId: record.getId(),
                 fixedFields: this.readOnly ? JSON.stringify(Object.assign(Object.fromEntries(record.constructor.getFieldNames().map((k, i) => [k, null])), record.data)) : null,

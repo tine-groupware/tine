@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -287,23 +287,5 @@ class Addressbook_Convert_Contact_String implements Tinebase_Convert_Interface
     public function getUnrecognizedTokens()
     {
         return $this->_unrecognizedTokens;
-    }
-
-    /**
-     * converts Tinebase_Record_RecordSet to external format
-     *
-     * @param ?Tinebase_Record_RecordSet $_records
-     * @param ?Tinebase_Model_Filter_FilterGroup $_filter
-     * @param ?Tinebase_Model_Pagination $_pagination
-     *
-     * @return mixed
-     *
-     * @throws Tinebase_Exception_NotImplemented
-     */
-    public function fromTine20RecordSet(?Tinebase_Record_RecordSet $_records = null,
-                                        ?Tinebase_Model_Filter_FilterGroup $_filter = null,
-                                        ?Tinebase_Model_Pagination $_pagination = null)
-    {
-        throw new Tinebase_Exception_NotImplemented();
     }
 }

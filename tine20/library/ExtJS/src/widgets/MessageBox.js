@@ -4,7 +4,6 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
-import {BootstrapVueNext} from 'bootstrap-vue-next'
 
 /**
  * @class Ext.MessageBox
@@ -26,7 +25,6 @@ Ext.Msg.prompt('Name', 'Please enter your name:', function(btn, text){
 });
 
 
-
 // Show a dialog using config options:
 Ext.Msg.show({
    title:'Save Changes?',
@@ -40,16 +38,10 @@ Ext.Msg.show({
  * @singleton
  */
 Ext.MessageBox = function(){
-    const MSG_BOX_MOUNT_ID = "Vue-Message-Box-Mount-Point"
-
     let opt, dlg;
 
     const skinShades = ["#ffffff", "#fad9b4", "#fcbf89", "#ec8f2e", "#d97103", "#b75b01", "#924500"]
-
-    const __HIDDEN = false // for readability and clarity
-    let synchronousVisibilityState = __HIDDEN
-    let initialized = false
-
+    
     // start vue properties
     let vueHandle, vueProps, vueEmitter;
     const defaultConfigs = Object.freeze({
@@ -95,13 +87,12 @@ Ext.MessageBox = function(){
 
     // private
     const handleButton = function({buttonName, textElValue} = arg){
-        handleHide()
+        vueProps.otherConfigs.visible = false;
         Ext.callback(opt.fn, opt.scope||window, [buttonName, textElValue, opt], 1);
     }
     
     // private
     const handleHide = function() {
-        synchronousVisibilityState = __HIDDEN
         if(vueProps) vueProps.otherConfigs.visible = false;
     }
 
@@ -114,7 +105,7 @@ Ext.MessageBox = function(){
                     get(target, key){
                         switch(key){
                             case "hidden":
-                                return !synchronousVisibilityState
+                                return !vueProps.otherConfigs.visible
                             case "setZIndex":
                                 return setZIndex
                             case "setActive":
@@ -244,50 +235,39 @@ Ext.Msg.show({
          */
         show: async function(options){
             options.skinColor = skinShades[Math.floor(Math.random()*skinShades.length)]
-            synchronousVisibilityState = !__HIDDEN
             Ext.getBody().mask("Loading");
+            window.vue = window.vue || await import(/* webpackChunkName: "Tinebase/js/Vue-Runtime"*/"tine-vue")
+            const {default: mitt} = await import(/* webpackChunkName: "Tinebase/js/Mitt"*/'mitt')
+            const {createApp, h} = await import("vue")
             const {MessageBoxApp, SymbolKeys} = await import(/* webpackChunkName: "Tinebase/js/VueMessageBox"*/'./VueMessageBox')
-            const {default: PersonaContainer } = await import(/* webpackChunkName: "Tinebase/js/PersonaContainer"*/'../../../../Tinebase/js/ux/vue/PersonaContainer/PersonaContainer.vue')
             const {BootstrapVueNext} = await import(/* webpackChunkName: "Tinebase/js/BootstrapVueNext"*/'bootstrap-vue-next')
-
-            // initializing vue stuff
-            if(!initialized){
-                const {createApp, h, reactive} = window.vue
-                initialized = true
-                otherConfigs.buttonText = this.buttonText;
-                vueProps = reactive({
-                    opt: JSON.parse(JSON.stringify(defaultConfigs)),
-                    otherConfigs: JSON.parse(JSON.stringify(otherConfigs)),
-                });
-
-                // app initialization and mounting
-                vueHandle = createApp({
-                    render: () => h(MessageBoxApp, vueProps)
-                });
-
-                // events initialization
-                vueEmitter = window.mitt();
-                vueEmitter.on("close", handleHide);
-                vueEmitter.on("buttonClicked", handleButton);
-
-                vueHandle.config.globalProperties.ExtEventBus = vueEmitter;
-                vueHandle.provide(SymbolKeys.ExtEventBusInjectKey, vueEmitter);
-                vueHandle.component('PersonaContainer', PersonaContainer)
-                vueHandle.use(BootstrapVueNext)
-
-                const mp = document.createElement("div");
-                mp.id = MSG_BOX_MOUNT_ID;
-                document.body.appendChild(mp);
-                vueHandle.mount(mp);
-            }
 
             opt = {...defaultConfigs,...options};
             opt["closable"] = (opt.closable !== false && opt.progress !== true && opt.wait !== true);
             opt["prompt"] = opt.prompt || (opt.multiline ? true : false);
-
-            // if a MessageBox.show() came right after the first MessageBox calls
-            // the async module are being loaded, so
-            if(!vueProps || !vueEmitter || !vueHandle) return
+            // creating mount point
+            const mountId = "Vue-Message-Box-Mount-Point";
+            let mp = document.getElementById(mountId);
+            if(!mp){
+                mp = document.createElement("div");
+                mp.id = mountId;
+                document.body.appendChild(mp);
+            }
+            // initializing the reactive prop.
+            if(!vueProps){
+                otherConfigs.buttonText = this.buttonText;
+                const {reactive} = await import("vue")
+                vueProps = reactive({
+                    opt: JSON.parse(JSON.stringify(defaultConfigs)),
+                    otherConfigs: JSON.parse(JSON.stringify(otherConfigs)),
+                });
+            }
+            Ext.getBody().unmask();
+            if(!vueEmitter){
+                vueEmitter = mitt();
+                vueEmitter.on("close", handleHide);
+                vueEmitter.on("buttonClicked", handleButton);
+            }
             // setting the prop values to the ones passed in config option
             // only those values are taken whose keys are present in the
             // defaultOpt as these are the only ones allowed
@@ -297,12 +277,18 @@ Ext.Msg.show({
                 }
             })
 
-            Ext.getBody().unmask();
+            // initializing and mounting the app.
+            if(!vueHandle){
+                vueHandle = createApp({
+                    render: () => h(MessageBoxApp, vueProps)
+                });
+                vueHandle.config.globalProperties.ExtEventBus = vueEmitter;
+                vueHandle.provide(SymbolKeys.ExtEventBusInjectKey, vueEmitter);
+                vueHandle.use(BootstrapVueNext)
 
-            // as the other modules are async loaded,
-            // the following checks if the visibility state was changed while
-            // the modules were being loaded.
-            if (synchronousVisibilityState === __HIDDEN) return this;
+                vueHandle.mount(mp);
+            }
+
             vueProps.otherConfigs.visible = true;
             const d = this.getDialog("");
             Ext.WindowMgr.bringToFront(d)
@@ -381,7 +367,6 @@ Ext.MessageBox.ERROR
                 minWidth: this.minProgressWidth,
                 waitConfig: config,
                 fn: 'fake',
-                icon: this.INFO_WAIT
             });
         },
 

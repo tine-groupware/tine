@@ -1,11 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Tine 2.0
  * 
  * @package     Tinebase
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        move some functionality to Tinebase_Acl_Roles
@@ -37,9 +37,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const CHECK_VERSION = 'check_version';
-
-    const MANAGE_NUMBERABLES = 'manage_numberables';
-
+    
     /**
      * the right to manage the own profile
      * @staticvar string
@@ -51,8 +49,6 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_OWN_STATE = 'manage_own_state';
-
-    public const MANAGE_EVALUATION_DIMENSIONS = 'manage_evaluation_dimensions';
 
     /**
      * the right to use the installation in maintenance mode
@@ -149,10 +145,8 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             $addRights = array(
                 self::REPORT_BUGS,
                 self::CHECK_VERSION,
-                self::MANAGE_NUMBERABLES,
                 self::MANAGE_OWN_PROFILE,
                 self::MANAGE_OWN_STATE,
-                self::MANAGE_EVALUATION_DIMENSIONS,
                 self::MAINTENANCE,
                 self::SHOW_LICENSE_INFO,
                 self::REPLICATION,
@@ -195,18 +189,10 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'                  => $translate->_('Manage own profile'),
                 'description'           => $translate->_('The right to manage the own profile (selected contact data).'),
             ),
-            self::MANAGE_NUMBERABLES => [
-                'text'                  => $translate->_('Manage Numberables'),
-                'description'           => $translate->_('The right to manage numberables.'),
-            ],
             self::MANAGE_OWN_STATE   => array(
                 'text'                  => $translate->_('Manage own client state'),
                 'description'           => $translate->_('The right to manage the own client state.'),
             ),
-            self::MANAGE_EVALUATION_DIMENSIONS   => [
-                'text'                  => $translate->_('Manage evaluation dimensions'),
-                'description'           => $translate->_('The right to manage evaluation dimensions.'),
-            ],
             self::MAINTENANCE        => array(
                 'text'                  => $translate->_('Maintenance'),
                 'description'           => $translate->_('The right to use the installation in maintenance mode.'),

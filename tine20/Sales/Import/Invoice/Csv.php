@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Christian Feitl<c.feitl@metaways.de>
- * @copyright   Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -132,17 +132,13 @@ class Sales_Import_Invoice_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected function _setCostCenter($result)
     {
-        static $cc = null;
-        if (null === $cc) {
-            $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
-                ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
-            ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
-        }
-
+        static $costCenters;
         if (!empty($result['costcenter'])) {
-            foreach ($cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} as $costCenter) {
+            if (!$costCenters)
+                $costCenters = Tinebase_Controller_CostCenter::getInstance()->getAll();
+            foreach ($costCenters as $costCenter) {
                 if ($costCenter['name'] == $result['costcenter']) {
-                    $result['eval_dim_cost_center'] = $costCenter['id'];
+                    $result['costcenter_id'] = $costCenter['id'];
                 }
             }
         }

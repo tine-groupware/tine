@@ -56,10 +56,12 @@ class OpenDocument_DocumentTests extends \PHPUnit\Framework\TestCase
         $cell = $row->appendCell('###MARKER###');
         
         $filename = Tinebase_Config::getInstance()->get('tmpdir') . DIRECTORY_SEPARATOR . Tinebase_Record_Abstract::generateUID(4) . '-ods-unittest.ods';
-
-        $cc1 = new Tinebase_Model_EvaluationDimensionItem(array('id' => Tinebase_Record_Abstract::generateUID(), 'number' => 'cc1', 'name' => 'unittest-cc1'));
         
-        $cc2 = new Tinebase_Model_EvaluationDimensionItem(array('id' => Tinebase_Record_Abstract::generateUID(), 'number' => 'cc2', 'name' => 'unittest-cc2'));
+        $ccc = Tinebase_Controller_CostCenter::getInstance();
+        
+        $cc1 = $ccc->create(new Tinebase_Model_CostCenter(array('number' => 'cc1', 'name' => 'unittest-cc1')));
+        
+        $cc2 = $ccc->create(new Tinebase_Model_CostCenter(array('number' => 'cc2', 'name' => 'unittest-cc2')));
         
         $colInfo = array();
         $colInfo[$cc1->getId()] = $cc1->number;

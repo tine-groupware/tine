@@ -46,7 +46,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
     /**
      * holds the costcenter for "marketing"
      * 
-     * @var Tinebase_Model_EvaluationDimensionItem
+     * @var Tinebase_Model_CostCenter
      */
     protected $_marketingCostCenter;
     
@@ -60,7 +60,7 @@ abstract class Tinebase_Setup_DemoData_Abstract
     /**
      * holds the costcenter for "development"
      * 
-     * @var Tinebase_Model_EvaluationDimensionItem
+     * @var Tinebase_Model_CostCenter
      */
     protected $_developmentCostCenter;
     
@@ -427,12 +427,8 @@ abstract class Tinebase_Setup_DemoData_Abstract
      */
     protected function _loadCostCentersAndDivisions()
     {
-
-        $this->_costCenters  = Tinebase_Controller_EvaluationDimensionItem::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimensionItem::class, [
-            ['field' => Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID, 'operator' => 'definedBy', 'value' => [
-                ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
-            ]],
-        ]))->sort('number');
+        $this->_costCenters  = Tinebase_Controller_CostCenter::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_CostCenter::class, []))->sort('number');
         $this->_costCenterKeys[] = array();
         
         foreach($this->_costCenters as $cc) {

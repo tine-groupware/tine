@@ -30,8 +30,6 @@ class Sales_Model_DocumentPosition_Order extends Sales_Model_DocumentPosition_Ab
         $_definition[self::VERSION] = 3;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
-        $_definition[self::RECORD_NAME] = 'Order Position'; // ngettext('Order Position', 'Order Positions', n)
-        $_definition[self::RECORDS_NAME] = 'Order Positions'; // gettext('GENDER_Order Position')
 
         $_definition[self::FIELDS][self::FLD_PARENT_ID][self::CONFIG][self::MODEL_NAME] = self::MODEL_NAME_PART;
 

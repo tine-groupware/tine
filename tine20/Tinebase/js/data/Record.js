@@ -176,11 +176,6 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
         var _ = window.lodash,
             me = this;
 
-        const template = Tine.Tinebase.appMgr.get(this.appName).getRegistry().get('preferences')?.get(`${_.lowerFirst(this.modelName)}TitleTemplate`);
-        if (template) {
-            this.titleProperty = template;
-        }
-
         if (Tine.Tinebase.data.TitleRendererManager.has(this.appName, this.modelName)) {
             return Tine.Tinebase.data.TitleRendererManager.get(this.appName, this.modelName)(this);
         } else if (String(this.titleProperty).match(/[{ ]/)) {
@@ -196,7 +191,7 @@ Ext.extend(Tine.Tinebase.data.Record, Ext.data.Record, {
                 this.constructor.titleTwing = twingEnv;
             }
 
-            return this.constructor.titleTwing.renderProxy(this.constructor.getPhpClassName() + 'Title', Object.assign({record: this}, this.data));
+            return this.constructor.titleTwing.renderProxy(this.constructor.getPhpClassName() + 'Title', this.data);
         } else if (_.get(this.fields.get(this.titleProperty), 'fieldDefinition.config.specialType') === 'localizedString') {
             // const keyFieldDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(this.constructor, this.titleProperty);
             const languagesAvailableDef = _.get(this.constructor.getModelConfiguration(), 'languagesAvailable')
@@ -605,8 +600,6 @@ Tine.Tinebase.data.RecordMgr = new Tine.Tinebase.data.RecordManager(true);
  * @returns {Tine.Tinebase.data.Record}
  */
 Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
-    recordClass = Tine.Tinebase.data.RecordMgr.get(recordClass);
-    if (!recordClass) return null;
     var jsonReader = new Ext.data.JsonReader({
         id: recordClass.idProperty,
         root: 'results',
