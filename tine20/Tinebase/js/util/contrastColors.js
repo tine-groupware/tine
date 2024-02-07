@@ -5,6 +5,10 @@
 
 const contrastColors = {
   findBackground: (element, brightnesses = [], isRoot = true) => {
+    if (element.innerHTML === '') {
+      return;
+    }
+
     _.forEach(element.children, (c) => {
       if (c.classList.contains('felamimail-body-signature-current')) {
         return;
@@ -39,14 +43,14 @@ const contrastColors = {
       }, 0)
 
       let brightness = sum / count;
-      if (brightness > 128) {
+      if (brightness > 160) {
         if (contrastColors.getBrightness(getComputedStyle(element).backgroundColor) > 128
           || getComputedStyle(element).backgroundColor === 'rgba(0, 0, 0, 0)')
         {
           element.style.backgroundColor = '#171717'
           element.style.color = '#ffffff'
         }
-      } else {
+      } else if (brightness < 95) {
         if (contrastColors.getBrightness(getComputedStyle(element).backgroundColor) <= 128) {
           element.style.backgroundColor = '#F3F6F7'
           element.style.color = '#171717'
