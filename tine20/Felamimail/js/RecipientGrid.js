@@ -171,6 +171,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             token.contact_record = contactData;
             await this.updateRecipientsToken(record, [token], record.get('type'));
         }, this);
+        // reload store otherwise the recipients will not be updated
+        this.searchCombo.store.load({
+            params: this.searchCombo.getParams('')
+        });
     },
     
     /**
