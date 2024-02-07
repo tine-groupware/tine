@@ -620,16 +620,18 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
     
     /**
      * sets record related properties
-     * 
+     *
      * @param string $_name of property
      * @param mixed $_value of property
-     * @throws Tinebase_Exception_UnexpectedValue
      * @return void
+     * @throws Tinebase_Exception_Record_Validation
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     public function __set($_name, $_value)
     {
         if (! (isset($this->_validators[$_name]) || array_key_exists ($_name, $this->_validators))) {
-            throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of $this->_properties');
+            throw new Tinebase_Exception_UnexpectedValue($_name . ' is no property of '
+                . get_class($this) . ' properties');
         }
         
         if ($this->bypassFilters !== true) {
