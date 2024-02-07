@@ -30,6 +30,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE011 = __CLASS__ . '::update011';
     const RELEASE017_UPDATE012 = __CLASS__ . '::update012';
     const RELEASE017_UPDATE013 = __CLASS__ . '::update013';
+    const RELEASE017_UPDATE014 = __CLASS__ . '::update014';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -78,6 +79,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE013 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update013',
+            ],
+            self::RELEASE017_UPDATE014 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update014',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -493,5 +498,11 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             . Sales_Model_PurchaseInvoice::class . '" AND `type` = "COST_CENTER"');
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.13', self::RELEASE017_UPDATE013);
+    }
+
+    public function update014()
+    {
+        $this->setTableVersion('sales_numbers', 2);
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.14', self::RELEASE017_UPDATE014);
     }
 }
