@@ -8,8 +8,6 @@
  * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
-
 /**
  * class to hold data representing one object which can be inserted into the tree
  * 
@@ -91,7 +89,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 8,
+        self::VERSION       => 7,
         'modlogActive'      => true,
 
         'appName'           => 'Tinebase',
@@ -109,24 +107,8 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
                 'description'        => [
                     self::COLUMNS           => ['description'],
                     self::FLAGS             => ['fulltext'],
-                ],
-                'flysystem'         => [
-                    self::COLUMNS       => ['flysystem'],
-                ],
+                ]
             ]
-        ],
-
-        self::ASSOCIATIONS => [
-            ClassMetadataInfo::MANY_TO_ONE  => [
-                'flysystem'           => [
-                    self::TARGET_ENTITY             => Tinebase_Model_Tree_FlySystem::class,
-                    self::FIELD_NAME                => 'flysystem',
-                    self::JOIN_COLUMNS              => [[
-                        self::NAME                      => 'flysystem',
-                        self::REFERENCED_COLUMN_NAME    => 'id',
-                    ]],
-                ],
-            ],
         ],
 
         'fields'            => [
@@ -145,18 +127,6 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                     ['InArray', [self::TYPE_FOLDER, self::TYPE_FILE, self::TYPE_PREVIEW, self::TYPE_LINK]]
                 ],
-            ],
-            'flysystem'                     => [
-                self::TYPE                      => self::TYPE_RECORD,
-                self::NULLABLE                  => true,
-                self::CONFIG                    => [
-                    self::APP_NAME                  => Tinebase_Config::APP_NAME,
-                    self::MODEL_NAME                => Tinebase_Model_Tree_FlySystem::MODEL_NAME_PART,
-                ],
-            ],
-            'flypath'                       => [
-                self::TYPE                      => self::TYPE_TEXT,
-                self::NULLABLE                  => true,
             ],
             'contenttype'                   => [
                 self::TYPE                      => self::TYPE_STRING,

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Tinebase</name>
-    <version>17.7</version>
+    <version>16.7</version>
     <order>0</order>
     <minimumRequiredVersion>12.28</minimumRequiredVersion>
     <tables>
@@ -3080,7 +3080,7 @@
         </table>
         <table>
             <name>numberable</name>
-            <version>2</version>
+            <version>1</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -3092,8 +3092,7 @@
                     <name>bucket</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>true</notnull>
-                    <default/>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>number</name>

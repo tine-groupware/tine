@@ -51,7 +51,6 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_Product::MODEL_NAME_PART,
         Sales_Model_ProductLocalization::MODEL_NAME_PART,
         Sales_Model_SubProductMapping::MODEL_NAME_PART,
-        Sales_Model_Document_Offer::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Offer::MODEL_NAME_PART,
         Sales_Model_Document_Order::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Order::MODEL_NAME_PART,
@@ -59,22 +58,11 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Sales_Model_DocumentPosition_Delivery::MODEL_NAME_PART,
         Sales_Model_Document_Invoice::MODEL_NAME_PART,
         Sales_Model_DocumentPosition_Invoice::MODEL_NAME_PART,
-        Sales_Model_Debitor::MODEL_NAME_PART,
-        Sales_Model_Document_Debitor::MODEL_NAME_PART,
-        Sales_Model_Division::MODEL_NAME_PART,
-        Sales_Model_DivisionGrants::MODEL_NAME_PART,
-        Sales_Model_Document_Category::MODEL_NAME_PART,
-        Sales_Model_DivisionEvalDimensionItem::MODEL_NAME_PART,
-//        'OrderConfirmation',
-//        'PurchaseInvoice',
-//        'Offer',
-//        'Supplier',
         'Contract',
         'Customer',
         'Address',
         'ProductAggregate',
-        'Boilerplate',
-        'Invoice',
+        'Boilerplate'
     );
     
     /**
@@ -178,7 +166,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function searchContracts($filter, $paging)
     {
         return $this->_search($filter, $paging, Sales_Controller_Contract::getInstance(), 'Sales_Model_ContractFilter',
-            /* $_getRelations */ array('Sales_Model_Customer', 'Addressbook_Model_Contact', Tinebase_Model_EvaluationDimensionItem::class,));
+            /* $_getRelations */ array('Sales_Model_Customer', 'Addressbook_Model_Contact', 'Tinebase_Model_CostCenter'));
     }
 
     /**
@@ -195,11 +183,11 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         // TODO: resolve this in controller
         if (! empty($contract['products']) && is_array($contract['products'])) {
-            $prds = Sales_Controller_Product::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, array()));
+            $cc = Sales_Controller_Product::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Product::class, array()));
             for ($i = 0; $i < count($contract['products']); $i++) {
-                $prd = $prds->filter('id', $contract['products'][$i]['product_id'])->getFirstRecord();
-                if ($prd) {
-                    $contract['products'][$i]['product_id'] = $prd->toArray();
+                $costCenter = $cc->filter('id', $contract['products'][$i]['product_id'])->getFirstRecord();
+                if ($costCenter) {
+                    $contract['products'][$i]['product_id'] = $costCenter->toArray();
                 }
                 if (Tinebase_Application::getInstance()->isInstalled('WebAccounting')) {
                     if (isset($contract['products'][$i]['json_attributes']['assignedAccountables'])) {
@@ -585,8 +573,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (isset($recordData['address_id']) && is_array($recordData["address_id"])) {
             $recordData["address_id"] = $recordData["address_id"]['id'];
         }
-        if (isset($recordData['eval_dim_cost_center']) && is_array($recordData["eval_dim_cost_center"])) {
-            $recordData["eval_dim_cost_center"] = $recordData["eval_dim_cost_center"]['id'];
+        if (isset($recordData['costcenter_id']) && is_array($recordData["costcenter_id"])) {
+            $recordData["costcenter_id"] = $recordData["costcenter_id"]['id'];
         }
         // sanitize product_id
         if (isset($recordData['positions']) && is_array($recordData['positions'])) {
@@ -640,7 +628,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, Sales_Controller_PurchaseInvoice::getInstance(),
             'Sales_Model_PurchaseInvoiceFilter',
-            ['Sales_Model_Supplier', Tinebase_Model_EvaluationDimensionItem::class, 'Addressbook_Model_Contact']);
+            ['Sales_Model_Supplier', 'Tinebase_Model_CostCenter', 'Addressbook_Model_Contact']);
     }
     
     /**

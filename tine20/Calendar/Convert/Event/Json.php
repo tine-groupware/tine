@@ -43,7 +43,7 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         Calendar_Model_Attender::resolveAttendee($_record->attendee, TRUE, $_record);
         self::resolveRrule($_record);
         self::resolvePoll($_record);
-//        self::resolveEventTypes($_record); // not needed here as it comes from mc
+        self::resolveEventTypes($_record);
         self::resolveOrganizer($_record);
         self::resolveLocationRecord($_record);
         self::resolveGrantsOfExternalOrganizers($_record);

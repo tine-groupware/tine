@@ -30,8 +30,8 @@ Tine.Addressbook.Model.ContactMixin = {
         return (this.get(preferred) || this.get(other));
     },
     
-    getTitle: function(options) {
-        var result = Tine.Tinebase.data.Record.prototype.getTitle.call(this, options);
+    getTitle: function() {
+        var result = this.get('n_fileas');
 
         var tinebaseApp = new Tine.Tinebase.Application({
             appName: 'Tinebase'

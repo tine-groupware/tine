@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2016-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,8 +15,6 @@
  */
 class Phone_Config extends Tinebase_Config_Abstract
 {
-    public const APP_NAME = 'Phone';
-
     /**
      * @var string
      */

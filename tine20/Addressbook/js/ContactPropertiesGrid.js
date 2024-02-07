@@ -41,31 +41,6 @@ export default (config) => {
         config.customRenderers[name] = Tine.widgets.grid.RendererManager.get(app.appName, config.recordClass, field.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
     });
 
-    // config.isValid = function() {
-    //     let valid = true;
-    //     const values = this.getSource();
-    //     _.forEach(config.customEditors, (gridEditor, name) => {
-    //         const field = gridEditor.field;
-    //         field.setValue(values[name]);
-    //         if (!field.validate()) {
-    //             valid = false;
-    //             // mark row invalid somehow!
-    //             return false;
-    //         }
-    //     });
-    //     return valid;
-    // };
-    //
-    // /* needed for isFormField cycle */
-    // config.isFormField = true;
-    // config.markInvalid = Ext.form.Field.prototype.markInvalid;
-    // config.clearInvalid = Ext.form.Field.prototype.clearInvalid;
-    // config.getMessageHandler = Ext.form.Field.prototype.getMessageHandler;
-    // config.getName = Ext.form.Field.prototype.getName;
-    // config.getValue = Ext.emptyFn;
-    // config.setValue = Ext.emptyFn;
-    // config.validate = function() { return this.isValid(); };
-
     const propertyGrid = new Ext.grid.PropertyGrid(Object.assign({
         border: false,
         hideHeaders: true,

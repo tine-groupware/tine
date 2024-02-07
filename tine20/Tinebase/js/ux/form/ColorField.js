@@ -103,11 +103,8 @@ Ext.ux.form.ColorField = Ext.extend(Ext.form.TriggerField, {
     
     //private
     onSelect: function(m, d){
-        if (d !== null) {
-            d = '#'+d
-        }
-        this.setValue(d);
-        this.fireEvent('select', this, d);
+        this.setValue('#'+d);
+        this.fireEvent('select', this, '#'+d);
 
         if (this.inEditor && this.editor) {
             this.editor.completeEdit();

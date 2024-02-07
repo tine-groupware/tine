@@ -35,7 +35,7 @@ class Tinebase_WebDav_Plugin_ACLTest extends Tinebase_WebDav_Plugin_AbstractBase
         ];
         $this->server->addPlugin($this->plugin);
         $this->server->addPlugin(
-            new \Tine20\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
+            new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
         );
     }
 
@@ -52,7 +52,7 @@ class Tinebase_WebDav_Plugin_ACLTest extends Tinebase_WebDav_Plugin_AbstractBase
                      </A:prop>
                  </A:propfind>';
 
-        $request = new Tine20\HTTP\Request(array(
+        $request = new Sabre\HTTP\Request(array(
             'REQUEST_METHOD' => 'OPTIONS',
             'REQUEST_URI'    => '/webdav/Filemanager',
         ));

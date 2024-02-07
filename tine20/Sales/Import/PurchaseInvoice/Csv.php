@@ -62,14 +62,20 @@ class Sales_Import_PurchaseInvoice_Csv extends Tinebase_Import_Csv_Abstract
     protected function _setCostCenter($result)
     {
         if (!empty($result['costcenter'])) {
-            $costCenters = Tinebase_Controller_EvaluationDimensionItem::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimensionItem::class, [
-                ['field' => Tinebase_Model_EvaluationDimensionItem::FLD_EVALUATION_DIMENSION_ID, 'operator' => 'definedBy', 'value' => [
-                    ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
-                ]],
-            ]));
+            $costCenters = Tinebase_Controller_CostCenter::getInstance()->getAll();
             foreach ($costCenters as $costCenter) {
                 if ($costCenter['name'] == $result['costcenter']) {
-                    $result['eval_dim_cost_center'] = $costCenter['id'];
+                    $result['relations'][] =
+                        array(
+                            'own_model' => 'Sales_Model_PurchaseInvoice',
+                            'own_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                            'own_id' => NULL,
+                            'related_degree' => Tinebase_Model_Relation::DEGREE_SIBLING,
+                            'related_model' => Tinebase_Model_CostCenter::class,
+                            'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
+                            'related_id' => $costCenter['id'],
+                            'type' => 'LEAD_COST_CENTER'
+                        );
                 }
             }
         }

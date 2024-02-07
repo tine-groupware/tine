@@ -17,7 +17,7 @@
  * @subpackage  Import
  * 
  */
-class Tinebase_Import_CalDav_Client extends \Tine20\DAV\Client
+class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
 {
     /**
      * used to overwrite default retry behavior (if != null)
@@ -64,8 +64,8 @@ class Tinebase_Import_CalDav_Client extends \Tine20\DAV\Client
         
         //$this->requestLogFH = fopen('/var/log/tine20/requestLog', 'w');
         
-        $this->propertyMap['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] = 'Tine20\CalDAV\Property\SupportedCalendarComponentSet';
-        $this->propertyMap['{DAV:}acl'] = 'Tine20\DAVACL\Property\Acl';
+        $this->propertyMap['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] = 'Sabre\CalDAV\Property\SupportedCalendarComponentSet';
+        $this->propertyMap['{DAV:}acl'] = 'Sabre\DAVACL\Property\Acl';
         $this->propertyMap['{DAV:}group-member-set'] = 'Tinebase_Import_CalDav_GroupMemberSet';
     }
     

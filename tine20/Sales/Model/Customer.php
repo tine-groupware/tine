@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,14 +18,11 @@
  * @property string $name_shorthand
  * @property string $cpextern_id
  */
-class Sales_Model_Customer extends Tinebase_Record_NewAbstract
+class Sales_Model_Customer extends Tinebase_Record_Abstract
 {
     public const MODEL_NAME_PART = 'Customer';
-    public const TABLE_NAME = 'sales_customers';
 
-    public const FLD_DEBITORS = 'debitors';
-    public const FLD_VAT_PROCEDURE = 'vat_procedure';
-
+    const FLD_VAT_PROCEDURE = 'vat_procedure';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -40,54 +37,30 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        self::VERSION                   => 6,
-        self::APP_NAME                  => Sales_Config::APP_NAME,
-        self::MODEL_NAME                => self::MODEL_NAME_PART,
-        self::RECORD_NAME               => 'Customer', // gettext('GENDER_Customer')
-        self::RECORDS_NAME              => 'Customers', // ngettext('Customer', 'Customers', n)
-        self::TITLE_PROPERTY            => 'name',
+        'recordName'        => 'Customer', // gettext('GENDER_Customer')
+        'recordsName'       => 'Customers', // ngettext('Customer', 'Customers', n)
+        'hasRelations'      => TRUE,
+        'hasCustomFields'   => TRUE,
+        'hasNotes'          => TRUE,
+        'hasTags'           => TRUE,
+        'modlogActive'      => TRUE,
+        'hasAttachments'    => TRUE,
+        'createModule'      => TRUE,
+        'containerProperty' => NULL,
 
-        self::HAS_RELATIONS             => true,
-        self::HAS_CUSTOM_FIELDS         => true,
-        self::HAS_NOTES                 => true,
-        self::HAS_TAGS                  => true,
-        self::HAS_ATTACHMENTS           => true,
+        'exposeHttpApi'     => true,
+        
+        'titleProperty'     => 'name',
+        'appName'           => 'Sales',
+        'modelName'         => self::MODEL_NAME_PART,
 
-        self::MODLOG_ACTIVE             => true,
-        self::CONTAINER_PROPERTY        => null,
-        self::DELEGATED_ACL_FIELD       => self::FLD_DEBITORS,
-
-        self::CREATE_MODULE             => true,
-        self::EXPOSE_HTTP_API           => true,
-
-        self::DEFAULT_SORT_INFO         => ['field' => 'number', 'direction' => 'DESC'],
-
-        self::TABLE                     => [
-            self::NAME                      => self::TABLE_NAME,
-            self::INDEXES                   => [
-                'description'                   => [
-                    self::COLUMNS                   => ['description'],
-                    self::FLAGS                     => [self::TYPE_FULLTEXT],
-                ],
-            ],
-        ],
+        'defaultSortInfo'   => ['field' => 'number', 'direction' => 'DESC'],
 
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                self::FLD_DEBITORS => [
-                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        Sales_Model_Debitor::FLD_DIVISION_ID  => [],
-                        Sales_Model_Debitor::FLD_BILLING      => [
-                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['relations' => []],
-                        ],
-                        Sales_Model_Debitor::FLD_DELIVERY     => [
-                            Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['relations' => []],
-                        ],
-                    ],
-                ],
-                'postal'        => [
-                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => ['relations' => []],
-                ],
+                'delivery'      => [],
+                'billing'       => [],
+                'postal'        => [],
                 'cpextern_id'   => [],
                 'cpintern_id'   => [],
             ],
@@ -98,6 +71,7 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
                 self::OPTIONS => [
                     self::MODEL_NAME    => Sales_Model_Document_Offer::MODEL_NAME_PART,
+
                 ],
                 'jsConfig'          => [
                     'filtertype' => 'foreignrecord',
@@ -112,6 +86,7 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
                 self::OPTIONS => [
                     self::MODEL_NAME    => Sales_Model_Document_Order::MODEL_NAME_PART,
+
                 ],
                 'jsConfig'          => [
                     'filtertype' => 'foreignrecord',
@@ -126,6 +101,7 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
                 self::OPTIONS => [
                     self::MODEL_NAME    => Sales_Model_Document_Invoice::MODEL_NAME_PART,
+
                 ],
                 'jsConfig'          => [
                     'filtertype' => 'foreignrecord',
@@ -140,6 +116,7 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 self::FILTER => Sales_Model_Document_CustomerDocumentFilter::class,
                 self::OPTIONS => [
                     self::MODEL_NAME    => Sales_Model_Document_Delivery::MODEL_NAME_PART,
+
                 ],
                 'jsConfig'          => [
                     'filtertype' => 'foreignrecord',
@@ -155,12 +132,12 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
             'number' => array(
                 'label'       => 'Customer Number', //_('Customer Number')
                 'group'       => 'core',
-                'queryFilter' => true,
-                self::TYPE    => self::TYPE_NUMBERABLE_STRING,
-                self::CONFIG  => [
-                    Tinebase_Numberable_Abstract::BUCKETKEY => self::CLASS . '#number',
-                    Tinebase_Numberable_String::ZEROFILL => 6,
-                ],
+                // TODO number can't be part of query filter because it is an integer
+                // for mysql it is ok, but for pgsql we need a typecast...
+                //'queryFilter' => TRUE,
+                'type'        => self::TYPE_BIGINT,
+                self::UNSIGNED => true,
+//                self::DEFAULT_VAL => 0, // -> no default to autopick number
             ),
             'name' => array(
                 'label'       => 'Name', // _('Name')
@@ -229,21 +206,10 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 self::LABEL => 'VAT Procedure', // _('VAT Procedure')
                 self::TYPE => self::TYPE_KEY_FIELD,
                 self::NAME => Sales_Config::VAT_PROCEDURES,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
             ],
-            'iban' => array (
-                'label'   => 'IBAN',
-                self::TYPE => self::TYPE_TEXT,
-                'group'   => 'accounting',
-                'shy'     => TRUE,
-                self::NULLABLE => true,
-            ),
-            'bic' => array (
-                'label'   => 'BIC',
-                self::TYPE => self::TYPE_TEXT,
-                'group'   => 'accounting',
-                'shy'     => TRUE,
-                self::NULLABLE => true,
-            ),
             'credit_term' => array (
                 'label'   => 'Credit Term (days)', // _('Credit Term (days)')
                 'type'    => 'integer',
@@ -264,10 +230,23 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 'label'   => 'Currency Translation Rate', // _('Currency Translation Rate')
                 'type'    => 'float',
                 'group'   => 'accounting',
+                'default' => 1,
                 'shy'     => TRUE,
                 self::NULLABLE => true,
-                self::UNSIGNED => true,
+                self::UNSIGNED => true, // TODO FIXME doesnt work?!
                 'inputFilters' => array('Zend_Filter_Empty' => null),
+            ),
+            'iban' => array (
+                'label'   => 'IBAN',
+                'group'   => 'accounting',
+                'shy'     => TRUE,
+                self::NULLABLE => true,
+            ),
+            'bic' => array (
+                'label'   => 'BIC',
+                'group'   => 'accounting',
+                'shy'     => TRUE,
+                self::NULLABLE => true,
             ),
             'discount' => array (
                 'label'   => 'Discount (%)', // _('Discount (%)')
@@ -276,6 +255,40 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                 self::NULLABLE => true,
                 self::UNSIGNED => true, // TODO FIXME doesnt work?!
                 'inputFilters' => array('Zend_Filter_Empty' => null),
+            ),
+            'delivery' => array (
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Delivery Addresses', // _('Delivery Addresses')
+                'type'       => 'records',
+                'config'     => array(
+                    'appName'          => 'Sales',
+                    'modelName'        => 'Address',
+                    'refIdField'       => 'customer_id',
+                    'addFilters'       => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'delivery')),
+                    'paging'           => array('sort' => 'locality', 'dir' => 'ASC'),
+                    'dependentRecords' => TRUE,
+                    self::FORCE_VALUES      => [
+                        'type'                  => 'delivery',
+                    ],
+                ),
+            ),
+            'billing' => array(
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
+                'label'      => 'Billing Addresses', // _('Billing Addresses')
+                'type'       => 'records',
+                'config'     => array(
+                    // we need the billing address on search in the contract-customer combo to automatically set the first billing address
+                    'omitOnSearch'     => FALSE,
+                    'appName'          => 'Sales',
+                    'modelName'        => 'Address',
+                    'refIdField'       => 'customer_id',
+                    'addFilters'       => array(array('field' => 'type', 'operator' => 'equals', 'value' => 'billing')),
+                    'paging'           => array('sort' => 'locality', 'dir' => 'ASC'),
+                    'dependentRecords' => TRUE,
+                    self::FORCE_VALUES      => [
+                        'type'                  => 'billing',
+                    ],
+                ),
             ),
             'postal' => [
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL],
@@ -289,27 +302,8 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
                     self::DEPENDENT_RECORDS => true,
                     self::FORCE_VALUES      => [
                         'type'                  => 'postal',
-                        Sales_Model_Address::FLD_DEBITOR_ID => null,
                     ],
                 ]
-            ],
-            self::FLD_DEBITORS   => [
-                self::TYPE              => self::TYPE_RECORDS,
-                self::LABEL             => 'Debitors', // _('Debitors')
-                self::CONFIG            => [
-                    self::APP_NAME          => Sales_Config::APP_NAME,
-                    self::MODEL_NAME        => Sales_Model_Debitor::MODEL_NAME_PART,
-                    self::REF_ID_FIELD      => Sales_Model_Debitor::FLD_CUSTOMER_ID,
-                    self::DEPENDENT_RECORDS => true,
-                ],
-                self::VALIDATORS        => [
-                    Zend_Filter_Input::ALLOW_EMPTY => false,
-                    Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
-                ],
-                self::UI_CONFIG         => [
-                    'columns'               => [ Sales_Model_Debitor::FLD_NUMBER, Sales_Model_Debitor::FLD_NAME, Sales_Model_Debitor::FLD_DIVISION_ID ],
-                    'editDialogConfig'      => ['fieldsToExclude' => [Sales_Model_Debitor::FLD_CUSTOMER_ID]]
-                ],
             ],
             'fulltext' => array(
                 'type'   => 'virtual',
@@ -320,10 +314,20 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
             ),
         )
     );
-
-    public function hydrateFromBackend(array &$data)
+    
+    /**
+     * sets the record related properties from user generated input.
+     *
+     * Input-filtering and validation by Zend_Filter_Input can enabled and disabled
+     *
+     * @param array $_data            the new data to set
+     * @throws Tinebase_Exception_Record_Validation when content contains invalid or missing data
+     *
+     * @todo remove custom fields handling (use Tinebase_Record_RecordSet for them)
+     */
+    public function setFromArray(array &$_data)
     {
-        parent::hydrateFromBackend($data);
+        parent::setFromArray($_data);
         $this->fulltext = $this->number . ' - ' . $this->name;
     }
     

@@ -1490,7 +1490,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $db->query('SET foreign_key_checks = 0');
                     $setupBackend->dropIndex('tree_nodes', 'parent_id-name');
                 } catch (Zend_Db_Statement_Exception $zdse) {
-                    echo $zdse->getMessage() . "\n";
+                    echo 'Could not drop key/index (error: ' . $zdse->getMessage() . ")\n";
                 } finally {
                     $db->query('SET foreign_key_checks = 0');
                 }

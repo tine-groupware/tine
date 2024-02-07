@@ -45,12 +45,12 @@ class Sales_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
     
     /**
      * (non-PHPdoc)
-     * @see Tine20\DAV\Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($name)
     {
         if (!isset($this->_modules[$name]) || !$this->_hasModuleRight($this->_modules[$name]['right'])) {
-            throw new \Tine20\DAV\Exception\NotFound("Directory $this->_path/$name not found");
+            throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
         }
         
         return new Sales_Frontend_WebDAV_Module($this->_path . '/' . $name);
@@ -62,7 +62,7 @@ class Sales_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
      * 
      * the records subtree is not returned as child here. It's only available via getChild().
      *
-     * @return \Tine20\DAV\INode[]
+     * @return \Sabre\DAV\INode[]
      */
     function getChildren()
     {

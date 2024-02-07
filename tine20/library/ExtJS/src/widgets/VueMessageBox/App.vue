@@ -12,10 +12,10 @@
           @close="closeBox" :style="{'z-index': otherConfigs.zIndex}"
   >
     <template #default>
-      <div class="container">
+      <div class="container" :style="`--skin-color: ${opt.skinColor}`">
         <div class="row">
           <div class="col-3" v-if="props.opt.icon">
-            <PersonaContainer :iconName="opt.icon" :skinColor="opt?.skinColor"/>
+            <div v-html="rawSvg" class="dark-reverse vue-msg-box-svg-container"></div>
           </div>
           <div class="col">
             <div class="pb-1 mb-1">
@@ -55,7 +55,9 @@
 // TODO: change the progressBar according to `props.opt.waitConfig` if available
 // NOTE: Ext.MessageBox.wait is currently not used with any waitConfig, so
 // the implementation is not given top priority
-import {computed, inject, onBeforeMount, ref, watch} from "vue"
+import {computed, inject, onBeforeMount, ref, watch, onMounted, onUpdated} from "vue"
+
+import getIconPath from "./helpers";
 
 import {SymbolKeys} from ".";
 
@@ -67,8 +69,13 @@ const textAreaField = ref();
 const progressBarVisibility = ref(false);
 const textAreaHeight = ref(0);
 const textElValue = ref("");
+const rawSvg = ref()
 
 const init = async function () {
+  if (props.opt.icon) {
+    const {default: img} = await import(/* webpackChunkName: "Tinebase/js/[request]"*/`images/dialog-personas/${getIconPath(props.opt.icon)}.svg`)
+    rawSvg.value = window.atob(img.split(",")[1])
+  }
   if (props.opt.prompt) {
     if (props.opt.multiline) {
       textBoxElVisibility.value = false;
@@ -126,12 +133,23 @@ watch(() => props.otherConfigs.visible, newVal => {
 })
 
 onBeforeMount(async () => {
+  await import(/* webpackChunkName: "Tinebase/js/CustomBootstrapVueStyles" */"library/ExtJS/src/widgets/VueMessageBox/styles.scss")
   await init();
 })
 </script>
 
 <style lang="scss">
+.container {
+  --skin-color: #FFFFFF;
+}
+
 .vue-button.x-tool-close {
   background-image: none !important;
+}
+
+.vue-msg-box-svg-container {
+  .skin {
+    fill: var(--skin-color) !important;
+  }
 }
 </style>

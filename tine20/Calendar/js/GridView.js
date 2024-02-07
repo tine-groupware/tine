@@ -48,7 +48,6 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
-        this.recordClass = Tine.Calendar.Model.Event
         
         this.store.sort(this.defaultSortInfo.field, this.defaultSortInfo.direction);
         
@@ -194,14 +193,17 @@ Tine.Calendar.GridView = Ext.extend(Ext.grid.GridPanel, {
  *
  * @return Ext.grid.ColumnModel
  */
-Tine.Calendar.GridView.initCM = function(app) {
-    const additionalColumns = Tine.widgets.grid.GridPanel.prototype.getCustomfieldColumns.call({recordClass:Tine.Calendar.Model.Event, app}) || [];
+Tine.Calendar.GridView.initCM = function(app, additionalColumns) {
+    if (! additionalColumns) {
+        additionalColumns = [];
+    }
+
     return new Ext.grid.ColumnModel({
         defaults: {
             sortable: true,
             resizable: true
         },
-        columns: [{
+        columns: additionalColumns.concat([{
             id: 'attachments',
             header: '<div class="action_attach tine-grid-row-action-icon"></div>',
             tooltip: window.i18n._('Attachments'),
@@ -299,6 +301,6 @@ Tine.Calendar.GridView.initCM = function(app) {
                 }
                 return Ext.util.Format.htmlEncode(description);
             }
-        }].concat(additionalColumns)
+        }])
     });
 };

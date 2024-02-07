@@ -144,6 +144,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 case 'from':
                 case 'display_format':
                 case 'compose_format':
+                case 'preserve_format':
                 case 'organization':
                 case 'reply_to':
                 case 'save_sent_mail_copy':
@@ -829,12 +830,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     editable      : false,
                     mode          : 'local',
                     forceSelection: true,
-                    value: 'content_type',
+                    value: 'html',
                     xtype: 'combo',
                     store: [
                         ['html', this.app.i18n._('HTML')],
                         ['plain',  this.app.i18n._('Plain Text')],
-                        ['content_type',  this.app.i18n._('Depending on content format')]
+                        //TODO: content_type should not be experimental anymore
+                        ['content_type',  this.app.i18n._('Depending on content type (experimental)')]
                     ]
                 }], [{
                     fieldLabel: this.app.i18n._('Compose Format'),
@@ -850,6 +852,21 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     store: [
                         ['html', this.app.i18n._('HTML')],
                         ['plain',  this.app.i18n._('Plain Text')]
+                    ]
+                }], [{
+                    fieldLabel: this.app.i18n._('Preserve Format'),
+                    name: 'preserve_format',
+                    typeAhead     : false,
+                    triggerAction : 'all',
+                    lazyRender    : true,
+                    editable      : false,
+                    mode          : 'local',
+                    forceSelection: true,
+                    value: '0',
+                    xtype: 'combo',
+                    store: [
+                        [0, this.app.i18n._('No')],
+                        [1,  this.app.i18n._('Yes')]
                     ]
                 }], [{
                     fieldLabel: this.app.i18n._('Reply-To Email'),

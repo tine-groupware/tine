@@ -1,5 +1,5 @@
-.x-box-inner .ux-imagefield-ct.x-form-field.x-box-item {
-    border: 1px solid #B5B8C8;
+.ux-imagefield-ct {
+    border: 1px solid #B5B8C8 !important;
     background-color: transparent !important;
 }
 .ux-imagefield-button{

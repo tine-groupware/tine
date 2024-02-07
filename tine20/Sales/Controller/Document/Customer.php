@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -37,5 +37,28 @@ class Sales_Controller_Document_Customer extends Tinebase_Controller_Record_Abst
         $this->_modelName = Sales_Model_Document_Customer::class;
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+    }
+
+    /**
+     * inspect creation of one record (before create)
+     *
+     * @param   Sales_Model_SubProductMapping $_record
+     * @return  void
+     */
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        parent::_inspectBeforeCreate($_record);
+
+
+    }
+
+    /**
+     * @param Sales_Model_SubProductMapping $_record
+     * @param Sales_Model_SubProductMapping $_oldRecord
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+
+        parent::_inspectBeforeUpdate($_record, $_oldRecord);
     }
 }

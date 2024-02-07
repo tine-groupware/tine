@@ -24,7 +24,7 @@ Ext.ns('Tine.Sales');
  */
 Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowWidth: 900,
-    windowHeight: 1000,
+    windowHeight: 800,
     displayNotes: true,
     
     initComponent: function() {
@@ -150,7 +150,27 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         var currency = Tine.Sales.registry.get('config').ownCurrency.value;
-
+        
+        this.billingAddressGridPanel = new Tine.Sales.BillingAddressGridPanel({
+            app: this.app,
+            editDialog: this,
+            frame: false,
+            border: true,
+            autoScroll: true,
+            layout: 'border',
+            editDialogRecordProperty: 'billing'
+        });
+        
+        this.deliveryAddressGridPanel = new Tine.Sales.DeliveryAddressGridPanel({
+            app: this.app,
+            editDialog: this,
+            frame: false,
+            border: true,
+            autoScroll: true,
+            layout: 'border',
+            editDialogRecordProperty: 'delivery'
+        });
+        
         return {
             xtype: 'tabpanel',
             defaults: {
@@ -165,7 +185,6 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             border: false,
             frame: true,
             layout: 'border',
-            defaults: { autoScroll: true },
             items: [{
                 region: 'center',
                 layout: 'hfit',
@@ -179,10 +198,24 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         xtype: 'columnform',
                         labelAlign: 'top',
                         formDefaults: formFieldDefaults,
-                        items: [[
-                            fieldManager('number', {
-                                columnWidth: .250
-                            }), {
+                        items: [[{
+                                fieldLabel: this.app.i18n._('Customer Number'),
+                                name: 'number',
+                                allowBlank: true,
+                                nullable: true,
+                                columnWidth: .250,
+                                minValue: 1,
+                                maxValue: 4294967296,
+                                xtype: 'uxspinner',
+                                strategy: new Ext.ux.form.Spinner.NumberStrategy({
+                                    incrementValue : 1,
+                                    alternateIncrementValue: 1,
+                                    minValue: 1,
+                                    maxValue: 4294967296,
+                                }),
+                                allowDecimals : false,
+                                useThousandSeparator : false,
+                            }, {
                                 columnWidth: .750,
                                 allowBlank: false,
                                 fieldLabel: this.app.i18n._('Name'),
@@ -271,15 +304,6 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }
                         ]]
                     }]
-                }, {
-                    xtype: 'fieldset',
-                    hidden: this.denormalizationRecordClass,
-                    layout: 'hfit',
-                    autoHeight: true,
-                    title: this.app.i18n._('Debitors'),
-                    items: [
-                        fieldManager('debitors')
-                    ]
                 }, {
                     xtype: 'fieldset',
                     layout: 'hfit',
@@ -434,8 +458,9 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     })
                 ]
             }]
-        },
-            new Tine.widgets.activities.ActivitiesTabPanel({
+        }, this.billingAddressGridPanel,
+           this.deliveryAddressGridPanel,
+           new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
                 record_model: 'Sales_Model_Customer'

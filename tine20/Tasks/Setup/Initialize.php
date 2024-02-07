@@ -43,30 +43,32 @@ class Tasks_Setup_Initialize extends Setup_Initialize
         ))));
 
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "My responsibility",                      // _("My responsibility")
+            'name'              => "My open tasks",
+            'description'       => "My open tasks", // _("My open tasks")
+            'filters'           => array(
+                array('field' => 'organizer', 'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
+                array('field' => 'status',    'operator' => 'notin',  'value' => $closedStatus->getId()),
+            )
+        ))));
+        
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "My open tasks this week",
+            'description'       => "My open tasks this week", // _("My open tasks this week")
+            'filters'           => array(
+                array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
+                array('field' => 'due',          'operator' => 'within', 'value' => 'weekThis'),
+                array('field' => 'status',    'operator' => 'notin',  'value' => $closedStatus->getId()),
+            )
+        ))));
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "All tasks for me",                      // _("All tasks for me")
             'description'       => "All tasks that I am responsible for",   // _("All tasks that I am responsible for")
             'filters'           => array(
                 array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
             )
         ))));
-
-        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "To be done for me",                      // _("All tasks for me")
-            'description'       => "All tasks to be done for me",   // _("All tasks that I am responsible for")
-            'filters'           => array(
-                array('field' => 'tasksDue',    'operator' => 'equals', 'value' => Addressbook_Model_Contact::CURRENTCONTACT),
-            )
-        ))));
-
-        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "To be done for me this week",
-            'description'       => "To be done for me this week", // _("To be done for me this week")
-            'filters'           => array(
-                array('field' => 'due',         'operator' => 'within', 'value' => 'weekThis'),
-                array('field' => 'tasksDue',    'operator' => 'equals', 'value' => Addressbook_Model_Contact::CURRENTCONTACT),
-            )
-        ))));
-
+        
         $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
             'name'              => "Last modified by me", // _("Last modified by me")
             'description'       => "All tasks that I have last modified", // _("All tasks that I have last modified")

@@ -1408,6 +1408,97 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
 
     /**
+     * test if a user, who has no manage_invoices - right, is able tosave a timeaccount having an invoice linked
+     */
+    public function testUpdateInvoiceLinkedTimeaccount()
+    {
+        $this->markTestSkipped('0010492: fix failing invoices and timetracker tests');
+
+        $ta = $this->_getTimeaccount(array('title' => 'to find'), true);
+        $cc = Tinebase_Controller_CostCenter::getInstance()->create(new Tinebase_Model_CostCenter(array('number' => 1, 'title' => 'test')));
+
+        $customer = Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer(array(
+            'number' => 100,
+            'name' => 'test',
+            'description' => 'unittest',
+            'credit_term' => 1
+        )));
+
+        $address = Sales_Controller_Address::getInstance()->create(new Sales_Model_Address(array(
+            'street' => 'teststreet',
+            'locality' => 'testcity',
+            'customer_id' => $customer->id,
+            'postalcode' => 12345
+        )));
+
+        $invoice = Sales_Controller_Invoice::getInstance()->create(new Sales_Model_Invoice(array(
+            'description' => 'test',
+            'address_id' => $address->id,
+            'date' => Tinebase_DateTime::now(),
+            'credit_term' => 1,
+            'type' => 'INVOICE',
+            'start_date' => Tinebase_DateTime::now(),
+            'end_date' => Tinebase_DateTime::now()->addMonth(1),
+            'costcenter_id' => $cc->id
+        )));
+
+        Tinebase_Relations::getInstance()->setRelations('Sales_Model_Invoice', 'Sql', $invoice->id, array(array(
+            'related_id' => $ta->id,
+            'related_model' => 'Timetracker_Model_Timeaccount',
+            'related_degree' => 'sibling',
+            'type' => 'INVOICE'
+        )));
+
+        // fetch user group
+        $group   = Tinebase_Group::getInstance()->getDefaultGroup();
+        $groupId = $group->getId();
+
+        // create new user
+        $user = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'testuser',
+            'accountPrimaryGroup'   => $groupId,
+            'accountDisplayName'    => 'Test User',
+            'accountLastName'       => 'User',
+            'accountFirstName'      => 'Test',
+            'accountFullName'       => 'Test User',
+            'accountEmailAddress'   => 'unittestx8@' . TestServer::getPrimaryMailDomain(),
+        ));
+
+        $user = Admin_Controller_User::getInstance()->create($user, 'pw', 'pw');
+
+        // add tt-ta admin right to user role to allow user to update (manage) timeaccounts
+        // user has no right to see sales contracts
+        $fe = new Admin_Frontend_Json();
+        $userRoles = $fe->getRoles('user', array(), array(), 0, 1);
+        $userRole = $fe->getRole($userRoles['results'][0]['id']);
+
+        $roleRights = $fe->getRoleRights($userRole['id']);
+        $roleMembers = $fe->getRoleMembers($userRole['id']);
+        $roleMembers['results'][] = array('name' => 'testuser', 'type' => 'user', 'id' => $user->accountId);
+
+        $app = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
+
+        $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS);
+        $roleRights['results'][] = array('application_id' => $app->getId(), 'right' => Tinebase_Acl_Rights::ADMIN);
+        $fe->saveRole($userRole, $roleMembers['results'], $roleRights['results']);
+
+        // switch to other user
+        $this->_testUser = Tinebase_Core::getUser();
+        Tinebase_Core::set(Tinebase_Core::USER, $user);
+
+        $ta = $this->_json->getTimeaccount($ta->id);
+        $this->assertTrue(empty($ta['relations']), 'relations are not empty: ' . print_r($ta['relations'], true));
+
+        // this must be possible
+        $ta = $this->_json->saveTimeaccount($ta);
+
+        Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+
+        $ta = $this->_json->getTimeaccount($ta['id']);
+        $this->assertTrue(count($ta['relations']) == 1);
+    }
+
+    /**
      * try to add a Timesheet
      */
     public function testTimesheetInvoiceId()

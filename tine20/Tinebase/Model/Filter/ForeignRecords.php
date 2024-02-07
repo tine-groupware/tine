@@ -44,14 +44,6 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
         parent::_setOptions($_options);
     }
 
-    public function setValue($_value)
-    {
-        parent::setValue($_value);
-        if ($this->_valueIsNull) {
-            $this->_setFilterGroup();
-        }
-    }
-
     /**
      * appends sql to given select statement
      *
@@ -109,23 +101,7 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
         $this->_field = 'id';
 
         try {
-            if ($this->_valueIsNull) {
-                if (strpos($this->_operator, 'not') === 0) {
-                    if (empty($this->_foreignIds)) {
-                        $_select->where('1 = 0');
-                    } else {
-                        $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', $this->_foreignIds);
-                    }
-                } else {
-                    if (empty($this->_foreignIds)) {
-                        $_select->where('1 = 1');
-                    } else {
-                        $_select->where($this->_getQuotedFieldName($_backend) . ' NOT IN (?)', $this->_foreignIds);
-                    }
-                }
-            } else {
-                parent::appendFilterSql($_select, $_backend);
-            }
+            parent::appendFilterSql($_select, $_backend);
         } finally {
             $this->_field = $orgField;
         }

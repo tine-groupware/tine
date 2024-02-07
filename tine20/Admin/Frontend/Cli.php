@@ -9,8 +9,6 @@
  * 
  */
 
-use Firebase\JWT\JWT;
-
 /**
  * cli server for Admin
  *
@@ -40,50 +38,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             )
         ),
     );
-
-    public function createJwtAccessRoute(Zend_Console_Getopt $_opts): int
-    {
-        $this->_checkAdminRight();
-
-        $args = $this->_parseArgs($_opts, ['account', 'route']);
-
-        try {
-            $accountId = Tinebase_User::getInstance()->getFullUserByLoginName($args['account'])->getId();
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            echo $tenf->getMessage() . "\n";
-            return 1;
-        }
-        $route = (array)$args['route'];
-
-        // create new private and public key
-        $new_key_pair = openssl_pkey_new(array(
-            "private_key_bits" => 2048,
-            "private_key_type" => OPENSSL_KEYTYPE_RSA,
-        ));
-        openssl_pkey_export($new_key_pair, $private_key_pem);
-
-
-        $jwtAccessRoute = new Admin_Model_JWTAccessRoutes([
-            Admin_Model_JWTAccessRoutes::FLD_ACCOUNTID => $accountId,
-            Admin_Model_JWTAccessRoutes::FLD_KEYID => Tinebase_Record_Abstract::generateUID(),
-            Admin_Model_JWTAccessRoutes::FLD_ISSUER => Tinebase_Record_Abstract::generateUID(),
-            Admin_Model_JWTAccessRoutes::FLD_KEY => $private_key_pem,
-            Admin_Model_JWTAccessRoutes::FLD_ROUTES => $route,
-        ]);
-
-        $token = JWT::encode(
-            payload: ['iss' => $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_ISSUER}],
-            key: $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_KEY},
-            alg: 'RS512',
-            keyId: $jwtAccessRoute->{Admin_Model_JWTAccessRoutes::FLD_KEYID}
-        );
-
-        Admin_Controller_JWTAccessRoutes::getInstance()->create($jwtAccessRoute);
-
-        echo PHP_EOL . $token . PHP_EOL;
-
-        return 0;
-    }
 
     /**
      * create system groups for addressbook lists that don't have a system group
@@ -281,39 +235,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         return 0;
     }
 
-    /**
-     * Delete containers with no users
-     *
-     * @return void
-     */
-    public function deleteUserlessContainers(Zend_Console_Getopt $opts)
-    {
-        if ($opts->d) {
-            echo "--DRY RUN--\n";
-        }
-        // Get an instance of Admin_Frontend_Json
-        $jsonFrontend = new Admin_Frontend_Json();
-
-        // Get all containers
-        $containers = $jsonFrontend->searchContainers([], null);
-
-        foreach ($containers['results'] as $container) {
-          // Check if the container has no users
-          if ($container['type'] == 'personal') {
-            try {
-              $user = Tinebase_User::getInstance()->getFullUserById($container['owner_id']);
-            } catch (Tinebase_Exception_NotFound) {
-              if ($opts->d) {
-                echo "--DRY RUN-- Found " . $container['name'] . PHP_EOL;
-              } else {
-                $jsonFrontend->deleteContainers([$container['id']]);
-                echo 'Deleted container ' . $container['name'] . ' with no users.' . PHP_EOL;
-              }
-            }
-          } 
-        }
-    }
-    
     /**
      * shorten loginnmes to fit ad samaccountname
      *

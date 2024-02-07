@@ -145,21 +145,7 @@ class Sales_Controller extends Tinebase_Controller_Event
     {
         $result = parent::getCoreDataForApplication();
         $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-
-        $result->addRecord(new CoreData_Model_CoreData(array(
-            'id' => 'sales_division',
-            'application_id' => $application,
-            'model' => Sales_Model_Division::class,
-            'label' => 'Divisions' // _('Divisions')
-        )));
-
-        $result->addRecord(new CoreData_Model_CoreData(array(
-            'id' => 'sales_category',
-            'application_id' => $application,
-            'model' => Sales_Model_Document_Category::class,
-            'label' => 'Categories' // _('Categories')
-        )));
-
+        
         $result->addRecord(new CoreData_Model_CoreData(array(
             'id' => 'cs_boilerplate',
             'application_id' => $application,

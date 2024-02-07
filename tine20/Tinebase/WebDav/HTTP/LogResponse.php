@@ -15,7 +15,7 @@
  *
  * NOTE: we can't decide logging before content-type header is set
  */
-class Tinebase_WebDav_HTTP_LogResponse extends Tine20\HTTP\Response
+class Tinebase_WebDav_HTTP_LogResponse extends Sabre\HTTP\Response
 {
     protected $_bodyLog = false;
 

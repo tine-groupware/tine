@@ -19,7 +19,7 @@ class Tinebase_Frontend_WebDAV_RecordCollection extends Tinebase_WebDav_Collecti
 {
     /**
      * (non-PHPdoc)
-     * @see Tine20\DAV\Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($_name)
     {
@@ -29,7 +29,7 @@ class Tinebase_Frontend_WebDAV_RecordCollection extends Tinebase_WebDav_Collecti
     /**
      * Returns an array with all the child nodes
      *
-     * @return Tine20\DAV\INode[]
+     * @return Sabre\DAV\INode[]
      */
     function getChildren()
     {

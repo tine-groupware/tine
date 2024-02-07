@@ -67,7 +67,7 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
      * 
      * @param string $name  name of the invoice
      * @param resource $data  binary data of the invoice (aka a pdf)
-     * @throws Tine20\DAV\Exception\Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @return Sales_Model_PurchaseInvoice
      */
     public function importPurchaseInvoice($name, $data)
@@ -99,7 +99,7 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
             $handle = Tinebase_FileSystem::getInstance()->fopen($attachmentPath . '/' . $name, 'w');
 
             if (!is_resource($handle)) {
-                throw new Tine20\DAV\Exception\Forbidden('Permission denied to create file:' . $attachmentPath . '/' . $name );
+                throw new Sabre\DAV\Exception\Forbidden('Permission denied to create file:' . $attachmentPath . '/' . $name );
             }
 
             if (is_resource($data)) {
@@ -137,13 +137,18 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
     
     /**
      * finds the costcenter of $this->_currentContract
+     * 
+     * @return Tinebase_Model_CostCenter|NULL
      */
-    protected function _findCurrentCostCenter(): ?Tinebase_Model_EvaluationDimensionItem
+    protected function _findCurrentCostCenter()
     {
-        if ($this->_currentBillingContract->eval_dim_cost_center && !$this->_currentBillingContract->eval_dim_cost_center instanceof Tinebase_Model_EvaluationDimensionItem) {
-            $this->_currentBillingContract->eval_dim_cost_center = Tinebase_Controller_EvaluationDimensionItem::getInstance()->get($this->_currentBillingContract->eval_dim_cost_center);
+        $this->_currentBillingCostCenter = NULL;
+        
+        foreach ($this->_currentBillingContract->relations as $relation) {
+            if ($relation->type == 'LEAD_COST_CENTER' && $relation->related_model == Tinebase_Model_CostCenter::class) {
+                $this->_currentBillingCostCenter = $relation->related_record;
+            }
         }
-        $this->_currentBillingCostCenter = $this->_currentBillingContract->eval_dim_cost_center;
 
         return $this->_currentBillingCostCenter;
     }

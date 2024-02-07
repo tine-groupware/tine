@@ -7,7 +7,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -20,9 +20,6 @@
 class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
 {
     use Tinebase_Controller_SingletonTrait;
-
-    protected static $_adminGrant = Sales_Model_DivisionGrants::GRANT_ADMIN_DOCUMENT_OFFER;
-    protected static $_readGrant = Sales_Model_DivisionGrants::GRANT_READ_DOCUMENT_OFFER;
 
     /**
      * the constructor
@@ -46,8 +43,8 @@ class Sales_Controller_Document_Offer extends Sales_Controller_Document_Abstract
         $this->_documentStatusField = Sales_Model_Document_Offer::FLD_OFFER_STATUS;
         $this->_oldRecordBookWriteableFields = [
             Sales_Model_Document_Offer::FLD_OFFER_STATUS,
-            Sales_Model_Document_Offer::FLD_EVAL_DIM_COST_CENTER,
-            Sales_Model_Document_Offer::FLD_EVAL_DIM_COST_BEARER,
+            Sales_Model_Document_Offer::FLD_COST_CENTER_ID,
+            Sales_Model_Document_Offer::FLD_COST_BEARER_ID,
             Sales_Model_Document_Offer::FLD_DESCRIPTION,
             Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_CREATED_STATUS,
             Sales_Model_Document_Offer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS,

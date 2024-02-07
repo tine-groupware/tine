@@ -1,6 +1,6 @@
 <?php
 
-use Tine20\DAV;
+use Sabre\DAV;
 
 /**
  * Tine 2.0
@@ -22,7 +22,7 @@ class Tinebase_WebDav_Auth implements DAV\Auth\Backend\BackendInterface
 {
     /**
      * (non-PHPdoc)
-     * @see Tine20\DAV\Auth\IBackend::getCurrentUser()
+     * @see Sabre\DAV\Auth\IBackend::getCurrentUser()
      */
     public function getCurrentUser()
     {
@@ -31,7 +31,7 @@ class Tinebase_WebDav_Auth implements DAV\Auth\Backend\BackendInterface
     
     /**
      * (non-PHPdoc)
-     * @see Tine20\DAV\Auth\IBackend::authenticate()
+     * @see Sabre\DAV\Auth\IBackend::authenticate()
      */
     public function authenticate(DAV\Server $_server, $_realm) 
     {

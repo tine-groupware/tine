@@ -2,6 +2,6 @@
 <application>
     <name>Bookmarks</name>
     <!-- gettext('Bookmarks') -->
-    <version>17.0</version>
+    <version>16.0</version>
     <status>enabled</status>
 </application>

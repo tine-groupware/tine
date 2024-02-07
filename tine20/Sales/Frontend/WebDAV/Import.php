@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Tine20\DAV\IProperties, \Tine20\DAVACL\IACL
+class Sales_Frontend_WebDAV_Import extends \Sabre\DAV\Collection implements \Sabre\DAV\IProperties, \Sabre\DAVACL\IACL
 {
     /**
      * the current application object
@@ -65,7 +65,7 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
     
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\Collection::createFile()
+     * @see \Sabre\DAV\Collection::createFile()
      */
     public function createFile($name, $data = null)
     {
@@ -85,11 +85,11 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
     
     /**
      * (non-PHPdoc)
-     * @see Tine20\DAV\Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($name)
     {
-        throw new Tine20\DAV\Exception\NotFound("Directory $this->_path/$name not found");
+        throw new Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
     }
     
     /**
@@ -97,7 +97,7 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
      * 
      * the records subtree is not returned as child here. It's only available via getChild().
      *
-     * @return \Tine20\DAV\INode[]
+     * @return \Sabre\DAV\INode[]
      */
     function getChildren()
     {
@@ -136,7 +136,7 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
     
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\Node::getLastModified()
+     * @see \Sabre\DAV\Node::getLastModified()
      */
     public function getLastModified()
     {
@@ -187,7 +187,7 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
      */
     public function getName()
     {
-        list(,$name) = Tine20\DAV\URLUtil::splitPath($this->_path);
+        list(,$name) = Sabre\DAV\URLUtil::splitPath($this->_path);
         
         return $name;
     }
@@ -231,8 +231,8 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
             switch ($property) {
                 case '{DAV:}owner':
                     if ($this->getOwner()) {
-                        $response[$property] = new \Tine20\DAVACL\Property\Principal(
-                            \Tine20\DAVACL\Property\Principal::HREF, $this->getOwner()
+                        $response[$property] = new \Sabre\DAVACL\Property\Principal(
+                            \Sabre\DAVACL\Property\Principal::HREF, $this->getOwner()
                         );
                     }
                     
@@ -261,7 +261,7 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
      */
     public function setACL(array $acl)
     {
-        throw new Tine20\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
     
     /**
@@ -311,10 +311,10 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
                 // once iCal tried to set default-alarm config with a negative feedback
                 // it doesn't send default-alarms to the server any longer. So we fake
                 // success here as workaround to let the client send its default alarms
-                case '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-datetime':
-                case '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-date':
-                case '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-datetime':
-                case '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-date':
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-datetime':
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-date':
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-datetime':
+                case '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-date':
                     // fake success
                     $result['200'][$key] = null;
                     break;

@@ -21,23 +21,15 @@ msgstr ""
 msgid "You do not have admin rights on Sales"
 msgstr "Bạn không có quyền quản trị trên hệ thống Kinh doanh"
 
-#: Controller.php:153
-msgid "Divisions"
-msgstr ""
-
-#: Controller.php:160
-msgid "Categories"
-msgstr ""
-
-#: Controller.php:167 js/Document/AbstractEditDialog.js:207
-#: js/Document/AbstractEditDialog.js:213 js/Document/BoilerplatePanel.js:67
-#: js/Document/BoilerplatePanel.js:114 Model/Boilerplate.php:52
-#: Model/Boilerplate.php:154
+#: Controller.php:153 js/Document/AbstractEditDialog.js:131
+#: js/Document/AbstractEditDialog.js:137 js/Document/BoilerplatePanel.js:65
+#: js/Document/BoilerplatePanel.js:98 Model/Boilerplate.php:52
+#: Model/Boilerplate.php:143
 msgid "Boilerplate"
 msgid_plural "Boilerplates"
 msgstr[0] ""
 
-#: Frontend/Json.php:578
+#: Frontend/Json.php:570
 msgid "You have to set a customer!"
 msgstr ""
 
@@ -46,28 +38,26 @@ msgid "Add New Offer"
 msgstr ""
 
 #: js/OfferEditDialog.js:101 js/OrderConfirmationEditDialog.js:101
-#: js/ContractEditDialog.js:245 js/ExceptionHandler.js:91 Config.php:687
-#: Config.php:896 Model/OrderConfirmation.php:64 Model/Offer.php:77
-#: Model/Product.php:120 Model/Debitor.php:80 Model/Contract.php:115
+#: js/ContractEditDialog.js:245 js/ExceptionHandler.js:91 Config.php:650
+#: Config.php:830 Model/OrderConfirmation.php:64 Model/Offer.php:77
+#: Model/Product.php:139 Model/Contract.php:115
 msgid "Number"
 msgstr "Số"
 
 #: js/OfferEditDialog.js:106 js/OrderConfirmationEditDialog.js:106
 #: js/ContractEditDialog.js:252 js/ExceptionHandler.js:96
 #: Model/OrderConfirmation.php:69 Model/InvoicePosition.php:81
-#: Model/Offer.php:82 Model/Document/Abstract.php:238 Model/Division.php:64
-#: Model/Contract.php:120
+#: Model/Offer.php:82 Model/Document/Abstract.php:202 Model/Contract.php:120
 msgid "Title"
 msgstr "Tiêu đề"
 
 #: js/OfferEditDialog.js:111 js/InvoiceDetailsPanel.js:104
 #: js/ContractEditDialog.js:267 js/CustomerFilterModel.js:30
-#: js/CustomerEditDialog.js:163 js/InvoiceEditDialog.js:584 Model/Offer.php:52
-#: Model/Offer.php:96 Model/Address.php:92 Model/Document/Abstract.php:263
-#: Model/Customer.php:47 Model/Customer.php:332 Model/Invoice.php:92
-#: Model/Invoice.php:250 Model/Invoice.php:299 Model/Debitor.php:108
-#: Model/Boilerplate.php:143 Model/Contract.php:174 Model/Contract.php:273
-#: Model/Contract.php:294
+#: js/CustomerEditDialog.js:179 js/InvoiceEditDialog.js:583 Model/Offer.php:52
+#: Model/Offer.php:96 Model/Address.php:85 Model/Document/Abstract.php:227
+#: Model/Customer.php:39 Model/Customer.php:267 Model/Invoice.php:90
+#: Model/Invoice.php:248 Model/Invoice.php:289 Model/Boilerplate.php:132
+#: Model/Contract.php:167 Model/Contract.php:266 Model/Contract.php:287
 msgid "Customer"
 msgid_plural "Customers"
 msgstr[0] ""
@@ -76,23 +66,23 @@ msgstr[0] ""
 #: js/OrderConfirmationEditDialog.js:147 js/SupplierDetailsPanel.js:157
 #: js/SupplierEditDialog.js:368 js/InvoiceDetailsPanel.js:103
 #: js/CustomerDetailsPanel.js:157 js/ContractEditDialog.js:323
-#: js/CustomerEditDialog.js:412 js/PurchaseInvoiceEditDialog.js:548
-#: js/InvoiceEditDialog.js:563 Model/OrderConfirmation.php:74
-#: Model/Offer.php:87 Model/Product.php:162 Model/Customer.php:185
-#: Model/Invoice.php:111 Model/Supplier.php:75 Model/PurchaseInvoice.php:86
-#: Model/Contract.php:125 Model/DocumentPosition/Abstract.php:270
+#: js/CustomerEditDialog.js:429 js/PurchaseInvoiceEditDialog.js:548
+#: js/InvoiceEditDialog.js:562 Model/OrderConfirmation.php:74
+#: Model/Offer.php:87 Model/Product.php:181 Model/Customer.php:101
+#: Model/Invoice.php:109 Model/Supplier.php:75 Model/PurchaseInvoice.php:86
+#: Model/Contract.php:125 Model/DocumentPosition/Abstract.php:256
 msgid "Description"
 msgstr "Mo tả"
 
 #: js/OfferEditDialog.js:150 js/OrderConfirmationEditDialog.js:161
-#: js/SupplierEditDialog.js:382 js/CustomerEditDialog.js:426
+#: js/SupplierEditDialog.js:382 js/CustomerEditDialog.js:443
 #: js/PurchaseInvoiceEditDialog.js:562
 msgid "Enter description"
 msgstr ""
 
 #: js/PurchaseInvoiceApproverFilterModel.js:30
 #: js/PurchaseInvoiceEditDialog.js:503 Model/PurchaseInvoice.php:67
-#: Model/PurchaseInvoice.php:201 Model/PurchaseInvoice.php:247
+#: Model/PurchaseInvoice.php:201 Model/PurchaseInvoice.php:240
 msgid "Approver"
 msgstr ""
 
@@ -101,76 +91,75 @@ msgid "without approver"
 msgstr ""
 
 #: js/PurchaseInvoiceDetailsPanel.js:66 js/InvoiceDetailsPanel.js:66
-#: js/Document/SendToDatevAction.js:88
 msgid "Select invoice"
 msgstr ""
 
 #: js/PurchaseInvoiceDetailsPanel.js:98 js/InvoiceDetailsPanel.js:98
-#: js/PurchaseInvoiceEditDialog.js:404 js/InvoiceEditDialog.js:524
-#: js/InvoiceEditDialog.js:537 Config.php:729 Model/Document/Invoice.php:48
-#: Model/Invoice.php:58
+#: js/PurchaseInvoiceEditDialog.js:404 js/InvoiceEditDialog.js:523
+#: js/InvoiceEditDialog.js:536 Config.php:692 Model/Document/Invoice.php:46
+#: Model/Invoice.php:56
 msgid "Invoice"
 msgid_plural "Invoices"
 msgstr[0] ""
 
 #: js/PurchaseInvoiceDetailsPanel.js:100 js/InvoiceDetailsPanel.js:100
-#: js/PurchaseInvoiceEditDialog.js:412 js/InvoiceEditDialog.js:545
-#: Model/Invoice.php:106 Model/PurchaseInvoice.php:81
+#: js/PurchaseInvoiceEditDialog.js:412 js/InvoiceEditDialog.js:544
+#: Model/Invoice.php:104 Model/PurchaseInvoice.php:81
 msgid "Invoice Number"
 msgstr ""
 
 #: js/PurchaseInvoiceDetailsPanel.js:101 js/InvoiceDetailsPanel.js:101
-#: js/InvoiceEditDialog.js:552 Model/Invoice.php:133
+#: js/InvoiceEditDialog.js:551 Model/Invoice.php:131
 msgid "Date"
 msgstr ""
 
 #: js/PurchaseInvoiceDetailsPanel.js:102 js/InvoiceDetailsPanel.js:102
-#: js/InvoiceEditDialog.js:558 Model/InvoicePosition.php:53
-#: Model/InvoicePosition.php:57 Model/Invoice.php:174
-#: Model/DocumentPosition/Abstract.php:208
+#: js/InvoiceEditDialog.js:557 Model/InvoicePosition.php:53
+#: Model/InvoicePosition.php:57 Model/Invoice.php:172
+#: Model/DocumentPosition/Abstract.php:194
 msgid "Type"
 msgstr ""
 
 #: js/PurchaseInvoiceDetailsPanel.js:104 js/SupplierEditDialog.js:145
 #: js/PurchaseInvoiceEditDialog.js:418 js/SupplierFilterModel.js:30
 #: Model/Supplier.php:35 Model/Supplier.php:269 Model/PurchaseInvoice.php:55
-#: Model/PurchaseInvoice.php:213 Model/PurchaseInvoice.php:239
+#: Model/PurchaseInvoice.php:213 Model/PurchaseInvoice.php:232
 msgid "Supplier"
 msgid_plural "Suppliers"
 msgstr[0] ""
 
-#: js/PurchaseInvoiceDetailsPanel.js:114 js/InvoiceDetailsPanel.js:115
-#: js/ContractEditDialog.js:269 js/InvoiceEditDialog.js:599
-#: Model/Contract.php:140
+#: js/PurchaseInvoiceDetailsPanel.js:114 js/BillingAddressGridPanel.js:39
+#: js/InvoiceDetailsPanel.js:115 js/ContractEditDialog.js:269
+#: js/InvoiceEditDialog.js:598 Model/Contract.php:140
 msgid "Billing Address"
 msgstr ""
 
 #: js/PurchaseInvoiceDetailsPanel.js:126 js/SupplierEditDialog.js:315
-#: js/InvoiceDetailsPanel.js:127 js/CustomerEditDialog.js:359
-#: js/PurchaseInvoiceEditDialog.js:470 js/InvoiceEditDialog.js:624
+#: js/InvoiceDetailsPanel.js:127 js/CustomerEditDialog.js:376
+#: js/PurchaseInvoiceEditDialog.js:470 js/InvoiceEditDialog.js:623
 msgid "Miscellaneous"
 msgstr ""
 
 #: js/PurchaseInvoiceDetailsPanel.js:128 js/InvoiceDetailsPanel.js:129
-#: js/InvoiceEditDialog.js:631 Model/Invoice.php:153
+#: js/InvoiceEditDialog.js:630 Model/Invoice.php:151
 msgid "Credit Term"
 msgstr ""
 
 #: js/PurchaseInvoiceDetailsPanel.js:130 js/InvoiceDetailsPanel.js:131
-#: js/PurchaseInvoiceEditDialog.js:525 js/InvoiceEditDialog.js:652
-#: Model/Invoice.php:168
+#: js/PurchaseInvoiceEditDialog.js:525 js/InvoiceEditDialog.js:651
+#: Model/Invoice.php:166
 msgid "Cleared"
 msgstr "Đã xóa"
 
 #: js/PurchaseInvoiceDetailsPanel.js:131 js/InvoiceDetailsPanel.js:132
-#: js/PurchaseInvoiceEditDialog.js:293 js/InvoiceEditDialog.js:457
-#: Model/Invoice.php:184 Model/PurchaseInvoice.php:140
+#: js/PurchaseInvoiceEditDialog.js:293 js/InvoiceEditDialog.js:456
+#: Model/Invoice.php:182 Model/PurchaseInvoice.php:140
 msgid "Price Net"
 msgstr ""
 
 #: js/PurchaseInvoiceDetailsPanel.js:132 js/InvoiceDetailsPanel.js:133
-#: js/PurchaseInvoiceEditDialog.js:337 js/InvoiceEditDialog.js:469
-#: Model/Invoice.php:191 Model/PurchaseInvoice.php:161
+#: js/PurchaseInvoiceEditDialog.js:337 js/InvoiceEditDialog.js:468
+#: Model/Invoice.php:189 Model/PurchaseInvoice.php:161
 msgid "Taxes (VAT)"
 msgstr ""
 
@@ -184,10 +173,10 @@ msgid "Add New Order Confirmation"
 msgstr ""
 
 #: js/OrderConfirmationEditDialog.js:111 js/InvoiceDetailsPanel.js:105
-#: js/ContractFilterModel.js:30 js/InvoiceEditDialog.js:567
+#: js/ContractFilterModel.js:30 js/InvoiceEditDialog.js:566
 #: Model/OrderConfirmation.php:51 Model/OrderConfirmation.php:83
-#: Model/ProductAggregate.php:81 Model/Invoice.php:80 Model/Invoice.php:238
-#: Model/Invoice.php:295 Model/Contract.php:46
+#: Model/ProductAggregate.php:81 Model/Invoice.php:78 Model/Invoice.php:236
+#: Model/Invoice.php:285 Model/Contract.php:46
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] ""
@@ -200,11 +189,8 @@ msgid "Offer"
 msgid_plural "Offers"
 msgstr[0] ""
 
-#: js/Sales.js:111
-msgid "Clipboard"
-msgstr ""
-
-#: js/Sales.js:117 js/SupplierEditDialog.js:122 js/CustomerEditDialog.js:139
+#: js/Sales.js:79 js/SupplierEditDialog.js:122 js/CustomerEditDialog.js:135
+#: js/AddressGridPanel.js:51
 msgid "Copy address to the clipboard"
 msgstr ""
 
@@ -213,7 +199,7 @@ msgid "Select supplier"
 msgstr ""
 
 #: js/SupplierDetailsPanel.js:123 js/SupplierEditDialog.js:158
-#: js/CustomerDetailsPanel.js:123 js/CustomerEditDialog.js:177
+#: js/CustomerDetailsPanel.js:123 js/CustomerEditDialog.js:192
 msgid "Core Data"
 msgstr ""
 
@@ -224,64 +210,63 @@ msgstr ""
 
 #: js/SupplierDetailsPanel.js:126 js/SupplierEditDialog.js:182
 #: js/SupplierEditDialog.js:265 js/CustomerDetailsPanel.js:126
-#: js/CustomerEditDialog.js:188 js/CustomerEditDialog.js:311
-#: js/AddressEditDialog.js:122 Model/Product.php:150 Model/Address.php:132
-#: Model/Document/Category.php:71 Model/Customer.php:163 Model/Supplier.php:62
-#: Model/Supplier.php:173 Model/Supplier.php:181 Model/Debitor.php:104
-#: Model/Boilerplate.php:92
+#: js/CustomerEditDialog.js:216 js/CustomerEditDialog.js:328
+#: js/AddressEditDialog.js:135 Model/Product.php:169 Model/Address.php:116
+#: Model/Customer.php:79 Model/Supplier.php:62 Model/Supplier.php:173
+#: Model/Supplier.php:181 Model/Boilerplate.php:87
 msgid "Name"
 msgstr "Tên"
 
 #: js/SupplierDetailsPanel.js:127 js/SupplierEditDialog.js:323
-#: js/CustomerDetailsPanel.js:127 js/CustomerEditDialog.js:367
-#: Model/Customer.php:178 Model/Supplier.php:69
+#: js/CustomerDetailsPanel.js:127 js/CustomerEditDialog.js:384
+#: Model/Customer.php:94 Model/Supplier.php:69
 msgid "Web"
 msgstr ""
 
 #: js/SupplierDetailsPanel.js:128 js/SupplierEditDialog.js:191
 #: js/CustomerDetailsPanel.js:128 js/ContractEditDialog.js:289
-#: js/CustomerEditDialog.js:197 Model/Customer.php:193 Model/Supplier.php:82
-#: Model/Contract.php:96 Model/Contract.php:186
+#: js/CustomerEditDialog.js:225 Model/Customer.php:109 Model/Supplier.php:82
+#: Model/Contract.php:96 Model/Contract.php:179
 msgid "Contact Person (external)"
 msgstr ""
 
 #: js/SupplierDetailsPanel.js:129 js/SupplierEditDialog.js:201
 #: js/CustomerDetailsPanel.js:129 js/ContractEditDialog.js:301
-#: js/CustomerEditDialog.js:207 Model/Customer.php:206 Model/Supplier.php:93
-#: Model/Contract.php:85 Model/Contract.php:198
+#: js/CustomerEditDialog.js:235 Model/Customer.php:122 Model/Supplier.php:93
+#: Model/Contract.php:85 Model/Contract.php:191
 msgid "Contact Person (internal)"
 msgstr ""
 
 #: js/SupplierDetailsPanel.js:141 js/SupplierEditDialog.js:209
-#: js/CustomerDetailsPanel.js:141 js/CustomerEditDialog.js:215
+#: js/CustomerDetailsPanel.js:141 js/CustomerEditDialog.js:243
 msgid "Accounting"
 msgstr ""
 
 #: js/SupplierDetailsPanel.js:143 js/SupplierEditDialog.js:247
-#: js/CustomerDetailsPanel.js:143 js/CustomerEditDialog.js:243
+#: js/CustomerDetailsPanel.js:143 js/CustomerEditDialog.js:280
 msgid "IBAN"
 msgstr ""
 
 #: js/SupplierDetailsPanel.js:144 js/SupplierEditDialog.js:250
-#: js/CustomerDetailsPanel.js:144 js/CustomerEditDialog.js:246
+#: js/CustomerDetailsPanel.js:144 js/CustomerEditDialog.js:283
 msgid "BIC"
 msgstr ""
 
 #: js/SupplierDetailsPanel.js:145 js/SupplierEditDialog.js:217
-#: js/CustomerDetailsPanel.js:145 js/CustomerEditDialog.js:223
-#: Model/Customer.php:219 Model/Supplier.php:104
+#: js/CustomerDetailsPanel.js:145 js/CustomerEditDialog.js:251
+#: Model/Customer.php:135 Model/Supplier.php:104
 msgid "VAT ID"
 msgstr ""
 
 #: js/SupplierDetailsPanel.js:146 js/SupplierEditDialog.js:231
-#: js/CustomerDetailsPanel.js:146 js/CustomerEditDialog.js:228
-#: Model/Customer.php:254 Model/Supplier.php:117
+#: js/CustomerDetailsPanel.js:146 js/CustomerEditDialog.js:265
+#: Model/Customer.php:151 Model/Supplier.php:117
 msgid "Currency"
 msgstr ""
 
 #: js/SupplierDetailsPanel.js:147 js/SupplierEditDialog.js:236
-#: js/CustomerDetailsPanel.js:147 js/CustomerEditDialog.js:232
-#: Model/Customer.php:261 Model/Supplier.php:122
+#: js/CustomerDetailsPanel.js:147 js/CustomerEditDialog.js:269
+#: Model/Customer.php:158 Model/Supplier.php:122
 msgid "Currency Translation Rate"
 msgstr ""
 
@@ -302,48 +287,48 @@ msgstr ""
 msgid "Edit Supplier \"{0}\""
 msgstr ""
 
-#: js/SupplierEditDialog.js:220 js/CustomerEditDialog.js:262
-#: Model/Document/Abstract.php:405 Model/Customer.php:245
+#: js/SupplierEditDialog.js:220 js/CustomerEditDialog.js:254
+#: Model/Document/Abstract.php:353 Model/Customer.php:142
 #: Model/Supplier.php:110
 msgid "Credit Term (days)"
 msgstr ""
 
-#: js/SupplierEditDialog.js:257 js/CustomerEditDialog.js:287
+#: js/SupplierEditDialog.js:257 js/CustomerEditDialog.js:304
 msgid "Postal Address"
 msgstr ""
 
-#: js/SupplierEditDialog.js:269 js/CustomerEditDialog.js:307
-#: js/AddressEditDialog.js:97 Model/Address.php:126
+#: js/SupplierEditDialog.js:269 js/CustomerEditDialog.js:324
+#: js/AddressEditDialog.js:110 Model/Address.php:109
 msgid "Email"
 msgstr ""
 
-#: js/SupplierEditDialog.js:273 js/CustomerEditDialog.js:327
-#: js/AddressEditDialog.js:137 Model/Address.php:157 Model/Supplier.php:189
+#: js/SupplierEditDialog.js:273 js/CustomerEditDialog.js:344
+#: js/AddressEditDialog.js:150 Model/Address.php:145 Model/Supplier.php:189
 msgid "Street"
 msgstr ""
 
-#: js/SupplierEditDialog.js:277 js/CustomerEditDialog.js:331
-#: js/AddressEditDialog.js:140 Model/Address.php:163 Model/Supplier.php:231
+#: js/SupplierEditDialog.js:277 js/CustomerEditDialog.js:348
+#: js/AddressEditDialog.js:153 Model/Address.php:152 Model/Supplier.php:231
 msgid "Postbox"
 msgstr ""
 
-#: js/SupplierEditDialog.js:283 js/CustomerEditDialog.js:336
-#: js/AddressEditDialog.js:143 Model/Address.php:169 Model/Supplier.php:198
+#: js/SupplierEditDialog.js:283 js/CustomerEditDialog.js:353
+#: js/AddressEditDialog.js:156 Model/Address.php:159 Model/Supplier.php:198
 msgid "Postalcode"
 msgstr ""
 
-#: js/SupplierEditDialog.js:288 js/CustomerEditDialog.js:340
-#: js/AddressEditDialog.js:146 Model/Address.php:175 Model/Supplier.php:206
+#: js/SupplierEditDialog.js:288 js/CustomerEditDialog.js:357
+#: js/AddressEditDialog.js:159 Model/Address.php:166 Model/Supplier.php:206
 msgid "Locality"
 msgstr ""
 
-#: js/SupplierEditDialog.js:292 js/CustomerEditDialog.js:344
-#: js/AddressEditDialog.js:149 Model/Address.php:181 Model/Supplier.php:214
+#: js/SupplierEditDialog.js:292 js/CustomerEditDialog.js:361
+#: js/AddressEditDialog.js:162 Model/Address.php:173 Model/Supplier.php:214
 msgid "Region"
 msgstr ""
 
-#: js/SupplierEditDialog.js:297 js/CustomerEditDialog.js:349
-#: js/AddressEditDialog.js:153 Model/Address.php:187 Model/Supplier.php:222
+#: js/SupplierEditDialog.js:297 js/CustomerEditDialog.js:366
+#: js/AddressEditDialog.js:166 Model/Address.php:180 Model/Supplier.php:222
 msgid "Country"
 msgstr ""
 
@@ -368,8 +353,12 @@ msgstr ""
 msgid "Selected  {0}"
 msgstr ""
 
+#: js/BillingAddressGridPanel.js:40 Model/Customer.php:205
+msgid "Billing Addresses"
+msgstr ""
+
 #: js/InvoiceDetailsPanel.js:134 js/PurchaseInvoiceEditDialog.js:304
-#: js/InvoiceEditDialog.js:481 Model/Invoice.php:198
+#: js/InvoiceEditDialog.js:480 Model/Invoice.php:196
 #: Model/PurchaseInvoice.php:147
 msgid "Price Gross"
 msgstr ""
@@ -382,7 +371,8 @@ msgstr ""
 msgid "Select customer"
 msgstr ""
 
-#: js/CustomerDetailsPanel.js:125 Model/Customer.php:153
+#: js/CustomerDetailsPanel.js:125 js/CustomerEditDialog.js:198
+#: Model/Customer.php:69
 msgid "Customer Number"
 msgstr ""
 
@@ -425,7 +415,7 @@ msgstr ""
 msgid "Please use a decimal number here!"
 msgstr "Xin sử dụng 1 số thập phân tại đây!"
 
-#: js/ContractEditDialog.js:239 Model/Invoice.php:224
+#: js/ContractEditDialog.js:239 Model/Invoice.php:222
 msgid "Positions"
 msgstr ""
 
@@ -440,7 +430,7 @@ msgid "End Date"
 msgstr ""
 
 #: js/ContractEditDialog.js:312 js/PurchaseInvoiceEditDialog.js:514
-#: Model/PurchaseInvoice.php:255 Model/Contract.php:210 Model/Contract.php:286
+#: Model/PurchaseInvoice.php:248 Model/Contract.php:203 Model/Contract.php:279
 msgid "Lead Cost Center"
 msgstr "Trung tâm giá"
 
@@ -448,15 +438,11 @@ msgstr "Trung tâm giá"
 msgid "Enter description..."
 msgstr "Nhập vào mô tả"
 
-#: js/ContractSearchCombo.js:59
-msgid "Show closed"
-msgstr ""
-
-#: js/Document/AbstractEditDialog.js:31
+#: js/Document/AbstractEditDialog.js:30
 msgid "Confirm Status Change"
 msgstr ""
 
-#: js/Document/AbstractEditDialog.js:32
+#: js/Document/AbstractEditDialog.js:31
 msgid "Changing this workflow status might not be revertible. Proceed anyway?"
 msgstr ""
 
@@ -464,32 +450,20 @@ msgstr ""
 msgid "More Boilerplates"
 msgstr ""
 
-#: js/Document/BoilerplatePanel.js:155
+#: js/Document/BoilerplatePanel.js:139
 msgid "Choose Boilerplate"
 msgstr ""
 
-#: js/Document/BoilerplatePanel.js:156
+#: js/Document/BoilerplatePanel.js:140
 msgid "Please choose which boilerplate you want to use as { name }"
 msgstr ""
 
-#: js/Document/BoilerplatePanel.js:160
+#: js/Document/BoilerplatePanel.js:144
 msgid "Existing:"
 msgstr ""
 
-#: js/Document/BoilerplatePanel.js:161
+#: js/Document/BoilerplatePanel.js:145
 msgid "Applicable:"
-msgstr ""
-
-#: js/Document/SendToDatevAction.js:15
-msgid "Send as Email to Datev"
-msgstr ""
-
-#: js/Document/SendToDatevAction.js:129
-msgid "Confirm"
-msgstr ""
-
-#: js/Document/SendToDatevAction.js:130
-msgid "Datev email has been sent before , continue anyway?"
 msgstr ""
 
 #: js/Document/TracAction.js:18
@@ -506,7 +480,7 @@ msgid "Creating {type} Paper Slip"
 msgstr ""
 
 #: js/Document/CreatePaperSlipAction.js:58
-#: js/Document/CreateFollowUpAction.js:176
+#: js/Document/CreateFollowUpAction.js:170
 msgid "There where Errors:"
 msgstr ""
 
@@ -526,57 +500,57 @@ msgstr ""
 msgid "Expand Positions"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:37 Config.php:730
-#: Model/Document/Abstract.php:186 Model/Document/Abstract.php:610
-#: Model/DocumentPosition/Abstract.php:478
+#: js/Document/CreateFollowUpAction.js:36 Config.php:693
+#: Model/Document/Abstract.php:154 Model/Document/Abstract.php:572
+#: Model/DocumentPosition/Abstract.php:477
 msgid "Reversal"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:38
+#: js/Document/CreateFollowUpAction.js:37
 msgid "Reversals"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:43
+#: js/Document/CreateFollowUpAction.js:41
 msgid "Create { targetRecordName }"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:65
+#: js/Document/CreateFollowUpAction.js:63
 msgid "Creating { targetRecordsName }"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:76
+#: js/Document/CreateFollowUpAction.js:74
 msgid "Book unbooked { sourceRecordsName }"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:77
+#: js/Document/CreateFollowUpAction.js:75
 msgid "Creating followup { targetRecordsName } is allowed for booked { sourceRecordsName } only. Book selected { sourceRecordsName } now?"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:95
+#: js/Document/CreateFollowUpAction.js:89
 msgid "Cannot book { sourceDocument }: ({e.code}) { e.message }"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:137
+#: js/Document/CreateFollowUpAction.js:131
 msgid "Nothing to do"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:138
+#: js/Document/CreateFollowUpAction.js:132
 msgid "{ document } has no open positions left."
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:145
+#: js/Document/CreateFollowUpAction.js:139
 msgid "Choose { sourceRecordsName }"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:146
+#: js/Document/CreateFollowUpAction.js:140
 msgid "Please choose which { sourceRecordsName } should be included in shared { targetRecordName }"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:167
+#: js/Document/CreateFollowUpAction.js:161
 msgid "Cannot create { targetType } from { sourceDocument }: ({e.code}) { e.message }"
 msgstr ""
 
-#: js/Document/CreateFollowUpAction.js:185
+#: js/Document/CreateFollowUpAction.js:179
 msgid "Documents Created:"
 msgstr ""
 
@@ -601,45 +575,41 @@ msgstr ""
 msgid "Edit Customer \"{0}\""
 msgstr ""
 
-#: js/CustomerEditDialog.js:249 js/PurchaseInvoiceEditDialog.js:379
-#: Model/Customer.php:270 Model/PurchaseInvoice.php:127
+#: js/CustomerEditDialog.js:286 js/PurchaseInvoiceEditDialog.js:379
+#: Model/Customer.php:180 Model/PurchaseInvoice.php:127
 msgid "Discount (%)"
 msgstr ""
 
-#: js/CustomerEditDialog.js:279 Model/Customer.php:295
-msgid "Debitors"
-msgstr ""
-
-#: js/CustomerEditDialog.js:296 js/AddressEditDialog.js:86
-#: Model/Address.php:114 Model/Customer.php:170
+#: js/CustomerEditDialog.js:313 js/AddressEditDialog.js:99 Model/Address.php:97
+#: Model/Customer.php:86
 msgid "Name shorthand"
 msgstr ""
 
-#: js/CustomerEditDialog.js:302 js/AddressEditDialog.js:92
-#: Model/Address.php:120 Model/Document/Abstract.php:194
-#: Model/Boilerplate.php:163
+#: js/CustomerEditDialog.js:319 js/AddressEditDialog.js:105
+#: Model/Address.php:103 Model/Document/Abstract.php:162
+#: Model/Boilerplate.php:152
 msgid "Language"
 msgstr ""
 
-#: js/CustomerEditDialog.js:315 js/AddressEditDialog.js:126
-#: Model/Address.php:138
+#: js/CustomerEditDialog.js:332 js/AddressEditDialog.js:139
+#: Model/Address.php:123
 msgid "Prefix 1"
 msgstr ""
 
-#: js/CustomerEditDialog.js:319 js/AddressEditDialog.js:130
-#: Model/Address.php:144
+#: js/CustomerEditDialog.js:336 js/AddressEditDialog.js:143
+#: Model/Address.php:130
 msgid "Prefix 2"
 msgstr ""
 
-#: js/CustomerEditDialog.js:323 js/AddressEditDialog.js:134
-#: Model/Address.php:150
+#: js/CustomerEditDialog.js:340 js/AddressEditDialog.js:147
+#: Model/Address.php:137
 msgid "Prefix 3"
 msgstr ""
 
 #: js/ProductAggregateGridPanel.js:61 js/ProductAggregateGridPanel.js:226
-#: Config.php:774 Model/Product.php:66 Model/SubProductMapping.php:101
+#: Config.php:724 Model/Product.php:65 Model/SubProductMapping.php:101
 #: Model/ProductAggregate.php:39 Model/ProductAggregate.php:69
-#: Model/DocumentPosition/Abstract.php:221
+#: Model/DocumentPosition/Abstract.php:207
 msgid "Product"
 msgid_plural "Products"
 msgstr[0] ""
@@ -648,7 +618,7 @@ msgstr[0] ""
 
 #: js/ProductAggregateGridPanel.js:162 js/ProductAggregateGridPanel.js:187
 #: js/ProductAggregateGridPanel.js:230 Model/InvoicePosition.php:98
-#: Model/ProductAggregate.php:93 Model/DocumentPosition/Abstract.php:280
+#: Model/ProductAggregate.php:93 Model/DocumentPosition/Abstract.php:266
 msgid "Quantity"
 msgstr ""
 
@@ -714,16 +684,16 @@ msgstr ""
 msgid "OK"
 msgstr "OK"
 
-#: js/AddressEditDialog.js:103
+#: js/AddressEditDialog.js:116
 msgid "Apply postal address"
 msgstr ""
 
-#: js/AddressEditDialog.js:160
+#: js/AddressEditDialog.js:173 Model/Address.php:187
 msgid "Number Debit"
 msgstr ""
 
-#: js/AddressEditDialog.js:173 js/AddressEditDialog.js:183 Model/Address.php:64
-#: Model/Invoice.php:116 Model/Invoice.php:127
+#: js/AddressEditDialog.js:186 js/AddressEditDialog.js:196 Model/Address.php:61
+#: Model/Invoice.php:114 Model/Invoice.php:125
 msgid "Address"
 msgid_plural "Addresss"
 msgstr[0] ""
@@ -758,7 +728,7 @@ msgstr ""
 msgid "Additional Price Gross"
 msgstr ""
 
-#: js/PurchaseInvoiceEditDialog.js:358 js/InvoiceEditDialog.js:503
+#: js/PurchaseInvoiceEditDialog.js:358 js/InvoiceEditDialog.js:502
 msgid "Sales Tax (percent)"
 msgstr ""
 
@@ -769,7 +739,7 @@ msgstr[0] ""
 
 #: js/PurchaseInvoiceEditDialog.js:416 js/PurchaseInvoiceEditDialog.js:444
 #: js/PurchaseInvoiceEditDialog.js:459 js/PurchaseInvoiceEditDialog.js:488
-#: js/InvoiceEditDialog.js:548 js/InvoiceEditDialog.js:554
+#: js/InvoiceEditDialog.js:547 js/InvoiceEditDialog.js:553
 msgid "automatically set..."
 msgstr ""
 
@@ -797,37 +767,37 @@ msgstr ""
 msgid "without supplier"
 msgstr ""
 
-#: js/AddressSearchCombo.js:51
-msgid "Select Debitor"
-msgstr ""
-
-#: js/AddressSearchCombo.js:52
-msgid "Please select debitor"
+#: js/AddressGridPanel.js:46
+msgid "Clipboard"
 msgstr ""
 
 #: js/ContractProductFilterModel.js:30 Model/Contract.php:108
-#: Model/Contract.php:220
+#: Model/Contract.php:213
 msgid "Products"
 msgstr ""
 
-#: js/ProductEditDialog.js:74 Model/Product.php:277
-msgid "Accountable"
+#: js/DeliveryAddressGridPanel.js:39
+msgid "Delivery Address"
 msgstr ""
 
-#: js/DocumentPosition/AbstractGridPanel.js:39
+#: js/DeliveryAddressGridPanel.js:40 Model/Customer.php:189
+msgid "Delivery Addresses"
+msgstr ""
+
+#: js/DocumentPosition/AbstractGridPanel.js:42
 msgid "Generic"
 msgstr ""
 
-#: js/DocumentPosition/AbstractGridPanel.js:277
-#: Model/DocumentPosition/Abstract.php:309
+#: js/DocumentPosition/AbstractGridPanel.js:269
+#: Model/DocumentPosition/Abstract.php:288
 msgid "Price"
 msgstr ""
 
-#: js/DocumentPosition/AbstractGridPanel.js:278
+#: js/DocumentPosition/AbstractGridPanel.js:270
 msgid "Discount"
 msgstr ""
 
-#: js/DocumentPosition/AbstractGridPanel.js:279
+#: js/DocumentPosition/AbstractGridPanel.js:271
 msgid "Total"
 msgstr ""
 
@@ -869,31 +839,31 @@ msgstr ""
 msgid "Positions ({0})"
 msgstr ""
 
-#: js/InvoiceEditDialog.js:333
+#: js/InvoiceEditDialog.js:332
 msgid "No customer assigned"
 msgstr ""
 
-#: js/InvoiceEditDialog.js:334
+#: js/InvoiceEditDialog.js:333
 msgid "The selected contract doesn't have a customer assigned, yet. Add a customer to the contract with the contract edit dialog."
 msgstr ""
 
-#: js/InvoiceEditDialog.js:345
+#: js/InvoiceEditDialog.js:344
 msgid "No cost center assigned"
 msgstr ""
 
-#: js/InvoiceEditDialog.js:346
+#: js/InvoiceEditDialog.js:345
 msgid "The selected contract doesn't have a cost center assigned, yet. Add a cost center to the contract with the contract edit dialog."
 msgstr ""
 
-#: js/InvoiceEditDialog.js:514 Model/Invoice.php:216
+#: js/InvoiceEditDialog.js:513 Model/Invoice.php:214
 msgid "Inventory Change"
 msgstr ""
 
-#: js/InvoiceEditDialog.js:660 Model/Invoice.php:140
+#: js/InvoiceEditDialog.js:659 Model/Invoice.php:138
 msgid "Interval Begins"
 msgstr ""
 
-#: js/InvoiceEditDialog.js:666 Model/Invoice.php:147
+#: js/InvoiceEditDialog.js:665 Model/Invoice.php:145
 msgid "Interval Ends"
 msgstr ""
 
@@ -912,583 +882,525 @@ msgstr ""
 #: tempExtract/3f11f0ee1ceae127599f1753960e4654/word/document.xml:1
 #: tempExtract/3f11f0ee1ceae127599f1753960e4654/word/header1.xml:1
 #: tempExtract/3f11f0ee1ceae127599f1753960e4654/word/footer1.xml:1
-#: tempExtract/a7241cf4826c3db47a0fe5377572d264/word/document.xml:1
+#: tempExtract/2c594000c3b6d92076d159c151403b2b/word/document.xml:1
+#: tempExtract/2c594000c3b6d92076d159c151403b2b/word/header1.xml:1
+#: tempExtract/2c594000c3b6d92076d159c151403b2b/word/footer1.xml:1
 msgid "Arial"
 msgstr ""
 
-#: Setup/Update/16.php:156 Setup/Initialize.php:217
-msgid "Active Contracts"
-msgstr ""
-
-#: Setup/Update/16.php:157 Setup/Initialize.php:218
-msgid "Contracts that are still running"
-msgstr ""
-
-#: Setup/Initialize.php:36
+#: Setup/Initialize.php:34
 msgid "My Products"
 msgstr "Sản phẩm của tôi"
 
-#: Setup/Initialize.php:37
+#: Setup/Initialize.php:35
 msgid "Products created by me"
 msgstr ""
 
-#: Setup/Initialize.php:53
+#: Setup/Initialize.php:51
 msgid "My Contracts"
 msgstr "Hợp đồng của tôi"
 
-#: Setup/Initialize.php:54
+#: Setup/Initialize.php:52
 msgid "Contracts created by myself"
 msgstr "Hợp đồng tạo bởi tôi"
 
-#: Setup/Initialize.php:70
+#: Setup/Initialize.php:68
 msgid "All Customers"
 msgstr ""
 
-#: Setup/Initialize.php:71
+#: Setup/Initialize.php:69
 msgid "All customer records"
 msgstr ""
 
-#: Setup/Initialize.php:82
+#: Setup/Initialize.php:80
 msgid "All Offers"
 msgstr ""
 
-#: Setup/Initialize.php:83
+#: Setup/Initialize.php:81
 msgid "All offer records"
 msgstr ""
 
-#: Setup/Initialize.php:129
-msgid "Limit to Sales Divisions"
-msgstr ""
-
-#: Setup/Initialize.php:208
+#: Setup/Initialize.php:121
 msgid "Inactive Contracts"
 msgstr ""
 
-#: Setup/Initialize.php:209
+#: Setup/Initialize.php:122
 msgid "Contracts that have already been terminated"
 msgstr ""
 
-#: Setup/Initialize.php:243
+#: Setup/Initialize.php:130
+msgid "Active Contracts"
+msgstr ""
+
+#: Setup/Initialize.php:131
+msgid "Contracts that are still running"
+msgstr ""
+
+#: Setup/Initialize.php:159
 msgid "All Suppliers"
 msgstr ""
 
-#: Setup/Initialize.php:244
+#: Setup/Initialize.php:160
 msgid "All supplier records"
 msgstr ""
 
-#: Setup/Initialize.php:267
+#: Setup/Initialize.php:183
 msgid "All Purchase Imvoices"
 msgstr ""
 
-#: Setup/Initialize.php:268
+#: Setup/Initialize.php:184
 msgid "All purchase invoices"
 msgstr ""
 
-#: Setup/Initialize.php:291
+#: Setup/Initialize.php:207
 msgid "All Products"
 msgstr ""
 
-#: Setup/Initialize.php:292
+#: Setup/Initialize.php:208
 msgid "All product records"
 msgstr ""
 
-#: Setup/Initialize.php:302
+#: Setup/Initialize.php:218
 msgid "All Contracts"
 msgstr ""
 
-#: Setup/Initialize.php:303
+#: Setup/Initialize.php:219
 msgid "All contract records"
 msgstr ""
 
-#: Setup/Initialize.php:313
+#: Setup/Initialize.php:229
 msgid "All Invoices"
 msgstr ""
 
-#: Setup/Initialize.php:314
+#: Setup/Initialize.php:230
 msgid "All invoice records"
 msgstr ""
 
-#: Setup/Initialize.php:324
+#: Setup/Initialize.php:240
 msgid "All Order Confirmations"
 msgstr ""
 
-#: Setup/Initialize.php:325
+#: Setup/Initialize.php:241
 msgid "All order confirmation records"
 msgstr ""
 
-#: Setup/Initialize.php:341 Config.php:1036 Config.php:1038
-msgid "Default Division"
-msgstr ""
-
-#: Setup/Initialize.php:359
-msgid "Standard"
-msgstr ""
-
-#: Config.php:258
+#: Config.php:229
 msgid "Auto Invoice Contract Interval"
 msgstr ""
 
-#: Config.php:260
+#: Config.php:231
 msgid "Sets the biggest interval, contracts will be billed."
 msgstr ""
 
-#: Config.php:268
+#: Config.php:239
 msgid "Followup Status"
 msgstr ""
 
-#: Config.php:270
+#: Config.php:241
 msgid "Possible Followup Status"
 msgstr ""
 
-#: Config.php:280 Config.php:870
+#: Config.php:251 Config.php:804
 msgid "None"
 msgstr ""
 
-#: Config.php:286
+#: Config.php:257
 msgid "Partially"
 msgstr ""
 
-#: Config.php:292
+#: Config.php:263
 msgid "Completed"
 msgstr ""
 
-#: Config.php:302
+#: Config.php:273
 msgid "Reversal Status"
 msgstr ""
 
-#: Config.php:304
+#: Config.php:275
 msgid "Possible Reversal Status"
 msgstr ""
 
-#: Config.php:314
+#: Config.php:285
 msgid "Not reversed"
 msgstr ""
 
-#: Config.php:320
+#: Config.php:291
 msgid "Partially reversed"
 msgstr ""
 
-#: Config.php:326
+#: Config.php:297
 msgid "Reversed"
 msgstr ""
 
-#: Config.php:336
+#: Config.php:307
 msgid "Offer Status"
 msgstr ""
 
-#: Config.php:338
+#: Config.php:309
 msgid "Possible Offer Status"
 msgstr ""
 
-#: Config.php:353
+#: Config.php:324
 msgid "Draft (unbooked, open)"
 msgstr ""
 
-#: Config.php:361
+#: Config.php:332
 msgid "Released (booked, open)"
 msgstr ""
 
-#: Config.php:369
+#: Config.php:340
 msgid "Ordered (booked, closed)"
 msgstr ""
 
-#: Config.php:377
+#: Config.php:348
 msgid "Rejected (booked, closed)"
 msgstr ""
 
-#: Config.php:389
+#: Config.php:360
 msgid "Offer Status Transitions"
 msgstr ""
 
-#: Config.php:391
+#: Config.php:362
 msgid "Possible Offer Status Transitions"
 msgstr ""
 
-#: Config.php:432
+#: Config.php:400
 msgid "Order Status"
 msgstr ""
 
-#: Config.php:434
+#: Config.php:402
 msgid "Possible Order Status"
 msgstr ""
 
-#: Config.php:449
+#: Config.php:417
 msgid "Received (unbooked, open)"
 msgstr ""
 
-#: Config.php:457
+#: Config.php:425
 msgid "Accepted (booked, open)"
 msgstr ""
 
-#: Config.php:465 Config.php:534
+#: Config.php:433 Config.php:500
 msgid "Done (booked, closed)"
 msgstr ""
 
-#: Config.php:477
+#: Config.php:445
 msgid "Order Status Transitions"
 msgstr ""
 
-#: Config.php:479
+#: Config.php:447
 msgid "Possible Order Status Transitions"
 msgstr ""
 
-#: Config.php:508
+#: Config.php:474
 msgid "Delivery Status"
 msgstr ""
 
-#: Config.php:510
+#: Config.php:476
 msgid "Possible Delivery Status"
 msgstr ""
 
-#: Config.php:526
+#: Config.php:492
 msgid "Created (unbooked, open)"
 msgstr ""
 
-#: Config.php:546
+#: Config.php:512
 msgid "Delivery Status Transitions"
 msgstr ""
 
-#: Config.php:548
+#: Config.php:514
 msgid "Possible Delivery Status Transitions"
 msgstr ""
 
-#: Config.php:570
+#: Config.php:535
 msgid "Invoice Status"
 msgstr ""
 
-#: Config.php:572
+#: Config.php:537
 msgid "Possible Invoice Status"
 msgstr ""
 
-#: Config.php:587
+#: Config.php:552
 msgid "Proforma (unbooked, open)"
 msgstr ""
 
-#: Config.php:595
+#: Config.php:560
 msgid "Booked (booked, open)"
 msgstr ""
 
-#: Config.php:603
+#: Config.php:568
 msgid "Shipped (booked, closed)"
 msgstr ""
 
-#: Config.php:611
+#: Config.php:576
 msgid "Paid (booked, closed)"
 msgstr ""
 
-#: Config.php:623
+#: Config.php:588
 msgid "Invoice Status Transitions"
 msgstr ""
 
-#: Config.php:625
+#: Config.php:590
 msgid "Possible Invoice Status Transitions"
 msgstr ""
 
-#: Config.php:659
+#: Config.php:622
 msgid "Ignore Billables Before Date"
 msgstr ""
 
-#: Config.php:661
+#: Config.php:624
 msgid "Sets the date billables will be ignored before."
 msgstr ""
 
-#: Config.php:669
+#: Config.php:632
 msgid "Contract Number Creation"
 msgstr "Tạo số hợp đồng"
 
-#: Config.php:671
+#: Config.php:634
 msgid "Should the contract number be set manually or be auto-created?"
 msgstr "Sẽ tự động hay tự nhập"
 
-#: Config.php:674 Config.php:883
+#: Config.php:637 Config.php:817
 msgid "automatically"
 msgstr "tự động"
 
-#: Config.php:675 Config.php:884
+#: Config.php:638 Config.php:818
 msgid "manually"
 msgstr "tự nhập"
 
-#: Config.php:682
+#: Config.php:645
 msgid "Contract Number Validation"
 msgstr "Phê chuẩn số hợp đồng"
 
-#: Config.php:684 Config.php:893
+#: Config.php:647 Config.php:827
 msgid "The Number can be validated as text or number."
 msgstr "Số có thể được phê chuẩn khi là chữ hoặc số"
 
-#: Config.php:688 Config.php:775 Config.php:897
+#: Config.php:651 Config.php:725 Config.php:831
 msgid "Text"
 msgstr "Chữ"
 
-#: Config.php:695
+#: Config.php:658
 msgid "Own Currency"
 msgstr ""
 
-#: Config.php:697
+#: Config.php:660
 msgid "The currency defined here is used as default currency in the customerd edit dialog."
 msgstr ""
 
-#: Config.php:705
+#: Config.php:668
 msgid "Languages Available"
 msgstr ""
 
-#: Config.php:706
+#: Config.php:669
 msgid "List of languages available in the sales modules."
 msgstr ""
 
-#: Config.php:720
+#: Config.php:683
 msgid "Invoice Type"
 msgstr ""
 
-#: Config.php:722
+#: Config.php:685
 msgid "Possible Invoice Types."
 msgstr ""
 
-#: Config.php:731 Config.php:936
+#: Config.php:694 Config.php:870
 msgid "Credit"
 msgstr ""
 
-#: Config.php:737 Model/DocumentPosition/Abstract.php:297
-msgid "Price Type"
-msgstr ""
-
-#: Config.php:738
-msgid "Price is net or gross. Calculation is based on net or gross."
-msgstr ""
-
-#: Config.php:743
-msgid "Net"
-msgstr ""
-
-#: Config.php:744
-msgid "Gross"
-msgstr ""
-
-#: Config.php:750 Config.php:751 Model/Document/Abstract.php:339
+#: Config.php:700 Config.php:701 Model/Document/Abstract.php:292
 msgid "Invoice Discount Type"
 msgstr ""
 
-#: Config.php:759
+#: Config.php:709
 msgid "Percentage"
 msgstr ""
 
-#: Config.php:760
+#: Config.php:710
 msgid "Sum"
 msgstr ""
 
-#: Config.php:765 Config.php:766
+#: Config.php:715 Config.php:716
 msgid "Document Position Type"
 msgstr ""
 
-#: Config.php:776
+#: Config.php:726
 msgid "Heading"
 msgstr ""
 
-#: Config.php:777
+#: Config.php:727
 msgid "Page Break"
 msgstr ""
 
-#: Config.php:778
+#: Config.php:728
 msgid "Alternative"
 msgstr ""
 
-#: Config.php:779
+#: Config.php:729
 msgid "Optional"
 msgstr ""
 
-#: Config.php:785 Config.php:787
-msgid "Default Category"
+#: Config.php:735 Config.php:736 Model/Boilerplate.php:125
+msgid "Document Category"
 msgstr ""
 
-#: Config.php:817
+#: Config.php:745
+msgid "Standard"
+msgstr ""
+
+#: Config.php:751
 msgid "Product Category"
 msgstr ""
 
-#: Config.php:819
+#: Config.php:753
 msgid "Possible Product Categories."
 msgstr ""
 
-#: Config.php:826
+#: Config.php:760
 msgid "Default"
 msgstr ""
 
-#: Config.php:832 Config.php:833
+#: Config.php:766 Config.php:767
 msgid "Product Unfold Type"
 msgstr ""
 
-#: Config.php:841 Config.php:871
+#: Config.php:775 Config.php:805
 msgid "Shared"
 msgstr ""
 
-#: Config.php:842 Config.php:872
+#: Config.php:776 Config.php:806
 msgid "Own"
 msgstr ""
 
-#: Config.php:847 Config.php:848
+#: Config.php:781 Config.php:782
 msgid "Product Unit"
 msgstr ""
 
-#: Config.php:856 Model/ProductAggregate.php:308
+#: Config.php:790 Model/ProductAggregate.php:308
 msgid "Piece"
 msgstr ""
 
-#: Config.php:861
+#: Config.php:795
 msgid "Sub-Product Variable Position Flag"
 msgstr ""
 
-#: Config.php:862
+#: Config.php:796
 msgid "Accounting for the sub-product is variable and each same sub-product gets on own or a common shared position in a document."
 msgstr ""
 
-#: Config.php:878
+#: Config.php:812
 msgid "Product Number Creation"
 msgstr ""
 
-#: Config.php:880
+#: Config.php:814
 msgid "Should the product number be set manually or be auto-created?"
 msgstr ""
 
-#: Config.php:891
+#: Config.php:825
 msgid "Product Number Validation"
 msgstr ""
 
-#: Config.php:904
+#: Config.php:838
 msgid "Product Number Prefix"
 msgstr ""
 
-#: Config.php:906
+#: Config.php:840
 msgid "The prefix of the product number."
 msgstr ""
 
-#: Config.php:914
+#: Config.php:848
 msgid "Product Number Zero Fill"
 msgstr ""
 
-#: Config.php:916
+#: Config.php:850
 msgid "Fill the number with leading zero"
 msgstr ""
 
-#: Config.php:924 Model/PurchaseInvoice.php:120
+#: Config.php:858 Model/PurchaseInvoice.php:120
 msgid "Payment Method"
 msgstr ""
 
-#: Config.php:926
+#: Config.php:860
 msgid "Possible Payment Methods."
 msgstr ""
 
-#: Config.php:933
+#: Config.php:867
 msgid "Bank transfer"
 msgstr ""
 
-#: Config.php:934
+#: Config.php:868
 msgid "Direct debit"
 msgstr ""
 
-#: Config.php:935
+#: Config.php:869
 msgid "Cancellation"
 msgstr ""
 
-#: Config.php:937
+#: Config.php:871
 msgid "Credit card"
 msgstr ""
 
-#: Config.php:938
+#: Config.php:872
 msgid "EC card"
 msgstr ""
 
-#: Config.php:939
+#: Config.php:873
 msgid "Paypal"
 msgstr ""
 
-#: Config.php:940
+#: Config.php:874
 msgid "Assets"
 msgstr ""
 
-#: Config.php:946
+#: Config.php:880
 msgid "Invoice Cleared"
 msgstr ""
 
-#: Config.php:948
+#: Config.php:882
 msgid "Possible Invoice Cleared States."
 msgstr ""
 
-#: Config.php:955
+#: Config.php:889
 msgid "to clear"
 msgstr ""
 
-#: Config.php:956
+#: Config.php:890
 msgid "cleared"
 msgstr ""
 
-#: Config.php:962 Config.php:963
-msgid "Datev sender email purchase invoice"
-msgstr ""
-
-#: Config.php:970 Config.php:971
-msgid "Datev sender email for invoice"
-msgstr ""
-
-#: Config.php:978 Config.php:979
-msgid "Datev recipient emails"
-msgstr ""
-
-#: Config.php:986
-msgid "VAT Procedures"
-msgstr ""
-
-#: Config.php:988
-msgid "Possible VAT Procedures"
-msgstr ""
-
-#: Config.php:998
-msgid "Taxable"
-msgstr ""
-
-#: Config.php:1004
-msgid "Non taxable"
-msgstr ""
-
-#: Config.php:1010
-msgid "Reverse charge"
-msgstr ""
-
-#: Config.php:1020
-msgid "Reverse Charge Template"
-msgstr ""
-
-#: Config.php:1022 Config.php:1068
-msgid "Enabled Features in Sales Application."
-msgstr ""
-
-#: Config.php:1066
+#: Config.php:911
 msgid "Enabled Features"
 msgstr ""
 
-#: Config.php:1077
+#: Config.php:913
+msgid "Enabled Features in Sales Application."
+msgstr ""
+
+#: Config.php:922
 msgid "Invoices Module"
 msgstr ""
 
-#: Config.php:1084
+#: Config.php:929
 msgid "Offers Module"
 msgstr ""
 
-#: Config.php:1092
+#: Config.php:937
 msgid "Legacy Offers"
 msgstr ""
 
-#: Config.php:1100
+#: Config.php:945
 msgid "Order Confirmations Module"
 msgstr ""
 
-#: Config.php:1107
+#: Config.php:952
 msgid "Suppliers Module"
 msgstr ""
 
-#: Config.php:1114
+#: Config.php:959
 msgid "Purchase Invoice Module"
 msgstr ""
 
-#: Config.php:1094
+#: Config.php:939
 msgid "Legacy (non-document) Offers)"
 msgstr ""
 
@@ -1496,19 +1408,11 @@ msgstr ""
 msgid "The number you have tried to set is already in use!"
 msgstr "Số bạn đang đặt đã tồn tại!"
 
-#: Controller/Boilerplate.php:119
-msgid "Name needs to be unique."
-msgstr ""
-
-#: Controller/Boilerplate.php:121
-msgid "Dates \""
-msgstr ""
-
 #: Model/OrderConfirmation.php:32
 msgid "GENDER_Order Confirmation"
 msgstr ""
 
-#: Model/InvoicePosition.php:37 Model/DocumentPosition/Invoice.php:33
+#: Model/InvoicePosition.php:37
 msgid "Invoice Position"
 msgid_plural "Invoice Positions"
 msgstr[0] ""
@@ -1517,164 +1421,82 @@ msgstr[0] ""
 msgid "Month"
 msgstr ""
 
-#: Model/InvoicePosition.php:94 Model/Product.php:186
-#: Model/DocumentPosition/Abstract.php:291
+#: Model/InvoicePosition.php:94 Model/Product.php:205
+#: Model/DocumentPosition/Abstract.php:277
 msgid "Unit"
-msgstr ""
-
-#: Model/DivisionGrants.php:79
-msgid "Read Debitors"
-msgstr ""
-
-#: Model/DivisionGrants.php:80
-msgid "The grant to read the division's debitors."
-msgstr ""
-
-#: Model/DivisionGrants.php:83
-msgid "Admin Debitors"
-msgstr ""
-
-#: Model/DivisionGrants.php:84
-msgid "The grant to administrate the division's debitors."
-msgstr ""
-
-#: Model/DivisionGrants.php:87
-msgid "Read Offers"
-msgstr ""
-
-#: Model/DivisionGrants.php:88
-msgid "The grant to read the division's offer documents."
-msgstr ""
-
-#: Model/DivisionGrants.php:91
-msgid "Admin Offers"
-msgstr ""
-
-#: Model/DivisionGrants.php:92
-msgid "The grant to administrate the division's offer documents."
-msgstr ""
-
-#: Model/DivisionGrants.php:95
-msgid "Read Orders"
-msgstr ""
-
-#: Model/DivisionGrants.php:96
-msgid "The grant to read the division's order documents."
-msgstr ""
-
-#: Model/DivisionGrants.php:99
-msgid "Admin Orders"
-msgstr ""
-
-#: Model/DivisionGrants.php:100
-msgid "The grant to administrate the division's order documents."
-msgstr ""
-
-#: Model/DivisionGrants.php:103
-msgid "Read Deliveries"
-msgstr ""
-
-#: Model/DivisionGrants.php:104
-msgid "The grant to read the division's delivery documents."
-msgstr ""
-
-#: Model/DivisionGrants.php:107
-msgid "Admin Deliveries"
-msgstr ""
-
-#: Model/DivisionGrants.php:108
-msgid "The grant to administrate the division's delivery documents."
-msgstr ""
-
-#: Model/DivisionGrants.php:111
-msgid "Read Invoices"
-msgstr ""
-
-#: Model/DivisionGrants.php:112
-msgid "The grant to read the division's invoice documents."
-msgstr ""
-
-#: Model/DivisionGrants.php:115
-msgid "Admin Invoices"
-msgstr ""
-
-#: Model/DivisionGrants.php:116
-msgid "The grant to administrate the division's invoice documents."
-msgstr ""
-
-#: Model/DivisionGrants.php:119
-msgid "Admin"
-msgstr ""
-
-#: Model/DivisionGrants.php:120
-msgid "The grant to administrate this division (implies all other grants and the grant to set grants as well)."
 msgstr ""
 
 #: Model/Offer.php:32 Model/Document/Offer.php:44
 msgid "GENDER_Offer"
 msgstr ""
 
-#: Model/Product.php:112 Model/Product.php:254 Model/Document/Category.php:34
-#: Model/Document/Abstract.php:200 Model/Boilerplate.php:129
-#, fuzzy
+#: Model/Product.php:131 Model/Product.php:266 Model/Document/Abstract.php:168
 msgid "Category"
-msgid_plural "Categories"
-msgstr[0] "Danh mục"
+msgstr "Danh mục"
 
-#: Model/Product.php:130
+#: Model/Product.php:149
 msgid "GTIN"
 msgstr ""
 
-#: Model/Product.php:138 Model/SubProductMapping.php:126
+#: Model/Product.php:157 Model/SubProductMapping.php:126
 msgid "Shortcut"
 msgstr ""
 
-#: Model/Product.php:168
+#: Model/Product.php:187
 msgid "Default Grouping"
 msgstr ""
 
-#: Model/Product.php:174
+#: Model/Product.php:193
 msgid "Default Sorting"
 msgstr ""
 
-#: Model/Product.php:194
+#: Model/Product.php:213
 msgid "Purchaseprice"
 msgstr ""
 
-#: Model/Product.php:203
-msgid "Salesprice Type"
-msgstr ""
-
-#: Model/Product.php:211
+#: Model/Product.php:223
 msgid "Salesprice"
 msgstr ""
 
-#: Model/Product.php:220 Model/DocumentPosition/Abstract.php:354
+#: Model/Product.php:232 Model/DocumentPosition/Abstract.php:333
 msgid "Sales Tax Rate"
 msgstr ""
 
-#: Model/Product.php:232
+#: Model/Product.php:244
 msgid "Manufacturer"
 msgstr "Nhà sản xuất"
 
-#: Model/Product.php:240
+#: Model/Product.php:252
 msgid "Subproducts"
 msgstr ""
 
-#: Model/Product.php:260
+#: Model/Product.php:272
 msgid "Is Sales Product"
 msgstr ""
 
-#: Model/Product.php:266
+#: Model/Product.php:278
 msgid "Is active"
 msgstr ""
 
-#: Model/Product.php:286
+#: Model/Product.php:289
+msgid "Accountable"
+msgstr ""
+
+#: Model/Product.php:298
 msgid "Lifespan start"
 msgstr ""
 
-#: Model/Product.php:297
+#: Model/Product.php:309
 msgid "Lifespan end"
+msgstr ""
+
+#: Model/Product.php:319 Model/DocumentPosition/Abstract.php:370
+msgid "Costcenter"
+msgstr ""
+
+#: Model/Product.php:328 Model/Document/Abstract.php:371
+#: Model/DocumentPosition/Abstract.php:360
+msgid "Cost Bearer"
 msgstr ""
 
 #: Model/SubProductMapping.php:43
@@ -1694,21 +1516,17 @@ msgstr ""
 msgid "Amount"
 msgstr ""
 
-#: Model/SubProductMapping.php:150 Model/DocumentPosition/Abstract.php:238
+#: Model/SubProductMapping.php:150 Model/DocumentPosition/Abstract.php:224
 msgid "Sorting"
 msgstr ""
 
-#: Model/Address.php:65
+#: Model/Address.php:62
 msgid "GENDER_Address"
 msgstr ""
 
-#: Model/Address.php:103
-msgid "Debitor Number"
-msgstr ""
-
-#: Model/Address.php:234 Model/ProductAggregate.php:137 Model/Invoice.php:307
-#: Model/Invoice.php:311 Model/Invoice.php:315 Model/Invoice.php:319
-#: Model/Invoice.php:323 Model/Invoice.php:327 Model/Invoice.php:331
+#: Model/Address.php:223 Model/ProductAggregate.php:137 Model/Invoice.php:297
+#: Model/Invoice.php:301 Model/Invoice.php:305 Model/Invoice.php:309
+#: Model/Invoice.php:313 Model/Invoice.php:317 Model/Invoice.php:321
 msgid "Invoice Item"
 msgstr ""
 
@@ -1716,21 +1534,8 @@ msgstr ""
 msgid "Billing Interval"
 msgstr ""
 
-#: Model/Document/Category.php:33
-msgid "GENDER_Category"
-msgstr ""
-
-#: Model/Document/Category.php:75 Model/Document/Abstract.php:151
-#: Model/Division.php:33 Model/DivisionEvalDimensionItem.php:36
-#: Model/DivisionEvalDimensionItem.php:61 Model/Debitor.php:121
-msgid "Division"
-msgid_plural "Divisions"
-msgstr[0] ""
-"one: Bộ phận\n"
-"other: Bộ phận"
-
 #: Model/Document/Offer.php:89 Model/Document/Order.php:63
-#: Model/Document/Delivery.php:66 Model/Document/Invoice.php:71
+#: Model/Document/Delivery.php:66 Model/Document/Invoice.php:69
 msgid "Status"
 msgstr ""
 
@@ -1771,110 +1576,98 @@ msgstr ""
 msgid "Invoice Booked"
 msgstr ""
 
-#: Model/Document/Order.php:117
+#: Model/Document/Order.php:119
 msgid "Invoice Recipient"
 msgstr ""
 
-#: Model/Document/Order.php:137
+#: Model/Document/Order.php:139
 msgid "Delivery Recipient"
 msgstr ""
 
-#: Model/Document/Order.php:157
+#: Model/Document/Order.php:159
 msgid "Shared Delivery"
 msgstr ""
 
-#: Model/Document/Order.php:158
-msgid "include in shared delivery"
-msgstr ""
-
-#: Model/Document/Order.php:164
+#: Model/Document/Order.php:166
 msgid "Shared Invoice"
 msgstr ""
 
-#: Model/Document/Order.php:165
-msgid "include in shared invoice"
-msgstr ""
-
-#: Model/Document/Order.php:191
+#: Model/Document/Order.php:193
 msgid "OR-"
 msgstr ""
 
-#: Model/Document/Abstract.php:105
+#: Model/Document/Abstract.php:102
 msgid "Document"
 msgid_plural "Documents"
 msgstr[0] ""
 
-#: Model/Document/Abstract.php:106
+#: Model/Document/Abstract.php:103
 msgid "GENDER_Document"
 msgstr ""
 
-#: Model/Document/Abstract.php:169
+#: Model/Document/Abstract.php:138
 msgid "Document Number"
 msgstr ""
 
-#: Model/Document/Abstract.php:224
+#: Model/Document/Abstract.php:188
 msgid "Boilerplates"
 msgstr ""
 
-#: Model/Document/Abstract.php:245
+#: Model/Document/Abstract.php:209
 msgid "Document Date"
 msgstr ""
 
-#: Model/Document/Abstract.php:253
+#: Model/Document/Abstract.php:217
 msgid "Customer Reference"
 msgstr ""
 
-#: Model/Document/Abstract.php:277 Model/Debitor.php:40
-msgid "Debitor"
-msgid_plural "Debitors"
-msgstr[0] ""
-
-#: Model/Document/Abstract.php:288
+#: Model/Document/Abstract.php:241
 msgid "Recipient"
 msgstr ""
 
-#: Model/Document/Abstract.php:299
+#: Model/Document/Abstract.php:252
 msgid "Reference Person"
 msgstr ""
 
-#: Model/Document/Abstract.php:320
+#: Model/Document/Abstract.php:273
 msgid "Positions Net Sum"
 msgstr ""
 
-#: Model/Document/Abstract.php:329
+#: Model/Document/Abstract.php:282
 msgid "Positions Discount Sum"
 msgstr ""
 
-#: Model/Document/Abstract.php:347
+#: Model/Document/Abstract.php:300
 msgid "Invoice Discount Percentage"
 msgstr ""
 
-#: Model/Document/Abstract.php:353
+#: Model/Document/Abstract.php:306
 msgid "Invoice Discount Sum"
 msgstr ""
 
-#: Model/Document/Abstract.php:365
+#: Model/Document/Abstract.php:318
 msgid "Net Sum"
 msgstr ""
 
-#: Model/Document/Abstract.php:373 Model/Customer.php:226
-msgid "VAT Procedure"
-msgstr ""
-
-#: Model/Document/Abstract.php:378 Model/Invoice.php:205
-#: Model/PurchaseInvoice.php:168 Model/DocumentPosition/Abstract.php:364
+#: Model/Document/Abstract.php:326 Model/Invoice.php:203
+#: Model/PurchaseInvoice.php:168 Model/DocumentPosition/Abstract.php:343
 msgid "Sales Tax"
 msgstr ""
 
-#: Model/Document/Abstract.php:387
+#: Model/Document/Abstract.php:335
 msgid "Sales Tax by Rate"
 msgstr ""
 
-#: Model/Document/Abstract.php:396
+#: Model/Document/Abstract.php:344
 msgid "Gross Sum"
 msgstr ""
 
-#: Model/Document/Abstract.php:412
+#: Model/Document/Abstract.php:361 Model/Invoice.php:157
+#: Model/PurchaseInvoice.php:188
+msgid "Cost Center"
+msgstr ""
+
+#: Model/Document/Abstract.php:381
 msgid "Internal Note"
 msgstr ""
 
@@ -1887,7 +1680,7 @@ msgid "Delivery"
 msgid_plural "Deliveries"
 msgstr[0] ""
 
-#: Model/Document/Delivery.php:81 Model/Document/Invoice.php:86
+#: Model/Document/Delivery.php:81 Model/Document/Invoice.php:84
 msgid "Proforma Number"
 msgstr ""
 
@@ -1895,7 +1688,7 @@ msgstr ""
 msgid "PD-"
 msgstr ""
 
-#: Model/Document/Delivery.php:98 Model/Document/Invoice.php:110
+#: Model/Document/Delivery.php:97 Model/Document/Invoice.php:100
 msgid "Shared Document"
 msgstr ""
 
@@ -1903,51 +1696,23 @@ msgstr ""
 msgid "DN-"
 msgstr ""
 
-#: Model/Document/Invoice.php:47 Model/Invoice.php:57
+#: Model/Document/Invoice.php:45 Model/Invoice.php:55
 msgid "GENDER_Invoice"
 msgstr ""
 
-#: Model/Document/Invoice.php:92
+#: Model/Document/Invoice.php:90
 msgid "PI-"
 msgstr ""
 
-#: Model/Document/Invoice.php:100 Model/PurchaseInvoice.php:222
-msgid "Last Datev send date"
-msgstr ""
-
-#: Model/Document/Invoice.php:125
+#: Model/Document/Invoice.php:115
 msgid "IN-"
 msgstr ""
 
-#: Model/Division.php:32 Model/DivisionEvalDimensionItem.php:35
-msgid "GENDER_Division"
-msgstr ""
-
-#: Model/Customer.php:46
+#: Model/Customer.php:38
 msgid "GENDER_Customer"
 msgstr ""
 
-#: Model/Customer.php:94
-msgid "Has Offers"
-msgstr ""
-
-#: Model/Customer.php:108
-msgid "Has Orders"
-msgstr ""
-
-#: Model/Customer.php:122
-msgid "Has Invoices"
-msgstr ""
-
-#: Model/Customer.php:136
-msgid "Has Deliveries"
-msgstr ""
-
-#: Model/Invoice.php:159 Model/PurchaseInvoice.php:188
-msgid "Cost Center"
-msgstr ""
-
-#: Model/Invoice.php:303
+#: Model/Invoice.php:293
 msgid "Reversal Invoice"
 msgstr ""
 
@@ -1955,27 +1720,15 @@ msgstr ""
 msgid "GENDER_Supplier"
 msgstr ""
 
-#: Model/Debitor.php:39
-msgid "GENDER_Debitor"
-msgstr ""
-
-#: Model/Debitor.php:133
-msgid "Delivery Addresses"
-msgstr ""
-
-#: Model/Debitor.php:152
-msgid "Billing Addresses"
-msgstr ""
-
-#: Model/Boilerplate.php:79
+#: Model/Boilerplate.php:74
 msgid "Model"
 msgstr ""
 
-#: Model/Boilerplate.php:100
+#: Model/Boilerplate.php:95
 msgid "From"
 msgstr ""
 
-#: Model/Boilerplate.php:115
+#: Model/Boilerplate.php:110
 msgid "Until"
 msgstr ""
 
@@ -1987,100 +1740,69 @@ msgstr ""
 msgid "GENDER_Contract"
 msgstr ""
 
-#: Model/Contract.php:242
+#: Model/Contract.php:235
 msgid "Merge"
 msgstr ""
 
-#: Model/Contract.php:272
+#: Model/Contract.php:265
 msgid "Responsible"
 msgstr "Chịu trách nhiệm"
 
-#: Model/Contract.php:274
+#: Model/Contract.php:267
 msgid "Partner"
 msgstr "Đối tác"
 
-#: Model/Contract.php:290
+#: Model/Contract.php:283
 msgid "Time Account"
 msgstr "Tài khoản theo thời gian"
 
-#: Model/DocumentPosition/Offer.php:33
-msgid "Offer Position"
-msgid_plural "Offer Positions"
-msgstr[0] ""
-
-#: Model/DocumentPosition/Offer.php:34
-msgid "GENDER_Offer Position"
-msgstr ""
-
-#: Model/DocumentPosition/Order.php:33
-msgid "Order Position"
-msgid_plural "Order Positions"
-msgstr[0] ""
-
-#: Model/DocumentPosition/Order.php:34
-msgid "GENDER_Order Position"
-msgstr ""
-
-#: Model/DocumentPosition/Abstract.php:154
+#: Model/DocumentPosition/Abstract.php:153
 msgid "Position"
 msgid_plural "Positions"
 msgstr[0] ""
 
-#: Model/DocumentPosition/Abstract.php:155
+#: Model/DocumentPosition/Abstract.php:154
 msgid "GENDER_Position"
 msgstr ""
 
-#: Model/DocumentPosition/Abstract.php:213
+#: Model/DocumentPosition/Abstract.php:199
 msgid "Pos."
 msgstr ""
 
-#: Model/DocumentPosition/Abstract.php:231
+#: Model/DocumentPosition/Abstract.php:217
 msgid "Grouping"
 msgstr ""
 
-#: Model/DocumentPosition/Abstract.php:260
+#: Model/DocumentPosition/Abstract.php:246
 msgid "Product / Service"
 msgstr ""
 
-#: Model/DocumentPosition/Abstract.php:285
+#: Model/DocumentPosition/Abstract.php:271
 msgid "Use Actual Quantity"
 msgstr ""
 
-#: Model/DocumentPosition/Abstract.php:304
+#: Model/DocumentPosition/Abstract.php:283
 msgid "Unit Price"
 msgstr ""
 
-#: Model/DocumentPosition/Abstract.php:318
+#: Model/DocumentPosition/Abstract.php:297
 msgid "Position Discount Type"
 msgstr ""
 
-#: Model/DocumentPosition/Abstract.php:326
+#: Model/DocumentPosition/Abstract.php:305
 msgid "Position Discount Percentage"
 msgstr ""
 
-#: Model/DocumentPosition/Abstract.php:334
+#: Model/DocumentPosition/Abstract.php:313
 msgid "Position Discount Sum"
 msgstr ""
 
-#: Model/DocumentPosition/Abstract.php:345
+#: Model/DocumentPosition/Abstract.php:324
 msgid "Net price"
 msgstr ""
 
-#: Model/DocumentPosition/Abstract.php:373
+#: Model/DocumentPosition/Abstract.php:352
 msgid "Gross Price"
-msgstr ""
-
-#: Model/DocumentPosition/Delivery.php:33
-msgid "Delivery Position"
-msgid_plural "Delivery Positions"
-msgstr[0] ""
-
-#: Model/DocumentPosition/Delivery.php:34
-msgid "GENDER_Delivery Position"
-msgstr ""
-
-#: Model/DocumentPosition/Invoice.php:34
-msgid "GENDER_Invoice Position"
 msgstr ""
 
 #: Export/Ods/Invoice.php:125
@@ -2091,20 +1813,10 @@ msgstr "ĐÃ XÓA"
 msgid "INVOICE"
 msgstr "HÓA ĐƠN"
 
-#: Export/definitions/customer_xls_current_columns.xml:5
-#: Export/definitions/documentinvoice_xls_current_columns.xml:5
-#: Export/definitions/documentorder_xls_current_columns.xml:5
-#: Export/definitions/documentdelivery_xls_current_columns.xml:5
-#: Export/definitions/product_xls_current_columns.xml:5
-#: Export/definitions/documentoffer_xls_current_columns.xml:5
-msgid "Excel current columns"
-msgstr ""
-
 #: Export/definitions/documentoffer_xls.xml:5
-#: Export/definitions/product_xls.xml:5 Export/definitions/debitor_xls.xml:5
+#: Export/definitions/product_xls.xml:5
 #: Export/definitions/documentinvoice_xls.xml:5
 #: Export/definitions/customer_xls.xml:5
-#: Export/definitions/sales_expot_boilerplate_xls.xml:6
 #: Export/definitions/purchaseinvoice_xls.xml:5
 #: Export/definitions/documentdelivery_xls.xml:5
 #: Export/definitions/documentorder_xls.xml:5
@@ -2173,101 +1885,99 @@ msgstr ""
 msgid "The Address you tried to delete is used in one or more contract(s) as Billing Address. Please assign another Billing Address to these contracts or change this one and do not delete."
 msgstr ""
 
-#: Acl/Rights.php:195
+#: Acl/Rights.php:188
 msgid "Manage Products"
 msgstr ""
 
-#: Acl/Rights.php:196
+#: Acl/Rights.php:189
 msgid "Add, edit and delete products."
 msgstr ""
 
-#: Acl/Rights.php:199
+#: Acl/Rights.php:192
 msgid "Manage Contracts"
 msgstr ""
 
-#: Acl/Rights.php:200
+#: Acl/Rights.php:193
 msgid "Add, edit and delete contracts."
 msgstr ""
 
-#: Acl/Rights.php:203
+#: Acl/Rights.php:196
 msgid "Manage Cost Centers"
 msgstr ""
 
-#: Acl/Rights.php:204
+#: Acl/Rights.php:197
 msgid "Add, edit and delete cost centers."
 msgstr ""
 
-#: Acl/Rights.php:207
+#: Acl/Rights.php:200
 msgid "Manage Customers"
 msgstr ""
 
-#: Acl/Rights.php:208
+#: Acl/Rights.php:201
 msgid "Add, edit and delete customers."
 msgstr ""
 
-#: Acl/Rights.php:211
+#: Acl/Rights.php:204
 msgid "Manage Suppliers"
 msgstr ""
 
-#: Acl/Rights.php:212
+#: Acl/Rights.php:205
 msgid "Add, edit and delete suppliers."
 msgstr ""
 
-#: Acl/Rights.php:215
+#: Acl/Rights.php:208
 msgid "manage invoices"
 msgstr ""
 
-#: Acl/Rights.php:216
+#: Acl/Rights.php:209
 msgid "Add, edit and delete invoices."
 msgstr ""
 
-#: Acl/Rights.php:219
+#: Acl/Rights.php:212
 msgid "Manage Order Confirmations"
 msgstr ""
 
-#: Acl/Rights.php:220
+#: Acl/Rights.php:213
 msgid "Add, edit and delete order confirmations."
 msgstr ""
 
-#: Acl/Rights.php:223
+#: Acl/Rights.php:216
 msgid "Manage Offers"
 msgstr ""
 
-#: Acl/Rights.php:224
+#: Acl/Rights.php:217
 msgid "Add, edit and delete offers."
 msgstr ""
 
-#: Acl/Rights.php:227
+#: Acl/Rights.php:220
 msgid "Manage Purchase Invoices"
 msgstr ""
 
-#: Acl/Rights.php:228
+#: Acl/Rights.php:221
 msgid "Add, edit and delete purchase invoices."
 msgstr ""
 
-#: Acl/Rights.php:231
+#: Acl/Rights.php:224
 msgid "Change number of an order confirmations"
 msgstr ""
 
-#: Acl/Rights.php:232
+#: Acl/Rights.php:225
 msgid "Allow changing the number of an order confirmation during the update."
 msgstr ""
 
-#: Acl/Rights.php:235
+#: Acl/Rights.php:228
 msgid "Set number of invoices"
 msgstr ""
 
-#: Acl/Rights.php:236
+#: Acl/Rights.php:229
 msgid "Allow to set the number of an invoice."
 msgstr ""
 
-#: Acl/Rights.php:239
-msgid "Manage Divisions"
-msgstr ""
-
-#: Acl/Rights.php:240
-msgid "Add, edit and delete divisions"
-msgstr ""
+#~ msgid "Division"
+#~ msgid_plural "Divisions"
+#~ msgstr[0] ""
+#~ "one: Bộ phận\n"
+#~ "other: Bộ phận"
 
 #~ msgid "Remark"
 #~ msgstr "Đánh dấu lại"

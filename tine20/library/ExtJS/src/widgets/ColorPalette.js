@@ -127,17 +127,11 @@ cp.colors = ['000000', '993300', '333300'];
                     if (value === 'picker') {
                         return 'FFFFFF';
                     }
-                    if (value === 'auto') {
-                        return 'FFFFFF';
-                    }
                     return value;
                 },
                 getSymbol: function (value) {
                     if (value === 'picker') {
                         return '+';
-                    }
-                    if (value === 'auto') {
-                        return '&#128942';
                     }
                     return '&#160';
                 }
@@ -169,10 +163,6 @@ cp.colors = ['000000', '993300', '333300'];
             return;
         }
         if(!this.disabled){
-            if (t.className === 'color-auto') {
-                this.select(null)
-                return
-            }
             var c = t.className.match(/(?:^|\s)color-(.{6})(?:\s|$)/)[1];
             this.select(c.toUpperCase());
         }
@@ -183,12 +173,6 @@ cp.colors = ['000000', '993300', '333300'];
      * @param {String} color A valid 6-digit color hex code (# will be stripped if included)
      */
     select : function(color){
-        if (color === null) {
-            this.value = null
-            this.fireEvent('select', this, null)
-            return
-        }
-
         color = String(color).replace('#', '');
         if (color === 'PICKER') {
             this.renderColorPicker();

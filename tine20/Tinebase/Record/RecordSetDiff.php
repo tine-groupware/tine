@@ -92,19 +92,12 @@ class Tinebase_Record_RecordSetDiff extends Tinebase_Record_Abstract
 
     public function purgeLonelySeq()
     {
-
-        if (is_array($this->_properties['modified'])) {
-            foreach($this->_properties['modified'] as $key => $value) {
-                if (count($value) === 1 && isset($value['seq'])) {
-                    unset($this->_properties['modified'][$key]);
-                }
-            }
-        } elseif ($this->_properties['modified'] instanceof Tinebase_Record_RecordSet) {
-            /** @var Tinebase_Record_Diff $value */
-            foreach ($this->_properties['modified'] as $key => $value) {
-                $value->purgeLonelySeq();
-                if ($value->isEmpty()) {
-                    unset($this->_properties['modified'][$key]);
+        foreach (array('added', 'removed', 'modified') as $action) {
+            if (is_array($this->_properties[$action])) {
+                foreach($this->_properties[$action] as $key => $value) {
+                    if (count($value['seq']) === 1 && isset($value['seq'])) {
+                        unset($this->_properties[$action][$key]);
+                    }
                 }
             }
         }

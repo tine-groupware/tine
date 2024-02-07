@@ -6,12 +6,9 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
-
-use Sales_Model_Customer as SMC;
-use Sales_Model_Debitor as SMDN;
 
 /**
  * customer controller class for Sales application
@@ -19,7 +16,7 @@ use Sales_Model_Debitor as SMDN;
  * @package     Sales
  * @subpackage  Controller
  */
-class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
+class Sales_Controller_Customer extends Sales_Controller_NumberableAbstract
 {
     /**
      * delete or just set is_delete=1 if record is going to be deleted
@@ -43,9 +40,10 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
      */
     private function __construct()
     {
-        $this->_applicationName = Sales_Config::APP_NAME;
+        $this->_applicationName = 'Sales';
         $this->_backend = new Sales_Backend_Customer();
-        $this->_modelName = Sales_Model_Customer::class;
+        $this->_modelName = 'Sales_Model_Customer';
+        $this->_doContainerACLChecks = FALSE;
         // TODO this should be done automatically if model has customfields (hasCustomFields)
         $this->_resolveCustomFields = true;
     }
@@ -94,6 +92,7 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        $this->_setNextNumber($_record);
         self::validateCurrencyCode($_record->currency);
     }
 
@@ -125,6 +124,10 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
         $this->handleExternAndInternId($_record);
         
         self::validateCurrencyCode($_record->currency);
+
+        if ($_record->number != $_oldRecord->number) {
+            $this->_setNextNumber($_record, TRUE);
+        }
     }
 
     /**
@@ -137,18 +140,6 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
         $this->_setContactCustomerRelation($_createdRecord);
-
-        // create default debitor if missing
-        if (!$_record->{SMC::FLD_DEBITORS}) {
-            $_record->{SMC::FLD_DEBITORS} = new Tinebase_Record_RecordSet(Sales_Model_Debitor::class);
-        }
-        if ($_record->{SMC::FLD_DEBITORS}->count() > 0) {
-            return;
-        }
-        $_record->{SMC::FLD_DEBITORS}->addRecord(new Sales_Model_Debitor([
-            Sales_Model_Debitor::FLD_CUSTOMER_ID => $_record->getId(),
-            Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}
-        ]));
     }
 
     /**
@@ -216,7 +207,7 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
     /**
      * create postal address record after creat customer
      *
-     * - create billing address after postal address created
+     * - create billing address adter postal address created
      * - billing address equal to postal address
      *
      * @param Tinebase_Record_Interface $_record
@@ -229,12 +220,9 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
      */
     protected function _resolveBillingAddress($_record)
     {
-        // TODO FIXME WHAT DO WE DO WITH THIS?!? check each debitor? should we do this on the creation of each debitor? now its only been done on the creation of the customer...
-
-        if ($_record->{SMC::FLD_DEBITORS}?->getFirstRecord()?->{SMDN::FLD_BILLING}?->count() > 0) {
+        if (!empty($_record->billing) && (!$_record->billing instanceof Tinebase_Record_RecordSet || $_record->billing->count() > 0)) {
             return;
         }
-
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $_record['id'])));
 
@@ -244,12 +232,9 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
         if ($postalAddressRecord) {
             $billingAddress = $postalAddressRecord->getData();
             unset($billingAddress['id']);
-            unset($billingAddress[Sales_Model_Address::FLD_CUSTOMER_ID]);
-            $billingAddress['type'] = Sales_Model_Address::TYPE_BILLING;
-            $billingAddress[Sales_Model_Address::FLD_DEBITOR_ID] = $_record->{SMC::FLD_DEBITORS}->getFirstRecord()->getId();
+            $billingAddress['type'] = 'billing';
             
-            $address = Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($billingAddress));
-            $_record->{SMC::FLD_DEBITORS}?->getFirstRecord()?->{SMDN::FLD_BILLING}?->addRecord($address);
+            Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($billingAddress));
         }
     }
 
@@ -277,12 +262,14 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
                     $contact->container_id->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK])
                 {
                     Tinebase_Relations::getInstance()->addRelation(new Tinebase_Model_Relation([
+                        'own_model' => Addressbook_Model_Contact::class,
+                        'own_id' => $contact->getId(),
                         'related_degree' => Tinebase_Model_Relation::DEGREE_CHILD,
-                        'related_model' => Addressbook_Model_Contact::class,
+                        'related_model' => Sales_Model_Customer::class,
                         'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                        'related_id' => $contact->getId(),
+                        'related_id' => $customer->getId(),
                         'type' => 'CONTACTCUSTOMER'
-                    ], true), $customer);
+                    ]), $customer);
                 }
             }
         }

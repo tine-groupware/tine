@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2012-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -85,16 +85,9 @@ class HumanResources_Import_DemoData_Csv extends Tinebase_Import_Csv_Abstract
         ));
         
         HumanResources_Controller_Contract::getInstance()->create($contract_Model);
+        
 
-        static $cc = null;
-        if (null === $cc) {
-            $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
-                ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
-            ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
-        }
-
-
-        foreach ($cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} as $costCenter)
+        foreach (Tinebase_Controller_CostCenter::getInstance()->getAll() as $costCenter)
         {
             if($costCenter['name'] == $this->_costCenter )
             {

@@ -191,17 +191,17 @@ parameters:
 			path: tine20/Addressbook/Convert/Contact/String.php
 
 		-
-			message: "#^Binary operation \"\\.\" between 'Addressbook_Convert…' and Tine20\\\\VObject\\\\Node results in an error\\.$#"
+			message: "#^Binary operation \"\\.\" between 'Addressbook_Convert…' and Sabre\\\\VObject\\\\Node results in an error\\.$#"
 			count: 2
 			path: tine20/Addressbook/Convert/Contact/VCard/Abstract.php
 
 		-
-			message: "#^Binary operation \"\\.\" between non\\-empty\\-string and Tine20\\\\VObject\\\\Node results in an error\\.$#"
+			message: "#^Binary operation \"\\.\" between non\\-empty\\-string and Sabre\\\\VObject\\\\Node results in an error\\.$#"
 			count: 1
 			path: tine20/Addressbook/Convert/Contact/VCard/Abstract.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\VObject\\\\Node\\:\\:getParts\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:getParts\\(\\)\\.$#"
 			count: 1
 			path: tine20/Addressbook/Convert/Contact/VCard/Abstract.php
 
@@ -221,22 +221,22 @@ parameters:
 			path: tine20/Addressbook/Convert/Contact/VCard/Abstract.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
 			count: 1
 			path: tine20/Addressbook/Convert/Contact/VCard/Akonadi.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
 			count: 10
 			path: tine20/Addressbook/Convert/Contact/VCard/CalDAVSynchronizer.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
 			count: 3
 			path: tine20/Addressbook/Convert/Contact/VCard/DavDroid.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
 			count: 11
 			path: tine20/Addressbook/Convert/Contact/VCard/EMClient.php
 
@@ -251,7 +251,7 @@ parameters:
 			path: tine20/Addressbook/Convert/Contact/VCard/EMClient.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
 			count: 10
 			path: tine20/Addressbook/Convert/Contact/VCard/Evolution.php
 
@@ -261,12 +261,12 @@ parameters:
 			path: tine20/Addressbook/Convert/Contact/VCard/Evolution.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
 			count: 5
 			path: tine20/Addressbook/Convert/Contact/VCard/IOS.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
 			count: 1
 			path: tine20/Addressbook/Convert/Contact/VCard/KDE.php
 
@@ -276,12 +276,12 @@ parameters:
 			path: tine20/Addressbook/Convert/Contact/VCard/Telefonbuch.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VCard\\:\\:\\$X\\-OUTLOOK\\-EMAIL\\-2\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCard\\:\\:\\$X\\-OUTLOOK\\-EMAIL\\-2\\.$#"
 			count: 1
 			path: tine20/Addressbook/Convert/Contact/VCard/WebDAVCollaborator.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VCard\\:\\:\\$X\\-OUTLOOK\\-EMAIL\\-3\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCard\\:\\:\\$X\\-OUTLOOK\\-EMAIL\\-3\\.$#"
 			count: 1
 			path: tine20/Addressbook/Convert/Contact/VCard/WebDAVCollaborator.php
 
@@ -306,7 +306,7 @@ parameters:
 			path: tine20/Addressbook/Frontend/ActiveSync.php
 
 		-
-			message: "#^Method Addressbook_Frontend_CardDAV_AllContacts\\:\\:getChildren\\(\\) has invalid return type Tine20\\\\DAV\\\\DAV\\\\INode\\.$#"
+			message: "#^Method Addressbook_Frontend_CardDAV_AllContacts\\:\\:getChildren\\(\\) has invalid return type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Addressbook/Frontend/CardDAV/AllContacts.php
 
@@ -1121,27 +1121,27 @@ parameters:
 			path: tine20/Calendar/Controller/Resource.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$METHOD\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$METHOD\\.$#"
 			count: 1
 			path: tine20/Calendar/Convert/Event/VCalendar/Abstract.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$VEVENT\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$VEVENT\\.$#"
 			count: 3
 			path: tine20/Calendar/Convert/Event/VCalendar/Abstract.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$X\\-CALENDARSERVER\\-ACCESS\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$X\\-CALENDARSERVER\\-ACCESS\\.$#"
 			count: 1
 			path: tine20/Calendar/Convert/Event/VCalendar/Abstract.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VEvent\\:\\:\\$RECURRENCE\\-ID\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VEvent\\:\\:\\$RECURRENCE\\-ID\\.$#"
 			count: 1
 			path: tine20/Calendar/Convert/Event/VCalendar/Abstract.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VEvent\\:\\:\\$SEQUENCE\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VEvent\\:\\:\\$SEQUENCE\\.$#"
 			count: 1
 			path: tine20/Calendar/Convert/Event/VCalendar/Abstract.php
 
@@ -1151,17 +1151,17 @@ parameters:
 			path: tine20/Calendar/Convert/Event/VCalendar/Abstract.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\VObject\\\\Node\\:\\:getValue\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:getValue\\(\\)\\.$#"
 			count: 10
 			path: tine20/Calendar/Convert/Event/VCalendar/Abstract.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\VObject\\\\Node\\:\\:setValue\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:setValue\\(\\)\\.$#"
 			count: 1
 			path: tine20/Calendar/Convert/Event/VCalendar/Abstract.php
 
 		-
-			message: "#^Cannot cast Tine20\\\\VObject\\\\Node to string\\.$#"
+			message: "#^Cannot cast Sabre\\\\VObject\\\\Node to string\\.$#"
 			count: 4
 			path: tine20/Calendar/Convert/Event/VCalendar/Abstract.php
 
@@ -1176,7 +1176,7 @@ parameters:
 			path: tine20/Calendar/Convert/Event/VCalendar/Abstract.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$VEVENT\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$VEVENT\\.$#"
 			count: 1
 			path: tine20/Calendar/Convert/Event/VCalendar/BusyCal.php
 
@@ -1186,17 +1186,17 @@ parameters:
 			path: tine20/Calendar/Convert/Event/VCalendar/Factory.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$VEVENT\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$VEVENT\\.$#"
 			count: 1
 			path: tine20/Calendar/Convert/Event/VCalendar/MacOSX.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VEvent\\:\\:\\$RRULE\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VEvent\\:\\:\\$RRULE\\.$#"
 			count: 1
 			path: tine20/Calendar/Convert/Event/VCalendar/MacOSX.php
 
 		-
-			message: "#^Result of method Tine20\\\\VObject\\\\Parser\\\\MimeDir\\:\\:readProperty\\(\\) \\(void\\) is used\\.$#"
+			message: "#^Result of method Sabre\\\\VObject\\\\Parser\\\\MimeDir\\:\\:readProperty\\(\\) \\(void\\) is used\\.$#"
 			count: 1
 			path: tine20/Calendar/Convert/Event/VCalendar/SabrePropertyParser.php
 
@@ -1241,7 +1241,7 @@ parameters:
 			path: tine20/Calendar/Frontend/CalDAV/Dropbox.php
 
 		-
-			message: "#^Method Calendar_Frontend_CalDAV_Dropbox\\:\\:getChildren\\(\\) has invalid return type Tine20\\\\DAV\\\\DAV\\\\INode\\.$#"
+			message: "#^Method Calendar_Frontend_CalDAV_Dropbox\\:\\:getChildren\\(\\) has invalid return type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/Dropbox.php
 
@@ -1256,27 +1256,27 @@ parameters:
 			path: tine20/Calendar/Frontend/CalDAV/FixMultiGet404Plugin.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\VObject\\\\Document\\:\\:expand\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Document\\:\\:expand\\(\\)\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/FixMultiGet404Plugin.php
 
 		-
-			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\DAV\\\\Tree\\.$#"
+			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\DAV\\\\Tree\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/FixMultiGet404Plugin.php
 
 		-
-			message: "#^Call to method sendBody\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendBody\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/FixMultiGet404Plugin.php
 
 		-
-			message: "#^Call to method sendStatus\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendStatus\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/FixMultiGet404Plugin.php
 
 		-
-			message: "#^Call to method setHeader\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method setHeader\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 2
 			path: tine20/Calendar/Frontend/CalDAV/FixMultiGet404Plugin.php
 
@@ -1301,37 +1301,37 @@ parameters:
 			path: tine20/Calendar/Frontend/CalDAV/PluginManagedAttachments.php
 
 		-
-			message: "#^Call to method getBody\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Request\\.$#"
+			message: "#^Call to method getBody\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Request\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/PluginManagedAttachments.php
 
 		-
-			message: "#^Call to method getHeader\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Request\\.$#"
+			message: "#^Call to method getHeader\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Request\\.$#"
 			count: 2
 			path: tine20/Calendar/Frontend/CalDAV/PluginManagedAttachments.php
 
 		-
-			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\DAV\\\\Tree\\.$#"
+			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\DAV\\\\Tree\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/PluginManagedAttachments.php
 
 		-
-			message: "#^Call to method getQueryString\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Request\\.$#"
+			message: "#^Call to method getQueryString\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Request\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/PluginManagedAttachments.php
 
 		-
-			message: "#^Call to method sendBody\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendBody\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/PluginManagedAttachments.php
 
 		-
-			message: "#^Call to method sendStatus\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendStatus\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/PluginManagedAttachments.php
 
 		-
-			message: "#^Call to method setHeader\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method setHeader\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 4
 			path: tine20/Calendar/Frontend/CalDAV/PluginManagedAttachments.php
 
@@ -1341,7 +1341,7 @@ parameters:
 			path: tine20/Calendar/Frontend/CalDAV/PluginManagedAttachments.php
 
 		-
-			message: "#^Call to method getStatusMessage\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method getStatusMessage\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 2
 			path: tine20/Calendar/Frontend/CalDAV/PropertyResponse.php
 
@@ -1351,7 +1351,7 @@ parameters:
 			path: tine20/Calendar/Frontend/CalDAV/ScheduleInbox.php
 
 		-
-			message: "#^Method Calendar_Frontend_CalDAV_ScheduleInbox\\:\\:getChildren\\(\\) has invalid return type Tine20\\\\DAV\\\\DAV\\\\INode\\.$#"
+			message: "#^Method Calendar_Frontend_CalDAV_ScheduleInbox\\:\\:getChildren\\(\\) has invalid return type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/ScheduleInbox.php
 
@@ -1361,7 +1361,7 @@ parameters:
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPlugin.php
 
 		-
-			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\DAV\\\\Tree\\.$#"
+			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\DAV\\\\Tree\\.$#"
 			count: 2
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPlugin.php
 
@@ -1381,42 +1381,42 @@ parameters:
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPlugin.php
 
 		-
-			message: "#^Access to property \\$firstChild on an unknown class Tine20\\\\DAV\\\\DOMDocument\\.$#"
+			message: "#^Access to property \\$firstChild on an unknown class Sabre\\\\DAV\\\\DOMDocument\\.$#"
 			count: 4
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPropfindPlugin.php
 
 		-
-			message: "#^Call to method getBody\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Request\\.$#"
+			message: "#^Call to method getBody\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Request\\.$#"
 			count: 4
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPropfindPlugin.php
 
 		-
-			message: "#^Call to method getElementsByTagNameNS\\(\\) on an unknown class Tine20\\\\DAV\\\\DOMDocument\\.$#"
+			message: "#^Call to method getElementsByTagNameNS\\(\\) on an unknown class Sabre\\\\DAV\\\\DOMDocument\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPropfindPlugin.php
 
 		-
-			message: "#^Call to method getHeader\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Request\\.$#"
+			message: "#^Call to method getHeader\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Request\\.$#"
 			count: 2
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPropfindPlugin.php
 
 		-
-			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\DAV\\\\Tree\\.$#"
+			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\DAV\\\\Tree\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPropfindPlugin.php
 
 		-
-			message: "#^Call to method sendBody\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendBody\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPropfindPlugin.php
 
 		-
-			message: "#^Call to method sendStatus\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendStatus\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPropfindPlugin.php
 
 		-
-			message: "#^Call to method setHeader\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method setHeader\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPropfindPlugin.php
 
@@ -3647,7 +3647,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Sales_Controller_PurchaseInvoice\\:\\:\\$_currentBillingContract\\.$#"
-			count: 7
+			count: 3
 			path: tine20/Sales/Controller/PurchaseInvoice.php
 
 		-
@@ -3721,7 +3721,7 @@ parameters:
 			path: tine20/Sales/Frontend/Cli.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\DAV\\\\INode\\:\\:getETag\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\DAV\\\\INode\\:\\:getETag\\(\\)\\.$#"
 			count: 1
 			path: tine20/Sales/Frontend/WebDAV/Import.php
 
@@ -4206,17 +4206,17 @@ parameters:
 			path: tine20/Tasks/Controller/Task.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$CALSCALE\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$CALSCALE\\.$#"
 			count: 1
 			path: tine20/Tasks/Convert/Task/VCalendar/Abstract.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$PRODID\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$PRODID\\.$#"
 			count: 1
 			path: tine20/Tasks/Convert/Task/VCalendar/Abstract.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$VERSION\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$VERSION\\.$#"
 			count: 1
 			path: tine20/Tasks/Convert/Task/VCalendar/Abstract.php
 
@@ -4226,12 +4226,12 @@ parameters:
 			path: tine20/Tasks/Convert/Task/VCalendar/Abstract.php
 
 		-
-			message: "#^Method Tasks_Convert_Task_VCalendar_Abstract\\:\\:_convertTasksModelTask\\(\\) should return Tine20\\\\VObject\\\\Component but return statement is missing\\.$#"
+			message: "#^Method Tasks_Convert_Task_VCalendar_Abstract\\:\\:_convertTasksModelTask\\(\\) should return Sabre\\\\VObject\\\\Component but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Tasks/Convert/Task/VCalendar/Abstract.php
 
 		-
-			message: "#^PHPDoc tag @param for parameter \\$_vtodo with type Tasks_Model_Task is incompatible with native type Tine20\\\\VObject\\\\Component\\\\VTodo\\.$#"
+			message: "#^PHPDoc tag @param for parameter \\$_vtodo with type Tasks_Model_Task is incompatible with native type Sabre\\\\VObject\\\\Component\\\\VTodo\\.$#"
 			count: 1
 			path: tine20/Tasks/Convert/Task/VCalendar/Abstract.php
 
@@ -4956,7 +4956,7 @@ parameters:
 			path: tine20/Tinebase/Convert/Tree/Node/Json.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\VObject\\\\Component\\:\\:\\$DUE\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\:\\:\\$DUE\\.$#"
 			count: 1
 			path: tine20/Tinebase/Convert/VCalendar/Abstract.php
 
@@ -5883,6 +5883,11 @@ parameters:
 		-
 			message: "#^Result of method Tinebase_Frontend_Http_Abstract\\:\\:_export\\(\\) \\(void\\) is used\\.$#"
 			count: 1
+			path: tine20/Tinebase/Frontend/Http/Abstract.php
+
+		-
+			message: "#^Variable \\$previewNode might not be defined\\.$#"
+			count: 4
 			path: tine20/Tinebase/Frontend/Http/Abstract.php
 
 		-
@@ -8326,27 +8331,27 @@ parameters:
 			path: tine20/Tinebase/Server/Plugin/WebDAV.php
 
 		-
-			message: "#^Call to method getHeader\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Request\\.$#"
+			message: "#^Call to method getHeader\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Request\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/WebDAV.php
 
 		-
-			message: "#^Call to method getHeaders\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Request\\.$#"
+			message: "#^Call to method getHeaders\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Request\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/WebDAV.php
 
 		-
-			message: "#^Call to method setBody\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Request\\.$#"
+			message: "#^Call to method setBody\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Request\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/WebDAV.php
 
 		-
-			message: "#^Call to method startBodyLog\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method startBodyLog\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/WebDAV.php
 
 		-
-			message: "#^Call to method stopBodyLog\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method stopBodyLog\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/WebDAV.php
 
@@ -9001,12 +9006,12 @@ parameters:
 			path: tine20/Tinebase/WebDav/Collection/Abstract.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\DAV\\\\INode\\:\\:getETag\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\DAV\\\\INode\\:\\:getETag\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Collection/Abstract.php
 
 		-
-			message: "#^Method Tinebase_WebDav_Collection_Abstract\\:\\:getChild\\(\\) should return Tine20\\\\DAV\\\\INode but return statement is missing\\.$#"
+			message: "#^Method Tinebase_WebDav_Collection_Abstract\\:\\:getChild\\(\\) should return Sabre\\\\DAV\\\\INode but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Collection/Abstract.php
 
@@ -9016,12 +9021,12 @@ parameters:
 			path: tine20/Tinebase/WebDav/Collection/Abstract.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\DAV\\\\INode\\:\\:getETag\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\DAV\\\\INode\\:\\:getETag\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Collection/AbstractContainerTree.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\DAV\\\\INode\\:\\:getSize\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\DAV\\\\INode\\:\\:getSize\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Collection/AbstractContainerTree.php
 
@@ -9076,7 +9081,7 @@ parameters:
 			path: tine20/Tinebase/WebDav/Container/Abstract.php
 
 		-
-			message: "#^Access to property \\$tree on an unknown class Tine20\\\\DAVACL\\\\Tine20\\\\DAV\\\\Server\\.$#"
+			message: "#^Access to property \\$tree on an unknown class Sabre\\\\DAVACL\\\\Sabre\\\\DAV\\\\Server\\.$#"
 			count: 2
 			path: tine20/Tinebase/WebDav/Plugin/ACL.php
 
@@ -9091,12 +9096,12 @@ parameters:
 			path: tine20/Tinebase/WebDav/Plugin/ACL.php
 
 		-
-			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\DAV\\\\Tree\\.$#"
+			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\DAV\\\\Tree\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/ExpandedPropertiesReport.php
 
 		-
-			message: "#^PHPDoc tag @param for parameter \\$node with type DAV\\\\INode is not subtype of native type Tine20\\\\DAV\\\\INode\\.$#"
+			message: "#^PHPDoc tag @param for parameter \\$node with type DAV\\\\INode is not subtype of native type Sabre\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/ExpandedPropertiesReport.php
 
@@ -9106,7 +9111,7 @@ parameters:
 			path: tine20/Tinebase/WebDav/Plugin/ExpandedPropertiesReport.php
 
 		-
-			message: "#^Access to property \\$firstChild on an unknown class Tine20\\\\DAV\\\\DOMDocument\\.$#"
+			message: "#^Access to property \\$firstChild on an unknown class Sabre\\\\DAV\\\\DOMDocument\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/Inverse.php
 
@@ -9121,22 +9126,22 @@ parameters:
 			path: tine20/Tinebase/WebDav/Plugin/Inverse.php
 
 		-
-			message: "#^Call to method getBody\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Request\\.$#"
+			message: "#^Call to method getBody\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Request\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/Inverse.php
 
 		-
-			message: "#^Call to method sendBody\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendBody\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 4
 			path: tine20/Tinebase/WebDav/Plugin/Inverse.php
 
 		-
-			message: "#^Call to method sendStatus\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendStatus\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 7
 			path: tine20/Tinebase/WebDav/Plugin/Inverse.php
 
 		-
-			message: "#^Call to method setHeader\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method setHeader\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 7
 			path: tine20/Tinebase/WebDav/Plugin/Inverse.php
 
@@ -9156,22 +9161,22 @@ parameters:
 			path: tine20/Tinebase/WebDav/Plugin/PrincipalSearch.php
 
 		-
-			message: "#^Call to an undefined method Tine20\\\\DAV\\\\ServerPlugin\\:\\:principalSearch\\(\\)\\.$#"
+			message: "#^Call to an undefined method Sabre\\\\DAV\\\\ServerPlugin\\:\\:principalSearch\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/PrincipalSearch.php
 
 		-
-			message: "#^Call to method sendBody\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendBody\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/PrincipalSearch.php
 
 		-
-			message: "#^Call to method sendStatus\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendStatus\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/PrincipalSearch.php
 
 		-
-			message: "#^Call to method setHeader\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method setHeader\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 2
 			path: tine20/Tinebase/WebDav/Plugin/PrincipalSearch.php
 
@@ -9181,32 +9186,32 @@ parameters:
 			path: tine20/Tinebase/WebDav/Plugin/PrincipalSearch.php
 
 		-
-			message: "#^Access to an undefined property Tine20\\\\DAV\\\\Server\\:\\:\\$transactionType\\.$#"
+			message: "#^Access to an undefined property Sabre\\\\DAV\\\\Server\\:\\:\\$transactionType\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/SyncToken.php
 
 		-
-			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\DAV\\\\Tree\\.$#"
+			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\DAV\\\\Tree\\.$#"
 			count: 2
 			path: tine20/Tinebase/WebDav/Plugin/SyncToken.php
 
 		-
-			message: "#^Call to method getStatusMessage\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method getStatusMessage\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/SyncToken.php
 
 		-
-			message: "#^Call to method sendBody\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendBody\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/SyncToken.php
 
 		-
-			message: "#^Call to method sendStatus\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method sendStatus\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/SyncToken.php
 
 		-
-			message: "#^Call to method setHeader\\(\\) on an unknown class Tine20\\\\DAV\\\\Tine20\\\\HTTP\\\\Response\\.$#"
+			message: "#^Call to method setHeader\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Plugin/SyncToken.php
 
@@ -9216,12 +9221,12 @@ parameters:
 			path: tine20/Tinebase/WebDav/Plugin/SyncToken.php
 
 		-
-			message: "#^Method Tinebase_WebDav_Principal\\:\\:getChild\\(\\) has invalid return type Tine20\\\\DAV\\\\DAV\\\\INode\\.$#"
+			message: "#^Method Tinebase_WebDav_Principal\\:\\:getChild\\(\\) has invalid return type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Principal.php
 
 		-
-			message: "#^Method Tinebase_WebDav_Principal\\:\\:getChildren\\(\\) has invalid return type Tine20\\\\DAV\\\\DAV\\\\INode\\.$#"
+			message: "#^Method Tinebase_WebDav_Principal\\:\\:getChildren\\(\\) has invalid return type Sabre\\\\DAV\\\\DAV\\\\INode\\.$#"
 			count: 1
 			path: tine20/Tinebase/WebDav/Principal.php
 

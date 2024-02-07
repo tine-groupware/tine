@@ -20,8 +20,6 @@ abstract class Tinebase_Import_Db_Abstract
     protected ?string $_mainTableName = null;
     protected bool $_duplicateCheck = true;
     protected array $_descriptionFields = [];
-    protected ?string $_importFilter = null;
-    protected ?string $_importOrder = null;
 
     public function __construct(?Zend_Db_Adapter_Abstract $db = null)
     {
@@ -40,18 +38,11 @@ abstract class Tinebase_Import_Db_Abstract
         $pageCount = 100;
         $importedIds = [];
         do {
-            $select = $this->_importDb->select()->from($this->_mainTableName)->limitPage(++$pageNumber, $pageCount);
-            if ($this->_importFilter) {
-                $select->where($this->_importFilter);
-            }
-            if ($this->_importOrder) {
-                $select->order($this->_importOrder);
-            }
-            $stmt = $select->query();
+            $cont = false;
+            $stmt = $this->_importDb->select()->from($this->_mainTableName)->limitPage(++$pageNumber, $pageCount)->query();
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' fetched ' . count($rows) . ' rows  / pagenumber: ' . $pageNumber);
-
             foreach ($rows as $row) {
                 try {
                     if ($record = $this->_importRecord($row)) {
@@ -65,8 +56,9 @@ abstract class Tinebase_Import_Db_Abstract
                         . ' Could not import ' . $this->_mainTableName . ' record: ' . $e);
                     $failcount++;
                 }
+                $cont = count($rows) >= $pageCount;
             }
-        } while (count($rows) >= $pageCount);
+        } while ($cont);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Imported ' . $count . ' records (failcount: ' . $failcount . ' | skipcount: ' . $skipcount . ')');
@@ -90,7 +82,7 @@ abstract class Tinebase_Import_Db_Abstract
             $record = $controller->create($recordToImport, $this->_duplicateCheck);
         }
 
-        $this->_onAfterImportRecord($record, $row);
+        $this->_onAfterImportRecord($record);
 
         return $record;
     }
@@ -98,7 +90,7 @@ abstract class Tinebase_Import_Db_Abstract
     abstract protected function _getRecord($row): Tinebase_Record_Interface;
     abstract protected function _getController(): Tinebase_Controller_Record_Abstract;
 
-    protected function _onAfterImportRecord(Tinebase_Record_Interface $record, array $row)
+    protected function _onAfterImportRecord(Tinebase_Record_Interface $record)
     {
     }
 

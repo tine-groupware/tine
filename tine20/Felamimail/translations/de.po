@@ -2127,8 +2127,8 @@ msgid ""
 "I hereby agree that this mailbox may be converted to a shared mailbox or "
 "transferred to another user."
 msgstr ""
-"Hiermit willige ich ein, dass dieses Postfach zu einem gemeinsamen Postfach "
-"umgewandelt oder einem anderen Benutzer übertragen werden darf."
+"Hiermit willige ich ein, dass dieses Postfach zu einem gemeinsamen "
+"Postfach umgewandelt oder einem anderen Benutzer übertragen werden darf."
 
 msgid "Forward and forwarded email as .eml in attachment"
 msgstr "Weiterleitung und weitergeleitete eMail als .eml im Anhang"
@@ -2147,6 +2147,3 @@ msgstr "E-Mail-Nutzung"
 
 msgid "Size (in byte)"
 msgstr "Größe (in Byte)"
-
-msgid "Depending on content format"
-msgstr "Abhängig vom Format"

@@ -718,7 +718,7 @@
      * @param string $method
      * @param Tinebase_Model_FullUser $updater
      * @param Calendar_Model_Attender $attendee
-     * @return Tine20\VObject\Component
+     * @return Sabre\VObject\Component
      */
     protected function _createVCalendar($event, $method, $updater, $attendee)
     {

@@ -39,9 +39,7 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
      * default alarm time in minutes before
      */
     const DEFAULTALARM_MINUTESBEFORE = 'defaultalarmminutesbefore';
-
-    const TASK_TITLE_TEMPLATE = 'taskTitleTemplate';
-
+    
     /**
      * @var string application
      */
@@ -61,7 +59,6 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTTASKLIST,
             self::DEFAULTALARM_ENABLED,
             self::DEFAULTALARM_MINUTESBEFORE,
-            self::TASK_TITLE_TEMPLATE,
         );
             
         return $allPrefs;
@@ -93,10 +90,6 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Standard Alarm Time'),
                 'description'   => $translate->_('Minutes before the task ends'),
             ),
-            self::TASK_TITLE_TEMPLATE => [
-                'label'         => $translate->_('Task Title Template'),
-                'description'   => $translate->_('How to build task titles.'),
-            ],
         );
         
         return $prefDescriptions;
@@ -156,24 +149,6 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
                         <option>
                             <label>60</label>
                             <value>60</value>
-                        </option>
-                    </options>';
-                break;
-            case self::TASK_TITLE_TEMPLATE:
-                $translate = Tinebase_Translation::getTranslation($this->_application);
-                $preference->uiconfig = [
-                    self::CLIENT_NEEDS_RELOAD => true
-                ];
-                $preference->value      = '{{ summary }}';
-                $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
-                    <options>
-                        <option>
-                            <value>{{ summary }}</value>
-                            <label>'. $translate->_('Summary') . '</label>
-                        </option>
-                        <option>
-                            <value>{% if source %}({{ renderModel(source_model) }}: {{ renderTitle(source, source_model) }}) {% endif %}{{ summary }}</value>
-                            <label>'. $translate->_('(source): Summary') . '</label>
                         </option>
                     </options>';
                 break;

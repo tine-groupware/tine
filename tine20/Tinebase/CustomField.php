@@ -110,7 +110,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param Tinebase_Model_CustomField_Config $_record
      * @return Tinebase_Record_Interface
      */
-    public function addCustomField(Tinebase_Model_CustomField_Config $_record, array $schemaUpdateModels = [])
+    public function addCustomField(Tinebase_Model_CustomField_Config $_record)
     {
         $transId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         try {
@@ -139,10 +139,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 // clear the MC cache
                 $model::resetConfiguration();
 
-                $mappingDrv = new Tinebase_Record_DoctrineMappingDriver();
-                if ($mappingDrv->isTransient($model)) {
-                    $subModels = array_filter(Tinebase_Application::getInstance()->getInheritedModels([$model]), fn($val) => $mappingDrv->isTransient($val));
-                    Setup_SchemaTool::updateSchema(array_merge([$model], $subModels, $schemaUpdateModels));
+                if ((new Tinebase_Record_DoctrineMappingDriver())->isTransient($model)) {
+                    Setup_SchemaTool::updateSchema([$model]);
                 }
             }
 
@@ -167,7 +165,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param Tinebase_Model_CustomField_Config $_record
      * @return Tinebase_Model_CustomField_Config
      */
-    public function updateCustomField(Tinebase_Model_CustomField_Config $_record, array $schemaUpdateModels = [])
+    public function updateCustomField(Tinebase_Model_CustomField_Config $_record)
     {
         $this->_clearCache();
         $this->_backendConfig->setAllCFs();
@@ -187,10 +185,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 // clear the MC cache
                 $model::resetConfiguration();
 
-                $mappingDrv = new Tinebase_Record_DoctrineMappingDriver();
-                if ($mappingDrv->isTransient($model)) {
-                    $subModels = array_filter(Tinebase_Application::getInstance()->getInheritedModels([$model]), fn($val) => $mappingDrv->isTransient($val));
-                    Setup_SchemaTool::updateSchema(array_merge([$model], $subModels, $schemaUpdateModels));
+                if ((new Tinebase_Record_DoctrineMappingDriver())->isTransient($model)) {
+                    Setup_SchemaTool::updateSchema([$model]);
                 }
             }
         } finally {
@@ -377,12 +373,10 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         if ($_customField->is_system) {
             /** @var Tinebase_Record_Interface $model */
             $model = $_customField->model;
-            if (class_exists($model)) {
-                $model::resetConfiguration();
+            $model::resetConfiguration();
 
-                if ((new Tinebase_Record_DoctrineMappingDriver())->isTransient($model)) {
-                    Setup_SchemaTool::updateSchema([$model]);
-                }
+            if ((new Tinebase_Record_DoctrineMappingDriver())->isTransient($model)) {
+                Setup_SchemaTool::updateSchema([$model]);
             }
         }
     }

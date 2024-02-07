@@ -256,9 +256,9 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             case 'record':
                 var recordOptions = record.get('options'),
                     recordClass = Tine.Tinebase.data.RecordMgr.get(recordOptions.appName, recordOptions.modelName),
-                    valueRecord = Tine.Tinebase.data.Record.setFromJson(value, recordClass);
+                    record = Tine.Tinebase.data.Record.setFromJson(value, recordClass);
 
-                value = valueRecord?.getTitle() || value;
+                value = record.getTitle();
                 break;
             default:
                 break;

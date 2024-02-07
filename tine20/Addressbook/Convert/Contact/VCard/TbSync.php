@@ -144,4 +144,6 @@ class Addressbook_Convert_Contact_VCard_TbSync extends Addressbook_Convert_Conta
 
         return $card;
     }
+
+
 }

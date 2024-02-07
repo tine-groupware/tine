@@ -190,21 +190,25 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         }
     }
 
-    protected function _initializeEvaluationDimensions()
+    public function _initializePF()
     {
-        Tinebase_Controller_EvaluationDimension::getInstance()->doRightChecks(false);
-        Tinebase_Controller_EvaluationDimension::getInstance()->modlogActive(false);
-        Tinebase_Controller_EvaluationDimension::getInstance()->useNotes(false);
-        Tinebase_Controller_EvaluationDimension::getInstance()->create(new Tinebase_Model_EvaluationDimension([
-            Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_CENTER,
-            Tinebase_Model_EvaluationDimension::FLD_SORTING => 1000,
+        $pfe = Tinebase_PersistentFilter::getInstance();
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter([
+            'name' => "All Cost Centers", // _('All Cost Centers')
+            'description' => "All cost center records", // _('All cost center records')
+            'filters' => [],
+            'account_id' => NULL,
+            'model' => Tinebase_Model_CostCenter::class,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId(),
         ]));
-        Tinebase_Controller_EvaluationDimension::getInstance()->create(new Tinebase_Model_EvaluationDimension([
-            Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_BEARER,
-            Tinebase_Model_EvaluationDimension::FLD_SORTING => 1010,
+
+        $pfe->createDuringSetup(new Tinebase_Model_PersistentFilter([
+            'name' => "All Cost Units", // _('All Cost Units')
+            'description' => "All cost unit records", // _('All cost unit records')
+            'filters' => [],
+            'account_id' => NULL,
+            'model' => Tinebase_Model_CostUnit::class,
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName(Tinebase_Config::APP_NAME)->getId(),
         ]));
-        Tinebase_Controller_EvaluationDimension::getInstance()->doRightChecks(true);
-        Tinebase_Controller_EvaluationDimension::getInstance()->modlogActive(true);
-        Tinebase_Controller_EvaluationDimension::getInstance()->useNotes(true);
     }
 }

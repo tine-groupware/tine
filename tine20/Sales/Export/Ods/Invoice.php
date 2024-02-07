@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -106,7 +106,7 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                 $cellType = $this->_getCellType($field->type);
                 
                 switch ($identifier) {
-                    case 'eval_dim_cost_center':
+                    case 'costcenter_id':
                         $value = $record[$identifier]['number'] . ' - ' . $record[$identifier]['name'];
                         break;
                     case 'customer':
@@ -127,7 +127,7 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                     case 'type':
                         $value = $i18n->_($record[$identifier] == 'INVOICE' ? 'invoice' : 'Reversal Invoice');
                         break;
-                    case 'debitor': // TODO FIXME WHAT IS THIS?!?
+                    case 'debitor':
                         if (! $addresses) {
                             $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array());
                             $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'id', 'operator' => 'in', 'value' => $addressIds)));
@@ -136,7 +136,12 @@ class Sales_Export_Ods_Invoice extends Sales_Export_Ods_Abstract
                         
                         $address = $addresses->filter('id', $record['address_id']['id'])->getFirstRecord();
 
-                        $value = '';
+                        if ($address) {
+                            $value = $address->custom1;
+                        } else {
+                            $value = '';
+                        }
+                        
                         break;
                     
                     default:

@@ -16,7 +16,7 @@
             <header>Invoice Number</header>
         </column>
         <column>
-            <identifier>eval_dim_cost_center</identifier>
+            <identifier>costcenter_id</identifier>
             <header>Cost Center</header>
         </column>
         <column>

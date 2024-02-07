@@ -68,9 +68,6 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return {
             xtype: 'tabpanel',
             plugins: [{
-                ptype: 'ux.itemregistry',
-                key: 'Calendar-Event-EditDialog-TabPanel'
-            }, {
                 ptype : 'ux.tabpanelkeyplugin'
             }],
             defaults: {
@@ -111,14 +108,13 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             margins: '5',
                             width: 100,
                             xtype: 'label',
-                            text: this.app.i18n._('Event Type')
+                            text: this.app.i18n._('Event Types')
                         }, {
                             flex: 1,
                             xtype:'tinerecordspickercombobox',
                             name: 'event_types',
                             recordClass: 'Calendar.EventTypes',
                             refIdField: 'record',
-                            searchComboConfig: {useEditPlugin: false},
                             editDialogConfig: {mode:  'local'},
                             isMetadataModelFor: 'Calendar.EventType',
                             requiredGrant: 'editGrant',

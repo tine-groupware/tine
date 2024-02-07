@@ -30,8 +30,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 dataIndex: 'summary',
                 quickaddField: new Ext.form.TextField({
                     emptyText: this.app.i18n._('Add a task...')
-                }),
-                sortable: true
+                })
             }, {
                 id: 'due',
                 header: this.app.i18n._("Due Date"),
@@ -44,8 +43,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 quickaddField: new Ext.ux.form.ClearableDateField({
                     //value: new Date(),
                     //format : "d.m.Y"
-                }),
-                sortable: true
+                })
             }, {
                 id: 'priority',
                 header: this.app.i18n._("Priority"),
@@ -60,14 +58,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
                     app: 'Tasks',
                     keyFieldName: 'taskPriority'
-                }),
-                sortable: true
-            }, {
-                id: 'dependens_on',
-                header: this.app.i18n._("Depends on"),
-                dataIndex: 'dependens_on',
-                renderer: Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'dependens_on', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL),
-                width: 75
+                })
             }, {
                 id: 'percent',
                 header: this.app.i18n._("Percent"),
@@ -80,8 +71,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 }),
                 quickaddField: new Ext.ux.PercentCombo({
                     autoExpand: true
-                }),
-                sortable: true
+                })
             }, {
                 id: 'status',
                 header: this.app.i18n._("Status"),

@@ -618,6 +618,16 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         this.initTemplates();
         this.initActions();
+        
+        // init filters
+        this.filters = Ext.isArray(this.filters) ? this.filters : [];
+        if (this.filters.length < 1) {
+            this.filters = [{field: this.defaultFilter}];
+        }
+        this.filterStore = new Ext.data.JsonStore({
+            fields: this.record,
+            data: this.filters
+        });
 
         // init filter models
         this.filterModelMap = {};
@@ -632,8 +642,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         if (this.recordClass) {
             // concat registered filters
             this.filterModels = this.filterModels.concat(Tine.widgets.grid.FilterRegistry.get(this.recordClass));
-
-            this.filterModels = this.filterModels.concat(Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters(this.recordClass));
 
             // auto add foreign record filter on demand
             var foreignRecordFilter = this.createFilterModel({filtertype: 'foreignrecord', ownRecordClass: this.recordClass, isGeneric: true});
@@ -702,22 +710,6 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 direction: 'ASC'
             }
         });
-
-
-        // make sure default filter exists
-        this.defaultFilter = _.find(this.filterModels, {field: this.defaultFilter}) ? this.defaultFilter : (
-            _.find(this.filterModels, {field: 'query'}) ? 'query' : this.filterModels[0].field
-        );
-
-        // init filters
-        this.filters = Ext.isArray(this.filters) ? this.filters : [];
-        if (this.filters.length < 1) {
-            this.filters = [{field: this.defaultFilter}];
-        }
-        this.filterStore = new Ext.data.JsonStore({
-            fields: this.record,
-            data: this.filters
-        });
     },
     
     /**
@@ -746,7 +738,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             return new Tine.widgets.grid.FilterModel(config);
         }
     },
-
+    
     /**
      * returns filterModel
      * 

@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2019 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-import { TwingEnvironment, TwingLoaderArray, TwingFilter, TwingFunction } from 'twing'
+import { TwingEnvironment, TwingLoaderArray, TwingFilter } from 'twing'
 import { TwingExtensionIntl } from 'twing-intl'
 import transliterate from 'util/transliterate'
 
@@ -179,19 +179,6 @@ const getTwingEnv = function () {
 
     twingEnv.addFilter(new TwingFilter('transliterate', function (string) {
       return Promise.resolve(transliterate(string))
-    }))
-
-    twingEnv.addFunction(new TwingFunction('keyField', function (appName, keyFieldName, id) {
-      return Promise.resolve(Tine.Tinebase.widgets.keyfield.Renderer.render(appName, keyFieldName, id, 'text'))
-    }))
-
-    twingEnv.addFunction(new TwingFunction('renderModel', function (modelName) {
-      return Promise.resolve(Tine.Tinebase.data.RecordMgr.get(modelName)?.getRecordName())
-    }))
-
-    twingEnv.addFunction(new TwingFunction('renderTitle', function (recordData, modelName) {
-      const title = Tine.Tinebase.data.Record.setFromJson(recordData, modelName)?.getTitle()
-      return Promise.resolve(title.asString ? title.asString() : title)
     }))
 
     /**

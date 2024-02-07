@@ -68,14 +68,14 @@ class Projects_JsonTest extends TestCase
         foreach ($projectData[Projects_Model_Project::FLD_TASKS] as $task) {
             switch($task['id']) {
                 case $id1:
-                    $this->assertSame($id2, $task[Tasks_Model_Task::FLD_DEPENDENS_ON][0][Tasks_Model_TaskDependency::FLD_DEPENDS_ON]['id']);
+                    $this->assertSame($id2, $task[Tasks_Model_Task::FLD_DEPENDENS_ON][0][Tasks_Model_TaskDependency::FLD_DEPENDS_ON]);
                     $this->assertSame($id3, $task[Tasks_Model_Task::FLD_DEPENDENT_TASKS][0][Tasks_Model_TaskDependency::FLD_TASK_ID]);
                     break;
                 case $id2:
                     $this->assertSame($id1, $task[Tasks_Model_Task::FLD_DEPENDENT_TASKS][0][Tasks_Model_TaskDependency::FLD_TASK_ID]);
                     break;
                 case $id3:
-                    $this->assertSame($id1, $task[Tasks_Model_Task::FLD_DEPENDENS_ON][0][Tasks_Model_TaskDependency::FLD_DEPENDS_ON]['id']);
+                    $this->assertSame($id1, $task[Tasks_Model_Task::FLD_DEPENDENS_ON][0][Tasks_Model_TaskDependency::FLD_DEPENDS_ON]);
                     break;
                 default:
                     $this->fail('unexpected task id');

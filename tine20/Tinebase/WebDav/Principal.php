@@ -3,62 +3,62 @@
  * Principals Collection
  *
  * This collection represents a list of users.
- * The users are instances of Tine20\DAVACL\Principal
+ * The users are instances of Sabre\DAVACL\Principal
  *
  * @copyright Copyright (C) 2007-2013 fruux GmbH (https://fruux.com/).
  * @author Evert Pot (http://evertpot.com/)
  * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Tinebase_WebDav_Principal extends \Tine20\DAVACL\Principal implements \Tine20\DAV\ICollection
+class Tinebase_WebDav_Principal extends \Sabre\DAVACL\Principal implements \Sabre\DAV\ICollection
 {
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\ICollection::createFile()
+     * @see \Sabre\DAV\ICollection::createFile()
      */
     public function createFile($name, $data = null) 
     {
-        throw new \Tine20\DAV\Exception\Forbidden('Permission denied to create file (filename ' . $this->getPrincipalUrl() . '/' . $name . ')');
+        throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create file (filename ' . $this->getPrincipalUrl() . '/' . $name . ')');
     }
 
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\ICollection::createDirectory()
+     * @see \Sabre\DAV\ICollection::createDirectory()
      */
     public function createDirectory($name) 
     {
-        throw new \Tine20\DAV\Exception\Forbidden('Permission denied to create directory');
+        throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create directory');
     }
 
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\ICollection::getChild()
+     * @see \Sabre\DAV\ICollection::getChild()
      */
     public function getChild($name) 
     {
         switch ($name) {
             case 'calendar-proxy-read':
-                return new \Tine20\CalDAV\Principal\ProxyRead($this->principalBackend, $this->principalProperties);
+                return new \Sabre\CalDAV\Principal\ProxyRead($this->principalBackend, $this->principalProperties);
                 
                 break;
                 
             case 'calendar-proxy-write':
-                return new \Tine20\CalDAV\Principal\ProxyWrite($this->principalBackend, $this->principalProperties);
+                return new \Sabre\CalDAV\Principal\ProxyWrite($this->principalBackend, $this->principalProperties);
                 
                 break;
         }
 
-        throw new \Tine20\DAV\Exception\NotFound('Node with name ' . $name . ' was not found');
+        throw new \Sabre\DAV\Exception\NotFound('Node with name ' . $name . ' was not found');
     }
 
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\ICollection::getChildren()
+     * @see \Sabre\DAV\ICollection::getChildren()
      */
     public function getChildren() 
     {
         $children = array(
-            new \Tine20\CalDAV\Principal\ProxyRead ($this->principalBackend, $this->principalProperties),
-            new \Tine20\CalDAV\Principal\ProxyWrite($this->principalBackend, $this->principalProperties)
+            new \Sabre\CalDAV\Principal\ProxyRead ($this->principalBackend, $this->principalProperties),
+            new \Sabre\CalDAV\Principal\ProxyWrite($this->principalBackend, $this->principalProperties)
         );
         
         return $children;
@@ -77,7 +77,7 @@ class Tinebase_WebDav_Principal extends \Tine20\DAVACL\Principal implements \Tin
             
             return true;
             
-        } catch (\Tine20\DAV\Exception\NotFound $e) {
+        } catch (\Sabre\DAV\Exception\NotFound $e) {
             return false;
         }
     }

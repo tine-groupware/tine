@@ -20,6 +20,10 @@
           "path": "js/"
         },
         {
+          "text": "CustomerSearchCombo.js",
+          "path": "js/"
+        },
+        {
           "text": "OfferSearchCombo.js",
           "path": "js/"
         },
@@ -57,6 +61,18 @@
         },
         {
           "text": "SupplierEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AddressGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "DeliveryAddressGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "BillingAddressGridPanel.js",
           "path": "js/"
         },
         {

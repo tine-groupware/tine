@@ -150,7 +150,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             ->joinLeft(
                 /* table  */ array('tree_fileobjects' => $this->_tablePrefix . 'tree_fileobjects'), 
                 /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.object_id') . ' = ' . $this->_db->quoteIdentifier('tree_fileobjects.id'),
-                /* select */ array('type', 'flysystem', 'flypath', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'seq', 'contenttype', 'revision_size', 'indexed_hash', 'description')
+                /* select */ array('type', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time', 'seq', 'contenttype', 'revision_size', 'indexed_hash', 'description')
             )
             ->joinLeft(
                 /* table  */ array('tree_filerevisions' => $this->_tablePrefix . 'tree_filerevisions'), 
@@ -297,15 +297,13 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function updated(Tinebase_Record_Interface $_newRecord, Tinebase_Record_Interface $_oldRecord)
     {
-        /** @var Tinebase_Model_Tree_Node $_newRecord */
-        /** @var Tinebase_Model_Tree_Node $_oldRecord */
         Tinebase_Timemachine_ModificationLog::getInstance()
             ->setRecordMetaData($_newRecord, (bool)$_newRecord->is_deleted === (bool)$_oldRecord->is_deleted ?
                 Tinebase_Controller_Record_Abstract::ACTION_UPDATE : ($_newRecord->is_deleted ?
                     Tinebase_Controller_Record_Abstract::ACTION_DELETE :
                     Tinebase_Controller_Record_Abstract::ACTION_UNDELETE), $_oldRecord);
         $currentMods = $this->_writeModLog($_newRecord, $_oldRecord);
-        if (null !== $currentMods && $currentMods->count() > 0 && (!$_newRecord->is_deleted || !$_newRecord->flysystem)) {
+        if (null !== $currentMods && $currentMods->count() > 0) {
             Tinebase_Notes::getInstance()->addSystemNote($_newRecord, Tinebase_Core::getUser(), Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $currentMods);
 
             if (true === $this->_notificationActive && Tinebase_Model_Tree_FileObject::TYPE_FILE === $_newRecord->type) {
@@ -313,6 +311,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             }
         }
 
+        /** @var Tinebase_Model_Tree_Node $_newRecord */
+        /** @var Tinebase_Model_Tree_Node $_oldRecord */
         $this->_inspectForPreviewCreation($_newRecord, $_oldRecord);
     }
 
@@ -464,15 +464,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      */
     public function getChild($parentId, $childName, $getDeleted = false, $throw = true)
     {
-        $flySystem = null;
-        $flyNode = null;
-        if ($parentId instanceof Tinebase_Model_Tree_Node) {
-            if ($parentId->flysystem) {
-                $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($parentId->flysystem);
-                $flyNode = $parentId;
-            }
-            $parentId  = $parentId->getId();
-        }
+        $parentId  = $parentId  instanceof Tinebase_Model_Tree_Node ? $parentId->getId() : $parentId;
         $childName = $childName instanceof Tinebase_Model_Tree_Node ? $childName->name   : $childName;
         
         $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
@@ -492,26 +484,13 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
             $searchFilter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
                 Tinebase_Model_Filter_Bool::VALUE_NOTSET));
         }
-        /** @var Tinebase_Model_Tree_Node $child */
         $child = $this->search($searchFilter)->getFirstRecord();
         
         if (!$child) {
-            if ($flySystem && ($flySystem->fileExists($flyNode->flypath . '/' . $childName) ||
-                    $flySystem->directoryExists($flyNode->flypath . '/' . $childName))) {
-                Tinebase_FileSystem::getInstance()->syncFlySystem($flyNode, 0);
-                return $this->getChild($parentId, $childName, $getDeleted, $throw);
-            }
             if (true === $throw) {
                 throw new Tinebase_Exception_NotFound('child: ' . $childName . ' not found!');
             }
             return null;
-        } elseif ($flySystem && is_string($child->flypath)) {
-            if ($child->type === Tinebase_Model_Tree_FileObject::TYPE_FOLDER ? !$flySystem->directoryExists($child->flypath) :  !$flySystem->fileExists($child->flypath)) {
-                Tinebase_FileSystem::getInstance()->syncFlySystem($child, 0);
-                return $this->getChild($parentId, $childName, $getDeleted, $throw);
-            } elseif ($child->type !== Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
-                Tinebase_FileSystem::getInstance()->syncFlySystem($child, 0);
-            }
         }
         
         return $child;

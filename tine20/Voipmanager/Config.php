@@ -5,7 +5,7 @@
  * @package     Voipmanager
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2015 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Flávio Gomes da Silva Lisboa <flavio.lisboa@serpro.gov.br>
  */
 
@@ -18,8 +18,6 @@
  */
  class Voipmanager_Config extends Tinebase_Config_Abstract
  {
-     public const APP_NAME = 'Voipmanager';
-
      /**
       * holds the instance of the singleton
       *

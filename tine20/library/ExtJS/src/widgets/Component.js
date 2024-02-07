@@ -1616,7 +1616,7 @@ alert(t.getXTypes());  // alerts 'component/box/field/textfield'
      * @return {Ext.Container} The first Container for which the custom function returns true
      */
     findParentBy : function(fn) {
-        for (var p = this.openerCt || this.ownerCt; (p != null) && !fn(p, this); p = p.openerCt || p.ownerCt);
+        for (var p = this.ownerCt; (p != null) && !fn(p, this); p = p.ownerCt);
         return p || null;
     },
 

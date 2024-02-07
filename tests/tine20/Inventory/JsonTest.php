@@ -9,8 +9,6 @@
  * @author      Michael Spahn <m.spahn@metaways.de>
  */
 
-use Tinebase_Model_Filter_Abstract as TMFA;
-
 /**
  * Test class for Inventory_JsonTest
  */
@@ -201,26 +199,19 @@ class Inventory_JsonTest extends Inventory_TestCase
      */
     public function testCostCenterFilter()
     {
-        $dimension = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
-            [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Model_EvaluationDimension::COST_CENTER],
-        ]))->getFirstRecord();
-        $dimension->{Tinebase_Model_EvaluationDimension::FLD_ITEMS} = new Tinebase_Record_RecordSet(Tinebase_Model_EvaluationDimensionItem::class,
-            [new Tinebase_Model_EvaluationDimensionItem([
-                Tinebase_Model_EvaluationDimensionItem::FLD_NAME => 'test123qwe',
-                Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER  => 123,
-            ], true)]);
-        $dimension = Tinebase_Controller_EvaluationDimension::getInstance()->update($dimension);
-        $ccId = $dimension->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->getFirstRecord()->getId();
+        $cc = Tinebase_Controller_CostCenter::getInstance()->create(new Tinebase_Model_CostCenter(
+            array('name' => 'test123qwe', 'number' => 123)
+        ));
         
         $inventoryItem = $this->_getInventoryItem();
-        $inventoryItem->eval_dim_cost_center = $ccId;
+        $inventoryItem->costcenter = $cc->getId();
         
         $this->_json->saveInventoryItem($inventoryItem->toArray());
     
         $inventoryItem = $this->_getInventoryItem();
         $this->_json->saveInventoryItem($inventoryItem->toArray());
         
-        $filter = Zend_Json::decode('[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"eval_dim_cost_center","operator":"AND","value":[{"field":":id","operator":"equals","value":"'.$ccId.'"}],"id":"ext-record-2"}],"id":"ext-comp-1135","label":"test"}]}]');
+        $filter = Zend_Json::decode('[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"costcenter","operator":"AND","value":[{"field":":id","operator":"equals","value":"'.$cc->getId().'"}],"id":"ext-record-2"}],"id":"ext-comp-1135","label":"test"}]}]');
         
         $result = $this->_json->searchInventoryItems($filter, array());
     

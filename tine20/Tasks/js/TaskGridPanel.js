@@ -113,9 +113,7 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 defaultTime: '12:00',
                 allowBlank: true
             })
-        }, colMgr('estimated_duration', {
-            width: 50,
-        }), {
+        }, {
             id: 'priority',
             header: this.app.i18n._("Priority"),
             width: 65,
@@ -130,12 +128,6 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 app: 'Tasks',
                 keyFieldName: 'taskPriority',
             })
-        }, {
-            id: 'dependens_on',
-            header: this.app.i18n._("Depends on"),
-            dataIndex: 'dependens_on',
-            renderer: Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'dependens_on', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL),
-            width: 150
         }, {
             id: 'percent',
             header: this.app.i18n._("Percent"),

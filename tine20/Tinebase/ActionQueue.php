@@ -22,7 +22,7 @@
  * @method int getDaemonStructSize()
  * @method int waitForJob()
  * @method mixed send($message)
- * @method array receive(integer $jobId, boolean $noUnserialize = false)
+ * @method array receive(integer $jobId)
  * @method array getQueueKeys()
  * @method array getDaemonStructKeys()
  * @method array getData(string $key)

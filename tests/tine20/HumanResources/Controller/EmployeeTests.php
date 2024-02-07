@@ -200,10 +200,11 @@ class HumanResources_Controller_EmployeeTests extends HumanResources_TestCase
             'dir' => 'ASC',
             'model' => HumanResources_Model_Employee::class,
         ]));
-        $msg = 'rwright and pwulf should have been found in ' . print_r($result->toArray(), true);
+        $msg = 'rwright and pwulf should have been found';
         $this->assertEquals(2, $result->count(), $msg);
-        $this->assertNotNull($result->filter('n_fn', 'Roberta Wright')->getFirstRecord(), $msg);
-        $this->assertNotNull($result->filter('n_fn', 'Paul Wulf')->getFirstRecord(), $msg);
+        $this->assertSame('Roberta Wright', $result->getFirstRecord()->n_fn);
+        $this->assertSame('Paul Wulf', $result->getLastRecord()->n_fn);
+
 
         $filter = new HumanResources_Model_EmployeeFilter(array(
             array('field' => 'is_employed', 'operator' => 'equals', 'value' => FALSE)
@@ -214,9 +215,9 @@ class HumanResources_Controller_EmployeeTests extends HumanResources_TestCase
             'model' => HumanResources_Model_Employee::class,
         ]));
 
-        $msg = 'jsmith and jmcblack should have been found in ' . print_r($result->toArray(), true);
+        $msg = 'jsmith and jmcblack should have been found';
         $this->assertEquals(2, $result->count(), $msg);
-        $this->assertNotNull($result->filter('n_fn', 'John Smith')->getFirstRecord(), $msg);
-        $this->assertNotNull($result->filter('n_fn', 'James McBlack')->getFirstRecord(), $msg);
+        $this->assertSame('John Smith', $result->getFirstRecord()->n_fn);
+        $this->assertSame('James McBlack', $result->getLastRecord()->n_fn);
     }
 }

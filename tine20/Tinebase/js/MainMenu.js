@@ -106,8 +106,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 this.action_showPreferencesDialog,
                 this.action_notificationPermissions,
                 this.action_changePassword,
-                this.action_manageMFADevices,
-                this.action_unstuck
+                this.action_manageMFADevices
             ];
 
             if (Tine.Tinebase.registry.get('userAccountChanged')) {
@@ -256,17 +255,6 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             handler: this.requestNotificationPermission,
             scope: this
         });
-
-        /**
-         * It's ctrl + l but a friendly Button!
-         */
-        this.action_unstuck = new Ext.Action({
-            text: i18n._('Reload the application'),
-            tooltip:  i18n._('Reloads the application and clears caches.'),
-            iconCls: 'action_login',
-            handler: this.reloadAndClearCache,
-            scope: this
-        });
     },
 
     systemTrayNotificationsEnabled: function() {
@@ -275,12 +263,6 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
 
     requestNotificationPermission: function() {
         window.Notification.requestPermission(Ext.emptyFn);
-    },
-
-    reloadAndClearCache: function() {
-        Tine.Tinebase.common.reload({
-            clearCache: true
-        });
     },
     
     /**

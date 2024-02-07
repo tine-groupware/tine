@@ -114,7 +114,7 @@
             </style>
         </column>
         <column>
-            <identifier>eval_dim_cost_center</identifier>
+            <identifier>costcenter_id</identifier>
             <header>Cost Center</header>
             <!--type>costcenter</type-->
         </column>

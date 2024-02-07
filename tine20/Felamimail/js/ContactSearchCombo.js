@@ -86,15 +86,6 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
 
         filter.push({field: 'name_email_query', operator: 'contains', value: queryFilter.value});
     },
-
-    doQuery : function(q, forceAll){
-        // always load store otherwise the recipients will not be updated
-        this.store.load({
-            params: this.getParams(q)
-        });
-  
-        Tine.Felamimail.ContactSearchCombo.superclass.doQuery.apply(this, arguments);
-    },
     
     /**
      * override default onSelect

@@ -8,7 +8,7 @@
  * @author     Paul Mehrer <p.mehrer@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
+class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Sabre\CalDAV\Plugin
 {
     protected $_fakeEvent = null;
     protected $_calBackend = null;
@@ -24,7 +24,7 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
      */
     public function calendarMultiGetReport($dom)
     {
-        $properties = array_keys(Tine20\DAV\XMLUtil::parseProperties($dom->firstChild));
+        $properties = array_keys(Sabre\DAV\XMLUtil::parseProperties($dom->firstChild));
         $hrefElems = $dom->getElementsByTagNameNS('urn:DAV','href');
 
         $xpath = new \DOMXPath($dom);
@@ -37,13 +37,13 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
             $start = $expandElem->getAttribute('start');
             $end = $expandElem->getAttribute('end');
             if(!$start || !$end) {
-                throw new Tine20\DAV\Exception\BadRequest('The "start" and "end" attributes are required for the CALDAV:expand element');
+                throw new Sabre\DAV\Exception\BadRequest('The "start" and "end" attributes are required for the CALDAV:expand element');
             }
-            $start = Tine20\VObject\DateTimeParser::parseDateTime($start);
-            $end = Tine20\VObject\DateTimeParser::parseDateTime($end);
+            $start = Sabre\VObject\DateTimeParser::parseDateTime($start);
+            $end = Sabre\VObject\DateTimeParser::parseDateTime($end);
 
             if ($end <= $start) {
-                throw new Tine20\DAV\Exception\BadRequest('The end-date must be larger than the start-date in the expand element.');
+                throw new Sabre\DAV\Exception\BadRequest('The end-date must be larger than the start-date in the expand element.');
             }
             $expand = true;
         } else {
@@ -57,11 +57,11 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
                 list($objProps) = $this->server->getPropertiesForPath($uri, $properties);
 
                 if ($expand && isset($objProps[200]['{' . self::NS_CALDAV . '}calendar-data'])) {
-                    $vObject = Tine20\VObject\Reader::read($objProps[200]['{' . self::NS_CALDAV . '}calendar-data']);
+                    $vObject = Sabre\VObject\Reader::read($objProps[200]['{' . self::NS_CALDAV . '}calendar-data']);
                     $vObject->expand($start, $end);
                     $objProps[200]['{' . self::NS_CALDAV . '}calendar-data'] = $vObject->serialize();
                 }
-            } catch (Tine20\DAV\Exception\NotFound $e) {
+            } catch (Sabre\DAV\Exception\NotFound $e) {
 
                 try {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
@@ -116,11 +116,11 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
 
         foreach ($properties as $prop) {
             switch($prop) {
-                case '{DAV:}getetag'               : if ($node instanceof Tine20\DAV\IFile && $etag = $node->getETag())  $newProperties[200][$prop] = $etag; break;
-                case '{DAV:}getcontenttype'        : if ($node instanceof Tine20\DAV\IFile && $ct = $node->getContentType())  $newProperties[200][$prop] = $ct; break;
+                case '{DAV:}getetag'               : if ($node instanceof Sabre\DAV\IFile && $etag = $node->getETag())  $newProperties[200][$prop] = $etag; break;
+                case '{DAV:}getcontenttype'        : if ($node instanceof Sabre\DAV\IFile && $ct = $node->getContentType())  $newProperties[200][$prop] = $ct; break;
                 /** @noinspection PhpMissingBreakStatementInspection */
-                case '{' . Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-data':
-                                                     if ($node instanceof Tine20\CalDAV\ICalendarObject) {
+                case '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-data':
+                                                     if ($node instanceof Sabre\CalDAV\ICalendarObject) {
                                                          $val = $node->get();
                                                          if (is_resource($val))
                                                              $val = stream_get_contents($val);
