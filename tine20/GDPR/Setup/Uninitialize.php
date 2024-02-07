@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tine 2.0
  *
@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2018-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -31,29 +31,36 @@ class GDPR_Setup_Uninitialize extends Setup_Uninitialize
         }
 
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
-            Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId(),
             GDPR_Controller_DataProvenance::ADB_CONTACT_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
 
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
-            Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId(),
             GDPR_Controller_DataProvenance::ADB_CONTACT_REASON_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
 
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
-            Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId(),
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
 
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
-            Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId(),
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_BLACKLIST_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
+        if (null !== $cfc) {
+            Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
+        }
+
+        $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
+            Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId(),
+            GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_EXPIRY_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
         if (null !== $cfc) {
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
