@@ -13,3 +13,12 @@ File: /etc/systemd/system/multi-user.target.wants/docker.service
 [Service]
 ExecStart=/usr/bin/dockerd --http-proxy="http://myproxy" --https-proxy="http://myproxy" -H fd:// --containerd=/run/containerd/containerd.sock
 ~~~
+
+## Connect to the database via MySQL/MariaDB client
+
+Go to your docker host and into the directory with the docker-compose.yml and run the following command
+(use differernt user/pw if you changed them):
+
+~~~shell
+docker compose exec db sh -c "mysql -u root -proot tine"
+~~~
