@@ -240,11 +240,11 @@
       }
       
       git_repo_clone_cached () {
-          set -x
           targetDir=${1:-$CI_PROJECT_DIR}
       
-          cacheRepoPath=${CI_CUSTOM_CACHE_DIR}/git-cache/v1/$(echo "${CI_REPOSITORY_URL}" | cut -d '@' -f2)
-      
+          cacheRepoPath=${CI_CUSTOM_CACHE_DIR}/git-cache/v2/$(echo "${CI_REPOSITORY_URL}" | cut -d '@' -f2)/$CI_CONCURRENT_ID
+          echo $cacheRepoPath
+          
           mkdir -p $cacheRepoPath
       
           pushd $cacheRepoPath
