@@ -11,9 +11,9 @@ services:
       MYSQL_PASSWORD: &MYSQL_PASSWORD tine
     ### use volume for persistent DB
     volumes:
-      - "./data/tine_mysql:/var/lib/mysql"
+      - "tine_db:/var/lib/mysql"
     ### OR
-#      - "tine_db:/var/lib/mysql"
+#      - "./data/tine_mysql:/var/lib/mysql"
     networks:
       - internal_network
 
@@ -48,10 +48,12 @@ services:
       ### apps to install - if omitted, all available apps are installed
       # TINE20_APPLICATION_TO_INSTALL: "Addressbook,Felamimail,Calendar,Filemanager"
     volumes:
-      - "./data/tine_files:/var/lib/tine20/files"
+      - "tine_files:/var/lib/tine20/files"
+      # use this for custom configuration files (like logger.inc.php)
       - "./conf.d:/etc/tine20/conf.d"
     ### OR
-#      - "tine_files:/var/lib/tine20/files"
+      # NOTE: you need to make sure that the folder has the correct file permissions
+#      - "./data/tine_files:/var/lib/tine20/files"
     networks:
       - external_network
       - internal_network
@@ -176,10 +178,10 @@ services:
 #      - "./letsencrypt:/letsencrypt"
 #      - "/var/run/docker.sock:/var/run/docker.sock:ro"
 
-### optional: use docker volumes instead of directory mounts
-# volumes:
-#  tine_files:
-#  tine_db:
+### if you use directory mounts, you might no need that
+volumes:
+  tine_files:
+  tine_db:
 #  clamav_files:
 
 networks:

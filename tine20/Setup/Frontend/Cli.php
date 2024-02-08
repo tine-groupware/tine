@@ -63,24 +63,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $time_start = microtime(true);
 
-        // always set real setup user if Tinebase is installed
-        if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-            try {
-                // TODO remove this if no update occure from < 12.7
-                Tinebase_Group_Sql::doJoinXProps(false);
-                $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
-            } catch (Exception $e) {
-                Tinebase_Exception::log($e);
-                $setupUser = Tinebase_User::SYSTEM_USER_SETUP;
-            }
-            Tinebase_Group_Sql::doJoinXProps(true);
-            if ($setupUser && ! Setup_Core::getUser() instanceof Tinebase_Model_User) {
-                Setup_Core::set(Tinebase_Core::USER, $setupUser);
-            }
-        } else {
-            Setup_Core::set(Setup_Core::USER, Tinebase_User::SYSTEM_USER_SETUP);
-        }
-
+        $this->_setSetupUser();
         $this->_setLocale($_opts);
 
         $result = 0;
@@ -159,6 +142,38 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
 
         return $result;
+    }
+
+    /**
+     * always set real setup user if Tinebase is installed
+     *
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _setSetupUser(): void
+    {
+        if (Setup_Core::getUser() instanceof Tinebase_Model_User) {
+            return;
+        }
+
+        $setupUser = Tinebase_User::SYSTEM_USER_SETUP;
+        if (Setup_Controller::getInstance()->isInstalled()) {
+            try {
+                // TODO remove this if no update occurred from < 12.7
+                Tinebase_Group_Sql::doJoinXProps(false);
+                $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
+            } catch (Exception $e) {
+                if (str_contains($e->getMessage(), 'Base table or view not found')) {
+                    // Tinebase might not be installed yet - clear the cache and continue
+                    Setup_Controller::getInstance()->clearCache();
+                } else {
+                    Tinebase_Exception::log($e);
+                }
+            }
+            Tinebase_Group_Sql::doJoinXProps(true);
+        }
+
+        Setup_Core::set(Setup_Core::USER, $setupUser);
     }
 
     protected function _setLocale(Zend_Console_Getopt $opts)
