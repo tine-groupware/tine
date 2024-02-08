@@ -201,6 +201,11 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
                     $result->removeRecord($current);
                     break;
                 }
+                if ($category === $boilerplate->{Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY} &&
+                    $category !== $current->{Sales_Model_Boilerplate::FLD_DOCUMENT_CATEGORY}) {
+                    $result->removeRecord($current);
+                    break;
+                }
                 continue 2;
             }
             $names[$boilerplate->{Sales_Model_Boilerplate::FLD_NAME}] = $boilerplate;
