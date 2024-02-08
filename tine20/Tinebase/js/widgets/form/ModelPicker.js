@@ -92,6 +92,6 @@ Ext.reg('tw-modelspickers', Ext.extend(Tine.widgets.grid.PickerGridPanel, {
         return _.map(this.supr().getValue.call(this), 'className');
     },
     setValue: function(value) {
-        return this.supr().setValue.call(this, _.map(value, v => { return _.isString(v) ? { className: v, modelName: `${Tine.Tinebase.data.RecordMgr.get(v).getRecordsName()} (${v})` } : v }));
+        return this.supr().setValue.call(this, _.map(value, v => { return _.isString(v) ? { className: v, modelName: `${Tine.Tinebase.data.RecordMgr.get(v)?.getRecordsName() || v} (${v})` } : v }));
     }
 }));
