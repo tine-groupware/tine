@@ -52,7 +52,7 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
         $config = Sales_Config::getInstance();
 
         $matchData = [
-            'DIVISON-' . $division . '--',
+            'DIVISION-' . $division . '--',
             'LANG-' . $lang . '--',
         ];
         foreach ($cats as $cat) {
