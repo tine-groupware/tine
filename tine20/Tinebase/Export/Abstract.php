@@ -6,7 +6,7 @@
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2017-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -556,7 +556,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
         }
 
         if (null === $match) {
-            throw new Tinebase_Exception('could not find template for path: ' . $_path);
+            return $_path; // we ignore this here, eventually file overwrite will find a file later, if not, we can always fail later...
         }
         return Tinebase_Model_Tree_Node_Path::createFromStatPath(Tinebase_FileSystem::getInstance()->getPathOfNode(
             $match, true))->streamwrapperpath;
