@@ -15,19 +15,28 @@ First, create a folder. Docker Compose uses the folder names as an identifier.
 mkdir tine
 cd tine
 ```
-Then you need to download the current docker-compose.yaml. And save it in the folder just created.
+Then you need to download the current docker-compose.yml. And save it in the folder just created.
 ```
 wget https://tine-docu.s3web.rz1.metaways.net/de/operators/docker/docker-compose.yml
 ```
 Now you can start the docker-compose.
+
+---
+**Note**
+
+Depending on your docker compose installation, you need to use this command: `docker compose` or this `docker-compose`.
+
+---
+
+
 ```
-docker-compose up
+docker compose up
 ```
 
 Wait for the database to become available. If it is, the web container will log `web_1    | DB available`. Now open another terminal and start the tine installer. There you need to accept the tine-license and Privacy policy and you will be able to set the initial admin password.
 
 ```
-docker-compose exec web tine20_install
+docker compose exec web tine20_install
 ```
 
 Your tine-groupware is now reachable at http://127.0.0.1:4000.
@@ -35,7 +44,7 @@ Your tine-groupware is now reachable at http://127.0.0.1:4000.
 ### Cleanup
 Use the following to stop and delete all containers, networks and volumes created by this compose.
 ```
-docker-compose down --volumes
+docker compose down --volumes
 ``` 
 
 ### Image
@@ -53,7 +62,7 @@ This image contains the tine code, PHP-FPM, and Nginx. Additionally, a database 
 
 ## Update
 
-Use 'docker-compose up' to fetch the latest docker image.
+Use 'docker compose up' to fetch the latest docker image.
 
 Use this command to update tine:
 
