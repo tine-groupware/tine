@@ -13,7 +13,7 @@ Erstellen Sie im ersten Schritt einen Ordner. Docker Compose verwendet die Ordne
 mkdir tine
 cd tine
 ```
-Als zweiten Schritt laden Sie die aktuelle Datei docker-compose.yaml herunter und speichern diese in dem soeben erstellten Ordner.
+Als zweiten Schritt laden Sie die aktuelle Datei docker-compose.yml herunter und speichern diese in dem soeben erstellten Ordner.
 
 ```
 wget https://tine-docu.s3web.rz1.metaways.net/de/operators/docker/docker-compose.yml
@@ -21,14 +21,21 @@ wget https://tine-docu.s3web.rz1.metaways.net/de/operators/docker/docker-compose
 
 Jetzt können Sie Docker-Compose starten.
 
+---
+**Anmerkung**
+
+Je nach Docker-Installation erfolgt der Docker Compose Aufruf so: `docker compose` oder so `docker-compose`.
+
+---
+
 ```
-docker-compose up
+docker compose up
 ```
 
 Warten Sie einen Moment, bis die Datenbank erreichbar ist. Im Webcontainer Log steht dann `web_1    | DB available`. Dann können Sie Tine installieren. Öffnen Sie dafür ein neues Terminal und führen Sie den Installer aus. Im Installer müssen Sie die Tine-Lizenz und Datenschutzerklärung bestätigen und können das Password für den initialen Admin festlegen.
 
 ```
-docker-compose exec web tine20_install
+docker compose exec web tine20_install
 ```
 
 tine ist jetzt unter http://127.0.0.1:4000 erreichbar.
@@ -36,7 +43,7 @@ tine ist jetzt unter http://127.0.0.1:4000 erreichbar.
 ### Aufräumen
 Um alle von Docker Compose erstellten Container, Netzwerke und Volumes zu stoppen und löschen nutzen Sie:
 ```
-docker-compose down --volumes
+docker compose down --volumes
 ```
 
 ## Image
@@ -54,7 +61,7 @@ Dieses Image enthält den tine-Code, PHP-FPM und Nginx. Zusätzlich benötigen S
 
 ## Update
 
-Zum Updaten einmal 'docker-compose down && docker-composer up' machen. Falls man eine andere Major-Version haben möchte, kann
+Zum Updaten einmal 'docker compose down && docker composer up' machen. Falls man eine andere Major-Version haben möchte, kann
 vorher in der docker-compose.yml auch eine konkrete Version angegeben werden.
 
 Zum Updaten von tine selbst verwendet man folgenden Befehl (ggf. muss der Name des Containers angepasst werden, herausfinden
