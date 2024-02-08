@@ -30,6 +30,9 @@ class Tinebase_Model_Tree_FlySystem extends Tinebase_Record_NewAbstract
         self::VERSION       => 2,
         self::APP_NAME      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
+        self::RECORD_NAME   => 'Flysystem Mount', // gettext('Flysystem Mount')
+        self::RECORDS_NAME  => 'Flysystem Mounts',// ngettext('Flysystem Mount', 'Flysystem Mounts', n)
+        self::EXPOSE_JSON_API => true,
 
         self::TABLE         => [
             self::NAME          => self::TABLE_NAME,
@@ -42,13 +45,16 @@ class Tinebase_Model_Tree_FlySystem extends Tinebase_Record_NewAbstract
 
         self::FIELDS        => [
             self::FLD_NAME      => [
-                self::TYPE          => self::TYPE_MODEL,
+                self::LABEL         => 'Name',
+                self::TYPE          => self::TYPE_STRING,
                 self::LENGTH        => 255,
+                self::QUERY_FILTER  => true,
                 self::VALIDATORS    => [
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
             ],
             self::FLD_ADAPTER_CONFIG_CLASS => [
+                self::LABEL         => 'Backend',
                 self::TYPE          => self::TYPE_MODEL,
                 self::CONFIG        => [
                     self::AVAILABLE_MODELS  => [
@@ -65,6 +71,7 @@ class Tinebase_Model_Tree_FlySystem extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_ADAPTER_CONFIG => [
+                self::LABEL         => 'Config',
                 self::TYPE          => self::TYPE_DYNAMIC_RECORD,
                 self::VALIDATORS    => [
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
@@ -75,6 +82,7 @@ class Tinebase_Model_Tree_FlySystem extends Tinebase_Record_NewAbstract
                 ],
             ],
             self::FLD_SYNC_ACCOUNT => [
+                self::LABEL             => 'Sync Account',
                 self::TYPE              => self::TYPE_USER,
                 self::VALIDATORS    => [
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,

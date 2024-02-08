@@ -23,7 +23,10 @@ class Tinebase_Model_Tree_FlySystem_AdapterConfig_Local extends Tinebase_Record_
     protected static $_modelConfiguration = [
         self::APP_NAME      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
-
+        self::RECORD_NAME   => 'Local Filesystem', // gettext('Local Filesystem')
+        self::RECORDS_NAME  => 'Local Filesystems',// ngettext('Local Filesystem', 'Local Filesystems', n)
+        self::TITLE_PROPERTY => self::FLD_BASE_PATH,
+        
         self::FIELDS        => [
             self::FLD_BASE_PATH => [
                 self::TYPE          => self::TYPE_STRING,

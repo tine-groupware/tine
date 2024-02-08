@@ -25,6 +25,9 @@ class Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV extends Tinebase_Record
     protected static $_modelConfiguration = [
         self::APP_NAME      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
+        self::RECORD_NAME   => 'WebDAV Mount', // gettext('WebDAV Mount')
+        self::RECORDS_NAME  => 'WebDAV Mounts',// ngettext('WebDAV Mount', 'WebDAV Mounts', n)
+        self::TITLE_PROPERTY => self::FLD_URL,
 
         self::FIELDS        => [
             self::FLD_URL => [
@@ -40,6 +43,7 @@ class Tinebase_Model_Tree_FlySystem_AdapterConfig_WebDAV extends Tinebase_Record
                 ],
             ],
             self::FLD_CC_ID => [
+                self::DISABLED      => true,
                 self::TYPE          => self::TYPE_STRING,
             ],
             self::FLD_PWD => [

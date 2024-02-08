@@ -365,6 +365,9 @@ Tine.widgets.form.FieldManager = function() {
                 case 'label':
                     field.xtype = 'label';
                     break;
+                case 'password':
+                    field.xtype = field.xtype || 'tw-passwordTriggerField';
+                    break;
                 default:
                     field.xtype = field.xtype || this.specialTypeMap[fieldDefinition.specialType] || 'textfield';
                     field.emptyValue = field.emptyValue || (fieldDefinition.nullable ? null : '');
