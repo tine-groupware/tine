@@ -81,7 +81,8 @@ Tine.Calendar.ResourceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         app: 'Calendar',
                         keyFieldName: 'resourceTypes',
                         fieldLabel: this.app.i18n._('Type'),
-                        name: 'type'
+                        name: 'type',
+                        allowBlank: false,
                     })], [{
                         xtype: 'textfield',
                         fieldLabel: this.app.i18n._('Calendar Hierarchy/Name'),
