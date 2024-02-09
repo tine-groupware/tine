@@ -156,6 +156,7 @@ class Tinebase_ModelConfiguration_Const {
     public const LABEL = 'label';
     public const LANGUAGES_AVAILABLE = 'languagesAvailable';
     public const LENGTH = 'length';
+    public const LENGTHS = 'lengths';
 
     public const MAPPED_BY = 'mappedBy';
     public const MODEL_NAME = 'modelName';

@@ -17,6 +17,7 @@ class Tinebase_Model_Tree_FlySystem extends Tinebase_Record_NewAbstract
     public const FLD_ADAPTER_CONFIG_CLASS = 'adapter_config_class';
     public const FLD_NAME = 'name';
     public const FLD_SYNC_ACCOUNT = 'sync_account';
+    public const FLD_MOUNT_POINT = 'mount_point';
 
     public const MODEL_NAME_PART = 'Tree_FlySystem';
     public const TABLE_NAME = 'tree_flysystem';
@@ -87,6 +88,15 @@ class Tinebase_Model_Tree_FlySystem extends Tinebase_Record_NewAbstract
                 self::VALIDATORS    => [
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+            ],
+            self::FLD_MOUNT_POINT => [
+                self::LABEL             => 'Mount Point',
+                self::DOCTRINE_IGNORE   => true,
+                self::TYPE              => self::TYPE_STRING, /*self::TYPE_RECORD,
+                self::CONFIG            => [
+                    self::APP_NAME          => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME        => Tinebase_Model_Tree_Node::MODEL_NAME_PART,
+                ],*/
             ],
         ],
     ];
