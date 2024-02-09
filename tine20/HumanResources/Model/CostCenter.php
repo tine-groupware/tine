@@ -33,8 +33,8 @@ class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract implement
      */
     protected static $_modelConfiguration = array(
         'version'           => 2,
-        'recordName'        => 'Cost Center', // ngettext('Cost Center', 'Cost Centers', n)
-        'recordsName'       => 'Cost Centers',
+        'recordName'        => 'Evaluation Dimension', // ngettext('Evaluation Dimension', 'Evaluation Dimensions', n)
+        'recordsName'       => 'Evaluation Dimensions',
         'hasTags'           => TRUE,
         'modlogActive'      => TRUE,
         self::HAS_SYSTEM_CUSTOM_FIELDS => true,
@@ -74,6 +74,7 @@ class HumanResources_Model_CostCenter extends Tinebase_Record_Abstract implement
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => FALSE),
                 'type'       => 'record',
                 'doctrineIgnore'        => true, // already defined as association
+                self::DISABLED => true,
                 'config' => array(
                     'appName'     => 'HumanResources',
                     'modelName'   => 'Employee',
