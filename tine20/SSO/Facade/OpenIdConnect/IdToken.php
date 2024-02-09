@@ -31,11 +31,12 @@ class SSO_Facade_OpenIdConnect_IdToken extends IdToken
         $token = $configuration->builder(ChainedFormatter::withUnixTimestampDates())
             ->withHeader('kid', method_exists($privateKey, 'getKid') ? $privateKey->getKid() : null)
             ->issuedBy($this->getIssuer())
-            ->identifiedBy($this->getSubject())
+            ->identifiedBy($this->getIdentifier())
             ->permittedFor($this->getAudience())
             ->relatedTo($this->getSubject())
             ->expiresAt(DateTimeImmutable::createFromMutable($this->getExpiration()))
             ->issuedAt($this->getIat())
+            ->canOnlyBeUsedAfter($this->getIat())
             ->withClaim('auth_time', $this->getAuthTime()->getTimestamp())
             ->withClaim('nonce', $this->getNonce());
 

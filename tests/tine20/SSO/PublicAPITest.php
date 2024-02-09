@@ -285,6 +285,37 @@ class SSO_PublicAPITest extends TestCase
         $this->assertStringContainsString('&state=af0ifjsldkj', $header[0]);
         $this->assertStringStartsWith($relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0] . '?', $header[0]);
         $this->assertTrue((bool)preg_match('/code=([^&]+)/', $header[0], $m), 'can not pregmatch code in redirect url');
-        // TODO test $m[1] against token api
+
+        Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala', 'GET'))
+                ->withParsedBody([
+                    'grant_type' => 'authorization_code',
+                    'scope' => 'openid profile email',
+                    'code' => $m[1],
+                    'client_id' => $relyingParty->{SSO_Model_RelyingParty::FLD_NAME},
+                    'client_secret' => 'unittest',
+                    'redirect_uri' => $relyingParty->{SSO_Model_RelyingParty::FLD_CONFIG}->{SSO_Model_OAuthOIdRPConfig::FLD_REDIRECT_URLS}[0],
+                ])
+        );
+/*
+        $response = SSO_Controller::publicToken();
+        $this->assertSame(200, $response->getStatusCode());
+        $stream = $response->getBody();
+        $stream->rewind();
+        $this->assertIsArray($response = json_decode($stream->getContents(), true));
+        $this->assertArrayHasKey('id_token', $response);
+        //$components = explode('.', $response['id_token']);
+        //$claims = json_decode(base64_decode($components[1]), true);
+
+        Tinebase_Core::getContainer()->set(\Psr\Http\Message\RequestInterface::class,
+            (new \Laminas\Diactoros\ServerRequest([], [], 'https://unittest/shalala', 'GET'))
+                ->withHeader('Authorization', 'Bearer ' . $response['id_token'])
+        );
+
+        $response = SSO_Controller::publicOIUserInfo();
+        $this->assertSame(200, $response->getStatusCode());*/
+        /*$stream = $response->getBody();
+        $stream->rewind();
+        $this->assertSame('foo', $stream->getContents());*/
     }
 }

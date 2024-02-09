@@ -44,6 +44,7 @@ class SSO_Facade_OpenIdConnect_AuthCodeGrant extends AuthCodeGrant
         $idToken->setAudience($authCodePayload->client_id);
         $idToken->setExpiration((new \DateTime())->add($this->idTokenTTL));
         $idToken->setIat(new \DateTimeImmutable());
+        $idToken->setIdentifier($result->getAccessToken()->getIdentifier());
 
         $idToken->setAuthTime(new \DateTime('@' . $authCodePayload->auth_time));
         $idToken->setNonce($authCodePayload->nonce);
