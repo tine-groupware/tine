@@ -5,10 +5,9 @@
  * @package     Filemanager
  * @subpackage  Exception
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
- * @todo        extend Tinebase_Exception_Data
  */
 
 /**
@@ -17,17 +16,16 @@
  * @package     Filemanager
  * @subpackage  Exception
  */
-class Filemanager_Exception_Quarantined extends Filemanager_Exception
+class Filemanager_Exception_Quarantined extends Tinebase_Exception_ProgramFlow
 {
     /**
-     * construct
      *
-     * @param string $_message
-     * @param integer $_code
-     * @return void
+     * @var string
      */
-    public function __construct($_message = 'file_quarantined', $_code = 904) {
-
+    protected $_title = 'Quarantined File'; // _('Quarantined File')
+    
+    public function __construct($_message = 'File is quarantined', $_code = 904)
+    {
         parent::__construct($_message, $_code);
     }
 }
