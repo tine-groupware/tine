@@ -27,7 +27,7 @@ Slashes (`/`) in input values are replaced with an empty strings
 
 Filename Syntax:
 ----
-`[DIVISON-<division name>--][CATEGORY-<category parts>--][LANG-<language key>--]<definitionFileName>`
+`[DIVISION-<division name>--][CATEGORY-<category parts>--][LANG-<language key>--]<definitionFileName>`
 
 
 Recursive Category Parts Lookup
@@ -37,18 +37,18 @@ given the `document_category` "foo/bar/baz"
 
 lookup searches in this order
 
-- `CATEGORY-foobarbaz--<definitionFileName>`
-- `CATEGORY-foobar--<definitionFileName>`
-- `CATEGORY-foo--<definitionFileName>`
+- `CATEGORY-FooBarBaz--<definitionFileName>`
+- `CATEGORY-FooBar--<definitionFileName>`
+- `CATEGORY-Foo--<definitionFileName>`
 - `<definitionFileName>`
 
 
 Examples
 ----
-- `DIVISION-acme--CATEGORY-foo--LANG-en--invoice.docx`
-- `DIVISION-acme--LANG-de--invoice.docx`
-- `DIVISION-acme--invoice.docx`
-- `LANG-fr--delivery.docx`
+- `DIVISION-Acme--CATEGORY-Foo--LANG-en--sales_document_order.docx`
+- `DIVISION-Acme--LANG-de--sales_document_order.docx`
+- `DIVISION-Acme--sales_document_order.docx`
+- `LANG-fr--sales_document_delivery.docx`
 
 The strongest match is chosen
 
