@@ -714,9 +714,13 @@ class Setup_Controller
                     Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
                         ' pending schema updates found, this should not happen!');
                     if ($options['strict']) {
-                        throw new Setup_Backend_Exception_NotImplemented('missing schema updates in update scripts');
+                        throw new Setup_Backend_Exception_NotImplemented('Missing schema updates in update scripts');
                     }
-                    Setup_SchemaTool::updateAllSchema();
+                    try {
+                        Setup_SchemaTool::updateAllSchema();
+                    } catch (Exception $e) {
+                        Tinebase_Exception::log($e);
+                    }
                 }
 
             } finally {
