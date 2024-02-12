@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2af59e7a2d384fd793222c012c8a74ec",
+    "content-hash": "d8acf1b29c9ebfd87544c6bfc1cb916c",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3674,16 +3674,16 @@
         },
         {
             "name": "league/flysystem-webdav",
-            "version": "3.16.0",
+            "version": "3.23.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-webdav.git",
-                "reference": "fd0340f0797744a6f968babd2a78047c4a839d2c"
+                "reference": "a7044f749baaa8a1a9b57b7251bfa64676418d84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-webdav/zipball/fd0340f0797744a6f968babd2a78047c4a839d2c",
-                "reference": "fd0340f0797744a6f968babd2a78047c4a839d2c",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-webdav/zipball/a7044f749baaa8a1a9b57b7251bfa64676418d84",
+                "reference": "a7044f749baaa8a1a9b57b7251bfa64676418d84",
                 "shasum": ""
             },
             "require": {
@@ -3717,7 +3717,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem-webdav/issues",
-                "source": "https://github.com/thephpleague/flysystem-webdav/tree/3.16.0"
+                "source": "https://github.com/thephpleague/flysystem-webdav/tree/3.23.1"
             },
             "funding": [
                 {
@@ -3729,7 +3729,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-09-07T19:13:13+00:00"
+            "time": "2024-01-26T18:25:23+00:00"
         },
         {
             "name": "league/mime-type-detection",
@@ -15606,5 +15606,5 @@
         "php": "8.0.2",
         "ext-filter": "8.0"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
