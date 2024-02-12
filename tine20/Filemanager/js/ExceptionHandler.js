@@ -112,6 +112,7 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
             });
             break;
         case 903: // Filemanager_Exception_DestinationIsSameNode
+        case 904: // Filemanager_Exception_Quarantined
             Ext.MessageBox.show({
                 buttons: Ext.Msg.OK,
                 icon: Ext.MessageBox.INFO,
