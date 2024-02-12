@@ -108,7 +108,7 @@
     "laminas/laminas-stratigility": "^3.2",
     "laminas/laminas-zendframework-bridge": "^1.6",
     "league/flysystem": "^3.0",
-    "league/flysystem-webdav": "^3.0",
+    "league/flysystem-webdav": "^3.16",
     "league/oauth2-server": "8.3.5pl1 as 8.3.5",
     "metaways/opendocument": "1.*",
     "metaways/timezoneconvert": "1.*",
