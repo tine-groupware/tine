@@ -9,6 +9,8 @@
  *
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
+
 /**
  * Pagination Class
  * @package Tinebase
@@ -295,7 +297,12 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                     $idProp = 'id';
                     $relatedField = 'display_name';
                 } else {
-                    $idProp = $relatedMC->getIdProperty();
+                    if ($refId = $recordFields[$field][TMCC::CONFIG][TMCC::REF_ID_FIELD] ?? null) {
+                        $field = $mc->getIdProperty();
+                        $idProp = $refId;
+                    } else {
+                        $idProp = $relatedMC->getIdProperty();
+                    }
                     if (is_array($relatedMC->defaultSortInfo) && isset($relatedMC->defaultSortInfo['field'])) {
                         $relatedField = $relatedMC->defaultSortInfo['field'];
                     } else {

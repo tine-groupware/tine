@@ -125,7 +125,9 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             Sales_Model_Document_Offer::class, [
                 ['field' => 'division_id', 'operator' => 'equals', 'value' => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}],
             ]
-        ));
+        ), new Tinebase_Model_Pagination([
+            Tinebase_Model_Pagination::FLD_SORT => Sales_Model_Document_Abstract::FLD_CUSTOMER_ID
+        ]));
         $this->assertSame(1, $result->count());
 
         $result = Sales_Controller_Document_Order::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
