@@ -8,6 +8,8 @@
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
+use Tinebase_Model_Filter_Abstract as TMFA;
+
 /**
  * Test class for Sales_Controller_Document_*
  */
@@ -60,6 +62,15 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         Tinebase_Record_Expander::expandRecord($storno);
         $this->assertSame(-2, (int)$storno->{Sales_Model_Document_Invoice::FLD_NET_SUM});
         $this->assertSame($invoice->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID}, $storno->{Sales_Model_Document_Invoice::FLD_RECIPIENT_ID}->{Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID});
+
+        Sales_Controller_DocumentPosition_Invoice::getInstance()->search(
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Invoice::class, [
+                [TMFA::FIELD => Sales_Model_DocumentPosition_Invoice::FLD_PRODUCT_ID, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $product1->getId()],
+                ]]
+            ]));
+        $filter = $filter->toArray(true);
+        $this->assertIsArray($filter[0]['value'][0]['value']['name'] ?? null);
     }
 
     public function testCategoryEvalDimensionCopy()
