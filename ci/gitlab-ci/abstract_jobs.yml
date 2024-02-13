@@ -98,7 +98,7 @@
     - test_prepare_working_dir
     - test_prepare_global_configs
     - test_composer_install
-    - test_npm_install
+    # - test_npm_install # 2023 >= do not need npm install
     - tine20_await_db
     - test_prepare_mail_db
     - tine20_install
