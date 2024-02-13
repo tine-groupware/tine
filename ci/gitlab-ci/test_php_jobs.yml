@@ -1,7 +1,7 @@
 # todo if gitlab version >= 14.3 use gitlab "!reference [.>abstractjob<, rules]" to reduce rules copying
 
 .php-unit-all-tests-source:
-  extends: .abstract_jobs.php_unit
+  extends: .abstract_jobs.php_unit_cache
   variables:
     ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
@@ -28,8 +28,7 @@ php-unit-all-tests-source-sequential:
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
-  needs:
-    - docker_build_source
+  needs: []
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "sequential"
       when: never
@@ -38,8 +37,7 @@ php-unit-all-tests-source-parallel:
   extends: .php-unit-all-tests-source
   timeout: 45m
   parallel: 5
-  needs:
-    - docker_build_source
+  needs: []
   rules:
     - if: $PHP_UNIT_ALL_TESTS_SOURCE_TYPE != "parallel"
       when: never
@@ -201,11 +199,11 @@ php-unit-all-tests-ldap-source-parallel:
       when: never
     - !reference [.php-unit-all-tests-ldap-source, rules]
 
-
 .php-unit-all-tests-built:
-  extends: .php-unit-all-tests-source
+  extends: .abstract_jobs.php_unit
   variables:
     ARG_IMAGE: test-built
+    ARG_COPY_SOURCE: "true"
   needs:
     - docker_build_built
   rules:
