@@ -238,6 +238,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }),
                                 allowDecimals : true,
                                 decimalPrecision: 2,
+                                nullable: true,
                             }], [{
                                 name: 'iban',
                                 fieldLabel: this.app.i18n._('IBAN')
@@ -256,6 +257,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 }),
                                 allowDecimals : true,
                                 decimalPrecision: 1,
+                                nullable: true,
                                 decimalSeparator: Tine.Tinebase.registry.get('decimalSeparator')
                             }, {
                                 name: 'credit_term',
@@ -268,6 +270,7 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                     maxValue: 1024,
                                 }),
                                 allowDecimals : false,
+                                nullable: true
                             }
                         ]]
                     }]
