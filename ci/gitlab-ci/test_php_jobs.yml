@@ -202,6 +202,7 @@ php-unit-all-tests-ldap-source-parallel:
   variables:
     ARG_IMAGE: test-built
     ARG_COPY_SOURCE: "true"
+    TINE20_LICENSE_PATH: "/usr/share/tests/tine20/Tinebase/License/license_contract_MW-TEST-2.0.pem"
   needs:
     - docker_build_built
   rules:
@@ -237,7 +238,7 @@ php-unit-all-tests-built-parallel:
 
 
 php-unit-tinebase-tests-built:
-  extends: .php-unit-all-tests-source
+  extends: .php-unit-all-tests-built
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
