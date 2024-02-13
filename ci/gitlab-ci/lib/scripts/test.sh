@@ -53,7 +53,7 @@ test_prepare_global_configs() {
     rm /etc/supervisor.d/worker.ini || true
     rm /etc/crontabs/tine20 || true
     /usr/sbin/confd -onetime -backend env
-    cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/;
+    # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
     # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
     rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
 }
