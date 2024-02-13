@@ -84,6 +84,13 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const XPROP_CUSTOMER_ADDRESSBOOK = 'customer_addressbook';
 
     /**
+     * default payment terms in days
+     *
+     * @const string DEFAULT_PAYMENT_TERMS
+     */
+    public const DEFAULT_PAYMENT_TERMS = 'defaultPaymentTerms';
+
+    /**
      * Invoice Type
      * 
      * @var string
@@ -1042,6 +1049,18 @@ VAT ID of the service recipient: { vatid }',
                 self::APPLICATION_NAME      => Sales_Config::APP_NAME,
                 self::MODEL_NAME            => Sales_Model_Division::MODEL_NAME_PART,
             ],
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+        ],
+
+        self::DEFAULT_PAYMENT_TERMS => [
+            //_('Default Payment Terms')
+            self::LABEL                 => 'Default Payment Terms',
+            //_('Default payment terms in days')
+            self::DESCRIPTION           => 'Default payment terms in days',
+            self::TYPE                  => self::TYPE_INT,
+            self::DEFAULT_STR           => 10, // 0 means immediately
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => false,
