@@ -10,6 +10,7 @@
 
 Ext.namespace('Tine.Sales');
 
+import './Model/Document/AbstractMixin';
 import './Model/DocumentPosition/Offer';
 import './Model/DocumentPosition/Order';
 import './Model/DocumentPosition/Delivery';

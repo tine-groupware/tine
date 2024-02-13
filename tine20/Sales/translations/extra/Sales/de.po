@@ -1,0 +1,32 @@
+#
+# Translators:
+# cweiss, 2024
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2024-01-31 09:18+0100\n"
+"Last-Translator: Christian Feitl <c.feitl@metaways.de>\n"
+"Language-Team: German (http://www.transifex.com/tine20/tine20/language/de/)\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#  NOTE message extraction from templates is not working atm as xgettext can't cope with alle xml garbish in the strings
+#       so we maintain translations manually here
+
+msgid "less {percentage}% discount"
+msgstr "abzgl. {percentage}% Rabatt"
+
+msgid "plus { tax }% tax"
+msgstr " zzgl. { tax}% Mwst."
+
+msgid "Payable within {days} days without deducation."
+msgstr "Zahlbar innerhalb von {days} Tagen ohne Abzug."
+
+msgid "Payable immediately without deducation."
+msgstr "Zahlbar sofort ohne Abzug."
