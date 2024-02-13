@@ -48,6 +48,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
+    public const MODEL_NAME_PART = 'Tree_Node';
     public const TABLE_NAME = 'tree_nodes';
 
     // forbidden in windows, @see #202420

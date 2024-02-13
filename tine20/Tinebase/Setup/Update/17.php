@@ -24,6 +24,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
     const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
     const RELEASE017_UPDATE007 = __CLASS__ . '::update007';
+    const RELEASE017_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
        self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -48,6 +49,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE004          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update004',
+            ],
+            self::RELEASE017_UPDATE008          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update008',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE        => [
@@ -210,5 +215,17 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         $this->_backend->getDb()->delete(SQL_TABLE_PREFIX . 'filter', 'model = "Tinebase_Model_CostUnit"');
 
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.7', self::RELEASE017_UPDATE007);
+    }
+
+    public function update008()
+    {
+        foreach ($this->_backend->getOwnForeignKeys(Tinebase_Model_Tree_FileObject::TABLE_NAME) as $foreignKey) {
+            $this->_backend->dropForeignKey(Tinebase_Model_Tree_FileObject::TABLE_NAME, $foreignKey['constraint_name']);
+        }
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_Tree_FileObject::class,
+            Tinebase_Model_Tree_FlySystem::class,
+        ]);
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.8', self::RELEASE017_UPDATE008);
     }
 }

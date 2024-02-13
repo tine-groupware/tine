@@ -91,7 +91,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 8,
+        self::VERSION       => 9,
         'modlogActive'      => true,
 
         'appName'           => 'Tinebase',
@@ -111,7 +111,8 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
                     self::FLAGS             => ['fulltext'],
                 ],
                 'flysystem'         => [
-                    self::COLUMNS       => ['flysystem'],
+                    self::COLUMNS       => ['flysystem', 'flypath'],
+                    self::OPTIONS       => [self::LENGTHS => [null, 255]],
                 ],
             ]
         ],
