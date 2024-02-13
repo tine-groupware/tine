@@ -812,8 +812,42 @@
           cd ${TINE20ROOT}
       }
       
+      test_prepare_global_configs() {
+          log "prepareing global configs ..."
+          rm /etc/supervisor.d/worker.ini || true
+          rm /etc/crontabs/tine20 || true
+          /usr/sbin/confd -onetime -backend env
+          cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/;
+          # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
+          rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
+      }
+      
+      test_prepare_mail_db() {
+          log "prepareing databases for mail setup ..."
+          mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"SET GLOBAL wait_timeout=31536000; SET GLOBAL interactive_timeout=31536000"
+          mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS dovecot"
+          mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS postfix"
+          mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';"
+          mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON postfix.* TO '$MYSQL_USER'@'%'"
+          mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"GRANT ALL PRIVILEGES ON dovecot.* TO '$MYSQL_USER'@'%'"
+          mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "dovecot" < /config/sql/dovecot_tables.sql
+          mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "postfix" < $ARG_POSTFIX_INIT_SQL_PATH
+      }
+      
       test_composer_install() {
-          log "prepearing composer cache"
+          log "trying to use cached vendor dir"
+          composer_lock_hash=$(cd ${TINE20ROOT}/tine20; sha1sum composer.json composer.lock | sha1sum | cut -d ' ' -f 1)
+          export VENDOR_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/composer-cache/v1/${composer_lock_hash}
+      
+          mkdir -p $(dirname $VENDOR_CACHE_DIR)
+      
+          if [ -d $VENDOR_CACHE_DIR ] && [ ! -d ${TINE20ROOT}/tine20/vendor ]; then
+              log "found cached vendor dir using it..."
+              cp -r $VENDOR_CACHE_DIR ${TINE20ROOT}/tine20/vendor
+              return 0
+          fi
+      
+          log "prepearing composer cache ..."
           # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
           export COMPOSER_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/composer-cache/v1/
           mkdir -p ${COMPOSER_CACHE_DIR}
@@ -822,6 +856,70 @@
           pushd ${TINE20ROOT}/tine20
           composer install --no-ansi --no-progress --no-suggest
           popd
+      
+          if [ ! -d $VENDOR_CACHE_DIR ]; then
+              log "storing vendor dir as cache"
+              cp -r ${TINE20ROOT}/tine20/vendor $VENDOR_CACHE_DIR
+          fi
+      }
+      
+      test_npm_install() {
+          log "trying to use cache..."
+          package_shrinkwrap_hash=$(cd ${TINE20ROOT}/tine20/Tinebase/js; sha1sum npm-shrinkwrap.json package.json | sha1sum | cut -d ' ' -f 1)
+          export NODE_MODULE_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/npm-cache/v1/${package_shrinkwrap_hash}
+      
+          mkdir -p $(dirname $NODE_MODULE_CACHE_DIR)
+      
+          if [ -d $NODE_MODULE_CACHE_DIR ] && [ ! -d ${TINE20ROOT}/tine20/Tinebase/js/node_modules ]; then
+              log "found cached node_modules using it..."
+              cp -r $NODE_MODULE_CACHE_DIR ${TINE20ROOT}/tine20/Tinebase/js/node_modules
+              return 0
+          fi
+      
+          log "installing npm ..."
+          pushd ${TINE20ROOT}/tine20/Tinebase/js
+          npm --no-optional install
+          popd
+      
+          if [ ! -d $NODE_MODULE_CACHE_DIR ]; then
+              log "storing node_modles dir as cache"
+              cp -r ${TINE20ROOT}/tine20/Tinebase/js/node_modules $NODE_MODULE_CACHE_DIR
+          fi
+      }
+      
+      
+      test_phpunit() {
+          log "prepareing test .."
+          if [ -f ${TINE20ROOT}/scripts/postInstallGitlab.sh ]; then
+              ${TINE20ROOT}/scripts/postInstallGitlab.sh
+          fi
+          
+          php -v
+          echo ${NODE_TOTAL} ${NODE_INDEX};
+          echo cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
+      
+          cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
+      
+      
+          log "testing ..."
+          cmd="php ${TINE20ROOT}/tine20/vendor/bin/phpunit --color --log-junit ${CI_PROJECT_DIR}/phpunit-report.xml --debug";
+      
+          if test -n "${ARG_FILTER}"; then
+              cmd="${cmd} --filter ${ARG_FILTER}"
+          fi
+          
+          if test -n "${ARG_EXCLUDE_GROUP}"; then
+              cmd="${cmd} --exclude-group ${ARG_EXCLUDE_GROUP}"
+          fi
+      
+          if test -n "${ARG_GROUP}"; then
+              cmd="${cmd} --group ${ARG_GROUP}"
+          fi
+      
+          cmd="${cmd} ${ARG_TEST}";
+      
+          echo ${cmd};
+          ${cmd}
       }
       
       # log in blue
