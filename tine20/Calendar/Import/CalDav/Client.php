@@ -319,10 +319,10 @@ class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
 
             if (isset($containerEtags[$data['id']])) {
                 $tine20Etag = $containerEtags[$data['id']]['etag'];
-                
+
+                $existingIds[$data['id']] = $containerEtags[$data['id']]['id'];
                 // remove from $containerEtags list to be able to tell deletes
                 unset($containerEtags[$data['id']]);
-                $existingIds[] = $data['id'];
 
                 if ($tine20Etag === $data['etag']) {
                     continue; // same
@@ -335,7 +335,7 @@ class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
                 
             } else {
                 try {
-                    $this->_recordBackend->checkETag($data['id'], $data['etag']);
+                    $this->_recordBackend->checkETag($data['id'], $data['etag'], $container->getId());
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
                             . ' Ignoring event from another container/organizer: ' . $data['id']);
                     continue;
@@ -346,7 +346,7 @@ class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
             }
 
             $updateResult['ics'][] = $ics;
-            if (in_array($data['id'], $existingIds)) {
+            if (isset($existingIds[$data['id']])) {
                 $updateResult['toupdate']++;
             } else {
                 $updateResult['toadd']++;
@@ -357,7 +357,7 @@ class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
         
         // handle deletes/exdates
         foreach ($containerEtags as $id => $data) {
-            if (in_array($data['external_uid'], $existingIds)) {
+            if (isset($existingIds[$data['external_uid']])) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' '
                         . ' Record ' . $id . ' is exdate of ' . $data['external_uid']);
                 continue;
@@ -431,9 +431,11 @@ class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
 
         $oldExternalIdUid = Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid(true);
         $oldAssertUser = Calendar_Controller_MSEventFacade::getInstance()->assertCalUserAttendee(false);
-        $msEventRaii = new Tinebase_RAII(function() use($oldExternalIdUid, $oldAssertUser) {
+        $oldExternalOrgContainer = Calendar_Controller_Event::getInstance()->useExternalOrganizerContainer(false);
+        $msEventRaii = new Tinebase_RAII(function() use($oldExternalIdUid, $oldAssertUser, $oldExternalOrgContainer) {
             Calendar_Controller_MSEventFacade::getInstance()->useExternalIdUid($oldExternalIdUid);
             Calendar_Controller_MSEventFacade::getInstance()->assertCalUserAttendee($oldAssertUser);
+            Calendar_Controller_Event::getInstance()->useExternalOrganizerContainer($oldExternalOrgContainer);
         });
 
         $start = 0;
@@ -447,7 +449,7 @@ class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
                     $name = explode('/', $ics[$i]);
                     $name = end($name);
                     $id = $this->_getEventIdFromName($name);
-                    if (in_array($id, $this->existingRecordIds[$calUri])) {
+                    if (isset($this->existingRecordIds[$calUri][$id])) {
                         ++$start;
                         continue;
                     }
@@ -459,7 +461,7 @@ class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
                     $name = explode('/', $ics[$i]);
                     $name = end($name);
                     $id = $this->_getEventIdFromName($name);
-                    if (!in_array($id, $this->existingRecordIds[$calUri])) {
+                    if (!isset($this->existingRecordIds[$calUri][$id])) {
                         ++$start;
                         continue;
                     }
@@ -495,8 +497,8 @@ class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
                 $name = end($name);
                 $id = $this->_getEventIdFromName($name);
                 try {
-                    if (in_array($id, $this->existingRecordIds[$calUri])) {
-                        $webdavFrontend = new $this->webdavFrontend($targetContainer, sha1($id));
+                    if (isset($this->existingRecordIds[$calUri][$id])) {
+                        $webdavFrontend = new $this->webdavFrontend($targetContainer, $this->existingRecordIds[$calUri][$id]);
                         $webdavFrontend->_getConverter()->setOptionsValue(\Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID, true);
                         $webdavFrontend->put($data);
                     } else {

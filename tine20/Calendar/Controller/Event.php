@@ -89,6 +89,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected $_keepAttenderStatus = false;
 
+    protected $_moveExternalOrganizerToContainer = true;
+
     /**
      * @var Calendar_Controller_Event
      */
@@ -143,6 +145,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         self::$_instance = null;
     }
 
+    public function useExternalOrganizerContainer(?bool $value = null): bool
+    {
+        $oldValue = $this->_moveExternalOrganizerToContainer;
+        if (null !== $value) {
+            $this->_moveExternalOrganizerToContainer = $value;
+        }
+        return $oldValue;
+    }
     /**
      * sets current calendar user
      *
@@ -2358,7 +2368,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         $this->_inspectOriginatorTZ($_record);
 
-        if ($_record->hasExternalOrganizer()) {
+        if ($_record->hasExternalOrganizer() && $this->_moveExternalOrganizerToContainer) {
             // assert calendarUser as attendee. This is important to keep the event in the loop via its displaycontianer(s)
             try {
                 $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
@@ -2380,9 +2390,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             if (! $container instanceof Tinebase_Model_Container || $container->type == Tinebase_Model_Container::TYPE_PERSONAL) {
                 // move into special (external users) container
-                $container = Calendar_Controller::getInstance()->getInvitationContainer($_record->resolveOrganizer());
+                $container = Calendar_Controller::getInstance()->getInvitationContainer($_record->organizer_email ? null : $_record->resolveOrganizer(), $_record->organizer_email);
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . ' Setting container_id to ' . $container->getId() . ' for external organizer ' . $_record->organizer->email);
+                    . ' Setting container_id to ' . $container->getId() . ' for external organizer ' . ($_record->organizer_email ?: $_record->organizer?->email));
                 $_record->container_id = $container->getId();
             }
             

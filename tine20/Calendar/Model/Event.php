@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -35,6 +35,9 @@
  * @property string                         $class
  * @property int                            $container_id
  * @property string                         $organizer
+ * @property string                         $organizer_type
+ * @property string                         $organizer_email
+ * @property string                         $organizer_displayname
  * @property Tinebase_Record_RecordSet      $attendee
  * @property Tinebase_DateTime              $dtstart
  * @property Tinebase_DateTime              $dtend
@@ -1064,7 +1067,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function isOrganizer($_attendee=NULL)
     {
-        if ($this->organizer_email) {
+        if ($this->organizer_type === Calendar_Model_Event::ORGANIZER_TYPE_EMAIL) {
             return $_attendee && $_attendee->user_email && $this->organizer_email === $_attendee->user_email;
         }
         if ($_attendee && in_array($_attendee->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
@@ -1085,7 +1088,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         $organizer = $this->resolveOrganizer();
         
-        return $organizer instanceof Addressbook_Model_Contact && ! $organizer->account_id;
+        return !$organizer instanceof Addressbook_Model_Contact || ! $organizer->account_id;
     }
     
     public function toShortString()

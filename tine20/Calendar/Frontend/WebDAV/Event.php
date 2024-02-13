@@ -1,7 +1,5 @@
 <?php
 
-use Tine20\VObject;
-
 /**
  * Tine 2.0
  *
@@ -9,8 +7,10 @@ use Tine20\VObject;
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+use Tine20\VObject;
 
 /**
  * class to handle a single event
@@ -144,7 +144,6 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
             $id = sha1($id);
         }
         if ($converter->getOptionsValue(Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID)) {
-            $event->setId(sha1($id));
             $event->external_id = $id;
         } else {
             $event->setId($id);
@@ -172,7 +171,12 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
 
             self::checkWriteAccess($converter);
             $retry = false;
+            $raii = null;
             try {
+                if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+                    $oldSkipRollback = Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+                    $raii = new Tinebase_RAII(fn () => Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack($oldSkipRollback));
+                }
                 $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
                 
             } catch (Zend_Db_Statement_Exception $zdse) {
@@ -204,6 +208,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
                     throw new Tine20\DAV\Exception\PreconditionFailed($e->getMessage());
                 }
             }
+            unset($raii);
             
             $vevent = new self($container, $event);
         } else {

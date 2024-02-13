@@ -18,6 +18,7 @@
  * @property string $status_authkey
  * @property string $user_type
  * @property string $displaycontainer_id
+ * @property string $user_email
  */
 class Calendar_Model_Attender extends Tinebase_Record_Abstract
 {
@@ -450,12 +451,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public function getResolvedUser($event = null, $resolveDisplayContainer = true)
     {
-        $clone = clone $this;
-        $resolvable = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($clone));
-        self::resolveAttendee($resolvable, $resolveDisplayContainer, $event);
-        
-        if ($this->user_type === self::USERTYPE_RESOURCE) {
-            $resource = $clone->user_id;
+        if ($this->user_type === self::USERTYPE_EMAIL) {
+            $result = new Addressbook_Model_Contact(array(
+                'n_fileas' => $this->{self::FLD_USER_DISPLAYNAME},
+                'email' => $this->{self::FLD_USER_EMAIL},
+            ));
+        } elseif ($this->user_type === self::USERTYPE_RESOURCE) {
+            $resource = $this->user_id;
             if (! $resource instanceof Calendar_Model_Resource) {
                 $resource = Calendar_Controller_Resource::getInstance()->get($resource);
             }
@@ -466,7 +468,17 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 'id' => $resource->getId(),
             ));
         } else {
+            $clone = clone $this;
+            $resolvable = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($clone));
+            self::resolveAttendee($resolvable, $resolveDisplayContainer, $event);
             $result = $clone->user_id;
+            if ($this->{self::FLD_USER_DISPLAYNAME}) {
+                $result->n_fileas = $this->{self::FLD_USER_DISPLAYNAME};
+                $result->n_fn = $this->{self::FLD_USER_DISPLAYNAME};
+            }
+            if ($this->{self::FLD_USER_EMAIL}) {
+                $result->email = $this->{self::FLD_USER_EMAIL};
+            }
         }
         
         return $result;

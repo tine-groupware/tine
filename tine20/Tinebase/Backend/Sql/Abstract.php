@@ -1721,12 +1721,13 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @return boolean
      * @throws Tinebase_Exception_NotFound
      */
-    public function checkETag($id, $etag)
+    public function checkETag($id, $etag, $containerId)
     {
         $select = $this->_db->select();
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), 'etag');
-        $select->where($this->_db->quoteIdentifier('external_id') . ' = ?', $id);
-        $select->orWhere($this->_db->quoteIdentifier('external_uid') . ' = ?', $id);
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('container_id') . ' = ?', $containerId) . ' AND ('
+            . $this->_db->quoteInto($this->_db->quoteIdentifier('external_id') . ' = ? OR ', $id)
+            . $this->_db->quoteInto($this->_db->quoteIdentifier('external_uid') . ' = ?', $id) . ')');
     
         $stmt = $select->query();
         $queryResult = $stmt->fetch(Zend_Db::FETCH_ASSOC);

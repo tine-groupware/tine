@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -182,7 +182,7 @@
             . " Notification action: " . $_action);
 
         $organizerContact = $_event->resolveOrganizer();
-        if (! $organizerContact) {
+        if (! $organizerContact && Calendar_Model_Event::ORGANIZER_TYPE_EMAIL !== $_event->organizer_type) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Organizer missing - using creator as organizer for notification purposes.');
             try {
@@ -195,18 +195,35 @@
         }
 
         $organizerIsAttender = false;
-        foreach ($_event->attendee as $attender) {
-            if ($attender->getUserId() === $organizerContact->getId()) {
-                $organizerIsAttender = true;
+        if (! $organizerContact) {
+            if ($_event->organizer_email) {
+                /** @var Calendar_Model_Attender $attender */
+                foreach ($_event->attendee as $attender) {
+                    if (Calendar_Model_Attender::USERTYPE_EMAIL === $attender->user_type && $attender->user_email === $_event->organizer_email) {
+                        $organizerIsAttender = true;
+                    }
+                }
             }
+            $organizer = new Calendar_Model_Attender(array(
+                Calendar_Model_Attender::FLD_USER_TYPE          => Calendar_Model_Attender::USERTYPE_EMAIL,
+                Calendar_Model_Attender::FLD_USER_EMAIL         => $_event->organizer_email,
+                Calendar_Model_Attender::FLD_USER_DISPLAYNAME   => $_event->organizer_displayname,
+            ));
+        } else {
+            foreach ($_event->attendee as $attender) {
+                if ($attender->getUserId() === $organizerContact->getId()) {
+                    $organizerIsAttender = true;
+                }
+            }
+            $organizer = new Calendar_Model_Attender(array(
+                'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'    => $organizerContact,
+            ));
         }
 
-        $organizerIsExternal = ! $organizerContact->account_id;
+        $organizerIsExternal = $_event->hasExternalOrganizer();
 
-        $organizer = new Calendar_Model_Attender(array(
-            'user_type'  => Calendar_Model_Attender::USERTYPE_USER,
-            'user_id'    => $organizerContact
-        ));
+
 
         switch ($_action) {
             case 'alarm':

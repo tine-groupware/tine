@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
@@ -28,26 +28,31 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
      */
     protected function _getUit()
     {
-        $testCredentials = TestServer::getInstance()->getTestCredentials();
         if ($this->_uit === null) {
-            $caldavClientOptions = array(
-                'baseUri' => 'localhost',
-                'userName' => Tinebase_Core::getUser()->accountLoginName,
-                'password' => $testCredentials['password'],
-            );
-            $this->_uit = new Calendar_Import_CalDAV_ClientMock($caldavClientOptions, 'Generic');
-            $this->_uit->setVerifyPeer(false);
+            $this->setUit();
         }
         
         return $this->_uit;
+    }
+
+    protected function setUit()
+    {
+        $testCredentials = TestServer::getInstance()->getTestCredentials();
+        $caldavClientOptions = array(
+            'baseUri' => 'localhost',
+            'userName' => Tinebase_Core::getUser()->accountLoginName,
+            'password' => $testCredentials['password'],
+        );
+        $this->_uit = new Calendar_Import_CalDAV_ClientMock($caldavClientOptions, 'Generic');
+        $this->_uit->setVerifyPeer(false);
     }
     
     /**
      * test import of a single container/calendar of current user
      */
-    public function testImportCalendars()
+    public function testImportCalendar($sharedContainer = true)
     {
-        $importCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);
+        $importCalendar = $this->_getTestContainer('Calendar', Calendar_Model_Event::class, $sharedContainer);
 
         $this->_getUit()->syncCalendarEvents('/calendars/__uids__/0AA03A3B-F7B6-459A-AB3E-4726E53637D0/calendar/', $importCalendar);
 
@@ -55,17 +60,21 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
             ['field' => 'container_id', 'operator' => 'in', 'value' => [$importCalendar->getId()]],
         ]));
         $this->assertSame(3, count($events));
+        $etags = $events->etag;
+        sort($etags);
         $this->assertSame([
                 '"0b3621a20e9045d8679075db57e881dd"',
                 '"8b89914690ad7290fa9a2dc1da490489"',
                 '"bcc36c611f0b60bfee64b4d42e44aa1d"',
-            ], $events->etag);
-        $this->assertEmpty($events->getFirstRecord()->organizer);
-        $this->assertNotEmpty($events->getFirstRecord()->organizer_email);
-        $this->assertEmpty($events->getFirstRecord()->attendee->getFirstRecord()->user_id);
-        $this->assertSame(Calendar_Model_Attender::USERTYPE_EMAIL,
-            $events->getFirstRecord()->attendee->getFirstRecord()->user_type);
-        $this->assertNotEmpty($events->getFirstRecord()->attendee->getFirstRecord()->user_email);
+            ], $etags);
+        $event = $events->getFirstRecord();
+        $this->assertEmpty($event->organizer);
+        $this->assertNotEmpty($event->organizer_email);
+        $this->assertSame(1, $event->attendee->count());
+        $attendees = $event->attendee->filter('user_email', 'klaustu@test.net');
+        $this->assertSame(1, $attendees->count());
+        $this->assertEmpty($attendees->getFirstRecord()->user_id);
+        $this->assertSame(Calendar_Model_Attender::USERTYPE_EMAIL, $attendees->getFirstRecord()->user_type);
 
         $this->_getUit()->updateServerEvents();
 
@@ -75,11 +84,13 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
             ['field' => 'container_id', 'operator' => 'in', 'value' => [$importCalendar->getId()]],
         ]));
         $this->assertSame(3, count($updatedEvents));
+        $etags = $updatedEvents->etag;
+        sort($etags);
         $this->assertSame([
                 '"-1030341843%40citrixonlinecom"',
                 '"aa3621a20e9045d8679075db57e881dd"',
                 '"bcc36c611f0b60bfee64b4d42e44aa1d"',
-            ], $updatedEvents->etag);
+            ], $etags);
 
         $oldIds = $events->getArrayOfIds();
         sort($oldIds);
@@ -89,6 +100,18 @@ class Calendar_Import_CalDAVTest extends Calendar_TestCase
 
         $this->assertSame('test update',
             $updatedEvents->find('etag', '"aa3621a20e9045d8679075db57e881dd"')->summary);
+    }
+
+    public function testImportCalendarPersonal()
+    {
+        $this->testImportCalendar(sharedContainer: false);
+    }
+
+    public function testImportCalendarTwice()
+    {
+        $this->testImportCalendar();
+        $this->setUit();
+        $this->testImportCalendar(sharedContainer: false);
     }
     
     /**

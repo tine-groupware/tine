@@ -7,7 +7,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -281,16 +281,26 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
         }
         
         // event organizer
+        $organizer = null;
         if (!empty($event->organizer)) {
             $organizerContact = $event->resolveOrganizer();
 
             if ($organizerContact instanceof Addressbook_Model_Contact && !empty($organizerContact->email)) {
                 $organizer = $vevent->add(
                     'ORGANIZER',
-                    'mailto:' . $organizerContact->email,
-                    array('CN' => $organizerContact->n_fileas, 'EMAIL' => $organizerContact->email)
+                    'mailto:' . ($event->organizer_email ?: $organizerContact->email),
+                    array('CN' => ($event->organizer_displayname ?:$organizerContact->n_fileas), 'EMAIL' => ($event->organizer_email ?: $organizerContact->email))
                 );
             }
+        }
+        if (null === $organizer && Calendar_Model_Event::ORGANIZER_TYPE_EMAIL === $event->organizer_type &&
+                $event->organizer_email) {
+
+            $vevent->add(
+                'ORGANIZER',
+                'mailto:' . $event->organizer_email,
+                array('CN' => ($event->organizer_displayname ?: 'Organizer'), 'EMAIL' => $event->organizer_email)
+            );
         }
 
         $this->_addEventAttendee($vevent, $event);
