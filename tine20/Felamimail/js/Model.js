@@ -230,7 +230,7 @@ Tine.Felamimail.Model.Message.getFilterModel = function() {
             valueStore: Tine.Felamimail.loadFlagsStore()
         }},
         {label: app.i18n._('Received'),    field: 'received',      valueType: 'datetime', pastOnly: true},
-        {label: app.i18n._('Size'),        field: 'size',          valueType: 'number'},
+        {label: app.i18n._('Size (in byte)'),   field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'},
         {filtertype: 'tinebase.tag', app: app},
     ];
 };
