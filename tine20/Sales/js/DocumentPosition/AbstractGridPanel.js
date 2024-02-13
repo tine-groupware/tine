@@ -66,6 +66,10 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.plugins = [new DDSortPlugin({
             ddSortCol: this.ddSortCol
         })];
+
+        this.editDialogConfig = this.editDialogConfig || {};
+        this.editDialogConfig.mode = 'local';
+        
         return this.supr().initComponent.call(this);
     },
 

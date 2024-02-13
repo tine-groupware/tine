@@ -56,13 +56,12 @@
     NODE_TOTAL: $CI_NODE_TOTAL
     NODE_INDEX: $CI_NODE_INDEX
     TINE20_ACCEPTED_TERMS_VERSION: 1000
-    TINE20_LICENSE_PATH: "/usr/share/tests/tine20/Tinebase/License/license_contract_MW-TEST-2.0.pem"
+    TINE20_LICENSE_PATH: "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/tine20/Tinebase/License/license_contract_MW-TEST-2.0.pem" # be default use test license from cloned tine repo
     ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci
     ARG_TEST: AllTests
     ARG_FILTER: $PHPUNIT_FILTER
     ARG_TEST_PATH_FROM_TINE20ROOT: tests/tine20/
     ARG_POSTFIX_INIT_SQL_PATH: /config/sql/postfix_tables.sql
-    TINE20_LICENSE_PATH: "/usr/share/tests/tine20/Tinebase/License/license_contract_MW-TEST-2.0.pem"
     KUBERNETES_CPU_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_CPU_REQUEST
     KUBERNETES_CPU_LIMIT: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_CPU_LIMIT
     KUBERNETES_MEMORY_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_MEMORY_REQUEST
@@ -84,6 +83,49 @@
     max: 2
     when:
       - runner_system_failure
+
+.abstract_jobs.php_unit_cache:
+  extends: .abstract_jobs.test
+  image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}
+  tags:
+    - custom-cache
+  variables:
+    TINE20ROOT: ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+    TINE20_LICENSE_PATH: "${TINE20ROOT}/tests/tine20/Tinebase/License/license_contract_MW-TEST-2.0.pem"
+  needs: []
+  before_script:
+    - !reference [.lib, script]
+    - test_prepare_working_dir
+    - test_prepare_global_configs
+    - test_composer_install
+    # - test_npm_install # 2023 >= do not need npm install
+    - tine20_await_db
+    - test_prepare_mail_db
+    - tine20_install
+    - supervisord
+  script:
+    - !reference [.lib, script]
+    - test_phpunit
+  # custom-cache is faster
+  # cache:
+  #   - key:
+  #       files:
+  #         - tine20/Tinebase/js/package.json
+  #         - tine20/Tinebase/js/npm-shrinkwrap.json
+  #     paths:
+  #       - tine20/Tinebase/js/node_modules
+  artifacts:
+    paths:
+      - ${CI_PROJECT_DIR}/tine20.log
+      - ${CI_PROJECT_DIR}/phpunit-report.xml
+    expire_in: 1 day
+    when: always
+    reports:
+      junit: ${CI_PROJECT_DIR}/phpunit-report.xml
+  services:
+    - !reference [.lib-services, db_service]
+    - !reference [.lib-services, redis_service]
+    - !reference [.lib-services, mail_service]
 
 # Has a db, redis and installs tine. Then runs a php unit test.
 # $ARG_IMAGE e.g. test-built-commit
@@ -141,7 +183,7 @@
 
 # extends .abstract_jobs.php_unit with ldap.
 .abstract_jobs.php_unit_ldap:
-  extends: .abstract_jobs.php_unit
+  extends: .abstract_jobs.php_unit_cache
   variables:
     LDAP_ORGANISATION: "Tine20 dev"
     LDAP_DOMAIN: "tine.test"
