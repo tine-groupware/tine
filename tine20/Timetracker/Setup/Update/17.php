@@ -48,7 +48,7 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
         }
 
         $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . Timetracker_Model_Timeaccount::TABLE_NAME . ' AS c JOIN '
-            . SQL_TABLE_PREFIX . 'relations AS r ON c.id = r.own_id AND r.own_model = "' . Sales_Model_Contract::class
+            . SQL_TABLE_PREFIX . 'relations AS r ON c.id = r.own_id AND r.own_model = "' . Timetracker_Model_Timeaccount::class
             . '" AND r.own_backend = "Sql" AND r.`type` = "COST_CENTER" AND related_model = "Tinebase_Model_CostCenter" SET c.eval_dim_cost_center = r.related_id');
 
         $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE own_model = "Tinebase_Model_CostCenter" AND own_backend = "Sql" AND related_model = "'
