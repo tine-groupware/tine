@@ -306,7 +306,7 @@ Ext.Msg.show({
             vueProps.otherConfigs.visible = true;
             const d = this.getDialog("");
             Ext.WindowMgr.bringToFront(d)
-            if (! opt.fn) {
+            if (! opt.fn && !this.progress) {
                 return new Promise((resolve) => {
                     opt.fn = function () {
                         resolve.call(opt.scope || window, _.get(arguments, '[2].prompt') ? [... arguments] : arguments[0]);

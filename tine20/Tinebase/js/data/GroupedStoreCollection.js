@@ -203,26 +203,30 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
     },
 
     onStoreAdd: async function (store, records, index) {
+        const suspendCloneStoreEvents = this.suspendCloneStoreEvents;
         this.suspendCloneStoreEvents = true;
 
         await [].concat(records).asyncForEach(async (record) => {
-            Ext.each(await this.getGroupNames(record), function (groupName) {
+            var groupNames = await this.getGroupNames(record);
+
+            Ext.each(groupNames, function (groupName) {
                 var store = this.get(groupName),
                     existingRecord = store && record.id != 0 ? store.getById(record.id) : null;
 
                 // NOTE: record might be existing as it was added to a cloneStore
                 if (existingRecord) {
-                    this.getCloneStore(groupName).replace(existingRecord, record.copy());
+                    this.getCloneStore(groupName).replaceRecord(existingRecord, record.copy());
                 } else {
                     this.getCloneStore(groupName).add([record.copy()]);
                 }
             }, this);
         });
 
-        this.suspendCloneStoreEvents = false;
+        this.suspendCloneStoreEvents = suspendCloneStoreEvents;
     },
 
     onStoreUpdate: async function(store, record, operation) {
+        const suspendCloneStoreEvents = this.suspendCloneStoreEvents;
         this.suspendCloneStoreEvents = true;
 
         var groupNames = await this.getGroupNames(record);
@@ -248,10 +252,11 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
             store.add(record.copy());
         }, this);
 
-        this.suspendCloneStoreEvents = false;
+        this.suspendCloneStoreEvents = suspendCloneStoreEvents;
     },
 
     onStoreRemove: function(store, record, index) {
+        const suspendCloneStoreEvents = this.suspendCloneStoreEvents;
         this.suspendCloneStoreEvents = true;
 
         this.eachKey(function(groupName) {
@@ -264,7 +269,7 @@ Ext.extend(Tine.Tinebase.data.GroupedStoreCollection, Ext.util.MixedCollection, 
 
         }, this);
 
-        this.suspendCloneStoreEvents = false;
+        this.suspendCloneStoreEvents = suspendCloneStoreEvents;
     },
 
     getCloneStore: function(groupName) {
