@@ -90,10 +90,10 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
                 // is this case used somewhere???
                 typeRecord = customer.data?.postal;
             } else {
-                const debitors = _.filter(customer.data.debitors, (deb) => { return isLegacy || _.get(deb, 'division_id.id', deb) === division?.id});
+                const debitors = _.cloneDeep(_.filter(customer.data.debitors, (deb) => { return isLegacy || _.get(deb, 'division_id.id', deb) === division?.id}));
                 const typeRecords = _.flatten(_.each(_.map(debitors, type), (addrs, idx) => {
                     // have postal addr in each debitor
-                    addrs = addrs.concat(customer?.data?.postal ? customer.data.postal : []);
+                    addrs = addrs.concat(customer?.data?.postal ? _.cloneDeep(customer.data.postal) : []);
                     // place debitor reference in each addr
                     _.each(addrs, (addr) => {addr.debitor_id = _.assign({... debitors[idx]}, {billing: null, delivery: null})})
                 }));
