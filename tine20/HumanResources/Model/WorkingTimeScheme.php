@@ -51,7 +51,7 @@ class HumanResources_Model_WorkingTimeScheme extends Tinebase_Record_NewAbstract
         self::RECORDS_NAME          => 'Working time schemes', // ngettext('Working time scheme', 'Working time schemes', n)
         self::MODLOG_ACTIVE         => TRUE,
         self::IS_DEPENDENT          => TRUE,
-        self::TITLE_PROPERTY        => self::FLDS_TITLE,
+        self::TITLE_PROPERTY        => '{{ title }} ({{ type }})',
         self::APP_NAME              => HumanResources_Config::APP_NAME,
         self::MODEL_NAME            => self::MODEL_NAME_PART,
         self::EXPOSE_JSON_API       => true,
