@@ -70,6 +70,10 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
                 ],
             ],
         ],
+        
+        self::UI_CONFIG => [
+            'copyEditAction'    => true,
+        ],
 
         self::FIELDS => [
             self::FLD_MODEL => [
