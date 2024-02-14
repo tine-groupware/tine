@@ -424,7 +424,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         // we follow the account compose_format when fetch msg failed
         const accountFormat = account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : null;
-        const format =  accountFormat ?? message?.getBodyType?.() ?? 'text/html';
+        const composeFormat =  accountFormat ?? message?.getBodyType?.() ?? 'text/html';
 
         if (!this.record.get('body')) {
             if (!this.msgBody) {
@@ -460,7 +460,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
             this.record.set('body', this.msgBody);
         }
-        this.record.set('content_type', format);
+        this.record.set('content_type', composeFormat);
 
         if (this.attachments) {
             this.handleExternalAttachments();
