@@ -38,7 +38,7 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             region: 'center',
             xtype: 'columnform',
             items: [
-                [fields.number, fields.gtin, fields.category],
+                [fields.number, fields.gtin/*, fields.category*/],
                 [fields.name, _.assign(fields.shortcut, {columnWidth: 1/3})],
                 // [fields.description],
                 [fields.manufacturer, _.assign(fields.purchaseprice, {columnWidth: 1/3})],

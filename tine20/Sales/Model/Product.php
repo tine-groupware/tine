@@ -113,6 +113,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
                 self::DEFAULT_VAL => 'DEFAULT',
                 self::NAME => Sales_Config::PRODUCT_CATEGORY,
                 self::NULLABLE => true,
+                self::DISABLED => true, // what for? it could be mixed up with document_category
             ],
             self::FLD_NUMBER => [
                 self::TYPE => self::TYPE_STRING,
@@ -283,7 +284,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
             ],
             self::FLD_LIFESPAN_START => [
                 self::TYPE => self::TYPE_DATETIME,
-                self::LABEL => 'Lifespan start', // _('Lifespan start')
+                self::LABEL => 'Valid from', // _('Valid from')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
@@ -294,7 +295,7 @@ class Sales_Model_Product extends Tinebase_Record_NewAbstract
             ],
             self::FLD_LIFESPAN_END => [
                 self::TYPE => self::TYPE_DATETIME,
-                self::LABEL => 'Lifespan end', // _('Lifespan end')
+                self::LABEL => 'Valid until', // _('Valid until')
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,

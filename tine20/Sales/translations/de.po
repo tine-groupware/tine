@@ -1689,12 +1689,12 @@ msgid "Is active"
 msgstr "Ist aktiv"
 
 #: Model/Product.php:286
-msgid "Lifespan start"
-msgstr "Laufzeit Beginn"
+msgid "Valid from"
+msgstr "Gültig ab"
 
 #: Model/Product.php:297
-msgid "Lifespan end"
-msgstr "Laufzeit Ende"
+msgid "Valid until"
+msgstr "Gültig bis"
 
 #: Model/SubProductMapping.php:43
 msgid "GENDER_Subproduct"
