@@ -41,6 +41,46 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ],
         ]));
 
+        $result = Sales_Controller_DocumentPosition_Invoice::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Invoice::class, [
+                [TMFA::FIELD => 'customer', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $customer->getId()],
+                ]]
+            ]));
+        $this->assertSame(2, $result->count());
+
+        $result = Sales_Controller_DocumentPosition_Invoice::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Invoice::class, [
+                [TMFA::FIELD => 'category', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT}],
+                ]]
+            ]));
+        $this->assertSame(2, $result->count());
+
+        $result = Sales_Controller_DocumentPosition_Invoice::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Invoice::class, [
+                [TMFA::FIELD => 'category', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT}],
+                ]]
+            ]));
+        $this->assertSame(0, $result->count());
+
+        $result = Sales_Controller_DocumentPosition_Invoice::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Invoice::class, [
+                [TMFA::FIELD => 'division', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}],
+                ]]
+            ]));
+        $this->assertSame(2, $result->count());
+
+        $result = Sales_Controller_DocumentPosition_Invoice::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Invoice::class, [
+                [TMFA::FIELD => 'division', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => 'id', TMFA::OPERATOR => 'not', TMFA::VALUE => Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION}],
+                ]]
+            ]));
+        $this->assertSame(0, $result->count());
+
         Tinebase_Record_Expander::expandRecord($invoice);
 
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
@@ -73,6 +113,14 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ]));
         $filter = $filter->toArray(true);
         $this->assertIsArray($filter[0]['value'][0]['value']['name'] ?? null);
+
+        $result = Sales_Controller_DocumentPosition_Invoice::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_DocumentPosition_Invoice::class, [
+                [TMFA::FIELD => 'customer', TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
+                    [TMFA::FIELD => 'id', TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $customer->getId()],
+                ]]
+            ]));
+        $this->assertSame(4, $result->count());
     }
 
     public function testCategoryEvalDimensionCopy()

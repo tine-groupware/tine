@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2017-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2017-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -106,7 +106,7 @@ class Tinebase_Model_Filter_ForeignRecords extends Tinebase_Model_Filter_Foreign
 
         // TODO allow to configure id property or get it from model config
         $orgField = $this->_field;
-        $this->_field = 'id';
+        $this->_field = $this->_options['id_field'] ?? 'id';
 
         try {
             if ($this->_valueIsNull) {
