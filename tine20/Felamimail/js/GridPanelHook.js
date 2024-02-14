@@ -299,11 +299,12 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         const records = (sm && sm.isFilterSelect) ? sm.getSelections(): this.records;
         
         var popupWindow = Tine.Felamimail.MessageEditDialog.openWindow({
+            massMailingPlugins: records?.[0]?.data?.poll_id ? ['poll'] : ['all'],
             contentPanelConstructorInterceptor: async (config) => {
                 const waitingText = this.app.i18n._('Loading Recipients...');
                 const mask = await config.setWaitText(waitingText);
                 const mailAddresses = await this.getMailAddresses(records);
-                
+
                 const record = new Tine.Felamimail.Model.Message({
                     subject: (this.subject) ? this.subject : '',
                     body: this.body,
