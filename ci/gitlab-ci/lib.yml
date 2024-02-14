@@ -854,17 +854,18 @@
       }
       
       test_composer_install() {
-          log "trying to use cached vendor dir"
-          composer_lock_hash=$(cd ${TINE20ROOT}/tine20; sha1sum composer.json composer.lock | sha1sum | cut -d ' ' -f 1)
-          export VENDOR_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/composer-cache/v1/${composer_lock_hash}
+          # todo: fix - vendor dir cache breaks customapp links
+          # log "trying to use cached vendor dir"
+          # composer_lock_hash=$(cd ${TINE20ROOT}/tine20; sha1sum composer.json composer.lock | sha1sum | cut -d ' ' -f 1)
+          # export VENDOR_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/composer-cache/v1/${composer_lock_hash}
       
-          mkdir -p $(dirname $VENDOR_CACHE_DIR)
+          # mkdir -p $(dirname $VENDOR_CACHE_DIR)
       
-          if [ -d $VENDOR_CACHE_DIR ] && [ ! -d ${TINE20ROOT}/tine20/vendor ]; then
-              log "found cached vendor dir using it..."
-              cp -r $VENDOR_CACHE_DIR ${TINE20ROOT}/tine20/vendor
-              return 0
-          fi
+          # if [ -d $VENDOR_CACHE_DIR ] && [ ! -d ${TINE20ROOT}/tine20/vendor ]; then
+          #     log "found cached vendor dir using it..."
+          #     cp -r $VENDOR_CACHE_DIR ${TINE20ROOT}/tine20/vendor
+          #     return 0
+          # fi
       
           log "prepearing composer cache ..."
           # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
