@@ -160,6 +160,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     updateToolbars: Ext.emptyFn,
+    
+    massMailingPlugins: ['all'],
 
     // private
     initComponent: function () {
@@ -312,7 +314,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     initRecord: function () {
         this.decodeMsgs();
-
+        
         this.recordDefaults = Tine.Felamimail.Model.Message.getDefaultData();
 
         if (this.mailAddresses) {
@@ -417,12 +419,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {} message
      */
     initContent: function (message) {
+        const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+        // we follow the account compose_format when fetch msg failed
+        const accountFormat = account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : null;
+        const format =  accountFormat ?? message?.getBodyType?.() ?? 'text/html';
+        
         if (!this.record.get('body')) {
-            const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
-            // we follow the account compose_format when fetch msg failed
-            const format =  account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : 
-                    message.getBodyType();
-
             if (!this.msgBody) {
                 message = this.getMessageFromConfig();
                 if (message) {
@@ -463,11 +465,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                 }
             }
-
-            this.record.set('content_type', format);
             this.record.set('body', this.msgBody);
         }
-
+        this.record.set('content_type', format);
+        
         if (this.attachments) {
             this.handleExternalAttachments();
         }
@@ -671,11 +672,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
             }
         }, 1000);
-        
-        if (this.record.get('massMailingFlag')) {
-            this.button_massMailing.toggle();
-            await this.switchMassMailingMode(this.record.get('massMailingFlag'));
-        }
     },
 
 
@@ -1223,32 +1219,32 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      *
      * @private
      */
-    onRecordLoad: function () {
+    onRecordLoad: async function () {
         // interrupt process flow till dialog is rendered
         if (!this.rendered || (this.record.get('content_type') === 'text/html' && !this.htmlEditor?.initialized)) {
             this.onRecordLoad.defer(250, this);
             return;
         }
-
+        
         let title = this.app.i18n._('Compose email:');
         const editor = this.record.get('content_type') === 'text/html' ? this.htmlEditor : this.textEditor;
-
+        
         if (this.record.get('subject')) {
             title = title + ' ' + this.record.get('subject');
         }
         this.window.setTitle(title);
-
+        
         if (!this.button_toggleEncrypt.pressed) {
             editor.setValue(this.record.get('body'));
             this.bodyCards.layout.setActiveItem(editor);
         }
-
+        
         // to make sure we have all recipients (for example when composing from addressbook with "all pages" filter)
         var ticketFn = this.onAfterRecordLoad.deferByTickets(this),
             wrapTicket = ticketFn();
         this.fireEvent('load', this, this.record, ticketFn);
         wrapTicket();
-
+        
         this.getForm().loadRecord(this.record);
         this.attachmentGrid.loadRecord(this.record);
         if (this.from) {
@@ -1258,6 +1254,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.addDefaultSignature();
         this.updateFileLocations();
         this.onFileMessageSelectionChange('', this.action_fileRecord.getSelected());
+        
+        if (this.record.get('massMailingFlag')) {
+            this.button_massMailing.toggle();
+            await this.switchMassMailingMode(this.record.get('massMailingFlag'));
+        }
+        
         this.onAfterRecordLoad();
     },
 
