@@ -153,8 +153,7 @@ php-unit-servertests-source:
   variables:
     ARG_IMAGE: test-source
     ARG_COPY_SOURCE: "true"
-  needs:
-    - docker_build_source
+  needs: []
   timeout: 2h
   interruptible: true
   rules:
