@@ -171,6 +171,12 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 
         self::JSON_EXPANDER                 => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                self::FLD_DOCUMENT_ID                       => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY  => [],
+                        Sales_Model_Document_Abstract::FLD_CUSTOMER_ID        => [],
+                    ],
+                ],
                 self::FLD_PRODUCT_ID                        => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Sales_Model_Product::FLD_SUBPRODUCTS        => [],
@@ -182,8 +188,8 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         self::FIELDS                        => [
             self::FLD_DOCUMENT_ID               => [
                 // needs to be set by concrete model
+                self::LABEL                         => 'Document', // _('Document)
                 self::TYPE                          => self::TYPE_RECORD,
-                self::DISABLED                      => true,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
                     //self::MODEL_NAME                    => Sales_Model_Document_Abstract::MODEL_PART_NAME,
@@ -192,6 +198,9 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::VALIDATORS                    => [
                     Zend_Filter_Input::ALLOW_EMPTY      => false,
                     Zend_Filter_Input::PRESENCE         => Zend_Filter_Input::PRESENCE_REQUIRED
+                ],
+                self::UI_CONFIG                     => [
+                    self::READ_ONLY                     => true,
                 ],
             ],
             self::FLD_PARENT_ID                 => [
