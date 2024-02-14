@@ -78,7 +78,9 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const isNewRecord = !this.record.get('creation_time');
 
         if (isNewRecord) {
-            this.getForm().findField('feast_calendar_id').setValue(Tine.Tinebase.configManager.get('defaultFeastCalendar', 'HumanResources'));
+            if (! this.record.get('feast_calendar_id')) {
+                this.getForm().findField('feast_calendar_id').setValue(Tine.Tinebase.configManager.get('defaultFeastCalendar', 'HumanResources'));
+            }
         } else {
             this.window.setTitle(String.format(i18n._('Edit {0}'), this.i18nRecordName));
         }
@@ -185,9 +187,6 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         this.record.set('working_time_scheme', working_time_scheme);
         this.blConfigPanel.onRecordUpdate(this, this.record);
         _.set(this.record, 'data.working_time_scheme.json', this.getJsonData());
-
-        // NOTE: we need to overwrite the selectedRecord as it gets applied in abstract code to preserve local data
-        this.getForm().findField('working_time_scheme').selectedRecord.data = _.get(this.record, 'data.working_time_scheme');
     },
     
     /**
@@ -276,10 +275,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         items: [
                         [
                                 Tine.widgets.form.RecordPickerManager.get('HumanResources', 'WorkingTimeScheme', {
-                                    value: this.record,
                                     fieldLabel: this.app.i18n._('Working Time Schema'),
-                                    selectedRecord: this.record,
-                                    ref: '../../../../../../../templateChooser',
                                     columnWidth: 2/3,
                                     name: 'working_time_scheme',
                                     additionalFilters: [{field: 'type', operator: 'not', value: 'individual'}],
