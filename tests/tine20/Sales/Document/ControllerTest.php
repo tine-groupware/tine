@@ -46,6 +46,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
 
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
         $storno = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
@@ -225,6 +227,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
 
         $offer->{Sales_Model_Document_Offer::FLD_OFFER_STATUS} = Sales_Model_Document_Offer::STATUS_RELEASED;
         $offer = Sales_Controller_Document_Offer::getInstance()->update($offer);
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
 
         $order = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Order::class,

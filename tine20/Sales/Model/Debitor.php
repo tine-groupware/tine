@@ -144,7 +144,12 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     ],
                 ],
                 self::UI_CONFIG                     => [
-                    'plugins'                           => ['sales.address.to-clipboard']
+                    'plugins'                           => ['sales.address.to-clipboard'],
+                    'editDialogConfig'              => [
+                        'fixedFields'                   => [
+                            Sales_Model_Address::FLD_TYPE   => Sales_Model_Address::TYPE_DELIVERY,
+                        ]
+                    ],
                 ],
             ],
             self::FLD_BILLING               => [
@@ -163,6 +168,14 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     ],
                     // we need the billing address on search in the contract-customer combo to automatically set the first billing address
                     'omitOnSearch'     => false, // is that a thing?
+                ],
+                self::UI_CONFIG                     => [
+                    'plugins'                           => ['sales.address.to-clipboard'],
+                    'editDialogConfig'              => [
+                        'fixedFields'                   => [
+                            Sales_Model_Address::FLD_TYPE   => Sales_Model_Address::TYPE_BILLING,
+                        ]
+                    ],
                 ],
             ],
         ],

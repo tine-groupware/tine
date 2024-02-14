@@ -371,6 +371,8 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);
         $this->assertSame(Sales_Config::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED, $savedDocument[SMDOffer::FLD_REVERSAL_STATUS]);
 
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
         /*$result =*/ $this->_instance->createFollowupDocument((new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
                 new Sales_Model_Document_TransitionSource([
@@ -422,6 +424,8 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertNotSame($customer->getId(), $savedDocument[SMDOffer::FLD_CUSTOMER_ID]['id']);
         $this->assertSame($customer->getId(), $savedDocument[SMDOffer::FLD_CUSTOMER_ID]['original_id']);
 
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
         $result = $this->_instance->createFollowupDocument((new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
                 new Sales_Model_Document_TransitionSource([
@@ -453,6 +457,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order[SMDOrder::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS]);
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order[SMDOrder::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS]);
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order[SMDOrder::FLD_FOLLOWUP_DELIVERY_CREATED_STATUS]);
+        Tinebase_Record_Expander_DataRequest::clearCache();
         $result = $this->_instance->createFollowupDocument((new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
                 new Sales_Model_Document_TransitionSource([

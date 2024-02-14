@@ -75,6 +75,9 @@ class Sales_Model_Customer extends Tinebase_Record_NewAbstract
         self::JSON_EXPANDER             => [
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_DEBITORS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                        Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
+                    ],
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Sales_Model_Debitor::FLD_DIVISION_ID  => [],
                         Sales_Model_Debitor::FLD_BILLING      => [

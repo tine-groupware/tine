@@ -168,10 +168,16 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
             ],
         ]);
 
-        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES]
-            [self::FLD_INVOICE_RECIPIENT_ID] = [];
-        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES]
-            [self::FLD_DELIVERY_RECIPIENT_ID] = [];
+        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_INVOICE_RECIPIENT_ID] = [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_Address::FLD_DEBITOR_ID => [],
+            ],
+        ];
+        $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_DELIVERY_RECIPIENT_ID] = [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_Address::FLD_DEBITOR_ID => [],
+            ],
+        ];
 
         // order positions
         $_definition[self::FIELDS][self::FLD_POSITIONS][self::CONFIG][self::MODEL_NAME] =

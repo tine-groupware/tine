@@ -68,8 +68,11 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         })];
 
         this.editDialogConfig = this.editDialogConfig || {};
-        this.editDialogConfig.mode = 'local';
-        
+        Object.assign(this.editDialogConfig, {
+            mode: 'local',
+            fieldsToExclude: ['document_id']
+        });
+
         return this.supr().initComponent.call(this);
     },
 
@@ -265,7 +268,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         // init all columns
         this.columns = Object.keys(modelConfig.fields).reduce((columns, fieldName) => {
             const col = colMgr(fieldName, { sortable: false });
-            if (col) {
+            if (col && ['document_id'].indexOf(fieldName) < 0) {
                 if (['type', 'pos_number', 'gross_price'].indexOf(fieldName) < 0) {
                     col.editor = Ext.ComponentMgr.create(fieldMgr(fieldName));
                 }

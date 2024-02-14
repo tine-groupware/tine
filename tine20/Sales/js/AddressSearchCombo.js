@@ -90,13 +90,16 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
                 // is this case used somewhere???
                 typeRecord = customer.data?.postal;
             } else {
-                const debitors = _.filter(customer.data.debitors, (deb) => { return isLegacy || _.get(deb, 'division_id.id', deb) === division?.id});
-                const typeRecords = _.flatten(_.each(_.map(debitors, type), (addrs, idx) => {
+                const debitors = _.cloneDeep(_.filter(customer.data.debitors, (deb) => { return isLegacy || _.get(deb, 'division_id.id', deb) === division?.id}));
+                const addrs = _.map(debitors, (debitor) => { return debitor[type].concat(type === 'delivery' ? debitor['billing'] : []) });
+                const typeRecords = _.flatten(_.each(addrs, (addrs, idx) => {
                     // have postal addr in each debitor
-                    addrs = addrs.concat(customer?.data?.postal ? customer.data.postal : []);
+                    addrs = addrs.concat(customer?.data?.postal ? _.cloneDeep(customer.data.postal) : []);
                     // place debitor reference in each addr
                     _.each(addrs, (addr) => {addr.debitor_id = _.assign({... debitors[idx]}, {billing: null, delivery: null})})
                 }));
+                // @TODO pick type first and postal last (sort by order delivery, billing, postal)
+                // mhh this could be dangourous as it could mixup debitors in orders (delivery/billing addresses)
                 typeRecord = typeRecords[0];
             }
             if (typeRecord) {
@@ -125,7 +128,7 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
 
             if (type !== 'postal') {
                 typeFilter.push({ condition: 'AND', filters: [
-                    {field: 'type', operator: 'equals', value: type}
+                    {field: 'type', operator: 'in', value: [type].concat(type === 'delivery' ? ['billing'] : [])}
                 ] });
                 if (division) {
                     typeFilter[1].filters.push({

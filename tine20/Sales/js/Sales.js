@@ -23,6 +23,7 @@ import './Document/CreateFollowUpAction';
 import './Document/CreatePaperSlipAction';
 import './Document/TracAction';
 import './Document/SendToDatevAction';
+import './DocumentPosition/customerColumn';
 
 /**
  * address renderer, not a default renderer
