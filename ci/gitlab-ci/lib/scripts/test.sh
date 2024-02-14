@@ -95,7 +95,7 @@ test_composer_install() {
 
     if [ ! -d $VENDOR_CACHE_DIR ]; then
         log "storing vendor dir as cache"
-        cp -r ${TINE20ROOT}/tine20/vendor $VENDOR_CACHE_DIR
+        cp -r ${TINE20ROOT}/tine20/vendor $VENDOR_CACHE_DIR || log "storing vendor dir failed. continuing"
     fi
 }
 
@@ -119,7 +119,7 @@ test_npm_install() {
 
     if [ ! -d $NODE_MODULE_CACHE_DIR ]; then
         log "storing node_modles dir as cache"
-        cp -r ${TINE20ROOT}/tine20/Tinebase/js/node_modules $NODE_MODULE_CACHE_DIR
+        cp -r ${TINE20ROOT}/tine20/Tinebase/js/node_modules $NODE_MODULE_CACHE_DIR || log "storing node_modles dir failed. continuing"
     fi
 }
 
