@@ -161,6 +161,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     updateToolbars: Ext.emptyFn,
 
+    massMailingPlugins: ['all'],
+
     // private
     initComponent: function () {
         this.autoSave = Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('autoSaveDrafts');
@@ -417,15 +419,14 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {} message
      */
     initContent: function (message) {
+        const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+        if (!message) message = this.getMessageFromConfig();
+
+        // we follow the account compose_format when fetch msg failed
+        const accountFormat = account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : null;
+        const format =  accountFormat ?? message?.getBodyType?.() ?? 'text/html';
+
         if (!this.record.get('body')) {
-            const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
-            if (!message) message = this.getMessageFromConfig();
-            
-            // we follow the account compose_format when fetch msg failed
-            const composeFormat =  account && account.get('compose_format') !== '' 
-                ? 'text/' + account.get('compose_format') 
-                : message.getBodyType();
-            
             if (!this.msgBody) {
                 if (message) {
                     if (!message.bodyIsFetched() || composeFormat !== message.getBodyType()) {
@@ -457,10 +458,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }
                 }
             }
-
-            this.record.set('content_type', composeFormat);
             this.record.set('body', this.msgBody);
         }
+        this.record.set('content_type', format);
 
         if (this.attachments) {
             this.handleExternalAttachments();
@@ -665,11 +665,6 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }
             }
         }, 1000);
-        
-        if (this.record.get('massMailingFlag')) {
-            this.button_massMailing.toggle();
-            await this.switchMassMailingMode(this.record.get('massMailingFlag'));
-        }
     },
 
 
@@ -1217,7 +1212,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      *
      * @private
      */
-    onRecordLoad: function () {
+    onRecordLoad: async function () {
         // interrupt process flow till dialog is rendered
         if (!this.rendered || (this.record.get('content_type') === 'text/html' && !this.htmlEditor?.initialized)) {
             this.onRecordLoad.defer(250, this);
@@ -1252,6 +1247,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.addDefaultSignature();
         this.updateFileLocations();
         this.onFileMessageSelectionChange('', this.action_fileRecord.getSelected());
+
+        if (this.record.get('massMailingFlag')) {
+            this.button_massMailing.toggle();
+            await this.switchMassMailingMode(this.record.get('massMailingFlag'));
+        }
+
         this.onAfterRecordLoad();
     },
 
