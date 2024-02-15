@@ -79,7 +79,7 @@ test_composer_install() {
 
     if [ -d $VENDOR_CACHE_DIR ] && [ ! -d ${TINE20ROOT}/tine20/vendor ]; then
         log "found cached vendor dir using it..."
-        cp -r $VENDOR_CACHE_DIR ${TINE20ROOT}/tine20/
+        cp -r $VENDOR_CACHE_DIR ${TINE20ROOT}/tine20/vendor
         # do not return here, we need to run composer install, so it creates the customapps links for us
     fi
 
