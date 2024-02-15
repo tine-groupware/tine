@@ -69,6 +69,9 @@ phpstan-analysis:
   #     paths:
   #       - tine20/vendor
   rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpstan-analysis/ && $PHPSTAN_ANALYSES_STRICT == "true"
+      allow_failure: false
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpstan-analysis/
     - if: $PHPSTAN_ANALYSES == "false"
       when: never
     - if: $PHPSTAN_ANALYSES == "true" && $PHPSTAN_ANALYSES_STRICT == "true"
@@ -85,9 +88,6 @@ phpstan-analysis:
         paths:
           - "**/*.php"
           - "tine20/composer.*"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpstan-analysis/ && $PHPSTAN_ANALYSES_STRICT == "true"
-      allow_failure: false
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /phpstan-analysis/
     - if: $PIPELINE_TYPE =~ /default-tests/ && $PHPSTAN_ANALYSES_STRICT == "true"
       allow_failure: false
     - if: $PIPELINE_TYPE =~ /default-tests/
