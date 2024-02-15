@@ -61,11 +61,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'container_id' => array(
                     'columns' => array('container_id')
                 )
-            ),
-            'uniqueConstraints' => array(
-                'inventory_id' => array(
-                    'columns' => array('inventory_id', 'deleted_time')
-                )
             )
         ),
 
