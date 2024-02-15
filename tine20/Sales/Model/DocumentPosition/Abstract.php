@@ -17,7 +17,7 @@
  */
 class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
 {
-    //const MODEL_NAME_PART = 'AbstractPosition';
+    const MODEL_NAME_PART = 'DocumentPosition_Abstract';
 
     const FLD_DOCUMENT_ID = 'document_id';
     const FLD_PARENT_ID = 'parent_id';
@@ -181,6 +181,51 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Sales_Model_Product::FLD_SUBPRODUCTS        => [],
                     ],
+                ],
+            ],
+        ],
+
+        self::FILTER_MODEL => [
+            'category'                  => [
+                self::LABEL => 'Category', // _('Category')
+                self::FILTER => Sales_Model_DocumentPosition_CategoryFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => null,
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Document_Category::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+            'customer'                  => [
+                self::LABEL => 'Customer', // _('Customer')
+                self::FILTER => Sales_Model_DocumentPosition_CustomerFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => null,
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Customer::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
+                ],
+            ],
+            'division'                  => [
+                self::LABEL => 'Division', // _('Division')
+                self::FILTER => Sales_Model_DocumentPosition_DivisionFilter::class,
+                self::OPTIONS => [
+                    self::MODEL_NAME    => null,
+                ],
+                'jsConfig'          => [
+                    'filtertype' => 'foreignrecord',
+                    'linkType' => 'foreignId',
+                    'foreignRecordClass' => Sales_Model_Division::class,
+                    'multipleForeignRecords' => true,
+                    'defaultOperator' => 'definedBy'
                 ],
             ],
         ],
@@ -411,6 +456,25 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
     protected static $_configurationObject = null;
 
     protected static $_exportContextLocale = null;
+
+    public static function inheritModelConfigHook(array &$_definition)
+    {
+        parent::inheritModelConfigHook($_definition);
+
+        [, $suffix] = explode('_', static::MODEL_NAME_PART, 2);
+        $modelNamePart = 'Document_' . $suffix;
+        $_definition[self::FLD_DOCUMENT_ID][self::CONFIG][self::MODEL_NAME] = $modelNamePart;
+
+        $_definition[self::FILTER_MODEL]['customer'][self::OPTIONS][self::MODEL_NAME] = $modelNamePart;
+        $_definition[self::FILTER_MODEL]['customer'][self::OPTIONS][self::RECORD_CLASS_NAME] = 'Sales_Model_' . $modelNamePart;
+        $_definition[self::FILTER_MODEL]['customer'][self::OPTIONS][self::CONTROLLER_CLASS_NAME] = 'Sales_Controller_' . $modelNamePart;
+
+        $_definition[self::FILTER_MODEL]['category'][self::OPTIONS][self::RECORD_CLASS_NAME] = 'Sales_Model_' . $modelNamePart;
+        $_definition[self::FILTER_MODEL]['category'][self::OPTIONS][self::CONTROLLER_CLASS_NAME] = 'Sales_Controller_' . $modelNamePart;
+
+        $_definition[self::FILTER_MODEL]['division'][self::OPTIONS][self::RECORD_CLASS_NAME] = 'Sales_Model_' . $modelNamePart;
+        $_definition[self::FILTER_MODEL]['division'][self::OPTIONS][self::CONTROLLER_CLASS_NAME] = 'Sales_Controller_' . $modelNamePart;
+    }
 
     public static function setExportContextLocale(?Zend_Locale $locale)
     {
