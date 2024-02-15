@@ -35,7 +35,7 @@ cd ${TINE20ROOT}/tine20;
 if test "COMPOSER_LOCK_REWRITE" == "true"; then
     php ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/scripts/packaging/composer/composerLockRewrite.php ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20/composer.lock satis.default.svc.cluster.local;
 fi
-composer install --no-ansi --no-progress --no-suggest
+COMPOSER_ALLOW_SUPERUSER=1 composer install --no-ansi --no-progress --no-suggest
 
 ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/install_custom_app.sh
 
