@@ -2457,8 +2457,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     
     isSmallLayout() {
         if (this.grid.getView().disableResponsiveLayout) return false;
-        const isWidthSmall = this.getWidth() < 700;
-        const isHeightSmall = this.getHeight() < 500;
+        const isWidthSmall = window.outerWidth < 700;
+        const isHeightSmall = window.outerHeight < 500;
         return isWidthSmall || isHeightSmall;
     },
     
