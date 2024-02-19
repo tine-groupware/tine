@@ -309,7 +309,11 @@ class Tinebase_EmailUser
     public static function manages($_configType)
     {
         $config = self::getConfig($_configType);
-        return (!empty($config['backend']) && isset($config['active']) && $config['active'] == true);
+        return (
+            ($_configType === Tinebase_Config::SIEVE || !empty($config['backend']))
+            && isset($config['active'])
+            && $config['active'] == true
+        );
     }
 
     /**
@@ -433,7 +437,9 @@ class Tinebase_EmailUser
                 if (preg_match("~^ldaps?://~i", $config['secondarydomains'])) {
                     // If LDAP-Url is given (instead of comma separated domains) add secondary domains from LDAP
                     $config['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl($config['secondarydomains']);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Secondarydomains from ldap (allowed domains): ' . print_r($config['secondarydomains'], true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Secondarydomains from ldap (allowed domains): '
+                        . print_r($config['secondarydomains'], true));
                 }
                 $allowedDomains = array_merge($allowedDomains, preg_split('/\s*,\s*/', $config['secondarydomains']));
             }
@@ -628,7 +634,7 @@ class Tinebase_EmailUser
             return false;
         }
 
-        $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $imapEmailBackend = Tinebase_EmailUser::getInstance();
         if (method_exists($imapEmailBackend, 'checkMasterUserTable')) {
             try {
                 $imapEmailBackend->checkMasterUserTable();
