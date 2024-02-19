@@ -1,21 +1,22 @@
 <?php
+
 /**
  * Tine 2.0
- * 
+ *
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009-2020 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * 
+ *
  * @todo        think about splitting email user model in two (imap + smtp)
  */
 
 /**
  * class Tinebase_EmailUser
- * 
+ *
  * Email Account Managing
- * 
+ *
  * @package Tinebase
  * @subpackage User
  */
@@ -23,119 +24,119 @@ class Tinebase_EmailUser
 {
     /**
      * Imap Cyrus backend const
-     * 
+     *
      * @staticvar string
      */
-    const IMAP_CYRUS            = 'Imap_Cyrus';
-    
+    public const IMAP_CYRUS            = 'Imap_Cyrus';
+
     /**
      * Imap standard backend const
-     * 
+     *
      * @staticvar string
      */
-    const IMAP_STANDARD         = 'Imap_Standard';
-    
+    public const IMAP_STANDARD         = 'Imap_Standard';
+
     /**
      * Imap DBmail backend const
-     * 
+     *
      * @staticvar string
      */
-    const IMAP_DBMAIL           = 'Imap_Dbmail';
-    
+    public const IMAP_DBMAIL           = 'Imap_Dbmail';
+
     /**
      * Imap Dovecot backend const
-     * 
+     *
      * @staticvar string
      */
-    const IMAP_DOVECOT          = 'Imap_Dovecot_imap';
-    
+    public const IMAP_DOVECOT          = 'Imap_Dovecot_imap';
+
     /**
      * Imap Dovecot combined backend const
-     * 
+     *
      * @staticvar string
      */
-    const IMAP_DOVECOT_COMBINED = 'Imap_Dovecotcombined';
-    
+    public const IMAP_DOVECOT_COMBINED = 'Imap_Dovecotcombined';
+
     /**
      * Smtp Postfix backend const
-     * 
+     *
      * @staticvar string
      */
-    const SMTP_POSTFIX          = 'Smtp_Postfix';
+    public const SMTP_POSTFIX          = 'Smtp_Postfix';
 
     /**
      * Smtp Postfix multi instance backend const
      *
      * @staticvar string
      */
-    const SMTP_POSTFIXMULTIINSTANCE          = 'Smtp_Postfixmultiinstance';
+    public const SMTP_POSTFIXMULTIINSTANCE          = 'Smtp_Postfixmultiinstance';
 
     /**
      * Smtp Postfix backend const
-     * 
+     *
      * @staticvar string
      */
-    const SMTP_POSTFIX_COMBINED = 'Smtp_Postfixcombined';
-    
+    public const SMTP_POSTFIX_COMBINED = 'Smtp_Postfixcombined';
+
     /**
      * Imap ldap backend const
-     * 
+     *
      * @staticvar string
      */
-    const IMAP_LDAP             = 'Imap_Ldap_imap';
-    
+    public const IMAP_LDAP             = 'Imap_Ldap_imap';
+
     /**
      * Smtp Ldap backend const
-     * 
+     *
      * @staticvar string
      */
-    const SMTP_LDAP             = 'Smtp_Ldapsmtp';
-    
+    public const SMTP_LDAP             = 'Smtp_Ldapsmtp';
+
     /**
      * Smtp Ldap mail attribute backend const
-     * 
+     *
      * @staticvar string
      */
-    const SMTP_LDAP_MAIL        = 'Smtp_Ldapsmtpmail';
-    
+    public const SMTP_LDAP_MAIL        = 'Smtp_Ldapsmtpmail';
+
     /**
      * Smtp Ldap backend const
-     * 
+     *
      * @staticvar string
      */
-    const SMTP_LDAP_QMAIL       = 'Smtp_Ldapsmtpqmail';
-    
+    public const SMTP_LDAP_QMAIL       = 'Smtp_Ldapsmtpqmail';
+
     /**
      * univention smtp ldap backend const
-     * 
+     *
      * @staticvar string
      */
-    const SMTP_LDAP_UNIVENTION  = 'Smtp_Ldap_univention';
+    public const SMTP_LDAP_UNIVENTION  = 'Smtp_Ldap_univention';
 
     /**
      * univention imap ldap backend const
-     * 
+     *
      * @staticvar string
      */
-    const IMAP_LDAP_UNIVENTION  = 'Imap_Ldap_univention';
+    public const IMAP_LDAP_UNIVENTION  = 'Imap_Ldap_univention';
 
     /**
      * simpleMail smtp ldap backend const
      *
      * @staticvar string
      */
-    const SMTP_LDAP_SIMPLEMAIL  = 'Smtp_Ldap_simplemail';
+    public const SMTP_LDAP_SIMPLEMAIL  = 'Smtp_Ldap_simplemail';
 
     /**
      * Smtp standard backend const
-     * 
+     *
      * @staticvar string
      */
-    const SMTP_STANDARD         = 'Smtp_Standard';
-    
+    public const SMTP_STANDARD         = 'Smtp_Standard';
+
     /**
      * supported backends
-     * 
+     *
      * @var array
      */
     protected static $_supportedBackends = array(
@@ -156,17 +157,17 @@ class Tinebase_EmailUser
         self::SMTP_POSTFIX_COMBINED => 'Tinebase_EmailUser_Smtp_PostfixCombined',
         self::SMTP_STANDARD         => 'Tinebase_EmailUser_Smtp_Standard',
     );
-    
+
     /**
      * backend object instances
-     * 
+     *
      * @var array
      */
     private static $_backends = array();
-    
+
     /**
      * configs as static class var to minimize db queries
-     *  
+     *
      * @var array
      */
     private static $_configs = array();
@@ -174,21 +175,21 @@ class Tinebase_EmailUser
     private static $_configuredBackends = [];
 
     private static $_masterUser = null;
-    
+
     /**
      * the constructor
      *
-     * don't use the constructor. use the singleton 
+     * don't use the constructor. use the singleton
      */
-    private function __construct() 
+    private function __construct()
     {
     }
-    
+
     /**
      * don't clone. Use the singleton.
      *
      */
-    private function __clone() 
+    private function __clone()
     {
     }
 
@@ -213,7 +214,7 @@ class Tinebase_EmailUser
         if (!isset(self::$_backends[$type])) {
             self::$_backends[$type] = self::factory($type);
         }
-        
+
         return self::$_backends[$type];
     }
 
@@ -229,20 +230,20 @@ class Tinebase_EmailUser
      * @return  Tinebase_User_Plugin_Abstract
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public static function factory($type) 
+    public static function factory($type)
     {
         if (!isset(self::$_supportedBackends[$type])) {
             throw new Tinebase_Exception_InvalidArgument("Backend type $type not implemented.");
         }
-        
+
         $className = self::$_supportedBackends[$type];
-        
+
         return new $className();
     }
-    
+
     /**
      * returns the configured backend
-     * 
+     *
      * @param string $configType
      * @return string
      * @throws Tinebase_Exception_NotFound
@@ -254,14 +255,16 @@ class Tinebase_EmailUser
         }
 
         $config = self::getConfig($configType);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, true));
+        }
+
         if (!isset($config['backend'])) {
             throw new Tinebase_Exception_NotFound("No backend in config for type $configType found.");
         }
-        
+
         $backend = ucfirst(strtolower($configType)) . '_' . ucfirst(strtolower($config['backend']));
-        
+
         if (!isset(self::$_supportedBackends[$backend])) {
             throw new Tinebase_Exception_NotFound("Config for type $configType / $backend not found.");
         }
@@ -270,39 +273,37 @@ class Tinebase_EmailUser
 
         return $backend;
     }
-    
+
     /**
      * merge two email users
-     * 
+     *
      * @param Tinebase_Model_EmailUser $_emailUserImap
      * @param Tinebase_Model_EmailUser $_emailUserSmtp
      * @return Tinebase_Model_EmailUser|NULL
      */
     public static function merge($_emailUserImap, $_emailUserSmtp)
     {
-        $result = NULL;
-        
-        if ($_emailUserImap !== NULL && $_emailUserSmtp !== NULL) {
+        $result = null;
+
+        if ($_emailUserImap !== null && $_emailUserSmtp !== null) {
             // merge
             $_emailUserImap->emailAliases = $_emailUserSmtp->emailAliases;
             $_emailUserImap->emailForwards = $_emailUserSmtp->emailForwards;
             $_emailUserImap->emailForwardOnly = $_emailUserSmtp->emailForwardOnly;
             $_emailUserImap->emailAddress = $_emailUserSmtp->emailAddress;
             $result = $_emailUserImap;
-            
-        } else if ($_emailUserImap !== NULL) {
+        } elseif ($_emailUserImap !== null) {
             $result =  $_emailUserImap;
-            
-        } else if ($_emailUserSmtp !== NULL) {
+        } elseif ($_emailUserSmtp !== null) {
             $result =  $_emailUserSmtp;
         }
-        
+
         return $result;
     }
-    
+
     /**
      * check if email users are managed for backend/config type
-     * 
+     *
      * @param string $_configType IMAP/SMTP
      * @return boolean
      */
@@ -329,7 +330,7 @@ class Tinebase_EmailUser
         $plugin = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
         return $plugin->supportsAliasesDispatchFlag();
     }
-    
+
     /**
      * get config for type IMAP/SMTP
      *
@@ -340,14 +341,27 @@ class Tinebase_EmailUser
     public static function getConfig($_configType, $convertDomainsToUnicode = false)
     {
         if (!isset(self::$_configs[$_configType])) {
-            self::$_configs[$_configType] = Tinebase_Config::getInstance()->get($_configType, new Tinebase_Config_Struct())->toArray();
+            self::$_configs[$_configType] = Tinebase_Config::getInstance()->get(
+                $_configType,
+                new Tinebase_Config_Struct()
+            )->toArray();
 
             // If LDAP-Url is given (instead of comma separated domains) add secondary domains from LDAP
-            if (($_configType == Tinebase_Config::SMTP) && (array_key_exists('secondarydomains', self::$_configs[Tinebase_Config::SMTP])) &&
-                    preg_match("~^ldaps?://~i", self::$_configs[Tinebase_Config::SMTP]['secondarydomains']))
-            {
-                self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl(self::$_configs[Tinebase_Config::SMTP]['secondarydomains']);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Secondarydomains from ldap (config): '. print_r(self::$_configs[Tinebase_Config::SMTP]['secondarydomains'], true));
+            if (
+                ($_configType == Tinebase_Config::SMTP) && (array_key_exists(
+                    'secondarydomains',
+                    self::$_configs[Tinebase_Config::SMTP]
+                )) &&
+                    preg_match("~^ldaps?://~i", self::$_configs[Tinebase_Config::SMTP]['secondarydomains'])
+            ) {
+                self::$_configs[Tinebase_Config::SMTP]['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl(
+                    self::$_configs[Tinebase_Config::SMTP]['secondarydomains']
+                );
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' Secondarydomains from ldap (config): '
+                        . print_r(self::$_configs[Tinebase_Config::SMTP]['secondarydomains'], true));
+                }
             }
         }
 
@@ -380,8 +394,7 @@ class Tinebase_EmailUser
         $query = explode('?', $ldap_url['query']);
         (count($query) > 0) ? $ldap_url['attributes'] = explode(',', $query[0]) : $ldap_url['attributes'] = array();
         $ldap_url['scope'] = Zend_Ldap::SEARCH_SCOPE_BASE;
-        if (count($query) > 1)
-        {
+        if (count($query) > 1) {
             switch ($query[1]) {
                 case 'subtree':
                 case 'sub':
@@ -403,14 +416,13 @@ class Tinebase_EmailUser
             $ldap_url['attributes']
         );
         $foundDomains = '';
-        foreach ($secondarydomains as $dn)
-        {
-            foreach ($ldap_url['attributes'] as $attr)
-            {
-                if (array_key_exists($attr, $dn)) foreach ($dn[$attr] as $domain)
-                {
-                    $foundDomains != '' ? $domain = ','.$domain : $domain;
-                    $foundDomains .= $domain;
+        foreach ($secondarydomains as $dn) {
+            foreach ($ldap_url['attributes'] as $attr) {
+                if (array_key_exists($attr, $dn)) {
+                    foreach ($dn[$attr] as $domain) {
+                        $foundDomains != '' ? $domain = ',' . $domain : $domain;
+                        $foundDomains .= $domain;
+                    }
                 }
             }
         }
@@ -437,9 +449,12 @@ class Tinebase_EmailUser
                 if (preg_match("~^ldaps?://~i", $config['secondarydomains'])) {
                     // If LDAP-Url is given (instead of comma separated domains) add secondary domains from LDAP
                     $config['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl($config['secondarydomains']);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                        __METHOD__ . '::' . __LINE__ . ' Secondarydomains from ldap (allowed domains): '
-                        . print_r($config['secondarydomains'], true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . ' Secondarydomains from ldap (allowed domains): '
+                            . print_r($config['secondarydomains'], true)
+                        );
+                    }
                 }
                 $allowedDomains = array_merge($allowedDomains, preg_split('/\s*,\s*/', $config['secondarydomains']));
             }
@@ -474,27 +489,39 @@ class Tinebase_EmailUser
      * @throws Tinebas_Exception_SystemGeneric
      * @throws Tinebase_Exception_EmailInAddionalDomains
      */
-    public static function checkDomain($_email, $_throwException = false, $_allowedDomains = null, $_includeAdditional = false)
-    {
+    public static function checkDomain(
+        $_email,
+        $_throwException = false,
+        $_allowedDomains = null,
+        $_includeAdditional = false
+    ) {
         $result = true;
         $allowedDomains = $_allowedDomains ? $_allowedDomains : self::getAllowedDomains(null, $_includeAdditional);
 
         if (! empty($_email) && ! empty($allowedDomains)) {
-
             if (! preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $_email)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                    __METHOD__ . '::' . __LINE__ . ' No valid email address: ' . $_email);
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' No valid email address: ' . $_email
+                    );
+                }
                 $domain = null;
             } else {
                 list($user, $domain) = explode('@', $_email, 2);
             }
 
             if (! in_array($domain, $allowedDomains)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(
-                    __METHOD__ . '::' . __LINE__ . ' Email address ' . $_email . ' not in allowed domains!');
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' Email address ' . $_email . ' not in allowed domains!'
+                    );
+                }
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                    __METHOD__ . '::' . __LINE__ . ' Allowed domains: ' . print_r($allowedDomains, TRUE));
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Allowed domains: ' . print_r($allowedDomains, true)
+                    );
+                }
 
                 if ($_throwException) {
                     if (! $_includeAdditional && in_array($domain, self::getAdditionalDomains())) {
@@ -532,7 +559,9 @@ class Tinebase_EmailUser
     public static function isEmailSystemAccountConfigured()
     {
         $imapConfig = Tinebase_Config::getInstance()->get(
-            Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
+            Tinebase_Config::IMAP,
+            new Tinebase_Config_Struct()
+        )->toArray();
         return (
             ! empty($imapConfig)
             && (isset($imapConfig['useSystemAccount']) || array_key_exists('useSystemAccount', $imapConfig))
@@ -562,8 +591,10 @@ class Tinebase_EmailUser
                 throw new Tinebase_Exception_SystemGeneric($translate->_('Email account already exists'));
             }
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::'
                 . __LINE__ . ' Email backend does not support existence check: ' . get_class($emailUserBackend));
+            }
         }
     }
 
@@ -573,13 +604,15 @@ class Tinebase_EmailUser
      */
     public static function prepareAccountForSieveAdminAccess($_accountId)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::'
             . __LINE__ . ' Account id: ' . $_accountId);
+        }
 
         $oldAccountAcl = Felamimail_Controller_Account::getInstance()->doContainerACLChecks(false);
         $oldSieveAcl = Felamimail_Controller_Sieve::getInstance()->doAclCheck(false);
 
-        $raii = new Tinebase_RAII(function() use($oldAccountAcl, $oldSieveAcl) {
+        $raii = new Tinebase_RAII(function () use ($oldAccountAcl, $oldSieveAcl) {
             Felamimail_Controller_Account::getInstance()->doContainerACLChecks($oldAccountAcl);
             Felamimail_Controller_Sieve::getInstance()->doAclCheck($oldSieveAcl);
         });
@@ -590,8 +623,10 @@ class Tinebase_EmailUser
         try {
             self::setAccountMasterPassword($account);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                 . __LINE__ . ' ' . $tenf->getMessage());
+            }
             return false;
         }
 
@@ -599,8 +634,10 @@ class Tinebase_EmailUser
         try {
             Felamimail_Backend_SieveFactory::factory($account);
         } catch (Felamimail_Exception_Sieve $fes) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::'
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::'
                 . __LINE__ . ' ' . $fes->getMessage());
+            }
             return false;
         }
 
@@ -615,18 +652,21 @@ class Tinebase_EmailUser
      */
     public static function backendSupportsMasterPassword(Felamimail_Model_Account $account = null): bool
     {
-        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP) ||
+        if (
+            ! Tinebase_EmailUser::manages(Tinebase_Config::IMAP) ||
             ! Tinebase_EmailUser::manages(Tinebase_Config::SIEVE)
         ) {
             return false;
         }
 
-        if ($account && ! in_array($account->type, [
+        if (
+            $account && ! in_array($account->type, [
                 Felamimail_Model_Account::TYPE_SYSTEM,
                 Felamimail_Model_Account::TYPE_SHARED,
                 Felamimail_Model_Account::TYPE_USER_INTERNAL,
                 Felamimail_Model_Account::TYPE_ADB_LIST
-            ])) {
+            ])
+        ) {
             return false;
         }
 
@@ -651,8 +691,11 @@ class Tinebase_EmailUser
      * @param string $service
      * @return void
      */
-    public static function setAccountMasterPassword(Felamimail_Model_Account $account, ?string $username = null, string $service = 'sieve'): void
-    {
+    public static function setAccountMasterPassword(
+        Felamimail_Model_Account $account,
+        ?string $username = null,
+        string $service = 'sieve'
+    ): void {
         self::$_masterUser = $username ?? Tinebase_Record_Abstract::generateUID(8);
         if (empty($account->user)) {
             $account->user = self::getAccountUsername($account, null, true);
@@ -672,16 +715,18 @@ class Tinebase_EmailUser
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    public static function getAccountUsername(Felamimail_Model_Account $account,
-                                              ?string $accountLoginName = null,
-                                              bool $masteruser = false): string
-    {
+    public static function getAccountUsername(
+        Felamimail_Model_Account $account,
+        ?string $accountLoginName = null,
+        bool $masteruser = false
+    ): string {
         $imapLoginname =  null;
         if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM) {
             // TODO we should handle other system accounts here, too
             $record = Tinebase_User::getInstance()->getFullUserById($account->user_id);
             $config = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
-            if (! $config->useEmailAsUsername
+            if (
+                ! $config->useEmailAsUsername
                 && isset($record->imapUser->emailUsername) && ! empty($record->imapUser->emailUsername)
             ) {
                 $imapLoginname = $record->imapUser->emailUsername;
@@ -693,9 +738,11 @@ class Tinebase_EmailUser
         if (! $imapLoginname) {
             $user = Tinebase_EmailUser_XpropsFacade::getEmailUserFromRecord($record);
             $imapEmailBackend = Tinebase_EmailUser::getInstance();
-            $imapLoginname = $imapEmailBackend->getLoginName($user->getId(),
+            $imapLoginname = $imapEmailBackend->getLoginName(
+                $user->getId(),
                 $accountLoginName ?? $account->email,
-                $account->email);
+                $account->email
+            );
         }
 
         if ($masteruser) {
