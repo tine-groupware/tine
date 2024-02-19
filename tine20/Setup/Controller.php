@@ -2797,12 +2797,14 @@ class Setup_Controller
      *      'db'         => bool   // backup database
      *      'files'      => bool   // backup files
      *      'novalidate' => bool   // do not validate sql backup
+     *      'structTables' => array // additional struct only tables (data backup is omitted)
      *    )
      */
     public function backup($options)
     {
         if (! $this->isInstalled('Tinebase')) {
-            Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Tine 2.0 is not installed');
+            Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                . Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE) . ' is not installed');
             return;
         }
 
@@ -2842,11 +2844,14 @@ class Setup_Controller
                 throw new Exception('db not configured, cannot backup');
             }
 
+            $structTables = $this->getBackupStructureOnlyTables($options['structTables'] ?? null);
             $backupOptions = array(
                 'backupDir'         => $backupDir,
-                'structTables'      => $this->getBackupStructureOnlyTables(),
+                'structTables'      => $structTables,
                 'novalidate'        => isset($options['novalidate']) && $options['novalidate'],
             );
+
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using options: ' . print_r($backupOptions, true));
 
             $this->_backend->backup($backupOptions);
 
@@ -2885,14 +2890,21 @@ class Setup_Controller
     /**
      * returns an array of all tables of all applications that should only backup the structure
      *
+     * @param ?string $structTablesString
      * @return array
      * @throws Setup_Exception_NotFound
      *
      * TODO support <backupStructureOnly>true</backupStructureOnly> for MC models without a table definition in setup.xml
      */
-    public function getBackupStructureOnlyTables()
+    public function getBackupStructureOnlyTables(?string $structTablesString = null): array
     {
-        $tables = array();
+        $tables = [];
+
+        if ($structTablesString) {
+            foreach (explode(',', $structTablesString) as $table) {
+                $tables[] = SQL_TABLE_PREFIX . $table;
+            }
+        }
 
         // find tables that only backup structure
         $applications = Tinebase_Application::getInstance()->getApplications();
@@ -2905,10 +2917,10 @@ class Setup_Controller
             if (! $tableDef) {
                 continue;
             }
-            $structOnlys = $tableDef->xpath('//table/backupStructureOnly[text()="true"]');
+            $structOnly = $tableDef->xpath('//table/backupStructureOnly[text()="true"]');
 
-            foreach ($structOnlys as $structOnly) {
-                $tableName = $structOnly->xpath('./../name/text()');
+            foreach ($structOnly as $structOnlyTable) {
+                $tableName = $structOnlyTable->xpath('./../name/text()');
                 $tables[] = SQL_TABLE_PREFIX . $tableName[0];
             }
         }
