@@ -1,14 +1,12 @@
-Tine Admin HowTo: Datenbank
-=================
+# Tine Admin HowTo: Datenbank
 
 Version: ab Caroline 2017.11
 
 Konfiguration und Performance-Optimierung der Datenbank
 
-MySQL Optimierung
-=================
+## MySQL Optimierung
 
-## Zusammengefasst:
+### Zusammengefasst:
 
 * der MySQL Server muß entsprechend der Datenmenge und Anwendernutzung dimensioniert sein
 * der MySQL Server hat 16 Hardware Threads, innodb_thread_concurrency prüfen und ggf. anpassen. Der Wert sollte mindestens auf 16 gesetzt werden und später mittels Messungen der optimale Wert irgendwo zwischen 16 und 64 gefunden werden.
@@ -16,7 +14,7 @@ MySQL Optimierung
 * die tmp table size effektiv auf 64MB setzen (max_heap_table_size und tmp_table_size beide auf 64 MB! Denn min(x,y) greift)
 * MySQL < 5.5 ist völlig veraltet und insbesondere die InnoDB performance wurde stark verbessert! Eine aktuelle Version kann leicht 30% Performance gewinnt bringen
 
-## Ausführlich
+### Ausführlich
 
     SELECT SUM(data_length+index_length) / POWER(1024,3) Total_InnoDB_G FROM information_schema.tables WHERE engine='InnoDB';
 
@@ -84,20 +82,19 @@ Sollte es auf Grund des knappen RAMs von 8GB nicht möglich sein den innodb_buff
 
 Fine Tuning wird aber keine großen Sprünge schaffen, es ist nur Fine Tuning. Eine performante DB braucht zwingend RAM > Datenbankgröße (Daten+Indexe).
 
-## MySQL unter Ubuntu 16.04+
+### MySQL unter Ubuntu 16.04+
 
     profiles::databases::mysql::limit_nofile_systemd: 100000
 
 Für jeden Prod-DB-Server sollte das (ab Xenial) mindestens auf 100000 gesetzt werden, wenn nicht höher. Sonst werden bestimmte Einstellungen von Mysql massiv runtergetunt. Namentlich betrifft das max_connections und table_open_cache.
 
-## MySQL-Tuner
+### MySQL-Tuner
 
 https://www.howtoforge.com/tuning-mysql-performance-with-mysqltuner
 bzw. https://raw.githubusercontent.com/major/MySQLTuner-perl/master/mysqltuner.pl
 
 
-DB-Schema Vergleich und Aktualisierung
-=================
+## DB-Schema Vergleich und Aktualisierung
 
 Es kann passieren, dass das Schema der Datenbank nicht mehr dem aktuellen Stand
  entspricht. Das betrifft vor allem alte Installationen bzw. Installationen bei
@@ -129,24 +126,22 @@ Mit "tinyint"-Feldern scheint es ein Problem zu geben, diese werden wohl nicht
         [2] => ALTER TABLE `tine20_tree_nodes` CHANGE `islink` `islink` TINYINT(1) DEFAULT '0' NOT NULL
     )
 
-Volltext-Indizierung in der Datenbank
-=================
+## Volltext-Indizierung in der Datenbank
 
-Tine 2.0 unterstützt die Volltext-Indizierung ab Mysql 5.6.4 bzw. MariaDB 10.1
+
+Tine unterstützt die Volltext-Indizierung ab Mysql 5.6.4 bzw. MariaDB 10.1
 
 Wenn man von einer älteren Version (oder z.B. PGSQL) kommt, kann man das Feature so nachinstallieren:
 
     $ php setup.php --upgradeMysql564
 
-Konfiguration des Datenbank-Ports auf Localhost
-=================
+## Konfiguration des Datenbank-Ports auf Localhost
 
 Durch einen Bug in PHP-PDO ist es nicht möglich den Port auf einen anderen, als den Default-Port zu setzen,
  wenn als Host "localhost" eingetragen ist. Bei Non-Default-Ports muss dann die IP-Adresse (z.B. 127.0.0.1)
  verwendet werden.
  
-Migration PostgreSQL (PGSQL) -> MySQL
-=================
+## Migration PostgreSQL (PGSQL) -> MySQL
 
 Ab Version 2018.11 wird PGSQL nicht mehr unterstützt.
 
@@ -201,10 +196,9 @@ innodb_file_format = Barracuda
 innodb_strict_mode=0
 ```
 
-Database Cleanup
-=================
+## Database Cleanup
 
-## Purge deleted records
+### Purge deleted records
 
 ~~~
 php tine20.php --method=Tinebase.purgeDeletedRecords -- [date=2024-01-01] [modlog=purge]
