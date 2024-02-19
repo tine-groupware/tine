@@ -200,3 +200,17 @@ innodb_file_per_table=1
 innodb_file_format = Barracuda
 innodb_strict_mode=0
 ```
+
+Database Cleanup
+=================
+
+## Purge deleted records
+
+~~~
+php tine20.php --method=Tinebase.purgeDeletedRecords -- [date=2024-01-01] [modlog=purge]
+~~~
+
+- removes all deleted records before DELETED_DATA_RETENTION_TIME (default: 12 months)
+- cleanup of relations, notes, customfields and deleted files
+- with param date=2024-01-01, all deleted data before 2024-01-01 are removed
+- with modlog=purge, all records in timemachine_modlog table before given date are removed
