@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Tine 2.0
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2008-2023 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
+ *
  * @todo        add ext check again
  */
 
@@ -44,14 +45,14 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @param string $_username
      * @param string $_password
-     * 
+     *
      * @return boolean
      */
     public function authenticate($_username, $_password)
     {
         return false;
     }
-    
+
     /**
      * handle request (call -ApplicationName-_Cli.-MethodName- or -ApplicationName-_Cli.getHelp)
      *
@@ -69,74 +70,74 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $result = 0;
         if (isset($_opts->install)) {
             $result = $this->_install($_opts);
-        } elseif(isset($_opts->update)) {
+        } elseif (isset($_opts->update)) {
             $result = $this->_update($_opts);
-        } elseif(isset($_opts->update_needed)) {
+        } elseif (isset($_opts->update_needed)) {
             $result = $this->_updateNeeded($_opts);
-        } elseif(isset($_opts->uninstall)) {
+        } elseif (isset($_opts->uninstall)) {
             $this->_uninstall($_opts);
-        } elseif(isset($_opts->install_dump)) {
+        } elseif (isset($_opts->install_dump)) {
             $this->_installDump($_opts);
-        } elseif(isset($_opts->maintenance_mode)) {
+        } elseif (isset($_opts->maintenance_mode)) {
             $this->_maintenanceMode($_opts);
-        } elseif(isset($_opts->list) || isset($_opts->version)) {
+        } elseif (isset($_opts->list) || isset($_opts->version)) {
             $result = $this->_listInstalled();
-        } elseif(isset($_opts->sync_accounts_from_ldap)) {
+        } elseif (isset($_opts->sync_accounts_from_ldap)) {
             $this->_importAccounts($_opts);
-        } elseif(isset($_opts->updateAllAccountsWithAccountEmail)) {
+        } elseif (isset($_opts->updateAllAccountsWithAccountEmail)) {
             $this->_updateAllAccountsWithAccountEmail($_opts);
-        } elseif(isset($_opts->sync_passwords_from_ldap)) {
+        } elseif (isset($_opts->sync_passwords_from_ldap)) {
             $this->_syncPasswords($_opts);
-        } elseif(isset($_opts->egw14import)) {
+        } elseif (isset($_opts->egw14import)) {
             $this->_egw14Import($_opts);
-        } elseif(isset($_opts->check_requirements)) {
+        } elseif (isset($_opts->check_requirements)) {
             $result = $this->_checkRequirements();
-        } elseif(isset($_opts->setconfig)) {
+        } elseif (isset($_opts->setconfig)) {
             $this->_setConfig($_opts);
-        } elseif(isset($_opts->clear_cache)) {
+        } elseif (isset($_opts->clear_cache)) {
             $this->_clearCache($_opts);
-        } elseif(isset($_opts->clear_cache_dir)) {
+        } elseif (isset($_opts->clear_cache_dir)) {
             $this->_clearCacheDir($_opts);
-        } elseif(isset($_opts->create_admin)) {
+        } elseif (isset($_opts->create_admin)) {
             $this->_createAdminUser($_opts);
-        } elseif(isset($_opts->getconfig)) {
+        } elseif (isset($_opts->getconfig)) {
             $this->_getConfig($_opts);
-        } elseif(isset($_opts->reset_demodata)) {
+        } elseif (isset($_opts->reset_demodata)) {
             $this->_resetDemodata($_opts);
-        } elseif(isset($_opts->updateAllImportExportDefinitions)) {
+        } elseif (isset($_opts->updateAllImportExportDefinitions)) {
             $this->_updateAllImportExportDefinitions($_opts);
-        } elseif(isset($_opts->backup)) {
+        } elseif (isset($_opts->backup)) {
             $this->_backup($_opts);
-        } elseif(isset($_opts->restore)) {
+        } elseif (isset($_opts->restore)) {
             $this->_restore($_opts);
-        } elseif(isset($_opts->setLicense)) {
+        } elseif (isset($_opts->setLicense)) {
             $this->_setLicense($_opts);
-        } elseif(isset($_opts->deleteLicense)) {
+        } elseif (isset($_opts->deleteLicense)) {
             $this->_deleteLicense();
-        } elseif(isset($_opts->compare)) {
+        } elseif (isset($_opts->compare)) {
             $this->_compare($_opts);
-        } elseif(isset($_opts->createmissingtables)) {
+        } elseif (isset($_opts->createmissingtables)) {
             $this->_createmissingtables($_opts);
-        } elseif(isset($_opts->mysql)) {
+        } elseif (isset($_opts->mysql)) {
             $this->_mysqlClient($_opts);
-        } elseif(isset($_opts->setpassword)) {
+        } elseif (isset($_opts->setpassword)) {
             $this->_setPassword($_opts);
-        } elseif(isset($_opts->pgsqlMigration)) {
+        } elseif (isset($_opts->pgsqlMigration)) {
             $this->_pgsqlMigration($_opts);
-        } elseif(isset($_opts->upgradeMysql564)) {
+        } elseif (isset($_opts->upgradeMysql564)) {
             $this->_upgradeMysql564();
-        } elseif(isset($_opts->migrateUtf8mb4)) {
+        } elseif (isset($_opts->migrateUtf8mb4)) {
             $this->_migrateUtf8mb4();
-        } elseif(isset($_opts->config_from_env)) {
+        } elseif (isset($_opts->config_from_env)) {
             $this->_configFromEnv();
-        } elseif(isset($_opts->is_installed)) {
+        } elseif (isset($_opts->is_installed)) {
             $result = $this->_isInstalled();
-        } elseif(isset($_opts->add_auth_token)) {
+        } elseif (isset($_opts->add_auth_token)) {
             $this->_addAuthToken($_opts);
         }
 
         Tinebase_Log::logUsageAndMethod('setup.php', $time_start, 'Setup.' . implode(',', $_opts->getOptions()));
-        
+
         if ($exitAfterHandle) {
             exit($result);
         }
@@ -182,12 +183,15 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $lang = $opts->lang ?: ($args['lang'] ?? getenv('LANGUAGE'));
 
         if ($lang) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                __METHOD__ . '::' . __LINE__ . ' Setting locale to ' . $lang);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Setting locale to ' . $lang
+                );
+            }
             Tinebase_Core::setLocale($lang);
         }
     }
-    
+
     /**
      * install new applications
      *
@@ -202,16 +206,22 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         if (isset($options['lang'])) {
             Tinebase_Core::setLocale($options['lang']);
         }
-        
+
         if ($_opts->install === true) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                    __METHOD__ . '::' . __LINE__ . ' Already installed ... nothing to do.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' Already installed ... nothing to do.'
+                    );
+                }
                 return 0;
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
-                __METHOD__ . '::' . __LINE__ . ' Installing ...');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . ' Installing ...'
+                );
+            }
 
             $applications = $controller->getInstallableApplications();
             $applications = array_keys($applications);
@@ -226,8 +236,10 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $applicationName = ucfirst(trim($applicationName));
                     try {
                         $controller->getSetupXml($applicationName);
-                        if (Setup_Controller::getInstance()->isInstalled('Tinebase') &&
-                            Setup_Controller::getInstance()->isInstalled($applicationName)) {
+                        if (
+                            Setup_Controller::getInstance()->isInstalled('Tinebase') &&
+                            Setup_Controller::getInstance()->isInstalled($applicationName)
+                        ) {
                             echo "Application $applicationName is already installed.\n";
                         } else {
                             $applications[] = $applicationName;
@@ -249,11 +261,11 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $this->_promptRemainingOptions($applications, $options);
         $appCount = $controller->installApplications($applications, $options);
-        
+
         if ((isset($options['acceptedTermsVersion']) || array_key_exists('acceptedTermsVersion', $options))) {
             Setup_Controller::getInstance()->saveAcceptedTerms($options['acceptedTermsVersion']);
         }
-        
+
         echo "Successfully installed " . $appCount . " applications.\n";
         return 0;
     }
@@ -357,8 +369,10 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 continue;
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' Migrating table ' . $table . ' ...');
+            }
 
             $start = 0;
             $limit = 50;
@@ -398,14 +412,18 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     $rowcount++;
                 }
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                    Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                     . ' ' . $query);
+                }
 
                 $mysqlDB->query($query . ')');
             }
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                 . ' ... done. Migrated ' . $rowcount . ' rows.');
+            }
         }
 
         $mysqlDB->query('COMMIT');
@@ -427,68 +445,71 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * prompt remaining options
-     * 
+     *
      * @param array $_applications
      * @param array $_options
      * @return void
-     * 
+     *
      * @todo add required version server side
      */
     protected function _promptRemainingOptions($_applications, &$_options)
     {
         if (in_array('Tinebase', $_applications)) {
-            
             if (! isset($_options['acceptedTermsVersion'])) {
-                fwrite(STDOUT, PHP_EOL . file_get_contents(dirname(dirname(dirname(__FILE__))) . '/LICENSE' ));
-                $licenseAnswer = Tinebase_Server_Cli::promptInput('I have read the license agreement and accept it (type "yes" to accept)');
-                
-                
-                fwrite(STDOUT, PHP_EOL . file_get_contents(dirname(dirname(dirname(__FILE__))) . '/PRIVACY' ));
-                $privacyAnswer = Tinebase_Server_Cli::promptInput('I have read the privacy agreement and accept it (type "yes" to accept)');
-            
+                fwrite(STDOUT, PHP_EOL . file_get_contents(dirname(dirname(dirname(__FILE__))) . '/LICENSE'));
+                $licenseAnswer = Tinebase_Server_Cli::promptInput(
+                    'I have read the license agreement and accept it (type "yes" to accept)'
+                );
+
+
+                fwrite(STDOUT, PHP_EOL . file_get_contents(dirname(dirname(dirname(__FILE__))) . '/PRIVACY'));
+                $privacyAnswer = Tinebase_Server_Cli::promptInput(
+                    'I have read the privacy agreement and accept it (type "yes" to accept)'
+                );
+
                 if (! (strtoupper($licenseAnswer) == 'YES' && strtoupper($privacyAnswer) == 'YES')) {
                     echo "error: you need to accept the terms! exiting \n";
-                    exit (1);
+                    exit(1);
                 }
-                
+
                 $_options['acceptedTermsVersion'] = 1;
             }
-            
-            
+
+
             // initial username
             if (! isset($_options['adminLoginName'])) {
                 $_options['adminLoginName'] = Tinebase_Server_Cli::promptInput('Inital Admin Users Username');
                 if (! $_options['adminLoginName']) {
                     echo "error: username must be given! exiting \n";
-                    exit (1);
+                    exit(1);
                 }
             }
-            
+
             // initial password / can be empty => will trigger password change dialogue
             if (! array_key_exists('adminPassword', $_options)) {
                 $_options['adminPassword'] = $this->_promptPassword();
             }
         }
     }
-    
+
     /**
      * prompt password
-     * 
+     *
      * @return string
      */
     protected function _promptPassword()
     {
-        $password1 = Tinebase_Server_Cli::promptInput('Admin user password', TRUE);
+        $password1 = Tinebase_Server_Cli::promptInput('Admin user password', true);
         if (! $password1) {
             echo "Error: Password must not be empty! Exiting ... \n";
-            exit (1);
+            exit(1);
         }
-        $password2 = Tinebase_Server_Cli::promptInput('Confirm password', TRUE);
+        $password2 = Tinebase_Server_Cli::promptInput('Confirm password', true);
         if ($password1 !== $password2) {
             echo "Error: Passwords do not match! Exiting ... \n";
-            exit (1);
+            exit(1);
         }
-        
+
         return $password1;
     }
 
@@ -562,17 +583,17 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected function _uninstall(Zend_Console_Getopt $_opts): bool
     {
         $controller = Setup_Controller::getInstance();
-        
+
         if ($_opts->uninstall === true) {
             $backend = Setup_Backend_Factory::factory();
             if (! $backend->tableExists('applications')) {
                 return 0;
             }
-            $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+            $applications = Tinebase_Application::getInstance()->getApplications(null, 'id');
         } else {
             $applications = new Tinebase_Record_RecordSet('Tinebase_Model_Application');
             $applicationNames = explode(',', $_opts->uninstall);
-            foreach($applicationNames as $applicationName) {
+            foreach ($applicationNames as $applicationName) {
                 $applicationName = ucfirst(trim($applicationName));
                 try {
                     $application = Tinebase_Application::getInstance()->getApplicationByName($applicationName);
@@ -581,13 +602,13 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 }
             }
         }
-        
+
         if (in_array('Tinebase', $applications->name) && $_opts->removemailaccounts) {
             $this->_removemailaccounts();
         }
-        
+
         $uninstallCount = $controller->uninstallApplications($applications->name);
-        
+
         echo "Successfully uninstalled " . $uninstallCount . " applications.\n";
         return 0;
     }
@@ -614,12 +635,12 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             Tinebase_Exception::log($e);
         }
     }
-    
+
     /**
      * reinstall applications
      * and reset Demodata
      * php setup.php --reset_demodata USERNAME
-     * 
+     *
      * @param Zend_Console_Getopt $_opts
      */
     protected function _resetDemodata(Zend_Console_Getopt $_opts)
@@ -628,10 +649,10 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $userController = Admin_Controller_User::getInstance();
         $containerController = Tinebase_Container::getInstance();
         $cli = new Tinebase_Frontend_Cli();
-        
+
         //Don't reset this applications
         $fixedApplications = array('Tinebase', 'Admin', 'Addressbook');
-        
+
         //Log in
         $opts = $_opts->getRemainingArgs();
         $username = $opts[0];
@@ -641,21 +662,21 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         $user = Tinebase_User::getInstance()->getUserByLoginName($username);
         Tinebase_Core::set(Tinebase_Core::USER, $user);
-        
+
         //get all applications and remove some
-        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-        
+        $applications = Tinebase_Application::getInstance()->getApplications(null, 'id');
+
         foreach ($applications as $key => &$application) {
             if (in_array($application, $fixedApplications)) {
                 unset($applications[$key]);
             }
         }
-        
+
         //get set rights
         $userRoleName = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_USER_ROLE_NAME);
         $users = Tinebase_Acl_Roles::getInstance()->getRoleByName($userRoleName);
         $rights = Tinebase_Acl_Roles::getInstance()->getRoleRights($users->getId());
-        
+
         //Uninstall Applications
         try {
             $controller->uninstallApplications($applications->name);
@@ -670,21 +691,21 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             echo "Successfully installed " . count($applications) . " applications.\n";
         } catch (Tinebase_Exception_NotFound $e) {
         }
-        
+
         //set rights
         foreach ($applications as $app) {
             $newApplicationId = Tinebase_Application::getInstance()->getApplicationByName($app->name)->getId();
-            
+
             foreach ($rights as &$right) {
                 if ($right['application_id'] == $app->id) {
                     $right['application_id'] = $newApplicationId;
                 }
             }
         }
-        
+
         Tinebase_Acl_Roles::getInstance()->setRoleRights($users->getId(), $rights);
         echo "Successfully restored user rights.\n";
-        
+
         //Clean up addressbooks
         $internalContacts = $userController->getDefaultInternalAddressbook();
         $containers = $containerController->getAll();
@@ -700,20 +721,20 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         unset($containers);
         echo "Successfully cleand up containers.\n";
-        
+
         //remove state
         $db = Tinebase_Core::getDb();
         $statement = "TRUNCATE TABLE " . $db->quoteIdentifier(SQL_TABLE_PREFIX . 'state');
         $db->query($statement);
         echo "Successfully truncated state table.\n";
-        
+
         //Get Demodata
         $cli->createAllDemoData($_opts);
-        
+
         //clear Cache
         Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
         echo "Successfully cleared Cache.\n";
-        
+
         echo "Every thing done!\n";
     }
 
@@ -731,13 +752,13 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $onlyDefinitions = false;
         }
         //get all applications
-        $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        $applications = Tinebase_Application::getInstance()->getApplications(null, 'id');
         foreach ($applications as $application) {
             Setup_Controller::getInstance()->createImportExportDefinitions($application, $onlyDefinitions);
             echo "Update definitions for " . $application->name . "...\n";
         }
     }
-    
+
     /**
      * list installed apps
      *
@@ -746,7 +767,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected function _listInstalled()
     {
         try {
-            $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+            $applications = Tinebase_Application::getInstance()->getApplications(null, 'id');
         } catch (Zend_Db_Statement_Exception $e) {
             echo "No applications installed\n";
             return 1;
@@ -755,7 +776,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo 'Version: "' . TINE20_CODENAME . '" ' . TINE20_PACKAGESTRING . ' (Build: ' . TINE20_BUILDTYPE . ")\n";
         if (Tinebase_Core::inMaintenanceModeAll()) {
             echo 'Maintenance Mode : ALL' . PHP_EOL;
-        } else if (Tinebase_Core::inMaintenanceMode()) {
+        } elseif (Tinebase_Core::inMaintenanceMode()) {
             echo 'Maintenance Mode : ON' . PHP_EOL;
         }
         echo "Currently installed applications:\n";
@@ -763,17 +784,20 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         foreach ($applications as $application) {
             try {
                 $maintenance = Tinebase_Core::getApplicationInstance(
-                    $application->name, '', true)->isInMaintenanceMode();
+                    $application->name,
+                    '',
+                    true
+                )->isInMaintenanceMode();
                 echo "* " . $application->name . " (Version: " . $application->version . ") - " . $application->status
                     . ' (maintenance: ' . ($maintenance ? 'on' : 'off') . ")\n";
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 echo "* " . $application->name . " - disabled (" . $tead->getMessage() . ")\n";
             }
         }
-        
+
         return 0;
     }
-    
+
     /**
      * import accounts from ldap
      *
@@ -783,14 +807,14 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         // disable timelimit during import of user accounts
         Setup_Core::setExecutionLifeTime(0);
-        
+
         // import groups
         if (! $_opts->onlyusers) {
             Tinebase_Group::syncGroups();
         }
-        
+
         // import users
-        $options = array('syncContactData' => TRUE);
+        $options = array('syncContactData' => true);
         if ($_opts->dbmailldap) {
             $options['ldapplugins'] = array(
                 new Tinebase_EmailUser_Imap_LdapDbmailSchema(),
@@ -813,7 +837,8 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * create/update email users with current account
-     *  USAGE: php setup.php --updateAllAccountsWithAccountEmail -- [fromInstance=master.mytine20.com createEmail=1 domain=mydomain.org]
+     *  USAGE: php setup.php --updateAllAccountsWithAccountEmail \
+     *                       -- [fromInstance=master.mytine20.com createEmail=1 domain=mydomain.org]
      *
      * @param Zend_Console_Getopt $_opts
      * @return int
@@ -839,8 +864,10 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 // TODO allow to set other domains via args?
                 if (! empty($config['primarydomain'])) {
                     $mail = $user->accountLoginName . '@' . $config['primarydomain'];
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' Setting new email address for user: ' . $mail);
+                    }
                     $user->accountEmailAddress = $mail;
                 }
             }
@@ -854,17 +881,20 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 // TODO allow to skip this?
                 if (count($allowedDomains) > 0 && ! in_array($domainPart, $allowedDomains)) {
                     $newEmailAddress = $userPart . '@' . $allowedDomains[0];
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                         . ' Setting new email address for user to comply with allowed domains: ' . $newEmailAddress);
+                    }
                     $user->accountEmailAddress = $newEmailAddress;
                 }
                 try {
                     $userController->update($user);
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                         . ' ' . $tenf);
+                    }
                 }
-
             }
         }
 
@@ -873,49 +903,50 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * sync ldap passwords
-     * 
+     *
      * @param Zend_Console_Getopt $_opts
      */
     protected function _syncPasswords(Zend_Console_Getopt $_opts)
     {
         Tinebase_User::syncLdapPasswords();
     }
-    
+
     /**
      * import from egw14
-     * 
+     *
      * @param Zend_Console_Getopt $_opts
      */
     protected function _egw14Import(Zend_Console_Getopt $_opts)
     {
         $args = $_opts->getRemainingArgs();
-        
+
         if (count($args) < 1 || ! is_readable($args[0])) {
             echo "can not open config file \n";
             echo "see tine20.org/wiki/EGW_Migration_Howto for details \n\n";
-            echo "usage: ./setup.php --egw14import /path/to/config.ini (see Tinebase/Setup/Import/Egw14/config.ini)\n\n";
+            echo "usage: ./setup.php --egw14import /path/to/config.ini " .
+                "(see Tinebase/Setup/Import/Egw14/config.ini)\n\n";
             exit(1);
         }
-        
+
         try {
-            $config = new Zend_Config(array(), TRUE);
+            $config = new Zend_Config(array(), true);
             $config->merge(new Zend_Config_Ini($args[0]));
             $config = $config->merge($config->all);
         } catch (Zend_Config_Exception $e) {
             fwrite(STDERR, "Error while parsing config file($args[0]) " .  $e->getMessage() . PHP_EOL);
             exit(1);
         }
-        
+
         $writer = new Zend_Log_Writer_Stream('php://output');
         $logger = new Zend_Log($writer);
-        
+
         $filter = new Zend_Log_Filter_Priority((int) $config->loglevel);
         $logger->addFilter($filter);
-        
+
         $importer = new Tinebase_Setup_Import_Egw14($config, $logger);
         $importer->import();
     }
-    
+
     /**
      * do the environment check
      *
@@ -925,9 +956,9 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $results = Setup_Controller::getInstance()->checkRequirements();
         if ($results['success']) {
-          echo "OK - All requirements are met\n";
+            echo "OK - All requirements are met\n";
         } else {
-          echo "ERRORS - The following requirements are not met: \n";
+            echo "ERRORS - The following requirements are not met: \n";
         }
         foreach (['results', 'resultOptionalBinaries'] as $key) {
             foreach ($results[$key] as $result) {
@@ -938,7 +969,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         return $results['success'] ? 0 : 1;
     }
-    
+
     /**
      * set config
      * USAGE: php setup.php --setconfig -- configkey={{configkey}} configvalue={{configvalue}} [default=1]
@@ -958,7 +989,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         if (isset($options['default']) && $options['default'] == 1) {
             $configValue = null;
-        } else if (! isset($options['configvalue'])) {
+        } elseif (! isset($options['configvalue'])) {
             $errors[] = 'Missing argument: configvalue';
         } else {
             $configValue = self::parseConfigValue($options['configvalue']);
@@ -967,13 +998,16 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $configKey = (string)$options['configkey'];
         $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
 
-        if (! Tinebase_Application::getInstance()->isInstalled('Tinebase') || ! Tinebase_Application::getInstance()->isInstalled($applicationName)) {
+        if (
+            ! Tinebase_Application::getInstance()->isInstalled('Tinebase')
+            || ! Tinebase_Application::getInstance()->isInstalled($applicationName)
+        ) {
             $errors[] = $applicationName . ' is not installed';
         }
-        
+
         if (empty($errors)) {
-           Setup_Controller::getInstance()->setConfigOption($configKey, $configValue, $applicationName);
-           echo "OK - Updated configuration option $configKey for application $applicationName\n";
+            Setup_Controller::getInstance()->setConfigOption($configKey, $configValue, $applicationName);
+            echo "OK - Updated configuration option $configKey for application $applicationName\n";
         } else {
             echo "ERRORS - The following errors occured: \n";
             foreach ($errors as $error) {
@@ -981,7 +1015,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
         }
     }
-    
+
     /**
      * get config
      *
@@ -992,7 +1026,8 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
 
         $errors = array();
-        if (! Tinebase_Application::getInstance()->isInstalled('Tinebase')
+        if (
+            ! Tinebase_Application::getInstance()->isInstalled('Tinebase')
             || ! Tinebase_Application::getInstance()->isInstalled($applicationName)
         ) {
             $errors[] = $applicationName . ' is not installed';
@@ -1038,12 +1073,12 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $cachesCleared = Setup_Controller::getInstance()->clearCache();
         if ($_opts->v) {
             echo "Caches cleared: " . print_r($cachesCleared, true) . "\n";
-        } 
+        }
     }
 
     /**
      * clears cache directories
-     * 
+     *
      * @param Zend_Console_Getopt $_opts
      */
     protected function _clearCacheDir(Zend_Console_Getopt $_opts)
@@ -1053,9 +1088,9 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * create admin user / activate existing user / allow to reset password
-     * 
+     *
      * @param Zend_Console_Getopt $_opts
-     * 
+     *
      * @todo check role by rights and not by name
      * @todo replace echos with stdout logger
      */
@@ -1068,20 +1103,24 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo "Please enter a username. An existing user is reactivated and you can reset the password.\n";
         $username = strtolower(Tinebase_Server_Cli::promptInput('Username'));
         $tomorrow = Tinebase_DateTime::now()->addDay(1);
-        
+
         try {
             $user = Tinebase_User::getInstance()->getFullUserByLoginName($username);
             echo "User $username already exists.\n";
             Tinebase_User::getInstance()->setStatus($user->getId(), Tinebase_Model_User::ACCOUNT_STATUS_ENABLED);
             echo "Activated admin user '$username'.\n";
-            
-            $expire = Tinebase_Server_Cli::promptInput('Should the admin user expire tomorrow (default: "no", "y" or "yes" for expiry)?');
+
+            $expire = Tinebase_Server_Cli::promptInput(
+                'Should the admin user expire tomorrow (default: "no", "y" or "yes" for expiry)?'
+            );
             if ($expire === 'y' or $expire === 'yes') {
                 Tinebase_User::getInstance()->setExpiryDate($user->getId(), $tomorrow);
                 echo "User expires tomorrow at $tomorrow.\n";
             }
-            
-            $resetPw = Tinebase_Server_Cli::promptInput('Do you want to reset the password (default: "no", "y" or "yes" for reset)?');
+
+            $resetPw = Tinebase_Server_Cli::promptInput(
+                'Do you want to reset the password (default: "no", "y" or "yes" for reset)?'
+            );
             if ($resetPw === 'y' or $resetPw === 'yes') {
                 $password = $this->_promptPassword();
                 Tinebase_User::getInstance()->setPassword($user, $password);
@@ -1097,7 +1136,6 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             }
 
             $this->_checkAdminRole($user);
-            
         } catch (Tinebase_Exception_NotFound $tenf) {
             // create new admin user that expires tomorrow
             $password = $this->_promptPassword();
@@ -1113,25 +1151,31 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * check admin role membership
-     * 
+     *
      * @param Tinebase_Model_FullUser $user
      */
     protected function _checkAdminRole($user)
     {
         $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($user->getId());
-        $adminRoleFound = FALSE;
+        $adminRoleFound = false;
         // TODO allow to configure this / pass it as param
         $adminRoleName = 'admin role';
 
         foreach ($roleMemberships as $roleId) {
             $role = Tinebase_Acl_Roles::getInstance()->getRoleById($roleId);
             if ($role->name === $adminRoleName) {
-                $adminRoleFound = TRUE;
+                $adminRoleFound = true;
                 break;
             }
         }
 
-        if (! $adminRoleFound || ! Tinebase_Acl_Roles::getInstance()->hasRight('Admin', $user->getId(), Tinebase_Acl_Rights::ADMIN)) {
+        if (
+            ! $adminRoleFound || ! Tinebase_Acl_Roles::getInstance()->hasRight(
+                'Admin',
+                $user->getId(),
+                Tinebase_Acl_Rights::ADMIN
+            )
+        ) {
             echo "Admin role not found for user " . $user->accountLoginName . ".\n";
 
             try {
@@ -1143,10 +1187,10 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             Tinebase_Acl_Roles::getInstance()->setRoleMembers($adminRole->getId(), array(
                 array(
                     'id'    => $user->getId(),
-                    'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, 
+                    'type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 )
             ));
-            
+
             echo "Added user " . $user->accountLoginName . " to role '$adminRoleName''.\n";
             // @todo clear roles/groups cache
         }
@@ -1214,13 +1258,14 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 $options['mode'] = $options['state'];
             }
         }
-        
+
         $modes = [
             Tinebase_Config::MAINTENANCE_MODE_ON,
             Tinebase_Config::MAINTENANCE_MODE_OFF,
         ];
         if (!in_array($options['mode'] ?? null, $modes)) {
-            echo PHP_EOL . 'mandatory parameter --mode=[' . implode('|', $modes) . '] missing or not recognized' . PHP_EOL;
+            echo PHP_EOL . 'mandatory parameter --mode=['
+                . implode('|', $modes) . '] missing or not recognized' . PHP_EOL;
             return 1;
         }
 
@@ -1233,18 +1278,25 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         try {
             Tinebase_License::getInstance()->isLicenseAvailable();
         } catch (Exception $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->warn(
-                __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->warn(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage()
+                );
+            }
             $licenseProblem = true;
         }
 
         if (! $licenseProblem && !in_array(Tinebase_Config::MAINTENANCE_MODE_FLAG_SKIP_APPS, $flags)) {
-            $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+            $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(
+                Tinebase_Application::ENABLED
+            );
             if (isset($options['apps'])) {
                 $apps = (array)$options['apps'];
-                $enabledApplications = $enabledApplications->filter(function (Tinebase_Model_Application $app) use ($apps) {
-                    return in_array($app->name, $apps);
-                });
+                $enabledApplications = $enabledApplications->filter(
+                    function (Tinebase_Model_Application $app) use ($apps) {
+                        return in_array($app->name, $apps);
+                    }
+                );
             }
 
             $enable = Tinebase_Config::MAINTENANCE_MODE_ON === $options['mode'];
@@ -1270,7 +1322,6 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     echo '.';
                     usleep(100000);
                 }
-
             } while ($enabledApplications->count() > 0);
             echo 'done' . PHP_EOL;
 
@@ -1343,35 +1394,40 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
     /**
      * parse options
-     * 
+     *
      * @param string $_value
      * @return array|string
      */
     public static function parseConfigValue($_value)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-            __METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, TRUE));
-        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+            Tinebase_Core::getLogger()->trace(
+                __METHOD__ . '::' . __LINE__ . ' ' . print_r($_value, true)
+            );
+        }
+
         // check value is json encoded
         if (Tinebase_Helper::is_json($_value)) {
-            return Zend_Json::decode($_value); 
+            return Zend_Json::decode($_value);
         }
-        
+
         $result = array(
             'active' => 1
         );
 
         // keep spaces, \: and \,
         $_value = preg_replace(array('/ /', '/\\\:/', '/\\\,/', '/\s*/'), array('§', '@', ';', ''), $_value);
-        
+
         $parts = explode(',', $_value);
-        
+
         foreach ($parts as $part) {
             $part = str_replace(';', ',', $part);
             $part = str_replace('§', ' ', $part);
             $part = str_replace('@', ':', $part);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $part);
-            if (strpos($part, '_') !== FALSE) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $part);
+            }
+            if (strpos($part, '_') !== false) {
                 list($key, $sub) = preg_split('/_/', $part, 2);
                 if (preg_match('/:/', $sub)) {
                     list($subKey, $value) = explode(':', $sub);
@@ -1383,11 +1439,13 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         $key = array_shift($exploded);
                         $result[$key] = implode(':', $exploded);
                     } else {
-                        throw new Timetracker_Exception_UnexpectedValue('You have an error in the config syntax (":" expected): ' . $part);
+                        throw new Timetracker_Exception_UnexpectedValue(
+                            'You have an error in the config syntax (":" expected): ' . $part
+                        );
                     }
                 }
             } else {
-                if (strpos($part, ':') !== FALSE) {
+                if (strpos($part, ':') !== false) {
                     list($key, $value) = preg_split('/:/', $part, 2);
                     $result[$key] = $value;
                 } else {
@@ -1398,10 +1456,10 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         return $result;
     }
-    
+
     /**
      * parse remaining args
-     * 
+     *
      * @param array $_args
      * @return array
      */
@@ -1409,13 +1467,15 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $options = array();
         foreach ($_args as $arg) {
-            if (strpos($arg, '=') !== FALSE) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $arg);
+            if (strpos($arg, '=') !== false) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                    Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $arg);
+                }
                 list($key, $value) = preg_split('/=/', $arg, 2);
                 $options[$key] = $value;
             }
         }
-        
+
         return $options;
     }
 
@@ -1433,9 +1493,12 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         print_r($schemaChanges);
 
         if (count($schemaChanges) > 0) {
-            echo "Do you want to apply the schema changes? WARNING: this might render your tine20 installation unusable. Always backup your DB before doing this!\n";
+            echo "Do you want to apply the schema changes? WARNING: this might render your "
+                . "installation unusable. Always backup your DB before doing this!\n";
 
-            $apply = Tinebase_Server_Cli::promptInput('Do you want to apply the schema changes? (default: "no", "y" or "yes" for apply sql)?');
+            $apply = Tinebase_Server_Cli::promptInput(
+                'Do you want to apply the schema changes? (default: "no", "y" or "yes" for apply sql)?'
+            );
             if ($apply === 'y' or $apply === 'yes') {
                 $db = Setup_Core::getDb();
                 foreach ($schemaChanges as $change) {
@@ -1482,7 +1545,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         } catch (Zend_Db_Exception $zde) {
             Tinebase_Exception::log($zde);
         }
-        
+
         $tables = $db->query('SELECT DISTINCT TABLE_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME LIKE "' .
             SQL_TABLE_PREFIX . '%" AND CHARACTER_SET_NAME IS NOT NULL AND CHARACTER_SET_NAME NOT LIKE "utf8mb4%"' .
             ' AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '"')->fetchAll(Zend_Db::FETCH_COLUMN);
@@ -1491,14 +1554,18 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $db->query('SET unique_checks = 0');
         foreach ($tables as $table) {
             echo "Converting table $table ...";
-            if ($db->query('SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = "' . $table .
-                    '" AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '" AND ROW_FORMAT <> "Dynamic"')->fetchColumn()) {
+            if (
+                $db->query('SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = "' . $table .
+                    '" AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '" AND ROW_FORMAT <> "Dynamic"')->fetchColumn()
+            ) {
                 try {
                     $db->query('ALTER TABLE ' . $db->quoteIdentifier($table) . ' ROW_FORMAT = DYNAMIC');
                 } catch (Zend_Db_Statement_Exception $e) {
-                    if ($db->query('SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = "' . $table .
+                    if (
+                        $db->query('SELECT count(*) FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = "' . $table .
                             '" AND TABLE_SCHEMA = "' . $dbConfig['dbname'] . '" AND ROW_FORMAT <> "Dynamic"')
-                            ->fetchColumn()) {
+                            ->fetchColumn()
+                    ) {
                         throw $e;
                     }
                 }
@@ -1583,7 +1650,10 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         foreach ($_ENV as $env_key => $env_value) {
             $env_key_array = explode('_', $env_key);
-            if ($env_key_array[0] != 'TINE20' || ! isset($env_key_array[1]) || $env_key_array[1] != '' || ! isset($env_key_array[2])) {
+            if (
+                $env_key_array[0] != 'TINE20' || ! isset($env_key_array[1])
+                || $env_key_array[1] != '' || ! isset($env_key_array[2])
+            ) {
                 //Only accept env vars with format 'TINE20__*'
                 continue;
             }
@@ -1598,7 +1668,10 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             $configValue = self::parseConfigValue($env_value);
 
-            if (! Tinebase_Application::getInstance()->isInstalled('Tinebase') || ! Tinebase_Application::getInstance()->isInstalled($applicationName)) {
+            if (
+                ! Tinebase_Application::getInstance()->isInstalled('Tinebase')
+                || ! Tinebase_Application::getInstance()->isInstalled($applicationName)
+            ) {
                 $output[] = $configKey . " err: " . $applicationName . ' is not installed';
                 continue;
             }
@@ -1628,7 +1701,8 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
     }
 
-    private function _isInstalled() {
+    private function _isInstalled()
+    {
         try {
             if ($this->_tinebaseApplication->isInstalled('Tinebase', true)) {
                 return 0;
@@ -1658,7 +1732,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             'channels',
         );
 
-        foreach($mandatoryOptions as $opt) {
+        foreach ($mandatoryOptions as $opt) {
             if (!isset($options[$opt])) {
                 echo 'option ' . $opt . ' is mandatory' . PHP_EOL;
                 return;
@@ -1684,7 +1758,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     protected function _mysqlClient(Zend_Console_Getopt $_opts)
     {
         $dbConf = Tinebase_Core::getConfig()->database;
-        $command ='mysql -h ' . $dbConf->host . ' -p' . $dbConf->password . ' -u ' . $dbConf->username
+        $command = 'mysql -h ' . $dbConf->host . ' -p' . $dbConf->password . ' -u ' . $dbConf->username
             . ' ' . $dbConf->dbname;
         $descriptorspec = [
             0 => array("pty"),
@@ -1695,7 +1769,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         stream_set_blocking($pipes[1], 0);
         stream_set_blocking($pipes[2], 0);
-        stream_set_blocking(STDIN,0);
+        stream_set_blocking(STDIN, 0);
         do {
             echo stream_get_contents($pipes[1]);
             echo stream_get_contents($pipes[2]);
@@ -1706,7 +1780,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     break 2;
                 }
             }
-        } while(is_resource($process));
+        } while (is_resource($process));
 
         fclose($pipes[0]);
         fclose($pipes[1]);
@@ -1734,7 +1808,7 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             if (count($tables) > 0) {
                 echo "Re-created tables for app " . $application->name . ":\n";
                 foreach ($tables as $table) {
-                    echo "- " . $table->name ."\n";
+                    echo "- " . $table->name . "\n";
                 }
             }
         }
