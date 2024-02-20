@@ -553,23 +553,30 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     protected function _fromTine20ModelRequiredFields(Tinebase_Record_Interface $record,$fn = null,$org = null)
     {
         /** @var Addressbook_Model_Contact $record */
-        $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
         if ( !isset($fn) || $fn === null ) {
             $fn = $record->n_fileas;
         }
         if ( !isset($org) || $org === null ) {
             $org = array($record->org_name, $record->org_unit);
         }
+        $prodId = $this->_getProdId();
         $card = new \Sabre\VObject\Component\VCard(array(
             'VERSION' => '3.0',
             'FN'      => $fn,
             'N'       => array($record->n_family, $record->n_given, $record->n_middle, $record->n_prefix, $record->n_suffix),
-            'PRODID'  => "-//tine20.com//Tine 2.0 Addressbook V$version//EN",
+            'PRODID'  => $prodId,
             'UID'     => $record->getId(),
             'ORG'     => $org,
             'TITLE'   => $record->title
         ));
         
         return $card;
+    }
+
+    protected function _getProdId(): string
+    {
+        $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
+        $tineTitle = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE);
+        return "-//$tineTitle/Addressbook V$version//EN";
     }
 }
