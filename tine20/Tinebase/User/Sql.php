@@ -1618,30 +1618,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
     }
 
-    public function undoReplicationModificationLog(Tinebase_Model_ModificationLog $modlog, bool $dryrun = false)
-    {
-        if (Tinebase_Timemachine_ModificationLog::CREATED === $modlog->change_type) {
-            if (!$dryrun) {
-                $this->deleteUser($modlog->record_id);
-            }
-        } elseif (Tinebase_Timemachine_ModificationLog::DELETED === $modlog->change_type) {
-            $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value, true));
-            $model = $modlog->record_type;
-            $record = new $model($diff->oldData, true);
-            if (!$dryrun) {
-                $this->unDelete($record->accountLoginName);
-            }
-        } else {
-            $record = $this->getFullUserById($modlog->record_id, true);
-            $diff = new Tinebase_Record_Diff(json_decode($modlog->new_value, true));
-            $record->undo($diff);
-
-            if (!$dryrun) {
-                $this->updateUser($record);
-            }
-        }
-    }
-
     /**
      * @param Tinebase_Model_FullUser $user
      */
