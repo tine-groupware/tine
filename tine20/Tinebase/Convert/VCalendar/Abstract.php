@@ -282,6 +282,6 @@ abstract class Tinebase_Convert_VCalendar_Abstract
     {
         $version = Tinebase_Application::getInstance()->getApplicationByName($app)->version;
         $tineTitle = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE);
-        return "-//$tineTitle/$app V$version//EN";
+        return "-//$tineTitle//$app V$version//EN";
     }
 }

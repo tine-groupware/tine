@@ -617,6 +617,6 @@ abstract class Addressbook_Convert_Contact_VCard_Abstract implements Tinebase_Co
     {
         $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
         $tineTitle = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE);
-        return "-//$tineTitle/Addressbook V$version//EN";
+        return "-//$tineTitle//Addressbook V$version//EN";
     }
 }
