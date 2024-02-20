@@ -47,12 +47,27 @@
      * intercept store write options
      */
     _.set = function(area, key, string) {
-        var oldValue = this.get(area, key),
-            ret = _set.apply(this, arguments);
-
-        this.fireEvent(key, oldValue, string);
-
-        return ret;
+        try {
+            const oldValue = this.get(area, key);
+            const ret = _set.apply(this, arguments);
+            this.fireEvent(key, oldValue, string);
+            return ret;
+        } catch (e) {
+            const storageSizeData = getLocalStorageSize();
+            if (e instanceof DOMException && (
+                e.name === 'QuotaExceededError' ||
+                e.name === 'NS_ERROR_DOM_QUOTA_REACHED'
+            )) {
+                // Handle quota exceeded error
+                console.error('LocalStorage quota exceeded');
+                console.log(storageSizeData);
+                
+                localStorage.clear();
+            } else {
+                console.error('Error storing data:', e);
+            }
+            return e;
+        }
     };
 
     _.remove = function(area, key) {
@@ -126,5 +141,23 @@
     _.fn('add', _.storeAPI.set);
     _.fn('replace', _.storeAPI.set);
     _.fn('containsKey', _.containsKey);
+    
+    const getLocalStorageSize = () => {
+        let total = 0;
+        const bigItems = [];
+        for (let x in localStorage) {
+            // Value is multiplied by 2 due to data being stored in `utf-16` format, which requires twice the space.
+            const amount = (localStorage[x].length * 2) / 1024 / 1024;
+            if (!isNaN(amount) && localStorage.hasOwnProperty(x)) {
+                // console.log(x, localStorage.getItem(x), amount);
+                total += amount;
+                if (amount > 0.5) bigItems.push({key: x, size: amount});
+            }
+        }
+        return {
+            total: total.toFixed(2),
+            bigItems: bigItems
+        };
+    };
 
 })(window.store, window.store._);
