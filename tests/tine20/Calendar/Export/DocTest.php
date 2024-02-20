@@ -161,7 +161,7 @@ class Calendar_Export_DocTest extends Calendar_TestCase
         static::assertStringContainsString($event->summary, $plain);
         static::assertStringContainsString($event->customfields['testCF'], $plain);
         static::assertStringContainsString($cfc->definition->label, $plain);
-        $relatedRecord = new Addressbook_Model_Contact($event->relations[0]['related_record'], true);
+        $relatedRecord = $event->relations[0]['related_record'];
         static::assertStringContainsString($relatedRecord->getTitle(), $plain);
     }
 
