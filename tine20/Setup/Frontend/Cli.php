@@ -992,24 +992,31 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
 
         $errors = array();
-        if (! Tinebase_Application::getInstance()->isInstalled('Tinebase') || ! Tinebase_Application::getInstance()->isInstalled($applicationName)) {
+        if (! Tinebase_Application::getInstance()->isInstalled('Tinebase')
+            || ! Tinebase_Application::getInstance()->isInstalled($applicationName)
+        ) {
             $errors[] = $applicationName . ' is not installed';
             $config = null;
         } else {
             $config = Tinebase_Config_Abstract::factory($applicationName);
         }
 
+        $availableKeys = $config::getProperties();
+        $configKey = null;
         if (! isset($options['configkey']) || empty($options['configkey'])) {
             $errors[] = 'Missing argument: configkey';
             if ($config) {
                 $errors[] = 'Available config settings:';
-                $errors[] = print_r($config::getProperties(), true);
+                $errors[] = print_r($availableKeys, true);
             }
         } else {
             $configKey = (string)$options['configkey'];
+            if (! isset($availableKeys[$configKey])) {
+                $errors[] = 'Config key not found in app ' . $applicationName;
+            }
         }
-        
-        if (empty($errors)) {
+
+        if (empty($errors) && $configKey) {
             $value = $config->get($configKey);
             $value = is_string($value) ? $value : Zend_Json::encode($value);
             echo $value . " \n";
