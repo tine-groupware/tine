@@ -127,7 +127,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             if (supportsSharedTransition && !!+record.get(sharedTransitionFlag)) {
                                 // group by address?
                                 const recipientId = _.get(record, `data.${recipientField}.original_id`)
-                                const category = record.get('document_category')
+                                const category = record.get('document_category').id
                                 transition = await Tine.Sales.getSharedOrderDocumentTransition(recipientId, category, transition.targetDocumentType)
 
                                 if (! transition?.sourceDocuments?.length) {
