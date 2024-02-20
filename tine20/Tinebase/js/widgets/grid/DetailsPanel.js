@@ -141,6 +141,12 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
      */
     initComponent: function() {
         if (!this.tbar) {
+            this.editRecordAction = new Ext.Action({
+                text: i18n._('Edit'),
+                iconCls: 'action_edit',
+                scope: this,
+                handler: this.onEdit
+            });
             this.tbar = [
                 new Ext.Action({
                     text: i18n._('Back'),
@@ -149,12 +155,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
                     handler: this.onClose
                 }),
                 '->',
-                new Ext.Action({
-                    text: i18n._('Edit'),
-                    iconCls: 'action_edit',
-                    scope: this,
-                    handler: this.onEdit
-                })
+                this.editRecordAction,
             ]
             this.useResponsiveTbar = true;
         }

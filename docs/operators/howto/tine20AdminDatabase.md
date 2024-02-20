@@ -185,8 +185,7 @@ return array (
 
 Anschliessend sollte das Update ohne Probleme durchlaufen.
 
-Probleme mit tine Update unter MariaDB (DB Row size too large)
-=================
+## Probleme mit tine Update unter MariaDB (DB Row size too large)
 
 ggf muss das hier in die my.cnf ergänzt werden:
 

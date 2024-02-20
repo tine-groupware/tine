@@ -1269,7 +1269,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
             case Felamimail_Model_Account::TYPE_SYSTEM:
             case Felamimail_Model_Account::TYPE_SHARED:
             case Felamimail_Model_Account::TYPE_USER_INTERNAL:
-                $this->_afterUpdateSetSieve($updatedRecord, $record, $currentRecord);
+                try {
+                    $this->_afterUpdateSetSieve($updatedRecord, $record, $currentRecord);
+                } catch (Tinebase_Exception_AccessDenied $tead) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                        ' ' . $tead->getMessage());
+                }
                 break;
         }
 

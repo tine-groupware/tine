@@ -46,6 +46,9 @@ Ext.ns('Tine.Felamimail');
         // this.initTopToolbar();
 
         Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
+        
+        this.editRecordAction.setText('');
+        this.editRecordAction.setIconClass('action_menu');
     },
 
     /**
@@ -86,6 +89,11 @@ Ext.ns('Tine.Felamimail');
         }
         return this.singleRecordPanel;
     },
+     
+     onEdit(e) {
+         if (!this.gridpanel) return;
+         this.gridpanel.contextMenu.showAt(e.el.getXY());
+     },
 
     /**
      * (on) update details
