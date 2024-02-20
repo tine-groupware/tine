@@ -348,6 +348,19 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this,
             iconCls: 'action_editcopy'
         });
+        
+        this.action_editRecord = new Ext.Action({
+            requiredGrant: 'editGrant',
+            allowMultiple: false,
+            text: this.app.i18n._('Edit'),
+            actionType: 'edit',
+            handler: this.onRowDblClick,
+            scope: this,
+            iconCls: 'action_edit',
+            actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
+                action.setHidden(! this.sentFolderSelected);
+            }.createDelegate(this)
+        });
 
         this.action_fileRecord = new Tine.Felamimail.MessageFileAction({});
         
@@ -420,6 +433,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_deleteRecord.initialConfig.translationObject = null;
 
         this.actionUpdater.addActions([
+            this.action_editRecord,
             this.action_deleteRecord,
             this.action_reply,
             this.action_replyAll,
@@ -449,6 +463,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_reply,
                 this.action_replyAll,
                 this.action_forward,
+                this.action_editRecord,
                 this.action_flag,
                 this.action_markUnread,
                 this.action_copyRecord,
