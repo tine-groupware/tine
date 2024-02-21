@@ -338,15 +338,13 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
         
-        //var_dump($vevent);
         $this->assertStringContainsString('VERSION:2.0',                                    $vevent, $vevent);
-        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
+        $this->_assertProdId($vevent);
         $this->assertStringContainsString('CREATED:20111111T111100Z',                       $vevent, $vevent);
         $this->assertStringContainsString('LAST-MODIFIED:20111111T121200Z',                 $vevent, $vevent);
         $this->assertStringContainsString('DTSTAMP:',                                       $vevent, $vevent);
         $this->assertStringContainsString('RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20111112',     $vevent, $vevent);
         $this->assertStringContainsString('EXDATE;VALUE=DATE:20111111',                     $vevent, $vevent);
-        #$this->assertStringContainsString('ORGANIZER;CN="' . Tinebase_Core::getUser()->accountDisplayName . '";EMAIL=' . Tinebase_Core::getUser()->accountEmailAddress . ':', $vevent, $vevent);
         $this->assertStringContainsString('ORGANIZER;CN=', $vevent, $vevent);
     }
     
@@ -419,10 +417,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
-        // var_dump($vevent);
-        // required fields
-        $this->assertStringContainsString('VERSION:2.0',                                    $vevent, $vevent);
-        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
+        $this->_assertProdId($vevent);
+        $this->assertStringContainsString('VERSION:2.0',                      $vevent, $vevent);
         $this->assertStringContainsString('CREATED:20111111T111100Z',         $vevent, $vevent);
         $this->assertStringContainsString('LAST-MODIFIED:20111111T121200Z',   $vevent, $vevent);
         $this->assertStringContainsString('DTSTAMP:',                         $vevent, $vevent);
@@ -438,6 +434,13 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         $this->assertStringContainsString('TZNAME:CET',          $vevent, $vevent);
         $this->assertStringContainsString('CATEGORIES:CATEGORY 1,CATEGORY 2', $vevent, $vevent);
         $this->assertStringNotContainsString('X-MOZ-LASTACK', $vevent, $vevent);
+    }
+
+    protected function _assertProdId(string $vevent)
+    {
+        $this->assertStringContainsString('PRODID:-//'
+            . Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE)
+            . '//Calendar V', $vevent, $vevent);
     }
     
     /**
@@ -461,7 +464,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         // var_dump($vevent);
         // required fields
         $this->assertStringContainsString('VERSION:2.0',                               $vevent, $vevent);
-        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Calendar V', $vevent, $vevent);
+        $this->_assertProdId($vevent);
         $this->assertStringContainsString('CREATED:20111111T111100Z',                  $vevent, $vevent);
         $this->assertStringContainsString('LAST-MODIFIED:20111111T121200Z',            $vevent, $vevent);
         $this->assertStringContainsString('DTSTAMP:',                                  $vevent, $vevent);
@@ -501,7 +504,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         // var_dump($vevent);
         // required fields
         $this->assertStringContainsString('VERSION:2.0',                                    $vevent, $vevent);
-        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Calendar V',      $vevent, $vevent);
+        $this->_assertProdId($vevent);
         $this->assertStringContainsString('CREATED:20111111T111100Z',         $vevent, $vevent);
         $this->assertStringContainsString('LAST-MODIFIED:20111020T144539Z',   $vevent, $vevent);
         $this->assertStringContainsString('DTSTAMP:20111020T144539Z',         $vevent, $vevent);
@@ -535,10 +538,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
         
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
-        #var_dump($vevent);
-        // required fields
         $this->assertStringContainsString('VERSION:2.0', $vevent, $vevent);
-        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Calendar V', $vevent, $vevent);
+        $this->_assertProdId($vevent);
         $this->assertStringContainsString('CREATED:20111111T111100Z',                  $vevent, $vevent);
         $this->assertStringContainsString('LAST-MODIFIED:20111111T121200Z',            $vevent, $vevent);
         $this->assertStringContainsString('DTSTAMP:',                                  $vevent, $vevent);

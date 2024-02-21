@@ -97,7 +97,9 @@ class Addressbook_Convert_Contact_VCard_GenericTest extends TestCase
         $this->assertStringContainsString('VERSION:3.0', $vcard, $vcard);
         
         $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
-        $this->assertStringContainsString("PRODID:-//tine20.com//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
+        $this->assertStringContainsString("PRODID:-//"
+            . Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE)
+            . "//Addressbook V$version//EN", $vcard, $vcard);
         
         // @todo can not test for folded lines
         $this->assertStringContainsString('ADR;TYPE=HOME:;Address Privat 2;Address Privat 1;City Privat;Region Privat;', $vcard, $vcard);
