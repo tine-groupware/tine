@@ -38,6 +38,8 @@ class SSO_Model_ExIdp_OIdConfig extends Tinebase_Record_NewAbstract implements S
         self::APP_NAME => SSO_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
         self::TITLE_PROPERTY => self::FLD_NAME,
+        self::RECORD_NAME => 'External Identity Provider Config',
+        self::RECORDS_NAME => 'External Identity Provider Configs', // ngettext('External Identity Provider Config', 'External Identity Provider Configs', n)
 
         self::FIELDS => [
             self::FLD_NAME              => [

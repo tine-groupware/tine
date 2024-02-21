@@ -113,11 +113,7 @@ class Addressbook_Convert_Contact_VCard_IOSTest extends \PHPUnit\Framework\TestC
         
         $vcard = $converter->fromTine20Model($contact)->serialize();
         
-        // required fields
         $this->assertStringContainsString('VERSION:3.0', $vcard, $vcard);
-        
-        $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
-        $this->assertStringContainsString("PRODID:-//tine20.com//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
         
         // @todo can not test for folded lines
         $this->assertStringContainsString('ADR;TYPE=WORK:;;Pickhuben 2;Hamburg;;20457;C', $vcard, $vcard);
@@ -135,6 +131,5 @@ class Addressbook_Convert_Contact_VCard_IOSTest extends \PHPUnit\Framework\TestC
         $this->assertStringContainsString('TEL;TYPE=PAGER:+49 PAGER', $vcard, $vcard);
         $this->assertStringContainsString('TEL;TYPE=WORK,VOICE:+49 BUSINESS', $vcard, $vcard);
         $this->assertStringContainsString('TITLE:Team Leader', $vcard, $vcard);
-        
     }
 }

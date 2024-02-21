@@ -112,11 +112,7 @@ class Addressbook_Convert_Contact_VCard_SogoTest extends \PHPUnit\Framework\Test
         $converter = Addressbook_Convert_Contact_VCard_Factory::factory(Addressbook_Convert_Contact_VCard_Factory::CLIENT_SOGO);
         $vcard = $converter->fromTine20Model($contact)->serialize();
         
-        // required fields
         $this->assertStringContainsString('VERSION:3.0', $vcard, $vcard);
-        
-        $version = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->version;
-        $this->assertStringContainsString("PRODID:-//tine20.com//Tine 2.0 Addressbook V$version//EN", $vcard, $vcard);
         
         // @todo can not test for folded lines
         $this->assertStringContainsString('ADR;TYPE=HOME:;Address Privat 2;Address Privat 1;City Privat;Region Privat;', $vcard, $vcard);

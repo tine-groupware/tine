@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d8acf1b29c9ebfd87544c6bfc1cb916c",
+    "content-hash": "c0d9e84707e67c787f83230f3e65d9db",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -12760,7 +12760,7 @@
             "version": "1.0.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tine20/composerapploader.git",
+                "url": "https://github.com/tine-groupware/composerapploader.git",
                 "reference": "0a4dbb421a00788d4107e3be0af2f787bf096f61"
             },
             "require": {
@@ -15603,5 +15603,5 @@
         "php": "8.0.2",
         "ext-filter": "8.0"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
