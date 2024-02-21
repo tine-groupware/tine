@@ -47,8 +47,10 @@ Ext.ns('Tine.Felamimail');
 
         Tine.Felamimail.GridDetailsPanel.superclass.initComponent.call(this);
         
-        this.editRecordAction.setText('');
-        this.editRecordAction.setIconClass('action_menu');
+        if (this.editRecordAction) {
+            this.editRecordAction.setText('');
+            this.editRecordAction.setIconClass('action_menu');
+        }
     },
 
     /**
