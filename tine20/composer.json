@@ -188,7 +188,9 @@
   "scripts": {
     "test": "./vendor/bin/phing phpunit-prepare phpunit-exec",
     "phpunit": "./vendor/bin/phing phpunit-prepare phpunit-exec",
-    "build": "./vendor/bin/phing"
+    "build": "./vendor/bin/phing",
+    "phpcs": "bash -c 'php ./vendor/bin/phpcs -s --standard=PSR12 --report=full --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=. ${1:-.}' --",
+    "phpcs-baseline": "php ./vendor/bin/phpcs -s --standard=PSR12 --report=\\\\DR\\\\CodeSnifferBaseline\\\\Reports\\\\Baseline --report-file=phpcs.baseline.xml --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=. ."
   },
   "support": {
     "issues": "https://github.com/tine20/Tine-2.0-Open-Source-Groupware-and-CRM/issues",
