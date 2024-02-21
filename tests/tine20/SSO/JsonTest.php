@@ -4,7 +4,7 @@
  *
  * @package     SSO
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -30,7 +30,6 @@ class SSO_JsonTest extends TestCase
             SSO_Model_ExternalIdp::FLD_NAME => 'unittest',
             SSO_Model_ExternalIdp::FLD_CONFIG_CLASS => SSO_Model_ExIdp_OIdConfig::class,
             SSO_Model_ExternalIdp::FLD_CONFIG => [
-                SSO_Model_ExIdp_OIdConfig::FLD_NAME => 'unittest',
                 SSO_Model_ExIdp_OIdConfig::FLD_PROVIDER_URL => 'provider_url',
                 SSO_Model_ExIdp_OIdConfig::FLD_ISSUER => 'issuer',
                 SSO_Model_ExIdp_OIdConfig::FLD_CLIENT_ID => 'client_id',
