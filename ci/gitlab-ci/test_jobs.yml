@@ -156,23 +156,14 @@ phpcs-analysis:
     - composer require digitalrevolution/php-codesniffer-baseline --no-interaction
   script:
     - if test "${CI_PROJECT_NAME}" == "tine20"; then dir=./tine20; else dir=./lib; fi
-    # # generate baseline
-    # # localy: php tine20/vendor/bin/phpcs -s --standard=PSR12 --report=\\DR\\CodeSnifferBaseline\\Reports\\Baseline --report-file=phpcs.baseline.xml --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration --extensions=php --ignore=vendor,library --basepath=. ./tine20
-    # # or:
-    # - >
-    #   php vendor/bin/phpcs -s --standard=PSR12 --report=\\DR\\CodeSnifferBaseline\\Reports\\Baseline --report-file=phpcs.baseline.xml
-    #   --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration
-    #   --extensions=php --ignore=vendor,library  --basepath=. $dir || true
+    - cp tine20/phpcs.baseline.xml phpcs.baseline.xml
     - >
       php vendor/bin/phpcs -s --standard=PSR12 --report=full --report-\\Micheh\\PhpCodeSniffer\\Report\\Gitlab=${CI_PROJECT_DIR}/phpcs-report.json
       --exclude=PSR1.Classes.ClassDeclaration,Squiz.Classes.ValidClassName,PSR2.Classes.PropertyDeclaration,PSR2.Methods.MethodDeclaration
-      --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=. $dir
+      --extensions=php --ignore=vendor,library,Tinebase/views/autodiscover --basepath=./tine20 $dir
   artifacts:
     reports:
       codequality: ${CI_PROJECT_DIR}/phpcs-report.json
-    # # generate baseline
-    # paths:
-    #   - phpcs.baseline.xml
   allow_failure: true
   rules:
     - if: $RUN_NO_TESTS == "true"
