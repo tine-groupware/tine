@@ -13,7 +13,7 @@ const contrastColors = {
       if (c.classList.contains('felamimail-body-signature-current')) {
         return;
       }
-      if (c.classList.contains('felamimail-body-blockquote')) {
+      if (c.classList.contains('felamimail-body-blockquote') || c.classList.contains('felamimail-body-forwarded')) {
         // quoted email gets its own background
         contrastColors.findBackground(c)
       } else {
