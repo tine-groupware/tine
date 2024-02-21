@@ -185,7 +185,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (this.refIdField) {
             const dataFields = _.difference(this.recordClass.getDataFields(), [this.refIdField]);
 
-            this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 /* precisely this is a cross-record */ ? dataFields[0] : null;
+            this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 && this.recordClass.getModelConfiguration().fields[dataFields[0]].type === 'record' /* precisely this is a cross-record */ ? dataFields[0] : null;
             this.metaDataFields = _.difference(dataFields, [this.isMetadataModelFor]);
             this.columns = this.columns || (this.isMetadataModelFor ? [this.isMetadataModelFor].concat(this.metaDataFields) : null);
         }
