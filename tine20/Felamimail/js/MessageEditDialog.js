@@ -535,6 +535,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
 
+        if (this.isForwardedMessage()) {
+            this.msgBody = '<div class="felamimail-body-forwarded">' + this.msgBody + '</div>'
+        }
+
         this.msgBody = this.getQuotedMailHeader(format) + this.msgBody;
 
         if (this.isForwardedMessage()) {

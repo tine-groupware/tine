@@ -4,6 +4,8 @@
  * licensing@extjs.com
  * http://www.extjs.com/license
  */
+import {contrastColors} from "../../../../../Tinebase/js/util/contrastColors";
+
 /**
  * @class Ext.form.HtmlEditor
  * @extends Ext.form.Field
@@ -667,6 +669,7 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
     // private
     initEvents : function(){
         this.originalValue = this.getValue();
+        this.on('activate', this.onActivate);
     },
 
     /**
@@ -890,6 +893,14 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
             }catch(e){}
         }
         this.fireEvent('activate', this);
+    },
+
+    onActivate: function (e) {
+        _.forEach(this.getEditorBody().children, (c) => {
+            if (c.classList.contains('felamimail-body-blockquote') || c.classList.contains('felamimail-body-forwarded')) {
+                contrastColors.findBackground(c)
+            }
+        })
     },
 
     // private
