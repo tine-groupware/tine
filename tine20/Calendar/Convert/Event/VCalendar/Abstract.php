@@ -101,11 +101,8 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
      */
     public function createVCalendar(Tinebase_Record_Interface $_record)
     {
-        // required vcalendar fields
-        $version = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->version;
-
         $vcalendar = new \Sabre\VObject\Component\VCalendar(array(
-            'PRODID'   => "-//tine20.com//Tine 2.0 Calendar V$version//EN",
+            'PRODID'   => $this->_getProdId(),
             'VERSION'  => '2.0',
             'CALSCALE' => 'GREGORIAN'
         ));

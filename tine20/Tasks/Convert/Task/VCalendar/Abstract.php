@@ -31,15 +31,13 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event ' . print_r($_record->toArray(), true));
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event '
+                . print_r($_record->toArray(), true));
         
         $vcalendar = new \Sabre\VObject\Component\VCalendar();
         
-        // required vcalendar fields
-        $version = Tinebase_Application::getInstance()->getApplicationByName('Tasks')->version;
-        
-        $vcalendar->PRODID   = "-//tine20.com//Tine 2.0 Tasks V$version//EN";
-        $vcalendar->VERSION  = '2.0';
+        $vcalendar->PRODID = $this->_getProdId('Tasks');
+        $vcalendar->VERSION = '2.0';
         $vcalendar->CALSCALE = 'GREGORIAN';
         
         // catch exceptions for unknown timezones

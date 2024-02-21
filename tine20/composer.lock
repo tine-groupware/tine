@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8a4850ce4aa0cb69842054c1bf8f72d8",
+    "content-hash": "72495418616c8c0db4f5f3993a883e4a",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -12263,11 +12263,11 @@
         },
         {
             "name": "tine20/composerapploader",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tine20/composerapploader.git",
-                "reference": "0a4dbb421a00788d4107e3be0af2f787bf096f61"
+                "url": "https://github.com/tine-groupware/composerapploader.git",
+                "reference": "c712b795bd1479538a0b5e9cb02525af99716cfe"
             },
             "require": {
                 "composer-plugin-api": ">=1.0.0"
@@ -12284,7 +12284,7 @@
                     "Tine20\\ComposerAppLoader\\": "src/"
                 }
             },
-            "time": "2020-10-25T22:34:03+00:00"
+            "time": "2023-09-29T21:02:21+00:00"
         },
         {
             "name": "twig/extensions",

@@ -170,10 +170,10 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends \PHPUnit\Framework\TestCa
         $converter = Tasks_Convert_Task_VCalendar_Factory::factory(Tasks_Convert_Task_VCalendar_Factory::CLIENT_GENERIC);
         
         $vcalendar = $converter->fromTine20Model($task)->serialize();
-        // var_dump($vcalendar);
-        // required fields
         $this->assertStringContainsString('VERSION:2.0',                                    $vcalendar, $vcalendar);
-        $this->assertStringContainsString('PRODID:-//tine20.com//Tine 2.0 Tasks V',         $vcalendar, $vcalendar);
+        $this->assertStringContainsString('PRODID:-//'
+            . Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE)
+            . '//Tasks V', $vcalendar, $vcalendar);
         $this->assertStringContainsString('CREATED:20111111T111100Z',       $vcalendar, $vcalendar);
         $this->assertStringContainsString('LAST-MODIFIED:20111111T121200Z', $vcalendar, $vcalendar);
         $this->assertStringContainsString('DTSTAMP:',                       $vcalendar, $vcalendar);

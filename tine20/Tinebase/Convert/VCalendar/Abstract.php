@@ -277,4 +277,11 @@ abstract class Tinebase_Convert_VCalendar_Abstract
         
         return $result;
     }
+
+    protected function _getProdId(string $app = 'Calendar'): string
+    {
+        $version = Tinebase_Application::getInstance()->getApplicationByName($app)->version;
+        $tineTitle = Tinebase_Config::getInstance()->get(Tinebase_Config::BRANDING_TITLE);
+        return "-//$tineTitle//$app V$version//EN";
+    }
 }
