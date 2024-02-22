@@ -20,10 +20,10 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 abstract class Tinebase_Server_Abstract implements Tinebase_Server_Interface
 {
-    const HTTP_ERROR_CODE_FORBIDDEN = 403;
-    const HTTP_ERROR_CODE_NOT_FOUND = 404;
-    const HTTP_ERROR_CODE_SERVICE_UNAVAILABLE = 503;
-    const HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR = 500;
+    public const HTTP_ERROR_CODE_FORBIDDEN = 403;
+    public const HTTP_ERROR_CODE_NOT_FOUND = 404;
+    public const HTTP_ERROR_CODE_SERVICE_UNAVAILABLE = 503;
+    public const HTTP_ERROR_CODE_INTERNAL_SERVER_ERROR = 500;
 
     /**
      * the request
