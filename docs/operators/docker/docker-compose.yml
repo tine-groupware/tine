@@ -9,6 +9,7 @@ services:
       MYSQL_DATABASE: &MYSQL_DATABASE tine
       MYSQL_USER: &MYSQL_USER tine
       MYSQL_PASSWORD: &MYSQL_PASSWORD tine
+      MARIADB_AUTO_UPGRADE: 1
     ### use volume for persistent DB
     volumes:
       - "tine_db:/var/lib/mysql"
@@ -37,6 +38,7 @@ services:
       TINE20_CREDENTIALCACHESHAREDKEY: change_me
       TINE20_SETUPUSER_USERNAME: tinesetup
       TINE20_SETUPUSER_PASSWORD: tinesetup
+      # TINE20_LOGGER_PRIORITY: "7"
       ### the url of you tine installation (should be adjusted)
       # TINE20_URL: http://localhost:4000
       ### install+update tine automatically
