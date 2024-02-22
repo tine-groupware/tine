@@ -24,6 +24,8 @@ phpstan_analyse() {
     export PHPSTAN_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/phpstan-cache/v1/${MAJOR_COMMIT_REF_NAME}/${PHP_VERSION}/$(sha256sum $TINE20ROOT/tine20/composer.lock | cut -d ' ' -f 1)
     mkdir -p ${PHPSTAN_CACHE_DIR}
     sed -i "s%tmpDir:%tmpDir: $PHPSTAN_CACHE_DIR%g" $TINE20ROOT/phpstan.neon
+    # create marker for cache cleanup
+    date --utc +%FT%TZ > $PHPSTAN_CACHE_DIR-lastused
 
     $TINE20ROOT/tine20/vendor/bin/phpstan --version
     log "analyse target: $dir"

@@ -671,6 +671,8 @@
           export PHPSTAN_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/phpstan-cache/v1/${MAJOR_COMMIT_REF_NAME}/${PHP_VERSION}/$(sha256sum $TINE20ROOT/tine20/composer.lock | cut -d ' ' -f 1)
           mkdir -p ${PHPSTAN_CACHE_DIR}
           sed -i "s%tmpDir:%tmpDir: $PHPSTAN_CACHE_DIR%g" $TINE20ROOT/phpstan.neon
+          # create marker for cache cleanup
+          date --utc +%FT%TZ > $PHPSTAN_CACHE_DIR-lastused
       
           $TINE20ROOT/tine20/vendor/bin/phpstan --version
           log "analyse target: $dir"
@@ -863,6 +865,8 @@
           if [ -d $VENDOR_CACHE_DIR ] && [ ! -d ${TINE20ROOT}/tine20/vendor ]; then
               log "found cached vendor dir using it..."
               cp -r $VENDOR_CACHE_DIR ${TINE20ROOT}/tine20/vendor
+              # create marker for cache cleanup
+              date --utc +%FT%TZ > $VENDOR_CACHE_DIR-lastused
               # do not return here, we need to run composer install, so it creates the customapps links for us
           fi
       
@@ -894,6 +898,9 @@
           if [ -d $NODE_MODULE_CACHE_DIR ] && [ ! -d ${TINE20ROOT}/tine20/Tinebase/js/node_modules ]; then
               log "found cached node_modules using it..."
               cp -r $NODE_MODULE_CACHE_DIR ${TINE20ROOT}/tine20/Tinebase/js/node_modules
+      
+              # create marker for cache cleanup
+              date --utc +%FT%TZ > $NODE_MODULE_CACHE_DIR-lastused
               return 0
           fi
       
