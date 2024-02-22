@@ -408,10 +408,10 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
             if (isset($_data[$fieldName]) && is_array($_data[$fieldName])) {
                 $config = $config[self::TYPE] === self::TYPE_VIRTUAL && isset($config[self::CONFIG][self::TYPE]) ?
                     $config[self::CONFIG] : $config;
-                if (in_array($config[self::TYPE], [self::TYPE_RECORD, self::TYPE_RECORDS]) &&
+                if (in_array($config[self::TYPE], [self::TYPE_RECORD, self::TYPE_RECORDS, self::TYPE_RELATION]) &&
                         isset($config[self::CONFIG][self::APP_NAME]) && isset($config[self::CONFIG][self::MODEL_NAME]) &&
                         (!isset($config[self::CONFIG][self::STORAGE]) || self::TYPE_JSON_REFID !== $config[self::CONFIG][self::STORAGE])) {
-                    $modelName = $config[self::CONFIG]['appName'] . '_Model_' . $config[self::CONFIG][self::MODEL_NAME];
+                    $modelName = $config[self::CONFIG][self::APP_NAME] . '_Model_' . $config[self::CONFIG][self::MODEL_NAME];
                     $this->{$fieldName} = $config[self::TYPE] === self::TYPE_RECORD ?
                         new $modelName($_data[$fieldName], $this->bypassFilters, true) :
                         new Tinebase_Record_RecordSet($modelName, $_data[$fieldName], $this->bypassFilters, true);

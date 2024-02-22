@@ -229,27 +229,30 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
      */
     protected function _resolveBillingAddress($_record)
     {
-        // TODO FIXME WHAT DO WE DO WITH THIS?!? check each debitor? should we do this on the creation of each debitor? now its only been done on the creation of the customer...
+        $postalAddressRecord = null;
+        foreach ($_record->{SMC::FLD_DEBITORS} ?? [] as $debitor) {
+            if ($debitor->{SMDN::FLD_BILLING}?->count() > 0) {
+                continue;
+            }
+            if (null === $postalAddressRecord) {
+                $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
+                $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $_record['id'])));
 
-        if ($_record->{SMC::FLD_DEBITORS}?->getFirstRecord()?->{SMDN::FLD_BILLING}?->count() > 0) {
-            return;
-        }
+                $postalAddressRecord = Sales_Controller_Address::getInstance()->search($filter)->getFirstRecord();
+            }
 
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Address::class, array(array('field' => 'type', 'operator' => 'equals', 'value' => 'postal')));
-        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'customer_id', 'operator' => 'equals', 'value' => $_record['id'])));
+            if (null === $postalAddressRecord) {
+                return;
+            }
 
-        $postalAddressRecord = Sales_Controller_Address::getInstance()->search($filter)->getFirstRecord();
-
-        // create if none has been found
-        if ($postalAddressRecord) {
             $billingAddress = $postalAddressRecord->getData();
             unset($billingAddress['id']);
             unset($billingAddress[Sales_Model_Address::FLD_CUSTOMER_ID]);
             $billingAddress['type'] = Sales_Model_Address::TYPE_BILLING;
-            $billingAddress[Sales_Model_Address::FLD_DEBITOR_ID] = $_record->{SMC::FLD_DEBITORS}->getFirstRecord()->getId();
-            
+            $billingAddress[Sales_Model_Address::FLD_DEBITOR_ID] = $debitor->getId();
+
             $address = Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($billingAddress));
-            $_record->{SMC::FLD_DEBITORS}?->getFirstRecord()?->{SMDN::FLD_BILLING}?->addRecord($address);
+            $debitor->{SMDN::FLD_BILLING}?->addRecord($address);
         }
     }
 

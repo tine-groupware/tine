@@ -239,7 +239,7 @@ class Addressbook_Export_DocTest extends TestCase
         static::assertStringContainsString($export->getTranslate()->_('Mr'), $plain);
         static::assertStringContainsString($contact->n_fn, $plain);
         static::assertStringContainsString($contact->n_given, $plain);
-        $relatedRecord = new Addressbook_Model_Contact($contact->relations[0]['related_record'], true);
+        $relatedRecord = $contact->relations[0]['related_record'];
         static::assertStringContainsString($relatedRecord->getTitle(), $plain);
     }
 

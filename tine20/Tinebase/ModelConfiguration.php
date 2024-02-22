@@ -1083,6 +1083,11 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 'shy' => true,
                 'sortable' => false,
                 'type' => 'relation',
+                'config' => [
+                    self::APP_NAME => Tinebase_Config::APP_NAME,
+                    self::MODEL_NAME => Tinebase_Model_Relation::MODEL_NAME_PART,
+                ],
+                self::FILTER_DEFINITION => [],
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
                 'copyOmit' => ! $this->_copyRelations
             ];

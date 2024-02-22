@@ -416,7 +416,7 @@ abstract class Tinebase_Record_Abstract extends Tinebase_ModelConfiguration_Cons
                 if (isset($_data[$fieldName]) && is_array($_data[$fieldName])) {
                     $config = $config['type'] === 'virtual' && isset($config['config']['type']) ? $config['config'] :
                         $config;
-                    if (in_array($config['type'], ['record', 'records']) && isset($config['config']['appName']) &&
+                    if (in_array($config['type'], ['record', 'records', 'relation']) && isset($config['config']['appName']) &&
                             isset($config['config']['modelName'])) {
                         $modelName = $config['config']['appName'] . '_Model_' . $config['config']['modelName'];
                         $this->{$fieldName} = $config['type'] == 'record' ?

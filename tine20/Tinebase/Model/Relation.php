@@ -31,6 +31,8 @@
  */
 class Tinebase_Model_Relation extends Tinebase_Record_Abstract
 {
+    public const MODEL_NAME_PART = 'Relation';
+
     /**
      * degree parent
      */
@@ -199,7 +201,10 @@ class Tinebase_Model_Relation extends Tinebase_Record_Abstract
     public function setFromArray(array &$_data)
     {
         parent::setFromArray($_data);
-        
+
+        if (is_array($_data['related_record'] ?? null) && isset($_data['related_model'])) {
+            $this->related_record = new $_data['related_model']($_data['related_record'], true);
+        }
         if ($this->remark && is_string($this->remark) && strpos($this->remark, '{') === 0) {
             $this->remark = Zend_Json::decode($this->remark);
         }
