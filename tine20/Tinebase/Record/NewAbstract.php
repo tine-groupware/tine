@@ -213,17 +213,28 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function __clone()
     {
-        foreach ($this->_data as $name => &$value)
-        {
-            if (is_object($value)) {
-                $this->_data[$name] = clone $value;
-            } else if (is_array($value)) {
-                foreach ($value as $arrKey => $arrValue) {
-                    if (is_object($arrValue)) {
-                        $value[$arrKey] = clone $arrValue;
+        static $idMap = [];
+        if ($id = $this->getId()) {
+            if (isset($idMap[$id])) {
+                return;
+            }
+            $idMap[$id] = true;
+        }
+
+        try {
+            foreach ($this->_data as $name => &$value) {
+                if (is_object($value)) {
+                    $this->_data[$name] = clone $value;
+                } else if (is_array($value)) {
+                    foreach ($value as $arrKey => $arrValue) {
+                        if (is_object($arrValue)) {
+                            $value[$arrKey] = clone $arrValue;
+                        }
                     }
                 }
             }
+        } finally {
+            unset($idMap[$id]);
         }
     }
 
@@ -497,18 +508,33 @@ class Tinebase_Record_NewAbstract extends Tinebase_ModelConfiguration_Const impl
      */
     public function toArray($_recursive = TRUE)
     {
-        $recordArray = $this->_data;
-        $this->_convertDateTimeToString($recordArray, Tinebase_Record_Abstract::ISO8601LONG);
-
-        if ($_recursive) {
-            /** @var Tinebase_Record_Interface  $value */
-            foreach ($recordArray as $property => $value) {
-                if (is_object($value) && method_exists($value, 'toArray')) {
-                    $recordArray[$property] = $value->toArray();
-                }
-            }
+        static $splObjSet = null;
+        if (null === $splObjSet) {
+            $splObjSet = new SplObjectStorage();
+        }
+        if ($splObjSet->contains($this)) {
+            $_recursive = false;
+        } elseif ($_recursive) {
+            $splObjSet->attach($this);
         }
 
+        try {
+            $recordArray = $this->_data;
+            $this->_convertDateTimeToString($recordArray, Tinebase_Record_Abstract::ISO8601LONG);
+
+            if ($_recursive) {
+                /** @var Tinebase_Record_Interface $value */
+                foreach ($recordArray as $property => $value) {
+                    if (is_object($value) && method_exists($value, 'toArray')) {
+                        $recordArray[$property] = $value->toArray();
+                    }
+                }
+            }
+        } finally {
+            if ($_recursive) {
+                $splObjSet->detach($this);
+            }
+        }
         return $recordArray;
     }
 
