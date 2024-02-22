@@ -80,6 +80,8 @@ test_composer_install() {
     if [ -d $VENDOR_CACHE_DIR ] && [ ! -d ${TINE20ROOT}/tine20/vendor ]; then
         log "found cached vendor dir using it..."
         cp -r $VENDOR_CACHE_DIR ${TINE20ROOT}/tine20/vendor
+        # create marker for cache cleanup
+        date --utc +%FT%TZ > $VENDOR_CACHE_DIR-lastused
         # do not return here, we need to run composer install, so it creates the customapps links for us
     fi
 
@@ -111,6 +113,9 @@ test_npm_install() {
     if [ -d $NODE_MODULE_CACHE_DIR ] && [ ! -d ${TINE20ROOT}/tine20/Tinebase/js/node_modules ]; then
         log "found cached node_modules using it..."
         cp -r $NODE_MODULE_CACHE_DIR ${TINE20ROOT}/tine20/Tinebase/js/node_modules
+
+        # create marker for cache cleanup
+        date --utc +%FT%TZ > $NODE_MODULE_CACHE_DIR-lastused
         return 0
     fi
 
