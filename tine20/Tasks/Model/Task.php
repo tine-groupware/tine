@@ -175,7 +175,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 self::DEFAULT_VAL   => 'NEEDS-ACTION',
             ),
             'organizer'         => array(
-                'label'             => 'Organizer', //_('Organizer')
+                'label'             => 'Organizer / Responsible', //_('Organizer / Responsible')
                 'type'              => 'user',
                 self::NULLABLE      => true,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
