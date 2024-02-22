@@ -33,13 +33,24 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         exit;
     }
 
-    public function downloadFolder($path, $recursive = false)
+    /**
+     * @param string $path
+     * @param bool $recursive
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function downloadFolder(string $path, bool $recursive = false): void
     {
         $path = Filemanager_Controller_Node::getInstance()->addBasePath($path);
         $fs = Tinebase_FileSystem::getInstance();
         $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($path);
         if (!$fs->isDir($pathRecord->statpath)) {
-            throw new Tinebase_Exception_SystemGeneric($path . ' is not a directory');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                __METHOD__ . '::' . __LINE__ . ' ' . $path . ' is not a directory');
+            $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
         }
         $node = $fs->stat($pathRecord->statpath);
 
@@ -81,7 +92,13 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                     }
                 }
             };
-            $fun($node);
+            try {
+                $fun($node);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
+            }
             if (!$z->close()) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
                     __METHOD__ . '::' . __LINE__ . ' Could not create zip file');
