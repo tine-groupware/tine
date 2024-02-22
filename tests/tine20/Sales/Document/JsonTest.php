@@ -419,10 +419,19 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $savedDocument = $this->_instance->saveDocument_Offer($document->toArray(true));
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $savedDocument[SMDOffer::FLD_FOLLOWUP_ORDER_CREATED_STATUS]);
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $savedDocument[SMDOffer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS]);
+        $savedDocument[SMDOffer::FLD_POSITIONS][] = [
+            Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'ipsum sub',
+            Sales_Model_DocumentPosition_Offer::FLD_PARENT_ID => $savedDocument[SMDOffer::FLD_POSITIONS][0]['id'],
+            Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $subProduct->toArray(),
+            Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX_RATE => 19,
+            Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX => 100 * 19 / 100,
+            Sales_Model_DocumentPosition_Offer::FLD_NET_PRICE => 100,
+        ];
         $savedDocument[SMDOffer::FLD_OFFER_STATUS] = SMDOffer::STATUS_RELEASED;
         $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);
         $this->assertNotSame($customer->getId(), $savedDocument[SMDOffer::FLD_CUSTOMER_ID]['id']);
         $this->assertSame($customer->getId(), $savedDocument[SMDOffer::FLD_CUSTOMER_ID]['original_id']);
+        $this->assertCount(2, $savedDocument[SMDOffer::FLD_POSITIONS]);
 
         Tinebase_Record_Expander_DataRequest::clearCache();
 
