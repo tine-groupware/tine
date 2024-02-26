@@ -924,7 +924,9 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
                     `<b>${window.i18n._('Image size')}</b>`,
                     {text: window.i18n._('small'), checked: (this.selectedImage.dataset.size === '300'), group: 'image-size', handler: this.setImageSize, scope: this, size: 300},
                     {text: window.i18n._('medium'), checked: (this.selectedImage.dataset.size === '500'), group: 'image-size', handler: this.setImageSize, scope: this, size: 500},
-                    {text: window.i18n._('large'), checked: (this.selectedImage.dataset.size === '800'), group: 'image-size', handler: this.setImageSize, scope: this, size: 800}
+                    {text: window.i18n._('large'), checked: (this.selectedImage.dataset.size === '800'), group: 'image-size', handler: this.setImageSize, scope: this, size: 800},
+                    new Ext.menu.Separator(),
+                    {text: window.i18n._('delete'), handler: this.deleteImage, scope: this}
                 ],
                 renderTo: this.wrap,
                 plugins: [{
@@ -939,6 +941,13 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
         }
 
         this.syncValue();
+    },
+
+    deleteImage: function ()
+    {
+        if (this.selectedImage) {
+            this.selectedImage.remove()
+        }
     },
 
     getImageBase64: async function (result, max, target, type = 'image/jpeg')
