@@ -137,6 +137,11 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 case 'document_category':
                     config.listeners = config.listeners || {}
                     config.listeners.select = (combo, record, index) => {
+                        this.getForm().items.each((field) => {
+                            if (field.name?.match(/(^eval_dim_.*)/)) {
+                                field.lastQuery = Tine.Tinebase.data.Record.generateUID();
+                            }
+                        });
                         _.forEach(record?.data, (val, key) => {
                             if (key.match(/^eval_dim_(.*)/) && this.getForm().findField(key) && val) {
                                 this.getForm().findField(key).setValue(val);
