@@ -28,7 +28,7 @@ Tine.Tinebase.Application = function(config) {
 
     this.hasMainScreen = Ext.isBoolean(this.hasMainScreen) ? this.hasMainScreen :
         (this.getMainScreen != Tine.Tinebase.Application.prototype.getMainScreen ||
-        typeof Tine[this.appName].MainScreen === 'function');
+        typeof Tine[this.appName].MainScreen === 'function' );
 
     this.hasMainScreen = this.hasMainScreen && Tine.Tinebase.common.hasRight('mainscreen', this.appName);
 

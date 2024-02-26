@@ -292,8 +292,8 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
         const appName = modelConfig.appName;
         const modelName = modelConfig.modelName;
         const owningAppName = _.get(fieldconfig, 'owningApp') || appName;
-        const app = Tine.Tinebase.appMgr.get(owningAppName);
-        if (! app) {
+
+        if (! Tine.Tinebase.appMgr.getInitialisedRecord(owningAppName)) {
             Tine.log.error('Application ' + owningAppName + ' not found!');
             return null;
         }
@@ -309,17 +309,18 @@ Ext.apply(Tine.Tinebase.ApplicationStarter,{
         
         var fieldTypeKey = (fieldconfig && fieldconfig.type) ? fieldconfig.type : (filterconfig && filterconfig.type) ? filterconfig.type : 'default',
             label = (filterconfig && filterconfig.hasOwnProperty('label')) ? filterconfig.label : (fieldconfig && fieldconfig.hasOwnProperty('label')) ? fieldconfig.label : null,
-            globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation'))),
-            i18n = globalI18n ? window.i18n : app.i18n;
-        
+            globalI18n = ((filterconfig && filterconfig.hasOwnProperty('useGlobalTranslation')) || (fieldconfig && fieldconfig.hasOwnProperty('useGlobalTranslation')));
+
         if (! label || _.get(fieldconfig, 'disabled') || _.get(fieldconfig, 'uiconfig.disabled') || _.get(filterOptions, 'disabled')) {
             return null;
         }
         // prepare filter
         var filter = {
-            label: i18n._hidden(label),
+            label,
+            owningAppName,
+            globalI18n,
             field: fieldKey,
-            gender: i18n._hidden('GENDER_' + label),
+            gender: 'GENDER_' + label,
             specialType: fieldconfig ? fieldconfig.specialType : null
         };
         
