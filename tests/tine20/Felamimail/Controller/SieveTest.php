@@ -48,7 +48,7 @@ class Felamimail_Controller_SieveTest extends Felamimail_TestCase
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
 
         self::assertNotNull($script);
-        self::assertStringContainsString('require ["envelope","copy","reject"];', $script->getSieve());
+        self::assertStringContainsString('require ["envelope","copy","reject","editheader"];', $script->getSieve());
         $domains = Tinebase_EmailUser::getAllowedDomains();
         self::assertStringContainsString('if address :is :domain "from" ' . json_encode($domains) . ' {
 redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
@@ -77,6 +77,22 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 } else { reject "', $script->getSieve());
 
         // TODO check sieve script functionality
+    }
+
+    public function testAdbMailinglistSieveReplyTo()
+    {
+        $this->_testNeedsTransaction();
+
+        $mailinglist = $this->_createMailinglist([
+            Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY
+        ]);
+        $mailinglist->xprops()[Addressbook_Model_List::XPROP_SIEVE_REPLY_TO] = 'sender';
+        $mailinglist = Addressbook_Controller_List::getInstance()->update($mailinglist);
+
+        // check if sieve script is on sieve server
+        $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
+        $sieveScript = $script->getSieve();
+        self::assertStringContainsString('addheader "Reply-To"', $sieveScript);
     }
 
     public function testAdbMailinglistSieveRuleForwardExternal()

@@ -2150,3 +2150,6 @@ msgstr "Größe (in Byte)"
 
 msgid "Depending on content format"
 msgstr "Abhängig vom Format"
+
+msgid "The recipients of this email distribution list are maintained in the list : {locationsHtml}"
+msgstr "Die Empfänger dieses Email-Verteilers werden in der Liste verwaltet : {locationsHtml}"

@@ -96,7 +96,6 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
         $this->_checkRight('get');
         $record = $this->_backend->get($_id);
         $this->resolveAccountEmailUsers($record);
-        
         return $record;
     }
 
@@ -259,6 +258,11 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             Admin_Controller_User::getInstance()->updateUserWithoutEmailPluginUpdate($user);
         } else {
             $this->resolveAccountEmailUsers($updatedRecord);
+        }
+        if ($record->type === Felamimail_Model_Account::TYPE_ADB_LIST
+            && Tinebase_Core::getUser()->hasRight(Addressbook_Config::APP_NAME, Addressbook_Acl_Rights::MANAGE_LIST_EMAIL_OPTIONS)
+        ) {
+            $updatedRecord['adb_list'] = $this->updateAdbList($record);
         }
     }
 
@@ -443,5 +447,29 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             }
         }
         return $updatedAccounts;
+    }
+
+    /**
+     * @param Felamimail_Model_Account $account
+     */
+    public function updateAdbList(Felamimail_Model_Account $account): ?Tinebase_Record_Interface
+    {
+        $list = $account['adb_list'];
+        if (!$list) {
+            $list = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter([
+                ['field' => 'id', 'operator' => 'equals', 'value' => $account['user_id']]
+            ]))->getFirstRecord();;
+        }
+        if (is_array($list)) {
+            $list = new Addressbook_Model_List($list, true);
+        }
+        if (!$list) return null;
+        
+        foreach ($account->grants as $grant) {
+            if ($grant['account_id'] !== Tinebase_Core::getUser()->getId() && $grant['readGrant']) {
+                $list->xprops()[Addressbook_Model_List::XPROP_SIEVE_KEEP_COPY] = true;
+            }
+        }
+        return Addressbook_Controller_List::getInstance()->update($list);
     }
 }
