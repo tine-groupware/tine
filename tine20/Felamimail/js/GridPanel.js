@@ -357,9 +357,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             handler: this.onRowDblClick,
             scope: this,
             iconCls: 'action_edit',
-            actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
-                action.setHidden(! this.sentFolderSelected);
-            }.createDelegate(this)
+            actionUpdater: (action, grants, records, isFilterSelect, filteredContainers) => {
+                let editable = false;
+                if (this.sentFolderSelected && records[0]) {
+                    const folder = this.app.getFolderStore().getById(records[0].get('folder_id'));
+                    const account = this.app.getAccountStore().getById(folder.get('account_id'));
+                    editable = folder.get('path').includes(account.getSpecialFolderId('drafts_folder'))
+                        || folder.get('path').includes(account.getSpecialFolderId('templates_folder'));
+                }
+                action.setHidden(!editable);
+            }
         });
 
         this.action_fileRecord = new Tine.Felamimail.MessageFileAction({});
