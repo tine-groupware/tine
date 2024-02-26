@@ -39,6 +39,7 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
         ]);
         $this->_purgeRecords = false;
         $this->_doContainerACLChecks = false;
+        $this->_duplicateCheckFields = [Tinebase_Model_EvaluationDimension::FLD_NAME];
     }
 
     protected function _checkRight($_action)
