@@ -22,6 +22,8 @@ Tine.Filemanager.NotificationGridPanel = Ext.extend(Tine.widgets.account.PickerG
     editDialog: null,
     actionUpdater: null,
 
+    enableTbar: true,
+
     initComponent: function () {
         var _ = window.lodash;
 

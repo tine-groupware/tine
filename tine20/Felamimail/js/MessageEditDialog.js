@@ -697,7 +697,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @param {} o
      */
     onKeyPress: function (e, t, o) {
-        if ((e.getKey() == e.TAB || e.getKey() == e.ENTER) && !e.shiftKey) {
+        if ((e.getKey() === e.TAB || e.getKey() === e.ENTER) && !e.shiftKey) {
             if (e.getTarget('input[name=subject]')) {
                 this.htmlEditor.focus.defer(50, this.htmlEditor);
             } else if (e.getTarget('input[type=text]')) {
@@ -705,9 +705,9 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }
         }
         if (e.getTarget('body')) {
-            if (e.getKey() == e.ENTER && e.ctrlKey) {
+            if (e.getKey() === e.ENTER && e.ctrlKey) {
                 this.onSaveAndClose();
-            } else if (e.getKey() == e.TAB && e.shiftKey) {
+            } else if (e.getKey() === e.TAB && e.shiftKey) {
                 this.subjectField.focus.defer(50, this.subjectField);
             }
         }
@@ -1098,7 +1098,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
         const text = this.bodyCards.layout.activeItem.getValue() || this.record.get('body');
         const format = this.record.getBodyType();
-        const textEditor = format === 'text/html' ? this.htmlEditor : this.textEditor;
+        const textEditor = format === 'text/plain' ? this.textEditor : this.htmlEditor;
 
         this.bodyCards.layout.setActiveItem(btn.pressed ? this.mailvelopeWrap : textEditor);
 
@@ -1145,10 +1145,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * toggle format
      */
     onToggleFormat: function () {
-        var source = this.bodyCards.layout.activeItem,
-            format = source.mimeType,
-            target = format === 'text/plain' ? this.htmlEditor : this.textEditor,
-            convert = format === 'text/plain' ?
+        const source = this.bodyCards.layout.activeItem;
+        const format = source.mimeType;
+        const target = format === 'text/plain' ? this.htmlEditor : this.textEditor;
+        const convert = format === 'text/plain' ?
                 Ext.util.Format.nl2br :
                 Tine.Tinebase.common.html2text;
 
@@ -1221,13 +1221,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onRecordLoad: async function () {
         // interrupt process flow till dialog is rendered
-        if (!this.rendered || (this.record.get('content_type') === 'text/html' && !this.htmlEditor?.initialized)) {
+        if (!this.rendered || (this.record.get('content_type') !== 'text/plain' && !this.htmlEditor?.initialized)) {
             this.onRecordLoad.defer(250, this);
             return;
         }
         
         let title = this.app.i18n._('Compose email:');
-        const editor = this.record.get('content_type') === 'text/html' ? this.htmlEditor : this.textEditor;
+        const editor = this.record.get('content_type') === 'text/plain' ? this.textEditor : this.htmlEditor;
         
         if (this.record.get('subject')) {
             title = title + ' ' + this.record.get('subject');
@@ -1311,7 +1311,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         const format = this.bodyCards.layout.activeItem.mimeType;
         if (format.match(/^text/)) {
-            const editor = format === 'text/html' ? this.htmlEditor : this.textEditor;
+            const editor = format === 'text/plain' ? this.textEditor : this.htmlEditor;
 
             this.record.set('content_type', format);
             this.record.set('body', editor.getValue());
