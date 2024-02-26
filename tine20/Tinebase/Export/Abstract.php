@@ -1313,14 +1313,24 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             } else {
                 $keyField = Tinebase_Config::factory($keyField['application'])->{$keyField['name']};
             }
-            /** @var Tinebase_Config_KeyFieldRecord $keyFieldRecordModel */
-            $keyFieldRecordModel = $keyField->getKeyFieldRecordModel();
-            $keyFieldRecordModel::setTranslation(
-                Tinebase_Translation::getTranslation($keyField->getAppName(), $this->_locale));
-            foreach ($_records as $record) {
-                if ($record->{$property} && !$record->{$property} instanceof Tinebase_Config_KeyFieldRecord &&
-                        ($keyFieldRec = $keyField->records->getById($record->{$property}))) {
-                    $record->{$property} = $keyFieldRec;
+            if ($keyField) {
+                /** @var Tinebase_Config_KeyFieldRecord $keyFieldRecordModel */
+                $keyFieldRecordModel = $keyField->getKeyFieldRecordModel();
+                $keyFieldRecordModel::setTranslation(
+                    Tinebase_Translation::getTranslation($keyField->getAppName(), $this->_locale)
+                );
+                foreach ($_records as $record) {
+                    if (
+                        $record->{$property} && !$record->{$property} instanceof Tinebase_Config_KeyFieldRecord &&
+                        ($keyFieldRec = $keyField->records->getById($record->{$property}))
+                    ) {
+                        $record->{$property} = $keyFieldRec;
+                    }
+                }
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Keyfield property ' . $property . ' not found in app config.');
                 }
             }
         }
