@@ -177,7 +177,7 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             renderer: Tine.Tinebase.common.dateTimeRenderer
         }, {
             id: 'organizer',
-            header: this.app.i18n._('Responsible'),
+            header: this.app.i18n._('Organizer / Responsible'),
             width: 200,
             dataIndex: 'organizer',
             renderer: Tine.Tinebase.common.accountRenderer,

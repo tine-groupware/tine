@@ -202,7 +202,7 @@ import './DependencyPanel'
                         }),
                         Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
                             userOnly: true,
-                            fieldLabel: this.app.i18n._('Organizer'),
+                            fieldLabel: this.app.i18n._('Organizer / Responsible'),
                             emptyText: i18n._('Add Responsible ...'),
                             useAccountRecord: true,
                             name: 'organizer',
