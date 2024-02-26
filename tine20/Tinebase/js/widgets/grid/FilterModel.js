@@ -131,6 +131,10 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         // e.g. {name = 'someApp'}
         this.app = Tine.Tinebase.appMgr.get(this.app);
 
+        const i18n = this.globalI18n ? window.i18n : (this.owningAppName ? Tine.Tinebase.appMgr.get(this.owningAppName) : this.app).i18n || window.i18n;
+        this.label = i18n._hidden(this.label);
+        this.gender = i18n._hidden(this.gender);
+
         if (this.app) {
             this.itemName = this.itemName || this.label;
             this.label = this.app.i18n._hidden(this.label);
