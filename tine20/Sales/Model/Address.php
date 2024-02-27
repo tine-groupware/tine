@@ -129,28 +129,28 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER => true,
             ],
             self::FLD_NAME => [
-                self::LABEL => 'Name', // _('Name')
-                self::NULLABLE => true,
-                self::TYPE => self::TYPE_STRING,
-                self::QUERY_FILTER => true,
+                self::LABEL         => 'Customer Name', // _('Customer Name')
+                self::NULLABLE      => true,
+                self::TYPE          => self::TYPE_STRING,
+                self::QUERY_FILTER  => true,
             ],
             self::FLD_PREFIX1 => [
-                self::LABEL   => 'Prefix 1', //_('Prefix 1')
-                self::NULLABLE => TRUE,
-                self::TYPE => self::TYPE_STRING,
-                self::QUERY_FILTER => TRUE
+                self::LABEL         => 'Company / Organisation (Prefix 1)', //_('Company / Organisation (Prefix 1)')
+                self::NULLABLE      => TRUE,
+                self::TYPE          => self::TYPE_STRING,
+                self::QUERY_FILTER  => TRUE,
             ],
             self::FLD_PREFIX2 => [
-                self::LABEL   => 'Prefix 2', //_('Prefix 2')
-                self::NULLABLE => TRUE,
-                self::TYPE => self::TYPE_STRING,
-                self::QUERY_FILTER => TRUE
+                self::LABEL             => 'Unit (Prefix 2)', //_('Unit (Prefix 2)')
+                self::NULLABLE          => TRUE,
+                self::TYPE              => self::TYPE_STRING,
+                self::QUERY_FILTER      => TRUE,
             ],
             self::FLD_PREFIX3 => [
-                self::LABEL   => 'Prefix 3', //_('Prefix 3')
-                self::NULLABLE => TRUE,
-                self::TYPE => self::TYPE_STRING,
-                self::QUERY_FILTER => TRUE
+                self::LABEL         => 'Recipient Name (Prefix 3)', //_('Recipient Name (Prefix 3)')
+                self::NULLABLE      => TRUE,
+                self::TYPE          => self::TYPE_STRING,
+                self::QUERY_FILTER  => TRUE,
             ],
             self::FLD_STREET => [
                 self::TYPE => self::TYPE_STRING,

@@ -629,20 +629,23 @@ msgstr "Kunden Kürzel"
 msgid "Language"
 msgstr "Sprache"
 
+msgid "Customer Name"
+msgstr "Kundenname"
+
 #: js/CustomerEditDialog.js:318 js/AddressEditDialog.js:126
 #: Model/Address.php:138
-msgid "Prefix 1"
-msgstr "Zusatz 1"
+msgid "Company / Organisation (Prefix 1)"
+msgstr "Firma / Organisation (Zusatz 1)"
 
 #: js/CustomerEditDialog.js:322 js/AddressEditDialog.js:130
 #: Model/Address.php:144
-msgid "Prefix 2"
-msgstr "Zusatz 2"
+msgid "Unit (Prefix 2)"
+msgstr "Abteilung (Zusatz 2)"
 
 #: js/CustomerEditDialog.js:326 js/AddressEditDialog.js:134
 #: Model/Address.php:150
-msgid "Prefix 3"
-msgstr "Zusatz 3"
+msgid "Recipient Name (Prefix 3)"
+msgstr "Name des Empfangenden (Zusatz 3)"
 
 #: js/ProductAggregateGridPanel.js:61 js/ProductAggregateGridPanel.js:226
 #: Config.php:781 Model/Product.php:66 Model/SubProductMapping.php:101
