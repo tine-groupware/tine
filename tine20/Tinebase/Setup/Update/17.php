@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * Tine 2.0
@@ -12,19 +12,21 @@
  * this is 2024.11 (ONLY!)
  */
 
+declare(strict_types=1);
+
 use Tinebase_Model_Filter_Abstract as TMFA;
 
 class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 {
-    const RELEASE017_UPDATE000 = __CLASS__ . '::update000';
-    const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
-    const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
-    const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
-    const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
-    const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
-    const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
-    const RELEASE017_UPDATE007 = __CLASS__ . '::update007';
-    const RELEASE017_UPDATE008 = __CLASS__ . '::update008';
+    protected const RELEASE017_UPDATE000 = __CLASS__ . '::update000';
+    protected const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
+    protected const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
+    protected const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
+    protected const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
+    protected const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
+    protected const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
+    protected const RELEASE017_UPDATE007 = __CLASS__ . '::update007';
+    protected const RELEASE017_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -135,9 +137,18 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             Tinebase_Model_EvaluationDimensionItem::class,
         ]);
 
-        if (null === Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
-                    [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Model_EvaluationDimension::COST_CENTER],
-                ]))->getFirstRecord()) {
+        if (
+            null === Tinebase_Controller_EvaluationDimension::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    Tinebase_Model_EvaluationDimension::class,
+                    [
+                    [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME,
+                        TMFA::OPERATOR => TMFA::OP_EQUALS,
+                        TMFA::VALUE => Tinebase_Model_EvaluationDimension::COST_CENTER],
+                    ]
+                )
+            )->getFirstRecord()
+        ) {
             $dimension = new Tinebase_Model_EvaluationDimension([
                 Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_CENTER,
                 Tinebase_Model_EvaluationDimension::FLD_SORTING => 1000,
@@ -145,7 +156,12 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 
             if ($this->_backend->tableExists('cost_centers')) {
                 $items = new Tinebase_Record_RecordSet(Tinebase_Model_EvaluationDimensionItem::class);
-                foreach ($this->_db->select()->from(SQL_TABLE_PREFIX . 'cost_centers', ['id', 'number', 'name', 'description'])->query()->fetchAll(Zend_Db::FETCH_ASSOC) as $cc) {
+                foreach (
+                    $this->_db->select()->from(
+                        SQL_TABLE_PREFIX . 'cost_centers',
+                        ['id', 'number', 'name', 'description']
+                    )->query()->fetchAll(Zend_Db::FETCH_ASSOC) as $cc
+                ) {
                     $items->addRecord(new Tinebase_Model_EvaluationDimensionItem([
                         Tinebase_Model_EvaluationDimensionItem::ID => $cc['id'],
                         Tinebase_Model_EvaluationDimensionItem::FLD_NAME => ($cc['name'] ?: '-'),
@@ -159,9 +175,17 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             Tinebase_Controller_EvaluationDimension::getInstance()->create($dimension);
         }
 
-        if (null === Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
-                [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Model_EvaluationDimension::COST_BEARER],
-            ]))->getFirstRecord()) {
+        if (
+            null === Tinebase_Controller_EvaluationDimension::getInstance()->search(
+                Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                    Tinebase_Model_EvaluationDimension::class,
+                    [
+                    [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME,
+                    TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => Tinebase_Model_EvaluationDimension::COST_BEARER],
+                    ]
+                )
+            )->getFirstRecord()
+        ) {
             $dimension = new Tinebase_Model_EvaluationDimension([
                 Tinebase_Model_EvaluationDimension::FLD_NAME => Tinebase_Model_EvaluationDimension::COST_BEARER,
                 Tinebase_Model_EvaluationDimension::FLD_SORTING => 1010,
@@ -169,7 +193,12 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 
             if ($this->_backend->tableExists('cost_bearers')) {
                 $items = new Tinebase_Record_RecordSet(Tinebase_Model_EvaluationDimensionItem::class);
-                foreach ($this->_db->select()->from(SQL_TABLE_PREFIX . 'cost_bearers', ['id', 'number', 'name', 'description'])->query()->fetchAll(Zend_Db::FETCH_ASSOC) as $cc) {
+                foreach (
+                    $this->_db->select()->from(
+                        SQL_TABLE_PREFIX . 'cost_bearers',
+                        ['id', 'number', 'name', 'description']
+                    )->query()->fetchAll(Zend_Db::FETCH_ASSOC) as $cc
+                ) {
                     $items->addRecord(new Tinebase_Model_EvaluationDimensionItem([
                         Tinebase_Model_EvaluationDimensionItem::ID => $cc['id'],
                         Tinebase_Model_EvaluationDimensionItem::FLD_NAME => ($cc['name'] ?: '-'),
@@ -193,13 +222,17 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update006()
     {
-        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE own_model = "Tinebase_Model_CostCenter"');
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX .
+            'relations WHERE own_model = "Tinebase_Model_CostCenter"');
 
-        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE related_model = "Tinebase_Model_CostCenter"');
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX .
+            'relations WHERE related_model = "Tinebase_Model_CostCenter"');
 
-        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE own_model = "Tinebase_Model_CostUnit"');
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX .
+            'relations WHERE own_model = "Tinebase_Model_CostUnit"');
 
-        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'relations WHERE related_model = "Tinebase_Model_CostUnit"');
+        $this->getDb()->query('DELETE FROM ' . SQL_TABLE_PREFIX .
+            'relations WHERE related_model = "Tinebase_Model_CostUnit"');
 
         if ($this->_backend->tableExists('cost_center')) {
             $this->_backend->dropTable('cost_center');
