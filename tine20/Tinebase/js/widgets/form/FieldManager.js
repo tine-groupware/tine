@@ -282,7 +282,8 @@ Tine.widgets.form.FieldManager = function() {
                             field.additionalFilterSpec = fieldDefinition.config.additionalFilterSpec;
                         }
                     } else {
-                        var picker = Tine.widgets.form.RecordsPickerManager.get(
+                        config.allowMultiple = true;
+                        var picker = Tine.widgets.form.RecordPickerManager.get(
                             fieldDefinition.config.appName,
                             fieldDefinition.config.modelName,
                             Ext.apply(field, config)
