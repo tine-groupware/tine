@@ -1329,6 +1329,25 @@ myStore.reload(lastOptions);
         this.loadRecords(r, {add: append}, true);
     },
 
+    mergeData : function(o){
+        const rs = this.reader.readRecords(o).records;
+        rs.forEach(r => {
+            this.getById(r.id)?.setData(r.data) || this.add(r);
+        });
+        this.data.each((r) => {
+            if (! _.find(rs, {id: r.id})) {
+                this.remove(r);
+            }
+        });
+        return this;
+    },
+
+    getData : function() {
+        return _.map(this.data.items, (r) => {
+            return r.getData();
+        })
+    },
+
     /**
      * Gets the number of cached records.
      * <p>If using paging, this may not be the total size of the dataset. If the data object

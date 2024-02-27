@@ -191,7 +191,31 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         Calendar_Model_Rrule::mergeAndRemoveNonMatchingRecurrences($_records, $_filter);
 
         $_records->sortByPagination($_pagination);
-        
-        return parent::fromTine20RecordSet($_records, $_filter, $_pagination);
+
+        $results = parent::fromTine20RecordSet($_records, $_filter, $_pagination);
+
+        // NOTE: parent::fromTine20RecordSet does not expand values in recurring instances (tags, notes, attachments, (system) cf's
+        //       therefore we copy anything not scheduling related manualy here (NOTE freebusy infos have no id)
+        $baseEventMap = array_reduce($results, function ($map, $result) {
+            if (isset($result['id']) && !preg_match('/^fakeid/', $result['id'])) {
+                $map[$result['id']] = $result;
+            }
+            return $map;
+        }, []);
+
+        $excludeFields = ['id', 'dtstart', 'dtend', 'recurid', 'base_event_id', 'rrule', 'rrule_until', 'rrule_constraints', 'exdate'];
+        foreach ($results as &$result) {
+            if (isset($result['id']) && preg_match('/^fakeid/', $result['id'])) {
+                if (isset($baseEventMap[$result['base_event_id']])) {
+                    foreach($baseEventMap[$result['base_event_id']] as $field => $value) {
+                        if (! in_array($field, $excludeFields)) {
+                            $result[$field] = $value;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $results;
     }
 }
