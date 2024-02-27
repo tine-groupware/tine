@@ -143,6 +143,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     allowDelete: true,
 
     /**
+     * @cfg {Bool} Duplicate
+     * allow to select same record multiple times
+     */
+    allowDuplicatePicks: false,
+
+    /**
      * config spec for additionalFilters - passed to RecordPicker
      *
      * @type: {object} e.g.
@@ -592,7 +598,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     return true;
                 }
             }, this);
-            if (existingRecord === -1) {
+            if (existingRecord === -1 || this.allowDuplicatePicks) {
                 if (this.fireEvent('beforeaddrecord', record, this) !== false) {
                     this.store.add([record]);
                     this.fireEvent('add', this, [record]);
