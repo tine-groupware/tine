@@ -21,7 +21,9 @@ phpstan_analyse() {
     log "setting up cache ..."
     # CI_CUSTOM_CACHE_DIR is a volume shared betwean runners
     # todo: monitor if composer.lock file hash prodoces to mutch dead cache
-    export PHPSTAN_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/phpstan-cache/v1/${MAJOR_COMMIT_REF_NAME}/${PHP_VERSION}/$(sha256sum $TINE20ROOT/tine20/composer.lock | cut -d ' ' -f 1)
+    phpstan_cache_key=$(echo $MAJOR_COMMIT_REF_NAME $PHP_VERSION $(sha256sum $TINE20ROOT/tine20/composer.lock | cut -d ' ' -f 1) | sha256sum | cut -d ' ' -f 1)
+    export PHPSTAN_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/${CI_PROJECT_NAME}/phpstan-cache/v2/$phpstan_cache_key
+    echo PHPSTAN_CACHE_DIR=$PHPSTAN_CACHE_DIR
     mkdir -p ${PHPSTAN_CACHE_DIR}
     sed -i "s%tmpDir:%tmpDir: $PHPSTAN_CACHE_DIR%g" $TINE20ROOT/phpstan.neon
     # create marker for cache cleanup

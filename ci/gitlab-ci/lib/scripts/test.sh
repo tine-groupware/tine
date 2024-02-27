@@ -79,6 +79,8 @@ test_composer_install() {
 
     if [ -d $VENDOR_CACHE_DIR ] && [ ! -d ${TINE20ROOT}/tine20/vendor ]; then
         log "found cached vendor dir using it..."
+        echo VENDOR_CACHE_DIR=$VENDOR_CACHE_DIR
+
         cp -r $VENDOR_CACHE_DIR ${TINE20ROOT}/tine20/vendor
         # create marker for cache cleanup
         date --utc +%FT%TZ > $VENDOR_CACHE_DIR-lastused
@@ -112,6 +114,8 @@ test_npm_install() {
 
     if [ -d $NODE_MODULE_CACHE_DIR ] && [ ! -d ${TINE20ROOT}/tine20/Tinebase/js/node_modules ]; then
         log "found cached node_modules using it..."
+        echo NODE_MODULE_CACHE_DIR=$NODE_MODULE_CACHE_DIR
+
         cp -r $NODE_MODULE_CACHE_DIR ${TINE20ROOT}/tine20/Tinebase/js/node_modules
 
         # create marker for cache cleanup
