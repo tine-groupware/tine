@@ -1,6 +1,6 @@
 test_prepare_working_dir() {
     if [ "${TINE20ROOT}" != "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20" ]; then
-        log "test_preapre_wirking_dir is only requires the tine root to be: \${CI_BUILDS_DIR}/\${CI_PROJECT_NAMESPACE}/tine20"
+        log "test_preapre_working_dir requires the tine root to be: \${CI_BUILDS_DIR}/\${CI_PROJECT_NAMESPACE}/tine20"
         # This function is only intended to work with the source from gitlab...
         # intended: for the main repo => do basicly nothing. Or for customapps => clone main repo and include customapp
         # and setup vars as if we where running in the main repo. 
