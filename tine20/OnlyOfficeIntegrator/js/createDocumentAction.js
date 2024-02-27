@@ -51,7 +51,7 @@ Promise.all([
         actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {
             const recordData = _.get(filteredContainers, '[0]');
             const isAttachment = _.get(recordData, 'container_id.account_grants', false);
-
+            
             // hack for attachments where grants are not evaluated
             let enabled = _.get(action, 'isUploadGrid', false);
             if (isAttachment) {
@@ -72,7 +72,8 @@ Promise.all([
     // filemanager -> path
     const fileManagerCreateDocumentAction = new Ext.Action(Ext.applyIf({
         getPath: async function (baseAction, type) {
-            return _.get(baseAction, 'filteredContainers[0].path');
+            const action = baseAction.initialConfig;
+            return _.get(baseAction, 'filteredContainers[0].path') || _.get(action, 'filteredContainers[0].path');
         },
         getName: async function (baseAction, type) {
             return new Promise((resolve) => {
@@ -115,8 +116,10 @@ Promise.all([
         rowspan: 2,
         iconAlign: 'top'
     }), 2);
-
-
+    
+    // file picker
+    Ext.ux.ItemRegistry.registerItem('Filemanager-FilePicker-ActionToolbar-leftbtngrp', fileManagerCreateDocumentAction, 20);
+    
     // upload grids -> tempFile
     const uploadGridCreateDocumentAction = new Ext.Action(Ext.applyIf({
         isUploadGrid: true,

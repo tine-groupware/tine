@@ -85,13 +85,14 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
         }
         
         this.allowCreateNewFile = this.mode === 'target' && this.constraint !== 'folder' && (this.fileName || this.files.length === 1);
+        this.allowManageExternalFile = this.mode === 'source' && this.constraint !== 'folder';
         
-        var model = Tine.Filemanager.Model.Node;
+        const model = Tine.Filemanager.Model.Node;
         this.app = Tine.Tinebase.appMgr.get(model.getMeta('appName'));
 
         this.treePanel = this.getTreePanel();
         this.gridPanel = this.getGridPanel();
-
+        
         this.addEvents(
             /**
              * @event nodeSelected
@@ -111,7 +112,6 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
              */
             'invalidNodeSelected'
         );
-
         this.items = [{
             layout: 'border',
             border: false,
@@ -149,7 +149,6 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
             }, {
                 region: 'north',
                 border: false,
-                hidden: !this.allowCreateNewFile,
                 layout: 'hbox',
                 height: 38,
                 frame: true,
@@ -158,13 +157,65 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                     border: false,
                     frame: true
                 },
-                items: [{
+                items: [
+                    {
+                        xtype: 'buttongroup',
+                        buttonAlign: 'left',
+                        ref: '../../../actionToolbar',
+                        items: [
+                            Ext.apply(this.createFolderButton = new Ext.Button(this.gridPanel.action_createFolder), {
+                            handler: () => {
+                                const currentPath = this.treePanel.getSelectedContainer()?.path;
+                                if (! currentPath) return;
+                                Ext.MessageBox.prompt(this.app.i18n._('New Folder'), this.app.i18n._('Please enter the name of the new folder:'), async function (btn, text) {
+                                    const nodeName = 'folder';
+                                    if (currentPath && btn === 'ok') {
+                                        if (!text) {
+                                            Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You have to supply a {0} name!'), nodeName));
+                                            return;
+                                        }
+                                        
+                                        if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
+                                            Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Illegal characters: ') + text);
+                                            return;
+                                        }
+                                        
+                                        const filename = `${currentPath}${text}/`;
+                                        await Tine.Filemanager.nodeBackend.createFolder(filename)
+                                            .then((result) => {
+                                                // messageBus does the trick!
+                                            })
+                                            .catch((e) => {
+                                                if (e.message === "file exists") {
+                                                    Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Folder with this name already exists!'));
+                                                }
+                                            });
+                                    }
+                                }, this);
+                            }
+                        }),
+                        Ext.apply(new Ext.Button(this.gridPanel.action_file_upload),{
+                            hidden: !this.allowManageExternalFile,
+                        }),
+                        [{
+                            hidden: !this.allowManageExternalFile,
+                            xtype: 'buttongroup',
+                            items: [],
+                            plugins: [{
+                                ptype: 'ux.itemregistry',
+                                key:   'Filemanager-FilePicker-ActionToolbar-leftbtngrp'
+                            }],
+                        }]
+                    ]
+                }, 
+                    {
                     flex: 1,
                 }, {
                     layout: 'form',
                     labelAlign: 'left',
                     width: 450,
                     frame: true,
+                    hidden: !this.allowCreateNewFile,
                     items: {
                         xtype: 'textfield',
                         ref: '../../../fileNameField',
@@ -201,55 +252,11 @@ Tine.Filemanager.FilePicker = Ext.extend(Ext.Container, {
                 }]
             }]
         }];
-        this.on('show', () => {
-            if (_.get(this, 'createFolderButton.setHidden')) {
-                this.createFolderButton.setHidden(!this.allowCreateNewFile);
-            }
-        });
-        this.on('hide', () => {
-                if (_.get(this, 'createFolderButton.setHidden')) {
-                    this.createFolderButton?.setHidden(true);
-                }
-        });
-
         Tine.Filemanager.FilePicker.superclass.initComponent.call(this);
     },
 
     afterRender: function() {
         Tine.Filemanager.FilePicker.superclass.afterRender.call(this);
-
-        const editDialog = this.findParentBy((c) => {return c instanceof Tine.Tinebase.dialog.Dialog});
-        editDialog.fbar.insert(0, this.createFolderButton = new Ext.Button(Object.assign({... Tine.Filemanager.nodeActions.CreateFolder}, {
-            hidden: this.hidden || !this.allowCreateNewFile, // @TODO hide if other plugin is active!
-            handler: () => {
-                const currentPath = this.treePanel.getSelectedContainer()?.path;
-                if (! currentPath) return;
-                Ext.MessageBox.prompt(this.app.i18n._('New Folder'), this.app.i18n._('Please enter the name of the new folder:'), async function (btn, text) {
-                    if (currentPath && btn === 'ok') {
-                        if (!text) {
-                            Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), String.format(this.app.i18n._('You have to supply a {0} name!'), nodeName));
-                            return;
-                        }
-
-                        if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
-                            Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Illegal characters: ') + forbidden);
-                            return;
-                        }
-
-                        const filename = `${currentPath}${text}/`;
-                        await Tine.Filemanager.nodeBackend.createFolder(filename)
-                            .then((result) => {
-                                // messageBus does the trick!
-                            })
-                            .catch((e) => {
-                                if (e.message === "file exists") {
-                                    Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Folder with this name already exists!'));
-                                }
-                            });
-                    }
-                }, this);
-            }
-        })));
     },
 
     checkState: function() {

@@ -460,6 +460,7 @@ Tine.Filemanager.nodeActions.Move = {
         var filePickerDialog = new Tine.Filemanager.FilePickerDialog({
             windowTitle: app.i18n._('Move Items'),
             singleSelect: true,
+            mode: 'target',
             constraint: (targetNode) => {
                 return Tine.Filemanager.nodeActionsMgr.checkConstraints('move', targetNode, records);
             }
