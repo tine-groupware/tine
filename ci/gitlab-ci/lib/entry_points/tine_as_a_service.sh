@@ -1,4 +1,3 @@
-#!/bin/bash
 echo -n 'wait for signal_files_ready ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_files_ready ]; do sleep 1; done; echo ' done'
 
 cp -r /usr/share/tine20/Tinebase/js/node_modules $TINE20ROOT/Tinebase/js/node_modules
