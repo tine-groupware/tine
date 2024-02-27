@@ -537,15 +537,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     onRecordLoad: function () {
         // NOTE: it comes again and again till
         if (this.rendered) {
-            var container = this.record.get('container_id');
-
-            // handle default container
-            // TODO should be generalized
-            if (! this.record.id && ! Ext.isObject(container)) {
-                container = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', Tine.Addressbook.registry.get('defaultAddressbook'));
-                this.record.set('container_id', container);
-            }
-
             if (this.mapPanel instanceof Tine.Addressbook.MapPanel) {
                 this.mapPanel.onRecordLoad(this.record);
             }
@@ -566,6 +557,20 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         }
 
         this.suggestFields();
+    },
+
+    /**
+     * onAfterRecordLoad
+     */
+    onAfterRecordLoad: function () {
+        let container = this.record.get('container_id')
+
+        if ( !this.record.id && ( !Ext.isObject(container) || !container.id ) ) {
+            container = this.app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', Tine.Addressbook.registry.get('defaultAddressbook'))
+            this.record.set('container_id', container)
+        }
+
+        this.supr().onAfterRecordLoad.apply(this, arguments)
     },
 
     /**
