@@ -27,48 +27,50 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE008 = __CLASS__ . '::update008';
 
     static protected $_allUpdates = [
-       self::PRIO_TINEBASE_BEFORE_STRUCT   => [
-            self::RELEASE017_UPDATE001          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update001',
-            ],
-           self::RELEASE017_UPDATE002          => [
-               self::CLASS_CONST                   => self::class,
-               self::FUNCTION_CONST                => 'update002',
-           ],
-           self::RELEASE017_UPDATE005          => [
-               self::CLASS_CONST                   => self::class,
-               self::FUNCTION_CONST                => 'update005',
-           ],
-        ],
-        self::PRIO_TINEBASE_STRUCTURE   => [
-            self::RELEASE017_UPDATE003          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update003',
-            ],
-            self::RELEASE017_UPDATE004          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update004',
-            ],
-            self::RELEASE017_UPDATE008          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update008',
+        self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
+            self::RELEASE017_UPDATE001 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update001',
             ],
         ],
-        self::PRIO_TINEBASE_UPDATE        => [
-            self::RELEASE017_UPDATE000          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update000',
+        self::PRIO_TINEBASE_BEFORE_STRUCT => [
+            self::RELEASE017_UPDATE002 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update002',
             ],
-            self::RELEASE017_UPDATE007          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update007',
+            self::RELEASE017_UPDATE005 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update005',
             ],
         ],
-        (self::PRIO_NORMAL_APP_UPDATE + 1)=> [
-            self::RELEASE017_UPDATE006          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update006',
+        self::PRIO_TINEBASE_STRUCTURE => [
+            self::RELEASE017_UPDATE003 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update003',
+            ],
+            self::RELEASE017_UPDATE004 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update004',
+            ],
+            self::RELEASE017_UPDATE008 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update008',
+            ],
+        ],
+        self::PRIO_TINEBASE_UPDATE => [
+            self::RELEASE017_UPDATE000 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update000',
+            ],
+            self::RELEASE017_UPDATE007 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update007',
+            ],
+        ],
+        (self::PRIO_NORMAL_APP_UPDATE + 1) => [
+            self::RELEASE017_UPDATE006 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update006',
             ],
         ],
     ];
