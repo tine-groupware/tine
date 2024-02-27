@@ -145,12 +145,16 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
         if ($_eventObject instanceof Tinebase_Event_User_DeleteAccount) {
             $attenderId = $_eventObject->account->contact_id;
             $type = Calendar_Model_Attender::USERTYPE_USER;
-        } else if ($_eventObject instanceof Calendar_Event_DeleteResource) {
+        } elseif ($_eventObject instanceof Calendar_Event_DeleteResource) {
             $attenderId = $_eventObject->resource->getId();
             $type = Calendar_Model_Attender::USERTYPE_RESOURCE;
         }  else if ($_eventObject instanceof Addressbook_Event_DeleteList) {
             $attenderId = $_eventObject->list->getId();
             $type = Calendar_Model_Attender::USERTYPE_GROUP;
+        } else {
+            Tinebase_Core::getLogger()->err(__METHOD__ . ' ' . __LINE__ . ' unknown event type: ' .
+                get_class($_eventObject));
+            return;
         }
 
         $filter = new Calendar_Model_EventFilter(array(array(

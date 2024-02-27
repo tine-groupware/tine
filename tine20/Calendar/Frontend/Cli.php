@@ -212,7 +212,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * import calendar events from a CalDav source
      * 
      * param Zend_Console_Getopt $_opts
-     */
+     *
     public function importCalDavData(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
@@ -227,7 +227,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * import calendars and calendar events from a CalDav source using multiple parallel processes
      * 
      * param Zend_Console_Getopt $_opts
-     */
+     *
     public function importCalDavMultiProc(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'numProc'));
@@ -242,7 +242,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * update calendar events from a CalDav source using multiple parallel processes
      * 
      * param Zend_Console_Getopt $_opts
-     */
+     *
     public function updateCalDavMultiProc(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'numProc'));
@@ -257,7 +257,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * import calendar events from a CalDav source for one user
      * 
      * param Zend_Console_Getopt $_opts
-     */
+     *
     public function importCalDavDataForUser(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'line', 'run'));
@@ -272,7 +272,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * update calendar/events from a CalDav source using etags for one user
      * 
      * @param Zend_Console_Getopt $_opts
-     */
+     *
     public function updateCalDavDataForUser(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile', 'line', 'run'));
@@ -287,7 +287,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * update calendar/events from a CalDav source using etags
      * 
      * param Zend_Console_Getopt $_opts
-     */
+     *
     public function updateCalDavData(Zend_Console_Getopt $_opts)
     {
         $args = $this->_parseArgs($_opts, array('url', 'caldavuserfile'));
@@ -296,7 +296,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         $caldavCli = new Calendar_Frontend_CalDAV_Cli($_opts, $args);
         $caldavCli->updateAllCalendarDataForUsers();
-    }
+    }*/
 
     /**
      * print alarm acknowledgement report (when, ip, client, user, ...)

@@ -286,7 +286,7 @@ Tine.Calendar.GridView.initCM = function(app) {
             width: 200,
             hidden: true,
             dataIndex: 'organizer',
-            renderer: Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderUserName
+            renderer: Tine.Calendar.organizerRenderer
         }, {
             id: 'description',
             header: app.i18n._("Description"),

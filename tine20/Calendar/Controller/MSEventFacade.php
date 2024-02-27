@@ -59,6 +59,16 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     protected $_currentEventFacadeContainer;
 
     /**
+     * @var bool
+     */
+    protected $_useExternalIdUid = false;
+
+    /**
+     * @var bool
+     */
+    protected $_assertCalUserAttendee = true;
+
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -310,8 +320,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         $exceptions = $_event->exdate;
         $_event->exdate = NULL;
-        
-        $_event->assertAttendee($this->getCalendarUser());
+
+        if ($this->_assertCalUserAttendee) {
+            $_event->assertAttendee($this->getCalendarUser());
+        }
         $savedEvent = $this->_eventController->create($_event);
         
         if ($exceptions instanceof Tinebase_Record_RecordSet) {
@@ -319,7 +331,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
                 . ' About to create ' . count($exceptions) . ' exdates for event ' . $_event->summary . ' (' . $_event->dtstart . ')');
             
             foreach ($exceptions as $exception) {
-                $exception->assertAttendee($this->getCalendarUser());
+                if ($this->assertCalUserAttendee()) {
+                    $exception->assertAttendee($this->getCalendarUser());
+                }
                 $this->_prepareException($savedEvent, $exception);
                 $this->_preserveMetaData($savedEvent, $exception, true);
                 $this->_eventController->createRecurException($exception, !!$exception->is_deleted);
@@ -806,6 +820,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         foreach ($event->attendee as $attender) {
+            if (Calendar_Model_Attender::USERTYPE_EMAIL === $attender->user_type) {
+                continue;
+            }
             $cacheId = $attender->user_type . $attender->user_id;
             
             // value is in array and true
@@ -922,7 +939,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         }
         
         // assert organizer
-        $_event->organizer = $_event->organizer ?: ($_currentEvent->organizer ?: $this->_calendarUser->user_id);
+        if (Calendar_Model_Attender::USERTYPE_EMAIL !== $_event->organizer_type) {
+            $_event->organizer = $_event->organizer ?: ($_currentEvent->organizer ?: $this->_calendarUser->user_id);
+        }
 
         $this->_addAttendeeWithoutEmail($_event, $_currentEvent);
         
@@ -977,7 +996,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         // assert organizer for personal calendars to be calendar owner
         if ($this->_currentEventFacadeContainer && $this->_currentEventFacadeContainer->getId() == $_event->container_id
             && $this->_currentEventFacadeContainer->type == Tinebase_Model_Container::TYPE_PERSONAL
-            && !$_event->hasExternalOrganizer() ) {
+            && !$_event->hasExternalOrganizer()
+            && Calendar_Model_Attender::USERTYPE_EMAIL !== $_event->organizer_type) {
 
             $_event->organizer = $this->_calendarUser->user_id;
         }
@@ -1117,11 +1137,29 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $_exception->last_modified_time = $currBaseEvent->last_modified_time;
     }
 
+    public function assertCalUserAttendee(?bool $b = null): bool
+    {
+        $oldValue = $this->_assertCalUserAttendee;
+        if (null !== $b) {
+            $this->_assertCalUserAttendee = $b;
+        }
+        return $oldValue;
+    }
+
+    public function useExternalIdUid(?bool $b = null): bool
+    {
+        $oldValue = $this->_useExternalIdUid;
+        if (null !== $b) {
+            $this->_useExternalIdUid = $b;
+        }
+        return $oldValue;
+    }
+
     public function getExistingEventById($_id, $_assumeExternalOrganizer, $_action, $_grant, $_getDeleted = false)
     {
-        $filters = new Calendar_Model_EventFilter(array(
-            array('field' => 'id',          'operator' => 'equals', 'value' => $_id),
-        ));
+        $filters = new Calendar_Model_EventFilter([
+            ['field' => ($this->_useExternalIdUid ? 'external_id' : 'id'), 'operator' => 'equals', 'value' => $_id],
+        ]);
         if ($_getDeleted) {
             $filters->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
                 Tinebase_Model_Filter_Bool::VALUE_NOTSET));
@@ -1143,9 +1181,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
 
     public function getExistingEventByUID($_uid, $_assumeExternalOrganizer, $_action, $_grant, $_getDeleted = false)
     {
-        $filters = new Calendar_Model_EventFilter(array(
-            array('field' => 'uid',          'operator' => 'equals', 'value' => $_uid),
-        ));
+        $filters = new Calendar_Model_EventFilter([
+            ['field' => ($this->_useExternalIdUid ? 'external_uid' : 'uid'), 'operator' => 'equals', 'value' => $_uid],
+        ]);
         if ($_getDeleted) {
             $filters->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals',
                 Tinebase_Model_Filter_Bool::VALUE_NOTSET));

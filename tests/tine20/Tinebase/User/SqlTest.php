@@ -334,7 +334,7 @@ class Tinebase_User_SqlTest extends TestCase
             'summary' => 'testevent',
             'dtstart' => '2015-12-24 12:00:00',
             'dtend' => '2015-12-24 13:00:00',
-            'organizer' => $testUser->accountEmailAddress,
+            'organizer' => $testUser->contact_id,
         ), true));
         $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
             'n_given' => 'testcontact'

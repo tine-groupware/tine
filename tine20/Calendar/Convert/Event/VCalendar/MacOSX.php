@@ -30,28 +30,6 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
     '/';
 
     const INTELLIGROUP = 'INTELLIGROUP';
-    
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        #'geo',
-        'location',
-        'priority',
-        'summary',
-        'url',
-        'alarms',
-        #'tags',
-        'dtstart',
-        'exdate',
-        'rrule',
-        'recurid',
-        'is_all_day_event',
-        #'rrule_until',
-        'originator_tz',
-    );
 
     /**
      * convert Tinebase_Record_RecordSet to Tine20\VObject\Component

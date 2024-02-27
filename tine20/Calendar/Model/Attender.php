@@ -3,7 +3,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -18,6 +18,7 @@
  * @property string $status_authkey
  * @property string $user_type
  * @property string $displaycontainer_id
+ * @property string $user_email
  */
 class Calendar_Model_Attender extends Tinebase_Record_Abstract
 {
@@ -29,6 +30,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const USERTYPE_GROUPMEMBER = 'groupmember';
     const USERTYPE_RESOURCE    = 'resource';
     const USERTYPE_ANY         = 'any';
+    const USERTYPE_EMAIL       = 'email';
 
     /**
      * supported roles
@@ -53,6 +55,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const FLD_CAL_EVENT_ID = 'cal_event_id';
     const FLD_USER_ID = 'user_id';
     const FLD_USER_TYPE = 'user_type';
+    const FLD_USER_EMAIL = 'user_email';
+    const FLD_USER_DISPLAYNAME = 'user_displayname';
     const FLD_ROLE = 'role';
     const FLD_QUANTITY = 'quantity';
     const FLD_STATUS = 'status';
@@ -85,7 +89,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION           => 9,
+        self::VERSION           => 10,
         self::RECORD_NAME       => 'Attendee',
         self::RECORDS_NAME       => 'Attendees', // ngettext('Attendee', 'Attendees', n)
         self::CONTAINER_PROPERTY => NULL,
@@ -152,8 +156,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             self::FLD_USER_ID => [
                 self::TYPE       => self::TYPE_STRING,
                 self::LENGTH     => 40,
-                self::NULLABLE   => false,
-                self::VALIDATORS  => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
+                self::NULLABLE   => true,
                 self::LABEL      => 'User', // _('User')
                 self::QUERY_FILTER => TRUE
             ],
@@ -171,10 +174,20 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 self::DEFAULT_VAL   => self::USERTYPE_USER,
                 self::NULLABLE      => false,
                 self::VALIDATORS    => [
-                    ['InArray', [self::USERTYPE_ANY, self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE]],
+                    ['InArray', [self::USERTYPE_ANY, self::USERTYPE_USER, self::USERTYPE_GROUP, self::USERTYPE_GROUPMEMBER, self::USERTYPE_RESOURCE, self::USERTYPE_EMAIL]],
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     Zend_Filter_Input::DEFAULT_VALUE => self::USERTYPE_USER
                 ],
+            ],
+            self::FLD_USER_EMAIL => [
+                self::TYPE       => self::TYPE_STRING,
+                self::LENGTH     => 255,
+                self::NULLABLE   => true,
+            ],
+            self::FLD_USER_DISPLAYNAME => [
+                self::TYPE       => self::TYPE_STRING,
+                self::LENGTH     => 255,
+                self::NULLABLE   => true,
             ],
             self::FLD_ROLE     => [
                 self::TYPE          => self::TYPE_STRING,
@@ -228,10 +241,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         ]
     ];
 
-
-
-
-
     /**
      * cache for already resolved attendee
      * 
@@ -246,7 +255,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     );
 
     protected static $_resolveAttendeeCustomfield;
-
 
     /**
      * returns accountId of this attender if present
@@ -278,6 +286,10 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public function getEmail($event=null)
     {
+        if (self::USERTYPE_EMAIL === $this->user_type) {
+            return $this->user_email;
+        }
+
         $resolvedUser = $this->getResolvedUser($event);
         if (! $resolvedUser instanceof Tinebase_Record_Interface) {
             return '';
@@ -379,6 +391,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public function getName()
     {
+        if (self::USERTYPE_EMAIL === $this->user_type) {
+            return $this->user_displayname;
+        }
         $resolvedUser = $this->getResolvedUser(null, false);
         if (! $resolvedUser instanceof Tinebase_Record_Interface) {
             Tinebase_Translation::getTranslation('Calendar');
@@ -420,6 +435,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 return $translation->translate('Group');
             case self::USERTYPE_RESOURCE:
                 return $translation->translate('Resource');
+            case self::USERTYPE_EMAIL:
+                return $translation->translate('Email');
             default:
                 return '';
         }
@@ -434,12 +451,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
      */
     public function getResolvedUser($event = null, $resolveDisplayContainer = true)
     {
-        $clone = clone $this;
-        $resolvable = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($clone));
-        self::resolveAttendee($resolvable, $resolveDisplayContainer, $event);
-        
-        if ($this->user_type === self::USERTYPE_RESOURCE) {
-            $resource = $clone->user_id;
+        if ($this->user_type === self::USERTYPE_EMAIL) {
+            $result = new Addressbook_Model_Contact(array(
+                'n_fileas' => $this->{self::FLD_USER_DISPLAYNAME},
+                'email' => $this->{self::FLD_USER_EMAIL},
+            ));
+        } elseif ($this->user_type === self::USERTYPE_RESOURCE) {
+            $resource = $this->user_id;
             if (! $resource instanceof Calendar_Model_Resource) {
                 $resource = Calendar_Controller_Resource::getInstance()->get($resource);
             }
@@ -450,7 +468,17 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 'id' => $resource->getId(),
             ));
         } else {
+            $clone = clone $this;
+            $resolvable = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array($clone));
+            self::resolveAttendee($resolvable, $resolveDisplayContainer, $event);
             $result = $clone->user_id;
+            if ($this->{self::FLD_USER_DISPLAYNAME}) {
+                $result->n_fileas = $this->{self::FLD_USER_DISPLAYNAME};
+                $result->n_fn = $this->{self::FLD_USER_DISPLAYNAME};
+            }
+            if ($this->{self::FLD_USER_EMAIL}) {
+                $result->email = $this->{self::FLD_USER_EMAIL};
+            }
         }
         
         return $result;
@@ -538,6 +566,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         //       this is _important_ for the calculation of migration as it
         //       saves us from deleting attendee out of current users scope
         $emailsOfCurrentAttendees = array();
+        /** @var Calendar_Model_Attender $currentAttendee */
         foreach ($_event->attendee as $currentAttendee) {
             if ($currentAttendeeEmailAddress = $currentAttendee->getEmail()) {
                 $emailsOfCurrentAttendees[$currentAttendeeEmailAddress] = $currentAttendee;
@@ -676,7 +705,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     }
                 }
 
-            } else if($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_GROUP) {
+            } elseif($newAttendee['userType'] == Calendar_Model_Attender::USERTYPE_GROUP) {
                 $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter(array(
                     array('field' => 'name',       'operator' => 'equals', 'value' => $newAttendee['displayName']),
                     array('field' => 'type',       'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP),
@@ -688,6 +717,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                 
                     $attendeeId = $lists->getFirstRecord()->group_id;
                 }
+            } elseif (self::USERTYPE_EMAIL === $newAttendee['userType']) {
+                $_event->attendee->addRecord(new Calendar_Model_Attender(array(
+                    'user_email'=> $newAttendee['email'],
+                    'user_displayName'=> $newAttendee['displayName'],
+                    'user_type' => $newAttendee['userType'],
+                    'status'    => isset($newAttendee['partStat']) ? $newAttendee['partStat'] : self::STATUS_NEEDSACTION,
+                    'role'      => $newAttendee['role']
+                )));
             }
 
             if ($attendeeId !== NULL) {
@@ -1071,7 +1108,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                         $contact->resolveAttenderCleanUp();
                         self::$_resolvedAttendeesCache[$type][$contact->getId()] = $contact;
                     }
-                    
                     break;
                     
                 case self::USERTYPE_GROUP:
@@ -1086,7 +1122,6 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                             self::$_resolvedAttendeesCache[$type][$group->getId()] = $list;
                         }
                     }
-                    
                     break;
                     
                 case self::USERTYPE_RESOURCE:
@@ -1101,13 +1136,13 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     foreach ($resources as $resource) {
                         self::$_resolvedAttendeesCache[$type][$resource->getId()] = $resource;
                     }
-                    
                     break;
-                    
+
+                case self::USERTYPE_EMAIL:
+                    break;
+
                 default:
                     throw new Tinebase_Exception_InvalidArgument("type $type not supported");
-                    
-                    break;
             }
         }
     }
@@ -1208,6 +1243,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         foreach ($eventAttendee as $attendee) {
             /** @var Calendar_Model_Attender $attender */
             foreach ($attendee as $attender) {
+                if (self::USERTYPE_EMAIL === $attendee->user_type) {
+                    continue;
+                }
                 if (empty($attender->user_id)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
@@ -1346,10 +1384,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     continue;
                 }
 
-                // keep authkey if attender is a contact (no account) and user has editGrant for event
-                if ($attender->user_type == self::USERTYPE_USER
+                    // keep authkey if attender is a contact (no account) and user has editGrant for event
+                if ((($attender->user_type === self::USERTYPE_USER
                     && $attender->user_id instanceof Tinebase_Record_Interface
-                    && (!$attender->user_id->has('account_id') || !$attender->user_id->account_id)
+                    && (!$attender->user_id->has('account_id') || !$attender->user_id->account_id))
+                        || $attender->user_type == self::USERTYPE_EMAIL)
                     && (!$event || $event->{Tinebase_Model_Grants::GRANT_EDIT})
                     && (!$event || !$event->hasExternalOrganizer())
                 ) {

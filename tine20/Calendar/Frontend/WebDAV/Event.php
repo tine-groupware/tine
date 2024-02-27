@@ -1,7 +1,5 @@
 <?php
 
-use Tine20\VObject;
-
 /**
  * Tine 2.0
  *
@@ -9,8 +7,10 @@ use Tine20\VObject;
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2018 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+use Tine20\VObject;
 
 /**
  * class to handle a single event
@@ -109,7 +109,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
      * @param  stream|string             $vobjectData
      * @return Calendar_Frontend_WebDAV_Event
      */
-    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = false)
+    public static function create(Tinebase_Model_Container $container, $name, $vobjectData, $onlyCurrentUserOrganizer = false, $converterOptions = [])
     {
         if (is_resource($vobjectData)) {
             $vobjectData = stream_get_contents($vobjectData);
@@ -121,6 +121,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
+        $converter->setOptions($converterOptions);
 
         try {
             /** @var Calendar_Model_Event $event */
@@ -142,7 +143,11 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
         if (strlen((string)$id) > 40) {
             $id = sha1($id);
         }
-        $event->setId($id);
+        if ($converter->getOptionsValue(Calendar_Convert_Event_VCalendar_Abstract::OPTION_USE_EXTERNAL_ID_UID)) {
+            $event->external_id = $id;
+        } else {
+            $event->setId($id);
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " Event to create: " . print_r($event->toArray(), TRUE));
@@ -166,7 +171,12 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
 
             self::checkWriteAccess($converter);
             $retry = false;
+            $raii = null;
             try {
+                if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+                    $oldSkipRollback = Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+                    $raii = new Tinebase_RAII(fn () => Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack($oldSkipRollback));
+                }
                 $event = Calendar_Controller_MSEventFacade::getInstance()->create($event);
                 
             } catch (Zend_Db_Statement_Exception $zdse) {
@@ -198,6 +208,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
                     throw new Tine20\DAV\Exception\PreconditionFailed($e->getMessage());
                 }
             }
+            unset($raii);
             
             $vevent = new self($container, $event);
         } else {
@@ -236,6 +247,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update existing event');
 
             $vevent = new self($container, $existingEvent);
+            $vevent->_getConverter()->setOptions($converterOptions);
             $event = static::_allowOnlyAttendeeProperties($existingEvent, $event, $container);
 
             $calCtrl = Calendar_Controller_Event::getInstance();
@@ -517,7 +529,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
      *
      * @param string $cardData
      * @param bool $retry
-     * @return void
+     * @return string
      */
     public function put($cardData, $retry = true)
     {
@@ -560,6 +572,9 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
         $currentContainer->resolveGrantsAndPath();
 
         // no If-Match header -> no moves / displaycontainer changes
+
+        // TODO FIXME !!! this is server code, we need client here...
+
         if (!Tinebase_Core::getRequest()->getHeaders()->has('If-Match')) {
             $event = static::_allowOnlyAttendeeProperties($currentEvent, $event, $this->_container);
 
@@ -720,9 +735,8 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
      */
     public function _getConverter()
     {
-        list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
-        
         if (!$this->_converter) {
+            list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
             $this->_converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
         }
         

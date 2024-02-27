@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -35,6 +35,9 @@
  * @property string                         $class
  * @property int                            $container_id
  * @property string                         $organizer
+ * @property string                         $organizer_type
+ * @property string                         $organizer_email
+ * @property string                         $organizer_displayname
  * @property Tinebase_Record_RecordSet      $attendee
  * @property Tinebase_DateTime              $dtstart
  * @property Tinebase_DateTime              $dtend
@@ -62,14 +65,18 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     const CLASS_PUBLIC         = 'PUBLIC';
     const CLASS_PRIVATE        = 'PRIVATE';
     //const CLASS_CONFIDENTIAL   = 'CONFIDENTIAL';
-    
-    const STATUS_CONFIRMED     = 'CONFIRMED';
-    const STATUS_TENTATIVE     = 'TENTATIVE';
-    const STATUS_CANCELED      = 'CANCELED';
-    
+
+    const ORGANIZER_TYPE_CONTACT = 'contact';
+    const ORGANIZER_TYPE_EMAIL = 'email';
+
     const RANGE_ALL           = 'ALL';
     const RANGE_THIS          = 'THIS';
     const RANGE_THISANDFUTURE = 'THISANDFUTURE';
+
+    const STATUS_CONFIRMED     = 'CONFIRMED';
+    const STATUS_TENTATIVE     = 'TENTATIVE';
+    const STATUS_CANCELED      = 'CANCELED';
+
     const XPROPS_IMIP_PROPERTIES = 'imipProperties';
     const XPROPS_REPLICATABLE = 'calendarReplicatable';
 
@@ -86,7 +93,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 19,
+        self::VERSION       => 20,
         'containerName'     => 'Calendar',
         'containersName'    => 'Calendars', // ngettext('Calendar', 'Calendars', n)
         'recordName'        => self::MODEL_PART_NAME, // gettext('GENDER_Event')
@@ -241,9 +248,28 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                 self::LENGTH        => 40,
                 self::NULLABLE      => true,
                 self::DEFAULT_VAL   => null,
+            ],
+            'organizer_type'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 255,
+                self::DEFAULT_VAL   => self::ORGANIZER_TYPE_CONTACT,
                 self::VALIDATORS    => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
-                ],
+                    Zend_Filter_Empty::class => self::ORGANIZER_TYPE_CONTACT,
+                    [Zend_Validate_InArray::class, [self::ORGANIZER_TYPE_CONTACT, self::ORGANIZER_TYPE_EMAIL]],
+                ]
+            ],
+            'organizer_email'   => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 255,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
+            ],
+            'organizer_displayname'=> [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 255,
+                self::NULLABLE      => true,
+                self::DEFAULT_VAL   => null,
             ],
             'priority'      => [
                 self::TYPE          => self::TYPE_INTEGER,
@@ -275,6 +301,16 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             'uid'      => [
                 self::TYPE          => self::TYPE_STRING,
                 self::LENGTH        => 255,
+            ],
+            'external_uid'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 255,
+                self::NULLABLE      => true,
+            ],
+            'external_id'      => [
+                self::TYPE          => self::TYPE_STRING,
+                self::LENGTH        => 255,
+                self::NULLABLE      => true,
             ],
             'etag'      => [
                 self::TYPE          => self::TYPE_STRING,
@@ -428,95 +464,6 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             ],
         ],
     ];
-    
-    /**
-     * validators
-     *
-     * @var array
-     *
-    protected $_validators = array(
-
-        // calendar only fields
-        'external_seq'         => array(Zend_Filter_Input::ALLOW_EMPTY => true,  'Int'  ), // external seq for caldav / imip update handling
-        'dtend'                => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'transp'               => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true,
-            array('InArray', array(self::TRANSP_OPAQUE, self::TRANSP_TRANSP))
-        ),
-        // ical common fields
-        'class'                => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true,
-            array('InArray', array(self::CLASS_PUBLIC, self::CLASS_PRIVATE, /*self::CLASS_CONFIDENTIAL*))
-        ),
-        'description'          => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'geo'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'adr_lon'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'adr_lat'              => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'location'             => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'location_record'      => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'organizer'            => array(Zend_Filter_Input::ALLOW_EMPTY => false,        ),
-        'priority'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Int'   ),
-        'status'            => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true,
-            array('InArray', array(self::STATUS_CONFIRMED, self::STATUS_TENTATIVE, self::STATUS_CANCELED))
-        ),
-        'summary'              => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'url'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'uid'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        'etag'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true          ),
-        // ical common fields with multiple appearance
-        //'attach'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'attendee'              => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // RecordSet of Calendar_Model_Attender
-        'alarms'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // RecordSet of Tinebase_Model_Alarm
-        'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // originally categories handled by Tinebase_Tags
-        'notes'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), // originally comment handled by Tinebase_Notes
-        'attachments'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        
-        //'contact'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        //'related'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        //'resources'             => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        //'rstatus'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        // ical scheduleable interface fields
-        'dtstart'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'recurid'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'members'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'resources'            => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'date'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'duration'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'time'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'groups'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'base_event_id'         => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        // ical scheduleable interface fields with multiple appearance
-        'exdate'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ), //  array of Tinebase_DateTimeTinebase_DateTime's
-        //'exrule'                => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        //'rdate'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'rrule'                 => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'poll_id'               => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        // calendar helper fields
-
-        'is_all_day_event'      => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'rrule_until'           => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        // instanceof Calendar_Model_EventFilter
-        'rrule_constraints'     => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'originator_tz'         => array(Zend_Filter_Input::ALLOW_EMPTY => true         ),
-        'mute'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => false      ),
-
-        // relations
-        'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-        'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
-        
-        // grant helper fields
-        Calendar_Model_EventPersonalGrants::GRANT_FREEBUSY => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        Tinebase_Model_Grants::GRANT_READ     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        Tinebase_Model_Grants::GRANT_SYNC     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        Tinebase_Model_Grants::GRANT_EXPORT   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        Tinebase_Model_Grants::GRANT_EDIT     => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        Tinebase_Model_Grants::GRANT_DELETE   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        Calendar_Model_EventPersonalGrants::GRANT_PRIVATE => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-
-        'xprops'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    );
-     */
 
     protected static $_freebusyCleanUpKeys = null;
     protected static $_freebusyCleanUpVisibilty = null;
@@ -1124,14 +1071,16 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function isOrganizer($_attendee=NULL)
     {
-        $organizerContactId = NULL;
+        if ($this->organizer_type === Calendar_Model_Event::ORGANIZER_TYPE_EMAIL) {
+            return $_attendee && $_attendee->user_email && $this->organizer_email === $_attendee->user_email;
+        }
         if ($_attendee && in_array($_attendee->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
             $organizerContactId = $_attendee->user_id instanceof Tinebase_Record_Interface ? $_attendee->user_id->getId() : $_attendee->user_id;
         } else {
             $organizerContactId = Tinebase_Core::getUser()->contact_id;
         }
         
-        return $organizerContactId == ($this->organizer instanceof Tinebase_Record_Interface ? $this->organizer->getId() : $this->organizer);
+        return $organizerContactId === ($this->organizer instanceof Tinebase_Record_Interface ? $this->organizer->getId() : $this->organizer);
     }
     
     /**
@@ -1143,7 +1092,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         $organizer = $this->resolveOrganizer();
         
-        return $organizer instanceof Addressbook_Model_Contact && ! $organizer->account_id;
+        return !$organizer instanceof Addressbook_Model_Contact || ! $organizer->account_id;
     }
     
     public function toShortString()

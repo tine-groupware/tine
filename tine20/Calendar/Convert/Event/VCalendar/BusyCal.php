@@ -20,28 +20,6 @@ class Calendar_Convert_Event_VCalendar_BusyCal extends Calendar_Convert_Event_VC
 	// BusyCal-2.6.6
     const HEADER_MATCH = '/^BusyCal-(?P<version>\S+)/';
     
-    protected $_supportedFields = array(
-        'seq',
-        'dtend',
-        'transp',
-        'class',
-        'description',
-        #'geo',
-        'location',
-        'priority',
-        'summary',
-        'url',
-        'alarms',
-        'tags',
-        'dtstart',
-        'exdate',
-        'rrule',
-        'recurid',
-        'is_all_day_event',
-        'rrule_until',
-        'originator_tz',
-    );
-    
     /**
      * get attendee array for given contact
      * 
