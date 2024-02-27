@@ -241,4 +241,13 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
         $mc->setAssociations($assoc);
         $mc->setJsonExpander($jsonExpander);
     }
+
+    public function getByName(string $name): ?Tinebase_Model_EvaluationDimension
+    {
+        /** @var ?Tinebase_Model_EvaluationDimension $result */
+        $result = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+            [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $name],
+        ]))->getFirstRecord();
+        return $result;
+    }
 }
