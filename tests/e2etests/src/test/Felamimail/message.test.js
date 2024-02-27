@@ -29,12 +29,26 @@ describe('message', () => {
         const fileToUpload = 'src/test/Felamimail/attachment.txt';
         await expect(popupWindow).toClick('.x-btn-text', {text: 'Datei hinzufügen'});
         const filePickerWindow = await lib.getNewWindow();
-        await expect(filePickerWindow).toClick('span',{text: 'Mein Gerät'});
+        await filePickerWindow.waitForTimeout(2000); //musst wait for input!
+        await expect(filePickerWindow).toClick('span',{text: 'Meine Ordner', clickCount: 2});
+        await filePickerWindow.waitForTimeout(5000); //musst wait!
+        await expect(filePickerWindow).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, clickCount: 2});
+        await filePickerWindow.waitForTimeout(2000); //musst wait!
         await filePickerWindow.waitForSelector('input[type=file]');
         const inputUploadHandle = await filePickerWindow.$('input[type=file]');
         await inputUploadHandle.uploadFile(fileToUpload);
-
-
+        await filePickerWindow.waitForTimeout(1000);
+        await expect(filePickerWindow).toClick('button', {text: 'Abbrechen'});
+        
+        await expect(popupWindow).toClick('.x-btn-text', {text: 'Datei hinzufügen'});
+        const filePickerWindowNew = await lib.getNewWindow();
+        await expect(filePickerWindowNew).toClick('span',{text: 'Meine Ordner'});
+        await filePickerWindowNew.waitForTimeout(500);
+        await expect(filePickerWindowNew).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text: 'Persönliche Dateien von ' + process.env.TEST_USER, clickCount: 2});
+        await filePickerWindowNew.waitForTimeout(1000);
+        await expect(filePickerWindowNew).toClick('.x-grid3-cell-inner.x-grid3-col-name', {text:'attachment.txt'});
+        await expect(filePickerWindowNew).toClick('button', {text: 'Ok'});
+        
         await popupWindow.waitForTimeout(2000);
         await expect(popupWindow).toMatchElement('.x-grid3-cell-inner.x-grid3-col-name', {text:'attachment.txt'});
         await popupWindow.waitForTimeout(2000); //musst wait for upload complete!

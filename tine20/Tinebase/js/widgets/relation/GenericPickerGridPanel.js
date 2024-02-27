@@ -266,11 +266,19 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * creates the toolbar
      */
     initTbar: function() {
-        var items = [this.getModelCombo(), ' '];
+        let items = [this.getModelCombo(), ' '];
         items = items.concat(this.createSearchCombos());
-
-        this.tbar = new Ext.Toolbar({
-            items: items
+        this.descriptionField = new Ext.form.Label({
+            text: '',
+        });
+        this.tbar = new Ext.Panel({
+            layout: 'fit',
+            items: [
+                this.descriptionField,
+                new Ext.Toolbar({
+                    items: items
+                })
+            ]
         });
     },
 
@@ -525,6 +533,17 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
      * @param {Number} index the selection index
      */
     onModelComboSelect: function(combo, selected, index) {
+        if (selected.get('appName') === 'Filemanager') {
+            const app = Tine.Tinebase.appMgr.get('Filemanager');
+            const description = app.i18n._("Attachments: Anyone who has access to the record can see the data");
+            const link = app.i18n._("Links: Rights of the respective application are respected");
+            const el = document.createElement('div');
+            el.innerHTML = description;
+            el.style.padding = '5px';
+            
+            this.descriptionField.show();
+            this.descriptionField.update(el.outerHTML);
+        }
         this.showSearchCombo(selected.get('appName'), selected.get('modelName'));
     },
     
