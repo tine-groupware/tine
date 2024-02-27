@@ -699,6 +699,7 @@ sortInfo: {
         if(index > -1){
             this.fireEvent('remove', this, record, index);
         }
+        this.removed.push(record);
     },
 
     /**
