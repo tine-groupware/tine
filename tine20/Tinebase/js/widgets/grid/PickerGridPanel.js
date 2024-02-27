@@ -271,7 +271,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     initStore: function() {
 
         if (!this.store) {
-            this.store = new Ext.data.SimpleStore({
+            this.store = new Ext.data.JsonStore({
                 sortInfo: this.defaultSortInfo || {
                     field: this.labelField,
                     direction: 'DESC'
