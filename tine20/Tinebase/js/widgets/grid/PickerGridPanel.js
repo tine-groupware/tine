@@ -591,6 +591,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             var recordData = this.getRecordDefaults();
             recordData[this.isMetadataModelFor] = recordToAdd.getData();
             var record =  Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
+            record.phantom = true;
 
             // check if already in
             const existingRecord = this.store.findBy(function (r) {
@@ -607,6 +608,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         } else {
             var record = new this.recordClass(Ext.applyIf(recordToAdd.data, this.getRecordDefaults()), recordToAdd.id);
+            record.phantom = true;
             // check if already in
             if (! this.store.getById(record.id)) {
                 if (this.fireEvent('beforeaddrecord', record, this) !== false) {
