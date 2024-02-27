@@ -1366,7 +1366,7 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $this->_checkCleared($_record);
         }
         
-        if (! empty($_record->number)) {
+        if (! empty($_record->number) || $_record->cleared === 'CLEARED') {
             if (! Tinebase_Core::getUser()->hasRight('Sales', Sales_Acl_Rights::SET_INVOICE_NUMBER)) {
                 throw new Tinebase_Exception_AccessDenied('You have no right to set the invoice number!');
             }
