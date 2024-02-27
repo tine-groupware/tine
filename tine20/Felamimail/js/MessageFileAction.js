@@ -130,7 +130,6 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
 
     showFileMenu: async function () {
         this.initSplitButton();
-        
         const selection = _.map(this.initialConfig.selections, 'data');
     
         if (!this.suggestionsLoaded || this.mode === 'fileInstant') {
@@ -256,8 +255,9 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
     },
     
     loadSuggestions: async function (messages) {
+        if (this.isSuggestionLoading) return;
+        this.isSuggestionLoading = true;
         const suggestionIds = [];
-    
         this.setIconClass('x-btn-wait');
         this.menu.hide();
         this.menu.removeAll();
@@ -309,11 +309,16 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                 }
             });
             
+            if (suggestionIds.length > 0) {
+                this.menu.addItem('-');
+            }
+            
             this.addDefaultSentImapFolder();
             this.addStaticMenuItems();
             this.addDownloadMenuItem();
         
             this.suggestionsLoaded = true;
+            this.isSuggestionLoading = false;
             this.setIconClass('action_file');
         });
     },
@@ -361,7 +366,6 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
     },
 
     addStaticMenuItems: function() {
-        this.menu.addItem('-');
         this.menu.addItem({
             text: this.app.i18n._('File (in Filemanager) ...'),
             hidden: ! Tine.Tinebase.common.hasRight('run', 'Filemanager'),
@@ -519,6 +523,7 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
 
     selectFilemanagerFolder: function(item, e) {
         const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
+            mode: 'target',
             constraint: 'folder',
             singleSelect: true,
             requiredGrants: ['addGrant']

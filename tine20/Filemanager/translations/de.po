@@ -986,3 +986,6 @@ msgstr "Gemeinsame Dateimanager-Favoriten verwalten"
 
 msgid "Create or update shared filemanager favorites'"
 msgstr "Gemeinsame Dateimanager-Favoriten erstellen oder bearbeiten"
+
+msgid "Attachments: Anyone who has access to the record can see the data"
+msgstr "Anhänge: Jeder der Zugriff auf Datensatz hat kann daten sehen"

@@ -5,9 +5,11 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2019-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
+
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * credential cache adapter for shared accounts based on config adapter
@@ -28,7 +30,7 @@ class Tinebase_Auth_CredentialCache_Adapter_Shared implements Tinebase_Auth_Cred
      *
      * @param  Tinebase_Model_CredentialCache $_cache
      */
-    public function setCache(Tinebase_Model_CredentialCache $_cache)
+    public function setCache(Tinebase_Model_CredentialCache $_cache, ?ResponseInterface $response = null): ?ResponseInterface
     {
         throw new Tinebase_Exception_NotImplemented(__METHOD__ . ' must never be called');
     }

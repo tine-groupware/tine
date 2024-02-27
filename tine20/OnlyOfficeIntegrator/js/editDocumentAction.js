@@ -76,7 +76,10 @@ Promise.all([
 
     // preview panel
     Ext.ux.ItemRegistry.registerItem('Tine-Filemanager-QuicklookPanel', editDocumentAction, 100);
-
+    
+    // file picker
+    Ext.ux.ItemRegistry.registerItem('Filemanager-FilePicker-ActionToolbar-leftbtngrp', editDocumentAction, 30);
+    
     // dblclick actions
     Tine.on('filesystem.fileDoubleClick', (fileNode, dblClickHandlers) => {
         const dbClickPreference = Tine.Tinebase.registry.get('preferences').get('fileDblClickAction');

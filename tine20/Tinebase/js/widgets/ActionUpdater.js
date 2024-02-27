@@ -143,7 +143,9 @@
             action.initialConfig.selections = records;
             action.initialConfig.isFilterSelect = isFilterSelect;
             action.initialConfig.selectionModel = selectionModel;
-
+            if (container) {
+                action.initialConfig.filteredContainers = container;
+            }
         }, this);
         
     },
