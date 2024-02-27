@@ -34,6 +34,7 @@ class Tinebase_Model_Tree_FlySystem extends Tinebase_Record_NewAbstract
         self::RECORD_NAME   => 'Flysystem Mount', // gettext('Flysystem Mount')
         self::RECORDS_NAME  => 'Flysystem Mounts',// ngettext('Flysystem Mount', 'Flysystem Mounts', n)
         self::EXPOSE_JSON_API => true,
+        self::TITLE_PROPERTY  => self::FLD_NAME,
 
         self::TABLE         => [
             self::NAME          => self::TABLE_NAME,
