@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0d9e84707e67c787f83230f3e65d9db",
+    "content-hash": "15e0efb0e71610b153766c362203ea17",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2408,6 +2408,67 @@
                 }
             ],
             "time": "2023-12-03T20:05:35+00:00"
+        },
+        {
+            "name": "hansott/psr7-cookies",
+            "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hansott/psr7-cookies.git",
+                "reference": "0d7f31d4f1d989421fe5227d8ef7f32ecd8f57ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hansott/psr7-cookies/zipball/0d7f31d4f1d989421fe5227d8ef7f32ecd8f57ef",
+                "reference": "0d7f31d4f1d989421fe5227d8ef7f32ecd8f57ef",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0 || ^8.0",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "guzzlehttp/psr7": "^1.3",
+                "phpunit/phpunit": "^5.7 || ^6.0 || ^7.5",
+                "scrutinizer/ocular": "~1.1"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "HansOtt\\PSR7Cookies\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hans Ott",
+                    "email": "hans@iott.consulting",
+                    "role": "Developer"
+                }
+            ],
+            "description": "🍪 bakes cookies for PSR-7 messages",
+            "homepage": "https://github.com/hansott/psr7-cookies",
+            "keywords": [
+                "cookies",
+                "fig",
+                "hansott",
+                "http-message",
+                "psr7-cookies",
+                "setcookie"
+            ],
+            "support": {
+                "issues": "https://github.com/hansott/psr7-cookies/issues",
+                "source": "https://github.com/hansott/psr7-cookies/tree/3.0.2"
+            },
+            "time": "2020-07-19T10:15:58+00:00"
         },
         {
             "name": "hfig/mapi",

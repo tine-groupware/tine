@@ -5,9 +5,11 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
+
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * credential cache adapter (cookie)
@@ -29,13 +31,28 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
      *
      * @param  Tinebase_Model_CredentialCache $_cache
      */
-    public function setCache(Tinebase_Model_CredentialCache $_cache)
+    public function setCache(Tinebase_Model_CredentialCache $_cache, ?ResponseInterface $response = null): ?ResponseInterface
     {
         $cacheId = $_cache->getCacheId();
         $cookieOptions = Tinebase_Helper::getDefaultCookieSettings();
-        setcookie(self::COOKIE_KEY, base64_encode(Zend_Json::encode($cacheId)), $cookieOptions);
+        $cookieValue = base64_encode(Zend_Json::encode($cacheId));
+        if (null === $response) {
+            setcookie(self::COOKIE_KEY, $cookieValue, $cookieOptions);
+        } else {
+            $cookie = new HansOtt\PSR7Cookies\SetCookie(
+                name: self::COOKIE_KEY,
+                value: $cookieValue,
+                path: '/',
+                secure: $cookieOptions['secure'] ?? false,
+                httpOnly: true,
+                sameSite: $cookieOptions['samesite'] ?? ''
+            );
+            $response = $cookie->addToResponse($response);
+        }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . ' Set credential cache cookie.');
+
+        return $response;
     }
     
     /**
