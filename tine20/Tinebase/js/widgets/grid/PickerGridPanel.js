@@ -551,6 +551,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 var mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor),
                     mappingRecordClass = mappingFieldDef.getRecordClass();
                 this.searchRecordClass = mappingRecordClass;
+                Object.assign(searchComboConfig, _.get(this.searchRecordClass.getModelConfiguration?.(), 'uiconfig.searchComboConfig', {}));
                 searchComboConfig.useEditPlugin = searchComboConfig.hasOwnProperty('useEditPlugin') ? searchComboConfig.useEditPlugin : true;
             }
 
