@@ -43,7 +43,6 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         Calendar_Model_Attender::resolveAttendee($_record->attendee, TRUE, $_record);
         self::resolveRrule($_record);
         self::resolvePoll($_record);
-//        self::resolveEventTypes($_record); // not needed here as it comes from mc
         self::resolveOrganizer($_record);
         self::resolveLocationRecord($_record);
         self::resolveGrantsOfExternalOrganizers($_record);
@@ -95,41 +94,6 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         foreach ($events as $event) {
             if ($event->poll_id) {
                 $event->poll_id = $polls->getById($event->poll_id);
-            }
-        }
-    }
-
-    /**
-     * resolves eventTypes of given event(s)
-     *
-     * @param Tinebase_Record_RecordSet|Calendar_Model_Event $_events
-     */
-    static public function resolveEventTypes($_events)
-    {
-        if (!Calendar_Config::getInstance()->featureEnabled(Calendar_Config::FEATURE_EVENT_TYPE)) {
-            return;
-        }
-
-        $events = $_events instanceof Tinebase_Record_RecordSet ?
-            $_events :
-            new Tinebase_Record_RecordSet(Calendar_Model_Event::class, array($_events));
-
-        foreach ($events as $event) {
-            $eventTypes = Calendar_Controller_EventTypes::getInstance()->search(
-                Tinebase_Model_Filter_FilterGroup::getFilterForModel(Calendar_Model_EventTypes::class,[
-                    ['field' => 'record', 'operator' => 'equals', 'value' => $event->id],
-                    ['field' => 'is_deleted', 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
-                ])
-            );
-            if ($eventTypes) {
-                // expand required properties
-                $expander = new Tinebase_Record_Expander(Calendar_Model_EventTypes::class, [
-                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'eventType' => [],
-                    ],
-                ]);
-                $expander->expand($eventTypes);
-                $event->event_types = $eventTypes;
             }
         }
     }
@@ -217,15 +181,9 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
         }
 
         Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
-        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
-        if (Tinebase_Core::isFilesystemAvailable()) {
-            Tinebase_FileSystem_RecordAttachments::getInstance()->getMultipleAttachmentsOfRecords($_records);
-        }
-
         Calendar_Model_Attender::resolveAttendee($_records->attendee, TRUE, $_records);
         Calendar_Convert_Event_Json::resolveRrule($_records);
         Calendar_Convert_Event_Json::resolvePoll($_records);
-        Calendar_Convert_Event_Json::resolveEventTypes($_records);
         Calendar_Convert_Event_Json::resolveLocationRecord($_records);
         Calendar_Controller_Event::getInstance()->getAlarms($_records);
         
@@ -234,11 +192,6 @@ class Calendar_Convert_Event_Json extends Tinebase_Convert_Json
 
         $_records->sortByPagination($_pagination);
         
-        Tinebase_Frontend_Json_Abstract::resolveContainersAndTags($_records, null, array('container_id'));
-
-        $_records->setTimezone(Tinebase_Core::getUserTimezone());
-        $_records->setConvertDates(true);
-
-        return $_records->toArray();
+        return parent::fromTine20RecordSet($_records, $_filter, $_pagination);
     }
 }
