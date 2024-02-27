@@ -238,6 +238,12 @@ class SSO_Controller extends Tinebase_Controller_Event
             $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($user));
             $authRequest->setAuthorizationApproved(true);
             $response = $server->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
+
+            if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
+                $response = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()
+                    ->setCache(Tinebase_Core::getUserCredentialCache(), $response);
+            }
+            
             if ($request->hasHeader('x-requested-with') && $request->getHeader('x-requested-With')[0] === 'XMLHttpRequest') {
                 // our login client
                 $response->getBody()->write('{ "method":"GET", "url": "' . $response->getHeader('Location')[0] . '" }');
