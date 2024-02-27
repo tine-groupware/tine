@@ -513,13 +513,19 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             if (!attachment.promises) attachment.promises = [];
             if (attachment?.isPreviewReady) return;
             const promise = new Promise(async (resolve) => {
-                let validCache = null;
-                await Promise.all(attachment.promises).then((responses) => {
-                    validCache = responses.find((r) => {return r.isPreviewReady});
-                });
+                const start = Date.now();
+                const responses = await Promise.all(attachment.promises);
+                const validCache = responses.find((r) => {return r.isPreviewReady});
+                
                 if (validCache) {
                     attachment.isPreviewReady = true;
-                    return resolve(validCache);
+                    return resolve({
+                        cache: validCache.cache,
+                        createPreviewInstantly: createPreviewInstantly,
+                        isPreviewReady: true,
+                        skipSendRequest: true,
+                        time: Date.now() - start,
+                    });
                 }
                 const attachmentId = [sourceModel, record.id, attachment.partId].join(':');
                 await Tine.Felamimail.getAttachmentCache(attachmentId, createPreviewInstantly)
@@ -528,6 +534,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                             cache: new Tine.Tinebase.Model.Tree_Node(cache.attachments[0]),
                             createPreviewInstantly: createPreviewInstantly,
                             isPreviewReady: cache.attachments[0].preview_count !== 0,
+                            time: Date.now() - start,
                         });
                     })
                     .catch((e) => {
