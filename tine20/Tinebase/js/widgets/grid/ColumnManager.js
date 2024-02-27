@@ -75,8 +75,10 @@ Tine.widgets.grid.ColumnManager = function() {
             if (fieldDefinition.type == 'records') {
                 if (_.get(fieldDefinition, 'config.specialType') === 'localizedString') {
                     fieldDefinition.type = 'localizedString';
+                } else if (_.get(fieldDefinition, 'uiconfig.hasGridColumn', false)) {
+                    config.width = 250;
                 } else {
-                    // don't show multiple record fields
+                    // don't show multiple record fields unless explicitly configured (backward compability)
                     return null;
                 }
             }
