@@ -205,9 +205,10 @@ Ext.data.Record.prototype = {
                     }
                 });
             } else {
-                this.set(v, k);
+                this.set(k, v);
             }
-        })
+        });
+        return this;
     },
     /**
      * Set the {@link Ext.data.Field#name named field} to the specified value.  For example:
