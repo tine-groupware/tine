@@ -695,7 +695,23 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertTrue($found, 'the timeaccount could not be found in the invoice!');
     }
     
+    public function testCreateClearedInvoice()
+    {
+        $this->_createCustomers();
+        $this->_createCostCenters();
 
+        $customer = $this->_customerRecords->filter('name', 'Customer1')->getFirstRecord();
+        $invoice = $this->_invoiceController->create(new Sales_Model_Invoice(array(
+            'customer_id' => $customer->getId(),
+            'description' => 'Cleared',
+            'address_id' => $this->_addressRecords->filter('customer_id', $customer->getId())->getFirstRecord()->getId(),
+            'costcenter_id' => $this->_costcenterRecords->getFirstRecord()->getId(),
+            'cleared'    => 'CLEARED',
+        )));
+
+        $this->assertNotNull($invoice->cleared, 'New created invoice with cleared status should generate the invoice number automatically.');
+    }
+    
     /**
      * tests if the rights work: Sales_Acl_Rights::SET_INVOICE_NUMBER, Sales_Acl_Rights::MANAGE_INVOICES
      */
