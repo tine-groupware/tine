@@ -417,7 +417,7 @@ Ext.data.Record.id(rec); // automatically generate a unique sequential id
      * @return {Boolean}
      */
     isModified : function(fieldName){
-        return !!(this.modified && this.modified.hasOwnProperty(fieldName));
+        return !!(this.modified && (fieldName ? this.modified.hasOwnProperty(fieldName) : Object.keys(this.modified).length));
     },
 
     /**
