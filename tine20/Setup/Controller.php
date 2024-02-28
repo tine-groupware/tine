@@ -1931,7 +1931,11 @@ class Setup_Controller
         Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
         Tinebase_Application::getInstance()->resetClassCache();
         try {
-            $this->updateApplications();
+            $this->updateApplications(options: [
+                'strict' => false,
+                'skipQueueCheck' => true,
+                'rerun' => [],
+            ]);
         } catch (Tinebase_Exception_Backend $e) {
             if (strpos($e->getMessage(), 'you still have some utf8 ') === 0) {
                 $fe = new Setup_Frontend_Cli();
