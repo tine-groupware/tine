@@ -415,7 +415,6 @@ Tine.Tinebase.tineInit = {
             handler: async function () {
                 let defaults = Tine.Felamimail.Model.Message.getDefaultData();
                 defaults.to = [email];
-                defaults.body = Tine.Felamimail.getSignature();
                 const record = new Tine.Felamimail.Model.Message(defaults, 0);
                 Tine.Felamimail.MessageEditDialog.openWindow({
                     record: record
