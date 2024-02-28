@@ -293,6 +293,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_POSTAL,
                 ],
                 self::SHY                   => true,
+                self::UI_CONFIG             => [
+                    'recordEditPluginConfig'    => [
+                        'allowCreateNew'            => true,
+                    ],
+                ],
             ],
             self::FLD_CONTACT_ID => [
                 self::TYPE                  => self::TYPE_RECORD,

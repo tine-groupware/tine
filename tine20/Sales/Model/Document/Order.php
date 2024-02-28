@@ -119,6 +119,9 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::SHY                   => true,
                 self::UI_CONFIG             => [
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_BILLING,
+                    'recordEditPluginConfig'    => [
+                        'allowCreateNew'            => true,
+                    ],
                 ],
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
@@ -139,6 +142,9 @@ class Sales_Model_Document_Order extends Sales_Model_Document_Abstract
                 self::SHY                   => true,
                 self::UI_CONFIG             => [
                     self::TYPE                  => Sales_Model_Document_Address::TYPE_DELIVERY,
+                    'recordEditPluginConfig'    => [
+                        'allowCreateNew'            => true,
+                    ],
                 ],
                 self::CONFIG                => [
                     self::APP_NAME              => Sales_Config::APP_NAME,
