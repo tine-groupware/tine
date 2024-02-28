@@ -140,7 +140,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             this.denormalizationRecordClass = this.recordClass;
             this.recordClass = Tine.Tinebase.data.RecordMgr.get(modelConfig.denormalizationOf);
             this.recordProxy =  Tine[this.recordClass.getMeta('appName')][this.recordClass.getMeta('modelName').toLowerCase() + 'Backend'];
-            this.plugins = (this.plugins || []).concat(new RecordEditFieldTriggerPlugin({
+            this.plugins = (this.plugins || []).concat(new RecordEditFieldTriggerPlugin(Ext.applyIf(this.recordEditPluginConfig || {}, {
                 allowCreateNew: false,
                 preserveJsonProps: 'original_id',
                 qtip: window.i18n._('Edit copy'),
@@ -148,7 +148,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
                     mode: 'local',
                     denormalizationRecordClass: this.denormalizationRecordClass
                 }
-            }));
+            })));
             this.useEditPlugin = false;
         }
 

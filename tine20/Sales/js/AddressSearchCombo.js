@@ -102,7 +102,7 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
                 // mhh this could be dangourous as it could mixup debitors in orders (delivery/billing addresses)
                 typeRecord = typeRecords[0];
             }
-            if (typeRecord) {
+            if (typeRecord && !this.isExplicitlyCleared) {
                 const address = Tine.Tinebase.data.Record.setFromJson(typeRecord, this.recordClass);
                 this.setValue(address);
                 this.fireEvent('select', this, address);
@@ -139,6 +139,16 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
                 }
             }
         }
+    },
+
+    setValue: function () {
+        Tine.Sales.AddressSearchCombo.superclass.setValue.apply(this, arguments);
+        this.isExplicitlyCleared = false;
+    },
+
+    onTrigger1Click: function () {
+        Tine.Sales.AddressSearchCombo.superclass.onTrigger1Click.apply(this, arguments);
+        this.isExplicitlyCleared = true;
     }
 });
 
