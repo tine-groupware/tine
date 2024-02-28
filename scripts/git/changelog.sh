@@ -12,6 +12,7 @@ showCommits () {
   headline=$2
   echo -e "### $headline"
   git log $VERSION1...$VERSION2 --oneline | egrep " \"*$type *\(" | egrep -v "\(ci" | egrep -v "fixup" | egrep -v "WIP" | egrep -v "Draft" | sed -E ':a;N;$!ba;s/\n/  \n/g'
+  echo -e
 }
 
 VERSION1=$1
