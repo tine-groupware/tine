@@ -1,8 +1,10 @@
 #!/bin/bash
 # by PS, 2024-02-28
 #
-# example: MergeUpwards 2014.11-develop 2015.07 gerrit || exit 1
-#  -> merges 2014.11-develop into 2015.07 and pushes 2015.07 to gerrit repo
+# prints a changelog
+#
+# usage: scripts/git/changelog.sh TAG_OR_BRANCH HEAD [--full]
+#
 
 # TODO only show headline if git log has output
 showCommits () {
@@ -10,6 +12,7 @@ showCommits () {
   headline=$2
   echo -e "### $headline"
   git log $VERSION1...$VERSION2 --oneline | egrep " \"*$type *\(" | egrep -v "\(ci" | egrep -v "fixup" | egrep -v "WIP" | egrep -v "Draft" | sed -E ':a;N;$!ba;s/\n/  \n/g'
+  echo -e
 }
 
 VERSION1=$1
