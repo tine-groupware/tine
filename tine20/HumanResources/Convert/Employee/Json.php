@@ -21,16 +21,6 @@ class HumanResources_Convert_Employee_Json extends Tinebase_Convert_Json
     {
         parent::_resolveBeforeToArray($records, $modelConfiguration, $multiple);
 
-        $expanderDef = [
-            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                'contracts' => [
-                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME => [],
-                    ],
-                ],
-            ],
-        ];
-        $expander = new Tinebase_Record_Expander(HumanResources_Model_Employee::class, $expanderDef);
-        $expander->expand($records);
+        Tinebase_Record_Expander::expandRecords($records);
     }
 }
