@@ -18,6 +18,8 @@
 - name: unpack extrapackages
   unarchive:
     src: "{{tine20repo}}/{{tine20_release}}/tine20-{{item}}_{{tine20_release}}.tar.bz2"
+    # for local files
+    #src: "{{tine20_releases_path}}/{{tine20_release}}/tine20-{{item}}_{{tine20_release}}.tar.bz2"
     dest: "{{tine20_releases_path}}/{{tine20_release}}"
     copy: false
     # coming with ansible 2.2 - replace copy with that
