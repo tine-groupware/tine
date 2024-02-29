@@ -19,8 +19,15 @@
  * @package     Tinebase
  * @subpackage  Filter
  */
-class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
+class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_ForeignId
 {
+    protected $_operators = [
+        'equals', //expects ID as value
+        'in', //expects IDs as value
+        'not', //expects ID as value
+        'notin', //expects IDs as value
+    ];
+
     protected $_userOperator = NULL;
     protected $_userValue = NULL;
     
@@ -38,6 +45,13 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
         
         parent::setOperator($_operator);
     }
+
+    protected function _setOptions(array $_options)
+    {
+        $_options['controller'] = $_options['filtergroup'] = '';
+
+        parent::_setOptions($_options);
+    }
     
     /**
      * sets value
@@ -51,7 +65,7 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
             $_value = $_value['accountId'];
         }
         
-        if ($this->_userOperator && $this->_userOperator == 'inGroup' && $this->_userValue) {
+        if ($this->_userOperator && $this->_userOperator == 'inGroup') {
             $this->_userValue = $_value;
             $_value = Tinebase_Group::getInstance()->getGroupMembers($this->_userValue);
         }
@@ -64,7 +78,12 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
         
         parent::setValue($_value);
     }
-    
+
+    protected function _resolveRecord($value)
+    {
+        return $value;
+    }
+
     /**
      * returns array with the filter settings of this filter
      *
@@ -80,16 +99,28 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
             $result['value']    = $this->_userValue;
         } else if ($this->_userValue === Tinebase_Model_User::CURRENTACCOUNT) {
             // switch back to CURRENTACCOUNT to make sure filter is saved and shown in client correctly
-            $result['value']    = $this->_userValue;
+            if ($_valueToJson) {
+                $this->_value = $result['value'];
+            } else {
+                $result['value'] = $this->_userValue;
+            }
         }
         
         if ($_valueToJson == true ) {
             if ($this->_userOperator && $this->_userOperator == 'inGroup' && $this->_userValue) {
-                $result['value'] = Tinebase_Group::getInstance()->getGroupById($this->_userValue)->toArray();
+                try {
+                    $result['value'] = Tinebase_Group::getInstance()->getGroupById($this->_userValue)->toArray();
+                } catch (Tinebase_Exception_Record_NotDefined) {
+                    $result['value'] = $this->_userValue;
+                }
             } else {
                 switch ($this->_operator) {
                     case 'equals':
-                        $result['value'] = $result['value'] ? Tinebase_User::getInstance()->getUserById($this->_value)->toArray() : $result['value'];
+                        try {
+                            $result['value'] = $result['value'] ? Tinebase_User::getInstance()->getUserById($this->_value)->toArray() : $result['value'];
+                        } catch (Tinebase_Exception_NotFound) {
+                            $result['value'] = $this->_value;
+                        }
                         break;
                     case 'in':
                         $result['value'] = array();
@@ -98,7 +129,11 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
                             $result['value'][] = $this->_value;
                         } else {
                             foreach ($this->_value as $userId) {
-                                $result['value'][] = Tinebase_User::getInstance()->getUserById($userId)->toArray();
+                                try {
+                                    $result['value'][] = Tinebase_User::getInstance()->getUserById($userId)->toArray();
+                                } catch(Tinebase_Exception_NotFound) {
+                                    $result['value'][] = $userId;
+                                }
                             }
                         }
                         break;
