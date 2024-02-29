@@ -143,6 +143,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     allowDelete: true,
 
     /**
+     * @cfg {Bool} Duplicate
+     * allow to select same record multiple times
+     */
+    allowDuplicatePicks: false,
+
+    /**
      * config spec for additionalFilters - passed to RecordPicker
      *
      * @type: {object} e.g.
@@ -265,7 +271,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     initStore: function() {
 
         if (!this.store) {
-            this.store = new Ext.data.SimpleStore({
+            this.store = new Ext.data.JsonStore({
                 sortInfo: this.defaultSortInfo || {
                     field: this.labelField,
                     direction: 'DESC'
@@ -545,6 +551,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 var mappingFieldDef = this.recordClass.getField(this.isMetadataModelFor),
                     mappingRecordClass = mappingFieldDef.getRecordClass();
                 this.searchRecordClass = mappingRecordClass;
+                Object.assign(searchComboConfig, _.get(this.searchRecordClass.getModelConfiguration?.(), 'uiconfig.searchComboConfig', {}));
                 searchComboConfig.useEditPlugin = searchComboConfig.hasOwnProperty('useEditPlugin') ? searchComboConfig.useEditPlugin : true;
             }
 
@@ -584,6 +591,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             var recordData = this.getRecordDefaults();
             recordData[this.isMetadataModelFor] = recordToAdd.getData();
             var record =  Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
+            record.phantom = true;
 
             // check if already in
             const existingRecord = this.store.findBy(function (r) {
@@ -592,7 +600,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     return true;
                 }
             }, this);
-            if (existingRecord === -1) {
+            if (existingRecord === -1 || this.allowDuplicatePicks) {
                 if (this.fireEvent('beforeaddrecord', record, this) !== false) {
                     this.store.add([record]);
                     this.fireEvent('add', this, [record]);
@@ -600,6 +608,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         } else {
             var record = new this.recordClass(Ext.applyIf(recordToAdd.data, this.getRecordDefaults()), recordToAdd.id);
+            record.phantom = true;
             // check if already in
             if (! this.store.getById(record.id)) {
                 if (this.fireEvent('beforeaddrecord', record, this) !== false) {

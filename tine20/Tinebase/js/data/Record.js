@@ -635,6 +635,7 @@ Tine.Tinebase.data.Record.setFromJson = function(json, recordClass) {
         record = new recordClass({}, recordId);
     }
     record.setId(recordId);
+    record.commit();
 
     return record;
 };

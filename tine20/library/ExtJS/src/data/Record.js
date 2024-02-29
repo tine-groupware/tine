@@ -205,9 +205,10 @@ Ext.data.Record.prototype = {
                     }
                 });
             } else {
-                this.set(v, k);
+                this.set(k, v);
             }
-        })
+        });
+        return this;
     },
     /**
      * Set the {@link Ext.data.Field#name named field} to the specified value.  For example:
@@ -416,7 +417,7 @@ Ext.data.Record.id(rec); // automatically generate a unique sequential id
      * @return {Boolean}
      */
     isModified : function(fieldName){
-        return !!(this.modified && this.modified.hasOwnProperty(fieldName));
+        return !!(this.modified && (fieldName ? this.modified.hasOwnProperty(fieldName) : Object.keys(this.modified).length));
     },
 
     /**
