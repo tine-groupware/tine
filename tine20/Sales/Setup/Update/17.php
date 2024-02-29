@@ -258,65 +258,65 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
         if ($this->_backend->columnExists('costcenter', Sales_Model_Product::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Product::TABLE_NAME)
-                . ' RENAME COLUMN costcenter TO eval_dim_cost_center');
+                . ' CHANGE costcenter eval_dim_cost_center varchar(255) DEFAULT NULL');
         }
         if ($this->_backend->columnExists('costbearer', Sales_Model_Product::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Product::TABLE_NAME)
-                . ' RENAME COLUMN costbearer TO eval_dim_cost_bearer');
+                . ' CHANGE costbearer eval_dim_cost_bearer varchar(255) DEFAULT NULL');
         }
 
         if ($this->_backend->columnExists('cost_center_id', Sales_Model_Document_Invoice::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Invoice::TABLE_NAME)
-                . ' RENAME COLUMN cost_center_id TO eval_dim_cost_center');
+                . ' CHANGE cost_center_id eval_dim_cost_center varchar(255) DEFAULT NULL');
         }
         if ($this->_backend->columnExists('cost_bearer_id', Sales_Model_Document_Invoice::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Invoice::TABLE_NAME)
-                . ' RENAME COLUMN cost_bearer_id TO eval_dim_cost_bearer');
+                . ' CHANGE cost_bearer_id eval_dim_cost_bearer varchar(255) DEFAULT NULL');
         }
 
         if ($this->_backend->columnExists('cost_center_id', Sales_Model_Document_Offer::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Offer::TABLE_NAME)
-                . ' RENAME COLUMN cost_center_id TO eval_dim_cost_center');
+                . ' CHANGE cost_center_id eval_dim_cost_center varchar(255) DEFAULT NULL');
         }
         if ($this->_backend->columnExists('cost_bearer_id', Sales_Model_Document_Offer::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Offer::TABLE_NAME)
-                . ' RENAME COLUMN cost_bearer_id TO eval_dim_cost_bearer');
+                . ' CHANGE cost_bearer_id eval_dim_cost_bearer varchar(255) DEFAULT NULL');
         }
 
         if ($this->_backend->columnExists('cost_center_id', Sales_Model_Document_Order::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Order::TABLE_NAME)
-                . ' RENAME COLUMN cost_center_id TO eval_dim_cost_center');
+                . ' CHANGE cost_center_id eval_dim_cost_center varchar(255) DEFAULT NULL');
         }
         if ($this->_backend->columnExists('cost_bearer_id', Sales_Model_Document_Order::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Document_Order::TABLE_NAME)
-                . ' RENAME COLUMN cost_bearer_id TO eval_dim_cost_bearer');
+                . ' CHANGE cost_bearer_id eval_dim_cost_bearer varchar(255) DEFAULT NULL');
         }
 
         if ($this->_backend->columnExists('payment_cost_center_id', Sales_Model_DocumentPosition_Invoice::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Invoice::TABLE_NAME)
-                . ' RENAME COLUMN payment_cost_center_id TO eval_dim_cost_center');
+                . ' CHANGE payment_cost_center_id eval_dim_cost_center varchar(255) DEFAULT NULL');
         }
         if ($this->_backend->columnExists('payment_cost_bearer_id', Sales_Model_DocumentPosition_Invoice::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Invoice::TABLE_NAME)
-                . ' RENAME COLUMN payment_cost_bearer_id TO eval_dim_cost_bearer');
+                . ' CHANGE payment_cost_bearer_id eval_dim_cost_bearer varchar(255) DEFAULT NULL');
         }
 
         if ($this->_backend->columnExists('payment_cost_center_id', Sales_Model_DocumentPosition_Offer::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Offer::TABLE_NAME)
-                . ' RENAME COLUMN payment_cost_center_id TO eval_dim_cost_center');
+                . ' CHANGE payment_cost_center_id eval_dim_cost_center varchar(255) DEFAULT NULL');
         }
         if ($this->_backend->columnExists('payment_cost_bearer_id', Sales_Model_DocumentPosition_Offer::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Offer::TABLE_NAME)
-                . ' RENAME COLUMN payment_cost_bearer_id TO eval_dim_cost_bearer');
+                . ' CHANGE payment_cost_bearer_id eval_dim_cost_bearer varchar(255) DEFAULT NULL');
         }
 
         if ($this->_backend->columnExists('payment_cost_center_id', Sales_Model_DocumentPosition_Order::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Order::TABLE_NAME)
-                . ' RENAME COLUMN payment_cost_center_id TO eval_dim_cost_center');
+                . ' CHANGE payment_cost_center_id eval_dim_cost_center varchar(255) DEFAULT NULL');
         }
         if ($this->_backend->columnExists('payment_cost_bearer_id', Sales_Model_DocumentPosition_Order::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_DocumentPosition_Order::TABLE_NAME)
-                . ' RENAME COLUMN payment_cost_bearer_id TO eval_dim_cost_bearer');
+                . ' CHANGE payment_cost_bearer_id eval_dim_cost_bearer varchar(255) DEFAULT NULL');
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.6', self::RELEASE017_UPDATE006);
@@ -449,7 +449,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         if ($this->_backend->tableExists(Sales_Model_Invoice::TABLE_NAME) && $this->_backend->columnExists('costcenter_id', Sales_Model_Invoice::TABLE_NAME)) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Sales_Model_Invoice::TABLE_NAME)
-                . ' RENAME COLUMN costcenter_id TO eval_dim_cost_center');
+                . ' CHANGE costcenter_id eval_dim_cost_center varchar(255) DEFAULT NULL');
         }
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.12', self::RELEASE017_UPDATE012);
