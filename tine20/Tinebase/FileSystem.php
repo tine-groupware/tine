@@ -3546,11 +3546,11 @@ class Tinebase_FileSystem implements
                             $childNode = $this->get($childNode->getId());
                         }
                         $childNode->unsetDirty();
-                        if ($childNode->flysystem !== $node->flysystem) {
+                        if ($childNode->flysystem !== $node->flysystem && $childNode->flypath !== '/') {
                             $childNode->flysystem = $node->flysystem;
                         }
                         $flyPath = rtrim($node->flypath, '/') . '/' . $childName;
-                        if ($flyPath !== $childNode->flypath) {
+                        if ($flyPath !== $childNode->flypath && $childNode->flysystem === $node->flysystem) {
                             $childNode->flypath = $flyPath;
                         }
                         if ($childNode->isDirty()) {
