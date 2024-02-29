@@ -1199,7 +1199,7 @@ viewConfig: {
             : widthResizedGrid / widthToResolve;
 
         colsToResolve.forEach((col) => {
-            const width = cm.isFixed(col.index) ? col.width : col.width * fraction;
+            const width = cm.isFixed(col.index)|| !cm.isResizable(col.index) ? col.width : col.width * fraction;
             let widthResolved = Math.max(this.grid.minColumnWidth, Math.floor(width));
             if (colIdxDefaultAutoExpand < 0 && !isOmitColumnValid && col.width && widthToResolve <= widthResizedGrid) {
                 widthResolved = Math.max(col.width, width);
