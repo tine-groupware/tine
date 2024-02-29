@@ -57,7 +57,13 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                     Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
                         Tinebase_Record_Expander::PROPERTY_CLASS_ACCOUNT_GRANTS => [],
                     ]
-                ]
+                ],
+                'contracts' => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME => [],
+                        'notes' => [],
+                    ],
+                ],
             ]
         ],
 
