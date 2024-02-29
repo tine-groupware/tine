@@ -151,7 +151,7 @@ Alternativ zu NGINX kann man auch traefik zur docker-composer.yml hinzufügen:
 
 ## Migration
 
-Um von einer alten Installation mit lokaler tine auf das Docker-Setup zu migrieren, müssen nur die Volumes entsprechend gemountet werden:
+Um von einer alten Installation mit lokaler tine auf das Docker-Setup zu migrieren, müssen nur die Volumes entsprechend gemountet werden (das root-Passwort der Datenbank sollte bekannt sein und die DB sollte die gleiche Version haben):
 
 ```yaml
   db:
@@ -168,6 +168,10 @@ Um von einer alten Installation mit lokaler tine auf das Docker-Setup zu migrier
 ```
 
 Bitte achtet auf die korrekte Angabe des TINE20_DATABASE_TABLEPREFIX -> sonst werden ggf. die Tabellen nicht gefunden.
+
+Falls das nicht klappt oder die alte tine DB auf einem anderen Server liegt, sollte man die tine CLI Funktionen `--backup` und `--restore` benutzen.
+Dabei muss beachtet werden, dass auf die Backup-Dateien von innerhalb des tine-Containers aus zugriffen werden kann.
+
 
 ## Custom-Konfiguration
 

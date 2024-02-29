@@ -146,7 +146,8 @@ server {
 
 ## Migration
 
-To migrate from an old tine installation, you can try to just mount the database as a volume:
+To migrate from an old tine installation, you can try to just mount the database as a volume
+(you have to know the root password of the existing database and you should ideally use the same db version):
 
 ```yaml
   db:
@@ -161,6 +162,9 @@ To migrate from an old tine installation, you can try to just mount the database
       - "/var/lib/tine20/files:/var/lib/tine20/files"
     #[...]
 ```
+
+If this does not work or your existing tine database is on another server, it is recommended to use the tine CLI functions `--backup` and `--restore` for migration.
+Please note that the tine container needs to access the backup/dump files, so it might be necessary to copy the files into the container.
 
 ## Custom Configuration
 
