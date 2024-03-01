@@ -35,6 +35,13 @@ const AceField = Ext.extend(Ext.form.Field, {
         if (this.ed) {
             value = this.ed.getValue();
         }
+
+        if (_.isString(value)) {
+            // NOTE: JSON fields do not store a JSON strings - they store js strings!
+            try {
+                value = JSON.parse(value);
+            } catch (e) {}
+        }
         return value;
     },
     
