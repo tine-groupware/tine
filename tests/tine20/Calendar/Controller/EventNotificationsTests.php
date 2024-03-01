@@ -537,7 +537,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_ATTENDEE_STATUS_UPDATE,
             $this->_personas['pwulf']->getId());
         $this->_eventController->createRecurException($recurSet[7], FALSE, FALSE); //2012-03-22
-        $this->_assertMail('pwulf', 'McBlack, James accepted event');
+        $this->_assertMail('pwulf', 'James McBlack accepted event');
         
         // cancel thisandfuture
         // @TODO check RANGE in ics
