@@ -1262,19 +1262,16 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 $resolved = array('n_given' => $_value, 'n_family' => $this->__get('n_family'), 'org_name' => $this->__get('org_name'));
                 $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
-                parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
             case 'n_family':
                 $resolved = array('n_family' => $_value, 'n_given' => $this->__get('n_given'), 'org_name' => $this->__get('org_name'));
                 $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
-                parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
             case 'org_name':
                 $resolved = array('org_name' => $_value, 'n_given' => $this->__get('n_given'), 'n_family' => $this->__get('n_family'));
                 $this->_resolveAutoValues($resolved);
                 parent::__set('n_fn', $resolved['n_fn']);
-                parent::__set('n_fileas', $resolved['n_fileas']);
                 break;
             default:
                 // normalize telephone numbers
