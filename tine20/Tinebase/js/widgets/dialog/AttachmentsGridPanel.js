@@ -83,6 +83,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
             this.editDialog.on('load', this.onLoadRecord, this);
         }
 
+        this.requiredGrant = this.editDialog?.requiredSaveGrant || this.requiredGrant;
         Tine.widgets.dialog.AttachmentsGridPanel.superclass.initComponent.call(this);
 
         this.postalSubscriptions = [];
