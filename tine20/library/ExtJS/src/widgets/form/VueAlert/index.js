@@ -1,3 +1,4 @@
+// docs see https://bootstrap-vue.org/docs/components/alert
 import BootstrapVueNext from 'bootstrap-vue-next'
 
 Ext.form.VueAlert = Ext.extend(Ext.BoxComponent, {

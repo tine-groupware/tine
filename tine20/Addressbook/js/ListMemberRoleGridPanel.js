@@ -50,7 +50,9 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
 
         this.sm = new Ext.grid.RowSelectionModel({singleSelect:true});
 
+        this.autoExpandColumn = 'memberroles';
         this.initColumns();
+
 
         this.store = new Ext.data.SimpleStore({
             autoSave: false,
@@ -131,10 +133,10 @@ Tine.Addressbook.ListMemberRoleGridPanel = Ext.extend(Tine.widgets.grid.PickerGr
             if (visibleColumns.indexOf(this.columns[idx].id) === -1) {
                 this.columns[idx].hidden = true;
             } else {
-                this.columns[idx].width = 200;
+                this.columns[idx].width = 150;
             }
             if (this.columns[idx].id === "memberroles") {
-                this.columns[idx].width = 300;
+                this.columns[idx].width = 200;
                 this.editors[idx] = new Tine.Addressbook.ListMemberRoleLayerCombo({
                     gridRecordClass: Tine.Addressbook.Model.ListRole
                 });
