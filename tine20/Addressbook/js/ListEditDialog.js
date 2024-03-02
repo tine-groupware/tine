@@ -55,10 +55,11 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             frame: true,
             layout: 'border',
             items: [{
+                height: 30,
                 region: 'north',
-                items: new Ext.form.Label({
+                items: new Ext.form.VueAlert({
                     text: '.',
-                    ref: '../../../sysGroupNote',
+                    ref: '../../../sysGroupNote'
                 })
             },{
                 region: 'center',
@@ -241,7 +242,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.sysGroupNote.setText(isSysGroup ?
             this.app.i18n._("This is a system group. To edit this group you need the Admin.ManageAccounts right.") : '');
-        
+
         ['name', 'description', 'email', 'account_only'].forEach((fieldName) => {this.getForm().findField(fieldName).setReadOnly(!allowEditSysFields)});
         this.memberGridPanel.setReadOnly(!allowEditSysFields);
         this.mailingListPanel?.setReadOnly(!allowEditSysFields);
