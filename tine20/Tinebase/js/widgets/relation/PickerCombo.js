@@ -69,6 +69,8 @@ Tine.widgets.relation.PickerCombo = Ext.extend(Ext.Container, {
     relationType: null,
 
 
+    resizable: true,
+
     // private
     items: null,
     store: null,
