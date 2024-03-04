@@ -644,12 +644,12 @@ function(grid, rowIndex, columnIndex, e) {
     },
 
     applyState : function(state){
-        var cm = this.colModel,
-            cs = state.columns,
-            store = this.store,
-            s,
-            c,
-            oldIndex;
+        const cm = this.colModel;
+        const cs = state.columns;
+        const store = this.store;
+        let   s;
+        let   c;
+        let   oldIndex;
             
         if(cs){
             //handle the case when other column data got pushed after responsive column
@@ -667,19 +667,21 @@ function(grid, rowIndex, columnIndex, e) {
                 cs.splice(cs.length, 0, item);
             }
             
-            for(var i = 0, len = cs.length; i < len; i++){
+            for (let i = 0, len = cs.length; i < len; i++){
                 s = cs[i];
                 c = cm.getColumnById(s.id);
-                if(c){
+                if (c) {
                     oldIndex = cm.getIndexById(s.id);
                     
                     cm.setHidden(oldIndex, !!s.hidden);
                     c.hidden = !!s.hidden;
                     c.width = s.width;
 
-                    if(oldIndex !== i){
+                    if (oldIndex !== i){
                         cm.moveColumn(oldIndex, i);
                     }
+                    if (!cm.isResizable(i)) continue;
+                    c.width = s.width;
                 }
             }
         }

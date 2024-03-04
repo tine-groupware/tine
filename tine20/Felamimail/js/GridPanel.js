@@ -1386,6 +1386,47 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         return this.getGrid().getSelectionModel().getSelected() ? this.action_fileRecord.handler() : false;
     },
     
+    @keydown(['ctrl+o', 'enter'])
+    openMessage() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onRowDblClick(this.grid) : false;
+    },
+    
+    @keydown('1')
+    toggleMessageFlagged() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onToggleFlag('\\Flagged') : false;
+    },
+    
+    @keydown('m')
+    toggleMessageUnread() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.onToggleFlag('\\Seen') : false;
+    },
+    
+    @keydown('j')
+    markMessagesSpam() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.processSpamStrategy('spam') : false;
+    },
+    
+    @keydown('shift+j')
+    markMessagesHam() {
+        return this.getGrid().getSelectionModel().getSelected() ? this.processSpamStrategy('ham') : false;
+    },
+    
+    getKeyBindingData() {
+        const data = [
+            'Ctrl+N / Ctrl+M : Compose message',
+            'Ctrl+L : Forward message',
+            'Ctrl+R : Reply message',
+            'Ctrl+Shift+R : Reply to all',
+            'A / Ctrl+S : File message',
+            'Ctrl+O / Enter : Open message',
+            '1 : Toggle highlighting',
+            'M : Mark read/unread',
+            'J : Mark message as SPAM',
+            'Shift+J : Mark message as HAM',
+        ];
+        return data.map((item) => this.app.i18n._(item));
+    },
+    
     /**
      * reply message handler
      * 
@@ -1477,11 +1518,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             Tine.Felamimail.GridPanel.superclass.onRowClick.apply(this, arguments);
         }
     },
-
-    @keydown(['ctrl+o', 'enter'])
-    openMessage() {
-        return this.getGrid().getSelectionModel().getSelected() ? this.onRowDblClick(this.grid) : false;
-    },
     
     /**
      * row doubleclick handler
@@ -1548,17 +1584,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             record.commit()
         }
     },
-    
-    @keydown('1')
-    toggleMessageFlagged() {
-        return this.getGrid().getSelectionModel().getSelected() ? this.onToggleFlag('\\Flagged') : false;
-    },
-    
-    @keydown('m')
-    toggleMessageUnread() {
-        return this.getGrid().getSelectionModel().getSelected() ? this.onToggleFlag('\\Seen') : false;
-    },
-    
+
     /**
      * toggle flagged status of mail(s)
      * - Flagged/Seen
@@ -2063,16 +2089,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         }
         return result;
-    },
-
-    @keydown('j')
-    markMessagesSpam() {
-        return this.getGrid().getSelectionModel().getSelected() ? this.processSpamStrategy('spam') : false;
-    },
-
-    @keydown('shift+j')
-    markMessagesHam() {
-        return this.getGrid().getSelectionModel().getSelected() ? this.processSpamStrategy('ham') : false;
     },
 
     /**

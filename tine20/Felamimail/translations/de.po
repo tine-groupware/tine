@@ -2147,3 +2147,33 @@ msgstr "E-Mail-Nutzung"
 
 msgid "Size (in byte)"
 msgstr "Größe (in Byte)"
+
+msgid "Ctrl+N / Ctrl+M : Compose message"
+msgstr "Ctrl+N / Ctrl+M : Nachricht verfassen"
+
+msgid "Ctrl+L : Forward message"
+msgstr "Ctrl+L : Nachricht Weiterleiten"
+
+msgid "Ctrl+R : Reply message"
+msgstr "Ctrl+R : Nachricht beantworten"
+
+msgid "Ctrl+Shift+R : Reply to all"
+msgstr "Ctrl+Shift+R : Allen antworten"
+
+msgid "A / Ctrl+S : File message"
+msgstr "A / Ctrl+S : Nachricht ablegen"
+
+msgid "Ctrl+O / Enter : Open message"
+msgstr "Ctrl+O / Enter : Nachricht öffnen"
+
+msgid "1 : Toggle highlighting"
+msgstr "1 : Markierung an/aus"
+
+msgid "M : Mark read/unread"
+msgstr "M : (Un)gelesen markierend"
+
+msgid "J : Mark message as SPAM"
+msgstr "J : Nachricht als SPAM markieren"
+
+msgid "Shift+J : Mark message as HAM"
+msgstr "Shift+J : Nachricht als HAM markieren"
