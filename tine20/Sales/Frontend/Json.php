@@ -5,7 +5,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add functions again (__call interceptor doesn't work because of the reflection api)
  * @todo        check if we can add these functions to the reflection without implementing them here
@@ -928,18 +928,22 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $order = Sales_Controller_Document_Order::getInstance()->get($orderId);
         $ft = $order->{$recipientField}->{Sales_Model_Address::FLD_FULLTEXT};
+        $contractId = $order->getIdFromProperty(Sales_Model_Document_Abstract::FLD_CONTRACT_ID);
 
         $orders = Sales_Controller_Document_Order::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class, [
                 [TMFA::FIELD => $recipientField, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
-                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->{$recipientField}->getIdFromProperty(Sales_Model_Document_Order::FLD_ORIGINAL_ID)]
+                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->{$recipientField}->getIdFromProperty(Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID)]
                 ]],
-                [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->getIdFromProperty(Sales_Model_Document_Order::FLD_DOCUMENT_CATEGORY)],
+                [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->getIdFromProperty(Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY)],
                 [TMFA::FIELD => $field, TMFA::OPERATOR => 'equals', TMFA::VALUE => true],
+                [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_CONTRACT_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $contractId],
                 [TMFA::FIELD => $followUpStatusFld, TMFA::OPERATOR => 'not', TMFA::VALUE => Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED],
                 [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => 'equals', TMFA::VALUE => Sales_Model_Document_Order::STATUS_ACCEPTED],
-            ]))->filter(fn ($rec) => $rec->{Sales_Model_Address::FLD_FULLTEXT} === $ft);
-        
+            ]), null, new Tinebase_Record_Expander(Sales_Model_Document_Order::class, [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [$recipientField => []],
+            ]))->filter(fn ($rec) => $rec->{$recipientField}->{Sales_Model_Address::FLD_FULLTEXT} === $ft);
+
         if ($orders->count() === 0) {
             return [];
         }
