@@ -828,6 +828,8 @@ viewConfig: {
     
     isResponsive() {
         if (this.disableResponsiveLayout) return false;
+        if (this.grid?.colModel?.config?.length <= 4) return false;
+        
         let width = this.grid?.getWidth?.() ?? 0;
         if (width === 0 && this.grid?.lastSize) {
             width = this.grid.lastSize.width;
