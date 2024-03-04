@@ -2388,22 +2388,31 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
                 if (e.browserEvent.key === '?') {
                     // TODO only show keys of actions that are available
-                    var helpText = i18n._('A: select all visible rows') + '<br/>' +
-                        i18n._('C: copy record') + '<br/>' +
-                        i18n._('E: edit record') + '<br/>' +
-                        i18n._('N: new record') + '<br/>' +
-                        i18n._('F: find') + '<br/>' +
-                        i18n._('ESC: focus grid') + '<br/>' +
-                        i18n._('R: reload grid') + '<br/>';
+                    
+                    const keyBindingData = this.getKeyBindingData();
+                    
                     Ext.MessageBox.show({
                         title: i18n._('Grid Panel Key Bindings'),
-                        msg: helpText,
+                        msg: keyBindingData.join('<br/>'),
                         buttons: Ext.Msg.OK,
                         icon: Ext.MessageBox.INFO_INSTRUCTION
                     });
                     e.stopEvent();
                 }
         }
+    },
+    
+    getKeyBindingData() {
+        const data = [
+            'A: select all visible rows',
+            'C: copy record',
+            'E: edit record',
+            'N: new record',
+            'F: find',
+            'ESC: focus grid',
+            'R: reload grid',
+        ];
+        return data.map((item) => i18n._(item));
     },
 
     /**
