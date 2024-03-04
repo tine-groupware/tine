@@ -909,7 +909,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         );
     }
 
-    public function getSharedOrderDocumentTransition(string $recipientId, string $category, string $targetDocument): array
+    public function getMatchingSharedOrderDocumentTransition(string $orderId, string $targetDocument): array
     {
         switch ($targetDocument) {
             case Sales_Model_Document_Invoice::class:
@@ -926,17 +926,20 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 throw new Tinebase_Exception_InvalidArgument('target document needs to be either invoice or delivery');
         }
 
+        $order = Sales_Controller_Document_Order::getInstance()->get($orderId);
+        $ft = $order->{$recipientField}->{Sales_Model_Address::FLD_FULLTEXT};
+
         $orders = Sales_Controller_Document_Order::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class, [
                 [TMFA::FIELD => $recipientField, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
-                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $recipientId]
+                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->{$recipientField}->getIdFromProperty(Sales_Model_Document_Order::FLD_ORIGINAL_ID)]
                 ]],
-                [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY, TMFA::OPERATOR => 'equals', TMFA::VALUE => $category],
+                [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->getIdFromProperty(Sales_Model_Document_Order::FLD_DOCUMENT_CATEGORY)],
                 [TMFA::FIELD => $field, TMFA::OPERATOR => 'equals', TMFA::VALUE => true],
                 [TMFA::FIELD => $followUpStatusFld, TMFA::OPERATOR => 'not', TMFA::VALUE => Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED],
                 [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => 'equals', TMFA::VALUE => Sales_Model_Document_Order::STATUS_ACCEPTED],
-            ]));
-
+            ]))->filter(fn ($rec) => $rec->{Sales_Model_Address::FLD_FULLTEXT} === $ft);
+        
         if ($orders->count() === 0) {
             return [];
         }
