@@ -275,13 +275,14 @@ Ext.apply(Tine.Felamimail.GridPanelHook.prototype, {
         let token = null;
         
         if (email && email.match(emailRegEx)) {
+            const hasContact = contact.get('id');
             token = {
                 'email': email,
                 'email_type': emailType,
-                'type': contact.get('type'),
-                'n_fileas': contact.get('n_fileas'),
-                'name': contact.get('n_fn'),
-                'contact_record': contact
+                'type': hasContact ? contact.get('type') : '',
+                'n_fileas': contact.get('n_fileas') ?? '',
+                'name': contact.get('n_fn') ?? '',
+                'contact_record': hasContact ? contact : null
             };
         }
         
