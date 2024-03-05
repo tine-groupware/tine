@@ -171,7 +171,7 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
                 data = {tip: 'Contact', iconClass: 'Contact'};
                 break;
             default :
-                if (token?.contact_record !== '') data = {tip: 'Contact', iconClass: 'Contact'};
+                if (token?.contact_record) data = {tip: 'Contact', iconClass: 'Contact'};
                 break;
         }
     
