@@ -289,6 +289,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                         attender.user_id.type = 'user';
                         recipients.push(attender.user_id);
                     }
+                    if (attender.user_type === 'email') {
+                        recipients.push({ 'email': attender.user_email});
+                    }
                 }, this);
                 await this.addRecipientTokenFromContacts(mailAddresses, recipients);
             }
