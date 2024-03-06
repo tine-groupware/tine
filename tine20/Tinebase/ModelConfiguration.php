@@ -2026,7 +2026,6 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                 if ($deNormOf) {
                     $fieldDef[self::CONFIG][self::DENORMALIZATION_OF] = $deNormOf;
                     $fieldDef[self::CONFIG][self::DEPENDENT_RECORDS] = true;
-                    $fieldDef[self::DOCTRINE_IGNORE] = true;
                     if (self::TYPE_RECORD === $fieldDef[self::TYPE] && !isset($fieldDef[self::FILTER_DEFINITION])) {
                         if (!isset($fieldDef[self::CONFIG][self::REF_ID_FIELD])) {
                             throw new Tinebase_Exception_Record_DefinitionFailure($this->_modelName . '::' . $fieldKey . ' is missing the ' . self::REF_ID_FIELD);
@@ -2046,10 +2045,14 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
                     }
                 }
                 $fieldDef['config']['dependentRecords'] = isset($fieldDef['config']['dependentRecords']) ? $fieldDef['config']['dependentRecords'] : false;
-                if ($fieldDef[self::TYPE] == self::TYPE_RECORD) {
-                    $fieldDef['config']['length'] = 40;
+                if ($fieldDef[self::TYPE] === self::TYPE_RECORD) {
+                    if ($fieldDef[self::CONFIG][self::REF_ID_FIELD] ?? false) {
+                        $fieldDef[self::DOCTRINE_IGNORE] = true;
+                    } else {
+                        $fieldDef['config']['length'] = 40;
+                    }
                     $this->_recordFields[$fieldKey] = $fieldDef;
-                    if (!isset($fieldDef[self::DOCTRINE_IGNORE]) || !$fieldDef[self::DOCTRINE_IGNORE]) {
+                    if (!($fieldDef[self::DOCTRINE_IGNORE] ?? false)) {
                         $this->_converters[$fieldKey] = [new Tinebase_Model_Converter_Record()];
                     }
                 } else {
