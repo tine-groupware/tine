@@ -36,7 +36,7 @@ packaging_build_packages() {
     fi
 
     # add current.map
-    if ! echo "$version" | grep "nightly"; then
+    if ! echo "$version" | grep "nightly" && ! echo "$version" | grep "weekly" ; then
         echo "currentPackage ${RELEASE}/tine20-allinone_${RELEASE}.tar.bz2" >> current.map
         tar -rf "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" current.map
     else
