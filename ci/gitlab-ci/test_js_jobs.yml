@@ -1,8 +1,7 @@
 .js-e2e-tests-source:
   extends: .abstract_jobs.test
   stage: test
-  needs:
-    - docker_build_source
+  needs: []
   variables:
     KUBERNETES_CPU_REQUEST: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_CPU_REQUEST
     KUBERNETES_CPU_LIMIT: $ABSTRACT_JOBS_E2E_TEST_KUBERNETES_CPU_LIMIT
@@ -19,29 +18,25 @@
     TEST_DOCKER: "true"
     TEST_BROWSER_LANGUAGE: en
     TINE20_INSTALL_LANG: de
-    ARG_COPY_SOURCE: "true"
-    ARG_IMAGE: test-source
     TINE20ROOT: ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
     WAIT_FOR_DB_TIMEOUT: '120'
   services:
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
     - !reference [.lib-services, mail_service]
-    - name: node:18.9.0-alpine
+    - name: ${UTIL_REGISTRY}/node:18.9.0-alpine-r1
       alias: webpack
       entrypoint:
         !reference [.lib, entry_points, tine_as_a_service_webpack]
-    - name: ${REGISTRY}/${ARG_IMAGE}-commit:${IMAGE_TAG}
+    - name: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}
       alias: tine
       entrypoint:
         !reference [.lib, entry_points, tine_as_a_service]
   image:
     name: dockerregistry.metaways.net/tine20/tine20/puppeteer:1.0.4
   before_script:
-    # clone tine repo if test is run for a custom app. the tine repo will in any case be under $TINE20ROOT
-    - if test "${CI_PROJECT_NAME}" != "tine20"; then git clone -b $TINE20_BRANCH --single-branch --depth 1 $TINE20_REPO_URL $TINE20ROOT; fi
-    - cd $TINE20ROOT; git submodule init; git submodule update
-    - touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_files_ready
+    - touch ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_mount_ready
+    - echo -n 'wait for signal_files_ready ...'; while [ ! -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_files_ready ]; do sleep 1; done; echo ' done'
     # install e2e test dependencies
     - npm --prefix $TINE20ROOT/tests/e2etests/ install
     # wait for service to become ready
@@ -50,7 +45,6 @@
     - if [ -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_wait_for_database_failed ]; then echo "waiting for database failed"; exit 1; fi
     - if [ -f ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/signal_demo_data_install_failed ]; then echo "demo data install failed"; exit 1; fi
   script:
-    - env
     - export TEST_URL=http://tine:10443;
     - while ! wget $TEST_URL; do sleep 1; done
     - echo TEST_URL=${TEST_URL}
@@ -110,12 +104,6 @@ js-e2e-tests-source-save-screenshots:
     - !reference [.js-e2e-tests-source, rules]
 js-e2e-tests-source-php-version-matrix:
   extends: .js-e2e-tests-source
-  variables:
-    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}
-  needs:
-    - 'docker_build_source_matrix: [8.0]'
-    - 'docker_build_source_matrix: [8.1]'
-    - 'docker_build_source_matrix: [8.2]'
   parallel:
     matrix:
       - PHP_VERSION:

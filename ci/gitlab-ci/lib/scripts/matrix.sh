@@ -1,4 +1,3 @@
-#!/bin/sh
 matrix_send_message() {
     roomid=$1
     message=$2
