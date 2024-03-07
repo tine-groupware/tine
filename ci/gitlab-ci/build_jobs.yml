@@ -236,10 +236,15 @@ docker_build_source_arm64:
 docker_build_built:
   extends: .abstract_jobs.docker
   stage: build2
+  needs: []
   script:
     - !reference [.lib, script]
+    - docker_build_image base $(docker_image_hash base)
     - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
+    - docker_build_image dependency $(docker_image_hash dependency)
     - export DEPENDENCY_IMAGE="${REGISTRY}/dependency:$(docker_image_hash dependency)";
+    - cp $DOCKER_GIT_CONFIG ./ci/dockerimage/.gitconfig
+    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/reuse_or_build_image.sh source false
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh build
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh built
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh test-built
@@ -307,6 +312,7 @@ docker_build_dev:
   stage: build2
   script:
     - !reference [.lib, script]
+    - docker_build_image base $(docker_image_hash base)
     - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh dev
   rules:
