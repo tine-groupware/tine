@@ -5,8 +5,6 @@ deploy-dev-image-to-gitlab:
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_gitlab.sh dev
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab/
-    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "false"
-      when: never
     - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "true"
     - if: $PIPELINE_TYPE =~ /build-dev-images/
   timeout: 20m
@@ -23,10 +21,8 @@ deploy-dev-image-to-gitlab-arm64:
   tags:
     - arm64
   rules:
-    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "false"
-      when: never
-    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab-arm64/
+    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "true"
     - if: $PIPELINE_TYPE =~ /build-dev-images/
 
 deploy-dev-image-to-dockerhub:
@@ -37,8 +33,6 @@ deploy-dev-image-to-dockerhub:
     - docker_hub_deploy dev dev $(echo $CI_COMMIT_REF_NAME | sed sI/I-Ig)-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub/
-    - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB == "false"
-      when: never
     - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB == "true"
     - if: $PIPELINE_TYPE =~ /build-dev-images/
   timeout: 20m
@@ -55,26 +49,28 @@ deploy-dev-image-to-dockerhub-arm64:
   tags:
     - arm64
   rules:
-    - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB_ARM64 == "false"
-      when: never
-    - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB_ARM64 == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub-arm64/
+    - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB_ARM64 == "true"
     - if: $PIPELINE_TYPE =~ /build-dev-images/
 
-deploy-built-image-to-dockerhub:
+.deploy-built-image-to-dockerhub:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
     - !reference [.lib, script]
     - docker_hub_deploy_with_tag built tine
   rules:
-    - if: ($BASE_MAJOR_COMMIT_REF_NAME != "2023.11" && $BASE_MAJOR_COMMIT_REF_NAME != "2024.11") || $CUSTOMER_MAJOR_COMMIT_REF_NAME != ""
-      when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-dockerhub/
       when: manual
     - if: $CI_COMMIT_TAG
   timeout: 20m
   interruptible: false
+deploy-built-image-to-dockerhub:
+  extends: .deploy-built-image-to-dockerhub
+  rules:
+    - if: ($BASE_MAJOR_COMMIT_REF_NAME != "2023.11" && $BASE_MAJOR_COMMIT_REF_NAME != "2024.11") || $CUSTOMER_MAJOR_COMMIT_REF_NAME != ""
+      when: never
+    - !reference [.deploy-built-image-to-dockerhub, rules]
 
 deploy-customer-image-to-registry:
   extends: .abstract_jobs.docker
@@ -85,9 +81,8 @@ deploy-customer-image-to-registry:
     - docker_registry_release_image built "$CUSTOMER_IMAGE_REGISTRY_REPO" "$DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY_SET_LATEST"
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
-    - if: $DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY != "true"
-      when: never
-    - if: $CI_COMMIT_TAG
+      when: manual
+    - if: $DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY == "true" && $CI_COMMIT_TAG
   timeout: 20m
   interruptible: false
 
@@ -142,20 +137,24 @@ release-packages-to-gitlab:
   timeout: 20m
   interruptible: false
 
-release-packages-to-github:
+.release-packages-to-github:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
     - !reference [.lib, script]
     - packaging_push_package_to_github
   rules:
-    - if: ($BASE_MAJOR_COMMIT_REF_NAME != "2023.11" && $BASE_MAJOR_COMMIT_REF_NAME != "2024.11") || $CUSTOMER_MAJOR_COMMIT_REF_NAME != ""
-      when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
       when: manual
     - if: $CI_COMMIT_TAG
   timeout: 20m
   interruptible: false
+release-packages-to-github:
+  extends: .release-packages-to-github
+  rules:
+    - if: ($BASE_MAJOR_COMMIT_REF_NAME != "2023.11" && $BASE_MAJOR_COMMIT_REF_NAME != "2024.11") || $CUSTOMER_MAJOR_COMMIT_REF_NAME != ""
+      when: never
+    - !reference [.release-packages-to-github, rules]
 
 trigger-release:
   stage: deploy
