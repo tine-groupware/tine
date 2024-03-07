@@ -24,7 +24,7 @@
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
     - !reference [.lib-services, mail_service]
-    - name: node:18.9.0-alpine
+    - name: ${UTIL_REGISTRY}/node:18.9.0-alpine-r1
       alias: webpack
       entrypoint:
         !reference [.lib, entry_points, tine_as_a_service_webpack]
