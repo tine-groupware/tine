@@ -1,6 +1,6 @@
 test_prepare_working_dir() {
     if [ "${TINE20ROOT}" != "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20" ]; then
-        log "test_preapre_wirking_dir is only requires the tine root to be: \${CI_BUILDS_DIR}/\${CI_PROJECT_NAMESPACE}/tine20"
+        log "test_preapre_working_dir requires the tine root to be: \${CI_BUILDS_DIR}/\${CI_PROJECT_NAMESPACE}/tine20"
         # This function is only intended to work with the source from gitlab...
         # intended: for the main repo => do basicly nothing. Or for customapps => clone main repo and include customapp
         # and setup vars as if we where running in the main repo. 
@@ -106,8 +106,9 @@ test_composer_install() {
 }
 
 test_npm_install() {
+    additional_npm_args="$1"
     log "trying to use cache..."
-    package_shrinkwrap_hash=$(cd ${TINE20ROOT}/tine20/Tinebase/js; sha1sum npm-shrinkwrap.json package.json | sha1sum | cut -d ' ' -f 1)
+    package_shrinkwrap_hash=$(cd ${TINE20ROOT}/tine20/Tinebase/js; echo $(sha1sum npm-shrinkwrap.json package.json)"$additional_npm_args" | sha1sum | cut -d ' ' -f 1)
     export NODE_MODULE_CACHE_DIR=${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/npm-cache/v1/${package_shrinkwrap_hash}
 
     mkdir -p $(dirname $NODE_MODULE_CACHE_DIR)
@@ -125,7 +126,7 @@ test_npm_install() {
 
     log "installing npm ..."
     pushd ${TINE20ROOT}/tine20/Tinebase/js
-    npm --no-optional install
+    npm --no-optional install $additional_npm_args
     popd
 
     if [ ! -d $NODE_MODULE_CACHE_DIR ]; then
