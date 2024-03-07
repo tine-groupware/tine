@@ -932,7 +932,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $this->_checkAdminRight();
         $data = $this->_parseArgs($_opts, array('accountId', 'grants'));
-        $dryrun = (bool)$_opts->d;
+        Tinebase_Container::getInstance()->doSearchAclFilter(false);
 
         $resourcesFilterData = [];
         foreach (['id', 'name', 'type'] as $field) {
@@ -962,6 +962,8 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
         $cli = new Tinebase_Frontend_Cli_Abstract();
         $cli->setContainerGrantsHelper($containers, $data, $_opts->d);
+
+        Tinebase_Container::getInstance()->doSearchAclFilter(true);
 
         return 0;
     }
