@@ -55,7 +55,6 @@ merge_trigger_next () {
         curl -X POST -F token=$MERGE_TRIGGER_TOKEN \
             -F ref=$ref \
             -F "variables[$var]=true" \
-            -F "variables[DOCKER_BUILD_SOURCE]=true" \
             -F "variables[SEND_PIPELINE_STATUS]=true" \
             "$CI_API_V4_URL/projects/$CI_PROJECT_ID/trigger/pipeline" > /dev/null
     done
