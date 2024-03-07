@@ -12,6 +12,7 @@ describe('Mainpage', () => {
     test('openEditDialog', async () => {
         let popupWindow = await lib.getEditDialog('Kontakt hinzufügen');
         await expect(popupWindow).toClick('span', {text: new RegExp("Verknüpfungen.*")});
+        await popupWindow.waitForSelector('.x-grid3-hd.x-grid3-cell.x-grid3-td-remark');
         let arrows = await popupWindow.$$('.x-panel.x-wdgt-pickergrid.x-grid-panel .x-form-trigger.x-form-arrow-trigger');
         await arrows[0].click();
         //await popupWindow.waitForSelector('.x-layer.x-combo-list',{visible: true});

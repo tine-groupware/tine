@@ -13,8 +13,6 @@ stages:
   - merge
 
 variables:
-  # also needs to be set in build job
-  IMAGE_TAG: $CI_PROJECT_ID-$CI_PIPELINE_IID-$PHP_VERSION
   CI_IS_CUSTOMAPP: "true"
   # TESTS
   PHP_UNIT_ALL_TESTS_SOURCE_PARALLEL: "false"
@@ -40,38 +38,3 @@ workflow:
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
       when: never
     - when: always
-
-docker_build_source:
-  stage: build
-  trigger:
-    project: tine20/tine20
-    branch: $TINE20_BRANCH
-    strategy: depend
-  variables:
-    RUN_NO_TESTS: "true"
-    AUTO_MERGE: "never"
-    IMAGE_TAG: $CI_PROJECT_ID-$CI_PIPELINE_IID-$PHP_VERSION
-    DOCKER_BUILD_SOURCE: "true"
-docker_build_source_matrix:
-  stage: build
-  parallel:
-    matrix:
-      - PHP_VERSION:
-          - "7.4"
-          - "8.0"
-          - "8.1"
-  script:
-    - echo job is there for needs
-  rules:
-    - if: $NOT_TURE == "true"
-      when: on_success
-    - when: never
-
-docker_build_built:
-  stage: build
-  script:
-    - echo job is there for needs
-  rules:
-    - if: $NOT_TURE == "true"
-      when: on_success
-    - when: never
