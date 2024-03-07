@@ -141,8 +141,9 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
     };
     
     ['PurchaseInvoice', 'Document_Invoice'].forEach((modelName) => {
-        const datevRecipients = Tine.Tinebase.configManager.get('datevRecipientEmails', 'Sales');
-        if (datevRecipients.length === 0) return;
+        const configName = modelName === 'PurchaseInvoice' ? 'datevRecipientEmailsPurchaseInvoice' : 'datevRecipientEmailsInvoice';
+        const datevRecipients = Tine.Tinebase.configManager.get(configName, 'Sales');
+        if (!datevRecipients || datevRecipients.length === 0) return;
         const action = getAction(modelName, {})
         const medBtnStyle = { scale: 'medium', rowspan: 2, iconAlign: 'top'}
         Ext.ux.ItemRegistry.registerItem(`Sales-${modelName}-GridPanel-ContextMenu`, action, 2)
