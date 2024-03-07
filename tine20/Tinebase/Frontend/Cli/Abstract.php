@@ -130,10 +130,27 @@ class Tinebase_Frontend_Cli_Abstract
         $data = $this->_parseArgs($_opts, array('accountId', 'grants'));
         
         $containers = $this->_getContainers($data);
+
+        $this->setContainerGrantsHelper($containers, $data, $_opts->d);
+        
+        return 0;
+    }
+
+    /**
+     *
+     * set containers grants helper
+     *
+     * @param $containers
+     * @param $data
+     * @param $dry
+     * @return int
+     */
+    public function setContainerGrantsHelper($containers, $data, $dryrun)
+    {
         if (count($containers) == 0) {
             echo "No matching containers found.\n";
         } else {
-            if ($_opts->d) {
+            if ($dryrun) {
                 echo "Setting " . print_r($data['grants'], true) . ' for ' . count($containers) . " containers(s).\n";
             } else {
                 Admin_Controller_Container::getInstance()->setGrantsForContainers(
@@ -147,7 +164,6 @@ class Tinebase_Frontend_Cli_Abstract
                 echo "Updated " . count($containers) . " container(s).\n";
             }
         }
-        
         return 0;
     }
 
@@ -387,7 +403,7 @@ class Tinebase_Frontend_Cli_Abstract
 
     /**
      * get container for setContainerGrants
-     * 
+     *
      * @param array $_params
      * @return Tinebase_Record_RecordSet
      * @throws Timetracker_Exception_UnexpectedValue
