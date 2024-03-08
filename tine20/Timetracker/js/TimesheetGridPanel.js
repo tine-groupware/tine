@@ -70,6 +70,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initDetailsPanel: function() {
+        if (this.detailsPanel === false) return; // e.g. in dialogs
         this.detailsPanel = new Tine.widgets.grid.DetailsPanel({
             gridpanel: this,
             
