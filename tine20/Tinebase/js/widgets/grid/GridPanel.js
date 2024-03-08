@@ -2553,7 +2553,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         var totalcount = this.selectionModel.getCount(),
             selectedRecords = [],
-            fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isObject(button.fixedFields)) ? Ext.encode(button.fixedFields) : null,
+            fixedFields = (button.hasOwnProperty('fixedFields') && Ext.isObject(button.fixedFields)) ? Ext.encode(button.fixedFields) :
+                (this.editDialogConfig.fixedFields ?? Ext.encode(button.fixedFields)),
             editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass),
             additionalConfig = additionalConfig ? additionalConfig : {};
         
