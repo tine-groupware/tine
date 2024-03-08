@@ -875,4 +875,49 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         parent::setFromArray($_data);
     }
+
+    public function createPositionFromProduct(Sales_Model_Product $product, string $lang): Sales_Model_DocumentPosition_Abstract
+    {
+        /** @var Sales_Model_DocumentPosition_Abstract $positionClass */
+        $positionClass = str_replace('_Document_', '_DocumentPosition_', static::class);
+        $position = new $positionClass([], true);
+
+        $prodFlds = $product::getConfiguration()->fields;
+        foreach (array_diff(array_intersect($product::getConfiguration()->fieldKeys, $positionClass::getConfiguration()->fieldKeys), Tinebase_ModelConfiguration::$genericProperties) as $property) {
+            if ($prodFlds[$property][self::TYPE] === self::TYPE_LOCALIZED_STRING) {
+                $position->{$property} = ($product->{$property}?->find(Tinebase_Record_PropertyLocalization::FLD_LANGUAGE, $lang)
+                    ?: $product->{$property}?->getFirstRecord())?->{Tinebase_Record_PropertyLocalization::FLD_TEXT};
+            } else {
+                $position->{$property} = $product->{$property};
+            }
+        }
+
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_TYPE} = Sales_Model_DocumentPosition_Abstract::POS_TYPE_PRODUCT;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_TITLE} = ($product->{Sales_Model_Product::FLD_NAME}->find(Tinebase_Record_PropertyLocalization::FLD_LANGUAGE, $lang)
+           ?: $product->{Sales_Model_Product::FLD_NAME}->getFirstRecord())->{Tinebase_Record_PropertyLocalization::FLD_TEXT};
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_PRODUCT_ID} = $product;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} = 1;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_TYPE} = Sales_Config::INVOICE_DISCOUNT_SUM;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_SUM} = 0;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_PERCENTAGE} = 0;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE} = $product->{Sales_Model_Product::FLD_SALESPRICE_TYPE} ?: Sales_Config::PRICE_TYPE_NET;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE} = $product->{Sales_Model_Product::FLD_SALESPRICE} ?: 0;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} = $product->{Sales_Model_Product::FLD_SALESTAXRATE} ?: 0;
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING} = $product->{Sales_Model_Product::FLD_DEFAULT_GROUPING};
+        $position->{Sales_Model_DocumentPosition_Abstract::FLD_SORTING} = $product->{Sales_Model_Product::FLD_DEFAULT_SORTING};
+
+        if ($this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE && Sales_Config::PRICE_TYPE_GROSS ===
+                $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE}) {
+           $position->computePrice();
+           $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE} = Sales_Config::PRICE_TYPE_NET;
+           $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE} =
+               $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE} - $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX};
+           $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX_RATE} = 0;
+        }
+
+        $position->computePrice();
+
+        $this->{self::FLD_POSITIONS}->addRecord($position);
+        return $position;
+    }
 }
