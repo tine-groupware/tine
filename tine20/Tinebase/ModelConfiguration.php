@@ -105,7 +105,28 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  * @property bool       $hasSystemCustomFields
  */
 
-class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const {
+class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
+{
+    public static $genericProperties = [
+        'id',
+        'customfields',
+        'relations',
+        'container_id',
+        self::FLD_ACCOUNT_GRANTS,
+        'tags',
+        'attachments',
+        'alarms',
+        'xprops',
+        'notes',
+        'created_by',
+        'creation_time',
+        'last_modified_by',
+        'last_modified_time',
+        'seq',
+        'deleted_by',
+        'deleted_time',
+        'is_deleted',
+    ];
 
     /**
      * this holds (caches) the availability info of applications globally
