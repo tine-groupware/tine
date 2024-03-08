@@ -12,6 +12,7 @@
 
 abstract class Tinebase_Record_Expander_Abstract
 {
+    const EXPANDER_USE_JSON_EXPANDER = 'useJsonExpander';
     const EXPANDER_PROPERTIES = 'properties';
     const EXPANDER_PROPERTY_CLASSES = 'propertyClasses';
     const EXPANDER_REPLACE_GET_TITLE = 'replaceGetTitle';
@@ -42,6 +43,9 @@ abstract class Tinebase_Record_Expander_Abstract
         /** @var Tinebase_Record_Abstract $_model */
         $this->_model = $_model;
         $this->_rootExpander = $_rootExpander;
+        if ($_expanderDefinition[self::EXPANDER_USE_JSON_EXPANDER] ?? false) {
+            $_expanderDefinition = array_merge($_model::getConfiguration()->jsonExpander, $_expanderDefinition);
+        }
         if (isset($_expanderDefinition[self::EXPANDER_PROPERTIES])) {
             foreach ($_expanderDefinition[self::EXPANDER_PROPERTIES] as $prop => $definition) {
                 $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($_model, $definition, $prop,
