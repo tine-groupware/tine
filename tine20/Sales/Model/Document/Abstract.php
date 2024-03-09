@@ -884,7 +884,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
         $prodFlds = $product::getConfiguration()->fields;
         foreach (array_diff(array_intersect($product::getConfiguration()->fieldKeys, $positionClass::getConfiguration()->fieldKeys), Tinebase_ModelConfiguration::$genericProperties) as $property) {
-            if ($prodFlds[$property][self::TYPE] === self::TYPE_LOCALIZED_STRING) {
+            if (($prodFlds[$property][self::CONFIG][self::SPECIAL_TYPE] ?? null) === self::TYPE_LOCALIZED_STRING) {
                 $position->{$property} = ($product->{$property}?->find(Tinebase_Record_PropertyLocalization::FLD_LANGUAGE, $lang)
                     ?: $product->{$property}?->getFirstRecord())?->{Tinebase_Record_PropertyLocalization::FLD_TEXT};
             } else {
