@@ -1184,6 +1184,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             }
         ]);
 
+        if (this.focusField) {
+            const focusField = this.getForm().findField(this.focusField);
+            if (focusField) {
+                focusField.focus(true, 500);
+            }
+        }
         this.showLoadMask();
 
         // init change event
