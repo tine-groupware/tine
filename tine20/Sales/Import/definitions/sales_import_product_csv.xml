@@ -49,6 +49,14 @@
             <source>lifespan_end</source>
             <destination>lifespan_end</destination>
         </field>
+        <field>
+            <source>default_grouping</source>
+            <destination>default_grouping</destination>
+        </field>
+        <field>
+            <source>default_sorting</source>
+            <destination>default_sorting</destination>
+        </field>
     </mapping>
 </config>
 
