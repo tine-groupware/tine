@@ -247,7 +247,7 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
         /** @var ?Tinebase_Model_EvaluationDimension $result */
         $result = $this->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
             [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $name],
-        ]))->getFirstRecord();
+        ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
         return $result;
     }
 }
