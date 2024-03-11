@@ -63,7 +63,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 };
 
                 const getMailAction = async (win, record) => {
-                    const recipientData = _.get(record, 'data.recipient_id.data', _.get(record, 'data.recipient_id'));
+                    const recipientData = _.get(record, 'data.recipient_id.data', _.get(record, 'data.recipient_id')) || {};
                     paperSlip.attachment_type = 'attachment';
 
                     return new Ext.Button({
