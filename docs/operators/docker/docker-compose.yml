@@ -99,7 +99,7 @@ services:
 #  broadcasthub
 ############################################################################
 #  broadcasthub:
-#    image: tinegroupware/broadcasthub:0.6
+#    image: tinegroupware/broadcasthub:0.7
 #    restart: always
 #    networks:
 #      - external_network

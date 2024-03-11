@@ -59,3 +59,13 @@
     mode: 0640
   become: true
   when: tinedockercompose_documentserver is defined and tinedockercompose_documentserver|bool
+
+- name: configure broadcasthub
+  template:
+    src: broadcasthub.inc.php.j2
+    dest: "{{ tinedockercompose_confd_path }}/broadcasthub.inc.php"
+    owner: tine20
+    group: root
+    mode: 0640
+  become: true
+  when: tinedockercompose_broadcasthub is defined and tinedockercompose_broadcasthub|bool
