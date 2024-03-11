@@ -220,6 +220,8 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             productsStore: this.store,
             blurOnSelect: true,
             recordClass: Tine.Sales.Model.Product,
+            sortBy: 'name',
+            sortDir: 'ASC',
             getValue: function() {
                 return this.selectedRecord ? this.selectedRecord.data : null;
             },
