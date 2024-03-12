@@ -724,18 +724,21 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $controller = $modelName === 'PurchaseInvoice' ? Sales_Controller_PurchaseInvoice::getInstance() 
             : Sales_Controller_Document_Invoice::getInstance();
-        $configName = $modelName === 'PurchaseInvoice' ? Sales_Config::DATEV_SENDER_EMAIL_PURCHASE_INVOICE
+        $senderConfig = $modelName === 'PurchaseInvoice' ? Sales_Config::DATEV_SENDER_EMAIL_PURCHASE_INVOICE
             : Sales_Config::DATEV_SENDER_EMAIL_INVOICE;
         
         $invalidInvoiceIds = [];
         $validInvoiceIds = [];
         $errorMessage = null;
 
-        $senderEmail = Sales_Config::getInstance()->get($configName);
+        $senderEmail = Sales_Config::getInstance()->get($senderConfig);
         $sender = !empty($senderEmail) ? Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $senderEmail) 
             : Tinebase_Core::getUser();
 
-        $recipientEmails = Sales_Config::getInstance()->get(Sales_Config::DATEV_RECIPIENT_EMAILS);
+        $recipientConfig = $modelName === 'PurchaseInvoice' ? Sales_Config::DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE
+            : Sales_Config::DATEV_RECIPIENT_EMAILS_INVOICE;
+        $recipientEmails = Sales_Config::getInstance()->get($recipientConfig);
+        
         if (sizeof($recipientEmails) === 0) {
             throw new Tinebase_Exception_SystemGeneric('recipient email is not configured');
         }
@@ -750,7 +753,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         if (sizeof($invalidInvoiceIds) > 0) {
             foreach ($controller->getMultiple($invalidInvoiceIds) as $invoice) {
-                $errorMessage .= PHP_EOL . $invoice->number . ': ' . $invoice->title . ' attachment size: ' . sizeof($invoiceData[$invoice->id]);
+                $errorMessage .= PHP_EOL . $invoice->document_number . ' : ' . $invoice->document_title . ' attachment size: ' . sizeof($invoiceData[$invoice->id]);
             }
             $exception = new Tinebase_Exception_SystemGeneric($errorMessage);
             $exception->setTitle('invoices with invalid attachments');

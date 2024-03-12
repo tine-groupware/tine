@@ -660,7 +660,7 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
 
     public function testExportInvoiceToDatev()
     {
-        Sales_Config::getInstance()->set(Sales_Config::DATEV_RECIPIENT_EMAILS, [Tinebase_Core::getUser()->accountEmailAddress]);
+        Sales_Config::getInstance()->set(Sales_Config::DATEV_RECIPIENT_EMAILS_INVOICE, [Tinebase_Core::getUser()->accountEmailAddress]);
         $testData = $this->getTrackingTestData();
         //insert attachment to invoice
         $invoice = null;

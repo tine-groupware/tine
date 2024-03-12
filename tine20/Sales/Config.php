@@ -197,7 +197,9 @@ class Sales_Config extends Tinebase_Config_Abstract
      */
     public const DATEV_SENDER_EMAIL_PURCHASE_INVOICE = 'datevSenderEmailPurchaseInvoice';
     public const DATEV_SENDER_EMAIL_INVOICE = 'datevSenderEmailInvoice';
-    public const DATEV_RECIPIENT_EMAILS = 'datevRecipientEmails';
+
+    public const DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE = 'datevRecipientEmailsInvoice';
+    public const DATEV_RECIPIENT_EMAILS_INVOICE = 'datevRecipientEmailsPurchaseInvoice';
 
 
     /**
@@ -981,9 +983,17 @@ class Sales_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE          => true,
             self::DEFAULT_STR               => '',
         ],
-        self::DATEV_RECIPIENT_EMAILS                 => [
-            self::LABEL                     => 'Datev recipient emails', //_('Datev recipient emails')
-            self::DESCRIPTION               => 'Datev recipient emails', //_('Datev recipient emails')
+        self::DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE    => [
+            self::LABEL                     => 'Datev recipient emails purchase invoice', //_('Datev recipient emails purchase invoice')
+            self::DESCRIPTION               => 'Datev recipient emails for purchase invoice', //_('Datev recipient emails for purchase invoice')
+            self::TYPE                      => self::TYPE_ARRAY,
+            self::CLIENTREGISTRYINCLUDE     => true,
+            self::SETBYADMINMODULE          => true,
+            self::DEFAULT_STR               => [],
+        ],
+        self::DATEV_RECIPIENT_EMAILS_INVOICE    => [
+            self::LABEL                     => 'Datev recipient emails invoice', //_('Datev recipient emails')
+            self::DESCRIPTION               => 'Datev recipient emails for invoice', //_('Datev recipient emails for invoice')
             self::TYPE                      => self::TYPE_ARRAY,
             self::CLIENTREGISTRYINCLUDE     => true,
             self::SETBYADMINMODULE          => true,
