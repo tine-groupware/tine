@@ -21,6 +21,8 @@
 class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
 {
     public const TABLE_NAME = 'inventory_item';
+    
+    const FLD_STATUS = 'status';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -82,13 +84,15 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'label'       => 'Name', // _('Name')
                 'queryFilter' => true,
             ),
-            'status' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-                'nullable' => true,
-                'label' => 'Status', // _('Status')
-                'type' => 'keyfield',
-                'name' => 'inventoryStatus',
-            ),
+            self::FLD_STATUS => [
+                self::LABEL => 'Status', // _('Status')
+                self::TYPE => self::TYPE_KEY_FIELD,
+                self::NAME => Inventory_Config::INVENTORY_STATUS,
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+                self::NULLABLE  => true,
+            ],
             'inventory_id' => array(
                 'type'       => 'string',
                 'length'     => 100,
