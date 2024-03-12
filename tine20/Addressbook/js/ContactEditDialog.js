@@ -555,8 +555,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         if(Tine.Tinebase.registry.get('currentAccount').contact_id == this.record.id) {
             this.enableOwnPrivateFields();
         }
-
-        this.suggestFields();
     },
 
     /**
@@ -570,7 +568,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             this.record.set('container_id', container)
         }
 
-        this.supr().onAfterRecordLoad.apply(this, arguments)
+        this.supr().onAfterRecordLoad.apply(this, arguments);
+        this.suggestFields();
     },
 
     /**
