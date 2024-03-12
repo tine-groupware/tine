@@ -45,7 +45,6 @@ class Sales_JsonTest extends TestCase
         
         Sales_Controller_Contract::getInstance()->setNumberPrefix();
         Sales_Controller_Contract::getInstance()->setNumberZerofill();
-        $this->_datevRecipientEmails = Sales_Config::getInstance()->get(Sales_Config::DATEV_RECIPIENT_EMAILS);
 
         $this->_deleteContracts = array();
     }
@@ -53,7 +52,6 @@ class Sales_JsonTest extends TestCase
     protected function tearDown(): void
     {
         Tinebase_Core::getPreference()->setValue(Tinebase_Preference::ADVANCED_SEARCH, false);
-        Sales_Config::getInstance()->set(Sales_Config::DATEV_RECIPIENT_EMAILS, $this->_datevRecipientEmails);
 
         parent::tearDown();
 
@@ -924,7 +922,7 @@ class Sales_JsonTest extends TestCase
 
     public function testExportPurchaseInvoiceToDatev()
     {
-        Sales_Config::getInstance()->set(Sales_Config::DATEV_RECIPIENT_EMAILS, [Tinebase_Core::getUser()->accountEmailAddress]);
+        Sales_Config::getInstance()->set(Sales_Config::DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE, [Tinebase_Core::getUser()->accountEmailAddress]);
         
         $pit = new Sales_PurchaseInvoiceTest();
         $pit->setUp();
