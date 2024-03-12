@@ -48,8 +48,11 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $fs = Tinebase_FileSystem::getInstance();
         $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($path);
         if (!$fs->isDir($pathRecord->statpath)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                __METHOD__ . '::' . __LINE__ . ' ' . $path . ' is not a directory');
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $path . ' is not a directory'
+                );
+            }
             $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
         }
         $node = $fs->stat($pathRecord->statpath);
@@ -95,8 +98,11 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             try {
                 $fun($node);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
-                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage()
+                    );
+                }
                 $this->_handleFailure(Tinebase_Server_Abstract::HTTP_ERROR_CODE_NOT_FOUND);
             }
             if (!$z->close()) {
