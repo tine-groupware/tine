@@ -906,7 +906,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING} = $product->{Sales_Model_Product::FLD_DEFAULT_GROUPING};
         $position->{Sales_Model_DocumentPosition_Abstract::FLD_SORTING} = $product->{Sales_Model_Product::FLD_DEFAULT_SORTING};
 
-        if ($this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE && Sales_Config::PRICE_TYPE_GROSS ===
+        if ($this->{self::FLD_VAT_PROCEDURE} && $this->{self::FLD_VAT_PROCEDURE} !== Sales_Config::VAT_PROCEDURE_TAXABLE && Sales_Config::PRICE_TYPE_GROSS ===
                 $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE}) {
            $position->computePrice();
            $position->{Sales_Model_DocumentPosition_Abstract::FLD_UNIT_PRICE_TYPE} = Sales_Config::PRICE_TYPE_NET;
