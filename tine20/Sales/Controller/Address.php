@@ -293,7 +293,9 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
             $salutations = Addressbook_Config::getInstance()->get(Addressbook_Config::CONTACT_SALUTATION, NULL);
             if ($salutations && $salutations->records instanceof Tinebase_Record_RecordSet) {
                 $salutationRecord = $salutations->records->getById($contact->salutation);
-                $fullName = $translation->_($salutationRecord->value) . ' ' . $fullName;
+                if ($salutationRecord) {
+                    $fullName = $translation->_($salutationRecord->value) . ' ' . $fullName;
+                }
             }
         }
         return $fullName;
