@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  MFA
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -332,7 +332,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             ],
             self::FLD_QUANTITY                  => [
                 self::LABEL                         => 'Quantity', // _('Quantity')
-                self::TYPE                          => self::TYPE_INTEGER,
+                self::TYPE                          => self::TYPE_FLOAT,
                 self::NULLABLE                      => true,
             ],
             self::FLD_USE_ACTUAL_QUANTITY       => [

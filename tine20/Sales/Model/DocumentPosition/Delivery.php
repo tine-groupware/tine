@@ -27,7 +27,7 @@ class Sales_Model_DocumentPosition_Delivery extends Sales_Model_DocumentPosition
     {
         parent::inheritModelConfigHook($_definition);
 
-        $_definition[self::VERSION] = 3;
+        $_definition[self::VERSION] = 4;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
         $_definition[self::RECORD_NAME] = 'Delivery Position'; // ngettext('Delivery Position', 'Delivery Positions', n)
