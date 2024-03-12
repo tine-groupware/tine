@@ -29,6 +29,22 @@ variables:
   #      see #3835[gitlab][ci] CI customapps e2etest ausführen lassen
   JS_E2E_TESTS_SOURCE: "false"
 
+docker_build_built:
+  stage: build
+  script:
+    - echo job is there for needs
+    - it is also needed if the depending jobs do not run
+  rules:
+    - if: $NOT_TURE == "true"
+      when: on_success
+    - when: never
+
+docker_build_source:
+  extends: docker_build_built
+
+docker_build_source_matrix:
+  extends: docker_build_built
+
 workflow:
   rules:
     # Disable ci pipeline
