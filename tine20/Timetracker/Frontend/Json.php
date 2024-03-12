@@ -73,7 +73,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array record data
      */
     protected function _recordToJson($_record)
-    {
+    { /*
         switch (get_class($_record)) {
             case 'Timetracker_Model_Timesheet':
                 $_record['timeaccount_id'] = $_record['timeaccount_id'] ? $this->_timeaccountController->get($_record['timeaccount_id']) : $_record['timeaccount_id'];
@@ -87,13 +87,13 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     } catch (Tinebase_Exception_NotFound $nfe) {
                         Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not resolve invoice with id ' . $_record['invoice_id']);
                     }
-                }
+                }*/
                 
                 $recordArray = parent::_recordToJson($_record);
-                break;
+               /* break;
             default:
                 $recordArray = parent::_recordToJson($_record);
-        }
+        }*/
 
         return $recordArray;
     }
@@ -108,7 +108,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array data
      * 
      * @todo replace with Timetracker_Convert_Timesheet_Json
-     */
+     *
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL, $_pagination = NULL)
     {
         if (count($_records) == 0) {
@@ -162,7 +162,7 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = $_records->toArray();
 
         return $result;
-    }
+    }*/
 
     /**
      * calculate effective ts grants so the client doesn't need to calculate them
