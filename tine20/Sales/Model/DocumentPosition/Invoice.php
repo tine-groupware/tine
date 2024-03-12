@@ -5,7 +5,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -27,7 +27,7 @@ class Sales_Model_DocumentPosition_Invoice extends Sales_Model_DocumentPosition_
     {
         parent::inheritModelConfigHook($_definition);
 
-        $_definition[self::VERSION] = 3;
+        $_definition[self::VERSION] = 4;
         $_definition[self::MODEL_NAME] = self::MODEL_NAME_PART;
         $_definition[self::TABLE][self::NAME] = self::TABLE_NAME;
         $_definition[self::RECORD_NAME] = 'Invoice Position'; // ngettext('Invoice Position', 'Invoice Positions', n)

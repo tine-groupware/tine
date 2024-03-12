@@ -643,7 +643,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     function(Sales_Model_DocumentPosition_Abstract $val) use($position) {
                         return $position->getId() ===
                             $val->getIdFromProperty(Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION);
-                        }, null)) || $pos->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} !== $position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY}) {
+                        }, null)) || (float)$pos->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} !== (float)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY}) {
                     throw new Tinebase_Exception_Record_Validation('partial facturation not supported');
                 }
             }
@@ -805,7 +805,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                             continue;
                         }
                     }
-                    $quantity += (int)$qty;
+                    $quantity += (float)$qty;
                 }
                 if (null === $quantity) {
                     if (Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED === $status) {
@@ -813,11 +813,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     }
                     continue;
                 }
-                if ($quantity < (int)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY}) {
+                if ($quantity < (float)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY}) {
                     $status = Sales_Config::DOCUMENT_FOLLOWUP_STATUS_PARTIALLY;
                     break;
                 }
-                if ($quantity === (int)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} &&
+                if ($quantity === (float)$position->{Sales_Model_DocumentPosition_Abstract::FLD_QUANTITY} &&
                         Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE === $status) {
                     $status = Sales_Config::DOCUMENT_FOLLOWUP_STATUS_PARTIALLY;
                     break;
