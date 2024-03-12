@@ -137,7 +137,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         })]
                     }, {
                         layout: 'hbox',
-                        height: 115,
+                        height: 135,
                         layoutConfig: {
                             align : 'stretch',
                             pack  : 'start'
@@ -249,7 +249,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 xtype: 'widget-keyfieldcombo',
                                 app:   'Calendar',
                                 keyFieldName: 'eventStatus',
-                                width: 120,
+                                width: 115,
                                 hideLabel: true,
                                 value: 'CONFIRMED',
                                 name: 'status',

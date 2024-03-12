@@ -131,20 +131,24 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
         this.editDialog.attendeeStore.on('remove', this.syncStores, this);
     },
     
-    syncStores: function() {
+    syncStores: async function() {
+        if(this.syncStoresIsRunning) return
+        this.syncStoresIsRunning = true;
         this.store.removeAll();
         this.store.add(this.originRecord);
         
-        this.editDialog.attendeeStore.each(function(attendee) {
+        await this.editDialog.attendeeStore.data.items.asyncForEach(async (attendee) => {
             if (attendee.get('user_id')) {
                 var attendee = attendee.copy(),
-                    displayName = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, attendee.get('user_id'), false, attendee);
+                    displayName = await Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName
+                        .call(Tine.Calendar.AttendeeGridPanel.prototype, attendee.get('user_id'), false, attendee)
+                        .asString();
                     
                 attendee.set('displayText', displayName + ' (' + Tine.Calendar.Model.Attender.getRecordName() + ')');
                 attendee.set('id', attendee.id);
                 this.store.add(attendee);
             }
-        }, this);
+        });
         
         // reset if perspective attendee is gone
         if (! this.store.getById(this.getValue())) {
@@ -159,6 +163,7 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
             attendeeStatusField.setValue(attendeeStatus);
             
         }
+        this.syncStoresIsRunning = false;
     },
     
     applyAlarmFilter: function() {
