@@ -163,6 +163,13 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
         }
     }
 
+    protected function _startGroup()
+    {
+        $this->_groupByContext = [];
+        parent::_startGroup();
+    }
+
+
     protected function _endDataSource($_name)
     {
         parent::_endDataSource($_name);
