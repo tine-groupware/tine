@@ -271,65 +271,33 @@ docker_build_built:
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh built
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh test-built
   rules:
-    - if: $DOCKER_BUILD_BUILT == "false"
-      when: never
-    # todo: use !ref when our gitlab suppored it
     - if: $CI_COMMIT_TAG
-    - if: $PIPELINE_TYPE =~ /default-tests/
-    # from php-unit-all-tests-built:
-    - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_BUILT_MERGE_REQUEST == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-built/
-    # from php-unit-tinebase-tests-built:
-    - if: $PHP_UNIT_TINEBASE_TESTS_BUILT == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_TINEBASE_TESTS_BUILT_MERGE_REQUEST == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-tinebase-tests-built/
-    # from php-unit-nogitlabci-tests-built:
-    - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_NOGITLABCI_TESTS_BUILT_MERGE_REQUEST == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-nogitlabci-tests-built/
-    # from php-unit-all-tests-ldap-built:
-    - if: $PHP_UNIT_ALL_TESTS_LDAP_BUILD == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_LDAP_BUILD_MERGE_REQUEST == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ldap-built/
-    # from deploy-built-image-to-gitlab:
-    - if: $DEPLOY_BUILD_IMAGE_TO_GITLAB == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab/
-    # from deploy-images-to-dockerhub:
-    - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
-    # from docker build packages:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
-    # from deploy-customer-image-to-registry:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
-    # from push-to-vpackages:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /push-to-vpackages/
-    # from release-to-github
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-github/
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-gitlab/
     - if: $PIPELINE_TYPE =~ /build-nightly/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-built/
+    - !reference [.php-unit-all-tests-built, rules]
+    - !reference [.php-unit-tinebase-tests-built, rules]
+    - !reference [.php-unit-nogitlabci-tests-built, rules]
+    - !reference [docker_build_packages, rules]
+    - !reference [deploy-customer-image-to-registry, rules]
+    - !reference [.deploy-built-image-to-dockerhub, rules]
   timeout: 120m
   interruptible: true
-docker_build_built_arm64:
-  services:
-    - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
-      alias: docker
-  image: ${UTIL_REGISTRY}/docker:20.10.21-r1
-  extends: docker_build_built
-  variables:
-    IMAGE_TAG_PLATFORM_POSTFIX: -arm64
-    IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
-  tags:
-    - arm64
-  rules:
-    - if: $DOCKER_BUILD_BUILT_ARM64 == "false"
-      when: never
-    - if: $DOCKER_BUILD_BUILT_ARM64 == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-built-arm64/
-    #from deploy-built-image-to-gitlab-arm:
-    - if: $DEPLOY_BUILT_IMAGE_TO_GITLAB_ARM64 == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-gitlab-arm64/
-    - if: $CI_PIPELINE_SOURCE == "schedule" && $DEPLOY_BUILD_IMAGE_TO_GITLAB_ARM64_SCHEDULE == "true"
+# docker_build_built_arm64:
+#   services:
+#     - name: ${UTIL_REGISTRY}/docker:20.10.21-dind-r1
+#       alias: docker
+#   image: ${UTIL_REGISTRY}/docker:20.10.21-r1
+#   extends: docker_build_built
+#   variables:
+#     IMAGE_TAG_PLATFORM_POSTFIX: -arm64
+#     IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
+#   tags:
+#     - arm64
+#   rules:
+#     - if: $DOCKER_BUILD_BUILT_ARM64 == "false"
+#       when: never
+#     - if: $DOCKER_BUILD_BUILT_ARM64 == "true"
+#     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-built-arm64/
 
 docker_build_dev:
   extends: .abstract_jobs.docker
@@ -340,16 +308,9 @@ docker_build_dev:
     - export BASE_IMAGE="${REGISTRY}/base:$(docker_image_hash base)";
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh dev
   rules:
-    - if: $DOCKER_BUILD_DEV == "false"
-      when: never
-    # from deploy-dev-image-to-gitlab:
-    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab/ 
-    - if: $PIPELINE_TYPE =~ /build-dev-images/
-    # from deploy-images-to-dockerhub:
-    - if: $DEPLOY_IMAGES_TO_DOCKERHUB == "true"
-    # from deploy-dev-image-to-dockerhub
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-dev/
+    - !reference [deploy-dev-image-to-gitlab, rules]
+    - !reference [deploy-dev-image-to-dockerhub, rules]
   timeout: 60m
   interruptible: true
 docker_build_dev_arm64:
@@ -364,16 +325,9 @@ docker_build_dev_arm64:
   tags:
     - arm64
   rules:
-    - if: $DOCKER_BUILD_DEV_ARM64 == "false"
-      when: never
-    - if: $DOCKER_BUILD_DEV_ARM64 == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-dev-arm64/
-    #from deploy-dev-image-to-gitlab-arm64:
-    - if: $DEPLOY_DEV_IMAGE_TO_GITLAB_ARM64 == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-gitlab-arm64/
-    - if: $PIPELINE_TYPE =~ /build-dev-images/
-    # from deploy-dev-image-to-dockerhub-arm64
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-dev-image-to-dockerhub-arm64/
+    - !reference [deploy-dev-image-to-gitlab-arm64, rules]
+    - !reference [deploy-dev-image-to-dockerhub-arm64, rules]
 
 docker_build_test:
   extends: .abstract_jobs.docker
@@ -399,12 +353,10 @@ docker_build_packages:
     - packaging
   rules:
     - if: $CI_COMMIT_TAG
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /push-to-vpackages/
-    # from release-to-github
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-github/
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-gitlab/
     - if: $PIPELINE_TYPE =~ /build-nightly/
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
+    - !reference [release-packages-to-gitlab, rules]
+    - !reference [.release-packages-to-github, rules]
+    - !reference [release-packages-to-vpackages, rules]
   timeout: 120m
   interruptible: true

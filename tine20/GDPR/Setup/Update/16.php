@@ -20,6 +20,7 @@ class GDPR_Setup_Update_16 extends Setup_Update_Abstract
     const RELEASE016_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE016_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE016_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE016_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         // we need to make sure to run this before our normal app structure updates
@@ -47,6 +48,10 @@ class GDPR_Setup_Update_16 extends Setup_Update_Abstract
             self::RELEASE016_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE016_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
     ];
@@ -155,5 +160,23 @@ class GDPR_Setup_Update_16 extends Setup_Update_Abstract
             GDPR_Model_DataIntendedPurposeLocalization::class,
         ]);
         $this->addApplicationUpdate('GDPR', '16.4', self::RELEASE016_UPDATE004);
+    }
+
+    public function update005()
+    {
+        $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
+            Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId(),
+            GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_BLACKLIST_CUSTOM_FIELD_NAME, Addressbook_Model_Contact::class, true);
+        if (null !== $cfc) {
+            $cfc->xprops('definition')[Tinebase_Model_CustomField_Config::CONTROLLER_HOOKS] = [
+                TMCC::CONTROLLER_HOOK_BEFORE_UPDATE => [
+                    [GDPR_Controller_DataIntendedPurposeRecord::class, 'adbContactBeforeUpdateHook'],
+                ],
+            ];
+            unset($cfc->xprops('definition')['controllerHookBeforeUpdate']);
+            Tinebase_CustomField::getInstance()->updateCustomField($cfc);
+        }
+
+        $this->addApplicationUpdate(GDPR_Config::APP_NAME, '16.5', self::RELEASE016_UPDATE005);
     }
 }
