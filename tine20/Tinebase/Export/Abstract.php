@@ -1613,13 +1613,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     'timestamp' => $this->_exportTimeStamp,
                     'account' => Tinebase_Core::getUser(),
                     'contact' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
-                    'groupdata' => $this->_lastGroupValue,
-                    'groupcontext' => $this->_groupByContext,
                 ],
                 'additionalRecords' => $this->_additionalRecords,
             ];
         }
         $this->_baseContext['export']['groupdata'] = $this->_lastGroupValue;
+        $this->_baseContext['export']['groupcontext'] = $this->_groupByContext;
 
         return array_merge($this->_baseContext, $context);
     }
