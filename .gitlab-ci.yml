@@ -48,4 +48,18 @@ workflow:
     # Do not run pipelines on push for feature branches. Only merge requests should run feature branche pipelines.
     - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_REF_NAME =~ /(^feat)|(^pu)|(change)/
       when: never
+    # Set PIPELINE_TYPE variable for tag pipelines
+    # Overwriting pipeline types is ok here. PIPELINE_TYPE should be empty for pipelines where $CI_COMMIT_TAG != ""
+    - if: $CI_COMMIT_TAG =~ /^weekly-.*/
+      variables:
+        PIPELINE_TYPE: release, release-weekly
+    - if: $CI_COMMIT_TAG =~ /^20..\.11\..*/ && $CUSTOMER_MAJOR_COMMIT_REF_NAME == ""
+      variables:
+        PIPELINE_TYPE: release, release-be
+    - if: $CI_COMMIT_TAG && $CUSTOMER_MAJOR_COMMIT_REF_NAME == ""
+      variables:
+        PIPELINE_TYPE: release, release-monthly
+    - if: $CI_COMMIT_TAG
+      variables:
+        PIPELINE_TYPE: release, release-customer
     - when: always
