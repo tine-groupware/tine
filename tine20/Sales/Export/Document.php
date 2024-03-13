@@ -86,7 +86,7 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
 
 
         if ($record->has(Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE) &&
-            $record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} === Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE) {
+                $record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} === Sales_Config::VAT_PROCEDURE_REVERSE_CHARGE) {
             $templates = $config->{Sales_Config::REVERSE_CHANGE_TEMPLATE};
             $record->{Sales_Model_Document_Abstract::FLD_VAT_PROCEDURE} = $templates[$lang] ?? $templates[$config->{Sales_Config::LANGUAGES_AVAILABLE}->default];
         }
@@ -111,10 +111,54 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
 
         if ('POSITIONS' === $_name) {
             $this->_groupByProperty = Sales_Model_DocumentPosition_Abstract::FLD_GROUPING;
+            $this->_groupByProcessor = function(?string &$grouping) {
+                static $lastGrouping = null;
+                static $groupCount = 0;
+
+                if (null === $grouping) {
+                    $grouping = '';
+                }
+                if (null === $lastGrouping) {
+                    $lastGrouping = $grouping;
+                } elseif ($lastGrouping !== $grouping) {
+                    $lastGrouping = $grouping;
+                    ++$groupCount;
+                }
+
+                if (preg_match('/^\[_[a-zA-Z0-9]+\]/', $grouping, $m)) {
+                    $prefix = '';
+                    if (preg_match('/^\[_[a-z]/', $grouping)) {
+                        $i = $groupCount;
+                        do {
+                            $prefix .= chr(ord('a') + $i % 26);
+                            $i -= 26;
+                        } while($i >= 0);
+                    } elseif (preg_match('/^\[_[A-Z]/', $grouping)) {
+                        $i = $groupCount;
+                        do {
+                            $prefix .= chr(ord('A') + $i % 26);
+                            $i -= 26;
+                        } while($i >= 0);
+                    } else {
+                        if (($digits = strlen($m[0]) - 3) > 1) {
+                            $prefix = sprintf('%0' . $digits . 'd', $groupCount);
+                        } else {
+                            $prefix = $groupCount;
+                        }
+                    }
+
+                    $grouping = $prefix . substr($grouping, strlen($m[0]));
+                }
+            };
             $this->_groupByRecordProcessor = function (Sales_Model_DocumentPosition_Abstract $position, array &$context): void {
                 $context['sum_net_price'] = ($context['sum_net_price'] ?? 0) + $position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE};
                 $context['sum_gross_price'] = ($context['sum_gross_price'] ?? 0) + $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROSS_PRICE};
                 $context['sum_sales_tax'] = ($context['sum_sales_tax'] ?? 0) + $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX};
+                if (preg_match('/^\[_[a-zA-Z0-9]+\]/', $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING} ?? '', $m)) {
+                    $context['sum_text'] = substr($position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING}, strlen($m[0]));
+                } else {
+                    $context['sum_text'] = $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROUPING};
+                }
             };
         }
     }
@@ -125,6 +169,8 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
 
         if ('POSITIONS' === $_name) {
             $this->_groupByProperty = null;
+            $this->_groupByRecordProcessor = null;
+            $this->_groupByProcessor = null;
         }
     }
 }
