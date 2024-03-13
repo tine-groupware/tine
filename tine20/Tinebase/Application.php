@@ -870,7 +870,7 @@ class Tinebase_Application
                 Setup_Controller::destroyInstance();
                 Setup_Controller::getInstance()->installApplications([$record->getId() => $record->name],
                     [Setup_Controller::INSTALL_NO_IMPORT_EXPORT_DEFINITIONS => true,
-                        Setup_Controller::INSTALL_NO_REPLICATION_SLAVE_CHECK => true]);
+                        Setup_Controller::INSTALL_NO_REPLICA_CHECK => true]);
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:
@@ -883,10 +883,14 @@ class Tinebase_Application
                 Tinebase_TransactionManager::getInstance()->rollBack();
                 Setup_Core::set(Setup_Core::CHECKDB, true);
                 Setup_Controller::destroyInstance();
-                Setup_Controller::getInstance()->uninstallApplications([$record->name], [
-                    Setup_Controller::INSTALL_NO_REPLICATION_SLAVE_CHECK => true
-                ]);
-                Setup_SchemaTool::resetUninstalledTables();
+                try {
+                    Setup_Controller::getInstance()->uninstallApplications([$record->name], [
+                        Setup_Controller::INSTALL_NO_REPLICA_CHECK => true
+                    ]);
+                    Setup_SchemaTool::resetUninstalledTables();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Exception::log($tenf);
+                }
                 break;
 
             default:
