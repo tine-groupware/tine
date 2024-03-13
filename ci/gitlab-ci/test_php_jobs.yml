@@ -1,5 +1,3 @@
-# todo if gitlab version >= 14.3 use gitlab "!reference [.>abstractjob<, rules]" to reduce rules copying
-
 .php-unit-all-tests-source:
   extends: .abstract_jobs.php_unit_cache
   variables:
@@ -201,10 +199,6 @@ php-unit-all-tests-ldap-source-parallel:
   needs:
     - docker_build_built
   rules:
-    - if: $RUN_NO_TESTS == "true"
-      when: never
-    - if: $PHP_UNIT_ALL_TESTS_BUILT == "false"
-      when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_BUILT_MERGE_REQUEST == "true"
       changes:
@@ -219,6 +213,10 @@ php-unit-all-tests-built-sequential:
     NODE_TOTAL: 1
     NODE_INDEX: 1
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_BUILT == "false"
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT_TYPE != "sequential"
       when: never
     - !reference [.php-unit-all-tests-built, rules]
@@ -227,13 +225,16 @@ php-unit-all-tests-built-parallel:
   timeout: 45m
   parallel: 5
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_BUILT == "false"
+      when: never
     - if: $PHP_UNIT_ALL_TESTS_BUILT_TYPE != "parallel"
       when: never
     - !reference [.php-unit-all-tests-built, rules]
 
-
-php-unit-tinebase-tests-built:
-  extends: .php-unit-all-tests-built
+.php-unit-tinebase-tests-built:
+  extends: .php-unit-all-tests-source
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
@@ -242,10 +243,6 @@ php-unit-tinebase-tests-built:
   needs:
     - docker_build_built
   rules:
-    - if: $RUN_NO_TESTS == "true"
-      when: never
-    - if: $PHP_UNIT_TINEBASE_TESTS_BUILT == "false"
-      when: never
     - if: $PHP_UNIT_TINEBASE_TESTS_BUILT == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_TINEBASE_TESTS_BUILT_MERGE_REQUEST == "true"
       changes:
@@ -254,6 +251,14 @@ php-unit-tinebase-tests-built:
           - "tine20/composer.*"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-tinebase-tests-built/
     - if: $PIPELINE_TYPE =~ /default-tests/
+php-unit-tinebase-tests-built:
+  extends: .php-unit-tinebase-tests-built
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_TINEBASE_TESTS_BUILT == "false"
+      when: never
+    - !reference [.php-unit-tinebase-tests-built, rules]
 
 
 .php-unit-nogitlabci-tests-built:
@@ -262,8 +267,6 @@ php-unit-tinebase-tests-built:
     ARG_EXCLUDE_GROUP: ""
     ARG_GROUP: "nogitlabci"
   rules:
-    - if: $RUN_NO_TESTS == "true"
-      when: never
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "false"
       when: never
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT == "true"
@@ -281,6 +284,8 @@ php-unit-nogitlabci-tests-built-sequential:
     NODE_TOTAL: 1
     NODE_INDEX: 1
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT_TYPE != "sequential"
       when: never
     - !reference [.php-unit-nogitlabci-tests-built, rules]
@@ -289,6 +294,8 @@ php-unit-nogitlabci-tests-built-parallel:
   timeout: 30m
   parallel: 5
   rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
     - if: $PHP_UNIT_NOGITLABCI_TESTS_BUILT_TYPE != "parallel"
       when: never
     - !reference [.php-unit-nogitlabci-tests-built, rules]
@@ -328,7 +335,7 @@ php-unit-update-tests:
     - if: $PHP_UNIT_UPDATE_TESTS == "false"
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-update-tests/
-    - if: $CI_COMMIT_BRANCH != "2021.11"
+    - if: $CI_COMMIT_BRANCH != "2022.11"
       when: never
     - if: $PHP_UNIT_UPDATE_TESTS == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_UPDATE_TESTS_MERGE_REQUEST == "true"
