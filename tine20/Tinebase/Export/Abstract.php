@@ -975,11 +975,6 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $fn = $this->_groupByProcessor;
                     $fn($propertyValue);
                 }
-                if (null !== $this->_groupByRecordProcessor) {
-                    /** @var closure $fn */
-                    $fn = $this->_groupByRecordProcessor;
-                    $fn($record, $this->_groupByContext);
-                }
                 if (true === $first || $this->_lastGroupValue !== $propertyValue) {
                     if ($this->_groupOpen) {
                         $this->_endGroup();
@@ -987,6 +982,11 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $this->_lastGroupValue = $propertyValue;
                     $this->_currentRecord = $record;
                     $this->_startGroup();
+                }
+                if (null !== $this->_groupByRecordProcessor) {
+                    /** @var closure $fn */
+                    $fn = $this->_groupByRecordProcessor;
+                    $fn($record, $this->_groupByContext);
                 }
             }
             $this->_currentRecord = $record;
