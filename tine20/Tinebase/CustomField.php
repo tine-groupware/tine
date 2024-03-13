@@ -341,8 +341,10 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * delete a custom field
      *
      * @param string|Tinebase_Model_CustomField_Config $_customField
+     * @return void
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function deleteCustomField($_customField)
+    public function deleteCustomField($_customField): void
     {
         if ($_customField instanceof Tinebase_Model_CustomField_Config) {
             $cfId = $_customField->getId();
@@ -360,7 +362,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__
             . ' Deleting custom field config ' . $cfId . ' and values.');
         
         $this->_clearCache();
