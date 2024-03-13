@@ -903,10 +903,14 @@ class Tinebase_Application
                 Tinebase_TransactionManager::getInstance()->rollBack();
                 Setup_Core::set(Setup_Core::CHECKDB, true);
                 Setup_Controller::destroyInstance();
-                Setup_Controller::getInstance()->uninstallApplications([$record->name], [
-                    Setup_Controller::INSTALL_NO_REPLICA_CHECK => true
-                ]);
-                Setup_SchemaTool::resetUninstalledTables();
+                try {
+                    Setup_Controller::getInstance()->uninstallApplications([$record->name], [
+                        Setup_Controller::INSTALL_NO_REPLICA_CHECK => true
+                    ]);
+                    Setup_SchemaTool::resetUninstalledTables();
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    Tinebase_Exception::log($tenf);
+                }
                 break;
 
             default:
