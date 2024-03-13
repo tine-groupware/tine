@@ -27,7 +27,7 @@ class Tinebase_FileSystem_Preview_AuthNetworkAdapter implements Tinebase_FileSys
     {
         $this->_url = $url;
 
-        $this->_licensePath = tempnam(Tinebase_core::getTempDir(), 'tine_tempfile_');
+        $this->_licensePath = Tinebase_TempFile::getTempPath();
         $this->_caPath = $caPath;
 
         copy($licensePath, $this->_licensePath);

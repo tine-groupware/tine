@@ -188,6 +188,13 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
         if (! $path) {
             throw new Tinebase_Exception_UnexpectedValue('Can not upload file, tempnam() could not return a valid filename!');
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Temp filename: ' . $path
+            );
+        }
+
         return $path;
     }
     
