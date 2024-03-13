@@ -53,3 +53,13 @@ Examples
 The strongest match is chosen
 
 
+Template: grouped positions
+---
+
+The datasource "POSITIONS" will be grouped by the position property grouping.
+Within the group the positions are sorted by the property sorting.
+
+In the group footer sums of all positions within the group are available:
+export.groupcontext.sum_net_price
+export.groupcontext.sum_gross_price
+export.groupcontext.sum_sales_tax
