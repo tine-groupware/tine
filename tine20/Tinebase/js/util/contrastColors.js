@@ -4,6 +4,12 @@
  */
 
 const contrastColors = {
+  lightFg: '#FFFFFF',
+  darkFg: '#171717',
+  lightBg: '#F3F6F7',
+  darkBg: '#171717',
+  darkMode: false,
+
   findBackground: (element, brightnesses = [], isRoot = true) => {
     if (element.innerHTML === '') {
       return;
@@ -14,7 +20,6 @@ const contrastColors = {
         return;
       }
       if (c.classList.contains('felamimail-body-blockquote') || c.classList.contains('felamimail-body-forwarded')) {
-        // quoted email gets its own background
         contrastColors.findBackground(c)
       } else {
         contrastColors.findBackground(c, brightnesses, false)
@@ -42,19 +47,74 @@ const contrastColors = {
         return a + current
       }, 0)
 
+      let computedBg = getComputedStyle(element).backgroundColor
+
       let brightness = sum / count;
       if (brightness > 160) {
-        if (contrastColors.getBrightness(getComputedStyle(element).backgroundColor) > 128
-          || getComputedStyle(element).backgroundColor === 'rgba(0, 0, 0, 0)')
+        if (contrastColors.getBrightness(computedBg) > 160
+          || computedBg === 'rgba(0, 0, 0, 0)')
         {
-          element.style.backgroundColor = '#171717'
-          element.style.color = '#ffffff'
+          element.style.backgroundColor = contrastColors.darkBg
+          element.style.color = contrastColors.lightFg
+          computedBg = element.style.backgroundColor
         }
       } else if (brightness < 95) {
-        if (contrastColors.getBrightness(getComputedStyle(element).backgroundColor) <= 128) {
-          element.style.backgroundColor = '#F3F6F7'
-          element.style.color = '#171717'
+        if (contrastColors.getBrightness(computedBg) < 95) {
+          element.style.backgroundColor = contrastColors.lightBg
+          element.style.color = contrastColors.darkFg
+          computedBg = element.style.backgroundColor
         }
+      }
+
+      if (contrastColors.darkMode && computedBg === 'rgba(0, 0, 0, 0)'
+        || contrastColors.getBrightness(computedBg) < 95)
+      {
+        contrastColors.adaptFg(element, true)
+      }
+      if (!contrastColors.darkMode && computedBg === 'rgba(0, 0, 0, 0)'
+        || contrastColors.getBrightness(computedBg) > 160)
+      {
+        contrastColors.adaptFg(element, false)
+      }
+    }
+  },
+
+  adaptFg: (element, brighten) => {
+    _.forEach(element.children, (c) => {
+      contrastColors.adaptFg(c, brighten)
+    })
+
+    let hasText = false
+    _.forEach(element.childNodes, (n) => {
+      if (n.nodeType === Node.TEXT_NODE && n.nodeValue !== '') {
+        hasText = true
+      }
+    })
+    if (!hasText) {
+      return
+    }
+
+    let bgColor = element.style.getPropertyValue('background-color')
+    if (bgColor !== '') {
+      return
+    }
+
+    let computedBg = getComputedStyle(element).backgroundColor
+    if (contrastColors.darkMode && contrastColors.getBrightness(computedBg) >= 95) {
+      return
+    }
+
+    let fgColor = element.style.getPropertyValue('color')
+    if (element.tagName === 'FONT' && fgColor === '') {
+      fgColor = element.getAttribute('color') || ''
+    }
+    if (fgColor !== '') {
+      let brightness = contrastColors.getBrightness(fgColor)
+      if (brighten && brightness < 95) {
+        element.style.color = contrastColors.lightFg
+      }
+      if (!brighten && brightness > 160) {
+        element.style.color = contrastColors.darkFg
       }
     }
   },

@@ -896,11 +896,15 @@ Ext.form.HtmlEditor = Ext.extend(Ext.form.Field, {
     },
 
     onActivate: function (e) {
-        _.forEach(this.getEditorBody().children, (c) => {
-            if (c.classList.contains('felamimail-body-blockquote') || c.classList.contains('felamimail-body-forwarded')) {
-                contrastColors.findBackground(c)
-            }
-        })
+        if (this.getEditorBody().classList.contains('dark-mode')) {
+            contrastColors.darkBg = '#000000'
+            contrastColors.darkMode = true
+            _.forEach(this.getEditorBody().children, (c) => {
+                if (c.classList.contains('felamimail-body-blockquote') || c.classList.contains('felamimail-body-forwarded')) {
+                    contrastColors.findBackground(c)
+                }
+            })
+        }
     },
 
     // private
