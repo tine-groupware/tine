@@ -234,7 +234,11 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
                 break;
 
             case Tinebase_Timemachine_ModificationLog::DELETED:
-                Tinebase_CustomField::getInstance()->deleteCustomField($_modification->record_id);
+                try {
+                    Tinebase_CustomField::getInstance()->deleteCustomField($_modification->record_id);
+                } catch (Exception $e) {
+                    Tinebase_Exception::log($e);
+                }
                 break;
 
             default:
