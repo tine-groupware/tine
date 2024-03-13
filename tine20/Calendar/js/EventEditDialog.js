@@ -472,22 +472,24 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     return record ? record.data : id;
                 },
                 setValue(value, record) {
-                    const orgaType = record.get('organizer_type');
-                    if (orgaType === 'email') {
-                        value = {
-                            "email": record.get('organizer_email'),
-                            "n_fileas": record.get('organizer_displayname'),
-                            "n_fn": record.get('organizer_displayname')
-                        };
+                    record = record ?? this.selectedRecord;
+                    if (record) {
+                        const orgaType = record.get('organizer_type') ?? 'contact';
+                        if (orgaType === 'email') {
+                            value = {
+                                "email": record.get('organizer_email'),
+                                "n_fileas": record.get('organizer_displayname'),
+                                "n_fn": record.get('organizer_displayname')
+                            };
+                        }
+                        const plugin = _.find(this.plugins, {id: 'orga-type'});
+                        plugin.setTriggerClass(`cal-organizer-type-${orgaType}`);
+                        plugin.setQtip(orgaType === 'email' ?
+                            this.app.i18n._('External organizer') :
+                            this.app.i18n._('Internal organizer')
+                        );
                     }
                     this.supr().setValue.call(this, value, record);
-
-                    const plugin = _.find(this.plugins, {id: 'orga-type'});
-                    plugin.setTriggerClass(`cal-organizer-type-${orgaType}`);
-                    plugin.setQtip(orgaType === 'email' ?
-                        this.app.i18n._('External organizer') :
-                        this.app.i18n._('Internal organizer')
-                    );
                 },
                 plugins: [new FieldTriggerPlugin({
                     id: 'orga-type',
