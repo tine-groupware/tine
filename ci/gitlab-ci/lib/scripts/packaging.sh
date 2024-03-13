@@ -178,6 +178,24 @@ packaging_get_version() {
     echo nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$description
 }
 
+packaging_push_to_vpackages() {
+    customer=$(release_determin_customer)
+    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
+    release=$(echo ${version} | sed sI-I~Ig)
+
+    echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
+
+    if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data curl ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar -o /tmp/${release}-source-${customer}.tar"; then
+        echo "Failed to download packages to vpackages"
+        return 1
+    fi
+
+    if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data /srv/packages.tine20.com/www/scripts/importTine20Repo.sh /tmp/${release}-source-${customer}.tar; sudo -u www-data rm -f /tmp/${release}-source-${customer}.tar"; then
+        echo "Failed to import package to repo"
+        return 1
+    fi
+}
+
 packaging() {
     version=$(packaging_get_version)
     release=${version}
