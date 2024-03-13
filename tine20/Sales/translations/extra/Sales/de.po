@@ -30,3 +30,6 @@ msgstr "Zahlbar innerhalb von {days} Tagen ohne Abzug."
 
 msgid "Payable immediately without deducation."
 msgstr "Zahlbar sofort ohne Abzug."
+
+msgid "Sum{sum_text}"
+msgstr "Summe{sum_text}"
