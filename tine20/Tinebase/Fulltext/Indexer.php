@@ -118,7 +118,14 @@ class Tinebase_Fulltext_Indexer
                 . $_id . ' to max blob size');
             $blob = mb_substr($blob, 0, $this->_maxBlobSize);
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__
+                . ' Adding index for ' . $_fileName
+            );
+        }
+
         $db = Tinebase_Core::getDb();
         $db->delete(SQL_TABLE_PREFIX . 'external_fulltext', $db->quoteInto($db->quoteIdentifier('id') . ' = ?', $_id));
         $db->insert(SQL_TABLE_PREFIX . 'external_fulltext', array('id' => $_id, 'text_data' => $blob));

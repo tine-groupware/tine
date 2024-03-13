@@ -20,6 +20,7 @@ class Tinebase_Fulltext_TextExtract
 {
     protected $_javaBin;
     protected $_tikaJar;
+    protected const MAX_FILE_BLOB_SIZE = 524288000; // 500 MB
 
     /**
      * holds the instance of the singleton
@@ -81,38 +82,62 @@ class Tinebase_Fulltext_TextExtract
         if (Tinebase_Model_Tree_FileObject::TYPE_FILE !== $_fileObject->type) {
             throw new Tinebase_Exception_InvalidArgument('$_fileObject needs to be of type file only!');
         }
-        
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Processing fileobject ' . $_fileObject->getId()
+            );
+        }
+
         $tempFileName = Tinebase_TempFile::getTempPath();
 
         if ($_fileObject->flysystem) {
             $flySystem = Tinebase_Controller_Tree_FlySystem::getFlySystem($_fileObject->flysystem);
             try {
                 if ($flySystem->mimeType($_fileObject->flypath) === 'application/encrypted') {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                        . ' Tika does not like encrypted files - skipping!');
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                        Tinebase_Core::getLogger()->info(
+                            __METHOD__ . '::' . __LINE__
+                            . ' Tika does not like encrypted files - skipping!'
+                        );
+                    }
                     return $tempFileName;
                 }
-            } catch (League\Flysystem\UnableToRetrieveMetadata $e) {}
+            } catch (League\Flysystem\UnableToRetrieveMetadata $e) {
+            }
             $blobFileName = Tinebase_TempFile::getTempPath();
             $raii = new Tinebase_RAII(fn() => @unlink($blobFileName));
             $tmpFh = null;
             try {
-                stream_copy_to_stream($flySystem->readStream($_fileObject->flypath), ($tmpFh = fopen($blobFileName, 'w')));
+                stream_copy_to_stream(
+                    $flySystem->readStream($_fileObject->flypath),
+                    ($tmpFh = fopen($blobFileName, 'w'))
+                );
             } finally {
-                if ($tmpFh) @fclose($tmpFh);
+                if ($tmpFh) {
+                    @fclose($tmpFh);
+                }
             }
         } else {
             $blobFileName = $_fileObject->getFilesystemPath();
 
             if (!is_readable($blobFileName) || ($fSize = filesize($blobFileName)) === 0 || false === $fSize) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Tika does not like empty or unreadable files - skipping!');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__
+                        . ' Tika does not like empty or unreadable files - skipping!'
+                    );
+                }
                 return $tempFileName;
             }
 
             if (mime_content_type($blobFileName) === 'application/encrypted') {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Tika does not like encrypted files - skipping!');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__
+                        . ' Tika does not like encrypted files - skipping!'
+                    );
+                }
                 return $tempFileName;
             }
         }
@@ -137,10 +162,14 @@ class Tinebase_Fulltext_TextExtract
         @exec('rm -Rf ' . escapeshellarg("$tempDir"));
         
         if ($result !== 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
-                . " Tika did not return status 0.\n command: $cmd\n output:"
-                . $errMsg . print_r($output, true) . ' ' . print_r($result, true));
-            
+            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                Tinebase_Core::getLogger()->err(
+                    __METHOD__ . '::' . __LINE__
+                    . " Tika did not return status 0.\n command: $cmd\n output:"
+                    . $errMsg . print_r($output, true) . ' ' . print_r($result, true)
+                );
+            }
+
             if (file_exists($tempFileName)) {
                 try {
                     unlink($tempFileName);
@@ -150,8 +179,11 @@ class Tinebase_Fulltext_TextExtract
             }
             return false;
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Tika success!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Tika success!'
+                );
+            }
         }
 
         unset($raii);
