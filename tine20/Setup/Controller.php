@@ -67,7 +67,7 @@ class Setup_Controller
 
     const MAX_DB_PREFIX_LENGTH = 10;
     const INSTALL_NO_IMPORT_EXPORT_DEFINITIONS = 'noImportExportDefinitions';
-    const INSTALL_NO_REPLICATION_SLAVE_CHECK = 'noReplicationSlaveCheck';
+    const INSTALL_NO_REPLICA_CHECK = 'noReplicaCheck';
 
     /**
      * don't clone. Use the singleton.
@@ -1748,8 +1748,8 @@ class Setup_Controller
     {
         $this->clearCache();
 
-        if (!isset($_options[self::INSTALL_NO_REPLICATION_SLAVE_CHECK]) ||
-                !$_options[self::INSTALL_NO_REPLICATION_SLAVE_CHECK]) {
+        if (!isset($_options[self::INSTALL_NO_REPLICA_CHECK]) ||
+                !$_options[self::INSTALL_NO_REPLICA_CHECK]) {
             if (Setup_Core::isReplicationSlave()) {
                 throw new Setup_Exception('Replication slaves can not install an app');
             }
@@ -2053,8 +2053,8 @@ class Setup_Controller
 
         foreach ($applications as $name => $xml) {
             $app = Tinebase_Application::getInstance()->getApplicationByName($name);
-            $this->_uninstallApplication($app, false, isset($_options[self::INSTALL_NO_REPLICATION_SLAVE_CHECK]) ?
-                $_options[self::INSTALL_NO_REPLICATION_SLAVE_CHECK] : false);
+            $this->_uninstallApplication($app, false, isset($_options[self::INSTALL_NO_REPLICA_CHECK]) ?
+                $_options[self::INSTALL_NO_REPLICA_CHECK] : false);
         }
 
         if (true === $deactivatedForeignKeyCheck) {
@@ -2368,13 +2368,13 @@ class Setup_Controller
      * @param Tinebase_Model_Application $_application
      * @throws Setup_Exception
      */
-    protected function _uninstallApplication(Tinebase_Model_Application $_application, $uninstallAll = false, $noSlaveCheck = false)
+    protected function _uninstallApplication(Tinebase_Model_Application $_application, $uninstallAll = false, $noReplicaCheck = false)
     {
         if ($this->_backend === null) {
             throw new Setup_Exception('No setup backend available');
         }
-        if (!$noSlaveCheck && Setup_Core::isReplicationSlave()) {
-            throw new Setup_Exception('Replication slaves can not uninstall an app');
+        if (!$noReplicaCheck && Setup_Core::isReplica()) {
+            throw new Setup_Exception('Replicas can not uninstall an app');
         }
         
         Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Uninstall ' . $_application);
