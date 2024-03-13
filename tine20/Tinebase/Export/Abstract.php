@@ -215,6 +215,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     protected $_groupByProcessor = null;
 
+    protected $_groupByRecordProcessor = null;
+
+    protected $_groupOpen = false;
+
+    protected $_groupByContext = [];
+
     protected $_currentRowType = null;
 
     /**
@@ -899,6 +905,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             '_writeGenericHeader'   => $this->_writeGenericHeader,
             '_groupByProperty'      => $this->_groupByProperty,
             '_groupByProcessor'     => $this->_groupByProcessor,
+            '_groupByRecordProcessor' => $this->_groupByRecordProcessor,
+            '_groupByContext'       => $this->_groupByContext,
+            '_groupOpen'            => $this->_groupOpen,
             '_lastGroupValue'       => $this->_lastGroupValue,
             '_currentRecord'        => $this->_currentRecord,
             '_currentRowType'       => $this->_currentRowType,
@@ -939,6 +948,9 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
                 $this->processIteration($value, false);
 
+                if ($this->_groupOpen) {
+                    $this->_endGroup();
+                }
                 $this->_endDataSource($key);
             }
 
@@ -963,16 +975,19 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     $fn = $this->_groupByProcessor;
                     $fn($propertyValue);
                 }
+                if (null !== $this->_groupByRecordProcessor) {
+                    /** @var closure $fn */
+                    $fn = $this->_groupByRecordProcessor;
+                    $fn($record, $this->_groupByContext);
+                }
                 if (true === $first || $this->_lastGroupValue !== $propertyValue) {
-                    if (false === $first) {
+                    if ($this->_groupOpen) {
                         $this->_endGroup();
                     }
                     $this->_lastGroupValue = $propertyValue;
                     $this->_currentRecord = $record;
                     $this->_startGroup();
                 }
-                // TODO fix this?
-                //$this->_writeGroupHeading($record);
             }
             $this->_currentRecord = $record;
 
@@ -987,10 +1002,6 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             if (true === $first) {
                 $first = false;
             }
-        }
-
-        if ($_records->count() > 0 && null !== $this->_groupByProperty) {
-            $this->_endGroup();
         }
 
         $this->_firstIteration = false;
@@ -1012,10 +1023,12 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
 
     protected function _startGroup()
     {
+        $this->_groupOpen = true;
     }
 
     protected function _endGroup()
     {
+        $this->_groupOpen = false;
     }
 
     protected function _writeGroupHeading(Tinebase_Record_Interface $_record)
@@ -1601,6 +1614,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
                     'account' => Tinebase_Core::getUser(),
                     'contact' => Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId()),
                     'groupdata' => $this->_lastGroupValue,
+                    'groupcontext' => $this->_groupByContext,
                 ],
                 'additionalRecords' => $this->_additionalRecords,
             ];
@@ -1739,6 +1753,10 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
      */
     protected function _onAfterExportRecords(/** @noinspection PhpUnusedParameterInspection */ array $result)
     {
+        if ($this->_groupOpen) {
+            $this->_endGroup();
+        }
+
         $this->_iterationDone = true;
 
         if (null !== $this->_twigTemplate) {

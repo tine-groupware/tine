@@ -104,4 +104,27 @@ class Sales_Export_Document extends Tinebase_Export_DocV2
         }
         parent::_renderTwigTemplate($_record);
     }
+
+    protected function _startDataSource($_name)
+    {
+        parent::_startDataSource($_name);
+
+        if ('POSITIONS' === $_name) {
+            $this->_groupByProperty = Sales_Model_DocumentPosition_Abstract::FLD_GROUPING;
+            $this->_groupByRecordProcessor = function (Sales_Model_DocumentPosition_Abstract $position, array &$context): void {
+                $context['sum_net_price'] = ($context['sum_net_price'] ?? 0) + $position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE};
+                $context['sum_gross_price'] = ($context['sum_gross_price'] ?? 0) + $position->{Sales_Model_DocumentPosition_Abstract::FLD_GROSS_PRICE};
+                $context['sum_sales_tax'] = ($context['sum_sales_tax'] ?? 0) + $position->{Sales_Model_DocumentPosition_Abstract::FLD_SALES_TAX};
+            };
+        }
+    }
+
+    protected function _endDataSource($_name)
+    {
+        parent::_endDataSource($_name);
+
+        if ('POSITIONS' === $_name) {
+            $this->_groupByProperty = null;
+        }
+    }
 }
