@@ -160,7 +160,8 @@ Tine.widgets.grid.ColumnManager = function() {
                 column.summaryType = fieldDefinition.summaryType;
             }
 
-            var renderer = Tine.widgets.grid.RendererManager.get(app, modelName, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+            // NOTE: app might be from owningApp whereas appName ist the models app
+            var renderer = Tine.widgets.grid.RendererManager.get(appName, modelName, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
             if (renderer) {
                 column.renderer = renderer;
             }
