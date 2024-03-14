@@ -52,7 +52,6 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
                 break;
             case 'date':
             case 'datetime':
-                this.valueType = 'date';
                 this.defaultOperator = 'within';
         }
         
@@ -133,4 +132,3 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
     }
 });
 Tine.widgets.grid.FilterToolbar.FILTERS['tinebase.customfield'] = Tine.widgets.customfields.FilterModel;
-
