@@ -505,7 +505,9 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     public function toArray($_valueToJson = false)
     {
         $result = parent::toArray($_valueToJson);
-        $result['value'] = $this->_orgValue;
+        if ($_valueToJson) {
+            $result['value'] = $this->_orgValue;
+        }
         return $result;
     }
 }
