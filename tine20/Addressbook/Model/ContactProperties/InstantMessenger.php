@@ -38,8 +38,8 @@ class Addressbook_Model_ContactProperties_InstantMessenger extends Tinebase_Reco
         self::APP_NAME => Addressbook_Config::APP_NAME,
         self::MODEL_NAME => self::MODEL_NAME_PART,
 
-        self::RECORD_NAME => 'Instant Messanger', // gettext('GENDER_Instant Messanger')
-        self::RECORDS_NAME => 'Instant Messangers', // ngettext('Instant Messanger', 'Instant Messangers', n)
+        self::RECORD_NAME => 'Instant Messenger', // gettext('GENDER_Instant Messenger')
+        self::RECORDS_NAME => 'Instant Messengers', // ngettext('Instant Messenger', 'Instant Messengers', n)
 
         /*self::TABLE => [
             self::NAME => self::TABLE_NAME,

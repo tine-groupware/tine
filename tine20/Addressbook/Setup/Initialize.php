@@ -446,13 +446,12 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $ctrl->create(new Addressbook_Model_ContactProperties_Definition([
             Addressbook_Model_ContactProperties_Definition::FLD_IS_SYSTEM => true,
             Addressbook_Model_ContactProperties_Definition::FLD_NAME => 'matrix_id',
-            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Matrix-ID ', // _('Matrix-ID )')
-            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information ', // _('Contact Information')
+            Addressbook_Model_ContactProperties_Definition::FLD_LABEL => 'Matrix-ID', // _('Matrix-ID')
+            Addressbook_Model_ContactProperties_Definition::FLD_GROUPING => 'Contact Information', // _('Contact Information')
             Addressbook_Model_ContactProperties_Definition::FLD_SORTING => 29,
             Addressbook_Model_ContactProperties_Definition::FLD_MODEL => Addressbook_Model_ContactProperties_InstantMessenger::class,
             Addressbook_Model_ContactProperties_Definition::FLD_LINK_TYPE => 'inline',
         ]));
-
 
         unset($raii);
     }
