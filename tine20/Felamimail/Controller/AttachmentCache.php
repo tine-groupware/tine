@@ -106,6 +106,15 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
             );
             $this->getBackend()->update($record);
 
+            if (Tinebase_FileSystem::getInstance()->_getTreeNodeBackend()->doSynchronousPreviewCreation()) {
+                /** @var Tinebase_Model_Tree_Node $node */
+                if (0 === ($node = $record->attachments?->getFirstRecord())?->preview_count && Tinebase_FileSystem_Previews::getInstance()->canNodeHavePreviews($node) &&
+                        Tinebase_FileSystem_Previews::getInstance()->createPreviewsFromNode($node)) {
+                    $record->attachments->removeRecord($node);
+                    $record->attachments->addRecord(Tinebase_FileSystem::getInstance()->get($node->getId()));
+                }
+            }
+
             return $record;
         } catch (Tinebase_Exception $te) {
             unset($selectForUpdate);
