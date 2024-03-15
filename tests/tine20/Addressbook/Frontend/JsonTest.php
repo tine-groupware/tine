@@ -2991,6 +2991,45 @@ Steuernummer 33/111/32212";
     }
 
     /**
+     * Search email addresss with duplicated list member email
+     */
+    public function testSearchEmailAddresssWithDuplicatedListMemberEmail()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $contact = $this->_addContact();
+        $contact['email'] = 'duplicate@mail.test';
+        $contact['email_home'] = $contact['email'];
+         $this->_uit->saveContact($contact);
+        $listRole = $this->_uit->saveListRole([
+            Addressbook_Model_ListRole::FLD_NAME => 'my test role with duplicated member email',
+            Addressbook_Model_ListRole::FLD_DESCRIPTION => 'my test description',
+            Addressbook_Model_ListRole::FLD_MAX_MEMBERS => 1,
+        ]);
+        $memberroles = array(array(
+            'contact_id' => $contact['id'],
+            'list_role_id' => $listRole['id'],
+        ));
+        $list = $this->_uit->saveList(array(
+            'name' => 'my test list',
+            'description' => '',
+            'members' => [$contact['id']],
+            'memberroles' => $memberroles,
+            'type' => Addressbook_Model_List::LISTTYPE_LIST,
+        ));
+
+        $result = $this->_uit->searchEmailAddresss([
+            ["condition" => "OR", "filters" => [["condition" => "AND", "filters" => [
+                ["field" => "name_email_query", "operator" => "contains", "value" => $list['name']]
+            ]], ["field" => "path", "operator" => "contains", "value" => ""]]]
+        ], ["sort" => "name", "dir" => "ASC", "start" => 0, "limit" => 50]);
+
+        static::assertEquals(1, $result['totalcount'], 'no results found');
+        static::assertEquals($list['email'], $result['results'][0]['email']);
+        static::assertCount(1, $result['results'][0]['emails']);
+    }
+
+    /**
      * testSaveContactWithAreaLockedRelation
      */
     public function testSaveContactWithAreaLockedRelation()

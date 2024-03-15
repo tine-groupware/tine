@@ -15,7 +15,7 @@ describe('Test mainpage', () => {
             await page.waitForTimeout(500);
             await page.click('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards .x-panel-collapsed .x-tool.x-tool-toggle');
             await page.waitForTimeout(500);
-
+            await expect(page).toMatchElement('.t-app-filemanager .tine-mainscreen-centerpanel-west-treecards span', {text: 'Gemeinsame Ordner'})
         } catch (e) {
             console.log('tree also expand');
         }
