@@ -1565,11 +1565,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                                     . " list member : " . $memberContact->n_fileas . " has no contact emails, skip.");
                                 continue;
                             }
-                            
+                            //we only get the first match email
                             $preferredEmail = $memberContact->getPreferredEmailAddress();
                             foreach ($memberPossibleAddresses as $memberPossibleAddress) {
                                 if ($preferredEmail === $memberPossibleAddress['email']) {
                                     $listMemberEmails[]  = $memberPossibleAddress;
+                                    break;
                                 }
                             }
                         }

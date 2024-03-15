@@ -307,10 +307,9 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 echo 'Deleted container ' . $container['name'] . ' with no users.' . PHP_EOL;
               }
             }
-          } 
+          }
         }
     }
-    
     /**
      * shorten loginnmes to fit ad samaccountname
      *
@@ -389,7 +388,7 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                             $aliases[] = is_array($alias) ? $alias['email'] : $alias;
                         }
                     }
-                    $aliases = implode($aliases, ',');
+                    $aliases = implode(',', $aliases);
                     $forwards = is_array($fullUser->emailUser->emailForwards) ? implode($fullUser->emailUser->emailForwards, ',') : '';
                     echo $fullUser->accountLoginName . ';' . $aliases . ';' . $forwards . "\n";
                 }
