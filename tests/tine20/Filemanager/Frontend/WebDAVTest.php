@@ -1078,6 +1078,50 @@ EOS
         $node->createFile('test.file');
     }
 
+    public function testCreateFileInFilemanagerShared_dir1_dir2_after_update_parent_grant()
+    {
+        $node = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared');
+        $node->createDirectory('dir1');
+        $nodeDir1 = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/dir1');
+        $nodeDir1->createDirectory('dir2');
+        $treeNodeDir1 = $nodeDir1->getNode();
+        
+        $testSyncUser = $this->_personas['sclever'];
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($treeNodeDir1);
+        // set default grant for test sync user first
+        $treeNodeDir1->grants->addRecord(new Tinebase_Model_Grants([
+            'account_type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id' => $testSyncUser->getId(),
+            Tinebase_Model_Grants::GRANT_READ => true,
+            Tinebase_Model_Grants::GRANT_SYNC => true,
+        ]));
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($treeNodeDir1, $treeNodeDir1->grants);
+
+        // change current user to test the sync ability
+        Tinebase_Core::setUser($testSyncUser);
+        $treeNodeDir2 = $this->_getWebDAVTree()->getNodeForPath('/webdav/Filemanager/shared/dir1/dir2');
+        $filename = dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png';
+
+        // it should not be possible to create a file in /webdav/Filemanager/shared folder
+        try {
+            $etag = $treeNodeDir2->createFile('tine_logo.png', fopen($filename, 'r'));
+            $this->fail('should not find sync state for folder');
+        } catch (Exception $e) {
+            $this->assertTrue($e instanceof \Sabre\DAV\Exception\Forbidden);
+        }
+
+        // assert sync only without read_grant nor sync_grant
+        foreach ($treeNodeDir1->grants as $grant) {
+            if ($grant->account_id === $testSyncUser->getId()) {
+                $grant->addGrant = true;
+            }
+        }
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($treeNodeDir1, $treeNodeDir1->grants);
+        $etag = $treeNodeDir2->createFile('tine_logo.png', fopen($filename, 'r'));
+        Tinebase_Core::setUser($this->_originalTestUser);
+    }
+
+
     /**
      * testSharedACLs of shared node
      */
