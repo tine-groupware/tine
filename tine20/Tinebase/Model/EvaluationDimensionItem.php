@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -32,7 +32,7 @@ class Tinebase_Model_EvaluationDimensionItem extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 1,
+        self::VERSION                   => 2,
         self::APP_NAME                  => Tinebase_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::MODLOG_ACTIVE             => true,
@@ -56,6 +56,12 @@ class Tinebase_Model_EvaluationDimensionItem extends Tinebase_Record_NewAbstract
                         self::FLD_DELETED_TIME
                     ],
                 ],
+            ],
+            self::INDEXES                   => [
+                self::FLD_DESCRIPTION           => [
+                    self::COLUMNS                   => [self::FLD_DESCRIPTION],
+                    self::FLAGS                     => [self::TYPE_FULLTEXT],
+                ]
             ],
         ],
 

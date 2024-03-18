@@ -1107,7 +1107,7 @@ EOS
             $etag = $treeNodeDir2->createFile('tine_logo.png', fopen($filename, 'r'));
             $this->fail('should not find sync state for folder');
         } catch (Exception $e) {
-            $this->assertTrue($e instanceof \Sabre\DAV\Exception\Forbidden);
+            $this->assertTrue($e instanceof \Tine20\DAV\Exception\Forbidden);
         }
 
         // assert sync only without read_grant nor sync_grant
