@@ -7,7 +7,7 @@
  *
  */
 
- // import {PersonaContainer, Personas} from "./ux/vue/PersonaContainer";
+ import {PersonaContainer, Personas} from "./ux/vue/PersonaContainer";
 
 Ext.ns('Tine', 'Tine.Tinebase');
  
@@ -21,10 +21,10 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
     id: 'changePassword_window',
     closeAction: 'close',
     modal: true,
-    width: 350,
-    height: 230,
-    minWidth: 350,
-    minHeight: 230,
+    width: 500,
+    height: 300,
+    minWidth: 500,
+    minHeight: 300,
     layout: 'column',
     plain: true,
     title: null,
@@ -41,12 +41,12 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
             this.currentAccount.accountDisplayName
         );
         this.items = []
-        // const persona = new PersonaContainer({persona: Personas.QUESTION_CONFIRM, columnWidth: .2})
-        // this.items.push(persona)
+        const persona = new PersonaContainer({persona: Personas.QUESTION_CONFIRM, columnWidth: .2})
+        this.items.push(persona)
         this.items.push(new Ext.FormPanel({
-            // columnWidth: .8,
+            columnWidth: .8,
             autoHeight: true,
-            bodyStyle: 'padding:5px;',
+            bodyStyle: 'padding:5px;padding-bottom:30px',
             buttonAlign: 'right',
             labelAlign: 'top',
             anchor:'100%',
@@ -59,7 +59,6 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                 xtype: 'textarea',
                 readOnly: true,
                 hideLabel: true,
-                style: 'padding-bottom: 10px;',
                 hidden: !this.dialogText,
                 value: this.dialogText
             }, {
