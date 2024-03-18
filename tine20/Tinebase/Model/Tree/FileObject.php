@@ -35,6 +35,10 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
 
     public const DEFAULT_CONTENT_TYPE = 'application/octet-stream';
 
+    public const FLD_INDEX_FAIL_COUNT = 'index_fail_count';
+    public const FLD_INDEX_LAST_TRY = 'index_last_try';
+    public const FLD_INDEX_FAIL_HASH = 'index_fail_hash';
+
     /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -91,7 +95,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 9,
+        self::VERSION       => 10,
         'modlogActive'      => true,
 
         'appName'           => 'Tinebase',
@@ -196,7 +200,22 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
                 self::TYPE                      => self::TYPE_STRING,
                 self::LENGTH                    => 40,
                 self::NULLABLE                  => true,
-                self::VALIDATORS                => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::OMIT_MOD_LOG              => true,
+            ],
+            self::FLD_INDEX_FAIL_COUNT      => [
+                self::TYPE                      => self::TYPE_INTEGER,
+                self::DEFAULT_VAL               => 0,
+                self::OMIT_MOD_LOG              => true,
+            ],
+            self::FLD_INDEX_LAST_TRY        => [
+                self::TYPE                      => self::TYPE_DATETIME,
+                self::NULLABLE                  => true,
+                self::OMIT_MOD_LOG              => true,
+            ],
+            self::FLD_INDEX_FAIL_HASH       => [
+                self::TYPE                      => self::TYPE_STRING,
+                self::LENGTH                    => 40,
+                self::NULLABLE                  => true,
                 self::OMIT_MOD_LOG              => true,
             ],
 

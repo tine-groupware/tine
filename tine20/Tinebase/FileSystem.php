@@ -11,6 +11,7 @@
  */
 
 use League\Flysystem\UnableToRetrieveMetadata;
+use Tinebase_Model_Tree_FileObject as TMTFO;
 
 /**
  * filesystem controller
@@ -1255,13 +1256,45 @@ class Tinebase_FileSystem implements
             // nothing to do
             return true;
         }
+        if ($fileObject->{TMTFO::FLD_INDEX_FAIL_HASH} && $fileObject->{TMTFO::FLD_INDEX_FAIL_HASH} !== $fileObject->hash) {
+            $fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} = 0;
+        }
+        if ($fileObject->{TMTFO::FLD_INDEX_LAST_TRY} && (int)$fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} > 3 &&
+                $fileObject->{TMTFO::FLD_INDEX_LAST_TRY}->isLater(Tinebase_DateTime::now()->subDay(1))) {
+            return true;
+        }
 
         // we clean up $tmpFile down there in finally
         if (false === ($tmpFile = Tinebase_Fulltext_TextExtract::getInstance()->fileObjectToTempFile($fileObject))) {
-            return false;
-        }
+            $work = function($fileObject) {
+                if ($fileObject->{TMTFO::FLD_INDEX_FAIL_HASH} !== $fileObject->hash) {
+                    $fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} = 1;
+                } else {
+                    $fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} = (int)$fileObject->{TMTFO::FLD_INDEX_FAIL_COUNT} + 1;
+                }
+                $fileObject->{TMTFO::FLD_INDEX_LAST_TRY} = Tinebase_DateTime::now();
+                $fileObject->{TMTFO::FLD_INDEX_FAIL_HASH} = $fileObject->hash;
 
-        $indexedHash = $fileObject->hash;
+                $this->_fileObjectBackend->update($fileObject);
+
+                return false;
+            };
+        } else {
+            $indexedHash = $fileObject->hash;
+            $work = function($fileObject) use($indexedHash, $tmpFile) {
+                if ($fileObject->hash === $fileObject->indexed_hash || $indexedHash === $fileObject->indexed_hash) {
+                    // nothing to do
+                    return true;
+                }
+
+                Tinebase_Fulltext_Indexer::getInstance()->addFileContentsToIndex($fileObject->getId(), $tmpFile);
+
+                $fileObject->indexed_hash = $indexedHash;
+                $this->_fileObjectBackend->update($fileObject);
+
+                return true;
+            };
+        }
 
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
 
@@ -1283,19 +1316,8 @@ class Tinebase_FileSystem implements
                     . ' file object ' . $_objectId . ' is not a file: ' . $fileObject->type);
                 return true;
             }
-            if ($fileObject->hash === $fileObject->indexed_hash || $indexedHash === $fileObject->indexed_hash) {
-                // nothing to do
-                return true;
-            }
 
-            Tinebase_Fulltext_Indexer::getInstance()->addFileContentsToIndex($fileObject->getId(), $tmpFile);
-
-            $fileObject->indexed_hash = $indexedHash;
-            $this->_fileObjectBackend->update($fileObject);
-
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            $transactionId = null;
-
+            return $work($fileObject);
         } catch (Exception $e) {
             $transactionId = null;
             Tinebase_Exception::log($e);
@@ -1304,15 +1326,16 @@ class Tinebase_FileSystem implements
             return false;
 
         } finally {
-            unlink($tmpFile);
+            if (false !== $tmpFile) {
+                unlink($tmpFile);
+            }
 
-            // in case of the return trues above
             if (null !== $transactionId) {
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             }
         }
 
-        return true;
+        return false;
     }
 
     public function acquireWriteLock()

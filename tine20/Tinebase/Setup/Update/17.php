@@ -27,6 +27,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE006 = __CLASS__ . '::update006';
     protected const RELEASE017_UPDATE007 = __CLASS__ . '::update007';
     protected const RELEASE017_UPDATE008 = __CLASS__ . '::update008';
+    protected const RELEASE017_UPDATE009 = __CLASS__ . '::update009';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -57,6 +58,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE008 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update008',
+            ],
+            self::RELEASE017_UPDATE009 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update009',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE => [
@@ -262,5 +267,15 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             Tinebase_Model_Tree_FlySystem::class,
         ]);
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.8', self::RELEASE017_UPDATE008);
+    }
+
+    public function update009()
+    {
+        Setup_SchemaTool::updateSchema([
+            Tinebase_Model_Tree_FileObject::class,
+            Tinebase_Model_EvaluationDimension::class,
+            Tinebase_Model_EvaluationDimensionItem::class,
+        ]);
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.9', self::RELEASE017_UPDATE009);
     }
 }
