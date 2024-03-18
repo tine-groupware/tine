@@ -192,6 +192,10 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
 
     protected function _initializeEvaluationDimensions()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
         Tinebase_Controller_EvaluationDimension::getInstance()->doRightChecks(false);
         Tinebase_Controller_EvaluationDimension::getInstance()->modlogActive(false);
         Tinebase_Controller_EvaluationDimension::getInstance()->useNotes(false);

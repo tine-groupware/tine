@@ -115,4 +115,9 @@ class Tinebase_Model_EvaluationDimensionItem extends Tinebase_Record_NewAbstract
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function isReplicable()
+    {
+        return true;
+    }
 }

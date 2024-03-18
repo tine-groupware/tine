@@ -46,6 +46,9 @@ class Inventory_Setup_Initialize extends Setup_Initialize
 
     protected function _initializeCostCenter()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
         Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [Inventory_Model_InventoryItem::class]);
     }
 }

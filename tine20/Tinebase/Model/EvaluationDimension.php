@@ -175,4 +175,9 @@ class Tinebase_Model_EvaluationDimension extends Tinebase_Record_NewAbstract
             'definition' => $definition,
         ], true);
     }
+
+    public function isReplicable()
+    {
+        return true;
+    }
 }
