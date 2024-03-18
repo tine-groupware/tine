@@ -918,9 +918,7 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Note', $rows, true);
-
-        return $result;
+        return new Tinebase_Record_RecordSet('Tinebase_Model_Note', $rows, true);
     }
 
     /**
@@ -949,14 +947,19 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
     /**
      * @param bool $purge
      * @param int $offset
-     * @param bool|null $dryrun
+     * @param ?bool $dryrun
+     * @param ?Tinebase_DateTime $beforeDate
      * @return int
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function removeObsoleteData(bool $purge = false, int $offset = 0, ?bool $dryrun = null): int
-    {
-        $limit = 1000;
+    public function removeObsoleteData(
+        bool $purge = false,
+        int $offset = 0,
+        ?bool $dryrun = null,
+        ?Tinebase_DateTime $beforeDate = null
+    ): int {
+        $limit = 100;
 
         $controllers = [];
         $models = [];
@@ -969,11 +972,19 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         $purgeCountEmptyUpdate = 0;
 
         do {
-            $notes = $this->getAllNotes('id ASC', $limit, $offset);
+            $notes = $this->getAllNotes('creation_time ASC', $limit, $offset);
             $offset += $limit;
 
             /** @var Tinebase_Model_Note $note */
             foreach ($notes as $note) {
+                if ($beforeDate && $note->creation_time->isLater($beforeDate)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . ' Retention time reached - we keep the rest');
+                    }
+                    return $deletedCount;
+                }
+
                 if ($note->note_type_id === Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN) {
                     // we only keep the avscan notes of last month
                     if ($note->creation_time->isEarlier($oneMonthBefore)) {
