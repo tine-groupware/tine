@@ -488,13 +488,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         this.on('resize', this.onContentResize, this, {buffer: 100});
-
+        
+        this.mon(Ext.fly(window), 'popstate', (event) => {
+            if (this.detailsPanel?.isInFullScreenMode) {
+                this.setFullScreen(false);
+            }
+        });
         this.areaLockSelector = this.recordClass.getPhpClassName().replace('_Model_', '.');
         this.initMessageBus();
 
         Tine.widgets.grid.GridPanel.superclass.initComponent.call(this);
     },
-
+    
     onDestroy: function() {
         _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
         return Tine.widgets.grid.GridPanel.superclass.onDestroy.call(this);
@@ -2521,6 +2526,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.originalOwner.add(this.detailsPanel);
             this.originalOwner.doLayout();
         } else {
+            // we should push state to prevent back action before popstate event
+            history.pushState({ page: `${this.app.appName}-detailsPanel` }, "", "");
+            
             this.originalOwner = this.detailsPanel.ownerCt;
             this.originalOwner.remove(this.detailsPanel, false);
             Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem = Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.activeItem;
