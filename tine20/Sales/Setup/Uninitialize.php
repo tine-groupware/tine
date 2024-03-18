@@ -50,6 +50,10 @@ class Sales_Setup_Uninitialize extends Setup_Uninitialize
 
     protected function _uninitializeCostCenterCostBearer()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
         Tinebase_Controller_EvaluationDimension::removeModelsFromDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
             Sales_Model_Invoice::class,
             Sales_Model_Product::class,

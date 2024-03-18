@@ -155,7 +155,12 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
     {
         /** @var string $model */
         foreach ($models as $model) {
-            $cfc = $dimension->getSystemCF($model);
+            try {
+                $cfc = $dimension->getSystemCF($model);
+            } catch (Tinebase_Exception_NotFound) {
+                // in case the application is already deinstalled, we can ignore that, the system cf gets removed by cleanup
+                continue;
+            }
             $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
                 $cfc->application_id, $cfc->name, $cfc->model, true);
             if (null !== $cfc) {

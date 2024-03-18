@@ -18,6 +18,9 @@ class Inventory_Setup_Uninitialize extends Setup_Uninitialize
 {
     protected function _uninitializeCostCenter()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
         Tinebase_Controller_EvaluationDimension::removeModelsFromDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [Inventory_Model_InventoryItem::class]);
     }
 }
