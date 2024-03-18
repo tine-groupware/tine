@@ -235,9 +235,10 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * Delete containers with no users
      *
-     * @return void
+     * @param Zend_Console_Getopt $opts
+     * @return int
      */
-    public function deleteUserlessContainers(Zend_Console_Getopt $opts)
+    public function deleteUserlessContainers(Zend_Console_Getopt $opts): int
     {
         if ($opts->d) {
             echo "--DRY RUN--\n";
@@ -249,20 +250,22 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $containers = $jsonFrontend->searchContainers([], null);
 
         foreach ($containers['results'] as $container) {
-          // Check if the container has no users
-          if ($container['type'] == 'personal') {
-            try {
-              $user = Tinebase_User::getInstance()->getFullUserById($container['owner_id']);
-            } catch (Tinebase_Exception_NotFound) {
-              if ($opts->d) {
-                echo "--DRY RUN-- Found " . $container['name'] . PHP_EOL;
-              } else {
-                $jsonFrontend->deleteContainers([$container['id']]);
-                echo 'Deleted container ' . $container['name'] . ' with no users.' . PHP_EOL;
-              }
+            // Check if the container has no users
+            if ($container['type'] == 'personal') {
+                try {
+                    $user = Tinebase_User::getInstance()->getFullUserById($container['owner_id']);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if ($opts->d) {
+                        echo "--DRY RUN-- Found " . $container['name'] . PHP_EOL;
+                    } else {
+                        $jsonFrontend->deleteContainers([$container['id']]);
+                        echo 'Deleted container ' . $container['name'] . ' with no users.' . PHP_EOL;
+                    }
+                }
             }
-          }
         }
+
+        return 0;
     }
 
     /**
