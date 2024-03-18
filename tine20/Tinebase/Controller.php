@@ -2138,7 +2138,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
         $this->_purgeTables($beforeDate, $orderedTables);
 
         if ($doEverything) {
-            Tinebase_Notes::getInstance()->removeObsoleteData();
+            Tinebase_Notes::getInstance()->removeObsoleteData(beforeDate: $beforeDate);
 
             // TODO implement
             /*
