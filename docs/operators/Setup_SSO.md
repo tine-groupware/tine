@@ -75,3 +75,13 @@ The oicd provider url of the tine idp (needed in the config of the rp) is <https
 ``` sh title="Add oidc RP"
 --8<-- "scripts/curl/admin_SSOAddRP_oidc"
 ```
+
+## Tine as RP, foreign IDP
+
+### - CLI
+``` sh title="Login"
+--8<-- "scripts/curl/login"
+```
+``` sh title="Add foreign mock IDP"
+--8<-- "scripts/curl/admin_SSOAddExIdp_oidc"
+```
