@@ -1493,9 +1493,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $filter->addFilter($propFilter);
 
         $paging = new Tinebase_Model_Pagination(array('sort' => $property));
-        
-        $values = array_unique($controller->search($filter, $paging)->{$property});
-        
+
+        $values = array_unique(array_map(
+            function ($value) {
+                return ucwords(strtolower(trim($value)), ' -–/()');
+            },
+            $controller->search($filter, $paging)->{$property}
+        ));
+
         $result = array(
             'results'   => array(),
             'totalcount' => count($values)
