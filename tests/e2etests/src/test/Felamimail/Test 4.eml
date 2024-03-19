@@ -1,0 +1,77 @@
+Return-Path: <tine20admin@mail.test>
+Delivered-To: 94859faff95b7ba4fb58006404a24580b03c772a@tine.test
+Received: from 762f189b849e.localdomain ([172.118.0.8])
+	by dfa1184937a1 with LMTP
+	id HfVaF0Af9GX6AQAAccZtRw
+	(envelope-from <tine20admin@mail.test>)
+	for <94859faff95b7ba4fb58006404a24580b03c772a@tine.test>; Fri, 15 Mar 2024 10:13:20 +0000
+Received: from localhost (tine20-web-1.tine20_external_network [172.118.0.9])
+	by 762f189b849e.localdomain (Postfix) with ESMTP id 50C0E605570
+	for <tine20admin@mail.test>; Fri, 15 Mar 2024 10:13:20 +0000 (UTC)
+Subject: Test 4
+From: "=?UTF-8?Q?tine=20=C2=AE=20Admin?=" <tine20admin@mail.test>
+To: "=?UTF-8?Q?Admin=2C=20tine=20=C2=AE?=" <tine20admin@mail.test>
+User-Agent: =?UTF-8?Q?tine=20=C2=AE=20Email=20Client=20(Version=20:=200=20()=20?=
+ =?UTF-8?Q?-=20none)?=
+Message-Id: <4c8482e1caf3e3ee18d7daf01f9ff005615d3d30@mail.test>
+X-MailGenerator: Tine 2.0
+Date: Fri, 15 Mar 2024 10:13:20 +0000
+Content-Type: multipart/alternative;
+ boundary="=_f2f2fcff08f616a3a8e6e1c615e19b81"
+MIME-Version: 1.0
+
+--=_f2f2fcff08f616a3a8e6e1c615e19b81
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo=
+ ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis=
+ dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultric=
+ies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis=
+ enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arc=
+u. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nulla=
+m dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.=
+ Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean=
+ leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam l=
+orem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverr=
+a nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam=
+ ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam ege=
+t dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus,=
+ sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam qu=
+am nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec=
+ odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis f=
+aucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincid=
+unt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagitti=
+s magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nu=
+nc,=0A=0A=E2=80=8B
+
+--=_f2f2fcff08f616a3a8e6e1c615e19b81
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; char=
+set=3DUTF-8"><title></title><style type=3D"text/css">.felamimail-body-bl=
+ockquote {margin: 5px 10px 0 3px;padding-left: 10px;border-left: 2px sol=
+id #000088;} </style></head><body><font face=3D"tahoma" color=3D"#333333=
+">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commo=
+do ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magn=
+is dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultr=
+icies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa qui=
+s enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, ar=
+cu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Null=
+am dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.=
+ Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean=
+ leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam l=
+orem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverr=
+a nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam=
+ ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam ege=
+t dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus,=
+ sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam qu=
+am nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec=
+ odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis f=
+aucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincid=
+unt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagitti=
+s magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nu=
+nc,</font><br><br><font face=3D"tahoma">=E2=80=8B</font></body></html>
+
+--=_f2f2fcff08f616a3a8e6e1c615e19b81--
