@@ -2667,3 +2667,6 @@ msgstr "Remove all filters on change selection"
 
 msgid "On Calendar Change will remove all filters"
 msgstr "On Calendar Change will remove all filters"
+
+msgid "The container already exists"
+msgstr "The container already exists"
