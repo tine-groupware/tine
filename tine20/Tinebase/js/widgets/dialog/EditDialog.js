@@ -1047,7 +1047,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.doCopyRecord();
             this.window.setTitle(String.format(i18n._('Copy {0}'), this.i18nRecordName));
         } else {
-            if (!this.record || !(this.record.get && this.record.get('creation_time'))) {
+            if (this.isNewRecord()) {
                 this.window.setTitle(formatMessage('{gender, select, male {Add New {recordName}} female {Add New {recordName}} other {Add New {recordName}}}', {
                     gender: this.recordClass.getRecordGender(),
                     recordName: this.i18nRecordName
@@ -1074,6 +1074,14 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
         this.fireEvent('load', this, this.record, ticketFn);
         wrapTicket();
+    },
+
+    /**
+     * overwrite if record id is already set on new records
+     * @returns {boolean}
+     */
+    isNewRecord: function () {
+        return !this.record || !(this.record.get && this.record.id )
     },
 
     setReadOnly: function(readOnly) {
