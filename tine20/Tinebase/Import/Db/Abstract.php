@@ -68,8 +68,11 @@ abstract class Tinebase_Import_Db_Abstract
             }
         } while (count($rows) >= $pageCount);
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-            . ' Imported ' . $count . ' records (failcount: ' . $failcount . ' | skipcount: ' . $skipcount . ')');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                . ' Imported ' . $count . ' records from ' . $this->_mainTableName
+                . ' (failcount: ' . $failcount . ' | skipcount: ' . $skipcount . ')');
+        }
 
         return $importedIds;
     }
