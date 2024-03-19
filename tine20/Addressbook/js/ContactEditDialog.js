@@ -254,15 +254,14 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     flex: 1,
                     recordClass: this.recordClass,
                     fields: _.sortBy(_.filter(this.recordClass.getModelConfiguration().fields, field => {
-                        // @TODO filter by systemCFDefinition.model once available
-                        return field.fieldName.match(/^(tel|email)/) && !field.disabled;
+                        return field.specialType?.match(/^Addressbook_Model_ContactProperties_(Phone|Email)/) && !field.disabled;
                     }), ['uiconfig.order'])
                 }), contactPropertiesGrid({
                     flex: 1,
                     recordClass: this.recordClass,
                     fields: _.sortBy(_.filter(this.recordClass.getModelConfiguration().fields,field => {
-                        // @TODO filter by systemCFDefinition.model once available
-                        return field.fieldName.match(/^(url|matrix)/) && !field.disabled;
+                        return field.specialType?.match(/^Addressbook_Model_ContactProperties_(Url|InstantMessenger)/) && !field.disabled;
+
                     }).concat(
                         _.find(this.recordClass.getModelConfiguration().fields, {fieldName: 'language'})
                     ), ['uiconfig.order'])
