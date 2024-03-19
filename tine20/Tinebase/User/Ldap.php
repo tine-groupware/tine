@@ -925,6 +925,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                         }
                         break;
 
+                    case 'accountLoginName':
+                        $accountArray[$keyMapping] = strtolower($value[0]);
+                        break;
+
                     default:
                         $accountArray[$keyMapping] = $value[0];
                         break;

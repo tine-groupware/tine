@@ -1211,6 +1211,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $this->rowNameMapping['accountLastName'] => $_user->accountLastName,
             $this->rowNameMapping['accountEmailAddress'] => $_user->accountEmailAddress,
             $this->rowNameMapping['password_must_change'] => $_user->password_must_change ? 1 : 0,
+            $this->rowNameMapping['accountLastPasswordChange'] => $_user->accountLastPasswordChange,
             'created_by' => $_user->created_by,
             'creation_time' => $_user->creation_time,
             'last_modified_by' => $_user->last_modified_by,
