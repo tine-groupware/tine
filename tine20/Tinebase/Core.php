@@ -1817,6 +1817,7 @@ class Tinebase_Core
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
             'allowBrowserPasswordManager'=> Tinebase_Config::getInstance()->get(Tinebase_Config::ALLOW_BROWSER_PASSWORD_MANAGER),
+            'allowPasswordLessLogin' => Tinebase_Config::getInstance()->{Tinebase_Config::PASSWORD_LESS_LOGIN},
             'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
             'titlePostfix'      => Tinebase_Config::getInstance()->get(Tinebase_Config::PAGETITLEPOSTFIX),
             'redirectUrl'       => Tinebase_Config::getInstance()->get(Tinebase_Config::REDIRECTURL),

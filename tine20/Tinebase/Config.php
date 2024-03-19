@@ -905,6 +905,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const ACTIONQUEUE_LR_MONITORING_DAEMONSTRCTSIZE_CRIT = 'LRdaemonStructSizeCrit';
     const ACTIONQUEUE_QUEUES = 'queues';
 
+    const PASSWORD_LESS_LOGIN = 'passwordLessLogin';
+
     const QUOTA = 'quota';
     const QUOTA_SHOW_UI = 'showUI';
     const QUOTA_INCLUDE_REVISION = 'includeRevision';
@@ -3163,6 +3165,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
             ],
             self::DEFAULT_STR           => [],
+        ],
+        self::PASSWORD_LESS_LOGIN => [
+            'label'                 => 'Enable Password Less Login', //_('Enable Password Less Login')
+            'description'           => 'Enable Password Less Login',
+            'type'                  => self::TYPE_BOOL,
+            self::DEFAULT_STR       => false,
+            'clientRegistryInclude' => false,
+            'setByAdminModule'      => true,
+            'setBySetupModule'      => true,
         ],
         self::QUOTA => array(
             //_('Quota settings')
