@@ -736,6 +736,10 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Calendar.EventEditDialog.superclass.onRecordLoad.call(this);
     },
 
+    isNewRecord: function () {
+        return !this.record || !(this.record.get && this.record.get('creation_time'))
+    },
+
     /**
      * is called after all subpanels have been loaded
      */
