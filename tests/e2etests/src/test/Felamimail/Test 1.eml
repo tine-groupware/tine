@@ -1,0 +1,43 @@
+Return-Path: <tine20admin@mail.test>
+Delivered-To: 94859faff95b7ba4fb58006404a24580b03c772a@tine.test
+Received: from 762f189b849e.localdomain ([172.118.0.9])
+	by dfa1184937a1 with LMTP
+	id fsVaLrmp8mVSAAAAccZtRw
+	(envelope-from <tine20admin@mail.test>)
+	for <94859faff95b7ba4fb58006404a24580b03c772a@tine.test>; Thu, 14 Mar 2024 07:39:37 +0000
+Received: from localhost (tine20-web-1.tine20_external_network [172.118.0.7])
+	by 762f189b849e.localdomain (Postfix) with ESMTP id B99ED60B3B4
+	for <tine20admin@mail.test>; Thu, 14 Mar 2024 07:39:37 +0000 (UTC)
+Subject: Test 1
+From: "=?UTF-8?Q?tine=20=C2=AE=20Admin?=" <tine20admin@mail.test>
+To: "=?UTF-8?Q?Admin=2C=20tine=20=C2=AE?=" <tine20admin@mail.test>
+User-Agent: =?UTF-8?Q?tine=20=C2=AE=20Email=20Client=20(Version=20:=200=20()=20?=
+ =?UTF-8?Q?-=20none)?=
+Message-Id: <c365082fd05e97231b06b350155aee654be78796@mail.test>
+X-MailGenerator: Tine 2.0
+Date: Thu, 14 Mar 2024 07:39:37 +0000
+Content-Type: multipart/alternative;
+ boundary="=_064fcc2985133cb8478eddbb05bef2b1"
+MIME-Version: 1.0
+
+--=_064fcc2985133cb8478eddbb05bef2b1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+=0AText ohne FarbeText in blauText in gelb=0AText in schwarz mit Hinterg=
+rund=0A=0A
+
+--=_064fcc2985133cb8478eddbb05bef2b1
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; char=
+set=3DUTF-8"><title></title><style type=3D"text/css">.felamimail-body-bl=
+ockquote {margin: 5px 10px 0 3px;padding-left: 10px;border-left: 2px sol=
+id #000088;} </style></head><body><div>Text ohne Farbe</div><font color=
+=3D"#00ffff">Text in blau</font><div style=3D""><font color=3D"#ffff99">=
+Text in gelb</font></div><div style=3D""><span style=3D"background-color=
+: rgb(153, 204, 255);"><font color=3D"#000000">Text in schwarz mit Hinte=
+rgrund</font></span></div><div style=3D""><br></div></body></html>
+
+--=_064fcc2985133cb8478eddbb05bef2b1--

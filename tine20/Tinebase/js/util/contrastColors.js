@@ -80,6 +80,11 @@ const contrastColors = {
   },
 
   adaptFg: (element, brighten) => {
+    let bgColor = element.style.getPropertyValue('background-color')
+    if (bgColor !== '') {
+      return
+    }
+
     _.forEach(element.children, (c) => {
       contrastColors.adaptFg(c, brighten)
     })
@@ -91,11 +96,6 @@ const contrastColors = {
       }
     })
     if (!hasText) {
-      return
-    }
-
-    let bgColor = element.style.getPropertyValue('background-color')
-    if (bgColor !== '') {
       return
     }
 
