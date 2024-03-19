@@ -6,7 +6,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
@@ -157,7 +157,7 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
             self::FLD_BOILERPLATE        => [
                 self::LABEL             => 'Boilerplate', //_('Boilerplate')
                 self::TYPE          => self::TYPE_TEXT,
-                self::LENGTH        => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_MEDIUMTEXT,
+                self::LENGTH        => \Doctrine\DBAL\Platforms\MySQLPlatform::LENGTH_LIMIT_MEDIUMTEXT,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED

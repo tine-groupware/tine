@@ -1267,7 +1267,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
             $this->_fields['xprops'] = array(
                 'label' => NULL,
                 'type'  => 'json',
-                self::LENGTH => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_TEXT,
+                self::LENGTH => \Doctrine\DBAL\Platforms\MySQLPlatform::LENGTH_LIMIT_TEXT,
                 self::NULLABLE => true,
                 self::DEFAULT_VAL => null,
                 self::DISABLED => true,
