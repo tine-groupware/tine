@@ -23,6 +23,8 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
 {
     use Tinebase_Controller_SingletonTrait;
 
+    protected bool $ignoreInspect = false;
+
     /**
      * the constructor
      *
@@ -65,8 +67,12 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
         /** @var Tinebase_Model_EvaluationDimension $_createdRecord */
         parent::_inspectAfterCreate($_createdRecord, $_record);
 
+        if ($this->ignoreInspect) {
+            return;
+        }
+
         if (!empty($models = $_createdRecord->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS))) {
-            $this->addDimensionToModel($_createdRecord, $models);
+            $this->updateDimensionOfModel($_createdRecord, $models);
         }
     }
 
@@ -84,11 +90,16 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
     {
         /** @var Tinebase_Model_EvaluationDimension $updatedRecord */
         parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
+
+        if ($this->ignoreInspect) {
+            return;
+        }
+
         $newModels = array_unique($updatedRecord->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS));
         $oldModels = array_unique($currentRecord->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS));
 
         if (!empty($addModels = array_diff($newModels, $oldModels))) {
-            $this->addDimensionToModel($updatedRecord, $addModels);
+            $this->updateDimensionOfModel($updatedRecord, $addModels);
         }
         if (!empty($delModels = array_diff($oldModels, $newModels))) {
             $this->removeDimensionFromModel($updatedRecord, $delModels);
@@ -102,29 +113,13 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
     {
         /** @var Tinebase_Model_EvaluationDimension $record */
         parent::_inspectAfterDelete($record);
+
+        if ($this->ignoreInspect) {
+            return;
+        }
+        
         if (!empty($models = $record->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS))) {
             $this->removeDimensionFromModel($record, array_unique($models));
-        }
-    }
-
-    protected function addDimensionToModel(Tinebase_Model_EvaluationDimension $dimension, array $models): void
-    {
-        /** @var Tinebase_Record_Interface $model */
-        foreach ($models as $model) {
-            if (!$model::getConfiguration()->{Tinebase_ModelConfiguration_Const::HAS_SYSTEM_CUSTOM_FIELDS}) {
-                throw new Tinebase_Exception_SystemGeneric($model . ' does not support system cf');
-            }
-
-            /** @var string $model */
-            $cfc = $dimension->getSystemCF($model);
-            $fun = function() use ($cfc) {
-                Tinebase_CustomField::getInstance()->addCustomField($cfc, [Tinebase_Model_EvaluationDimensionItem::class]);
-            };
-            if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
-                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback($fun);
-            } else {
-                $fun();
-            }
         }
     }
 
@@ -133,20 +128,22 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
         /** @var string $model */
         foreach ($models as $model) {
             $cfc = $dimension->getSystemCF($model);
-            $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
+            $existing = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
                 $cfc->application_id, $cfc->name, $cfc->model, true);
-            if (null !== $cfc) {
-                $cfc = $dimension->getSystemCF($model)->setId($cfc->getId());
-                $fun = function() use ($cfc) {
+            if (null !== $existing) {
+                $cfc->setId($existing->getId());
+                $fun = function () use ($cfc) {
                     Tinebase_CustomField::getInstance()->updateCustomField($cfc, [Tinebase_Model_EvaluationDimensionItem::class]);
                 };
-                if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
-                    Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback($fun);
-                } else {
-                    $fun();
-                }
             } else {
-                $this->addDimensionToModel($dimension, [$model]);
+                $fun = function() use ($cfc) {
+                    Tinebase_CustomField::getInstance()->addCustomField($cfc, [Tinebase_Model_EvaluationDimensionItem::class]);
+                };
+            }
+            if (Tinebase_TransactionManager::getInstance()->hasOpenTransactions()) {
+                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback($fun);
+            } else {
+                $fun();
             }
         }
     }
@@ -254,5 +251,18 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
             [TMFA::FIELD => Tinebase_Model_EvaluationDimension::FLD_NAME, TMFA::OPERATOR => TMFA::OP_EQUALS, TMFA::VALUE => $name],
         ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
         return $result;
+    }
+
+    /**
+     * @param Tinebase_Model_ModificationLog $modification
+     */
+    public function applyReplicationModificationLog(Tinebase_Model_ModificationLog $modification)
+    {
+        $this->ignoreInspect = true;
+        try {
+            Tinebase_Timemachine_ModificationLog::defaultApply($modification, $this);
+        } finally {
+            $this->ignoreInspect = false;
+        }
     }
 }
