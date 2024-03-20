@@ -143,6 +143,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      */
     init: function(ftb) {
         this.ftb = ftb;
+        
         if (this.syncFields) {
             this.ftb.renderFilterRow = this.ftb.renderFilterRow.createSequence(this.onAddFilter, this);
             this.ftb.onFieldChange = this.ftb.onFieldChange.createSequence(this.onFieldChange, this);
@@ -348,7 +349,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     },
 
     onGetValue: function() {
-        var value = this.origGetValue.call(this.ftb);
+        const value = this.origGetValue.call(this.ftb);
 
         if (! this.syncFields) {
             value.push({field: this.quickFilterField, operator: 'contains', value: this.quickFilter.getValue(), id: 'quickFilter'});
@@ -423,7 +424,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Ext.form.Field} field
      */
     syncField: function(field) {
-        if (field == this.quickFilter) {
+        if (field === this.quickFilter) {
             this.getQuickFilterRowField().formFields.value.setValue(this.quickFilter.getValue());
         } else {
             this.quickFilter.setValue(this.quickFilterRow.formFields.value.getValue());

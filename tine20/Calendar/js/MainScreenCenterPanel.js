@@ -116,7 +116,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         ];
         this.filterToolbar = this.getFilterToolbar({
             onFilterChange: this.refresh.createDelegate(this, [false]),
-            getAllFilterData: this.getAllFilterData.createDelegate(this)
+            getAllFilterData: this.getAllFilterData.createDelegate(this),
         });
         
         this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push(

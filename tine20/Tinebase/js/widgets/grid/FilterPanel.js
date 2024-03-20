@@ -9,7 +9,7 @@ Ext.ns('Tine.widgets.grid');
 
 Tine.widgets.grid.FilterPanel = function(config) {
     this.filterToolbarConfig = config;
-    Ext.copyTo(this, config, 'useQuickFilter,quickFilterConfig');
+    Ext.copyTo(this, config, 'useQuickFilter, quickFilterConfig, syncFields');
 
     // the plugins won't work there
     delete this.filterToolbarConfig.plugins;
@@ -85,9 +85,10 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
      */
     forceLayout: true,
     
+    syncFields: true,
+    
     initComponent: function() {
-        
-        var filterPanel = this.addFilterPanel();
+        const filterPanel = this.addFilterPanel();
         this.filterModelMap = filterPanel.filterModelMap;
         this.activeFilterPanel = filterPanel;
         
@@ -119,12 +120,12 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         }];
         
         Tine.widgets.grid.FilterPanel.superclass.initComponent.call(this);
-
+        
         if (this.useQuickFilter) {
             this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin(Ext.apply({
-                syncFields: false,
+                syncFields: this.syncFields,
             }, this.quickFilterConfig));
-            this.quickFilterPlugin.init(this);
+            this.quickFilterPlugin.init(filterPanel);
         }
     },
     
@@ -252,12 +253,12 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     },
 
     getValue: function() {
-        var filters = [];
+        const filters = [];
         
-
-        for (var id in this.filterPanels) {
+        for (let id in this.filterPanels) {
             if (this.filterPanels.hasOwnProperty(id) && this.filterPanels[id].isActive) {
-                filters.push({'condition': 'AND', 'filters': this.filterPanels[id].getValue(), 'id': id, label: Ext.util.Format.htmlDecode(this.filterPanels[id].title)});
+                const filterData = this.filterPanels[id].getValue();
+                filters.push({'condition': 'AND', 'filters': filterData, 'id': id, label: Ext.util.Format.htmlDecode(this.filterPanels[id].title)});
             }
         }
         
