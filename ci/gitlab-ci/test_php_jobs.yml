@@ -17,6 +17,8 @@
         paths:
           - "**/*.php"
           - "tine20/composer.*"
+          - "**/*.xslx"
+          - "**/*.docx"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-source/
     - if: $PIPELINE_TYPE =~ /default-tests/
     - if: $PIPELINE_TYPE =~ /mr-tests/
