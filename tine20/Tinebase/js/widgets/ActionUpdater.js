@@ -232,7 +232,7 @@
     getGrantsSum: function(records) {
 
         var _ = window.lodash,
-            modelNamePrefix = this.recordClass?.getMeta('modelName') + '_',
+            modelNamePrefix = this.recordClass?.getMeta?.('modelName') ? this.recordClass?.getMeta('modelName') + '_' : '',
             defaultGrant = records.length == 0 ? false : true,
             grants = {
                 addGrant:       defaultGrant,
