@@ -71,7 +71,12 @@ class Tinebase_Setup_Update_16 extends Setup_Update_Abstract
         Tinebase_TransactionManager::getInstance()->rollBack();
 
         if ($this->getTableVersion('customfield_config') < 7) {
-            $this->_backend->dropForeignKey('customfield_config', 'config_customfields::application_id--applications::id');
+            try {
+                $this->_backend->dropForeignKey('customfield_config', 'config_customfields::application_id--applications::id');
+            } catch (Exception $e) {
+                // might not exist
+                Tinebase_Exception::log($e);
+            }
             $this->_backend->dropIndex('customfield_config', 'application_id-name');
             $this->_backend->addIndex('customfield_config', new Setup_Backend_Schema_Index_Xml(
                 '<index>
