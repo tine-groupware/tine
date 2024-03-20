@@ -21,7 +21,7 @@
     TINE20ROOT: ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
     TINE20_LOGGER_ADDITIONALWRITERS_FILENAME: php://stdout
     WAIT_FOR_DB_TIMEOUT: '120'
-    TINE_CONTAINER_NAME: svc-4
+    TINE_CONTAINER_NAME: svc-5
   services:
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
