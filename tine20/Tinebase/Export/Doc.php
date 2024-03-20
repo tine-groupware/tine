@@ -448,7 +448,8 @@ class Tinebase_Export_Doc extends Tinebase_Export_Abstract implements Tinebase_R
                     }
                     $mergedRecords = array_merge($recordArray, $mergedRecords);
                 }
-                $validators = array_fill_keys(array_keys($mergedRecords), array(Zend_Filter_Input::ALLOW_EMPTY => true));
+                $validators = array_fill_keys(array_keys($mergedRecords), []);
+                $validators['id'] = [];
                 unset($validators['customfields']);
                 foreach($recordSet as $key => $recordArray) {
                     if (null !== $disallowedKeys && in_array($key, $disallowedKeys)) {
