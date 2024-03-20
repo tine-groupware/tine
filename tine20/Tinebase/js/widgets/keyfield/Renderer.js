@@ -35,31 +35,31 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
                     what = what ? what : 'text|icon',
                     whatParts = what.split('|'),
                     key = appName + keyFieldName + what;
+                
+                if (! renderers[key]) {
+                    renderers[key] = function(id) {
+                        if (! id) return "";
+                        var record = store.getById(id),
+                            i18nValue = record ? record.get('i18nValue') : app.i18n._hidden(id),
+                            icon = record ? record.get('icon') : null,
+                            string = '';
+                        
+                        if (whatParts.indexOf('icon') > -1 && icon) {
+                            string = string + '<img src="' + icon + '" class="tine-keyfield-icon" ext:qtip="' + Ext.util.Format.htmlEncode(i18nValue) + '" />';
+                        }
+                        
+                        if (whatParts.indexOf('text') > -1 && i18nValue) {
+                            string = string + Ext.util.Format.htmlEncode(i18nValue);
+                        }
+                        
+                        return string;
+                    }
+                }
+                
+                return renderers[key];
             } catch (e) {
                 Tine.log.error(e);
             }
-                
-            if (! renderers[key]) {
-                renderers[key] = function(id) {
-                    if (! id) return "";
-                    var record = store.getById(id),
-                        i18nValue = record ? record.get('i18nValue') : app.i18n._hidden(id),
-                        icon = record ? record.get('icon') : null,
-                        string = '';
-                        
-                    if (whatParts.indexOf('icon') > -1 && icon) {
-                        string = string + '<img src="' + icon + '" class="tine-keyfield-icon" ext:qtip="' + Ext.util.Format.htmlEncode(i18nValue) + '" />';
-                    }
-                        
-                    if (whatParts.indexOf('text') > -1 && i18nValue) {
-                        string = string + Ext.util.Format.htmlEncode(i18nValue);
-                    }
-                    
-                    return string;
-                }
-            }
-            
-            return renderers[key];
         },
         
         /**
