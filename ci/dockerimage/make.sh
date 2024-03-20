@@ -37,6 +37,7 @@ function build_image() {
 
     cmd+=" --build-arg CACHE_BUST=$(date +%s)"
     cmd+=" --build-arg ZIP_PACKAGES"
+    cmd+=" --build-arg RELEASE_TYPE"
 
     # configured by environment variables
     cmd+=" --build-arg CUSTOM_APP_VENDOR"

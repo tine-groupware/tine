@@ -141,6 +141,7 @@ Ext.grid.PropertyColumnModel = Ext.extend(Ext.grid.ColumnModel, {
     dateFormat : 'm/j/Y',
     trueText: 'true',
     falseText: 'false',
+    nameWidth: 120,
     
     constructor : function(grid, store){
         var g = Ext.grid,
@@ -148,7 +149,7 @@ Ext.grid.PropertyColumnModel = Ext.extend(Ext.grid.ColumnModel, {
 	        
 	    this.grid = grid;
 	    g.PropertyColumnModel.superclass.constructor.call(this, [
-	        {header: this.nameText, width:50, sortable: true, dataIndex:'name', id: 'name', menuDisabled:true},
+	        {header: this.nameText, width: this.nameWidth, sortable: true, dataIndex:'name', id: 'name', menuDisabled:true},
 	        {header: this.valueText, width:50, resizable:false, dataIndex: 'value', id: 'value', menuDisabled:true}
 	    ]);
 	    this.store = store;

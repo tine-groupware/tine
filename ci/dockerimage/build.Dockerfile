@@ -23,12 +23,15 @@ FROM ${SOURCE_IMAGE} as build
 ARG RELEASE=local
 ARG CODENAME=local
 ARG REVISION=local
+ARG RELEASE_TYPE=""
 
 COPY ci/dockerimage/build/build_script.sh /build_script.sh
 
 RUN rm -rf "${TINE20ROOT}/tine20/ExampleApplication"
-RUN rm -f "${TINE20ROOT}/tine20/Tinebase/License/cacert.pem"
-RUN rm -f "${TINE20ROOT}/tine20/Tinebase/License/cacert20240311.pem"
+RUN if [ "$RELEASE_TYPE" == be ]; then \
+        rm -f "${TINE20ROOT}/tine20/Tinebase/License/cacert.pem"; \
+        rm -f "${TINE20ROOT}/tine20/Tinebase/License/cacert20240311.pem"; \
+    fi
 RUN bash -c "source /build_script.sh && activateReleaseMode"
 RUN bash -c "source /build_script.sh && buildLangStats"
 RUN bash -c "source /build_script.sh && cleanupJs"
