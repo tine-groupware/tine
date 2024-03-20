@@ -19,7 +19,9 @@
     TEST_BROWSER_LANGUAGE: en
     TINE20_INSTALL_LANG: de
     TINE20ROOT: ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+    TINE20_LOGGER_ADDITIONALWRITERS_FILENAME: php://stdout
     WAIT_FOR_DB_TIMEOUT: '120'
+    TINE_CONTAINER_NAME: svc-4
   services:
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
@@ -53,6 +55,10 @@
     - cd $TINE20ROOT/tests/e2etests
     - npm test -- $JS_E2E_TEST_FILTER --reporters=default --reporters=jest-junit
   after_script:
+    - |
+      export now=$(date +%s000);
+      export start=$(date -d '-2 hour' +%s000);
+      echo tine20 log: "${GRAFANA_URL}&left=%5B%22${start}%22,%22${now}%22,%22Loki%22,%7B%22refId%22:%22A%22,%22expr%22:%22%7Bapp%3D%5C%22${HOSTNAME}%5C%22,%20container%3D%5C%22${TINE_CONTAINER_NAME}%5C%22%7D%22%7D%5D"
     - cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tests/e2etests/junit.xml ${CI_PROJECT_DIR}/junit.xml
   artifacts:
     when: always
