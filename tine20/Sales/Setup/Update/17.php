@@ -33,6 +33,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE014 = __CLASS__ . '::update014';
 
     const RELEASE017_UPDATE015 = __CLASS__ . '::update015';
+    const RELEASE017_UPDATE016 = __CLASS__ . '::update016';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -89,6 +90,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE015 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update015',
+            ],
+            self::RELEASE017_UPDATE016 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update016',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -522,5 +527,15 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.15', self::RELEASE017_UPDATE015);
+    }
+
+    public function update016()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Boilerplate::class,
+            Sales_Model_Document_Boilerplate::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.16', self::RELEASE017_UPDATE016);
     }
 }

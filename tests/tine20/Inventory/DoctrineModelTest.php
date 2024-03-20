@@ -46,8 +46,10 @@ class Inventory_DoctrineModelTest extends Inventory_TestCase
 
         $table = $toSchema->getTable('tine20_inventory_item');
 
-        $this->expectException('Doctrine\DBAL\DBALException');
-        $table->renameColumn('id', 'ident');
+        $this->expectException(Doctrine\DBAL\Exception::class);
+        $column = $table->getColumn('id');
+        $table->dropColumn('id');
+        $table->addColumn(new \Doctrine\DBAL\Schema\Column('ident', $column->getType(), $column->toArray()));
     }
 
     public function testExplicitRename()
@@ -75,7 +77,7 @@ class Inventory_DoctrineModelTest extends Inventory_TestCase
         //  ? Schema tool can't rename cols, but schema diff with compare (at least with mysql plattform) alters table name correctly when col is renamed in annotations
 
         // non rename updates are a lot more easy
-        $table->changeColumn('name', array(
+        $table->modifyColumn('name', array(
             'length' => 200,
         ));
 
