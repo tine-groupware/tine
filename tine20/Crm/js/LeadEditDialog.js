@@ -112,7 +112,7 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.contactGrid.store.loadData(relations.contacts, true);
             this.notificationsAction.setText(this.app.i18n._hidden(!!+this.record.get('mute') ?
                 'Notifications are disabled' : 'Notifications are enabled'));
-            debugger
+            
             this.notificationsAction.callEach('toggle', [!!+this.record.get('mute')]);
 
             if (this.productsGrid.store) {
@@ -407,13 +407,15 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         collapseMode: 'mini',
                         header: false,
                         collapsible: true,
+                        autoScroll: true,
                         items: [{
                             xtype: 'panel',
                             layout:'column',
-                            height: 140,
+                            height: 120,
                             id: 'lead_combos',
                             anchor:'100%',
                             labelAlign: 'top',
+                            bodyStyle: 'margin: 10px',
                             items: [{
                                 columnWidth: 0.33,
                                 items:[{

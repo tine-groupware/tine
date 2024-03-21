@@ -216,7 +216,8 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     getColumnModel: function() {
         return new Ext.grid.ColumnModel({
             defaults: {
-                sortable: true
+                sortable: true,
+                resizable: true,
             },
             columns: [            
                 {id:'id', header: "id", dataIndex: 'id', width: 25, hidden: true },
