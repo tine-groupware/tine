@@ -1841,6 +1841,9 @@ class Tinebase_FileSystem implements
                 } else {
                     /** @var Tinebase_Model_Tree_Node $child */
                     foreach ($children as $child) {
+                        $pathParts = $this->_splitPath($path . '/' . $child->name);
+                        $cacheId = $this->_getCacheId($pathParts);
+                        $this->_statCache[$cacheId] = $child;
                         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $child->type) {
                             $this->rmdir($path . '/' . $child->name, true, true, $deleteFlySys);
                         } else {
@@ -3677,7 +3680,10 @@ class Tinebase_FileSystem implements
     protected function _syncFlySystemDeleteNode(Tinebase_Model_Tree_Node $node): void
     {
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
-            $this->rmdir($this->getPathOfNode($node, true), true, false, false);
+            $pathParts = $this->_splitPath($this->getPathOfNode($node, true));
+            $cacheId = $this->_getCacheId($pathParts);
+            $this->_statCache[$cacheId] = $node;
+            $this->rmdir('/' . implode('/', $pathParts), true, false, false);
         } else {
             $this->deleteFileNode($node, false, false);
         }
