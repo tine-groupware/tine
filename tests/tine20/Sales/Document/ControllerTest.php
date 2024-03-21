@@ -218,6 +218,26 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $this->assertSame(0, $result->count());
     }
 
+    public function testQueryFilter()
+    {
+        $customer = $this->_createCustomer();
+
+        $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_RECEIVED,
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->postal,
+            Sales_Model_Document_Order::FLD_DOCUMENT_TITLE => 'unittest',
+        ]));
+
+        $result = Sales_Controller_Document_Order::getInstance()->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class, [
+                ['field' => 'query', 'operator' => 'contains', 'value' => 'nitt'],
+            ]))->getFirstRecord();
+
+        $this->assertNotNull($result);
+        $this->assertSame($order->getId(), $result->getId());
+    }
+
     public function testOrderAddresses()
     {
         $customer = $this->_createCustomer();
