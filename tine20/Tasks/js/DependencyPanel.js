@@ -45,7 +45,7 @@ Ext.reg('tasks.dependency', Ext.extend(Tine.widgets.grid.PickerGridPanel, {
                                 this.store.load();
                             } else {
                                 this.onBeforeLoad(this.store, {});
-                                this.store.data = me.dependendTaskPanel.store.data.clone();
+                                this.store.loadData(me.dependendTaskPanel.store.getData());
                                 this.store.remove(this.store.getById(me.findParentBy(function(c) {return c instanceof Tine.widgets.dialog.EditDialog})?.recordId));
                                 this.store.clearFilter();
                                 this.store.fireEvent('datachanged', this.store);
@@ -66,7 +66,8 @@ Ext.reg('tasks.dependency', Ext.extend(Tine.widgets.grid.PickerGridPanel, {
 
             const parantTaskId = this.findParentBy(function(c) {return c instanceof Tine.widgets.dialog.EditDialog})?.recordId;
             // use local store from dependendTaskPanel for task pickers
-            this.getSearchCombo().store.data = this.dependendTaskPanel.store.data.clone();
+            // grr cross window
+            this.getSearchCombo().store.loadData(this.dependendTaskPanel.store.getData());
             this.getSearchCombo().store.remove(this.getSearchCombo().store.getById(parantTaskId));
 
             // prevent recursion
