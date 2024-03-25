@@ -400,6 +400,9 @@ msgstr "Sie benötigen einen aktuellen Browser um dieses Programm zu nutzen."
 msgid "User: {0}"
 msgstr "Benutzer: {0}"
 
+msgid "Search for Application ..."
+msgstr "Nach Anwendung suchen ..."
+
 #: js/MainMenu.js:112
 msgid "Return to original user account"
 msgstr "Kehre zurück zum ursprünglichen Benutzer-Konto"
