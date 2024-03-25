@@ -121,6 +121,22 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
      * init the combined appchooser/tine menu
      */
     initMenu: function() {
+        this.appSearchField = new Ext.form.TextField({
+            width: '100%',
+            style: 'background-color: #272727;',
+            emptyText: i18n._('Search for Application ...'),
+            enableKeyEvents: true,
+            listeners: {
+                keyup: (f) => {
+                    const v = f.getRawValue();
+                    this.menu.items.get(0).items.each((appItem) => {
+                        if (appItem !== f) {
+                            appItem.setVisible(!v || appItem.text.match(v));
+                        }
+                    });
+                }
+            }
+        });
         this.menu = new Ext.menu.Menu({
             layout: 'column',
             width: 400,
@@ -145,7 +161,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
                 }
             },
             items: [{
-                items: this.getAppItems(),
+                items: [this.appSearchField].concat(this.appItems = this.getAppItems()),
                 style: {'border-right': '1px solid #E2E2E3'}
             }, {
                 plugins: [{
@@ -190,7 +206,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
             }
         }, this);
         
-        return appItems.reverse();
+        return _.sortBy(appItems, 'text');
     },
     
     /**
@@ -303,6 +319,10 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
     onBeforeTabChange: function(tp, newTab, currentTab) {
         if (this.id2appName(newTab) === 'menu') {
             this.menu[this.menu.isVisible() ? 'hide' : 'show'].defer(10, this.menu, [this.menuTabEl, 'tl-bl']);
+            this.appSearchField.reset();
+            this.menu.items.get(0).items.each((appItem) => {
+                    appItem.setVisible(true);
+            });
             return false;
         }
     },
