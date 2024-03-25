@@ -16,11 +16,12 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     recordClass: 'Tasks.Task',
     useBBar: true,
     parentRecordField: 'tasks',
-    editDialogConfig: { mode: 'load(remote):save(local)' },
     quickaddMandatory: 'summary',
     allowCreateNew: true,
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Tasks');
+        this.editDialogConfig = this.editDialogConfig || {};
+        this.editDialogConfig.mode = this.editDialogConfig.mode || 'load(remote):save(local)';
         this.editDialogConfig.dependendTaskPanel = this;
         this.columns = [
             {
