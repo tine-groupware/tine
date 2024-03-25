@@ -30,6 +30,7 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_NewAbstract implements SSO
     public const FLD_SINGLE_LOGOUT_SERVICE_BINDING = 'singleLogoutServiceBinding';
     public const FLD_ATTRIBUTE_MAPPING = 'attributeMapping';
     public const FLD_CUSTOM_HOOKS = 'customHooks';
+    public const FLD_NAME_ID_FORMAT = 'nameIdFormat';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -118,6 +119,10 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_NewAbstract implements SSO
             self::FLD_CUSTOM_HOOKS        => [
                 self::TYPE                  => self::TYPE_JSON,
             ],
+            self::FLD_NAME_ID_FORMAT      => [
+                self::TYPE                  => self::TYPE_STRING,
+                self::LENGTH                => 255,
+            ],
         ]
     ];
 
@@ -136,6 +141,9 @@ class SSO_Model_Saml2RPConfig extends Tinebase_Record_NewAbstract implements SSO
             self::FLD_CUSTOM_HOOKS => $this->{self::FLD_CUSTOM_HOOKS},
         ];
 
+        if (!empty($this->{self::FLD_NAME_ID_FORMAT})) {
+            $result['NameIDFormat'] = $this->{self::FLD_NAME_ID_FORMAT};
+        }
         if (!empty($this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION})) {
             $result['AssertionConsumerService']['Location'] = $this->{self::FLD_ASSERTION_CONSUMER_SERVICE_LOCATION};
         }
