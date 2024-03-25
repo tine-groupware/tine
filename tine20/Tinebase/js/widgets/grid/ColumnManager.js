@@ -157,6 +157,14 @@ Tine.widgets.grid.ColumnManager = function() {
             if (fieldDefinition.hasOwnProperty('summaryType')) {
                 column.summaryType = fieldDefinition.summaryType;
             }
+            
+            if (fieldDefinition?.uiconfig?.responsiveLevel) {
+                column.responsiveLevel = fieldDefinition.uiconfig.responsiveLevel;
+            }
+            
+            if (fieldDefinition?.shy) {
+                column.responsiveLevel = 'large';
+            }
 
             var renderer = Tine.widgets.grid.RendererManager.get(app, modelName, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
             if (renderer) {

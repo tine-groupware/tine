@@ -672,12 +672,9 @@ function(grid, rowIndex, columnIndex, e) {
                 c = cm.getColumnById(s.id);
                 if (c) {
                     oldIndex = cm.getIndexById(s.id);
-                    
                     cm.setHidden(oldIndex, !!s.hidden);
                     c.hidden = !!s.hidden;
-                    c.width = s.width;
-
-                    if (oldIndex !== i){
+                    if (oldIndex !== i) {
                         cm.moveColumn(oldIndex, i);
                     }
                     if (!cm.isResizable(i)) continue;
@@ -700,7 +697,7 @@ function(grid, rowIndex, columnIndex, e) {
             }
 
         }
-        var o = Ext.apply({}, state);
+        const o = Ext.apply({}, state);
         delete o.columns;
         delete o.sort;
         Ext.grid.GridPanel.superclass.applyState.call(this, o);
