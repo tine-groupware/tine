@@ -634,8 +634,13 @@ class SSO_Controller extends Tinebase_Controller_Event
             ['field' => 'name', 'operator' => 'equals', 'value' => $samlRequest->getIssuer()->getValue()]
         ]))->getFirstRecord();
 
-        $data = $request->getQueryParams();
-        $data['SAMLRequest'] = base64_encode(gzinflate(base64_decode($data['SAMLRequest'])));
+        /** @var \Psr\Http\Message\ServerRequestInterface $request */
+        if ($request->getQueryParams()['SAMLRequest'] ?? false) {
+            $data = $request->getQueryParams();
+        } else {
+            $data = $request->getParsedBody();
+        }
+        $data['SAMLRequest'] = base64_encode(gzinflate($decode = base64_decode($data['SAMLRequest'])) ?: $decode);
 
         return static::renderLoginPage($rp, $data);
     }
