@@ -710,6 +710,21 @@ class Sales_InvoiceTestCase extends TestCase
             $timesheet->description = 'ts from ' . (string) $tsDate;
             
             $this->_timesheetRecords->addRecord($this->_timesheetController->create($timesheet));
+
+            // this is a ts on 20xx-05-08
+            $timesheet->id = NULL;
+            $timesheet->start_date = $tsDate->addDay(1);
+            $timesheet->start_time = '09:20:00';
+            $timesheet->description = 'ts from ' . (string) $tsDate;
+
+            $this->_timesheetRecords->addRecord($this->_timesheetController->create($timesheet));
+
+            // this is a ts on 20xx-05-09
+            $timesheet->id = NULL;
+            $timesheet->start_date = $tsDate->addDay(1);
+            $timesheet->description = 'ts from ' . (string) $tsDate;
+
+            $this->_timesheetRecords->addRecord($this->_timesheetController->create($timesheet));
             
             // this is a ts on 20xx-09-07
             $timesheet->id = NULL;
