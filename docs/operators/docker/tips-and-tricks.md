@@ -17,7 +17,7 @@ ExecStart=/usr/bin/dockerd --http-proxy="http://myproxy" --https-proxy="http://m
 ## Connect to the database via MySQL/MariaDB client
 
 Go to your docker host and into the directory with the docker-compose.yml and run the following command
-(use differernt user/pw if you changed them):
+(use different user/pw if you changed them):
 
 ~~~shell
 $ docker compose exec db sh -c "mysql -u root -proot tine"
@@ -45,3 +45,7 @@ Afterwards, you can restart MariaDB and check the file with `tail -f` to find an
 $ /etc/init.d/mariadb restart
 $ tail -f /var/log/mysql/error.log
 ~~~
+
+On this stackoverflow question, you can find additional ways to activate error/slow.logs:
+
+(https://stackoverflow.com/questions/39708213/enable-logging-in-docker-mysql-container)
