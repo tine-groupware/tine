@@ -48,10 +48,12 @@ class Calendar_Import_Ical extends Calendar_Import_Abstract
                     'password' => $cc->password,
                 ]] : []);
             if (!$_resource) {
-                throw new Tinebase_Exception_NotFound('url not found or timeout');
+                throw new Tinebase_Exception_NotFound('URL not found or timeout: ' . $this->_options['url']);
             }
         }
-        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC);
+        $converter = Calendar_Convert_Event_VCalendar_Factory::factory(
+            Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC
+        );
         if (isset($this->_options['onlyBasicData'])) {
             $converter->setOptions(array('onlyBasicData' => $this->_options['onlyBasicData']));
         }
