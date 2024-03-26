@@ -213,30 +213,32 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
             if (!$appNotFound) {
 
-                    if ($app instanceof Tinebase_Container) {
-                        $backend = $app;
-                    } else if ($app instanceof Tinebase_User_Sql || $app instanceof Tinebase_Tree_FileObject) {
-                        // TODO make those backends work / refactor them
-                        continue;
-                    } else {
-                        if (!$app instanceof Tinebase_Controller_Record_Abstract) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                    . ' model: ' . $model . ' controller: ' . get_class($app)
-                                    . ' not an instance of Tinebase_Controller_Record_Abstract');
-                            continue;
+                if ($app instanceof Tinebase_Container) {
+                    $backend = $app;
+                } elseif ($app instanceof Tinebase_User_Sql || $app instanceof Tinebase_Tree_FileObject) {
+                    // TODO make those backends work / refactor them
+                    continue;
+                } else {
+                    if (!$app instanceof Tinebase_Controller_Record_Abstract) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . ' model: ' . $model . ' controller: ' . get_class($app)
+                                . ' not an instance of Tinebase_Controller_Record_Abstract');
                         }
+                        continue;
+                    }
 
                     $backend = $app->getBackend();
                 }
 
-                    if (!$backend instanceof Tinebase_Backend_Interface) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                . ' model: ' . $model . ' backend: ' . get_class($backend)
-                                . ' not an instance of Tinebase_Backend_Interface');
-                        continue;
+                if (!$backend instanceof Tinebase_Backend_Interface) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . ' model: ' . $model . ' backend: ' . get_class($backend)
+                        . ' not an instance of Tinebase_Backend_Interface');
                     }
+                    continue;
+                }
 
                 /** @var Tinebase_Record_Interface $record */
                 $record = new $model(null, true);
@@ -1538,18 +1540,25 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             try {
                 $authResponse = $tine20Service->login($tine20LoginName, $tine20Password);
             } catch (Exception $e) {
-                Tinebase_Exception::log($e);
+                if (! $e instanceof Zend_Service_Exception && ! $e instanceof Zend_Json_Exception) {
+                    Tinebase_Exception::log($e);
+                }
             }
             if (!is_array($authResponse) || !isset($authResponse['success']) || $authResponse['success'] !== true) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ .
-                    ' Could not login: ' . print_r($authResponse, true));
+                if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
+                    Tinebase_Core::getLogger()->err(
+                        __METHOD__ . '::' . __LINE__ .
+                        ' Could not login: ' . print_r($authResponse, true)
+                    );
+                }
                 throw new Tinebase_Exception_AccessDenied('login failed');
             }
             unset($authResponse);
 
-            //get replication state:
-            $masterReplicationId = intval(Tinebase_Application::getInstance()->getApplicationState('Tinebase',
-                Tinebase_Application::STATE_REPLICATION_MASTER_ID));
+            $masterReplicationId = intval(Tinebase_Application::getInstance()->getApplicationState(
+                'Tinebase',
+                Tinebase_Application::STATE_REPLICATION_MASTER_ID
+            ));
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
