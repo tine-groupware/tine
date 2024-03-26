@@ -83,7 +83,7 @@ Tine.ActiveSync.SyncDeviceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         maxLength: 40
                     }, {
                         columnWidth: 0.333,
-                        fieldLabel: this.app.i18n._('Owner'),
+                        fieldLabel: this.app.i18n._('Owned by'),
                         name: 'owner_id',
                         allowBlank: false,
                         xtype: 'addressbookcontactpicker',

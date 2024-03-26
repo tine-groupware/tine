@@ -74,7 +74,7 @@ msgstr ""
 
 #: js/SyncDevicesGridPanel.js:72 js/SyncDevicesGridPanel.js:155
 #: js/EditDialog.js:86
-msgid "Owner"
+msgid "Owned by"
 msgstr "Proprietario"
 
 #: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:98
@@ -154,7 +154,7 @@ msgid "Remote Device Reset"
 msgstr ""
 
 #: js/SyncDevicesGridPanel.js:116
-msgid "Please Confirm"
+msgid "Please confirm"
 msgstr "Conferma"
 
 #: js/SyncDevicesGridPanel.js:117
