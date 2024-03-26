@@ -67,8 +67,8 @@ msgstr "Device Type"
 
 #: js/SyncDevicesGridPanel.js:72 js/SyncDevicesGridPanel.js:155
 #: js/EditDialog.js:86
-msgid "Owner"
-msgstr "Owner"
+msgid "Owned by"
+msgstr "Owned by"
 
 #: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:98
 msgid "Policy"
@@ -147,8 +147,8 @@ msgid "Remote Device Reset"
 msgstr "Remote Device Reset"
 
 #: js/SyncDevicesGridPanel.js:116
-msgid "Please Confirm"
-msgstr "Please Confirm"
+msgid "Please confirm"
+msgstr "Please confirm"
 
 #: js/SyncDevicesGridPanel.js:117
 msgid "Do you really want to wipe the selected devices? All personal data will be removed and the device will be reset to factory settings!"
