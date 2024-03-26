@@ -319,7 +319,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     
                     const app = Tine.Tinebase.appMgr.get('Felamimail');
                     const description = document.createElement('div');
-                    description.innerHTML = app.formatMessage('The recipients of this email distribution list are maintained in the list : {locationsHtml}', {
+                    description.innerHTML = app.formatMessage('The recipients of this email distribution list are maintained in the list: {locationsHtml}', {
                         locationsHtml: listItem.outerHTML
                     });
                     description.style.padding = '5px';
