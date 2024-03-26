@@ -13107,11 +13107,11 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.20.71",
+            "version": "1.12.20.72",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine-groupware/zendframework1.git",
-                "reference": "12bcecb04004e7b521c3198907a84f8d7c287ced"
+                "reference": "390b5ae77bd26a3c80046f7be8040286fc4ff15f"
             },
             "require": {
                 "php": ">=7.4.0"
@@ -13128,7 +13128,7 @@
                 "New BSD License"
             ],
             "description": "Metaways Infosystems GmbH - Patched Zendframework1",
-            "time": "2024-01-29T13:50:49+00:00"
+            "time": "2024-03-26T09:14:34+00:00"
         }
     ],
     "packages-dev": [
