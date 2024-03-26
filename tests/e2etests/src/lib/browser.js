@@ -63,7 +63,7 @@ const priorities = {
 
     getEditDialog: async function (btnText, win) {
         await expect(win || page).toMatchElement('.x-btn-text', {text: btnText, visible: true});
-        await page.waitForTimeout(100); // wait for btn to get active
+        await page.waitForTimeout(500); // wait for btn to get active
         let popupWindow = this.getNewWindow();
         await expect(win || page).toClick('.x-btn-text', {text: btnText});
         popupWindow = await popupWindow;
