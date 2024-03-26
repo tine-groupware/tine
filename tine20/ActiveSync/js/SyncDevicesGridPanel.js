@@ -69,7 +69,7 @@ Tine.ActiveSync.SyncDevicesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('ID'),             id: 'id',                dataIndex: 'id',                hidden: true,  width: 50},
             { header: this.app.i18n._('Device ID'),      id: 'deviceid',          dataIndex: 'deviceid',          hidden: false, width: 200},
             { header: this.app.i18n._('Device Type'),     id: 'devicetype',        dataIndex: 'devicetype',        hidden: false, width: 100},
-            { header: this.app.i18n._('Owner'),          id: 'owner_id',          dataIndex: 'owner_id',          hidden: false, width: 80,  renderer: Tine.Tinebase.common.usernameRenderer},
+            { header: this.app.i18n._('Owned by'),          id: 'owner_id',          dataIndex: 'owner_id',          hidden: false, width: 80,  renderer: Tine.Tinebase.common.usernameRenderer},
             { header: this.app.i18n._('Policy'),         id: 'policy_id',         dataIndex: 'policy_id',         hidden: false, width: 200},
             { header: this.app.i18n._('ActiveSync Version'),     id: 'acsversion',        dataIndex: 'acsversion',        hidden: false, width: 100},
             { header: this.app.i18n._('User agent'),      id: 'useragent',         dataIndex: 'useragent',         hidden: true,  width: 200},
@@ -116,7 +116,7 @@ Tine.ActiveSync.SyncDevicesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onRemoteResetDevices: function() {
         Ext.MessageBox.confirm(
-            this.app.i18n._('Please Confirm'),
+            this.app.i18n._('Please confirm'),
             this.app.i18n._('Do you really want to wipe the selected devices? All personal data will be removed and the device will be reset to factory settings!'),
             function(button) {
                 if (button == 'yes') {
@@ -155,7 +155,7 @@ Tine.ActiveSync.SyncDevicesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             filterModels: [
                 {label: this.app.i18n._('Quicksearch'),     field: 'query',    operators: ['contains']},
                 {label: this.app.i18n._('Device ID'),       field: 'deviceid', operators: ['contains']},
-                {label: this.app.i18n._('Owner'),           field: 'owner_id', valueType: 'user'}
+                {label: this.app.i18n._('Owned by'),           field: 'owner_id', valueType: 'user'}
             ],
             defaultFilter: 'query',
             /*filters: [

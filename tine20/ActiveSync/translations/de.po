@@ -32,7 +32,7 @@ msgstr "Gerät auswählen"
 
 #: js/Application.js:57
 msgid "No ActiveSync Device registered"
-msgstr "Kein ActiveSync Gerät verfügbar"
+msgstr "Kein ActiveSync-Gerät verfügbar"
 
 #: js/Application.js:65
 #, python-brace-format
@@ -41,7 +41,7 @@ msgstr "Als {0} Filter setzen"
 
 #: js/Application.js:90
 msgid "Resetted Sync Filter"
-msgstr "Sync Filter zurückgesetzt"
+msgstr "Sync-Filter zurückgesetzt"
 
 #: js/Application.js:91 js/Application.js:103
 #, python-brace-format
@@ -54,11 +54,11 @@ msgstr "zurückgesetzt"
 
 #: js/Application.js:102
 msgid "Set Sync Filter"
-msgstr "Setze Sync Filter"
+msgstr "Setze Sync-Filter"
 
 #: js/AdminPanel.js:45
 msgid "Sync Devices"
-msgstr "Sync Geräte"
+msgstr "Sync-Geräte"
 
 #: js/SyncDevicesGridPanel.js:69
 msgid "ID"
@@ -71,12 +71,12 @@ msgstr "Geräte ID"
 
 #: js/SyncDevicesGridPanel.js:71
 msgid "Device Type"
-msgstr "Geräte Typ"
+msgstr "Geräte-Typ"
 
 #: js/SyncDevicesGridPanel.js:72 js/SyncDevicesGridPanel.js:155
 #: js/EditDialog.js:86
-msgid "Owner"
-msgstr "Eigentümer"
+msgid "Owned by"
+msgstr "Im Eigentum von"
 
 #: js/SyncDevicesGridPanel.js:73 js/EditDialog.js:98
 msgid "Policy"
@@ -84,7 +84,7 @@ msgstr "Richtlinie"
 
 #: js/SyncDevicesGridPanel.js:74 js/EditDialog.js:104
 msgid "ActiveSync Version"
-msgstr "ActiveSync Version"
+msgstr "ActiveSync-Version"
 
 #: js/SyncDevicesGridPanel.js:75 js/EditDialog.js:110
 msgid "User agent"
@@ -128,19 +128,19 @@ msgstr "Gerät löschen"
 
 #: js/SyncDevicesGridPanel.js:85
 msgid "Calendar Filter"
-msgstr "Kalender Filter"
+msgstr "Kalender-Filter"
 
 #: js/SyncDevicesGridPanel.js:86
 msgid "Contacts Filter"
-msgstr "Kontakt Filter"
+msgstr "Kontakt-Filter"
 
 #: js/SyncDevicesGridPanel.js:87
 msgid "E-mail Filter"
-msgstr "E-Mail Filter"
+msgstr "E-Mail-Filter"
 
 #: js/SyncDevicesGridPanel.js:88
 msgid "Tasks Filter"
-msgstr "Aufgaben Filter"
+msgstr "Aufgaben-Filter"
 
 #: js/SyncDevicesGridPanel.js:89
 msgid "Last Ping"
@@ -155,7 +155,7 @@ msgid "Remote Device Reset"
 msgstr "Gerät zurücksetzen (Fernzugriff)"
 
 #: js/SyncDevicesGridPanel.js:116
-msgid "Please Confirm"
+msgid "Please confirm"
 msgstr "Bitte bestätigen"
 
 #: js/SyncDevicesGridPanel.js:117
@@ -169,8 +169,8 @@ msgstr "Schnellsuche"
 #: js/SyncDevices.js:70
 msgid "Sync Device"
 msgid_plural "Sync Devices"
-msgstr[0] "Sync Gerät"
-msgstr[1] "Sync Geräte"
+msgstr[0] "Sync-Gerät"
+msgstr[1] "Sync-Geräte"
 
 #: js/Model.js:42
 msgid "Device"
@@ -184,7 +184,7 @@ msgstr "Geräte"
 
 #: js/EditDialog.js:79
 msgid "Devicetype"
-msgstr "Gerätetyp"
+msgstr "Geräte-Typ"
 
 #: js/EditDialog.js:134
 msgid "OS"
@@ -196,7 +196,7 @@ msgstr "Telefonnummer"
 
 #: Preference.php:75
 msgid "Default Address book"
-msgstr "Standardadressbuch"
+msgstr "Standard-Adressbuch"
 
 #: Preference.php:76
 msgid "The default address book to create new contacts in."
@@ -220,7 +220,7 @@ msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
 
 #: Config.php:60
 msgid "Default policy for new devices"
-msgstr "Standardrichtlinie für neue Geräte"
+msgstr "Standard-Richtlinie für neue Geräte"
 
 #: Config.php:62
 msgid "Enter the id of the policy to apply to newly created devices."
@@ -252,11 +252,11 @@ msgstr "Zugriffe per ActiveSync nicht im Zugriffslog speichern."
 
 #: Config.php:108
 msgid "Filter timeslot for e-mails"
-msgstr "Filter Zeitpunkt für E-Mails"
+msgstr "Filter-Zeitpunkt für E-Mails"
 
 #: Config.php:110
 msgid "For how long in the past the e-mails should be synchronized."
-msgstr "Maximales Alter für E-Mails die synchronisiert werden dürfen."
+msgstr "Maximales Alter für E-Mails, die synchronisiert werden dürfen."
 
 #: Config.php:131
 msgid "Filter timeslot for events"
@@ -264,7 +264,7 @@ msgstr "Maximales Alter für Termine"
 
 #: Config.php:133
 msgid "For how long in the past the events should be synchronized."
-msgstr "Maximales Alter für Termine die synchronisiert werden dürfen."
+msgstr "Maximales Alter für Termine, die synchronisiert werden dürfen."
 
 #: Controller/Device.php:213
 msgid "%1$s ActiveSync failure"
@@ -292,19 +292,19 @@ msgstr "Standardrichtlinie"
 
 #: Setup/setup.xml:554
 msgid "Default Policy installed during setup"
-msgstr "Standardrichtlinie aus dem Setup Prozess"
+msgstr "Standard-Richtlinie aus dem Setup-Prozess"
 
 #: Acl/Rights.php:110
 msgid "Manage ActiveSync devices"
-msgstr "ActiveSync Geräte verwalten"
+msgstr "ActiveSync-Geräte verwalten"
 
 #: Acl/Rights.php:111
 msgid "See, edit and delete ActiveSync devices"
-msgstr "ActiveSync Geräte sehen, verwalten und löschen"
+msgstr "ActiveSync-Geräte sehen, verwalten und löschen"
 
 #: Acl/Rights.php:114
 msgid "Reset ActiveSync devices"
-msgstr "ActiveSync Geräte zurücksetzen"
+msgstr "ActiveSync-Geräte zurücksetzen"
 
 #: Acl/Rights.php:115
 msgid "Remotely reset ActiveSync devices to factory state, deleting all data"

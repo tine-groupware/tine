@@ -25,7 +25,7 @@ msgstr ""
 
 #: Import/definitions/adb_google_import_csv.xml:11
 msgid "Import CSV formated contacts from Google address book"
-msgstr "Importiere CSV formatierte Kontakte aus einem Google Adressbuch"
+msgstr "Importiere CSV-formatierte Kontakte aus einem Google-Adressbuch"
 
 #: Import/definitions/adb_google_import_csv.xml:13
 msgid "Contact import from Google address book"
@@ -33,11 +33,11 @@ msgstr "Kontaktimport aus dem Google-Adressbuch"
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:11
 msgid "LX-Office CSV Contact import"
-msgstr "LX-Office CSV Kontakt Import"
+msgstr "LX-Office CSV-Kontakt-Import"
 
 #: Import/definitions/adb_lxoffice_import_csv.xml:13
 msgid "Import CSV formated contacts from LX-Office"
-msgstr "Importiere CSV formatierte Kontakte von LX-Office"
+msgstr "Importiere CSV-formatierte Kontakte von LX-Office"
 
 #: Import/definitions/adb_tine_import_csv.xml:11
 msgid "Tine 2.0 contact CSV import"
@@ -61,7 +61,7 @@ msgstr ""
 
 #: Import/definitions/adb_import_vcard.xml:9
 msgid "Import vCard formated contacts"
-msgstr "Importiere vCard formatierte Kontakte"
+msgstr "Importiere vCard-formatierte Kontakte"
 
 #: Import/definitions/adb_import_vcard.xml:15
 msgid "Contact VCARD import"
@@ -70,7 +70,7 @@ msgstr "VCARD-Import für Kontakte"
 #: Import/definitions/adb_outlook_import_csv.xml:10
 msgid "Import CSV formated contacts from Exchange / Outlook address book"
 msgstr ""
-"Importiere CSV formatierte Kontakte aus einem Exchange / Outlook Adressbuch"
+"Importiere CSV-formatierte Kontakte aus einem Exchange-/ Outlook-Adressbuch"
 
 #: Import/definitions/adb_outlook_import_csv.xml:14
 msgid "Contact CSV import from Outlook address book"
@@ -83,7 +83,7 @@ msgstr "CSV-Kontaktimport aus dem Mac-Adressbuch"
 #: Import/definitions/adb_outlook2007_de_import_csv.xml:10
 msgid "Import CSV formated contacts from Outlook 2007 German address book"
 msgstr ""
-"Importiere CSV formatierte Kontakte aus einem Outlook 2007 Deutsch Adressbuch"
+"Importiere CSV-formatierte Kontakte aus einem Outlook 2007 Deutsch Adressbuch"
 
 msgid "Import CSV formated contacts from Outlook 2010 German address book"
 msgstr ""
@@ -741,6 +741,7 @@ msgstr ""
 
 msgid "Contact Properties"
 msgstr "Kontakt-Felder"
+
 #: Setup/Initialize.php:126 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
 msgstr "Alle Kontakte für die ich Lese-Rechte habe"
@@ -854,19 +855,6 @@ msgstr[1] "Gruppen"
 #: js/MailinglistPanel.js:38
 msgid "Mailing List"
 msgstr "E-Mail-Verteiler"
-
-msgid "Reply to"
-msgstr "Antwortmails an"
-
-#: js/MailinglistPanel.js:38
-msgid "Sender"
-msgstr "Absender"
-
-msgid "Distribution list"
-msgstr "Verteilerliste"
-
-msgid "Sender and Distributor"
-msgstr "Absender und Verteiler"
 
 #: js/MailinglistPanel.js:45
 msgid "This group is a mailing list"
@@ -1364,6 +1352,26 @@ msgstr "female"
 
 msgid "Mailing Group Member"
 msgstr "E-Mail-Verteiler Mitglieder"
+
+#: Import/definitions/adb_tine_import_csv.xml:11
+msgid "Tine contact CSV import"
+msgstr "Tine Kontakt CSV-Import"
+
+#: Import/definitions/adb_tine_import_csv.xml:13
+msgid "Import CSV formated contacts from tine address book"
+msgstr "Importiere CSV-formatierte Kontakte aus einem tine-Adressbuch"
+
+msgid "Reply to"
+msgstr "Antwortmails an"
+
+msgid "Sender"
+msgstr "Absender"
+
+msgid "Distribution list"
+msgstr "Verteilerliste"
+
+msgid "Sender and Distributor"
+msgstr "Absender und Verteiler"
 
 msgid "Contact Title Template"
 msgstr "Kontakt Titel Template"
