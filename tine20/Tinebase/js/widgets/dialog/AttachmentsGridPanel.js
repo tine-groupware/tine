@@ -204,7 +204,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
 
         if (rowRecord.data.type === 'folder') {
             this.expandFolder(rowRecord);
-        } else if (!this.readOnly) {
+        } else {
             const dblClickHandlers = [{
                 prio: 100,
                 fn: _.bind(this.action_preview.execute, this.action_preview)
