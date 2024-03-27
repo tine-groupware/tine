@@ -134,6 +134,12 @@ services:
     networks:
       - external_network
       - internal_network
+{% if tinedockercompose_documentserver_additional_mounts is defined %}
+    volumes:
+{% for mount in tinedockercompose_documentserver_additional_mounts %}
+      - "{{ mount }}"
+{% endfor %}
+{% endif %}
 {% endif %}
 {% if tinedockercompose_clamav is defined %}
   clamav:
