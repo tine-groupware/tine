@@ -468,6 +468,15 @@ msgstr "Statusübergang Bestätigen"
 msgid "Changing this workflow status might not be revertible. Proceed anyway?"
 msgstr "Die Änderung des Status im Arbeitsablauf ist ggf. nicht umkehrbar. Trotzdem fortfahren?"
 
+msgid "No Matching Debitor"
+msgstr "Passender Debitor fehlt"
+
+msgid "The category <b>{category}</b> can't be selected as the customer <b>{customer}</b> has no debitor for the division <b>{division.title}</b> of the category."
+msgstr "Die Kategorie <b>{category}</b> kann nicht ausgewählt werden, da der Kunde <b>{customer}</b> keinen Debitor im Geschäftsbereich <b>{division.title}</b> dieser Kategorie hat."
+
+msgid "The customer <b>{customer}</b> can't be selected as it has no debitor for the division <b>{division.title}</b> of this documents' category <b>{category}</b>."
+msgstr "Der Kunde <b>{customer}</b> kann nicht ausgewählt werden, da er keinen Debitor im Geschäftsbereich <b>{division.title}</b> der Kategorie <b>{category}</b> dieses Dokumentes hat."
+
 #: js/Document/BoilerplatePanel.js:28
 msgid "More Boilerplates"
 msgstr "Weitere Textbausteine"

@@ -85,12 +85,14 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
             this.clearValue();
         }
         if (customer_id && customer && !this.selectedRecord) {
+            const debitors = _.cloneDeep(_.filter(customer.data.debitors, (deb) => { return isLegacy || _.get(deb, 'division_id.id', deb) === division?.id}));
             let typeRecord = null;
+            
             if (type === 'postal') {
-                // is this case used somewhere???
-                typeRecord = customer.data?.postal;
+                // order/offer recipients
+                typeRecord = _.cloneDeep(customer.data?.postal);
+                typeRecord.debitor_id = _.assign({... debitors[0]}, {billing: null, delivery: null});
             } else {
-                const debitors = _.cloneDeep(_.filter(customer.data.debitors, (deb) => { return isLegacy || _.get(deb, 'division_id.id', deb) === division?.id}));
                 const addrs = _.map(debitors, (debitor) => { return debitor[type].concat(type === 'delivery' ? debitor['billing'] : []) });
                 const typeRecords = _.flatten(_.each(addrs, (addrs, idx) => {
                     // have postal addr in each debitor
