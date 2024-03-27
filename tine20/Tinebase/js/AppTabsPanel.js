@@ -123,7 +123,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
     initMenu: function() {
         this.appSearchField = new Ext.form.TextField({
             width: '100%',
-            style: 'background-color: #272727;',
+            cls: 'x-form-field-wrap',
             emptyText: i18n._('Search for Application ...'),
             enableKeyEvents: true,
             listeners: {
