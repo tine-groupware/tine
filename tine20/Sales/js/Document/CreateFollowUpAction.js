@@ -108,7 +108,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 let processedSourceIds = [];
                 // @TODO: have all docs into one followUp vs. each doc gets an individual followUp
                 // allow 'ad-hoc' shared followups? -> no :-)
-                // check if document is 'shared' -> getSharedOrderDocumentTransition
+                // check if document is 'shared' -> getMatchingSharedOrderDocumentTransition
                 // NOTE: the selection might contain other documents which are part of the shared followup
                 //       those docs must not be processed individually
                 //       unbooked documents are not included -> inform user about this?
@@ -125,10 +125,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             }
 
                             if (supportsSharedTransition && !!+record.get(sharedTransitionFlag)) {
-                                // group by address?
-                                const recipientId = _.get(record, `data.${recipientField}.original_id`)
-                                const category = record.get('document_category').id
-                                transition = await Tine.Sales.getSharedOrderDocumentTransition(recipientId, category, transition.targetDocumentType)
+                                transition = await Tine.Sales.getMatchingSharedOrderDocumentTransition(record.get('id'), transition.targetDocumentType)
 
                                 if (! transition?.sourceDocuments?.length) {
                                     return await Ext.MessageBox.show({
