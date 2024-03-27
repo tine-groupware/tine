@@ -135,7 +135,15 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const fields = this.fields = Tine.widgets.form.RecordForm.getFormFields(this.recordClass, (fieldName, config, fieldDefinition) => {
             switch (fieldName) {
                 case 'document_category':
-                    config.listeners = config.listeners || {}
+                    config.listeners = config.listeners || {};
+                    config.listeners.beforeselect = async (combo, category, index) => {
+                        const division = _.get(category, 'data.division_id');
+                        const customer = this.getForm().findField('customer_id').selectedRecord;
+                        if (_.uniq(_.map(customer.get('debitors') || [], 'division_id.id')).indexOf(division.id) < 0) {
+                            Ext.Msg.alert(this.app.i18n._('No Matching Debitor'), this.app.formatMessage("The category <b>{category}</b> can't be selected as the customer <b>{customer}</b> has no debitor for the division <b>{division.title}</b> of the category.", {category: await category.getTitle(), customer: await customer.getTitle(), division}));
+                            return false;
+                        }
+                    }
                     config.listeners.select = (combo, record, index) => {
                         this.getForm().items.each((field) => {
                             if (field.name?.match(/(^eval_dim_.*)/)) {
@@ -150,7 +158,15 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     }
                     break;
                 case 'customer_id':
-                    config.listeners = config.listeners || {}
+                    config.listeners = config.listeners || {};
+                    config.listeners.beforeselect = async (combo, record, index) => {
+                        const category = this.getForm().findField('document_category').selectedRecord;
+                        const division = _.get(category, 'data.division_id');
+                        if (_.uniq(_.map(record.get('debitors') || [], 'division_id.id')).indexOf(division.id) < 0) {
+                            Ext.Msg.alert(this.app.i18n._('No Matching Debitor'), this.app.formatMessage("The customer <b>{customer}</b> can't be selected as it has no debitor for the division <b>{division.title}</b> of this documents' category <b>{category}</b>.", {customer: await record.getTitle(), division, category: category.getTitle()}));
+                            return false;
+                        }
+                    }
                     config.listeners.select = (combo, record, index) => {
                         fields['credit_term'].setValue(record.get('credit_term'))
                         fields['document_language'].setValue(record.get('language') || fields['document_language'].getValue())
