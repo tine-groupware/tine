@@ -132,7 +132,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
             'hierarchy'         => array(
                 'label'             => 'Hierarchy', //_('Hierarchy')
                 self::TYPE          => self::TYPE_TEXT,
-                self::LENGTH        => \Doctrine\DBAL\Platforms\MySQLPlatform::LENGTH_LIMIT_MEDIUMTEXT,
+                self::LENGTH        => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_MEDIUMTEXT,
                 self::NULLABLE      => true,
                 'queryFilter'       => true,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
