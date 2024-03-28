@@ -23,6 +23,7 @@
       entrypoint: ["/container/tool/run", "--copy-service"]
 
 .abstract_jobs.test:
+  image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}-${TEST_IMAGE_VERSION}
   variables:
     MAIL_DB_HOST: db # temporary variable, to switch form docker-machine to k8
     MYSQL_HOST: db
@@ -139,7 +140,7 @@
     - if test "${ARG_COPY_SOURCE}" == "true"; then ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh; fi
     - rm /etc/supervisor.d/worker.ini || true
     - rm /etc/crontabs/tine20 || true
-    - /usr/sbin/confd -onetime -backend env
+    - gomplate --config /etc/gomplate/config.yaml
     - tine20_await_db
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"SET GLOBAL wait_timeout=31536000; SET GLOBAL interactive_timeout=31536000"
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" -e"CREATE DATABASE IF NOT EXISTS dovecot"

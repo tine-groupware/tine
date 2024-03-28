@@ -316,6 +316,21 @@ docker_build_test:
           - "7.4"
           - "8.0"
           - "8.1"
+  before_script:
+    - export DOCKER_BUILDKIT=0
+    - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
+    - !reference [.lib, script]
+    - docker_registry_login ${REGISTRY} ${REGISTRY_USER} ${REGISTRY_PASSWORD}
+    - docker_registry_login ${CI_REGISTRY} ${CI_REGISTRY_USER} ${CI_REGISTRY_PASSWORD}
+    - |
+      WAIT_TIME=0
+      until [ $WAIT_TIME -eq 60 ] || docker version > /dev/null 2>&1
+      do
+        echo "."
+        sleep 1
+        WAIT_TIME=$((WAIT_TIME+1))
+      done
+      [ $WAIT_TIME -lt 60 ]
   script:
     - !reference [.lib, script]
     - docker_build_image base $(docker_image_hash base)

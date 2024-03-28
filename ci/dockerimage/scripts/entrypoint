@@ -20,7 +20,7 @@ fi
 set -e
 
 # generate config files
-/usr/sbin/confd -onetime -backend env
+gomplate --config /etc/gomplate/config.yaml
 
 # await database availability
 su tine20 -c "/usr/local/bin/tine20_await_db"
