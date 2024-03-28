@@ -32,15 +32,23 @@ class Tinebase_Record_Expander_RefIdProperty extends Tinebase_Record_Expander_Pr
         $ids = $_records->getArrayOfIds();
         if (!empty($ids)) {
             $self = $this; // we should do weak refs here to avoid circular references -> memory leak. ... this is one!
-            $this->_rootExpander->_registerDataToFetch((new Tinebase_Record_Expander_DataRequest_FilterByProperty(
-                $this->_prio, Tinebase_Core::getApplicationInstance($this->_mccCfg[MCC::RECORD_CLASS_NAME], '', true),
-                $this->_mccCfg[MCC::REF_ID_FIELD], $ids,
-                // workaround: [$this, '_setData'] doesn't work, even so it should!
-                function($_data) use($self) {$self->_setData($_data);}, $this->_getDeleted))
-                ->setAdditionalFilter(isset($this->_mccCfg[MCC::ADD_FILTERS]) ? $this->_mccCfg[MCC::ADD_FILTERS] : null)
-                ->setPaging(isset($this->_mccCfg[MCC::PAGING]) ? new Tinebase_Model_Pagination($this->_mccCfg[MCC::PAGING]) : null)
-                ->setFilterOptions(isset($this->_mccCfg[MCC::FILTER_OPTIONS]) ? $this->_mccCfg[MCC::FILTER_OPTIONS] : null)
-            );
+            try {
+                $appController = Tinebase_Core::getApplicationInstance($this->_mccCfg[MCC::RECORD_CLASS_NAME], '', true);
+                $this->_rootExpander->_registerDataToFetch((new Tinebase_Record_Expander_DataRequest_FilterByProperty(
+                    $this->_prio, $appController,
+                    $this->_mccCfg[MCC::REF_ID_FIELD], $ids,
+                    // workaround: [$this, '_setData'] doesn't work, even so it should!
+                    function($_data) use($self) {$self->_setData($_data);}, $this->_getDeleted))
+                    ->setAdditionalFilter(isset($this->_mccCfg[MCC::ADD_FILTERS]) ? $this->_mccCfg[MCC::ADD_FILTERS] : null)
+                    ->setPaging(isset($this->_mccCfg[MCC::PAGING]) ? new Tinebase_Model_Pagination($this->_mccCfg[MCC::PAGING]) : null)
+                    ->setFilterOptions(isset($this->_mccCfg[MCC::FILTER_OPTIONS]) ? $this->_mccCfg[MCC::FILTER_OPTIONS] : null)
+                );
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Could not expand data: ' . $tead->getMessage());
+                }
+            }
         }
     }
 
