@@ -337,7 +337,7 @@ php-unit-update-tests:
     - if: $PHP_UNIT_UPDATE_TESTS == "false"
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-update-tests/
-    - if: $CI_COMMIT_BRANCH != "2022.11"
+    - if: $CI_COMMIT_BRANCH != "tine20.com/2022.11"
       when: never
     - if: $PHP_UNIT_UPDATE_TESTS == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_UPDATE_TESTS_MERGE_REQUEST == "true"
