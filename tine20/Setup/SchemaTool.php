@@ -111,9 +111,9 @@ class Setup_SchemaTool
                 return self::getConfig(array_merge($models, $additionalModels));
             }
 
-            $config->setSchemaAssetsFilter(fn ($table) => preg_match('/' . implode('|', $tableNames) . '/', $table));
+            $config->setFilterSchemaAssetsExpression('/' . implode('|', $tableNames) . '/');
         } catch (Zend_Db_Exception $zde) {
-            $config->setSchemaAssetsFilter(fn ($table) => preg_match('/^' . SQL_TABLE_PREFIX . '/', $table));
+            $config->setFilterSchemaAssetsExpression('/' . SQL_TABLE_PREFIX . '/');
         }
 
         return $config;

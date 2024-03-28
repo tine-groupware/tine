@@ -531,11 +531,6 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update016()
     {
-        Setup_SchemaTool::updateSchema([
-            Sales_Model_Boilerplate::class,
-            Sales_Model_Document_Boilerplate::class,
-        ]);
-
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.16', self::RELEASE017_UPDATE016);
     }
 }

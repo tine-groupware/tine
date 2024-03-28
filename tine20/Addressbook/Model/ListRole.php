@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2016-2024 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2016-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 class Addressbook_Model_ListRole extends Tinebase_Record_NewAbstract
 {
@@ -57,7 +57,7 @@ class Addressbook_Model_ListRole extends Tinebase_Record_NewAbstract
             self::FLD_DESCRIPTION => array(
                 self::LABEL => 'Description', //_('Description')
                 self::TYPE => self::TYPE_TEXT,
-                self::LENGTH => \Doctrine\DBAL\Platforms\MySQLPlatform::LENGTH_LIMIT_MEDIUMTEXT,
+                self::LENGTH => \Doctrine\DBAL\Platforms\MySqlPlatform::LENGTH_LIMIT_MEDIUMTEXT,
                 self::NULLABLE => true,
                 self::VALIDATORS => array(Zend_Filter_Input::ALLOW_EMPTY => true),
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
