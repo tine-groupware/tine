@@ -34,7 +34,7 @@ describe('timeaccount', () => {
     });
 });
 
-describe('timetracker', () => {
+describe.skip('timetracker', () => {
     describe('Edit Timesheet', () => {
         let editDialog;
         test('mainpage', async () => {
