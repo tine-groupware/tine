@@ -232,21 +232,3 @@ update-version-check:
     branch: master
   rules:
     - if: $CI_COMMIT_TAG && $MAJOR_COMMIT_REF_NAME == "2023.11"
-
-push-test-image-to-gitlab:
-  extends: .abstract_jobs.docker
-  stage: deploy
-  script:
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_gitlab.sh test
-  rules:
-    - if: $PUSH_TEST_IMAGE_TO_GITLAB == "true"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /push-test-image-to-gitlab/ 
-    - if: $PIPELINE_TYPE =~ /build-test-images/
-  timeout: 20m
-  interruptible: false
-  parallel:
-    matrix:
-      - PHP_VERSION:
-          - "7.4"
-          - "8.0"
-          - "8.1"
