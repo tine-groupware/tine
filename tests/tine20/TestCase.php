@@ -744,6 +744,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
      * @param bool $delete
      * @param array $recordData
      * @param bool $description
+     * @param bool $testQueryFilter
      * @return array
      * @throws Exception
      */
@@ -753,7 +754,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $descriptionField = 'description',
         $delete = true,
         $recordData = [],
-        $description = true
+        $description = true,
+        $testQueryFilter = false,
     ) {
         $uit = $this->_getUit();
         if (!$uit instanceof Tinebase_Frontend_Json_Abstract) {
@@ -814,6 +816,12 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         $filter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $savedRecord['id']));
         $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
         self::assertEquals(1, $result['totalcount'], print_r($result['results'], true));
+
+        if ($testQueryFilter) {
+            $filter = array(array('field' => 'query', 'operator' => 'contains', 'value' => $savedRecord[$nameField]));
+            $result = call_user_func(array($uit, 'search' . $modelName . 's'), $filter, array());
+            self::assertEquals(1, $result['totalcount'], print_r($result['results'], true));
+        }
 
         if (null !== $configuration && $configuration->modlogActive && $recordWasUpdated) {
             self::assertTrue(isset($result['results'][0]['last_modified_by']['accountId']),
