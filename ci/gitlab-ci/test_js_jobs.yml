@@ -30,7 +30,7 @@
       alias: webpack
       entrypoint:
         !reference [.lib, entry_points, tine_as_a_service_webpack]
-    - name: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}
+    - name: ${TEST_IMAGE}
       alias: tine
       entrypoint:
         !reference [.lib, entry_points, tine_as_a_service]

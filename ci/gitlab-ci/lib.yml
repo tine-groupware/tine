@@ -92,6 +92,15 @@
               echo "image exists ...";
           fi;
       }
+      
+      docker_build_image_test() {
+          commit_ref_name_escaped=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+      
+          image=${TEST_IMAGE_REGISTRY}:${commit_ref_name_escaped}-${PHP_VERSION}-${TEST_IMAGE_VERSION}
+      
+          cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+          ./ci/dockerimage/make.sh -u -p -i "${image}" -c "${image}" test
+      }
 
       # lib/scripts/docker_hub.sh
       docker_hub_deploy () {
@@ -169,7 +178,7 @@
       
       _base_image_hash() {
           cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-          local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/confd/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
+          local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/gomplate/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
               
           echo $fh $TINE20ROOT $PHP_VERSION $IMAGE_TAG_PLATFORM_POSTFIX | sha256sum | head -c 32;
       }
@@ -902,7 +911,7 @@
           log "prepareing global configs ..."
           rm /etc/supervisor.d/worker.ini || true
           rm /etc/crontabs/tine20 || true
-          /usr/sbin/confd -onetime -backend env
+          gomplate --config /etc/gomplate/config.yaml
           # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
           # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
           rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
@@ -1118,6 +1127,15 @@
                 echo "image exists ...";
             fi;
         }
+        
+        docker_build_image_test() {
+            commit_ref_name_escaped=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+        
+            image=${TEST_IMAGE_REGISTRY}:${commit_ref_name_escaped}-${PHP_VERSION}-${TEST_IMAGE_VERSION}
+        
+            cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+            ./ci/dockerimage/make.sh -u -p -i "${image}" -c "${image}" test
+        }
 
         # lib/scripts/docker_hub.sh
         docker_hub_deploy () {
@@ -1195,7 +1213,7 @@
         
         _base_image_hash() {
             cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-            local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/confd/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
+            local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/gomplate/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
                 
             echo $fh $TINE20ROOT $PHP_VERSION $IMAGE_TAG_PLATFORM_POSTFIX | sha256sum | head -c 32;
         }
@@ -1928,7 +1946,7 @@
             log "prepareing global configs ..."
             rm /etc/supervisor.d/worker.ini || true
             rm /etc/crontabs/tine20 || true
-            /usr/sbin/confd -onetime -backend env
+            gomplate --config /etc/gomplate/config.yaml
             # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
             # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
             rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
@@ -2190,6 +2208,15 @@
                 echo "image exists ...";
             fi;
         }
+        
+        docker_build_image_test() {
+            commit_ref_name_escaped=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+        
+            image=${TEST_IMAGE_REGISTRY}:${commit_ref_name_escaped}-${PHP_VERSION}-${TEST_IMAGE_VERSION}
+        
+            cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+            ./ci/dockerimage/make.sh -u -p -i "${image}" -c "${image}" test
+        }
 
         # lib/scripts/docker_hub.sh
         docker_hub_deploy () {
@@ -2267,7 +2294,7 @@
         
         _base_image_hash() {
             cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-            local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/confd/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
+            local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/gomplate/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
                 
             echo $fh $TINE20ROOT $PHP_VERSION $IMAGE_TAG_PLATFORM_POSTFIX | sha256sum | head -c 32;
         }
@@ -3000,7 +3027,7 @@
             log "prepareing global configs ..."
             rm /etc/supervisor.d/worker.ini || true
             rm /etc/crontabs/tine20 || true
-            /usr/sbin/confd -onetime -backend env
+            gomplate --config /etc/gomplate/config.yaml
             # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
             # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
             rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
