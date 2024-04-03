@@ -18,3 +18,12 @@ docker_build_image() {
         echo "image exists ...";
     fi;
 }
+
+docker_build_image_test() {
+    commit_ref_name_escaped=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+
+    image=${TEST_IMAGE_REGISTRY}:${commit_ref_name_escaped}-${PHP_VERSION}-${TEST_IMAGE_VERSION}
+
+    cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+    ./ci/dockerimage/make.sh -u -p -i "${image}" -c "${image}" test
+}
