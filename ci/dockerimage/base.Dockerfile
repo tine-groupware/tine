@@ -15,7 +15,7 @@ FROM alpine:${ALPINE_BRANCH} as cache-invalidator
 ARG ALPINE_PHP_PACKAGE=php7
 ARG CACHE_BUST=0
 
-RUN apk add --update --no-cache --simulate supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd mysql-client icu-data-full | sha256sum >> /cachehash
+RUN apk add --update --no-cache --simulate supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd mysql-client icu-data-full gomplate | sha256sum >> /cachehash
 RUN apk add --no-cache --simulate \
                                   ${ALPINE_PHP_PACKAGE} \
                                   ${ALPINE_PHP_PACKAGE}-bcmath \
@@ -62,8 +62,6 @@ ARG TINE20ROOT=/usr/share
 ENV TINE20ROOT=$TINE20ROOT
 
 # todo version vars | move tika to lib
-RUN wget -O /usr/sbin/confd https://github.com/kelseyhightower/confd/releases/download/v0.16.0/confd-0.16.0-linux-amd64 \
-    && chmod +x /usr/sbin/confd
 RUN wget -O /usr/local/bin/tika.jar https://packages.tine20.org/tika/tika-app-2.6.0.jar
 
 # todo check if copy or add craetes folder
@@ -71,7 +69,7 @@ RUN mkdir /usr/local/lib/container
 
 COPY --from=cache-invalidator /cachehash /usr/local/lib/container/
 
-RUN apk add --update --no-cache supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd mysql-client icu-data-full
+RUN apk add --update --no-cache supervisor curl bash ytnef openjdk8-jre gettext openssl netcat-openbsd mysql-client icu-data-full gomplate
 RUN apk add --no-cache \
                                   ${ALPINE_PHP_PACKAGE} \
                                   ${ALPINE_PHP_PACKAGE}-bcmath \
@@ -126,7 +124,7 @@ RUN if [ ! -d /etc/php ] && [ -d /etc/php7 ]; then ln -s /etc/php7 /etc/php; ech
 RUN addgroup -S -g 150 tine20 && \
     adduser -S -H -D -s /bin/ash -g "tine20 user" -G tine20 -u 150 tine20 && \
     mkdir -p /etc/tine20/conf.d && \
-    mkdir -p /etc/confd && \
+    mkdir -p /etc/gomplate && \
     mkdir -p /etc/supervisor.d && \
     mkdir -p /var/log/tine20 && \
     mkdir -p /var/lib/tine20/files && \
@@ -155,10 +153,10 @@ RUN addgroup -S -g 150 tine20 && \
     chown tine20:tine20 /var/lib/nginx/tmp && \
     chown tine20:tine20 /var/log/tine20/tine20.log
 
-COPY ci/dockerimage/confd/conf.d /etc/confd/conf.d
-COPY ci/dockerimage/confd/templates/ /etc/confd/templates
-COPY etc/tine20/config.inc.php.tmpl /etc/confd/templates/config.inc.php.tmpl
-COPY etc/nginx/sites-available/tine20.conf.tmpl /etc/confd/templates/nginx-vhost.conf.tmpl
+COPY ci/dockerimage/gomplate/config.yaml /etc/gomplate/config.yaml
+COPY ci/dockerimage/gomplate/templates/ /etc/gomplate/templates
+COPY etc/tine20/config.inc.php.mpl /etc/gomplate/templates/config.inc.php.tmpl
+COPY etc/nginx/sites-available/tine20.conf.mpl /etc/gomplate/templates/nginx-vhost.conf.tmpl
 COPY etc/tine20/actionQueue.ini /etc/tine20/actionQueue.ini
 COPY etc/nginx/conf.d/ /etc/nginx/conf.d
 COPY etc/nginx/snippets /etc/nginx/snippets
