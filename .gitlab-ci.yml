@@ -28,6 +28,7 @@ variables:
 stages:
   - build0
   - build1
+  - push0
   - build2
   - test
   - build3

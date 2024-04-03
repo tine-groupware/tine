@@ -3,7 +3,7 @@
     GIT_STRATEGY: none
     MERGENONINTERACTIVE: "true" # "false" is also true! Runs not interactive if the variable exists.
     pushOptSkipCi: "true" # "false" is also true! Runs not interactive if the variable exists.
-  image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}
+  image: ${TEST_IMAGE}
   needs: []
   tags:
     - custom-cache
