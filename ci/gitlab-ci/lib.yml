@@ -92,6 +92,15 @@
               echo "image exists ...";
           fi;
       }
+      
+      docker_build_image_test() {
+          commit_ref_name_escaped=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+      
+          image=${TEST_IMAGE_REGISTRY}:${commit_ref_name_escaped}-${PHP_VERSION}-${TEST_IMAGE_VERSION}
+      
+          cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+          ./ci/dockerimage/make.sh -u -p -i "${image}" -c "${image}" test
+      }
 
       # lib/scripts/docker_hub.sh
       docker_hub_deploy () {
@@ -169,7 +178,7 @@
       
       _base_image_hash() {
           cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-          local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/confd/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
+          local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/gomplate/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
               
           echo $fh $TINE20ROOT $PHP_VERSION $IMAGE_TAG_PLATFORM_POSTFIX | sha256sum | head -c 32;
       }
@@ -921,7 +930,7 @@
           log "prepareing global configs ..."
           rm /etc/supervisor.d/worker.ini || true
           rm /etc/crontabs/tine20 || true
-          /usr/sbin/confd -onetime -backend env
+          gomplate --config /etc/gomplate/config.yaml
           # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
           # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
           rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
@@ -1137,6 +1146,15 @@
                 echo "image exists ...";
             fi;
         }
+        
+        docker_build_image_test() {
+            commit_ref_name_escaped=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+        
+            image=${TEST_IMAGE_REGISTRY}:${commit_ref_name_escaped}-${PHP_VERSION}-${TEST_IMAGE_VERSION}
+        
+            cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+            ./ci/dockerimage/make.sh -u -p -i "${image}" -c "${image}" test
+        }
 
         # lib/scripts/docker_hub.sh
         docker_hub_deploy () {
@@ -1214,7 +1232,7 @@
         
         _base_image_hash() {
             cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-            local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/confd/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
+            local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/gomplate/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
                 
             echo $fh $TINE20ROOT $PHP_VERSION $IMAGE_TAG_PLATFORM_POSTFIX | sha256sum | head -c 32;
         }
@@ -1414,12 +1432,18 @@
                 draft="true"
             fi
         
+            if ! echo "$version" | grep "weekly" > /dev/null; then
+                prerelease="false"
+            else
+                prerelease="true"
+            fi
+        
             curl -s \
                 -X POST \
                 -u "$user:$token" \
                 -H "accept: application/vnd.github.v3+json" \
                 "https://api.github.com/repos/tine-groupware/tine/releases" \
-                -d '{"name":"'"$tag"'", "tag_name":"'"$tag"'", "body":'"$body"', "draft":'$draft'}'
+                -d '{"name":"'"$tag"'", "tag_name":"'"$tag"'", "body":'"$body"', "draft":'$draft', "prerelease":'$prerelease'}'
         }
         
         github_release_add_asset() {
@@ -1841,6 +1865,19 @@
             curl -H "Authorization: Bearer $GITLAB_TOKEN" -XPOST "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/tags?tag_name=$tag&ref=$CI_COMMIT_SHA&message=version+$tag"
         }
         
+        release_weekly_tag() {
+            tag_prefix="weekly-$(date '+%Y.%V.')"
+        
+            last_counter="$(curl -H "Authorization: Bearer $GITLAB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/tags?search=^$tag_prefix" | jq -r '.[].name' | sort --version-sort | tail -n 1 | awk -F '.' '{print $NF}')"
+            counter="$((${last_counter:-0}+1))"
+        
+            tag="$tag_prefix$counter"
+        
+            echo "tag: $tag"
+        
+            curl -H "Authorization: Bearer $GITLAB_TOKEN" -XPOST "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/tags?tag_name=$tag&ref=$CI_COMMIT_SHA&message=version+$tag"
+        }
+        
         release_to_gitlab() {
             tag="${CI_COMMIT_TAG}"
             customer="$(release_determin_customer)"
@@ -1947,7 +1984,7 @@
             log "prepareing global configs ..."
             rm /etc/supervisor.d/worker.ini || true
             rm /etc/crontabs/tine20 || true
-            /usr/sbin/confd -onetime -backend env
+            gomplate --config /etc/gomplate/config.yaml
             # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
             # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
             rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
@@ -2209,6 +2246,15 @@
                 echo "image exists ...";
             fi;
         }
+        
+        docker_build_image_test() {
+            commit_ref_name_escaped=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+        
+            image=${TEST_IMAGE_REGISTRY}:${commit_ref_name_escaped}-${PHP_VERSION}-${TEST_IMAGE_VERSION}
+        
+            cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
+            ./ci/dockerimage/make.sh -u -p -i "${image}" -c "${image}" test
+        }
 
         # lib/scripts/docker_hub.sh
         docker_hub_deploy () {
@@ -2286,7 +2332,7 @@
         
         _base_image_hash() {
             cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20;
-            local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/confd/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
+            local fh=$(file_hashes ci/dockerimage/base.Dockerfile ci/dockerimage/gomplate/ ci/dockerimage/scripts/ ci/dockerimage/supervisor.d/ etc/nginx etc/tine20/config.inc.php.tmpl);
                 
             echo $fh $TINE20ROOT $PHP_VERSION $IMAGE_TAG_PLATFORM_POSTFIX | sha256sum | head -c 32;
         }
@@ -2486,12 +2532,18 @@
                 draft="true"
             fi
         
+            if ! echo "$version" | grep "weekly" > /dev/null; then
+                prerelease="false"
+            else
+                prerelease="true"
+            fi
+        
             curl -s \
                 -X POST \
                 -u "$user:$token" \
                 -H "accept: application/vnd.github.v3+json" \
                 "https://api.github.com/repos/tine-groupware/tine/releases" \
-                -d '{"name":"'"$tag"'", "tag_name":"'"$tag"'", "body":'"$body"', "draft":'$draft'}'
+                -d '{"name":"'"$tag"'", "tag_name":"'"$tag"'", "body":'"$body"', "draft":'$draft', "prerelease":'$prerelease'}'
         }
         
         github_release_add_asset() {
@@ -2913,6 +2965,19 @@
             curl -H "Authorization: Bearer $GITLAB_TOKEN" -XPOST "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/tags?tag_name=$tag&ref=$CI_COMMIT_SHA&message=version+$tag"
         }
         
+        release_weekly_tag() {
+            tag_prefix="weekly-$(date '+%Y.%V.')"
+        
+            last_counter="$(curl -H "Authorization: Bearer $GITLAB_TOKEN" "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/tags?search=^$tag_prefix" | jq -r '.[].name' | sort --version-sort | tail -n 1 | awk -F '.' '{print $NF}')"
+            counter="$((${last_counter:-0}+1))"
+        
+            tag="$tag_prefix$counter"
+        
+            echo "tag: $tag"
+        
+            curl -H "Authorization: Bearer $GITLAB_TOKEN" -XPOST "$CI_API_V4_URL/projects/$CI_PROJECT_ID/repository/tags?tag_name=$tag&ref=$CI_COMMIT_SHA&message=version+$tag"
+        }
+        
         release_to_gitlab() {
             tag="${CI_COMMIT_TAG}"
             customer="$(release_determin_customer)"
@@ -3019,7 +3084,7 @@
             log "prepareing global configs ..."
             rm /etc/supervisor.d/worker.ini || true
             rm /etc/crontabs/tine20 || true
-            /usr/sbin/confd -onetime -backend env
+            gomplate --config /etc/gomplate/config.yaml
             # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
             # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
             rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
