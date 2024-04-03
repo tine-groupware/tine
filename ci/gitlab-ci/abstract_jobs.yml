@@ -85,7 +85,7 @@
 
 .abstract_jobs.php_unit_cache:
   extends: .abstract_jobs.test
-  image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}
+  image: ${TEST_IMAGE}
   tags:
     - custom-cache
   variables:
