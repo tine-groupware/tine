@@ -28,38 +28,44 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
          * @return Ext.data.Store
          */
         get: function(app, keyFieldName, what) {
+            const appName = Ext.isString(app) ? app : app.appName;
+            app = Tine.Tinebase.appMgr.get(appName);
+            what = what || 'text|icon';
+            const whatParts = what.split('|');
+            const key = appName + keyFieldName + what;
             try {
-                var appName = Ext.isString(app) ? app : app.appName,
-                    app = Tine.Tinebase.appMgr.get(appName),
-                    store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName),
-                    what = what ? what : 'text|icon',
-                    whatParts = what.split('|'),
-                    key = appName + keyFieldName + what;
-                
-                if (! renderers[key]) {
-                    renderers[key] = function(id) {
-                        if (! id) return "";
-                        var record = store.getById(id),
-                            i18nValue = record ? record.get('i18nValue') : app.i18n._hidden(id),
-                            icon = record ? record.get('icon') : null,
-                            string = '';
-                        
-                        if (whatParts.indexOf('icon') > -1 && icon) {
-                            string = string + '<img src="' + icon + '" class="tine-keyfield-icon" ext:qtip="' + Ext.util.Format.htmlEncode(i18nValue) + '" />';
-                        }
-                        
-                        if (whatParts.indexOf('text') > -1 && i18nValue) {
-                            string = string + Ext.util.Format.htmlEncode(i18nValue);
-                        }
-                        
-                        return string;
-                    }
-                }
-                
-                return renderers[key];
+                this.store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName);
             } catch (e) {
                 Tine.log.error(e);
+                Tine.log.debug(`Add custom fields to registry for ${appName} again`);
+                const customfields = Tine[appName].registry.get('customfields');
+                const field = customfields.find(c => {return c.name === keyFieldName;});
+                if (field?.model) {
+                    const configs = Tine.widgets.customfields.ConfigManager.getConfigs(app, field.model);
+                    this.store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName);
+                    Tine.log.debug(`Custom fields are added to registry successfully!`);
+                }
             }
+            
+            if (!renderers[key]) {
+                renderers[key] = (id) => {
+                    if (!id) return "";
+                    const record = this.store ? this.store.getById(id) : null;
+                    const i18nValue = record ? record.get('i18nValue') : app.i18n._hidden(id);
+                    const icon = record ? record.get('icon') : null;
+                    let string = '';
+                    
+                    if (whatParts.indexOf('icon') > -1 && icon) {
+                        string = string + '<img src="' + icon + '" class="tine-keyfield-icon" ext:qtip="' + Ext.util.Format.htmlEncode(i18nValue) + '" />';
+                    }
+                    
+                    if (whatParts.indexOf('text') > -1 && i18nValue) {
+                        string = string + Ext.util.Format.htmlEncode(i18nValue);
+                    }
+                    return string;
+                }
+            }
+            return renderers[key];
         },
         
         /**
