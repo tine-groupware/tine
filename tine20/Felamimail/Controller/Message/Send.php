@@ -510,26 +510,44 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @todo or use raw message here?
      *       but we would need to change Felamimail_Controller_Message_File::getInstance()->fileMessages ...
      *
-     * @param $_message
-     * @param $_sentFolder
+     * @param Felamimail_Model_Message|null $_message
+     * @param Felamimail_Model_Folder $_sentFolder
+     * @return void
+     * @throws Felamimail_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_DefinitionFailure
+     * @throws Tinebase_Exception_Record_Validation
      */
-    protected function _fileSentMessage($_message, $_sentFolder)
+    protected function _fileSentMessage(?Felamimail_Model_Message $_message, Felamimail_Model_Folder $_sentFolder): void
     {
         if (! $_message || ! $_message->fileLocations || count($_message->fileLocations) === 0) {
             return;
         }
 
-        $sentMessage = Felamimail_Controller_Message::getInstance()->fetchRecentMessageFromFolder($_sentFolder, $_message);
+        $sentMessage = Felamimail_Controller_Message::getInstance()->fetchRecentMessageFromFolder(
+            $_sentFolder,
+            $_message
+        );
 
         if ($sentMessage) {
-            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Felamimail_Model_Message::class,
+                [
                 ['field' => 'id', 'operator' => 'in', 'value' => [$sentMessage->getId()]]
-            ]);
+                ]
+            );
             $locations = $_message->fileLocations instanceof Tinebase_Record_RecordSet
                 ? $_message->fileLocations
-                : new Tinebase_Record_RecordSet(Felamimail_Model_MessageFileLocation::class, $_message->fileLocations, true);
+                : new Tinebase_Record_RecordSet(
+                    Felamimail_Model_MessageFileLocation::class,
+                    $_message->fileLocations,
+                    true
+                );
             try {
                 Felamimail_Controller_Message_File::getInstance()->fileMessages($filter, $locations);
+            } catch (Tinebase_Exception_AccessDenied $tead) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Could not file message: ' . $tead->getMessage());
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
             }
