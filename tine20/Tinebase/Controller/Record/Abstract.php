@@ -2514,35 +2514,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         if (($mc = $_record->getConfiguration()) && $mc->delegateAclField) {
-            if (empty($_record->{$mc->delegateAclField}) && isset($mc->recordsFields[$mc->delegateAclField])) {
-                (new Tinebase_Record_Expander(get_class($_record), [
-                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [$mc->delegateAclField => []]
-                ]))->expand(new Tinebase_Record_RecordSet(get_class($_record), [$_record]));
-            }
-            if (empty($_record->{$mc->delegateAclField})) {
-                throw new Tinebase_Exception_AccessDenied('acl delegation field ' . $mc->delegateAclField .
-                    ' must not be empty');
-            }
-            /** @var Tinebase_Controller_Record_Abstract $ctrl */
-            $ctrl = $mc->fields[$mc->delegateAclField][Tinebase_ModelConfiguration::CONFIG][Tinebase_ModelConfiguration::CONTROLLER_CLASS_NAME];
-            $ctrl = $ctrl::getInstance();
-            if ($_record->{$mc->delegateAclField} instanceof Tinebase_Record_RecordSet) {
-                foreach ($_record->{$mc->delegateAclField} as $delegateRec) {
-                    if ($ctrl->checkGrant($delegateRec, $_action, false, $_errorMessage, $_oldRecord?->{$mc->delegateAclField}->getById($delegateRec->getId()) ?: null)) {
-                        return true;
-                    }
-                }
-                if ($_throw) {
-                    throw new Tinebase_Exception_AccessDenied($_errorMessage);
-                }
-                return false;
-            }
-            return $ctrl->checkGrant(
-                $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
-                    $_record->{$mc->delegateAclField} :
-                    $ctrl->get($_record->{$mc->delegateAclField}),
-                $_action, $_throw, $_errorMessage, $_oldRecord?->{$mc->delegateAclField}
-            );
+            return $this->_checkDelegatedGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord);
         }
         
         if (! is_object(Tinebase_Core::getUser())) {
@@ -2585,6 +2557,60 @@ abstract class Tinebase_Controller_Record_Abstract
         }
         
         return $hasGrant;
+    }
+
+    protected function _checkDelegatedGrant(Tinebase_Record_Interface $_record,
+                                            string $_action,
+                                            bool $_throw,
+                                            string $_errorMessage,
+                                            ?Tinebase_Record_Interface $_oldRecord): bool
+    {
+        $mc = $_record->getConfiguration();
+        if (empty($_record->{$mc->delegateAclField}) && isset($mc->recordsFields[$mc->delegateAclField])) {
+            (new Tinebase_Record_Expander(get_class($_record), [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [$mc->delegateAclField => []]
+            ]))->expand(new Tinebase_Record_RecordSet(get_class($_record), [$_record]));
+        }
+        if (empty($_record->{$mc->delegateAclField})) {
+            throw new Tinebase_Exception_AccessDenied('acl delegation field ' . $mc->delegateAclField .
+                ' must not be empty');
+        }
+        /** @var Tinebase_Controller_Record_Abstract $ctrl */
+        $ctrl = $mc->fields[$mc->delegateAclField][Tinebase_ModelConfiguration::CONFIG]
+            [Tinebase_ModelConfiguration::CONTROLLER_CLASS_NAME];
+        $ctrl = $ctrl::getInstance();
+        if ($_record->{$mc->delegateAclField} instanceof Tinebase_Record_RecordSet) {
+            foreach ($_record->{$mc->delegateAclField} as $delegateRec) {
+                if ($ctrl->checkGrant($delegateRec, $_action, false, $_errorMessage, $_oldRecord?->
+                {$mc->delegateAclField}->getById($delegateRec->getId()) ?: null)) {
+                    return true;
+                }
+            }
+            if ($_throw) {
+                throw new Tinebase_Exception_AccessDenied($_errorMessage);
+            }
+            return false;
+        }
+        if ($_action === self::ACTION_CREATE) {
+            // check CREATE - if it does not suffice, UPDATE is ok, too
+            if ($ctrl->checkGrant(
+                $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
+                    $_record->{$mc->delegateAclField} :
+                    $ctrl->get($_record->{$mc->delegateAclField}),
+                $_action, false, $_errorMessage, $_oldRecord?->{$mc->delegateAclField}
+            )) {
+                return true;
+            } else {
+                $_action = self::ACTION_UPDATE;
+            }
+        }
+
+        return $ctrl->checkGrant(
+            $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
+                $_record->{$mc->delegateAclField} :
+                $ctrl->get($_record->{$mc->delegateAclField}),
+            $_action, $_throw, $_errorMessage, $_oldRecord?->{$mc->delegateAclField}
+        );
     }
 
     /**
