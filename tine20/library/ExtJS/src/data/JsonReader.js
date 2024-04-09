@@ -310,7 +310,7 @@ Ext.extend(Ext.data.JsonReader, Ext.data.DataReader, {
             }
             return function(obj){
                 // support array as roots
-                return Ext.isArray(obj) ? obj : obj[expr];
+                return Ext.isArray(obj) && obj.length > 0 ? obj : obj[expr];
             };
 
         };
