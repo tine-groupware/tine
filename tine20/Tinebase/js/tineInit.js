@@ -1326,6 +1326,9 @@ Tine.Tinebase.tineInit = {
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType
         });
+
+        Tine.Tinebase.vue = Tine.Tinebase.vue || {}
+        Tine.Tinebase.vue.focusTrapStack = Tine.Tinebase.vue.focusTrapStack || []
     },
     /**
      * initialise state provider

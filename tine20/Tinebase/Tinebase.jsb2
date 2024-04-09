@@ -630,8 +630,12 @@
           "path": "js/widgets/dialog/"
         },
         {
-          "text": "MultiOptionsDialog.js",
-          "path": "js/widgets/dialog/"
+          "text": "index.js",
+          "path": "js/widgets/dialog/vue/ModalDialog/"
+        },
+        {
+          "text": "index.js",
+          "path": "js/widgets/dialog/vue/MultiOptionsDialog/"
         },
         {
           "text": "FileListDialog.js",

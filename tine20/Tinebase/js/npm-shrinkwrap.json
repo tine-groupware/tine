@@ -21,6 +21,7 @@
         "cytoscape-dagre": "^2.5.0",
         "director": "^1.2.8",
         "email-addresses": "^5.0.0",
+        "focus-trap": "^7.5.4",
         "format-message": "^6.2.4",
         "graphlib": "^2.1.8",
         "hammerjs": "^2.0.8",
@@ -2601,9 +2602,9 @@
       }
     },
     "node_modules/@types/web-bluetooth": {
-      "version": "0.0.17",
-      "resolved": "https://registry.npmjs.org/@types/web-bluetooth/-/web-bluetooth-0.0.17.tgz",
-      "integrity": "sha512-4p9vcSmxAayx72yn70joFoL44c9MO/0+iVEBIQXe3v2h2SiAsEIo/G5v6ObFWvNKRFjbrVadNf9LqEEZeQPzdA=="
+      "version": "0.0.20",
+      "resolved": "https://registry.npmjs.org/@types/web-bluetooth/-/web-bluetooth-0.0.20.tgz",
+      "integrity": "sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow=="
     },
     "node_modules/@types/ws": {
       "version": "8.5.3",
@@ -2732,36 +2733,86 @@
       "integrity": "sha512-7OjdcV8vQ74eiz1TZLzZP4JwqM5fA94K6yntPS5Z25r9HDuGNzaGdgvwKYq6S+MxwF0TFRwe50fIR/MYnakdkQ=="
     },
     "node_modules/@vueuse/core": {
-      "version": "10.3.0",
-      "resolved": "https://registry.npmjs.org/@vueuse/core/-/core-10.3.0.tgz",
-      "integrity": "sha512-BEM5yxcFKb5btFjTSAFjTu5jmwoW66fyV9uJIP4wUXXU8aR5Hl44gndaaXp7dC5HSObmgbnR2RN+Un1p68Mf5Q==",
+      "version": "10.9.0",
+      "resolved": "https://registry.npmjs.org/@vueuse/core/-/core-10.9.0.tgz",
+      "integrity": "sha512-/1vjTol8SXnx6xewDEKfS0Ra//ncg4Hb0DaZiwKf7drgfMsKFExQ+FnnENcN6efPen+1kIzhLQoGSy0eDUVOMg==",
       "dependencies": {
-        "@types/web-bluetooth": "^0.0.17",
-        "@vueuse/metadata": "10.3.0",
-        "@vueuse/shared": "10.3.0",
-        "vue-demi": ">=0.14.5"
+        "@types/web-bluetooth": "^0.0.20",
+        "@vueuse/metadata": "10.9.0",
+        "@vueuse/shared": "10.9.0",
+        "vue-demi": ">=0.14.7"
       },
       "funding": {
         "url": "https://github.com/sponsors/antfu"
       }
     },
+    "node_modules/@vueuse/core/node_modules/vue-demi": {
+      "version": "0.14.7",
+      "resolved": "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.7.tgz",
+      "integrity": "sha512-EOG8KXDQNwkJILkx/gPcoL/7vH+hORoBaKgGe+6W7VFMvCYJfmF2dGbvgDroVnI8LU7/kTu8mbjRZGBU1z9NTA==",
+      "hasInstallScript": true,
+      "bin": {
+        "vue-demi-fix": "bin/vue-demi-fix.js",
+        "vue-demi-switch": "bin/vue-demi-switch.js"
+      },
+      "engines": {
+        "node": ">=12"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/antfu"
+      },
+      "peerDependencies": {
+        "@vue/composition-api": "^1.0.0-rc.1",
+        "vue": "^3.0.0-0 || ^2.6.0"
+      },
+      "peerDependenciesMeta": {
+        "@vue/composition-api": {
+          "optional": true
+        }
+      }
+    },
     "node_modules/@vueuse/metadata": {
-      "version": "10.3.0",
-      "resolved": "https://registry.npmjs.org/@vueuse/metadata/-/metadata-10.3.0.tgz",
-      "integrity": "sha512-Ema3YhNOa4swDsV0V7CEY5JXvK19JI/o1szFO1iWxdFg3vhdFtCtSTP26PCvbUpnUtNHBY2wx5y3WDXND5Pvnw==",
+      "version": "10.9.0",
+      "resolved": "https://registry.npmjs.org/@vueuse/metadata/-/metadata-10.9.0.tgz",
+      "integrity": "sha512-iddNbg3yZM0X7qFY2sAotomgdHK7YJ6sKUvQqbvwnf7TmaVPxS4EJydcNsVejNdS8iWCtDk+fYXr7E32nyTnGA==",
       "funding": {
         "url": "https://github.com/sponsors/antfu"
       }
     },
     "node_modules/@vueuse/shared": {
-      "version": "10.3.0",
-      "resolved": "https://registry.npmjs.org/@vueuse/shared/-/shared-10.3.0.tgz",
-      "integrity": "sha512-kGqCTEuFPMK4+fNWy6dUOiYmxGcUbtznMwBZLC1PubidF4VZY05B+Oht7Jh7/6x4VOWGpvu3R37WHi81cKpiqg==",
+      "version": "10.9.0",
+      "resolved": "https://registry.npmjs.org/@vueuse/shared/-/shared-10.9.0.tgz",
+      "integrity": "sha512-Uud2IWncmAfJvRaFYzv5OHDli+FbOzxiVEQdLCKQKLyhz94PIyFC3CHcH7EDMwIn8NPtD06+PNbC/PiO0LGLtw==",
       "dependencies": {
-        "vue-demi": ">=0.14.5"
+        "vue-demi": ">=0.14.7"
       },
       "funding": {
         "url": "https://github.com/sponsors/antfu"
+      }
+    },
+    "node_modules/@vueuse/shared/node_modules/vue-demi": {
+      "version": "0.14.7",
+      "resolved": "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.7.tgz",
+      "integrity": "sha512-EOG8KXDQNwkJILkx/gPcoL/7vH+hORoBaKgGe+6W7VFMvCYJfmF2dGbvgDroVnI8LU7/kTu8mbjRZGBU1z9NTA==",
+      "hasInstallScript": true,
+      "bin": {
+        "vue-demi-fix": "bin/vue-demi-fix.js",
+        "vue-demi-switch": "bin/vue-demi-switch.js"
+      },
+      "engines": {
+        "node": ">=12"
+      },
+      "funding": {
+        "url": "https://github.com/sponsors/antfu"
+      },
+      "peerDependencies": {
+        "@vue/composition-api": "^1.0.0-rc.1",
+        "vue": "^3.0.0-0 || ^2.6.0"
+      },
+      "peerDependenciesMeta": {
+        "@vue/composition-api": {
+          "optional": true
+        }
       }
     },
     "node_modules/@webassemblyjs/ast": {
@@ -3587,44 +3638,6 @@
       },
       "peerDependencies": {
         "vue": "^3.3.4"
-      }
-    },
-    "node_modules/bootstrap-vue-next/node_modules/@types/web-bluetooth": {
-      "version": "0.0.16",
-      "resolved": "https://registry.npmjs.org/@types/web-bluetooth/-/web-bluetooth-0.0.16.tgz",
-      "integrity": "sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ=="
-    },
-    "node_modules/bootstrap-vue-next/node_modules/@vueuse/core": {
-      "version": "9.13.0",
-      "resolved": "https://registry.npmjs.org/@vueuse/core/-/core-9.13.0.tgz",
-      "integrity": "sha512-pujnclbeHWxxPRqXWmdkKV5OX4Wk4YeK7wusHqRwU0Q7EFusHoqNA/aPhB6KCh9hEqJkLAJo7bb0Lh9b+OIVzw==",
-      "dependencies": {
-        "@types/web-bluetooth": "^0.0.16",
-        "@vueuse/metadata": "9.13.0",
-        "@vueuse/shared": "9.13.0",
-        "vue-demi": "*"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/antfu"
-      }
-    },
-    "node_modules/bootstrap-vue-next/node_modules/@vueuse/metadata": {
-      "version": "9.13.0",
-      "resolved": "https://registry.npmjs.org/@vueuse/metadata/-/metadata-9.13.0.tgz",
-      "integrity": "sha512-gdU7TKNAUVlXXLbaF+ZCfte8BjRJQWPCa2J55+7/h+yDtzw3vOoGQDRXzI6pyKyo6bXFT5/QoPE4hAknExjRLQ==",
-      "funding": {
-        "url": "https://github.com/sponsors/antfu"
-      }
-    },
-    "node_modules/bootstrap-vue-next/node_modules/@vueuse/shared": {
-      "version": "9.13.0",
-      "resolved": "https://registry.npmjs.org/@vueuse/shared/-/shared-9.13.0.tgz",
-      "integrity": "sha512-UrnhU+Cnufu4S6JLCPZnkWh0WwZGUp72ktOF2DFptMlOs3TOdVv8xJN53zhHGARmVOsz5KqOls09+J1NR6sBKw==",
-      "dependencies": {
-        "vue-demi": "*"
-      },
-      "funding": {
-        "url": "https://github.com/sponsors/antfu"
       }
     },
     "node_modules/brace-expansion": {
@@ -6767,6 +6780,14 @@
       "version": "0.2.3",
       "resolved": "https://registry.npmjs.org/flow/-/flow-0.2.3.tgz",
       "integrity": "sha512-CFNnRuX6nsOmEjGvE5RP0zwGoebdU9k+IJJy97HHkc0Xdlyh5EFAmdOznTKhEQkWKWXTJp63bW0TWQZ+sywWRw=="
+    },
+    "node_modules/focus-trap": {
+      "version": "7.5.4",
+      "resolved": "https://registry.npmjs.org/focus-trap/-/focus-trap-7.5.4.tgz",
+      "integrity": "sha512-N7kHdlgsO/v+iD/dMoJKtsSqs5Dz/dXZVebRgJw23LDk+jMi/974zyiOYDziY2JPp8xivq9BmUGwIJMiuSBi7w==",
+      "dependencies": {
+        "tabbable": "^6.2.0"
+      }
     },
     "node_modules/follow-redirects": {
       "version": "1.15.2",
@@ -14674,6 +14695,11 @@
         "url": "https://github.com/sponsors/ljharb"
       }
     },
+    "node_modules/tabbable": {
+      "version": "6.2.0",
+      "resolved": "https://registry.npmjs.org/tabbable/-/tabbable-6.2.0.tgz",
+      "integrity": "sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew=="
+    },
     "node_modules/tapable": {
       "version": "2.2.1",
       "resolved": "https://registry.npmjs.org/tapable/-/tapable-2.2.1.tgz",
@@ -17998,9 +18024,9 @@
       }
     },
     "@types/web-bluetooth": {
-      "version": "0.0.17",
-      "resolved": "https://registry.npmjs.org/@types/web-bluetooth/-/web-bluetooth-0.0.17.tgz",
-      "integrity": "sha512-4p9vcSmxAayx72yn70joFoL44c9MO/0+iVEBIQXe3v2h2SiAsEIo/G5v6ObFWvNKRFjbrVadNf9LqEEZeQPzdA=="
+      "version": "0.0.20",
+      "resolved": "https://registry.npmjs.org/@types/web-bluetooth/-/web-bluetooth-0.0.20.tgz",
+      "integrity": "sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow=="
     },
     "@types/ws": {
       "version": "8.5.3",
@@ -18126,27 +18152,43 @@
       "integrity": "sha512-7OjdcV8vQ74eiz1TZLzZP4JwqM5fA94K6yntPS5Z25r9HDuGNzaGdgvwKYq6S+MxwF0TFRwe50fIR/MYnakdkQ=="
     },
     "@vueuse/core": {
-      "version": "10.3.0",
-      "resolved": "https://registry.npmjs.org/@vueuse/core/-/core-10.3.0.tgz",
-      "integrity": "sha512-BEM5yxcFKb5btFjTSAFjTu5jmwoW66fyV9uJIP4wUXXU8aR5Hl44gndaaXp7dC5HSObmgbnR2RN+Un1p68Mf5Q==",
+      "version": "10.9.0",
+      "resolved": "https://registry.npmjs.org/@vueuse/core/-/core-10.9.0.tgz",
+      "integrity": "sha512-/1vjTol8SXnx6xewDEKfS0Ra//ncg4Hb0DaZiwKf7drgfMsKFExQ+FnnENcN6efPen+1kIzhLQoGSy0eDUVOMg==",
       "requires": {
-        "@types/web-bluetooth": "^0.0.17",
-        "@vueuse/metadata": "10.3.0",
-        "@vueuse/shared": "10.3.0",
-        "vue-demi": ">=0.14.5"
+        "@types/web-bluetooth": "^0.0.20",
+        "@vueuse/metadata": "10.9.0",
+        "@vueuse/shared": "10.9.0",
+        "vue-demi": ">=0.14.7"
+      },
+      "dependencies": {
+        "vue-demi": {
+          "version": "0.14.7",
+          "resolved": "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.7.tgz",
+          "integrity": "sha512-EOG8KXDQNwkJILkx/gPcoL/7vH+hORoBaKgGe+6W7VFMvCYJfmF2dGbvgDroVnI8LU7/kTu8mbjRZGBU1z9NTA==",
+          "requires": {}
+        }
       }
     },
     "@vueuse/metadata": {
-      "version": "10.3.0",
-      "resolved": "https://registry.npmjs.org/@vueuse/metadata/-/metadata-10.3.0.tgz",
-      "integrity": "sha512-Ema3YhNOa4swDsV0V7CEY5JXvK19JI/o1szFO1iWxdFg3vhdFtCtSTP26PCvbUpnUtNHBY2wx5y3WDXND5Pvnw=="
+      "version": "10.9.0",
+      "resolved": "https://registry.npmjs.org/@vueuse/metadata/-/metadata-10.9.0.tgz",
+      "integrity": "sha512-iddNbg3yZM0X7qFY2sAotomgdHK7YJ6sKUvQqbvwnf7TmaVPxS4EJydcNsVejNdS8iWCtDk+fYXr7E32nyTnGA=="
     },
     "@vueuse/shared": {
-      "version": "10.3.0",
-      "resolved": "https://registry.npmjs.org/@vueuse/shared/-/shared-10.3.0.tgz",
-      "integrity": "sha512-kGqCTEuFPMK4+fNWy6dUOiYmxGcUbtznMwBZLC1PubidF4VZY05B+Oht7Jh7/6x4VOWGpvu3R37WHi81cKpiqg==",
+      "version": "10.9.0",
+      "resolved": "https://registry.npmjs.org/@vueuse/shared/-/shared-10.9.0.tgz",
+      "integrity": "sha512-Uud2IWncmAfJvRaFYzv5OHDli+FbOzxiVEQdLCKQKLyhz94PIyFC3CHcH7EDMwIn8NPtD06+PNbC/PiO0LGLtw==",
       "requires": {
-        "vue-demi": ">=0.14.5"
+        "vue-demi": ">=0.14.7"
+      },
+      "dependencies": {
+        "vue-demi": {
+          "version": "0.14.7",
+          "resolved": "https://registry.npmjs.org/vue-demi/-/vue-demi-0.14.7.tgz",
+          "integrity": "sha512-EOG8KXDQNwkJILkx/gPcoL/7vH+hORoBaKgGe+6W7VFMvCYJfmF2dGbvgDroVnI8LU7/kTu8mbjRZGBU1z9NTA==",
+          "requires": {}
+        }
       }
     },
     "@webassemblyjs/ast": {
@@ -18788,39 +18830,8 @@
       "resolved": "https://registry.npmjs.org/bootstrap-vue-next/-/bootstrap-vue-next-0.8.15.tgz",
       "integrity": "sha512-X8eGDMx+Xa6g5UIfDxg1NcH+UmGAzFbCMFqlG9ETW5bGr5hKQbCODVUG8yoF6EBoWTW6IRsmL8hQiVhmaxqmFw==",
       "requires": {
-        "@floating-ui/vue": "^0.2.1",
-        "@vueuse/core": "^9.13.0"
-      },
-      "dependencies": {
-        "@types/web-bluetooth": {
-          "version": "0.0.16",
-          "resolved": "https://registry.npmjs.org/@types/web-bluetooth/-/web-bluetooth-0.0.16.tgz",
-          "integrity": "sha512-oh8q2Zc32S6gd/j50GowEjKLoOVOwHP/bWVjKJInBwQqdOYMdPrf1oVlelTlyfFK3CKxL1uahMDAr+vy8T7yMQ=="
-        },
-        "@vueuse/core": {
-          "version": "9.13.0",
-          "resolved": "https://registry.npmjs.org/@vueuse/core/-/core-9.13.0.tgz",
-          "integrity": "sha512-pujnclbeHWxxPRqXWmdkKV5OX4Wk4YeK7wusHqRwU0Q7EFusHoqNA/aPhB6KCh9hEqJkLAJo7bb0Lh9b+OIVzw==",
-          "requires": {
-            "@types/web-bluetooth": "^0.0.16",
-            "@vueuse/metadata": "9.13.0",
-            "@vueuse/shared": "9.13.0",
-            "vue-demi": "*"
-          }
-        },
-        "@vueuse/metadata": {
-          "version": "9.13.0",
-          "resolved": "https://registry.npmjs.org/@vueuse/metadata/-/metadata-9.13.0.tgz",
-          "integrity": "sha512-gdU7TKNAUVlXXLbaF+ZCfte8BjRJQWPCa2J55+7/h+yDtzw3vOoGQDRXzI6pyKyo6bXFT5/QoPE4hAknExjRLQ=="
-        },
-        "@vueuse/shared": {
-          "version": "9.13.0",
-          "resolved": "https://registry.npmjs.org/@vueuse/shared/-/shared-9.13.0.tgz",
-          "integrity": "sha512-UrnhU+Cnufu4S6JLCPZnkWh0WwZGUp72ktOF2DFptMlOs3TOdVv8xJN53zhHGARmVOsz5KqOls09+J1NR6sBKw==",
-          "requires": {
-            "vue-demi": "*"
-          }
-        }
+        "@floating-ui/vue": "^1.0.0",
+        "@vueuse/core": "^10.1.2"
       }
     },
     "brace-expansion": {
@@ -21196,6 +21207,14 @@
       "version": "0.2.3",
       "resolved": "https://registry.npmjs.org/flow/-/flow-0.2.3.tgz",
       "integrity": "sha512-CFNnRuX6nsOmEjGvE5RP0zwGoebdU9k+IJJy97HHkc0Xdlyh5EFAmdOznTKhEQkWKWXTJp63bW0TWQZ+sywWRw=="
+    },
+    "focus-trap": {
+      "version": "7.5.4",
+      "resolved": "https://registry.npmjs.org/focus-trap/-/focus-trap-7.5.4.tgz",
+      "integrity": "sha512-N7kHdlgsO/v+iD/dMoJKtsSqs5Dz/dXZVebRgJw23LDk+jMi/974zyiOYDziY2JPp8xivq9BmUGwIJMiuSBi7w==",
+      "requires": {
+        "tabbable": "^6.2.0"
+      }
     },
     "follow-redirects": {
       "version": "1.15.2",
@@ -26916,6 +26935,11 @@
       "resolved": "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz",
       "integrity": "sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==",
       "dev": true
+    },
+    "tabbable": {
+      "version": "6.2.0",
+      "resolved": "https://registry.npmjs.org/tabbable/-/tabbable-6.2.0.tgz",
+      "integrity": "sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew=="
     },
     "tapable": {
       "version": "2.2.1",
