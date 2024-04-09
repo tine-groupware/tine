@@ -150,30 +150,37 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             item.setDisabled(true);
         }, this);
 
-        var keys = [];
+        const keys = [];
         
         // disable container selector - just container_id
-        var field = this.editDialog.getForm().findField('container_id');
+        const field = this.editDialog.getForm().findField('container_id');
         if (field) {
             field.disable();
         }
         
         // get fields to handle
-        Ext.each(this.editDialog.recordClass.getFieldNames(), function(key) {
-            var field = this.editDialog.getForm().findField(key);
+        Ext.each(this.editDialog.recordClass.getFieldDefinitions(), function(item) {
+            const key = item.name;
+            const field = this.editDialog.getForm().findField(item.name);
             if (!field) {
-                Tine.log.info('No field found for property "' + key + '". Ignoring...');
-                return true;
+                if (item?.fieldDefinition?.specialType) {
+                    Tine.log.info('Field found for contact property"' + key + '" with specialType : ' + item?.fieldDefinition.specialType);
+                    keys.push({key: key, type: 'default', formField: null, recordKey: key, specialType: item?.fieldDefinition.specialType});
+                    return true;
+                } else {
+                    Tine.log.info('No field found for property "' + key + '". Ignoring...');
+                    return true;
+                }
             }
             Tine.log.info('Field found for property "' + key + '".');
             keys.push({key: key, type: 'default', formField: field, recordKey: key});
         }, this);
         
         // get customfields to handle
-        var cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, this.editDialog.recordClass);
+        const cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, this.editDialog.recordClass);
         if (cfConfigs) {
             Ext.each(cfConfigs, function (config) {
-                var field = this.editDialog.getForm().findField('customfield_' + config.data.name);
+                const field = this.editDialog.getForm().findField('customfield_' + config.data.name);
                 if (!field) {
                     Tine.log.info('No customfield found for property "' + config.data.name + '". Ignoring...');
                     return true;
@@ -190,10 +197,15 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
                 keys.push({key: picker.relationType + '-' + picker.fullModelName, type: 'relation', formField: picker.combo, recordKey: '%' + picker.relationType + '-' + picker.fullModelName});
             });
         }
-
+        
         Ext.each(keys, function(field) {
-            var ff = field.formField;
+            const ff = field.formField;
             // disable fields which cannot be handled atm.
+            if (!ff) {
+                Tine.log.debug('Disabling key "' + field?.recordKey + '" with specialType : ' + field?.specialType + '. Cannot be handled atm.');
+                this.interRecord.set(field?.recordKey, '');
+                return true;
+            }
             if ((!(ff.isXType('textfield'))) && (!(ff.isXType('checkbox'))) && (!(ff.isXType('datetimefield'))) || ff.multiEditable === false) {
                 Tine.log.debug('Disabling field for key "' + field.recordKey + '". Cannot be handled atm.');
                 ff.setDisabled(true);
