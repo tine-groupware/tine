@@ -517,7 +517,7 @@ class Calendar_Controller extends Tinebase_Controller_Event implements
                     Calendar_Controller_Poll::class, 'publicApiUpdateAttendeeStatus', [
                     Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
                 ]))->toArray());
-                $routeCollector->put('/poll/{pollId}', (new Tinebase_Expressive_RouteHandler(
+                $routeCollector->post('/poll/join/{pollId}', (new Tinebase_Expressive_RouteHandler(
                     Calendar_Controller_Poll::class, 'publicApiAddAttendee', [
                     Tinebase_Expressive_RouteHandler::IS_PUBLIC => true
                 ]))->toArray());
