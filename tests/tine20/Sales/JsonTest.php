@@ -560,13 +560,16 @@ class Sales_JsonTest extends TestCase
         $this->assertEquals(2, $updatedCustomer['postal']['seq']);
     }
 
-    public function testSaveCustomerAndCreateInvoiceAddress()
+    public function testSaveCustomerAndCreateInvoiceAddress(bool $withDebitor = true)
     {
+        $debitors = $withDebitor ? [
+            [
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]
+        ] : [];
         $customer = $this->_instance->saveCustomer(array(
             'name'      => Tinebase_Record_Abstract::generateUID(),
-            Sales_Model_Customer::FLD_DEBITORS => [[
-                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
-            ]],
+            Sales_Model_Customer::FLD_DEBITORS => $debitors,
             'postal' => [
                 'street' => '11212stree',
                 'postalcode' => '1111',
@@ -574,11 +577,20 @@ class Sales_JsonTest extends TestCase
             ]
         ));
 
-        // assert invoice address (same as postal address)
-        self::assertTrue(is_array($customer[Sales_Model_Customer::FLD_DEBITORS][0]['billing']), print_r($customer, true));
-        self::assertCount(1, $customer[Sales_Model_Customer::FLD_DEBITORS][0]['billing'], print_r($customer, true));
+        self::assertEquals('11212stree', $customer['postal']['street']);
+
+        if ($withDebitor) {
+            // assert invoice address (same as postal address)
+            self::assertTrue(is_array($customer[Sales_Model_Customer::FLD_DEBITORS][0]['billing']), print_r($customer, true));
+            self::assertCount(1, $customer[Sales_Model_Customer::FLD_DEBITORS][0]['billing'], print_r($customer, true));
+        }
     }
-    
+
+    public function testSaveCustomerAndCreateInvoiceAddressWithoutDebitor()
+    {
+        $this->testSaveCustomerAndCreateInvoiceAddress(false);
+    }
+
     /**
      * testSaveContractWithManyRelations
      * 
