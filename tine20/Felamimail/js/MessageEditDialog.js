@@ -1999,9 +1999,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             if (me.button_toggleEncrypt.pressed && me.mailvelopeEditor) {
                 // always add own address so send message can be decrypted
                 all.push(me.record.get('from_email'));
-
+                
                 all = all.map(function (item) {
-                    return addressparser.parse(item.replace(/,/g, '\\\\,'))[0].address;
+                    const email = item.email ?? item;
+                    return addressparser.parse(email.replace(/,/g, '\\\\,'))[0].address;
                 });
 
                 return Tine.Felamimail.mailvelopeHelper.getKeyring().then(function (keyring) {
