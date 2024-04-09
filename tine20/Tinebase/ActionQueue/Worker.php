@@ -116,8 +116,10 @@ class Tinebase_ActionQueue_Worker extends Console_Daemon
 
                 // log only every minute
                 if (time() - $lastMaxChildren > 60) {
-                    $this->_getLogger()->crit(__METHOD__ . '::' . __LINE__ . " reached max children limit: " . $maxChildren);
-                    $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ . " number of pending jobs:" . $this->_actionQueue->getQueueSize());
+                    $this->_getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Reached max children limit: "
+                        . $maxChildren);
+                    $this->_getLogger()->info(__METHOD__ . '::' . __LINE__ . " Number of pending jobs:"
+                        . $this->_actionQueue->getQueueSize());
                     $lastMaxChildren = time();
                 }
                 usleep(1000); // save some trees
