@@ -2578,27 +2578,31 @@ abstract class Tinebase_Controller_Record_Abstract
         
         switch ($_action) {
             case self::ACTION_GET:
-                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_READ);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id,
+                    Tinebase_Model_Grants::GRANT_READ);
                 break;
             case self::ACTION_CREATE:
-                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_ADD);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id,
+                    Tinebase_Model_Grants::GRANT_ADD);
                 break;
             case self::ACTION_UPDATE:
-                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_EDIT);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id,
+                    Tinebase_Model_Grants::GRANT_EDIT);
                 break;
             case self::ACTION_DELETE:
-                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_DELETE);
+                $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id,
+                    Tinebase_Model_Grants::GRANT_DELETE);
                 break;
             default:
                 $hasGrant = Tinebase_Core::getUser()->hasGrant($_record->container_id, $_action);
         }
 
         if (! $hasGrant) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 $containerId = $_record->container_id instanceof Tinebase_Model_Container
                     ? $_record->container_id->getId()
                     : $_record->container_id;
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
                     . ' No permissions to ' . $_action . ' in container ' . print_r($containerId, true));
             }
             if ($_throw) {

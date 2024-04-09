@@ -525,6 +525,9 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveInvoice($recordData, $duplicateCheck = TRUE)
     {
+        // this may take longer
+        $this->_longRunningRequest(60*60); // set to 1 hour
+
         // validate customer
         $foundCustomer = FALSE;
         $customerCalculated = FALSE;
