@@ -2580,6 +2580,9 @@ abstract class Tinebase_Controller_Record_Abstract
             [Tinebase_ModelConfiguration::CONTROLLER_CLASS_NAME];
         $ctrl = $ctrl::getInstance();
         if ($_record->{$mc->delegateAclField} instanceof Tinebase_Record_RecordSet) {
+            if (count($_record->{$mc->delegateAclField}) === 0) {
+                return true;
+            }
             foreach ($_record->{$mc->delegateAclField} as $delegateRec) {
                 if ($ctrl->checkGrant($delegateRec, $_action, false, $_errorMessage, $_oldRecord?->
                 {$mc->delegateAclField}->getById($delegateRec->getId()) ?: null)) {
