@@ -151,8 +151,13 @@ class Sales_Export_TimesheetTimeaccount extends Tinebase_Export_Xls
      */
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
-        // @todo we need a more generic way of resolving tags! thats quite obscure for modelconfig applications! -> TRA->getTags() maybe?
-        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         parent::_resolveRecords($_records);
+
+        foreach ($_records as $record) {
+            if ($record->tags && $record->tags->filter('name', static::TAG_SUM)->count() === 0) {
+                $record->start_time = null;
+                $record->end_time = null;
+            }
+        }
     }
 }

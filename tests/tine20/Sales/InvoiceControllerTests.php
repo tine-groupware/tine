@@ -1767,8 +1767,38 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $timeaccountFilter = ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $customer3Timeaccount->getId()];
         $tsFilter = new Timetracker_Model_TimesheetFilter([$dateFilter, $timeaccountFilter]);
         $timesheets = $this->_timesheetController->search($tsFilter);
+        $bereitschaftTag = new Tinebase_Model_Tag(array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => 'Bereitschaft',
+            'description' => 'Bereitschaft für Admins',
+            'color' => '#009B31',
+        ));
+        $bereitschaftTag = Tinebase_Tags::getInstance()->createTag($bereitschaftTag);
+
+        $right = new Tinebase_Model_TagRight([
+            'tag_id'        => $bereitschaftTag->getId(),
+            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'view_right'    => true,
+            'use_right'     => true
+        ]);
+        Tinebase_Tags::getInstance()->setRights($right);
+        
         foreach ($timesheets as $idx => $timeSheet) {
             $timeSheet['is_billable'] = $idx % 2;
+            
+            if ($timeSheet['is_billable']) {
+                $timeSheet->description = 'ts without tag';
+                $timeSheet->start_time = '10:20:00';
+                $timeSheet->end_time = '12:20:00';
+                if ($idx === 1) {
+                    $filter = new Timetracker_Model_TimesheetFilter([
+                        ['field' => 'id', 'operator' => 'in', 'value' => [$timeSheet->getId()]]
+                    ]);
+                    Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $bereitschaftTag);
+                    $timeSheet->description = 'ts with tag';
+                }
+            }
             $this->_timesheetController->update($timeSheet);
         }
         
@@ -1782,12 +1812,13 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         }
         
         $timesheets = $this->_timesheetController->search($tsFilter);
-        static::assertEquals(2, $timesheets->count());
+        static::assertEquals(4, $timesheets->count());
         $billableTimesheets = $timesheets->filter('is_billable', 1);
-        static::assertEquals(1, $billableTimesheets->count());
+        static::assertEquals(2, $billableTimesheets->count());
         $billableTimesheet = $billableTimesheets->getFirstRecord();
         
         $invoice = $this->_invoiceController->get($billableTimesheet['invoice_id']);
+
         $definition = Tinebase_ImportExportDefinition::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_ImportExportDefinition::class, [
             'model' => Sales_Model_Invoice::class,
             'name' => 'invoice_timesheet_xlsx'
@@ -1813,7 +1844,19 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
 
             static::assertEquals($customer3Timeaccount['title'], $arrayData[0][2]);
             static::assertEquals($billableTimesheet['description'], $arrayData[4][1]);
-            static::assertEquals(null, $arrayData[5][1]);
+            // only export start time when tag Bereitschaft is set
+            $array = array_filter($arrayData, function ($data) {
+                return $data[1] === 'ts with tag';
+            });
+            $tsWithTag = array_pop($array);
+            static::assertNotNull($tsWithTag[6]);
+            static::assertEquals('Bereitschaft', $tsWithTag[7]);
+            $array1 = array_filter($arrayData, function ($data) {
+                return $data[1] === 'ts without tag';
+            });
+            $tsWithoutTag = array_pop($array1);
+            static::assertNull($tsWithoutTag[6]);
+            static::assertNull($tsWithoutTag[7]);
         } finally {
             @unlink($xlsx);
         }
