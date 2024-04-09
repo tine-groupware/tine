@@ -248,7 +248,6 @@ Ext.Msg.show({
             Ext.getBody().mask("Loading");
             const {MessageBoxApp, SymbolKeys} = await import(/* webpackChunkName: "Tinebase/js/VueMessageBox"*/'./VueMessageBox')
             const {default: PersonaContainer } = await import(/* webpackChunkName: "Tinebase/js/PersonaContainer"*/'../../../../Tinebase/js/ux/vue/PersonaContainer/PersonaContainer.vue')
-            const {BootstrapVueNext} = await import(/* webpackChunkName: "Tinebase/js/BootstrapVueNext"*/'bootstrap-vue-next')
 
             // initializing vue stuff
             if(!initialized){
@@ -259,6 +258,10 @@ Ext.Msg.show({
                     opt: JSON.parse(JSON.stringify(defaultConfigs)),
                     otherConfigs: JSON.parse(JSON.stringify(otherConfigs)),
                 });
+
+                Tine.Tinebase.vue = Tine.Tinebase.vue || {}
+                Tine.Tinebase.vue.focusTrapStack = Tine.Tinebase.vue.focusTrapStack || []
+                vueProps.opt.focusTrapStack = Tine.Tinebase.vue.focusTrapStack
 
                 // app initialization and mounting
                 vueHandle = createApp({

@@ -1,8 +1,8 @@
 <template>
-  <BModal v-model="props.otherConfigs.visible"
+  <BModal v-model="showModal"
           :title="props.opt.title"
           :title-class="'title'"
-          :modal-class="'bootstrap-scope'"
+          :modal-class="'bootstrap-scope vue-message-box'"
           :hide-header-close="!props.opt.closable"
           :hide-footer="!props.opt.buttons"
           :centered="true"
@@ -10,9 +10,10 @@
           :lazy="true"
           :noCloseOnBackdrop="true"
           @close="closeBox" :style="{'z-index': otherConfigs.zIndex}"
+          ref="modalRef"
   >
     <template #default>
-      <div class="container">
+      <div class="container" ref="containerRef">
         <div class="row">
           <div class="col-3" v-if="props.opt.icon">
             <PersonaContainer :iconName="opt.icon" :skinColor="opt?.skinColor"/>
@@ -55,7 +56,9 @@
 // TODO: change the progressBar according to `props.opt.waitConfig` if available
 // NOTE: Ext.MessageBox.wait is currently not used with any waitConfig, so
 // the implementation is not given top priority
-import {computed, inject, onBeforeMount, ref, watch} from "vue"
+import {computed, inject, nextTick, onBeforeMount, ref, watch} from "vue"
+
+import { createFocusTrap } from "focus-trap";
 
 import {SymbolKeys} from ".";
 
@@ -68,6 +71,7 @@ const progressBarVisibility = ref(false);
 const textAreaHeight = ref(0);
 const textElValue = ref("");
 
+const ft = ref(null)
 const init = async function () {
   if (props.opt.prompt) {
     if (props.opt.multiline) {
@@ -98,6 +102,7 @@ const props = defineProps({
 
 const closeBox = () => {
   if (props.opt.closable) {
+    ft.value.deactivate()
     ExtEventBus.emit("close");
   }
 }
@@ -121,8 +126,28 @@ const buttonToShow = computed(() => {
   }
 })
 
+const showModal = ref(false)
+const modalRef = ref(false)
+const containerRef = ref(false)
 watch(() => props.otherConfigs.visible, newVal => {
-  if (newVal) init();
+  if (newVal) {
+    init();
+    showModal.value = newVal
+    const isKeyForward = (event) => {
+      return !(['text', 'password'].includes(event.target?.type)) && ( event.key === 'ArrowDown' || event.key === 'ArrowRight' )
+    }
+    const isKeyBackward = (event) => {
+      return !(['text', 'password'].includes(event.target?.type)) && ( event.key === 'ArrowUp' || event.key === 'ArrowLeft' )
+    }
+    nextTick(() => {
+      ft.value = createFocusTrap('.vue-message-box .modal-content', { trapStack: props.opt.focusTrapStack, isKeyForward, isKeyBackward })
+      ft.value.activate()
+    })
+  } else {
+    console.log(ft.value, props.opt.focusTrapStack)
+    ft.value.deactivate()
+    showModal.value = newVal
+  }
 })
 
 onBeforeMount(async () => {
