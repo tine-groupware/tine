@@ -41,6 +41,12 @@ docker compose exec web tine20_install
 
 Your tine-groupware is now reachable at http://127.0.0.1:4000.
 
+### setup.php UI
+
+The setup.php browser interface can be accessed here: http://127.0.0.1:4000/setup.php. The site is protected by HTTP basic auth. 
+Username and passwort can be configured with the ENV Variable TINE20_SETUP_HTPASSWD (example: "setup:setuppw").
+You can also put a hash value (as in htpasswd file) into TINE20_SETUP_HTPASSWD.
+
 ### Cleanup
 Use the following to stop and delete all containers, networks and volumes created by this compose.
 ```

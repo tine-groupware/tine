@@ -2,6 +2,7 @@
 tinedockercompose_tine_image: "tinegroupware/tine:2023"
 tinedockercompose_tinesetupuser: "tinesetup"
 tinedockercompose_tinesetuppw: "movemetovault"
+tinedockercompose_tinesetuphtpasswd: "alsomovemetovault"
 tinedockercompose_tineloggerprio: "5"
 tinedockercompose_tinesharedkey: "changeme"
 
