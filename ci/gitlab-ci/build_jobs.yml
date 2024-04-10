@@ -14,8 +14,15 @@ docker_build_built:
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh built
     - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/build_image.sh test-built
   rules:
-    - if: $CI_COMMIT_TAG
-    - if: $PIPELINE_TYPE =~ /build-nightly/
+    - if: $PIPELINE_TYPE =~ /release-weekly/
+      variables:
+        RELEASE_TYPE: weekly
+    - if: $PIPELINE_TYPE =~ /build-nightly/ # todo: to become release-nightly. Then remove this. release will be the cache all.
+      variables:
+        RELEASE_TYPE: be
+    - if: $PIPELINE_TYPE =~ /release/
+      variables:
+        RELEASE_TYPE: be
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-built/
     - !reference [.php-unit-all-tests-built, rules]
     - !reference [.php-unit-tinebase-tests-built, rules]
@@ -118,7 +125,7 @@ docker_build_packages:
     - if: $PIPELINE_TYPE =~ /build-nightly/
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
     - !reference [release-packages-to-gitlab, rules]
-    - !reference [.release-packages-to-github, rules]
+    - !reference [release-packages-to-github, rules]
     - !reference [release-packages-to-vpackages, rules]
   timeout: 120m
   interruptible: true
