@@ -145,7 +145,7 @@ docker_build_packages:
     - if: $PIPELINE_TYPE =~ /build-nightly/
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-packages/
     - !reference [release-packages-to-gitlab, rules]
-    - !reference [.release-packages-to-github, rules]
+    - !reference [release-packages-to-github, rules]
     - !reference [release-packages-to-vpackages, rules]
   timeout: 120m
   interruptible: true
