@@ -100,7 +100,7 @@ function build_image_and_dependencies() {
                 build_image "dependency" "${dependency_image}" "${base_image}" '' '' '' '' "${alpine_branch}" "${alpine_php_package}"
             fi
 
-            if [ 'source' == "${target}" ] || [ 'test-dependency' == "${target}" ]; then
+            if [ 'source' == "${target}" ]; then
                 build_image "${target}" "${image}" "${base_image}" "${dependency_image}" '' '' '' "${alpine_branch}" "${alpine_php_package}"
             else
                 if [[ -z "${source_image}" ]]; then
@@ -112,7 +112,7 @@ function build_image_and_dependencies() {
                     build_image "source" "${source_image}" "${base_image}" "${dependency_image}" '' '' '' "${alpine_branch}" "${alpine_php_package}"
                 fi
 
-                if [ 'build' == "${target}" ] || [ 'test-source' == "${target}" ]; then
+                if [ 'build' == "${target}" ]; then
                     build_image "${target}" "${image}" "${base_image}" "${dependency_image}" "${source_image}" '' '' "${alpine_branch}" "${alpine_php_package}"
                 else
                     if [[ -z "${build_image}" ]]; then
@@ -289,9 +289,7 @@ function help() {
     echo '  dev'
     echo '  test'
     echo '  dependency'
-    echo '  test-dependency'
     echo '  source'
-    echo '  test-source'
     echo '  build'
     echo '  built'
     echo '  test-built'
@@ -361,9 +359,7 @@ case ${1} in
     dev) make_image 'dev' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     test) make_image 'test' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     dependency) make_image 'dependency' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
-    test-dependency) make_image 'test-source' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     source) make_image 'source' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
-    test-source) make_image 'test-source' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     build) make_image 'build' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     built) make_image 'built' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
     test-built) make_image 'test-built' '' "${BASE_IMAGE}" "${DEPENDENCY_IMAGE}" "${SOURCE_IMAGE}" "${BUILD_IMAGE}" "${BUILT_IMAGE}" "${PHP_VERSION}";;
