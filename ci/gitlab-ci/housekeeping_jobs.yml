@@ -25,28 +25,6 @@ housekeeping-uninterruptible:
 
 # ============ stage: housekeeping ===========================
 
-docker-populate-cache:
-  extends: .abstract_jobs.docker
-  stage: housekeeping
-  script:
-    - !reference [.lib, script]
-    - docker_layer_cache_populat_with_hash_image base $(docker_image_hash base) || true
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_cache.sh source || true
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_cache.sh test-source || true
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_cache.sh jsbuild || true
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_cache.sh build || true
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_cache.sh built || true
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_cache.sh test-built || true
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/push_image_to_cache.sh dev || true
-  allow_failure: true # a failure is a problem, but the pipeline should not fail
-  interruptible: false
-  rules:
-    # do not push cache if tests failed
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $RUN_NO_TESTS != "true"
-    - if: $PIPELINE_TYPE =~ /default-tests/
-    - if: $PIPELINE_TYPE =~ /mr-tests/
-    - if: $PIPELINE_TYPE =~ /matrix-tests/
-
 cache-cleanup:
   image: composer
   stage: housekeeping
