@@ -300,41 +300,69 @@ php-unit-nogitlabci-tests-built-parallel:
     - !reference [.php-unit-nogitlabci-tests-built, rules]
 
 php-unit-update-tests:
-  extends: .abstract_jobs.php_unit
+  extends: .abstract_jobs.php_unit_cache
   variables:
-    ARG_IMAGE: test-source
-    ARG_COPY_SOURCE: "true"
     NODE_TOTAL: 1
     NODE_INDEX: 1
-  needs:
-    - docker_build_source
+    TINE_VERSION_LTS: "2022.11"
+    TINE_VERSION_BE: "2023.11"
+    TINE_VERSION_BETA: ""
+    TINE_VERSION_NEXT: "2024.11"
+  needs: []
   stage: test
   timeout: 2h
   interruptible: true
+  before_script:
+    - !reference [.lib, script]
+    - test_prepare_working_dir
+    - test_prepare_global_configs
+    - tine20_await_db
+    - test_prepare_mail_db
+    - supervisord
   script:
-    - set -e
-    - apk add --repository http://nl.alpinelinux.org/alpine/v3.14/main --repository http://nl.alpinelinux.org/alpine/v3.14/community php7-sodium
-    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git fetch --unshallow; git checkout 2022.11;
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
-    - cd ${TINE20ROOT}/tine20
-    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
-    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --install Bookmarks,DFCom,EFile,GDPR,OnlyOfficeIntegrator"
-    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git checkout 2023.11;
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
-    - cd ${TINE20ROOT}/tine20
-    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --setLicense -- file=/usr/share/tests/tine20/Tinebase/License/license_contract_MW-TEST-2.0.pem"
-    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
-    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --install UserManual"
-    - cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; git checkout 2024.11;
-    - ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh
-    - cd ${TINE20ROOT}/tine20
-    - su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
-    - !reference [.abstract_jobs.php_unit, script]
+    - !reference [.lib, script]
+    - |
+      git fetch --unshallow || true
+      cd tine20
+    - |
+      log "installing ${TINE_VERSION_LTS}"
+      git checkout ${TINE_VERSION_LTS}
+      test_composer_install
+      log install
+      tine20_install
+    - |
+      log "updating to ${TINE_VERSION_BE}"
+      git checkout ${TINE_VERSION_BE}
+      test_composer_install
+      log update
+      su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
+      su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --install UserManual"
+    - |
+      if [ "${TINE_VERSION_BETA}" != "" ];then
+        log "updating to ${TINE_VERSION_BETA}"
+        git checkout ${TINE_VERSION_BETA}
+        test_composer_install
+        log update
+        su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
+
+      else
+        log skipping update to TINE_VERSION_BETA: ${TINE_VERSION_BETA}
+      fi
+    - |
+      log "updating to ${TINE_VERSION_NEXT}"
+      git checkout ${TINE_VERSION_NEXT}
+      test_composer_install
+      log update
+      su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
+    - |
+      log "testing"
+      test_phpunit
   rules:
     - if: $PHP_UNIT_UPDATE_TESTS == "false"
       when: never
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-update-tests/
-    - if: $CI_COMMIT_BRANCH != "2022.11"
+    # update test should only be stated on the ls branch
+    - if: $CI_COMMIT_BRANCH != $TINE_VERSION_LTS
       when: never
     - if: $PHP_UNIT_UPDATE_TESTS == "true"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_UPDATE_TESTS_MERGE_REQUEST == "true"
