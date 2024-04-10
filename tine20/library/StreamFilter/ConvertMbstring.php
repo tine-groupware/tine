@@ -18,7 +18,7 @@ class StreamFilter_ConvertMbstring extends php_user_filter
      */
     function filter($in, $out, &$consumed, $closing): int {
         while ($bucket = stream_bucket_make_writeable($in)) {
-            $encoding = mb_detect_encoding($bucket->data, array('utf-8', 'iso-8859-1', 'windows-1252', 'iso-8859-15'));
+            $encoding = mb_detect_encoding($bucket->data, array('utf-8', 'iso-8859-1', 'iso-8859-15'));
             if ($encoding !== FALSE) {
                 $bucket->data = @mb_convert_encoding($bucket->data, 'utf-8', $encoding);
             }
