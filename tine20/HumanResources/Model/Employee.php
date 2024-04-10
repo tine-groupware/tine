@@ -20,6 +20,8 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
 {
     const MODEL_NAME_PART = 'Employee';
 
+    public const TABLE_NAME = 'humanresources_employee';
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *

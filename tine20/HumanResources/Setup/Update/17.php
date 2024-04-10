@@ -16,6 +16,7 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -34,6 +35,10 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE017_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];
@@ -65,5 +70,18 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
             . ' AS edi ON cc.eval_dim_cost_center = edi.id WHERE edi.id IS NULL');
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '17.2', self::RELEASE017_UPDATE002);
+    }
+
+    public function update003()
+    {
+
+        $division = HumanResources_Controller_Division::getInstance()->search()->getFirstRecord();
+        if($division) {
+            $this->_db->update(
+                SQL_TABLE_PREFIX . HumanResources_Model_Employee::TABLE_NAME,
+                ['division_id' => $division->getId()],
+                'division_id is NULL');
+        }
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
     }
 }
