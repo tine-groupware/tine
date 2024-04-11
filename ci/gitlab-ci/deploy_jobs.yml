@@ -155,8 +155,8 @@ release-packages-to-github:
   stage: deploy
   script:
     - !reference [.lib, script]
+    - release_push_release_tag_to_github
     - release_packages_github_create_release
-    - packaging_push_package_to_github
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
       when: manual
