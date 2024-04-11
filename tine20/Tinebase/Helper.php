@@ -264,7 +264,7 @@ class Tinebase_Helper
     public static function mbConvertTo($string, $encodingTo = 'utf-8')
     {
         // try to fix bad encodings
-        $encoding = mb_detect_encoding((string)$string, array('utf-8', 'iso-8859-1', 'windows-1252', 'iso-8859-15'));
+        $encoding = mb_detect_encoding((string)$string, array('utf-8', 'iso-8859-1', 'iso-8859-15'));
         if ($encoding !== FALSE) {
             $string = @mb_convert_encoding((string)$string, $encodingTo, $encoding);
         }
