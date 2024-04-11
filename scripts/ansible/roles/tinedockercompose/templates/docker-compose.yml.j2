@@ -36,7 +36,7 @@ services:
       TINE20_CREDENTIALCACHESHAREDKEY: "{{ tinedockercompose_tinesharedkey }}"
       TINE20_SETUPUSER_USERNAME: {{ tinedockercompose_tinesetupuser }}
       TINE20_SETUPUSER_PASSWORD: "{{ tinedockercompose_tinesetuppw }}"
-      TINE20_SETUP_HTPASSWD: "setup:{{ tinedockercompose_tinesetuphtpasswd }}"
+      TINE20_SETUP_HTPASSWD: "{{ tinedockercompose_tinesetuphtpasswd }}"
       TINE20_LOGGER_PRIORITY: "{{ tinedockercompose_tineloggerprio }}"
 {% if tinedockercompose_tineurl is defined %}
       TINE20_URL: {{ tinedockercompose_tineurl }}
