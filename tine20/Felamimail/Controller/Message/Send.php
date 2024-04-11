@@ -289,17 +289,24 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
             ' ' . $mailAsString);
 
-        $imap = Felamimail_Backend_ImapFactory::factory($targetAccount);
-        $uid = $imap->appendMessage(
-            $mailAsString,
-            Felamimail_Model_Folder::encodeFolderName($folder->globalname),
-            $flags
-        );
-
-        if ($uid) {
-            $_message->messageuid = $uid;
+        $imapBackend = $this->_getBackendAndSelectFolder(NULL, $folder);
+        try {
+            $uid = $imapBackend->appendMessage(
+                $mailAsString,
+                Felamimail_Model_Folder::encodeFolderName($folder->globalname),
+                $flags
+            );
+            if ($uid) {
+                $_message->messageuid = $uid;
+            }
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            if ($zmse->getMessage() === 'cannot create message, please check if the folder exists and your flags') {
+                throw new Tinebase_Exception_NotFound('Folder ' . $folder->globalname . ' not found');
+            } else {
+                throw $zmse;
+            }
         }
-
+        
         return $_message;
     }
     
