@@ -43,8 +43,11 @@ tine ist jetzt unter http://127.0.0.1:4000 erreichbar.
 ### setup.php UI
 
 Die tine-Setup-UI ist dann unter http://127.0.0.1:4000/setup.php erreichbar. Bitte dran denken, dass diese im Container
- mit HTTP Basic Auth geschützt ist. Benutzername und Passwort sollten über die ENV Variable TINE20_SETUP_HTPASSWD gesetzt werden (Beispiel: "setup:setuppw").
-In die TINE20_SETUP_HTPASSWD kann man das Password auch als Hash reinschrieben. Das ist einfach nur eine Zeile aus der htaccess Datei.
+ mit HTTP Basic Auth geschützt ist. Benutzername und Passworthash sollten über die ENV Variable TINE20_SETUP_HTPASSWD gesetzt werden (Beispiel: "setup:$apr1$JhCtViTh$k15DH.HvNR5hZ66Ew5aTH/" #setup:setuppw).
+Der hash kann mit htpasswd generiert werden:
+1. `htpasswd -c setup.htpasswd setup`.
+2. Pasword eingeben wiederholen
+3. Benutzername und Passworthash aus der Datei `setup.htpasswd` kopieren.
 
 ### Aufräumen
 Um alle von Docker Compose erstellten Container, Netzwerke und Volumes zu stoppen und löschen nutzen Sie:
