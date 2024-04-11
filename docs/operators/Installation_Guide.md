@@ -45,7 +45,7 @@ Your tine-groupware is now reachable at http://127.0.0.1:4000.
 
 The setup.php browser interface can be accessed here: http://127.0.0.1:4000/setup.php. The site is protected by HTTP basic auth. 
 Username and password hash can be configured with the ENV Variable TINE20_SETUP_HTPASSWD (example: "setup:$apr1$JhCtViTh$k15DH.HvNR5hZ66Ew5aTH/" #setup:setuppw).
-The hahs can be generated with htpasswd:
+The hash can be generated with htpasswd:
 1. `htpasswd -c setup.htpasswd setup`.
 2. Enter the password.
 3. Copy username and password form the file  `setup.htpasswd`.
