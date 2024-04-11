@@ -104,8 +104,12 @@ release-to-gitlab:
     - !reference [.lib, script]
     - release_to_gitlab
   rules:
-    - if: $CI_COMMIT_TAG
-    - when: never
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-gitlab/
+      when: manual
+    - if: $PIPELINE_TYPE =~ /release-be/
+    - if: $PIPELINE_TYPE =~ /release-weekly/
+    - if: $PIPELINE_TYPE =~ /release-monthly/
+    - if: $PIPELINE_TYPE =~ /release-customer/
   timeout: 20m
   interruptible: true
 
@@ -118,11 +122,16 @@ release-packages-to-vpackages:
     - echo "$VPACKAGES_DEPLOY_KEY" | tr -d '\r' | ssh-add -
   script:
     - !reference [.lib, script]
-    - packaging_push_to_vpackages
+    - release_packages_vpackages_push
+    - if [ "$CREATE_CURRENT_LINK" == "true" ]; then release_packages_vpackages_create_current_link; fi
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-vpackages/
       when: manual
-    - if: $CI_COMMIT_TAG && $PUSH_TO_VPACKAGES == "true"
+    - if: $PIPELINE_TYPE =~ /release-be/ && $BASE_MAJOR_COMMIT_REF_NAME == "2023.11"
+      variables:
+        CREATE_CURRENT_LINK: "true"
+    - if: $PIPELINE_TYPE =~ /release-be/
+    - if: $PIPELINE_TYPE =~ /release-customer/ && $PUSH_TO_VPACKAGES == "true"
   timeout: 20m
   interruptible: false
 
@@ -131,33 +140,30 @@ release-packages-to-gitlab:
   stage: deploy
   script:
     - !reference [.lib, script]
-    - packaging_gitlab_set_current_link
+    - release_packages_gitlab_set_current_link
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-gitlab/
       when: manual
-    - if: $CI_COMMIT_TAG
+    - if: $PIPELINE_TYPE =~ /release-be/ && $BASE_MAJOR_COMMIT_REF_NAME == "2023.11"
+    # - if: $PIPELINE_TYPE =~ /release-be/ packages where already pushed by the build, here only the current link is updated
+    - if: $PIPELINE_TYPE =~ /release-customer/
   timeout: 20m
   interruptible: false
 
-.release-packages-to-github:
+release-packages-to-github:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
     - !reference [.lib, script]
-    - packaging_push_release_tag_to_github
+    - release_packages_github_create_release
     - packaging_push_package_to_github
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
       when: manual
-    - if: $CI_COMMIT_TAG
+    - if: $PIPELINE_TYPE =~ /release-be/ && $BASE_MAJOR_COMMIT_REF_NAME == "2023.11"
+    - if: $PIPELINE_TYPE =~ /release-weekly/
   timeout: 20m
   interruptible: false
-release-packages-to-github:
-  extends: .release-packages-to-github
-  rules:
-    - if: ($BASE_MAJOR_COMMIT_REF_NAME != "2023.11" && $BASE_MAJOR_COMMIT_REF_NAME != "2024.11") || $CUSTOMER_MAJOR_COMMIT_REF_NAME != ""
-      when: never
-    - !reference [.release-packages-to-github, rules]
 
 trigger-release:
   stage: deploy

@@ -269,14 +269,11 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
     
     /**
      * Returns registry data of setup
-     * .
-     * @see Tinebase_Application_Json_Abstract
-     * 
-     * @return mixed array 'variable name' => 'data'
-     * 
-     * @todo add 'titlePostfix'    => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::PAGETITLEPOSTFIX, NULL, '')->value here?
+     *
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function getRegistryData()
+    public function getRegistryData(): array
     {
         // anonymous registry
         $registryData =  array(
@@ -289,10 +286,9 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
                 // NOTE: if assetHash is not available we have a serious problem -  please don't generate one!
                 'assetHash'     => Tinebase_Frontend_Http_SinglePageApplication::getAssetHash(),
             ),
-            'authenticationData'   => $this->loadAuthenticationData(),
         );
         
-        // authenticated or non existent config
+        // authenticated or non-existent config
         if (! Setup_Core::configFileExists() || Setup_Core::isRegistered(Setup_Core::USER)) {
             try {
                 $license = Tinebase_License::getInstance();
@@ -302,11 +298,17 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             }
             $registryData = array_merge($registryData, $this->checkConfig());
             $registryData = array_merge($registryData, array(
+                'authenticationData'   => Setup_Core::isRegistered(Setup_Core::USER)
+                    ? $this->loadAuthenticationData() : [],
                 'rights'               => ['admin'],
-                'acceptedTermsVersion' => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? Setup_Controller::getInstance()->getAcceptedTerms() : 0,
+                'acceptedTermsVersion' => (! empty($registryData['checkDB']) &&
+                    $this->_controller->isInstalled(''))
+                    ? Setup_Controller::getInstance()->getAcceptedTerms() : 0,
                 'setupChecks'          => $this->envCheck(),
                 'configData'           => $this->loadConfig(),
-                'emailData'            => (! empty($registryData['checkDB']) && $this->_controller->isInstalled('Tinebase')) ? $this->getEmailConfig() : array(),
+                'emailData'            => (! empty($registryData['checkDB'])
+                    && $this->_controller->isInstalled() && Setup_Core::isRegistered(Setup_Core::USER))
+                    ? $this->getEmailConfig() : array(),
                 'licenseCheck'         => $license
                     ? $license->getStatus() === Tinebase_License::STATUS_LICENSE_OK
                     : Tinebase_License::STATUS_NO_LICENSE_AVAILABLE,
@@ -325,6 +327,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
 
     /**
      * Returns registry data of all applications current user has access to
+     *
      * @return mixed array 'variable name' => 'data'
      *
      * TODO DRY: most of this already is part of Tinebase_Frontend_Json::_getAnonymousRegistryData
@@ -338,7 +341,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
         Setup_Controller::getInstance()->clearCache();
 
         $registryData['Setup'] = $this->getRegistryData();
-        
+
         $coreRegistryData = Tinebase_Core::getCoreRegistryData();
         $coreRegistryData['serviceMap'] = Setup_Frontend_Http::getServiceMap();
         $coreRegistryData['timeZone'] = Setup_Core::getUserTimezone();
@@ -361,7 +364,7 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
 
     /**
      * Saves license configuration
-     * 
+     *
      * @param  string $license
      *
      * @return array

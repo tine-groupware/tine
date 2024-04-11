@@ -504,7 +504,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         
         $this->assertStringContainsString('würde', $body);
     }
-    
+
     /**
      * test reading a message without setting the \Seen flag
      */
@@ -1478,6 +1478,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         $cachedMessage = $this->messageTestHelper('multipart_alternative_related.eml');
         $message = $this->_getController()->getCompleteMessage($cachedMessage);
         $this->assertStringContainsString('some body contentsome body contentsome body content', $message->body);
+        $this->assertStringContainsString('TEI™ Study', $message->body);
     }
 
     /**

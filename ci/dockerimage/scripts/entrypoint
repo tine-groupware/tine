@@ -21,6 +21,7 @@ set -e
 
 # generate config files
 gomplate --config /etc/gomplate/config.yaml
+if ! [ -f /etc/tine20/setup.htpasswd ]; then echo "$TINE20_SETUP_HTPASSWD" > /etc/tine20/setup.htpasswd; fi
 
 # await database availability
 su tine20 -c "/usr/local/bin/tine20_await_db"

@@ -34,14 +34,6 @@ packaging_build_packages() {
     if ! ./ci/dockerimage/make.sh -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" -c "${CACHE_IMAGE}" -c "${MAJOR_CACHE_IMAGE}" packages; then
         return 1
     fi
-
-    # add current.map
-    if ! echo "$version" | grep "nightly" && ! echo "$version" | grep "weekly" ; then
-        echo "currentPackage ${RELEASE}/tine20-allinone_${RELEASE}.tar.bz2" >> current.map
-        tar -rf "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" current.map
-    else
-        echo "nightly, do not set curren.map"
-    fi
 }
 
 packaging_extract_all_package_tar() {
@@ -103,101 +95,9 @@ packaging_gitlab_get_version_for_pipeline_id() {
     fi
 }
 
-packaging_gitlab_set_current_link() {
-    customer=$(release_determin_customer)
-    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
-
-    if echo "$version" | grep "nightly"; then
-        echo "skip setting current link for nightly packages: $version"
-        return 0
-    fi
-
-    curl \
-        --header "JOB-TOKEN: ${CI_JOB_TOKEN}" \
-        -XPUT --data "${version}" \
-        "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/links/current"
-
-    matrix_send_message $MATRIX_ROOM "🟢 Package for ${version} is ready."
-}
-
-packaging_push_release_tag_to_github() {
-    if test "$CI_COMMIT_TAG"; then
-        echo "no tag to push: '$CI_COMMIT_TAG'"
-        return
-    fi
-
-    cp $DOCKER_GIT_CONFIG ~/.gitconfig
-    git config --global user.email "gitlabci@metaways.de"
-    git config --global user.name "gitlabci"
-    git remote add github https://github.com/tine-groupware/tine.git
-
-    git push github refs/tags/$CI_COMMIT_TAG
-}
-
-packaging_push_package_to_github() {
-    customer=$(release_determin_customer)
-    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
-
-    cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/
-
-    echo curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
-    curl "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/tine20-allinone_${version}.tar.bz2" -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2"
-
-    release_json=$(github_create_release "$version" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN")
-    if [ "$?" != "0" ]; then
-        echo "$release_json"
-        return 1
-    fi
-
-    echo "customer: $customer version: $version release_json: $release_json"
-
-    github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
-
-    matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
-
-    if [ "${MAJOR_COMMIT_REF_NAME}" == "2023.11" ]; then
-        matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version "${CODENAME}" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
-    fi
-}
-
-packaging_get_version() {
-    if test "$CI_COMMIT_TAG"; then
-        echo "$CI_COMMIT_TAG"
-        return
-    fi
-
-    description=$(git describe --tags 2> /dev/null)
-
-    if test -z "$description"; then
-         git fetch --unshallow --quiet > /dev/null 2> /dev/null
-         description=$(git describe --tags 2> /dev/null)
-    fi
-
-    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
-
-    echo nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$description
-}
-
-packaging_push_to_vpackages() {
-    customer=$(release_determin_customer)
-    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
-    release=$(echo ${version} | sed sI-I~Ig)
-
-    echo "publishing ${release} (${version}) for ${customer} from ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
-
-    if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data curl ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar -o /tmp/${release}-source-${customer}.tar"; then
-        echo "Failed to download packages to vpackages"
-        return 1
-    fi
-
-    if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "sudo -u www-data /srv/packages.tine20.com/www/scripts/importTine20Repo.sh /tmp/${release}-source-${customer}.tar; sudo -u www-data rm -f /tmp/${release}-source-${customer}.tar"; then
-        echo "Failed to import package to repo"
-        return 1
-    fi
-}
-
 packaging() {
-    version=$(packaging_get_version)
+    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
+    version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
     release=${version}
 
     echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version: $version release: $release MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
@@ -224,6 +124,7 @@ packaging() {
         return 1
     fi
 
+    # this is only needed for nightlitys. As calculating there name requies a fully fteched git, and deploy do not have need thah
     echo "setting ci pipeline id link"
     if ! packaging_gitlab_set_ci_id_link $version; then
         echo "Failed to set ci pipeline id link."
