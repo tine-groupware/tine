@@ -50,6 +50,8 @@ The hash can be generated with htpasswd:
 2. Enter the password.
 3. Copy username and password form the file  `setup.htpasswd`.
 
+Note: When using docker-compose, `$` needs to be escaped as follows: `$$`.
+
 ### Cleanup
 Use the following to stop and delete all containers, networks and volumes created by this compose.
 ```
