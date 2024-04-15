@@ -49,6 +49,8 @@ Der hash kann mit htpasswd generiert werden:
 2. Pasword eingeben wiederholen
 3. Benutzername und Passworthash aus der Datei `setup.htpasswd` kopieren.
 
+Hinweis: Bei der Verwendung von docker-compose muss `$` wie folgt escaped werden: `$$`.
+
 ### Aufräumen
 Um alle von Docker Compose erstellten Container, Netzwerke und Volumes zu stoppen und löschen nutzen Sie:
 ```
