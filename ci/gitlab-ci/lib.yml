@@ -902,6 +902,7 @@
           # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
           # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
           rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
+          echo "$TINE20_SETUP_HTPASSWD" > /etc/tine20/setup.htpasswd
       }
       
       test_prepare_mail_db() {
@@ -1019,6 +1020,24 @@
       # log in blue
       log() {
           echo -e "\033[0;34m"$@"\033[0m"
+      }
+
+      # lib/scripts/version_check.sh
+      version_check_update () {
+          version_check_update_file htdocs%2FversionCheck%2Fversion.json
+          version_check_update_file htdocs%2FversionCheck%2Fbe%2Fversion.json
+      }
+      
+      version_check_update_file () {
+          path=$1
+          
+          release_time="$(date "+%Y-%m-%d %H:%M:%S")"
+          version="{\\\"codeName\\\":\\\"${CODE_NAME}\\\",\\\"packageString\\\":\\\"${PACKAGE_STRING}\\\",\\\"releaseTime\\\":\\\"${release_time}\\\",\\\"critical\\\":\\\"false\\\",\\\"build\\\":\\\"${BUILD}\\\"}"
+      
+          curl --request PUT --header "PRIVATE-TOKEN: ${VERSION_CHECK_UPDATE_TOKEN}" \
+           --header "Content-Type: application/json" \
+           --data '{"branch": "master", "commit_message": "update version", "content": "'"$version"'"}' \
+           "${CI_API_V4_URL}/projects/${VERSION_CHECK_PROJECT_ID}/repository/files/$path"
       }
 
   entry_points:
@@ -1924,6 +1943,7 @@
             # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
             # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
             rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
+            echo "$TINE20_SETUP_HTPASSWD" > /etc/tine20/setup.htpasswd
         }
         
         test_prepare_mail_db() {
@@ -2041,6 +2061,24 @@
         # log in blue
         log() {
             echo -e "\033[0;34m"$@"\033[0m"
+        }
+
+        # lib/scripts/version_check.sh
+        version_check_update () {
+            version_check_update_file htdocs%2FversionCheck%2Fversion.json
+            version_check_update_file htdocs%2FversionCheck%2Fbe%2Fversion.json
+        }
+        
+        version_check_update_file () {
+            path=$1
+            
+            release_time="$(date "+%Y-%m-%d %H:%M:%S")"
+            version="{\\\"codeName\\\":\\\"${CODE_NAME}\\\",\\\"packageString\\\":\\\"${PACKAGE_STRING}\\\",\\\"releaseTime\\\":\\\"${release_time}\\\",\\\"critical\\\":\\\"false\\\",\\\"build\\\":\\\"${BUILD}\\\"}"
+        
+            curl --request PUT --header "PRIVATE-TOKEN: ${VERSION_CHECK_UPDATE_TOKEN}" \
+             --header "Content-Type: application/json" \
+             --data '{"branch": "master", "commit_message": "update version", "content": "'"$version"'"}' \
+             "${CI_API_V4_URL}/projects/${VERSION_CHECK_PROJECT_ID}/repository/files/$path"
         }
 
         #!/bin/bash
@@ -2992,6 +3030,7 @@
             # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
             # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
             rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
+            echo "$TINE20_SETUP_HTPASSWD" > /etc/tine20/setup.htpasswd
         }
         
         test_prepare_mail_db() {
