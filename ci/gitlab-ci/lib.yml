@@ -902,6 +902,7 @@
           # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
           # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
           rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
+          echo "$TINE20_SETUP_HTPASSWD" > /etc/tine20/setup.htpasswd
       }
       
       test_prepare_mail_db() {
@@ -1924,6 +1925,7 @@
             # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
             # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
             rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
+            echo "$TINE20_SETUP_HTPASSWD" > /etc/tine20/setup.htpasswd
         }
         
         test_prepare_mail_db() {
@@ -2992,6 +2994,7 @@
             # cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/dockerimage/supervisor.d/webpack.ini /etc/supervisor.d/; # 2023.11 >= todo have/need this file
             # todo move config dir to ${TINE20ROOT}/etc build test should be ablte to handle that
             rsync -a -I --delete ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/ /config;
+            echo "$TINE20_SETUP_HTPASSWD" > /etc/tine20/setup.htpasswd
         }
         
         test_prepare_mail_db() {

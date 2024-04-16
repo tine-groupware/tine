@@ -300,6 +300,7 @@ const priorities = {
             width: 1366,
             height: 768,
         });
+        await page.authenticate({'username': process.env.HTACCESS_USERNAME, 'password': process.env.HTACCESS_PASSWORD});
         await page.goto(process.env.TEST_URL+'/setup.php', {waitUntil: 'domcontentloaded', timeout: '30000'});
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 

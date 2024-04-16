@@ -22,6 +22,7 @@
     TINE20_LOGGER_ADDITIONALWRITERS_FILENAME: php://stdout
     WAIT_FOR_DB_TIMEOUT: '120'
     TINE_CONTAINER_NAME: svc-5
+    TINE20_SETUP_HTPASSWD: "dev:$$$$apr1$$$$Ivpb7VfS$$$$kLnOg/uI0eNpTUhbeZF7n/" # dev:dev #this only works for the svc container - for the build container only 2 $ are required. which dose not work for svc
   services:
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
