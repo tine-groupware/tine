@@ -150,7 +150,7 @@ Tine.Tinebase.widgets.dialog.PasswordDialog = Ext.extend(Tine.Tinebase.dialog.Di
     onPWGen: function () {
         var policyConfig = this.policyConfig || Tine.Tinebase.configManager.get('downloadPwPolicy');
 
-        config = {
+        let config = {
             minLength: policyConfig ? policyConfig.pwPolicyMinLength : 12,
             minWordChars: policyConfig ? policyConfig.pwPolicyMinWordChars : 5,
             minUppercaseChars: policyConfig ? policyConfig.pwPolicyMinUppercaseChars : 1,
