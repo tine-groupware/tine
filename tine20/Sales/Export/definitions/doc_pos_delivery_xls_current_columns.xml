@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Sales_Model_DocumentPosition_Delivery</model>
+    <name>doc_pos_delivery_xls_current_columns</name>
+    <!-- _('Excel current columns') -->
+    <label>Excel current columns</label>
+    <type>export</type>
+    <plugin>Tinebase_Export_Xls</plugin>
+    <icon_class>tinebase-action-export-xls</icon_class>
+    <favorite>true</favorite>
+    <order>600</order>
+    <scope>multi</scope>
+    <use_current_columns>true</use_current_columns>
+</config>
