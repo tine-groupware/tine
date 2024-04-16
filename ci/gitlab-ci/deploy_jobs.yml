@@ -229,12 +229,11 @@ mkdocs-deploy:
 update-version-check:
   stage: deploy
   variables:
-    TRIGGER_JOBS: update-version
     PACKAGE_STRING: ${CI_COMMIT_TAG}
     CODE_NAME: ${CODENAME}
-  trigger:
-    project: tine20/versionCheck
-    strategy: depend
-    branch: master
+    BUILD: "1"
+  script:
+    - !reference [.lib, script]
+    - version_check_update
   rules:
     - if: $CI_COMMIT_TAG && $MAJOR_COMMIT_REF_NAME == "2023.11"
