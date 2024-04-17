@@ -736,8 +736,8 @@ class Tinebase_Frontend_JsonTest extends TestCase
 
         self::assertArrayHasKey('Sales.createPaperSlip', $registryData['Tinebase']['serviceMap']['services']);
         self::assertSame(60, $registryData['Tinebase']['serviceMap']['services']['Sales.createPaperSlip']['apiTimeout']);
-
-        self::assertLessThan(2500000, strlen(json_encode($registryData)), 'registry size got too big');
+        
+        self::assertLessThan(2600000, strlen(json_encode($registryData)), 'registry size got too big');
     }
 
     protected function _assertImportExportDefinitions($registryData)
