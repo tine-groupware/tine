@@ -193,8 +193,7 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             const rangeKey = (pos.get('grouping') || '') + '_' + (pos.get('parent_id') || '');
             counters[rangeKey] = (counters[rangeKey] || 0) + 1;
 
-            // @TODO implement better groupPrefix
-            const groupPrefix = pos.get('grouping') ? pos.get('grouping')[0] : '';
+            const groupPrefix = pos.get('grouping') ? pos.get('grouping').match(/^([a-z-A-Z0-9\[\]_]){1,4}/)[0] : '';
             const parentPrefix = pos.get('parent_id') ? this.store.getById(pos.get('parent_id')).get('pos_number') : '';
 
             const posNumber = (parentPrefix ? parentPrefix + '.' : (groupPrefix ? groupPrefix + ' ' : '')) + counters[rangeKey];
@@ -331,6 +330,14 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             this.quickaddRecord.set('sorting', last.get('sorting') + this.sortInc);
         }
         this.store.add(this.quickaddRecord);
+        // NOTE: might be out of order from DB
+        // @TODO rethink sort by sorting or numbering?
+        //    references will break when renumbering, wouldn't it be better so sort by pos first and rearange sorting numbers???
+        //    but headings etc. have no pos numbering!
+        //    so sorting by sorting should be the right thing to do - and this is done by loadData already! so out of order from db is already handled here!
+        //    pos numbering and sorting must be done right from importers and generators!
+
+        // this.applyNumbering();
     },
     getValue: function () {
         const data = [];
