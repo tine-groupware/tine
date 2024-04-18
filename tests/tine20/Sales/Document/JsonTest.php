@@ -32,6 +32,88 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $this->_instance = new Sales_Frontend_Json();
     }
 
+    public function testGetMatchingSharedOrderDocumentTransition()
+    {
+        $contractCtrl = Sales_Controller_Contract::getInstance();
+        $orderCtrl = Sales_Controller_Document_Order::getInstance();
+        $customer = $this->_createCustomer();
+
+        $contract1 = $contractCtrl->create(new Sales_Model_Contract([
+            'title' => 'contract1',
+        ], true));
+        $contract2 = $contractCtrl->create(new Sales_Model_Contract([
+            'title' => 'contract1',
+        ], true));
+
+        $postal1 = clone $customer->postal;
+        $postal1->{Sales_Model_Address::FLD_POSTALCODE} = 'unittest';
+
+        $commonFlds = [
+            SMDOrder::FLD_CUSTOMER_ID => $customer,
+            SMDOrder::FLD_ORDER_STATUS => SMDOrder::STATUS_ACCEPTED,
+            SMDOrder::FLD_SHARED_INVOICE => true,
+        ];
+        $orders = [
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $customer->postal,
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $customer->postal,
+            ]), true)),
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $customer->postal,
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $customer->postal,
+            ]), true)),
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $postal1,
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $postal1,
+            ]), true)),
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $customer->postal,
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $customer->postal,
+                SMDOrder::FLD_CONTRACT_ID => $contract1->getId(),
+            ]), true)),
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $postal1,
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $postal1,
+                SMDOrder::FLD_CONTRACT_ID => $contract1->getId(),
+            ]), true)),
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $customer->postal,
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $customer->postal,
+                SMDOrder::FLD_CONTRACT_ID => $contract2->getId(),
+            ]), true)),
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $customer->postal,
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $customer->postal,
+                SMDOrder::FLD_CONTRACT_ID => $contract2->getId(),
+            ]), true)),
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $postal1,
+                SMDOrder::FLD_INVOICE_RECIPIENT_ID => $postal1,
+                SMDOrder::FLD_CONTRACT_ID => $contract2->getId(),
+            ]), true)),
+        ];
+
+        $expectedResult = [
+            ['count' => 2, 'ids' => [$orders[0]->getId(), $orders[1]->getId()]],
+            ['count' => 2, 'ids' => [$orders[0]->getId(), $orders[1]->getId()]],
+            ['count' => 1, 'ids' => [$orders[2]->getId()]],
+            ['count' => 1, 'ids' => [$orders[3]->getId()]],
+            ['count' => 1, 'ids' => [$orders[4]->getId()]],
+            ['count' => 2, 'ids' => [$orders[5]->getId(), $orders[6]->getId()]],
+            ['count' => 2, 'ids' => [$orders[5]->getId(), $orders[6]->getId()]],
+            ['count' => 1, 'ids' => [$orders[7]->getId()]],
+        ];
+
+        foreach ($orders as $idx => $order) {
+            $result = $this->_instance->getMatchingSharedOrderDocumentTransition($order->getId(), Sales_Model_Document_Invoice::class);
+            $this->assertNotEmpty($result);
+            $this->assertCount($expectedResult[$idx]['count'], $result[Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS]);
+            foreach ($result[Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS] as $src) {
+                $this->assertContains($src[Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT]['id'], $expectedResult[$idx]['ids']);
+            }
+        }
+    }
+
     public function testOfferBoilerplates()
     {
         $customer = $this->_createCustomer();

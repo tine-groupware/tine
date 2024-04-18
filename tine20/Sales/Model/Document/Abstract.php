@@ -64,6 +64,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 
     public const FLD_REVERSAL_STATUS = 'reversal_status';
 
+    public const FLD_CONTRACT_ID = 'contract_id';
+
     // ORDER:
     //  - INVOICE_RECIPIENT_ID // abweichende Rechnungsadresse, RECIPIENT_ID wenn leer
     //  - INVOICE_CONTACT_ID // abweichender Rechnungskontakt, CONTACT_ID wenn leer
@@ -419,6 +421,15 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::NULLABLE                      => true,
                 self::QUERY_FILTER                  => true,
                 self::SHY                           => true,
+            ],
+            self::FLD_CONTRACT_ID               => [
+                self::TYPE                          => self::TYPE_RECORD,
+                self::LABEL                         => 'Contract', //_('Contract')
+                self::CONFIG                        => [
+                    self::APP_NAME                      => Sales_Config::APP_NAME,
+                    self::MODEL_NAME                    => Sales_Model_Contract::MODEL_NAME_PART,
+                ],
+                self::NULLABLE                      => true,
             ],
         ]
     ];
