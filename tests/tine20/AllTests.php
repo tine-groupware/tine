@@ -27,15 +27,16 @@ class AllTests
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 All Tests');
 
         $suites = array(
+            'Tasks',
             'Tinebase',
+            'Felamimail',
             'Addressbook',
+            'Calendar',
+            'Sales',
+            'Crm',
             'ActiveSync',
             'Admin',
             'Courses',
-            'Felamimail',
-            'Calendar',
-            'Crm',
-            'Tasks',
             'Voipmanager',
             'Phone',
             'Timetracker',
@@ -46,7 +47,6 @@ class AllTests
             'ExampleApplication',
             'SimpleFAQ',
             'CoreData',
-            'Sales',
             'Zend',
         );
 
