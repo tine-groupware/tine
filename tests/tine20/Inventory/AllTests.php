@@ -31,4 +31,9 @@ class Inventory_AllTests
         $suite->addTestSuite('Inventory_DoctrineModelTest');
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 3;
+    }
 }

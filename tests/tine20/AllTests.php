@@ -62,9 +62,31 @@ class AllTests
             }
         }
 
-        foreach ($suites as $i => $name) {
-            if ($i % $node_total === $node_index - 1) {
-                $className = $name . '_AllTests';
+
+        // for reproducibility, as suites may have the same estimated runtime, sort alphabetically first
+        sort($suites, SORT_STRING);
+        foreach ($suites as &$name) {
+            $name = $name . '_AllTests';
+        }
+
+        if ($node_total > 1) {
+            // sort by runtime, highest to lowest
+            $sortedSuites = [];
+            foreach ($suites as $className) {
+                if (method_exists($className, 'estimatedRunTime')) {
+                    $time = $className::estimatedRunTime();
+                } else {
+                    $time = 0;
+                }
+                $sortedSuites[$time][] = $className;
+            }
+            krsort($sortedSuites, SORT_NUMERIC);
+
+            $suites = array_merge(...$sortedSuites);
+        }
+
+        foreach ($suites as $i => $className) {
+            if ($i % $node_total === $node_index - 1) {;
                 $suite->addTest($className::suite());
             }
         }
