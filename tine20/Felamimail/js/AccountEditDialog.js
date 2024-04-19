@@ -273,7 +273,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.asAdminModule) {
             return Tine.Tinebase.common.hasRight('manage_emailaccounts', 'Admin');
         } else {
-            if (account.data?.type === 'shared') {
+            if (account.data?.type === 'shared' || account.data?.type === 'adblist') {
                 return account.data?.account_grants?.editGrant;
             }
             return true;

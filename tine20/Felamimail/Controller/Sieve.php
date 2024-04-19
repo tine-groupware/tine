@@ -266,7 +266,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     protected function _checkAccountEditGrant($account)
     {
         if ($this->_doAclCheck) {
-            if ($account->type === Felamimail_Model_Account::TYPE_SHARED) {
+            if ($account->type === Felamimail_Model_Account::TYPE_SHARED 
+                || $account->type === Felamimail_Model_Account::TYPE_ADB_LIST
+            ) {
                 Felamimail_Controller_Account::getInstance()->checkGrantForSharedAccount($account,
                     Felamimail_Model_AccountGrants::GRANT_EDIT);
             } else if ($account->user_id !== Tinebase_Core::getUser()->getId()) {
