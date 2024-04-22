@@ -2974,13 +2974,13 @@ Steuernummer 33/111/32212";
         static::assertEquals(1, $result['totalcount'], 'no results found');
         static::assertEquals($list['email'], $result['results'][0]['email']);
 
-        // Felamimail searchAccounts should not return mailinglist
+        // Felamimail searchAccounts should return mailinglist too
         $ffj = new Felamimail_Frontend_Json();
         $result = $ffj->searchAccounts([], []);
         $listaccounts = array_filter($result['results'], function ($account) {
             return $account['type'] === Felamimail_Model_Account::TYPE_ADB_LIST;
         });
-        self::assertEquals(0, count($listaccounts), 'found adb list account(s): '
+        self::assertEquals(1, count($listaccounts), 'found adb list account(s): '
             . print_r($listaccounts, true));
     }
 

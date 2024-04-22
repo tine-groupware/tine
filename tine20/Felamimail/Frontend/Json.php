@@ -581,6 +581,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     Felamimail_Model_Account::TYPE_SHARED,
                     Felamimail_Model_Account::TYPE_USER_INTERNAL,
                     Felamimail_Model_Account::TYPE_SYSTEM,
+                    Felamimail_Model_Account::TYPE_ADB_LIST,
                 ])) {
                 unset($accounts[$idx]);
                 continue;
@@ -591,6 +592,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 Felamimail_Model_Account::TYPE_USER,
                 Felamimail_Model_Account::TYPE_USER_INTERNAL,
                 Felamimail_Model_Account::TYPE_SYSTEM,
+                Felamimail_Model_Account::TYPE_ADB_LIST,
             ])) {
                 // remove ADB list type from result set
                 unset($accounts[$idx]);
