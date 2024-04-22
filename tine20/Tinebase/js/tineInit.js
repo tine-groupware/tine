@@ -909,6 +909,18 @@ Tine.Tinebase.tineInit = {
             }
         });
     },
+    
+    getRegistryDB() {
+        if (!this.registryDB) {
+            this.registryDB = localforage.createInstance({
+                driver: localforage.INDEXEDDB, // or use localforage.WEBSQL or localforage.LOCALSTORAGE
+                name: Tine.Tinebase.tineInit.lsPrefix + '.registry', // optional
+                version: 1.0, // optional
+                storeName: 'registry', // optional
+            });
+        }
+        return this.registryDB;
+    },
 
     /**
      * init registry
@@ -918,27 +930,18 @@ Tine.Tinebase.tineInit = {
      * @param {Object} scope
      */
     initRegistry: async function (forceReload, cb, scope) {
-
-        localforage.config({
-            driver: localforage.INDEXEDDB, // or use localforage.WEBSQL or localforage.LOCALSTORAGE
-            name: Tine.Tinebase.tineInit.lsPrefix + '.registry', // optional
-            version: 1.0, // optional
-            storeName: 'registry', // optional
-        });
-
-        // todo: find store clean up / delete all as its not longer neede (common.js => reload?)
-
-        const registryData =  await localforage.getItem('data');
+        const registryDB = this.getRegistryDB();
+        const registryData =  await registryDB.getItem('data');
         Tine.Tinebase.registry = new Ext.util.MixedCollection();
         Tine.Tinebase.registry.addAll(registryData?.Tinebase || {});
         const version = Tine.Tinebase.registry.get('version');
         const userApplications = Tine.Tinebase.registry.get('userApplications') || [];
-        const reloadNeeded =
-            !version
+        const reloadNeeded = !version
             || !userApplications
             || userApplications.length < 2;
-
+        
         if (forceReload || reloadNeeded) {
+            await this.clearRegistry();
             Ext.Ajax.request({
                 timeout: 120000, // 2 minutes
                 params: {
@@ -951,7 +954,6 @@ Tine.Tinebase.tineInit = {
                             clearCache: true
                         });
                     }
-
                     // if registry could not be loaded, this is mostly due to misconfiguration
                     // don't send error reports for that!
                     Tine.Tinebase.ExceptionHandler.handleRequestException({
@@ -959,56 +961,28 @@ Tine.Tinebase.tineInit = {
                     });
                 },
                 success: async function (response, request) {
-                    var registryData = Ext.util.JSON.decode(response.responseText);
+                    const registryData = Ext.util.JSON.decode(response.responseText);
                     if (Tine.Tinebase.tineInit.checkServerUpdateRequired(registryData)) {
                         return;
                     }
-                    await localforage.setItem('data', registryData)
-                    for (var app in registryData) {
-                        if (registryData.hasOwnProperty(app)) {
-                            var appData = registryData[app];
-                            Ext.ns('Tine.' + app);
-                            Tine[app].registry = new Ext.util.MixedCollection();
-
-                            for (var key in appData) {
-                                if (appData.hasOwnProperty(key)) {
-                                    if (key === 'preferences') {
-                                        Tine[app].preferences = new Ext.util.MixedCollection();
-                                        Tine[app].registry.set(key, Tine[app].preferences);
-                                        for (var pref in appData[key]) {
-                                            if (appData[key].hasOwnProperty(pref)) {
-                                                Tine[app].preferences.set(pref, appData[key][pref]);
-                                            }
-                                        }
-
-                                    } else {
-                                        Tine[app].registry.set(key, appData[key]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // check outdated client
-                    await new Promise((resolve) => {
-                        Ext.Ajax.request({
-                            timeout: 120000, // 2 minutes
-                            params: {
-                                method: 'Tinebase.ping'
-                            },
-                            callback: (request, success, response) => {
-                                try {
-                                    if (success && JSON.parse(response.responseText) === 'ack') return resolve();
-                                } catch (e) {
-                                }
-                                Tine.Tinebase.common.reload({
-                                    keepRegistry: false,
-                                    clearCache: true
+                    await registryDB.setItem('data', registryData)
+                    Object.keys(registryData).forEach(app => {
+                        const appData = registryData[app];
+                        Ext.ns('Tine.' + app);
+                        Tine[app].registry = new Ext.util.MixedCollection();
+                        Object.keys(appData).forEach(key => {
+                            if (key === 'preferences') {
+                                Tine[app].preferences = new Ext.util.MixedCollection();
+                                Tine[app].registry.set(key, Tine[app].preferences);
+                                Object.keys(appData[key]).forEach(pref => {
+                                    Tine[app].preferences.set(pref, appData[key][pref]);
                                 });
+                            } else {
+                                Tine[app].registry.set(key, appData[key]);
                             }
                         });
                     });
-
+                    
                     Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
                         Ext.util.CSS.refreshCache();
                         if (Ext.isFunction(cb)) {
@@ -1016,9 +990,30 @@ Tine.Tinebase.tineInit = {
                         }
                     });
                 }
-            });
+            })
         } else {
-            for (var app,i=0;i<userApplications.length;i++) {
+            if (window.isMainWindow) {
+                await new Promise((resolve) => {
+                    Ext.Ajax.request({
+                        timeout: 120000, // 2 minutes
+                        params: {
+                            method: 'Tinebase.ping'
+                        },
+                        callback: (request, success, response) => {
+                            try {
+                                if (success && JSON.parse(response.responseText) === 'ack') return resolve();
+                            } catch (e) {
+                            }
+                            Tine.Tinebase.common.reload({
+                                keepRegistry: false,
+                                clearCache: true
+                            });
+                        }
+                    });
+                });
+            }
+            
+            for (let app,i=0;i<userApplications.length;i++) {
                 app = userApplications[i].name;
                 Ext.ns('Tine.' + app);
                 Tine[app].registry = new Ext.util.MixedCollection();
@@ -1026,10 +1021,8 @@ Tine.Tinebase.tineInit = {
                 Tine[app].preferences = new Ext.util.MixedCollection();
                 Tine[app].preferences.addAll(registryData[app].preferences);
                 Tine[app].registry.add('preferences', Tine[app].preferences);
-
             }
-
-
+            
             Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
                 Ext.util.CSS.refreshCache();
                 if (Ext.isFunction(cb)) {
@@ -1190,16 +1183,7 @@ Tine.Tinebase.tineInit = {
      */
     clearRegistry: async function() {
         Tine.log.info('tineInit::clearRegistry');
-
-        localforage.config({
-            driver: localforage.INDEXEDDB, // or use localforage.WEBSQL or localforage.LOCALSTORAGE
-            name: Tine.Tinebase.tineInit.lsPrefix + '.registry', // optional
-            version: 1.0, // optional
-            storeName: 'registry', // optional
-        });
-
-        await localforage.clear();
-        // @TODO clear all registry (MixedCollections) as well?
+        await this.getRegistryDB().clear();
     },
 
     /**
