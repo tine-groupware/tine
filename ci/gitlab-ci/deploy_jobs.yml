@@ -53,24 +53,25 @@ deploy-dev-image-to-dockerhub-arm64:
     - if: $DEPLOY_DEV_IMAGE_TO_DOCKERHUB_ARM64 == "true"
     - if: $PIPELINE_TYPE =~ /build-dev-images/
 
-.deploy-built-image-to-dockerhub:
+
+
+
+deploy-built-image-to-dockerhub:
   extends: .abstract_jobs.docker
   stage: deploy
   script:
     - !reference [.lib, script]
-    - docker_hub_deploy_with_tag built tine
+    - docker login -u "${DOCKERHUB_USER}" -p "${DOCKERHUB_TOKEN}" "docker.io"
+    - docker_registry_release_image built docker.io/tinegroupware/tine $LATEST
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-built-image-to-dockerhub/
       when: manual
-    - if: $CI_COMMIT_TAG
+    - if: $PIPELINE_TYPE =~ /release-be/
+      variables:
+        LATEST: "true"
+    - if: $PIPELINE_TYPE =~ /release-weekly/
   timeout: 20m
   interruptible: false
-deploy-built-image-to-dockerhub:
-  extends: .deploy-built-image-to-dockerhub
-  rules:
-    - if: ($BASE_MAJOR_COMMIT_REF_NAME != "2023.11" && $BASE_MAJOR_COMMIT_REF_NAME != "2024.11") || $CUSTOMER_MAJOR_COMMIT_REF_NAME != ""
-      when: never
-    - !reference [.deploy-built-image-to-dockerhub, rules]
 
 deploy-customer-image-to-registry:
   extends: .abstract_jobs.docker
@@ -78,14 +79,15 @@ deploy-customer-image-to-registry:
   script:
     - !reference [.lib, script]
     - docker login --username $CUSTOMER_IMAGE_REGISTRY_USERNAME --password $CUSTOMER_IMAGE_REGISTRY_PASSWORD $CUSTOMER_IMAGE_REGISTRY_REPO
-    - docker_registry_release_image built "$CUSTOMER_IMAGE_REGISTRY_REPO" "$DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY_SET_LATEST"
+    - docker_registry_release_image built "$CUSTOMER_IMAGE_REGISTRY_REPO" true
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /deploy-customer-image-to-registry/
       when: manual
-    - if: $DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY == "true" && $CI_COMMIT_TAG
+    - if: $PIPELINE_TYPE =~ /release-customer/ &&  $DEPLOY_CUSTOMER_IMAGE_TO_REGISTRY == "true"
   timeout: 20m
   interruptible: false
 
+# creates a gitlab release - some text, changelog and link to the local packages
 release-to-gitlab:
   extends: .abstract_jobs.docker
   variables:
@@ -105,6 +107,7 @@ release-to-gitlab:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-to-gitlab/
       when: manual
     - if: $PIPELINE_TYPE =~ /release-be/
+    - if: $PIPELINE_TYPE =~ /release-lts/
     - if: $PIPELINE_TYPE =~ /release-weekly/
     - if: $PIPELINE_TYPE =~ /release-monthly/
     - if: $PIPELINE_TYPE =~ /release-customer/
@@ -125,14 +128,15 @@ release-packages-to-vpackages:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-vpackages/
       when: manual
-    - if: $PIPELINE_TYPE =~ /release-be/ && $BASE_MAJOR_COMMIT_REF_NAME == "2023.11"
+    - if: $PIPELINE_TYPE =~ /release-be/
       variables:
         CREATE_CURRENT_LINK: "true"
-    - if: $PIPELINE_TYPE =~ /release-be/
+    - if: $PIPELINE_TYPE =~ /release-lts/
     - if: $PIPELINE_TYPE =~ /release-customer/ && $PUSH_TO_VPACKAGES == "true"
   timeout: 20m
   interruptible: false
 
+# only set current link - packages where already pushed by the packaging job
 release-packages-to-gitlab:
   extends: .abstract_jobs.docker          
   stage: deploy
@@ -142,12 +146,12 @@ release-packages-to-gitlab:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-gitlab/
       when: manual
-    - if: $PIPELINE_TYPE =~ /release-be/ && $BASE_MAJOR_COMMIT_REF_NAME == "2023.11"
-    # - if: $PIPELINE_TYPE =~ /release-be/ packages where already pushed by the build, here only the current link is updated
+    - if: $PIPELINE_TYPE =~ /release-be/
     - if: $PIPELINE_TYPE =~ /release-customer/
   timeout: 20m
   interruptible: false
 
+# creates a github release - some text, changelog, packages
 release-packages-to-github:
   extends: .abstract_jobs.docker
   stage: deploy
@@ -157,10 +161,23 @@ release-packages-to-github:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
       when: manual
-    - if: $PIPELINE_TYPE =~ /release-be/ && $BASE_MAJOR_COMMIT_REF_NAME == "2023.11"
-    - if: $PIPELINE_TYPE =~ /release-weekly/
+    - if: $PIPELINE_TYPE =~ /release-be/
+    - if: $PIPELINE_TYPE =~ /release-weekly/ # should/is only be pushed as pre release
   timeout: 20m
   interruptible: false
+
+update-version-check:
+  stage: deploy
+  variables:
+    TRIGGER_JOBS: update-version
+    PACKAGE_STRING: ${CI_COMMIT_TAG}
+    CODE_NAME: ${CODENAME}
+  trigger:
+    project: tine20/versionCheck
+    strategy: depend
+    branch: master
+  rules:
+    - if: $PIPELINE_TYPE =~ /release-be/
 
 trigger-release:
   stage: deploy

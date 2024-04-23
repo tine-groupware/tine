@@ -26,4 +26,9 @@ class Projects_AllTests
         $suite->addTestSuite('Projects_JsonTest');
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 5;
+    }
 }

@@ -23,4 +23,9 @@ class Courses_AllTests
         $suite->addTestSuite(Courses_ImportTest::class);
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 101;
+    }
 }

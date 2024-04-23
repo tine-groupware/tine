@@ -47,5 +47,10 @@ class Calendar_AllTests
 
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 358;
+    }
 }
 

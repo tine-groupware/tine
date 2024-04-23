@@ -30,4 +30,9 @@ class OnlyOfficeIntegrator_AllTests
 
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 179;
+    }
 }

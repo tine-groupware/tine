@@ -34,4 +34,9 @@ class Admin_AllTests
         $suite->addTestSuite(Admin_Frontend_AllTests::class);
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 341;
+    }
 }
