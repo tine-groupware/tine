@@ -82,6 +82,12 @@ kann man ihn z.B. mit 'docker ps'):
 docker exec --user tine20 tine-docker_web_1 sh -c "php /usr/share/tine20/setup.php --config=/etc/tine20 --update"
 ```
 
+Falls dieser Fehler erscheint:
+
+    "Tinebase_Exception -> waited for Action Queue to become empty for more than 300 sec"
+
+Sollte geprüft werden, ob noch Jobs in der Queue sind und/oder man startet das Update mit dem Schalter `skipQueueCheck=1`.
+
 ## SSL / Reverse Proxy
 
 Um den tine-Container "von aussen" verfügbar zu machen, kann man einen NGINX, Traefik oder HAProxy davorschalten.
