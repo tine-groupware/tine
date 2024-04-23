@@ -86,10 +86,9 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 allowBlank: false
                             }], [{
                                 columnWidth: 1,
-                                xtype: 'textfield',
+                                xtype: 'mirrortextfield',
                                 fieldLabel: this.app.i18n._('E-Mail'),
                                 name: 'email',
-                                vtype: 'email',
                                 maxLength: 255,
                                 allowBlank: true,
                                 checkState: function (editDialog, field) {
@@ -97,8 +96,12 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                         const checked = editDialog.mailingListPanel.isMailinglistCheckbox.checked;
                                         const field = editDialog.getForm().findField('email');
                                         field.setVisible(checked);
+                                        field.validate();
                                         editDialog.doLayout();
                                     }
+                                },
+                                validator: function (value) {
+                                    return Tine.Tinebase.common.checkEmailDomain(value);
                                 },
                                 disabled: ! Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook'),
                             }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
@@ -242,10 +245,11 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.sysGroupNote.setText(isSysGroup ?
             this.app.i18n._("This is a system group. To edit this group you need the Admin.ManageAccounts right.") : '');
-
+        this.sysGroupNote.setVisible(isSysGroup);
+            
         ['name', 'description', 'email', 'account_only'].forEach((fieldName) => {this.getForm().findField(fieldName).setReadOnly(!allowEditSysFields)});
         this.memberGridPanel.setReadOnly(!allowEditSysFields);
-        this.mailingListPanel?.setReadOnly(!allowEditSysFields);
+        this.mailingListPanel?.setReadOnly(!this.mailingListPanel?.isMailingList || !allowEditSysFields);
         this.doLayout();
     }
 });
