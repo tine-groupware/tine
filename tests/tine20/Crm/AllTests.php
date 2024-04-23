@@ -23,4 +23,9 @@ class Crm_AllTests
         $suite->addTestSuite('Crm_Import_CsvTest');
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 18;
+    }
 }

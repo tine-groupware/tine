@@ -118,11 +118,6 @@
           docker tag "${FROM_IMAGE}" "${DESTINATION_IMAGE}"
           docker push "${DESTINATION_IMAGE}"
       }
-      
-      docker_hub_deploy_with_tag () {
-          docker_hub_deploy $1 $2 $CI_COMMIT_TAG
-          docker_hub_deploy $1 $2 $(echo $CI_COMMIT_TAG | cut -d '.' -f 1)
-      }
 
       # lib/scripts/docker_image_hash.sh
       _longest_common_prefix() {
@@ -1158,11 +1153,6 @@
             docker pull "${FROM_IMAGE}"
             docker tag "${FROM_IMAGE}" "${DESTINATION_IMAGE}"
             docker push "${DESTINATION_IMAGE}"
-        }
-        
-        docker_hub_deploy_with_tag () {
-            docker_hub_deploy $1 $2 $CI_COMMIT_TAG
-            docker_hub_deploy $1 $2 $(echo $CI_COMMIT_TAG | cut -d '.' -f 1)
         }
 
         # lib/scripts/docker_image_hash.sh

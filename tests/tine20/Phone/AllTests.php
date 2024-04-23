@@ -29,4 +29,9 @@ class Phone_AllTests
         $suite->addTestSuite('Phone_Call_ControllerTest');
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 7;
+    }
 }

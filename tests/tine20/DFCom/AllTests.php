@@ -25,4 +25,9 @@ class DFCom_AllTests
         $suite->addTestSuite(DFCom_RecordHandler_TimeAccountingTest::class);
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 12;
+    }
 }
