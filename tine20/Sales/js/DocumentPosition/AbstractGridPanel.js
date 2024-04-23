@@ -64,7 +64,8 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.enableDragDrop = true;
         this.ddGroup = this.recordClass.getRecordName();
         this.plugins = [new DDSortPlugin({
-            ddSortCol: this.ddSortCol
+            ddSortCol: this.ddSortCol,
+            onAfterSort: this.onAfterManualSort.createDelegate(this)
         })];
 
         this.editDialogConfig = this.editDialogConfig || {};
@@ -181,6 +182,10 @@ const AbstractGridPanel = Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             this.fireEvent('change', this)
         });
         return false;
+    },
+
+    onAfterManualSort() {
+        this.applyNumbering();
     },
 
     applySorting: DDSortPlugin.prototype.applySorting,
