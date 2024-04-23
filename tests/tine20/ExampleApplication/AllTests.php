@@ -30,4 +30,9 @@ class ExampleApplication_AllTests
         $suite->addTestSuite('ExampleApplication_ControllerTest');
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 1;
+    }
 }

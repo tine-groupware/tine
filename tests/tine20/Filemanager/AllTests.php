@@ -29,4 +29,9 @@ class Filemanager_AllTests
 
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 160;
+    }
 }

@@ -37,4 +37,9 @@ class HumanResources_AllTests
         $suite->addTestSuite(HumanResources_Controller_FreeTimeTests::class);
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 271;
+    }
 }

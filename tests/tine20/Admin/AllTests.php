@@ -35,4 +35,9 @@ class Admin_AllTests
         $suite->addTestSuite(Admin_Export_UserTest::class);
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 341;
+    }
 }

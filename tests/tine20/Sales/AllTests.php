@@ -44,4 +44,9 @@ class Sales_AllTests
 
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 162;
+    }
 }
