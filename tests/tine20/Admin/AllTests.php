@@ -38,6 +38,6 @@ class Admin_AllTests
 
     public static function estimatedRunTime()
     {
-        return 539;
+        return 566;
     }
 }
