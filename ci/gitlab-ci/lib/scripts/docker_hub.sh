@@ -13,8 +13,3 @@ docker_hub_deploy () {
     docker tag "${FROM_IMAGE}" "${DESTINATION_IMAGE}"
     docker push "${DESTINATION_IMAGE}"
 }
-
-docker_hub_deploy_with_tag () {
-    docker_hub_deploy $1 $2 $CI_COMMIT_TAG
-    docker_hub_deploy $1 $2 $(echo $CI_COMMIT_TAG | cut -d '.' -f 1)
-}
