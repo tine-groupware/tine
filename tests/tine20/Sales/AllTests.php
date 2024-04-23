@@ -47,6 +47,6 @@ class Sales_AllTests
 
     public static function estimatedRunTime()
     {
-        return 162;
+        return 45;
     }
 }

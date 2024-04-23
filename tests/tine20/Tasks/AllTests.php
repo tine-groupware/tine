@@ -37,6 +37,6 @@ class Tasks_AllTests
 
     public static function estimatedRunTime()
     {
-        return 5;
+        return 8;
     }
 }

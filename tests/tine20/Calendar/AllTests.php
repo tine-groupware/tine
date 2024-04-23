@@ -50,7 +50,7 @@ class Calendar_AllTests
 
     public static function estimatedRunTime()
     {
-        return 358;
+        return 368;
     }
 }
 

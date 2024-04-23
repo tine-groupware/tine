@@ -46,6 +46,6 @@ class Addressbook_AllTests
 
     public static function estimatedRunTime()
     {
-        return 93;
+        return 66;
     }
 }

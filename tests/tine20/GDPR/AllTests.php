@@ -32,6 +32,6 @@ class GDPR_AllTests
 
     public static function estimatedRunTime()
     {
-        return 2;
+        return 7;
     }
 }

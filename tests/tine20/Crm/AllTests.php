@@ -26,6 +26,6 @@ class Crm_AllTests
 
     public static function estimatedRunTime()
     {
-        return 37;
+        return 18;
     }
 }

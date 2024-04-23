@@ -32,6 +32,6 @@ class Filemanager_AllTests
 
     public static function estimatedRunTime()
     {
-        return 160;
+        return 104;
     }
 }

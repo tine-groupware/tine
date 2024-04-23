@@ -26,6 +26,6 @@ class Courses_AllTests
 
     public static function estimatedRunTime()
     {
-        return 101;
+        return 60;
     }
 }

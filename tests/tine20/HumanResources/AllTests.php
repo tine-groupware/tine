@@ -40,6 +40,6 @@ class HumanResources_AllTests
 
     public static function estimatedRunTime()
     {
-        return 271;
+        return 243;
     }
 }

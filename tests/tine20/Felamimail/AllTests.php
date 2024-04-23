@@ -60,6 +60,6 @@ class Felamimail_AllTests
 
     public static function estimatedRunTime()
     {
-        return 512;
+        return 323;
     }
 }
