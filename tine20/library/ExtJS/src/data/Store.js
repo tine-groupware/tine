@@ -1377,7 +1377,7 @@ myStore.reload(lastOptions);
     sortData : function(f, direction){
         direction = direction || 'ASC';
         var st = this.fields.get(f).sortType;
-        var locale = Tine.Tinebase.registry.get('locale').locale;
+        var locale = String(Tine.Tinebase.registry.get('locale').locale).substring(0,2);
         var fn = st !== Ext.data.SortTypes.asUCString ? function(r1, r2){
             var v1 = st(r1.data[f]), v2 = st(r2.data[f]);
             return v1 > v2 ? 1 : (v1 < v2 ? -1 : 0);
