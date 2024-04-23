@@ -2187,3 +2187,6 @@ msgid ""
 msgstr ""
 "Die Empfänger dieses Email-Verteilers werden in folgnder Liste verwaltet: "
 "{locationsHtml}"
+
+msgid "Selected E-Mail"
+msgstr "Ausgewählte E-Mail"

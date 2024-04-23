@@ -38,7 +38,25 @@ export default (config) => {
         const name = `${_.padStart( String(idx), 3, '0')}_${field.fieldName}`;
         config.propertyNames[name] = editor.fieldLabel;
         config.customEditors[name] = new Ext.grid.GridEditor(Ext.create(editor));
-        config.customRenderers[name] = Tine.widgets.grid.RendererManager.get(app.appName, config.recordClass, field.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+        config.customRenderers[name] =  (value, metaData, record) => {
+            const renderer = Tine.widgets.grid.RendererManager.get(app.appName, config.recordClass, field.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+            const isPreferred = isPreferredField(field.fieldName);
+
+            if (isPreferred) {
+                const el = document.createElement('div');
+                el.className = 'tinebase-property-field';
+
+                const renderedEl =  document.createElement('div');
+                renderedEl.innerHTML = renderer(value, metaData, record);
+                const preferredIconEl =  document.createElement('div');
+                preferredIconEl.className = `tine-combo-icon renderer_PreferredIcon`;
+                preferredIconEl.setAttribute('ext:qtip',  app.i18n._('Preferred'));
+                el.append(renderedEl, preferredIconEl);
+                return el.outerHTML;
+            }
+
+            return renderer(value, metaData, record);
+        }
     });
 
     // config.isValid = function() {
@@ -66,6 +84,17 @@ export default (config) => {
     // config.setValue = Ext.emptyFn;
     // config.validate = function() { return this.isValid(); };
 
+    const isPreferredField = (fieldName) => {
+        let result = false;
+        const editDialog = propertyGrid.findParentBy(function (c) { return c instanceof Tine.widgets.dialog.EditDialog});
+        ['preferred_email', 'preferred_address'].forEach((preferred_field) => {
+            if (editDialog.record.get(preferred_field) === fieldName) {
+                result = true;
+            }
+        })
+        return result;
+    }
+
     const propertyGrid = new Ext.grid.PropertyGrid(Object.assign({
         border: false,
         hideHeaders: true,
@@ -82,6 +111,7 @@ export default (config) => {
         });
         editDialog.on('load', onRecordLoad);
         editDialog.on('recordUpdate', onRecordUpdate);
+        propertyGrid.on('cellclick', onClick);
 
         // NOTE: in case we are rendered after record was load
         onRecordLoad(editDialog, editDialog.record);
@@ -97,7 +127,6 @@ export default (config) => {
             }
             return source;
         }, {}));
-
     };
 
     const onRecordUpdate = (editDialog, record) => {
@@ -105,6 +134,30 @@ export default (config) => {
             const fieldName = name.replace(/^\d{3}_/, '');
             record.set(fieldName, value);
         });
+    };
+
+    const onClick = (e, row, c, d) => {
+        const record = propertyGrid.store.getAt(row);
+        const fieldName = record.data.name.replace(/^\d{3}_/, '');
+        const value = record.data.value;
+        const isPreferred = isPreferredField(fieldName);
+        const emailFields = Tine.Addressbook.Model.EmailAddress.prototype.getEmailFields().map((f) => f.fieldName);
+        if (value && c === 0 && emailFields.includes(fieldName)) {
+            const ctxMenu = new Ext.menu.Menu({
+                items: [new Ext.Action({
+                    text: app.i18n._('Set as preferred E-Mail'),
+                    iconCls: isPreferred ? 'action_enable' : '',
+                    handler: async (item) => {
+                        const editDialog = propertyGrid.findParentBy(function (c) { return c instanceof Tine.widgets.dialog.EditDialog});
+                        if (fieldName.includes('email')) {
+                            editDialog.record.set('preferred_email', fieldName);
+                            propertyGrid.getView().refresh();
+                        }
+                    },
+                })]
+            });
+            ctxMenu.showAt(d.getXY());
+        }
     };
 
     return propertyGrid;

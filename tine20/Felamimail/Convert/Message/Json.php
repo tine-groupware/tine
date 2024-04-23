@@ -128,7 +128,7 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
                         "name" => $parsedEmail["name"] ?? '',
                         "type" =>  '',
                         "n_fileas" => '',
-                        "email_type" =>  '',
+                        "email_type_field" =>  '',
                         "contact_record" => ''
                     ];
                     

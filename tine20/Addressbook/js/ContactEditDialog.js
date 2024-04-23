@@ -261,7 +261,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                     recordClass: this.recordClass,
                     fields: _.sortBy(_.filter(this.recordClass.getModelConfiguration().fields,field => {
                         return field.specialType?.match(/^Addressbook_Model_ContactProperties_(Url|InstantMessenger)/) && !field.disabled;
-
                     }).concat(
                         _.find(this.recordClass.getModelConfiguration().fields, {fieldName: 'language'})
                     ), ['uiconfig.order'])
@@ -551,7 +550,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         
         this.supr().onRecordLoad.apply(this, arguments);
         
-        if(Tine.Tinebase.registry.get('currentAccount').contact_id == this.record.id) {
+        if(Tine.Tinebase.registry.get('currentAccount').contact_id === this.record.id) {
             this.enableOwnPrivateFields();
         }
     },

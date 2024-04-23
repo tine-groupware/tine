@@ -831,7 +831,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             const name =  this.replyTo.get('from_name');
             this.to = [{
                 'email': email ?? '',
-                'email_type': '',
+                'email_type_field': '',
                 'type': '',
                 'n_fileas': '',
                 'name': name !== email ? name : '',

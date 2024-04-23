@@ -1076,7 +1076,7 @@ Tine.Felamimail.getSignature = function(account = null, signatureRecord = null) 
  */
 Tine.Felamimail.getEmailStringFromContact = function(contact) {
     var result = contact.get('n_fileas') + ' <';
-    result += contact.getPreferredEmail();
+    result += contact.getPreferredEmail().email;
     result += '>';
     
     return result;
