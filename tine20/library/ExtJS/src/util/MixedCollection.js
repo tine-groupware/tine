@@ -69,6 +69,14 @@ Ext.extend(Ext.util.MixedCollection, Ext.util.Observable, {
      */
     allowFunctions : false,
 
+    // backward compatibility to store.js
+    set: function(key, o) {
+        this.add(key, o);
+    },
+    getAll: function() {
+        return this.map;
+    },
+
     /**
      * Adds an item to the collection. Fires the {@link #add} event when complete.
      * @param {String} key <p>The key to associate with the item, or the new item.</p>
