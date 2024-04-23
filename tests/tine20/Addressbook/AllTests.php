@@ -43,4 +43,9 @@ class Addressbook_AllTests
 //         $suite->addTestSuite(Addressbook_Setup_DemoDataTests::class);
         return $suite;
     }
+
+    public static function estimatedRunTime()
+    {
+        return 66;
+    }
 }
