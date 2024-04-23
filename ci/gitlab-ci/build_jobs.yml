@@ -29,7 +29,7 @@ docker_build_built:
     - !reference [.php-unit-nogitlabci-tests-built, rules]
     - !reference [docker_build_packages, rules]
     - !reference [deploy-customer-image-to-registry, rules]
-    - !reference [.deploy-built-image-to-dockerhub, rules]
+    - !reference [deploy-built-image-to-dockerhub, rules]
   timeout: 120m
   interruptible: true
 # docker_build_built_arm64:
