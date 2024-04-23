@@ -81,6 +81,12 @@ Use this command to update tine:
 docker exec --user tine20 tine-docker_web_1 sh -c "php /usr/share/tine20/setup.php --config=/etc/tine20 --update"
 ```
 
+If you see this error during the update:
+
+    "Tinebase_Exception -> waited for Action Queue to become empty for more than 300 sec"
+
+You should check why there are still jobs in the ActionQueue and/or run the update with `skipQueueCheck=1`. 
+
 ## SSL / Reverse Proxy
 
 ### NGINX
