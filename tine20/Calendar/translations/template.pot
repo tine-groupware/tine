@@ -2590,3 +2590,6 @@ msgstr ""
 
 msgid "The container already exists"
 msgstr ""
+
+msgid "Save in calendar without response"
+msgstr ""
