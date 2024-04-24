@@ -53,8 +53,10 @@ class Sales_Config extends Tinebase_Config_Abstract
      * How should the contract number be created
      * @var string
      */
-    const PRODUCT_NUMBER_GENERATION = 'productNumberGeneration';
-    
+    public const PRODUCT_NUMBER_GENERATION = 'productNumberGeneration';
+    public const PRODUCT_NUMBER_GENERATION_AUTO = 'auto';
+    public const PRODUCT_NUMBER_GENERATION_MANUAL = 'manual';
+
     /**
      * How should the contract number be validated
      * 
@@ -889,12 +891,13 @@ class Sales_Config extends Tinebase_Config_Abstract
                                    //_('Should the product number be set manually or be auto-created?')
             'description'           => 'Should the product number be set manually or be auto-created?',
             'type'                  => 'string',
-                                    // _('automatically')
-                                    // _('manually')
-            'options'               => array(array('auto', 'automatically'), array('manual', 'manually')),
+            'options'               => [
+                [self::PRODUCT_NUMBER_GENERATION_AUTO, 'automatically'], // _('automatically')
+                [self::PRODUCT_NUMBER_GENERATION_MANUAL, 'manually'] // _('manually')
+            ],
             'clientRegistryInclude' => TRUE,
             'setByAdminModule'      => TRUE,
-            'default'               => 'auto'
+            'default'               => self::PRODUCT_NUMBER_GENERATION_AUTO
         ),
         self::PRODUCT_NUMBER_VALIDATION => array(
                                    //_('Product Number Validation')
