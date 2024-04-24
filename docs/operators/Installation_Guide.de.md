@@ -207,3 +207,7 @@ Wenn man möchte, kann man Custom-Configs (via conf.d) ebenfalls als eigenes Vol
 ``` yaml title="docker-compose.yml"
 --8<-- "docs/operators/docker/docker-compose.yml"
 ```
+
+## Ansible Rolle für Deployments
+
+https://github.com/tine-groupware/tine/tree/main/scripts/ansible/roles/tinedockercompose

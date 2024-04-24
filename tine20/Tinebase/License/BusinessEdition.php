@@ -138,6 +138,8 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
         $caFiles = array(
             __DIR__ . '/cacert.pem',
             __DIR__ . '/cacert20150305.pem',
+            __DIR__ . '/cacert20240117.pem',
+            __DIR__ . '/cacert20240311.pem',
         );
 
         foreach ($caFiles as $index => $file) {

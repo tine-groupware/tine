@@ -198,3 +198,7 @@ Please note that the tine container needs to access the backup/dump files, so it
 ``` yaml title="docker-compose.yml"
 --8<-- "docs/operators/docker/docker-compose.yml"
 ```
+
+## Ansible Role For Deployments
+
+https://github.com/tine-groupware/tine/tree/main/scripts/ansible/roles/tinedockercompose

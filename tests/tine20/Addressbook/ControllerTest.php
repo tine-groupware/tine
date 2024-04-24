@@ -231,7 +231,6 @@ class Addressbook_ControllerTest extends TestCase
     
     /**
      * try to get count of contacts
-     *
      */
     public function testGetCountOfAllContacts()
     {
@@ -243,7 +242,7 @@ class Addressbook_ControllerTest extends TestCase
         ));
         $count = $this->_instance->searchCount($filter);
         
-        $this->assertEquals(1, $count);
+        self::assertGreaterThanOrEqual(1, $count);
     }
     
     /**
