@@ -92,8 +92,7 @@ abstract class Sales_Controller_NumberableAbstract extends Tinebase_Controller_R
             $filterArray[] = array('field' => 'id', 'operator' => 'notin', 'value' => $record->getId());
         }
         
-        $filterName = $this->_modelName . 'Filter';
-        $filter = new $filterName($filterArray);
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel($this->_modelName, $filterArray);
         $existing = $this->search($filter);
         
         if (count($existing->toArray()) > 0) {
