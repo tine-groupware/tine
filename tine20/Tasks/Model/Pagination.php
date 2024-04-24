@@ -16,12 +16,13 @@
 class Tasks_Model_Pagination extends Tinebase_Model_Pagination
 {
     /**
-     * Appends pagination statements to a given select object
-     * 
-     * @param  Zend_Db_Select
+     * @param Zend_Db_Select $_select
+     * @param bool $_getDeleted
+     * @param array|null $_schema
      * @return void
+     * @throws Tinebase_Exception_Record_Validation
      */
-    public function appendPaginationSql($_select, $_getDeleted = false)
+    public function appendPaginationSql(Zend_Db_Select $_select, bool $_getDeleted = false, ?array $_schema = null)
     {
         if ($this->isValid()) {
             if (!empty($this->sort) && !empty($this->dir) && $this->sort == 'due'){
