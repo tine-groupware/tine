@@ -136,19 +136,26 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
         var singleRecordPanel = this.getSingleRecordPanel();
         
         this.actions = [];
-        this.statusActions = [];
-        
+        this.statusActions = [
+            new Ext.Action({
+                text: this.app.i18n._('Save'),
+                handler: this.processIMIP.createDelegate(this, ['NEEDS-ACTION', true]),
+                icon: 'images/icon-set/icon_invite.svg',
+                tooltip: this.app.i18n._('Save in calendar without response')
+            })
+        ];
+
         Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').each(function(status) {
             // NEEDS-ACTION is not appropriate in iMIP context
             if (status.id == 'NEEDS-ACTION') return;
-            
+
             this.statusActions.push(new Ext.Action({
                 text: status.get('i18nValue'),
                 handler: this.processIMIP.createDelegate(this, [status.id]),
                 icon: status.get('icon')
             }));
         }, this);
-        
+
         this.actions = this.actions.concat(this.statusActions);
         
         // add more actions here (no spam / apply / crush / send event / ...)
@@ -170,7 +177,7 @@ Tine.Calendar.iMIPDetailsPanel = Ext.extend(Tine.Calendar.EventDetailsPanel, {
             ].concat(this.actions)
         });
     },
-    
+
     /**
      * show/layout iMIP panel
      */

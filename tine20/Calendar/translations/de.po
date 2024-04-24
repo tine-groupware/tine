@@ -2918,3 +2918,6 @@ msgstr ""
 "Status am Termin zu ändern. Wollen Sie wirklich den Termin-Status ändern? "
 "Die Teilnahme von Ihnen und der der anderen Teilnehmenden bleibt "
 "unverändert."
+
+msgid "Save in calendar without response"
+msgstr "Termin ohne Rückmeldung im Kalender speichern"
