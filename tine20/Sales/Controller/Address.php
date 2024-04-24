@@ -243,11 +243,10 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
      * 
      * @param Sales_Model_Address $address
      * @param Addressbook_Model_Contact $contact
-     * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_NotFound
      */
-    public function contactToCustomerAddress(Sales_Model_Address $address, Addressbook_Model_Contact $contact)
+    public function contactToCustomerAddress(Sales_Model_Address $address, Addressbook_Model_Contact $contact): void
     {
         $language = Sales_Controller::getInstance()->getContactDefaultLanguage($contact);
         if ($address->customer_id) {
@@ -261,6 +260,7 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $fullName = $this->getContactFullName($contact, $language);
         
         //Update Address
+        $oldAddress = clone $address;
         $address->name =  $customer->name;
         $address->street = $contact->adr_one_street;
         $address->postalcode  = $contact->adr_one_postalcode;
@@ -273,7 +273,11 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
         $address->language = $language;
         $address->email = $contact->email;
 
-        return Sales_Controller_Address::getInstance()->update($address);
+        /** @var Tinebase_Model_Diff $diff */
+        $diff = $oldAddress->diff($address);
+        if (!$diff->isEmpty()) {
+            Sales_Controller_Address::getInstance()->update($address);
+        }
     }
 
     /**
@@ -283,7 +287,6 @@ class Sales_Controller_Address extends Tinebase_Controller_Record_Abstract
     public function getContactFullName(Addressbook_Model_Contact $contact, $language = 'en'): string
     {
         $fullName = $contact->n_given . ' ' . $contact->n_family;
-        
         if ($contact->n_prefix) {
             $fullName = $contact->n_prefix . ' ' . $fullName;
         }
