@@ -31,7 +31,6 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
     checkboxes: {},
 
     initComponent: function() {
-        const panel = this;
         this.app = this.app || Tine.Tinebase.appMgr.get('Addressbook');
         this.title = this.title || this.app.i18n._('Mailing List');
 
@@ -39,9 +38,25 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         this.editDialog.on('recordUpdate', this.onRecordUpdate, this);
 
         this.isMailinglistCheckbox = new Ext.form.Checkbox({
+            hideLabels: true,
             disabled: true,
             boxLabel: this.app.i18n._('This group is a mailing list'),
             listeners: {scope: this, check: this.onMailinglistCheck}
+        });
+        
+        this.emailField = new Ext.ux.form.MirrorTextField({
+            width: 250,
+            fieldLabel: this.app.i18n._('E-Mail'),
+            xtype: 'mirrortextfield',
+            name: 'email',
+            maxLength: 128,
+            disabled: ! Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook'),
+            checkState: function (editDialog, record) {
+                this.validate();
+            },
+            validator: function (value) {
+                return Tine.Tinebase.common.checkEmailDomain(value);
+            },
         });
 
         this.replyToComboBox = new Ext.form.ComboBox({
@@ -65,15 +80,15 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
             'sieveAllowOnlyMembers': this.app.i18n._('Only forward member mails'),
             'sieveForwardOnlySystem': this.app.i18n._('Only forward to system email accounts')
         };
-        const checkboxItems = [this.isMailinglistCheckbox];
+        const checkboxItems = [];
 
-        _.forOwn(checkboxLabels, function(label, key) {
-            panel.checkboxes[key] = new Ext.form.Checkbox({
+        _.forOwn(checkboxLabels, (label, key) => {
+            this.checkboxes[key] = new Ext.form.Checkbox({
                 disabled: true,
                 boxLabel: label,
                 hideLabels: true,
             });
-            checkboxItems.push(panel.checkboxes[key]);
+            checkboxItems.push(this.checkboxes[key]);
         });
         
         this.items = [{
@@ -81,17 +96,22 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
             align: 'stretch',
             pack: 'start',
             border: false,
-            items: [{
+            items: [
+                {
                 layout: 'form',
                 frame: true,
                 hideLabels: true,
                 width: '100%',
-                items: checkboxItems
+                items: [
+                    this.isMailinglistCheckbox,
+                    checkboxItems
+                ]
             }, {
                 layout: 'form',
                 frame: true,
                 width: '100%',
                 items: [
+                    this.emailField,
                     this.replyToComboBox
                 ]
             }]
@@ -100,39 +120,49 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
     },
     
     onMailinglistCheck: function(cb, checked) {
-        _.forOwn(this.checkboxes, function(checkbox, key) {
-            checkbox.setReadOnly(!checked);
+        Object.entries(this.checkboxes).forEach(([key, checkbox]) => {
             checkbox.setDisabled(!checked);
         });
+        this.replyToComboBox.setVisible(checked);
         this.replyToComboBox.setDisabled(!checked);
+        
+        this.emailField.setVisible(checked);
+        this.emailField.setDisabled(!checked);
+        this.emailField.validate();
     },
 
     onRecordLoad: function(editDialog, record, ticketFn) {
         this.listRecord = record;
         const evalGrants = editDialog.evalGrants;
-        const isMailinglist = _.get(record, 'data.xprops.useAsMailinglist', false);
+        this.isMailingList = _.get(record, 'data.xprops.useAsMailinglist', false);
         // TODO check right here, too
         const hasRight = Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook');
         const hasRequiredGrant = !evalGrants
             || (_.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant) && hasRight);
-        const mailinglistDisabled = ! (_.get(record, 'data.account_grants.adminGrant', false) && hasRight);
-
-        this.isMailinglistCheckbox.setDisabled(mailinglistDisabled);
-        this.isMailinglistCheckbox.setValue(isMailinglist);
-        _.forOwn(this.checkboxes, function(checkbox, key) {
-            checkbox.setValue(_.get(record, 'data.xprops.' + key, false));
-            checkbox.setDisabled(! isMailinglist);
-        });
-        
+        const mailinglistDisabled = ! (_.get(record, 'data.container_id.account_grants.adminGrant', false) && hasRight);
         const sieveReplyTo = record?.data?.xprops?.sieveReplyTo ?? 'sender';
-        this.replyToComboBox.setValue(sieveReplyTo);
+        this.isMailinglistCheckbox.checked = this.isMailingList;
+        Object.entries(this.checkboxes).forEach(([key, checkbox]) => {
+            checkbox.checked = _.get(record, 'data.xprops.' + key, false);
+        });
+        this.afterIsRendered().then(() => {
+            this.isMailinglistCheckbox.setDisabled(mailinglistDisabled);
+            this.replyToComboBox.setValue(sieveReplyTo);
+            this.emailField.setValue(record?.data?.email);
+            
+            this.replyToComboBox.setVisible(this.isMailingList);
+            this.emailField.setVisible(this.isMailingList);
+            this.emailField.validate();
+        });
         this.setReadOnly(!hasRequiredGrant || !hasRight);
     },
 
     setReadOnly: function(readOnly) {
         this.readOnly = readOnly;
-        this.isMailinglistCheckbox.setDisabled(readOnly);
-        _.forOwn(this.checkboxes, function(checkbox, key) {
+        this.emailField.setDisabled(readOnly);
+        this.replyToComboBox.setDisabled(readOnly);
+        
+        Object.entries(this.checkboxes).forEach(([key, checkbox]) => {
             checkbox.setDisabled(readOnly);
         });
     },
@@ -140,17 +170,18 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
     onRecordUpdate: function(editDialog, record) {
         // TODO set record xprops
         let xprops = record.get('xprops');
-        const isMailingList = this.isMailinglistCheckbox.getValue();
+        this.isMailingList = this.isMailinglistCheckbox.getValue();
         
         if (! xprops || Ext.isArray(xprops)) {
             xprops = {};
         }
-        xprops.useAsMailinglist = isMailingList;
-        _.forOwn(this.checkboxes, function(checkbox, key) {
-            xprops[key] = isMailingList ? checkbox.getValue() : false;
+        xprops.useAsMailinglist = this.isMailingList;
+        Object.entries(this.checkboxes).forEach(([key, checkbox]) => {
+            xprops[key] = this.isMailingList ? checkbox.getValue() : false;
         });
         xprops.sieveReplyTo = this.replyToComboBox.getValue();
         record.set('xprops', xprops);
         this.listRecord.set('xprops', xprops);
+        if (!this.isMailingList) this.listRecord.set('email', '');
     }
 });
