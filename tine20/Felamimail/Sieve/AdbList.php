@@ -29,7 +29,7 @@ class Felamimail_Sieve_AdbList
 
     public function __toString()
     {
-        $result = 'require ["envelope", "copy", "reject", "editheader"];' . PHP_EOL;
+        $result = 'require ["envelope", "copy", "reject", "editheader", "variables"];' . PHP_EOL;
         $rejectMsg = Felamimail_Config::getInstance()->{Felamimail_Config::SIEVE_MAILINGLIST_REJECT_REASON};
         $translation = Tinebase_Translation::getTranslation('Felamimail');
         $rejectMsg = $translation->_($rejectMsg);

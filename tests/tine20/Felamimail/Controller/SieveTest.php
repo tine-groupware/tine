@@ -48,7 +48,7 @@ class Felamimail_Controller_SieveTest extends Felamimail_TestCase
         $script = Felamimail_Sieve_AdbList::getSieveScriptForAdbList($mailinglist);
 
         self::assertNotNull($script);
-        self::assertStringContainsString('require ["envelope","copy","reject","editheader"];', $script->getSieve());
+        self::assertStringContainsString('require ["envelope","copy","reject","editheader","variables"];', $script->getSieve());
         $domains = Tinebase_EmailUser::getAllowedDomains();
         self::assertStringContainsString('if address :is :domain "from" ' . json_encode($domains) . ' {
 redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
