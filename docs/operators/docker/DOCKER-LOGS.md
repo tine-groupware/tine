@@ -37,3 +37,6 @@ Find all tine logs containing the string "permission denied" between the date 20
 ~~~
 $ docker logs tine20-web-1 --since 2023-08-15 --until 2023-08-20 2>&1 | grep -i "permission denied"
 ~~~
+
+Find more information on how to use timestamps for since/until here:
+https://stackoverflow.com/questions/44443062/how-to-use-since-option-with-docker-logs-command
