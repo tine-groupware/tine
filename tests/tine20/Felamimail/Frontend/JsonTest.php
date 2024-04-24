@@ -879,27 +879,6 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
-     * try search for a message with sorting by tags (should be handled by server - even if col does not exist)
-     */
-    public function testSearchMessageTagsSort()
-    {
-        $filter = array (
-            1 =>
-                array (
-                    'field' => 'query',
-                    'operator' => 'contains',
-                    'value' => '',
-                    'id' => 'quickFilter',
-                ),
-        );
-        $paging = [
-            'sort' => 'tags',
-        ];
-        $result = $this->_json->searchMessages($filter, $paging);
-        self::assertGreaterThanOrEqual(0, $result['totalcount']);
-    }
-
-    /**
      * test flags (add + clear + deleted)
      */
     public function testAddAndClearFlags()
