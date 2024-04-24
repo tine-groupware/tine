@@ -435,9 +435,21 @@ em.emoji {
     color: #f1f1f1;
 }
 
+.dark-mode .x-ux-display .preview-panel-felamimail-body p {
+    color: #f1f1f1;
+}
+
 .dark-mode .preview-panel-felamimail-body em.emoji {
     filter: none;
     font-style: normal;
+}
+
+.dark-mode .preview-panel-felamimail-body a {
+    color: #6c9ad9;
+}
+
+.dark-mode .preview-panel-felamimail-body a:visited {
+    color: #3c78c9;
 }
 
 .felamimail-message-title {
