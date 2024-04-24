@@ -69,7 +69,7 @@ return array(
         'logruntime' => true,
         'logdifftime' => true,
         'traceQueryOrigins' => true,
-        {{if not (eq (getenv "TINE20_LOGGGER_ADDITIONALWRITERS_FILENAME" "") "")}}
+        {{if not (eq (getenv "TINE20_LOGGER_ADDITIONALWRITERS_FILENAME" "") "")}}
         'additionalWriters' => array(array(
             'active' => true,
             'filename' => '{{getenv "TINE20_LOGGER_ADDITIONALWRITERS_FILENAME"}}',

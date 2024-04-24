@@ -573,7 +573,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         $this->_addSecondarySort($pagination);
         $this->_appendForeignSort($pagination, $select);
-        $pagination->appendPaginationSql($select, $getDeleted);
+        $pagination->appendPaginationSql($select, $getDeleted, [$this->_tableName => $this->_schema]);
         
         if ($getIdValuePair) {
             return $this->_fetch($select, self::FETCH_MODE_PAIR);
@@ -603,7 +603,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $pagination = clone($_pagination);
         }
         $pagination->appendModelConfig($select);
-        $pagination->appendSort($select);
+        $pagination->appendSort($select, [$this->_tableName => $this->_schema]);
         
         $rows = $this->_fetch($select, self::FETCH_ALL);
         
@@ -710,10 +710,17 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         if ($_pagination instanceof Tinebase_Model_Pagination) {
             $ignoreColumns = $this->_getIgnoreSortColumns();
-            foreach($_pagination->getSortColumns() as $sort) {
+            $schema = $this->getSchema();
+            foreach ($_pagination->getSortColumns() as $sort) {
                 if (!in_array($sort, $ignoreColumns) && !isset($colsToFetch[$sort])) {
-                    $colsToFetch[$sort] = (substr_count($sort, $this->_tableName) === 0) ? $this->_tableName . '.' .
+                    $sortCol = (substr_count($sort, $this->_tableName) === 0) ? $this->_tableName . '.' .
                         $sort : $sort;
+                    if ($schema && substr_count($sortCol, $this->_tableName) && !in_array($sort, array_keys($schema))) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                            __METHOD__ . '::' . __LINE__ . ' skip invalid sort field: ' . $sort);
+                    } else {
+                        $colsToFetch[$sort] = $sortCol;
+                    }
                 }
             }
         }
@@ -818,7 +825,8 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected function _fetch(Zend_Db_Select $_select, $_mode = self::FETCH_MODE_SINGLE)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
         
         $this->_checkTracing($_select);
         
