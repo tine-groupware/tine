@@ -116,6 +116,17 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $this->assertEquals('onDemand', $certData['policies'][103][1], 'license type mismatch');
     }
 
+    public function testExtendedCaLicense()
+    {
+        $this->_uit->setLicenseFile(dirname(__FILE__) . '/license_contract_MW-TEST-3.0.0.pem');
+        $certData = $this->_uit->getCertificateData();
+        self::assertTrue($this->_uit->isPermitted('OnlyOfficeIntegrator'), 'license is not valid');
+
+        $this->assertEquals(0, $certData['policies'][101][1], '0 users limit expected');
+        $this->assertEquals('2029-04-24 15:11:33', $certData['validTo']->toString());
+        $this->assertEquals('ON_DEMAND', $certData['policies'][103][1], 'license type mismatch');
+    }
+
     public function testLicensePropertiesLimitedTime()
     {
         $this->_uit->setLicenseFile(dirname(__FILE__) . '/V-limitedTime.pem');
