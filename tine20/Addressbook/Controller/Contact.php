@@ -1657,7 +1657,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         }
 
         $emailFields = Addressbook_Model_Contact::getEmailFields();
-        $emailDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Email::class);
+        $emailDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Email::class)->sort('sorting');
         foreach ($emailDefs as $emailDef) {
             $emailFields[$emailDef->{AMCPD::FLD_NAME}] = $emailDef;
         }

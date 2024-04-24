@@ -235,6 +235,7 @@ class Addressbook_ControllerTest extends TestCase
      */
     public function testGetCountOfAllContacts()
     {
+        $this->objects['initialContact']['n_family'] = 'testUser';
         $contact = $this->_addContact();
         
         $filter = new Addressbook_Model_ContactFilter(array(
