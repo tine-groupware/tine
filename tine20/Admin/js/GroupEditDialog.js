@@ -115,7 +115,13 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     anchor: '100%',
                     vtype: 'email',
                     maxLength: 255,
-                    allowBlank: true
+                    allowBlank: true,
+                    checkState: function (editDialog, field) {
+                            const checked = editDialog.record.data.xprops?.useAsMailinglist;
+                            field = editDialog.getForm().findField('email');
+                            field.setVisible(checked);
+                            editDialog.doLayout();
+                    },
                 }, {
                     columnWidth: 0.5,
                     xtype: 'checkbox',
