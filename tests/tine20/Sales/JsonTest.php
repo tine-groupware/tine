@@ -417,8 +417,10 @@ class Sales_JsonTest extends TestCase
     
     /**
      * test product json api
+     *
+     * @param bool $autoNumber
      */
-    public function testAddGetSearchDeleteProduct()
+    public function testAddGetSearchDeleteProduct(bool $autoNumber = true)
     {
         $product = $this->_testSimpleRecordApi('Product', null, null, true, [
             'name' => [[
@@ -431,11 +433,21 @@ class Sales_JsonTest extends TestCase
             ]],
             'price' => 10000,
             'default_sorting' => '',
+            'number' => $autoNumber ? null : Tinebase_Record_Abstract::generateUID(8)
         ], false);
         $this->assertArrayHasKey(Sales_Model_ProductLocalization::FLD_RECORD_ID, $product['name'][0]);
         $this->assertSame($product['id'], $product['name'][0][Sales_Model_ProductLocalization::FLD_RECORD_ID]);
     }
-    
+
+    public function testAddProductWithManualNumberConfig()
+    {
+        Sales_Config::getInstance()->set(Sales_Config::PRODUCT_NUMBER_GENERATION,
+            Sales_Config::PRODUCT_NUMBER_GENERATION_MANUAL);
+        $this->testAddGetSearchDeleteProduct(false);
+        Sales_Config::getInstance()->set(Sales_Config::PRODUCT_NUMBER_GENERATION,
+            Sales_Config::PRODUCT_NUMBER_GENERATION_AUTO);
+    }
+
     /**
      * save product with note
      * 
