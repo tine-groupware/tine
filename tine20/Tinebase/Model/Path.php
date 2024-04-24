@@ -161,4 +161,44 @@ class Tinebase_Model_Path extends Tinebase_Record_Abstract
 
         return $result;
     }
+
+    public function splitByShadowPathPart(string $pathPart): array
+    {
+        if (false === ($partPos = strpos($this->shadow_path, $pathPart))) {
+            return [$this];
+        }
+        $pathParts = explode('/', trim($this->path, '/'));
+        $result = [];
+        if ($partPos > 0) {
+            if ('' !== ($head = trim(substr($this->shadow_path, 0, $partPos), '/'))) {
+                if (preg_match('/\{[^}]+}$/', $head, $m)) {
+                    $head = trim(substr($head, 0, 0 - strlen($m[0])), '/');
+                }
+                if ('' !== $head && ($pathCount = count(explode('/', $head))) > 1) {
+                    $path = '/' . join('/', array_splice($pathParts, 0, $pathCount));
+                    if (str_ends_with($path, '}') && ($pos = strrpos($path, '{'))) {
+                        $path = substr($path, 0, $pos);
+                    }
+                    $result[] = new Tinebase_Model_Path([
+                        'path' => $path,
+                        'shadow_path' => '/' . $head,
+                    ]);
+                }
+            }
+        }
+        if ('' !== ($tail = trim(substr($this->shadow_path, $partPos + strlen($pathPart)), '/'))) {
+            if (preg_match('/^\{[^}]+}/', $tail, $m)) {
+                $tail = trim(substr($tail, strlen($m[0])), '/');
+            }
+            if ('' !== $tail && ($pathCount = count(explode('/', $tail))) > 1) {
+                $path = '/' . join('/', array_splice($pathParts, 0 - $pathCount));
+                $result[] = new Tinebase_Model_Path([
+                    'path' => $path,
+                    'shadow_path' => '/' . $tail,
+                ]);
+            }
+        }
+
+        return $result;
+    }
 }
