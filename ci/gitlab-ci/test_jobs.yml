@@ -213,10 +213,9 @@ test-with-health-check:
     - if: $CI_COMMIT_TAG
 
 test-install-demodata:
-  extends: .abstract_jobs.php_unit
-  variables:
-    ARG_IMAGE: test-source
+  extends: .abstract_jobs.php_unit_cache
   stage: test
+  needs: []
   timeout: 35m
   script:
     - test -f ${TINE20ROOT}/scripts/postInstallGitlab.sh && ${TINE20ROOT}/scripts/postInstallGitlab.sh
