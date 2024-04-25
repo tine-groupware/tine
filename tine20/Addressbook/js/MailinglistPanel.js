@@ -139,6 +139,7 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         const hasRight = Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook');
         const hasRequiredGrant = !evalGrants
             || (_.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant) && hasRight);
+        // fixme: admin group edit dialog has no account_grants and the mailinglistDisabled was set to true , but it should be enabled
         const mailinglistDisabled = ! (_.get(record, 'data.container_id.account_grants.adminGrant', false) && hasRight);
         const sieveReplyTo = record?.data?.xprops?.sieveReplyTo ?? 'sender';
         this.isMailinglistCheckbox.checked = this.isMailingList;
