@@ -33,8 +33,9 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
             what = what || 'text|icon';
             const whatParts = what.split('|');
             const key = appName + keyFieldName + what;
+            let store;
             try {
-                this.store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName);
+                store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName);
             } catch (e) {
                 Tine.log.error(e);
                 Tine.log.debug(`Add custom fields to registry for ${appName} again`);
@@ -42,7 +43,7 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
                 const field = customfields.find(c => {return c.name === keyFieldName;});
                 if (field?.model) {
                     const configs = Tine.widgets.customfields.ConfigManager.getConfigs(app, field.model);
-                    this.store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName);
+                    store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName);
                     Tine.log.debug(`Custom fields are added to registry successfully!`);
                 }
             }
@@ -50,7 +51,7 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
             if (!renderers[key]) {
                 renderers[key] = (id) => {
                     if (!id) return "";
-                    const record = this.store ? this.store.getById(id) : null;
+                    const record = store ? store.getById(id) : null;
                     const i18nValue = record ? record.get('i18nValue') : app.i18n._hidden(id);
                     const icon = record ? record.get('icon') : null;
                     let string = '';
