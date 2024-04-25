@@ -153,6 +153,93 @@ class Tinebase_Record_PathTest extends TestCase
         $this->assertEquals($fatherPath->getId(), $testerPath->getId(), 'father and tester path are not the same one! ' . print_r($fatherPath, true) . PHP_EOL . print_r($testerPath, true));
     }
 
+    public function testDeleteShadowPath()
+    {
+        $contacts = [];
+        for($i = 0; $i < 10; ++$i) {
+            if ($i > 0) {
+                $relations = [
+                    $this->_getParentRelationArray($contacts[$i-1]),
+                ];
+            } else {
+                $relations = [];
+            }
+            $contacts[$i] = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+                'n_family' => 'contact' . $i,
+                'relations' => $relations,
+            )));
+        }
+        $shadowRenderer = function($start, $end) use($contacts): string {
+            $path = '';
+            for ($i = $start; $i <= $end; ++$i) {
+                $path .= $contacts[$i]->getShadowPathPart($i > $start ? $contacts[$i]->relations->getFirstRecord() : null);
+            }
+            return $path;
+        };
+
+        $contact0Path = $this->_uit->getPathsForRecord($contacts[0]);
+        $this->assertSame(1, $contact0Path->count());
+        $contact1Path = $this->_uit->getPathsForRecord($contacts[1]);
+        $this->assertSame(1, $contact1Path->count());
+        $this->assertSame($contact0Path->getFirstRecord()->getId(), $contact1Path->getFirstRecord()->getId());
+
+        Addressbook_Controller_Contact::getInstance()->delete($contacts[7]);
+
+        $this->assertSame(0, $this->_uit->getPathsForRecord($contacts[7])->count());
+
+        $contact0NewPath = $this->_uit->getPathsForRecord($contacts[0]);
+        $this->assertSame(1, $contact0NewPath->count());
+        $contact1NewPath = $this->_uit->getPathsForRecord($contacts[1]);
+        $this->assertSame(1, $contact1NewPath->count());
+        $this->assertSame($contact0NewPath->getFirstRecord()->getId(), $contact1NewPath->getFirstRecord()->getId());
+        $this->assertNotSame($contact0NewPath->getFirstRecord()->getId(), $contact0Path->getFirstRecord()->getId());
+        $this->assertNotSame($contact1NewPath->getFirstRecord()->getId(), $contact1Path->getFirstRecord()->getId());
+
+        $contact8NewPath = $this->_uit->getPathsForRecord($contacts[8]);
+        $this->assertSame(1, $contact8NewPath->count());
+        $this->assertNotSame($contact0NewPath->getFirstRecord()->getId(), $contact8NewPath->getFirstRecord()->getId());
+
+        $this->assertSame('/contact0{t}/contact1{t}/contact2{t}/contact3{t}/contact4{t}/contact5{t}/contact6', $contact0NewPath->getFirstRecord()->path);
+        $this->assertSame($shadowRenderer(0, 6), $contact0NewPath->getFirstRecord()->shadow_path);
+        $this->assertSame('/contact8{t}/contact9', $contact8NewPath->getFirstRecord()->path);
+        $this->assertSame($shadowRenderer(8, 9), $contact8NewPath->getFirstRecord()->shadow_path);
+
+        Addressbook_Controller_Contact::getInstance()->delete($contacts[8]);
+
+        $this->assertSame(0, $this->_uit->getPathsForRecord($contacts[8])->count());
+        $this->assertSame(0, $this->_uit->getPathsForRecord($contacts[9])->count());
+
+        Addressbook_Controller_Contact::getInstance()->delete($contacts[6]);
+
+        $this->assertSame(0, $this->_uit->getPathsForRecord($contacts[6])->count());
+        $this->assertSame('/contact0{t}/contact1{t}/contact2{t}/contact3{t}/contact4{t}/contact5', $this->_uit->getPathsForRecord($contacts[5])->getFirstRecord()->path);
+
+        Addressbook_Controller_Contact::getInstance()->delete($contacts[6]);
+
+        $this->assertSame(0, $this->_uit->getPathsForRecord($contacts[6])->count());
+        $this->assertSame(1, ($paths5 = $this->_uit->getPathsForRecord($contacts[5]))->count());
+        $this->assertSame('/contact0{t}/contact1{t}/contact2{t}/contact3{t}/contact4{t}/contact5', $paths5->getFirstRecord()->path);
+
+        Addressbook_Controller_Contact::getInstance()->delete($contacts[0]);
+
+        $this->assertSame(0, $this->_uit->getPathsForRecord($contacts[0])->count());
+        $this->assertSame(1, ($paths5 = $this->_uit->getPathsForRecord($contacts[5]))->count());
+        $this->assertSame('/contact1{t}/contact2{t}/contact3{t}/contact4{t}/contact5', $paths5->getFirstRecord()->path);
+
+        Addressbook_Controller_Contact::getInstance()->delete($contacts[2]);
+
+        $this->assertSame(0, $this->_uit->getPathsForRecord($contacts[2])->count());
+        $this->assertSame(0, $this->_uit->getPathsForRecord($contacts[1])->count());
+        $this->assertSame(1, ($paths5 = $this->_uit->getPathsForRecord($contacts[5]))->count());
+        $this->assertSame('/contact3{t}/contact4{t}/contact5', $paths5->getFirstRecord()->path);
+
+        Addressbook_Controller_Contact::getInstance()->delete($contacts[4]);
+
+        $this->assertSame(0, $this->_uit->getPathsForRecord($contacts[3])->count());
+        $this->assertSame(0, $this->_uit->getPathsForRecord($contacts[4])->count());
+        $this->assertSame(0, $this->_uit->getPathsForRecord($contacts[5])->count());
+    }
+
     /**
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_AccessDenied

@@ -277,7 +277,6 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
             }
         }
 
-
         if (count($oldPathChildren) > 0 || count($oldPathParents) > 0) {
             $toDelete = array();
             foreach($oldPathParents as $pathPart => $tmp) {
@@ -525,67 +524,35 @@ class Tinebase_Record_Path extends Tinebase_Controller_Record_Abstract
     public function deleteShadowPathParts(array $_shadowPathParts)
     {
         $ids = array();
-        $paths = array();
         foreach ($_shadowPathParts as $shadowPathPart) {
             $filter = new Tinebase_Model_PathFilter(array(
                 array('field' => 'shadow_path', 'operator' => 'contains', 'value' => $shadowPathPart)
             ));
             $result = $this->_backend->search($filter);
+            /** @var Tinebase_Model_Path $path */
             foreach($result as $path) {
                 if (!isset($ids[$path->getId()])) {
-                    $ids[$path->getId()] = true;
-                    $paths[] = $path;
+                    $ids[$path->getId()] = $path->splitByShadowPathPart($shadowPathPart);
+                } else {
+                    $newPaths = [];
+                    /** @var Tinebase_Model_Path $splitPath */
+                    foreach ($ids[$path->getId()] as $splitPath) {
+                        $newPaths = array_merge($newPaths, $splitPath->splitByShadowPathPart($shadowPathPart));
+                    }
+                    $ids[$path->getId()] = $newPaths;
                 }
             }
         }
 
         $this->_backend->delete(array_keys($ids));
-
-        $this->_workRebuildQueue();
-
-        $recordIds = array();
-        /** @var Tinebase_Model_Path $path */
-        foreach($paths as $path) {
-            foreach($path->getRecordIds() as $key => $data) {
-                if (!isset($recordIds[$key])) {
-                    $recordIds[$key] = $data;
-                }
+        $newPaths = [];
+        foreach ($ids as $paths) {
+            foreach ($paths as $path) {
+                $newPaths[$path->shadow_path] = $path;
             }
         }
-
-        $controllerCache = array();
-        foreach($recordIds as $data) {
-            $model = $data['model'];
-            if (isset($controllerCache[$model])) {
-                $controller = $controllerCache[$model]['controller'];
-            } else {
-                $controllerCache[$model] = [];
-                $controller = $controllerCache[$model]['controller'] =
-                    Tinebase_Core::getApplicationInstance($model, '', true);
-                $controllerCache[$model]['doRightChecks'] = $controller->doRightChecks(false);
-                $controllerCache[$model]['doContainerACLChecks'] = $controller->doContainerACLChecks(false);
-                $controllerCache[$model]['sendNotifications'] = $controller->sendNotifications(false);
-            }
-
-            try {
-                $record = $controller->get($data['id']);
-            } catch(Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' could not get record during path rebuild, possibly concurrent deletion');
-                continue;
-            }
-
-            $this->addToRebuildQueue($record);
+        foreach ($newPaths as $path) {
+            $this->_backend->create($path);
         }
-
-        foreach ($controllerCache as $data) {
-            /** @var Tinebase_Controller_Record_Abstract $controller */
-            $controller = $data['controller'];
-            $controller->doRightChecks($data['doRightChecks']);
-            $controller->doContainerACLChecks($data['doContainerACLChecks']);
-            $controller->sendNotifications($data['sendNotifications']);
-        }
-
-        $this->_workRebuildQueue();
     }
 }

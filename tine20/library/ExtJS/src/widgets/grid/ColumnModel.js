@@ -558,8 +558,15 @@ var grid = new Ext.grid.GridPanel({
      * @return {Boolean}
      */
     isResizable : function(colIndex){
-        return colIndex >= 0 && this.config[colIndex]?.resizable && !this.config[colIndex]?.fixed;
+        return colIndex >= 0 && this.config[colIndex]?.resizable !== false && this.config[colIndex]?.fixed !== true;
     },
+
+    isFitable : function(colIndex){
+        return colIndex >= 0 && this.config[colIndex]?.resizable !== false
+            && this.config[colIndex]?.fixed !== true
+            && this.config[colIndex]?.fit !== false;
+    },
+
     /**
      * Sets if a column is hidden.
 <pre><code>

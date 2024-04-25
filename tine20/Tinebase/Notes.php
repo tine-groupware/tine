@@ -958,9 +958,9 @@ class Tinebase_Notes implements Tinebase_Backend_Sql_Interface
         int $offset = 0,
         ?bool $dryrun = null,
         ?Tinebase_DateTime $beforeDate = null
-    ): int {
-        $limit = 100;
-
+    ): int
+    {
+        $limit = 10000;
         $controllers = [];
         $models = [];
         $deleteIds = [];
