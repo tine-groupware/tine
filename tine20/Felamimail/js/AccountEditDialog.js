@@ -82,8 +82,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * -> only allow to change some fields if it is a system account
      */
     onRecordLoad: function() {
-        Tine.Felamimail.AccountEditDialog.superclass.onRecordLoad.call(this);
-
         if (! this.copyRecord && ! this.record.id && this.window) {
             this.window.setTitle(this.app.i18n._('Add New Account'));
             if (this.asAdminModule) {
@@ -92,6 +90,8 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         } else {
             this.grantsGrid.setValue(this.record.get('grants'));
         }
+
+        Tine.Felamimail.AccountEditDialog.superclass.onRecordLoad.call(this);
 
         this.loadEmailQuotas();
         this.disableSieveTabs();
