@@ -250,6 +250,15 @@ class Tinebase_FileSystem_Previews
             }
         }
 
+        $lockId = __METHOD__ . $node->getId();
+        $lock = Tinebase_Core::getMultiServerLock($lockId);
+        $lockRaii = new Tinebase_RAII(fn() => $lock->isLocked() && $lock->release());
+        if (false === Tinebase_Core::acquireMultiServerLock($lockId)) {
+            // we wait until the other job is done, then return
+            Tinebase_Core::acquireMultiServerLock($lockId, false);
+            return true;
+        }
+
         $ext = pathinfo($node->name, PATHINFO_EXTENSION);
 
         try {
@@ -380,6 +389,7 @@ class Tinebase_FileSystem_Previews
             }
         }
 
+        unset($lockRaii);
         return true;
     }
 

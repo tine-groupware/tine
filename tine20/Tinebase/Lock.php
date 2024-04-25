@@ -60,7 +60,7 @@ class Tinebase_Lock
 
     /**
      * @param $id
-     * @return Tinebase_Lock_Interface
+     * @return Tinebase_Lock_Interface|null
      */
     public static function getLock($id)
     {
@@ -70,21 +70,23 @@ class Tinebase_Lock
         }
         return static::$locks[$id];
     }
+
     /**
      * @param string $id
      * @return bool|null bool on success / failure, null if not supported
      */
     public static function tryAcquireLock($id)
     {
-        $id = static::preFixId($id);
-        if (isset(static::$locks[$id])) {
-            return static::$locks[$id]->tryAcquire();
-        }
-        if (($lock = static::getBackend($id)) === null) {
-            return null;
-        }
-        static::$locks[$id] = $lock;
-        return $lock->tryAcquire();
+        return static::getLock($id)?->tryAcquire();
+    }
+
+    /**
+     * @param string $id
+     * @return bool|null bool on success / failure, null if not supported
+     */
+    public static function acquireLock($id)
+    {
+        return static::getLock($id)?->tryAcquire(0);
     }
 
     /**
