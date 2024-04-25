@@ -621,7 +621,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     accountId = (activeAccount) ? activeAccount.id : null;
                 }
 
-                if (! this.replyTo) {
+                if (! this.replyTo && !this.isForwardedMessage()) {
                     this.from = fromAccount;
                 }
                 this.accountId = accountId;
