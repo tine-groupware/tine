@@ -1873,7 +1873,10 @@ msgstr "Ansprechpartner"
 
 #: Model/Document/Abstract.php:320
 msgid "Positions Net Sum"
-msgstr "Zwischensumme"
+msgstr "Zwischensumme (netto)"
+
+msgid "Positions Gross Sum"
+msgstr "Zwischensumme (brutto)"
 
 #: Model/Document/Abstract.php:329
 msgid "Positions Discount Sum"

@@ -34,6 +34,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
     const RELEASE017_UPDATE015 = __CLASS__ . '::update015';
     const RELEASE017_UPDATE016 = __CLASS__ . '::update016';
+    const RELEASE017_UPDATE017 = __CLASS__ . '::update017';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -94,6 +95,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE016 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update016',
+            ],
+            self::RELEASE017_UPDATE017 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update017',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -532,5 +537,27 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     public function update016()
     {
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.16', self::RELEASE017_UPDATE016);
+    }
+
+    public function update017()
+    {
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Document_Delivery::class,
+            Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Offer::class,
+            Sales_Model_Document_Order::class,
+        ]);
+
+        foreach ([
+             Sales_Model_Document_Invoice::TABLE_NAME,
+             Sales_Model_Document_Offer::TABLE_NAME,
+             Sales_Model_Document_Order::TABLE_NAME,
+         ] as $table) {
+            $this->getDb()->update(SQL_TABLE_PREFIX . $table, [
+                Sales_Model_Document_Abstract::FLD_POSITIONS_GROSS_SUM => new Zend_Db_Expr(Sales_Model_Document_Abstract::FLD_GROSS_SUM . ' + ' . Sales_Model_Document_Abstract::FLD_INVOICE_DISCOUNT_SUM)
+            ], '1=1');
+        }
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.17', self::RELEASE017_UPDATE017);
     }
 }
