@@ -203,8 +203,10 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        $this->updateAccountEmailUsers($_record);
-        $this->resolveAccountEmailUsers($_createdRecord);
+        if ($_createdRecord->type !== Felamimail_Model_Account::TYPE_USER) {
+            $this->updateAccountEmailUsers($_record);
+            $this->resolveAccountEmailUsers($_createdRecord);
+        }
         Felamimail_Controller_Account::getInstance()->checkEmailAccountContact($_createdRecord);
     }
 
