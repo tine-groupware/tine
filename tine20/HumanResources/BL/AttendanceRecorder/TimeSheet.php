@@ -90,7 +90,7 @@ class HumanResources_BL_AttendanceRecorder_TimeSheet implements Tinebase_BL_Elem
                 foreach ($refIdRecords as $record) {
                     while (!$tsRs && isset($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id'])) {
                         $tsRs = Timetracker_Controller_Timesheet::getInstance()->getMultiple($record->xprops()[HumanResources_Model_AttendanceRecord::META_DATA][Timetracker_Model_Timesheet::class]['id']);
-                        if (0 === $tsRs->count()) {
+                        if (0 === $tsRs->count() || null === $tsRs->find(fn ($ts) => $ts->start_date->format('Y-m-d') === $record->{HumanResources_Model_AttendanceRecord::FLD_TIMESTAMP}->getClone()->setTimezone(Tinebase_Core::getUserTimezone())->format('Y-m-d'), null)) {
                             if (Tinebase_Core::isLogLevel(Zend_Log::INFO))
                                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ts not found!');
                             $tsRs = null;
