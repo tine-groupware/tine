@@ -2451,9 +2451,13 @@ class Tinebase_Core
      * @param string $id
      * @return bool
      */
-    public static function acquireMultiServerLock($id)
+    public static function acquireMultiServerLock($id, bool $try = true)
     {
-        return Tinebase_Lock::tryAcquireLock($id . '::' . static::getTinebaseId());
+        if ($try) {
+            return Tinebase_Lock::tryAcquireLock($id . '::' . static::getTinebaseId());
+        } else {
+            return Tinebase_Lock::acquireLock($id . '::' . static::getTinebaseId());
+        }
     }
 
     /**
