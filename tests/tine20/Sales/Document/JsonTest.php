@@ -91,6 +91,12 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                 SMDOrder::FLD_INVOICE_RECIPIENT_ID => $postal1,
                 SMDOrder::FLD_CONTRACT_ID => $contract2->getId(),
             ]), true)),
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $customer->postal,
+            ]), true)),
+            $orderCtrl->create(new SMDOrder(array_merge($commonFlds, [
+                SMDOrder::FLD_RECIPIENT_ID => $customer->postal,
+            ]), true)),
         ];
 
         $expectedResult = [
@@ -102,6 +108,8 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
             ['count' => 2, 'ids' => [$orders[5]->getId(), $orders[6]->getId()]],
             ['count' => 2, 'ids' => [$orders[5]->getId(), $orders[6]->getId()]],
             ['count' => 1, 'ids' => [$orders[7]->getId()]],
+            ['count' => 2, 'ids' => [$orders[8]->getId(), $orders[9]->getId()]],
+            ['count' => 2, 'ids' => [$orders[8]->getId(), $orders[9]->getId()]],
         ];
 
         foreach ($orders as $idx => $order) {
