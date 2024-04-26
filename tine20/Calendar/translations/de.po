@@ -2921,3 +2921,7 @@ msgstr ""
 
 msgid "Save in calendar without response"
 msgstr "Termin ohne Rückmeldung im Kalender speichern"
+
+#: views/eventNotification.php:12
+msgid "Updates from"
+msgstr "Änderungen von"

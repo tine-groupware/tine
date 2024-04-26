@@ -8,8 +8,8 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 ?>
-<?php if (count((array)$this->updates) > 0): ?>
-<?php echo $this->translate->_('Updates') ?>:
+<?php if ($this && count((array)$this->updates) > 0): ?>
+<?php echo $this->translate->_('Updates from') . ' ' . $this->updater->accountDisplayName ?>:
 <?php 
 foreach ($this->updates as $field => $update) {
     if ($field != 'attendee') {
