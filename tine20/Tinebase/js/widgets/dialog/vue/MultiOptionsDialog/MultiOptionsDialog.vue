@@ -26,14 +26,15 @@ const props = defineProps({
   allowMultiple: Boolean
 })
 
-const selectedOption = ref(props.options.find(el => el.checked)?.inputValue)
+const selectedOption = ref(props.options[props.allowMultiple ? 'filter' : 'find'](el => el.checked)?.inputValue)
 
 const _options = computed(() => {
   return props.options.map(el => {
     return {
       value: el.inputValue,
       text: el.boxLabel,
-      disabled: el.disabled
+      disabled: el.disabled,
+      originalOptObj: el.originalOptObj
     }
   })
 })
@@ -44,7 +45,20 @@ const _options = computed(() => {
 const disableok = computed(() => !selectedOption.value)
 
 const getValue = () => {
-  return selectedOption.value
+  let option = null
+  if (props.allowMultiple) {
+    option = selectedOption?.value?.length
+      ? props.options.filter((option) => {
+        return selectedOption.value.indexOf(option.originalOptObj.name) >= 0
+      })
+      : null
+    option = _.map(option, 'originalOptObj')
+  } else {
+    option = selectedOption.value ? selectedOption.value : null
+    option = _.find(props.options, { originalOptObj: { name: option } })?.value || option
+  }
+  option = option ? JSON.parse(JSON.stringify(option)) : null
+  return option
 }
 
 defineExpose({ getValue, disableok })
