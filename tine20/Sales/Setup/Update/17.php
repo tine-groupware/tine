@@ -541,6 +541,8 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update017()
     {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        
         Setup_SchemaTool::updateSchema([
             Sales_Model_Document_Delivery::class,
             Sales_Model_Document_Invoice::class,
