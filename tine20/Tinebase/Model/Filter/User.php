@@ -61,8 +61,15 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_ForeignId
     public function setValue($_value)
     {
         // cope with resolved records
-        if (is_array($_value) && (isset($_value['accountId']) || array_key_exists('accountId', $_value))) {
-            $_value = $_value['accountId'];
+        if (is_array($_value)) {
+            if (isset($_value['accountId'])) {
+                $_value = $_value['accountId'];
+            } elseif (isset($_value[0]['accountId'])) {
+                foreach ($_value as &$val) {
+                    $val = $val['accountId'] ?? null;
+                }
+                $_value = array_filter($_value);
+            }
         }
 
         // transform current user
