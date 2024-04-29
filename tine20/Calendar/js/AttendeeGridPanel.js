@@ -848,6 +848,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             return this.app.i18n._(this.addNewAttendeeText);
         }
     },
+    
+    renderAttenderAnyName: function(name) {
+        return Tine.Tinebase.appMgr.get('Tinebase').i18n._('Anyone');
+    },
 
     renderAttenderEmailName: function(name, metadata, record) {
         return this.renderAttenderUserName({
