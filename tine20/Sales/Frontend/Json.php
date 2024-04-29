@@ -927,13 +927,13 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         $order = Sales_Controller_Document_Order::getInstance()->get($orderId);
-        $ft = $order->{$recipientField}->{Sales_Model_Address::FLD_FULLTEXT};
+        $ft = $order->{$recipientField}?->{Sales_Model_Address::FLD_FULLTEXT};
         $contractId = $order->getIdFromProperty(Sales_Model_Document_Abstract::FLD_CONTRACT_ID);
 
         $orders = Sales_Controller_Document_Order::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Document_Order::class, [
                 [TMFA::FIELD => $recipientField, TMFA::OPERATOR => 'definedBy', TMFA::VALUE => [
-                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->{$recipientField}->getIdFromProperty(Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID)]
+                    [TMFA::FIELD => Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->{$recipientField}?->getIdFromProperty(Tinebase_ModelConfiguration_Const::FLD_ORIGINAL_ID)]
                 ]],
                 [TMFA::FIELD => Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY, TMFA::OPERATOR => 'equals', TMFA::VALUE => $order->getIdFromProperty(Sales_Model_Document_Abstract::FLD_DOCUMENT_CATEGORY)],
                 [TMFA::FIELD => $field, TMFA::OPERATOR => 'equals', TMFA::VALUE => true],
@@ -942,7 +942,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 [TMFA::FIELD => Sales_Model_Document_Order::FLD_ORDER_STATUS, TMFA::OPERATOR => 'equals', TMFA::VALUE => Sales_Model_Document_Order::STATUS_ACCEPTED],
             ]), null, new Tinebase_Record_Expander(Sales_Model_Document_Order::class, [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [$recipientField => []],
-            ]))->filter(fn ($rec) => $rec->{$recipientField}->{Sales_Model_Address::FLD_FULLTEXT} === $ft);
+            ]))->filter(fn ($rec) => $rec->{$recipientField}?->{Sales_Model_Address::FLD_FULLTEXT} === $ft);
 
         if ($orders->count() === 0) {
             return [];
