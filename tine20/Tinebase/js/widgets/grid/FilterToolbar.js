@@ -633,7 +633,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             // concat registered filters
             this.filterModels = this.filterModels.concat(Tine.widgets.grid.FilterRegistry.get(this.recordClass));
 
-            this.filterModels = this.filterModels.concat(Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters(this.recordClass));
+            this.filterModels = this.filterModels.concat(Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters.call(this, this.recordClass));
 
             // auto add foreign record filter on demand
             var foreignRecordFilter = this.createFilterModel({filtertype: 'foreignrecord', ownRecordClass: this.recordClass, isGeneric: true});

@@ -151,7 +151,15 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
                 app = Tine.Tinebase.appMgr.get(appName),
                 label = app ? app.i18n._hidden(def.label) : def.label;
 
-            operators.push({operator: {linkType: def.linkType, foreignRecordClass: foreignRecordClass, filterName: def.filterName}, label: label});
+            if(def.generic !== false) {
+                operators.push({
+                    operator: {
+                        linkType: def.linkType,
+                        foreignRecordClass: foreignRecordClass,
+                        filterName: def.filterName
+                    }, label: label
+                });
+            }
         }, this);
 
         // we need this to detect operator changes
