@@ -138,17 +138,19 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                             }
 
                             if (transition.sourceDocuments.length > 1) {
-                                transition.sourceDocuments = _.map(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
-                                    title: app.formatMessage('Choose { sourceRecordsName }', { sourceRecordsName }),
-                                    questionText: app.formatMessage('Please choose which { sourceRecordsName } should be included in shared { targetRecordName }', { sourceRecordsName, targetRecordName}),
-                                    allowMultiple: true,
-                                    allowCancel: false,
-                                    height: transition.sourceDocuments.length * 30 + 100,
-                                    options: transition.sourceDocuments.map((source) => {
-                                        const sourceDocument = Tine.Tinebase.data.Record.setFromJson(source.sourceDocument, sourceRecordClass)
-                                        return { text: sourceDocument.getTitle(), name: sourceDocument.id, checked: true, source }
-                                    })
-                                }), 'source');
+                                try {
+                                    transition.sourceDocuments = _.map(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                                        title: app.formatMessage('Choose { sourceRecordsName }', { sourceRecordsName }),
+                                        questionText: app.formatMessage('Please choose which { sourceRecordsName } should be included in shared { targetRecordName }', { sourceRecordsName, targetRecordName}),
+                                        allowMultiple: true,
+                                        allowCancel: true,
+                                        height: transition.sourceDocuments.length * 30 + 100,
+                                        options: transition.sourceDocuments.map((source) => {
+                                            const sourceDocument = Tine.Tinebase.data.Record.setFromJson(source.sourceDocument, sourceRecordClass)
+                                            return { text: sourceDocument.getTitle(), name: sourceDocument.id, checked: true, source }
+                                        })
+                                    }), 'source');
+                                } catch (e) {/* USERABORT */ return; }
                             }
 
                             const followUpDocumentData = await Tine.Sales.createFollowupDocument(transition)
