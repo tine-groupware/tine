@@ -296,6 +296,60 @@ class Addressbook_ControllerTest extends TestCase
         $this->assertTrue(48143 == $updatedContact->adr_two_postalcode || is_null($updatedContact->adr_two_postalcode));
     }
 
+    public function testCreatedByFilter()
+    {
+        $filterCUser = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()]
+        ]);
+        $filterInCUserSC = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'in', 'value' => [Tinebase_Core::getUser()->getId(), $this->_personas['sclever']->getId()]]
+        ]);
+        $filterNotInScPw = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'notin', 'value' => [$this->_personas['sclever']->getId(), $this->_personas['pwulf']->getId()]]
+        ]);
+        $filterNotInCUser = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'notin', 'value' => [Tinebase_Core::getUser()->getId()]]
+        ]);
+        $oldSearchCountCUser = $this->_instance->searchCount($filterCUser);
+        $oldSearchCountInCUserSC = $this->_instance->searchCount($filterInCUserSC);
+        $oldSearchCountNotInScPw = $this->_instance->searchCount($filterNotInScPw);
+        $oldSearchCountNotInCUser = $this->_instance->searchCount($filterNotInCUser);
+
+        $this->_addContact();
+
+        $this->assertSame(1 + $oldSearchCountCUser, $this->_instance->searchCount($filterCUser), 'search for created_by with equals did not work');
+        $this->assertSame(1 + $oldSearchCountInCUserSC, $this->_instance->searchCount($filterInCUserSC), 'search for created_by with in did not work');
+        $this->assertSame(1 + $oldSearchCountNotInScPw, $this->_instance->searchCount($filterNotInScPw), 'search for created_by with not in did not work');
+        $this->assertSame($oldSearchCountNotInCUser, $this->_instance->searchCount($filterNotInCUser), 'search for created_by with not in did not work');
+    }
+
+    public function testCreatedByFilterWithRecordValues()
+    {
+        $filterCUser = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()]
+        ]);
+        $filterInCUserSC = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'in', 'value' => [Tinebase_Core::getUser(), $this->_personas['sclever']]]
+        ]);
+        $filterNotInScPw = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'notin', 'value' => [$this->_personas['sclever'], $this->_personas['pwulf']]]
+        ]);
+        $filterNotInCUser = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_Contact::class, [
+            ['field' => 'created_by', 'operator' => 'notin', 'value' => [Tinebase_Core::getUser()]]
+        ]);
+        $oldSearchCountCUser = $this->_instance->searchCount($filterCUser);
+        $oldSearchCountInCUserSC = $this->_instance->searchCount($filterInCUserSC);
+        $oldSearchCountNotInScPw = $this->_instance->searchCount($filterNotInScPw);
+        $oldSearchCountNotInCUser = $this->_instance->searchCount($filterNotInCUser);
+
+        $this->_addContact();
+
+        $this->assertSame(1 + $oldSearchCountCUser, $this->_instance->searchCount($filterCUser), 'search for created_by with equals did not work');
+        $this->assertSame(1 + $oldSearchCountInCUserSC, $this->_instance->searchCount($filterInCUserSC), 'search for created_by with in did not work');
+        $this->assertSame(1 + $oldSearchCountNotInScPw, $this->_instance->searchCount($filterNotInScPw), 'search for created_by with not in did not work');
+        $this->assertSame($oldSearchCountNotInCUser, $this->_instance->searchCount($filterNotInCUser), 'search for created_by with not in did not work');
+    }
+
     public function testSearchContactCS()
     {
         $this->objects['initialContact']->adr_one_street = 'caseSensitivityIsVerySensitive';
