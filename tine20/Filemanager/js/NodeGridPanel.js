@@ -595,7 +595,7 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         return new Tine.widgets.grid.FilterToolbar(Ext.apply(config, {
             app: this.app,
             recordClass: this.recordClass,
-            filterModels: this.recordClass.getFilterModel().concat(Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters(this.recordClass)),
+            filterModels: this.recordClass.getFilterModel(),
             defaultFilter: 'query',
             filters: this.defaultFilters || [],
             plugins: plugins

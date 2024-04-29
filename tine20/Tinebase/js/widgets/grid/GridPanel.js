@@ -665,9 +665,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (! this.filterToolbar && ! this.editDialog) {
             var filterModels = [];
             if (this.modelConfig) {
-                filterModels = Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters(this.recordClass);
+                //filterModels = Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters.call(this, this.recordClass);
             } else if (Ext.isFunction(this.recordClass.getFilterModel)) {
-                filterModels = this.recordClass.getFilterModel().concat(Tine.widgets.customfields.FilterModel.prototype.getCustomfieldFilters(this.recordClass));
+                filterModels = this.recordClass.getFilterModel();
             }
             this.filterToolbar = new Tine.widgets.grid.FilterPanel(Ext.apply({}, {
                 app: this.app,
