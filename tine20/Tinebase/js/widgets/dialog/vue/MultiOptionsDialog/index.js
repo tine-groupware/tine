@@ -90,7 +90,8 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Tine.widgets.dialog.ModalDial
                 labelSeparator: '',
                 boxLabel: option.text,
                 name: this.itemsName,
-                inputValue: option.name
+                inputValue: option.name,
+                originalOptObj: option
             });
         }, this);
 
