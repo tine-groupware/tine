@@ -151,7 +151,7 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
         })).then(names => {
             const value = names.join(', ');
             this.setRawValue(value || this.emptyText);
-            this.el[(value ? 'remove' : 'add') + 'Class'](this.emptyClass);
+            if (this.el?.dom) this.el[(value ? 'remove' : 'add') + 'Class'](this.emptyClass);
         });
         return this;
         
