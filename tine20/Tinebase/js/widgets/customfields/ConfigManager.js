@@ -9,42 +9,25 @@
 Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
 
 Tine.widgets.customfields.ConfigManager = function() {
-    var stores = {};
-    var idMap = {};
+    const stores = {};
+    const idMap = {};
     
-    var getStore = function(app) {
+    const getStore = function(app) {
         app = Tine.Tinebase.appMgr.get(app);
         if (! stores[app.appName]) {
-            var _ = window.lodash,
-                allCfs = (Ext.isFunction(app.getRegistry)) ? app.getRegistry().get('customfields') : null;
-
+            const allCfs = (Ext.isFunction(app.getRegistry)) ? app.getRegistry().get('customfields') : [];
             // set defaults -- uiconfig are empty strings :-(
             _.each(allCfs, function(cfConfig) {
+                idMap[cfConfig.id] = cfConfig;
                 _.each({tab: 'customfields', 'group': '', sort: 0}, function(defaultValue, field) {
                     if (['', null].indexOf(_.get(cfConfig, 'definition.uiconfig.' + field, '')) >= 0) {
                         _.set(cfConfig, 'definition.uiconfig.' + field, defaultValue);
                     }
                 });
             });
-
             stores[app.appName] = new Ext.data.JsonStore({
                 fields: Tine.Tinebase.Model.Customfield,
-                data: allCfs ? allCfs : []
-            });
-            
-            // place customefield keyFieldConfig in registry so we can use the standard widgets
-            // keyfields are used for key/value customfields with a defined store 
-            stores[app.appName].each(function(cfConfig) {
-                idMap[cfConfig.id] = cfConfig;
-                var definition = cfConfig.get('definition'),
-                    options = definition.options ? definition.options : {},
-                    keyFieldConfig = definition.keyFieldConfig ? definition.keyFieldConfig : null;
-                    
-                if (keyFieldConfig) {
-                    var config = app.getRegistry().get('config');
-                    config[cfConfig.get('name')] = keyFieldConfig;
-                    app.getRegistry().set('config', config);
-                }
+                data: allCfs
             });
         }
         
@@ -57,8 +40,8 @@ Tine.widgets.customfields.ConfigManager = function() {
      * @param  {Record} cfConfig
      * @return {Ext.data.Field} field definition
      */
-    var config2Field = function(cfConfig) {
-        var def = cfConfig.get('definition');
+    const config2Field = function(cfConfig) {
+        const def = cfConfig.get('definition');
         
         return new Ext.data.Field(Ext.apply({
             name: '#' + cfConfig.get('name')
@@ -74,7 +57,7 @@ Tine.widgets.customfields.ConfigManager = function() {
          * @return {Record}
          */
         getById: function(customfieldId, asField) {
-            var cfConfig = idMap[customfieldId];
+            const cfConfig = idMap[customfieldId];
 
             return asField ? config2Field(cfConfig) : cfConfig;
         },
@@ -89,8 +72,8 @@ Tine.widgets.customfields.ConfigManager = function() {
          * @return {Record}
          */
         getConfig: function (app, model, name, asField) {
-            var cfStore = getStore(app),
-                cfConfig = null;
+            const cfStore = getStore(app);
+            let cfConfig;
 
             model = model.match(/_Model_/) ? model : (app.appName ? app.appName : app) + '_Model_' + model;
             
@@ -117,8 +100,8 @@ Tine.widgets.customfields.ConfigManager = function() {
                 model = model.getMeta('appName') + '_Model_' + model.getMeta('modelName');
             }
             
-            var cfStore = getStore(app),
-                cfConfigs = [];
+            const cfStore = getStore(app);
+            const cfConfigs = [];
             
             cfStore.clearFilter(true);
             cfStore.filter('model', model);

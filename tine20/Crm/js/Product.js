@@ -83,8 +83,10 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         // init properties
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Crm');
         this.title = this.app.i18n._('Products');
-        //this.recordEditDialogOpener = Tine.Products.EditDialog.openWindow;
         this.recordEditDialogOpener = Ext.emptyFn;
+        if (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales')) {
+            this.recordEditDialogOpener = Tine.Sales.ProductEditDialog.openWindow;
+        }
         this.recordClass = Tine.Sales.Model.Product;
         
         this.storeFields = Tine.Sales.Model.ProductArray;

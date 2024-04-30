@@ -21,12 +21,16 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
 
     // get keyField config
     if (config.app.getRegistry()) {
-        if (! config.keyFieldConfig) {
-            config.keyFieldConfig = config.app.getRegistry().get('config')[config.keyFieldName];
+        const registry = config.app.getRegistry();
+        config.keyFieldConfig = config.keyFieldConfig || registry.get('config')[config.keyFieldName];
+        
+        if (!config.keyFieldConfig) {
+            const cf = _.find(registry.get('customfields'), { name: config.keyFieldName });
+            config.keyFieldConfig = cf?.definition.keyFieldConfig;
         }
 
         // init data / translate values
-        var data = config.keyFieldConfig && config.keyFieldConfig.value && config.keyFieldConfig.value.records && config.keyFieldConfig.value.records.length ? config.keyFieldConfig.value.records : [];
+        const data = config.keyFieldConfig?.value?.records ?? [];
         const translationList = Locale.getTranslationList(config?.keyFieldConfig?.definition?.localeTranslationList);
         Ext.each(data, function (d) {
             d.i18nValue = translationList ? translationList[d.id] : (d.value ? config.app.i18n._hidden(d.value) : "");

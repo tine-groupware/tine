@@ -38,14 +38,6 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
                 store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName);
             } catch (e) {
                 Tine.log.error(e);
-                Tine.log.debug(`Add custom fields to registry for ${appName} again`);
-                const customfields = Tine[appName].registry.get('customfields');
-                const field = customfields.find(c => {return c.name === keyFieldName;});
-                if (field?.model) {
-                    const configs = Tine.widgets.customfields.ConfigManager.getConfigs(app, field.model);
-                    store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName);
-                    Tine.log.debug(`Custom fields are added to registry successfully!`);
-                }
             }
             
             if (!renderers[key]) {
