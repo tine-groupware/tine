@@ -17,7 +17,7 @@
  * were passed without an explicit key parameter to a MixedCollection method.  Passing this parameter is
  * equivalent to providing an implementation for the {@link #getKey} method.
  */
-Ext.util.MixedCollection = function(allowFunctions, keyFn){
+Ext.util.MixedCollection = function(allowFunctions, keyFn, returnClones){
     this.items = [];
     this.map = {};
     this.keys = [];
@@ -54,6 +54,7 @@ Ext.util.MixedCollection = function(allowFunctions, keyFn){
         'sort'
     );
     this.allowFunctions = allowFunctions === true;
+    this.returnClones = returnClones === true;
     if(keyFn){
         this.getKey = keyFn;
     }
@@ -80,7 +81,7 @@ Ext.extend(Ext.util.MixedCollection, Ext.util.Observable, {
     },
     
     getAll: function() {
-        return this.map;
+        return this.returnClones ? _.cloneDeep(this.map) : this.map;
     },
 
     /**
@@ -354,6 +355,9 @@ mc.add(otherEl);
     item : function(key){
         var mk = this.map[key],
             item = mk !== undefined ? mk : (typeof key == 'number') ? this.items[key] : undefined;
+        if (this.returnClones && !Ext.isFunction(item)) {
+            item = _.cloneDeep(item);
+        }
         return !Ext.isFunction(item) || this.allowFunctions ? item : null; // for prototype!
     },
 
@@ -363,7 +367,11 @@ mc.add(otherEl);
      * @return {Object} The item at the specified index.
      */
     itemAt : function(index){
-        return this.items[index];
+        let item = this.items[index];
+        if (this.returnClones && !Ext.isFunction(item)) {
+            item = _.cloneDeep(item);
+        }
+        return item;
     },
 
     /**
@@ -409,7 +417,12 @@ mc.add(otherEl);
      * @return {Object} the first item in the collection..
      */
     first : function(){
-        return this.items[0];
+        let item = this.items[0];
+        if (this.returnClones && !Ext.isFunction(item)) {
+            item = _.cloneDeep(item);
+        }
+        return item;
+
     },
 
     /**
@@ -417,7 +430,11 @@ mc.add(otherEl);
      * @return {Object} the last item in the collection..
      */
     last : function(){
-        return this.items[this.length-1];
+        let item = this.items[this.length-1];
+        if (this.returnClones && !Ext.isFunction(item)) {
+            item = _.cloneDeep(item);
+        }
+        return item;
     },
 
     /**
@@ -499,6 +516,9 @@ mc.add(otherEl);
                 r[r.length] = items[i];
             }
         }
+        if (this.returnClones) {
+            r = _.cloneDeep(r);
+        }
         return r;
     },
 
@@ -538,6 +558,9 @@ mc.add(otherEl);
             if(fn.call(scope||this, it[i], k[i])){
                 r.add(k[i], it[i]);
             }
+        }
+        if (this.returnClones) {
+            r = _.cloneDeep(r);
         }
         return r;
     },

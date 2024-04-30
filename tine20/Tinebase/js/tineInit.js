@@ -932,7 +932,7 @@ Tine.Tinebase.tineInit = {
     initRegistry: async function (forceReload, cb, scope) {
         const registryDB = this.getRegistryDB();
         const registryData =  await registryDB.getItem('data');
-        Tine.Tinebase.registry = new Ext.util.MixedCollection();
+        Tine.Tinebase.registry = new Ext.util.MixedCollection(false, false, true);
         Tine.Tinebase.registry.addAll(registryData?.Tinebase || {});
         
         const version = Tine.Tinebase.registry.get('version');
@@ -951,7 +951,7 @@ Tine.Tinebase.tineInit = {
                 await registryDB.setItem('data', registryData);
             };
             ['registry', 'preferences'].forEach(((collection) => {
-                Tine[app][collection] = new Ext.util.MixedCollection();
+                Tine[app][collection] = new Ext.util.MixedCollection(false, false, true);
                 Tine[app][collection].on('replace', async (key, oldValue, newValue) => {
                     await setItems(collection, key, newValue);
                 });
