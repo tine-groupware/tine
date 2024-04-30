@@ -934,12 +934,35 @@ Tine.Tinebase.tineInit = {
         const registryData =  await registryDB.getItem('data');
         Tine.Tinebase.registry = new Ext.util.MixedCollection();
         Tine.Tinebase.registry.addAll(registryData?.Tinebase || {});
+        
         const version = Tine.Tinebase.registry.get('version');
         const userApplications = Tine.Tinebase.registry.get('userApplications') || [];
         const reloadNeeded = !version
             || !userApplications
             || userApplications.length < 2;
-        
+
+        const initAppRegistry = (app, registryData) => {
+            Ext.ns('Tine.' + app);
+            const setItems = async(collection, key, value) => {
+                const reference = collection === 'preferences' ? registryData[app]['preferences'] : registryData[app];
+
+                if (value instanceof Ext.util.MixedCollection) value = value.getAll();
+                reference[key] = value;
+                await registryDB.setItem('data', registryData);
+            };
+            ['registry', 'preferences'].forEach(((collection) => {
+                Tine[app][collection] = new Ext.util.MixedCollection();
+                Tine[app][collection].on('replace', async (key, oldValue, newValue) => {
+                    await setItems(collection, key, newValue);
+                });
+                Tine[app][collection].on('add', async (index, newValue, key) => {
+                    await setItems(collection, key, newValue);
+                });
+            }))
+            Tine[app].registry.addAll(registryData[app] || {}, true)
+            Tine[app].preferences.addAll(registryData[app].preferences || {}, true);
+            Tine[app].registry.set('preferences', Tine[app].preferences, true);
+        }
         if (forceReload || reloadNeeded) {
             await this.clearRegistry();
             Ext.Ajax.request({
@@ -960,27 +983,13 @@ Tine.Tinebase.tineInit = {
                         code: 503
                     });
                 },
-                success: async function (response, request) {
+                success: async (response, request) => {
                     const registryData = Ext.util.JSON.decode(response.responseText);
-                    if (Tine.Tinebase.tineInit.checkServerUpdateRequired(registryData)) {
-                        return;
-                    }
-                    await registryDB.setItem('data', registryData)
-                    Object.keys(registryData).forEach(app => {
-                        const appData = registryData[app];
-                        Ext.ns('Tine.' + app);
-                        Tine[app].registry = new Ext.util.MixedCollection();
-                        Object.keys(appData).forEach(key => {
-                            if (key === 'preferences') {
-                                Tine[app].preferences = new Ext.util.MixedCollection();
-                                Tine[app].registry.set(key, Tine[app].preferences);
-                                Object.keys(appData[key]).forEach(pref => {
-                                    Tine[app].preferences.set(pref, appData[key][pref]);
-                                });
-                            } else {
-                                Tine[app].registry.set(key, appData[key]);
-                            }
-                        });
+                    if (Tine.Tinebase.tineInit.checkServerUpdateRequired(registryData)) return;
+                    await registryDB.setItem('data', registryData);
+                    
+                    Object.keys(registryData).forEach((app) => {
+                        initAppRegistry(app, registryData);
                     });
                     
                     Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
@@ -1012,16 +1021,9 @@ Tine.Tinebase.tineInit = {
                     });
                 });
             }
-            
-            for (let app,i=0;i<userApplications.length;i++) {
-                app = userApplications[i].name;
-                Ext.ns('Tine.' + app);
-                Tine[app].registry = new Ext.util.MixedCollection();
-                Tine[app].registry.addAll(registryData[app] || {})
-                Tine[app].preferences = new Ext.util.MixedCollection();
-                Tine[app].preferences.addAll(registryData[app].preferences);
-                Tine[app].registry.add('preferences', Tine[app].preferences);
-            }
+            userApplications.forEach((app) => {
+                initAppRegistry(app.name, registryData);
+            })
             
             Tine.Tinebase.tineInit.onRegistryLoad().then(function() {
                 Ext.util.CSS.refreshCache();

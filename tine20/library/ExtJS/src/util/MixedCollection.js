@@ -70,9 +70,15 @@ Ext.extend(Ext.util.MixedCollection, Ext.util.Observable, {
     allowFunctions : false,
 
     // backward compatibility to store.js
-    set: function(key, o) {
-        this.add(key, o);
+    /**
+     * @param key
+     * @param {Object} o The item to add.
+     * @param suppressEvent
+     */
+    set: function(key, o, suppressEvent) {
+        this.add(key, o, suppressEvent);
     },
+    
     getAll: function() {
         return this.map;
     },
@@ -85,24 +91,28 @@ Ext.extend(Ext.util.MixedCollection, Ext.util.Observable, {
      * the MixedCollection will be able to <i>derive</i> the key for the new item.
      * In this case just pass the new item in this parameter.</p>
      * @param {Object} o The item to add.
+     * @param suppressEvent
      * @return {Object} The item added.
      */
-    add : function(key, o){
-        if(arguments.length == 1){
+    add : function(key, o, suppressEvent){
+        if(arguments.length === 1){
             o = arguments[0];
             key = this.getKey(o);
         }
         if(typeof key != 'undefined' && key !== null){
             var old = this.map[key];
             if(typeof old != 'undefined'){
-                return this.replace(key, o);
+                return this.replace(key, o, suppressEvent);
             }
             this.map[key] = o;
         }
         this.length++;
         this.items.push(o);
         this.keys.push(key);
-        this.fireEvent('add', this.length-1, o, key);
+        
+        if (!suppressEvent) {
+            this.fireEvent('add', this.length-1, o, key);
+        }
         return o;
     },
 
@@ -149,19 +159,21 @@ mc.add(otherEl);
      * with that key.
      * @return {Object}  The new item.
      */
-    replace : function(key, o){
+    replace : function(key, o, suppressEvent){
         if(arguments.length == 1){
             o = arguments[0];
             key = this.getKey(o);
         }
         var old = this.map[key];
         if(typeof key == 'undefined' || key === null || typeof old == 'undefined'){
-             return this.add(key, o);
+             return this.add(key, o, suppressEvent);
         }
         var index = this.indexOfKey(key);
         this.items[index] = o;
         this.map[key] = o;
-        this.fireEvent('replace', key, old, o);
+        if (!suppressEvent) {
+            this.fireEvent('replace', key, old, o);
+        }
         return o;
     },
 
@@ -171,9 +183,10 @@ mc.add(otherEl);
      * to the collection, or an Array of values, each of which are added to the collection.
      * Functions references will be added to the collection if <code>{@link #allowFunctions}</code>
      * has been set to <tt>true</tt>.
+     * @param suppressEvent
      */
-    addAll : function(objs){
-        if(arguments.length > 1 || Ext.isArray(objs)){
+    addAll : function(objs, suppressEvent){
+        if(arguments.length > 2 || Ext.isArray(objs)){
             var args = arguments.length > 1 ? arguments : objs;
             for(var i = 0, len = args.length; i < len; i++){
                 this.add(args[i]);
@@ -181,7 +194,7 @@ mc.add(otherEl);
         }else{
             for(var key in objs){
                 if(this.allowFunctions || typeof objs[key] != 'function'){
-                    this.add(key, objs[key]);
+                    this.add(key, objs[key], suppressEvent);
                 }
             }
         }
