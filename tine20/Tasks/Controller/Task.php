@@ -147,8 +147,15 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
             return;
         }
 
+        static $knownFilterIds = [];
+        if (isset($knownFilterIds[$_filter->getId()])) {
+            return;
+        }
         $_filter->andWrapItself();
         $_filter->isImplicit(true);
+        $_filter->setId(Tinebase_Record_Abstract::generateUID());
+        $knownFilterIds[$_filter->getId()] = true;
+
         parent::checkFilterACL($_filter, $_action);
 
         $aclFilters = $_filter->getAclFilters();
@@ -157,6 +164,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         }
 
         $aclFilterGroup = new Tinebase_Model_Filter_FilterGroup();
+        $aclFilterGroup->isImplicit(true);
         /** @var Tinebase_Model_Filter_Abstract $filter */
         foreach ($aclFilters as $filter) {
             $_filter->removeFilter($filter);

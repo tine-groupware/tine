@@ -400,6 +400,36 @@ class Tasks_JsonTest extends TestCase
                 
         $this->_backend->deleteTasks(array($returned['id']));
     }
+
+    public function testSearchFilterRemoveImplicit()
+    {
+        $task = $this->_getTask();
+        $task->container_id = $this->_getTestContainer(Tasks_Config::APP_NAME, Tasks_Model_Task::class, true);
+        $task = $this->_backend->saveTask($task->toArray());
+
+        // search tasks
+        $tasks = $this->_backend->searchTasks([[
+            "condition" => "OR",
+            "filters" => [[
+                "condition" => "AND",
+                "filters" => [[
+                    "field" => "status",
+                    "operator" => "notin",
+                    "value" => ["COMPLETED", "CANCELLED"],
+                ], [
+                    "field" => "container_id",
+                    "operator" => "in",
+                    "value" => [$task['container_id']],
+                ]],
+            ],[
+            "field" => "query",
+            "operator" => "contains",
+            "value" => null,
+        ]]]], []);
+
+        $this->assertCount(1, $tasks['filter'] ?? []);
+        $this->assertSame('OR', $tasks['filter'][0]['condition'] ?? 'not set');
+    }
     
     /**
      * try to search for tasks
