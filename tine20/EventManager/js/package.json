@@ -1,0 +1,15 @@
+{
+  "name": "Event Manager",
+  "version": "0.0.1",
+  "description": "Tine 2.0 Event Manager",
+  "main": "eventManager.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Event MAnager",
+    "extension"
+  ],
+  "author": "Stefanie Stamer",
+  "license": "AGPL-3.0"
+}

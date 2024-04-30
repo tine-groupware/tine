@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <name>EventManager</name>
+    <!-- gettext('EventManager') -->
+    <version>16.0</version>
+    <order>90</order>
+    <status>enabled</status>
+    <depends>
+        <application>Addressbook</application>
+        <application>Klimabuendnis</application>
+    </depends>
+    <tables/>
+</application>
