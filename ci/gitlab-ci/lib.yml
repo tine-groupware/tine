@@ -855,7 +855,7 @@
               customer="maintenance"
           fi
       
-          if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "if test -d /srv/packages.tine20.com/www/htdocs/${customer}/source/; then sudo -u www-data rm -f /srv/packages.tine20.com/www/htdocs/${customer}/source/current; sudo -u www-data ln -s ${version}/tine20-allinone_${version}.tar.bz2 /srv/packages.tine20.com/www/htdocs/${customer}/source/current; fi"; then
+          if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "if test -d /srv/packages.tine20.com/www/htdocs/${customer}/source/; then sudo -u www-data rm -f /srv/packages.tine20.com/www/htdocs/${customer}/source/tine-groupware-current.tar.bz2; sudo -u www-data ln -s ${version}/tine20-allinone_${version}.tar.bz2 /srv/packages.tine20.com/www/htdocs/${customer}/source/tine-groupware-current.tar.bz2; fi"; then
               echo "Failed to set current link"
               return 1
           fi
@@ -1935,7 +1935,7 @@
                 customer="maintenance"
             fi
         
-            if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "if test -d /srv/packages.tine20.com/www/htdocs/${customer}/source/; then sudo -u www-data rm -f /srv/packages.tine20.com/www/htdocs/${customer}/source/current; sudo -u www-data ln -s ${version}/tine20-allinone_${version}.tar.bz2 /srv/packages.tine20.com/www/htdocs/${customer}/source/current; fi"; then
+            if ! ssh ${VPACKAGES_SSH_URL} -o StrictHostKeyChecking=no -C  "if test -d /srv/packages.tine20.com/www/htdocs/${customer}/source/; then sudo -u www-data rm -f /srv/packages.tine20.com/www/htdocs/${customer}/source/tine-groupware-current.tar.bz2; sudo -u www-data ln -s ${version}/tine20-allinone_${version}.tar.bz2 /srv/packages.tine20.com/www/htdocs/${customer}/source/tine-groupware-current.tar.bz2; fi"; then
                 echo "Failed to set current link"
                 return 1
             fi
