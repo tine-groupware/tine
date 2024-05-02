@@ -309,6 +309,9 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 case 'percentage':
                     this.operators.push('equals', 'greater', 'less');
                     break;
+                case 'user':
+                    this.operators.push('equals', 'in', 'not', 'notin');
+                    break;
                 default:
                     this.operators.push(this.defaultOperator);
                     break;
@@ -394,6 +397,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
      * @private
      */
     onOperatorChange: function(filter, newOperator, keepValue) {
+        const oldOperator = filter.get('operator');
         filter.set('operator', newOperator);
         filter.set('value', '');
         
@@ -420,8 +424,14 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
             }
         }
 
-        var _ = window.lodash,
-            valueField = _.get(filter, 'formFields.value');
+        const checkFn = _.get(filter, 'formFields.value.recreateOnOpChange');
+        if (_.isFunction(checkFn) && checkFn(filter, newOperator, oldOperator)) {
+            filter.formFields.value.destroy()
+            valueField = this.valueRenderer(filter, filter.formFields.value.initialConfig.renderTo);
+            filter.formFields.value = valueField;
+        }
+
+        var valueField = _.get(filter, 'formFields.value');
 
         if (valueField instanceof Ext.ux.form.ClearableTextField) {
             valueField.disableTrigger = (newOperator != 'contains');
@@ -481,20 +491,25 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                 }));
                 break;
             case 'user':
-                value = new Tine.Addressbook.SearchCombo(Ext.apply(commonOptions, {
+                value = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', Ext.apply(commonOptions, {
                     emptyText: i18n._('Search Account ...'),
                     userOnly: true,
                     name: 'organizer',
                     nameField: 'n_fileas',
                     useAccountRecord: true,
+                    allowMultiple: ['in', 'notin', 'allOf'].indexOf(filter.formFields.operator.getValue()) > -1,
                     listeners: {
                         'specialkey': function(field, e) {
-                             if(e.getKey() == e.ENTER){
-                                 this.onFiltertrigger();
-                             }
+                            if(e.getKey() == e.ENTER){
+                                this.onFiltertrigger();
+                            }
                         },
                         'select': this.onFiltertrigger,
                         scope: this
+                    },
+                    recreateOnOpChange: function(filter, oldOperator, newOperator) {
+                        return (['equals', 'not'].indexOf(oldOperator) >= 0 && ['in', 'notin'].indexOf(newOperator) >= 0)
+                            || (['in', 'notin'].indexOf(oldOperator) >= 0 && ['equals', 'not'].indexOf(newOperator) >= 0);
                     }
                 }));
                 break;

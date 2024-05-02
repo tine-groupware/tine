@@ -119,6 +119,7 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_ForeignId
             } else {
                 switch ($this->_operator) {
                     case 'equals':
+                    case 'not':
                         try {
                             if ($this->_userValue) {
                                 $result['value'] = Tinebase_User::getInstance()->getUserById($this->_userValue)->toArray();
@@ -128,6 +129,7 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_ForeignId
                         }
                         break;
                     case 'in':
+                    case 'notin':
                         $result['value'] = array();
                         if (! is_array($this->_userValue)) {
                             // somehow the client sent us a scalar - put this into the value array

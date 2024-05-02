@@ -743,7 +743,23 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             // filter from reg
             return new Tine.widgets.grid.FilterToolbar.FILTERS[config.filtertype](config);
         } else {
-            return new Tine.widgets.grid.FilterModel(config);
+            switch (config.valueType) {
+                // NOT YET, user filter does not support definedBy atm.
+                // case 'user':
+                //     return new Tine.widgets.grid.ForeignRecordFilter(Object.assign(config, {
+                //         app: Tine.Tinebase.appMgr.get(config.appName),
+                //         ownRecordClass: Tine.Tinebase.data.RecordMgr.get(config.appName, config.modelName),
+                //         foreignRecordClass: 'Addressbook.Contact',
+                //         linkType: 'foreignId',
+                //         ownField: config.field,
+                //         pickerConfig: {
+                //             userOnly: true,
+                //             useAccountRecord: true
+                //         }
+                //     }));
+                default:
+                    return new Tine.widgets.grid.FilterModel(config);
+            }
         }
     },
 
