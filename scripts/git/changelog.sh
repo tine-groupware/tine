@@ -33,7 +33,6 @@ fi
 
 showCommits feature Features
 showCommits fix Bugfixes
-showCommits refactor Refactoring
 showCommits tweak Tweaks
 
 # TODO allow to get all other changes with a param --full
@@ -47,4 +46,6 @@ then
 
   echo -e "\n### CI Changes"
   git log $VERSION1...$VERSION2 --oneline | egrep "\(ci" | egrep -v "fixup" | sed -E ':a;N;$!ba;s/\n/  \n/g'
+
+  showCommits refactor Refactoring
 fi
