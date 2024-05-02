@@ -428,10 +428,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $this->_backend->updateSyncBackendIds($updatedRecord->getId(), $updatedRecord->syncBackendIds);
         }
 
-        $event = new Addressbook_Event_InspectContactAfterUpdate();
-        $event->updatedContact = $updatedRecord;
-        $event->record = $record;
-        Tinebase_Event::fireEvent($event);
+        if (! $this->_disabledEvents) {
+            $event = new Addressbook_Event_InspectContactAfterUpdate();
+            $event->updatedContact = $updatedRecord;
+            $event->record = $record;
+            Tinebase_Event::fireEvent($event);
+        }
     }
 
     protected function _updateMailinglistsOnEmailChange($updatedRecord, $currentRecord)
@@ -533,10 +535,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $this->_backend->updateSyncBackendIds($_createdRecord->getId(), $_createdRecord->syncBackendIds);
         }
 
-        $event = new Addressbook_Event_CreateContact();
-        $event->createdContact = $_createdRecord;
-        $event->record = $_record;
-        Tinebase_Event::fireEvent($event);
+        if (! $this->_disabledEvents) {
+            $event = new Addressbook_Event_CreateContact();
+            $event->createdContact = $_createdRecord;
+            $event->record = $_record;
+            Tinebase_Event::fireEvent($event);
+        }
     }
 
     public function resetSyncBackends()
@@ -610,13 +614,14 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             throw new Addressbook_Exception_AccessDenied($translation->_('It is not allowed to delete email account type contact!'));
         }
 
-        Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Addressbook_Event_BeforeDeleteContact(array(
-            'observable' => $_record
-        )));
-
-        $event = new Addressbook_Event_DeleteContact();
-        $event->record = $_record;
-        Tinebase_Event::fireEvent($event);
+        if (! $this->_disabledEvents) {
+            Tinebase_Record_PersistentObserver::getInstance()->fireEvent(new Addressbook_Event_BeforeDeleteContact(array(
+                'observable' => $_record
+            )));
+            $event = new Addressbook_Event_DeleteContact();
+            $event->record = $_record;
+            Tinebase_Event::fireEvent($event);
+        }
 
         $recordBackendIds = $_record->syncBackendIds;
 
