@@ -343,7 +343,8 @@ class Tinebase_ApplicationTest extends TestCase
                 Felamimail_Model_Sieve_ScriptPart::class,
                 Felamimail_Model_Sieve_Vacation::class,
                 Felamimail_Model_Signature::class,
-                Felamimail_Model_MailType::class
+                Felamimail_Model_MailType::class,
+                Felamimail_Model_MessageExpectedAnswer::class
             ),
             'Filemanager' => array(
                 Filemanager_Model_DownloadLink::class,

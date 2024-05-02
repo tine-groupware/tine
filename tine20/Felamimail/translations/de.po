@@ -2188,5 +2188,49 @@ msgstr ""
 "Die Empfänger dieses Email-Verteilers werden in folgnder Liste verwaltet: "
 "{locationsHtml}"
 
+#: Controller/MessageExpectedAnswer.php:74
+msgid "still unanswered: "
+msgstr "noch unbeantwortet: "
+
+#: Controller/MessageExpectedAnswer.php:77
+msgid "Here is the reminder you requested. Unfortunately, we were unable to locate a response to the email attached within your specified deadline of: "
+msgstr "Hier ist die von Ihnen angeforderte Erinnerung. Leider war es uns nicht möglich, eine Antwort auf die angehängte E-Mail innerhalb der von Ihnen angegebenen Frist zu finden: "
+
+#: js/MessageExpectedAnswerAction.js:22
+msgid "Expected Answer"
+msgstr "Erwarte Antwort"
+
+#: js/MessageExpectedAnswerAction.js:69
+msgid "Tomorrow"
+msgstr "Morgen"
+
+#: js/MessageExpectedAnswerAction.js:74
+msgid "In two days"
+msgstr "In zwei Tagen"
+
+#: js/MessageExpectedAnswerAction.js:79
+msgid "In a week"
+msgstr "In einer Woche"
+
+#: js/MessageExpectedAnswerAction.js:84
+msgid "In two weeks"
+msgstr "In zwei Wochen"
+
+#: js/MessageExpectedAnswerAction.js:89
+msgid "In a month"
+msgstr "In einem Monat"
+
+#: js/MessageExpectedAnswerAction.js:94
+msgid "Custom"
+msgstr "Kalendar"
+
+#: js/MessageExpectedAnswerAction.js:109
+msgid "Information"
+msgstr "Information"
+
+#: js/MessageExpectedAnswerAction.js:109
+msgid "If you select one of these options, you will receive a notification if you have not received a reply to the mail after the configured deadline has expired"
+msgstr "Wenn Sie eine dieser Optionen wählen, erhalten Sie eine Benachrichtigung, falls Sie nach Ablauf der konfigurierten Frist keine Antwort auf die E-Mail erhalten haben"
+
 msgid "Selected E-Mail"
 msgstr "Ausgewählte E-Mail"

@@ -249,6 +249,20 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             tooltip: this.app.i18n._('Activate this toggle button to receive a reading confirmation.')
         });
 
+        this.action_expectedAnswer = new Tine.Felamimail.MessageExpectedAnswerAction({
+            mode: 'selectOnly',
+            composeDialog: this,
+            originalMessage: this.replyTo,
+            listeners: {
+                scope: this,
+                selectionchange: this.onFileMessageSelectionChange
+            }
+        });
+
+        this.button_ExpectedAnswer = Ext.apply(new Ext.Button(this.action_expectedAnswer), {
+            tooltip: this.app.i18n._('If you select one of these options, you will receive a notification if you have not received a reply to the mail after the configured deadline has expired')
+        });
+
         this.action_toggleEncrypt = new Ext.Action({
             text: this.app.i18n._('Encrypt Email'),
             toggleHandler: this.onToggleEncrypt,
@@ -279,7 +293,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             defaults: {height: 43},
             items: [{
                 xtype: 'buttongroup',
-                columns: 7,
+                columns: 8,
                 items: [
                     Ext.apply(new Ext.Button(this.action_send), {
                         scale: 'medium',
@@ -298,11 +312,12 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         tooltip: this.app.i18n._('Click to search for and add recipients from the Addressbook.')
                     }),
                     this.action_saveAsDraft,
-                    this.action_saveAsTemplate,
-                    this.button_fileMessage,
                     this.button_toggleReadingConfirmation,
+                    this.button_massMailing,
+                    this.button_fileMessage,
+                    this.action_saveAsTemplate,
                     this.button_toggleEncrypt,
-                    this.button_massMailing
+                    this.button_ExpectedAnswer,
                 ]
             }]
         });
@@ -1327,7 +1342,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('from_name', account.get('from'));
 
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
-
+        this.record.set('expected_answer', this.action_expectedAnswer?.answer);
         this.record.set('account_id', account.get('original_id'));
         this.updateFileLocations();
 

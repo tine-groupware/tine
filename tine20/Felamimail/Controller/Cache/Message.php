@@ -934,6 +934,13 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $cachedMessage = $this->addMessageToCache($messageToCache);
 
+        if ($cachedMessage && isset($_message['header']['in-reply-to'])) {
+           if(!((isset($_message['header']['auto-submitted']) && $_message['header']['auto-submitted'] == "auto-replied (vacation)") ||
+               (isset($_message['header']['x-auto-suppress']) && $_message['header']['x-auto-suppress'] == "All"))) {
+              $this->deleteExpectedAnswer($_message['header']['in-reply-to']);
+            }
+        }
+
         if ($cachedMessage !== false) {
             if (Felamimail_Controller_Message_Flags::getInstance()->tine20FlagEnabled($_message)) {
                 Felamimail_Controller_Message_Flags::getInstance()->setTine20Flag($cachedMessage);
@@ -962,13 +969,13 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     protected function _createMessageToCache(array $_message, Felamimail_Model_Folder $_folder)
     {
         $message = new Felamimail_Model_Message(array(
-            'account_id'    => $_folder->account_id,
-            'messageuid'    => $_message['uid'],
-            'folder_id'     => $_folder->getId(),
-            'timestamp'     => Tinebase_DateTime::now(),
-            'received'      => Felamimail_Message::convertDate($_message['received']),
-            'size'          => $_message['size'],
-            'flags'         => $_message['flags'],
+            'account_id'      => $_folder->account_id,
+            'messageuid'      => $_message['uid'],
+            'folder_id'       => $_folder->getId(),
+            'timestamp'       => Tinebase_DateTime::now(),
+            'received'        => Felamimail_Message::convertDate($_message['received']),
+            'size'            => $_message['size'],
+            'flags'           => $_message['flags']
         ));
 
         $message->parseStructure($_message['structure']);
@@ -1032,6 +1039,20 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         return $result;
+    }
+    /**
+     * delete message from expected answer table if answer arrived
+     *
+     * @param string $message_id
+     * @return void
+     */
+    public function deleteExpectedAnswer(string $message_id): void
+    {
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_MessageExpectedAnswer::class, [
+            ['field' => Felamimail_Model_MessageExpectedAnswer::FLD_MESSAGE_ID, 'operator' => 'equals', 'value' => $message_id],
+        ]);
+        Felamimail_Controller_MessageExpectedAnswer::getInstance()->deleteByFilter($filter);
     }
 
     /**
