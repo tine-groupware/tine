@@ -3323,4 +3323,70 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $this->assertEquals(0, $updatedFolder['cache_totalcount']);
         $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_EMPTY, $updatedFolder['cache_status']);
     }
+
+    /**
+     * Test if expected answer is set and saved in the database.
+     *
+     */
+    public function testMessageExpectedAnswer()
+    {
+        $messageToSend = $this->_getMessageData();
+        $date = Tinebase_DateTime::now()->addHour(1)->setTimezone(Tinebase_Core::getUserTimezone())->format(Tinebase_Record_Abstract::ISO8601LONG);
+        $messageToSend['expected_answer'] = $date;
+        $messageToSend['subject'] = Tinebase_Record_Abstract::generateUID();
+        $message = $this->_sendMessage(_messageToSend: $messageToSend);
+
+        // get complete message
+        $message = $this->_json->getMessage($message['id']);
+
+        $this->_checkExpectedAnswerInDb($message['headers']['message-id']);
+
+        // reply to our mail - check if expected answer is removed from db
+        $replyMessage = $this->_getReply($message);
+        $this->_json->saveMessage($replyMessage);
+        $this->_getMessages();
+        $this->_checkExpectedAnswerInDb($message['headers']['message-id'], false);
+    }
+
+    /**
+     * Check if the expected answer is saved in the database.
+     *
+     * @param string $message_id The ID of the message to check for.
+     * @param bool $exists Flag to indicate whether the expected answer should exist in the database.
+     * @throws PHPUnit_Framework_AssertionFailedError If the expected answer is not found when it should exist or vice versa.
+     */protected function _checkExpectedAnswerInDb(string $message_id, bool $exists = true)
+    {
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_MessageExpectedAnswer::class, [
+            ['field' => 'message_id', 'operator' => 'equals', 'value' => $message_id]
+        ]);
+        $result = Felamimail_Controller_MessageExpectedAnswer::getInstance()->search($filter);
+        $expected_answer = $result->getFirstRecord();
+        if ($exists) {
+            $this->assertNotNull($expected_answer, 'did not find expected answer for message id ' . $message_id);
+        } else {
+            $this->assertNull($expected_answer, 'did find expected answer for message id ' . $message_id);
+        }
+    }
+
+    /**
+     * Test to see if a reminder is sent if the expected answer is set and is no longer in the datebase.
+     *
+     */
+    public function testAutomaticMailExpectedAnswer()
+    {
+        $messageToSend = $this->_getMessageData();
+        $date = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format(Tinebase_Record_Abstract::ISO8601LONG);
+        $messageToSend['expected_answer'] = $date;
+        $messageToSend['subject'] = Tinebase_Record_Abstract::generateUID();
+        $message = $this->_sendMessage(_messageToSend: $messageToSend);
+        Felamimail_Controller_MessageExpectedAnswer::getInstance()->checkExpectedAnswer();
+        $message = $this->_json->getMessage($message['id']);
+        // check that the entry is no longer in the db
+        $this->_checkExpectedAnswerInDb($message['headers']['message-id'], false);
+        // check if reminder was sent
+        $result = $this->getMessages();
+        $this->assertTrue(!empty($result));
+    }
 }
+
+

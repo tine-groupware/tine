@@ -37,7 +37,7 @@
  * @property    array   $fileLocations      file locations of this message
  * @property    boolean $is_spam_suspicions true if is spam suspicions
  * @property    array   $sent_copy_folder   target folder ids when save copy message to source folder
-
+ * @property    Tinebase_DateTime  $expected_answer    the selected date option for an expected answer
  */
 class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tinebase_BL_DataInterface
 {
@@ -184,6 +184,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         'is_spam_suspicions'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tags'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), // originally categories handled by Tinebase_Tags
         'sent_copy_folder'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'expected_answer'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -195,6 +196,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
         'timestamp',
         'received',
         'sent',
+        'expected_answer',
     );
 
     /**

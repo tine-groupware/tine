@@ -7,6 +7,7 @@
  */
 
 require('./MessageFileAction');
+require('./MessageExpectedAnswerAction');
 
 Ext.ns('Tine.Felamimail');
 

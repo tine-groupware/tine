@@ -191,4 +191,12 @@ vacation_template_test
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' Saved task FelamimailPruneAttachmentCache in scheduler.');
     }
+
+    /**
+     * init scheduler tasks
+     */
+    protected function _initializeSchedulerTasks()
+    {
+        Felamimail_Scheduler_Task::addCheckExpectedAnswerTask(Tinebase_Core::getScheduler());
+    }
 }
