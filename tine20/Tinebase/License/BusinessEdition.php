@@ -97,19 +97,23 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             Tinebase_Exception::log($teb);
             return null;
         }
-        if ($fs->fileExists($this->getLicensePath())) {
-            $licenseFileHandle = $fs->fopen($this->getLicensePath(), 'r');
-            if ($licenseFileHandle !== false) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+        try {
+            if ($fs->fileExists($this->getLicensePath())) {
+                $licenseFileHandle = $fs->fopen($this->getLicensePath(), 'r');
+                if ($licenseFileHandle !== false) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                         __METHOD__ . '::' . __LINE__ . " Fetching current license from vfs: " . $this->getLicensePath());
 
-                $result = fread($licenseFileHandle, 8192);
-                $fs->fclose($licenseFileHandle);
+                    $result = fread($licenseFileHandle, 8192);
+                    $fs->fclose($licenseFileHandle);
 
-                if (!empty($result)) {
-                    return $result;
+                    if (!empty($result)) {
+                        return $result;
+                    }
                 }
             }
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
         }
 
         return null;
