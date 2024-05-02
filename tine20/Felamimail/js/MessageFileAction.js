@@ -490,9 +490,14 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
      */
     itemToLocation:function(item) {
         const app = item.fileTarget?.model?.getMeta?.('appName') ?? null;
+        const model = item.fileTarget?.model?.getPhpClassName?.();
+        let type =  'attachment';
+        if (app === 'Filemanager') type = 'node';
+        if (model === 'Felamimail_Model_Folder') type = 'folder';
+        
         return {
-            type: !app ? 'attachment' : app === 'Felamimail' ? 'folder' : 'node',
-            model: item.fileTarget?.model?.getPhpClassName?.(),
+            type: type,
+            model: model,
             record_id: item.fileTarget.data,
             record_title: item.fileTarget.record_title
         };
