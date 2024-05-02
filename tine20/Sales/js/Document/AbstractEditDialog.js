@@ -68,7 +68,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         const sums = positions.reduce((a, pos) => {
             document_price_type = document_price_type === 'gross' && pos.unit_price_type === 'gross' ? 'gross' : 'net';
             a['positions_net_sum'] = (a['positions_net_sum'] || 0) + (pos['net_price'] || 0)
-            a['positions_gross_sum'] = (a['positions_gross_sum'] || 0) + (pos['position_price'] || 0)
+            a['positions_gross_sum'] = (a['positions_gross_sum'] || 0) + (pos['gross_price'] || 0)
             a['positions_discount_sum'] = (a['positions_discount_sum'] || 0) + (pos['position_discount_sum'] || 0)
 
             const rate = pos['sales_tax_rate'] || 0
