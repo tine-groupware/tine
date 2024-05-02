@@ -712,7 +712,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             $this->{self::FLD_POSITIONS_NET_SUM} = $this->{self::FLD_POSITIONS_NET_SUM}
                 + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_NET_PRICE});
             $this->{self::FLD_POSITIONS_GROSS_SUM} = $this->{self::FLD_POSITIONS_GROSS_SUM}
-                + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_PRICE});
+                + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_GROSS_PRICE});
             $this->{self::FLD_POSITIONS_DISCOUNT_SUM} = $this->{self::FLD_POSITIONS_DISCOUNT_SUM}
                 + floatval($position->{Sales_Model_DocumentPosition_Abstract::FLD_POSITION_DISCOUNT_SUM});
 

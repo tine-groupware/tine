@@ -115,6 +115,11 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
     denormalizationRecordClass: null,
 
     /**
+     * lasy load record if id is given only
+     */
+    lasyLoading: true,
+
+    /**
      * @cfg {Boolean} useEditPlugin
      */
     useEditPlugin: false,
@@ -389,6 +394,15 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             } else if (Ext.isPrimitive(value) && value == this.getValue()) {
                 // value is the current id
                 return this.setValue(this.selectedRecord);
+            } else if (value && Ext.isString(value) && !value.match(/^{/) && !this.store.getById(value) && this.lasyLoading) {
+                // value is an id
+                try {
+                    this.recordProxy.promiseLoadRecord(value).then(record => {
+                        this.suspendEvents();
+                        this.setValue(record);
+                        this.resumeEvents();
+                    }).catch()
+                } catch (e) {/* do nothing */}
             }
         }
 
