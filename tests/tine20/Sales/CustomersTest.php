@@ -351,14 +351,13 @@ class Sales_CustomersTest extends TestCase
         $customer['debitors'][0]['delivery'] = NULL;
         $customer = $this->_json->saveCustomer($customer);
     
-        //$this->assertEquals(1406708670499, $customer['debitors'][0]['billing'][0]['id']);
         $this->assertEquals(0, count($customer['debitors'][0]['delivery']));
     }
 
     public function testAutoCustomerContactRelation()
     {
         // create contact (in container with $container->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK]
-        // create customer
+        // -> auto creates customer
         $container = Tinebase_Container::getInstance()->getSharedContainer(
             Tinebase_Core::getUser()->getId(),
             Addressbook_Model_Contact::class,
@@ -368,10 +367,34 @@ class Sales_CustomersTest extends TestCase
         $container = Tinebase_Container::getInstance()->update($container);
         Tinebase_Container::getInstance()->resetClassCache();
         Tinebase_Record_Expander_DataRequest::clearCache();
-        $customer = $this->_createCustomer($container);
 
-        // TODO assert special relation (TYPE CONTACTCUSTOMER - see \Sales_Controller::createUpdatePostalAddress)
-        self::assertCount(1, $customer['relations']);
+        $contact = $this->_contactController->create(new Addressbook_Model_Contact([
+            'container_id' => $container->getId(),
+            'n_family' => 'new vip customer',
+        ]));
+
+        // TODO assert customer + special relation (TYPE CONTACTCUSTOMER - see \Sales_Controller::createUpdatePostalAddress)
+//        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Sales_Model_Customer::class, [
+//            ['field' => 'relations', 'operator' => 'definedBy', 'value' => [
+//                ['field' => 'related_id', 'operator' => 'equals' , 'value' => $contact->getId()],
+//                ['field' => 'type', 'operator' => 'equals' , 'value' => 'CONTACTCUSTOMER'],
+//                ['field' => 'own_model',     'operator' => 'equals', 'value' => Sales_Model_Customer::class],
+//                ['field' => 'related_model', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::class],
+//            ]],
+//        ]);
+//        $customer = Sales_Controller_Customer::getInstance()->search($filter);
+//        self::assertCount(1, count($customer));
+
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_Relation::class, [
+            ['field' => 'related_id', 'operator' => 'equals' , 'value' => $contact->getId()],
+            ['field' => 'type', 'operator' => 'equals' , 'value' => 'CONTACTCUSTOMER'],
+            ['field' => 'own_model',     'operator' => 'equals', 'value' => Sales_Model_Customer::class],
+            ['field' => 'related_model', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::class],
+        ]);
+        $relations = Tinebase_Relations::getInstance()->search($filter);
+        self::assertCount(1, $relations, 'contact-customer relation not found');
+
+        // TODO assert customer
     }
 
     public function testMultiDivisionNoGrants()

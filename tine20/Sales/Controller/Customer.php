@@ -100,8 +100,8 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
     /**
      * inspect creation of one record (after setReleatedData)
      *
-     * @param   Tinebase_Record_Interface $createdRecord    the just updated record
-     * @param   Tinebase_Record_Interface $record           the update record
+     * @param Tinebase_Record_Interface $createdRecord the just updated record
+     * @param Tinebase_Record_Interface $record the update record
      * @return  void
      */
     protected function _inspectAfterSetRelatedDataCreate($createdRecord, $record)
@@ -123,21 +123,19 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         $this->handleExternAndInternId($_record);
-        
+
         self::validateCurrencyCode($_record->currency);
     }
 
     /**
      * inspect creation of one record (after create)
      *
-     * @param   Tinebase_Record_Interface $_createdRecord
-     * @param   Tinebase_Record_Interface $_record
+     * @param Tinebase_Record_Interface $_createdRecord
+     * @param Tinebase_Record_Interface $_record
      * @return  void
      */
     protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        $this->_setContactCustomerRelation($_createdRecord);
-
         // create default debitor if missing
         if (!$_record->{SMC::FLD_DEBITORS}) {
             $_record->{SMC::FLD_DEBITORS} = new Tinebase_Record_RecordSet(Sales_Model_Debitor::class);
@@ -152,22 +150,15 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * inspect update of one record (before update)
+     * inspect update of one record (after update)
      *
      * @param Tinebase_Record_Interface $updatedRecord
      * @param Tinebase_Record_Interface $record
      * @param Tinebase_Record_Interface $currentRecord
      * @return  void
-     *
-     * @throws Sales_Exception_DuplicateNumber
-     * @throws Sales_Exception_UnknownCurrencyCode
-     * @todo $_record->contracts should be a Tinebase_Record_RecordSet
-     * @todo use getMigration()
      */
     protected function _inspectAfterUpdate($updatedRecord, $record, $currentRecord)
     {
-        $this->_setContactCustomerRelation($updatedRecord);
-
         $this->handleExternAndInternId($record);
     }
 
@@ -202,14 +193,15 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
      * @return  Tinebase_Record_Interface
      *
      */
-    public function handleExternAndInternId($_record) {
+    public function handleExternAndInternId($_record)
+    {
         //its only for the occasion after resolveVirtualFields
         foreach (array('cpextern_id', 'cpintern_id') as $prop) {
             if (isset($_record[$prop]) && is_array($_record[$prop])) {
                 $_record[$prop] = $_record[$prop]['id'];
             }
         }
-        
+
         return $_record;
     }
 
@@ -253,41 +245,6 @@ class Sales_Controller_Customer extends Tinebase_Controller_Record_Abstract
 
             $address = Sales_Controller_Address::getInstance()->create(new Sales_Model_Address($billingAddress));
             $debitor->{SMDN::FLD_BILLING}?->addRecord($address);
-        }
-    }
-
-    /**
-     * set / update customer / contact relation when contact container xprop is set
-     *
-     * @param Sales_Model_Customer $customer
-     * @return void
-     * @throws Tinebase_Exception_AccessDenied
-     * @throws Tinebase_Exception_NotFound
-     * @throws Tinebase_Exception_Record_DefinitionFailure
-     * @throws Tinebase_Exception_Record_NotAllowed
-     * @throws Tinebase_Exception_Record_Validation
-     */
-    protected function _setContactCustomerRelation(Sales_Model_Customer $customer): void
-    {
-        if ($customer->cpextern_id) {
-            // get sales customer with cpextern == this contact
-            $contact = $customer->relations?->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
-
-            if (! $contact) {
-                // set special contact relation if missing (TYPE CONTACTCUSTOMER - see \Sales_Controller::createUpdatePostalAddress)
-                $contact = Addressbook_Controller_Contact::getInstance()->get($customer->cpextern_id);
-                if (isset($contact->container_id->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK]) &&
-                    $contact->container_id->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK])
-                {
-                    Tinebase_Relations::getInstance()->addRelation(new Tinebase_Model_Relation([
-                        'related_degree' => Tinebase_Model_Relation::DEGREE_CHILD,
-                        'related_model' => Addressbook_Model_Contact::class,
-                        'related_backend' => Tinebase_Model_Relation::DEFAULT_RECORD_BACKEND,
-                        'related_id' => $contact->getId(),
-                        'type' => 'CONTACTCUSTOMER'
-                    ], true), $customer);
-                }
-            }
         }
     }
 }
