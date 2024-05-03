@@ -117,12 +117,20 @@ class Timetracker_Config extends Tinebase_Config_Abstract
             ],
         ],
         self::ACCOUNTING_TIME_ROUNDING_MINUTES => [
+            self::LABEL                 => 'rounding minutes',
+            self::DESCRIPTION           => '',
             self::TYPE                  => self::TYPE_INT,
+            self::SETBYSETUPMODULE      => false,
+            self::SETBYADMINMODULE      => true,
             self::CLIENTREGISTRYINCLUDE => true,
             self::DEFAULT_STR           => 15
         ],
         self::ACCOUNTING_TIME_ROUNDING_METHOD => [
+            self::LABEL                 => 'rounding method',
+            self::DESCRIPTION           => '',
             self::TYPE                  => self::TYPE_STRING,
+            self::SETBYSETUPMODULE      => false,
+            self::SETBYADMINMODULE      => true,
             self::CLIENTREGISTRYINCLUDE => true,
             self::DEFAULT_STR           => self::ACCOUNTING_TIME_ROUNDING_METHOD_CEIL,
         ],
