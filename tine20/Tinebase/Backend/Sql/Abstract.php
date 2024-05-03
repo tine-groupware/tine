@@ -567,6 +567,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if ($_filter !== NULL) {
             if (Tinebase_Model_Filter_FilterGroup::CONDITION_OR === $_filter->getCondition() && !$getDeleted) {
                 $_filter->andWrapItself();
+                $_filter->isImplicit(true);
             }
             $this->_addFilter($select, $_filter);
         }

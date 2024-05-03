@@ -646,13 +646,16 @@ class Crm_JsonTest extends Crm_AbstractTest
         $lead2['leadstate_id'] = 2;             // contacted
         $this->_getUit()->saveLead($lead2);
         
-        $sort = array(
+        $sort = [
             'sort' => 'leadstate_id',
-            'dir' => 'ASC'
-        );
+            'dir' => 'ASC',
+        ];
         $searchLeads = $this->_getUit()->searchLeads($this->_getLeadFilter(), $sort);
-        
-        $this->assertEquals(2, $searchLeads['results'][0]['leadstate_id'], 'leadstate "contacted" should come first');
+        $this->assertSame(1, (int)$searchLeads['results'][0]['leadstate_id']);
+
+        $sort['dir'] = 'DESC';
+        $searchLeads = $this->_getUit()->searchLeads($this->_getLeadFilter(), $sort);
+        $this->assertSame(2, (int)$searchLeads['results'][0]['leadstate_id']);
     }
     
     /**
