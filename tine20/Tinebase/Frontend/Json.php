@@ -1496,7 +1496,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         $values = array_unique(array_map(
             function ($value) {
-                return ucwords(strtolower(trim($value)), ' -–/()');
+                return trim($value);
             },
             $controller->search($filter, $paging)->{$property}
         ));
