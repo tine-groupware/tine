@@ -72,6 +72,10 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     },
 
     getItems: function () {
+        const  {allowMultiple, renderTo, filter, listeners, ... searchComboConfig} = this.initialConfig;
+        this.searchComboConfig = this.searchComboConfig || {};
+        Object.assign(this.searchComboConfig, searchComboConfig);
+
         this.pickerGrid = new Tine.widgets.grid.PickerGridPanel(Ext.copyTo({
             height: this.layerHeight - 40 || 'auto',
             onStoreChange: Ext.emptyFn,

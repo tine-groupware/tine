@@ -7,6 +7,7 @@
  */
 
 Ext.ns('Tine.Addressbook');
+import './ContactsSearchCombo'
 
 require('./StructurePanel');
 require('./Model/ContactPersonalGrants');
