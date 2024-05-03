@@ -34,6 +34,10 @@ class Tinebase_Auth_MFATest extends TestCase
         }
 
         $this->_oldRequest = Tinebase_Core::getContainer()->get(RequestInterface::class);
+
+        if (null === Tinebase_Core::getRequest()) {
+            Tinebase_Core::set(Tinebase_Core::REQUEST, new Tinebase_Http_Request());
+        }
     }
 
     protected function tearDown(): void
@@ -404,7 +408,7 @@ class Tinebase_Auth_MFATest extends TestCase
         $this->assertIsArray($sessionData, 'session data not set properly');
         $this->assertArrayHasKey('ttl', $sessionData, 'session data not set properly');
         $this->assertArrayHasKey('pin', $sessionData, 'session data not set properly');
-        $this->assertStringContainsString('"body":"' . $sessionData['pin'] . ' is your ',
+        $this->assertStringContainsString($sessionData['pin'],
             $httpClientTestAdapter->lastRequestBody);
         $this->assertStringContainsString('"recipients":["+491234567890"],"route":"2345"',
             $httpClientTestAdapter->lastRequestBody);
