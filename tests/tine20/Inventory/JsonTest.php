@@ -104,7 +104,7 @@ class Inventory_JsonTest extends Inventory_TestCase
         $returned = $json->autoComplete('Inventory', 'InventoryItem', 'name', 'mini');
 
         // account for strtolower and ucwords
-        $this->assertEquals('Minimal Inventory Item By Phpunit::inventory_jsontest', $returned['results'][0]['name']);
+        $this->assertEquals('minimal inventory item by PHPUnit::Inventory_JsonTest', $returned['results'][0]['name']);
     }
     
     /**
