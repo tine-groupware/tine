@@ -199,11 +199,22 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             handler: this.onDetailsToggle,
             stateful: stateful,
             stateId : stateful ? stateId : null,
-            getState: function() {
+            getState: function () {
+                const filterStore = this?.scope?.ftb?.filterStore;
+                const queryFilter = filterStore.find('field', 'query');
+                const state = Ext.state.Manager.get(this.stateId);
+                
+                if (typeof state?.detailsButtonPressed === 'undefined') {
+                    const enabled = filterStore?.data?.length > 1 || queryFilter === -1;
+                    Ext.state.Manager.set(this.stateId, {detailsButtonPressed: enabled});
+                    if (this.pressed !== enabled) {
+                        this.applyState({detailsButtonPressed: enabled});
+                    }
+                }
                 return {detailsButtonPressed: this.pressed};
             },
             applyState: function(state) {
-                if (state.detailsButtonPressed) {
+                if (state?.detailsButtonPressed) {
                     this.setText( i18n._('hide details'));
                     this.toggle(state.detailsButtonPressed);
                 }
@@ -234,7 +245,6 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             // preset quickFilter with filterrow value
             this.syncField(filter.formFields.value);
         }
-        
     },
     
     /**
