@@ -141,7 +141,7 @@ class Tinebase_CustomFieldTest extends TestCase
 
         $jsonResult = (new Addressbook_Frontend_Json)->searchContacts($filter->toArray(), []);
         $this->assertSame($jsonResult['results'][0]['n_given'], 'Matt');
-        $this->assertArrayNotHasKey($cf1->name, $jsonResult['results'][0]['customfields']);
+        $this->assertArrayNotHasKey($cf1->name, $jsonResult['results'][0]['customfields'] ?? []);
 
         $record2->xprops('customfields')[$cf1->name] = [$record1->getId()];
         $c->update($record2);
