@@ -20,7 +20,6 @@ class Tinebase_Config_MCKeyFieldRecord extends Tinebase_Record_NewAbstract
     public const MODEL_NAME_PART = 'MCKeyFieldRecord';
 
     protected static $_modelConfiguration = [
-        self::VERSION       => 1,
         self::APP_NAME      => Tinebase_Config::APP_NAME,
         self::MODEL_NAME    => self::MODEL_NAME_PART,
         self::RECORD_NAME   => 'Key Field Record', // // gettext('GENDER_Key Field Record')
