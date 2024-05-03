@@ -638,6 +638,10 @@
           "path": "js/widgets/dialog/vue/MultiOptionsDialog/"
         },
         {
+          "text": "index.js",
+          "path": "js/widgets/dialog/vue/ModalDialog/"
+        },
+        {
           "text": "FileListDialog.js",
           "path": "js/widgets/dialog/"
         },
@@ -982,8 +986,8 @@
           "path": "js/widgets/file/"
         },
         {
-          "text": "PasswordDialog.js",
-          "path": "js/widgets/dialog/"
+          "text": "index.js",
+          "path": "js/widgets/dialog/vue/PasswordDialog/"
         },
         {
           "text": "SecondFactorDialog.js",
@@ -1014,8 +1018,8 @@
           "path": "js/widgets/path/"
         },
         {
-          "text": "PasswordChangeDialog.js",
-          "path": "js/"
+          "text": "index.js",
+          "path": "js/widgets/dialog/vue/PasswordChangeDialog/"
         },
         {
           "text": "AboutDialog.js",
