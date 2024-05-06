@@ -141,10 +141,18 @@ watch(() => props.otherConfigs.visible, newVal => {
     }
     nextTick(() => {
       ft.value = createFocusTrap('.vue-message-box .modal-content', { trapStack: props.opt.focusTrapStack, isKeyForward, isKeyBackward })
-      ft.value.activate()
+      try{
+        ft.value.activate()
+      } catch (e) {
+        // ignorable error
+        const msg = "Your focus-trap must have at least one container with at least one tabbable node in it at all times"
+        if(e.message !== msg){
+          throw e
+        }
+      }
     })
   } else {
-    console.log(ft.value, props.opt.focusTrapStack)
+    console.debug(ft.value, props.opt.focusTrapStack)
     ft.value.deactivate()
     showModal.value = newVal
   }
