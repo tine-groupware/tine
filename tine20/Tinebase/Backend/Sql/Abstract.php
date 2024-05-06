@@ -670,7 +670,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (!empty($this->_additionalSearchCountCols)) {
             $result = $this->_db->fetchRow($countSelect);
         } else {
-            $result = $this->_db->fetchOne($countSelect);
+            $result = (int)$this->_db->fetchOne($countSelect);
         }
         
         return $result;
