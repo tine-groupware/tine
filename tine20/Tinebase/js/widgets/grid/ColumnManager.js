@@ -72,6 +72,10 @@ Tine.widgets.grid.ColumnManager = function() {
                 return null;
             }
 
+            if (['text', 'fulltext'].indexOf(fieldDefinition.type) >= 0) {
+                return null;
+            }
+
             if (fieldDefinition.type == 'records') {
                 if (_.get(fieldDefinition, 'config.specialType') === 'localizedString') {
                     fieldDefinition.type = 'localizedString';
