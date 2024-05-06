@@ -104,12 +104,6 @@ msgid_plural "Texts"
 msgstr[0] "Text"
 msgstr[1] "Texte"
 
-msgid "Gets assigned automatically"
-msgstr "Wird automatisch zugewiesen"
-
-msgid "Number is Editable"
-msgstr "Nummer ist editierbar"
-
 #: Record/Expander/PropertyClass/Grants.php:65 Frontend/Json/Container.php:223
 #: js/widgets/account/PickerGridPanel.js:231
 msgid "Anyone"
@@ -399,9 +393,6 @@ msgstr "Sie benötigen einen aktuellen Browser um dieses Programm zu nutzen."
 #, python-brace-format
 msgid "User: {0}"
 msgstr "Benutzer: {0}"
-
-msgid "Search for Application ..."
-msgstr "Nach Anwendung suchen ..."
 
 #: js/MainMenu.js:112
 msgid "Return to original user account"
@@ -2410,9 +2401,6 @@ msgstr "Passwort generieren"
 msgid "What would you like to do?"
 msgstr "Was möchten Sie machen?"
 
-msgid "Please choose an option."
-msgstr "Bitte wählen Sie eine Option aus."
-
 #: js/widgets/dialog/MultiOptionsDialog.js:32
 #: js/widgets/dialog/MultiOptionsDialog.js:179
 #: js/widgets/dialog/FileListDialog.js:32
@@ -2491,6 +2479,10 @@ msgid ""
 msgstr ""
 "Nachfolgend finden Sie eine Liste mit allen Import-Formaten und eine "
 "Beispieldatei, anhand derer Sie sehen, wir die Datei aussehen sollte."
+
+msgid "Following you find a list of all supported import formats."
+msgstr ""
+"Nachfolgend finden Sie eine Liste mit allen unterstützten Import-Formaten."
 
 #: js/widgets/dialog/ImportDialog.js:292
 #: js/widgets/dialog/SimpleImportDialog.js:191
@@ -3905,6 +3897,9 @@ msgstr "Konfiguriere was mit den Daten gelöschter Benutzer geschehen soll"
 #: Config.php:946
 msgid "Delete personal containers"
 msgstr "Lösche persönliche Ordner"
+
+msgid "Personal container"
+msgstr "Persönlicher Ordner"
 
 #: Config.php:953
 msgid "Delete file folders and files"
@@ -6475,7 +6470,7 @@ msgid "medium"
 msgstr "mittel"
 
 msgid "large"
-msgstr "groß"
+msgstr "extra groß"
 
 msgid "Select Image"
 msgstr "Bild auswählen"
@@ -6486,8 +6481,23 @@ msgstr "Bild in ausgewählter Größe einfügen"
 msgid "Image size"
 msgstr "Bildgröße"
 
-msgid "Personal container"
-msgstr "Persönlicher Ordner"
+msgid "one column"
+msgstr "einspaltig"
+
+msgid "big"
+msgstr "groß"
+
+msgid "Gets assigned automatically"
+msgstr "Wird automatisch zugewiesen"
+
+msgid "Number is Editable"
+msgstr "Nummer ist editierbar"
+
+msgid "Search for Application ..."
+msgstr "Nach Anwendung suchen ..."
+
+msgid "Please choose an option."
+msgstr "Bitte wählen Sie eine Option aus."
 
 msgid "Reload the application"
 msgstr "Anwendung neu laden"
@@ -6514,7 +6524,3 @@ msgstr "Anzahl Nullauffüllungen"
 
 msgid "Prefix"
 msgstr "Präfix"
-
-msgid "Following you find a list of all supported import formats."
-msgstr ""
-"Nachfolgend finden Sie eine Liste mit allen unterstützten Import-Formaten."

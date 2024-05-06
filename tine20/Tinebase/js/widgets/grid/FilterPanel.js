@@ -220,20 +220,14 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     setActiveFilterPanel: function(filterPanel) {
         filterPanel = Ext.isString(filterPanel) ? this.filterPanels[filterPanel] : filterPanel;
         this.activeFilterPanel = filterPanel;
-       
-        let enable = true;
-        const plugin = filterPanel?.getQuickFilterPlugin?.();
-        if (plugin?.detailsToggleBtn) {
-            const state = plugin.detailsToggleBtn.getState();
-            enable = state?.detailsButtonPressed;
-        }
-        
+
         if (this.layout.center) {
             this.layout.center.panel.add(filterPanel);
-            if (enable) this.layout.center.panel.layout.setActiveItem(filterPanel.id);
+            this.layout.center.panel.layout.setActiveItem(filterPanel.id);
         }
-        filterPanel.doLayout();
         
+        filterPanel.doLayout();
+
         // solve layout problems (#6332)
         let parentSheet = filterPanel;
         let activeSheet = parentSheet.activeSheet;

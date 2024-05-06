@@ -203,6 +203,7 @@ class Tinebase_ModelConfiguration_Const {
      */
     public const REQUIRED_RIGHT = 'requiredRight';
     public const RESOLVE_DELETED = 'resolveDeleted';
+    public const RESPONSIVE_LEVEL = 'responsiveLevel';
     public const RUN_CONVERT_TO_RECORD_FROM_JSON = 'runConvertToRecordFromJson';
 
     /**
@@ -278,6 +279,10 @@ class Tinebase_ModelConfiguration_Const {
     public const UNIQUE_CONSTRAINTS = 'uniqueConstraints';
     public const UNSIGNED = 'unsigned';
     public const UI_CONFIG = 'uiconfig';
+    public const UI_CONFIG_LAYOUT_SMALL = 'small';
+    public const UI_CONFIG_LAYOUT_MEDIUM = 'medium';
+    public const UI_CONFIG_LAYOUT_BIG = 'big';
+    public const UI_CONFIG_LAYOUT_LARGE = 'large';
 
     public const VALIDATORS = 'validators';
     public const VERSION = 'version';
