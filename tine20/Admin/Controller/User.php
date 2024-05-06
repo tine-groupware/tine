@@ -255,7 +255,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         Tinebase_Event::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->setAccountPassword($_user, $_password, $_passwordRepeat, true);
+            $this->setAccountPassword($_user, $_password, $_passwordRepeat, (bool)$_user->password_must_change);
         }
 
         $this->_updateCurrentUser($user);
