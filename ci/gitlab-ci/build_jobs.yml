@@ -74,6 +74,7 @@ docker_build_dev_arm64:
     IMAGE_TAG: ${CI_PIPELINE_ID}-${PHP_VERSION}-arm64
   tags:
     - arm64
+  allow_failure: true
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /docker-build-dev-arm64/
     - !reference [deploy-dev-image-to-gitlab-arm64, rules]

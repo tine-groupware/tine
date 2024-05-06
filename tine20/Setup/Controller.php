@@ -2556,7 +2556,11 @@ class Setup_Controller
                 foreach ($stillInstalledApps as $name) {
                     if (!isset($xml[$name])) {
                         try {
-                            $xml[$name] = $this->getSetupXml($name) ?: throw new Setup_Exception_NotFound();
+                            if ($x = $this->getSetupXml($name)) {
+                                $xml[$name] = $x;
+                            } else {
+                                throw new Setup_Exception_NotFound($name . ' setup.xml not found/valid/loaded');
+                            }
                         } catch (Setup_Exception_NotFound $senf) {
                             Tinebase_Exception::log($senf);
                         }
