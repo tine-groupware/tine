@@ -88,9 +88,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     syncFields: true,
     
     initComponent: function() {
-        const filterPanel = this.addFilterPanel();
-        this.filterModelMap = filterPanel.filterModelMap;
-        this.activeFilterPanel = filterPanel;
+        const filterToolbar = this.addFilterPanel();
+        this.filterModelMap = filterToolbar.filterModelMap;
+        this.activeFilterPanel = filterToolbar;
         
         // this.initQuickFilterField();
 
@@ -111,7 +111,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             border: false,
             layout: 'card',
             activeItem: 0,
-            items: [filterPanel],
+            items: [filterToolbar],
             autoScroll: false,
             listeners: {
                 scope: this,
@@ -125,7 +125,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin(Ext.apply({
                 syncFields: this.syncFields,
             }, this.quickFilterConfig));
-            this.quickFilterPlugin.init(filterPanel);
+            this.quickFilterPlugin.init(filterToolbar, this);
         }
     },
     
@@ -179,7 +179,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     
     addFilterPanel: function(config) {
         config = config || {};
-        
+        //FIXME: it always return FilterToolbar , should we rename it ?
         var filterPanel = new Tine.widgets.grid.FilterToolbar(Ext.apply({}, this.filterToolbarConfig, config));
         filterPanel.onFilterChange = this.onFilterChange.createDelegate(this);
         
@@ -220,20 +220,14 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     setActiveFilterPanel: function(filterPanel) {
         filterPanel = Ext.isString(filterPanel) ? this.filterPanels[filterPanel] : filterPanel;
         this.activeFilterPanel = filterPanel;
-       
-        let enable = true;
-        const plugin = filterPanel?.getQuickFilterPlugin?.();
-        if (plugin?.detailsToggleBtn) {
-            const state = plugin.detailsToggleBtn.getState();
-            enable = state?.detailsButtonPressed;
-        }
-        
+
         if (this.layout.center) {
             this.layout.center.panel.add(filterPanel);
-            if (enable) this.layout.center.panel.layout.setActiveItem(filterPanel.id);
+            this.layout.center.panel.layout.setActiveItem(filterPanel.id);
         }
-        filterPanel.doLayout();
         
+        filterPanel.doLayout();
+
         // solve layout problems (#6332)
         let parentSheet = filterPanel;
         let activeSheet = parentSheet.activeSheet;

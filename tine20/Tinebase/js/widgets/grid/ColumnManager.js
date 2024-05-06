@@ -72,6 +72,10 @@ Tine.widgets.grid.ColumnManager = function() {
                 return null;
             }
 
+            if (['text', 'fulltext'].indexOf(fieldDefinition.type) >= 0) {
+                return null;
+            }
+
             if (fieldDefinition.type == 'records') {
                 if (_.get(fieldDefinition, 'config.specialType') === 'localizedString') {
                     fieldDefinition.type = 'localizedString';
@@ -156,6 +160,14 @@ Tine.widgets.grid.ColumnManager = function() {
 
             if (fieldDefinition.hasOwnProperty('summaryType')) {
                 column.summaryType = fieldDefinition.summaryType;
+            }
+            
+            if (fieldDefinition?.uiconfig?.responsiveLevel) {
+                column.responsiveLevel = fieldDefinition.uiconfig.responsiveLevel;
+            }
+            
+            if (fieldDefinition?.shy) {
+                column.responsiveLevel = 'large';
             }
 
             var renderer = Tine.widgets.grid.RendererManager.get(app, modelName, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);

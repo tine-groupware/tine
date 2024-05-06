@@ -552,11 +552,13 @@ class Tinebase_Helper
     }
 
     /**
+     * convert mail domain
+     *
      * @param string $domain
-     * @param string $converterFunction
+     * @param string $converterFunction idn_to_utf8 / idn_to_ascii
      * @return false|mixed|string
      */
-    public static function convertDomain($domain, $converterFunction)
+    public static function convertDomain(string $domain, string $converterFunction = 'idn_to_utf8')
     {
         if (strpos($domain, '@') !== false) {
             list($emailpart, $domainpart) = explode('@', $domain);
@@ -586,7 +588,7 @@ class Tinebase_Helper
      */
     public static function convertDomainToUnicode($domain)
     {
-        return self::convertDomain($domain, 'idn_to_utf8');
+        return self::convertDomain($domain);
     }
 
     /**

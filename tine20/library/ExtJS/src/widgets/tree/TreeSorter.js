@@ -62,7 +62,7 @@ Ext.tree.TreeSorter = function(tree, config){
     const leafAttr = this.leafAttr || 'leaf';
     let priorityList = this.priorityList || [];
     const priorityProperty = this.priorityProperty;
-    const locale = Tine.Tinebase.registry.get('locale').locale || 'en';
+    const locale = String(Tine.Tinebase.registry.get('locale').locale).substring(0,2) || 'en';
 
     this.sortFn = function(n1, n2){
         if(fs) {

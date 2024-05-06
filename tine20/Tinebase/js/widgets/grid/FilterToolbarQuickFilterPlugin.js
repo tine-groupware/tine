@@ -138,11 +138,13 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
     
     /**
      * called by filtertoolbar in plugin init process
-     * 
+     *
      * @param {Tine.widgets.grid.FilterToolbar} ftb
+     * @param filterPanel
      */
-    init: function(ftb) {
+    init: function(ftb, filterPanel = null) {
         this.ftb = ftb;
+        this.filterPanel = filterPanel;
         
         if (this.syncFields) {
             this.ftb.renderFilterRow = this.ftb.renderFilterRow.createSequence(this.onAddFilter, this);
@@ -200,17 +202,6 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             stateful: stateful,
             stateId : stateful ? stateId : null,
             getState: function () {
-                const filterStore = this?.scope?.ftb?.filterStore;
-                const queryFilter = filterStore.find('field', 'query');
-                const state = Ext.state.Manager.get(this.stateId);
-                
-                if (typeof state?.detailsButtonPressed === 'undefined') {
-                    const enabled = filterStore?.data?.length > 1 || queryFilter === -1;
-                    Ext.state.Manager.set(this.stateId, {detailsButtonPressed: enabled});
-                    if (this.pressed !== enabled) {
-                        this.applyState({detailsButtonPressed: enabled});
-                    }
-                }
                 return {detailsButtonPressed: this.pressed};
             },
             applyState: function(state) {
@@ -245,6 +236,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             // preset quickFilter with filterrow value
             this.syncField(filter.formFields.value);
         }
+        
     },
     
     /**
@@ -253,9 +245,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Ext.Button} btn
      */
     onDetailsToggle: function(btn) {
-        btn.setText(btn.pressed ? i18n._('hide details') : i18n._('show details'));
+        btn.setText(i18n._(`${!btn.pressed ? 'show' : 'hide'} details`));
         
-        this.ftb[btn.pressed ? 'show' : 'hide']();
+        const action = btn.pressed ? 'show' : 'hide';
+        this.ftb[action]();
+        if (this.filterPanel) this.filterPanel[action]();
         
         // cares for resizing
         this.ftb.onFilterRowsChange();
@@ -340,6 +334,19 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Array} filters
      */
     onRender: function() {
+        const btn = this.detailsToggleBtn;
+
+        if (btn.stateful && btn.stateId) {
+            const state = Ext.state.Manager.get(btn.stateId);
+            if (typeof state?.detailsButtonPressed === 'undefined') {
+                const filterStore = this.ftb?.filterStore;
+                const queryFilter = filterStore.find('field', 'query');
+                const enabled = filterStore?.data?.length > 1 || queryFilter === -1;
+                Ext.state.Manager.set(btn.stateId, {detailsButtonPressed: enabled});
+                btn.pressed = enabled;
+            }
+        }
+
         this.onDetailsToggle(this.detailsToggleBtn);
     },
     

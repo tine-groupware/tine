@@ -57,7 +57,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                 htmlEncode: false,
                                 cls: 'responsive-title',
                                 renderer: (value, metaData, record) => {
-                                    return Tine.Addressbook.ContactGridPanel.prototype.responsiveRenderer.call(this, null, null, record)
+                                    return Tine.Addressbook.ContactGridPanel.prototype.oneColumnRenderer.call(this, null, null, record)
                                 }
                             }]
                         }, {
