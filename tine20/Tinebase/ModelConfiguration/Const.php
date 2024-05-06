@@ -230,6 +230,10 @@ class Tinebase_ModelConfiguration_Const {
     public const TITLE_PROPERTY = 'titleProperty';
     public const TOOLTIP = 'tooltip';
     public const TRACK_CHANGES = 'trackChanges';
+    /**
+     * uiconfig -> translate value in renderers and forms, useful for default data (e.g. coredata)
+     */
+    public const TRANSLATE = 'translate';
     public const TYPE = 'type';
     public const TYPE_ATTACHMENTS = 'attachments';
     public const TYPE_BIGINT = 'bigint';
