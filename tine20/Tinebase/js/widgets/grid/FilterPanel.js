@@ -88,9 +88,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     syncFields: true,
     
     initComponent: function() {
-        const filterPanel = this.addFilterPanel();
-        this.filterModelMap = filterPanel.filterModelMap;
-        this.activeFilterPanel = filterPanel;
+        const filterToolbar = this.addFilterPanel();
+        this.filterModelMap = filterToolbar.filterModelMap;
+        this.activeFilterPanel = filterToolbar;
         
         // this.initQuickFilterField();
 
@@ -111,7 +111,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             border: false,
             layout: 'card',
             activeItem: 0,
-            items: [filterPanel],
+            items: [filterToolbar],
             autoScroll: false,
             listeners: {
                 scope: this,
@@ -125,7 +125,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
             this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin(Ext.apply({
                 syncFields: this.syncFields,
             }, this.quickFilterConfig));
-            this.quickFilterPlugin.init(filterPanel);
+            this.quickFilterPlugin.init(filterToolbar, this);
         }
     },
     
@@ -179,7 +179,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     
     addFilterPanel: function(config) {
         config = config || {};
-        
+        //FIXME: it always return FilterToolbar , should we rename it ?
         var filterPanel = new Tine.widgets.grid.FilterToolbar(Ext.apply({}, this.filterToolbarConfig, config));
         filterPanel.onFilterChange = this.onFilterChange.createDelegate(this);
         
