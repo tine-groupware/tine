@@ -1,6 +1,6 @@
 <template>
   <div class="bootstrap-scope">
-    <BAlert :model-value="true" variant="primary"><span v-html="label"/></BAlert>
+    <BAlert :model-value="true" v-bind:variant="variant"><span v-html="label"/></BAlert>
   </div>
 </template>
 
@@ -9,5 +9,6 @@ import {defineProps} from 'vue'
 
 defineProps({
   label: String,
+  variant: String,
 })
 </script>

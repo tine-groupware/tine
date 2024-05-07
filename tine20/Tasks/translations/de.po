@@ -21,6 +21,9 @@ msgstr ""
 "X-Poedit-Language: en\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+msgid "This Task is part of:"
+msgstr "Die Aufgabe ist teil von:"
+
 #: js/TaskEditDialog.js:89
 msgid "Add New Task"
 msgstr "Neue Aufgabe hinzufügen"

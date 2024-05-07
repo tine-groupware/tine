@@ -4,6 +4,7 @@ import BootstrapVueNext from 'bootstrap-vue-next'
 Ext.form.VueAlert = Ext.extend(Ext.BoxComponent, {
     vueHandle: null,
     label: '',
+    variant: 'primary',
     props: null,
 
     autoHeight: true,
@@ -12,7 +13,8 @@ Ext.form.VueAlert = Ext.extend(Ext.BoxComponent, {
         const {createApp, h, reactive} = window.vue
         const {default: VueAlert} = await import(/* webpackChunkName: "Tinebase/vue/VueAlert"*/'./VueAlert.vue')
         this.props = reactive({
-            label: this.label
+            label: this.label,
+            variant: this.variant
         })
         this.vueHandle = createApp({
             render: () => h(VueAlert, this.props)

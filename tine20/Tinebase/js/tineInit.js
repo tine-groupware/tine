@@ -212,7 +212,7 @@ Tine.Tinebase.tineInit = {
 
         Ext.getBody().on('click', async function (e) {
 
-            var target = e.getTarget('a', 1, true),
+            var target = e.getTarget('a', 2, true),
                 href = target ? target.getAttribute('href') : '';
             const position = e.getXY();
 
