@@ -62,6 +62,7 @@ import './DependencyPanel'
      */
     initComponent: function() {
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
+        this.sourceRenderer = Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'source', Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
         Tine.Tasks.TaskEditDialog.superclass.initComponent.call(this);
     },
     
@@ -85,6 +86,10 @@ import './DependencyPanel'
         if (! this.copyRecord && ! this.record.id) {
             this.window.setTitle(this.app.i18n._('Add New Task'));
         }
+
+        const source = this.record.get('source');
+        this.sourceHint.setVisible(!! source);
+        this.sourceHint.setText(source ? this.app.i18n._('This Task is part of:') + ' ' + this.sourceRenderer(source, {}, this.record) : '...');
     },
     
     /**
@@ -177,6 +182,12 @@ import './DependencyPanel'
                         columnWidth: .333
                     },
                     items: [[{
+                        xtype: 'v-alert',
+                        variant: 'info',
+                        columnWidth: 1,
+                        ref: '../../../../../sourceHint',
+                        label: '...'
+                    }],[{
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Summary'),
                         name: 'summary',
