@@ -535,6 +535,15 @@ Tine.Tinebase.data.Record.getDefaultData = function(recordClass, defaults) {
 
     // @TODO: use grants model and set all grants to true for new records
     dd['account_grants'] = {'adminGrant': true};
+
+    // NOTE: ui config overwrites db config
+    _.forEach(modelConfig.fields, (config, name) => {
+        const fieldDefault = _.get(config, 'uiconfig.default', this);
+        if (fieldDefault !== this) {
+            dd[name] = fieldDefault;
+        }
+    });
+
     return Object.assign(dd, defaults);
 };
 
