@@ -2143,17 +2143,15 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * - disable spam actions if the message has no spam flag
      */
     onDisplaySpamActions: function () {
-        if (!this.app.featureEnabled('featureSpamSuspicionStrategy')) {
-            return ;
-        }
+        if (!this.app.featureEnabled('featureSpamSuspicionStrategy')) return;
         
         const folder = this.getCurrentFolderFromTree();
         const account = folder ? this.app.getAccountStore().getById(folder.get('account_id')) : null;
 
         this.action_spam.show();
         this.action_ham.show();
-
-        if (!account) {
+        
+        if (!account || account.get('type') === 'user') {
             this.action_spam.hide();
             this.action_ham.hide();
         }

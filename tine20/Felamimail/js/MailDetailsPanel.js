@@ -204,7 +204,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     const app = Tine.Tinebase.appMgr.get('Felamimail');
                     const account = app.getAccountStore().getById(messageData.account_id);
                     const folder = app.getFolderStore().getById(messageData.folder_id);
-                    if (!folder || !account || !messageData.is_spam_suspicions) return '';
+                    if (!folder || !account || account.get('type') === 'user' || !messageData.is_spam_suspicions) return '';
                     
                     const html = '<span style="width: 60%; padding: 5px;">'
                         + app.i18n._('This message is probably SPAM. Please help to train your anti-SPAM system with a decision: "Yes, it is SPAM" or "No, it is not"') + '</span>';
