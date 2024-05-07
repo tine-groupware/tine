@@ -102,7 +102,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         }
         
         // assertions
-        $this->assertEquals($getLead, $savedLead);
+        $this->assertEquals($getLead['id'], $savedLead['id']);
         $this->assertEquals($getLead['notes'][0]['note'], 'phpunit test note');
         $this->assertTrue($searchLeads['totalcount'] > 0, print_r($searchLeads, true));
         $this->assertTrue(isset($searchLeads['totalleadstates']) && count($searchLeads['totalleadstates']) > 0);

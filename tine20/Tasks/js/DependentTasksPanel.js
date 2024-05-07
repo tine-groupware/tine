@@ -29,6 +29,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 header: this.app.i18n._("Summary"),
                 width: 130,
                 dataIndex: 'summary',
+                sortable: true,
                 quickaddField: new Ext.form.TextField({
                     emptyText: this.app.i18n._('Add a task...')
                 }),
@@ -42,6 +43,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 editor: new Ext.ux.form.ClearableDateField({
                     //format : 'd.m.Y'
                 }),
+                sortable: true,
                 quickaddField: new Ext.ux.form.ClearableDateField({
                     //value: new Date(),
                     //format : "d.m.Y"
@@ -58,6 +60,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                     app: 'Tasks',
                     keyFieldName: 'taskPriority'
                 },
+                sortable: true,
                 quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
                     app: 'Tasks',
                     keyFieldName: 'taskPriority'
@@ -79,6 +82,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                     autoExpand: true,
                     blurOnSelect: true
                 }),
+                sortable: true,
                 quickaddField: new Ext.ux.PercentCombo({
                     autoExpand: true
                 }),
@@ -89,6 +93,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 width: 100,
                 dataIndex: 'status',
                 renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskStatus'),
+                sortable: true,
                 editor: {
                     xtype: 'widget-keyfieldcombo',
                     app: 'Tasks',
@@ -99,6 +104,21 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                     keyFieldName: 'taskStatus',
                     value: 'NEEDS-ACTION'
                 })
+            }, {
+                id: 'organizer',
+                header: this.app.i18n._('Responsible'),
+                width: 100,
+                dataIndex: 'organizer',
+                renderer: Tine.Tinebase.common.accountRenderer,
+                sortable: true,
+                quickaddField: Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                    userOnly: true,
+                    useAccountRecord: true,
+                    blurOnSelect: true,
+                    selectOnFocus: true,
+                    allowBlank: true,
+                    value: Tine.Tinebase.registry.get('currentAccount')
+                })            
             }
         ];
 
