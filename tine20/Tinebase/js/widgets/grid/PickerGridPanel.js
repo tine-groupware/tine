@@ -131,6 +131,11 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     readOnly: false,
 
     /**
+     * @cfg {Bool} allowCopy
+     */
+    allowCopy: false,
+
+    /**
      * @cfg {Bool} allowCreateNew
      * allow to create new records (local mode only atm.!)
      */
@@ -331,7 +336,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             handler: () => {
                 const record = this.selModel.getSelected();
                 const row = this.store.indexOf(record);
-                this.onRowDblClick(this, row, )
+                this.onRowDblClick(this, row, null);
             },
             iconCls: 'action_edit'
         });
@@ -346,6 +351,24 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             actionUpdater: this.actionRemoveUpdater
         });
 
+        this.actionCopy = new Ext.Action({
+            text: String.format(i18n._('Copy {0}'), this.recordName),
+            hidden: !hasEditDialog || !useEditDialog || !this.allowCopy,
+            scope: this,
+            disabled: true,
+            actionUpdater: function(action, grants, records) {
+                action.setDisabled(!records.length || records.length > 1);
+            },
+            handler: () => {
+                const record = this.selModel.getSelected();
+                const row = this.store.indexOf(record);
+                this.editDialogConfig.copyRecord = true;
+                this.onRowDblClick(this, row, null);
+                delete this.editDialogConfig.copyRecord;
+            },
+            iconCls: 'action_editcopy'
+        });
+
         // init actions
         this.actionUpdater = new Tine.widgets.ActionUpdater({
             recordClass: this.recordClass,
@@ -354,14 +377,15 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.actionUpdater.addActions([
             this.actionCreate,
             this.actionEdit,
-            this.actionRemove
+            this.actionRemove,
+            this.actionCopy
         ]);
 
         this.selModel.on('selectionchange', function(sm) {
             this.actionUpdater.updateActions(sm);
         }, this);
 
-        var contextItems = [this.actionCreate, this.actionEdit, this.actionRemove];
+        var contextItems = [this.actionCreate, this.actionCopy, this.actionEdit, this.actionRemove];
         this.contextMenu = new Ext.menu.Menu({
             plugins: [{
                 ptype: 'ux.itemregistry',
