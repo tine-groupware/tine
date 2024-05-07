@@ -1019,19 +1019,21 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     /**
      * get config
      *
+     * @param Zend_Console_Getopt $_opts
+     * @return int
      */
-    protected function _getConfig(Zend_Console_Getopt $_opts)
+    protected function _getConfig(Zend_Console_Getopt $_opts): int
     {
         $options = $this->_parseRemainingArgs($_opts->getRemainingArgs());
         $applicationName = (isset($options['app'])) ? $options['app'] : 'Tinebase';
 
-        $errors = array();
+        $errors = [];
         if (
             ! Tinebase_Application::getInstance()->isInstalled('Tinebase')
             || ! Tinebase_Application::getInstance()->isInstalled($applicationName)
         ) {
-            $errors[] = $applicationName . ' is not installed';
-            $config = null;
+            echo $applicationName . " is not installed\n";
+            return 1;
         } else {
             $config = Tinebase_Config_Abstract::factory($applicationName);
         }
@@ -1040,10 +1042,8 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $configKey = null;
         if (! isset($options['configkey']) || empty($options['configkey'])) {
             $errors[] = 'Missing argument: configkey';
-            if ($config) {
-                $errors[] = 'Available config settings:';
-                $errors[] = print_r($availableKeys, true);
-            }
+            $errors[] = 'Available config settings:';
+            $errors[] = print_r($availableKeys, true);
         } else {
             $configKey = (string)$options['configkey'];
             if (! isset($availableKeys[$configKey])) {
@@ -1060,7 +1060,10 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             foreach ($errors as $error) {
                 echo "- " . $error . "\n";
             }
+            return 1;
         }
+
+        return 0;
     }
 
     /**
