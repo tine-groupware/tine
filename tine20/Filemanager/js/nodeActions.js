@@ -569,7 +569,7 @@ Tine.Filemanager.nodeActions.Publish = {
         });
         
         passwordDialog.openWindow();
-        passwordDialog.on('apply', function (password) {
+        passwordDialog.on('apply',  (password)=> {
             const record = new Tine.Filemanager.Model.DownloadLink({
                 node_id: selected.id,
                 expiry_time: this.validDateField.value,
