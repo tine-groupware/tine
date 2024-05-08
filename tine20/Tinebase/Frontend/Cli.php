@@ -498,7 +498,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     echo 'async_job has been dropped, no need to clear it anymore' . PHP_EOL;
                     break;
                 case 'credential_cache':
-                    Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable($dateString);
+                    Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable();
                     break;
                 case 'temp_files':
                     Tinebase_TempFile::getInstance()->clearTableAndTempdir($dateString);
