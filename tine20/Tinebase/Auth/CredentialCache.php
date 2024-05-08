@@ -107,8 +107,8 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     {
         $adapterClass = 'Tinebase_Auth_CredentialCache_Adapter_' . $_adapter;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Using credential cache adapter: ' . $adapterClass);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' Using credential cache adapter: ' . $adapterClass);
         $this->_cacheAdapter = new $adapterClass();
     }
     
@@ -368,20 +368,17 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
     }
     
     /**
-     * remove all credential cache records before $_date
+     * remove all credential cache records that are no longer valid
      * 
-     * @param Tinebase_DateTime|string $_date
      * @return bool
      */
-    public function clearCacheTable($_date = NULL)
+    public function clearCacheTable()
     {
-        $dateString = ($_date instanceof Tinebase_DateTime) ? $_date->format(Tinebase_Record_Abstract::ISO8601LONG) : $_date;
-        $dateWhere = ($dateString === NULL) 
-            ? $this->_db->quoteInto($this->_db->quoteIdentifier('valid_until') . ' < ?', Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG)) 
-            : $this->_db->quoteInto($this->_db->quoteIdentifier('creation_time') . ' < ?', $dateString);
+        $dateWhere = $this->_db->quoteInto($this->_db->quoteIdentifier('valid_until') . ' < ?',
+            Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG));
         $where = array($dateWhere);
 
-        // TODO should be handled with looong "valid_until" until time
+        // TODO should be handled with looong "valid_until" until time & make sure that deleting account deletes cc
         if (Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
             // delete only records that are not related to email accounts
             $fmailIds = $this->_getFelamimailCredentialIds();
@@ -391,7 +388,12 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implem
         }
         
         $tableName = $this->getTablePrefix() . $this->getTableName();
-        $this->_db->delete($tableName, $where);
+        $count = $this->_db->delete($tableName, $where);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__ . ' Removed ' . $count . ' obsolete cc records');
+        }
 
         return true;
     }
