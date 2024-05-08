@@ -896,7 +896,10 @@ Tine.Tinebase.common = {
 
         const parsedList = [];
         addresses.forEach((address) => {
-            address = addrs.parseOneAddress(address);
+            address = addrs.parseOneAddress({
+                input: address, 
+                partial: true
+            });
             if (address) parsedList.push(address);
         })
 
