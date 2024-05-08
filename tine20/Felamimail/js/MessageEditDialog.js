@@ -825,28 +825,8 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     initReplyRecipients: async function () {
         // should resolve recipients here , save data
-        const replyTo = this.replyTo.get('headers')['reply-to'];
+        this.to = this.getReplyToEmail();
         
-        if (replyTo) {
-            this.to = replyTo;
-        } else {
-            const email = this.replyTo.get('from_email');
-            const name =  this.replyTo.get('from_name');
-            this.to = [{
-                'email': email ?? '',
-                'email_type': '',
-                'type': '',
-                'n_fileas': '',
-                'name': name !== email ? name : '',
-                'contact_record': ''
-            }];
-            
-            // we might get the recipient token from server
-            if (this.replyTo.get('from')) {
-                this.to = this.replyTo.get('from');
-            }
-        }
-
         if (this.replyToAll) {
             if (!Ext.isArray(this.to)) {
                 this.to = [this.to];
@@ -865,6 +845,30 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 });
             }, this);
         }
+    },
+    
+    getReplyToEmail() {
+        // should resolve recipients here , save data
+        const replyToHeader = this.replyTo.get('headers')['reply-to'];
+        const replyToEmail = this.replyTo.get('from_email');
+        const replyToName = this.replyTo.get('from_name');
+        const replyToToken = this.replyTo.get('from')?.[0];
+        
+        // we might get the recipient token from server
+        if (replyToToken && replyToToken?.email) return this.replyTo.get('from');
+        if (replyToEmail) {
+            return [{
+                'email': replyToEmail,
+                'email_type': '',
+                'type': '',
+                'n_fileas': '',
+                'name': replyToName ?? '',
+                'contact_record': ''
+            }];
+        }
+        if (replyToHeader) return [replyToHeader];
+        
+        return [];
     },
 
     /**
