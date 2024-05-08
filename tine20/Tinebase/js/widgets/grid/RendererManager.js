@@ -184,9 +184,10 @@ Tine.widgets.grid.RendererManager = function() {
 
                     }
                     break;
+                case 'string':
                 case 'text':
                 case 'fulltext':
-                    renderer = Ext.ux.display.DisplayField.prototype.renderer;
+                    renderer = this.defaultRenderer;
                     break;
                 case 'user':
                     renderer = Tine.Tinebase.common.usernameRenderer;
