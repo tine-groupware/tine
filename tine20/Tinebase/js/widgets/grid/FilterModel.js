@@ -507,8 +507,8 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                         'select': this.onFiltertrigger,
                         scope: this
                     },
-                    recreateOnOpChange: function(filter, oldOperator, newOperator) {
-                        return (['equals', 'not'].indexOf(oldOperator) >= 0 && ['in', 'notin'].indexOf(newOperator) >= 0)
+                    recreateOnOpChange: function(filter, newOperator, oldOperator) {
+                        return (['', 'equals', 'not'].indexOf(oldOperator) >= 0 && ['in', 'notin'].indexOf(newOperator) >= 0)
                             || (['in', 'notin'].indexOf(oldOperator) >= 0 && ['equals', 'not'].indexOf(newOperator) >= 0);
                     }
                 }));
