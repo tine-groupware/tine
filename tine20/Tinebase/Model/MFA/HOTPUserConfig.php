@@ -117,8 +117,12 @@ class Tinebase_Model_MFA_HOTPUserConfig extends Tinebase_Auth_MFA_AbstractUserCo
             $adapter = end($adapter);
             try {
                 $cc->setCacheAdapter('Shared');
-                $sharedCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($this->{self::ID},
-                    $newSecret, null, true /* save in DB */, Tinebase_DateTime::now()->addYear(100));
+                $sharedCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(
+                    username: $this->{self::ID},
+                    password: $newSecret,
+                    persist: true /* save in DB */,
+                    validUntil: Tinebase_DateTime::now()->addYear(100)
+                );
 
                 $this->{self::FLD_CC_ID} = $sharedCredentials->getId();
 
