@@ -6464,20 +6464,14 @@ msgstr "Unten"
 msgid "Right"
 msgstr "Rechts"
 
-msgid "one column"
-msgstr "einspaltig"
-
 msgid "small"
 msgstr "klein"
 
 msgid "medium"
 msgstr "mittel"
 
-msgid "big"
-msgstr "groß"
-
 msgid "large"
-msgstr "extra groß"
+msgstr "groß"
 
 msgid "Select Image"
 msgstr "Bild auswählen"
