@@ -7,6 +7,8 @@
  * @copyright   Copyright (c) 2007-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
+import {getLayoutClassByMode} from "../../Tinebase/js/util/responsiveLayout";
+
 Ext.namespace('Tine.Felamimail');
 
 require('./MessageFileAction');
@@ -829,7 +831,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Folder|Account} record
      * @return {String}
      */
-    responsiveRenderer: function(folderId, metadata, record) {
+    oneColumnRenderer: function(folderId, metadata, record) {
         const block = document.createElement('div');
         
         const flagIcons = record.getFlagIcons();
@@ -1655,7 +1657,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     onStoreBeforeLoadFolderChange: function (store, options) {
-        this.updateGridState();
         this.updateDefaultfilter(options.params, this.sentFolderSelected);
     },
     
@@ -1710,80 +1711,40 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         params.filter[0].filters[0].filters = targetFilters;
     },
+    
+    getStateIdSuffix() {
+        this.resolveSendFolderPath();
+        this.folderSuffix = this.sentFolderSelected ? '-SendFolder' : '';
+        return `${this.stateIdSuffix}${this.folderSuffix}`;
+    },
 
     /**
-     * // if send, draft, template folders are selected, do the following:
-     * // - hide from email + name columns from grid
-     * // - show to column in grid
-     * // - save this state
-     * // - if grid state is changed by user, do not change columns by user
-     *
-     * // if switched from send, draft, template to "normal" folder
-     * // - switch to default state
+     * if send, draft, template folders are selected, do the following:
+     * 
+     * - hide from email + name columns from grid
+     * - show to column in grid
      */
-    updateGridState: function () {
-        this.resolveSendFolderPath();
-        let stateId = this.sentFolderSelected ? this.sendFolderGridStateId : this.gridConfig.stateId;
-        const isEastLayout = this.detailsPanelRegion === 'east';
-        if (isEastLayout && !stateId.includes('_DetailsPanel_East')) stateId = stateId + '_DetailsPanel_East';
-        const isStateIdChanged = this.grid.stateId !== stateId;
-        if (!Ext.state.Manager.get(stateId)) this.grid.saveState();
-        this.grid.stateId = stateId;
+    updateGridState: async function () {
+        this.grid.stateId = this.getResolvedGridStateId();
         
-        const stateIdDefault = isEastLayout ? stateId : this.gridConfig.stateId;
-        const stateStored = Ext.state.Manager.get(stateIdDefault);
-        const stateCurrent = this.grid.getState();
-        let stateCloned = stateStored;
-        if (!isStateIdChanged || !stateStored) stateCloned = stateCurrent;
-        let stateClonedResolved = JSON.parse(JSON.stringify(stateCloned));
-        
-        if (stateClonedResolved?.columns && isEastLayout) {
-            const stateClonedResolvedVisibleColumns = stateClonedResolved.columns.filter((col) => { return !col.hidden;});
-            if (stateClonedResolvedVisibleColumns.length === 0) {
-                const restoreStateId = stateId.replace('_DetailsPanel_East', '');
-                const restoreState = Ext.state.Manager.get(restoreStateId);
-                const restoreStateVisibleColumns = restoreState.columns.filter((col) => { return !col.hidden;});
-                if (restoreStateVisibleColumns === 0) {
-                    stateClonedResolved.columns.forEach((c) => {c.hidden = c.id === 'responsive';})
-                } else {
-                    stateClonedResolved.columns.forEach((c, idx) => {c.hidden = restoreState.columns[idx].hidden ?? false;})
-                }
-            }
-        }
-        
-        if (stateId.includes(this.sendFolderGridStateId)) {
-            let refState = Ext.state.Manager.get(stateId);
-            if (refState) stateClonedResolved = JSON.parse(JSON.stringify(refState));
-            
-            // - hide from email + name columns from grid
-            // - show to column in grid
+        if (this.grid.stateId.includes(this.sendFolderGridStateId)) {
             const customHideCols = {
-                'from_email' : true,
-                'from_name' : true,
-                'to' : false,
+                'from_email': true,
+                'from_name': true,
+                'to': false,
             }
-            //overwrite custom states
             _.each(customHideCols, (isHidden, colId) => {
-                const idx = _.findIndex(stateClonedResolved.columns, {id: colId});
-                isHidden = !refState ? isHidden : _.get(_.find(refState.columns, {id: colId}), 'hidden', false);
-                
-                if (idx > -1 && isHidden !== _.get(stateClonedResolved.columns[idx], 'hidden', false)) {
-                    if (isHidden) {
-                        stateClonedResolved.columns[idx].hidden = true;
-                    } else {
-                        delete stateClonedResolved.columns[idx].hidden;
-                    }
+                const idx = _.findIndex(this.grid.colModel.config, {id: colId});
+                if (idx > -1 && isHidden !== _.get(this.grid.colModel.config[idx], 'hidden', false)) {
+                    this.grid.colModel.setHidden(idx, isHidden, true);
                 }
             })
         }
-
-        if (!isStateIdChanged) {
-            stateClonedResolved.sort = this.store.getSortState();
+        
+        if (this.grid && !Ext.state.Manager.get(this.grid.stateId)) {
+            await this.grid.saveState();
         }
-        this.grid.applyState(stateClonedResolved);
-        // save state
-        this.grid.saveState();
-        if (isStateIdChanged) this.getView().refresh(true);
+        this.grid.view.layout();
     },
 
     /**

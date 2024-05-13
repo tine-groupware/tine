@@ -15,6 +15,8 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
 {
     public const RELEASE017_UPDATE000 = __CLASS__ . '::update000';
     public const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
+    public const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
+
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -27,6 +29,10 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
+            ],
+            self::RELEASE017_UPDATE002          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update002',
             ],
         ],
     ];
@@ -57,5 +63,25 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
             . Timetracker_Model_Timeaccount::class . '" AND `type` = "COST_CENTER"');
 
         $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.1', self::RELEASE017_UPDATE001);
+    }
+    
+    public function update002()
+    {
+        $stateRepo = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_State',
+            'tableName' => 'state',
+        ));
+
+        $states = $stateRepo->search(new Tinebase_Model_StateFilter(array(
+            array('field' => 'state_id', 'operator' => 'in', 'value' => [
+                "Timetracker-Timesheet-GridPanel-Grid_large",
+                "Timetracker-Timesheet-GridPanel-Grid_big",
+            ]),
+        )));
+
+        if (count($states) > 0) {
+            $stateRepo->delete($states->getId());
+        }
+        $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.2', self::RELEASE017_UPDATE002);
     }
 }

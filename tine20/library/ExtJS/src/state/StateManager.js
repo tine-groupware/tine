@@ -40,14 +40,14 @@ Ext.state.Manager = function(){
         get : function(key, defaultValue){
             return provider.get(key, defaultValue);
         },
-
+        
         /**
          * Sets the value for a key
-         * @param {String} name The key name
+         * @param key
          * @param {Mixed} value The state data
          */
-         set : function(key, value){
-            provider.set(key, value);
+        set : async function (key, value) {
+            await provider.set(key, value);
         },
 
         /**

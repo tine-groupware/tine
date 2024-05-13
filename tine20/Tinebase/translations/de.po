@@ -6476,7 +6476,7 @@ msgid "big"
 msgstr "groß"
 
 msgid "large"
-msgstr "groß"
+msgstr "extra groß"
 
 msgid "Select Image"
 msgstr "Bild auswählen"
