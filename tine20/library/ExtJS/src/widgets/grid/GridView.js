@@ -1194,25 +1194,35 @@ viewConfig: {
         }
         const currentGridStateId = this.resolveStateIdResponsiveMode(this.grid?.stateId);
         const currentGridState = Ext.state.Manager.get(currentGridStateId);
-        const isStateIdChanged = this.latestGridStateId !== currentGridStateId;
+        const isStateIdChanged = !!(!this.latestGridStateId && currentGridStateId)
+            || !!((this.latestGridStateId && currentGridStateId) && (this.latestGridStateId !== currentGridStateId));
         this.latestGridStateId = currentGridStateId;
         
         if (isStateIdChanged) {
+            if (this.grid) {
+                this.grid.stateId = this.latestGridStateId;
+                if (currentGridState) {
+                    this.grid.applyState(currentGridState);
+                }
+            }
             const mode = this.getResponsiveMode();
             cm.config.forEach((col, idx) => {
                 col.initialConfig = col.initialConfig || {... col};
                 col.index = idx;
                 const refConfig = currentGridState?.columns?.[idx] ?? col.initialConfig;
                 // reset grid state if stateId changed, make sure column config is based on current stateId
-                cm.setColumnWidth(col.index, refConfig.width ?? this.grid.minColumnWidth, true);
-                let hidden = refConfig.hidden ?? false;
+                cm.setColumnWidth(col.index, refConfig?.width ?? this.grid.minColumnWidth, true);
+                let hidden = refConfig?.hidden ?? false;
                 if (mode.level > -1) {
                     if (mode.name === 'oneColumn') {
                         hidden = col.id !== 'responsive';
                     } else {
-                        const responsiveLevel = col?.responsiveLevel ?? 'big';
-                        const colModeClass = getLayoutClassByMode(responsiveLevel, this.cm.config);
-                        if (col?.responsiveLevel || !hidden) hidden = colModeClass.level > mode.level;
+                        //handle auto mode and strict mode
+                        if (!refConfig) {
+                            const responsiveLevel = col?.responsiveLevel ?? 'big';
+                            const colModeClass = getLayoutClassByMode(responsiveLevel, this.cm.config);
+                            if (col?.responsiveLevel || !hidden) hidden = colModeClass.level > mode.level;
+                        }
                         if (col.id === 'responsive') hidden = true;
                     }
                     this.updateColumnStyle(col.index, {'display': hidden ? 'none' : ''});
@@ -1224,8 +1234,6 @@ viewConfig: {
             if (sortInfo && this.grid.store.sortInfo !== sortInfo) {
                 this.grid.store.sort(sortInfo.field, sortInfo.direction);
             }
-            
-            this.grid.stateId = this.latestGridStateId;
             this.fitColumns(preventRefresh, onlyExpand, omitColumn);
         }
         
@@ -1236,7 +1244,7 @@ viewConfig: {
         cm.config.forEach((col, idx) => {
             if (!cm.isHidden(idx)) {
                 if (idx > colIdxOmitColumn) colsToResolve.push(col);
-                if (!cm.isFixed(col.index)) colIdxLastVisible = idx;
+                if (!cm.isFixed(idx)) colIdxLastVisible = idx;
             }
         });
         if (!colsToResolve.length) return;
@@ -1249,12 +1257,13 @@ viewConfig: {
             : widthResizedGrid / widthToResolve;
         
         colsToResolve.forEach((col) => {
-            const width = !cm.isFitable(col.index) ? col.width : col.width * fraction;
+            const idx = _.findIndex(cm.config, (c) => { return col.id === c.id; })
+            const width = !cm.isFitable(idx) ? col.width : col.width * fraction;
             let widthResolved = Math.max(this.grid.minColumnWidth, Math.floor(width));
             if (colIdxDefaultAutoExpand < 0 && !isOmitColumnValid && col.width && widthToResolve <= widthResizedGrid) {
                 widthResolved = Math.max(col.width, width);
             }
-            cm.setColumnWidth(col.index, widthResolved, true);
+            cm.setColumnWidth(idx, Math.floor(widthResolved), true);
         });
         
         // resolve auto expand column index, it should not be on the left hand side
@@ -1270,7 +1279,9 @@ viewConfig: {
             }
         }
 
-        this.grid.saveState();
+        if (this.grid?.stateId && this.grid.stateId === this.latestGridStateId) {
+            this.grid.saveState();
+        }
         
         if (preventRefresh !== true) this.updateAllColumnWidths();
         return true;

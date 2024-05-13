@@ -1858,6 +1858,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         } else {
             Grid = (this.gridConfig.gridType || Ext.grid.GridPanel);
         }
+        //we need the state configs before initial Grid
+        if (this.stateful) {
+            this.gridConfig.stateful = true;
+            this.gridConfig.stateId = this.stateId + '-Grid' + this.stateIdSuffix;
+            
+            this.regionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
+            this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
+            const stateId = this.getResolvedGridStateId();
+            let state = Ext.state.Manager.get(stateId);
+            if (state) this.defaultSortInfo = state.sort;
+        }
         
         this.gridConfig.store = this.store;
         
@@ -1874,16 +1885,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             getDragDropText: this.getDragDropText.createDelegate(this)
         }));
         
-        if (this.stateful) {
-            this.gridConfig.stateful = true;
-            this.gridConfig.stateId = this.stateId + '-Grid' + this.stateIdSuffix;
-            
-            this.regionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
-            this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
-            const stateId = this.getResolvedGridStateId();
-            let state = Ext.state.Manager.get(stateId);
-            if (state) this.defaultSortInfo = state.sort;
-        }
+
         
         this.grid.store.sortInfo = this.defaultSortInfo;
         
