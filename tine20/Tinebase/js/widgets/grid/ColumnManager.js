@@ -73,7 +73,7 @@ Tine.widgets.grid.ColumnManager = function() {
             }
 
             if (['text', 'fulltext'].indexOf(fieldDefinition.type) >= 0) {
-                return null;
+                config.hidden = true;
             }
 
             if (fieldDefinition.type == 'records') {

@@ -19,7 +19,7 @@ Tine.widgets.grid.RendererManager.register('Timetracker', 'Timesheet', 'timeacco
 Tine.widgets.grid.RendererManager.register('Timetracker', 'Timesheet', 'timeaccount_id', function(row, index, record) {
     var record = new Tine.Timetracker.Model.Timeaccount(record.get('timeaccount_id'));
     var closedText = record.get('is_open') ? '' : (' (' + Tine.Tinebase.appMgr.get('Timetracker').i18n._('closed') + ')');
-    return record.get('number') ? (record.get('number') + ' - ' + record.get('title') + closedText) : '';
+    return Ext.util.Format.htmlEncode(record.get('number') ? (record.get('number') + ' - ' + record.get('title') + closedText) : '');
 });
 
 // Tine.Tinebase.data.TitleRendererManager.register('Timetracker', 'Timeaccount', function(record) {
