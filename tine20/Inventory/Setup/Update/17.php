@@ -60,7 +60,7 @@ class Inventory_Setup_Update_17 extends Setup_Update_Abstract
         Tinebase_TransactionManager::getInstance()->rollBack();
         if ($this->_backend->columnExists('costcenter', Inventory_Model_InventoryItem::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . Inventory_Model_InventoryItem::TABLE_NAME)
-                . ' RENAME COLUMN costcenter TO eval_dim_cost_center');
+                . ' CHANGE costcenter eval_dim_cost_center varchar(255) DEFAULT NULL');
         }
         $this->addApplicationUpdate(Inventory_Config::APP_NAME, '17.2', self::RELEASE017_UPDATE002);
     }

@@ -54,7 +54,7 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
 
         if ($this->_backend->columnExists('cost_center_id', HumanResources_Model_CostCenter::TABLE_NAME)) {
             $this->_db->query('ALTER TABLE ' . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . HumanResources_Model_CostCenter::TABLE_NAME)
-                . ' RENAME COLUMN cost_center_id TO eval_dim_cost_center');
+                . ' CHANGE cost_center_id eval_dim_cost_center varchar(255) DEFAULT NULL');
         }
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '17.1', self::RELEASE017_UPDATE001);
     }
