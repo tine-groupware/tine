@@ -87,13 +87,9 @@ class Felamimail_Controller_MessageExpectedAnswer extends Tinebase_Controller_Re
         Tinebase_Notification::getInstance()->send($user, array($recipient), $subject, $text, _attachments: $attachments);
     }
 
-    public function getAttachments(Felamimail_Model_MessageExpectedAnswer $entry): Felamimail_Model_Message
+    public function getAttachments(Felamimail_Model_MessageExpectedAnswer $entry): Tinebase_Record_RecordSet
     {
-        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
-            ['field' => Felamimail_Model_MessageExpectedAnswer::FLD_MESSAGE_ID, 'operator' => 'equals', 'value' => $entry->message_id]
-        ]);
-        $message = Felamimail_Controller_Cache_Message::getInstance()->search($filter)->getFirstRecord();
-        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message);
-        return $message;
+        $entry = Felamimail_Controller_MessageExpectedAnswer::getInstance()->get($entry->id);
+        return $entry->attachments;
     }
 }

@@ -52,4 +52,12 @@ interface Felamimail_Transport_Interface
      * @return string
      */
     public function getRawMessage(Zend_Mail $mail = NULL, $_additionalHeaders = array());
+
+    /**
+     * get mail header as string
+     *
+     * @param string $header
+     * @return array
+     */
+    public function getHeader(string $header);
 }

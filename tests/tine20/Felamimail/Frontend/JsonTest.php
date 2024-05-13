@@ -3374,6 +3374,8 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
      */
     public function testAutomaticMailExpectedAnswer()
     {
+        $this->_testNeedsTransaction();
+
         $messageToSend = $this->_getMessageData();
         $date = Tinebase_DateTime::now()->setTimezone(Tinebase_Core::getUserTimezone())->format(Tinebase_Record_Abstract::ISO8601LONG);
         $messageToSend['expected_answer'] = $date;

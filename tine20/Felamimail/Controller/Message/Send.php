@@ -1488,10 +1488,11 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         return $result;
     }
 
-    protected function _setExpectedAnswer($_message, $transport)
+    protected function _setExpectedAnswer($_message, Felamimail_Transport_Interface $transport)
     {
         if ($_message->expected_answer) {
             $messageId = $transport->getHeader('Message-Id')[0];
+
             $expected_answer = new Felamimail_Model_MessageExpectedAnswer([
                 'account_id'=> $_message->account_id,
                 'message_id'=> $messageId,
@@ -1499,8 +1500,19 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 'subject'=> $_message->subject,
                 'expected_answer'=> $_message->expected_answer,
             ], true);
-            Felamimail_Controller_MessageExpectedAnswer::getInstance()->create($expected_answer);
-            return $expected_answer;
+
+            $path = Tinebase_TempFile::getTempPath();
+            // TODO maybe we should save only the mail body without attachments?
+            file_put_contents($path, $transport->getRawMessage());
+            $expected_answer->attachments = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array(
+                array(
+                    'name'      => $_message->subject . '.eml',
+                    'contenttype' => 'message/rfc822',
+                    'tempFile'  => Tinebase_TempFile::getInstance()->createTempFile($path)
+                )
+            ), true);
+
+            return Felamimail_Controller_MessageExpectedAnswer::getInstance()->create($expected_answer);
         }
         return null;
     }
