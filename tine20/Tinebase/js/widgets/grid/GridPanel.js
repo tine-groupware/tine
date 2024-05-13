@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2007-2013 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import {getLocalizedLangPicker} from "../form/LocalizedLangPicker";
-import {getDefaultLayoutClasses} from "../../util/responsiveLayout";
+import { getCls } from "../../util/responsiveLayout"
 
 Ext.ns('Tine.widgets.grid');
 
@@ -37,8 +37,14 @@ Tine.widgets.grid.GridPanel = function(config) {
         start: 0,
         limit: 50
     };
-    
-    this.layoutStyle = 'auto';
+
+    // screen is of widthClass if width <= px
+    this.widthClasses = {
+        small: 300,
+        medium: 800,
+        big: 1600,
+        large: Infinity
+    };
 
     // allow to initialize with string
     this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
@@ -1484,27 +1490,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         Ext.applyIf(options.params, this.defaultPaging);
     },
     
-    async updateGridState() {
+    updateGridState() {
         if (!this.stateful) return;
-        this.grid.stateId = this.getResolvedGridStateId();
-        
-        if (this.grid && !Ext.state.Manager.get(this.grid.stateId)) {
-            await this.grid.saveState();
+        this.grid.stateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
+        if (!Ext.state.Manager.get(this.grid.stateId)) {
+            this.grid.saveState();
         }
-        this.grid.view.layout();
-    },
-    
-    getResolvedGridStateId() {
-        const stateIdSuffix = this.getStateIdSuffix();
-        const suffixEast = this.detailsPanelRegion === 'east' ? '_DetailsPanel_East' : '';
-        let stateId = `${this.gridConfig.stateId}${stateIdSuffix}${suffixEast}`;
-        if (this.grid?.getView?.()) stateId = this.grid.getView().resolveStateIdResponsiveMode(stateId);
-
-        return stateId;
-    },
-    
-    getStateIdSuffix() {
-        return this.stateIdSuffix;
+        const defaultState = Ext.state.Manager.get(this.grid.stateId) ?? this.grid.getState();
+        if (defaultState) {
+            this.grid.applyState(defaultState);
+            this.grid.saveState();
+        }
     },
 
     /**
@@ -1703,9 +1699,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * init ext grid panel
      * @private
      */
-    initGrid: async function () {
+    initGrid: function() {
         var preferences = Tine.Tinebase.registry.get('preferences');
-        
+
         if (preferences) {
             this.gridConfig = Ext.applyIf(this.gridConfig || {}, {
                 stripeRows: preferences.get('gridStripeRows') ? preferences.get('gridStripeRows') : false,
@@ -1720,20 +1716,20 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 };
             }
         }
-        
+
         // generic empty text
         this.i18nEmptyText = i18n.gettext('No data to display');
         
         // init sel model
-        if (!this.selectionModel) {
+        if (! this.selectionModel) {
             this.selectionModel = new Tine.widgets.grid.FilterSelectionModel({
                 moveEditorOnEnter: false,
                 store: this.store,
                 gridPanel: this
             });
         }
-        
-        this.selectionModel.on('selectionchange', function (sm) {
+
+        this.selectionModel.on('selectionchange', function(sm) {
             this.actionUpdater.updateActions(sm, this.getFilteredContainers());
             this.latestSelection = sm;
             this.ctxNode = this.selectionModel.getSelections();
@@ -1741,7 +1737,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.detailsPanel.onDetailsUpdate(sm);
             }
         }, this);
-        
+
         if (this.usePagingToolbar) {
             this.pagingToolbar = new Ext.ux.grid.PagingToolbar(Ext.apply({
                 pageSize: this.defaultPaging && this.defaultPaging.limit ? this.defaultPaging.limit : 50,
@@ -1752,7 +1748,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 displaySelectionHelper: this.displaySelectionHelper,
                 sm: this.selectionModel,
                 disableSelectAllPages: this.disableSelectAllPages,
-                nested: !!this.editDialog
+                nested: this.editDialog ? true : false
             }, this.pagingConfig));
             const columns = this.gridConfig?.cm?.columns ?? this.gridConfig?.columns;
             const sortActions = columns
@@ -1762,7 +1758,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         text: column.header,
                         dataIndex: column.dataIndex,
                         scope: this,
-                        handler: (action) => {
+                        handler: (action)=> {
                             this.store.sort(action.dataIndex);
                         }
                     });
@@ -1770,10 +1766,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.sortingMenu = new Ext.Action({
                 xtype: 'tbsplit',
                 iconCls: 'action_sort',
-                menu: new Ext.menu.Menu({items: sortActions}),
+                menu: new Ext.menu.Menu({ items: sortActions}),
                 hidden: true,
                 displayPriority: 0,
-                handler: (action) => {
+                handler: (action)=> {
                     const sortState = this.store.getSortState();
                     sortActions.forEach((action) => {
                         if (sortState.field === action.initialConfig.dataIndex) {
@@ -1785,47 +1781,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     })
                 }
             });
-            // todo : hide the layout action if disableResponsiveLayout ?
-            const levels = [...new Set(columns.map((col) => col?.responsiveLevel).filter(Boolean))];
-            this.widthClasses = ['auto', 'oneColumn', 'big'].concat(levels);
-            
-            const layoutActions = this.widthClasses.map((level) => {
-                const text = level === 'oneColumn' ? 'one column' : level;
-                return new Ext.Action({
-                    text: Ext.util.Format.capitalize(i18n._(text)),
-                    dataIndex: level,
-                    handler: (action) => {
-                        this.layoutStyle = action.dataIndex;
-                        this.grid.getView().setResponsiveMode(this.layoutStyle);
-                        this.grid.view.layout();
-                    }
-                });
-            });
-            this.layoutMenu = new Ext.Action({
-                xtype: 'tbsplit',
-                menu: new Ext.menu.Menu({items: layoutActions}),
-                hidden: true,
-                displayPriority: 80,
-                iconCls: 'x-cols-icon',
-                tooltip: 'Layout',
-                handler: (action) => {
-                    const mode = this.grid.getView().getResponsiveMode().name;
-                    layoutActions.forEach((action) => {
-                        if (action.initialConfig.dataIndex !== 'auto') {
-                            const item = action.items[0];
-                            const isModeMatched = mode === action.initialConfig.dataIndex;
-                            item.container[isModeMatched ? "addClass" : "removeClass"]("x-menu-item-checked");
-                            item[isModeMatched ? "addClass" : "removeClass"]('x-menu-check-item x-menu-group-item');
-                        }
-                        action.setIconClass(action.initialConfig.dataIndex === this.layoutStyle ? 'action_enable' : '');
-                    });
-                },
-            });
             this.pagingToolbar.insert(11, this.sortingMenu);
-            this.pagingToolbar.insert(12, this.layoutMenu);
             
             // mark next grid refresh as paging-refresh
-            this.pagingToolbar.on('beforechange', function () {
+            this.pagingToolbar.on('beforechange', function() {
                 this.grid.getView().isPagingRefresh = true;
             }, this);
             
@@ -1841,7 +1800,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             }
         }
-        
+
         // which grid to use?
         // TODO find a better way to configure quickadd grid
         var Grid = null;
@@ -1851,12 +1810,24 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         } else {
             Grid = (this.gridConfig.gridType || Ext.grid.GridPanel);
         }
-        
+
         this.gridConfig.store = this.store;
-        
+
         // activate grid header menu for column selection
         this.gridConfig.plugins = this.gridConfig.plugins ? this.gridConfig.plugins : [];
         this.gridConfig.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
+        if (this.stateful) {
+            this.gridConfig.stateful = true;
+            this.gridConfig.stateId  = this.stateId + '-Grid' + this.stateIdSuffix;
+            
+            this.regionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
+            this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
+            this.stateIdDetailPanelEast = !this.gridConfig.stateId.includes('_DetailsPanel_East') ? this.gridConfig.stateId + '_DetailsPanel_East' : this.gridConfig.stateId;
+            const StoredStateId = this.detailsPanelRegion === 'east' ? this.stateIdDetailPanelEast : this.gridConfig.stateId;
+            const state = Ext.state.Manager.get(StoredStateId);
+            if (state) this.defaultSortInfo = state.sort;
+        }
+        
         this.grid = new Grid(Ext.applyIf(this.gridConfig, {
             border: false,
             store: this.store,
@@ -1866,27 +1837,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             recordClass: this.recordClass,
             getDragDropText: this.getDragDropText.createDelegate(this)
         }));
-        
-        if (this.stateful) {
-            this.gridConfig.stateful = true;
-            this.gridConfig.stateId = this.stateId + '-Grid' + this.stateIdSuffix;
-            
-            this.regionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
-            this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
-            const stateId = this.getResolvedGridStateId();
-            let state = Ext.state.Manager.get(stateId);
-            if (state) this.defaultSortInfo = state.sort;
-        }
-        
         this.grid.store.sortInfo = this.defaultSortInfo;
         
         // init various grid / sm listeners
-        this.grid.on('keydown', this.onKeyDown, this);
-        this.grid.on('rowclick', this.onRowClick, this);
-        this.grid.on('rowdblclick', this.onRowDblClick, this);
-        this.grid.on('newentry', this.onStoreNewEntry, this);
-        this.grid.on('headerclick', this.onHeaderClick, this);
-        
+        this.grid.on('keydown',     this.onKeyDown,         this);
+        this.grid.on('rowclick',    this.onRowClick,        this);
+        this.grid.on('rowdblclick', this.onRowDblClick,     this);
+        this.grid.on('newentry',    this.onStoreNewEntry,   this);
+        this.grid.on('headerclick', this.onHeaderClick,   this);
+
         this.grid.on('rowcontextmenu', this.onRowContextMenu, this);
     },
 

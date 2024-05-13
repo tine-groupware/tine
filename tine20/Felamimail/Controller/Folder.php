@@ -235,6 +235,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         $foldername = $this->_prepareFolderName($_folderName);
         $globalname = (empty($_parentFolder)) ? $foldername : $_parentFolder . $this->_delimiter . $foldername;
+            
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
             __METHOD__ . '::' . __LINE__ . ' Trying to create new folder: ' . $globalname
             . ' (parent: ' . $_parentFolder . ')');
@@ -244,7 +245,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         // check if parent folder exists
         if (! empty($_parentFolder)) {
             try {
-                $imap->examineFolder($_parentFolder);
+                $imap->examineFolder(Felamimail_Model_Folder::encodeFolderName($_parentFolder));
             } catch (Zend_Mail_Storage_Exception $zmse) {
                 throw new Tinebase_Exception_NotFound('Could not create folder: parent folder '
                     . $_parentFolder . ' not found');

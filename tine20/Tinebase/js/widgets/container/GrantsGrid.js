@@ -86,7 +86,7 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
             this.store = new Ext.data.JsonStore({
                 root: 'results',
                 totalProperty: 'totalcount',
-                id: 'account_id',
+                id: 'id',
                 fields: this.recordClass
             });
         }

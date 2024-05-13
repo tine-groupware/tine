@@ -138,6 +138,27 @@ class Felamimail_Controller_FolderTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue(($testFolder->is_selectable == 1));
     }
 
+    /**
+     * create a mail folder on the server
+     */
+    public function testCreateFolderUmlaut()
+    {
+        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'Über.sub01';
+        $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'Über';
+        
+        $newFolder = $this->_controller->create($this->_account->getId(), 'Über', 'INBOX');
+        $folder = $this->_controller->search($this->_getFolderFilter('INBOX' ));
+
+        // check returned data (id)
+        $this->assertTrue(!empty($newFolder->id));
+        $this->assertEquals('INBOX' . $this->_account->delimiter . 'Über', $newFolder->globalname);
+
+        $this->_controller->create($this->_account->getId(), 'sub01', 'INBOX' . $this->_account->delimiter . 'Über');
+        $resultTestSub = $this->_controller->search($this->_getFolderFilter('INBOX' . $this->_account->delimiter . 'Über'))->getFirstRecord();
+        $this->assertEquals('INBOX' . $this->_account->delimiter . 'Über' . '.sub01', $resultTestSub->globalname);
+
+    }
+
     public function testCreateDuplicateFolders()
     {
         $this->_createdFolders[] = 'INBOX' . $this->_account->delimiter . 'test';
