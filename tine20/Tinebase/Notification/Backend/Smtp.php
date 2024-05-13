@@ -108,7 +108,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         }
         
         // attachments
-        if (is_array($_attachments)) {
+        if (is_array($_attachments) || $_attachments instanceof Tinebase_Record_RecordSet) {
             $attachments = &$_attachments;
         } elseif (is_string($_attachments)) {
             $attachments = array(&$_attachments);
