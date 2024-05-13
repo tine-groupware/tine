@@ -6463,14 +6463,20 @@ msgstr "Unten"
 msgid "Right"
 msgstr "Rechts"
 
+msgid "one column"
+msgstr "einspaltig"
+
 msgid "small"
 msgstr "klein"
 
 msgid "medium"
 msgstr "mittel"
 
+msgid "big"
+msgstr "groß"
+
 msgid "large"
-msgstr "extra groß"
+msgstr "groß"
 
 msgid "Select Image"
 msgstr "Bild auswählen"
@@ -6480,12 +6486,6 @@ msgstr "Bild in ausgewählter Größe einfügen"
 
 msgid "Image size"
 msgstr "Bildgröße"
-
-msgid "one column"
-msgstr "einspaltig"
-
-msgid "big"
-msgstr "groß"
 
 msgid "Gets assigned automatically"
 msgstr "Wird automatisch zugewiesen"

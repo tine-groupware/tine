@@ -82,7 +82,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Folder|Account} record
      * @return {String}
      */
-    oneColumnRenderer: function(folderId, metadata, record) {
+    responsiveRenderer: function(folderId, metadata, record) {
         const block =  document.createElement('div');
         block.className = 'responsive-title';
         

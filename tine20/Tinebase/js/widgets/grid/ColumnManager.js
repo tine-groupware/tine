@@ -163,14 +163,6 @@ Tine.widgets.grid.ColumnManager = function() {
             if (fieldDefinition.hasOwnProperty('summaryType')) {
                 column.summaryType = fieldDefinition.summaryType;
             }
-            
-            if (fieldDefinition?.uiconfig?.responsiveLevel) {
-                column.responsiveLevel = fieldDefinition.uiconfig.responsiveLevel;
-            }
-            
-            if (fieldDefinition?.shy) {
-                column.responsiveLevel = 'large';
-            }
 
             // NOTE: app might be from owningApp whereas appName ist the models app
             var renderer = Tine.widgets.grid.RendererManager.get(appName, modelName, fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
