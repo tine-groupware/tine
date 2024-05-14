@@ -2425,35 +2425,35 @@ msgstr ""
 
 #: views/eventNotification.php:25
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr ""
+msgstr "%1$s changed from \"%2$s\" to \"%3$s\""
 
 #: views/eventNotification.php:32
 msgid "%1$s has been invited"
-msgstr ""
+msgstr "%1$s has been invited"
 
 #: views/eventNotification.php:37
 msgid "%1$s has been removed"
-msgstr ""
+msgstr "%1$s has been removed"
 
 #: views/eventNotification.php:44
 msgid "%1$s accepted invitation"
-msgstr ""
+msgstr "%1$s accepted invitation"
 
 #: views/eventNotification.php:48
 msgid "%1$s declined invitation"
-msgstr ""
+msgstr "%1$s declined invitation"
 
 #: views/eventNotification.php:52
 msgid "Tentative response from %1$s"
-msgstr ""
+msgstr "Tentative response from %1$s"
 
 #: views/eventNotification.php:56
 msgid "No response from %1$s"
-msgstr ""
+msgstr "No response from %1$s"
 
 #: views/eventNotification.php:59
 msgid "\"%2$s\" response from %1$s"
-msgstr ""
+msgstr "\"%2$s\" response from %1$s"
 
 #: views/eventNotification.php:70
 msgid "Link"
