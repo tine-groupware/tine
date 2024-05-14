@@ -315,7 +315,10 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Cont
     {
         $tsBackend = new Timetracker_Backend_Timesheet();
         
-        if ($currentRecord['status'] !== $updatedRecord['status'] && $updatedRecord['status'] === Timetracker_Model_Timeaccount::STATUS_BILLED) {
+        if (Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)
+            && $currentRecord['status'] !== $updatedRecord['status']
+            && $updatedRecord['status'] === Timetracker_Model_Timeaccount::STATUS_BILLED)
+        {
             $timesheets = $tsBackend->search(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(Timetracker_Model_Timesheet::class, [
                         ['field' => 'timeaccount_id', 'operator' => 'equals', 'value' => $updatedRecord->getId()],
