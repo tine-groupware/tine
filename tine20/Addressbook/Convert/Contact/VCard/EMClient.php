@@ -105,10 +105,13 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
         $card->add('ADR', array(null, $_record->adr_one_street2, $_record->adr_one_street, $_record->adr_one_locality, $_record->adr_one_region, $_record->adr_one_postalcode, $_record->adr_one_countryname), array('TYPE' => 'WORK'));
         
         $card->add('ADR', array(null, $_record->adr_two_street2, $_record->adr_two_street, $_record->adr_two_locality, $_record->adr_two_region, $_record->adr_two_postalcode, $_record->adr_two_countryname), array('TYPE' => 'HOME'));
-        
-        $card->add('EMAIL', $_record->email, array('TYPE' => 'PREF'));
-        
-        $card->add('EMAIL', $_record->email_home);
+
+        if (! empty($_record->email)) {
+            $card->add('EMAIL', $_record->email, array('TYPE' => 'PREF'));
+        }
+        if (! empty($_record->email_home)) {
+            $card->add('EMAIL', $_record->email_home);
+        }
         
         $card->add('URL', $_record->url, array('TYPE' => 'WORK'));
         
