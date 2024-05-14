@@ -2477,10 +2477,6 @@ msgstr "No response from %1$s"
 msgid "\"%2$s\" response from %1$s"
 msgstr "\"%2$s\" response from %1$s"
 
-#: views/eventNotification.php:59
-msgid "\"%2$s\" response from %1$s"
-msgstr ""
-
 #: views/eventNotification.php:70
 msgid "Link"
 msgstr ""
