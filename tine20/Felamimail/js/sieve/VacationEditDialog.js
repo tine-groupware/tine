@@ -133,29 +133,31 @@ Tine.Felamimail.sieve.VacationEditDialog = Ext.extend(Tine.widgets.dialog.EditDi
     onRecordUpdate: async function () {
         Tine.Felamimail.sieve.VacationEditDialog.superclass.onRecordUpdate.call(this);
         
-        let contactIds = [];
+        const contactIds = [];
         Ext.each(['contact_id1', 'contact_id2'], function (field) {
             if (this.getForm().findField(field) && this.getForm().findField(field).getValue() !== '') {
                 contactIds.push(this.getForm().findField(field).getValue());
             }
         }, this);
         
-        let template = this.getForm().findField('template_id').getValue();
-        
         this.record.set('contact_ids', contactIds);
-        this.record.set('template_id', template);
-
-        if (template !== '') {
-            try {
-                let response = await Tine.Felamimail.getVacationMessage(this.record.data);
-                this.vacationPanel.reasonEditor.setValue(response.message);
-            } catch (e) {
-                Tine.Felamimail.handleRequestException(exception);
+        
+        const templateField = this.getForm().findField('template_id');
+        
+        if (templateField) {
+            const templateValue = templateField.getValue();
+            this.record.set('template_id', templateValue);
+            if (templateValue !== '') {
+                try {
+                    let response = await Tine.Felamimail.getVacationMessage(this.record.data);
+                    this.vacationPanel.reasonEditor.setValue(response.message);
+                } catch (e) {
+                    Tine.Felamimail.handleRequestException(exception);
+                }
             }
         }
         
-        let form = this.getForm();
-        form.updateRecord(this.record);
+        this.getForm().updateRecord(this.record);
         
         this.checkStates();
     },
