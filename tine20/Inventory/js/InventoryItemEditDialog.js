@@ -104,6 +104,18 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 name: 'name',
                                 maxLength: 100,
                                 allowBlank: false
+                            }],
+                            [{
+                                columnWidth: 1,
+                                editDialog: this,
+                                xtype: 'tinerelationpickercombo',
+                                fieldLabel: this.app.i18n._('Employee'),
+                                allowBlank: true,
+                                app: 'HumanResources',
+                                recordClass: Tine.HumanResources.Model.Employee,
+                                relationType: 'EMPLOYEE',
+                                relationDegree: 'sibling',
+                                modelUnique: true
                             }]
                         ]
                     },

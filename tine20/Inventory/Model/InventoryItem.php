@@ -22,7 +22,10 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
 {
     public const TABLE_NAME = 'inventory_item';
     
-    const FLD_STATUS = 'status';
+    public const FLD_STATUS = 'status';
+
+    public const MODEL_NAME_PART = 'InventoryItem';
+
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -76,6 +79,20 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             'supportedFormats' => array('csv', 'ods'),
         ),
 
+        'filterModel' => array(
+            'employee' => array(
+                'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
+                'label' => 'Employee', // _('Employee')
+                'options' => array(
+                    'controller' => 'HumanResources_Controller_Employee',
+                    'filtergroup' => 'HumanResources_Model_EmployeeFilter',
+                    'own_filtergroup' => 'Inventory_Model_InventoryItemFilter',
+                    'own_controller' => 'Inventory_Controller_InventoryItem',
+                    'related_model' => 'HumanResources_Model_Employee',
+                ),
+            ),
+        ),
+        
         'fields'            => array(
             'name' => array(
                 'type'        => 'string',
@@ -162,6 +179,18 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 'inputFilters' => array('Zend_Filter_Empty' => null),
                 'type'       => 'datetime',
                 'nullable'   => true,
+            ),
+            'employee' => array(
+                'type' => 'virtual',
+                'config' => array(
+                    'type' => 'relation',
+                    'label' => 'Employee',    // _('Employee')
+                    'config' => array(
+                        'appName'   => 'HumanResources',
+                        'modelName' => 'Employee',
+                        'type' => 'EMPLOYEE'
+                    )
+                )
             ),
             'added_date' => array(
                 'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => true),

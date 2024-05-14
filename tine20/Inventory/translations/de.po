@@ -198,3 +198,6 @@ msgid ""
 msgstr ""
 "Gegenstände importiert am ###CURRENTDATE### um ###CURRENTTIME### von "
 "###USERFULLNAME###"
+
+msgid "Employee"
+msgstr "Mitarbeiter"

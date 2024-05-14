@@ -188,6 +188,20 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             freetimeType: 'SICKNESS',
             hideColumns: ['employee_id']
         });
+        this.inventoryGridPanel = new Tine.Inventory.InventoryItemGridPanel({
+            title: 'Inventory',
+            app: this.app,
+            editDialog: this,
+            frame: false,
+            autoScroll: true,
+            onStoreBeforeload: function(store, options) {
+                this.supr().onStoreBeforeload.call(this, store, options);
+                options.params.filter.push({field: 'status', operator: 'in', value: ['ORDERED', 'AVAILABLE', 'DEFECT', 'UNKNOWN']});
+                options.params.filter.push({field: 'employee', operator: 'definedBy', value: [
+                    {field: 'account_id', operator: 'equals', value: this.editDialog.record.get('account_id')}
+                ]});
+            },
+        });
             
         var tabs = [{
             title: this.app.i18n._('Employee'),
@@ -568,6 +582,7 @@ Tine.HumanResources.EmployeeEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.contractGridPanel,
             this.vacationGridPanel,
             this.sicknessGridPanel,
+            this.inventoryGridPanel,
             this.activitiesTabPanel = new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,
