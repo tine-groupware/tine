@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "43d424f1886b1089939329f0ec2832f7",
+    "content-hash": "90269f510ba1521d4f67b557031bebc5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4324,11 +4324,11 @@
         },
         {
             "name": "metaways/timezoneconvert",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tine20/timezoneconvert.git",
-                "reference": "69cf7a925f95f7f7ae0fdfd78901044c39ec9448"
+                "url": "https://github.com/tine-groupware/timezoneconvert.git",
+                "reference": "985c16bcfb9d274633fa4e3d34ce09e095587895"
             },
             "require": {
                 "php": ">=7.4"
@@ -4351,6 +4351,9 @@
                 ],
                 "php81test": [
                     "cd tests/docker; docker-compose run cli81 ash -c 'cd /src/tests; ../vendor/bin/phpunit --color TimeZoneConvert/AllTests.php'; cd ../..;"
+                ],
+                "php82test": [
+                    "cd tests/docker; docker-compose run cli82 ash -c 'cd /src/tests; ../vendor/bin/phpunit --color TimeZoneConvert/AllTests.php'; cd ../..;"
                 ]
             },
             "license": [
@@ -4366,7 +4369,7 @@
                 "Timezones",
                 "UTC"
             ],
-            "time": "2022-09-15T19:51:35+00:00"
+            "time": "2024-05-14T15:02:02+00:00"
         },
         {
             "name": "mlocati/ip-lib",
@@ -15665,5 +15668,5 @@
         "php": "8.0.2",
         "ext-filter": "8.0"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
