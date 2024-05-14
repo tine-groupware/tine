@@ -2435,7 +2435,7 @@ msgstr ""
 
 #: views/eventNotification.php:25
 msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr ""
+msgstr "%1$s changed from \"%2$s\" to \"%3$s\""
 
 #: views/eventNotification.php:32
 msgid "%1$s has been invited"
@@ -2451,11 +2451,11 @@ msgstr "%1$s on hyväksynyt kutsun"
 
 #: views/eventNotification.php:48
 msgid "%1$s declined invitation"
-msgstr ""
+msgstr "%1$s declined invitation"
 
 #: views/eventNotification.php:52
 msgid "Tentative response from %1$s"
-msgstr ""
+msgstr "Tentative response from %1$s"
 
 #: views/eventNotification.php:56
 msgid "No response from %1$s"
@@ -2463,7 +2463,7 @@ msgstr "Ei vastausta määräaikaan mennessä  %1$s"
 
 #: views/eventNotification.php:59
 msgid "\"%2$s\" response from %1$s"
-msgstr ""
+msgstr "\"%2$s\" response from %1$s"
 
 #: views/eventNotification.php:70
 msgid "Link"
