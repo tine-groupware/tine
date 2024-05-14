@@ -266,6 +266,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Record_Abstract
                 $record->grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $record->grants);
             }
             $diff = $record->grants->diff($oldGrants);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
+                Tinebase_Core::getLogger()->trace(
+                    __METHOD__ . '::' . __LINE__ . ' Grants diff: ' . print_r($diff->toArray(), true));
+            }
+
             if (!$diff->isEmpty() || $oldRecord->acl_node !== $record->acl_node) {
                 $stillAdmin = false;
                 /** @var Tinebase_Model_Grants $grant */

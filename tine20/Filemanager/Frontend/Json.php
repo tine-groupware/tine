@@ -215,14 +215,17 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     
     /**
      * save node
+     *
      * save node here in json fe just updates meta info (name, description, relations, customfields, tags, notes),
      * if record already exists (after it had been uploaded)
-     * @param array with record data 
+     * @param array $recordData with record data
      * @return array
+     *
+     * @refactor NOTE: upload should not call this function - the check for created/creation_time is very suspicious!
      */
-    public function saveNode($recordData)
+    public function saveNode($recordData): array
     {
-        if((isset($recordData['created_by']) || array_key_exists('created_by', $recordData))) {
+        if((isset($recordData['created_by']) || array_key_exists('created_by', $recordData)) || isset($recordData['creation_time'])) {
             $result = $this->_save($recordData, Filemanager_Controller_Node::getInstance(), 'Node');
             if ($recordData['name'] !== $result['name']) {
                 $moveResult = $this->moveNodes($result['path'], [dirname($result['path']) . '/' . $recordData['name']], false);
@@ -231,7 +234,11 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
             }
             return $result;
-        } else {    // on upload complete
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' On upload complete');
+            }
             return $recordData;
         }
     }
