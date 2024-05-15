@@ -824,6 +824,27 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
 
     /**
+     * update sieve Script for all mailinglist accounts
+     *
+     * usage: method=Admin.updateNotificationScripts [-d]
+     * @param Zend_Console_Getopt $opts
+     * @return int
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_Record_Validation
+     */
+    public function updateSieveScript(Zend_Console_Getopt $opts)
+    {
+        if ($opts->d) {
+            echo "--DRY RUN--\n";
+        }
+
+        $updated = Admin_Controller_EmailAccount::getInstance()->updateSieveScript(null, $opts->d);
+
+        echo "Updated sieve script for " . count($updated) . " email accounts\n";
+        return 0;
+    }
+
+    /**
      * removes mailaccounts that are no longer linked to a user
      *
      * @param Zend_Console_Getopt $opts
