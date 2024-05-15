@@ -79,6 +79,7 @@ class Projects_Model_Project extends Tinebase_Record_NewAbstract
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 self::FLD_TASKS => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Tasks_Model_Task::FLD_ORGANIZER => [],
                         Tasks_Model_Task::FLD_DEPENDENT_TASKS => [],
                         Tasks_Model_Task::FLD_DEPENDENS_ON => [
                             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [

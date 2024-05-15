@@ -549,6 +549,10 @@ Ext.Button = Ext.extend(Ext.BoxComponent, {
         return this;
     },
 
+    getState: function() {
+        return {pressed: this.pressed}
+    },
+
     /**
      * Focus the button
      */

@@ -6,6 +6,7 @@
  * @copyright   Copyright (c) 2011-2021 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 import dependentTasksPanel from "../../Tasks/js/DependentTasksPanel";
+import Stringable from 'ux/Stringable';
 
 Ext.ns('Tine.Projects');
 
@@ -210,7 +211,15 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         items: [
                             new dependentTasksPanel({
                                 title: Tine.Tasks.Model.Task.getAppName(),
-                                editDialog: this
+                                editDialog: this,
+                                filter: [
+                                    { field: "tasksDue", operator: "equals", value: "currentContact" },
+                                    { field: "source:Projects_Model_Project", operator: "definedBy?condition=and&setOperator=oneOf", value: [
+                                        { field: ":id", operator: "equals", value: new Stringable('...', () => {
+                                            return this.record.id;
+                                        }) }
+                                    ]}
+                                ]
                             })
                         ]
                     }]

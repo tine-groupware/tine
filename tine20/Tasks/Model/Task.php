@@ -28,6 +28,8 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
     public const FLD_DUE = 'due';
     public const FLD_ESTIMATED_DURATION = 'estimated_duration';
     public const FLD_STATUS = 'status';
+    public const FLD_ORGANIZER = 'organizer';
+    
 
     public const TASK_STATUS_NEEDS_ACTION = 'NEEDS-ACTION';
     public const TASK_STATUS_COMPLETED = 'COMPLETED';
@@ -79,8 +81,8 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                     self::COLUMNS       => ['description'],
                     self::FLAGS         => [self::TYPE_FULLTEXT],
                 ],
-                'organizer'       => [
-                    self::COLUMNS       => ['organizer'],
+                self::FLD_ORGANIZER       => [
+                    self::COLUMNS       => [self::FLD_ORGANIZER],
                 ],
                 'uid__id'       => [
                     self::COLUMNS       => ['uid', 'id'],
@@ -104,7 +106,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Tasks_Model_TaskDependency::FLD_DEPENDS_ON => [
                             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                                'organizer' => [],
+                                self::FLD_ORGANIZER => [],
                                 'source' => [],
                             ],
                         ],
@@ -114,7 +116,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                         Tasks_Model_TaskDependency::FLD_TASK_ID => [
                             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                                'organizer' => [],
+                                self::FLD_ORGANIZER => [],
                             ],
                         ],
                     ],
@@ -174,7 +176,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => false),
                 self::DEFAULT_VAL   => 'NEEDS-ACTION',
             ),
-            'organizer'         => array(
+            self::FLD_ORGANIZER         => array(
                 'label'             => 'Organizer / Responsible', //_('Organizer / Responsible')
                 'type'              => 'user',
                 self::NULLABLE      => true,
@@ -322,7 +324,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_resolveForeignIdFields = array(
-        'Tinebase_Model_User'     => array('created_by', 'last_modified_by', 'organizer'),
+        'Tinebase_Model_User'     => array('created_by', 'last_modified_by', self::FLD_ORGANIZER),
         'recursive'               => array('attachments' => 'Tinebase_Model_Tree_Node'),
     );
     
@@ -344,16 +346,16 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
             $_data['class'] = self::CLASS_PUBLIC;
         }
         
-        if (isset($_data['organizer']) && is_array($_data['organizer'])
+        if (isset($_data[self::FLD_ORGANIZER]) && is_array($_data[self::FLD_ORGANIZER])
         ) {
-            if (isset($_data['organizer']['account_id'])) {
-                $_data['organizer'] = $_data['organizer']['account_id'];
-            } else if (isset($_data['organizer']['accountId'])) {
-                $_data['organizer'] = $_data['organizer']['accountId'];
+            if (isset($_data[self::FLD_ORGANIZER]['account_id'])) {
+                $_data[self::FLD_ORGANIZER] = $_data[self::FLD_ORGANIZER]['account_id'];
+            } else if (isset($_data[self::FLD_ORGANIZER]['accountId'])) {
+                $_data[self::FLD_ORGANIZER] = $_data[self::FLD_ORGANIZER]['accountId'];
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
                     __METHOD__ . '::' . __LINE__ . ' Account ID missing from organizer data: '
-                    . print_r($_data['organizer'], true));
+                    . print_r($_data[self::FLD_ORGANIZER], true));
             }
         }
         
@@ -384,7 +386,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
         $dueDateString = Tinebase_Translation::dateToStringInTzAndLocaleFormat($this->due, $timezone, $locale);
         
         // resolve values
-        Tinebase_User::getInstance()->resolveUsers($this, 'organizer', true);
+        Tinebase_User::getInstance()->resolveUsers($this, self::FLD_ORGANIZER, true);
         $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records->getById($this->status);
         $organizerName = ($this->organizer) ? $this->organizer->accountDisplayName : '';
         
@@ -442,7 +444,7 @@ class Tasks_Model_Task extends Tinebase_Record_Abstract
      */
     public function resolveOrganizer()
     {
-        Tinebase_User::getInstance()->resolveUsers($this, 'organizer', true);
+        Tinebase_User::getInstance()->resolveUsers($this, self::FLD_ORGANIZER, true);
         
         if (! empty($this->organizer) && $this->organizer instanceof Tinebase_Model_User) {
             $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($this->organizer->contact_id, TRUE);
