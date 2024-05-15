@@ -23,6 +23,10 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         this.editDialogConfig = this.editDialogConfig || {};
         this.editDialogConfig.mode = this.editDialogConfig.mode || 'load(remote):save(local)';
         this.editDialogConfig.dependendTaskPanel = this;
+        this.viewConfig = _.assign(this.viewConfig || {},{
+            getRowClass: this.getRowClass.createDelegate(this)
+        });
+
         this.columns = [
             {
                 id: 'summary',
@@ -32,8 +36,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 sortable: true,
                 quickaddField: new Ext.form.TextField({
                     emptyText: this.app.i18n._('Add a task...')
-                }),
-                sortable: true
+                })
             }, {
                 id: 'due',
                 header: this.app.i18n._("Due Date"),
@@ -43,7 +46,6 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 editor: new Ext.ux.form.ClearableDateField({
                     //format : 'd.m.Y'
                 }),
-                sortable: true,
                 quickaddField: new Ext.ux.form.ClearableDateField({
                     //value: new Date(),
                     //format : "d.m.Y"
@@ -64,8 +66,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
                     app: 'Tasks',
                     keyFieldName: 'taskPriority'
-                }),
-                sortable: true
+                })
             }, {
                 id: 'dependens_on',
                 header: this.app.i18n._("Depends on"),
@@ -85,8 +86,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 sortable: true,
                 quickaddField: new Ext.ux.PercentCombo({
                     autoExpand: true
-                }),
-                sortable: true
+                })
             }, {
                 id: 'status',
                 header: this.app.i18n._("Status"),
@@ -123,5 +123,67 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
         ];
 
         this.supr().initComponent.call(this);
+
+        if (this.filter) {
+            this.filterButton = new Ext.Toolbar.Button({
+                enableToggle: true,
+                pressed: true,
+                stateful: true,
+                stateId: 'my-dependent-tasks-filter',
+                stateEvents: ['toggle'],
+                iconCls: 'action_filter',
+                text: this.app.i18n._('My open tasks'),
+                listeners: {
+                    toggle: this.applyFilter,
+                    scope: this
+                }
+            });
+            this.getBottomToolbar().add('->', this.filterButton);
+            this.editDialog.on('load', this.applyFilter, this);
+        }
+    },
+
+    applyFilter: async function() {
+        this.filteredData = null;
+
+        if (this.filterButton.pressed) {
+            const {results: filteredData} = await Tine.Tasks.searchTasks(this.filter);
+            this.filteredData = filteredData;
+
+            this.store.filterBy((r) => {
+                return _.find(filteredData, {id: r.id});
+            })
+        } else {
+            this.store.clearFilter();
+        }
+    },
+
+    /**
+     * Return CSS class to apply to rows depending upon due status
+     *
+     * @param {Tine.Tasks.Model.Task} record
+     * @param {Integer} index
+     * @return {String}
+     */
+    getRowClass: function(record, index) {
+        let classNames = [];
+
+        const due = record.get('due');
+
+        if(record.get('status') == 'COMPLETED') {
+            classNames.push('tasks-grid-completed');
+        } else  if (due) {
+            var dueDay = due.format('Y-m-d');
+            var today = new Date().format('Y-m-d');
+
+            if (dueDay == today) {
+                classNames.push('tasks-grid-duetoday');
+            } else if (dueDay < today) {
+                classNames.push('tasks-grid-overdue');
+            }
+
+        }
+
+        return _.join(_.uniq(classNames), ' ');
     }
 });

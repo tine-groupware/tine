@@ -252,8 +252,9 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      * @return {Array}
      */
     getFromStoreAsArray: function(deleteAutoIds) {
-        var result = Tine.Tinebase.common.assertComparable([]);
-        this.store.each(function(record) {
+        const result = Tine.Tinebase.common.assertComparable([]);
+        const data = this.store.snapshot || this.store;
+        data.each(function(record) {
             var data = record.data;
             if (deleteAutoIds && String(data.id).match(/ext-gen/)) {
                 delete data.id;
