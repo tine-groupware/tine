@@ -65,7 +65,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     
     const STATUS_CONFIRMED     = 'CONFIRMED';
     const STATUS_TENTATIVE     = 'TENTATIVE';
-    const STATUS_CANCELED      = 'CANCELED';
+    const STATUS_CANCELED      = 'CANCELLED';
     
     const RANGE_ALL           = 'ALL';
     const RANGE_THIS          = 'THIS';
