@@ -139,6 +139,7 @@ class Tinebase_CustomFieldTest extends TestCase
             array('field' => 'n_family', 'operator' => 'equals', 'value' => 'Friendly')
         ), 'AND');
 
+        Addressbook_Controller_Contact::getInstance()->resolveCustomfields(true);
         $jsonResult = (new Addressbook_Frontend_Json)->searchContacts($filter->toArray(), []);
         $this->assertSame($jsonResult['results'][0]['n_given'], 'Matt');
         $this->assertArrayNotHasKey($cf1->name, $jsonResult['results'][0]['customfields'] ?? []);

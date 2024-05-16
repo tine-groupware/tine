@@ -784,7 +784,10 @@ class Setup_Controller
             }
         }
         
-        $xml = simplexml_load_file($setupXML);
+        if (false === ($xml = simplexml_load_file($setupXML))) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
+                . ' failed to load xml: ' . print_r(libxml_get_last_error(), true));
+        }
 
         return $xml;
     }
