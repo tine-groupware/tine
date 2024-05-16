@@ -108,7 +108,7 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends \PHPUnit\Framework\TestC
         $task = $converter->toTine20Model($vcalendar);
         $this->assertEquals(Tasks_Model_Task::STATUS_TENTATIVE, $task->status);
         
-        $vcalendar = str_replace('STATUS:TENTATIVE', 'STATUS:CANCELED', $vcalendar);
+        $vcalendar = str_replace('STATUS:TENTATIVE', 'STATUS:CANCELLED', $vcalendar);
         $task = $converter->toTine20Model($vcalendar);
         $this->assertEquals(Tasks_Model_Task::STATUS_CANCELED, $task->status);
     }
