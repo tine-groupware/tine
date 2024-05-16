@@ -338,7 +338,7 @@ class Calendar_Config extends Tinebase_Config_Abstract
                 'records' => [
                     ['id' => 'CONFIRMED',    'value' => 'Confirmed',   'icon' => 'images/icon-set/icon_ok.svg',                          'system' => true], //_('Confirmed')
                     ['id' => 'TENTATIVE',    'value' => 'Tentative',   'icon' => 'images/icon-set/icon_calendar_attendee_tentative.svg', 'system' => true], //_('Tentative')
-                    ['id' => 'CANCELED',     'value' => 'Canceled',    'icon' => 'images/icon-set/icon_calendar_attendee_cancle.svg',    'system' => true], //_('Canceled')
+                    ['id' => 'CANCELLED',    'value' => 'Canceled',    'icon' => 'images/icon-set/icon_calendar_attendee_cancle.svg',    'system' => true], //_('Canceled')
                 ],
                 'default' => 'CONFIRMED'
             ]

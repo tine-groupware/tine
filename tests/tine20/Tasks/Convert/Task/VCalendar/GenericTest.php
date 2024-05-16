@@ -114,7 +114,7 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends \PHPUnit\Framework\TestCa
         $task = $converter->toTine20Model($vcalendar);
         $this->assertEquals(Tasks_Model_Task::STATUS_TENTATIVE, $task->status);
         
-        $vcalendar = str_replace('STATUS:TENTATIVE', 'STATUS:CANCELED', $vcalendar);
+        $vcalendar = str_replace('STATUS:TENTATIVE', 'STATUS:CANCELLED', $vcalendar);
         $task = $converter->toTine20Model($vcalendar);
         $this->assertEquals(Tasks_Model_Task::STATUS_CANCELED, $task->status);
     }
@@ -242,7 +242,7 @@ class Tasks_Convert_Task_VCalendar_GenericTest extends \PHPUnit\Framework\TestCa
         $task->is_deleted = 1;
         $vevent = $converter->fromTine20Model($task)->serialize();
         #var_dump($vevent);
-        $this->assertStringContainsString('STATUS:CANCELED',        $vevent, $vevent);
+        $this->assertStringContainsString('STATUS:CANCELLED',        $vevent, $vevent);
     }
     
     public function testConvertToTine20ModelWithCustomAlarm()

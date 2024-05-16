@@ -53,7 +53,7 @@ class Calendar_Export_DocV2 extends Tinebase_Export_DocV2
             $record->resolveOrganizer();
         }
 
-        if ($record->status == 'CANCELED'){
+        if ($record->status == 'CANCELLED'){
             $translation = Tinebase_Translation::getTranslation('Calendar');
             $record->summary =  $this->strikeText($record->summary) . '  (' . $translation->_('Canceled') . ')';
         };
