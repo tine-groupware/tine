@@ -30,9 +30,15 @@ Tine.Addressbook.Model.ContactMixin = {
      * @return {String}
      */
     getPreferredEmail: function() {
-        let preferredType = this.get('preferred_email');
+        let preferredType = this.get('preferred_email') ?? 'email';
         const email = this.get(preferredType);
-        if (!email || email === '') preferredType = 'email';
+        if (!email || email === '') {
+            _.each(this.modelConfiguration.fields, (field) => {
+                if (field?.specialType === 'Addressbook_Model_ContactProperties_Email' && this.get(field.fieldName)) {
+                    preferredType = field.fieldName;
+                }
+            });
+        }
         
         return {
             email: this.get(preferredType),

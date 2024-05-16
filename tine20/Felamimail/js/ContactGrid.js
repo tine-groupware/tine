@@ -152,6 +152,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      */
     preferredEmailRenderer: function(field, cell, contact) {
         const token = this.getSelectedToken(contact).token;
+        if (!token) return '';
         const block =  document.createElement('span');
         block.className = 'tinebase-contact-link';
         block.innerHTML = Tine.Felamimail.ContactSearchCombo.prototype.renderEmailAddressAndIcon(token);
@@ -252,6 +253,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
                 const fieldName = field.fieldName;
                 if (!contact.data[fieldName]) return;
                 const token = Tine.Felamimail.GridPanelHook.prototype.getRecipientTokenFromContact(contact, fieldName);
+                if (!token) return;
                 items.push(new Ext.Action({
                     text: Tine.Felamimail.ContactSearchCombo.prototype.renderEmailAddressAndIcon(token),
                     iconCls: target.textContent.includes(token.email) ? 'action_enable' : '',
