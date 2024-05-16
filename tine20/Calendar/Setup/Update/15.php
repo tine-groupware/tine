@@ -17,6 +17,7 @@ class Calendar_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE015_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE015_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE015_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -37,6 +38,10 @@ class Calendar_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE002 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update002',
+            ],
+            self::RELEASE015_UPDATE004 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update004',
             ],
         ],
     ];
@@ -106,5 +111,11 @@ class Calendar_Setup_Update_15 extends Setup_Update_Abstract
         }
 
         $this->addApplicationUpdate('Calendar', '15.3', self::RELEASE015_UPDATE003);
+    }
+
+    public function update004()
+    {
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Calendar_Model_Event::TABLE_NAME . ' SET `status` = "CANCELLED" WHERE `status` = "CANCELED"');
+        $this->addApplicationUpdate('Calendar', '15.4', self::RELEASE015_UPDATE004);
     }
 }
