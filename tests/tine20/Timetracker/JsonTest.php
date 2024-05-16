@@ -1430,6 +1430,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      */
     public function testUpdateClosedTimeaccount()
     {
+        Timetracker_Controller_Timesheet::getInstance()->doContainerACLChecks(true);
+
         $timeaccountData = $this->_saveTimeaccountWithGrants();
         $timeaccountData['is_open'] = 0;
         $timeaccount = $this->_json->saveTimeaccount($timeaccountData);
