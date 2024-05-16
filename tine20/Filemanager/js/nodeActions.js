@@ -185,7 +185,7 @@ Tine.Filemanager.nodeActions.CreateFolder = {
                 let text = localRecord.get('name');
                 
                 if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
-                    Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + forbidden);
+                    Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + text);
                     return;
                 }
                 
@@ -306,7 +306,7 @@ Tine.Filemanager.nodeActions.Rename = {
                     }
                     
                     if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
-                        Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + forbidden);
+                        Ext.Msg.alert(String.format(app.i18n._('Not renamed {0}'), nodeName), app.i18n._('Illegal characters: ') + text);
                         return;
                     }
 
