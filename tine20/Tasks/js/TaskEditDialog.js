@@ -290,6 +290,47 @@ import './DependencyPanel'
          if (Ext.isDate(due) && due.getTime() - Date.now() <= 0) {
              dueField.markInvalid(this.app.i18n._('Attention: This due date is in the past!'));
          }
+     },
+
+     getCopyRecordData: function (record, recordClass, omitCopyTitle) {
+         const recordData = Tine.Tasks.TaskEditDialog.superclass.getCopyRecordData.apply(this, arguments);
+         recordData.id = Tine.Tinebase.data.Record.generateUID();
+         recordData.uid = Tine.Tinebase.data.Record.generateUID();
+
+         // @TODO get correct container (needs an option)
+         const templateContainer = Tine.Tinebase.configManager.get('templateContainer', 'Tasks')
+
+         if ((recordData.container_id?.id || recordData.container_id) === templateContainer) {
+             const defaultData = Tine.Tasks.Model.Task.getDefaultData();
+             recordData.container_id = defaultData.container_id;
+         }
+
+         recordData.attendees = _.map(record.get('attendees'), (attendee) => {
+             return Object.assign(attendee, {
+                 id: null,
+                 task_id: recordData.id
+             });
+         });
+
+         // @TODO copy? (needs an option)
+         recordData.dependens_on = null
+
+         // @TODO clear? (needs an option)
+         recordData.dependent_taks = _.map(record.get('dependent_taks'), (taskDependency) => {
+             // @TODO is dependent task fully resolved here?
+             const task = Tine.Tinebase.data.Record.setFromJson(taskDependency.task_id, recordClass);
+             return Object.assign({... taskDependency}, {
+                 id: null,
+                 depends_on: recordData.id,
+                 task_id: Tine.Tasks.TaskEditDialog.prototype.getCopyRecordData.call(this, task, recordClass, omitCopyTitle)
+             });
+         });
+
+         if (record.get('container_id')?.id === Tine.Tinebase.configManager.get('templateContainer', 'Tasks')) {
+             recordData.container_id = Tine.Tasks.Model.Task.getDefaultData().container_id;
+         }
+
+         return recordData;
      }
 });
 

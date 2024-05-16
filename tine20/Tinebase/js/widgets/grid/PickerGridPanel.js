@@ -320,8 +320,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.actionCreate = new Ext.Action({
             text: String.format(i18n._('Create {0}'), this.recordName),
             hidden: !hasEditDialog || !this.allowCreateNew || !useEditDialog,
-            scope: this,
-            handler: this.onCreate,
+            handler: this.onCreate.bind(this, []),
             iconCls: 'action_add'
         });
 
@@ -645,8 +644,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         picker.reset();
     },
 
-    onCreate: function() {
-        const record = Tine.Tinebase.data.Record.setFromJson(Ext.apply(this.recordClass.getDefaultData(), this.getRecordDefaults()), this.recordClass);
+    onCreate: function(recordData) {
+        const record = Tine.Tinebase.data.Record.setFromJson(Object.assign(recordData || {}, this.recordClass.getDefaultData(), this.getRecordDefaults()), this.recordClass);
         record.phantom = true;
         const editDialogClass = this.editDialogClass || Tine.widgets.dialog.EditDialog.getConstructor(this.recordClass);
         const mode = this.editDialogConfig?.mode || editDialogClass.prototype.mode;

@@ -18,6 +18,9 @@
     height: 12px;
 }
 
+.tasks-action_create_from_template {
+    background-image:url(../../images/icon-set/icon_template.svg) !important;
+}
 /***** tasks grid panel classes ******/
 
 .tasks-grid-overdue {

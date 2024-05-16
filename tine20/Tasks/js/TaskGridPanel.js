@@ -95,9 +95,11 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 allowBlank: false,
                 maxLength: 255
             }),
-            quickaddField: new Ext.form.TextField({
+            quickaddField: new Ext.form.TriggerField({
                 emptyText: this.app.i18n._('Add a task...'),
-                maxLength: 255
+                maxLength: 255,
+                hideTrigger: true,
+                plugins: [{ ptype: 'tasks.createFromTempalte' }]
             })
         }, {
             id: 'due',
