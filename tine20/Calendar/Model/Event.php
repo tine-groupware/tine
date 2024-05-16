@@ -75,7 +75,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
 
     const STATUS_CONFIRMED     = 'CONFIRMED';
     const STATUS_TENTATIVE     = 'TENTATIVE';
-    const STATUS_CANCELED      = 'CANCELED';
+    const STATUS_CANCELED      = 'CANCELLED';
 
     const XPROPS_IMIP_PROPERTIES = 'imipProperties';
     const XPROPS_REPLICATABLE = 'calendarReplicatable';

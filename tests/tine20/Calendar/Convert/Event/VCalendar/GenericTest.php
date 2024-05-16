@@ -217,6 +217,10 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         $vcalendar = str_replace('STATUS:TENTATIVE', 'STATUS:CANCELED', $vcalendar);
         $event = $this->_converter->toTine20Model($vcalendar);
         $this->assertEquals(Calendar_Model_Event::STATUS_CANCELED, $event->status);
+
+        $vcalendar = str_replace('STATUS:CANCELED', 'STATUS:CANCELLED', $vcalendar);
+        $event = $this->_converter->toTine20Model($vcalendar);
+        $this->assertEquals(Calendar_Model_Event::STATUS_CANCELED, $event->status);
     }
     
     /**
@@ -590,7 +594,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         $event->is_deleted = 1;
         $vevent = $this->_converter->fromTine20Model($event)->serialize();
         #var_dump($vevent);
-        $this->assertStringContainsString('STATUS:CANCELED',        $vevent, $vevent);
+        $this->assertStringContainsString('STATUS:CANCELLED',        $vevent, $vevent);
     }
     
     public function testConvertToTine20ModelWithCustomAlarm()

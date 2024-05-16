@@ -46,7 +46,7 @@ class Calendar_Export_Ods extends Tinebase_Export_Spreadsheet_Ods
     {
         $translation = Tinebase_Translation::getTranslation('Calendar');
 
-        if ($record->status == 'CANCELED'){
+        if ($record->status == 'CANCELLED'){
             $record->summary =  $this->strikeText($record->summary) . '  (' . $translation->_('Canceled') . ')';
         };
         
