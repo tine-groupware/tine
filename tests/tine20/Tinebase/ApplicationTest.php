@@ -387,6 +387,7 @@ class Tinebase_ApplicationTest extends TestCase
             'Inventory' => array(
                 Inventory_Model_InventoryItem::class,
                 Inventory_Model_Status::class,
+                Inventory_Model_Type::class,
             ),
             'Phone' => array(
                 Phone_Model_Call::class,

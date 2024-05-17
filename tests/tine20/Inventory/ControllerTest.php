@@ -20,7 +20,8 @@ class Inventory_ControllerTest extends Inventory_TestCase
 
         $this->assertEquals(array(
             'Inventory_Model_InventoryItem',
-            'Inventory_Model_Status'
+            'Inventory_Model_Status',
+            'Inventory_Model_Type',
         ), $models);
     }
 }
