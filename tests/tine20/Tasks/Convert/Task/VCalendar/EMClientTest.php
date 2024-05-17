@@ -86,18 +86,25 @@ class Tasks_Convert_Task_VCalendar_EMClientTest extends \PHPUnit\Framework\TestC
     {
         $vcalendar = Tasks_Frontend_WebDAV_TaskTest::getVCalendar(dirname(__FILE__) . '/../../../Import/files/emtask.ics', 'r');
         $converter = Tasks_Convert_Task_VCalendar_Factory::factory(Tasks_Convert_Task_VCalendar_Factory::CLIENT_EMCLIENT);
-        
+
+        $task = $converter->toTine20Model($vcalendar);
+        $this->assertEquals('IN-PROCESS', $task->status);
+
         $vcalendar = str_replace('STATUS:IN-PROCESS', 'STATUS:NEEDS-ACTION', $vcalendar);
         $task = $converter->toTine20Model($vcalendar);
         $this->assertEquals('NEEDS-ACTION', $task->status);
 
+        $vcalendar = str_replace('STATUS:NEEDS-ACTION', 'STATUS:CONFIRMED', $vcalendar);
+        $task = $converter->toTine20Model($vcalendar);
+        $this->assertEquals(Calendar_Model_Event::STATUS_CONFIRMED, $task->status);
+
         $vcalendar = str_replace('STATUS:CONFIRMED', 'STATUS:TENTATIVE', $vcalendar);
         $task = $converter->toTine20Model($vcalendar);
-        $this->assertEquals('TENTATIVE', $task->status);
+        $this->assertEquals(Calendar_Model_Event::STATUS_TENTATIVE, $task->status);
         
         $vcalendar = str_replace('STATUS:TENTATIVE', 'STATUS:CANCELLED', $vcalendar);
         $task = $converter->toTine20Model($vcalendar);
-        $this->assertEquals('CANCELLED', $task->status);
+        $this->assertEquals(Calendar_Model_Event::STATUS_CANCELED, $task->status);
     }
     
     /**

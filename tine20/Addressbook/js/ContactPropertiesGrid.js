@@ -48,7 +48,7 @@ export default (config) => {
             isEditableValue: () => {
                 return true
             },
-        }
+        },
     }, config));
 
     propertyGrid.afterIsRendered().then(() => {
@@ -57,7 +57,10 @@ export default (config) => {
         });
         editDialog.on('load', onRecordLoad);
         editDialog.on('recordUpdate', onRecordUpdate);
-
+        //TODO: support propertyGrid im multiple edit mode ?
+        if (editDialog.useMultiple) {
+            propertyGrid.setDisabled(true);
+        }
         // NOTE: in case we are rendered after record was load
         onRecordLoad(editDialog, editDialog.record);
     });
@@ -66,7 +69,10 @@ export default (config) => {
         const recordGrants = _.get(record, record.constructor.getMeta('grantsPath'));
         propertyGrid.setSource(config.fields.reduce((source, field, idx) => {
             const requiredGrants = field.requiredGrants; // NOTE: at the moment this means rw!
-            if (! requiredGrants || recordGrants.adminGrant || requiredGrants?.some((requiredGrant) => { return recordGrants[requiredGrant] })) {
+            if (! requiredGrants 
+                || recordGrants?.adminGrant 
+                || requiredGrants?.some((requiredGrant) => { return recordGrants?.[requiredGrant] })
+            ) {
                 const name = `${_.padStart(String(idx), 3, '0')}_${field.fieldName}`;
                 source[name] = record.get(field.fieldName);
             }
