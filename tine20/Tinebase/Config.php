@@ -812,6 +812,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      */
     const REPLICATION_USER_PASSWORD = 'replicationUserPassword';
 
+    const REPLICATION_IS_PRIMARY = 'replicationIsPrimary';
+
     /**
      * @var string
      */
@@ -1366,7 +1368,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             'content'               => array(
                 self::REPLICATION_USER_PASSWORD     => array(
                     'type'                              => Tinebase_Config::TYPE_STRING
-                )
+                ),
+                self::REPLICATION_IS_PRIMARY        => [
+                    self::TYPE                          => self::TYPE_BOOL
+                ],
             ),
         ),
         self::REPLICATION_SLAVE => array(

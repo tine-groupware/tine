@@ -97,7 +97,7 @@ class OnlyOfficeIntegrator_Setup_Update_1 extends Setup_Update_Abstract
     public function update006()
     {
         // this is only done on primary and then replicated to the secondaries
-        if (Tinebase_Core::isReplicationPrimary()) {
+        if (!Tinebase_Core::isReplica()) {
             $group = Tinebase_Group::getInstance()->create(new Tinebase_Model_Group([
                 'name' => 'OnlyOfficeIntegratorQuarantine'
             ]));
