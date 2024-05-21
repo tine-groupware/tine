@@ -335,6 +335,7 @@ php-unit-update-tests:
       git checkout ${TINE_VERSION_BE}
       test_composer_install
       log update
+      su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --setLicense -- file=${TINE20ROOT}/tests/tine20/Tinebase/License/license_contract_MW-TEST-3.0.0.pem"
       su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
       su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --install UserManual"
     - |
