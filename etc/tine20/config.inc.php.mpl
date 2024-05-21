@@ -73,7 +73,7 @@ return array(
         'additionalWriters' => array(array(
             'active' => true,
             'filename' => '{{getenv "TINE20_LOGGER_ADDITIONALWRITERS_FILENAME"}}',
-            'priority' => {{getenv "TINE20_LOGGER_ADDITIONALWRITERS_FILENAME_PRIORITY" "5"}},
+            'priority' => {{getenv "TINE20_LOGGER_ADDITIONALWRITERS_PRIORITY" "5"}},
         )),
         {{end}}
     ),
