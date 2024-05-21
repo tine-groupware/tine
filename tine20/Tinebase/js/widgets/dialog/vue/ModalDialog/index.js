@@ -68,7 +68,7 @@ Tine.widgets.dialog.ModalDialog = Ext.extend(Ext.Component, {
             get(target, key){
                 switch(key){
                     case "hidden":
-                        return !me.modalProps?.visible
+                        return !me.visible
                     case "setZIndex":
                         return me.setZIndex.bind(me)
                     case "setActive":
@@ -150,6 +150,7 @@ Tine.widgets.dialog.ModalDialog = Ext.extend(Ext.Component, {
     },
 
     showModal: function() {
+        this.visible = true
         this._mask = this._mask || new Ext.LoadMask(document.body, {msg: i18n._('Loading')})
         if(!(this.vueHandle && this.modalProps && !this.modalProps.visible)){
             if(this._mask.disabled) this._mask.show()
@@ -168,6 +169,7 @@ Tine.widgets.dialog.ModalDialog = Ext.extend(Ext.Component, {
     },
 
     hideModal: function() {
+        this.visible = false
         this.modalProps.visible = false
     },
 
