@@ -79,7 +79,7 @@ sieveFile
      */
     public function update_1()
     {
-        if (Tinebase_Core::isReplicationMaster()) {
+        if (!Tinebase_Core::isReplica()) {
             $basepath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(
                 'Felamimail',
                 Tinebase_FileSystem::FOLDER_TYPE_SHARED

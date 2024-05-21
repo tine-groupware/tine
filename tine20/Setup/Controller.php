@@ -2184,6 +2184,39 @@ class Setup_Controller
             }
 
             if (Tinebase_Config::APP_NAME !== $application->name) {
+
+                // create personal folders for all users to replicate them to the replicas
+                if (Tinebase_Core::isReplicationPrimary()) {
+                    $allUsers = null;
+                    $createdModels = [];
+                    $appCtrl = Tinebase_Core::getApplicationInstance($application->name, '', true);
+                    if ($appCtrl instanceof  Tinebase_Application_Container_Interface) {
+                        $allUsers = Tinebase_User::getInstance()->getFullUsers();
+                        foreach ($allUsers as $user) {
+                            /** @var Tinebase_Model_Container $container */
+                            foreach($appCtrl->createPersonalFolder($user) as $container) {
+                                $createdModels[$container->model] = true;
+                            }
+                        }
+                    }
+                    foreach ($appCtrl->getModels() as $model) {
+                        if (isset($createdModels[$model])) {
+                            continue;
+                        }
+                        /** @var Tinebase_Record_Interface $model */
+                        $modelCtrl = Tinebase_Core::getApplicationInstance($application->name, $model, true);
+                        if ($modelCtrl instanceof Tinebase_Controller_Record_Interface)
+                        if (($mc = $model::getConfiguration()) && $mc->hasPersonalContainer) {
+                            if (null === $allUsers) {
+                                $allUsers = Tinebase_User::getInstance()->getFullUsers();
+                            }
+                            foreach ($allUsers as $user) {
+                                Tinebase_Container::getInstance()->createDefaultContainer($model, $application->name, $user);
+                            }
+                        }
+                    }
+                }
+
                 foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
                     if ($app->name === $application->name) continue;
 

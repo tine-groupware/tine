@@ -2514,11 +2514,13 @@ class Tinebase_Core
     }
 
     /**
+     * attention, this will not be true on non replicating system! use if (!isReplica()) instead!
+     *
      * @return bool
      */
     public static function isReplicationPrimary()
     {
-        return static::isReplicationMaster();
+        return (bool)Tinebase_Config::getInstance()->{Tinebase_Config::REPLICATION_MASTER}->{Tinebase_Config::REPLICATION_IS_PRIMARY};
     }
 
     /**
