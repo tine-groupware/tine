@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -1688,5 +1688,28 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             $expanderDef[Tinebase_Record_Expander::EXPANDER_PROPERTIES][$val] = [];
         }
         $mc->setJsonExpander($expanderDef);
+    }
+
+    protected function _checkDelegatedGrant(Tinebase_Record_Interface $_record,
+                                            string $_action,
+                                            bool $_throw,
+                                            string $_errorMessage,
+                                            ?Tinebase_Record_Interface $_oldRecord): bool
+    {
+        $tead = null;
+        try {
+            if (parent::_checkDelegatedGrant($_record, $_action, $_throw, $_errorMessage, $_oldRecord)) {
+                return true;
+            }
+        } catch (Tinebase_Exception_AccessDenied $tead) {}
+
+        if ($_action === self::ACTION_CREATE) {
+            return parent::_checkDelegatedGrant($_record, self::ACTION_UPDATE, $_throw, $_errorMessage, $_oldRecord);
+        }
+
+        if (null !== $tead) {
+            throw $tead;
+        }
+        return false;
     }
 }
