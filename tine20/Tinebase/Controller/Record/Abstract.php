@@ -2598,19 +2598,6 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             return false;
         }
-        if ($_action === self::ACTION_CREATE) {
-            // check CREATE - if it does not suffice, UPDATE is ok, too
-            if ($ctrl->checkGrant(
-                $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
-                    $_record->{$mc->delegateAclField} :
-                    $ctrl->get($_record->{$mc->delegateAclField}),
-                $_action, false, $_errorMessage, $_oldRecord?->{$mc->delegateAclField}
-            )) {
-                return true;
-            } else {
-                $_action = self::ACTION_UPDATE;
-            }
-        }
 
         return $ctrl->checkGrant(
             $_record->{$mc->delegateAclField} instanceof Tinebase_Record_Interface ?
