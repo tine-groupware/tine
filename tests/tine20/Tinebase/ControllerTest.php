@@ -107,6 +107,7 @@ class Tinebase_ControllerTest extends TestCase
         ]);
         $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
         Admin_Controller_EmailAccount::getInstance()->delete($emailAccounts->getArrayOfIds());
+        Tinebase_User::getInstance()->setPassword($this->_personas['sclever'], Tinebase_Helper::array_value('password', TestServer::getInstance()->getTestCredentials()));
 
         $this->_instance->login(
             'sclever',
