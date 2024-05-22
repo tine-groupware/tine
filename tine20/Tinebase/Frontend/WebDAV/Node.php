@@ -165,6 +165,8 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\INode, \Tine2
             throw new Tine20\DAV\Exception\Forbidden('forbidden name');
         } else if (substr($name, 0, 2) == '._') {
             throw new Tine20\DAV\Exception\Forbidden('no resource files accepted');
+        } else if (preg_match(Tinebase_Model_Tree_Node::FILENAME_FORBIDDEN_CHARS_EXP, $name, $matches)) {
+            throw new Tine20\DAV\Exception\Forbidden('Illegal characters: ' . print_r($matches, true));
         }
     }
 
