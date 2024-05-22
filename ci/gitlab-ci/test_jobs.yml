@@ -98,7 +98,7 @@ phpstan-analysis:
     - if: $CI_COMMIT_TAG && $PHPSTAN_ANALYSES_STRICT == "true"
       allow_failure: false
     - if: $CI_COMMIT_TAG
-  timeout: 40m
+  timeout: 60m
   interruptible: true
 
 parallel-lint-analysis:
