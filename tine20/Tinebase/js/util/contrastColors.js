@@ -42,14 +42,13 @@ const contrastColors = {
         return
       }
 
-      let count = brightnesses.length
       let sum = brightnesses.reduce((a, current) => {
         return a + current
       }, 0)
 
       let computedBg = getComputedStyle(element).backgroundColor
 
-      let brightness = sum / count;
+      let brightness = sum / brightnesses.length;
       if (brightness > 160) {
         if (contrastColors.getBrightness(computedBg) > 160
           || computedBg === 'rgba(0, 0, 0, 0)')
@@ -66,27 +65,20 @@ const contrastColors = {
         }
       }
 
-      if (contrastColors.darkMode && computedBg === 'rgba(0, 0, 0, 0)'
-        || contrastColors.getBrightness(computedBg) < 95)
-      {
-        contrastColors.adaptFg(element, true)
-      }
-      if (!contrastColors.darkMode && computedBg === 'rgba(0, 0, 0, 0)'
-        || contrastColors.getBrightness(computedBg) > 160)
-      {
-        contrastColors.adaptFg(element, false)
+      if (contrastColors.darkMode) {
+        contrastColors.adaptFg(element, computedBg)
       }
     }
   },
 
-  adaptFg: (element, brighten) => {
+  adaptFg: (element, outerBg = '') => {
     let bgColor = element.style.getPropertyValue('background-color')
     if (bgColor !== '') {
-      return
+      outerBg = bgColor
     }
 
     _.forEach(element.children, (c) => {
-      contrastColors.adaptFg(c, brighten)
+      contrastColors.adaptFg(c, outerBg)
     })
 
     let hasText = false
@@ -98,22 +90,25 @@ const contrastColors = {
     if (!hasText) {
       return
     }
-
-    let computedBg = getComputedStyle(element).backgroundColor
-    if (contrastColors.darkMode && contrastColors.getBrightness(computedBg) >= 95) {
-      return
+    let computedBg = element.style.getPropertyValue('background-color')
+    if (computedBg === '') {
+      computedBg = outerBg
     }
 
     let fgColor = element.style.getPropertyValue('color')
     if (element.tagName === 'FONT' && fgColor === '') {
       fgColor = element.getAttribute('color') || ''
     }
+    if (fgColor === '') {
+      fgColor = contrastColors.darkMode ? contrastColors.lightBg : contrastColors.darkFg
+    }
     if (fgColor !== '') {
       let brightness = contrastColors.getBrightness(fgColor)
-      if (brighten && brightness < 95) {
+      let brightnessBg = contrastColors.getBrightness(computedBg)
+      if (brightness < 95 && brightnessBg < 95) {
         element.style.color = contrastColors.lightFg
       }
-      if (!brighten && brightness > 160) {
+      if (brightness > 160 && brightnessBg > 160) {
         element.style.color = contrastColors.darkFg
       }
     }
