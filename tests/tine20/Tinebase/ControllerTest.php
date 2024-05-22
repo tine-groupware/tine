@@ -68,9 +68,12 @@ class Tinebase_ControllerTest extends TestCase
         }
 
         Tinebase_Config::getInstance()->maintenanceMode = $maintenanceModeSetting;
-        $loginName = $maintenanceModeSetting === Tinebase_Config::MAINTENANCE_MODE_ALL
-            ? Tinebase_Core::getUser()->accountLoginName
-            : 'sclever';
+        if ($maintenanceModeSetting === Tinebase_Config::MAINTENANCE_MODE_ALL) {
+            $loginName = Tinebase_Core::getUser()->accountLoginName;
+        } else {
+            $loginName = 'sclever';
+            Tinebase_User::getInstance()->setPassword($this->_personas[$loginName], Tinebase_Helper::array_value('password', TestServer::getInstance()->getTestCredentials()));
+        }
 
         try {
             $this->_instance->login(
