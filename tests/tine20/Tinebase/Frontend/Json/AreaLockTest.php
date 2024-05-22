@@ -39,6 +39,7 @@ class Tinebase_Frontend_Json_AreaLockTest extends TestCase
      */
     public function testAreaLockProviderConfigRemovedFromRegistryData()
     {
+        Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
         $this->_createAreaLockConfig([Tinebase_Model_AreaLockConfig::FLD_AREAS => ['foo']]);
 
         $this->assertSame(['pin'], Tinebase_Config::getInstance()->{Tinebase_Config::AREA_LOCKS}->records

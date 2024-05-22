@@ -793,12 +793,12 @@ class Setup_Controller
             $xmlString = file_get_contents($setupXML);
             if (str_starts_with($xmlString, '<?xml')) {
                 libxml_clear_errors();
-                if (false === ($xml = simplexml_load_string($setupXML))) {
+                if (false === ($xml = simplexml_load_string($xmlString))) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
                         . ' failed to load xml: ' . print_r(libxml_get_last_error(), true));
                     $logMsg = '';
-                    for ($i = 0; $i < mb_strlen($setupXML); ++$i) {
-                        $char = mb_substr($setupXML, $i, 1);
+                    for ($i = 0; $i < mb_strlen($xmlString); ++$i) {
+                        $char = mb_substr($xmlString, $i, 1);
                         $logMsg .= strlen($char) . ' ' . $char . ' ' . ord($char) . PHP_EOL;
                     }
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
