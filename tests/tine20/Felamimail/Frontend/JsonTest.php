@@ -1231,14 +1231,18 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         // check attachment name
         $forwardMessageComplete = $this->_json->getMessage($forwardMessage['id']);
         $this->assertEquals(1, count($forwardMessageComplete['attachments']));
-        $this->assertEquals('Verbessurüngsvorschlag.eml', $forwardMessageComplete['attachments'][0]['filename'], 'umlaut missing from attachment filename');
+        $this->assertEquals('Verbessurüngsvorschlag.eml', $forwardMessageComplete['attachments'][0]['filename'],
+            'umlaut missing from attachment filename');
 
-        $forwardMessage = $this->_json->getMessage($forwardMessage['id']);
-        $this->assertTrue((isset($forwardMessage['structure']) || array_key_exists('structure', $forwardMessage)), 'structure should be set when fetching complete message: ' . print_r($forwardMessage, TRUE));
-        $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardMessage['structure']['parts'][2]['contentType']);
+        $forwardMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($forwardMessage['id']);
+        $this->assertTrue((isset($forwardMessage['structure']) || array_key_exists('structure', $forwardMessage)),
+            'structure should be set when fetching complete message: ' . print_r($forwardMessage, TRUE));
+        $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
+            $forwardMessage['structure']['parts'][2]['contentType']);
 
         $message = $this->_json->getMessage($message['id']);
-        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']), 'forwarded flag missing in flags: ' . print_r($message, TRUE));
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']),
+            'forwarded flag missing in flags: ' . print_r($message, TRUE));
     }
 
     protected function _appendMessageforForwarding($file = 'multipart_related.eml', $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag')
@@ -1773,13 +1777,13 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
-     * testSendMailveopeAPIMessage
+     * testSendMailvelopeAPIMessage
      *
-     * - envolpe amored message into PGP MIME structure
+     * - envelope armored message into PGP MIME structure
      */
-    public function testSendMailveopeAPIMessage()
+    public function testSendMailvelopeAPIMessage()
     {
-        $subject = 'testSendMailveopeAPIMessage';
+        $subject = __FUNCTION__;
         $messageData = $this->_getMessageData('', $subject);
         $messageData['body'] = '-----BEGIN PGP MESSAGE-----
 Version: Mailvelope v1.3.3
@@ -1820,8 +1824,7 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
         $this->_json->saveMessage($messageData);
 
         $message = $this->_searchForMessageBySubject(Tinebase_Core::filterInputForDatabase($subject));
-        $fullMessage = $this->_json->getMessage($message['id']);
-
+        $fullMessage = Felamimail_Controller_Message::getInstance()->getCompleteMessage($message['id']);
         $this->assertStringContainsString('multipart/encrypted', $fullMessage['headers']['content-type']);
         $this->assertStringContainsString('protocol="application/pgp-encrypted"', $fullMessage['headers']['content-type']);
         $this->assertCount(2, $fullMessage['structure']['parts']);
@@ -1834,11 +1837,11 @@ IbVx8ZTO7dJRKrg72aFmWTf0uNla7vicAhpiLWobyNYcZbIjrAGDfg==
     /**
      * testMessagePGPMime
      *
-     * - prepare amored part of PGP MIME structure
+     * - prepare armored part of PGP MIME structure
      */
     public function testMessagePGPMime()
     {
-        $fullMessage = $this->testSendMailveopeAPIMessage();
+        $fullMessage = $this->testSendMailvelopeAPIMessage();
 
         $this->assertEquals('application/pgp-encrypted', $fullMessage['preparedParts'][0]['contentType']);
         $this->assertStringContainsString('-----BEGIN PGP MESSAGE-----', $fullMessage['preparedParts'][0]['preparedData']);
