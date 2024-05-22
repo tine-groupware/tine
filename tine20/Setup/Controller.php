@@ -796,8 +796,13 @@ class Setup_Controller
                 if (false === ($xml = simplexml_load_string($setupXML))) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
                         . ' failed to load xml: ' . print_r(libxml_get_last_error(), true));
+                    $logMsg = '';
+                    for ($i = 0; $i < mb_strlen($setupXML); ++$i) {
+                        $char = mb_substr($setupXML, $i, 1);
+                        $logMsg .= strlen($char) . ' ' . $char . ' ' . ord($char) . PHP_EOL;
+                    }
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
-                        . ' failed to load xml: "' . $xmlString . '"');
+                        . ' failed to load xml: "' . $xmlString . '"' . PHP_EOL . $logMsg);
                 }
             } else {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
