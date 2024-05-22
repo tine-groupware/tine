@@ -364,7 +364,7 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                     }
             
                     if (!Tine.Filemanager.Model.Node.isNameValid(text)) {
-                        Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Illegal characters: ') + forbidden);
+                        Ext.Msg.alert(String.format(this.app.i18n._('No {0} added'), nodeName), this.app.i18n._('Illegal characters: ') + text);
                         return;
                     }
             
