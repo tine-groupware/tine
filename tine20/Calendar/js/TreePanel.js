@@ -84,12 +84,34 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     initComponent: function() {
         var _ = window.lodash,
             me = this;
-
         //@TODO improve detection or pipe as config
         this.isMainScreenFilterTree = this.hasContextMenu;
 
         this.removeFiltersOnSelectContainer = this.app ? this.app.getRegistry().get('preferences').get('removeFiltersOnSelectContainer') : false;
 
+        this.extraItems = [
+            {
+                path: '/shared',
+                id: 'resources',
+                name: this.app.i18n._('Resources'),
+                'leaf': false,
+                'editable': false,
+                'draggable': false,
+                'allowDrag': false,
+                'allowDrop': false,
+                'singleClickExpand': true,
+                'listeners': {
+                    'click': (node)=> {
+                        node.expand(true, true, (node)=> {
+                            const nodes = [];
+                            this.loader.findAllNodes(node, nodes);
+                            this.loader.fireEvent('virtualNodesSelected', nodes);
+                        });
+                        return false;
+                    }
+                }
+            }
+        ]
         // only apply filter plugin when used as mainscreen leftpanel
         if (this.isMainScreenFilterTree) {
             this.filterPlugin = new Tine.widgets.tree.FilterPlugin({
@@ -101,7 +123,7 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                  */
                 getGridPanel: function () {
                     return Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
-                }
+                },
             });
         }
         
@@ -111,16 +133,14 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         });
         
         this.supr().initComponent.call(this);
-
         // remove resource calendars user has appropriate grants for
         this.loader.processResponse = _.wrap(this.loader.processResponse, function(orig, response, node, callback, scope) {
-            var o = response.responseData || Ext.decode(response.responseText);
+            const o = response.responseData || Ext.decode(response.responseText);
             response.responseData = o.hasOwnProperty('totalcount') ? o.results : o;
-
-                response.responseData = _.reduce(response.responseData, function (newResponse, nodeData) {
-                var grantsModelName = _.get(nodeData, 'xprops.Tinebase.Container.GrantsModel', 'Tinebase_Model_Grants'),
-                    accountGrants = _.get(nodeData, 'account_grants', {}),
-                    hasRequiredGrants = grantsModelName != 'Calendar_Model_ResourceGrants' ? true : (
+            response.responseData = _.reduce(response.responseData,  (newResponse, nodeData) => {
+                const grantsModelName = _.get(nodeData, 'xprops.Tinebase.Container.GrantsModel', 'Tinebase_Model_Grants');
+                const accountGrants = _.get(nodeData, 'account_grants', {});
+                const hasRequiredGrants = grantsModelName !== 'Calendar_Model_ResourceGrants' ? true : (
                         (
                             _.get(accountGrants, 'resourceInviteGrant', false) ||
                             _.get(accountGrants, 'resourceReadGrant', false)
@@ -129,21 +149,24 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                             _.get(accountGrants, 'eventsReadGrant', false)
                         )
                     );
-
-                if (grantsModelName == 'Calendar_Model_ResourceGrants') {
+                if (grantsModelName === 'Calendar_Model_ResourceGrants') {
                     // transform grants for event container selection
                     accountGrants.addGrant = accountGrants.eventsAddGrant;
                     accountGrants.editGrant = accountGrants.eventsEditGrant;
                     accountGrants.deleteGrant = accountGrants.eventsDeleteGrant;
                 }
-
-                return hasRequiredGrants ? newResponse.concat([nodeData]) : newResponse;
+                const isResource = !!nodeData?.xprops?.Calendar?.Resource && nodeData.model === 'Calendar_Model_Event';
+                if (hasRequiredGrants) {
+                    if (node.id === 'shared' && !isResource) return newResponse.concat([nodeData]);
+                    if (node.id === 'resources' && isResource) return newResponse.concat([nodeData]);
+                }
+                return newResponse;
             }, []);
 
             return orig.apply(me.loader, _.drop(arguments));
         });
     },
-
+    
     initContextMenu: function() {
         this.supr().initContextMenu.call(this);
         this.contextModel = 'Event';
@@ -289,5 +312,17 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         }
 
         return this.supr().getSelectedContainer.call(this, requiredGrants, defaultContainer, onlySingle);
-    }
+    },
+    
+    getTreePath: function(containerPath) {
+        let treePath = this.supr().getTreePath.call(this, containerPath);
+        const rootId = this.getRootNode().id;
+        const nodeId = treePath.split('/').pop();
+        const node = this.getNodeById(nodeId);
+        const isResource = !!node.attributes?.xprops?.Calendar?.Resource && node.attributes?.model === 'Calendar_Model_Event';
+        
+        if (isResource) treePath = treePath.replace(`${rootId}/shared`, `${rootId}/resources`);
+        
+        return treePath;
+    },
 });
