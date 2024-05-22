@@ -1112,7 +1112,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         'filename' => $filename,
                         'partId' => $part['partId'],
                         'size' => isset($part['size']) ? $part['size'] : 0,
-                        'description' => isset($part['description']) ? $part['description'] : '',
+                        'description' => isset($part['description']) ? Tinebase_Helper::mbConvertTo($part['description']) : '',
                         'cid' => (!empty($part['id'])) ? $part['id'] : NULL,
                     );
 
@@ -1329,7 +1329,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        return $filename;
+        return Tinebase_Helper::mbConvertTo($filename);
     }
 
     /**

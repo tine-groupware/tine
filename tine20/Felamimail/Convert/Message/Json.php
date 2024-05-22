@@ -46,7 +46,13 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
         $this->_dehydrateFileLocations([$_record]);
+
         $this->_resolveAddress($_record);
+
+        // remove message structure - client does not need it, and it might contain bad chars that can't be encoded
+        // with \Zend_Json::encode
+        unset($_record->structure);
+
         return parent::fromTine20Model($_record);
     }
 

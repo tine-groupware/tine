@@ -98,7 +98,7 @@ phpstan-analysis:
     - if: $CI_COMMIT_TAG && $PHPSTAN_ANALYSES_STRICT == "true"
       allow_failure: false
     - if: $CI_COMMIT_TAG
-  timeout: 40m
+  timeout: 60m
   interruptible: true
 
 parallel-lint-analysis:
@@ -213,9 +213,7 @@ test-with-health-check:
     - if: $CI_COMMIT_TAG
 
 test-install-demodata:
-  extends: .abstract_jobs.php_unit
-  variables:
-    ARG_IMAGE: test-source
+  extends: .abstract_jobs.php_unit_cache
   stage: test
   timeout: 35m
   script:
