@@ -126,6 +126,7 @@ Ext.ux.PopupWindowGroup = function(config) {
             }
             list[win.name] = win;
             accessList.push(win);
+            console.error(win);
             //win.on('hide', activateLast);
         },
 
@@ -142,6 +143,7 @@ Ext.ux.PopupWindowGroup = function(config) {
          * @return {Ext.ux.PopupWindow}
          */
         get : function(name){
+            console.error(name);
             cleanupClosedWindows();
             name = typeof name == "object" ? name.name : name;
             return list[name];
