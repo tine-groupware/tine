@@ -40,7 +40,6 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'headers' },
       { name: 'content_type' },
       { name: 'body_content_type' },
-      { name: 'structure' },
       { name: 'attachments' },
       { name: 'has_attachment', type: 'bool' },
       { name: 'original_id' },
