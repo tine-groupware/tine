@@ -783,12 +783,26 @@ class Setup_Controller
                 throw new Setup_Exception_NotFound($setupXML . ' not found. If application got renamed or deleted, re-run setup.php.');
             }
         }
-        
+
+        // update tests have some wired issue here... valid xml cant be loaded...
+        libxml_clear_errors();
         if (false === ($xml = simplexml_load_file($setupXML))) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
                 . ' failed to load xml: ' . print_r(libxml_get_last_error(), true));
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
-                . ' failed to load xml: "' . file_get_contents($setupXML) . '"');
+
+            $xmlString = file_get_contents($setupXML);
+            if (str_starts_with($xmlString, '<?xml')) {
+                libxml_clear_errors();
+                if (false === ($xml = simplexml_load_string($setupXML))) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
+                        . ' failed to load xml: ' . print_r(libxml_get_last_error(), true));
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
+                        . ' failed to load xml: "' . $xmlString . '"');
+                }
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $setupXML
+                    . ' failed to load xml: "' . $xmlString . '"');
+            }
         }
 
         return $xml;
