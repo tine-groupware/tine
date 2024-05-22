@@ -51,7 +51,7 @@ Ext.ux.PopupWindowGroup = function(config) {
                 doc = false;
                 
             }
-            if (! doc) {
+            if (! doc && (!list[id]?.asIframe || list[id]?.contentPanelConstructed)) {
                 list[id].destroy();
                 accessList.remove(list[id]);
                 list[id] = null;
@@ -118,6 +118,7 @@ Ext.ux.PopupWindowGroup = function(config) {
 
         register : function(win){
 
+
             win.registerTime = new Date().getTime();
             cleanupClosedWindows();
             if (! win.popup) {
@@ -125,6 +126,7 @@ Ext.ux.PopupWindowGroup = function(config) {
             }
             list[win.name] = win;
             accessList.push(win);
+            console.error(win);
             //win.on('hide', activateLast);
         },
 
@@ -141,6 +143,7 @@ Ext.ux.PopupWindowGroup = function(config) {
          * @return {Ext.ux.PopupWindow}
          */
         get : function(name){
+            console.error(name);
             cleanupClosedWindows();
             name = typeof name == "object" ? name.name : name;
             return list[name];
