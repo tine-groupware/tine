@@ -194,6 +194,9 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract implements Tinebase_
         try {
             $output = $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
             $output = (string) $output;
+            if (empty($output)) {
+                throw new Zend_Json_Exception('json encoding failed - bad chars?');
+            }
         } catch (Throwable $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
