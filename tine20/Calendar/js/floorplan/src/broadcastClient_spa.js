@@ -28,7 +28,7 @@ const init = async (wsUrl, jsonRPC, cb) => {
     const authToken = d.result.auth_token
     const socket = new WebSocket(wsUrl);
     let authResponse = null;
-    const jsonApiUrl = window.location.protocol + '//' + window.location.host + '/' + 'index.php'
+    const jsonApiUrl = window.location.protocol + '//' + window.location.host + '/'
 
     socket.onopen = async (e) => {
         running = true;
