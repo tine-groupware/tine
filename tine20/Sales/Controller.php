@@ -240,8 +240,10 @@ class Sales_Controller extends Tinebase_Controller_Event
         }
 
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact);
-        if (isset($contact->container_id->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK]) &&
-            $contact->container_id->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK])
+        $container = $contact->container_id instanceof Tinebase_Model_Container ? $contact->container_id :
+            Tinebase_Container::getInstance()->getContainerById($contact->container_id);
+        if (isset($container->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK]) &&
+            $container->xprops()[Sales_Config::XPROP_CUSTOMER_ADDRESSBOOK])
         {
             // check if contact / customer relation already exists, if not -> create customer & relation
             $customer = $contact->relations?->filter('type', 'CONTACTCUSTOMER')->getFirstRecord();
