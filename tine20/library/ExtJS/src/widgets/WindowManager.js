@@ -25,9 +25,10 @@ Ext.WindowGroup = function(){
         var a = accessList, len = a.length;
         if(len > 0){
             a.sort(sortWindows);
-            var seed = a[0].manager.zseed;
+            let seed
             for(var i = 0; i < len; i++){
                 var win = a[i];
+                seed = seed || win?.manager?.zseed;
                 if(win && !win.hidden){
                     win.setZIndex(seed + (i*10));
                 }

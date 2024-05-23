@@ -18,7 +18,6 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
      * @const MAX_FILE_SIZE
      */
     const MAX_FILE_SIZE = 10 * 1024 * 1024;
-
     protected $_document = null;
     protected $_exportFileHandle = null;
     protected $_exportFilenames = [];
@@ -161,7 +160,9 @@ abstract class Tinebase_Export_VObject extends Tinebase_Export_Abstract
         if (! $result && $this->_config->returnFileLocation) {
             // create a tempfile and return that
             $this->_tmpFile = Tinebase_TempFile::getTempPath();
-            $exportString = is_string($this->_document) ? $this->_document : $this->_document->serialize();
+            $exportString = is_string($this->_document)
+                ? $this->_document
+                : ($this->_document ? $this->_document->serialize() : '');
             file_put_contents($this->_tmpFile, $exportString);
         } else if (is_array($result) && count($result) === 1) {
             $this->_tmpFile = $this->_exportFilenames[0];
