@@ -654,6 +654,8 @@ class Sales_JsonTest extends TestCase
         $boilerCustomer->{Sales_Model_Boilerplate::FLD_CUSTOMER} = $customer['id'];
         $boilerCustomer = $ctrl->create($boilerCustomer);
 
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . print_r($ctrl->getAll()->toArray(), true));
+
         $result = $this->_instance->getApplicableBoilerplates(Sales_Model_Document_Offer::class);
         $this->assertCount(1, $result['results']);
         $this->assertSame($boilerDefault->getId(), $result['results'][0]['id']);

@@ -703,6 +703,7 @@ class Tinebase_Timemachine_ModificationLogTest extends \PHPUnit\Framework\TestCa
         $instance_seq = Tinebase_Timemachine_ModificationLog::getInstance()->getMaxInstanceSeq();
 
         $groupController = Tinebase_Group::getInstance();
+        $groupController->modlogActive(true);
 
         $group = new Tinebase_Model_Group(array('name' => 'unittest test group'));
         $group = $groupController->addGroup($group);
