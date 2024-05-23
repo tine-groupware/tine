@@ -2030,6 +2030,21 @@ msgstr ""
 msgid "Create new email accounts"
 msgstr ""
 
+msgid "Current Mailbox size"
+msgstr ""
+
+msgid "Current Sieve size"
+msgstr ""
+
+msgid "Imap Quota"
+msgstr ""
+
+msgid "Sieve Quota"
+msgstr ""
+
+msgid "no quota set"
+msgstr ""
+
 #: Controller/MessageExpectedAnswer.php:74
 msgid "still unanswered: "
 msgstr ""
