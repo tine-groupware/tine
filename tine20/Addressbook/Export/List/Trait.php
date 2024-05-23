@@ -116,8 +116,15 @@ trait Addressbook_Export_List_Trait
             }
 
             $memberRecords = array();
-            if (is_array($record->members)) {
-                $memberRecords = Addressbook_Controller_Contact::getInstance()->getMultiple($record->members);
+            if (is_array($record->members) && !empty($record->members)) {
+                $memberIds = $record->members;
+                foreach ($memberIds as &$mId) {
+                    if (is_array($mId)) {
+                        $mId = $mId['id'] ?? '';
+                    }
+                }
+                unset($mId);
+                $memberRecords = Addressbook_Controller_Contact::getInstance()->getMultiple($memberIds);
             }
             $newMembers = array();
 
