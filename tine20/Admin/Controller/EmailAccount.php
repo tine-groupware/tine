@@ -452,6 +452,52 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * @param ?mixed $mailAccounts
+     * @param bool $dryRun
+     * @param bool $allowToFail
+     * @return Tinebase_Record_RecordSet
+     * @throws Tinebase_Exception_Record_NotAllowed
+     */
+    public function updateSieveScript($mailAccounts = null, bool $dryRun = false, bool $allowToFail = true): Tinebase_Record_RecordSet
+    {
+        if (!$mailAccounts) {
+            $backend = Admin_Controller_EmailAccount::getInstance();
+            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+                ['field' => 'type', 'operator' => 'equals', 'value' => Tinebase_EmailUser_Model_Account::TYPE_ADB_LIST]
+            ]);
+            $mailAccounts = $backend->search($filter);
+        }
+
+        if ($dryRun) {
+            return $mailAccounts;
+        }
+
+        $updatedAccounts = new Tinebase_Record_RecordSet(Felamimail_Model_Account::class);
+        foreach ($mailAccounts as $record) {
+            if (Tinebase_EmailUser::backendSupportsMasterPassword($record)) {
+                $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($record->getId());
+                try {
+                    $record = Felamimail_Controller_Account::getInstance()->getBackend()->update($record);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
+                        . __LINE__ . 'Sieve script updated from record: ' . $record->getId());
+                    $updatedAccounts->addRecord($record);
+                } catch (Exception $e) {
+                    if ($allowToFail) {
+                        Tinebase_Exception::log($e);
+                    } else {
+                        throw $e;
+                    }
+                } finally {
+                    Tinebase_EmailUser::removeAdminAccess();
+                    unset($raii);
+                }
+            }
+        }
+        return $updatedAccounts;
+    }
+    
+
+    /**
      * @param Felamimail_Model_Account $account
      */
     public function updateAdbList(Felamimail_Model_Account $account): ?Tinebase_Record_Interface
