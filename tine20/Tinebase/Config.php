@@ -3614,10 +3614,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         // TODO replace this with a hook in the config itself or something
         if (isset($clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']) &&
                 $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records) {
-            $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records = clone
-                $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records;
+            $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value'] = clone
+                $clientProperties[self::APP_NAME][self::AREA_LOCKS]['value'];
             /** @var Tinebase_Model_AreaLockConfig $record */
-            foreach($clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records as $idx => $record) {
+            foreach($clientProperties[self::APP_NAME][self::AREA_LOCKS]['value']->records as $record) {
                 $result = [];
                 /** @var Tinebase_Model_MFA_UserConfig $usrCfg */
                 foreach ($record->getUserMFAIntersection(Tinebase_Core::getUser()) as $usrCfg) {

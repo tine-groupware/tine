@@ -178,6 +178,9 @@ class Sales_Controller_Boilerplate extends Tinebase_Controller_Record_Abstract
             $filter[] = ['field' => \Sales_Model_Boilerplate::FLD_CUSTOMER, 'operator' => 'equals', 'value' => null];
         }
 
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' filter: ' . print_r($filter, true));
+
         $result = new Tinebase_Record_RecordSet(Sales_Model_Boilerplate::class);
 
         $names = [];
