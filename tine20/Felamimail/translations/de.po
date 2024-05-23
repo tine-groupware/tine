@@ -2234,3 +2234,18 @@ msgstr "Wenn Sie eine dieser Optionen wählen, erhalten Sie eine Benachrichtigun
 
 msgid "Selected E-Mail"
 msgstr "Ausgewählte E-Mail"
+
+msgid "Current Mailbox size"
+msgstr "Aktuelle Mailbox-Größe"
+
+msgid "Current Sieve size"
+msgstr "Aktuelle Sieve-Größe"
+
+msgid "Imap Quota"
+msgstr "Imap Kontingent"
+
+msgid "Sieve Quota"
+msgstr "Sieve Kontingent"
+
+msgid "no quota set"
+msgstr "keine Begrenzung"

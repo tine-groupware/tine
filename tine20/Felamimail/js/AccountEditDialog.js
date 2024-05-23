@@ -593,30 +593,30 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         disabled: true
                     })],
                     [{
-                        fieldLabel: 'Imap Quota',
-                        emptyText: 'no quota set',
+                        fieldLabel: this.app.i18n._('Imap Quota'),
+                        emptyText: this.app.i18n._('no quota set'),
                         name: 'emailMailQuota',
                         xtype: 'extuxbytesfield',
                         disabled: true,
                         hidden: !this.asAdminModule || !this.emailImapUser.hasOwnProperty('emailMailQuota')
                     }],
                     [{
-                        fieldLabel: 'Current Mailbox size',
+                        fieldLabel: this.app.i18n._('Current Mailbox size'),
                         name: 'emailMailSize',
                         xtype: 'extuxbytesfield',
                         disabled: true,
                         hidden: !this.asAdminModule || !this.emailImapUser.hasOwnProperty('emailMailSize')
                     }],
                     [{
-                        fieldLabel: 'Sieve Quota',
-                        emptyText: 'no quota set',
+                        fieldLabel: this.app.i18n._('Sieve Quota'),
+                        emptyText: this.app.i18n._('no quota set'),
                         name: 'emailSieveQuota',
                         xtype: 'extuxbytesfield',
                         disabled: true,
                         hidden: !this.asAdminModule || !this.emailImapUser.hasOwnProperty('emailSieveQuota')
                     }],
                     [{
-                        fieldLabel: 'Current Sieve size',
+                        fieldLabel: this.app.i18n._('Current Sieve size'),
                         name: 'emailSieveSize',
                         xtype: 'extuxbytesfield',
                         disabled: true,
