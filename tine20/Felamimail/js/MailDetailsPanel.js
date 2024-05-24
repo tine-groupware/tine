@@ -8,10 +8,9 @@
  */
 
 import waitFor from "../../Tinebase/js/util/waitFor.es6";
+import getFileAttachmentAction from './AttachmentFileAction';
 
 Ext.ns('Tine.Felamimail');
-
-import getFileAttachmentAction from './AttachmentFileAction';
 
 /**
  * @param config
@@ -374,6 +373,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 const selectedAttachments = idx !== 'all' ? [attachments[idx]] : attachments;
                 // remove part id if set (that is the case in message/rfc822 attachments)
                 const messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
+                
                 const menu = Ext.create({
                     xtype: 'menu',
                     plugins: [{
@@ -383,7 +383,6 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     items: [{
                             text: this.app.i18n._('Open'),
                             iconCls: 'action_preview',
-                            disabled: this.record.get('from_node'), // not implemented yet
                             hidden: selectedAttachments.length !== 1 || _.get(selectedAttachments, '[0]content-type') !== 'message/rfc822',
                             handler: () => {
                                 // fixme: messageId might be filemanager node id
@@ -392,24 +391,24 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                                         id: messageId + '_' + selectedAttachments[0].partId
                                     })
                                 });
-                            }
+                            },
                         }, {
                             text: this.app.i18n._('Preview'),
                             iconCls: 'action_preview',
                             hidden: !selectedAttachments.length 
                                 || !Tine.Tinebase.appMgr.isEnabled('Filemanager')
                                 || (_.get(selectedAttachments, '[0]content-type') === 'message/rfc822' && selectedAttachments.length === 1),
-                            disabled: this.record.get('from_node'), // not implemented yet                           
                             handler: () => {
                                 Tine.Filemanager.QuickLookPanel.openWindow({
                                     windowNamePrefix: `QuickLookPanel_${sourceModel}_Attachment_${idx}_`,
                                     record: this.record,
                                     initialApp: this.app,
                                     handleAttachments: this.quicklookHandleAttachments,
+                                    onNavigateAttachment: this.onNavigateAttachment,
                                     sm: this.grid?.getGrid()?.getSelectionModel(),
                                     initialAttachmentIdx: idx !== 'all' ? +idx : 0,
                                 });
-                            }
+                            },
                         }, {
                             xtype: 'menuseparator'
                         }, getFileAttachmentAction(async (locations, action, updatedAttachments = null) => {
@@ -445,10 +444,12 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     actions: menu
                 });
                 actionUpdater.updateActions(attachments.map((attachmentData) => {
-                    return Tine.Tinebase.data.Record.setFromJson(Object.assign(attachmentData, {
+                    const record = Tine.Tinebase.data.Record.setFromJson(Object.assign(attachmentData, {
                         id: `${messageId}:${attachmentData.partId}`,
-                        messageId
+                        messageId,
                     }), Tine.Felamimail.Model.Attachment);
+                    record.cachePromises = attachmentData?.promises;
+                    return record;
                 }), messageId);
 
                 menu.showAt(e.getXY());
@@ -508,16 +509,18 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
         _.each(attachments, (attachment) => {
             if (!attachment.promises) attachment.promises = [];
-            if (attachment?.isPreviewReady) return;
+            if (this.isAttachmentDataValid(attachment)) return;
+            
             const promise = new Promise(async (resolve) => {
                 const start = Date.now();
                 const responses = await Promise.all(attachment.promises);
-                const validCache = responses.find((r) => {return r.isPreviewReady});
+                const validResponse = responses.find((r) => {return this.isAttachmentDataValid(r);});
                 
-                if (validCache) {
+                if (validResponse) {
                     attachment.isPreviewReady = true;
+                    attachment.cache = validResponse.cache;
                     return resolve({
-                        cache: validCache.cache,
+                        cache: validResponse.cache,
                         createPreviewInstantly: createPreviewInstantly,
                         isPreviewReady: true,
                         skipSendRequest: true,
@@ -536,6 +539,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     })
                     .catch((e) => {
                         console.error(e);
+                        attachment.isPreviewReady = false;
                         return resolve(attachment);
                     });
             })
@@ -543,6 +547,14 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         });
         record.set('attachments', attachments);
         return attachments;
+    },
+    
+    onNavigateAttachment: function(dir) {
+        this.initialAttachmentIdx += dir;
+        if (this.attachments?.[this.initialAttachmentIdx]) {
+            this.record = this.attachments[this.initialAttachmentIdx];
+            this.loadPreviewPanel();
+        }
     },
 
     // NOTE: runs in the scope of QuickLookPanel
@@ -552,34 +564,52 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
         // remove part id if set (that is the case in message/rfc822 attachments)
         const messageId = this.record.get('messageId') || ((String(this.record.id).match(/_/)) ? this.record.id.split('_')[0] : this.record.id);
         const sourceModel = this.record.get('from_node') ? 'Filemanager_Model_Node' : 'Felamimail_Model_Message';
-
+        let promises  = this.record?.data?.promises ?? [];
+        
         if (this.record.constructor.hasField('attachments')) {
-            await waitFor(() => { return this.record.bodyIsFetched()});
+            await waitFor(() => {
+                return this.record.bodyIsFetched()
+            });
             let attachments = this.record.get('attachments');
-            if (! attachments.length) {
+            if (!attachments.length) {
                 // might happen with keyNav in preview panel
-                this.record = new Tine.Tinebase.Model.Tree_Node({ name: 'Email has no attachemtns', path: '' });
+                this.record = new Tine.Tinebase.Model.Tree_Node({name: 'Email has no attachemtns', path: ''});
                 return;
             }
+            this.attachments = _.map(this.record.get('attachments'), (attachment) => {
+                return new Tine.Tinebase.Model.Tree_Node(attachment);
+            });
             
             // make sure we get the attachment caches
             attachments = Tine.Felamimail.MailDetailsPanel.prototype.resolveAttachmentCache(sourceModel, this.record, true);
             const initialAttachmentIdx = this.initialAttachmentIdx ?? 0;
             if (!attachments[initialAttachmentIdx].promises) return;
-            await Promise.all(attachments[initialAttachmentIdx].promises).then((cachePromises) => {
-                let resolvedAttachmentData = {};
-                const validResponse = cachePromises.find((cachePromise) => {return cachePromise.isPreviewReady});
-                if (validResponse) {
-                    resolvedAttachmentData = validResponse.cache.data;
+            promises = attachments[initialAttachmentIdx].promises;
+        }
+        
+        await Promise.all(promises).then((cachePromises) => {
+            let resolvedAttachmentData = {};
+            const validResponse = cachePromises.find((r) => {return r?.isPreviewReady && r?.cache;});
+            if (validResponse) {
+                resolvedAttachmentData = validResponse.cache.data;
+            } else {
+                // promise data got lost in cross window
+                const validPromise = promises.find((r) => {return r?.isPreviewReady && r?.cache;});
+                if (validPromise){
+                    resolvedAttachmentData = validPromise.cache.data;
                 } else {
                     const invalidResponse = cachePromises.find((cachePromise) => {return cachePromise?.cache});
-                    if (invalidResponse) resolvedAttachmentData = invalidResponse.cache.data;
+                    if (invalidResponse) resolvedAttachmentData = invalidResponse.cache.data; 
                 }
-                resolvedAttachmentData.messageId = this.record.id;
-                this.record = Tine.Tinebase.data.Record.setFromJson(resolvedAttachmentData, Tine.Tinebase.Model.Tree_Node);
-                this.record.isAttachmentCache = true;
-            })
-        }
+            }
+            resolvedAttachmentData.messageId = this.record.id;
+            this.record = Tine.Tinebase.data.Record.setFromJson(resolvedAttachmentData, Tine.Tinebase.Model.Tree_Node);
+            this.record.isAttachmentCache = true;
+        })
+    },
+    
+    isAttachmentDataValid(data) {
+        return data?.isPreviewReady && data?.cache;
     },
 
     attachmentAnnimation: async function (target, workload) {
