@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
@@ -16,7 +16,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php'
 /**
  * Test class for Tinebase_Config
  */
-class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
+class Tinebase_ConfigTest extends TestCase
 {
     /**
      * unit under test (UIT)
@@ -39,8 +39,10 @@ class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         $this->_instance = Tinebase_Config::getInstance();
+
+        parent::setUp();
     }
 
     /**
@@ -50,12 +52,14 @@ class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
      * @access protected
      */
     protected function tearDown(): void
-{
+    {
         foreach ($this->_filenamesToDelete as $filename) {
             unlink($filename);
         }
 
         Tinebase_Config::getInstance()->clearCache();
+
+        parent::tearDown();
     }
 
     /**
@@ -114,6 +118,27 @@ class Tinebase_ConfigTest extends \PHPUnit\Framework\TestCase
 
         $this->assertGreaterThan(0, count($dbConfig), 'could not get db config');
         $this->assertTrue($dbConfig['dbname'] != '', 'could not get dbname');
+    }
+
+    public function testContentClassFeature()
+    {
+        Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS} = [
+            Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS => [
+                [
+                    Tinebase_Model_Sms_AdapterConfig::FLD_NAME => 'sms1',
+                    Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CLASS => Tinebase_Model_Sms_GenericHttpAdapter::class,
+                    Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG => [
+                        Tinebase_Model_Sms_GenericHttpAdapter::FLD_URL => 'a',
+                    ],
+                ],
+            ],
+        ];
+
+        $data = Tinebase_Config::getInstance()->{Tinebase_Config::SMS}->{Tinebase_Config::SMS_ADAPTERS}->{Tinebase_Model_Sms_AdapterConfigs::FLD_ADAPTER_CONFIGS};
+        $this->assertInstanceOf(Tinebase_Record_RecordSet::class, $data);
+        $this->assertInstanceOf(Tinebase_Model_Sms_AdapterConfig::class, $data->getFirstRecord());
+        $this->assertInstanceOf(Tinebase_Model_Sms_GenericHttpAdapter::class, $data->getFirstRecord()->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG});
+        $this->assertSame('a', $data->getFirstRecord()->{Tinebase_Model_Sms_AdapterConfig::FLD_ADAPTER_CONFIG}->{Tinebase_Model_Sms_GenericHttpAdapter::FLD_URL});
     }
 
     /**

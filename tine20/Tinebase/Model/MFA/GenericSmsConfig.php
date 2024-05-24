@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -19,6 +19,7 @@ class Tinebase_Model_MFA_GenericSmsConfig extends Tinebase_Record_NewAbstract
 {
     const MODEL_NAME_PART = 'MFA_GenericSmsConfig';
 
+    const FLD_SYSTEM_SMS_NAME = 'system_sms';
     const FLD_BODY = 'body';
     const FLD_HEADERS = 'headers';
     const FLD_METHOD = 'method';
@@ -36,25 +37,28 @@ class Tinebase_Model_MFA_GenericSmsConfig extends Tinebase_Record_NewAbstract
         self::MODEL_NAME                    => self::MODEL_NAME_PART,
 
         self::FIELDS                        => [
+            self::FLD_SYSTEM_SMS_NAME           => [
+                self::TYPE                          => self::TYPE_TEXT,
+            ],
             self::FLD_BODY                      => [
-                self::TYPE                      => self::TYPE_TEXT,
+                self::TYPE                          => self::TYPE_TEXT,
             ],
-            self::FLD_HEADERS               => [
-                self::TYPE                      => self::TYPE_JSON,
+            self::FLD_HEADERS                   => [
+                self::TYPE                          => self::TYPE_JSON,
             ],
-            self::FLD_METHOD                => [
-                self::TYPE                      => self::TYPE_STRING,
+            self::FLD_METHOD                    => [
+                self::TYPE                          => self::TYPE_STRING,
             ],
             // length of the generated pin
-            self::FLD_PIN_LENGTH            => [
-                self::TYPE                      => self::TYPE_INTEGER,
+            self::FLD_PIN_LENGTH                => [
+                self::TYPE                          => self::TYPE_INTEGER,
             ],
             // time the generated pins lives
-            self::FLD_PIN_TTL               => [
-                self::TYPE                      => self::TYPE_INTEGER,
+            self::FLD_PIN_TTL                   => [
+                self::TYPE                          => self::TYPE_INTEGER,
             ],
-            self::FLD_URL                   => [
-                self::TYPE                      => self::TYPE_TEXT,
+            self::FLD_URL                       => [
+                self::TYPE                          => self::TYPE_TEXT,
             ],
         ]
     ];
