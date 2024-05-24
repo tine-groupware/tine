@@ -230,7 +230,10 @@ class Setup_SchemaTool
         }
 
         $sqls = array_filter($tool->getUpdateSchemaSql($classes, true), function ($val) {
-            return strpos($val, "CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL") === false;
+            return ((strpos($val, "CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL") === false)
+                || (strpos($val, ", CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL") !== false)
+                || (strpos($val, "CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL,") !== false))
+                && $val !== "ALTER TABLE tine20_tree_nodes CHANGE islink islink TINYINT(1) DEFAULT '0' NOT NULL, CHANGE is_deleted is_deleted TINYINT(1) DEFAULT '0' NOT NULL";
         });
 
         Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
