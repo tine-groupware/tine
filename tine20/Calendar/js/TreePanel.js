@@ -157,8 +157,8 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 }
                 const isResource = !!nodeData?.xprops?.Calendar?.Resource && nodeData.model === 'Calendar_Model_Event';
                 if (hasRequiredGrants) {
-                    if (node.id === 'shared' && !isResource) return newResponse.concat([nodeData]);
-                    if (node.id === 'resources' && isResource) return newResponse.concat([nodeData]);
+                    if(node.id !== 'resources' && !isResource) return newResponse.concat([nodeData]);
+                    if(node.id === 'resources' && isResource) return newResponse.concat([nodeData]);
                 }
                 return newResponse;
             }, []);
