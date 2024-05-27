@@ -106,6 +106,7 @@ Tine.widgets.dialog.AttachmentsGridPanel = Ext.extend(Tine.widgets.grid.FileUplo
      * bus notified about record changes
      */
     onAttachmentChanges: function(data, e) {
+        if (!data?.data) return;
         const record = Tine.Tinebase.data.Record.setFromJson(data, Tine.Tinebase.Model.Tree_Node);
         const existingRecord = this.store.getById(data.id);
         if (!record.data.size && !record.data.name) return;
