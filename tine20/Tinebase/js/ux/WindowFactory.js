@@ -144,7 +144,6 @@ Ext.ux.WindowFactory.prototype = {
      * constructs window items from config properties
      */
      getCenterPanel: async function (config, win) {
-         debugger;
         config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
 
         config.contentPanelConstructorConfig.setWaitText = async (text) => {
