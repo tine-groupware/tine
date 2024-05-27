@@ -745,7 +745,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         $fixedDocumentPart = parent::fixBrokenMacros($documentPart);
 
         $fixedDocumentPart = preg_replace_callback(
-            '|\{\{[^}]*\}[^}]*\}|U',
+            '|\{[^{}%]*\{[^}]*\}[^}]*\}|U',
             function ($match) {
                 return strip_tags($match[0]);
             },
@@ -753,7 +753,7 @@ class Tinebase_Export_Richtext_TemplateProcessor extends \PhpOffice\PhpWord\Temp
         );
 
         $fixedDocumentPart = preg_replace_callback(
-            '|\{%[^}]*%[^}]*\}|U',
+            '|\{[^{}%]*%[^}]*%[^}]*\}|U',
             function ($match) {
                 return strip_tags($match[0]);
             },
