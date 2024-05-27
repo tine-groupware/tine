@@ -191,6 +191,12 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
      *       But the server transforms the original type into the requested format/display_format.
      */
     getBodyType: function() {
+        //when BE throws not found error from external messages with html body type, the body_content_type_of_body_property_of_this_record is still text/plain
+        //, so we need to detect the body_content_type_of_body_property_of_this_record type in FE
+        const htmlRegex = /<\/?[a-z][\s\S]*>/i;
+        if (this.bodyIsFetched()) {
+            return htmlRegex.test(this.get('body')) ? 'text/html' : 'text/plain';
+        }
         return this.get('body_content_type_of_body_property_of_this_record');
     }
 });
@@ -312,7 +318,7 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
             scope: this,
             suppressBusEvents: true, // skip events to prevent gird reloads on message fetch
             success: function(response, options) {
-                var msg = this.recordReader({responseText: Ext.util.JSON.encode(response.data)});
+                const msg = this.recordReader({responseText: Ext.util.JSON.encode(response.data)});
                 // NOTE: Flags from the server might be outdated, so we skip them
                 Ext.copyTo(message.data, msg.data, Tine.Felamimail.Model.Message.getFieldNames().remove('flags'));
                 if (Ext.isFunction(callback)) {
