@@ -32,6 +32,13 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
 
     protected function __construct()
     {
+        $cfc = new Tinebase_CustomField_Config();
+        $cfc->setAllCFs();
+        $this->_oldRecordBookWriteableFields = array_merge($this->_oldRecordBookWriteableFields, array_unique($cfc->search(new Tinebase_Model_CustomField_ConfigFilter([
+            ['field' => 'model', 'operator' => 'startswith', 'value' => 'Sales_Model_Document_'],
+            ['field' => 'name', 'operator' => 'startswith', 'value' => 'eval_dim_'],
+        ], '', ['ignoreAcl' => true]))->name));
+
         if (!$this->_documentStatusConfig || !$this->_documentStatusTransitionConfig || !$this->_documentStatusField ||
                 empty($this->_oldRecordBookWriteableFields) || empty($this->_bookRecordRequiredFields) ||
                 null === static::$_readGrant || null === static::$_adminGrant) {
