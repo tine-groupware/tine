@@ -7,7 +7,6 @@
     <status>enabled</status>
     <depends>
         <application>Addressbook</application>
-        <application>Klimabuendnis</application>
     </depends>
     <tables/>
 </application>
