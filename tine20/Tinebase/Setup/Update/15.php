@@ -46,6 +46,7 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
     const RELEASE015_UPDATE028 = __CLASS__ . '::update028';
     const RELEASE015_UPDATE029 = __CLASS__ . '::update029';
     const RELEASE015_UPDATE030 = __CLASS__ . '::update030';
+    const RELEASE015_UPDATE031 = __CLASS__ . '::update031';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -177,6 +178,10 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             self::RELEASE015_UPDATE029          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update029',
+            ],
+            self::RELEASE015_UPDATE031          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update031',
             ],
         ],
     ];
@@ -866,5 +871,22 @@ class Tinebase_Setup_Update_15 extends Setup_Update_Abstract
             }
         }
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.30', self::RELEASE015_UPDATE030);
+    }
+
+    public function update031()
+    {
+        $rows = $this->getDb()->query('SELECT id, name FROM ' . SQL_TABLE_PREFIX .
+            'tree_nodes WHERE is_deleted = 0 and name REGEXP "[\\/\\:\\*\\?\\"\\<\\>\\|]"')->fetchAll();
+
+        foreach ($rows as $row) {
+            try {
+                $updatedName = Tinebase_Model_Tree_Node::sanitizeName($row['name']);
+                $this->getDb()->query('UPDATE ' . SQL_TABLE_PREFIX . 'tree_nodes SET name = "' . $updatedName . '" WHERE id = "' . $row['id'] . '"');
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                Tinebase_Exception::log($zdse);
+            }
+        }
+        
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '15.31', self::RELEASE015_UPDATE031);
     }
 }
