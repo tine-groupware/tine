@@ -73,8 +73,6 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     protected $_userBaseFilter = 'objectclass=user';
 
-    protected $_isReadOnlyBackend = false;
-
     /**
      * the constructor
      *
@@ -121,7 +119,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     public function addUserToSyncBackend(Tinebase_Model_FullUser $_user)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser($_user->getId())) {
             return NULL;
         }
         
@@ -169,7 +167,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     public function setExpiryDateInSyncBackend($_accountId, $_expiryDate)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_accountId))) {
             return;
         }
         
@@ -219,7 +217,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_userId))) {
             return;
         }
         
@@ -271,7 +269,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     public function setStatusInSyncBackend($_accountId, $_status)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_accountId))) {
             return;
         }
         
@@ -320,7 +318,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      */
     public function updateUserInSyncBackend(Tinebase_Model_FullUser $_account)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser($_account->getId())) {
             return null;
         }
 

@@ -910,6 +910,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 . ' User backend is not instanceof Tinebase_User_Ldap, nothing to sync');
             return true;
         }
+        
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_DISABLED}) {
+            return true;
+        }
 
         $userIdsInSqlBackend = [];
         if (isset($options['deleteUsers']) && $options['deleteUsers']) {

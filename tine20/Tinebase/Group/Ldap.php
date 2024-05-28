@@ -121,6 +121,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if ((isset($_options['readonly']) || array_key_exists('readonly', $_options))) {
             $this->_isReadOnlyBackend = (bool)$_options['readonly'];
         }
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_DISABLED}) {
+            $this->_isReadOnlyBackend = true;
+        }
         if ((isset($_options['ldap']) || array_key_exists('ldap', $_options))) {
             $this->_ldap = $_options['ldap'];
         }
@@ -195,7 +198,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      *
      * @todo make filtering working. Allways returns all groups
      *
-     * @param  string  $_filter
+     * @param  Zend_Ldap_Filter  $_filter
      * @param  string  $_sort
      * @param  string  $_dir
      * @param  int     $_start
@@ -208,8 +211,12 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if ($this->isDisabledBackend()) {
             throw new Tinebase_Exception_UnexpectedValue('backend is disabled');
         }
-        
-        $filter = Zend_Ldap_Filter::string($this->_groupBaseFilter);
+
+        $filter = Zend_Ldap_Filter::andFilter(Zend_Ldap_Filter::string($this->_groupBaseFilter));
+
+        if ($_filter) {
+            $filter->addFilter($_filter);
+        }
         
         $groups = $this->getLdap()->search(
             $filter, 

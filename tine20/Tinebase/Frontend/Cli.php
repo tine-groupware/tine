@@ -2223,6 +2223,35 @@ fi';
         return 0;
     }
 
+    public function importGroupFromSyncBackend(Zend_Console_Getopt $opts): int
+    {
+        $this->_checkAdminRight();
+
+        $data = $this->_parseArgs($opts);
+        if (!isset($data['group']) || empty($data['group'])) {
+            echo 'mandatory argument "group" missing' . PHP_EOL;
+            return 1;
+        }
+
+        $groupCtrl = Tinebase_Group::getInstance();
+        if (!$groupCtrl instanceof Tinebase_Group_Interface_SyncAble) {
+            echo 'no group syncable backend configured' . PHP_EOL;
+            return 1;
+        }
+        $group = $groupCtrl->getGroupsFromSyncBackend(
+            Zend_Ldap_Filter::equals('cn', $data['group'])
+        )->getFirstRecord();
+
+        if ($group) {
+            $groupCtrl->addGroup($group);
+            echo 'created group: ' . $group->name . PHP_EOL;
+        } else {
+            echo 'group ' . $data['name'] . ' not found in sync backend' . PHP_EOL;
+        }
+
+        return 0;
+    }
+
     public function syncFileTreeFromBackupDB(Zend_Console_Getopt $opts)
     {
         $this->_checkAdminRight();
