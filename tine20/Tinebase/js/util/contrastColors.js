@@ -73,7 +73,7 @@ const contrastColors = {
 
   adaptFg: (element, outerBg = '') => {
     let bgColor = element.style.getPropertyValue('background-color')
-    if (bgColor !== '') {
+    if (bgColor !== '' && bgColor !== 'transparent') {
       outerBg = bgColor
     }
 
