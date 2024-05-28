@@ -142,6 +142,7 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         // fixme: admin group edit dialog has no account_grants and the mailinglistDisabled was set to true , but it should be enabled
         const mailinglistDisabled = ! (_.get(record, 'data.container_id.account_grants.adminGrant', false) && hasRight);
         const sieveReplyTo = record?.data?.xprops?.sieveReplyTo ?? 'sender';
+        const sieveReplyToEmail = record?.data?.email;
         this.isMailinglistCheckbox.checked = this.isMailingList;
         Object.entries(this.checkboxes).forEach(([key, checkbox]) => {
             checkbox.checked = _.get(record, 'data.xprops.' + key, false);
@@ -149,7 +150,8 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
         this.afterIsRendered().then(() => {
             this.isMailinglistCheckbox.setDisabled(mailinglistDisabled);
             this.replyToComboBox.setValue(sieveReplyTo);
-            this.emailField.setValue(record?.data?.email);
+            this.emailField.setValue(sieveReplyToEmail);
+            this.emailField.value = sieveReplyToEmail;
             
             this.replyToComboBox.setVisible(this.isMailingList);
             this.emailField.setVisible(this.isMailingList);
