@@ -431,11 +431,13 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     // fixme : how to deal with preserve_format = true && format = text/html && message.get('body_content_type') = text/plain ?
                     // the conflict case : we want to show text/html but we also want to preserve format as text/plain
                     let fetchType = format;
-                    if (message.bodyIsFetched() && account.get('preserve_format')) {
+                    const bodyContentType = message.getBodyType();
+                    if (message.bodyIsFetched()) {
                         // format of the received message. this is the format to preserve
-                        fetchType = message.get('body_content_type');
+                        if (fetchType !== bodyContentType) fetchType = bodyContentType;
+                        if (account.get('preserve_format')) fetchType = message.get('body_content_type');
                     }
-                    if (!message.bodyIsFetched() || fetchType !== message.getBodyType()) {
+                    if (!message.bodyIsFetched() || fetchType !== bodyContentType) {
                         // self callback when body needs to be (re) fetched
                         return this.recordProxy.fetchBody(message, fetchType, {
                             success: this.initContent.createDelegate(this),
