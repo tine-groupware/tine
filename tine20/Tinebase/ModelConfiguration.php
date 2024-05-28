@@ -2008,14 +2008,14 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 }
                 if (!isset($fieldDef[self::CONFIG][self::RECORD_CLASS_NAME])) {
                     if (! isset($fieldDef[self::CONFIG]['appName'])) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__
-                            . '::' . __LINE__ . ' appName missing in config for field ' . $fieldKey . ' '
-                            . print_r($fieldDef, true));
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                            __METHOD__ . '::' . __LINE__ . ' appName missing in config for field ' . $fieldKey
+                            . ' of model ' . $this->_modelName);
                         break;
                     }
                     $fieldDef[self::CONFIG][self::RECORD_CLASS_NAME] = $this->_getPhpClassName($fieldDef[self::CONFIG]);
                     if (!class_exists($fieldDef[self::CONFIG][self::RECORD_CLASS_NAME])) {
-                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' record class does not exists '
+                        Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Record class does not exists '
                             . $fieldKey . ' ' . print_r($fieldDef, true));
                         break;
                     }
