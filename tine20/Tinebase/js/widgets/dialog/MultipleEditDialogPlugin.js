@@ -427,7 +427,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             if (this.store) {
                 this.store.removeAll();
             }
-            this.setValue('');
+            if (this.isXType('textarea')) {
+                this.setValue(null)
+            } else {
+                this.setValue('');
+            }
             if (this.multi) {
                 this.cleared = true;
                 this.allowBlank = this.origAllowBlank;
@@ -462,10 +466,12 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             currentValue = this.fullDateTime ? this.fullDateTime.format('Y-m-d H:i:s') : '';
         } else if (this.isXType('timefield')) {
             currentValue = this.fullDateTime;
+        } else if (this.isXType('textarea')) {
+            currentValue = this.getValue() || ''
         } else {
             currentValue = this.getValue();
         }
-        
+
         Tine.log.info('Start value: "' + originalValue + '", current: "' + currentValue + '"');
         if ((Ext.encode(originalValue) != Ext.encode(currentValue)) || (this.cleared === true)) {  // if edited or cleared
             // Create or set arrow
@@ -500,6 +506,7 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             this.edited = false;
             if (this.multi) {
                 this.addClass('tinebase-editmultipledialog-noneedit');
+                this.removeClass('x-form-invalid')
             }
             
             // Set button
