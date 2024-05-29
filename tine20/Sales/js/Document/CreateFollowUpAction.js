@@ -71,6 +71,12 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     return unbooked.concat(statusDef.records.find((r) => { return r.id === status })?.booked ? [] : [record])
                 }, [])
 
+                if (_.filter(selections, (document) => { return document.get('reversal_status') !== 'notReversed' }).length) {
+                    if (await Ext.MessageBox.confirm(
+                        app.formatMessage('Create new { targetRecordName }?', { targetRecordName: targetRecordClass.getRecordName() }),
+                        app.formatMessage('Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document.', { sourceRecordsName, targetRecordName: targetRecordClass.getRecordName() })
+                    ) !== 'yes') { return false }
+                }
                 if (unbooked.length) {
                     if (await Ext.MessageBox.confirm(
                         app.formatMessage('Book unbooked { sourceRecordsName }', { sourceRecordsName }),

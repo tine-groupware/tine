@@ -561,6 +561,12 @@ msgstr "Erstelle { targetRecordName }"
 msgid "Creating { targetRecordsName }"
 msgstr "{ targetRecordsName } wird erzeugt"
 
+msgid "Create new { targetRecordName }?"
+msgstr "{ targetRecordName } neu erzeugen?"
+
+msgid "Reversal { sourceRecordsName } cannot be undone. If you continue, a new { targetRecordName } will be created as a positive document."
+msgstr "Storno { sourceRecordsName } können nicht rückgängig gemacht werden. Wenn sie fortfahren, wird ein neuer { targetRecordName }s-Beleg mit positiven Werten erstellt."
+
 #: js/Document/CreateFollowUpAction.js:76
 msgid "Book unbooked { sourceRecordsName }"
 msgstr "Ungebuchte { sourceRecordsName } buchen"
