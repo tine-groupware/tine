@@ -56,7 +56,7 @@ interface Tinebase_Group_Interface_SyncAble
     /**
      * get list of groups from syncbackend
      *
-     * @param  string  $_filter
+     * @param  Zend_Ldap_Filter  $_filter
      * @param  string  $_sort
      * @param  string  $_dir
      * @param  int     $_start

@@ -446,7 +446,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const SYNC_USER_HOOK_CLASS = 'syncUserHookClass';
-    
+
+    const SYNC_USER_DISABLED = 'syncUserDisabled';
+
+    const SYNC_USER_OF_GROUP = 'syncUserOfGroup';
+
     /**
      * configure if user contact data should be synced from sync backend, default yes
      *
@@ -1705,6 +1709,28 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                             'setBySetupModule'      => FALSE,
                             'default'               => FALSE
                         ),
+                        self::SYNC_USER_DISABLED => [
+                            //_('Sync user accounts / groups disabled')
+                            'label'                 => 'Sync user accounts / groups disabled',
+                            //_('Sync user accounts / groups disabled')
+                            'description'           => 'Sync user accounts / groups disabled',
+                            'type'                  => 'bool',
+                            'clientRegistryInclude' => false,
+                            'setByAdminModule'      => false,
+                            'setBySetupModule'      => false,
+                            'default'               => false,
+                        ],
+                        self::SYNC_USER_OF_GROUP => [
+                            //_('Sync user accounts to sync backend if member of this group')
+                            'label'                 => 'Sync user accounts to sync backend if member of this group',
+                            //_('Sync user accounts to sync backend if member of this group')
+                            'description'           => 'Sync user accounts to sync backend if member of this group',
+                            'type'                  => self::TYPE_STRING,
+                            'clientRegistryInclude' => false,
+                            'setByAdminModule'      => false,
+                            'setBySetupModule'      => false,
+                            'default'               => '',
+                        ],
                     ),
                     'default'                   => array(),
                 ),

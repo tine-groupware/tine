@@ -121,6 +121,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     protected $_ldapPlugins = array();
     
     protected $_isReadOnlyBackend = false;
+
+    protected ?string $_writeGroup = null;
+    protected ?array $_writeGroupMembers = null;
     
     /**
      * used to save the last user properties from ldap backend
@@ -392,7 +395,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_userId))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
@@ -452,7 +455,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function setStatusInSyncBackend($_accountId, $_status)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_accountId))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
@@ -508,7 +511,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function setExpiryDateInSyncBackend($_accountId, $_expiryDate)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_accountId))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return;
@@ -543,7 +546,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function updateUserInSyncBackend(Tinebase_Model_FullUser $_account)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser($_account->getId())) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return $_account;
@@ -607,7 +610,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function addUserToSyncBackend(Tinebase_Model_FullUser $user)
     {
-        if ($this->_isReadOnlyBackend) {
+        if ($this->isReadOnlyUser($user->getId())) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
             return null;
@@ -645,6 +648,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function deleteUserInSyncBackend($_userId)
     {
+        // we do not call isReadOnlyUser() here, because we always delete all users from sync backend (unless it's a readOnlyBackend)
         if ($this->_isReadOnlyBackend) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
@@ -676,6 +680,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function deleteUsersInSyncBackend(array $_accountIds)
     {
+        // we do not call isReadOnlyUser() here, because we always delete all users from sync backend (unless it's a readOnlyBackend)
         if ($this->_isReadOnlyBackend) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
@@ -1208,5 +1213,19 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         )->getFirst();
 
         return $groupId['uidnumber'][0];
+    }
+
+    protected function isReadOnlyUser(string|int|null $userId): bool
+    {
+        if ($this->_isReadOnlyBackend) {
+            return true;
+        }
+        if (null !== $this->_writeGroup) {
+            if (null === $this->_writeGroupMembers) {
+                $this->_writeGroupMembers = array_fill_keys(Tinebase_Group::getInstance()->getGroupMembers($this->_writeGroup), false);
+            }
+            return $this->_writeGroupMembers[$userId] ?? true;
+        }
+        return false;
     }
 }
