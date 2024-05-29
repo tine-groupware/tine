@@ -633,7 +633,12 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         if ($isReversal) {
             $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
                 new Zend_Locale($this->{self::FLD_DOCUMENT_LANGUAGE}));
-            $this->{self::FLD_DOCUMENT_TITLE} = $translation->_('Reversal') . ': ' . $this->{self::FLD_DOCUMENT_TITLE};
+            $this->{self::FLD_DOCUMENT_TITLE} = $translation->_('Reversal') . ' ' .  implode(', ',
+                    array_reduce($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}, function($carry, $document) {
+                        array_push($carry, $document->{Sales_Model_Document_Abstract::FLD_DOCUMENT_NUMBER});
+                        return $carry;
+                    }, [])) .
+                ': ' . $this->{self::FLD_DOCUMENT_TITLE};
 
             /** @var Sales_Model_Document_TransitionSource $record */
             foreach ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS}
