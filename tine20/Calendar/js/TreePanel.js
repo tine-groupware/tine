@@ -319,7 +319,7 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         const rootId = this.getRootNode().id;
         const nodeId = treePath.split('/').pop();
         const node = this.getNodeById(nodeId);
-        const isResource = !!node.attributes?.xprops?.Calendar?.Resource && node.attributes?.model === 'Calendar_Model_Event';
+        const isResource = !!node?.attributes?.xprops?.Calendar?.Resource && node?.attributes?.model === 'Calendar_Model_Event';
         
         if (isResource) treePath = treePath.replace(`${rootId}/shared`, `${rootId}/resources`);
         
