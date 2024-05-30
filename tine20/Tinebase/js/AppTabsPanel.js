@@ -131,7 +131,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
                     const v = f.getRawValue();
                     this.menu.items.get(0).items.each((appItem) => {
                         if (appItem !== f) {
-                            appItem.setVisible(!v || appItem.text.match(v));
+                            appItem.setVisible(!v || appItem.text.match(new RegExp(v, 'i')));
                         }
                     });
                 }
