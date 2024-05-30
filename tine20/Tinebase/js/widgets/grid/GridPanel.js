@@ -2522,6 +2522,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     setFullScreen(fullScreen = true) {
         if (!this.detailsPanel) return;
         this.detailsPanel.isInFullScreenMode = fullScreen;
+        this.detailsPanel.onToolbarResize();
         if (!fullScreen) {
             Tine.Tinebase.viewport.tineViewportMaincardpanel.remove(this.detailsPanel, false);
             const latestActive = Tine.Tinebase.viewport.tineViewportMaincardpanel.layout.lastActiveItem;
