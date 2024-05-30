@@ -235,16 +235,27 @@ class Tinebase_FileSystem_RecordAttachments
         }
 
         if (empty($name)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
-                ' Could not evaluate attachment name.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Could not evaluate attachment name.');
+            }
             return null;
         }
-        
+
+        if (mb_strlen($name) > 255) {
+            $name = mb_substr($name, 0, 255);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Attachment name too long,
+                 truncating to ' . $name);
+            }
+        }
         $attachmentsDir = $this->getRecordAttachmentPath($record, TRUE);
         $attachmentPath = $attachmentsDir . '/' . $name;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .
-            ' Creating new record attachment ' . $attachmentPath);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug( __METHOD__ . ':: ' . __LINE__ . ' Creating new record attachment '
+                . $attachmentPath);
+        }
         if ($this->_fsController->fileExists($attachmentPath)) {
             throw new Tinebase_Exception_Duplicate('File already exists');
         }
