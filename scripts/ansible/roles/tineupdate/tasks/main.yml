@@ -6,10 +6,10 @@
   run_once: true
   when: tine20_activate_maintenance_mode|bool
 
-- include: repo.yml
+- include_tasks: repo.yml
   when: tine20_packages is not defined
 
-- include: tarball.yml
+- include_tasks: tarball.yml
   when: tine20_packages is defined
 
 - name: run tine20 update script
