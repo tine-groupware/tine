@@ -74,6 +74,8 @@ abstract class Tinebase_Import_Db_Abstract
                 . ' (failcount: ' . $failcount . ' | skipcount: ' . $skipcount . ')');
         }
 
+        $this->_onAfterImport();
+
         return $importedIds;
     }
 
@@ -101,7 +103,11 @@ abstract class Tinebase_Import_Db_Abstract
     abstract protected function _getRecord($row): Tinebase_Record_Interface;
     abstract protected function _getController(): Tinebase_Controller_Record_Abstract;
 
-    protected function _onAfterImportRecord(Tinebase_Record_Interface $record, array $row)
+    protected function _onAfterImportRecord(Tinebase_Record_Interface $record, array $row): void
+    {
+    }
+
+    protected function _onAfterImport(): void
     {
     }
 
