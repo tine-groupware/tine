@@ -1126,7 +1126,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
                 const requiredGrants = _.get(this.modelConfig, `fields[${f.fieldName}].requiredGrants`);
                 if (requiredGrants) {
-                    hasRequiredGrants = hasRequiredGrants && ( recordGrants.adminGrant || requiredGrants.some((requiredGrant) => { return recordGrants[requiredGrant] }));
+                    hasRequiredGrants = hasRequiredGrants && ( recordGrants.adminGrant || requiredGrants?.some((requiredGrant) => { return recordGrants[requiredGrant] }));
                 }
 
                 // NOTE: requiredGrant is UI only property
