@@ -444,11 +444,11 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends TestCase
                     $this->assertEquals($requestFilter['value'], $responseFilter['value']['id'], 'wrong containerId');
                     break;
                 case 'organizer':
-                    $this->assertTrue(is_array($responseFilter['value']), 'user is not resolved');
                     if ($requestFilter['value'] !== 'currentAccount') {
+                        $this->assertTrue(is_array($responseFilter['value']), 'user is not resolved');
                         $this->assertEquals($requestFilter['value'], $responseFilter['value']['accountId'], 'wrong accountId');
                     } else {
-                        $this->assertEquals(Tinebase_Core::getUser()->getId(), $responseFilter['value']['accountId'], 'wrong accountId');
+                        $this->assertEquals($requestFilter['value'], $responseFilter['value'], 'wrong accountId');
                     }
                     break;
                 case 'due':

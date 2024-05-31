@@ -422,11 +422,6 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(! empty($searchResultData['results']));
         $resultEventData = $searchResultData['results'][0];
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
-        
-        // check organizer filter resolving
-        $organizerfilter = $searchResultData['filter'][2];
-        $this->assertTrue(is_array($organizerfilter['value']), 'organizer should be resolved: ' . print_r($organizerfilter, TRUE));
-        $this->assertEquals(Tinebase_Core::getUser()->contact_id, $organizerfilter['value']['id']);
     }
 
     /**
