@@ -24,7 +24,7 @@ Tine.widgets.grid.FilterPanel = function(config) {
     // become filterPlugin
     Ext.applyIf(this, new Tine.widgets.grid.FilterPlugin());
     
-    this.filterPanels = [];
+    this.filterToolbars = [];
     
     this.addEvents(
         /**
@@ -88,7 +88,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     syncFields: true,
     
     initComponent: function() {
-        const filterToolbar = this.addFilterPanel();
+        const filterToolbar = this.addFilterToolbar();
         this.filterModelMap = filterToolbar.filterModelMap;
         this.activeFilterPanel = filterToolbar;
         
@@ -120,13 +120,6 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         }];
         
         Tine.widgets.grid.FilterPanel.superclass.initComponent.call(this);
-        
-        if (this.useQuickFilter) {
-            this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin(Ext.apply({
-                syncFields: this.syncFields,
-            }, this.quickFilterConfig));
-            this.quickFilterPlugin.init(filterToolbar, this);
-        }
     },
     
     /**
@@ -172,64 +165,70 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         }
     },
     
-    onAddFilterPanel: function() {
-        var filterPanel = this.addFilterPanel();
-        this.setActiveFilterPanel(filterPanel);
+    onAddFilterToolbar: function() {
+        const filterToolbar = this.addFilterToolbar();
+        this.setActiveFilterToolbar(filterToolbar);
     },
     
-    addFilterPanel: function(config) {
+    addFilterToolbar: function(config) {
         config = config || {};
-        //FIXME: it always return FilterToolbar , should we rename it ?
-        var filterPanel = new Tine.widgets.grid.FilterToolbar(Ext.apply({}, this.filterToolbarConfig, config));
-        filterPanel.onFilterChange = this.onFilterChange.createDelegate(this);
-        
-        this.filterPanels[filterPanel.id] = filterPanel;
+        const filterToolbar = new Tine.widgets.grid.FilterToolbar(Ext.apply({}, this.filterToolbarConfig, config));
+        filterToolbar.onFilterChange = this.onFilterChange.createDelegate(this);
+        if (this.useQuickFilter) {
+            if (!this.quickFilterPlugin) {
+                this.quickFilterPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin(Ext.apply({
+                    syncFields: this.syncFields,
+                }, this.quickFilterConfig));
+            }
+            this.quickFilterPlugin.init(filterToolbar, this);
+        }
+        this.filterToolbars[filterToolbar.id] = filterToolbar;
         this.criteriaCount++;
         
-        if (this.criteriaCount > 1 && filterPanel.title == filterPanel.generateTitle()) {
-            filterPanel.setTitle(filterPanel.title + ' ' + this.criteriaCount);
+        if (this.criteriaCount > 1 && filterToolbar.title === filterToolbar.generateTitle()) {
+            filterToolbar.setTitle(filterToolbar.title + ' ' + this.criteriaCount);
         }
-        this.fireEvent('filterpaneladded', this, filterPanel);
-        return filterPanel;
+        this.fireEvent('filterpaneladded', this, filterToolbar);
+        return filterToolbar;
     },
     
     /**
      * remove filter panel
      * 
-     * @param {mixed} filterPanel
+     * @param {mixed} filterToolbar
      */
-    removeFilterPanel: function(filterPanel) {
-        filterPanel = Ext.isString(filterPanel) ? this.filterPanels[filterPanel] : filterPanel;
+    removeFilterToolbar: function(filterToolbar) {
+        filterToolbar = Ext.isString(filterToolbar) ? this.filterToolbars[filterToolbar] : filterToolbar;
         
-        if (! this.filterPanels[filterPanel.id].destroying) {
-            this.filterPanels[filterPanel.id].destroy();
+        if (! this.filterToolbars[filterToolbar.id].destroying) {
+            this.filterToolbars[filterToolbar.id].destroy();
         }
         
-        delete this.filterPanels[filterPanel.id];
+        delete this.filterToolbars[filterToolbar.id];
         this.criteriaCount--;
         
-        this.fireEvent('filterpanelremoved', this, filterPanel);
+        this.fireEvent('filterpanelremoved', this, filterToolbar);
         
-        for (var id in this.filterPanels) {
-            if (this.filterPanels.hasOwnProperty(id)) {
-                return this.setActiveFilterPanel(this.filterPanels[id]);
+        for (const id in this.filterToolbars) {
+            if (this.filterToolbars.hasOwnProperty(id)) {
+                return this.setActiveFilterToolbar(this.filterToolbars[id]);
             }
         }
     },
     
-    setActiveFilterPanel: function(filterPanel) {
-        filterPanel = Ext.isString(filterPanel) ? this.filterPanels[filterPanel] : filterPanel;
-        this.activeFilterPanel = filterPanel;
+    setActiveFilterToolbar: function(filterToolbar) {
+        filterToolbar = Ext.isString(filterToolbar) ? this.filterToolbars[filterToolbar] : filterToolbar;
+        this.activeFilterPanel = filterToolbar;
 
         if (this.layout.center) {
-            this.layout.center.panel.add(filterPanel);
-            this.layout.center.panel.layout.setActiveItem(filterPanel.id);
+            this.layout.center.panel.add(filterToolbar);
+            this.layout.center.panel.layout.setActiveItem(filterToolbar.id);
         }
         
-        filterPanel.doLayout();
+        filterToolbar.doLayout();
 
         // solve layout problems (#6332)
-        let parentSheet = filterPanel;
+        let parentSheet = filterToolbar;
         let activeSheet = parentSheet.activeSheet;
         while (activeSheet && activeSheet.activeSheet !== activeSheet) {
             parentSheet = activeSheet;
@@ -241,7 +240,7 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         
         this.manageHeight.defer(100, this);
         
-        this.fireEvent('filterpanelactivate', this, filterPanel);
+        this.fireEvent('filterpanelactivate', this, filterToolbar);
     },
 
     getQuickFilterField: function() {
@@ -255,10 +254,10 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     getValue: function() {
         const filters = [];
         
-        for (let id in this.filterPanels) {
-            if (this.filterPanels.hasOwnProperty(id) && this.filterPanels[id].isActive) {
-                const filterData = this.filterPanels[id].getValue();
-                filters.push({'condition': 'AND', 'filters': filterData, 'id': id, label: Ext.util.Format.htmlDecode(this.filterPanels[id].title)});
+        for (let id in this.filterToolbars) {
+            if (this.filterToolbars.hasOwnProperty(id) && this.filterToolbars[id].isActive) {
+                const filterData = this.filterToolbars[id].getValue();
+                filters.push({'condition': 'AND', 'filters': filterData, 'id': id, label: Ext.util.Format.htmlDecode(this.filterToolbars[id].title)});
             }
         }
         
@@ -267,12 +266,13 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
     },
 
     setValue: function(value) {
-        // save last filter ?
-        var prefs;
-        if ((prefs = this.filterToolbarConfig.app.getRegistry().get('preferences')) && prefs.get('defaultpersistentfilter') == '_lastusedfilter_') {
-            var lastFilterStateName = this.filterToolbarConfig.recordClass.getMeta('appName') + '-' + this.filterToolbarConfig.recordClass.getMeta('recordName') + '-lastusedfilter';
+        let id;
+// save last filter ?
+        let prefs;
+        if ((prefs = this.filterToolbarConfig.app.getRegistry().get('preferences')) && prefs.get('defaultpersistentfilter') === '_lastusedfilter_') {
+            const lastFilterStateName = this.filterToolbarConfig.recordClass.getMeta('appName') + '-' + this.filterToolbarConfig.recordClass.getMeta('recordName') + '-lastusedfilter';
             
-            if (Ext.encode(Ext.state.Manager.get(lastFilterStateName)) != Ext.encode(value)) {
+            if (Ext.encode(Ext.state.Manager.get(lastFilterStateName)) !== Ext.encode(value)) {
                 Tine.log.debug('Tine.widgets.grid.FilterPanel::setValue save last used filter');
                 Ext.state.Manager.set(lastFilterStateName, value);
             }
@@ -281,9 +281,9 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         // NOTE: value is always an array representing a filterGroup with condition AND (server limitation)!
         //       so we need to route "alternate criterias" (OR on root level) through this filterGroup for transport
         //       and scrape them out here -> this also means we whipe all other root level filters (could only be implicit once)
-        var alternateCriterias = false;
+        let alternateCriterias = false;
         Ext.each(value, function(filterData) {
-            if (filterData.condition && filterData.condition == 'OR') {
+            if (filterData.condition && filterData.condition === 'OR') {
                 value = filterData.filters;
                 alternateCriterias = true;
                 return false;
@@ -293,56 +293,54 @@ Ext.extend(Tine.widgets.grid.FilterPanel, Ext.Panel, {
         if (! alternateCriterias) {
             // reset criterias
             this.activeFilterPanel.setTitle(this.activeFilterPanel.generateTitle());
-            for (var id in this.filterPanels) {
-                if (this.filterPanels.hasOwnProperty(id)) {
-                    if (this.filterPanels[id] != this.activeFilterPanel) {
-                        this.removeFilterPanel(this.filterPanels[id]);
+            for (id in this.filterToolbars) {
+                if (this.filterToolbars.hasOwnProperty(id)) {
+                    if (this.filterToolbars[id] !== this.activeFilterPanel) {
+                        this.removeFilterToolbar(this.filterToolbars[id]);
                     }
                 }
             }
             
             this.activeFilterPanel.setValue(value);
-
         } 
         
         // OR condition on root level
         else {
-            var keepFilterPanels = [],
+            const keepFilterPanels = [],
                 activeFilterPanel = this.activeFilterPanel;
             
             Ext.each(value, function(filterData) {
-                var filterPanel;
+                let filterToolbar;
                 
                 // refresh existing filter panel
-                if (filterData.id && this.filterPanels.hasOwnProperty(filterData.id)) {
-                    filterPanel = this.filterPanels[filterData.id];
+                if (filterData.id && this.filterToolbars.hasOwnProperty(filterData.id)) {
+                    filterToolbar = this.filterToolbars[filterData.id];
                 }
                 
                 // create new filterPanel
                 else {
                     // NOTE: don't use filterData.id here, it's a ext-comp-* which comes from a different session
                     // and might be a totally different element yet.
-                    filterPanel = this.addFilterPanel();
-                    this.setActiveFilterPanel(filterPanel);
+                    filterToolbar = this.addFilterToolbar();
+                    this.setActiveFilterToolbar(filterToolbar);
                 }
                 
-                filterPanel.setValue(filterData.filters);
-                keepFilterPanels.push(filterPanel.id);
+                filterToolbar.setValue(filterData.filters);
+                keepFilterPanels.push(filterToolbar.id);
                 
                 if (filterData.label) {
-                    filterPanel.setTitle(Ext.util.Format.htmlEncode(filterData.label));
+                    filterToolbar.setTitle(Ext.util.Format.htmlEncode(filterData.label));
                 }
                 
             }, this);
             
             // (re)activate filterPanel
-            this.setActiveFilterPanel(keepFilterPanels.indexOf(activeFilterPanel.id) > 0 ? activeFilterPanel : keepFilterPanels[0]);
-            
+            this.setActiveFilterToolbar(keepFilterPanels.indexOf(activeFilterPanel.id) > 0 ? activeFilterPanel : keepFilterPanels[0]);
             
             // remove unused panels
-            for (var id in this.filterPanels) {
-                if (this.filterPanels.hasOwnProperty(id) && keepFilterPanels.indexOf(id) < 0 && this.filterPanels[id].isActive == true) {
-                    this.removeFilterPanel(id);
+            for (id in this.filterToolbars) {
+                if (this.filterToolbars.hasOwnProperty(id) && keepFilterPanels.indexOf(id) < 0 && this.filterToolbars[id].isActive === true) {
+                    this.removeFilterToolbar(id);
                 }
             }
         }
