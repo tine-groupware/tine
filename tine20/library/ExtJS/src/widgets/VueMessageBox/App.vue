@@ -107,9 +107,11 @@ const closeBox = () => {
   }
 }
 
+const buttonOrder = ['cancel', 'no', 'yes', 'ok']
+
 const buttonToShow = computed(() => {
   if (props.opt.buttons) {
-    return Object.keys(props.opt.buttons).map(buttonName => {
+    return buttonOrder.filter( el => Object.keys(props.opt.buttons).includes(el)).map(buttonName => {
       return {
         clickHandler: () => {
           ExtEventBus.emit("buttonClicked", {
@@ -120,7 +122,7 @@ const buttonToShow = computed(() => {
         name: props.otherConfigs.buttonText[buttonName],
         class: `${buttonName}-button`
       }
-    });
+    })
   } else {
     return []
   }
