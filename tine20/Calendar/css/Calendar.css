@@ -235,10 +235,10 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
     font-style: italic !important;
 }
 
-.cal-status-CANCELED,
-.cal-status-CANCELED .cal-daysviewpanel-event-body,
-.cal-status-CANCELED .cal-daysviewpanel-event-header-inner,
-.cal-status-CANCELED .x-grid3-cell-inner {
+.cal-status-CANCELLED,
+.cal-status-CANCELLED .cal-daysviewpanel-event-body,
+.cal-status-CANCELLED .cal-daysviewpanel-event-header-inner,
+.cal-status-CANCELLED .x-grid3-cell-inner {
     text-decoration: line-through !important;
     opacity: 0.7;
 }
