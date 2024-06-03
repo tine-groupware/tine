@@ -127,12 +127,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * the (extra) quick filter field. 
      */
     getQuickFilterRowField: function() {
-        if (! this.quickFilterRow) {
+        if (!this.quickFilterRow || this.ftb.filterStore.find('field', 'query') === -1) {
             // NOTE: at this point there is no query filter in the filtertoolbar
-            var filter = new this.ftb.record({field: this.quickFilterField, value: this.quickFilter.getValue()});
-            this.ftb.addFilter(filter);
+            this.quickFilterRow = new this.ftb.record({field: this.quickFilterField, value: this.quickFilter.getValue()});
+            this.ftb.addFilter(this.quickFilterRow);
         }
-        
         return this.quickFilterRow;
     },
     
@@ -162,7 +161,7 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
         this.ftb.getQuickFilterField = this.getQuickFilterField.createDelegate(this);
         this.ftb.getQuickFilterPlugin = this.getQuickFilterPlugin.createDelegate(this);
         
-        this.quickFilter = new Ext.ux.SearchField({
+        this.quickFilter = this.quickFilter ?? new Ext.ux.SearchField({
             width: 300,
             enableKeyEvents: true
         });
@@ -229,14 +228,12 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Ext.data.Record} filter
      */
     onAddFilter: function(filter) {
-        if (filter.get('field') == this.quickFilterField && ! this.quickFilterRow) {
+        if (filter.get('field') === this.quickFilterField && ! this.quickFilterRow) {
             this.quickFilterRow = filter;
             this.bind();
-            
             // preset quickFilter with filterrow value
             this.syncField(filter.formFields.value);
         }
-        
     },
     
     /**
@@ -259,11 +256,11 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * called when a filter field of the filtertoolbar changes
      */
     onFieldChange: function(filter, newField) {
-        if (filter == this.quickFilterRow) {
+        if (filter === this.quickFilterRow) {
             this.onBeforeDeleteFilter(filter);
         }
         
-        if (newField == this.quickFilterField) {
+        if (newField === this.quickFilterField) {
             this.onAddFilter(filter);
         }
     },
@@ -294,14 +291,14 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Ext.data.Record} filter
      */
     onBeforeDeleteFilter: function(filter) {
-        if (filter == this.quickFilterRow) {
+        if (filter === this.quickFilterRow) {
             this.quickFilter.setValue('');
             this.unbind();
             delete this.quickFilterRow;
             
-            // look for an other quickfilterrow
+            // look for another quickfilterrow
             this.ftb.filterStore.each(function(f) {
-                if (f != filter && f.get('field') == this.quickFilterField ) {
+                if (f !== filter && f.get('field') === this.quickFilterField ) {
                     this.onAddFilter(f);
                     return false;
                 }
@@ -441,8 +438,9 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
      * @param {Ext.form.Field} field
      */
     syncField: function(field) {
+        const quickFilterRow = this.getQuickFilterRowField();
         if (field === this.quickFilter) {
-            this.getQuickFilterRowField().formFields.value.setValue(this.quickFilter.getValue());
+            quickFilterRow.formFields.value.setValue(this.quickFilter.getValue());
         } else {
             this.quickFilter.setValue(this.quickFilterRow.formFields.value.getValue());
         }
