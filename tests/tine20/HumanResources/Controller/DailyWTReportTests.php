@@ -87,6 +87,16 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         $result = $result->{HumanResources_Model_MonthlyWTReport::FLDS_CORRECTIONS}->getFirstRecord();
         $this->assertNotNull($result);
         $this->assertSame($monthlyCorrection->getId(), $result->getId());
+
+        $paging = new Tinebase_Model_Pagination(array(
+            'start' => 0,
+            'limit' => 0,
+            'sort' => 'employee_id',
+            'dir' => 'ASC'
+
+        ));
+
+        $result = HumanResources_Controller_MonthlyWTReport::getInstance()->search(null , $paging)->getFirstRecord();
     }
 
     public function testCalculateAllReports()
