@@ -434,24 +434,24 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     arrangeButtons: function() {
 
-        var numFilters = this.filterStore.getCount();
+        const numFilters = this.filterStore.getCount();
         
-        if (numFilters == 0) {
+        if (numFilters === 0) {
             Tine.log.info('Tine.widgets.grid.FilterToolbar::arrangeButtons no filters found!');
             return;
         }
         
-        var firstId = this.filterStore.getAt(0).id;
-        var lastId = this.filterStore.getAt(numFilters-1).id;
+        const firstId = this.filterStore.getAt(0).id;
+        const lastId = this.filterStore.getAt(numFilters-1).id;
         
         this.filterStore.each(function(filter){
-            var tr = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
+            const tr = this.bwrap.child('tr[id='+ this.frowIdPrefix + filter.id + ']');
             
             if (tr) {
                 tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = '<span style="width: 25px; display: inline-block">' + i18n._(this.conjunctionOperator) + '<span>';
             }
             
-            if (filter.id == lastId) {
+            if (filter.id === lastId) {
                 if (tr) {
                     // move add filter button
                     tr.child('td[class=tw-ftb-frow-pbutton]').insertFirst(this.actions.addFilterRow.getEl());
@@ -474,7 +474,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                 this.actions.saveFilter.setVisible(this.allowSaving);
             }
             
-            if (filter.id == firstId) {
+            if (filter.id === firstId) {
                 if (tr) {
                     tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = this.rowPrefix;
                 }
