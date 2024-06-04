@@ -235,11 +235,9 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
         
         try {
             $this->_moveMessagesInFolderOnSameAccount($_messagesInFolder, $targetFolder);
-            if ($_messagesInFolder->getFirstRecord()->message_id !== null) {
-                Felamimail_Controller_Cache_Message::getInstance()->deleteExpectedAnswer(
-                    $_messagesInFolder->getFirstRecord()->message_id
-                );
-            }
+            Felamimail_Controller_Cache_Message::getInstance()->deleteExpectedAnswer(
+                $_messagesInFolder->message_id
+            );
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
             . ' No trash folder found - skipping messages in this folder.');
