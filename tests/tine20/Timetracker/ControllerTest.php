@@ -315,6 +315,10 @@ class Timetracker_ControllerTest extends TestCase
      */
     public function testSearchTS()
     {
+        // activate fulltext query filter
+        Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
+            ->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = true;
+        
         Tinebase_Core::setUser($this->_personas['jmcblack']);
 
         $this->_objects['timesheet']['account_id'] = $this->_personas['jmcblack']->getId();
@@ -335,6 +339,10 @@ class Timetracker_ControllerTest extends TestCase
 
         $result = $this->_timesheetController->search($filter)->toArray();
         $this->assertArrayHasKey('is_billable_combined', $result[0]);
+
+        // reset fulltext query filter
+        Tinebase_Config::getInstance()->{Tinebase_Config::FULLTEXT}
+            ->{Tinebase_Config::FULLTEXT_QUERY_FILTER} = false;
     }
 
     public function testSearchOwnTSNoGrant()
@@ -625,6 +633,16 @@ class Timetracker_ControllerTest extends TestCase
 
                 $result = $this->_timesheetController->search($filter);
                 $this->assertEquals($_expect, count($result));
+
+                $filter = new Timetracker_Model_TimesheetFilter(array(
+                    array(
+                        'field' => 'query',
+                        'operator' => 'contains',
+                        'value' => 'zzzzz'
+                    ),
+                ));
+                $result = $this->_timesheetController->search($filter);
+                $this->assertEquals(0, count($result));
                 break;
             case 'searchTSExport':
 
