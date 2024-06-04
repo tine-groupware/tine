@@ -836,9 +836,12 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         if ($opts->d) {
             echo "--DRY RUN--\n";
+            $dryrun = true;
+        } else {
+            $dryrun = false;
         }
 
-        $updated = Admin_Controller_EmailAccount::getInstance()->updateSieveScript(null, $opts->d);
+        $updated = Admin_Controller_EmailAccount::getInstance()->updateSieveScript(null, $dryrun);
 
         echo "Updated sieve script for " . count($updated) . " email accounts\n";
         return 0;
