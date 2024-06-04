@@ -1424,7 +1424,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             } else {
                 // check SSL (certificate expired...)
                 if ($port === 993 || $port === 587) {
-                    $command = 'openssl s_client -connect ' . $host . ':993 -quiet -verify_return_error 2>&1';
+                    $command = 'echo -n Q | openssl s_client -connect ' . $host . ':993 2>&1';
                     exec($command, $output, $result_code);
                     $output = print_r($output, true);
 
