@@ -50,6 +50,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
         self::DELEGATED_ACL_FIELD => 'division_id',
 
         'titleProperty'     => '{{number}} {{n_fn}}',
+        self::DEFAULT_SORT_INFO => [self::FIELD => 'number'],
         'appName'           => 'HumanResources',
         'modelName'         =>  self::MODEL_NAME_PART,
 
