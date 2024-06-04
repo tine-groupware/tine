@@ -144,6 +144,48 @@ class HumanResources_Controller_DailyWTReportTests extends HumanResources_TestCa
         $this->assertArrayHasKey('id', $reportMonthlyDeleted['results'][0]['employee_id']);
     }
 
+    public function testTsEndMidnight()
+    {
+        $this->_createBasicData();
+
+        $today = Tinebase_DateTime::today()->format('Y-m-d');
+        $yesterday = Tinebase_DateTime::today()->subDay(1)->format('Y-m-d');
+
+        $this->wtTAid = HumanResources_Controller_WorkingTimeScheme::getInstance()
+            ->getWorkingTimeAccount($this->employee)->getId();
+        Timetracker_Controller_Timesheet::getInstance()->create(new Timetracker_Model_Timesheet([
+            'start_date' => $yesterday,
+            'start_time' => '10:00',
+            'end_time' => '11:00',
+            'duration' => 0,
+            'description' => 'bla',
+            'account_id' => $this->employee->account_id,
+            'timeaccount_id' => $this->wtTAid,
+        ]));
+        Timetracker_Controller_Timesheet::getInstance()->create(new Timetracker_Model_Timesheet([
+            'start_date' => $yesterday,
+            'start_time' => '20:00',
+            'end_time' => '00:00',
+            'duration' => 0,
+            'description' => 'bla',
+            'account_id' => $this->employee->account_id,
+            'timeaccount_id' => $this->wtTAid,
+        ]));
+
+
+        // create report
+        $start = new Tinebase_DateTime($yesterday . ' 00:00:00');
+        $end = new Tinebase_DateTime($today . ' 23:59:59');
+        HumanResources_Controller_DailyWTReport::getInstance()->calculateReportsForEmployee($this->employee, $start, $end);
+
+        $result = $this->_getReportsForEmployee($this->employee);
+        /** @var HumanResources_Model_DailyWTReport $report */
+        $report = $result->find('date', $yesterday . ' 00:00:00');
+        $this->assertSame(5 * 3600, (int)$report->working_time_total);
+        $report = $result->find('date', $today . ' 00:00:00');
+        $this->assertSame(0, (int)$report->working_time_total);
+    }
+
     public function testMoveTSdate()
     {
         $this->_createBasicData();
