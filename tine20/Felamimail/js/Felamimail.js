@@ -905,45 +905,43 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * show felamimail credentials dialog
      *
      * @param {Tine.Felamimail.Model.Account} account
-     * @param {String} username [optional]
+     * @param username
      */
     showCredentialsDialog: function(account, username) {
+        const accountId = account.id;
         Tine.Felamimail.credentialsDialog = Tine.widgets.dialog.CredentialsDialog.openWindow({
             windowTitle: String.format(this.i18n._('IMAP Credentials for {0}'), account.get('name')),
             appName: 'Felamimail',
-            credentialsId: account.id,
+            credentialsId: accountId,
             i18nRecordName: this.i18n._('Credentials'),
             recordClass: Tine.Tinebase.Model.Credentials,
             record: new Tine.Tinebase.Model.Credentials({
-                id: account.id,
-                username: username ? username : ''
+                id: accountId,
+                username: username ?? ''
             }),
             listeners: {
                 scope: this,
                 'update': function(data) {
-                    var folderStore = this.getFolderStore();
-                    if (folderStore.queriesPending.length > 0) {
-                        // reload all folders of account and try to select inbox
-                        var accountId = folderStore.queriesPending[0].substring(16, 56),
-                            account = this.getAccountStore().getById(accountId),
-                            accountNode = this.getMainScreen().getTreePanel().getNodeById(accountId);
-
-                        folderStore.resetQueryAndRemoveRecords('parent_path', '/' + accountId);
-                        account.set('all_folders_fetched', true);
-                        account.commit();
-
-                        accountNode.loading = false;
-                        accountNode.reload(function(callback) {
-                            Ext.each(accountNode.childNodes, function(node) {
-                                if (Ext.util.Format.lowercase(node.attributes.localname) == 'inbox') {
-                                    node.select();
-                                    return false;
-                                }
-                            }, this);
-                        });
-                    } else {
-                        this.checkMailsDelayedTask.delay(0);
-                    }
+                    // reload all folders of account and try to select inbox
+                    const account = this.getAccountStore().getById(accountId);
+                    const accountNode = this.getMainScreen().getTreePanel().getNodeById(accountId);
+                    
+                    const folderStore = this.getFolderStore();
+                    folderStore.queriesDone.remove(folderStore.getKey('parent_path', '/' + accountId));
+                    folderStore.resetQueryAndRemoveRecords('parent_path', '/' + accountId);
+                    account.set('all_folders_fetched', true);
+                    account.commit();
+                    
+                    accountNode.loading = false;
+                    accountNode.reload(function(callback) {
+                        Ext.each(accountNode.childNodes, function(node) {
+                            if (Ext.util.Format.lowercase(node.attributes.localname) === 'inbox') {
+                                node.select();
+                                return false;
+                            }
+                        }, this);
+                    });
+                    this.checkMailsDelayedTask.delay(0);
                 }
             }
         });
