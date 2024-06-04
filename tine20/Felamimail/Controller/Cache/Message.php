@@ -937,7 +937,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if ($cachedMessage && isset($_message['header']['in-reply-to'])) {
            if(!((isset($_message['header']['auto-submitted']) && $_message['header']['auto-submitted'] == "auto-replied (vacation)") ||
                (isset($_message['header']['x-auto-suppress']) && $_message['header']['x-auto-suppress'] == "All"))) {
-              $this->deleteExpectedAnswer($_message['header']['in-reply-to']);
+              $this->deleteExpectedAnswer([$_message['header']['in-reply-to']]);
             }
         }
 
@@ -1043,14 +1043,14 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     /**
      * delete message from expected answer table if answer arrived
      *
-     * @param string $message_id
+     * @param array $message_ids
      * @return void
      */
-    public function deleteExpectedAnswer(string $message_id): void
+    public function deleteExpectedAnswer(array $message_ids): void
     {
         $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
             Felamimail_Model_MessageExpectedAnswer::class, [
-            ['field' => Felamimail_Model_MessageExpectedAnswer::FLD_MESSAGE_ID, 'operator' => 'equals', 'value' => $message_id],
+            ['field' => Felamimail_Model_MessageExpectedAnswer::FLD_MESSAGE_ID, 'operator' => 'in', 'value' => $message_ids],
         ]);
         Felamimail_Controller_MessageExpectedAnswer::getInstance()->deleteByFilter($filter);
     }
