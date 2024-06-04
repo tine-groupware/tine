@@ -1420,6 +1420,28 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $result = $result_code;
             if ($result > 0) {
                 $error .= '| ' . $server . ' on ' . $host . ' failed';
+                break;
+            } else {
+                // check SSL (certificate expired...)
+                if ($port === 993 || $port === 587) {
+                    $command = 'openssl s_client -connect ' . $host . ':993 -quiet -verify_return_error 2>&1';
+                    exec($command, $output, $result_code);
+                    $output = print_r($output, true);
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . PHP_EOL . 'openssl command: ' . $command
+                            . PHP_EOL . 'result code : ' . $result_code
+                            . PHP_EOL . 'output : ' . $output
+                        );
+                    };
+
+                    $result = $result_code;
+                    if ($result > 0) {
+                        $error .= '| ' . $server . ' on ' . $host . ' failed';
+                        break;
+                    }
+                }
             }
         }
 

@@ -6,7 +6,7 @@
  * @subpackage  Address
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2013-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -69,7 +69,7 @@ class Sales_Model_Address extends Tinebase_Record_NewAbstract
         self::CREATE_MODULE => false,
         self::IS_DEPENDENT  => true,
         self::TITLE_PROPERTY => "{% if debitor_id.number %}{{ debitor_id.number }} {% endif %}{% if name_shorthand %}'{{ name_shorthand }}' {% endif %}{% if name %}{{ name }} {% endif %}{% if email %}{{ email }} {% endif %}{% if prefix1 %}{{ prefix1 }}{% if prefix2 %} {% else %}, {% endif %}{% endif %}{% if prefix2 %}{{ prefix2 }}, {% endif %}{% if postbox %}{{ postbox }}, {% elseif street %}{{ street }}, {% endif %}{% if postalcode %}{{ postalcode }} {% endif %}{% if locality %}{{ locality }} {% endif %}({{ type }})",
-
+        self::DEFAULT_SORT_INFO => [self::FIELD => self::FLD_NAME],
         self::EXPOSE_JSON_API => true,
         'resolveRelated'  => TRUE,
         'defaultFilter'   => 'query',

@@ -261,7 +261,22 @@ class Tinebase_ApplicationTest extends TestCase
             }
         }
     }
-    
+
+    public function testSanityCheckModelsOfAllApplications()
+    {
+        /** @var Tinebase_Record_Interface $model */
+        foreach(Tinebase_Application::getInstance()->getModelsOfAllApplications() as $model) {
+            if (!($mc = $model::getConfiguration())) {
+                continue;
+            }
+
+            if (!empty($mc->table) && $mc->titleProperty && strpos($mc->titleProperty, '{{') !== false) {
+                $this->assertIsArray($mc->defaultSortInfo, $model);
+                $this->assertArrayHasKey('field', $mc->defaultSortInfo, $model);
+            }
+        }
+    }
+
     /**
      * Test
      */
