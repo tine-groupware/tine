@@ -39,6 +39,11 @@ class Sales_Model_Document_DivisionFilter extends Tinebase_Model_Filter_ForeignR
 
     public function setValue($_value)
     {
+        // e.g. from persistent filter
+        if (isset($_value[0]['field']) && $_value[0]['field'] === 'division_id') {
+            $_value = $_value[0]['value'];
+        }
+
         $value = [
             [TMFA::FIELD => Sales_Model_Debitor::FLD_DIVISION_ID, TMFA::OPERATOR => $this->_orgOrgOperator, TMFA::VALUE => $_value],
         ];
