@@ -90,6 +90,9 @@ class HumanResources_BL_DailyWTReport_Data implements Tinebase_BL_DataInterface
             }
             if ($timeSheet->end_time) {
                 $timeSlot->end = new Tinebase_DateTime($timeSheet->start_date->format('Y-m-d ') . $timeSheet->end_time);
+                if ('00:00:00' === $timeSheet->end_time && $timeSheet->duration > 0) {
+                    $timeSlot->end->addDay(1);
+                }
             } else {
                 $timeSlot->end = $timeSlot->start->getClone()->addMinute($timeSheet->duration);
             }

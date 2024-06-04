@@ -6,7 +6,7 @@
  * @package     Sales
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2021-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2021-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
@@ -51,6 +51,7 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
         self::RECORD_NAME => self::MODEL_NAME_PART,
         self::RECORDS_NAME => 'Boilerplates', // ngettext('Boilerplate', 'Boilerplates', n)
         self::TITLE_PROPERTY => "{{ name }}{% if locally_changed %} (individuell){% elseif customer or from or until %} ( {% if customer %}customerspecific {% endif %}{% if from %}from {{ from |date('Y/m/d') }} {% endif %}{% if until %}until {{ until |date('Y/m/d') }}{% endif %}){% endif %}", //self::FLD_NAME,
+        self::DEFAULT_SORT_INFO => [self::FIELD => self::FLD_NAME],
 
         self::HAS_RELATIONS => false,
         self::HAS_ATTACHMENTS => false,
