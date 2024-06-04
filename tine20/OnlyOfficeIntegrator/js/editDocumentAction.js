@@ -24,11 +24,23 @@ Promise.all([
 
         emailInterceptor: async function(config) {
             const mask = await config.setWaitText(app.i18n._('Preparing Attachment...'));
+            
+            const emailAttachment = config?.recordData?.cachePromises ? config.recordData : Tine.Tinebase.data.Record.setFromJson(config.recordData, Tine.Felamimail.Model.Attachment);
+            const partId = emailAttachment?.data?.partId.toString().split(':').pop();
 
-            const emailAttachment = Tine.Tinebase.data.Record.setFromJson(config.recordData, Tine.Felamimail.Model.Attachment);
-            const attachmentCache = await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', emailAttachment.get('messageId'), emailAttachment.get('partId')].join(':'));
-
-            config.recordData = _.get(attachmentCache, 'attachments[0]');
+            await Tine.Felamimail.getAttachmentCache(['Felamimail_Model_Message', emailAttachment.get('messageId'), partId].join(':'))
+                .then((response) => {
+                    config.recordData = _.get(response, 'attachments[0]');
+                })
+                .catch(async (e) => {
+                    if (emailAttachment?.cachePromises) {
+                        const responses = await Promise.all(emailAttachment.cachePromises);
+                        const validCache = responses.find((r) => {return r?.isPreviewReady});
+                        if (validCache?.cache?.data) {
+                            config.recordData = validCache.cache.data;
+                        }
+                    }
+                });
             mask.hide();
         },
 
@@ -36,7 +48,10 @@ Promise.all([
             const record = this.selections[0];
             const tempFile = record.get('tempFile');
             const isEmailAttachment = record.get('messageId');
-            const recordData = tempFile ? JSON.stringify(tempFile) : record.toString();
+            let recordData = tempFile ? JSON.stringify(tempFile) : record.toString();
+            if (isEmailAttachment) {
+                recordData = record;
+            }
             const win = Tine.OnlyOfficeIntegrator.OnlyOfficeEditDialog.openWindow({ recordData: recordData, id: record.id, contentPanelConstructorInterceptor: isEmailAttachment ? this.emailInterceptor : null });
         },
 
