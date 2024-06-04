@@ -4,7 +4,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2018-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -92,7 +92,7 @@ class HumanResources_Model_DailyWTReport extends Tinebase_Record_Abstract
         self::DELEGATED_ACL_FIELD => 'employee_id',
 
         self::TITLE_PROPERTY=> "{# {{date - sorting! #}{% if working_time_actual %}{{ working_time_actual |date('H:i', 'GMT')}}{% else %}00:00{% endif %} - {{ date | localizeddate('full', 'none', app.user.locale ) }}",
-
+        self::DEFAULT_SORT_INFO => [self::FIELD => 'date'],
 
         'associations' => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
