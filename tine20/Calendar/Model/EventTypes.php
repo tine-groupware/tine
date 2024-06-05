@@ -5,7 +5,7 @@
  * @package     Calendar
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
