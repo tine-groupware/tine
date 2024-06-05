@@ -6524,3 +6524,14 @@ msgstr "Anzahl Nullauffüllungen"
 
 msgid "Prefix"
 msgstr "Präfix"
+
+msgid "Evaluation Dimension"
+msgid_plural "Evaluation Dimensions"
+msgstr[0] "Bewertungsdimension"
+msgstr[1] "Bewertungsdimensionen"
+
+msgid "Sorting"
+msgstr "Sortierung"
+
+msgid "Configured Models"
+msgstr "Konfigurierte Models"
