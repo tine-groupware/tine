@@ -48,14 +48,14 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 
                 invoices.forEach((invoice) => {
                     const node = new Ext.tree.TreeNode({
-                        text: invoice.document_number ?? invoice.number,
+                        text: invoice?.document_number ?? invoice?.number ?? invoice?.fulltext,
                         id: invoice.id,
                         leaf: true,
                         expanded: invoice?.attachments?.length > 0,
                     });
         
                     invoice.attachments.forEach((attachment, idx) => {
-                        const isValid = modelName === 'Document_Invoice' ? 
+                        const isValid = ['Document_Invoice', 'Invoice'].includes(modelName) ? 
                             !(/.*(timesheet|resource|ip-volum).*/).test(attachment.name)
                             : true;
                         const attachmentNode = new Ext.tree.TreeNode({
@@ -140,7 +140,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
         });
     };
     
-    ['PurchaseInvoice', 'Document_Invoice'].forEach((modelName) => {
+    ['PurchaseInvoice', 'Document_Invoice', 'Invoice'].forEach((modelName) => {
         const configName = modelName === 'PurchaseInvoice' ? 'datevRecipientEmailsPurchaseInvoice' : 'datevRecipientEmailsInvoice';
         const datevRecipients = Tine.Tinebase.configManager.get(configName, 'Sales');
         if (!datevRecipients || datevRecipients.length === 0) return;
