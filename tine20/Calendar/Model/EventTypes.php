@@ -5,7 +5,7 @@
  * @package     Calendar
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2020-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Stefanie Stamer <s.stamer@metaways.de>
  */
 
@@ -35,6 +35,7 @@ class Calendar_Model_EventTypes extends Tinebase_Record_NewAbstract
         self::RECORD_NAME               => 'Event Type',
         self::RECORDS_NAME              => 'Event Types', // ngettext('Event Type', 'Event Types', n)
         self::TITLE_PROPERTY            => '{{ eventType.name }}',
+        self::DEFAULT_SORT_INFO         => [self::FIELD => self::FLD_EVENT_TYPE],
         self::HAS_RELATIONS             => false,
         self::HAS_CUSTOM_FIELDS         => false,
         self::HAS_SYSTEM_CUSTOM_FIELDS  => false,
