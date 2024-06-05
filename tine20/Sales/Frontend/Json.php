@@ -725,21 +725,36 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function exportInvoicesToDatevEmail(string $modelName, $invoiceData)
     {
-        $controller = $modelName === 'PurchaseInvoice' ? Sales_Controller_PurchaseInvoice::getInstance() 
-            : Sales_Controller_Document_Invoice::getInstance();
-        $senderConfig = $modelName === 'PurchaseInvoice' ? Sales_Config::DATEV_SENDER_EMAIL_PURCHASE_INVOICE
-            : Sales_Config::DATEV_SENDER_EMAIL_INVOICE;
+        $senderConfig = Sales_Config::DATEV_SENDER_EMAIL_INVOICE;
+        $recipientConfig = Sales_Config::DATEV_RECIPIENT_EMAILS_INVOICE;
+        $controller = null;
+        switch ($modelName) {
+            case 'PurchaseInvoice':
+                $senderConfig = Sales_Config::DATEV_SENDER_EMAIL_PURCHASE_INVOICE;
+                $recipientConfig = Sales_Config::DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE;
+                $controller = Sales_Controller_PurchaseInvoice::getInstance();
+                break;
+            case 'Document_Invoice':
+                $controller = Sales_Controller_Document_Invoice::getInstance();
+                break;
+            case 'Invoice':
+                $controller = Sales_Controller_Invoice::getInstance();
+                break;
+            default:
+                break;
+        }
         
         $invalidInvoiceIds = [];
         $validInvoiceIds = [];
         $errorMessage = null;
 
+        if (empty($controller)) {
+            throw new Tinebase_Exception_SystemGeneric('missing datev export controller');
+        }
+        
         $senderEmail = Sales_Config::getInstance()->get($senderConfig);
         $sender = !empty($senderEmail) ? Tinebase_User::getInstance()->getUserByProperty('accountEmailAddress', $senderEmail) 
             : Tinebase_Core::getUser();
-
-        $recipientConfig = $modelName === 'PurchaseInvoice' ? Sales_Config::DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE
-            : Sales_Config::DATEV_RECIPIENT_EMAILS_INVOICE;
         $recipientEmails = Sales_Config::getInstance()->get($recipientConfig);
         
         if (sizeof($recipientEmails) === 0) {
@@ -791,8 +806,8 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $result = $controller->updateMultiple($filter, ['last_datev_send_date' => $lastDatevSendTime->getIso()]);
             $result = $result['results'];
         }
-        if ($model === Sales_Model_Document_Invoice::class) {
-            $expander = new Tinebase_Record_Expander($model, Sales_Model_Document_Invoice::getConfiguration()->jsonExpander);
+        if ($model === Sales_Model_Document_Invoice::class || $model === Sales_Model_Invoice::class) {
+            $expander = new Tinebase_Record_Expander($model, $model::getConfiguration()->jsonExpander);
             $expander->expand($records);
             foreach ($records as $validInvoice) {
                 $validInvoice['last_datev_send_date'] = $lastDatevSendTime;

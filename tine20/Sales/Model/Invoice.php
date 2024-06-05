@@ -43,6 +43,8 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
     public const TABLE_NAME = 'sales_sales_invoices';
 
     public const FLD_DEBITOR_ID = 'debitor_id';
+    public const FLD_LAST_DATEV_SEND_DATE = 'last_datev_send_date';
+
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -292,7 +294,14 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                     'sortable' => false,
                     'type'   => 'string'
                 )
-            )
+            ),
+            self::FLD_LAST_DATEV_SEND_DATE       => [
+                self::LABEL                 => 'Last Datev send date', // _('Last Datev send date')
+                self::TYPE                  => self::TYPE_DATETIME,
+                self::VALIDATORS            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                self::NULLABLE              => true,
+                self::SHY                   => true,
+            ],
         )
     );
 
