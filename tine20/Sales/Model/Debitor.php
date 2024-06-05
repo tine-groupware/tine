@@ -45,6 +45,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
         self::EXPOSE_HTTP_API           => true,
         self::IS_DEPENDENT              => true,
         self::TITLE_PROPERTY            => "{{ number }} {{ name }}{% if division_id.title %} ({{ division_id.title }}){% endif %}",
+        self::DEFAULT_SORT_INFO         => [self::FIELD => self::FLD_NUMBER],
         self::CONTAINER_PROPERTY        => null,
         self::DELEGATED_ACL_FIELD       => self::FLD_DIVISION_ID,
 //        generic export is not so useful atm.

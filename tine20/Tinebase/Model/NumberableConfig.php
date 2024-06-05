@@ -46,6 +46,7 @@ class Tinebase_Model_NumberableConfig extends Tinebase_Record_NewAbstract
         self::RECORD_NAME           => 'Numbering Range', // gettext('GENDER_Numbering Range')
         self::RECORDS_NAME          => 'Numbering Ranges', // ngettext('Numbering Range', 'Numbering Ranges', n)
         self::TITLE_PROPERTY        => '{{ model }} {{ property }} {{ additional_key }}',
+        self::DEFAULT_SORT_INFO     => [self::FIELD => self::FLD_MODEL],
         self::UI_CONFIG             => [
             'allowCreateNew'            => false,
             'allowDelete'               => false,
