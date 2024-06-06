@@ -48,8 +48,15 @@ abstract class Tinebase_Record_Expander_Abstract
         }
         if (isset($_expanderDefinition[self::EXPANDER_PROPERTIES])) {
             foreach ($_expanderDefinition[self::EXPANDER_PROPERTIES] as $prop => $definition) {
-                $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($_model, $definition, $prop,
-                    $this->_rootExpander);
+                try {
+                    $this->_subExpanders[] = Tinebase_Record_Expander_Factory::create($_model, $definition, $prop,
+                        $this->_rootExpander);
+                } catch (Tinebase_Exception_InvalidArgument $teia) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' '
+                            . $teia->getMessage());
+                    }
+                }
             }
         }
         if (isset($_expanderDefinition[self::EXPANDER_PROPERTY_CLASSES])) {
