@@ -246,7 +246,9 @@ Tine.Tinebase.tineInit = {
                         const win = window.open(href, '_blank', null, true);
                         win.opener = null;
                     } else {
-                        window.opener.location.href = href;
+                        if (href !== window.opener.location.href) {
+                            window.opener.location.href = href;
+                        }
                     }
                 }
             } else {
