@@ -963,7 +963,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 ['id', 'notes' /*, 'attachments'*/]),
             fields = recordClass.getFieldNames(),
             fieldsToCopy = fields.diff(omitFields),
-            recordData = Ext.copyTo({}, record.data, fieldsToCopy),
+            recordData = Ext.copyTo({__meta: { phantom: true }}, record.data, fieldsToCopy),
             resetProperties = {
                 alarms:    ['id', 'record_id', 'sent_time', 'sent_message'],
                 relations: ['id', 'own_id', 'created_by', 'creation_time', 'last_modified_by', 'last_modified_time']
@@ -973,6 +973,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Ext.iterate(resetProperties, function(property, properties) {
             if (recordData.hasOwnProperty(property)) {
                 var r = recordData[property];
+                if (!r) return;
                 for (var index = 0; index < r.length; index++) {
                     Ext.each(properties,
                         function(prop) {
@@ -986,6 +987,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         Ext.iterate(setProperties, function(property, properties) {
             if (recordData.hasOwnProperty(property)) {
                 var r = recordData[property];
+                if (!r) return;
                 for (var index = 0; index < r.length; index++) {
                     Ext.iterate(properties,
                         function(prop, value) {

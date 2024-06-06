@@ -126,10 +126,10 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $defaultContainer = Tasks_Controller::getInstance()->getDefaultContainer();
         $defaultContainerArray = $defaultContainer->toArray();
         $defaultContainerArray['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultContainer)->toArray();
-        
-        
+
         $registryData = array(
-            'defaultContainer' => $defaultContainerArray
+            'defaultContainer' => $defaultContainerArray,
+            'templateContainer'=> Tasks_Config::getInstance()->{Tasks_Config::TEMPLATE_CONTAINER},
         );
         
         return $registryData;

@@ -34,8 +34,18 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
                 width: 130,
                 dataIndex: 'summary',
                 sortable: true,
-                quickaddField: new Ext.form.TextField({
-                    emptyText: this.app.i18n._('Add a task...')
+                quickaddField: new Ext.form.TriggerField({
+                    emptyText: this.app.i18n._('Add a task...'),
+                    maxLength: 255,
+                    hideTrigger: true,
+                    plugins: [{
+                        ptype: 'tasks.createFromTempalte',
+                        editDialogConfig: this.editDialogConfig,
+                        onTemplateSelect: (taskData) => {
+                            this.store.add(Tine.Tinebase.data.Record.setFromJson(taskData, Tine.Tasks.Model.Task));
+                            this.onCreate(taskData)
+                        }
+                    }]
                 })
             }, {
                 id: 'due',

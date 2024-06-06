@@ -76,6 +76,12 @@ msgstr[1] "Status"
 msgid "Completed"
 msgstr "Abgeschlossen"
 
+msgid "Tasks Template Container"
+msgstr "Vorlagen Ordner für Aufgaben"
+
+msgid "Container for task templates"
+msgstr "Ordner für Aufgaben Vorlagen"
+
 #: js/TaskGridPanel.js:54
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
@@ -295,6 +301,9 @@ msgstr "Telefon"
 #: Model/Task.php:327
 msgid "Email"
 msgstr "Email"
+
+msgid "Create from Template"
+msgstr "Von Vorlage erstellen"
 
 msgid "Depends on"
 msgstr "Hängt ab von"

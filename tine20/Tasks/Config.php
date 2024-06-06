@@ -37,6 +37,14 @@ class Tasks_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const TASK_PRIORITY = 'taskPriority';
+
+    /**
+     * Tasks Templates Container
+     *
+     * @var string containerId
+     */
+    const TEMPLATE_CONTAINER = 'templateContainer';
+
     
     /**
      * (non-PHPdoc)
@@ -106,6 +114,14 @@ class Tasks_Config extends Tinebase_Config_Abstract
                 'default' => 'NEEDS-ACTION'
             )
         ),
+        self::TEMPLATE_CONTAINER => [
+            self::LABEL                 => 'Tasks Template Container', // _('Tasks Template Container')
+            self::DESCRIPTION           => 'Container for task templates', // _('Container for task templates')
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => false,
+        ],
     );
     
     /**

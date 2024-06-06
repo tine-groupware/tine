@@ -9,6 +9,7 @@
  */
 
 import './TasksDueFilter';
+import './CreateFromTemplateAction';
 
 Ext.ns('Tine', 'Tine.Tasks');
 
