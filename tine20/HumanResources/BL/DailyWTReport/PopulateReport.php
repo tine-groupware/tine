@@ -6,7 +6,7 @@
  * @subpackage  BL
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -84,17 +84,18 @@ class HumanResources_BL_DailyWTReport_PopulateReport implements Tinebase_BL_Elem
             ($_data->result->working_time_target_correction ?: 0);
 
         if ($_data->bankHoliday) {
+            $bankHolidayWTT = round($workingTimeTarget * $_data->bankHoliday->{Tinebase_Model_BankHoliday::FLD_FRACTION});
             if ($workingTimeTarget > 0) {
                 $_data->result->working_times->addRecord(new HumanResources_Model_BLDailyWTReport_WorkingTime([
                     'id' => Tinebase_Record_Abstract::generateUID(),
                     HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_WAGE_TYPE =>
                         HumanResources_Model_WageType::ID_FEAST,
-                    HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $workingTimeTarget,
+                    HumanResources_Model_BLDailyWTReport_WorkingTime::FLDS_DURATION => $bankHolidayWTT,
                 ]));
             }
             $_data->result->system_remark = $_data->bankHoliday->{Tinebase_Model_BankHoliday::FLD_NAME};
-            $_data->result->working_time_total += $workingTimeTarget;
-            $_data->result->working_time_actual += $workingTimeTarget;
+            $_data->result->working_time_total += $bankHolidayWTT;
+            $_data->result->working_time_actual += $bankHolidayWTT;
         } elseif ($_data->freeTimes) {
             /** @var HumanResources_Model_FreeTime $freeTime */
             foreach ($_data->freeTimes as $freeTime) {

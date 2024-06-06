@@ -28,6 +28,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE007 = __CLASS__ . '::update007';
     protected const RELEASE017_UPDATE008 = __CLASS__ . '::update008';
     protected const RELEASE017_UPDATE009 = __CLASS__ . '::update009';
+    protected const RELEASE017_UPDATE010 = __CLASS__ . '::update010';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -62,6 +63,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE009 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update009',
+            ],
+            self::RELEASE017_UPDATE010 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update010',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE => [
@@ -277,5 +282,13 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             Tinebase_Model_EvaluationDimensionItem::class,
         ]);
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.9', self::RELEASE017_UPDATE009);
+    }
+
+    public function update010()
+    {
+        $this->updateSchema(Tinebase_Config::APP_NAME, [
+            Tinebase_Model_BankHoliday::class,
+        ]);
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.10', self::RELEASE017_UPDATE010);
     }
 }

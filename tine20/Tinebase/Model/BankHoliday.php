@@ -17,10 +17,11 @@ class Tinebase_Model_BankHoliday extends Tinebase_Record_NewAbstract
     const MODEL_NAME_PART = 'BankHoliday';
     const TABLE_NAME = 'bankholiday';
 
-    const FLD_NAME = 'name';
-    const FLD_DESCRIPTION = 'description';
-    const FLD_DATE = 'date';
     const FLD_CALENDAR_ID = 'calendar_id';
+    const FLD_DATE = 'date';
+    const FLD_DESCRIPTION = 'description';
+    const FLD_FRACTION = 'fraction';
+    const FLD_NAME = 'name';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -28,7 +29,7 @@ class Tinebase_Model_BankHoliday extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION       => 1,
+        self::VERSION       => 2,
         self::MODLOG_ACTIVE => true,
         self::IS_DEPENDENT  => true,
 
@@ -84,6 +85,11 @@ class Tinebase_Model_BankHoliday extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => false,
                     Zend_Filter_Input::PRESENCE => Zend_Filter_Input::PRESENCE_REQUIRED
                 ],
+            ],
+            self::FLD_FRACTION          => [
+                self::TYPE                  => self::TYPE_FLOAT,
+                self::LABEL                 => 'Fraction', // _('Fraction')
+                self::DEFAULT_VAL           => 1,
             ],
             self::FLD_NAME              => [
                 self::TYPE                  => self::TYPE_STRING,
