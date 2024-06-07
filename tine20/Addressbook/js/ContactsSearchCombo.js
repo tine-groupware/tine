@@ -33,7 +33,7 @@ Tine.Addressbook.ContactsSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Rec
     },
 
     setValue: async function (value) {
-        if (value && value.length && !value[0].account_id) {
+        if (value && value.length && _.isObject(value[0]) && !value[0].hasOwnProperty('account_id')) {
             // value is account record, but we need contacts!
             value = (await Tine.Addressbook.searchContacts([{field: 'id', operator: 'in', value: _.map(value, 'contact_id')}])).results;
         }

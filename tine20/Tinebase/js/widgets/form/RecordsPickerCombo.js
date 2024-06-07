@@ -72,8 +72,7 @@ Tine.Tinebase.widgets.form.RecordsPickerCombo = Ext.extend(Ext.ux.form.LayerComb
     },
 
     getItems: function () {
-
-        const  {allowMultiple, renderTo, filter, listeners, ... searchComboConfig} = this.initialConfig;
+        const  {allowMultiple, renderTo, filter, listeners, value, ... searchComboConfig} = this.initialConfig;
         if(searchComboConfig.xtype === 'tinerecordspickercombobox'){
             // prevent recursive recordsPicker
             delete searchComboConfig.xtype;
