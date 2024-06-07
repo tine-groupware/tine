@@ -42,6 +42,16 @@ class SSO_Config extends Tinebase_Config_Abstract
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = [
+        self::PWD_LESS_LOGIN        => [
+            //_('PasswordLess Login')
+            self::LABEL                 => 'PasswordLess Login',
+            //_('PasswordLess Login')
+            self::DESCRIPTION           => 'PasswordLess Login',
+            self::TYPE                  => self::TYPE_STRING,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE      => true,
+            self::SETBYSETUPMODULE      => true,
+        ],
         self::OAUTH2                => [
             //_('Oauth2')
             self::LABEL                 => 'Oauth2',
