@@ -394,7 +394,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
             } else if (Ext.isPrimitive(value) && value == this.getValue()) {
                 // value is the current id
                 return this.setValue(this.selectedRecord);
-            } else if (value && Ext.isString(value) && !value.match(/^{/) && !value.match(/\s/) && !this.store.getById(value) && this.lasyLoading) {
+            } else if (value && Ext.isString(value) && !value.match(/^{/) && !value.match(/^current/) && !value.match(/\s/) && !this.store.getById(value) && this.lasyLoading) {
                 if (this.selectedRecord?.getTitle?.() === value) return;
                 // value is an id
                 try {

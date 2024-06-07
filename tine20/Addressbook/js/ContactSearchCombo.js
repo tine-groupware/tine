@@ -164,6 +164,10 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
     },
     
     getValue: function() {
+        if (this.serverValue) {
+            return this.serverValue;
+        }
+
         if (this.useAccountRecord) {
             if (this.selectedRecord) {
                 return this.selectedRecord.get('account_id') || this.selectedRecord.get('accountId');
@@ -178,6 +182,10 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
     setValue: function (value) {
         if (this.useAccountRecord) {
             if (value) {
+                if (value === 'currentAccount') {
+                    this.serverValue = value;
+                    value = Tine.Tinebase.registry.get('currentAccount');
+                }
                 if(value.accountId) {
                     // account object
                     this.selectedRecord = this.selectedAccount = Tine.Tinebase.data.Record.setFromJson(value, Tine.Tinebase.Model.User);
@@ -190,6 +198,11 @@ Tine.Addressbook.ContactSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.Reco
                     value = value.get('name');
                 }
             } else {
+                if (value === 'currentContact') {
+                    this.serverValue = value;
+                    value = Tine.Tinebase.registry.get('userContact');
+                }
+
                 this.accountId = null;
                 this.selectedRecord = null;
             }

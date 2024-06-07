@@ -74,11 +74,10 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_ForeignId
 
         // transform current user
         if ($_value == Tinebase_Model_User::CURRENTACCOUNT && is_object(Tinebase_Core::getUser())) {
+            $this->_userValue = $_value;
             $_value = Tinebase_Core::getUser()->getId();
         }
 
-        $this->_userValue = $_value;
-        
         if ($this->_userOperator && $this->_userOperator == 'inGroup') {
             $_value = Tinebase_Group::getInstance()->getGroupMembers($this->_userValue);
         }
@@ -104,38 +103,36 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_ForeignId
         if ($this->_userOperator && $this->_userOperator == 'inGroup') {
             $result['operator'] = $this->_userOperator;
             $result['value']    = $this->_userValue;
-        } elseif ($this->_userValue === Tinebase_Model_User::CURRENTACCOUNT && !$_valueToJson) {
+        } elseif ($this->_userValue === Tinebase_Model_User::CURRENTACCOUNT) {
             // switch back to CURRENTACCOUNT to make sure filter is saved and shown in client correctly
             $result['value'] = $this->_userValue;
         }
-        
+
         if ($_valueToJson === true ) {
-            if ($this->_userOperator && $this->_userOperator == 'inGroup' && $this->_userValue) {
-                try {
-                    $result['value'] = Tinebase_Group::getInstance()->getGroupById($this->_userValue)->toArray();
-                } catch (Tinebase_Exception_Record_NotDefined) {
-                    $result['value'] = $this->_userValue;
+            if ($this->_userOperator) {
+                if ($this->_userOperator == 'inGroup' && $this->_userValue) {
+                    try {
+                        $result['value'] = Tinebase_Group::getInstance()->getGroupById($this->_userValue)->toArray();
+                    } catch (Tinebase_Exception_Record_NotDefined) {}
                 }
             } else {
                 switch ($this->_operator) {
                     case 'equals':
                     case 'not':
-                        try {
-                            if ($this->_userValue) {
-                                $result['value'] = Tinebase_User::getInstance()->getUserById($this->_userValue)->toArray();
-                            }
-                        } catch (Tinebase_Exception_NotFound) {
-                            $result['value'] = $this->_userValue;
+                        if ($result['value'] && $result['value'] !== Tinebase_Model_User::CURRENTACCOUNT) {
+                            try {
+                                $result['value'] = Tinebase_User::getInstance()->getUserById($result['value'])->toArray();
+                            } catch (Tinebase_Exception_NotFound) {}
                         }
                         break;
                     case 'in':
                     case 'notin':
                         $result['value'] = array();
-                        if (! is_array($this->_userValue)) {
+                        if (! is_array($result['value'])) {
                             // somehow the client sent us a scalar - put this into the value array
-                            $result['value'][] = $this->_userValue;
+                            $result['value'][] = $result['value'];
                         } else {
-                            foreach ($this->_userValue as $userId) {
+                            foreach ($result['value'] as $userId) {
                                 try {
                                     $result['value'][] = Tinebase_User::getInstance()->getUserById($userId)->toArray();
                                 } catch(Tinebase_Exception_NotFound) {

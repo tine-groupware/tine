@@ -50,6 +50,9 @@ Tine.Addressbook.ContactFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, 
             value: filter.data.value ? filter.data.value : this.defaultValue,
             renderTo: el,
             getValue: function() {
+                if (this.serverValue) {
+                    return this.serverValue;
+                }
                 return this.selectedRecord.id;
             },
             onSelect: function(record) {
@@ -62,6 +65,10 @@ Tine.Addressbook.ContactFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, 
                 }
             },
             setValue: function(value) {
+                if (value === 'currentContact') {
+                    this.serverValue = value;
+                    value = Tine.Tinebase.registry.get('userContact');
+                }
                 this.selectedRecord = value;
                 var displayValue = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderUserName.call(this, value);
                 Tine.Addressbook.SearchCombo.superclass.setValue.call(this, displayValue);
