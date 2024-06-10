@@ -57,6 +57,11 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
     public const XPROP_EMAIL_USERID_SMTP = 'emailUserIdSmtp';
 
     /**
+     * @var string
+     */
+    public const DEFAULT_FOLDER_DELIMITER = '/';
+
+    /**
      * hidden from addressbook
      *
      * @var string
@@ -316,7 +321,7 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::NULLABLE => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
-                    Zend_Filter_Input::DEFAULT_VALUE => '/'
+                    Zend_Filter_Input::DEFAULT_VALUE => self::DEFAULT_FOLDER_DELIMITER
                 ],
             ],
             'display_format' => [
