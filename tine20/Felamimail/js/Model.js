@@ -196,7 +196,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
         //, so we need to detect the body_content_type_of_body_property_of_this_record type in FE
         const htmlRegex = /<\/?[a-z][\s\S]*>/i;
         if (this.bodyIsFetched()) {
-            return htmlRegex.test(this.get('body')) ? 'text/html' : 'text/plain';
+            if (htmlRegex.test(this.get('body'))) return 'text/html';
         }
         return this.get('body_content_type_of_body_property_of_this_record');
     }
