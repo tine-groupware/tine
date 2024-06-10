@@ -3,12 +3,6 @@ Tine Admin HowTo: ActionQueue + Worker
 
 Version: Ellie 2023.11
 
-Einleitung
-=================
-
-TODO: add more (was machen queue + worker?)
-TODO translate to english
-
 Welche Jobs landen in der Queue?
 =================
 
@@ -22,6 +16,21 @@ Monitoring
 =================
 
     php tine20.php --method Tinebase.monitoringCheckQueue
+
+Restart Worker (Docker)
+=================
+
+    ps aux | grep worker # get PID
+    kill PID
+
+-> worker process restarts.
+
+Activate Worker Logging
+=================
+
+Add something like this to /etc/tine20/actionQueue.ini:
+
+    general.logfile=/var/log/tine20/worker.log
 
 Anschauen / Leeren der Queue
 =================

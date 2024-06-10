@@ -6,10 +6,9 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        this should extend Felamimail_Controller_Folder (like Felamimail_Controller_Cache_Message)
- * @todo        add cleanup routine for deleted (by other clients)/outofdate folders?
  */
 
 /**
@@ -91,8 +90,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             . ' Updating folder cache of parent folder: ' . $_folderName);
         
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
-        $this->_delimiter = $account->delimiter;
-        
+        $this->_delimiter = $account->delimiter ? $account->delimiter : Felamimail_Model_Account::DEFAULT_FOLDER_DELIMITER;
+
         try {
             $folders = $this->_getFoldersFromIMAP($account, $_folderName);
             
