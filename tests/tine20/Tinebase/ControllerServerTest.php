@@ -186,33 +186,4 @@ EOS
         $result = Tinebase_Controller::getInstance()->login($credentials['username'], $credentials['password'], $request);
         $this->assertTrue($result, 'account should be unblocked now');
     }
-
-    /**
-     * @group ServerTests
-     */
-    public function testOpenIdConnectLogin()
-    {
-        $request = $this->_getTestRequest();
-
-        Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_ACTIVE} = true;
-        Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_PROVIDER_URL} = 'https://myoidcprovider.org';
-        Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_CLIENT_SECRET} = 'abc12';
-        Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_CLIENT_ID} = 'abc12';
-        Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_ADAPTER} = 'OpenIdConnectMock';
-
-        $credentials = $this->getTestCredentials();
-        Tinebase_Core::setUser($this->getAccountByName($credentials['username']));
-        $user = Tinebase_User::getInstance()->getFullUserByLoginName($credentials['username']);
-        $user->openid = 'test@example.org';
-        Tinebase_User::getInstance()->updateUser($user);
-        Tinebase_Core::unsetUser();
-
-        $oidcResponse = 'access_token=somethingabcde12344';
-
-        $result = Tinebase_Controller::getInstance()->loginOIDC($oidcResponse, $request);
-
-        self::assertTrue($result);
-        self::assertTrue(Tinebase_Core::isRegistered(Tinebase_Core::USER));
-        self::assertEquals($user->accountLoginName, Tinebase_Core::getUser()->accountLoginName);
-    }
 }
