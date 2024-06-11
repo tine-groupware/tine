@@ -2065,3 +2065,9 @@ msgstr "Der definitive Termin wurde auf den „%1$s“ gelegt."
 
 msgid "You can review the poll results here:"
 msgstr "Sie können die Umfrageergebnisse hier einsehen:"
+
+msgid "Enables all CalDAV clients. Note: Use at your own risk. Non-official clients are not supported."
+msgstr "Ermöglicht alle CalDAV-Clients. Hinweis: Nutzung auf eigene Gefahr. Nicht-offizielle Clients werden nicht unterstützt."
+
+msgid "Allow generic CalDAV clients"
+msgstr "Ermöglicht alle CalDAV-Clients"

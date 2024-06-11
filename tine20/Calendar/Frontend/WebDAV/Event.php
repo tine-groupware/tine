@@ -339,7 +339,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         if (in_array($converterClass, [
             'Calendar_Convert_Event_VCalendar_Generic',
             'Calendar_Convert_Event_VCalendar_KDE',
-        ])) {
+        ]) && !Calendar_Config::getInstance()->get(Calendar_Config::ALLOW_GENERIC_CALDAV_CLIENT)) {
             $useragent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'unknown';
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN))
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Update by '
