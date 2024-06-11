@@ -130,6 +130,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                             selectOnFocus: true,
                             value: this.defaultPassword,
                             disabled: modSsl ? true : false,
+                            hidden: Tine.Tinebase.registry.get('allowPasswordLessLogin'),
                             listeners: {
                                 render: this.setLastLoginUser.createDelegate(this)
                             }
@@ -533,7 +534,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 this.redirect(exception);
                 break;
             case 651: // Password required
-                //@TODO
+                const pwdField = me.getLoginPanel().getForm().findField('password');
+                pwdField.setVisible(true);
+                pwdField.syncSize();
+                pwdField.focus(true);
                 break;
             default:
                 return Tine.Tinebase.ExceptionHandler.handleRequestException(response);
@@ -632,7 +636,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 params: _.assign({
                     method: this.loginMethod,
                     username: values.username,
-                    password: values.password
+                    password: form.findField('password').isVisible() ? values.password : null
                 }, additionalParams),
                 timeout: 60000, // 1 minute
                 success: this.onLoginSuccess,
