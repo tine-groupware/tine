@@ -1798,8 +1798,6 @@ class Tinebase_Core
 
         $registryData =  [
             'modSsl'           => Tinebase_Auth::getConfiguredBackend() == Tinebase_Auth::MODSSL,
-            // sso
-            'sso'               => Tinebase_Config::getInstance()->{Tinebase_Config::SSO}->{Tinebase_Config::SSO_ACTIVE},
             'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'locale'           => [
                 'locale'   => $locale->toString(),

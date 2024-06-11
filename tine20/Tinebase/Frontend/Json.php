@@ -629,27 +629,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             return $this->_getLoginFailedResponse();
         }
     }
-
-    /**
-     * @param string $oidcResponse
-     * @return array
-     */
-    public function openIDCLogin(string $oidcResponse)
-    {
-        Tinebase_Core::startCoreSession();
-
-        // try to login user
-        $success = Tinebase_Controller::getInstance()->loginOIDC(
-            $oidcResponse,
-            Tinebase_Core::get(Tinebase_Core::REQUEST)
-        );
-
-        if ($success === true) {
-            return $this->_getLoginSuccessResponse(Tinebase_Core::getUser()->accountLoginName);
-        } else {
-            return $this->_getLoginFailedResponse();
-        }
-    }
     
     /**
      * create login response

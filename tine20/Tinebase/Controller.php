@@ -176,52 +176,6 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     }
 
     /**
-     * create new user session (via openID connect)
-     *
-     * @param   string                           $oidcResponse
-     * @param   \Zend\Http\PhpEnvironment\Request $request
-     *
-     * @return  bool
-     * @throws  Tinebase_Exception_MaintenanceMode
-     */
-    public function loginOIDC($oidcResponse, \Zend\Http\PhpEnvironment\Request $request)
-    {
-        if (Tinebase_Core::inMaintenanceModeAll()) {
-            throw new Tinebase_Exception_MaintenanceMode();
-        }
-
-        $ssoConfig = Tinebase_Config::getInstance()->{Tinebase_Config::SSO};
-        if (! $ssoConfig->{Tinebase_Config::SSO_ACTIVE}) {
-            throw new Tinebase_Exception('sso client config inactive');
-        }
-
-        $adapterName = $ssoConfig->{Tinebase_Config::SSO_ADAPTER};
-        /** @var Tinebase_Auth_OpenIdConnect $authAdapter */
-        $authAdapter = Tinebase_Auth_Factory::factory($adapterName);
-        $authAdapter->setOICDResponse($oidcResponse);
-        $authResult = $authAdapter->authenticate();
-        $adapterUser = $authAdapter->getLoginUser();
-        if (! $adapterUser) {
-            return false;
-        }
-        $loginName = $adapterUser->accountLoginName;
-
-        $accessLog = Tinebase_AccessLog::getInstance()->getAccessLogEntry($loginName, $authResult, $request,
-            $adapterName);
-
-        $user = $this->_validateAuthResult($authResult, $accessLog);
-
-        if (!($user instanceof Tinebase_Model_FullUser)) {
-            return false;
-        }
-
-        // TODO make credential cache work without PW
-        $this->_loginUser($user, $accessLog, Tinebase_Record_Abstract::generateUID(20));
-
-        return true;
-    }
-
-    /**
      * @param Tinebase_Model_FullUser $user
      * @param \Laminas\Http\PhpEnvironment\Request $request
      * @param string|null $clientIdString
