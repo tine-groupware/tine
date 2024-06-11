@@ -289,14 +289,19 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     initAccounts: function() {
         this.accountStore = this.app.getAccountStore();
-        this.accountStore.each(this.addAccount, this);
+        this.accountStore.each(this.addAccountNode, this);
 
         this.accountStore.on('load', function(store, records) {
             this.root.removeAll();
-            _.map(records, _.bind(this.addAccount, this));
+            _.map(records, _.bind(this.addAccountNode, this));
             this.selectLastSelectedNode();
         }, this);
-        this.accountStore.on('add', function(store, records) {_.map(records, _.bind(this.addAccount, this)); }, this);
+        this.accountStore.on('add', function(store, records) {
+            _.map(records, (record) => {
+                const node = this.addAccountNode(record);
+                node.expand();
+            });
+        }, this);
         this.accountStore.on('update', this.onAccountUpdate, this);
         this.accountStore.on('remove', this.deleteAccount, this);
     },
@@ -960,9 +965,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * 
      * @param {Tine.Felamimail.Model.Account} record
      */
-    addAccount: function(record) {
-        
-        var node = new Ext.tree.AsyncTreeNode({
+    addAccountNode: function(record) {
+        const node = new Ext.tree.AsyncTreeNode({
             id: record.data.id,
             path: '/' + record.data.id,
             record: record,
@@ -994,6 +998,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         _.defer(() => {
             this.app.getMainScreen().getCenterPanel().action_write.setDisabled(! this.app.getActiveAccount());
         });
+        return node;
     },
 
     deleteAccount: function(store, account) {
