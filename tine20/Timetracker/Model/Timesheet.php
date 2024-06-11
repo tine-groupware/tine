@@ -336,6 +336,6 @@ class Timetracker_Model_Timesheet extends Tinebase_Record_Abstract implements Sa
 
     public static function filterEmptyNonZero($data)
     {
-        return empty($data) && $data !== 0 && $data !== '0' ? 1 : $data; 
+        return $data === null || $data === false || $data === '' ? 1 : $data;
     }
 }

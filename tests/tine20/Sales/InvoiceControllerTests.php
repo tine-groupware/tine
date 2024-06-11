@@ -580,6 +580,17 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->assertArrayHasKey(0, $result);
 
         $this->_checkInvoiceUpdateExistingTimeaccount($result[0], 5);
+
+        $oldTimesheet->accounting_time_factor = 0;
+        $filter = new Timetracker_Model_TimesheetFilter(array(
+            array('field' => 'id', 'operator' => 'equals', 'value' => $oldTimesheet->getId()),
+        ));
+        $this->_timesheetController->update($oldTimesheet);
+        $this->assertEquals(0.0, $oldTimesheet->accounting_time_factor, 'accounting_time_factor should not be changed');
+
+        $result = $this->_timesheetController->updateMultiple($filter, array('invoice_id' => null));
+        $record = $result['results']->getFirstRecord();
+        $this->assertEquals(0.0, $record->accounting_time_factor, 'accounting_time_factor should not be changed');
     }
 
     protected function _checkInvoiceUpdateWithNewTimeaccount($invoiceId)
