@@ -1660,6 +1660,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         $updatedMessage->subject = $newSubject;
+
+        Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder);
         return $updatedMessage;
     }
 
