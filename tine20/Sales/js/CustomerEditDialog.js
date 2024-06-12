@@ -392,32 +392,9 @@ Tine.Sales.CustomerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             {
                                 columnWidth: 1,
                                 fieldLabel: this.app.i18n._('Web'),
-                                xtype: 'mirrortextfield',
+                                xtype: 'urlfield',
                                 name: 'url',
                                 maxLength: 128,
-                                listeners: {
-                                    scope: this,
-                                    focus: function (field) {
-                                        if (! field.getValue()) {
-                                            field.setValue('http://www.');
-                                            field.selectText.defer(100, field, [7, 11]);
-                                        }
-                                    },
-                                    blur: function (field) {
-                                        if (field.getValue() === 'http://www.') {
-                                            field.setValue(null);
-                                            field.validate();
-                                        }
-                                        if (field.getValue().indexOf('http://http://') == 0 || field.getValue().indexOf('http://https://') == 0) {
-                                            field.setValue(field.getValue().substr(7));
-                                            field.validate();
-                                        }
-                                        if (field.getValue().indexOf('http://www.http://') == 0 || field.getValue().indexOf('http://www.https://') == 0) {
-                                            field.setValue(field.getValue().substr(11));
-                                            field.validate();
-                                        }
-                                    }
-                                }
                             }
                         ]]
                     }]
