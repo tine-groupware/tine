@@ -1203,7 +1203,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         this.showLoadMask();
 
         // init change event
-        var form = this.getForm().items.each(function(item) {
+        this.getForm().items.each(function(item) {
             this.relayEvents(item, ['change', 'select']);
         }, this);
         this.on('change', this.checkStates, this, {buffer: 100});

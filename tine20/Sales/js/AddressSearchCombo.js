@@ -96,12 +96,17 @@ Tine.Sales.AddressSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPick
                 const addrs = _.map(debitors, (debitor) => { return debitor[type].concat(type === 'delivery' ? debitor['billing'] : []) });
                 const typeRecords = _.flatten(_.each(addrs, (addrs, idx) => {
                     // have postal addr in each debitor
-                    addrs = addrs.concat(customer?.data?.postal ? _.cloneDeep(customer.data.postal) : []);
+                    customer?.data?.postal ? addrs.push( _.cloneDeep(customer.data.postal)) : null;
                     // place debitor reference in each addr
                     _.each(addrs, (addr) => {addr.debitor_id = _.assign({... debitors[idx]}, {billing: null, delivery: null})})
                 }));
-                // @TODO pick type first and postal last (sort by order delivery, billing, postal)
-                // mhh this could be dangourous as it could mixup debitors in orders (delivery/billing addresses)
+                const order = ['delivery', 'billing', 'postal']
+                typeRecords.sort((a,b) => {
+                    return order.indexOf(a.type) - order.indexOf(b.type) || b.creation_time > a.creation_time ? 1 : -1;
+                })
+                // @TODO check if debitor is right?
+                //       in orders debitor of 'delivery', 'billing' should match receipient?
+                //       in all documents debitor should match precursor receipient?
                 typeRecord = typeRecords[0];
             }
             if (typeRecord && !this.isExplicitlyCleared) {

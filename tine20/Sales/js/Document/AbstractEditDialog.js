@@ -87,8 +87,10 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         })
 
         // make sure discount calculations run
-        this.getForm().findField('invoice_discount_sum').price_field = document_price_type === 'gross' ? 'positions_gross_sum' : 'positions_net_sum';
-        this.getForm().findField('invoice_discount_sum').net_field = document_price_type === 'gross' ? 'gross_sum' : 'net_sum';
+        if (this.getForm().findField('invoice_discount_sum')) {
+            this.getForm().findField('invoice_discount_sum').price_field = document_price_type === 'gross' ? 'positions_gross_sum' : 'positions_net_sum';
+            this.getForm().findField('invoice_discount_sum').net_field = document_price_type === 'gross' ? 'gross_sum' : 'net_sum';
+        }
         Tine.Sales.Document_AbstractEditDialog.superclass.checkStates.apply(this, arguments)
 
         this.getForm().findField('positions_net_sum')?.setVisible(document_price_type !== 'gross');
@@ -191,7 +193,7 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         }
                     }
                     config.listeners.select = (combo, record, index) => {
-                        fields['credit_term'].setValue(record.get('credit_term'))
+                        fields['credit_term']?.setValue(record.get('credit_term'))
                         fields['document_language'].setValue(record.get('language') || fields['document_language'].getValue())
                         if (record.get('discount')) {
                             fields['invoice_discount_type'].setValue('PERCENTAGE')
