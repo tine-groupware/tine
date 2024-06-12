@@ -54,6 +54,10 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
 
         // get keyField config
         this.keyFieldConfig = this.app.getRegistry().get('config')[this.keyFieldName];
+        if (!this.keyFieldConfig) {
+            const cf = _.find(this.app.getRegistry().get('customfields'), { name: this.keyFieldName });
+            this.keyFieldConfig = cf?.definition.keyFieldConfig;
+        }
         
         var definition = this.keyFieldConfig.definition,
             options = definition && definition.options || {};
