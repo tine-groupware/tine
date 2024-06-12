@@ -12,6 +12,23 @@ Welche Jobs landen in der Queue?
 - Virenscans?
 - TODO: gibt es mehr?
 
+tine Update ("waited for Action Queue to become empty for more than 300 sec")
+=================
+
+This error occurs when the tine update (setup.php --update) runs and there are still some jobs in the queue.
+When the jobs are not finished in 5 minutes, the update process stops.
+
+You can force the update by giving the parameter `skipQueueCheck=1`:
+
+    php setup.php --update -- skipQueueCheck=1
+
+Activate/Deactivate Queue & Worker in docker setup
+=================
+
+You can just set this ENV variable (for example in docker-compose.yml) to deactivate the queue & worker (it is active by default in the PROD image):
+
+    TINE20_ACTIONQUEUE: "false"
+
 Monitoring
 =================
 
