@@ -262,12 +262,8 @@ function make_image() {
     local alpine_php_package=
 
     case "${php_version}" in
-        7.3)
-            alpine_branch=3.12
-            alpine_php_package=php7
-            ;;
         7.4)
-            alpine_branch=3.14
+            alpine_branch=3.15
             alpine_php_package=php7
             ;;
         8.0)
@@ -275,7 +271,7 @@ function make_image() {
             alpine_php_package=php8
             ;;
         8.1)
-            alpine_branch=3.16
+            alpine_branch=3.19
             alpine_php_package=php81
             ;;
         8.2)
