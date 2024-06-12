@@ -528,7 +528,11 @@ class Admin_Frontend_Json_EmailAccountTest extends TestCase
 
     protected function _checkMasterUserTable()
     {
-        $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        if (!Tinebase_EmailUser::manages(Tinebase_Config::SIEVE)) {
+            self::markTestSkipped('tine does not manage sieve');
+        }
+
+        $imapEmailBackend = Tinebase_EmailUser::getInstance();
         if (method_exists($imapEmailBackend, 'checkMasterUserTable')) {
             try {
                 $imapEmailBackend->checkMasterUserTable();
