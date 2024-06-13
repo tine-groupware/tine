@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -64,7 +64,7 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
      * @param  \Sabre\VObject\Property\ICalendar\CalAddress  $calAddress  the attendee row from the vevent object
      * @return array
      */
-    protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress)
+    protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress): ?array
     {
         $newAttendee = parent::_getAttendee($calAddress);
 
@@ -200,7 +200,7 @@ class Calendar_Convert_Event_VCalendar_MacOSX extends Calendar_Convert_Event_VCa
      * @param Calendar_Model_Event          $event
      * @param Tinebase_Record_RecordSet     $attachments
      */
-    protected function _manageAttachmentsFromClient($event, $attachments)
+    protected function _manageAttachmentsFromClient(Calendar_Model_Event $event, Tinebase_Record_RecordSet $attachments): void
     {
         $event->attachments = $attachments;
     }

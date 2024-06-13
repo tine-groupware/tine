@@ -299,8 +299,9 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 : $event->container_id;
 
             // either current user is organizer or has admin right on container
-            if ($event->organizer === $currentContact
-                && Calendar_Config::getInstance()->get(Calendar_Config::ORGANIZER_IMPLICIT_EDIT_GRANT)
+            if (($event->organizer === $currentContact
+                    && Calendar_Config::getInstance()->get(Calendar_Config::ORGANIZER_IMPLICIT_EDIT_GRANT))
+                || $event->hasExternalOrganizer()
             ) {
                 foreach ($this->_recordBasedGrants as $grant) {
                     $event->{$grant} = true;

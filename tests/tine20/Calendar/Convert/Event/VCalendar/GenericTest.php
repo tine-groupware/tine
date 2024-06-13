@@ -293,7 +293,7 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         $this->assertEquals($event->uid,            $event->exdate[3]->uid);
         $this->assertEquals("2011-10-08 13:00:00",  (string)$event->exdate[3]->dtend   , 'DTEND mismatch');
         $this->assertEquals("2011-10-08 11:00:00",  (string)$event->exdate[3]->dtstart , 'DTSTART mismatch');
-        $this->assertEquals($event->dtstart->format('hm'),  $event->exdate[3]->recurid->format('hm') , 'Recurid mismatch');
+        $this->assertEquals($event->uid . '-' . $event->exdate[3]->dtstart->format('Y-m-d ') . $event->dtstart->format('H:i:s'),  $event->exdate[3]->recurid , 'Recurid mismatch');
         
         return $event;
     }
@@ -319,8 +319,8 @@ class Calendar_Convert_Event_VCalendar_GenericTest extends \PHPUnit\Framework\Te
         $this->assertEquals('PUBLIC', $event->class);
         $this->assertEquals("2011-11-07 23:00:00", (string) $event->dtstart, 'DTEND mismatch');
         $this->assertEquals("2011-11-08 22:59:59", (string) $event->dtend,   'DTSTART mismatch');
-        $this->assertEquals("2011-11-10 23:00:00", (string) $event->exdate[0]->recurid, 'RECURID fallout mismatch');
-        $this->assertEquals("2011-11-08 23:00:00", (string) $event->exdate[1]->recurid, 'RECURID exdate mismatch');
+        $this->assertEquals($event->uid . "-2011-11-10 23:00:00", (string) $event->exdate[0]->recurid, 'RECURID fallout mismatch');
+        $this->assertEquals($event->uid . "-2011-11-08 23:00:00", (string) $event->exdate[1]->recurid, 'RECURID exdate mismatch');
         
         return $event;
     }

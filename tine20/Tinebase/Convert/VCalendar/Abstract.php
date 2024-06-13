@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -40,7 +40,7 @@ abstract class Tinebase_Convert_VCalendar_Abstract
 
     /**
      * returns VObject of input data
-     *
+     * @param mixed $blob
      * @return  \Sabre\VObject\Component\VCalendar
      */
     public static function getVObject(mixed $blob)
@@ -80,8 +80,7 @@ abstract class Tinebase_Convert_VCalendar_Abstract
      * @param integer $lastBrokenLineNumber
      * @param array $lastLines
      * @throws Sabre\VObject\ParseException
-     * @return Sabre\VObject\Component\VCalendar
-     *
+     * @return Sabre\VObject\Component\VCalendar*
      * @see 0006110: handle iMIP messages from outlook
      *
      * @todo maybe we can remove this when #7438 is resolved
@@ -139,7 +138,7 @@ abstract class Tinebase_Convert_VCalendar_Abstract
     
         return $vcalendar;
     }
-    
+
     /**
      * to be overwriten in extended classes to modify/cleanup $_vcalendar
      *
@@ -238,7 +237,7 @@ abstract class Tinebase_Convert_VCalendar_Abstract
             $record->alarms->addRecord($alarm);
         }
     }
-    
+
     /**
      * get datetime from sabredav datetime property (user TZ is fallback)
      * 

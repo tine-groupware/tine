@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -54,7 +54,7 @@ class Calendar_Convert_Event_VCalendar_TineSyncClient extends Calendar_Convert_E
      * @param  \Sabre\VObject\Property\ICalendar\CalAddress  $calAddress  the attendee row from the vevent object
      * @return array
      */
-    protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress)
+    protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress): ?array
     {
         if (null !== ($attendee = parent::_getAttendee($calAddress))) {
             $attendee['userType'] = Calendar_Model_Attender::USERTYPE_EMAIL;

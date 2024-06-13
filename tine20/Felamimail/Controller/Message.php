@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2025 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Hfig\MAPI\OLE\Pear;
@@ -485,10 +485,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get iMIP by message and part id
      *
      * @param string $_iMIPId
-     * @return Tinebase_Record_Interface
+     * @return null|Calendar_Model_iMIP
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function getiMIP($_iMIPId)
+    public function getiMIP(string $_iMIPId): ?Calendar_Model_iMIP
     {
         if (strpos($_iMIPId, '_') === FALSE) {
             throw new Tinebase_Exception_InvalidArgument('messageId_partId expecetd.');
@@ -504,7 +504,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $iMIPPartStructure = $message->getPartStructure($partId);
         $iMIP = $this->_getForeignMessagePart($message, $partId, $iMIPPartStructure);
 
-        return $iMIP;
+        return $iMIP instanceof Calendar_Model_iMIP ? $iMIP : null;
     }
 
     /**

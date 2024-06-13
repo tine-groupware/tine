@@ -87,6 +87,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $record = $event->getRecord();
 
         $this->assertEquals('New Event', $record->summary);
+        $this->assertSame(Tinebase_Core::getUser()->getId(), $record->organizer->account_id);
         
         return $event;
     }
@@ -148,9 +149,8 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
         $vcalendar = $converter->fromTine20Model($event);
 
-
-        $this->expectException(Sabre\DAV\Exception\PreconditionFailed::class);
-        $this->expectExceptionMessage('only organizer may recover deleted events');
+        $this->expectException(Sabre\DAV\Exception\Forbidden::class);
+        $this->expectExceptionMessage('write access denied');
         
         Calendar_Frontend_WebDAV_Event::create($this->_getPersonasDefaultCals('sclever'), $event->getId() . '.ics',
             $vcalendar->serialize());
@@ -176,18 +176,19 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $event = Calendar_Frontend_WebDAV_Event::create($personalContainer, "gotomeeting.ics", $vcalendar);
 
         $record = $event->getRecord();
-
+        $this->assertSame($sclever->contact_id, $record->resolveOrganizer()?->getId());
         $this->assertEquals('Meeting', $record->summary);
 
         //Import same file for pwulf
         $pwulf = $this->_personas['pwulf'];
         $personalContainer = $this->_getPersonalContainer(Calendar_Model_Event::class, $pwulf->accountId);
         Tinebase_Core::set(Tinebase_Core::USER, $pwulf);
-        $event = Calendar_Frontend_WebDAV_Event::create($personalContainer, "gotomeeting.ics", $vcalendar);
+        $pwEvent = Calendar_Frontend_WebDAV_Event::create($personalContainer, "gotomeeting.ics", $vcalendar);
 
-        $record = $event->getRecord();
-
-        $this->assertEquals('Meeting', $record->summary);
+        $pwRecord = $pwEvent->getRecord();
+        $this->assertSame($pwulf->contact_id, $pwRecord->resolveOrganizer()?->getId());
+        $this->assertNotSame($record->getId(), $pwRecord->getId());
+        $this->assertEquals('Meeting', $pwRecord->summary);
     }
     
     /**
@@ -1225,9 +1226,9 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $event = Calendar_Frontend_WebDAV_Event::create($this->objects['initialContainer'], "$id.ics", $vcalendar);
         
         // move event origin to shared (origin and display where the same)
-        Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", stream_get_contents($event->get()));
-//         $oldEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "$id.ics");
-//         $oldEvent->delete();
+        $vevent = Calendar_Frontend_WebDAV_Event::create($this->objects['sharedContainer'], "$id.ics", stream_get_contents($event->get()));
+        $this->assertSame($event->getId(), $vevent->getId());
+        $this->assertSame($this->objects['sharedContainer']->getId(), $vevent->getRecord()->container_id);
         
         // wait some time
         $cbs = new Calendar_Backend_Sql();

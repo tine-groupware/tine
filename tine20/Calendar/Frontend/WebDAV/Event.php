@@ -148,18 +148,15 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($container);
         
-        // check if there is already an existing event with this ID
+        // check if there is already an existing event
         // this can happen when the invitation email is faster then the caldav update or
-        // or when an event gets moved to another container
-        if (null === ($existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventByUID(
-                $event->uid, $event->hasExternalOrganizer(), 'sync', null, true))) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Did not find existing event by UID - trying to find one by id (' . $event->uid . ')');
-            $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventById($event->uid,
-                $event->hasExternalOrganizer(), 'sync', null, true);
+        // or when an event gets moved to another container (<- TODO FIXME what about this? moving events?)
+        try {
+            $existingEvent = Calendar_Controller_MSEventFacade::getInstance()->getExistingEventFromExternalEventData($event, $event->container_id, _action: 'sync', _getDeleted: true, requiredGrants: [Tinebase_Model_Grants::GRANT_SYNC]);
+        } catch (Tinebase_Exception_AccessDenied) {
+            throw new Sabre\DAV\Exception\Forbidden('write access denied');
         }
-        
-        if ($existingEvent === null) {
+        if (null === $existingEvent) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                 . ' Creating new event');
 
@@ -180,7 +177,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 }
             } catch (Tinebase_Exception_AccessDenied $tead) {
                 $retry = true;
-                Tinebase_Exception::log($tead, true);
+                //Tinebase_Exception::log($tead, true);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
@@ -218,11 +215,14 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
                     Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' recovering already deleted event');
 
-                if (!$existingEvent->hasExternalOrganizer() &&
+                if (!$existingEvent->hasGrant(Tinebase_Model_Grants::GRANT_EDIT)) {
+                    throw new Sabre\DAV\Exception\Forbidden('write access denied');
+                }
+                /*if (!$existingEvent->hasExternalOrganizer() &&
                         (!$existingEvent->organizer instanceof Addressbook_Model_Contact ||
                             $existingEvent->organizer->account_id !== $container->getOwner())) {
                     throw new Sabre\DAV\Exception\PreconditionFailed('only organizer may recover deleted events');
-                }
+                }*/
 
                 // @TODO have a undelete/recover workflow beginning in controller
                 $existingEvent->is_deleted = 0;

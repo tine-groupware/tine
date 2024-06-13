@@ -15,6 +15,8 @@
  * 
  * @package     Tinebase
  * @subpackage  Controller
+ *
+ * @template T of Tinebase_Record_Interface
  */
 interface Tinebase_Controller_Record_Interface
 {
@@ -22,7 +24,7 @@ interface Tinebase_Controller_Record_Interface
      * get by id
      *
      * @param string $_id
-     * @return Tinebase_Record_Interface
+     * @return T
      * @throws  Tinebase_Exception_AccessDenied
      */
     public function get($_id);
@@ -34,7 +36,7 @@ interface Tinebase_Controller_Record_Interface
      * @param bool $_ignoreACL
      * @para $_expander
      * @param bool $_getDeleted
-     * @return Tinebase_Record_RecordSet of $this->_modelName
+     * @return Tinebase_Record_RecordSet<T> of $this->_modelName
      * @internal param array $array of record identifiers
      */
     public function getMultiple($_ids, $_ignoreACL = false, ?\Tinebase_Record_Expander $_expander = null, $_getDeleted = false);
@@ -45,7 +47,7 @@ interface Tinebase_Controller_Record_Interface
      * @param string $_orderBy Order result by
      * @param string $_orderDirection Order direction - allowed are ASC and DESC
      * @throws Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet<T>
      */
     public function getAll($_orderBy = 'id', $_orderDirection = 'ASC');
     
@@ -54,8 +56,8 @@ interface Tinebase_Controller_Record_Interface
     /**
      * add one record
      *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
+     * @param   T $_record
+     * @return  T
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
@@ -64,8 +66,8 @@ interface Tinebase_Controller_Record_Interface
     /**
      * update one record
      *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
+     * @param   T $_record
+     * @return  T
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
@@ -86,7 +88,7 @@ interface Tinebase_Controller_Record_Interface
      * 
      * If one of the records could not be deleted, no record is deleted
      * 
-     * @param   array|Tinebase_Record_Interface|Tinebase_Record_RecordSet $_ids array of record identifiers
+     * @param   array|T|Tinebase_Record_RecordSet<T> $_ids array of record identifiers
      * @return  Tinebase_Record_RecordSet
      */
     public function delete($_ids);
@@ -103,7 +105,7 @@ interface Tinebase_Controller_Record_Interface
     /**
      * returns the model name
      *
-     * @return string
+     * @return class-string<T>
      */
     public function getModel();
 
