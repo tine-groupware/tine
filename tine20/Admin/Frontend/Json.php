@@ -1345,10 +1345,18 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getEmailAccount(string $id): array
     {
-        try {
-            $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($id);
-            $sieve = true;
-        } catch (Tinebase_Exception_Backend $teb) {
+        if (Tinebase_EmailUser::sieveBackendSupportsMasterPassword()) {
+            try {
+                $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($id);
+                $sieve = true;
+            } catch (Tinebase_Exception_Backend $teb) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' ' . $teb->getMessage());
+                }
+                $sieve = false;
+            }
+        } else {
             $sieve = false;
         }
 
@@ -1367,7 +1375,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 Tinebase_Exception::log($zmpe);
             } finally {
                 Tinebase_EmailUser::removeSieveAdminAccess();
-                unset($raii);
+                if (isset($raii)) {
+                    unset($raii);
+                }
             }
         }
 
@@ -1589,7 +1599,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if (count($pathFilters) !== 1) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                        . 'Exactly one path filter required.');
+                        . ' Exactly one path filter required.');
                 }
                 $pathFilter = $filter->createFilter(array(
                         'field' => 'path',
@@ -1986,7 +1996,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } finally {
             Tinebase_EmailUser::removeSieveAdminAccess();
         }
-        //for unused variable check
+        // for unused variable check
         unset($raii);
         return $result;
     }
