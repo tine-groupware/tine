@@ -15,6 +15,7 @@
 /**
  * class to hold Account data
  * 
+ * @property  string $name
  * @property  string $trash_folder
  * @property  string $sent_folder
  * @property  string $drafts_folder
