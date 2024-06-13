@@ -933,7 +933,14 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 }
 
                 if (!isset($imapConfig['user']) || empty($imapConfig['user'])) {
-                    $credentials->username = Tinebase_EmailUser::getAccountUsername($this, $credentials->username);
+                    try {
+                        $credentials->username = Tinebase_EmailUser::getAccountUsername($this, $credentials->username);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ .
+                                ' ' . $tenf->getMessage());
+                        }
+                    }
                 }
             }
 
