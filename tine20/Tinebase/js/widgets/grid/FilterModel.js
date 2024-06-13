@@ -135,6 +135,10 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
         this.label = i18n._hidden(this.label);
         this.gender = i18n._hidden(this.gender);
 
+        this.recordClass = this.recordClass || Tine.Tinebase.data.RecordMgr.get(this.appName, this.modelName);
+        this.modelConfiguration = this.recordClass?.getModelConfiguration();
+        this.fieldConfig = this.modelConfiguration?.fields[this.field] || {};
+
         if (this.app) {
             this.itemName = this.itemName || this.label;
             this.label = this.app.i18n._hidden(this.label);
@@ -291,6 +295,9 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.util.Observable, {
                     break;
                 case 'string':
                     this.operators.push('contains', 'notcontains', 'equals', 'startswith', 'endswith', 'not', 'in', 'notin');
+                    if (this.fieldConfig?.type === "numberableStr") {
+                        this.operators.push('greater', 'less');
+                    }
                     break;
                 case 'customfield':
                     this.operators.push('contains', 'equals', 'startswith', 'endswith', 'not');
