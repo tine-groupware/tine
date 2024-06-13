@@ -851,7 +851,9 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
     protected function _getCmdServiceHttpClient($url)
     {
-        $client = new Zend_Http_Client($url);
+        $client = new Zend_Http_Client($url, [
+            'timeout' => 60,
+        ]);
         if ($this->_cmdServiceClientAdapter) {
             $client->setAdapter($this->_cmdServiceClientAdapter);
         }
