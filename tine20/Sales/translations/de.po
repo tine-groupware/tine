@@ -462,11 +462,14 @@ msgstr "Geschlossene anzeigen"
 
 #: js/Document/AbstractEditDialog.js:31
 msgid "Confirm Status Change"
-msgstr "Statusübergang Bestätigen"
+msgstr "Statusübergang bestätigen"
 
 #: js/Document/AbstractEditDialog.js:32
 msgid "Changing this workflow status might not be revertible. Proceed anyway?"
 msgstr "Die Änderung des Status im Arbeitsablauf ist ggf. nicht umkehrbar. Trotzdem fortfahren?"
+
+msgid "Change document date from { date } to today?"
+msgstr "Soll das Belegdatum von { date } auf heute geändert werden?"
 
 msgid "No Matching Debitor"
 msgstr "Passender Debitor fehlt"
@@ -574,6 +577,12 @@ msgstr "Ungebuchte { sourceRecordsName } buchen"
 #: js/Document/CreateFollowUpAction.js:77
 msgid "Creating followup { targetRecordsName } is allowed for booked { sourceRecordsName } only. Book selected { sourceRecordsName } now?"
 msgstr "Die Erstellung von Folge-{ targetRecordsName } ist nur für gebuchte { sourceRecordsName } erlaubt. Ausgewählte { sourceRecordsName } jetzt buchen?"
+
+msgid "Change Document Date?"
+msgstr "Belegdatum ändern?"
+
+msgid "Please select the { sourceRecordsName } where you want to change the document date to today."
+msgstr "Bitte wählen die die { sourceRecordsName } bei denen das Belegdatum auf Heute geändert werden soll."
 
 #: js/Document/CreateFollowUpAction.js:95
 msgid "Cannot book { sourceDocument }: ({e.code}) { e.message }"

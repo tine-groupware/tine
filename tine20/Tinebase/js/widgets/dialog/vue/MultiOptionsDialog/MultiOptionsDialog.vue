@@ -23,7 +23,8 @@ import { computed, ref } from 'vue'
 const props = defineProps({
   questionText: String,
   options: Object,
-  allowMultiple: Boolean
+  allowMultiple: Boolean,
+  allowEmpty: Boolean
 })
 
 const selectedOption = ref(props.options[props.allowMultiple ? 'filter' : 'find'](el => el.checked)?.inputValue)
@@ -42,7 +43,7 @@ const _options = computed(() => {
 // onBeforeMount(() => {
 //   console.debug('MultiOptionsDialog: Props:', props)
 // })
-const disableok = computed(() => !selectedOption.value)
+const disableok = computed(() => !props.allowEmpty && (props.allowMultiple ? !selectedOption?.value?.length : !selectedOption.value))
 
 const getValue = () => {
   let option = null

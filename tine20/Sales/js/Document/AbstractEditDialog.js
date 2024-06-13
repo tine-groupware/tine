@@ -34,6 +34,15 @@ Tine.Sales.Document_AbstractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             return false;
         }
 
+        if (this.record.get('date') && this.record.get('date').format('Ymd') !== new Date().format('Ymd') && await Ext.MessageBox.show({
+            icon: Ext.MessageBox.QUESTION,
+            buttons: Ext.MessageBox.YESNO,
+            title: this.app.formatMessage('Change Document Date?'),
+            msg: this.app.formatMessage('Change document date from { date } to today?', {date: Tine.Tinebase.common.dateRenderer(this.record.get('date'))}),
+        }) === 'yes') {
+            this.record.set('date', new Date().clearTime());
+        }
+
         if (this.record.phantom) {
             // new documents need to be saved first to get a proforma number
             await this.applyChanges()
