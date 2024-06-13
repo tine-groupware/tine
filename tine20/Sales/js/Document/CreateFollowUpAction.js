@@ -67,6 +67,7 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                 const statusFieldName = `${sourceType.toLowerCase()}_status`
                 const statusDef = Tine.Tinebase.widgets.keyfield.getDefinitionFromMC(sourceRecordClass, statusFieldName)
                 const unbooked = selections.reduce((unbooked, record) => {
+                    record.noProxy = true // kill grid autoSave
                     const status = record.get(statusFieldName)
                     return unbooked.concat(statusDef.records.find((r) => { return r.id === status })?.booked ? [] : [record])
                 }, [])
@@ -86,8 +87,26 @@ Promise.all([Tine.Tinebase.appMgr.isInitialised('Sales'),
                     // @TODO: maybe we should define default booked state somehow? e.g. offer should be accepted (not only send) or let the user select?
                     const bookedState = statusDef.records.find((r) => { return r.booked })
                     mask.show()
+
+                    try {
+                        // check if date is set and ask if user want's to change it to today
+                        const notToday = _.reduce(unbooked, (acc, record) => {
+                            return _.concat(acc, record.get('date') && record.get('date').format('Ymd') !== new Date().format('Ymd') ? record : []);
+                        }, [])
+                        _.each(await Tine.widgets.dialog.MultiOptionsDialog.getOption({
+                            title: app.formatMessage('Change Document Date?'),
+                            questionText: app.formatMessage('Please select the { sourceRecordsName } where you want to change the document date to today.', { sourceRecordsName}),
+                            allowMultiple: true,
+                            allowEmpty: true,
+                            allowCancel: false,
+                            height: notToday.length * 30 + 100,
+                            options: notToday.map((source) => {
+                                return { text: source.getTitle() + ': ' + Tine.Tinebase.common.dateRenderer(source.get('date')), name: source.id, checked: false, source }
+                            })
+                        }), (option) => { _.find(unbooked, { id: option.name }).set('date', new Date().clearTime()); debugger});
+                    } catch (e) {/* USERABORT -> continue */ }
+
                     await unbooked.asyncForEach(async (record) => {
-                        record.noProxy = true // kill grid autoSave
                         record.set(statusFieldName, bookedState.id)
                         let updatedRecord
                         try {

@@ -37,6 +37,10 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Tine.widgets.dialog.ModalDial
      */
     allowMultiple: false,
     /**
+     * @cfg {Boolean} allowEmpty selection
+     */
+    allowEmpty: false,
+    /**
      * @cfg {Boolean} allowCancel
      */
     allowCancel: false,
@@ -59,7 +63,8 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Tine.widgets.dialog.ModalDial
         this.contentProps = window.vue.reactive({
             questionText: this.questionText,
             options: this.getItems(),
-            allowMultiple: this.allowMultiple
+            allowMultiple: this.allowMultiple,
+            allowEmpty: this.allowEmpty
         })
         this.postInit()
         this.showModal()
