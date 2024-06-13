@@ -498,6 +498,27 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         self::assertFalse($userInSmtpBackend);
     }
 
+    public function testExternalDomainInUserAccount()
+    {
+        $this->_skipWithoutEmailSystemAccountConfig();
+
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
+        $imapConfig->allowExternalEmail = true;
+        Tinebase_Config::getInstance()->set(Tinebase_Config::IMAP, $imapConfig);
+
+        $user = $this->_createTestUser();
+        $userArray = $user->toArray();
+        $userArray['accountEmailAddress'] = 'address@some.external.domain';
+        $updatedUser = $this->_json->saveUser($userArray);
+        self::assertEquals($userArray['accountEmailAddress'], $updatedUser['accountEmailAddress']);
+        self::assertEmpty($updatedUser['xprops']['emailUserIdImap'], print_r($updatedUser['xprops'], true));
+
+        // check if removing also works
+        $userArray['accountEmailAddress'] = '';
+        $updatedUser = $this->_json->saveUser($userArray);
+        self::assertEquals($userArray['accountEmailAddress'], $updatedUser['accountEmailAddress']);
+    }
+
     public function testUmlautsInDomainAndEmailAddress()
     {
         $umlautDomain = 'myümläutdomain.de';

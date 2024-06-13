@@ -834,9 +834,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         $manageSmtpEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::SMTP);
+        $manageImapEmailUser = Tinebase_EmailUser::manages(Tinebase_Config::IMAP);
         $smtpConfig = $manageSmtpEmailUser
             ? Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP, true)
-            : $smtpConfig = array();
+            : [];
 
         // be license class for setting some license registry data
         $license = Tinebase_License::getInstance();
@@ -849,7 +850,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'userContact' => $userContactArray,
             'jsonKey' => Tinebase_Core::get('jsonKey'),
             'userApplications' => $user->getApplications()->toArray(),
-            'manageImapEmailUser' => Tinebase_EmailUser::manages(Tinebase_Config::IMAP),
+            'manageImapEmailUser' => $manageImapEmailUser,
             'manageSmtpEmailUser' => $manageSmtpEmailUser,
             'mustchangepw' => $user->mustChangePassword(),
             'confirmLogout' => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
@@ -862,6 +863,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'primarydomain' => isset($smtpConfig['primarydomain']) ? $smtpConfig['primarydomain'] : '',
             'secondarydomains' => isset($smtpConfig['secondarydomains']) ? $smtpConfig['secondarydomains'] : '',
             'additionaldomains' => isset($smtpConfig['additionaldomains']) ? $smtpConfig['additionaldomains'] : '',
+            'allowExternalEmail' => ! $manageImapEmailUser || Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail,
             'smtpAliasesDispatchFlag' => Tinebase_EmailUser::smtpAliasesDispatchFlag(),
         );
 

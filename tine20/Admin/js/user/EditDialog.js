@@ -211,7 +211,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return  Tine.Admin.UserEditDialog.superclass.isValid.call(this).then((result) => {
             let errorMessages = '';
             
-            if (Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
+            if (Tine.Tinebase.registry.get('manageSmtpEmailUser') && ! Tine.Tinebase.registry.get('allowExternalEmail')) {
                 const emailValue = this.getForm().findField('accountEmailAddress').getValue();
                 if (! Tine.Tinebase.common.checkEmailDomain(emailValue)) {
                     let errorMessage = this.app.i18n._("Domain is not allowed. Check your SMTP domain configuration.") + '<br>';

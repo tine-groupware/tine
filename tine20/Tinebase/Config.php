@@ -1231,6 +1231,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
          * backend (string) - see Tinebase_EmailUser::$_supportedBackends
          * verifyPeer (bool)
          * "allowOverwrite": false (bool)
+         * "allowExternalEmail": false (bool)
+         *
+         * TODO make this a structured config with subconfig keys
          */
         self::IMAP => array(
                                    //_('System IMAP')

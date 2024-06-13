@@ -850,7 +850,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * updates an user
      * 
-     * this function updates an user 
+     * this function updates a user
      *
      * @param Tinebase_Model_FullUser $_user
      * @return Tinebase_Model_FullUser
@@ -946,16 +946,30 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             return;
         }
 
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail &&
+            !Tinebase_EmailUser::checkDomain($user->accountEmailAddress)
+        ) {
+            $externalDomain = true;
+        } else {
+            $externalDomain = false;
+        }
+
         $xprop = strpos(get_class($plugin), 'Imap') !== false
             ? Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_IMAP
             : Tinebase_EmailUser_XpropsFacade::XPROP_EMAIL_USERID_SMTP;
 
-        if ($method === 'inspectUpdateUser' && empty($user->accountEmailAddress)
+        if ($method === 'inspectUpdateUser' && (empty($user->accountEmailAddress) || $externalDomain)
             && isset($user->xprops()[$xprop]) && $user->xprops()[$xprop]
         ) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                 __METHOD__ . '::' . __LINE__ . ' Remove plugin user as email address has been removed');
             $this->_inspectEmailPluginCRUD($plugin, $user, $newUserProperties, 'inspectDeleteUser');
+            return;
+        }
+
+        if ($externalDomain && $method !== 'inspectDeleteUser') {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Email address not managed by us. Skipping plugin handling.');
             return;
         }
 
@@ -1048,7 +1062,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw new Tinebase_Exception_Record_Validation('Invalid user object. ' . print_r($_user->getValidationErrors(), TRUE));
         }
 
-        Tinebase_EmailUser::checkDomain($_user->accountEmailAddress, true, null, true);
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)
+            && ! Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail) {
+            Tinebase_EmailUser::checkDomain($_user->accountEmailAddress,
+                true,
+                null,
+                true);
+        }
 
         $accountId = Tinebase_Model_User::convertUserIdToInt($_user);
 
