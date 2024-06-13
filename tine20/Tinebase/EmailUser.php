@@ -309,7 +309,11 @@ class Tinebase_EmailUser
     public static function manages($_configType)
     {
         $config = self::getConfig($_configType);
-        return (!empty($config['backend']) && isset($config['active']) && $config['active'] == true);
+        return (
+            ($_configType === Tinebase_Config::SIEVE || !empty($config['backend']))
+            && isset($config['active'])
+            && $config['active'] == true
+        );
     }
 
     /**
@@ -433,7 +437,9 @@ class Tinebase_EmailUser
                 if (preg_match("~^ldaps?://~i", $config['secondarydomains'])) {
                     // If LDAP-Url is given (instead of comma separated domains) add secondary domains from LDAP
                     $config['secondarydomains'] = self::_getSecondaryDomainsFromLdapUrl($config['secondarydomains']);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Secondarydomains from ldap (allowed domains): ' . print_r($config['secondarydomains'], true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                        __METHOD__ . '::' . __LINE__ . ' Secondarydomains from ldap (allowed domains): '
+                        . print_r($config['secondarydomains'], true));
                 }
                 $allowedDomains = array_merge($allowedDomains, preg_split('/\s*,\s*/', $config['secondarydomains']));
             }
@@ -563,9 +569,9 @@ class Tinebase_EmailUser
 
     /**
      * @param string $_accountId
-     * @return Tinebase_RAII|boolean
+     * @return Tinebase_RAII
      */
-    public static function prepareAccountForSieveAdminAccess($_accountId)
+    public static function prepareAccountForSieveAdminAccess($_accountId): Tinebase_RAII
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
             . __LINE__ . ' Account id: ' . $_accountId);
@@ -580,13 +586,17 @@ class Tinebase_EmailUser
 
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
 
+        if (! Tinebase_EmailUser::sieveBackendSupportsMasterPassword($account)) {
+            return $raii;
+        }
+
         // create sieve master user account here
         try {
             self::_setSieveMasterPassword($account);
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                 . __LINE__ . ' ' . $tenf->getMessage());
-            return false;
+            return $raii;
         }
 
         // sieve login
@@ -595,7 +605,7 @@ class Tinebase_EmailUser
         } catch (Felamimail_Exception_Sieve $fes) {
             if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::'
                 . __LINE__ . ' ' . $fes->getMessage());
-            return false;
+            return $raii;
         }
 
         return $raii;
@@ -624,7 +634,7 @@ class Tinebase_EmailUser
             return false;
         }
 
-        $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $imapEmailBackend = Tinebase_EmailUser::getInstance();
         if (method_exists($imapEmailBackend, 'checkMasterUserTable')) {
             try {
                 $imapEmailBackend->checkMasterUserTable();
@@ -692,11 +702,13 @@ class Tinebase_EmailUser
 
     public static function removeSieveAdminAccess()
     {
-        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP) || self::$_masterUser === null ||
+            ! Tinebase_EmailUser::sieveBackendSupportsMasterPassword())
+        {
             return false;
         }
 
-        $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        $imapEmailBackend = Tinebase_EmailUser::getInstance();
         if (method_exists($imapEmailBackend, 'removeMasterPassword')) {
             $imapEmailBackend->removeMasterPassword(self::$_masterUser);
         }
