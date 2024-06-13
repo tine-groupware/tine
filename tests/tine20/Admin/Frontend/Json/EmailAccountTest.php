@@ -580,7 +580,11 @@ Ich bin vom 22.04.2023 bis zum 23.04.2023 im Urlaub. Bitte kontaktieren Sie&lt;b
 
     protected function _checkMasterUserTable()
     {
-        $imapEmailBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
+        if (!Tinebase_EmailUser::manages(Tinebase_Config::SIEVE)) {
+            self::markTestSkipped('tine does not manage sieve');
+        }
+
+        $imapEmailBackend = Tinebase_EmailUser::getInstance();
         if (method_exists($imapEmailBackend, 'checkMasterUserTable')) {
             try {
                 $imapEmailBackend->checkMasterUserTable();

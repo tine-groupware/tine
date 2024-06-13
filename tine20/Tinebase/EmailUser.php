@@ -600,9 +600,9 @@ class Tinebase_EmailUser
 
     /**
      * @param string $_accountId
-     * @return Tinebase_RAII|boolean
+     * @return Tinebase_RAII
      */
-    public static function prepareAccountForSieveAdminAccess($_accountId)
+    public static function prepareAccountForSieveAdminAccess($_accountId): Tinebase_RAII
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::'
@@ -619,6 +619,10 @@ class Tinebase_EmailUser
 
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
 
+        if (! Tinebase_EmailUser::backendSupportsMasterPassword($account)) {
+            return $raii;
+        }
+
         // create sieve master user account here
         try {
             self::setAccountMasterPassword($account);
@@ -627,7 +631,7 @@ class Tinebase_EmailUser
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
                 . __LINE__ . ' ' . $tenf->getMessage());
             }
-            return false;
+            return $raii;
         }
 
         // sieve login
@@ -638,7 +642,7 @@ class Tinebase_EmailUser
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::'
                 . __LINE__ . ' ' . $fes->getMessage());
             }
-            return false;
+            return $raii;
         }
 
         return $raii;
@@ -753,7 +757,9 @@ class Tinebase_EmailUser
 
     public static function removeAdminAccess()
     {
-        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP) || self::$_masterUser === null) {
+        if (! Tinebase_EmailUser::manages(Tinebase_Config::IMAP) || self::$_masterUser === null ||
+            ! Tinebase_EmailUser::backendSupportsMasterPassword())
+        {
             return false;
         }
 
