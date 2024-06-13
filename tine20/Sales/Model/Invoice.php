@@ -183,7 +183,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             'price_net' => array(
                 'label' => 'Price Net', // _('Price Net')
                 'type'  => 'money',
-                'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'inputFilters' => array('Zend_Filter_Empty' => 0.0),
                 'shy' => TRUE,
                 self::NULLABLE => true,
             ),
@@ -191,14 +191,14 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                 'label' => 'Taxes (VAT)', // _('Taxes (VAT)')
                 'type'  => 'money',
                 self::NULLABLE => true,
-                'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'inputFilters' => array('Zend_Filter_Empty' => 0.0),
                 'shy' => TRUE,
             ),
             'price_gross' => array(
                 'label' => 'Price Gross', // _('Price Gross')
                 'type'  => 'money',
                 self::NULLABLE => true,
-                'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'inputFilters' => array('Zend_Filter_Empty' => 0.0),
                 'shy' => TRUE,
             ),
             'sales_tax' => array(
@@ -209,7 +209,7 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
                     self::APP_NAME  => Tinebase_Config::APP_NAME,
                     self::CONFIG => Tinebase_Config::SALES_TAX
                 ],
-                'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'inputFilters' => array('Zend_Filter_Empty' => 0.0),
                 'shy' => TRUE,
                 self::NULLABLE => true,
                 self::UNSIGNED => true,
@@ -217,8 +217,8 @@ class Sales_Model_Invoice extends Tinebase_Record_Abstract
             'inventory_change' => array(
                 'label' => 'Inventory Change', // _('Inventory Change')
                 'type'  => 'money',
-                'default' => 0,
-                'inputFilters' => array('Zend_Filter_Empty' => 0),
+                'default' => 0.0,
+                'inputFilters' => array('Zend_Filter_Empty' => 0.0),
                 'shy' => TRUE,
                 self::NULLABLE => true,
             ),

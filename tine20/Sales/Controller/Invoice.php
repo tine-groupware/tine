@@ -1663,7 +1663,8 @@ class Sales_Controller_Invoice extends Sales_Controller_NumberableAbstract
             $diff = $diff['diff'];
             
             $allowChange = array('relations', 'notes', 'tags', 'attachments', 'description', 'created_by', 'creation_time',
-                'last_modified_by', 'last_modified_time', 'is_deleted', 'deleted_by', 'deleted_time', 'date', 'start_date', 'end_date', 'seq'
+                'last_modified_by', 'last_modified_time', 'is_deleted', 'deleted_by', 'deleted_time', 'date', 'start_date', 'end_date', 'seq',
+                'last_datev_send_date'
             );
             
             foreach($allowChange as $field) {
