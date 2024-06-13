@@ -73,6 +73,9 @@ services:
     extra_hosts:
       - "{{ tinedockercompose_extra_hosts }}"
 {% endif %}
+{% if tinedockercompose_dns is defined %}
+    dns: "{{ tinedockercompose_dns }}"
+{% endif %}
 {% if tinedockercompose_traefik_host is defined %}
     ### for traefik support (see https://doc.traefik.io/traefik/providers/docker/)
     labels:
