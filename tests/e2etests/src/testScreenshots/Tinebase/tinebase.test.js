@@ -16,7 +16,7 @@ describe('mainScreen', () => {
                 await page.waitForTimeout(1000);
                 await expect(page).toClick('span', {text: process.env.TEST_BRANDING_TITLE});
                 await page.waitForTimeout(1000);
-                await expect(page).toClick('span', {text: Apps[i]});
+                await expect(page).toClick('span.x-menu-item-text', {text: Apps[i]});
             } catch (e) {
                 //console.log('Application ' + Apps[i] + ' don´t install');
             }
