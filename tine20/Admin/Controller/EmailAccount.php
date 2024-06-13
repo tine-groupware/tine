@@ -457,11 +457,10 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     /**
      * @param ?mixed $mailAccounts
      * @param bool $dryRun
-     * @param bool $allowToFail
      * @return Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_Record_NotAllowed
      */
-    public function updateSieveScript($mailAccounts = null, bool $dryRun = false, bool $allowToFail = true): Tinebase_Record_RecordSet
+    public function updateSieveScript($mailAccounts = null, bool $dryRun = false): Tinebase_Record_RecordSet
     {
         if (!$mailAccounts) {
             $backend = Admin_Controller_EmailAccount::getInstance();
@@ -477,23 +476,15 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
 
         $updatedAccounts = new Tinebase_Record_RecordSet(Felamimail_Model_Account::class);
         foreach ($mailAccounts as $record) {
-            if (Tinebase_EmailUser::backendSupportsMasterPassword($record)) {
-                $raii = Tinebase_EmailUser::prepareAccountForSieveAdminAccess($record->getId());
-                try {
-                    $record = Felamimail_Controller_Account::getInstance()->getBackend()->update($record);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::'
-                        . __LINE__ . 'Sieve script updated from record: ' . $record->getId());
-                    $updatedAccounts->addRecord($record);
-                } catch (Exception $e) {
-                    if ($allowToFail) {
-                        Tinebase_Exception::log($e);
-                    } else {
-                        throw $e;
-                    }
-                } finally {
-                    Tinebase_EmailUser::removeAdminAccess();
-                    unset($raii);
+            $list = $this->_getListFromAccount($record);
+            if (! $list) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::'
+                        . __LINE__ . ' No list found for account ' . $record->getId());
                 }
+            } else {
+                Felamimail_Sieve_AdbList::setScriptForList($list);
+                $updatedAccounts->addRecord($record);
             }
         }
         return $updatedAccounts;
@@ -507,9 +498,7 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
     {
         $list = $account['adb_list'];
         if (!$list) {
-            $list = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter([
-                ['field' => 'id', 'operator' => 'equals', 'value' => $account['user_id']]
-            ]))->getFirstRecord();;
+            $list = $this->_getListFromAccount($account);
         }
         if (is_array($list)) {
             $list = new Addressbook_Model_List($list, true);
@@ -522,5 +511,16 @@ class Admin_Controller_EmailAccount extends Tinebase_Controller_Record_Abstract
             }
         }
         return Addressbook_Controller_List::getInstance()->update($list);
+    }
+
+    protected function _getListFromAccount(Felamimail_Model_Account $account): ?Addressbook_Model_List
+    {
+        /* @var Addressbook_Model_List $list */
+        $acl = Addressbook_Controller_List::getInstance()->doContainerACLChecks(false);
+        $list = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter([
+            ['field' => 'id', 'operator' => 'equals', 'value' => $account->user_id]
+        ]))->getFirstRecord();
+        Addressbook_Controller_List::getInstance()->doContainerACLChecks($acl);
+        return $list;
     }
 }
