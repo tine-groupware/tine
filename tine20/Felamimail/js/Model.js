@@ -191,9 +191,9 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
      *       But the server transforms the original type into the requested format/display_format.
      */
     getBodyType: function() {
-        //when BE throws not found error from external messages with html body type, the body_content_type_of_body_property_of_this_record is still text/plain
-        //, so we need to detect the body_content_type_of_body_property_of_this_record type in FE
-        const htmlRegex = /<\/?[a-z][\s\S]*>/i;
+        //fixme: when BE throws not found error from external messages with html body type, the body_content_type_of_body_property_of_this_record is still text/plain
+        //, so we need to detect the body_content_type_of_body_property_of_this_record type in FE, is there a better solution ?
+        const htmlRegex = /<\s*([a-zA-Z]+)(\s+[^>]+)?>/;
         if (this.bodyIsFetched()) {
             if (htmlRegex.test(this.get('body'))) return 'text/html';
         }
