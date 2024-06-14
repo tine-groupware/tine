@@ -207,7 +207,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      *
      * @todo move to converter?
      */
-    public static function createFromMime($_mimeContent)
+    public static function createFromMime($_mimeContent, $mimeType = null)
     {
         $message = \ZBateson\MailMimeParser\Message::from($_mimeContent, false);
 
@@ -238,12 +238,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                 $data[$headerKey][] = $address->getEmail();
             }
         }
-
-        $contentPart = $message->getPartByMimeType(Zend_Mime::TYPE_HTML);
+        $mimeType = $mimeType ?? Zend_Mime::TYPE_HTML;
+        $contentPart = $message->getPartByMimeType($mimeType);
         if (! $contentPart) {
             $contentPart = $message->getPartByMimeType(Zend_Mime::TYPE_TEXT);
         }
-
         if ($contentPart) {
             if ($contentPart->getContentType() == Zend_Mime::TYPE_TEXT) {
                 $data['body'] = $contentPart->getContent();
@@ -255,8 +254,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
                     $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
                 } else {
                     $data['body'] = $contentPart->getContent();
+                    if (strip_tags($data['body']) !== $data['body']) {
+                        $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
+                    }
                 }
-
                 $data['body_content_type'] = Zend_Mime::TYPE_HTML;
             }
         }

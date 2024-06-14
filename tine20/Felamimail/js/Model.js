@@ -291,25 +291,10 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
      * fetches body and additional headers (which are needed for the preview panel) into given message
      *
      * @param {Message} message
-     * @param formatConfig
+     * @param mimeType
      * @param {Function|Object} callback (NOTE: this has NOTHING to do with standard Ext request callback fn)
      */
-    fetchBody: function(message, formatConfig, callback) {
-        const account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(message.get('account_id'));
-        // set default mimeType to text/plain when no account found, might happen for .eml emails
-        let mimeType = 'text/plain';
-        
-        if (account && formatConfig) {
-            mimeType = account.get(formatConfig);
-            if (mimeType === 'content_type') {
-                mimeType = message.get('body_content_type');
-            } else {
-                if (!mimeType.match(/^text\//)) {
-                    mimeType = 'text/' + mimeType;
-                }
-            }
-        }
-        
+    fetchBody: function(message, mimeType, callback) {
         return this.loadRecord(message, {
             params: {mimeType: mimeType},
             timeout: 120000, // 2 minutes
@@ -333,6 +318,34 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
                 }
             }
         });
+    },
+    
+    /**
+     * get format config from account
+     *
+     * @param formatConfig (compose_format / display_format)
+     * @param {Message} message
+     * @param account
+     */
+    getFormatConfig(formatConfig, message, account = null) {
+        account = account ?? Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(message.get('account_id'));
+        // set default mimeType to text/plain when no account found, might happen for .eml emails
+        let mimeType = 'text/plain';
+        
+        if (account) {
+            mimeType = account.get(formatConfig);
+            if (mimeType === 'content_type') {
+                mimeType = message.get('body_content_type');
+            } else {
+                if (!mimeType.match(/^text\//)) {
+                    mimeType = 'text/' + mimeType;
+                }
+            }
+        } else {
+            mimeType = message?.getBodyType?.() ?? 'text/html';
+        }
+
+        return mimeType;
     },
     
     /**
