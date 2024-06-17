@@ -165,7 +165,7 @@ class EFile_Model_FileMetadata extends Tinebase_Record_NewAbstract
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::CONFIG => [
                     self::APP_NAME => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME => Addressbook_Model_Contact::MODEL_PART_NAME,
+                    self::MODEL_NAME => Addressbook_Model_Contact::MODEL_NAME_PART,
                 ],
                 self::LABEL => 'Final Decree by', // _('Final Decree by')
                 self::UI_CONFIG => [

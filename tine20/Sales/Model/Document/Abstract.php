@@ -255,7 +255,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 // TODO add resolve deleted flag? guess that would be nice
                 self::CONFIG                => [
                     self::APP_NAME              => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_PART_NAME,
+                    self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_NAME_PART,
                 ],
                 self::NULLABLE              => true,
                 self::SHY                   => true,
