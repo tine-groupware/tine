@@ -160,12 +160,14 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             const {results: filteredData} = await Tine.Tasks.searchTasks(this.filter);
             this.filteredData = filteredData;
 
-            this.store.filterBy((r) => {
-                return _.find(filteredData, {id: r.id});
-            })
-        } else {
-            this.store.clearFilter();
+        //     this.store.filterBy((r) => {
+        //         return _.find(filteredData, {id: r.id});
+        //     })
+        // } else {
+        //     this.store.clearFilter();
         }
+
+        this.getView().refresh()
     },
 
     /**
@@ -191,7 +193,10 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
             } else if (dueDay < today) {
                 classNames.push('tasks-grid-overdue');
             }
+        }
 
+        if (this.filteredData && !_.find(this.filteredData, { id: record.id })) {
+            classNames.push('tine-grid-row-nolongerinfilter');
         }
 
         return _.join(_.uniq(classNames), ' ');
