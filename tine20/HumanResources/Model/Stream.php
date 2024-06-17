@@ -139,7 +139,7 @@ class HumanResources_Model_Stream extends Tinebase_Record_NewAbstract
                     self::LABEL                 => 'Responsibles',
                     self::CONFIG                => [
                         self::APP_NAME              => \Addressbook_Config::APP_NAME,
-                        self::MODEL_NAME            => \Addressbook_Model_Contact::MODEL_PART_NAME,
+                        self::MODEL_NAME            => \Addressbook_Model_Contact::MODEL_NAME_PART,
                         self::TYPE                  => 'RESPONSIBLES'
                     ]
                 ]
