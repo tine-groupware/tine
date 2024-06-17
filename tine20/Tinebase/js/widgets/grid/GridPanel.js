@@ -1228,6 +1228,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             return;
         }
 
+        if (this.editDialog) {
+            this.storeRemoteSort = false;
+        }
+        
         if (this.recordProxy) {
             if (! this.defaultSortInfo.field) {
                 if (this.modelConfig && this.modelConfig.defaultSortInfo) {
