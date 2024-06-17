@@ -96,7 +96,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                 self::LABEL => 'Name', // _('Name')
                 self::CONFIG            => [
                     self::APP_NAME => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME => Addressbook_Model_Contact::MODEL_PART_NAME,
+                    self::MODEL_NAME => Addressbook_Model_Contact::MODEL_NAME_PART,
                 ],
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => false,
