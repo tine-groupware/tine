@@ -103,7 +103,7 @@ class HumanResources_Model_FreeDay extends Tinebase_Record_Abstract
                 self::NORESOLVE     => true,
                 self::CONFIG        => [
                     self::APP_NAME      => Calendar_Config::APP_NAME,
-                    self::MODEL_NAME    => Calendar_Model_Event::MODEL_PART_NAME,
+                    self::MODEL_NAME    => Calendar_Model_Event::MODEL_NAME_PART,
                 ],
             ],
         ),

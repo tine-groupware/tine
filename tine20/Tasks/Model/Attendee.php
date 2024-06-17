@@ -95,7 +95,7 @@ class Tasks_Model_Attendee extends Tinebase_Record_NewAbstract
                 self::LABEL      => 'Collaborator', // _('Collaborator')
                 self::CONFIG                => [
                     self::APP_NAME              => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_PART_NAME,
+                    self::MODEL_NAME            => Addressbook_Model_Contact::MODEL_NAME_PART,
                 ],
                 self::QUERY_FILTER => TRUE
             ],

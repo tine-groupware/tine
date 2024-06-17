@@ -65,7 +65,7 @@ class Addressbook_Model_ContactProperties_Phone extends Tinebase_Record_NewAbstr
                 self::TYPE                      => self::TYPE_RECORD,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME                => Addressbook_Model_Contact::MODEL_PART_NAME,
+                    self::MODEL_NAME                => Addressbook_Model_Contact::MODEL_NAME_PART,
                 ],
                 self::DISABLED => true,
                 self::VALIDATORS => [
