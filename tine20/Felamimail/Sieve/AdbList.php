@@ -116,13 +116,13 @@ class Felamimail_Sieve_AdbList
 }';
         }
         if ($this->_replyTo === 'sender') {
-            $result .= 'if header :matches "from" "*" {
+            $result .= 'if address :matches "from" "*" {
     addheader "Reply-To" "${1}";
 }';
         }
         if ($this->_replyTo === 'both') {
             $mailingList = $this->_listEmail ? ', ' . $this->_listEmail : '';
-            $result .= 'if header :matches "from" "*" {
+            $result .= 'if address :matches "from" "*" {
     addheader "Reply-To" "${1}' . $mailingList. '";
 }';
         }
