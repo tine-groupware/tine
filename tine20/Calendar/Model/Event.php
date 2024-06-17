@@ -56,7 +56,7 @@
  */
 class Calendar_Model_Event extends Tinebase_Record_Abstract
 {
-    const MODEL_PART_NAME      = 'Event';
+    const MODEL_NAME_PART      = 'Event';
     const TABLE_NAME           = 'cal_events';
 
     const TRANSP_TRANSP        = 'TRANSPARENT';
@@ -96,7 +96,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         self::VERSION       => 20,
         'containerName'     => 'Calendar',
         'containersName'    => 'Calendars', // ngettext('Calendar', 'Calendars', n)
-        'recordName'        => self::MODEL_PART_NAME, // gettext('GENDER_Event')
+        'recordName'        => self::MODEL_NAME_PART, // gettext('GENDER_Event')
         'recordsName'       => 'Events', // ngettext('Event', 'Events', n)
         'titleProperty'     => 'summary',
         'hasRelations'      => true,
@@ -112,7 +112,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'containerProperty' => 'container_id',
 
         'appName'           => 'Calendar',
-        'modelName'         => self::MODEL_PART_NAME,
+        'modelName'         => self::MODEL_NAME_PART,
         self::TABLE         => [
             self::NAME          => self::TABLE_NAME,
             self::INDEXES       => [

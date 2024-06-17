@@ -93,7 +93,7 @@ use Addressbook_Model_ContactProperties_Definition as AMCPD;
  */
 class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 {
-    const MODEL_PART_NAME = 'Contact';
+    const MODEL_NAME_PART = 'Contact';
 
     /**
      * const to describe contact of current account id independent
@@ -153,7 +153,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
         self::VERSION       => 27,
         'containerName'     => 'Addressbook', // gettext('GENDER_Addressbook')
         'containersName'    => 'Addressbooks', // ngettext('Addressbook', 'Addressbooks', n)
-        'recordName'        => self::MODEL_PART_NAME, // gettext('GENDER_Contact')
+        'recordName'        => self::MODEL_NAME_PART, // gettext('GENDER_Contact')
         'recordsName'       => 'Contacts', // ngettext('Contact', 'Contacts', n)
         'hasRelations'      => true,
         'copyRelations'     => false,
@@ -172,7 +172,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
         'titleProperty'     => 'n_fileas',
         'appName'           => 'Addressbook',
-        'modelName'         => self::MODEL_PART_NAME, // _('GENDER_Contact')
+        'modelName'         => self::MODEL_NAME_PART, // _('GENDER_Contact')
         self::TABLE         => [
             self::NAME          => self::TABLE_NAME,
             self::INDEXES       => [

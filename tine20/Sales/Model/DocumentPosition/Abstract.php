@@ -238,7 +238,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::TYPE                          => self::TYPE_RECORD,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
-                    //self::MODEL_NAME                    => Sales_Model_Document_Abstract::MODEL_PART_NAME,
+                    //self::MODEL_NAME                    => Sales_Model_Document_Abstract::MODEL_NAME_PART,
                     self::FOREIGN_FIELD                 => Sales_Model_Document_Abstract::FLD_POSITIONS,
                 ],
                 self::VALIDATORS                    => [
@@ -255,7 +255,7 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
                 self::DISABLED                      => true,
                 self::CONFIG                        => [
                     self::APP_NAME                      => Sales_Config::APP_NAME,
-                    //self::MODEL_NAME                    => Sales_Model_DocumentPosition_Abstract::MODEL_PART_NAME,
+                    //self::MODEL_NAME                    => Sales_Model_DocumentPosition_Abstract::MODEL_NAME_PART,
                 ],
                 self::NULLABLE                      => true,
             ],

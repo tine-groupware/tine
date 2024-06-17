@@ -36,7 +36,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @var array
      */
     protected $_configuredModels = [
-        Addressbook_Model_Contact::MODEL_PART_NAME,
+        Addressbook_Model_Contact::MODEL_NAME_PART,
         Addressbook_Model_ContactProperties_Address::MODEL_NAME_PART,
         Addressbook_Model_ContactProperties_Definition::MODEL_NAME_PART,
         Addressbook_Model_ContactProperties_Email::MODEL_NAME_PART,

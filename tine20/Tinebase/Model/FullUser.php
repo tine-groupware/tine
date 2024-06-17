@@ -139,7 +139,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
                 self::TYPE                      => self::TYPE_RECORD,
                 self::CONFIG                    => [
                     self::APP_NAME                  => Addressbook_Config::APP_NAME,
-                    self::MODEL_NAME                => Addressbook_Model_Contact::MODEL_PART_NAME,
+                    self::MODEL_NAME                => Addressbook_Model_Contact::MODEL_NAME_PART,
                 ],
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
             ],
