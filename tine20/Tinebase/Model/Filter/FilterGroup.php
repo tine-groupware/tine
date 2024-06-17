@@ -146,7 +146,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     /**
      * @var array filter model fieldName => definition
      */
-    protected $_filterModel = array();
+    protected $_filterModel = [];
 
     /**
      * @var string id
@@ -169,7 +169,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     /**
      * @var array holds filter objects of this filter
      */
-    protected $_filterObjects = array();
+    protected $_filterObjects = [];
     
     /**
      * @var array special options
@@ -179,7 +179,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     /**
      * @var array holds data of all custom filters
      */
-    protected $_customData = array();
+    protected $_customData = [];
     
     /**
      * @var string holds condition between this filters
@@ -212,7 +212,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @param  array $_options
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function __construct(array $_data = array(), $_condition = '', $_options = array(),
+    public function __construct(array $_data = [], $_condition = '', $_options = [],
         Tinebase_Model_Filter_FilterGroup $_parent = null)
     {
         $this->_createFromModelConfiguration();
@@ -686,7 +686,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             $filter = NULL;
         } else {
             $self = $this;
-            $data[TMFA::OPTIONS] = array_merge($this->_options, isset($definition[TMFA::OPTIONS]) ? (array)$definition[TMFA::OPTIONS] : array(), array('parentFilter' => $self));
+            $data[TMFA::OPTIONS] = array_merge($this->_options, isset($definition[TMFA::OPTIONS]) ? (array)$definition[TMFA::OPTIONS] : [], array('parentFilter' => $self));
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Creating filter: ' . $definition['filter'] . ' with data: ' . print_r($data, TRUE));
 
@@ -727,7 +727,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function getAclFilters()
     {
-        $aclFilters = array();
+        $aclFilters = [];
         
         foreach ($this->_filterObjects as $object) {
             if ($object instanceof Tinebase_Model_Filter_AclFilter) {
@@ -935,7 +935,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function toArray($_valueToJson = false)
     {
-        $result = array();
+        $result = [];
         /** @var Tinebase_Model_Filter_FilterGroup|Tinebase_Model_Filter_Abstract $filter */
         foreach ($this->_filterObjects as $filter) {
             if ($filter->isImplicit()) {
@@ -1035,7 +1035,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      */
     public function getRequiredColumnsForSelect()
     {
-        $result = array();
+        $result = [];
         
         foreach ($this->getFilterObjects() as $filter) {
             if ($filter instanceof Tinebase_Model_Filter_Abstract) {
@@ -1179,12 +1179,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * returns filter for given model
      *
      * @param string $_modelOrFilterName model or model filter class name
-     * @param array  $_data
+     * @param ?array $_data
      * @param string $_condition
      * @param array  $_options
      * @return Tinebase_Model_Filter_FilterGroup
      */
-    public static function getFilterForModel($_modelOrFilterName, array $_data = array(), $_condition = '', $_options = array())
+    public static function getFilterForModel($_modelOrFilterName, ?array $_data = [], $_condition = '', $_options = [])
     {
         if (preg_match('/Filter$/', $_modelOrFilterName)) {
             $modelName = preg_replace('/Filter$/', '', $_modelOrFilterName);
@@ -1194,12 +1194,16 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
             $modelFilterClass = $modelName . 'Filter';
         }
 
+        if (! $_data) {
+            $_data = [];
+        }
+
         if (! class_exists($modelFilterClass)) {
             // TODO check if model class exists?
             //if (class_exists($modelName))
 
             // use generic filter model
-            $filter = new Tinebase_Model_Filter_FilterGroup(array(), $_condition, $_options);
+            $filter = new Tinebase_Model_Filter_FilterGroup([], $_condition, $_options);
             $filter->setConfiguredModel($modelName);
             $filter->setFromArray($_data);
         } else {
