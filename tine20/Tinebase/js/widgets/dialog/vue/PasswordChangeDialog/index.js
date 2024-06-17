@@ -20,6 +20,7 @@ Ext.ns('Tine', 'Tine.Tinebase', 'Tine.widgets.dialog');
 Tine.Tinebase.PasswordChangeDialog = Ext.extend(Tine.widgets.dialog.ModalDialog, {
 
     dialogText: '',
+    pwType: 'password',
 
     initComponent: async function() {
         this.persona = Personas.QUESTION_INPUT
