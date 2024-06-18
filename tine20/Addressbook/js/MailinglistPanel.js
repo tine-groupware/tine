@@ -39,7 +39,6 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
 
         this.isMailinglistCheckbox = new Ext.form.Checkbox({
             hideLabels: true,
-            disabled: true,
             boxLabel: this.app.i18n._('This group is a mailing list'),
             listeners: {scope: this, check: this.onMailinglistCheck}
         });
@@ -84,7 +83,6 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
 
         _.forOwn(checkboxLabels, (label, key) => {
             this.checkboxes[key] = new Ext.form.Checkbox({
-                disabled: true,
                 boxLabel: label,
                 hideLabels: true,
             });
@@ -133,58 +131,50 @@ Tine.Addressbook.MailinglistPanel = Ext.extend(Ext.Panel, {
 
     onRecordLoad: function(editDialog, record, ticketFn) {
         this.listRecord = record;
-        const evalGrants = editDialog.evalGrants;
         this.isMailingList = _.get(record, 'data.xprops.useAsMailinglist', false);
-        // TODO check right here, too
-        const hasRight = Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook');
-        const hasRequiredGrant = !evalGrants
-            || (_.get(record, record.constructor.getMeta('grantsPath') + '.' + this.requiredGrant) && hasRight);
-        // fixme: admin group edit dialog has no account_grants and the mailinglistDisabled was set to true , but it should be enabled
-        const mailinglistDisabled = ! (_.get(record, 'data.container_id.account_grants.adminGrant', false) && hasRight);
+        this.isMailinglistCheckbox.checked = this.isMailingList;
         const sieveReplyTo = record?.data?.xprops?.sieveReplyTo ?? 'sender';
         const sieveReplyToEmail = record?.data?.email;
-        this.isMailinglistCheckbox.checked = this.isMailingList;
+        
         Object.entries(this.checkboxes).forEach(([key, checkbox]) => {
             checkbox.checked = _.get(record, 'data.xprops.' + key, false);
         });
+        
         this.afterIsRendered().then(() => {
-            this.isMailinglistCheckbox.setDisabled(mailinglistDisabled);
+            const hasRight = Tine.Tinebase.common.hasRight('manage_list_email_options', 'Addressbook');
+            const containerData = _.get(record, record.constructor.getMeta('grantsPath'));
+            const containerGrant =  !containerData ? false : containerData[this.requiredGrant];
+            const hasRequiredGrant = !editDialog.evalGrants || containerGrant;
+            
+            this.onMailinglistCheck(null, this.isMailingList);
+            this.setReadOnly(!hasRequiredGrant || !hasRight);
+            
             this.replyToComboBox.setValue(sieveReplyTo);
             this.emailField.setValue(sieveReplyToEmail);
             this.emailField.value = sieveReplyToEmail;
-            
-            this.replyToComboBox.setVisible(this.isMailingList);
-            this.emailField.setVisible(this.isMailingList);
-            this.emailField.validate();
-        });
-        this.setReadOnly(!hasRequiredGrant || !hasRight);
-    },
-
-    setReadOnly: function(readOnly) {
-        this.readOnly = readOnly;
-        this.emailField.setDisabled(readOnly);
-        this.replyToComboBox.setDisabled(readOnly);
-        
-        Object.entries(this.checkboxes).forEach(([key, checkbox]) => {
-            checkbox.setDisabled(readOnly);
         });
     },
-
+    
+    setReadOnly(readOnly, includeMain = true) {
+        if (includeMain) this.isMailinglistCheckbox.setDisabled(readOnly);
+        this.onMailinglistCheck(null, !readOnly && this.isMailinglistCheckbox?.checked);
+    },
+    
     onRecordUpdate: function(editDialog, record) {
         // TODO set record xprops
         let xprops = record.get('xprops');
-        this.isMailingList = this.isMailinglistCheckbox.getValue();
+        const isMailingList = this.isMailinglistCheckbox.getValue();
         
         if (! xprops || Ext.isArray(xprops)) {
             xprops = {};
         }
-        xprops.useAsMailinglist = this.isMailingList;
+        xprops.useAsMailinglist = isMailingList;
         Object.entries(this.checkboxes).forEach(([key, checkbox]) => {
-            xprops[key] = this.isMailingList ? checkbox.getValue() : false;
+            xprops[key] = isMailingList ? checkbox.getValue() : false;
         });
         xprops.sieveReplyTo = this.replyToComboBox.getValue();
         record.set('xprops', xprops);
         this.listRecord.set('xprops', xprops);
-        if (!this.isMailingList) this.listRecord.set('email', '');
+        if (!isMailingList) this.listRecord.set('email', '');
     }
 });
