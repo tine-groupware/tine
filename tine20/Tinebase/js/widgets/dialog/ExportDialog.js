@@ -283,7 +283,8 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         Tine.widgets.exportAction.downloadExport(this.record).then(async (raw) => {
                             // NOTE: filename is missing in fm_path
                             const fileLocation = _.get(JSON.parse(raw.responseText), 'file_location');
-                            const link = new Tine.Filemanager.Model.Node({path: fileLocation.fm_path}).getSystemLink();
+                            const path = fileLocation.fm_path + '/' + (fileLocation.file_name || '');
+                            const link = new Tine.Filemanager.Model.Node({path: path}).getSystemLink();
                             Ext.Msg.show({
                                 title: i18n._('Success'),
                                 msg: i18n._('Export created successfully.') + `<br /><br /><a href="${link}">${ Ext.util.Format.ellipsis(link, 50)}</a>`,
