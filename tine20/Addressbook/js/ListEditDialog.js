@@ -257,7 +257,7 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 Tine.Addressbook.ListEditDialog.openWindow = function (config) {
     
     // if a container is selected in the tree, take this as default container
-    var treeNode = Ext.getCmp('Addressbook_Tree') ? Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode() : null;
+    var treeNode = Ext.getCmp('Addressbook_List_Tree') ? Ext.getCmp('Addressbook_List_Tree').getSelectionModel().getSelectedNode() : null;
     if (treeNode && treeNode.attributes && treeNode.attributes.container.type) {
         config.forceContainer = treeNode.attributes.container;
     } else {
