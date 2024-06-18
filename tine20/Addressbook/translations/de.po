@@ -562,6 +562,9 @@ msgstr[1] "Branchen"
 msgid "Note"
 msgstr "Notizen"
 
+msgid "Enter Note"
+msgstr "Notiz eingeben"
+
 #: Model/Contact.php:479 js/ContactEditDialog.js:158 js/ContactGrid.js:214
 #: js/Model.js:19 js/Model.js:165
 msgid "Last Name"
