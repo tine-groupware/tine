@@ -1419,7 +1419,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_NotFound
      * @throws Tinebase_Exception_SystemGeneric
      */
-    public function getMessageFromNode($nodeId): Felamimail_Model_Message
+    public function getMessageFromNode($nodeId, $mimeType = null): Felamimail_Model_Message
     {
         // @todo simplify this / create Tinebase_Model_Tree_Node_Path::createFromNode()?
 
@@ -1467,8 +1467,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
         } else {
             $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
-            // @todo allow to configure body mime type to fetch?
-            $message = Felamimail_Model_Message::createFromMime($content);
+            $message = Felamimail_Model_Message::createFromMime($content,  $mimeType);
             $message->body = $this->_purifyBodyContent($message->body);
         }
 

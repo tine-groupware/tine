@@ -899,9 +899,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param $nodeId
      * @return array
      */
-    public function getMessageFromNode($nodeId)
+    public function getMessageFromNode($nodeId, $mimeType = null)
     {
-        $message = Felamimail_Controller_Message::getInstance()->getMessageFromNode($nodeId);
+        $message = Felamimail_Controller_Message::getInstance()->getMessageFromNode($nodeId, $mimeType);
         return $this->_recordToJson($message);
     }
 

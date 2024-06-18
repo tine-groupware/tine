@@ -438,38 +438,50 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (!message) message = this.getMessageFromConfig();
 
         // we follow the account compose_format when fetch msg failed
-        const accountFormat = account && account.get('compose_format') !== '' ? 'text/' + account.get('compose_format') : null;
-        const composeFormat =  accountFormat ?? message?.getBodyType?.() ?? 'text/html';
-
+        const composeFormat =  this.recordProxy.getFormatConfig('compose_format', message, account);
+        
         if (!this.record.get('body')) {
-            if (!this.msgBody) {
-                if (message) {
-                    if (!message.bodyIsFetched() || composeFormat !== message.getBodyType()) {
-                        // self callback when body needs to be (re) fetched
-                        return this.recordProxy.fetchBody(message, 'compose_format', {
-                            success: this.initContent.createDelegate(this),
-                            // set format to message body format if fetch fails
-                            failure: message.bodyIsFetched()
-                                ? this.initContent.createDelegate(this, [message])
-                                : null
-                        });
+            if (!this.msgBody && message) {
+                if (!message.bodyIsFetched() || composeFormat !== message.getBodyType()) {
+                    // self callback when body needs to be (re) fetched
+                    if (!this.fetchRequestCount) this.fetchRequestCount = 0;
+                    return this.recordProxy.fetchBody(message, composeFormat, {
+                        success: (result) => {
+                            this.initContent(result);
+                            this.fetchRequestCount = 0;
+                        },
+                        // set format to message body format if fetch fails
+                        failure: async (e) => {
+                            this.fetchRequestCount++;
+                            if (this.fetchRequestCount === 3 || !message.bodyIsFetched()) return null;
+                            
+                            if (e?.code === 404) {
+                                await Tine.Felamimail.getMessageFromNode(message.data.id, composeFormat)
+                                    .then(async (response) => {
+                                        message = Tine.Felamimail.messageBackend.recordReader({responseText: Ext.util.JSON.encode(response)});
+                                    }).catch((exception) => {
+                                        console.error(exception);
+                                    });
+                            }
+                            this.initContent(message);
+                        }
+                    });
+                }
+                this.setMessageBody(message, account, composeFormat);
+                this.handleAttachmentsOfExistingMessage(message);
+                
+                const folder = this.app.getFolderStore().getById(message.get('folder_id'));
+                if (folder) {
+                    this.isDraft = folder.get('globalname') === account.get('drafts_folder');
+                    this.isTemplate = folder.get('globalname') === account.get('templates_folder');
+
+                    if (this.isDraft) {
+                        this.record.set('messageuid', message.get('messageuid'));
+                        this.draftUid = message.get('messageuid');
                     }
-                    this.setMessageBody(message, account, composeFormat);
-                    this.handleAttachmentsOfExistingMessage(message);
 
-                    let folder = this.app.getFolderStore().getById(message.get('folder_id'));
-                    if (folder) {
-                        this.isDraft = folder.get('globalname') === account.get('drafts_folder');
-                        this.isTemplate = folder.get('globalname') === account.get('templates_folder');
-
-                        if (this.isDraft) {
-                            this.record.set('messageuid', message.get('messageuid'));
-                            this.draftUid = message.get('messageuid');
-                        }
-
-                        if (this.isTemplate) {
-                            this.templateId = message.get('id');
-                        }
+                    if (this.isTemplate) {
+                        this.templateId = message.get('id');
                     }
                 }
             }
@@ -523,7 +535,7 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.msgBody = message.get('body');
 
         if (preparedParts && preparedParts.length > 0) {
-            if (preparedParts[0].contentType == 'application/pgp-encrypted') {
+            if (preparedParts[0].contentType === 'application/pgp-encrypted') {
                 this.quotedPGPMessage = preparedParts[0].preparedData;
 
                 this.msgBody = this.msgBody + this.app.i18n._('Encrypted Content');
@@ -551,7 +563,18 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
 
         if (this.isForwardedMessage()) {
-            this.msgBody = '<div class="felamimail-body-forwarded">' + this.msgBody + '</div>'
+            if (format === 'text/plain') {
+                this.msgBody = String('> ' + this.msgBody).replace(/\r?\n/g, '\n> ');
+            } else {
+                const forwardEl = document.createElement('div');
+                forwardEl.className = 'felamimail-body-forwarded';
+                if (message.getBodyType() === 'text/plain') {
+                    forwardEl.innerText = this.msgBody;
+                } else {
+                    forwardEl.innerHTML = this.msgBody;
+                }
+                this.msgBody = '<br/>' + forwardEl.outerHTML;
+            }
         }
 
         this.msgBody = this.getQuotedMailHeader(format) + this.msgBody;
@@ -1201,10 +1224,10 @@ Tine.Felamimail.MessageEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
             if (forwardMode !== 'onlyAsAttachment') {
                 header = String.format('{0}-----' + this.app.i18n._('Original message') + '-----{1}',
-                        format == 'text/plain' ? '' : '<br /><b>',
-                        format == 'text/plain' ? '\n' : '</b><br />')
+                        format === 'text/plain' ? '' : '<br /><b>',
+                        format === 'text/plain' ? '\n' : '</b><br />')
                     + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true, format == 'text/plain')
-                    + (format == 'text/plain' ? '' : '<br /><br />');
+                    + (format === 'text/plain' ? '\n' : '<br /><br />');
             }
         }
         if (format === 'text/html' && header !== '') {

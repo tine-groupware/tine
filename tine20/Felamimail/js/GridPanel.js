@@ -2039,14 +2039,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         let header = '';
         for (header in headers) {
             if (headers.hasOwnProperty(header) && 
-                    (! onlyImportant || header == 'from' || header == 'to' || header == 'cc' || header == 'subject' || header == 'date')) 
+                    (! onlyImportant || header === 'from' || header === 'to' || header === 'cc' || header === 'subject' || header === 'date')) 
             {
-                result += (plain ? (header + ': ') : ('<b>' + header + ':</b> '))
-                    + Ext.util.Format.htmlEncode(
-                        (ellipsis) 
-                            ? Ext.util.Format.ellipsis(headers[header], 40)
-                            : headers[header]
-                    ) + (plain ? '\n' : '<br/>');
+                const headerName = plain ? (header + ': ') : ('<b>' + header + ':</b> ');
+                let headerContent = ellipsis ? Ext.util.Format.ellipsis(headers[header], 40) : headers[header];
+                headerContent = plain ? headerContent : Ext.util.Format.htmlEncode(headerContent);
+                result += headerName + headerContent + (plain ? '\n' : '<br/>');
             }
         }
         return result;
