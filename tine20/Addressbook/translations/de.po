@@ -40,12 +40,12 @@ msgid "Import CSV formated contacts from LX-Office"
 msgstr "Importiere CSV-formatierte Kontakte von LX-Office"
 
 #: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Tine 2.0 contact CSV import"
-msgstr "Tine 2.0 Kontakt CSV Import"
+msgid "Tine contact CSV import"
+msgstr "Tine Kontakt CSV-Import"
 
 #: Import/definitions/adb_tine_import_csv.xml:13
-msgid "Import CSV formated contacts from Tine 2.0 address book"
-msgstr "Importiere CSV formatierte Kontakte aus einem Tine 2.0 Adressbuch"
+msgid "Import CSV formated contacts from tine address book"
+msgstr "Importiere CSV-formatierte Kontakte aus einem tine-Adressbuch"
 
 #: Import/definitions/adb_tine_import_csv.xml:19
 msgid "Import list (###CURRENTDATE###)"
@@ -614,9 +614,6 @@ msgstr "Pfade"
 #: js/ContactGrid.js:233 js/Model.js:52
 msgid "Preferred Address"
 msgstr "Bevorzugte Adresse"
-
-msgid "Preferred E-Mail"
-msgstr "Bevorzugte E-Mail"
 
 #: Model/Contact.php:582 js/ContactGrid.js:221 js/Model.js:32 js/Model.js:175
 msgid "Job Role"
@@ -1356,13 +1353,17 @@ msgstr "female"
 msgid "Mailing Group Member"
 msgstr "E-Mail-Verteiler Mitglieder"
 
-#: Import/definitions/adb_tine_import_csv.xml:11
-msgid "Tine contact CSV import"
-msgstr "Tine Kontakt CSV-Import"
+msgid "Enter Note"
+msgstr "Notiz eingeben"
 
-#: Import/definitions/adb_tine_import_csv.xml:13
-msgid "Import CSV formated contacts from tine address book"
-msgstr "Importiere CSV-formatierte Kontakte aus einem tine-Adressbuch"
+msgid "Tine 2.0 contact CSV import"
+msgstr "Tine 2.0 Kontakt CSV Import"
+
+msgid "Import CSV formated contacts from Tine 2.0 address book"
+msgstr "Importiere CSV formatierte Kontakte aus einem Tine 2.0 Adressbuch"
+
+msgid "Preferred E-Mail"
+msgstr "Bevorzugte E-Mail"
 
 msgid "Reply to"
 msgstr "Antwortmails an"

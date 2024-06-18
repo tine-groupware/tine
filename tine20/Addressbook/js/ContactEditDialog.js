@@ -304,7 +304,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             items: [
                 new Ext.Panel({
                     // @todo generalise!
-                    title: this.app.i18n._('Description'),
+                    title: this.app.i18n._('Note'),
                     iconCls: 'descriptionIcon',
                     layout: 'form',
                     labelAlign: 'top',
@@ -318,7 +318,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         grow: false,
                         preventScrollbars: false,
                         anchor: '100% 100%',
-                        emptyText: this.app.i18n._('Enter description'),
+                        emptyText: this.app.i18n._('Enter Note'),
                         requiredGrant: 'editGrant'
                     }]
                 }), new Ext.Panel({
