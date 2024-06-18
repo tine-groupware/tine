@@ -232,12 +232,11 @@ Tine.Addressbook.ContactGridPanel.countryRenderer = function(data) {
  * @return {*}
  */
 Tine.Addressbook.ContactGridPanel.preferredAddressRenderer = function(value) {
-    var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
-
+    const i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n;
     switch (value) {
-        case '0':
+        case 'adr_one':
             return i18n._('Business');
-        case '1':
+        case 'adr_two':
             return i18n._('Private');
         default:
             return i18n._('Not set');
