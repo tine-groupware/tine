@@ -129,7 +129,8 @@ Tine.Crm.Model.Lead.getFilterModel = function() {
             {label: i18n._('Last Modified By'),                                                  field: 'last_modified_by',   valueType: 'user'},
             {label: i18n._('Creation Time'),                                                     field: 'creation_time',      valueType: 'datetime'},
             {label: i18n._('Created By'),                                                        field: 'created_by',         valueType: 'user'},
-            
+
+            {label: app.i18n._('Description'), field: 'description', operators: ['wordstartswith']},
             {label: app.i18n._('Estimated end'), field: 'end_scheduled', valueType: 'datetime'},
             {label: app.i18n._('Resubmission Date'), field: 'resubmission_date', valueType: 'datetime'},
             {label: app.i18n._('End'), field: 'end', valueType: 'datetime'},
