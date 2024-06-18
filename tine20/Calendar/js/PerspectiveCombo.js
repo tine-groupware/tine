@@ -254,21 +254,21 @@ Tine.Calendar.PerspectiveCombo = Ext.extend(Ext.form.ComboBox, {
     /**
      * load perspective into dialog
      */
-    loadPerspective: function(perspective) {
+    loadPerspective: async function(perspective) {
         if (! this.perspectiveIsInitialized) {
-            this.syncStores();
-            
-            var myAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord(this.store),
-                imOrganizer = this.editDialog.record.get('organizer')?.id == Tine.Tinebase.registry.get('currentAccount').contact_id,
-                eventView = Tine.Tinebase.configManager.get('eventView', 'Calendar');
-                
-            if (eventView == 'organizer') {
-                perspective = 'origin';
-            } else {
-                perspective = imOrganizer || ! myAttendee ? 'origin' : myAttendee.id;
-            }
-            this.perspectiveIsInitialized = true;
-            this.setValue(perspective);
+            await this.syncStores().then(() => {
+                var myAttendee = Tine.Calendar.Model.Attender.getAttendeeStore.getMyAttenderRecord(this.store),
+                  imOrganizer = this.editDialog.record.get('organizer')?.id == Tine.Tinebase.registry.get('currentAccount').contact_id,
+                  eventView = Tine.Tinebase.configManager.get('eventView', 'Calendar');
+
+                if (eventView == 'organizer') {
+                    perspective = 'origin';
+                } else {
+                    perspective = imOrganizer || ! myAttendee ? 'origin' : myAttendee.id;
+                }
+                this.perspectiveIsInitialized = true;
+                this.setValue(perspective);
+            });
         }
         
         var perspective = perspective || this.getValue(),
