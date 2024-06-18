@@ -51,6 +51,7 @@ trait Tinebase_Export_FileLocationTrait
                     $targetPath = $trgtPath->statpath . '/' . $pInfo['filename'] . '(' . (++$i) . ').' . $pInfo['extension'];
                 }
 
+                $this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME} = basename($targetPath);
                 $this->save('tine20://' . $targetPath);
                 break;
 
@@ -78,6 +79,7 @@ trait Tinebase_Export_FileLocationTrait
                         $fileName = $pInfo['filename'] . '(' . (++$i) . ').' . $pInfo['extension'];
                         $targetNode->name = $fileName;
                     }
+                    $this->_fileLocation->{Tinebase_Model_Tree_FileLocation::FLD_FILE_NAME} = basename($fileName);
                     $record->attachments->addRecord($targetNode);
                     $ctrl->update($record);
                 } finally {

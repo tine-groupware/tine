@@ -245,7 +245,8 @@ Tine.Tinebase.tineInit = {
                 });
 
                 // open internal links in same window (use router)
-                if (window.isMainWindow === true) {
+                const mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
+                if (window === mainWindow) {
                     if (href.match(new RegExp('^' + window.lodash.escapeRegExp(Tine.Tinebase.common.getUrl())))) {
                         target.set({
                             href: decodeURI(href),
@@ -259,8 +260,8 @@ Tine.Tinebase.tineInit = {
                         const win = window.open(href, '_blank', null, true);
                         win.opener = null;
                     } else {
-                        if (href !== window.opener.location.href) {
-                            window.opener.location.href = href;
+                        if (href !== mainWindow.location.href) {
+                            mainWindow.location.href = href;
                         }
                     }
                 }
