@@ -12,7 +12,7 @@ server {
     access_log /dev/stdout {{getenv "NGINXV_LOG_FORMAT" "tine20"}};
 
     set $PHP_ADMIN_VALUE "error_log = /var/log/nginx/php-error.log";
-    set $PHP_VALUE "include_path={{getenv "NGINXV_TINE20_CONFIG_DIR" "/etc/tine20"}}:/usr/share/tine20;
+    set $PHP_VALUE "include_path={{getenv "NGINXV_TINE20_CONFIG_DIR" "/etc/tine20"}}:/usr/share/tine20";
 
     include /etc/nginx/snippets/tine20-rewriterules.conf;
     include /etc/nginx/snippets/tine20-locations.conf;
