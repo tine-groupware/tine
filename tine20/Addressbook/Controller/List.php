@@ -275,7 +275,7 @@ class Addressbook_Controller_List extends Tinebase_Controller_Record_Abstract
 
     protected function _checkGroupGrant($_list, $_throw = false, $_msg = '')
     {
-        if (! empty($_list->group_id)) {
+        if (! empty($_list->group_id) && Admin_Controller_Group::getInstance()->doRightChecks()) {
             if (!Tinebase_Core::getUser()->hasRight('Admin', Admin_Acl_Rights::MANAGE_ACCOUNTS)) {
                 if ($_throw) {
                     throw new Tinebase_Exception_AccessDenied($_msg);
