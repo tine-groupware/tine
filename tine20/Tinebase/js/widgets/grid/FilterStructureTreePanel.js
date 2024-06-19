@@ -41,7 +41,7 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
 //        this.tbar = [{
 //            text: '+',
 //            scope: this,
-//            handler: this.onAddFilterPanel
+//            handler: this.onAddFilterToolbar
 //        }];
         
         this.root = {
@@ -103,7 +103,7 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     
     onCtxRemove: function() {
         if (this.contextMenu.contextNode) {
-            this.filterPanel.removeFilterPanel(this.contextMenu.contextNode.id);
+            this.filterPanel.removeFilterToolbar(this.contextMenu.contextNode.id);
         }
     },
     
@@ -213,15 +213,15 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     },
     
     onBeforeClick: function(node) {
-        if (node.id == 'addFilterPanel') {
-            this.onAddFilterPanel();
+        if (node.id === 'addFilterPanel') {
+            this.onAddFilterToolbar();
             return false;
         }
     },
     
-    onAddFilterPanel: function() {
-        var filterPanel = this.filterPanel.addFilterPanel();
-        this.filterPanel.setActiveFilterPanel(filterPanel);
+    onAddFilterToolbar: function() {
+        const filterToolbar = this.filterPanel.addFilterToolbar();
+        this.filterPanel.setActiveFilterToolbar(filterToolbar);
     },
     
     onCheckChange: function(node, checked) {
@@ -230,7 +230,7 @@ Tine.widgets.grid.FilterStructureTreePanel = Ext.extend(Ext.tree.TreePanel, {
     
     onClick: function(node) {
         if (node.attributes && node.attributes.filterPanel) {
-            this.filterPanel.setActiveFilterPanel(node.attributes.filterPanel);
+            this.filterPanel.setActiveFilterToolbar(node.attributes.filterPanel);
         }
     },
     
