@@ -19,6 +19,8 @@
  */
 class Admin_Controller_Group extends Tinebase_Controller_Abstract
 {
+    protected $_doRightChecks = true;
+
     /**
      * holds the instance of the singleton
      *
@@ -91,6 +93,23 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         $result = count($groups);
         
         return $result;
+    }
+
+    public function doRightChecks($setTo = NULL)
+    {
+        $oldValue = $this->_doRightChecks;
+        if (null !== $setTo) {
+            $this->_doRightChecks= $setTo;
+        }
+        return $oldValue;
+    }
+
+    public function checkRight($_right, $_throwException = true, $_includeTinebaseAdmin = true)
+    {
+        if (!$this->_doRightChecks) {
+            return true;
+        }
+        return parent::checkRight($_right, $_throwException, $_includeTinebaseAdmin);
     }
 
     /**

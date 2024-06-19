@@ -855,10 +855,6 @@ class SSO_Controller extends Tinebase_Controller_Event
             } catch (Tinebase_Exception_NotFound) {
                 // TODO FIXME check if we should create!
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()
-                    ->notice(__METHOD__ . '::' . __LINE__ . ' create from extern idp not yet supported');
-                return static::publicOidAuthResponseErrorRedirect($authRequest);
-                /*
                 if (!isset($data->email) || !($pos = strpos($data->email, '@'))) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()
                         ->notice(__METHOD__ . '::' . __LINE__ . ' external idp did not send us an email address to work with');
@@ -867,18 +863,21 @@ class SSO_Controller extends Tinebase_Controller_Event
                 $loginName = substr($data->email, 0, $pos);
 
                 $oldValue = Admin_Controller_User::getInstance()->doRightChecks(false);
+                $oldGroupValue = Admin_Controller_Group::getInstance()->doRightChecks(false);
                 try {
                     $user = Tinebase_User::createSystemUser(Tinebase_User::SYSTEM_USER_ANONYMOUS);
                     Tinebase_Core::setUser($user);
 
-                    // TODO FIXME without password email user cant be created, needs to be disabled
+                    $pw = Tinebase_Record_Abstract::generateUID(12) . '!Ab1';
                     $account = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array_merge([
                         'accountLoginName'      => $loginName,
                         'accountEmailAddress'   => $data->email,
+                        'accountStatus'         => 'enabled',
+                        'accountExpires'        => NULL,
                         'openid'                => $ssoIdp->getId() . ':' . $data->sub,
                         'accountLastName'       => $data->name ?? $loginName,
                         'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->getId(),
-                    ])), '', '');
+                    ])), $pw, $pw);
                 } catch (Tinebase_Exception $e) {
                     $e->setLogLevelMethod('notice');
                     $e->setLogToSentry(false);
@@ -886,8 +885,9 @@ class SSO_Controller extends Tinebase_Controller_Event
                     return static::publicOidAuthResponseErrorRedirect($authRequest);
                 } finally {
                     Admin_Controller_User::getInstance()->doRightChecks($oldValue);
+                    Admin_Controller_Group::getInstance()->doRightChecks($oldGroupValue);
                     Tinebase_Core::unsetUser();
-                }*/
+                }
             }
 
             Tinebase_Auth::destroyInstance();

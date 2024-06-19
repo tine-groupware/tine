@@ -1186,7 +1186,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function addUserInSqlBackend(Tinebase_Model_FullUser $_user)
     {
-        Tinebase_EmailUser::checkDomain($_user->accountEmailAddress, true, null, true);
+        Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP)->allowExternalEmail
+            || Tinebase_EmailUser::checkDomain($_user->accountEmailAddress, true, null, true);
 
         $_user->isValid(TRUE);
         
