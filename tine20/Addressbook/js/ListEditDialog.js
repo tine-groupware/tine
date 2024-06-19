@@ -46,6 +46,8 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
        
         this.supr().initComponent.apply(this, arguments);
+        
+        this.containerSelectCombo.on('select', this.checkStates, this);
     },
 
     getFormItems: function () {
@@ -237,19 +239,23 @@ Tine.Addressbook.ListEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return _.delay(_.bind(this.checkStates, this), 250);
         }
         this.supr().checkStates.call(this);
-        
-        const hasEditGrant = !this.record.id || this.form.findField('container_id')?.selectedContainer?.account_grants?.editGrant;
+        const containerData = this.form.findField('container_id')?.selectedContainer;
+        const hasEditGrant = !this.record.id || containerData?.account_grants?.editGrant;
         const isSysGroup = this.record.get('type') === 'group';
         const allowEditSysFields = hasEditGrant && 
             (!isSysGroup || Tine.Tinebase.common.hasRight('manage_accounts', 'Admin'));
+        
+        if (containerData) this.record.set('container_id', containerData);
         
         this.sysGroupNote.setText(isSysGroup ?
             this.app.i18n._("This is a system group. To edit this group you need the Admin.ManageAccounts right.") : '');
         this.sysGroupNote.setVisible(isSysGroup);
             
         ['name', 'description', 'email', 'account_only'].forEach((fieldName) => {this.getForm().findField(fieldName).setReadOnly(!allowEditSysFields)});
+        
         this.memberGridPanel.setReadOnly(!allowEditSysFields);
-        this.mailingListPanel?.setReadOnly(!this.mailingListPanel?.isMailingList || !allowEditSysFields);
+        this.mailingListPanel.setReadOnly(!allowEditSysFields || !containerData?.account_grants?.editGrant);
+        
         this.doLayout();
     }
 });
