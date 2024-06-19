@@ -112,22 +112,22 @@ Tine.Crm.LeadGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 sortable: true
             },
             columns: [
-                {header: this.app.i18n._('Tags'), id: 'tags', dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
-                {header: this.app.i18n._('Lead name'), id: 'lead_name', dataIndex: 'lead_name', width: 200},
-                {header: this.app.i18n._('Responsible'), id: 'lead_responsible', dataIndex: 'lead_responsible', width: 175, sortable: false, hidden: true, renderer: this.responsibleRenderer},
-                {header: this.app.i18n._('Partner'), id: 'lead_partner', dataIndex: 'lead_partner', width: 175, sortable: false, renderer: this.partnerRenderer},
-                {header: this.app.i18n._('Customer'), id: 'lead_customer', dataIndex: 'lead_customer', width: 175, sortable: false, renderer: this.customerRenderer},
-                {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', width: 100, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadstates')},
-                {header: this.app.i18n._('Leadtype'), id: 'leadtype_id', dataIndex: 'leadtype_id', width: 100, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadtypes')},
-                {header: this.app.i18n._('Leadsource'), id: 'leadsource_id', dataIndex: 'leadsource_id', width: 100, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadsources')},
-                {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.ux.PercentRenderer },
-                {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.money },
+                {header: this.app.i18n._('Tags'), id: 'tags', renderer: Tine.Tinebase.common.tagsRenderer },
+                {header: this.app.i18n._('Lead name'), id: 'lead_name', width: 200},
+                {header: this.app.i18n._('Responsible'), id: 'lead_responsible', width: 150, sortable: false, hidden: true, renderer: this.responsibleRenderer},
+                {header: this.app.i18n._('Partner'), id: 'lead_partner', width: 150, sortable: false, renderer: this.partnerRenderer},
+                {header: this.app.i18n._('Customer'), id: 'lead_customer', width: 150, sortable: false, renderer: this.customerRenderer},
+                {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', width: 90, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadstates')},
+                {header: this.app.i18n._('Leadtype'), id: 'leadtype_id',width: 90, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadtypes')},
+                {header: this.app.i18n._('Leadsource'), id: 'leadsource_id', width: 90, renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Crm', 'leadsources')},
+                {header: this.app.i18n._('Probability'), id: 'probability', renderer: Ext.ux.PercentRenderer },
+                {header: this.app.i18n._('Turnover'), id: 'turnover', renderer: Ext.util.Format.money },
 
-                {header: this.app.i18n._('Estimated end'), id: 'end_scheduled', dataIndex: 'end_scheduled', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
-                {header: this.app.i18n._('End'), id: 'end', dataIndex: 'end', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
-                {header: this.app.i18n._('Start'), id: 'start', dataIndex: 'start', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
-                {header: this.app.i18n._('Probable Turnover'), id: 'probableTurnover', dataIndex: 'probableTurnover', width: 100, renderer: Ext.util.Format.money, sortable: false },
-                {header: this.app.i18n._('Resubmission Date'), id: 'resubmission_date', dataIndex: 'resubmission_date', width: 100, renderer: Tine.Tinebase.common.dateRenderer, sortable: true }
+                {header: this.app.i18n._('Estimated end'), id: 'end_scheduled', renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
+                {header: this.app.i18n._('End'), id: 'end', renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
+                {header: this.app.i18n._('Start'), id: 'start', renderer: Tine.Tinebase.common.dateRenderer, sortable: true },
+                {header: this.app.i18n._('Probable Turnover'), id: 'probableTurnover', renderer: Ext.util.Format.money, sortable: false },
+                {header: this.app.i18n._('Resubmission Date'), id: 'resubmission_date', renderer: Tine.Tinebase.common.dateRenderer, sortable: true }
                 
             ].concat(this.getModlogColumns().concat(this.getCustomfieldColumns()))
         });

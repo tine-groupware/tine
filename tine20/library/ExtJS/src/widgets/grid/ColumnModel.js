@@ -216,6 +216,18 @@ Ext.grid.ColumnModel = Ext.extend(Ext.util.Observable, {
 
         for(i = 0, len = config.length; i < len; i++){
             c = Ext.applyIf(config[i], this.defaults);
+            if (!config[i]?.dataIndex) config[i].dataIndex = config[i]?.id;
+            if (config[i]?.dataIndex && initial) {
+                const fieldConfig = {
+                    name: config[i]?.dataIndex,
+                    type: 'auto',
+                };
+                const uiConfig = Tine.widgets.grid.ColumnManager.getColumnUIConfig(fieldConfig, null, config[i]);
+                const resolvedConfig = Tine.widgets.grid.ColumnManager.resolveUIConfigWidth(config[i], uiConfig);
+
+                c = Ext.applyIf(config[i], resolvedConfig);
+            }
+
             // if no id, create one using column's ordinal position
             if(Ext.isEmpty(c.id)){
                 c.id = i;
@@ -226,6 +238,7 @@ Ext.grid.ColumnModel = Ext.extend(Ext.util.Observable, {
                 config[i] = c;
             }
             this.lookup[c.id] = c;
+
         }
         if(!initial){
             this.fireEvent('configchange', this);
@@ -384,7 +397,9 @@ var columns = grid.getColumnModel().getColumnsBy(function(c){
      * event. Defaults to false.
      */
     setColumnWidth : function(col, width, suppressEvent){
-        this.config[col].width = width;
+        const { maxWidth, minWidth } = this.config[col] || {};
+        
+        this.config[col].width = Math.max(minWidth || 30, Math.min(maxWidth || width, width));
         this.totalWidth = null;
         if(!suppressEvent){
              this.fireEvent("widthchange", this, col, width);

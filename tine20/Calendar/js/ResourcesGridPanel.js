@@ -42,73 +42,53 @@ Tine.Calendar.ResourceGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.gridConfig.columns = [{
             id: 'name',
             header: this.app.i18n._("Name"),
-            width: 150,
             sortable: true,
-            dataIndex: 'name'
         }, {
             id: 'hierarchy',
             header: this.app.i18n._("Calendar Hierarchy/Name"),
-            width: 150,
             sortable: true,
-            dataIndex: 'hierarchy'
         },{
             id: 'email',
             header: this.app.i18n._("Email"),
-            width: 150,
             sortable: true,
-            dataIndex: 'email'
         }, {
             id: 'type',
             header: this.app.i18n._("Type"),
-            width: 150,
             sortable: true,
-            dataIndex: 'type',
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'resourceTypes')
         }, {
             id: 'max_number_of_people',
             header: this.app.i18n._("Maximum number of attendee"),
-            width: 150,
             sortable: true,
-            dataIndex: 'max_number_of_people'
         }, {
             id: 'status',
-            dataIndex: 'status',
-            width: 140,
             header: this.app.i18n._('Default Status'),
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'attendeeStatus')
         }, {
             id: 'status_with_grant',
-            dataIndex: 'status_with_grant',
-            width: 140,
             header: this.app.i18n._('Default Status with status grant'),
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'attendeeStatus')
         }, {
             id: 'busy_type',
-            dataIndex: 'busy_type',
-            width: 140,
             header: this.app.i18n._('Busy Type'),
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Calendar', 'freebusyTypes')
         }, {
             id: 'site',
             header: this.app.i18n._('Site'),
-            width: 150,
             dataIndex: 'relations',
             renderer: Tine.Calendar.ResourceGridPanel.siteRenderer,
             sortable: false
         }, {
             id: 'location',
             header: this.app.i18n._('Location'),
-            width: 150,
             dataIndex: 'relations',
             renderer: Tine.Calendar.ResourceGridPanel.locationRenderer,
             sortable: false
         }, {
             id: 'color',
             header: this.app.i18n._('Color'),
-            width: 30,
             sortable: false,
             renderer: Tine.Tinebase.common.colorRenderer,
-            dataIndex: 'color'
         }];
 
         Tine.Calendar.ResourceGridPanel.superclass.initComponent.call(this);

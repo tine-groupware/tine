@@ -147,7 +147,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
             day = day.add(Date.DAY, 1);
 
         } while (day < period.until);
-
+        
         return columns;
     },
 

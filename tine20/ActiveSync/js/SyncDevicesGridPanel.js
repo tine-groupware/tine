@@ -64,31 +64,32 @@ Tine.ActiveSync.SyncDevicesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      * @return Array
      */
-    getColumns: function(){
-        return [
-            { header: this.app.i18n._('ID'),             id: 'id',                dataIndex: 'id',                hidden: true,  width: 50},
-            { header: this.app.i18n._('Device ID'),      id: 'deviceid',          dataIndex: 'deviceid',          hidden: false, width: 200},
-            { header: this.app.i18n._('Device Type'),     id: 'devicetype',        dataIndex: 'devicetype',        hidden: false, width: 100},
-            { header: this.app.i18n._('Owned by'),          id: 'owner_id',          dataIndex: 'owner_id',          hidden: false, width: 80,  renderer: Tine.Tinebase.common.usernameRenderer},
-            { header: this.app.i18n._('Policy'),         id: 'policy_id',         dataIndex: 'policy_id',         hidden: false, width: 200},
-            { header: this.app.i18n._('ActiveSync Version'),     id: 'acsversion',        dataIndex: 'acsversion',        hidden: false, width: 100},
-            { header: this.app.i18n._('User agent'),      id: 'useragent',         dataIndex: 'useragent',         hidden: true,  width: 200},
-            { header: this.app.i18n._('Model'),          id: 'model',             dataIndex: 'model',             hidden: false, width: 200},
-            { header: this.app.i18n._('IMEI'),           id: 'imei',              dataIndex: 'imei',              hidden: true,  width: 200},
-            { header: this.app.i18n._('Friendly Name'),  id: 'friendlyname',      dataIndex: 'friendlyname',      hidden: false, width: 200},
-            { header: this.app.i18n._('Operating System'),             id: 'os',                dataIndex: 'os',                hidden: false, width: 200},
-            { header: this.app.i18n._('OS Language'),    id: 'oslanguage',        dataIndex: 'oslanguage',        hidden: true,  width: 200},
-            { header: this.app.i18n._('Phone Number'),    id: 'phonenumber',       dataIndex: 'phonenumber',       hidden: false, width: 200},
-            { header: this.app.i18n._('Ping Lifetime'),  id: 'pinglifetime',      dataIndex: 'pinglifetime',      hidden: true,  width: 200},
-            //{ header: this.app.i18n._('Ping Folder'),    id: 'pingfolder',        dataIndex: 'pingfolder',        hidden: false, width: 200},
-            { header: this.app.i18n._('Remote Wipe'),    id: 'remotewipe',        dataIndex: 'remotewipe',        hidden: false, width: 100},
-            { header: this.app.i18n._('Calendar Filter'), id: 'calendarfilter_id', dataIndex: 'calendarfilter_id', hidden: true,  width: 200},
-            { header: this.app.i18n._('Contacts Filter'), id: 'contactsfilter_id', dataIndex: 'contactsfilter_id', hidden: true,  width: 200},
-            { header: this.app.i18n._('E-mail Filter'),    id: 'emailfilter_id',    dataIndex: 'emailfilter_id',    hidden: true,  width: 200},
-            { header: this.app.i18n._('Tasks Filter'),    id: 'tasksfilter_id',    dataIndex: 'tasksfilter_id',    hidden: true,  width: 200},
-            { header: this.app.i18n._('Last Ping'),      id: 'lastping',          dataIndex: 'lastping',          hidden: false, width: 200, renderer: Tine.Tinebase.common.dateTimeRenderer},
-            { header: this.app.i18n._('Monitor Last Ping'), id: 'monitor_lastping',  dataIndex: 'monitor_lastping',  hidden: false, width: 100}
+    getColumns: function() {
+        const columns = [
+            { header: this.app.i18n._('ID'),             id: 'id',                hidden: true,  width: 50},
+            { header: this.app.i18n._('Device ID'),      id: 'deviceid',          hidden: false, width: 200},
+            { header: this.app.i18n._('Device Type'),    id: 'devicetype',        hidden: false, width: 120},
+            { header: this.app.i18n._('Owned by'),       id: 'owner_id',          hidden: false, width: 150,  renderer: Tine.Tinebase.common.usernameRenderer},
+            { header: this.app.i18n._('Policy'),         id: 'policy_id',         hidden: false, width: 200},
+            { header: this.app.i18n._('ActiveSync Version'), id: 'acsversion',    hidden: false, width: 100},
+            { header: this.app.i18n._('User agent'),     id: 'useragent',         hidden: true,  width: 200},
+            { header: this.app.i18n._('Model'),          id: 'model',             hidden: false, width: 200},
+            { header: this.app.i18n._('IMEI'),           id: 'imei',              hidden: true,  width: 200},
+            { header: this.app.i18n._('Friendly Name'),  id: 'friendlyname',      hidden: false, width: 200},
+            { header: this.app.i18n._('Operating System'), id: 'os',              hidden: false, width: 200},
+            { header: this.app.i18n._('OS Language'),    id: 'oslanguage',        hidden: true,  width: 200},
+            { header: this.app.i18n._('Phone Number'),   id: 'phonenumber',       hidden: false, width: 200},
+            { header: this.app.i18n._('Ping Lifetime'),  id: 'pinglifetime',      hidden: true,  width: 200},
+            //{ header: this.app.i18n._('Ping Folder'),    id: 'pingfolder',      hidden: false, width: 200},
+            { header: this.app.i18n._('Remote Wipe'),    id: 'remotewipe',        hidden: false, width: 100},
+            { header: this.app.i18n._('Calendar Filter'), id: 'calendarfilter_id', hidden: true,  width: 200},
+            { header: this.app.i18n._('Contacts Filter'), id: 'contactsfilter_id', hidden: true,  width: 200},
+            { header: this.app.i18n._('E-mail Filter'),  id: 'emailfilter_id',    hidden: true,  width: 200},
+            { header: this.app.i18n._('Tasks Filter'),   id: 'tasksfilter_id',    hidden: true,  width: 200},
+            { header: this.app.i18n._('Last Ping'),      id: 'lastping',          hidden: false, width: 200, renderer: Tine.Tinebase.common.dateTimeRenderer},
+            { header: this.app.i18n._('Monitor Last Ping'), id: 'monitor_lastping', hidden: false, width: 100}
         ];
+        return columns;
     },
 
     /**

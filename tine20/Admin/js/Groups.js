@@ -238,15 +238,15 @@ Tine.Admin.Groups.Main = {
                 resizable: true
             },
             columns: [
-                { id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', width: 50, hidden: true },
-                { id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 50 },
-                { id: 'email', header: this.translation.gettext('E-mail'), dataIndex: 'email', width: 50 },
-                { id: 'account_only', header: this.translation.gettext('Account only'), dataIndex: 'account_only', renderer: Tine.Tinebase.common.booleanRenderer},
-                { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description' },
-                { id: 'creation_time',      header: i18n._('Creation Time'),         dataIndex: 'creation_time',         renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
-                { id: 'created_by',         header: i18n._('Created By'),            dataIndex: 'created_by',            renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true },
-                { id: 'last_modified_time', header: i18n._('Last Modified Time'),    dataIndex: 'last_modified_time',    renderer: Tine.Tinebase.common.dateRenderer,        hidden: true, sortable: true },
-                { id: 'last_modified_by',   header: i18n._('Last Modified By'),      dataIndex: 'last_modified_by',      renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true, sortable: true }
+                { id: 'id', header: this.translation.gettext('ID'), hidden: true },
+                { id: 'name', header: this.translation.gettext('Name') },
+                { id: 'email', header: this.translation.gettext('E-mail') },
+                { id: 'account_only', header: this.translation.gettext('Account only'), renderer: Tine.Tinebase.common.booleanRenderer},
+                { id: 'description', header: this.translation.gettext('Description') },
+                { id: 'creation_time',      header: i18n._('Creation Time'),          renderer: Tine.Tinebase.common.dateRenderer,        hidden: true },
+                { id: 'created_by',         header: i18n._('Created By'),             renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true },
+                { id: 'last_modified_time', header: i18n._('Last Modified Time'),     renderer: Tine.Tinebase.common.dateRenderer,        hidden: true },
+                { id: 'last_modified_by',   header: i18n._('Last Modified By'),       renderer: Tine.Tinebase.common.usernameRenderer,    hidden: true }
             ]
         });
         

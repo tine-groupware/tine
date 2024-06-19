@@ -37,41 +37,13 @@ Tine.Voipmanager.AsteriskMeetmeGridPanel = Ext.extend(Tine.widgets.grid.GridPane
      * 
      */
     getColumns: function(){
-        return [{
-            id: 'id',
-            header: this.app.i18n._("id"),
-            width: 10,
-            sortable: true,
-            hidden: true,
-            dataIndex: 'id'
-        }, {
-            id: 'confno',
-            header: this.app.i18n._("confno"),
-            width: 80,
-            sortable: true,
-            dataIndex: 'confno',
-            renderer: function(confno) {
-                return Ext.util.Format.htmlEncode(confno);
-            }
-        }, {
-            id: 'pin',
-            header: this.app.i18n._("pin"),
-            width: 80,
-            sortable: true,
-            dataIndex: 'pin',
-            renderer: function(pin) {
-                return Ext.util.Format.htmlEncode(pin);
-            }
-        }, {
-            id: 'adminpin',
-            header: this.app.i18n._("adminpin"),
-            width: 80,
-            sortable: true,
-            dataIndex: 'adminpin',
-            renderer: function(adminpin) {
-                return Ext.util.Format.htmlEncode(adminpin);
-            }
-           }];
+        const columns = [
+            { id: 'id', header: this.app.i18n._("id"), width: 10, hidden: true },
+            { id: 'confno', header: this.app.i18n._("confno"), width: 80, renderer: function(confno) { return Ext.util.Format.htmlEncode(confno); } },
+            { id: 'pin', header: this.app.i18n._("pin"), width: 80, renderer: function(pin) { return Ext.util.Format.htmlEncode(pin); } },
+            { id: 'adminpin', header: this.app.i18n._("adminpin"), width: 80, renderer: function(adminpin) { return Ext.util.Format.htmlEncode(adminpin); } }
+        ];
+        return columns;
     },
     
     initDetailsPanel: function() { return false; },

@@ -298,7 +298,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             {
                 resizable: true,
                 id: 'type',
-                dataIndex: 'type',
                 width: 104,
                 menuDisabled: true,
                 header: 'type',
@@ -320,10 +319,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 resizable: true,
                 menuDisabled: true,
                 id: 'address',
-                dataIndex: 'address',
                 header: 'address',
                 editor: this.searchCombo,
-                columnWidth: 1,
+                //columnWidth: 1,
                 renderer: (token) => {
                     if (! token?.email) return '';
                     const block =  document.createElement('span');

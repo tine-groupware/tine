@@ -141,12 +141,11 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
 
             this.onLoad();
         }.createDelegate(combo, [this], true);
-
-        return [{
+        
+        const columns = [{
             id: 'attachment_type',
-            dataIndex: 'attachment_type',
             sortable: true,
-            width: 250,
+            width: 150,
             header: this.app.i18n._('Attachment Type'),
             tooltip: this.app.i18n._('Click icon to change'),
             listeners: {},
@@ -168,23 +167,20 @@ Tine.Felamimail.AttachmentUploadGrid = Ext.extend(Tine.widgets.grid.FileUploadGr
         }, {
             resizable: true,
             id: 'name',
-            dataIndex: 'name',
             flex: 1,
             header: i18n._('name'),
             renderer: Ext.ux.PercentRendererWithName
         }, {
             resizable: true,
             id: 'size',
-            dataIndex: 'size',
-            width: 70,
             header: i18n._('size'),
             renderer: Ext.util.Format.fileSize
         }, {
             resizable: true,
             id: 'type',
-            dataIndex: 'type',
-            width: 70,
+            width: 150,
             header: i18n._('type')
-        }]
+        }];
+        return columns;
     }
 });

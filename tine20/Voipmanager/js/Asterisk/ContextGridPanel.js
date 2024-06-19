@@ -37,32 +37,12 @@ Tine.Voipmanager.AsteriskContextGridPanel = Ext.extend(Tine.widgets.grid.GridPan
      * 
      */
     getColumns: function(){
-        return [{
-            id: 'id',
-            header: this.app.i18n._("id"),
-            width: 10,
-            sortable: true,
-            hidden: true,
-            dataIndex: 'id'
-        }, {
-            id: 'name',
-            header: this.app.i18n._("Name"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'name',
-            renderer: function(name) {
-                return Ext.util.Format.htmlEncode(name);
-            }
-        }, {
-            id: 'description',
-            header: this.app.i18n._("Description"),
-            width: 350,
-            sortable: true,
-            dataIndex: 'description',
-            renderer: function(description) {
-                return Ext.util.Format.htmlEncode(description);
-            }
-        }];
+        const columns = [
+            { id: 'id', header: this.app.i18n._("id"), width: 10, hidden: true },
+            { id: 'name', header: this.app.i18n._("Name"), width: 100, renderer: function(name) { return Ext.util.Format.htmlEncode(name); } },
+            { id: 'description', header: this.app.i18n._("Description"), width: 350, renderer: function(description) { return Ext.util.Format.htmlEncode(description); } }
+        ];
+        return columns;
     },
     
     initDetailsPanel: function() { return false; },

@@ -349,7 +349,7 @@ viewConfig: {
         this.innerHd = this.mainHd.dom.firstChild;
         this.scroller = new E(this.mainWrap.dom.childNodes[1]);
         if(this.forceFit){
-            this.scroller.setStyle('overflow-x', 'hidden');
+            this.scroller.setStyle('overflow-x', 'auto');
         }
         /**
          * <i>Read-only</i>. The GridView's body Element which encapsulates all rows in the Grid.
@@ -1595,7 +1595,6 @@ viewConfig: {
                     id: 'responsive',
                     header: " Title ",
                     sortable: false,
-                    dataIndex: 'responsive',
                     hidden: true,
                     renderer: source && Ext.isFunction(source.oneColumnRenderer) ?
                         source.oneColumnRenderer.createDelegate(this) :

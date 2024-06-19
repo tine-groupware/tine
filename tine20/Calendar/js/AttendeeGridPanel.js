@@ -183,7 +183,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.columns = [{
             id: 'role',
-            dataIndex: 'role',
             width: 70,
             sortable: true,
             hidden: !this.showAttendeeRole || this.showNamesOnly,
@@ -196,7 +195,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         }, {
             id: 'displaycontainer_id',
-            dataIndex: 'displaycontainer_id',
             width: 200,
             sortable: false,
             hidden: this.showNamesOnly || true,
@@ -231,7 +229,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             })
         }, {
             id: 'user_type',
-            dataIndex: 'user_type',
             width: 50,
             sortable: true,
             header: this.app.i18n._('Type'),
@@ -240,7 +237,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             editor: this.attendeeTypeCombo
         }, {
             id: 'user_id',
-            dataIndex: 'user_id',
             width: 300,
             sortable: true,
             header: this.app.i18n._('Name'),
@@ -248,7 +244,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             editor: true
         }, {
             id: 'fbInfo',
-            dataIndex: 'fbInfo',
             width: 20,
             hidden: this.showNamesOnly,
             header: '&nbsp',
@@ -261,7 +256,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         }, {
             id: 'status',
-            dataIndex: 'status',
             width: 100,
             sortable: true,
             header: this.app.i18n._('Status'),

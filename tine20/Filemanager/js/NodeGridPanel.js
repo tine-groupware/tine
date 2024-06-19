@@ -459,7 +459,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 40,
         },{
             id: 'size',
-            width: 30,
             renderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
         },{
             id: 'contenttype',

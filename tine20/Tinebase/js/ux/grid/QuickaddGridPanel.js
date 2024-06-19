@@ -357,7 +357,7 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var columns = this.getCols();
         for (var column, tdEl, i=columns.length -1; i>=0; i--) {
             column = columns[i];
-            if (this.quickaddMode === 'header' && column.dataIndex !== 'responsive') {
+            if (this.quickaddMode === 'header' && column.id !== 'responsive') {
                 var tdEl = this.getQuickAddWrap(column).parent();
 
                 // resort columns

@@ -95,7 +95,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
             store: this.byTypeStore,
             flex: 1,
             columns: [
-                {id:'type',header: this.app.i18n._('File Type'), width: 160, sortable: true, dataIndex: 'type'},
+                {id:'type',header: this.app.i18n._('File Type'), width: 160, sortable: true},
             ].concat(columns),
             stripeRows: true,
             autoExpandColumn: 'type',
@@ -107,7 +107,7 @@ Tine.Filemanager.UsagePanel = Ext.extend(Ext.Panel, {
             store: this.byUserStore,
             flex: 1,
             columns: [
-                {id:'user',header: this.app.i18n._('User'), width: 160, sortable: true, dataIndex: 'user'},
+                {id:'user',header: this.app.i18n._('User'), width: 160, sortable: true},
             ].concat(columns),
             stripeRows: true,
             autoExpandColumn: 'user',

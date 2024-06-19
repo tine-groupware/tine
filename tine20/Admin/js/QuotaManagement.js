@@ -90,7 +90,6 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
             header: this.app.i18n._("Name"),
             width: 400,
             sortable: true,
-            dataIndex: 'i18n_name'
         },{
             id: 'i18n_name',
             header: this.app.i18n._("Quota"),
@@ -107,9 +106,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                 this.columns.push({
                     id: 'size',
                     header: this.app.i18n._("Size"),
-                    width: 60,
                     sortable: true,
-                    dataIndex: 'size',
                     tpl: new Ext.XTemplate('{size:this.byteRenderer}', {
                         byteRenderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
                     })
@@ -123,7 +120,6 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                     tooltip: this.app.i18n._("Total size of all available revisions"),
                     width: 60,
                     sortable: true,
-                    dataIndex: 'revision_size',
                     tpl: new Ext.XTemplate('{revision_size:this.byteRenderer}', {
                         byteRenderer: Tine.Tinebase.common.byteRenderer.createDelegate(this, [2, undefined], 3)
                     })

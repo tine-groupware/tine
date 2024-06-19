@@ -71,25 +71,11 @@ Tine.Admin.SambaMachineGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getColumns: function(){
-        return [{
-            id: 'accountId',
-            header: this.app.i18n._("ID"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'accountId',
-            hidden: true
-        },{
-            id: 'accountLoginName',
-            header: this.app.i18n._("Name"),
-            width: 350,
-            sortable: true,
-            dataIndex: 'accountLoginName'
-        },{
-            id: 'accountDisplayName',
-            header: this.app.i18n._("Description"),
-            width: 350,
-            sortable: true,
-            dataIndex: 'accountDisplayName'
-        }];
+        const columns = [
+            {id: 'accountId', header: this.app.i18n._("ID"), width: 100, hidden: true},
+            {id: 'accountLoginName', header: this.app.i18n._("Name"), width: 350 },
+            {id: 'accountDisplayName', header: this.app.i18n._("Description"), width: 350 }
+        ];
+        return columns;
     }
 });

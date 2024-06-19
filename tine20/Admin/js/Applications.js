@@ -275,10 +275,10 @@ Tine.Admin.Applications.Main = {
                 resizable: true
             },
             columns: [
-                { header: this.translation.gettext('Order'),   id: 'order', dataIndex: 'order', width: 50},
-                { header: this.translation.gettext('Name'),    id: 'name', dataIndex: 'name', renderer: this.translateAppTitle.createDelegate(this)},
-                { header: this.translation.gettext('Status'),  id: 'status', dataIndex: 'status', width: 150, renderer: this._renderEnabled.createDelegate(this)},
-                { header: this.translation.gettext('Version'), id: 'version', dataIndex: 'version', width: 70}
+                { header: this.translation.gettext('Order'),   id: 'order', width: 50},
+                { header: this.translation.gettext('Name'),    id: 'name', renderer: this.translateAppTitle.createDelegate(this)},
+                { header: this.translation.gettext('Status'),  id: 'status', renderer: this._renderEnabled.createDelegate(this)},
+                { header: this.translation.gettext('Version'), id: 'version', width: 70}
             ]
         });
 

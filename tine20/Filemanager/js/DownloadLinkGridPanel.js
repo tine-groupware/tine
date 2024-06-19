@@ -267,7 +267,6 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var columns = [{ 
                 id: 'url',
                 header: this.app.i18n._('URL'),
-                dataIndex: 'url',
                 width: 250,
                 hidden: false,
                 readOnly: true,
@@ -277,7 +276,6 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 header: this.app.i18n._("Created By"),
                 width: 150,
                 sortable: true,
-                dataIndex: 'created_by',
                 hidden: false,
                 renderer: Tine.Tinebase.common.usernameRenderer
             }, {
@@ -285,7 +283,6 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 header: this.app.i18n._("Creation Time"),
                 width: 100,
                 sortable: true,
-                dataIndex: 'creation_time',
                 renderer: Tine.Tinebase.common.dateTimeRenderer,
                 hidden: true
             }, {
@@ -293,7 +290,6 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 header: this.app.i18n._("Valid until"),
                 width: 100,
                 sortable: true,
-                dataIndex: 'expiry_time',
                 hidden: false,
                 renderer: Tine.Tinebase.common.dateTimeRenderer,
                 editor: new Ext.ux.form.ClearableDateField()
@@ -302,7 +298,6 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 header: this.app.i18n._("Password"),
                 width: 70,
                 sortable: true,
-                dataIndex: 'password',
                 renderer: Tine.Tinebase.common.booleanRenderer,
                 hidden: false
             }, {
@@ -310,14 +305,12 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 header: this.app.i18n._("Access Count"),
                 width: 70,
                 sortable: true,
-                dataIndex: 'access_count',
                 hidden: false
             }, {
                 id: 'last_modified_time',
                 header: this.app.i18n._("Last Modified Time"),
                 width: 100,
                 sortable: true,
-                dataIndex: 'last_modified_time',
                 hidden: true,
                 renderer: Tine.Tinebase.common.dateTimeRenderer
             }, {
@@ -325,7 +318,6 @@ Tine.Filemanager.DownloadLinkGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 header: this.app.i18n._("Last Modified By"),
                 width: 150,
                 sortable: true,
-                dataIndex: 'last_modified_by',
                 hidden: true,
                 renderer: Tine.Tinebase.common.usernameRenderer 
             }

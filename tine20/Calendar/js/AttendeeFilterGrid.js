@@ -57,7 +57,6 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         
         this.columns.unshift(new Ext.ux.grid.CheckColumn({
             id: 'checked',
-            dataIndex: 'checked',
             width: 30,
             sortable: true,
             resizable: false,
@@ -342,4 +341,3 @@ Tine.Calendar.AttendeeFilterGrid = Ext.extend(Tine.Calendar.AttendeeGridPanel, {
         }, this);
     }
 });
-
