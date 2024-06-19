@@ -30,8 +30,9 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract implements Tinebase_S
         'Tinebase.monitoringActiveUsers',
         'Tinebase.monitoringMailServers',
         'Tinebase.monitoringCheckPreviewService',
+        'Tinebase.monitoringMaintenanceMode',
     );
-    
+
     /**
      * return anonymous methods
      * 
