@@ -48,8 +48,6 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
      * @var array
      */
     protected $_importResult = array(
-//         'results'           => NULL,
-//         'exceptions'        => NULL,
         'totalcount'        => 0,
         'failcount'         => 0,
         'duplicatecount'    => 0,
@@ -113,7 +111,6 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
     /**
      * constructs this importer
      * 
-     * @param Zend_Db_Adapter_Abstract  $_egwDb
      * @param Zend_Config               $_config
      * @param Zend_Log                  $_log
      */
@@ -121,8 +118,9 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
     {
         $this->_config = $_config;
         $this->_log    = $_log;
-        
-        $this->_egwDb = Zend_Db::factory('PDO_MYSQL', $this->_config->all->egwDb);
+
+        $dbConfig = $this->_config->all ? $this->_config->all->egwDb : $this->_config->egwDb;
+        $this->_egwDb = Zend_Db::factory('PDO_MYSQL', $dbConfig);
         
         /* egw config is utf-8 but db needs utf8 as string -> leave as config atm.
         $select = $this->_egwDb->select()
@@ -134,7 +132,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
         */
         
         $this->_log->INFO(__METHOD__ . '::' . __LINE__ . " setting egw charset to {$this->_config->all->egwDb->charset}");
-        $this->_egwDb->query("SET NAMES {$this->_config->all->egwDb->charset}");
+        $this->_egwDb->query("SET NAMES {$dbConfig->charset}");
 
         if ($this->_config->all->dryRun) {
             Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
