@@ -114,7 +114,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             })]},
             {field: 'attender_status', operator: 'notin', value: ['DECLINED']}
         ];
-        this.filterToolbar = this.getFilterToolbar({
+        this.filterToolbar = new Tine.widgets.grid.FilterPanel({
+            app: this.app,
+            recordClass: this.recordClass,
+            filterModels: this.recordClass.getFilterModel(),
+            defaultFilter: 'query',
+            filters: this.defaultFilters || [],
             onFilterChange: this.refresh.createDelegate(this, [false]),
             getAllFilterData: this.getAllFilterData.createDelegate(this),
         });
@@ -667,7 +672,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     
     getCustomfieldFilters: Tine.widgets.grid.GridPanel.prototype.getCustomfieldFilters,
     
-    getFilterToolbar: Tine.widgets.grid.GridPanel.prototype.getFilterToolbar,
     
     /**
      * returns store of currently active view
@@ -1636,7 +1640,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if (this.rendered) {
-            // update filtertoolbar
+            // update filter panel
             if(this.filterToolbar) {
                 this.filterToolbar.setValue(store.proxy.jsonReader.jsonData.filter);
             }
