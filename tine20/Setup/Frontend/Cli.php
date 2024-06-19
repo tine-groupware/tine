@@ -1381,6 +1381,8 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             } else {
                 $options['state'] = Tinebase_Config::MAINTENANCE_MODE_ALL;
             }
+        } else {
+            $options['state'] = Tinebase_Config::MAINTENANCE_MODE_OFF;
         }
         if (Setup_Controller::getInstance()->setMaintenanceMode($options)) {
             echo PHP_EOL . 'set maintenance mode to: ' . $options['mode'] . PHP_EOL;
