@@ -58,4 +58,9 @@ Problem: Link fehlt in Termin-Erinnerungs-Mail
 
 Um den richtigen Link in die Erinnerungs-E-Mail zu bekommen, muss folgender Eintrag in die Konfiguration geschrieben werden:
 
-    'tine20URL' => 'https://my.tine20.domain'
+    'tine20URL' => 'https://my.tine.domain'
+
+Einen Hinweis auf das Fehlen der Konfiguration gibt auch diese Meldung aus dem Log (z.b. des cronusers):
+
+    WARN (4): Tinebase_Core::getUrl::2052 neither SERVER_NAME nor HTTP_HOST are set and tine20URL config is not set too!
+
