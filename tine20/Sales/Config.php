@@ -191,8 +191,8 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const DATEV_SENDER_EMAIL_PURCHASE_INVOICE = 'datevSenderEmailPurchaseInvoice';
     public const DATEV_SENDER_EMAIL_INVOICE = 'datevSenderEmailInvoice';
 
-    public const DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE = 'datevRecipientEmailsInvoice';
-    public const DATEV_RECIPIENT_EMAILS_INVOICE = 'datevRecipientEmailsPurchaseInvoice';
+    public const DATEV_RECIPIENT_EMAILS_PURCHASE_INVOICE = 'datevRecipientEmailsPurchaseInvoice';
+    public const DATEV_RECIPIENT_EMAILS_INVOICE = 'datevRecipientEmailsInvoice';
 
 
     /**
