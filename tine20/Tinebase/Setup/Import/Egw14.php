@@ -97,7 +97,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
         
         $accounts = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_OBJ);
         
-        foreach($accounts as $account) {
+        foreach ($accounts as $account) {
             $user = new Tinebase_Model_FullUser(array(
                 'accountId'                 => $account->account_id,
                 'accountLoginName'          => $account->account_lid,
@@ -107,8 +107,8 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                 'accountStatus'             => $account->account_status == 'A' ? 'enabled' : 'disabled',
                 'accountExpires'            => $account->account_expires > 0 ? new Tinebase_DateTime($account->account_expires) : NULL,
                 'accountPrimaryGroup'       => abs($account->account_primary_group),
-                'accountLastName'           => $account->n_family ? $account->n_family : 'Lastname',
-                'accountFirstName'          => $account->n_given ? $account->n_given : 'Firstname',
+                'accountLastName'           => $account->n_family ?: 'Lastname',
+                'accountFirstName'          => $account->n_given ?: 'Firstname',
                 'accountEmailAddress'       => isset($account->email) ? $account->email : $account->contact_email
             ));
             
@@ -128,8 +128,11 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             // (re)set password
             Tinebase_User::getInstance()->setPassword($user, $account->account_pwd, FALSE);
             
-            // plase user in his groups
+            // place user in his groups
             Tinebase_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
+            if (($defaultgroupId = Tinebase_Group::getInstance()->getDefaultGroup()->getId()) !== $user->accountPrimaryGroup) {
+                Tinebase_Group::getInstance()->addGroupMember($defaultgroupId, $user);
+            }
         }
         
         $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' imported ' . count($accounts) . ' users from egw');
@@ -149,16 +152,16 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
         
         $groups = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_OBJ);
         
-        foreach($groups as $group) {
+        foreach ($groups as $group) {
             $groupObject = new Tinebase_Model_Group(array(
-                'id'            => abs($group->account_id),
+                'id'            => (string) abs($group->account_id),
                 'name'          => $group->account_lid,
-                'description'   => 'imported by Tine 2.0 group importer'
+                'description'   => 'imported by tine group importer from egw',
             ));
             
             $this->_log->DEBUG(__METHOD__ . '::' . __LINE__ .' add group: ' . print_r($groupObject->toArray(), TRUE));
+            $list = null;
             try {
-                $list = null;
                 $list = Addressbook_Controller_List::getInstance()->createOrUpdateByGroup($groupObject);
                 Tinebase_Group::getInstance()->addGroup($groupObject);
             } catch (Exception $e) {
@@ -188,7 +191,7 @@ class Tinebase_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
 
         $groupIds = [];
         foreach($groupMembers as $member) {
-            $groupId = abs($member->acl_location);
+            $groupId = (string) abs($member->acl_location);
 
             $groupIds[$groupId] = true;
             Tinebase_Group::getInstance()->addGroupMember($groupId, $member->acl_account);

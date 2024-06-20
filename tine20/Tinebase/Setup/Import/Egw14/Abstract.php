@@ -48,8 +48,6 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
      * @var array
      */
     protected $_importResult = array(
-//         'results'           => NULL,
-//         'exceptions'        => NULL,
         'totalcount'        => 0,
         'failcount'         => 0,
         'duplicatecount'    => 0,
@@ -113,7 +111,6 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
     /**
      * constructs this importer
      * 
-     * @param Zend_Db_Adapter_Abstract  $_egwDb
      * @param Zend_Config               $_config
      * @param Zend_Log                  $_log
      */
@@ -121,8 +118,9 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
     {
         $this->_config = $_config;
         $this->_log    = $_log;
-        
-        $this->_egwDb = Zend_Db::factory('PDO_MYSQL', $this->_config->egwDb);
+
+        $dbConfig = $this->_config->all ? $this->_config->all->egwDb : $this->_config->egwDb;
+        $this->_egwDb = Zend_Db::factory('PDO_MYSQL', $dbConfig);
         
         /* egw config is utf-8 but db needs utf8 as string -> leave as config atm.
         $select = $this->_egwDb->select()
@@ -133,15 +131,15 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
         $charset = $egwConfig[0]['config_value'];
         */
         
-        $this->_log->INFO(__METHOD__ . '::' . __LINE__ . " setting egw charset to {$this->_config->egwDb->charset}");
-        $this->_egwDb->query("SET NAMES {$this->_config->egwDb->charset}");
+        $this->_log->INFO(__METHOD__ . '::' . __LINE__ . " setting egw charset to {$this->_config->all->egwDb->charset}");
+        $this->_egwDb->query("SET NAMES {$dbConfig->charset}");
 
-        if ($this->_config->dryRun) {
+        if ($this->_config->all->dryRun) {
             Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         }
         
-        if ($this->_config->accountIdMap) {
-            $this->_accountIdMapCache = include($this->_config->accountIdMap);
+        if ($this->_config->all->accountIdMap) {
+            $this->_accountIdMapCache = include($this->_config->all->accountIdMap);
         }
     }
     
@@ -158,8 +156,8 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
      */
     protected function _appendRecordFilter($_select)
     {
-        if ($this->_config->egwOwnerFilter) {
-            $ownerIds = explode(',', preg_replace('/\s/', '', $this->_config->egwOwnerFilter));
+        if ($this->_config->all->egwOwnerFilter) {
+            $ownerIds = explode(',', preg_replace('/\s/', '', $this->_config->all->egwOwnerFilter));
             
             $_select->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier($this->_egwOwnerColumn) . ' IN (?)', $ownerIds));
         }
@@ -226,7 +224,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             return NULL;
         }
         
-        $_tz = $_tz ? $_tz : $this->_config->egwServerTimezone;
+        $_tz = $_tz ? $_tz : $this->_config->all->egwServerTimezone;
         
         $date = new Tinebase_DateTime($_egwTS, $_tz);
         
@@ -256,7 +254,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             
             try {
                 $tineUserId = $_egwAccountId;
-                if ($this->_config->accountIdMap) {
+                if ($this->_config->all->accountIdMap) {
                     throw new Exception("account with id {$_egwAccountId} not found in static map");
                 } else if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
                     if ((int) $_egwAccountId < 0) {
@@ -302,7 +300,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
         
         // not in cache
         if (! $egwAccountId) {
-            if ($this->_config->accountIdMap) {
+            if ($this->_config->all->accountIdMap) {
                 throw new Exception("account with id {$_tineAccountId} not found in static map");
             } else if (Tinebase_User::getConfiguredBackend() === Tinebase_User::LDAP) {
                 if ($_accountType == 'User') {
@@ -339,7 +337,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
                 $isNewContainer = $this->_migrationStartTime->isEarlier($container->creation_time);
             }
             
-            if (($isNewContainer && $this->_config->setPersonalContainerGrants) || $this->_config->forcePersonalContainerGrants) {
+            if (($isNewContainer && $this->_config->all->setPersonalContainerGrants) || $this->_config->all->forcePersonalContainerGrants) {
                 // resolve grants based on user/groupmemberships
                 $grants = $this->getGrantsByOwner($this->getApplication()->name, $userId);
                 Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE);
