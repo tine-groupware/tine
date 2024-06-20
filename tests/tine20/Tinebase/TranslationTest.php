@@ -185,10 +185,12 @@ class Tinebase_TranslationTest extends TestCase
 
         $tineRoot = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20';
         
-        $cmd = 'for i in `ls ' . $tineRoot . '/*/translations/*.po`; do msgfmt -o - --strict $i 2>&1 1>/dev/null ; done';
+        $cmd = 'for i in `ls ' . $tineRoot
+            . '/*/translations/*.po`; do msgfmt -o - --strict $i 2>&1 1>/dev/null || echo "file: $i"; done';
         exec($cmd, $output);
         
-        $this->assertEquals(0, count($output), "Found invalid translation file(s):\n command: $cmd ->" . print_r($output, true));
+        $this->assertEquals(0, count($output),
+            "Found invalid translation file(s):\n command: $cmd ->" . print_r($output, true));
     }
 
     /**
