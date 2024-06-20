@@ -659,14 +659,15 @@ class Tinebase_Frontend_Cli_Abstract
      * import from egroupware
      *
      * @param Zend_Console_Getopt $_opts
+     * @return int
      */
-    public function importegw14($_opts)
+    public function importegw14(Zend_Console_Getopt $_opts): int
     {
         $args = $_opts->getRemainingArgs();
         
         if (count($args) < 1 || ! is_readable($args[0])) {
             echo "can not open config file \n";
-            echo "see tine20.org/wiki/EGW_Migration_Howto for details \n\n";
+            // echo "see tine20.org/wiki/EGW_Migration_Howto for details \n\n";
             echo "usage: ./tine20.php --method=Appname.importegw14 /path/to/config.ini  (see Tinebase/Setup/Import/Egw14/config.ini)\n\n";
             exit(1);
         }
@@ -678,27 +679,23 @@ class Tinebase_Frontend_Cli_Abstract
             }
         } catch (Zend_Config_Exception $e) {
             fwrite(STDERR, "Error while parsing config file($args[0]) " .  $e->getMessage() . PHP_EOL);
-            exit(1);
+            return 1;
         }
-        
-        $writer = new Zend_Log_Writer_Stream('php://output');
-        $logger = new Zend_Log($writer);
-        
-        $filter = new Zend_Log_Filter_Priority((int) $config->loglevel);
-        $logger->addFilter($filter);
         
         $class_name = $this->_applicationName . '_Setup_Import_Egw14';
         if (! class_exists($class_name)) {
-            $logger->ERR(__METHOD__ . '::' . __LINE__ . " no import for {$this->_applicationName} available");
-            exit(1);
+            echo " no import for {$this->_applicationName} available\n";
+            return 1;
         }
         
         try {
-            $importer = new $class_name($config, $logger);
+            $importer = new $class_name($config, Tinebase_Core::getLogger());
             $importer->import();
         } catch (Exception $e) {
-            $logger->ERR(__METHOD__ . '::' . __LINE__ . " import for {$this->_applicationName} failed ". $e->getMessage());
+            echo "Import for {$this->_applicationName} failed: ". $e->getMessage() . "\n";
+            return 1;
         }
+        return 0;
     }
 
     /**
