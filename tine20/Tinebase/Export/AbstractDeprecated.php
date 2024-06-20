@@ -726,7 +726,7 @@ abstract class Tinebase_Export_AbstractDeprecated implements Tinebase_Record_Ite
 
     public function save($target = null)
     {
-        if ($target && $this->_tmpFile) {
+        if ($target && is_string($this->_tmpFile)) {
             stream_copy_to_stream(fopen($this->_tmpFile, 'r'), fopen($target, 'w'));
         }
     }
