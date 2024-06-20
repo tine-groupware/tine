@@ -501,6 +501,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
     public function testExternalDomainInUserAccountCreate()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
+        $this->_skipIfLDAPBackend();
 
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP);
         $imapConfig->allowExternalEmail = true;
