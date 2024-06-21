@@ -10,6 +10,8 @@
  *
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
+
 /**
  * Tasks Controller (composite)
  * 
@@ -134,6 +136,25 @@ class Tasks_Controller extends Tinebase_Controller_Event implements Tinebase_App
                     $this->deletePersonalFolder($_eventObject->account, Tasks_Model_Task::class);
                 }
                 break;
+        }
+    }
+
+    public static function timesheetMCHookFun(array &$fields, Tinebase_ModelConfiguration $mc): void
+    {
+        if (!in_array(Tasks_Model_Task::class, $fields['source_model'][TMCC::CONFIG][TMCC::AVAILABLE_MODELS])) {
+            $fields['source_model'][TMCC::CONFIG][TMCC::AVAILABLE_MODELS][] = Tasks_Model_Task::class;
+        }
+        $filterModels = $mc->filterModel;
+        if (!isset($filterModels['source:' . Tasks_Model_Task::class])) {
+            $filterModels['source:' . Tasks_Model_Task::class] = [
+                TMCC::FILTER         => Tinebase_Model_Filter_ForeignId::class,
+                TMCC::OPTIONS => [
+                    TMCC::CONTROLLER    => Tasks_Controller_Task::class,
+                    TMCC::FILTER_GROUP  => Tasks_Model_Task::class,
+                    TMCC::FIELD         => 'source'
+                ],
+            ];
+            $mc->setFilterModel($filterModels);
         }
     }
 }

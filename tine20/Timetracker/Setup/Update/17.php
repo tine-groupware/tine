@@ -16,6 +16,8 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
     public const RELEASE017_UPDATE000 = __CLASS__ . '::update000';
     public const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
     public const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
+    public const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
+
 
 
     static protected $_allUpdates = [
@@ -23,6 +25,10 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE017_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -83,5 +89,19 @@ class Timetracker_Setup_Update_17 extends Setup_Update_Abstract
             $stateRepo->delete($states->getId());
         }
         $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.2', self::RELEASE017_UPDATE002);
+    }
+
+    public function update003()
+    {
+        Setup_SchemaTool::updateSchema([
+            Timetracker_Model_Timesheet::class,
+        ]);
+
+        $initalize = new Timetracker_Setup_Initialize();
+        $method = new ReflectionMethod(Timetracker_Setup_Initialize::class, '_initializeSystemCFs');
+        $method->setAccessible(true);
+        $method->invoke($initalize);
+
+        $this->addApplicationUpdate(Timetracker_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
     }
 }

@@ -9,6 +9,8 @@
  *
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
+
 /**
  * class for Timetracker initialization
  *
@@ -183,5 +185,38 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
         Tinebase_Controller_EvaluationDimension::addModelsToDimension(Tinebase_Model_EvaluationDimension::COST_CENTER, [
             Timetracker_Model_Timeaccount::class,
         ]);
+    }
+
+    /**
+     * init system customfields
+     */
+    protected function _initializeSystemCFs()
+    {
+        $taskAppId = Tinebase_Application::getInstance()->getApplicationByName(
+            Tasks_Config::APP_NAME
+        )->getId();
+
+        $cf = new Tinebase_Model_CustomField_Config([
+            'name' => 'timeaccount',
+            'application_id' => $taskAppId,
+            'model' => Tasks_Model_Task::class,
+            'is_system' => true,
+            'definition' => [
+                Tinebase_Model_CustomField_Config::DEF_FIELD => [
+                    TMCC::NAME => 'timeaccount',
+                    TMCC::LABEL => 'Timeaccount', //_('Timeaccount')
+                    TMCC::TYPE => TMCC::TYPE_RECORD,
+                    TMCC::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true,],
+                    TMCC::NULLABLE => true,
+                    TMCC::OWNING_APP => Tasks_Config::APP_NAME,
+                    TMCC::CONFIG => [
+                        TMCC::APPLICATION => Timetracker_Config::APP_NAME,
+                        TMCC::APP_NAME => Timetracker_Config::APP_NAME,
+                        TMCC::MODEL_NAME => Timetracker_Model_Timeaccount::MODEL_NAME_PART,
+                    ],
+                ],
+            ],
+        ], true);
+        Tinebase_CustomField::getInstance()->addCustomField($cf);
     }
 }

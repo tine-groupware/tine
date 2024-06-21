@@ -2,9 +2,12 @@
 <application>
     <name>Timetracker</name>
     <!-- gettext('Timetracker') -->   
-    <version>17.2</version>
+    <version>17.3</version>
     <order>60</order>
     <status>enabled</status>
+    <depends>
+        <application>Tasks</application>
+    </depends>
     <tables>
         <table>
             <name>timetracker_timeaccount_fav</name>
