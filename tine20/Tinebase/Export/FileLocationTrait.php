@@ -99,7 +99,7 @@ trait Tinebase_Export_FileLocationTrait
             return $this->_fileLocation;
         }
 
-        if ($filename === null) {
+        if (!is_string($filename)) {
             if (method_exists($this, 'write')) {
                 ob_start();
                 $fh = null;
