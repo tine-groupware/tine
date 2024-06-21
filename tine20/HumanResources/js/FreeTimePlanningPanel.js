@@ -173,7 +173,7 @@ Tine.HumanResources.FreeTimePlanningPanel = Ext.extend(Tine.widgets.grid.GridPan
                 // support multiple freetimes per day?
                 const freeTimeType = freeTimes[0].type;
                 processStatus = _.get(freeTimes[0], 'process_status', '')
-                char = _.get(freeTimeType, 'abbreviation', freeTimeType[0]);
+                char = Tine.HumanResources.Model.FreeTimeType.getAbbreviation(freeTimeType) || '?'
                 bgColor = _.get(freeTimeType, 'color', '#FFFFFF');
                 img = Tine.Tinebase.widgets.keyfield.Renderer.get('HumanResources', 'freeTimeProcessStatus', 'icon')(processStatus)
                 // bgColor = _.get(freeTimeType, 'icon', 'none');
