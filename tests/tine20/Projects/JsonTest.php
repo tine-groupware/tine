@@ -32,6 +32,70 @@ class Projects_JsonTest extends TestCase
         $this->_json = new Projects_Frontend_Json();
     }
 
+    public function testAddProjectTaskWithDependencyWithId()
+    {
+        $project = $this->_getProjectData();
+        $id1 = Tinebase_Record_Abstract::generateUID();
+        $id2 = Tinebase_Record_Abstract::generateUID();
+
+        $project[Projects_Model_Project::FLD_TASKS] = [
+            ['id' => $id1, 'summary' => 'task1', 'completed' => '1970-01-01 00:00:00', 'due' => '1970-01-01 00:00:00',
+                'description' => '', 'location' => '', 'status' => 'a', 'url' => '', 'etag' => '', 'attach' => '',
+                'attendee' => '', 'comment' => '', 'contact' => '', 'related' => '', 'resources' => '', 'rstatus' => '',
+                'dtstart' => '1970-01-01 00:00:00', 'duration' => '', 'recurid' => '', 'exdate' => '1970-01-01 00:00:00', 'exrule' => '', 'rdate' => '1970-01-01 00:00:00',
+                'rrule' => '', 'geo' => '1',
+                Tasks_Model_Task::FLD_DEPENDENT_TASKS => [[
+                    Tasks_Model_TaskDependency::FLD_TASK_ID => ['id' => $id2, 'summary' => 'task2', 'completed' => '1970-01-01 00:00:00', 'due' => '1970-01-01 00:00:00',
+                        'description' => '', 'location' => '', 'status' => 'a', 'url' => '', 'etag' => '', 'attach' => '',
+                        'attendee' => '', 'comment' => '', 'contact' => '', 'related' => '', 'resources' => '', 'rstatus' => '',
+                        'dtstart' => '1970-01-01 00:00:00', 'duration' => '', 'recurid' => '', 'exdate' => '1970-01-01 00:00:00', 'exrule' => '', 'rdate' => '1970-01-01 00:00:00',
+                        'rrule' => '', 'geo' => '1'],
+                ]]
+            ],
+        ];
+        $projectData = $this->_json->saveProject($project);
+
+        $this->assertCount(1, $projectData[Projects_Model_Project::FLD_TASKS]);
+        $this->assertSame($id1, $projectData[Projects_Model_Project::FLD_TASKS][0]['id']);
+        $this->assertSame($id2, $projectData[Projects_Model_Project::FLD_TASKS][0][Tasks_Model_Task::FLD_DEPENDENT_TASKS][0][Tasks_Model_TaskDependency::FLD_TASK_ID]);
+
+        $task = (new Tasks_Frontend_Json())->getTask($id2);
+        $task['summary'] = 'task3';
+
+        $projectData[Projects_Model_Project::FLD_TASKS][0][Tasks_Model_Task::FLD_DEPENDENT_TASKS][0][Tasks_Model_TaskDependency::FLD_TASK_ID] = $task;
+        $this->_json->saveProject($projectData);
+
+        $notUpdatedTask = (new Tasks_Frontend_Json())->getTask($id2);
+        $this->assertNotSame($task['summary'], $notUpdatedTask['summary']);
+    }
+
+    public function testAddProjectTaskWithDependencyWithOutId()
+    {
+        $project = $this->_getProjectData();
+        $id1 = Tinebase_Record_Abstract::generateUID();
+
+        $project[Projects_Model_Project::FLD_TASKS] = [
+            ['id' => $id1, 'summary' => 'task1', 'completed' => '1970-01-01 00:00:00', 'due' => '1970-01-01 00:00:00',
+                'description' => '', 'location' => '', 'status' => 'a', 'url' => '', 'etag' => '', 'attach' => '',
+                'attendee' => '', 'comment' => '', 'contact' => '', 'related' => '', 'resources' => '', 'rstatus' => '',
+                'dtstart' => '1970-01-01 00:00:00', 'duration' => '', 'recurid' => '', 'exdate' => '1970-01-01 00:00:00', 'exrule' => '', 'rdate' => '1970-01-01 00:00:00',
+                'rrule' => '', 'geo' => '1',
+                Tasks_Model_Task::FLD_DEPENDENT_TASKS => [[
+                    Tasks_Model_TaskDependency::FLD_TASK_ID => ['summary' => 'task2', 'completed' => '1970-01-01 00:00:00', 'due' => '1970-01-01 00:00:00',
+                        'description' => '', 'location' => '', 'status' => 'a', 'url' => '', 'etag' => '', 'attach' => '',
+                        'attendee' => '', 'comment' => '', 'contact' => '', 'related' => '', 'resources' => '', 'rstatus' => '',
+                        'dtstart' => '1970-01-01 00:00:00', 'duration' => '', 'recurid' => '', 'exdate' => '1970-01-01 00:00:00', 'exrule' => '', 'rdate' => '1970-01-01 00:00:00',
+                        'rrule' => '', 'geo' => '1'],
+                ]]
+            ],
+        ];
+        $projectData = $this->_json->saveProject($project);
+
+        $this->assertCount(1, $projectData[Projects_Model_Project::FLD_TASKS]);
+        $this->assertSame($id1, $projectData[Projects_Model_Project::FLD_TASKS][0]['id']);
+        $this->assertCount(1, $projectData[Projects_Model_Project::FLD_TASKS][0][Tasks_Model_Task::FLD_DEPENDENT_TASKS]);
+    }
+
     public function testAddProjectTasksDependingOnEach()
     {
         $project = $this->_getProjectData();
