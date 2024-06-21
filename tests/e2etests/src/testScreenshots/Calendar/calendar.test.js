@@ -82,8 +82,8 @@ describe('editDialog', () => {
         await newPage.type('input[name=summary]', 'Test Event');
         await newPage.screenshot({path: 'screenshots/Kalender/6_kalender_neuer_termin.png'});
         await newPage.click('[id^=CalendarEditDialogContainerSelectorext]');
-        await newPage.waitForTimeout(500);
-        await expect(newPage).toClick('.x-combo-list-item', {text: 'Andere Kalender wählen...'});
+        await newPage.waitForTimeout(1000);
+        await expect(newPage).toClick('.x-layer.x-combo-list .x-combo-list-item', {text: 'Andere Kalender wählen...'});
         await newPage.waitForTimeout(2000);
         let collapseTree = await newPage.$$('.x-tree-node-el.x-unselectable.x-tree-node-collapsed');
         for (let i = 0; i < collapseTree.length; i++) {
@@ -93,7 +93,7 @@ describe('editDialog', () => {
         await newPage.mouse.move(0, 0);
         await newPage.waitForTimeout(500);
         await newPage.screenshot({path: 'screenshots/Kalender/7_kalender_neuer_termin_kalenderauswahl.png'});
-        await newPage.keyboard.press('Escape');
+        await expect(newPage).toClick('.x-window.x-window-plain.x-resizable-pinned button', {text: 'Abbrechen'});
     });
 
     test('add attendees', async () => {
