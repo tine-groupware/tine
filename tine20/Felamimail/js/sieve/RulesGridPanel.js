@@ -10,6 +10,8 @@
  
 Ext.ns('Tine.Felamimail.sieve');
 
+require('./EditSieveScriptWindow');
+
 /**
  * @namespace Tine.Felamimail
  * @class     Tine.Felamimail.sieve.RulesGridPanel
@@ -54,7 +56,13 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.editDialogConfig = {
             account: this.account
         };
-        
+
+        this.editSieveScriptWindow = new Tine.Felamimail.sieve.EditSieveScriptWindow({
+            accountId: this.account.id,
+            asAdminModule: this.asAdminModule,
+            app: this.app
+        })
+
         this.supr().initComponent.call(this);
     },
     
@@ -108,7 +116,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this,
             iconCls: 'action_disable'
         });
-        
+
         this.supr().initActions.call(this);
     },
     
@@ -177,7 +185,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         ];
     },
-    
+
     /**
      * add custom items to context menu
      * 
@@ -241,6 +249,21 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             border : false,
             items  : this.actionToolbar
         });
+
+        this.items.push({
+            region: 'south',
+            height: 30,
+            layout: 'card',
+            activeItem: 0,
+            border: false,
+            items: new Ext.Button({
+                text: this.app.i18n._('Edit Sieve custom script'),
+                handler: async () => {
+                    await this.editSieveScriptWindow.showEditSieveScriptWindow()
+                },
+                hidden: !this.editSieveScriptWindow.checkAccountEditRight(this.account)
+            })
+        })
     },
     
     /**
