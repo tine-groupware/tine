@@ -58,9 +58,22 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
         
         $this->_setColumnWidths();
         
-        return $this->_tmpFile = $this->getDocument();
+        return $this->getDocument();
     }
-    
+
+    public function save($target = null)
+    {
+        if ($target && $this->_excelObject instanceof PHPExcel) {
+            ob_start();
+            try {
+                $this->write();
+            } finally {
+                $output = ob_get_clean();
+            }
+            file_put_contents($target, $output);
+        }
+    }
+
     /**
      * sets the colunm widths by config column->width
      */
