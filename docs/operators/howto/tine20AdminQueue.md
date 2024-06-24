@@ -58,6 +58,12 @@ oder
 
     redis-cli -h redis.host EVAL "return redis.call('del', 'defaultKey',unpack(redis.call('keys', ARGV[1])))" 0 tine20worker_*
 
+
+Docker setup (container name "tine20-cache-1" may vary):
+
+    docker exec -it tine20-cache-1 sh
+    redis-cli --scan --pattern 'actionqueue*' | xargs -L 1000 redis-cli unlink
+
 eintrag in der queue anschauen
 
     redis-cli hval tine20workerData:UUID
