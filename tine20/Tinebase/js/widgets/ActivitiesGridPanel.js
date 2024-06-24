@@ -101,35 +101,13 @@ Tine.widgets.activities.ActivitiesGridPanel = Ext.extend(Ext.grid.GridPanel, {
      * @return Array
      */
     getColumns: function () {
-        return [
-            {
-                id: 'note_type_id',
-                header: i18n._('Type'),
-                dataIndex: 'note_type_id',
-                width: 80,
-                renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteType')
-            },
-            {
-                id: 'note',
-                dataIndex: 'note',
-                header: i18n._('Note'),
-                sortable: true,
-                renderer: this.renderMultipleLines
-            },
-            {
-                id: 'created_by',
-                header: i18n._('Created By'),
-                dataIndex: 'created_by',
-                renderer: Tine.Tinebase.common.usernameRenderer,
-            },
-            {
-                id: 'creation_time',
-                header: i18n._('Creation time'),
-                dataIndex: 'creation_time',
-                width: 140,
-                renderer: Tine.Tinebase.common.dateTimeRenderer
-            }
+        const columns = [
+            { id: 'note_type_id', header: i18n._('Type'), renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tinebase', 'noteType') },
+            { id: 'note', header: i18n._('Note'), renderer: this.renderMultipleLines },
+            { id: 'created_by', header: i18n._('Created By'), renderer: Tine.Tinebase.common.usernameRenderer },
+            { id: 'creation_time', header: i18n._('Creation time'), renderer: Tine.Tinebase.common.dateTimeRenderer }
         ];
+        return columns;
     },
 
     /**

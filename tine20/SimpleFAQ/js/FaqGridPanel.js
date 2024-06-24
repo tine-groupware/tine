@@ -77,9 +77,6 @@ Tine.SimpleFAQ.FaqGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         },{
             id: 'tags',
             header: this.app.i18n._('Tags'),
-            width: 50,
-            sortable: false,
-            dataIndex: 'tags',
             renderer: Tine.Tinebase.common.tagsRenderer
         },{
             id: 'faqstatus',

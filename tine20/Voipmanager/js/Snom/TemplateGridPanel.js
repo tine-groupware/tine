@@ -37,47 +37,15 @@ Tine.Voipmanager.SnomTemplateGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
      * 
      */
     getColumns: function(){
-        return [{
-                id: 'id', 
-                header: this.app.i18n._('id'), 
-                dataIndex: 'id', 
-                width: 10, 
-                sortable: true,
-                hidden: true 
-               },{
-                   id: 'name', 
-                   header: this.app.i18n._('name'), 
-                   dataIndex: 'name', 
-                   width: 100,
-                sortable: true
-               },{
-                   id: 'description', 
-                   header: this.app.i18n._('Description'), 
-                   dataIndex: 'description', 
-                   width: 350,
-                sortable: true
-               },{
-                   id: 'keylayout_id', 
-                   header: this.app.i18n._('Keylayout Id'), 
-                   dataIndex: 'keylayout_id', 
-                   width: 10, 
-                sortable: true,
-                   hidden: true 
-               },{
-                   id: 'setting_id', 
-                   header: this.app.i18n._('Settings Id'), 
-                   dataIndex: 'setting_id', 
-                   width: 10, 
-                sortable: true,
-                   hidden: true 
-               },{
-                   id: 'software_id', 
-                   header: this.app.i18n._('Software Id'), 
-                   dataIndex: 'software_id', 
-                   width: 10, 
-                sortable: true,
-                   hidden: true 
-               }];
+        const columns = [
+            { id: 'id', header: this.app.i18n._('id'), width: 10, sortable: true, hidden: true },
+            { id: 'name', header: this.app.i18n._('name'), width: 100, sortable: true },
+            { id: 'description', header: this.app.i18n._('Description'), width: 350, sortable: true },
+            { id: 'keylayout_id', header: this.app.i18n._('Keylayout Id'), width: 10, sortable: true, hidden: true },
+            { id: 'setting_id', header: this.app.i18n._('Settings Id'), width: 10, sortable: true, hidden: true },
+            { id: 'software_id', header: this.app.i18n._('Software Id'), width: 10, sortable: true, hidden: true }
+        ];
+        return columns;
     },
     
     initDetailsPanel: function() { return false; },

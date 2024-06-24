@@ -53,82 +53,20 @@ Tine.Voipmanager.SnomLocationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
      * 
      */
     getColumns: function(){
-        return [{
-                id: 'firmware_interval', 
-                header: this.app.i18n._('FW Interval'), 
-                dataIndex: 'firmware_interval', 
-                width: 10, 
-                sortable: true,
-                hidden: true 
-            },{
-                id: 'update_policy', 
-                header: this.app.i18n._('Update Policy'), 
-                dataIndex: 'update_policy', 
-                width: 30, 
-                sortable: true,
-                hidden: true 
-            },{
-                id: 'registrar', 
-                header: this.app.i18n._('Registrar'), 
-                dataIndex: 'registrar', 
-                width: 100, 
-                sortable: true,
-                hidden: true  
-            },{
-                id: 'admin_mode', 
-                header: this.app.i18n._('Admin Mode'), 
-                dataIndex: 'admin_mode', 
-                width: 10, 
-                sortable: true,
-                hidden: true 
-            },{
-                id: 'ntp_server', 
-                header: this.app.i18n._('NTP Server'), 
-                dataIndex: 'ntp_server', 
-                width: 50, 
-                sortable: true,
-                hidden: true  
-            },{
-                id: 'webserver_type', 
-                header: this.app.i18n._('Webserver Type'), 
-                dataIndex: 'webserver_type', 
-                width: 30, 
-                sortable: true,
-                hidden: true 
-            },{
-                id: 'https_port', 
-                header: this.app.i18n._('HTTPS Port'), 
-                dataIndex: 'https_port', 
-                width: 10, 
-                sortable: true,
-                hidden: true  
-            },{
-                id: 'http_user', 
-                header: this.app.i18n._('HTTP User'), 
-                dataIndex: 'http_user', 
-                width: 15, 
-                sortable: true,
-                hidden: true 
-            },{
-                id: 'id', 
-                header: this.app.i18n._('id'), 
-                dataIndex: 'id', 
-                width: 10, 
-                sortable: true,
-                hidden: true 
-            },{
-                id: 'name',
-                header: this.app.i18n._('Name'),
-                dataIndex: 'name',
-                width: 80,
-                sortable: true
-            },{
-                id: 'description', 
-                header: this.app.i18n._('Description'), 
-                dataIndex: 'description', 
-                width: 350,
-                sortable: true
-            }];
+        const columns = [
+            { id: 'firmware_interval', header: this.app.i18n._('FW Interval'), width: 10, hidden: true },
+            { id: 'update_policy', header: this.app.i18n._('Update Policy'), width: 30, hidden: true },
+            { id: 'registrar', header: this.app.i18n._('Registrar'), width: 100, hidden: true },
+            { id: 'admin_mode', header: this.app.i18n._('Admin Mode'), width: 10, hidden: true },
+            { id: 'ntp_server', header: this.app.i18n._('NTP Server'), width: 50, hidden: true },
+            { id: 'webserver_type', header: this.app.i18n._('Webserver Type'), width: 30, hidden: true },
+            { id: 'https_port', header: this.app.i18n._('HTTPS Port'), width: 10, hidden: true },
+            { id: 'http_user', header: this.app.i18n._('HTTP User'), width: 15, hidden: true },
+            { id: 'id', header: this.app.i18n._('id'), width: 10, hidden: true },
+            { id: 'name', header: this.app.i18n._('Name'), dataIndex: 'name', width: 80, sortable: true },
+            { id: 'description', header: this.app.i18n._('Description'), dataIndex: 'description', width: 350, sortable: true }
+        ];
+        return columns;
     },
     
     initDetailsPanel: function() { return false; },

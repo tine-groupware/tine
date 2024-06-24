@@ -264,68 +264,61 @@ Tine.Addressbook.ContactGridPanel.languageRenderer = function(value) {
  * Statically constructs the columns used to represent a contact. Reused by ListMemberGridPanel + ListMemberRoleGridPanel
  */
 Tine.Addressbook.ContactGridPanel.getBaseColumns = function(i18n) {
-    var columns = [
-        { id: 'type', header: i18n._('Type'), tooltip: i18n._('Type'), dataIndex: 'type', width: 20, renderer: Tine.Addressbook.ContactGridPanel.contactTypeRenderer.createDelegate(this), hidden: false, resizable: false },
-        { id: 'jpegphoto', header: '<div class="action_image tine-grid-row-action-icon"></div>', tooltip: i18n._('Contact Image'), dataIndex: 'jpegphoto', width: 20, sortable: false, resizable: false, renderer: Tine.widgets.grid.imageRenderer, hidden: false, resizable: false },
-        { id: 'attachments', header: '<div class="action_attach tine-grid-row-action-icon"></div>', tooltip: window.i18n._('Attachments'), dataIndex: 'attachments', width: 20, sortable: false, resizable: false, renderer: Tine.widgets.grid.attachmentRenderer, hidden: false, resizable: false },
-        { id: 'tags', header: i18n._('Tags'), dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false, hidden: false, fit: false  },
-        { id: 'salutation', header: i18n._('Salutation'), dataIndex: 'salutation', renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Addressbook', 'contactSalutation') },
-        {
-            id: 'container_id',
-            dataIndex: 'container_id',
-            header: Tine.Addressbook.Model.Contact.getContainerName(),
-            width: 150,
-            renderer: Tine.Tinebase.common.containerRenderer
-        },
-        { id: 'n_prefix', header: i18n._('Title'), dataIndex: 'n_prefix', width: 80 },
-        { id: 'n_middle', header: i18n._('Middle Name'), dataIndex: 'n_middle', width: 80 },
-        { id: 'n_family', header: i18n._('Last Name'), dataIndex: 'n_family' },
-        { id: 'n_given', header: i18n._('First Name'), dataIndex: 'n_given', width: 80 },
-        { id: 'n_fn', header: i18n._('Full Name'), dataIndex: 'n_fn', renderer: Tine.Addressbook.ContactGridPanel.displayNameRenderer },
-        { id: 'n_fileas', header: i18n._('Display Name'), dataIndex: 'n_fileas', hidden: false, renderer: Tine.Addressbook.ContactGridPanel.displayNameRenderer},
-        { id: 'org_name', header: i18n._('Company / Organisation'), dataIndex: 'org_name', width: 120, hidden: false },
-        { id: 'org_unit', header: i18n._('Unit'), dataIndex: 'org_unit'  },
-        { id: 'title', header: i18n._('Job Title'), dataIndex: 'title' },
-//            { id: 'role', header: i18n._('Job Role'), dataIndex: 'role' },
-//            { id: 'room', header: i18n._('Room'), dataIndex: 'room' },
-        { id: 'adr_one_street', header: i18n._('Street'), dataIndex: 'adr_one_street' },
-        { id: 'adr_one_locality', header: i18n._('City'), dataIndex: 'adr_one_locality', width: 150, hidden: false },
-        { id: 'adr_one_region', header: i18n._('Region'), dataIndex: 'adr_one_region' },
-        { id: 'adr_one_postalcode', header: i18n._('Postalcode'), dataIndex: 'adr_one_postalcode' },
-        { id: 'adr_one_countryname', header: i18n._('Country'), dataIndex: 'adr_one_countryname', renderer: Tine.Addressbook.ContactGridPanel.countryRenderer },
-        { id: 'adr_two_street', header: i18n._('Street (private)'), dataIndex: 'adr_two_street' },
-        { id: 'adr_two_locality', header: i18n._('City (private)'), dataIndex: 'adr_two_locality' },
-        { id: 'adr_two_region', header: i18n._('Region (private)'), dataIndex: 'adr_two_region' },
-        { id: 'adr_two_postalcode', header: i18n._('Postalcode (private)'), dataIndex: 'adr_two_postalcode' },
-        { id: 'adr_two_countryname', header: i18n._('Country (private)'), dataIndex: 'adr_two_countryname', renderer: Tine.Addressbook.ContactGridPanel.countryRenderer },
-        { id: 'preferred_address', header: i18n._('Preferred Address'), dataIndex: 'preferred_address', renderer: Tine.Addressbook.ContactGridPanel.preferredAddressRenderer },
-        { id: 'preferred_email', header: i18n._('Preferred E-Mail'), dataIndex: 'preferred_email', renderer: Tine.Addressbook.ContactGridPanel.preferredEmailRenderer },
-        { id: 'email', header: i18n._('Email'), dataIndex: 'email', width: 150, hidden: false },
-        { id: 'tel_work', header: i18n._('Phone'), dataIndex: 'tel_work', hidden: false },
-        { id: 'tel_cell', header: i18n._('Mobile'), dataIndex: 'tel_cell', hidden: false },
-        { id: 'tel_fax', header: i18n._('Fax'), dataIndex: 'tel_fax' },
-        { id: 'tel_car', header: i18n._('Car phone'), dataIndex: 'tel_car' },
-        { id: 'tel_pager', header: i18n._('Pager'), dataIndex: 'tel_pager' },
-        { id: 'tel_home', header: i18n._('Phone (private)'), dataIndex: 'tel_home' },
-        { id: 'tel_fax_home', header: i18n._('Fax (private)'), dataIndex: 'tel_fax_home' },
-        { id: 'tel_cell_private', header: i18n._('Mobile (private)'), dataIndex: 'tel_cell_private' },
-        { id: 'email_home', header: i18n._('Email (private)'), dataIndex: 'email_home' },
-        { id: 'url', header: i18n._('Web'), dataIndex: 'url' },
-        { id: 'url_home', header: i18n._('URL (private)'), dataIndex: 'url_home' },
-        { id: 'language', header: i18n._('Language'), dataIndex: 'language', renderer: Tine.Addressbook.ContactGridPanel.languageRenderer },
-        { id: 'note', header: i18n._('Note'), dataIndex: 'note' },
-        { id: 'tz', header: i18n._('Timezone'), dataIndex: 'tz' },
-        { id: 'geo', header: i18n._('Geo'), dataIndex: 'geo' },
-        { id: 'bday', header: i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer },
-        { id: 'color', header: i18n._('Color'), dataIndex: 'color' }
+    const columns = [
+        { id: 'type', header: i18n._('Type'), renderer: Tine.Addressbook.ContactGridPanel.contactTypeRenderer.createDelegate(this), hidden: false, resizable: false, width: 30 },
+        { id: 'jpegphoto', header: '<div class="action_image tine-grid-row-action-icon"></div>', tooltip: i18n._('Contact Image'), sortable: false, resizable: false, renderer: Tine.widgets.grid.imageRenderer, hidden: false, width: 30 },
+        { id: 'attachments', sortable: false, hidden: false },
+        { id: 'tags', header: i18n._('Tags'), renderer: Tine.Tinebase.common.tagsRenderer, hidden: false, fit: false },
+        { id: 'salutation', header: i18n._('Salutation'), renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Addressbook', 'contactSalutation') },
+        { id: 'container_id', header: Tine.Addressbook.Model.Contact.getContainerName(), width: 150, renderer: Tine.Tinebase.common.containerRenderer },
+        { id: 'n_prefix', header: i18n._('Title'), width: 80},
+        { id: 'n_middle', header: i18n._('Middle Name'), width: 80 },
+        { id: 'n_family', header: i18n._('Last Name'), width: 80 },
+        { id: 'n_given', header: i18n._('First Name'), width: 80 },
+        { id: 'n_fn', header: i18n._('Full Name'), renderer: Tine.Addressbook.ContactGridPanel.displayNameRenderer },
+        { id: 'n_fileas', header: i18n._('Display Name'), hidden: false, renderer: Tine.Addressbook.ContactGridPanel.displayNameRenderer },
+        { id: 'org_name', header: i18n._('Company / Organisation'), width: 120, hidden: false },
+        { id: 'org_unit', header: i18n._('Unit') },
+        { id: 'title', header: i18n._('Job Title') },
+        // { id: 'role', header: i18n._('Job Role'), dataIndex: 'role' },
+        // { id: 'room', header: i18n._('Room'), dataIndex: 'room' },
+        { id: 'adr_one_street', header: i18n._('Street') },
+        { id: 'adr_one_locality', header: i18n._('City'), hidden: false },
+        { id: 'adr_one_region', header: i18n._('Region') },
+        { id: 'adr_one_postalcode', header: i18n._('Postalcode') },
+        { id: 'adr_one_countryname', header: i18n._('Country'), renderer: Tine.Addressbook.ContactGridPanel.countryRenderer },
+        { id: 'adr_two_street', header: i18n._('Street (private)') },
+        { id: 'adr_two_locality', header: i18n._('City (private)') },
+        { id: 'adr_two_region', header: i18n._('Region (private)') },
+        { id: 'adr_two_postalcode', header: i18n._('Postalcode (private)') },
+        { id: 'adr_two_countryname', header: i18n._('Country (private)'), renderer: Tine.Addressbook.ContactGridPanel.countryRenderer },
+        { id: 'preferred_address', header: i18n._('Preferred Address'), renderer: Tine.Addressbook.ContactGridPanel.preferredAddressRenderer },
+        { id: 'preferred_email', header: i18n._('Preferred E-Mail'), renderer: Tine.Addressbook.ContactGridPanel.preferredEmailRenderer },
+        { id: 'email', header: i18n._('Email'), width: 150, hidden: false },
+        { id: 'tel_work', header: i18n._('Phone'), hidden: false },
+        { id: 'tel_cell', header: i18n._('Mobile'), hidden: false },
+        { id: 'tel_fax', header: i18n._('Fax') },
+        { id: 'tel_car', header: i18n._('Car phone') },
+        { id: 'tel_pager', header: i18n._('Pager') },
+        { id: 'tel_home', header: i18n._('Phone (private)') },
+        { id: 'tel_fax_home', header: i18n._('Fax (private)') },
+        { id: 'tel_cell_private', header: i18n._('Mobile (private)') },
+        { id: 'email_home', header: i18n._('Email (private)') },
+        { id: 'url', header: i18n._('Web') },
+        { id: 'url_home', header: i18n._('URL (private)') },
+        { id: 'language', header: i18n._('Language'), renderer: Tine.Addressbook.ContactGridPanel.languageRenderer },
+        { id: 'note', header: i18n._('Note') },
+        { id: 'tz', header: i18n._('Timezone') },
+        { id: 'geo', header: i18n._('Geo') },
+        { id: 'bday', header: i18n._('Birthday'), renderer: Tine.Tinebase.common.dateRenderer },
+        { id: 'color', header: i18n._('Color') }
     ];
-
+    
     if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry')) {
-        columns.push({ id: 'industry', header: i18n._('Industry'), dataIndex: 'industry', renderer: Tine.Tinebase.common.foreignRecordRenderer});
+        columns.push({ id: 'industry', header: i18n._('Industry'), renderer: Tine.Tinebase.common.foreignRecordRenderer});
     }
     if (Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureShortName')) {
-        columns.push({ id: 'n_short', header: i18n._('Short Name'), dataIndex: 'n_short', width: 50 });
+        columns.push({ id: 'n_short', header: i18n._('Short Name'), width: 50 });
     }
-    
     return columns;
 };

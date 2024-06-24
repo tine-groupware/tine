@@ -232,9 +232,9 @@ Tine.Admin.Roles.Main = {
                 resizable: true
             },
             columns: [
-                { id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', hidden: true, width: 10 },
-                { id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 50 },
-                { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description' }
+                { id: 'id', header: this.translation.gettext('ID'), hidden: true },
+                { id: 'name', header: this.translation.gettext('Name') },
+                { id: 'description', header: this.translation.gettext('Description') }
             ]
         });
         
@@ -353,5 +353,3 @@ Tine.Admin.Roles.Right = Ext.data.Record.create([
     {name: 'application_id'},
     {name: 'right'}
 ]);
-
-

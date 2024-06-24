@@ -180,7 +180,6 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
                     id: 'dtstart',
                     header: this.app.i18n._('Start Date'),
                     width: 200,
-                    dataIndex: 'dtstart',
                     hideable: false,
                     sortable: true,
                     renderer: this.dateRenderer.createDelegate(this),
@@ -193,7 +192,6 @@ Tine.Calendar.PollPanel = Ext.extend(Ext.Panel, {
                 }, {
                     id: 'info',
                     header: this.app.i18n._('Info'),
-                    dataIndex: 'info',
                     hideable: false,
                     sortable: true,
                     renderer: this.infoRenderer.createDelegate(this)

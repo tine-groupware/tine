@@ -106,7 +106,6 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         columns.push({
             id: 'selected_email',
             header: this.felamimailApp.i18n._('Selected E-Mail'),
-            dataIndex: 'selected_email',
             renderer: this.preferredEmailRenderer.createDelegate(this),
             width: 400,
             hidden: false
@@ -114,7 +113,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         
         // hide all columns except name/company/email/email_home (?)
         Ext.each(columns, (column) => {
-            if (!['org_name', 'selected_email'].includes(column.dataIndex)) {
+            if (!['org_name', 'selected_email'].includes(column.id)) {
                 column.hidden = true;
             }
         });

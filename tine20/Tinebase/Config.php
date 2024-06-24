@@ -1425,7 +1425,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 // shall we include fulltext fields in the query filter?
                 self::FULLTEXT_QUERY_FILTER     => array(
                     'type'                              => Tinebase_Config::TYPE_BOOL,
-                    'default'                           => false
+                    'default'                           => true
                 ),
             ),
             'default'                           => array()

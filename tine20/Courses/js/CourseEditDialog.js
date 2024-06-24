@@ -311,7 +311,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 id: 'data',
                 header: this.app.i18n._("Login"),
                 width: 200,
-                dataIndex: 'data',
                 renderer: function(value) {
                     return (value.account_id) ? i18n._('unknown') : value;
                 }
@@ -324,7 +323,6 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     id: fieldName,
                     header: group.name,
                     width: 100,
-                    dataIndex: fieldName,
                     readOnly: ! Tine.Tinebase.common.hasRight('set_additional_memberships', 'Courses', '')
                 }));
                 membersFields.push(fieldName);

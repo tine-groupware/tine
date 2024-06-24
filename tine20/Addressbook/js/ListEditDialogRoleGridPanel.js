@@ -52,27 +52,13 @@ Tine.Addressbook.ListEditDialogRoleGridPanel = Ext.extend(Tine.widgets.grid.Grid
     },
 
     getColumns: function() {
-        return [{
-            id: 'id',
-            header: this.app.i18n._("ID"),
-            width: 50,
-            sortable: true,
-            dataIndex: 'id',
-            hidden: true
-        }, {
-            id: 'name',
-            header: this.app.i18n._("Name"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'name'
-        }, {
-            id: 'members',
-            header: this.app.i18n._("Members"),
-            width: 150,
-            sortable: true,
-            dataIndex: 'members',
-            renderer: this.memberRenderer
-        }];
+        const columns = [
+            { id: 'id', header: this.app.i18n._("ID"), width: 50, hidden: true }, 
+            { id: 'name', header: this.app.i18n._("Name"), width: 100 }, 
+            { id: 'members', header: this.app.i18n._("Members"), width: 150, renderer: this.memberRenderer}
+        ];
+
+        return columns;
     },
 
     /**

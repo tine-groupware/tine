@@ -779,13 +779,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     customizeColumns: function(columns) {
         if (this.customColumnData) {
-            var _ = window.lodash;
-
-            _.forEach(this.customColumnData, function(value) {
-                var column = _.find(columns, { id: value.id });
-                if (column) {
+            this.customColumnData.forEach((column) => {
+                const col = _.find(columns, { id: column.id });
+                if (col) {
                     // apply custom cfg
-                    column = Ext.apply(column, value);
+                    column = Ext.apply(col, column);
                 }
             });
 
@@ -1879,6 +1877,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // activate grid header menu for column selection
         this.gridConfig.plugins = this.gridConfig.plugins ? this.gridConfig.plugins : [];
         this.gridConfig.plugins.push(new Ext.ux.grid.GridViewMenuPlugin({}));
+
+        const configs = Tine.widgets.grid.ColumnManager.getResolvedColumnsConfig(
+            this.gridConfig?.cm?.config ?? this.gridConfig?.columns, 
+            this.recordClass.getMeta('appName'), 
+            this.recordClass.getMeta('modelName')
+        );
+        if (this.gridConfig?.cm) {
+            this.gridConfig.cm.setConfig(configs, true);
+        }
+        
         this.grid = new Grid(Ext.applyIf(this.gridConfig, {
             border: false,
             store: this.store,

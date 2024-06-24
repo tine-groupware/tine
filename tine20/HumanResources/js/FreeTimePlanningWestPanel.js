@@ -22,6 +22,9 @@ const colorLegend = Ext.extend(Ext.Panel, {
             initFilterPanel: Ext.emptyFn,
             showColumns: ['color', 'name'],
             hideMode: 'delete',
+            gridConfig: {
+                disableResponsiveLayout: true,
+            },
             initComponent: function() {
                 this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('HumanResources');
 

@@ -223,7 +223,6 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                     id: 'summary',
                     header: this.app.i18n._("Summary"),
                     width: 150,
-                    dataIndex: 'summary',
                     quickaddField: new Ext.form.TextField({
                         emptyText: this.app.i18n._('Add a task...')
                     })
@@ -231,7 +230,6 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                     id: 'due',
                     header: this.app.i18n._("Due Date"),
                     width: 110,
-                    dataIndex: 'due',
                     renderer: Tine.Tinebase.common.dateRenderer,
                     editor: new Ext.ux.form.ClearableDateField({
                         //format : 'd.m.Y'
@@ -244,7 +242,6 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                     id: 'priority',
                     header: this.app.i18n._("Priority"),
                     width: 80,
-                    dataIndex: 'priority',
                     renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskPriority'),
                     editor: {
                         xtype: 'widget-keyfieldcombo',
@@ -259,7 +256,6 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                     id: 'percent',
                     header: this.app.i18n._("Percent"),
                     width: 80,
-                    dataIndex: 'percent',
                     renderer: Ext.ux.PercentRenderer,
                     editor: new Ext.ux.PercentCombo({
                         autoExpand: true,
@@ -272,7 +268,6 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                     id: 'status',
                     header: this.app.i18n._("Status"),
                     width: 92,
-                    dataIndex: 'status',
                     renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskStatus'),
                     editor: {
                         xtype: 'widget-keyfieldcombo',
@@ -288,7 +283,6 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                     id: 'organizer',
                     header: this.app.i18n._("Organizer"),
                     width: 180,
-                    dataIndex: 'organizer',
                     renderer: Tine.Tinebase.common.usernameRenderer,
                     quickaddField: this.organizerQuickAdd,
                     editor: this.organizerEditor

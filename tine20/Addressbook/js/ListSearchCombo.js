@@ -10,6 +10,8 @@
 
 Ext.ns('Tine.Addressbook');
 
+import {listTypeRenderer} from "./renderers";
+
 Tine.Addressbook.ListSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordPickerComboBox, {
 
     /**
@@ -77,14 +79,15 @@ Tine.Addressbook.ListSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordP
                     '<div class="x-combo-list-item">',
                         '<table>',
                             '<tr>',
-                                '<td style="min-width: 20px;">{[Tine.Addressbook.ListGridPanel.listTypeRenderer(null, null, values)]}</td>',
+                                '<td style="min-width: 20px;">{[this.listTypeRenderer(null, null, values)]}</td>',
                                 '<td width="100%">{[Tine.Tinebase.EncodingHelper.encode(values.name)]}</td>',
                             '</tr>',
                         '</table>',
                         '{[Tine.widgets.path.pathsRenderer(values.paths, this.getLastQuery())]}',
                     '</div>',
                 '</tpl>', {
-                    getLastQuery: this.getLastQuery.createDelegate(this)
+                    getLastQuery: this.getLastQuery.createDelegate(this),
+                    listTypeRenderer: listTypeRenderer,
                 }
             );
         }

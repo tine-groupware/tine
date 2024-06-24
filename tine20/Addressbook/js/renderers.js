@@ -215,6 +215,24 @@ const avatarRenderer = function(n_short, metadata, record) {
     const colorSchema = Tine.Calendar.colorMgr.getSchema(record && record.get('color') ? record.get('color') : Tine.Calendar.ColorManager.stringToColour(shortName).substring(1,6));
     return shortName ? `<span class="adb-avatar-wrap" ext:qtip="${fullName}" style="background-color: ${colorSchema.color}; color: ${colorSchema.text}">${shortName}</span>` : '';
 }
+
+
+/**
+ * list type renderer
+ *
+ * @private
+ * @return {String} HTML
+ */
+const listTypeRenderer = function(data, cell, record) {
+    var i18n = Tine.Tinebase.appMgr.get('Addressbook').i18n,
+        type = ((record.get && record.get('type')) || record.type),
+        cssClass = 'tine-grid-row-action-icon ' + (type == 'group' ? 'renderer_typeGroupIcon' : 'renderer_typeListIcon'),
+        qtipText = Tine.Tinebase.common.doubleEncode(type == 'group' ? i18n._('System Group') : i18n._('Group'));
+    
+    return '<div ext:qtip="' + qtipText + '" style="background-position:0px;" class="' + cssClass + '">&#160</div>';
+}
+Tine.widgets.grid.RendererManager.register('Addressbook', 'List', 'type', listTypeRenderer, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+
 export {
     mailAddressRenderer,
     countryRenderer,
@@ -223,5 +241,6 @@ export {
     preferredAddressRender,
     preferredEmailRender, 
     urlRenderer,
-    avatarRenderer
+    avatarRenderer,
+    listTypeRenderer,
 }

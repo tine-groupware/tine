@@ -355,7 +355,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             autoExpandColumn: 'name',
             store: this.storeRoles,
             recordClass: Tine.Tinebase.Model.Role,
-            columns: [{id: 'name', header: this.app.i18n.gettext('Name'), sortable: true, dataIndex: 'name'}],
+            columns: [{id: 'name', header: this.app.i18n.gettext('Name'), sortable: true}],
             initActionsAndToolbars: function () {
                 // for now removed abillity to edit role membership
 //                Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
@@ -689,7 +689,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         let cm = [{
             id: 'email',
             header: app.i18n.gettext('E-mail Alias'),
-            dataIndex: 'email',
             width: 260,
             hideable: false,
             sortable: true,
@@ -706,7 +705,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 id: 'dispatch_address',
                 header: '...',
                 tooltip: app.i18n.gettext('This alias can be used for sending e-mails.'),
-                dataIndex: 'dispatch_address',
                 width: 40,
                 hideable: false,
                 sortable: true
@@ -772,7 +770,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 cm: new Ext.grid.ColumnModel([{
                     id: 'email',
                     header: app.i18n.gettext('E-mail Forward'),
-                    dataIndex: 'email',
                     width: 300,
                     hideable: false,
                     sortable: true,

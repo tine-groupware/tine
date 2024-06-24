@@ -119,7 +119,6 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
                         id: 'type',
                         header: (this.typeColumnHeader) ? this.typeColumnHeader : i18n._('Type'),
                         dataIndex: 'type',
-                        width: 100,
                         sortable: true,
                         renderer: (this.relationTypesKeyfieldName)
                             ? Tine.Tinebase.widgets.keyfield.Renderer.get(this.app.appName, this.relationTypesKeyfieldName)

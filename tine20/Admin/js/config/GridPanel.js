@@ -75,20 +75,17 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             header: this.app.i18n._("Name"),
             width: 150,
             sortable: true,
-            dataIndex: 'name'
         },{
             id: 'label',
             header: this.app.i18n._("Label"),
             width: 150,
             sortable: true,
-            dataIndex: 'label',
             renderer: Tine.Tinebase.common.i18nRenderer.createDelegate(this.configApp.i18n)
         }, {
             id: 'value',
             header: this.app.i18n._("Value"),
             width: 150,
             sortable: true,
-            dataIndex: 'value',
             renderer: this.valueRenderer.createDelegate(this),
             editable: true
         }];
@@ -276,4 +273,3 @@ Tine.Admin.config.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         return value;
     }
 });
-

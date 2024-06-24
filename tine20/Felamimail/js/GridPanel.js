@@ -643,102 +643,22 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getColumns: function(){
-        return [{
-            id: 'id',
-            header: this.app.i18n._("Id"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'id',
-            hidden: true
-        }, {
-            id: 'content_type',
-            header: '<div class="action_attach tine-grid-row-action-icon"></div>',
-            tooltip: this.app.i18n._("Attachments"),
-            width: 12,
-            sortable: true,
-            dataIndex: 'has_attachment',
-            renderer: this.attachmentRenderer
-        }, {
-            id: 'flags',
-            header: this.app.i18n._("Flags"),
-            width: 24,
-            sortable: true,
-            dataIndex: 'flags',
-            align: 'center',
-            renderer: this.flagRenderer
-        }, {
-            id: 'tags',
-            header: this.app.i18n._("Tags"),
-            width: 24,
-            sortable: false,
-            dataIndex: 'tags',
-            align: 'center',
-            renderer: Tine.Tinebase.common.tagsRenderer
-        },{
-            id: 'subject',
-            header: this.app.i18n._("Subject"),
-            width: 300,
-            sortable: true,
-            dataIndex: 'subject'
-        },{
-            id: 'from_email',
-            header: this.app.i18n._("From (Email)"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'from_email'
-        },{
-            id: 'from_name',
-            header: this.app.i18n._("From (Name)"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'from_name'
-        },{
-            id: 'sender',
-            header: this.app.i18n._("Sender"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'sender',
-            hidden: true
-        },{
-            id: 'to',
-            header: this.app.i18n._("To"),
-            width: 150,
-            sortable: true,
-            dataIndex: 'to',
-            hidden: true,
-            renderer: Tine.Tinebase.common.emailRenderer,
-        },{
-            id: 'sent',
-            header: this.app.i18n._("Sent"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'sent',
-            renderer: Tine.Tinebase.common.dateTimeRenderer
-        },{
-            id: 'received',
-            header: this.app.i18n._("Received"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'received',
-            hidden: true,
-            renderer: Tine.Tinebase.common.dateTimeRenderer
-        },{
-            id: 'folder_id',
-            header: this.app.i18n._("Folder"),
-            width: 100,
-            sortable: true,
-            dataIndex: 'folder_id',
-            hidden: true,
-            renderer: this.accountAndFolderRenderer.createDelegate(this)
-        },{
-            id: 'size',
-            header: this.app.i18n._("Size"),
-            width: 80,
-            sortable: true,
-            dataIndex: 'size',
-            hidden: true,
-            renderer: Ext.util.Format.fileSize
-        }];
+        const columns = [
+            { id: 'id', header: this.app.i18n._("Id"), hidden: true },
+            { id: 'content_type', dataIndex: 'has_attachment', renderer: this.attachmentRenderer },
+            { id: 'flags', header: this.app.i18n._("Flags"), align: 'center', renderer: this.flagRenderer },
+            { id: 'tags', header: this.app.i18n._("Tags"), align: 'center', renderer: Tine.Tinebase.common.tagsRenderer },
+            { id: 'subject', header: this.app.i18n._("Subject") },
+            { id: 'from_email', header: this.app.i18n._("From (Email)") },
+            { id: 'from_name', header: this.app.i18n._("From (Name)") },
+            { id: 'sender', header: this.app.i18n._("Sender"), hidden: true },
+            { id: 'to', header: this.app.i18n._("To"), hidden: true, renderer: Tine.Tinebase.common.emailRenderer },
+            { id: 'sent', header: this.app.i18n._("Sent"), renderer: Tine.Tinebase.common.dateTimeRenderer },
+            { id: 'received', header: this.app.i18n._("Received"), hidden: true, renderer: Tine.Tinebase.common.dateTimeRenderer },
+            { id: 'folder_id', header: this.app.i18n._("Folder"), hidden: true, renderer: this.accountAndFolderRenderer.createDelegate(this) },
+            { id: 'size', header: this.app.i18n._("Size"), hidden: true, renderer: Ext.util.Format.fileSize }
+        ];
+        return columns;
     },
     
     /**

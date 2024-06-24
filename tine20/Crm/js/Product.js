@@ -135,20 +135,17 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             {
                 header: this.app.i18n._("Product"),
                 id: 'name',
-                dataIndex: 'name',
                 renderer: Tine.widgets.grid.RendererManager.get('Sales','Product','name'),
                 width: 150
             }, {
                 header: this.app.i18n._("Description"),
                 id: 'remark_description',
-                dataIndex: 'remark_description',
                 width: 150,
                 editor: new Ext.form.TextField({
                 })
             }, {
                 header: this.app.i18n._("Price"),
                 id: 'remark_price',
-                dataIndex: 'remark_price',
                 width: 150,
                 editor: new Ext.form.NumberField({
                     allowBlank: false,
@@ -160,7 +157,6 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             }, {
                 header: this.app.i18n._("Quantity"),
                 id: 'remark_quantity',
-                dataIndex: 'remark_quantity',
                 width: 50,
                 editor: new Ext.form.NumberField({
                     allowBlank: false,

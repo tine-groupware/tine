@@ -35,11 +35,10 @@ Tine.Felamimail.SignatureGridPanel = Ext.extend(Ext.grid.GridPanel, {
         });
 
         me.columns = [
-            {id: 'name', dataIndex: 'name', header: me.app.i18n._('Name'), sortable: false},
+            {id: 'name', header: me.app.i18n._('Name'), sortable: false},
             me.checkColumn = new Ext.ux.grid.CheckColumn({
                 id: 'is_default',
                 header: me.app.i18n._('Is Default'),
-                dataIndex: 'is_default',
                 width: 100,
                 listeners: {checkchange: _.bind(me.onCheckChange, me)}
             })
