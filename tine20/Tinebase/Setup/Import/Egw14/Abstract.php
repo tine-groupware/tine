@@ -337,7 +337,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
                 $isNewContainer = $this->_migrationStartTime->isEarlier($container->creation_time);
             }
             
-            if (($isNewContainer && $this->_config->all->setPersonalContainerGrants) || $this->_config->all->forcePersonalContainerGrants) {
+            if (($isNewContainer && $this->_config->setPersonalContainerGrants) || $this->_config->forcePersonalContainerGrants) {
                 // resolve grants based on user/groupmemberships
                 $grants = $this->getGrantsByOwner($this->getApplication()->name, $userId);
                 Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE);
@@ -360,7 +360,8 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
         $privateString = 'Private';
         
         if (! (isset($this->_privateContainerCache[$userId]) || array_key_exists($userId, $this->_privateContainerCache))) {
-            $personalContainers = Tinebase_Container::getInstance()->getPersonalContainer($userId, $this->getApplication()->name, $userId, Tinebase_Model_Grants::GRANT_ADMIN, TRUE);
+            $personalContainers = Tinebase_Container::getInstance()->getPersonalContainer($userId,
+                $this->getApplication()->name, $userId, Tinebase_Model_Grants::GRANT_ADMIN, TRUE);
             $privateContainer = $personalContainers->filter('name', $privateString);
             
             if (count($privateContainer) < 1) {
@@ -422,8 +423,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('acl_account') . ' IN (?)', $acl_account));
             
         $egwGrantDatas = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
-//         print_r($egwGrantDatas);
-        
+
         // in a first run we merge grants from different sources
         $effectiveGrants = array();
         if ($egwAccountId > 0) {

@@ -33,26 +33,112 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
      * @var array
      */
     protected $_countryMapping = array(
-        
-        "BELGIEN"          => "BE",
-        "BULGARIEN"        => "BG",
-        "DEUTSCHLAND"      => "DE",
-        "FRANKREICH"       => "FR",
-        "GERMANY"          => "DE",
-        "GREAT BRITAIN"    => "GB",
-        "IRELAND"          => "IE",
-        "JAPAN"            => "JP",
-        "LUXEMBURG"        => "LU",
-        "NEW ZEALAND"      => "NZ",
-        "NIEDERLANDE"      => "NL",
-        "ÖSTERREICH"       => "AT",
-        "SCHWEIZ"          => "CH",
-        "SLOVAKEI"         => "SK",
-        "SPANIEN"          => "ES",
-        "SWEDEN"           => "SE",
-        "USA"              => "US",
+        "BELGIEN" => "BE",
+        "BULGARIEN" => "BG",
+        "DEUTSCHLAND" => "DE",
+        "FRANKREICH" => "FR",
+        "GERMANY" => "DE",
+        "GREAT BRITAIN" => "GB",
+        "VEREINIGTES KÖNIGREICH" => "GB",
+        "IRELAND" => "IE",
+        "JAPAN" => "JP",
+        "LUXEMBURG" => "LU",
+        "NEW ZEALAND" => "NZ",
+        "NIEDERLANDE" => "NL",
+        "ÖSTERREICH" => "AT",
+        "SCHWEIZ" => "CH",
+        "SLOVAKEI" => "SK",
+        "SPANIEN" => "ES",
+        "SWEDEN" => "SE",
+        "SCHWEDEN" => "SE",
+        "USA" => "US",
         "VEREINIGTE STAATEN VON AMERIKA" => "US",
-        
+        "TÜRKEI" => "TR",
+        "ITALIEN" => "IT",
+        "SAUDI ARABIEN" => "SA",
+        "FINLAND" => "FI",
+        "CHINA" => "CN",
+        "TUNISIEN" => "TN",
+        "TUNESIEN" => "TN",
+        "HONG KONG" => "HK",
+        "TSCHECHISCHE REPUBLIK" => "CZ",
+        "SÜDAFRIKA" => "ZA",
+        "KANADA" => "CA",
+        "POLEN" => "PL",
+        "PORTUGAL" => "PT",
+        "LIECHTENSTEIN" => "LI",
+        "RUSSISCHE FÖDERATION" => "RU",
+        "UNGARN" => "HU",
+        "OMAN" => "OM",
+        "AUSTRALIEN" => "AU",
+        "SLOWAKEI" => "SK",
+        "VEREINIGTEN ARABISCHEN EMIRATE" => "AE",
+        "BOLIVIEN" => "BO",
+        "WEISSRUSSLAND (BELORUSSLAND)" => "BY",
+        "RUMÄNIEN" => "RO",
+        "LETTLAND" => "LV",
+        "SLOWENIEN" => "SI",
+        "INDIEN" => "IN",
+        "MAZEDONIEN, FRÜHERE JUGOSLAVISCHE REPUBLIK" => "MK",
+        "ISRAEL" => "IL",
+        "MONACO" => "MC",
+        "ARGENTIEN" => "AR",
+        "ARGENTINIEN" => "AR",
+        "DÄNEMARK" => "DK",
+        "MAROCCO" => "MA",
+        "JORDANIEN" => "JO",
+        "BRASILIEN" => "BR",
+        "DJIBOUTI" => "DJ",
+        "KOREA" => "KR",
+        "KOREA REPUBLIC OF" => "KR",
+        "NORWEGEN" => "NO",
+        "ÄGYPTEN" => "EG",
+        "GRIECHENLAND" => "GR",
+        "ARMENIEN" => "AM",
+        "KROATIEN" => "HR",
+        "MAURITIUS" => "MU",
+        "FAROE INSELN" => "FO",
+        "ZYPERN" => "CY",
+        "IRAQ" => "IQ",
+        "BELIZE" => "BZ",
+        "PERU" => "PE",
+        "LIBANON" => "LB",
+        "MEXICO" => "MX",
+        "QATAR" => "QA",
+        "SUDAN" => "SD",
+        "VIETNAM" => "VN",
+        "IRAN, ISLAMISCHE REPUBLIC" => "IR",
+        "UKRAINE" => "UA",
+        "PARAGUAY" => "PY",
+        "ISLAND" => "IS",
+        "SERBIA" => "RS",
+        "KOSOVO" => "XK",
+        "WEIHNACHTS INSEL" => "CX",
+        "THAILAND" => "TH",
+        "PHILIPPINEN" => "PH",
+        "ASERBAIDSCHAN" => "AZ",
+        "BOSNIEN UND HERZEGOVINA" => "BA",
+        "ARUBA" => "AW",
+        "BENIN" => "BJ",
+        "UNITED STATES MINOR OUTLYING ISLANDS" => "UM",
+        "LITAUEN" => "LT",
+        "GEORGIEN" => "GE",
+        "SINGAPUR" => "SG",
+        "ALBANIEN" => "AL",
+        "KUWAIT" => "KW",
+        "JAMAICA" => "JM",
+        "ALGERIEN" => "DZ",
+        "PAKISTAN" => "PK",
+        "SRI LANKA" => "LK",
+        "CHILE" => "CL",
+        "ESTONIEN" => "EE",
+        "MALAYSIA" => "MY",
+        "KOLUMBIEN" => "CO",
+        "COSTA RICA" => "CR",
+        "NEUSEELAND" => "NZ",
+        "SYRIEN, ARABISCHE REPUBLIK" => "SY",
+        "MALTA" => "MT",
+        "NEPAL" => "NP",
     );
     
     /**
@@ -64,14 +150,15 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         
         $this->_migrationStartTime = Tinebase_DateTime::now();
         $this->_tineRecordBackend = new Addressbook_Backend_Sql();
-        
-        $estimate = $this->_getEgwRecordEstimate();
-        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . " found {$estimate} contacts for migration");
-        
+
+        $page = 1;
         $pageSize = 100;
+        $estimate = $this->_getEgwRecordEstimate();
         $numPages = ceil($estimate/$pageSize);
-        
-        for ($page=1; $page <= $numPages; $page++) {
+        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__
+            . " found {$estimate} total contacts for migration ({$numPages} pages)");
+
+        for (; $page <= $numPages; $page++) {
             $this->_log->info(__METHOD__ . '::' . __LINE__ . " starting migration page {$page} of {$numPages}");
             
             Tinebase_Core::setExecutionLifeTime($pageSize*10);
@@ -126,7 +213,8 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
                 $contactData['adr_two_countryname'] = $this->convertCountryname2Iso($egwContactData['adr_two_countryname']);
                 
                 // handle bday
-                if ((isset($egwContactData['contact_bday']) || array_key_exists('contact_bday', $egwContactData)) && $egwContactData['contact_bday']) {
+                if ((isset($egwContactData['contact_bday']) || array_key_exists('contact_bday', $egwContactData))
+                    && $egwContactData['contact_bday'] && $egwContactData['contact_bday'] !== 'NULL') {
                     // @TODO evaluate contact_tz
                     $contactData['bday'] = new Tinebase_DateTime($egwContactData['contact_bday'], $this->_config->birthdayDefaultTimezone);
                 } else if ((isset($egwContactData['bday']) || array_key_exists('bday', $egwContactData)) && $egwContactData['bday']) {
@@ -153,7 +241,10 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
             } catch (Exception $e) {
                 $this->_importResult['failcount']++;
                 Tinebase_Core::set(Tinebase_Core::USER, $currentUser);
-                $this->_log->ERR(__METHOD__ . '::' . __LINE__ . ' could not migrate contact "' . $egwContactData['contact_id'] . '" cause: ' . $e->getMessage());
+                if (!Tinebase_Exception::isDbDuplicate($e)) {
+                    $this->_log->ERR(__METHOD__ . '::' . __LINE__ . ' could not migrate contact "'
+                        . $egwContactData['contact_id'] . '" cause: ' . $e->getMessage());
+                }
                 $this->_log->DEBUG(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             }
         }
@@ -168,18 +259,23 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
     {
         if (! $record->account_id) {
             $savedRecord = $this->_tineRecordBackend->create($record);
-        }
-            
-        else if ($this->_config->updateAccountRecords) {
+        } else if ($this->_config->updateAccountRecords) {
             $accountId = $this->mapAccountIdEgw2Tine($record->account_id);
             $account = Tinebase_User::getInstance()->getUserById($accountId);
             
             if (! ($account && $account->contact_id)) {
-                $this->_log->WARN(__METHOD__ . '::' . __LINE__ . " could not migrate account contact for {$record->n_fn} - no contact found");
+                $this->_log->WARN(__METHOD__ . '::' . __LINE__
+                    . " could not migrate account contact for {$record->n_fn} - no contact found");
                 return;
             }
-            
-            $contact = $this->_tineRecordBackend->get($account->contact_id);
+
+            try {
+                $contact = $this->_tineRecordBackend->get($account->contact_id);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                $this->_log->WARN(__METHOD__ . '::' . __LINE__
+                    . " could not migrate account contact for {$record->n_fn} - no contact found");
+                return;
+            }
             $record->setId($account->contact_id);
             $record->container_id = $contact->container_id;
             
@@ -203,7 +299,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         $countryname = strtoupper(trim($countryname));
         
         if (! (isset($this->_countryMapping[$countryname]) || array_key_exists($countryname, $this->_countryMapping))) {
-            $this->_log->WARN(__METHOD__ . '::' . __LINE__ . " could not get coutry code for {$countryname}");
+            $this->_log->WARN(__METHOD__ . '::' . __LINE__ . " could not get country code for {$countryname}");
             
             return NULL;
         }
