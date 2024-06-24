@@ -153,15 +153,20 @@ COPY ci/dockerimage/gomplate/config.yaml /etc/gomplate/config.yaml
 COPY ci/dockerimage/gomplate/templates/ /etc/gomplate/templates
 COPY etc/tine20/config.inc.php.mpl /etc/gomplate/templates/config.inc.php.tmpl
 COPY etc/nginx/sites-available/tine20.conf.mpl /etc/gomplate/templates/nginx-vhost.conf.tmpl
-COPY etc/tine20/actionQueue.ini /etc/tine20/actionQueue.ini
+COPY etc/tine20/actionQueue.ini.tmpl /etc/gomplate/templates/actionQueue.ini.tmpl
+COPY etc/tine20/actionQueueLR.ini /etc/tine20/actionQueueLR.ini
 COPY etc/nginx/conf.d/ /etc/nginx/conf.d
 COPY etc/nginx/snippets /etc/nginx/snippets
 COPY ci/dockerimage/supervisor.d/conf.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/nginx.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/crond.ini /etc/supervisor.d/
 COPY ci/dockerimage/supervisor.d/php-fpm.ini /etc/supervisor.d/
+COPY ci/dockerimage/supervisor.d/worker.ini /etc/supervisor.d/
+COPY ci/dockerimage/supervisor.d/workerLR.ini /etc/supervisor.d/
 COPY ci/dockerimage/scripts/* /usr/local/bin/
 
 WORKDIR ${TINE20ROOT}
 ENV TINE20ROOT=${TINE20ROOT}
+ENV TINE20_ACTIONQUEUE=true
+ENV TINE20_ACTIONQUEUE_LONG_RUNNING_QUEUE=false
 CMD ["/usr/local/bin/entrypoint"]

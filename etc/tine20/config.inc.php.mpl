@@ -57,6 +57,9 @@ return array(
         'path' => '{{getenv "TINE20_SESSIONP_PATH" "/var/lib/tine20/sessions"}}',
         'host' => '{{getenv "TINE20_SESSION_HOST" ""}}',
         'port' => '{{getenv "TINE20_SESSION_PORT" "6379"}}',
+        {{if not (eq (getenv "TINE20_SESSION_PREFIX" "") "")}}
+        'prefix' => '{{getenv "TINE20_SESSION_PREFIX"}}',
+        {{end}}
     ),
 
     'credentialCacheSharedKey' => '{{.Env.TINE20_CREDENTIALCACHESHAREDKEY}}',
@@ -85,7 +88,13 @@ return array(
         'backend' => 'Redis',
         'host' => '{{getenv "TINE20_ACTIONQUEUE_HOST" ""}}',
         'port' => {{getenv "TINE20_ACTIONQUEUE_PORT" "6379"}},
-        'queueName' => 'actionqueue'
+        'queueName' => '{{getenv "TINE20_ACTIONQUEUE_QUEUENAME" "actionqueue"}}',
+        {{if not (eq (getenv "TINE20_ACTIONQUEUE_QUEUES" "") "")}}
+        'queues' => {{getenv "TINE20_ACTIONQUEUE_QUEUES"}},
+        {{end}}
+        {{if (eq (getenv "TINE20_ACTIONQUEUE_LONG_RUNNING_QUEUE" "false") "true")}}
+        'longRunning' => 'LR',
+        {{end}}
     ),
     {{end}}
 

@@ -1,0 +1,7 @@
+general.daemonize=0
+general.loglevel=6
+general.pidfile=/tmp/actionQueue.pid
+tine20.shutDownWait=10
+{{if not (eq (getenv "TINE_ACTIONQUEUE_MAXCHILDREN" "") "")}}
+tine20.maxChildren={{getenv "TINE_ACTIONQUEUE_MAXCHILDREN"}}
+{{end}}
