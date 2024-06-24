@@ -180,11 +180,16 @@ class Tinebase_FileSystem_Previews
      * @param string|Tinebase_Model_Tree_Node $_id
      * @param int $_revision
      * @return bool
-     * @throws Zend_Db_Statement_Exception
+     * @throws Zend_Db_Statement_Exception|Tinebase_Exception
      */
-    public function createPreviews($_id, $_revision = null)
+    public function createPreviews($_id, $_revision = null): bool
     {
-        $node = $_id instanceof Tinebase_Model_Tree_Node ? $_id : $this->_fsController->get($_id, $_revision);
+        try {
+            $node = $_id instanceof Tinebase_Model_Tree_Node ? $_id : $this->_fsController->get($_id, $_revision);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+            return false;
+        }
 
         try {
             return $this->createPreviewsFromNode($node);
