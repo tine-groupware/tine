@@ -232,6 +232,7 @@ mkdocs-deploy:
 
 update-version-check:
   stage: deploy
+  extends: .abstract_jobs.docker
   variables:
     PACKAGE_STRING: ${CI_COMMIT_TAG}
     CODE_NAME: ${CODENAME}
