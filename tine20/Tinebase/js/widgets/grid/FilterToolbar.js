@@ -376,7 +376,13 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             value: filterModel.field,
             renderTo: fRow.child('td[class=tw-ftb-frow-field]'),
             validator: this.validateFilter.createDelegate(this),
-            tpl: '<tpl for="."><div class="x-combo-list-item tw-ftb-field-{field}">{label}</div></tpl>'
+            tpl: '<tpl for="."><div class="x-combo-list-item tw-ftb-field-{field}">{label}</div></tpl>',
+            beforeBlur : function(){
+                this.assertValue();
+                if (! this.getValue()) {
+                    this.setValue(filterModel.field)
+                }
+            }
         });
         filter.formFields.field.setValue = filter.formFields.field.setValue.createInterceptor(function() {
             // NOTE: as this.fieldStore is a shared store we need to clear the filter before we use it,
