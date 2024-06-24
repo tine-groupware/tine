@@ -32,7 +32,7 @@ Ext.ux.ItemRegistry.registerItem('Tasks-Task-EditDialog-TabPanel',  Ext.extend(E
             },
             getRecordDefaults: function() {
                 const defaults = Tine.Timetracker.TimesheetGridPanel.prototype.getRecordDefaults.call(this)
-                defaults.timeaccount_id = me.timeAccountPicker.getValue();
+                defaults.timeaccount_id = me.timeAccountPicker.selectedRecord;
                 defaults.source_model = me.editDialog.recordClass.getPhpClassName();
                 defaults.source = me.record
 
@@ -77,10 +77,10 @@ Ext.ux.ItemRegistry.registerItem('Tasks-Task-EditDialog-TabPanel',  Ext.extend(E
         this.record = record;
 
         this.timesheetGridPanel.setDisabled(record.phantom);
+        this.timeAccountPicker.setValue(record.get('timeaccount'));
 
         if (! record.phantom) {
             this.timesheetGridPanel.store.reload();
-            this.timeAccountPicker.setValue(record.get('timeaccount'));
             // this.timesheetGridPanel.editDialogConfig.fixedFields = {
             //     // process_status: 'ACCEPTED',
             //     timeaccount_id: record.get('timeaccount'),
