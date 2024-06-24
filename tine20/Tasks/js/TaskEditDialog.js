@@ -161,6 +161,9 @@ import './DependencyPanel'
             border: false,
             plugins: [{
                 ptype : 'ux.tabpanelkeyplugin'
+            }, {
+                ptype: 'ux.itemregistry',
+                key:   'Tasks-Task-EditDialog-TabPanel'
             }],
             defaults: {
                 hideMode: 'offsets'

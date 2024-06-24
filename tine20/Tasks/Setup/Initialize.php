@@ -10,6 +10,8 @@
  *
  */
 
+use Tinebase_ModelConfiguration_Const as TMCC;
+
 /**
  * class for Tasks initialization
  * 
@@ -86,5 +88,25 @@ class Tasks_Setup_Initialize extends Setup_Initialize
                 'value'     => '',
             )),
         ))));
+    }
+
+    public static function applicationInstalled(Tinebase_Model_Application $app): void
+    {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+        if (class_exists('Timetracker_Config') && Timetracker_Config::APP_NAME === $app->name) {
+            Tinebase_CustomField::getInstance()->addCustomField(new Tinebase_Model_CustomField_Config([
+                'application_id' => $app->getId(),
+                'model' => Timetracker_Model_Timesheet::class,
+                'is_system' => true,
+                'name' => 'TasksTimesheetCoupling',
+                'definition' => [
+                    Tinebase_Model_CustomField_Config::DEF_HOOK => [
+                        [Tasks_Controller::class, 'timesheetMCHookFun'],
+                    ],
+                ]
+            ]));
+        }
     }
 }
