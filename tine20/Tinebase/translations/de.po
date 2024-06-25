@@ -94,6 +94,30 @@ msgid_plural "Bank Holiday Calendars"
 msgstr[0] "Feiertagskalender"
 msgstr[1] "Feiertagskalender"
 
+msgid "Fraction"
+msgstr "Anteil"
+
+msgid "Fraction of the day"
+msgstr "Anteil des Tages"
+
+msgid "One quarter of the day"
+msgstr "Ein Viertel des Tages"
+
+msgid "One third of the day"
+msgstr "Ein Drittel des Tages"
+
+msgid "Half of the day"
+msgstr "Die Hälfte des Tages"
+
+msgid "Two third of the day"
+msgstr "Zwei Drittel des Tages"
+
+msgid "Three quarters of the day"
+msgstr "Drei Viertel des Tages"
+
+msgid "Whole day"
+msgstr "Der ganze Tag"
+
 #: Record/PropertyLocalization.php:115
 msgid "GENDER_Text"
 msgstr "Male"

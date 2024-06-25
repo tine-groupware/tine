@@ -57,6 +57,7 @@ require('../css/bootstrap-vue/custom_vue_styles.scss')
 require('./ux/util/screenshot');
 require('./ux/file/UploadManagerUI');
 require ('./UploadmanagerStatusButton');
+require ('BankHoliday/FractionField');
 
 module.exports = {
     director: director,
