@@ -152,8 +152,10 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
                     renderer = Tine.widgets.grid.RendererManager.get(appName, recordClass, field.name, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
 
                 if (label) {
-                    var oldValue = renderer(oldValue, {}, record),
+                    if (['record', 'records'].indexOf(_.get(field, 'fieldDefinition.type')) < 0) {
+                        oldValue = renderer(oldValue, {}, record);
                         newValue = renderer(newValue, {}, record);
+                    }
 
                     note = note.replace(regexp, i18nLabel + ' (' + oldValue + ' \u27bd ' + newValue + ')');
                 } else {
