@@ -1055,12 +1055,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     'areas'             => ['Tinebase_login'],
                     'mfas'              => ['Authenticator App', 'FIDO2'],
                     'validity'          => 'session',
-                ], [
-                    'area_name'         => 'area lock 1',
-                    'areas'             => [/*'Sales', 'HumanResources',*/ 'Tinebase_datasafe'],
-                    'mfas'              => ['Authenticator App', 'FIDO2'],
-                    'validity'          => 'presence',
-                    'lifetime'          => 15,
                 ]]
             ],
         ),
