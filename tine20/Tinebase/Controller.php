@@ -896,8 +896,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         if (($accessLog->clienttype !== Tinebase_Frontend_Json::REQUEST_TYPE &&
                 $accessLog->clienttype !== self::PAM_VALIDATE_REQUEST_TYPE &&
-                $accessLog->clienttype !== SSO_Controller::OIDC_AUTH_REQUEST_TYPE &&
-                $accessLog->clienttype !== SSO_Controller::OIDC_AUTH_CLIENT_REQUEST_TYPE
+                $accessLog->clienttype !== SSO_Controller::OIDC_AUTH_REQUEST_TYPE
             ) ||
                 ! $areaLock->hasLock(Tinebase_Model_AreaLockConfig::AREA_LOGIN) ||
                 ! $areaLock->isLocked(Tinebase_Model_AreaLockConfig::AREA_LOGIN)
