@@ -279,7 +279,6 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             }
         }
         
-//         echo "$_egwAccountId => {$this->_accountIdMapCache[$_egwAccountId]} \n";
         return $this->_accountIdMapCache[$_egwAccountId];
     }
     
@@ -479,8 +478,6 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             
             $tineGrants->addRecord($tineGrant);
         }
-//         print_r($tineGrants->toArray());
-        
         // for group owners (e.g. group addressbooks) we need an container admin
         if ($egwAccountId < 0) {
             $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
@@ -629,5 +626,24 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
         }
         
         return $createdAlarms;
+    }
+
+    protected function _getInfoLogData(int $recordId, string $recordApp): string
+    {
+        $select = $this->_egwDb->select()
+            ->from(array('infolog' => 'egw_infolog'))
+            ->join('egw_links', 'infolog.info_id = egw_links.link_id1')
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('egw_links.link_app2') . ' = ?', $recordApp))
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('egw_links.link_app1') . ' = ?', 'infolog'))
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('egw_links.link_id2') . ' = ?', $recordId));
+
+        $egwInfologs = $this->_egwDb->fetchAll($select, null, Zend_Db::FETCH_ASSOC);
+
+        $result = '';
+        foreach ($egwInfologs as $infolog) {
+            $result = '[' . $infolog['info_type'] . '] ' . $infolog['info_subject'] . ": \n" . $infolog['info_from']
+                ." \n" . $infolog['info_des'] . "\n\n";
+        }
+        return $result;
     }
 }
