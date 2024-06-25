@@ -27,14 +27,9 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
     protected $_egwOwnerColumn = 'cal_owner';
     protected $_defaultContainerConfigProperty = Calendar_Preference::DEFAULTCALENDAR;
     protected $_tineRecordModel = 'Calendar_Model_Event';
-    
+
     /**
-     * @var Tinebase_DateTime
-     */
-    protected $_migrationStartTime = NULL;
-    
-    /**
-     * maps egw attender status to tine attender status
+     * maps egw attender status to tine atte nder status
      * 
      * @var array
      */

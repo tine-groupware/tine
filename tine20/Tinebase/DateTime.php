@@ -98,6 +98,9 @@ class Tinebase_DateTime extends DateTime
             
             $time = $_time->format("Y-m-d H:i:s");
         } else {
+            if ($_time === 'NULL') {
+                $_time = '';
+            }
             $time = (is_numeric($_time)) ? "@" . floor($_time) : ($_time ?: 'now');
         }
         
