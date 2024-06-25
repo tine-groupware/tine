@@ -23,8 +23,6 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
     protected $_egwOwnerColumn = 'contact_owner';
     protected $_defaultContainerConfigProperty = Addressbook_Preference::DEFAULTADDRESSBOOK;
     protected $_tineRecordModel = 'Addressbook_Model_Contact';
-    
-    
     protected $_tineRecordBackend = NULL;
     
     /**
@@ -146,7 +144,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
      */
     public function import()
     {
-        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' starting egw import for Adressbook');
+        $this->_log->notice(__METHOD__ . '::' . __LINE__ . ' starting egw import for Adressbook');
         
         $this->_migrationStartTime = Tinebase_DateTime::now();
         $this->_tineRecordBackend = new Addressbook_Backend_Sql();
@@ -155,7 +153,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         $pageSize = 100;
         $estimate = $this->_getEgwRecordEstimate();
         $numPages = ceil($estimate/$pageSize);
-        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__
+        $this->_log->notice(__METHOD__ . '::' . __LINE__
             . " found {$estimate} total contacts for migration ({$numPages} pages)");
 
         for (; $page <= $numPages; $page++) {
@@ -167,7 +165,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
             $this->_migrateEgwRecordPage($recordPage);
         }
         
-        $this->_log->NOTICE(__METHOD__ . '::' . __LINE__ . ' ' . ($this->_importResult['totalcount'] - $this->_importResult['failcount']) . ' contacts imported sucessfully ' . ($this->_importResult['failcount'] ? " {$this->_importResult['failcount']} contacts skipped with failures" : ""));
+        $this->_log->notice(__METHOD__ . '::' . __LINE__ . ' ' . ($this->_importResult['totalcount'] - $this->_importResult['failcount']) . ' contacts imported sucessfully ' . ($this->_importResult['failcount'] ? " {$this->_importResult['failcount']} contacts skipped with failures" : ""));
     }
     
     /**
@@ -242,10 +240,10 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
                 $this->_importResult['failcount']++;
                 Tinebase_Core::set(Tinebase_Core::USER, $currentUser);
                 if (!Tinebase_Exception::isDbDuplicate($e)) {
-                    $this->_log->ERR(__METHOD__ . '::' . __LINE__ . ' could not migrate contact "'
+                    $this->_log->err(__METHOD__ . '::' . __LINE__ . ' could not migrate contact "'
                         . $egwContactData['contact_id'] . '" cause: ' . $e->getMessage());
                 }
-                $this->_log->DEBUG(__METHOD__ . '::' . __LINE__ . ' ' . $e);
+                $this->_log->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             }
         }
     }
@@ -257,6 +255,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
      */
     public function saveTineRecord(Tinebase_Record_Interface $record)
     {
+        $savedRecord = null;
         if (! $record->account_id) {
             $savedRecord = $this->_tineRecordBackend->create($record);
         } else if ($this->_config->updateAccountRecords) {
@@ -264,7 +263,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
             $account = Tinebase_User::getInstance()->getUserById($accountId);
             
             if (! ($account && $account->contact_id)) {
-                $this->_log->WARN(__METHOD__ . '::' . __LINE__
+                $this->_log->warn(__METHOD__ . '::' . __LINE__
                     . " could not migrate account contact for {$record->n_fn} - no contact found");
                 return;
             }
@@ -272,7 +271,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
             try {
                 $contact = $this->_tineRecordBackend->get($account->contact_id);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                $this->_log->WARN(__METHOD__ . '::' . __LINE__
+                $this->_log->warn(__METHOD__ . '::' . __LINE__
                     . " could not migrate account contact for {$record->n_fn} - no contact found");
                 return;
             }
@@ -282,8 +281,9 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
             $savedRecord = $this->_tineRecordBackend->update($record);
         }
         
-        // tags
-        $this->attachTags($record->tags, $savedRecord->getId());
+        if ($savedRecord) {
+            $this->attachTags($record->tags, $savedRecord->getId());
+        }
     }
     
     /**
@@ -299,7 +299,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         $countryname = strtoupper(trim($countryname));
         
         if (! (isset($this->_countryMapping[$countryname]) || array_key_exists($countryname, $this->_countryMapping))) {
-            $this->_log->WARN(__METHOD__ . '::' . __LINE__ . " could not get country code for {$countryname}");
+            $this->_log->warn(__METHOD__ . '::' . __LINE__ . " could not get country code for {$countryname}");
             
             return NULL;
         }

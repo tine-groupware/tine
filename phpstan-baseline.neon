@@ -351,51 +351,6 @@ parameters:
 			path: tine20/Addressbook/Setup/DemoData.php
 
 		-
-			message: "#^Access to an undefined property Addressbook_Setup_Import_Egw14\\:\\:\\$_migrationStartTime\\.$#"
-			count: 1
-			path: tine20/Addressbook/Setup/Import/Egw14.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$birthdayDefaultTimezone\\.$#"
-			count: 1
-			path: tine20/Addressbook/Setup/Import/Egw14.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$setPersonalContainerGrants\\.$#"
-			count: 1
-			path: tine20/Addressbook/Setup/Import/Egw14.php
-
-		-
-			message: "#^Access to an undefined property Zend_Config\\:\\:\\$updateAccountRecords\\.$#"
-			count: 1
-			path: tine20/Addressbook/Setup/Import/Egw14.php
-
-		-
-			message: "#^Call to an undefined method Zend_Log\\:\\:DEBUG\\(\\)\\.$#"
-			count: 1
-			path: tine20/Addressbook/Setup/Import/Egw14.php
-
-		-
-			message: "#^Call to an undefined method Zend_Log\\:\\:ERR\\(\\)\\.$#"
-			count: 1
-			path: tine20/Addressbook/Setup/Import/Egw14.php
-
-		-
-			message: "#^Call to an undefined method Zend_Log\\:\\:NOTICE\\(\\)\\.$#"
-			count: 3
-			path: tine20/Addressbook/Setup/Import/Egw14.php
-
-		-
-			message: "#^Call to an undefined method Zend_Log\\:\\:WARN\\(\\)\\.$#"
-			count: 2
-			path: tine20/Addressbook/Setup/Import/Egw14.php
-
-		-
-			message: "#^Variable \\$savedRecord might not be defined\\.$#"
-			count: 1
-			path: tine20/Addressbook/Setup/Import/Egw14.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$application$#"
 			count: 1
 			path: tine20/Addressbook/Setup/Initialize.php

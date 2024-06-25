@@ -28,19 +28,24 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
     /**
      * @var Zend_Db_Adapter_Abstract
      */
-    protected $_egwDb = NULL;
+    protected $_egwDb = null;
     
     /**
      * @var Zend_Config
      */
-    protected $_config = NULL;
+    protected $_config = null;
     
     /**
      * @var Zend_Log
      */
-    protected $_log = NULL;
+    protected $_log = null;
     
     protected $_failures = array();
+
+    /**
+     * @var Tinebase_DateTime
+     */
+    protected ?Tinebase_DateTime $_migrationStartTime = null;
     
     /**
      * import result array
@@ -87,7 +92,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
      * @var array
      */
     protected $_priorityMap = array(
-        0 => NULL,  // not set
+        0 => null,  // not set
         1 => 0,     // low
         2 => 1,     // normaml
         3 => 2,     // high
@@ -127,7 +132,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             ->from(array('grants' => 'egw_config'))
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('config_name') . ' = (?)', 'system_charset'));
             
-        $egwConfig = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+        $egwConfig = $this->_egwDb->fetchAll($select, null, Zend_Db::FETCH_ASSOC);
         $charset = $egwConfig[0]['config_value'];
         */
         
@@ -173,7 +178,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             
         $this->_appendRecordFilter($select);
         
-        $recordCount = Tinebase_Helper::array_value(0, $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC));
+        $recordCount = Tinebase_Helper::array_value(0, $this->_egwDb->fetchAll($select, null, Zend_Db::FETCH_ASSOC));
         return $recordCount['count'];
     }
     
@@ -192,7 +197,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             
         $this->_appendRecordFilter($select);
         
-        $recordPage = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+        $recordPage = $this->_egwDb->fetchAll($select, null, Zend_Db::FETCH_ASSOC);
         
         return $recordPage;
     }
@@ -218,10 +223,10 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
      * @param  string $_tz timezone
      * @return Tinebase_DateTime
      */
-    public function convertDate($_egwTS, $_tz=NULL)
+    public function convertDate($_egwTS, $_tz=null)
     {
         if (! $_egwTS) {
-            return NULL;
+            return null;
         }
         
         $_tz = $_tz ? $_tz : $this->_config->all->egwServerTimezone;
@@ -270,7 +275,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
                     throw $e;
                 }
                 
-                $this->_accountIdMapCache[$_egwAccountId] = NULL;
+                $this->_accountIdMapCache[$_egwAccountId] = null;
             }
         }
         
@@ -287,7 +292,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
      */
     public function mapAccountIdTine2Egw($_tineAccountId, $_accountType = 'User')
     {
-        $egwAccountId = NULL;
+        $egwAccountId = null;
         
         $keys = array_keys($this->_accountIdMapCache, $_tineAccountId);
         foreach ((array) $keys as $candidate) {
@@ -375,7 +380,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
                 ));
                 
                 // NOTE: if no grants are given, container class gives all grants to accountId
-                $privateContainer = Tinebase_Container::getInstance()->addContainer($container, NULL, TRUE);
+                $privateContainer = Tinebase_Container::getInstance()->addContainer($container, null, TRUE);
             } else {
                 $privateContainer = $privateContainer->getFirstRecord();
             }
@@ -422,7 +427,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('acl_appname') . ' = ?', $_application))
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('acl_account') . ' IN (?)', $acl_account));
             
-        $egwGrantDatas = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
+        $egwGrantDatas = $this->_egwDb->fetchAll($select, null, Zend_Db::FETCH_ASSOC);
 
         // in a first run we merge grants from different sources
         $effectiveGrants = array();
@@ -527,12 +532,12 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
                 ->from(array('cats' => 'egw_categories'))
                 ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('cat_id') . ' = ?', $catId));
             
-            $cat = $this->_egwDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
-            $cat = count($cat) === 1 ? $cat[0] : NULL;
+            $cat = $this->_egwDb->fetchAll($select, null, Zend_Db::FETCH_ASSOC);
+            $cat = count($cat) === 1 ? $cat[0] : null;
             
             if (! $cat) {
                 $this->_log->DEBUG(__METHOD__ . '::' . __LINE__ . " category {$catId} not found in egw, skipping tag");
-                return $this->_tagMapCache[$catId] = NULL;
+                return $this->_tagMapCache[$catId] = null;
             }
             
             $tineDb = Tinebase_Core::getDb();
@@ -540,8 +545,8 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
                 ->from(array('tags' => $tineDb->table_prefix . 'tags'))
                 ->where($tineDb->quoteInto($tineDb->quoteIdentifier('name') . ' LIKE ?', $cat['cat_name']));
             
-            $tag = $tineDb->fetchAll($select, NULL, Zend_Db::FETCH_ASSOC);
-            $tag = count($tag) > 0 ? $tag[0] : NULL;
+            $tag = $tineDb->fetchAll($select, null, Zend_Db::FETCH_ASSOC);
+            $tag = count($tag) > 0 ? $tag[0] : null;
             
             if ($tag) {
                 return $this->_tagMapCache[$catId] = $tag['id'];
