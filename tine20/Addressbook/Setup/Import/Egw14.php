@@ -156,6 +156,8 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         $this->_log->notice(__METHOD__ . '::' . __LINE__
             . " found {$estimate} total contacts for migration ({$numPages} pages)");
 
+        // $numPages = 1;
+
         for (; $page <= $numPages; $page++) {
             $this->_log->info(__METHOD__ . '::' . __LINE__ . " starting migration page {$page} of {$numPages}");
             
@@ -176,7 +178,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
      */
     protected function _migrateEgwRecordPage($recordPage)
     {
-        foreach($recordPage as $egwContactData) {
+        foreach ($recordPage as $egwContactData) {
             try {
                 $this->_importResult['totalcount']++;
                 $currentUser = Tinebase_Core::get(Tinebase_Core::USER);
@@ -231,9 +233,11 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
                         $this->getPrivateContainer($this->mapAccountIdEgw2Tine($egwContactData['contact_owner']))->getId() :
                         $this->getPersonalContainer($this->mapAccountIdEgw2Tine($egwContactData['contact_owner']))->getId();
                 }
+
+                $contactData['note'] = $this->_getInfoLogData($egwContactData['contact_id'], 'addressbook');
                 
                 // finally create the record
-                $tineContact = new Addressbook_Model_Contact ($contactData);
+                $tineContact = new Addressbook_Model_Contact($contactData);
                 $this->saveTineRecord($tineContact);
                 
             } catch (Exception $e) {
