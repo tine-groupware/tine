@@ -726,12 +726,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 columns.unshift(tagsCol);
             }
             
+            if (_.find(columns, {dataIndex: 'type'})) {
+                const typeCol = _.find(columns, {dataIndex: 'type'});
+                _.remove(columns, typeCol);
+                columns.unshift(typeCol);
+            }
+            
             if (_.find(columns, {dataIndex: 'attachments'})) {
                 var attachCol = _.find(columns, {dataIndex: 'attachments'});
                 _.remove(columns, attachCol);
                 columns.unshift(attachCol);
             }
-
+            
             _.forEachRight(_.filter(this.modelConfig.fields, {type: 'image'}), function(field) {
                 var imgCol = _.find(columns, {dataIndex: field.key});
                 if (imgCol) {
