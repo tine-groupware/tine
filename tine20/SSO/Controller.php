@@ -892,12 +892,8 @@ class SSO_Controller extends Tinebase_Controller_Event
 
             Tinebase_Auth::destroyInstance();
             Tinebase_Auth::setBackendType('OidcMock');
-            try {
 
-                /* TODO FIXME!!! Tinebase_Controller::getInstance()->setRequestContext(array(
-                    'MFAPassword' => $MFAPassword,
-                    'MFAId'       => $MFAUserConfigId
-                ));*/
+            try {
                 Tinebase_Controller::getInstance()->forceUnlockLoginArea();
                 if (!Tinebase_Controller::getInstance()->login($account->accountLoginName, '',
                         static::getLoginFakeRequest('/sso/oid/auth/response'),
@@ -905,24 +901,11 @@ class SSO_Controller extends Tinebase_Controller_Event
                     Tinebase_Exception::log(new Tinebase_Exception('login did not work unexpectedly'));
                     return static::publicOidAuthResponseErrorRedirect($authRequest);
                 }
-
-            } catch (Tinebase_Exception_AreaLocked | Tinebase_Exception_AreaUnlockFailed $teal) {
-                /** @var SSO_Facade_OAuth2_ClientEntity $client */
-                $client = $authRequest?->getClient();
-                if (!($relyingParty = $client?->getRelyingPart())) {
-                    $relyingParty = new SSO_Model_RelyingParty([], true);
-                }
-                return static::renderLoginPage($relyingParty, [], $redirectUrl, $teal);
             } finally {
                 Tinebase_Auth::destroyInstance();
                 Tinebase_Auth::setBackendType(null);
             }
 
-            if ($authRequest) {
-                $authRequest->setUser(new SSO_Facade_OAuth2_UserEntity($account));
-                $authRequest->setAuthorizationApproved(true);
-                return static::getOpenIdConnectServer()->completeAuthorizationRequest($authRequest, new \Laminas\Diactoros\Response());
-            }
             return new \Laminas\Diactoros\Response('php://memory', 302, ['Location' => Tinebase_Core::getUrl()]);
         }
 

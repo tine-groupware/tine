@@ -2040,6 +2040,8 @@ class Tinebase_Core
     /**
      * returns requested url part
      *
+     * we expect Tinebase_Config::TINE20_URL to be set. We code as if it always would be. Failure is on the sys adm, not us (as always of course)
+     *
      * @param string $part
      * @param boolean $useConfig Tinebase_Config::TINE20_URL (if set)
      * @return string
