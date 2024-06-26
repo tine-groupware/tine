@@ -30,10 +30,15 @@ export default (config) => {
     config.customEditors = {};
     config.customRenderers = {};
     config.fields.forEach((field, idx) => {
+        if (field?.specialType === 'Addressbook_Model_ContactProperties_Url') {
+            field.type = 'url';
+        }
+        
         const editor = fieldManager(field.fieldName, {
             selectOnFocus:true,
             expandOnFocus:true,
-            cls: `x-grid-editor-${field.fieldName}`
+            cls: `x-grid-editor-${field.fieldName}`,
+            type: field.type,
         });
         const name = `${_.padStart( String(idx), 3, '0')}_${field.fieldName}`;
         config.propertyNames[name] = editor.fieldLabel;

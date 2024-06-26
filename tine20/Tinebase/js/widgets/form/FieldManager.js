@@ -12,6 +12,7 @@ import 'widgets/form/ModelPicker';
 import 'widgets/form/LanguagePicker';
 import 'widgets/form/RecordEditField';
 import 'widgets/form/LocalizedField';
+import 'widgets/form/UrlField';
 
 /**
  * central form field manager
@@ -365,6 +366,9 @@ Tine.widgets.form.FieldManager = function() {
                     break;
                 case 'label':
                     field.xtype = 'label';
+                    break;
+                case 'url':
+                    field.xtype = 'urlfield';
                     break;
                 case 'password':
                     field.xtype = field.xtype || 'tw-passwordTriggerField';
