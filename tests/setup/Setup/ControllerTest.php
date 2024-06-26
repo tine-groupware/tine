@@ -477,7 +477,6 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
             'Sales',
             'ExampleApplication',
             'Inventory',
-            'Timetracker',
             'ActiveSync',
             'Filemanager',
             'Phone',
@@ -487,6 +486,7 @@ class Setup_ControllerTest extends \PHPUnit\Framework\TestCase
             'Voipmanager',
             'HumanResources',
             'Projects',
+            'Timetracker',
             'SimpleFAQ',
         ];
         self::assertEquals($expected, array_keys($result));
