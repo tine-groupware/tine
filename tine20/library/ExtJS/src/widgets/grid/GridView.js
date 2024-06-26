@@ -1268,11 +1268,11 @@ viewConfig: {
         
         // resolve auto expand column index, it should not be on the left hand side
         const widthUpdatedTotalVisibleCols = cm.getTotalWidth(false);
+        const diff = widthResizedGrid - widthUpdatedTotalVisibleCols;
         let colIdxResolvedAutoExpand = colIdxDefaultAutoExpand;
         if (isOmitColumnValid || colIdxDefaultAutoExpand <= colIdxOmitColumn) colIdxResolvedAutoExpand = colIdxLastVisible;
         // resized columns might not fit the total width , we should make sure they are equal
         if (colIdxResolvedAutoExpand >= 0 && fraction !== 1) {
-            const diff = widthResizedGrid - widthUpdatedTotalVisibleCols;
             const width = cm.getColumnWidth(colIdxResolvedAutoExpand);
             if (!cm.isHidden(colIdxResolvedAutoExpand)) {
                 cm.setColumnWidth(colIdxResolvedAutoExpand, Math.max(this.grid.minColumnWidth,  width + diff), true);
@@ -1284,6 +1284,10 @@ viewConfig: {
         }
         
         if (preventRefresh !== true) this.updateAllColumnWidths();
+
+        // browser might draw x-scrollbars when y-scrollbars where shown
+        this.scroller.setStyle('overflow-x', diff > 0 ? 'auto' : 'hidden');
+
         return true;
     },
 
