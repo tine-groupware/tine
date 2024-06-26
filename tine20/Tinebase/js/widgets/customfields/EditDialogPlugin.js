@@ -152,7 +152,10 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
             tabPanel = this.getTabPanel(),
             form = this.editDialog.getForm(),
             cfConfigs = [];
-        
+
+        // global sort so groups are sorted to
+        allCfConfigs = _.sortBy(allCfConfigs, 'data.definition.uiconfig.order');
+
         // remove already applied cfs / fill the mixed collection
         Ext.each(allCfConfigs, function(cfConfig) {
             if (! form.findField('customfield_' + cfConfig.get('name'))) {

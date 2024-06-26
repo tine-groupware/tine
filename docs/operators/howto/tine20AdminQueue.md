@@ -11,14 +11,35 @@ Version: Ellie 2023.11
 - Virenscans?
 - TODO: gibt es mehr?
 
-## tine Update ("waited for Action Queue to become empty for more than 300 sec")
+## Activate/Deactivate Queue & Worker in non-docker setup
 
-This error occurs when the tine update (setup.php --update) runs and there are still some jobs in the queue.
-When the jobs are not finished in 5 minutes, the update process stops.
+You can start a worker with this command:
 
-You can force the update by giving the parameter `skipQueueCheck=1`:
+    sudo -u USER worker.php
 
-    php setup.php --update -- skipQueueCheck=1
+It is recommended to have some kind of process control for the worker for (auto-)starting / stopping.
+
+Example UWSGI config:
+
+~~~ini
+[uwsgi]
+master = True
+vacuum = True
+workers = 1
+threads = 1
+uid = www-data
+gid = www-data
+attach-daemon = php -d include_path=/etc/tine20/ /path/to/worker.php --config /etc/tine20/actionQueue.ini
+~~~
+
+Example actionQueue.ini:
+~~~ini
+general.daemonize=0
+general.logfile=/path/to/logs/daemon.log
+general.loglevel=6
+tine20.shutDownWait=10
+tine20.maxChildren=2
+~~~
 
 ## Activate/Deactivate Queue & Worker in docker setup
 
@@ -67,6 +88,15 @@ Docker setup (container name "tine20-cache-1" may vary):
 eintrag in der queue anschauen
 
     redis-cli hval tine20workerData:UUID
+
+## tine Update ("waited for Action Queue to become empty for more than 300 sec")
+
+This error occurs when the tine update (setup.php --update) runs and there are still some jobs in the queue.
+When the jobs are not finished in 5 minutes, the update process stops.
+
+You can force the update by giving the parameter `skipQueueCheck=1`:
+
+    php setup.php --update -- skipQueueCheck=1
 
 ## Restore a job from the dead letter queue
 
