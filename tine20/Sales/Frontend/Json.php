@@ -784,9 +784,13 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 
         foreach ($records as $invoice) {
             $attachments = $invoice->attachments;
-            
+            $attachmentIds = $invoiceData[$invoice->id];
             if ($attachments) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Found ' .
                 $attachments->count() . ' attachments for ' . $modelName . ' : ' . $invoice['name']);
+            
+            $selectedAttachments =  $attachments->filter(function(Tinebase_Model_Tree_Node $node) use ($attachmentIds) {
+                return in_array($node->id, $attachmentIds);
+            });
             
             $recipients = array_map(function ($recipientEmail) {return new Addressbook_Model_Contact(['email' => $recipientEmail], true);}, $recipientEmails);
             $messageBody = PHP_EOL . 'Model  : ' . $modelName . ', ID     : ' . $invoice['id']
@@ -794,7 +798,7 @@ class Sales_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 . PHP_EOL . 'Datev Sent Date : ' . $lastDatevSendTime->toString();
             
             Tinebase_Notification::getInstance()->send($sender, $recipients, 'Datev notification', $messageBody, null,
-                $attachments->asArray(), false, Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL);
+                $selectedAttachments->asArray(), false, Tinebase_Model_ActionLog::TYPE_DATEV_EMAIL);
         }
 
         $model = Sales_Config::APP_NAME . '_Model_' . $modelName;
