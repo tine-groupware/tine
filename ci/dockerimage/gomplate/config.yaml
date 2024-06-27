@@ -8,6 +8,10 @@ inputFiles:
   - "/etc/gomplate/templates/php.ini.tmpl"
   - "/etc/gomplate/templates/php-fpm.conf.tmpl"
   - "/etc/gomplate/templates/php.ini.tmpl"
+  - "/etc/gomplate/templates/php-fpm.conf.tmpl"
+  - "/etc/gomplate/templates/php.ini.tmpl"
+  - "/etc/gomplate/templates/php-fpm.conf.tmpl"
+  - "/etc/gomplate/templates/php.ini.tmpl"
   - "/etc/gomplate/templates/actionQueue.ini.tmpl"
 outputFiles:
   - "/etc/tine20/config.inc.php"
