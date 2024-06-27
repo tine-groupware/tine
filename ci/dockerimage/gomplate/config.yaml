@@ -19,4 +19,8 @@ outputFiles:
   - "/etc/php8/php.ini"
   - "/etc/php81/php-fpm.d/www.conf"
   - "/etc/php81/php.ini"
+  - "/etc/php82/php-fpm.d/www.conf"
+  - "/etc/php82/php.ini"
+  - "/etc/php83/php-fpm.d/www.conf"
+  - "/etc/php83/php.ini"
   - "/etc/tine20/actionQueue.ini"

@@ -22,7 +22,7 @@ ARG TINE20ROOT=/usr/share
 ARG ALPINE_PHP_PACKAGE=php7
 
 RUN apk add --update --no-cache git mysql-client jq rsync build-base
-RUN if [ "${ALPINE_PHP_PACKAGE}" == "php81" ]; then \
+RUN if [ "${ALPINE_PHP_PACKAGE}" == "php81" ] || [ "${ALPINE_PHP_PACKAGE}" == "php82" ] || [ "${ALPINE_PHP_PACKAGE}" == "php83" ]; then \
         EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"; \
         php -r "copy('https://getcomposer.org/installer', '/composer-setup.php');"; \
         ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', '/composer-setup.php');")"; \
