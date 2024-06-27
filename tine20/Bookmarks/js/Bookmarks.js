@@ -14,5 +14,5 @@ require('./Model');
 Tine.widgets.grid.RendererManager.register('Bookmarks', 'Bookmark', 'url', (url, metadata, record) => {
     const link = Tine.Tinebase.common.getUrl() + '/Bookmarks/openBookmark/' + record.getId()
 
-    return `<a href="${link}" onclick="javascript:window.open('${link}', '_blank'); return false;">${url}</a>`;
+    return `<a href="${link}" onclick="javascript:window.open('${link}', '_blank'); return false;">${Ext.util.Format.htmlEncode(url)}</a>`;
 }, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);

@@ -178,13 +178,12 @@ Tine.widgets.display.RecordDisplayPanel = Ext.extend(Ext.ux.display.DisplayPanel
 
                 if (fieldType === 'json') {
                     Ext.apply(field, {
-                        type: 'code/json'
+                        type: 'code/json',
+                        nl2br: false
                     });
                 }
                 field.renderer = Tine.widgets.grid.RendererManager.get(this.appName, this.modelName,
                     fieldDefinition.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
-                field.htmlEncode = false;
-                field.nl2br = false;
                 textDisplayAreas.push(field);
             } else if (fieldType === 'image') {
                 // should be the first area
