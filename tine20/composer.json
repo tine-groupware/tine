@@ -138,7 +138,7 @@
     "symfony/intl": "^5.4",
     "syncroton/syncroton": "^1.5",
     "tine20/composerapploader": "1.0.*",
-    "tine20/sabredav": "1.8.12pl3",
+    "tine20/sabredav": "1.8.12pl5",
     "tine20/sabrevobject": "3.5.3pl7",
     "twig/extensions": "^1.5",
     "twig/twig": "v2.15.5",
