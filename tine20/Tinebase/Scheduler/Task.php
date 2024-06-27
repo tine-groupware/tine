@@ -224,19 +224,28 @@ class Tinebase_Scheduler_Task
                     . ' Could not get callable for scheduler job');
                 $aggResult = false;
             } else {
+                // TODO activate notifications again
+                //  current problems:
+                //      - logs some strange stuff in docker setup
+                //      - writer is not removed after execution, so each following task adds another writer...
+                //  solution:
+                //      - use a temp file for the writer
+                //      - send the file contents as notification
+                //      - remove/stop the writer after execution
+
                 // catch output buffer
-                ob_start();
-                $writer = new Zend_Log_Writer_Stream('php://output');
-                // TODO get priority from scheduler config?
-                $priority = 6;
-                $writer->addFilter(new Zend_Log_Filter_Priority($priority));
-                Tinebase_Core::getLogger()->addWriter($writer);
+//                ob_start();
+//                $writer = new Zend_Log_Writer_Stream('php://output');
+//                // TODO get priority from scheduler config?
+//                $priority = 6;
+//                $writer->addFilter(new Zend_Log_Filter_Priority($priority));
+//                Tinebase_Core::getLogger()->addWriter($writer);
 
                 $result = call_user_func_array($classmethod, $callable[self::ARGS] ?? []);
 
-                $notificationBody = ob_get_clean();
-                $this->_sendNotification($callable, $notificationBody);
                 // send notification with $notificationBody to configured email
+//                $notificationBody = ob_get_clean();
+//                $this->_sendNotification($callable, $notificationBody);
 
                 $aggResult = $aggResult && $result;
             }

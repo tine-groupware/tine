@@ -3,9 +3,10 @@ return [
     'broadcasthub' => [
         'active' => true,
         'url' => '{{ tinedockercompose_broadcasthub_url }}',
-        'pubsubname' => 'redis://cache:6379:broadcasthub',
+        # should not be required in single TENANCY MODE
+        #'pubsubname' => 'redis://cache:6379:broadcasthub',
         'redis' => [
-            'host' => 'redis://cache:6379',
+            'host' => 'cache',
         ],
     ],
 ];
