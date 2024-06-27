@@ -89,9 +89,10 @@ docker_build_test:
   parallel:
     matrix:
       - PHP_VERSION:
-          - "7.4"
           - "8.0"
           - "8.1"
+          - "8.2"
+          - "8.3"
   before_script:
     - export DOCKER_BUILDKIT=0
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names

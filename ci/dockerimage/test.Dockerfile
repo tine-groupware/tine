@@ -14,7 +14,7 @@ FROM ${BASE_IMAGE} as test
 ARG ALPINE_PHP_PACKAGE=php7
 
 RUN apk add mysql-client jq rsync coreutils git build-base
-RUN if [ "${ALPINE_PHP_PACKAGE}" == "php81" ] || [ "${ALPINE_PHP_PACKAGE}" == "php82" ]; then \
+RUN if [ "${ALPINE_PHP_PACKAGE}" == "php81" ] || [ "${ALPINE_PHP_PACKAGE}" == "php82" ] || [ "${ALPINE_PHP_PACKAGE}" == "php83" ]; then \
         # install composer 2.7.1
         curl https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer \
         | php -- --quiet --install-dir=/usr/bin --filename=composer; \

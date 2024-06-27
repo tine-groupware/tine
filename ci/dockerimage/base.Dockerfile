@@ -109,13 +109,16 @@ RUN apk add --no-cache --repository nginx nginx-mod-http-brotli
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.13/community/ gnu-libiconv=1.15-r3
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
+RUN if [ ! -f /usr/bin/php ] && [ -f /usr/bin/php83 ]; then ln -s /usr/bin/php83 /usr/bin/php; echo "php83 symlink created"; fi
 RUN if [ ! -f /usr/bin/php ] && [ -f /usr/bin/php82 ]; then ln -s /usr/bin/php82 /usr/bin/php; echo "php82 symlink created"; fi
 RUN if [ ! -f /usr/bin/php ] && [ -f /usr/bin/php81 ]; then ln -s /usr/bin/php81 /usr/bin/php; echo "php81 symlink created"; fi
 RUN if [ ! -f /usr/bin/php ] && [ -f /usr/bin/php8 ]; then ln -s /usr/bin/php8 /usr/bin/php; echo "php8 symlink created"; fi
+RUN if [ ! -f /usr/sbin/php-fpm ] && [ -f /usr/sbin/php-fpm83 ]; then ln -s /usr/sbin/php-fpm83 /usr/sbin/php-fpm; echo "php-fpm83 symlink created"; fi
 RUN if [ ! -f /usr/sbin/php-fpm ] && [ -f /usr/sbin/php-fpm82 ]; then ln -s /usr/sbin/php-fpm82 /usr/sbin/php-fpm; echo "php-fpm82 symlink created"; fi
 RUN if [ ! -f /usr/sbin/php-fpm ] && [ -f /usr/sbin/php-fpm81 ]; then ln -s /usr/sbin/php-fpm81 /usr/sbin/php-fpm; echo "php-fpm81 symlink created"; fi
 RUN if [ ! -f /usr/sbin/php-fpm ] && [ -f /usr/sbin/php-fpm8 ]; then ln -s /usr/sbin/php-fpm8 /usr/sbin/php-fpm; echo "php-fpm8 symlink created"; fi
 RUN if [ ! -f /usr/sbin/php-fpm ] && [ -f /usr/sbin/php-fpm7 ]; then ln -s /usr/sbin/php-fpm7 /usr/sbin/php-fpm; echo "php-fpm7 symlink created"; fi
+RUN if [ ! -d /etc/php ] && [ -d /etc/php83 ]; then ln -s /etc/php83 /etc/php; echo "etc php83 symlink created"; fi
 RUN if [ ! -d /etc/php ] && [ -d /etc/php82 ]; then ln -s /etc/php82 /etc/php; echo "etc php82 symlink created"; fi
 RUN if [ ! -d /etc/php ] && [ -d /etc/php81 ]; then ln -s /etc/php81 /etc/php; echo "etc php81 symlink created"; fi
 RUN if [ ! -d /etc/php ] && [ -d /etc/php8 ]; then ln -s /etc/php8 /etc/php; echo "etc php8 symlink created"; fi
@@ -137,6 +140,7 @@ RUN addgroup -S -g 150 tine20 && \
     mkdir -p /etc/php8/php-fpm.d/ && \
     mkdir -p /etc/php81/php-fpm.d/ && \
     mkdir -p /etc/php82/php-fpm.d/ && \
+    mkdir -p /etc/php83/php-fpm.d/ && \
     rm -r /etc/nginx/http.d && \
     rm /etc/nginx/nginx.conf && \
     mkdir -p /etc/nginx/conf.d/ && \
