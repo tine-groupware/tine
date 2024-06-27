@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -156,7 +156,8 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         $this->_log->notice(__METHOD__ . '::' . __LINE__
             . " found {$estimate} total contacts for migration ({$numPages} pages)");
 
-        // $numPages = 1;
+        // for testing
+        // $page = $numPages = 3;
 
         for (; $page <= $numPages; $page++) {
             $this->_log->info(__METHOD__ . '::' . __LINE__ . " starting migration page {$page} of {$numPages}");
@@ -167,7 +168,9 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
             $this->_migrateEgwRecordPage($recordPage);
         }
         
-        $this->_log->notice(__METHOD__ . '::' . __LINE__ . ' ' . ($this->_importResult['totalcount'] - $this->_importResult['failcount']) . ' contacts imported sucessfully ' . ($this->_importResult['failcount'] ? " {$this->_importResult['failcount']} contacts skipped with failures" : ""));
+        $this->_log->notice(__METHOD__ . '::' . __LINE__ . ' ' . ($this->_importResult['totalcount']
+                - $this->_importResult['failcount']) . ' contacts imported sucessfully '
+            . ($this->_importResult['failcount'] ? " {$this->_importResult['failcount']} contacts skipped with failures" : ""));
     }
     
     /**
@@ -235,6 +238,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
                 }
 
                 $contactData['note'] = $this->_getInfoLogData($egwContactData['contact_id'], 'addressbook');
+                $contactData['customfields'] = $this->_getCustomFields($egwContactData['contact_id']);
                 
                 // finally create the record
                 $tineContact = new Addressbook_Model_Contact($contactData);
@@ -309,5 +313,48 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         }
         
         return $this->_countryMapping[$countryname];
+    }
+
+    /**
+     * @param int $recordId
+     * @return array
+     *
+     * TODO support owner?
+     */
+    protected function _getCustomFields(int $recordId): array
+    {
+        $select = $this->_egwDb->select()
+            ->from('egw_addressbook_extra')
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('contact_id') . ' = ?', $recordId));
+        $egwCustomfieldData = $this->_egwDb->fetchAll($select, null, Zend_Db::FETCH_ASSOC);
+
+        $result = [];
+        foreach ($egwCustomfieldData as $egwCF) {
+            $this->_createCustomFieldIfMissing($egwCF['contact_name']);
+            $result[$egwCF['contact_name']] = $egwCF['contact_value'];
+        }
+        return $result;
+    }
+
+    protected function _createCustomFieldIfMissing($name)
+    {
+        $application = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
+        $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($application->getId(),
+                $name, Addressbook_Model_Contact::class);
+        if (! $cf) {
+            $cfc = array(
+                'name' => $name,
+                'application_id' => $application->getId(),
+                'model' => Addressbook_Model_Contact::class,
+                'definition' => array(
+                    // 'uiconfig' => $customfield['uiconfig'],
+                    'label' => $name,
+                    'type' => 'string',
+                )
+            );
+            $cf = new Tinebase_Model_CustomField_Config($cfc);
+            Tinebase_CustomField::getInstance()->addCustomField($cf);
+            $this->_log->notice(__METHOD__ . '::' . __LINE__ . ' Added new customfield: "' . $name . '"');
+        }
     }
 }
