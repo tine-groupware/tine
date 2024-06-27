@@ -1112,8 +1112,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         'filename' => $filename,
                         'partId' => $part['partId'],
                         'size' => isset($part['size']) ? $part['size'] : 0,
-                        'description' => isset($part['description']) ? Tinebase_Helper::mbConvertTo($part['description']) : '',
-                        'cid' => (!empty($part['id'])) ? $part['id'] : NULL,
+                        'description' => isset($part['description'])
+                            ? Tinebase_Helper::mbConvertTo($part['description'])
+                            : '',
+                        'cid' => (!empty($part['id'])) ? $part['id'] : null,
                     );
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -1472,9 +1474,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         $message->setId($node->getId());
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-            . ' Got Message: ' . print_r($message->toArray(), true));
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . ' Got Message with subject "' . $message->subject . '"');
+        }
 
         return $message;
     }
@@ -1643,10 +1647,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
             //append flags from original message to updated message
             foreach ($updatedMessage->flags as $flag) {
-               $supportedFlags = array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(FALSE));
-                
-              if (in_array($flag, $supportedFlags)) {
-                   $imap->addFlags($updatedMessage->messageuid, [$flag]);
+                $supportedFlags = array_keys(
+                    Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(false)
+                );
+
+                if (in_array($flag, $supportedFlags)) {
+                     $imap->addFlags($updatedMessage->messageuid, [$flag]);
                 }
             }
         } else {
