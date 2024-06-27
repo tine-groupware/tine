@@ -9452,3 +9452,47 @@ parameters:
 			message: "#^Variable \\$pluralForm might not be defined\\.$#"
 			count: 1
 			path: tine20/langHelper.php
+		-
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$calscale\\.$#"
+			count: 1
+			path: tine20/Calendar/Frontend/CalDAV/ICSExportPlugin.php
+
+		-
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$prodid\\.$#"
+			count: 2
+			path: tine20/Calendar/Frontend/CalDAV/ICSExportPlugin.php
+
+		-
+			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$version\\.$#"
+			count: 1
+			path: tine20/Calendar/Frontend/CalDAV/ICSExportPlugin.php
+
+		-
+			message: "#^Call to an undefined method Sabre\\\\DAV\\\\ServerPlugin\\:\\:checkPrivileges\\(\\)\\.$#"
+			count: 1
+			path: tine20/Calendar/Frontend/CalDAV/ICSExportPlugin.php
+
+		-
+			message: "#^Call to method getNodeForPath\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\DAV\\\\Tree\\.$#"
+			count: 1
+			path: tine20/Calendar/Frontend/CalDAV/ICSExportPlugin.php
+
+		-
+			message: "#^Call to method getQueryString\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Request\\.$#"
+			count: 1
+			path: tine20/Calendar/Frontend/CalDAV/ICSExportPlugin.php
+
+		-
+			message: "#^Call to method sendBody\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
+			count: 1
+			path: tine20/Calendar/Frontend/CalDAV/ICSExportPlugin.php
+
+		-
+			message: "#^Call to method sendStatus\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
+			count: 1
+			path: tine20/Calendar/Frontend/CalDAV/ICSExportPlugin.php
+
+		-
+			message: "#^Call to method setHeader\\(\\) on an unknown class Sabre\\\\DAV\\\\Sabre\\\\HTTP\\\\Response\\.$#"
+			count: 1
+			path: tine20/Calendar/Frontend/CalDAV/ICSExportPlugin.php
