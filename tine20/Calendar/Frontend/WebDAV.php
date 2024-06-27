@@ -51,6 +51,9 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
      */
     public function getChild($name)
     {
+        // drop query string e.g. from export plugin
+        $name = preg_replace('/\?.*$/', '', $name);
+
         if (isset($this->_instanceCache[__FUNCTION__][$name])) {
             return $this->_instanceCache[__FUNCTION__][$name];
         }

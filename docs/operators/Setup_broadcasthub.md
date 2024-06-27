@@ -1,5 +1,4 @@
-Configure tine Broadcasthub
-=
+# Configure tine Broadcasthub
 
 The tine Broadcasthub was built to deliver status messages about files and containers from the tine Server to the tine Client in the browser. One use case would be to mark files in the tine file manager that are currently opened in the tine OnlyOffice integration by other users. But in general the Broadcasthub just pipes through any message it receives, it is up to the tine Server what to send.
 
@@ -12,3 +11,13 @@ The tine Broadcasthub is a NodeJS application.
 Fetch it from https://hub.docker.com/r/tinegroupware/broadcasthub (operation via Docker is recommended)
 
 see https://github.com/tine-groupware/broadcasthub/blob/master/TINEDOCS.md for more information and the setup howto…
+
+# Check if Broadcasthub is working
+
+- go into browser debug console
+- switch to network
+- activate "WS" (websockets)
+- it should show the connection (IP/Hostname)
+- selecting the connection should show the messages, for example record updates:
+
+      {verb: "update", model: "Addressbook_Model_Contact",…}
