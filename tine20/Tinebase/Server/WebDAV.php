@@ -275,6 +275,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             self::$_server->addPlugin(new Tinebase_WebDav_Plugin_PrincipalSearch());
             self::$_server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
             self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
+            self::$_server->addPlugin(new Calendar_Frontend_CalDAV_ICSExportPlugin());
             if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
                 $userA = null;
                 if (isset($_SERVER['HTTP_USER_AGENT'])) {
@@ -292,6 +293,10 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin());
             self::$_server->httpResponse->startBodyLog(Tinebase_Core::isLogLevel(Zend_Log::DEBUG) &&
                 $this->_request->getMethod() !== 'GET');
+
+            // drop frontend query from rewrite rule
+            $_SERVER['QUERY_STRING'] = str_replace('frontend=webdav&', '',
+                isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '');
 
             self::$_server->exec();
 
