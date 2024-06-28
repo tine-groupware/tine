@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3cd288e560fc47282e39495b657b4479",
+    "content-hash": "2b2fcd82ab2e5711611acd1d24d24bb6",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -12975,11 +12975,11 @@
         },
         {
             "name": "tine20/sabredav",
-            "version": "1.8.12pl3",
+            "version": "1.8.12pl5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/sabredav.git",
-                "reference": "796d6b12dabf711e49fdc5dee8e11db53476ff88"
+                "reference": "aeaadfb7fb607a0515345097aa26ffbe14f28976"
             },
             "require": {
                 "ext-ctype": "*",
@@ -13043,7 +13043,7 @@
                 "forum": "https://groups.google.com/group/sabredav-discuss",
                 "source": "https://github.com/evert/sabredav"
             },
-            "time": "2023-10-16T16:30:02+00:00"
+            "time": "2024-06-27T16:27:53+00:00"
         },
         {
             "name": "tine20/sabrevobject",

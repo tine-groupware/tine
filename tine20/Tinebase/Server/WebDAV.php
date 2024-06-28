@@ -275,7 +275,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
             self::$_server->addPlugin(new Tinebase_WebDav_Plugin_OwnCloud());
             self::$_server->addPlugin(new Tinebase_WebDav_Plugin_PrincipalSearch());
             self::$_server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
-            self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
+            self::$_server->addPlugin(new \Tine20\DAV\Browser\Plugin());
             self::$_server->addPlugin(new \Tine20\CalDAV\ICSExportPlugin());
             if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
                 $userA = null;
