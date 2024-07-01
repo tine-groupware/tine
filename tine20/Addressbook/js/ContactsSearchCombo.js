@@ -6,14 +6,12 @@
  * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-Tine.Addressbook.ContactsSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.RecordsPickerCombo, {
+Tine.Addressbook.ContactsSearchCombo = Ext.extend(Tine.Tinebase.widgets.form.VMultiPicker, {
 
     initComponent: function(){
         this.app = Tine.Tinebase.appMgr.get('Addressbook');
 
-        if (this.recordClass === null) {
-            this.recordClass = Tine.Addressbook.Model.Contact;
-        }
+        this.recordClass = this.recordClass || Tine.Addressbook.Model.Contact;
 
         this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : (this.userOnly ?
                 this.app.i18n._('Search for users ...') :

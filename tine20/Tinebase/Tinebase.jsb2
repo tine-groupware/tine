@@ -250,8 +250,8 @@
           "path": "js/ux/form/"
         },
         {
-          "text": "RecordsComboBox.js",
-          "path": "js/ux/form/"
+          "text": "index.js",
+          "path": "js/widgets/form/VMultiPicker"
         },
         {
           "text": "DateTimeField.js",
@@ -948,10 +948,6 @@
         {
           "text": "PickerCombo.js",
           "path": "js/widgets/relation/"
-        },
-        {
-          "text": "RecordsPickerCombo.js",
-          "path": "js/widgets/form/"
         },
         {
           "text": "PickerGridLayerCombo.js",
