@@ -181,7 +181,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
             '<div class="preview-panel-felamimail">',
             '{[this.showInfo(values)]}',
             '{[this.showAttachments(values.attachments, values)]}',
-            '<div class="preview-panel-felamimail-filelocations">{[this.showFileLocations(values)]}</div>',
+            '{[this.showFileLocations(values)]}',
             '<div class="preview-panel-felamimail-preparedPart"></div>',
             '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values)]}</div>',
             '</div>',{
@@ -317,15 +317,18 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
 
                 showFileLocations: function(messageData) {
                     let fileLocations = _.get(messageData, 'fileLocations', []);
-
+                    const fileLocationBlock =  document.createElement('div');
+                    fileLocationBlock.className = 'preview-panel-felamimail-filelocations';
+                    
                     if (fileLocations.length) {
                         let app = Tine.Tinebase.appMgr.get('Felamimail');
-                        let text = app.formatMessage('{locationCount, plural, one {This message is filed at the following location} other {This message is filed at the following locations}}: {locationsHtml}', {
+                        const html = Tine.Felamimail.MessageFileAction.getFileLocationText(fileLocations, ', ');
+                        const text = app.formatMessage('{locationCount, plural, one {This message is filed at the following location} other {This message is filed at the following locations}}: {locationsHtml}', {
                             locationCount: fileLocations.length,
-                            locationsHtml: Tine.Felamimail.MessageFileAction.getFileLocationText(fileLocations, ', ')
+                            locationsHtml: html
                         });
-
-                        return text;
+                        fileLocationBlock.innerHTML = text;
+                        return fileLocationBlock.outerHTML;
                     } else {
                         return '';
                     }
