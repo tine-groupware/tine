@@ -45,6 +45,7 @@
     cursor: pointer;
     position: absolute;
     margin: 2px;
+    z-index: 10;
 }
 
 .ux-pp-mode {
