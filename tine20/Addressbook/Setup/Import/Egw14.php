@@ -157,7 +157,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
             . " found {$estimate} total contacts for migration ({$numPages} pages)");
 
         // for testing
-        $page = $numPages = 13;
+        # $page = $numPages = 13;
 
         for (; $page <= $numPages; $page++) {
             $this->_log->info(__METHOD__ . '::' . __LINE__ . " starting migration page {$page} of {$numPages}");
