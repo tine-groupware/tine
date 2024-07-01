@@ -106,12 +106,14 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             requiredGrant: 'editGrant',
                             maxLength: 1024
                         }]
-                    }, {
+                    },
+                        {
                         layout: 'hbox',
-                        hidden: !this.app.featureEnabled('featureEventType'),
+                            hidden: !this.app.featureEnabled('featureEventType'),
                         items: [{
                             margins: '5',
                             width: 100,
+                            // height: 30,
                             xtype: 'label',
                             text: this.app.i18n._('Event Type')
                         }, {
@@ -121,7 +123,7 @@ Tine.Calendar.EventEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             recordClass: 'Calendar.EventTypes',
                             refIdField: 'record',
                             searchComboConfig: {useEditPlugin: false},
-                            editDialogConfig: {mode:  'local'},
+                            editDialogConfig: {mode: 'local'},
                             isMetadataModelFor: 'Calendar.EventType',
                             requiredGrant: 'editGrant',
                         }]
