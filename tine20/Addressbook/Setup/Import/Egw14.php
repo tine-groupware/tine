@@ -157,7 +157,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
             . " found {$estimate} total contacts for migration ({$numPages} pages)");
 
         // for testing
-        // $page = $numPages = 3;
+        // $page = $numPages = 4;
 
         for (; $page <= $numPages; $page++) {
             $this->_log->info(__METHOD__ . '::' . __LINE__ . " starting migration page {$page} of {$numPages}");
@@ -238,6 +238,8 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
                 }
 
                 $contactData['note'] = $this->_getInfoLogData($egwContactData['contact_id'], 'addressbook');
+                $contactData['tags'] = array_merge($contactData['tags'],
+                    $this->_getInfoLogTags($egwContactData['contact_id'], 'addressbook'));
                 $contactData['customfields'] = $this->_getCustomFields($egwContactData['contact_id']);
                 
                 // finally create the record
