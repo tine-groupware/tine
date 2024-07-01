@@ -1286,7 +1286,7 @@ viewConfig: {
         if (preventRefresh !== true) this.updateAllColumnWidths();
 
         // browser might draw x-scrollbars when y-scrollbars where shown
-        this.scroller.setStyle('overflow-x', diff > 0 ? 'auto' : 'hidden');
+        this.scroller.setStyle('overflow-x', diff < 0 ? 'auto' : 'hidden');
 
         return true;
     },
