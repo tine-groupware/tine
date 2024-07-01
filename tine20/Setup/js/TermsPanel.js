@@ -16,7 +16,8 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
     border: false,
     layout: 'fit',
     version: 1,
-    
+    saveMethod: 'Setup.saveTerms',
+
     /**
      * @property actionToolbar
      * @type Ext.Toolbar
@@ -24,10 +25,13 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
     actionToolbar: null,
     
     getLicensePanel: function() {
-        var acceptField = new Ext.form.Checkbox({
+        let accepted = Tine.Setup.registry.get('acceptedTermsVersion') >= Tine.Setup.CurrentTermsVersion;
+        let acceptField = new Ext.form.Checkbox({
             name: 'acceptLicense',
             xtype: 'checkbox',
-            boxLabel: this.app.i18n._('I have read the license agreement and accept it')
+            boxLabel: this.app.i18n._('I have read the license agreement and accept it'),
+            checked: accepted,
+            disabled: accepted
         });
         this.acceptFields.push(acceptField);
         
@@ -49,11 +53,13 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
     },
     
     getPrivacyPanel: function() {
-        
-        var acceptField = new Ext.form.Checkbox({
+        let accepted = Tine.Setup.registry.get('acceptedTermsVersion') >= Tine.Setup.CurrentTermsVersion;
+        let acceptField = new Ext.form.Checkbox({
             name: 'acceptPrivacy',
             xtype: 'checkbox',
-            boxLabel: this.app.i18n._('I have read the privacy agreement and accept it')
+            boxLabel: this.app.i18n._('I have read the privacy agreement and accept it'),
+            checked: accepted,
+            disabled: accepted
         });
         this.acceptFields.push(acceptField);
         
@@ -125,8 +131,26 @@ Tine.Setup.TermsPanel = Ext.extend(Ext.Panel, {
         
         if (isValid) {
             Tine.Setup.registry.replace('acceptedTermsVersion', Tine.Setup.CurrentTermsVersion);
+            this.saveAcceptTerms(Tine.Setup.CurrentTermsVersion);
         } else {
             Tine.log.notice('Terms not accepted.');
         }
+    },
+
+    saveAcceptTerms: function (data) {
+        Ext.Ajax.request({
+            scope: this,
+            params: {
+                method: this.saveMethod,
+                data: data
+            },
+            success: function(response) {
+            },
+            failure: function(response, options) {
+                let responseText = Ext.util.JSON.decode(response.responseText),
+                  exception = responseText.data ? responseText.data : responseText;
+                Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+            }
+        });
     }
 });
