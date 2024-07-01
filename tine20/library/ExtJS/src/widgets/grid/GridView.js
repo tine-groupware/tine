@@ -806,6 +806,7 @@ viewConfig: {
         
         if(this.forceFit){
             this.fitColumns(false, false);
+            
             this.lastViewWidth = vw;
         }else {
             this.autoExpand();
@@ -1173,7 +1174,7 @@ viewConfig: {
     },
     
     fitColumns : function(preventRefresh, onlyExpand, omitColumn){
-        if (!this.mainBody) return;
+        if (!this.mainBody || !this.grid.viewReady) return;
         const cm = this.cm;
         const widthCurrentVisibleTotal = cm.getTotalWidth(false);
         if (!widthCurrentVisibleTotal) return;
@@ -1210,6 +1211,9 @@ viewConfig: {
                 col.initialConfig = col.initialConfig || {... col};
                 col.index = idx;
                 const refConfig = currentGridState?.columns?.[idx] ?? col.initialConfig;
+                // set custom field
+                col.useManualWidth = refConfig.useManualWidth ?? false;
+                
                 // reset grid state if stateId changed, make sure column config is based on current stateId
                 cm.setColumnWidth(col.index, refConfig?.width ?? this.grid.minColumnWidth, true);
                 let hidden = refConfig?.hidden ?? false;
@@ -1228,6 +1232,7 @@ viewConfig: {
                     this.updateColumnStyle(col.index, {'display': hidden ? 'none' : ''});
                 }
                 cm.setHidden(col.index, hidden, true);
+
             });
             // handle sorting too
             const sortInfo = currentGridState?.sort;
@@ -1236,15 +1241,13 @@ viewConfig: {
             }
             this.fitColumns(preventRefresh, onlyExpand, omitColumn);
         }
-        
+
         // collect all visible columns from existing config
         const colsToResolve = [];
-        let colIdxLastVisible = colIdxOmitColumn;
         
         cm.config.forEach((col, idx) => {
             if (!cm.isHidden(idx)) {
                 if (idx > colIdxOmitColumn) colsToResolve.push(col);
-                if (!cm.isFixed(idx)) colIdxLastVisible = idx;
             }
         });
         if (!colsToResolve.length) return;
@@ -1252,7 +1255,7 @@ viewConfig: {
         // handle columns fractional resizing
         const widthToResolve = colsToResolve.reduce((acc, col) => {return acc + col.width;}, 0);
         const colIdxDefaultAutoExpand = this.autoExpand && this.grid.autoExpandColumn ? cm.getIndexById(this.grid.autoExpandColumn) : -1;
-        const fraction = isOmitColumnValid 
+        const fraction = isOmitColumnValid
             ? (widthToResolve - widthExtra) / widthToResolve
             : widthResizedGrid / widthToResolve;
         
@@ -1263,6 +1266,10 @@ viewConfig: {
             if (colIdxDefaultAutoExpand < 0 && !isOmitColumnValid && col.width && widthToResolve <= widthResizedGrid) {
                 widthResolved = Math.max(col.width, width);
             }
+            if (col.useManualWidth && col.width !== col.minWidth) {
+                widthResolved = col.width;
+            }
+
             cm.setColumnWidth(idx, Math.floor(widthResolved), true);
         });
         
@@ -1270,24 +1277,41 @@ viewConfig: {
         const widthUpdatedTotalVisibleCols = cm.getTotalWidth(false);
         const diff = widthResizedGrid - widthUpdatedTotalVisibleCols;
         let colIdxResolvedAutoExpand = colIdxDefaultAutoExpand;
-        if (isOmitColumnValid || colIdxDefaultAutoExpand <= colIdxOmitColumn) colIdxResolvedAutoExpand = colIdxLastVisible;
+        let colAutoExpand = null;
+        let isDefaultAutoExpandColReachLimit = false;
+        if (colIdxResolvedAutoExpand > -1) {
+            colAutoExpand = cm.config[colIdxResolvedAutoExpand];
+            isDefaultAutoExpandColReachLimit = (diff > 0 && colAutoExpand.maxWidth === colAutoExpand.width)
+                || (diff < 0 && colAutoExpand.width === colAutoExpand.minWidth);
+        }
+        if (isOmitColumnValid 
+            || colIdxDefaultAutoExpand <= colIdxOmitColumn 
+            || colAutoExpand?.useManualWidth
+            || (colAutoExpand && cm.isHidden(colIdxResolvedAutoExpand))
+            || isDefaultAutoExpandColReachLimit
+        ) {
+            let colIdxLastResizeable =  -1;
+            cm.config.forEach((col, idx) => {
+                if (!cm.isHidden(idx) && !cm.isFixed(idx) && idx > colIdxOmitColumn) {
+                    colIdxLastResizeable = idx;
+                }
+            });
+            colIdxResolvedAutoExpand = colIdxLastResizeable;
+        }
         // resized columns might not fit the total width , we should make sure they are equal
         if (colIdxResolvedAutoExpand >= 0 && fraction !== 1) {
             const width = cm.getColumnWidth(colIdxResolvedAutoExpand);
-            if (!cm.isHidden(colIdxResolvedAutoExpand)) {
-                cm.setColumnWidth(colIdxResolvedAutoExpand, Math.max(this.grid.minColumnWidth,  width + diff), true);
-            }
+            cm.setColumnWidth(colIdxResolvedAutoExpand, Math.max(this.grid.minColumnWidth,  width + diff), true);
         }
-
+        
         if (this.grid?.stateId && this.grid.stateId === this.latestGridStateId) {
             this.grid.saveState();
         }
         
         if (preventRefresh !== true) this.updateAllColumnWidths();
-
+        
         // browser might draw x-scrollbars when y-scrollbars where shown
         this.scroller.setStyle('overflow-x', diff < 0 ? 'auto' : 'hidden');
-
         return true;
     },
 
@@ -1816,9 +1840,13 @@ viewConfig: {
     // private
     onColumnSplitterMoved : function(i, w){
         this.userResized = true;
-        var cm = this.grid.colModel;
-        cm.setColumnWidth(i, w, true);
+        const cm = this.grid.colModel;
+        const oldWidth = cm.getColumnWidth(i);
+        cm.setColumnWidth(i, w, true, true);
+        const newWidth = cm.getColumnWidth(i);
 
+        if (oldWidth === newWidth) return;
+        
         if(this.forceFit){
             this.fitColumns(true, false, i);
             this.updateAllColumnWidths();

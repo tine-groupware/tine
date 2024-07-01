@@ -1900,7 +1900,40 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             parentScope: this,
             view: this.createView(),
             recordClass: this.recordClass,
-            getDragDropText: this.getDragDropText.createDelegate(this)
+            getDragDropText: this.getDragDropText.createDelegate(this),
+            getState : ()=> {
+                const o = {columns: []};
+                const store = this.store;
+                let ss;
+                let gs;
+                
+                let i = 0, c;
+                for(; (c = this.grid.colModel.config[i]); i++){
+                    o.columns[i] = {
+                        id: c.id,
+                        width: c.width,
+                    };
+                    if(c.useManualWidth){
+                        o.columns[i].useManualWidth = true;
+                    }
+                    if(c.hidden){
+                        o.columns[i].hidden = true;
+                    }
+                }
+                if(store){
+                    ss = store.getSortState();
+                    if(ss){
+                        o.sort = ss;
+                    }
+                    if(store.getGroupState){
+                        gs = store.getGroupState();
+                        if(gs){
+                            o.group = gs;
+                        }
+                    }
+                }
+                return o;
+            },
         }));
         
 
@@ -2356,6 +2389,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             filters: this.defaultFilters || []
         }));
     },
+    
 
     /**
      * return store from grid
