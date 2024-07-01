@@ -630,6 +630,17 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
 
     protected function _getInfoLogData(int $recordId, string $recordApp): string
     {
+        $egwInfologs = $this->_fetchInfoLogs($recordId, $recordApp);
+        $result = '';
+        foreach ($egwInfologs as $infolog) {
+            $result = '[' . $infolog['info_type'] . '] ' . $infolog['info_subject'] . ": \n" . $infolog['info_from']
+                ." \n" . $infolog['info_des'] . "\n\n";
+        }
+        return $result;
+    }
+
+    protected function _fetchInfoLogs(int $recordId, string $recordApp): array
+    {
         $select = $this->_egwDb->select()
             ->from(array('infolog' => 'egw_infolog'))
             ->join('egw_links', 'infolog.info_id = egw_links.link_id1')
@@ -637,12 +648,16 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('egw_links.link_app1') . ' = ?', 'infolog'))
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('egw_links.link_id2') . ' = ?', $recordId));
 
-        $egwInfologs = $this->_egwDb->fetchAll($select, null, Zend_Db::FETCH_ASSOC);
+        return $this->_egwDb->fetchAll($select, null, Zend_Db::FETCH_ASSOC);
+    }
 
-        $result = '';
+    protected function _getInfoLogTags(int $recordId, string $recordApp): array
+    {
+        $egwInfologs = $this->_fetchInfoLogs($recordId, $recordApp);
+
+        $result = [];
         foreach ($egwInfologs as $infolog) {
-            $result = '[' . $infolog['info_type'] . '] ' . $infolog['info_subject'] . ": \n" . $infolog['info_from']
-                ." \n" . $infolog['info_des'] . "\n\n";
+            $result = $this->convertCategories($infolog['info_cat']);
         }
         return $result;
     }
