@@ -107,14 +107,35 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
             if (is_object($_value['until']) && get_class($_value['until']) === 'DateTime') {
                 $_value['until'] = new Tinebase_DateTime($_value['until']);
             }
-            
-            $from = $_value['from'] instanceof Tinebase_DateTime ? $_value['from']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['from'];
-            $until = $_value['until'] instanceof Tinebase_DateTime ? $_value['until']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['until'];
-            
-            $this->_from = $this->_convertStringToUTC($from);
-            $this->_until = $this->_convertStringToUTC($until);
+
+            $from = $_value['from'] instanceof Tinebase_DateTime
+                ? $_value['from']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['from'];
+            $until = $_value['until'] instanceof Tinebase_DateTime
+                ? $_value['until']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['until'];
+
+            try {
+                $this->_from = $this->_convertStringToUTC($from);
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Invalid from (' . $from . '): ' . $e->getMessage() . ' - sanitizing to NOW()');
+                }
+                $this->_from = $this->_convertStringToUTC('');
+            }
+            try {
+                $this->_until = $this->_convertStringToUTC($until);
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                        . ' Invalid until (' . $until . '): ' . $e->getMessage() . ' - sanitizing to 7 days from NOW()');
+                }
+                $until = Tinebase_DateTime::now()->addDay(7);
+                $this->_until = $this->_convertStringToUTC($until);
+            }
         } else {
-            throw new Tinebase_Exception_UnexpectedValue('Period must be an array with from and until properties');
+            throw new Tinebase_Exception_UnexpectedValue(
+                'Period must be an array with from and until properties'
+            );
         }
     }
 

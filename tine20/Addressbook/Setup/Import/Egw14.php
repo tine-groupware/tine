@@ -157,7 +157,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
             . " found {$estimate} total contacts for migration ({$numPages} pages)");
 
         // for testing
-        // $page = $numPages = 3;
+        # $page = $numPages = 13;
 
         for (; $page <= $numPages; $page++) {
             $this->_log->info(__METHOD__ . '::' . __LINE__ . " starting migration page {$page} of {$numPages}");
@@ -238,6 +238,8 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
                 }
 
                 $contactData['note'] = $this->_getInfoLogData($egwContactData['contact_id'], 'addressbook');
+                $contactData['tags'] = array_merge($contactData['tags'],
+                    $this->_getInfoLogTags($egwContactData['contact_id'], 'addressbook'));
                 $contactData['customfields'] = $this->_getCustomFields($egwContactData['contact_id']);
                 
                 // finally create the record
@@ -323,20 +325,40 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
      */
     protected function _getCustomFields(int $recordId): array
     {
+        // TODO get all addressbook customfield config from egw_config
+        $config['info_startdate'] = [
+            'type' => 'datetime',
+        ];
+
         $select = $this->_egwDb->select()
             ->from('egw_addressbook_extra')
             ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('contact_id') . ' = ?', $recordId));
         $egwCustomfieldData = $this->_egwDb->fetchAll($select, null, Zend_Db::FETCH_ASSOC);
 
+        // also add info_startdate from infologs
+        // TODO add config for this
+        // TODO handle multiple occurrences?
+        $infologs = $this->_fetchInfoLogs($recordId, 'addressbook');
+        foreach ($infologs as $infolog) {
+            if (! empty($infolog['info_startdate'])) {
+                $egwCustomfieldData[] = [
+                    'contact_name' => 'info_startdate',
+                    'contact_value' => new Tinebase_DateTime('@' . $infolog['info_startdate']),
+                ];
+            }
+        }
+
         $result = [];
         foreach ($egwCustomfieldData as $egwCF) {
-            $this->_createCustomFieldIfMissing($egwCF['contact_name']);
-            $result[$egwCF['contact_name']] = $egwCF['contact_value'];
+            $name = $egwCF['contact_name'];
+            $this->_createCustomFieldIfMissing($name, $config[$name] ?? []);
+            $result[$name] = $egwCF['contact_value'];
         }
+
         return $result;
     }
 
-    protected function _createCustomFieldIfMissing($name)
+    protected function _createCustomFieldIfMissing(string $name, array $config = []): void
     {
         $application = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
         $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($application->getId(),
@@ -347,9 +369,9 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
                 'application_id' => $application->getId(),
                 'model' => Addressbook_Model_Contact::class,
                 'definition' => array(
-                    // 'uiconfig' => $customfield['uiconfig'],
-                    'label' => $name,
-                    'type' => 'string',
+                    'label' => ucfirst($name),
+                    'uiconfig' => $config['uiconfig'] ?? null,
+                    'type' => $config['type'] ?? 'string',
                 )
             );
             $cf = new Tinebase_Model_CustomField_Config($cfc);

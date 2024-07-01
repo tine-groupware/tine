@@ -2183,10 +2183,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onDisplaySpamActions: function () {
         if (!this.app.featureEnabled('featureSpamSuspicionStrategy')) return;
-        
+        const sm = this.getGrid().getSelectionModel();
+        const msg = sm.getSelected();
         const folder = this.getCurrentFolderFromTree();
-        const account = folder ? this.app.getAccountStore().getById(folder.get('account_id')) : null;
-
+        const accountId = folder?.get('account_id') ?? msg?.get('account_id') ?? null;
+        const account = this.app.getAccountStore().getById(accountId);
+        
         this.action_spam.show();
         this.action_ham.show();
         

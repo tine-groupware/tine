@@ -594,16 +594,21 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
             items: new Tine.Tinebase.dialog.Dialog({
                 listeners: {
                     scope: this,
-                    apply: function(fileTarget) {
-                        item.fileTarget = fileTarget;
+                    apply: async function(fileTarget) {
+                        item.fileTarget = await fileTarget;
                         this.selectionHandler(item, e);
                     }
                 },
-                getEventData: function(eventName) {
+                getEventData: async function (eventName) {
                     if (eventName === 'apply') {
                         const attachRecord = this.getForm().findField('attachRecord').selectedRecord;
+                        // getTitle might need to registerReplacer
+                        let title = attachRecord.getTitle();
+                        if (title && title.asString) {
+                            title = await title.asString();
+                        }
                         return {
-                            record_title: attachRecord.getTitle(),
+                            record_title: title,
                             model: model,
                             data: attachRecord.data,
                         };

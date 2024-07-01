@@ -394,4 +394,15 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
 
         return array();
     }
+
+    /**
+     * @return true[]
+     */
+    public function saveTerms($data): array
+    {
+        $this->_controller->saveAcceptedTerms($data);
+        return array(
+            'success' => true,
+        );
+    }
 }
