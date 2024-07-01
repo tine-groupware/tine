@@ -12,8 +12,18 @@
   <div>
     <div v-if="questionText?.trim?.().startsWith('<')" v-html="questionText" class="mb-3"></div>
     <p v-else>{{questionText}}</p>
-    <BFormRadioGroup v-if="!props.allowMultiple" v-model="selectedOption" :options="_options" stacked/>
-    <BFormCheckboxGroup v-if="props.allowMultiple" v-model="selectedOption" :options="_options" stacked/>
+    <BFormRadioGroup v-if="!props.allowMultiple" v-model="selectedOption" stacked>
+      <BFormRadio v-for="option in _options" :value="option.value" :key="option.value" :disabled="option.disabled">
+        <span v-if="option.text.trim().startsWith('<')" v-html="option.text"/>
+        <span v-else>{{option.text}}</span>
+      </BFormRadio>
+    </BFormRadioGroup>
+    <BFormCheckboxGroup v-if="props.allowMultiple" v-model="selectedOption" stacked>
+      <BFormCheckbox v-for="option in _options" :value="option.value" :key="option.value" :disabled="option.disabled">
+        <span v-if="option.text.trim().startsWith('<')" v-html="option.text"/>
+        <span v-else>{{option.text}}</span>
+      </BFormCheckbox>
+    </BFormCheckboxGroup>
   </div>
 </template>
 
