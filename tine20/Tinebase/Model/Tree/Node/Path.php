@@ -325,6 +325,9 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             Tinebase_FileSystem::FOLDER_TYPE_PREVIEWS,
             self::TYPE_ROOT
         ))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . 'invalid path Parts: ' . print_r($_pathParts, true));
+            
             throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $containerType);
         }
         
