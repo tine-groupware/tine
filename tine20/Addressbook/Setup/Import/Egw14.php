@@ -325,9 +325,9 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
      */
     protected function _getCustomFields(int $recordId): array
     {
-        // TODO get all addressbook customfield config from egw_config
+        $config = $this->_getEgwCustomFieldConfig('addressbook');
         $config['info_startdate'] = [
-            'type' => 'datetime',
+            'type' => 'date',
         ];
 
         $select = $this->_egwDb->select()
@@ -340,7 +340,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         // TODO handle multiple occurrences?
         $infologs = $this->_fetchInfoLogs($recordId, 'addressbook');
         foreach ($infologs as $infolog) {
-            if (! empty($infolog['info_startdate'])) {
+            if (! empty($infolog['info_startdate']) && $infolog['status'] === 'ongoing') {
                 $egwCustomfieldData[] = [
                     'contact_name' => 'info_startdate',
                     'contact_value' => new Tinebase_DateTime('@' . $infolog['info_startdate']),
@@ -364,15 +364,42 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         $cf = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication($application->getId(),
                 $name, Addressbook_Model_Contact::class);
         if (! $cf) {
+            $additionalDefinition = [];
+            if (isset($config['type'])) {
+                switch($config['type']) {
+                    case 'select':
+                        $type = 'keyField';
+                        $records = [];
+                        foreach ($config['values'] as $key => $value) {
+                            $records[] = [
+                                'id' => $key,
+                                'value' => $value,
+                            ];
+                        }
+                        $additionalDefinition = [
+                            'keyFieldConfig' => [
+                                'value' => [
+                                    'records' => $records,
+                                ],
+                            ],
+                        ];
+                        break;
+                    default:
+                        $type = $config['type'];
+                }
+            } else {
+                $type = 'string';
+            }
+
             $cfc = array(
                 'name' => $name,
                 'application_id' => $application->getId(),
                 'model' => Addressbook_Model_Contact::class,
-                'definition' => array(
-                    'label' => ucfirst($name),
+                'definition' => array_merge([
+                    'label' => $config['label'] ?? ucfirst($name),
                     'uiconfig' => $config['uiconfig'] ?? null,
-                    'type' => $config['type'] ?? 'string',
-                )
+                    'type' => $type,
+                ], $additionalDefinition),
             );
             $cf = new Tinebase_Model_CustomField_Config($cfc);
             Tinebase_CustomField::getInstance()->addCustomField($cf);

@@ -72,29 +72,29 @@ and follow the instructions of the repo.
 ## requirements / supported clients
 
 ### ActiveSync Clients
-iOS to version 17
-Android to version 14
+- iOS to version 17
+- Android to version 14
 
 ### WebDAV/CardDAV Clients
-OwnCloud Client to version 3.2.1
-Windows Explorer to version 11
-macOS X Finder to macOS 14.0
-KDE Plasma to version 5.27
-Gnome/Nautilus to version 44
-CardBook (Thunderbird addon)
-emClient
+- OwnCloud Client to version 3.2.1
+- Windows Explorer to version 11
+- macOS X Finder to macOS 14.0
+- KDE Plasma to version 5.27
+- Gnome/Nautilus to version 44
+- CardBook (Thunderbird addon)
+- emClient to version 8.0
 
 ### CalDAV Clients
-Mozilla Thunderbird to version 115.4
-eM Client to version 8.0
-iCal to version 14.0
-Reminders/Erinnerungen bis macOS 14.0
-iOS to version 17
-DAVx5 to version 4.3.9
+- Mozilla Thunderbird to version 115.4
+- eM Client to version 8.0
+- iCal to version 14.0
+- Reminders to macOS 14.0
+- iOS to version 17
+- DAVx5 to version 4.3.9
 
-### Server-Dienste
-PHP version 8.0 to 8.1
-MySQL to version 8.0
-MariaDB to version 10.9
-Nginx to version 1.25
-Redis to version 6.0
+### Server
+- PHP version 8.0 to 8.1
+- MySQL to version 8.0
+- MariaDB to version 10.9
+- Nginx to version 1.25
+- Redis to version 6.0
