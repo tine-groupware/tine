@@ -81,7 +81,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
             // load ui config values
             Ext.each(this.uiconfigFields, function (name) {
-                this.getForm().findField(name).setValue(this.record.get('definition').uiconfig[name]);
+                this.getForm().findField(name).setValue(_.get(this.record.get('definition'), 'uiconfig.name', null));
             }, this);
             
             // load specific values for fields with store
