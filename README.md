@@ -88,11 +88,11 @@ and follow the instructions of the repo.
 - Mozilla Thunderbird to version 115.4
 - eM Client to version 8.0
 - iCal to version 14.0
-- Reminders/Erinnerungen bis macOS 14.0
+- Reminders to macOS 14.0
 - iOS to version 17
 - DAVx5 to version 4.3.9
 
-### Server-Dienste
+### Server
 - PHP version 8.0 to 8.1
 - MySQL to version 8.0
 - MariaDB to version 10.9
