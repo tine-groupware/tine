@@ -3161,18 +3161,21 @@ abstract class Tinebase_Controller_Record_Abstract
             }
         }
 
+        $records = new Tinebase_Record_RecordSet($_records->getRecordClassName());
+
         if (!empty($ids = $_records->getArrayOfIds())) {
             foreach ($controller->has($ids, true) as $id) {
+                $records->addRecord($_records->getById($id));
                 $_records->removeById($id);
             }
         }
 
-        $createdRecords = new Tinebase_Record_RecordSet($_records->getRecordClassName());
+
         foreach ($_records as $record) {
-            $createdRecords->addRecord($controller->create($record));
+            $records->addRecord($controller->create($record));
         }
 
-        $_record->{$property} = $_fieldDef[TMCC::TYPE] === TMCC::TYPE_RECORDS ? $createdRecords : $createdRecords->getFirstRecord();
+        $_record->{$property} = $_fieldDef[TMCC::TYPE] === TMCC::TYPE_RECORDS ? $records : $records->getFirstRecord();
 
         unset($ctrlAclRaii);
     }
