@@ -237,7 +237,7 @@ Tine.Tinebase.tineInit = {
                 }
             }
             
-            if (target && href && href !== '#') {
+            if (target && href && href !== '#' && href !== Tine.Tinebase.common.getUrl()) {
                 target.set({
                     href: decodeURI(href),
                     rel: "noreferrer",
