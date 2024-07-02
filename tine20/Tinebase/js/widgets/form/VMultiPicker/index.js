@@ -224,3 +224,6 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
 })
 
 Ext.reg('tinerecordspickercombobox', Tine.Tinebase.widgets.form.VMultiPicker)
+
+// legacy
+Tine.Tinebase.widgets.form.RecordsPickerCombo = Tine.Tinebase.widgets.form.VMultiPicker;

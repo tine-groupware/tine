@@ -13,7 +13,7 @@ Ext.ns('Tine.widgets.grid');
  *
  * @namespace   Tine.widgets.grid
  * @class       Tine.widgets.grid.PickerGridLayerCombo
- * @extends     Tine.Tinebase.widgets.form.RecordsPickerCombo
+ * @extends     Tine.Tinebase.widgets.form.VMultiPicker
  */
 Tine.widgets.grid.PickerGridLayerCombo = Ext.extend(Tine.Tinebase.widgets.form.VMultiPicker, {
 

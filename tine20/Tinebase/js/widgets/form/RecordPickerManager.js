@@ -43,8 +43,8 @@ Tine.widgets.form.RecordPickerManager = function() {
                 }
             } else {    // not registered, create default
                 const pickerClass = config.allowMultiple ?
-                        Tine.Tinebase.widgets.form.RecordsPickerCombo :
-                        Tine.Tinebase.widgets.form.RecordPickerComboBox;
+                    Tine.Tinebase.widgets.form.VMultiPicker :
+                    Tine.Tinebase.widgets.form.RecordPickerComboBox;
                 const modelConfig = Tine.Tinebase.data.RecordMgr.get(appName, modelName)?.getModelConfiguration();
 
                 const defaultconfig = {
