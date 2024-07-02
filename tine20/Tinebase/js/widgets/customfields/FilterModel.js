@@ -33,7 +33,7 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
         this.field = 'customfield:' + this.cfConfig.id;
         this.cfDefinition = this.cfConfig.get('definition');
         this.label =  this.cfDefinition.label;
-        
+
         switch (this.cfDefinition.type) {
             case 'record':
             case 'keyField':
@@ -41,18 +41,14 @@ Tine.widgets.customfields.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel
                 break;
             case 'integer':
             case 'int':
-                this.operators = ['equals', 'greater', 'less'];
-                this.defaultOperator = 'equals';
+                this.valueType = 'number';
                 break;
-            case 'bool':
             case 'boolean':
                 this.valueType = 'bool';
-                this.defaultOperator = 'equals';
-                this.defaultValue = '0';
                 break;
-            case 'date':
-            case 'datetime':
-                this.defaultOperator = 'within';
+            default:
+                this.valueType = this.cfDefinition.type;
+                break;
         }
         
         Tine.widgets.customfields.FilterModel.superclass.initComponent.call(this);
