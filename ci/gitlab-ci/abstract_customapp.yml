@@ -45,6 +45,11 @@ docker_build_source:
 docker_build_source_matrix:
   extends: docker_build_built
 
+success-job:
+  stage: build
+  script:
+    - echo i just run to prevent empty pipelines. If the pipeline is empty, the mr can not be merged.
+
 workflow:
   rules:
     # Disable ci pipeline
