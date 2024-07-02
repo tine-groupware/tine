@@ -661,4 +661,24 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
         }
         return $result;
     }
+
+    protected function _getEgwCustomFieldConfig(string $recordApp): array
+    {
+        $select = $this->_egwDb->select()
+            ->from('egw_config')
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('config_app') . ' = ?', $recordApp))
+            ->where($this->_egwDb->quoteInto($this->_egwDb->quoteIdentifier('config_name') . ' = ?', 'customfields'));
+        $config = $this->_egwDb->fetchAssoc($select);
+        if (isset($config['addressbook']['config_value'])) {
+            $value = $config['addressbook']['config_value'];
+            // somehow the serialized config data might be corrupted - fix from stackoverflow (THX!)
+            // https://stackoverflow.com/questions/10152904/how-to-repair-a-serialized-string-which-has-been-corrupted-by-an-incorrect-byte/21389439#21389439
+            $value = preg_replace_callback ( '!s:(\d+):"(.*?)";!', function($match) {
+                return ($match[1] == strlen($match[2])) ? $match[0] : 's:' . strlen($match[2]) . ':"' . $match[2] . '";';
+            }, $value);
+            return unserialize($value);
+        } else {
+            return [];
+        }
+    }
 }
