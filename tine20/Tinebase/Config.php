@@ -163,6 +163,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const EMAIL_USER_ID_IN_XPROPS = 'emailUserIdInXprops';
 
     /**
+     * database
+     *
+     * @var string
+     */
+    public const DATABASE = 'database';
+
+    /**
      * INTERNET_PROXY
      *
      * @var string
@@ -1060,6 +1067,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ]]
             ],
         ),
+        self::DATABASE => [
+            //_('Database Configuration')
+            'label' => 'Database Configuration',
+            'description' => 'Database Configuration',
+            self::TYPE => self::TYPE_OBJECT,
+            self::CLASSNAME => Tinebase_Config_Struct::class,
+            'clientRegistryInclude' => false,
+            'setByAdminModule' => false,
+            'setBySetupModule' => false,
+        ],
         self::MFA_BYPASS_NETMASKS => [
             self::LABEL             => 'MFA Bypass Netmasks', // _('MFA Bypass Netmasks')
             self::DESCRIPTION       => 'MFA Bypass Netmasks', // _('MFA Bypass Netmasks')
