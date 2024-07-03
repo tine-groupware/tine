@@ -141,7 +141,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Felamimail.messageBackend;
         this.gridConfig.cm = new Ext.grid.ColumnModel({
             defaults: {
-                resizable: true
+                resizable: true,
+                sortable: true,
             },
             columns: this.getColumns()
         });
@@ -647,7 +648,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { id: 'id', header: this.app.i18n._("Id"), hidden: true },
             { id: 'content_type', dataIndex: 'has_attachment', renderer: this.attachmentRenderer },
             { id: 'flags', header: this.app.i18n._("Flags"), align: 'center', renderer: this.flagRenderer },
-            { id: 'tags', header: this.app.i18n._("Tags"), align: 'center', renderer: Tine.Tinebase.common.tagsRenderer },
+            { id: 'tags', header: this.app.i18n._("Tags"), align: 'center', renderer: Tine.Tinebase.common.tagsRenderer, sortable: false},
             { id: 'subject', header: this.app.i18n._("Subject") },
             { id: 'from_email', header: this.app.i18n._("From (Email)") },
             { id: 'from_name', header: this.app.i18n._("From (Name)") },
