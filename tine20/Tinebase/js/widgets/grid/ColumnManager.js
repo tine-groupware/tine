@@ -223,9 +223,7 @@ Tine.widgets.grid.ColumnManager = function() {
                 config.maxWidth = 100;
                 
                 if (fieldDefinition?.specialType === 'minutes') {
-                    config.minWidth = 70;
-                    config.defaultWidth = 130;
-                    config.maxWidth = 140;
+                    config.minWidth = config.defaultWidth = config.maxWidth = 130;
                 }
             }
             
