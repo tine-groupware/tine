@@ -269,16 +269,25 @@ Tine.widgets.grid.ColumnManager = function() {
             if (type === 'keyfield') {
                 config.minWidth = 50;
                 config.defaultWidth = 80;
-                config.maxWidth = 200;
+                config.maxWidth = 1000;
                 
                 if (app && fieldDefinition?.name) {
                     try {
                         const store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, fieldDefinition.name);
-                        store.each((option) => {
-                            const iconWidth = option?.data?.icon ? 30 : 0;
-                            config.defaultWidth = Math.max(Math.floor(this.getTextWidth(option?.data?.i18nValue)), config?.width || config?.defaultWidth || config.minWidth) + iconWidth;
-                            config.maxWidth = Math.max(Math.ceil((config.defaultWidth + 1) / 10) * 10, config?.maxWidth || config.defaultWidth) + 30;
-                        });
+                        const data = store.getData();
+                        const maxText = data.map((f) => f.i18nValue).reduce((longest, current) => {
+                            return current.length > longest.length ? current : longest;
+                        }, "");
+                        const maxTextLength = Math.ceil(this.getTextWidth(maxText) / 10) * 10;
+                        
+                        const minText = data.map((f) => f.i18nValue).reduce((shortest, current) => {
+                            return current.length < shortest.length ? current : shortest;
+                        }, data[0].i18nValue);
+                        const minTextLength = Math.ceil(this.getTextWidth(minText) / 10) * 10;
+                        
+                        config.minWidth = minTextLength + 50;
+                        config.maxWidth = maxTextLength + 50;
+                        config.defaultWidth = config.minWidth;
                     } catch (e) {
                         Tine.log.error(e);
                     }

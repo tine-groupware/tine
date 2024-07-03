@@ -114,7 +114,6 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, colMgr('estimated_duration'), {
             id: 'priority',
             header: this.app.i18n._("Priority"),
-            width: 65,
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskPriority'),
             editor: {
                 xtype: 'widget-keyfieldcombo',
@@ -144,7 +143,6 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, {
             id: 'status',
             header: this.app.i18n._("Status"),
-            width: 85,
             renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskStatus'),
             editor: {
                 xtype: 'widget-keyfieldcombo',

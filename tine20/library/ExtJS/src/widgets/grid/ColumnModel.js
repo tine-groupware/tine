@@ -395,11 +395,14 @@ var columns = grid.getColumnModel().getColumnsBy(function(c){
      * @param {Number} width The new width
      * @param {Boolean} suppressEvent True to suppress firing the <code>{@link #widthchange}</code>
      * event. Defaults to false.
+     * @param isManualAction
      */
-    setColumnWidth : function(col, width, suppressEvent){
+    setColumnWidth : function(col, width, suppressEvent, isManualAction = false){
         const { maxWidth, minWidth } = this.config[col] || {};
         
         this.config[col].width = Math.max(minWidth || 30, Math.min(maxWidth || width, width));
+        if (isManualAction) this.config[col].useManualWidth = true;
+        
         this.totalWidth = null;
         if(!suppressEvent){
              this.fireEvent("widthchange", this, col, width);
