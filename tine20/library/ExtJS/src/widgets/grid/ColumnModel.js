@@ -401,6 +401,15 @@ var columns = grid.getColumnModel().getColumnsBy(function(c){
         const { maxWidth, minWidth } = this.config[col] || {};
         
         this.config[col].width = Math.max(minWidth || 30, Math.min(maxWidth || width, width));
+        
+        const colIdxLastVisible = this.config.reduce((lastIdx, col, idx) => {
+            return this.isHidden(idx) ? lastIdx : idx;
+        }, -1);
+        
+        if (col === colIdxLastVisible) {
+            this.config[col].width = Math.max(minWidth || 30, Math.min(2000, width));
+        }
+        
         if (isManualAction) this.config[col].useManualWidth = true;
         
         this.totalWidth = null;
