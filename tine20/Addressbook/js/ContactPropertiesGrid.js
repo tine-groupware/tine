@@ -17,6 +17,8 @@
 export default (config) => {
     const app = Tine.Tinebase.appMgr.get(config.recordClass.getMeta('appName'));
 
+    let editDialog;
+
     const fieldManager = _.bind(
         Tine.widgets.form.FieldManager.get,
         Tine.widgets.form.FieldManager,
@@ -43,24 +45,27 @@ export default (config) => {
         const name = `${_.padStart( String(idx), 3, '0')}_${field.fieldName}`;
         config.propertyNames[name] = editor.fieldLabel;
         config.customEditors[name] = new Ext.grid.GridEditor(Ext.create(editor));
+
+        const renderer = Tine.widgets.grid.RendererManager.get(app.appName, config.recordClass, field.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
         config.customRenderers[name] =  (value, metaData, record) => {
-            const renderer = Tine.widgets.grid.RendererManager.get(app.appName, config.recordClass, field.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
-            const isPreferred = isPreferredField(field.fieldName);
+            let result = renderer(value, metaData, record);
 
-            if (isPreferred) {
-                const el = document.createElement('div');
-                el.className = 'tinebase-property-field';
-
-                const renderedEl =  document.createElement('div');
-                renderedEl.innerHTML = renderer(value, metaData, record);
-                const preferredIconEl =  document.createElement('div');
-                preferredIconEl.className = `tine-combo-icon renderer_PreferredIcon`;
-                preferredIconEl.setAttribute('ext:qtip',  app.i18n._('Preferred'));
-                el.append(renderedEl, preferredIconEl);
-                return el.outerHTML;
+            if (isPreferredField(field.fieldName)) {
+                result = `<div class="tinebase-property-field">
+                    <div>${result}</div>
+                    <div class="tine-combo-icon renderer_PreferredIcon" ext:qtip="${app.i18n._('Preferred')}"></div>
+                </div>`
             }
 
-            return renderer(value, metaData, record);
+            if (editDialog.useMultiple) {
+                const fieldName = record.get('name').replace(/^\d{3}_/, '');
+                const multiData = _.find(editDialog.interRecord.multiData, { name: fieldName });
+                if (multiData?.equalValues === false) {
+                    metaData.css += 'tinebase-editmultipledialog-noneedit ';
+                }
+            }
+
+            return result;
         }
     });
 
@@ -111,17 +116,14 @@ export default (config) => {
     }, config));
 
     propertyGrid.afterIsRendered().then(() => {
-        const editDialog = propertyGrid.findParentBy(function (c) {
+        editDialog = propertyGrid.findParentBy(function (c) {
             return c instanceof Tine.widgets.dialog.EditDialog
         });
         editDialog.on('load', onRecordLoad);
         editDialog.on('recordUpdate', onRecordUpdate);
         propertyGrid.on('cellclick', onClick);
 
-        //TODO: support propertyGrid im multiple edit mode ?
-        if (editDialog.useMultiple) {
-            propertyGrid.setDisabled(true);
-        }
+        editDialog.on('multipleRecordUpdate', onMultipleRecordUpdate);
 
         // NOTE: in case we are rendered after record was load
         onRecordLoad(editDialog, editDialog.record);
@@ -149,6 +151,17 @@ export default (config) => {
         });
     };
 
+    const onMultipleRecordUpdate = (p, changes) => {
+        // if currentValue differs from startValue add to changes
+        _.forEach(propertyGrid.getSource(), (value, name) => {
+            const fieldName = name.replace(/^\d{3}_/, '');
+            const multiData = _.find(p.interRecord.multiData, { name: fieldName });
+            if (multiData && multiData.startValue != value) {
+                changes.push({name: fieldName, value});
+            }
+        });
+    };
+
     const onClick = (e, row, c, d) => {
         const record = propertyGrid.store.getAt(row);
         const fieldName = record.data.name.replace(/^\d{3}_/, '');
@@ -161,7 +174,9 @@ export default (config) => {
                     text: app.i18n._('Set as preferred E-Mail'),
                     iconCls: isPreferred ? 'action_enable' : '',
                     handler: async (item) => {
-                        const editDialog = propertyGrid.findParentBy(function (c) { return c instanceof Tine.widgets.dialog.EditDialog});
+                        const editDialog = propertyGrid.findParentBy(function (c) {
+                            return c instanceof Tine.widgets.dialog.EditDialog
+                        });
                         if (fieldName.includes('email')) {
                             editDialog.record.set('preferred_email', fieldName);
                             propertyGrid.getView().refresh();
