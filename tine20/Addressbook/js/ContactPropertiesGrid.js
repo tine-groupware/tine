@@ -17,6 +17,8 @@
 export default (config) => {
     const app = Tine.Tinebase.appMgr.get(config.recordClass.getMeta('appName'));
 
+    let editDialog;
+
     const fieldManager = _.bind(
         Tine.widgets.form.FieldManager.get,
         Tine.widgets.form.FieldManager,
@@ -25,6 +27,17 @@ export default (config) => {
         _,
         Tine.widgets.form.FieldManager.CATEGORY_PROPERTYGRID
     );
+
+    const multiRenderer = (renderer, value, meta, record) => {
+        if (editDialog.useMultiple) {
+            const fieldName = record.get('name').replace(/^\d{3}_/, '');
+            const multiData = _.find(editDialog.interRecord.multiData, { name: fieldName });
+            if (multiData?.equalValues === false) {
+                meta.css += 'tinebase-editmultipledialog-noneedit ';
+            }
+        }
+        return renderer(value, meta, record);
+    }
 
     config.propertyNames = {};
     config.customEditors = {};
@@ -43,7 +56,7 @@ export default (config) => {
         const name = `${_.padStart( String(idx), 3, '0')}_${field.fieldName}`;
         config.propertyNames[name] = editor.fieldLabel;
         config.customEditors[name] = new Ext.grid.GridEditor(Ext.create(editor));
-        config.customRenderers[name] = Tine.widgets.grid.RendererManager.get(app.appName, config.recordClass, field.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL);
+        config.customRenderers[name] = _.wrap(Tine.widgets.grid.RendererManager.get(app.appName, config.recordClass, field.fieldName, Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL), multiRenderer);
     });
 
     const propertyGrid = new Ext.grid.PropertyGrid(Object.assign({
@@ -57,15 +70,14 @@ export default (config) => {
     }, config));
 
     propertyGrid.afterIsRendered().then(() => {
-        const editDialog = propertyGrid.findParentBy(function (c) {
+        editDialog = propertyGrid.findParentBy(function (c) {
             return c instanceof Tine.widgets.dialog.EditDialog
         });
         editDialog.on('load', onRecordLoad);
         editDialog.on('recordUpdate', onRecordUpdate);
-        //TODO: support propertyGrid im multiple edit mode ?
-        if (editDialog.useMultiple) {
-            propertyGrid.setDisabled(true);
-        }
+
+        editDialog.on('multipleRecordUpdate', onMultipleRecordUpdate);
+
         // NOTE: in case we are rendered after record was load
         onRecordLoad(editDialog, editDialog.record);
     });
@@ -90,6 +102,17 @@ export default (config) => {
         _.forEach(propertyGrid.getSource(), (value, name) => {
             const fieldName = name.replace(/^\d{3}_/, '');
             record.set(fieldName, value);
+        });
+    };
+
+    const onMultipleRecordUpdate = (p, changes) => {
+        // if currentValue differs from startValue add to changes
+        _.forEach(propertyGrid.getSource(), (value, name) => {
+            const fieldName = name.replace(/^\d{3}_/, '');
+            const multiData = _.find(p.interRecord.multiData, { name: fieldName });
+            if (multiData && multiData.startValue != value) {
+                changes.push({name: fieldName, value});
+            }
         });
     };
 
