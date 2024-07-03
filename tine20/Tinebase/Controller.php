@@ -141,6 +141,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             }
         }
 
+        // TODO generalize this -> apps should be able to react to "user login" event
         if (Tinebase_Application::getInstance()->isInstalled('Felamimail', true)) {
             Felamimail_Controller::getInstance()->handleAccountLogin($user, $password);
         }
