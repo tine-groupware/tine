@@ -354,7 +354,7 @@ Tine.widgets.relation.GenericPickerGridPanel = Ext.extend(Tine.widgets.grid.Pick
                     return nodeGrid.onRowDblClick(record);
                 case 'folder':
                     const filePickerDialog = new Tine.Filemanager.FilePickerDialog({
-                        mode: 'view',
+                        mode: 'source',
                         windowTitle: i18n._('Contents of Related Folder'),
                         singleSelect: true,
                         requiredGrants: ['readGrant'],

@@ -60,19 +60,22 @@ class HumanResources_Import_OpenHolidaysApi extends Tinebase_Import_Abstract
      */
     protected function _beforeImport($_resource = NULL)
     {
-        //https://openholidaysapi.org/PublicHolidays?countryIsoCode=DE&languageIsoCode=DE&validFrom=2023-01-01&validTo=2023-12-31&subdivisionCode=DE-BY
+        // https://openholidaysapi.org/PublicHolidays?countryIsoCode=DE&languageIsoCode=DE&validFrom=2023-01-01&validTo=2023-12-31&subdivisionCode=DE-BY
         $apiData = file_get_contents(
             'https://openholidaysapi.org/PublicHolidays?countryIsoCode=' . urlencode($this->_options[self::OPT_COUNTRY]) .
             '&languageIsoCode=' . urlencode($this->_options[self::OPT_COUNTRY]) . '&validFrom=' .
             urlencode($this->_options[self::OPT_FROM]) . '&validTo=' .urlencode($this->_options[self::OPT_TO]) .
             (!empty($this->_options[self::OPT_SUBDIVISION]) ? '&subdivisionCode=' . $this->_options[self::OPT_SUBDIVISION] : '')
         );
+        if (! $apiData) {
+            throw new Tinebase_Exception_Backend('Could not load data from openholidaysapi.org');
+        }
         $this->_data = json_decode($apiData, true);
 
         if (!is_array($this->_data) || empty($this->_data) || !isset($this->_data[0]['id']) ||
                 !isset($this->_data[0]['startDate']) || !isset($this->_data[0]['endDate']) ||
                 !isset($this->_data[0]['type']) || !isset($this->_data[0]['name'][0]['text'])) {
-            throw new Tinebase_Exception_Backend('could not load data from openholidaysapi');
+            throw new Tinebase_Exception_Backend('Could not load data from openholidaysapi.org');
         }
 
         if (empty($this->_options[self::OPT_CALENDAR_ID])) {

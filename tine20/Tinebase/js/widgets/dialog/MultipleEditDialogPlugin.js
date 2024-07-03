@@ -97,14 +97,13 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
         ed.onRecordUpdate = Ext.emptyFn;
         ed.initRecord = Ext.emptyFn;
         ed.useMultiple = true;
-        ed.interRecord = new ed.recordClass({});
+        ed.interRecord = this.interRecord = new ed.recordClass({});
         ed.loadRecord = true;
         ed.checkUnsavedChanges = false;
         
         this.app = Tine.Tinebase.appMgr.get(ed.app);
         this.handleFields = [];
-        this.interRecord = ed.interRecord;
-        
+
         if (ed.action_saveAndClose) {
             ed.action_saveAndClose.enable();
         }
@@ -203,13 +202,11 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             // disable fields which cannot be handled atm.
             if (!ff) {
                 Tine.log.debug('Disabling key "' + field?.recordKey + '" with specialType : ' + field?.specialType + '. Cannot be handled atm.');
-                this.interRecord.set(field?.recordKey, '');
                 return true;
             }
             if ((!(ff.isXType('textfield'))) && (!(ff.isXType('checkbox'))) && (!(ff.isXType('datetimefield'))) || ff.multiEditable === false) {
                 Tine.log.debug('Disabling field for key "' + field.recordKey + '". Cannot be handled atm.');
                 ff.setDisabled(true);
-                this.interRecord.set(field.recordKey, '');
                 return true;
             }
             // remove empty text
@@ -531,31 +528,37 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
      * find out which fields have differences
      */
     onRecordPrepare: function(records) {
-        Ext.each(this.handleFields, function(field) {
+        this.interRecord.multiData = [];
+        Ext.each(this.editDialog.recordClass.getFieldDefinitions(), function(fieldDef) {
+            var field = _.find(this.handleFields, {key: fieldDef.name});
             var refData = false;
+            var multiData = {name: fieldDef.name};
+            this.interRecord.multiData.push(multiData);
             Ext.each(records, function(record, index) {
-                if (field.type == 'relation') {
+                if (field && field.type == 'relation') {
                     this.setFieldValue(field, false);
                 } else {
                     // the first record of the selected is the reference
                     if (index === 0) {
-                        refData = record.get(field.recordKey);
+                        refData = record.get(fieldDef.name);
                     }
-                    if ((Ext.encode(record.get(field.recordKey)) != Ext.encode(refData))) {
-                        this.interRecord.set(field.recordKey, '');
-                        this.setFieldValue(field, false);
+                    if ((Ext.encode(record.get(fieldDef.name)) != Ext.encode(refData))) {
+                        this.interRecord.set(fieldDef.name, '');
+                        Object.assign(multiData, { equalValues: false, startValue: '' });
+                        field && this.setFieldValue(field, false);
                         return false;
                     } else {
                         if (index == records.length - 1) {
-                            this.interRecord.set(field.recordKey, refData);
-                            this.setFieldValue(field, true);
+                            this.interRecord.set(fieldDef.name, refData);
+                            Object.assign(multiData, { equalValues: true, startValue: refData });
+                            field && this.setFieldValue(field, true);
                             return true;
                         }
                     }
                 }
             }, this);
         }, this);
-        
+
         // TODO: grantsProperty not handled here, not needed at the moment but sometimes, perhaps.
 //        var cp = this.editDialog.recordClass.getMeta('containerProperty') ? this.editDialog.recordClass.getMeta('containerProperty') : 'container_id';
 //        if (this.interRecord.get(cp) !== undefined) {
@@ -759,6 +762,19 @@ Tine.widgets.dialog.MultipleEditDialogPlugin.prototype = {
             this.changedHuman += '</li>';
         }, this);
 
+        const humChanges = _.map(changes, 'name');
+
+        this.editDialog.fireEvent('multipleRecordUpdate', this, changes);
+
+        const rc = this.editDialog.recordClass;
+        _.forEach(changes, (change) => {
+            if (humChanges.indexOf(change.name) < 0) {
+                const label = this.editDialog.app.i18n._hidden(rc.getField(change.name).label);
+                const value = Tine.widgets.grid.RendererManager.get(rc.getAppName(), rc.getPhpClassName(), change.name, 'displayPanel')(change.value);
+
+                this.changedHuman += `<li><span style="font-weight:bold">${label}:</span> ${value}</li>`;
+            }
+        });
         this.changedHuman += '</ul>';
         var filter = this.selectionFilter;
         if (changes.length > 0) {
