@@ -2006,7 +2006,7 @@
         </table>
         <table>
             <name>customfield_config</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2040,6 +2040,8 @@
                 </field>
                 <field>
                     <name>definition</name>
+                    <!--Long text!-->
+                    <length>2147483647</length>
                     <type>text</type>
                 </field>
                 <index>
