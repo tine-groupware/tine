@@ -150,6 +150,29 @@ class Tinebase_Log extends Zend_Log
         $this->addWriter($writer);
     }
 
+
+    /**
+     * Remove a writer.
+     *
+     * @param  Zend_Log_Writer_Abstract $writer
+     * @return Zend_Log
+     * @throws Zend_Log_Exception
+     */
+    public function removeWriter($writer)
+    {
+        if ($writer instanceof Zend_Log_Writer_Abstract) {
+            foreach ($this->_writers as $key => $existingWriter) {
+                if ($existingWriter === $writer) {
+                    unset($this->_writers[$key]);
+                    return $this;
+                }
+            }
+            throw new Zend_Log_Exception('Writer not found in the list of writers.');
+        } else {
+            throw new Zend_Log_Exception('Writer must be an instance of Zend_Log_Writer_Abstract.');
+        }
+    }
+
     /**
      * Chose writer from logger config stream or db
      * 
