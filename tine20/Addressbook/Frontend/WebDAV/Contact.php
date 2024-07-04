@@ -253,18 +253,14 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
      * Updates the VCard-formatted object
      *
      * @param string $cardData
-     * @throws DAV\Exception\Forbidden
      * @return string
+     * @throws DAV\Exception\Forbidden
+     * @throws DAV\Exception\NotFound
+     * @throws DAV\Exception\PreconditionFailed
      */
-    public function put($cardData) 
+    public function put($cardData)
     {
-        if (get_class($this->_converter) == 'Addressbook_Convert_Contact_VCard_Generic') {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . " update by generic client not allowed. See Addressbook_Convert_Contact_VCard_Factory for supported clients.");
-            throw new DAV\Exception\Forbidden('Update denied for unknown client');
-        }
-        
+        $this->_checkPutPermission();
         $contact = $this->_converter->toTine20Model($cardData, $this->getRecord(), array(
             Addressbook_Convert_Contact_VCard_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
@@ -287,6 +283,28 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         $this->_vcard = null;
         
         return $this->getETag();
+    }
+
+    protected function _checkPutPermission(): void
+    {
+        $configReadonlyPolicy = Addressbook_Config::getInstance()->get(Addressbook_Config::CARDDAV_READONLY_POLICY);
+        if ($configReadonlyPolicy === Addressbook_Config::CARDDAV_READONLY_POLICY_UNKNOWN
+            && get_class($this->_converter) === Addressbook_Convert_Contact_VCard_Generic::class)
+        {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' Update by generic client not allowed.'
+                    . ' See Addressbook_Convert_Contact_VCard_Factory for supported clients.');
+            }
+            throw new DAV\Exception\Forbidden('Update denied for unknown client');
+        } else if ($configReadonlyPolicy === Addressbook_Config::CARDDAV_READONLY_POLICY_ALWAYS) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Update not allowed.'
+                    . ' See Addressbook_Config::CARDDAV_READONLY_POLICY');
+            }
+            throw new DAV\Exception\Forbidden('Update denied');
+        }
     }
 
     /**

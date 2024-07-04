@@ -348,9 +348,12 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
     public function put($cardData) 
     {
         if (get_class($this->_converter) == 'Tasks_Convert_Task_VCalendar_Generic') {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " update by generic client not allowed. See Tasks_Convert_Task_VCalendar_Factory for supported clients.");
-            throw new Sabre\DAV\Exception\Forbidden('Update denied for unknow client');
+            // TODO generalize this? see \Addressbook_Frontend_WebDAV_Contact::_checkPutPermission
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . " Update by generic client not allowed. See Tasks_Convert_Task_VCalendar_Factory for supported clients.");
+            }
+            throw new Sabre\DAV\Exception\Forbidden('Update denied for unknown client');
         }
         
         if (is_resource($cardData)) {
@@ -358,9 +361,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         }
         // Converting to UTF-8, if needed
         $cardData = Sabre\DAV\StringUtil::ensureUTF8($cardData);
-        
-        #Sabre_CalDAV_ICalendarUtil::validateICalendarObject($cardData, array('VTODO', 'VFREEBUSY'));
-        
+
         $vobject = Tasks_Convert_Task_VCalendar_Abstract::getVObject($cardData);
         foreach ($vobject->children() as $component) {
             if (isset($component->{'X-TINE20-CONTAINER'})) {
@@ -376,7 +377,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
             Tasks_Convert_Task_VCalendar_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
         
-        // iCal does sends back an old value, because it does not refresh the vcalendar after 
+        // iCal does send back an old value, because it does not refresh the vcalendar after
         // update. Therefor we must reapply the value of last_modified_time after the convert
         $task->last_modified_time = $recordBeforeUpdate->last_modified_time;
         

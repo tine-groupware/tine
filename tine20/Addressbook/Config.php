@@ -4,7 +4,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -16,6 +16,19 @@
 class Addressbook_Config extends Tinebase_Config_Abstract
 {
     const APP_NAME = 'Addressbook';
+
+    /**
+     * carddav readonly policy
+     *
+     * @var string
+     */
+    public const CARDDAV_READONLY_POLICY = 'carddavReadonlyPolicy';
+    // unknown clients readonly
+    public const CARDDAV_READONLY_POLICY_UNKNOWN = 'unknown';
+    // all clients readonly
+    public const CARDDAV_READONLY_POLICY_ALWAYS = 'always';
+    // all clients have write access
+    public const CARDDAV_READONLY_POLICY_NEVER = 'never';
 
     /**
      * contact nominatim during contact import
@@ -138,7 +151,20 @@ class Addressbook_Config extends Tinebase_Config_Abstract
      * (FEATURE_LIST_VIEW-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
-    protected static $_properties = array(
+    protected static $_properties = [
+        // TODO define possible values (CARDDAV_READONLY_POLICY_*)
+        self::CARDDAV_READONLY_POLICY => [
+            //_('CardDAV readonly policy')
+            self::LABEL                 => 'CardDAV readonly policy',
+            //_('Possible values: always, unknown, never')
+            self::DESCRIPTION           => 'Possible values: always, unknown, never',
+            self::TYPE                  => self::TYPE_STRING,
+            self::DEFAULT_STR           => self::CARDDAV_READONLY_POLICY_UNKNOWN,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => false,
+        ],
+
         self::ENABLED_FEATURES => [
             //_('Enabled Features')
             self::LABEL                 => 'Enabled Features',
@@ -387,7 +413,7 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE      => true,
             self::SETBYSETUPMODULE      => true,
         ],
-    );
+    ];
     
     /**
      * (non-PHPdoc)
