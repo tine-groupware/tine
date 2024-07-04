@@ -166,7 +166,8 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
      */
     public function testPutContactFromThunderbird()
     {
-        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
+        $_SERVER['HTTP_USER_AGENT'] =
+            'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.21) Gecko/20110831 Lightning/1.0b2 Thunderbird/3.1.13';
         
         $contact = $this->testCreateContact();
         
@@ -180,7 +181,23 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
         $this->assertEquals('Kneschke', $record->n_family);
         $this->assertEquals('+49 BUSINESS', $record->tel_work);
     }
-    
+
+    public function testPutContactWithReadOnlyConfig()
+    {
+        Addressbook_Config::getInstance()->set(Addressbook_Config::CARDDAV_READONLY_POLICY,
+            Addressbook_Config::CARDDAV_READONLY_POLICY_ALWAYS);
+
+        try {
+            $this->testPutContactFromThunderbird();
+            self::fail('config not working: Addressbook_Config::CARDDAV_READONLY_POLICY_ALWAYS');
+        } catch (Sabre\DAV\Exception\Forbidden $sdef) {
+            self::assertStringContainsString('Update denied', $sdef->getMessage());
+        } finally {
+            Addressbook_Config::getInstance()->set(Addressbook_Config::CARDDAV_READONLY_POLICY,
+                Addressbook_Config::CARDDAV_READONLY_POLICY_UNKNOWN);
+        }
+    }
+
     /**
      * test updating existing contact from MacOS X
      * @depends testCreateContact
