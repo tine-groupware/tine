@@ -218,35 +218,28 @@ class Tinebase_Scheduler_Task
                 continue;
             }
 
-            $classmethod = [$class, $callable[self::METHOD_NAME]];
-            if (! is_callable($classmethod)) {
+            $classMethod = [$class, $callable[self::METHOD_NAME]];
+            if (! is_callable($classMethod)) {
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
                     . ' Could not get callable for scheduler job');
                 $aggResult = false;
             } else {
-                // TODO activate notifications again
-                //  current problems:
-                //      - logs some strange stuff in docker setup
-                //      - writer is not removed after execution, so each following task adds another writer...
-                //  solution:
-                //      - use a temp file for the writer
-                //      - send the file contents as notification
-                //      - remove/stop the writer after execution
+                // use a temp file for the writer
+                $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'schedular_task');
+                $writer = new Zend_Log_Writer_Stream($tmpPath);
+                $priority = $this->_config['loglevel'] ?? 6;
+                $writer->addFilter(new Zend_Log_Filter_Priority($priority));
+                Tinebase_Core::getLogger()->addWriter($writer);
 
-                // catch output buffer
-//                ob_start();
-//                $writer = new Zend_Log_Writer_Stream('php://output');
-//                // TODO get priority from scheduler config?
-//                $priority = 6;
-//                $writer->addFilter(new Zend_Log_Filter_Priority($priority));
-//                Tinebase_Core::getLogger()->addWriter($writer);
-
-                $result = call_user_func_array($classmethod, $callable[self::ARGS] ?? []);
-
-                // send notification with $notificationBody to configured email
-//                $notificationBody = ob_get_clean();
-//                $this->_sendNotification($callable, $notificationBody);
-
+                try {
+                    $result = call_user_func_array($classMethod, $callable[self::ARGS] ?? []);
+                    $notificationBody = file_get_contents($tmpPath);
+                    // send the file contents as notification to configured email
+                    $this->_sendNotification($callable, $notificationBody);
+                } finally {
+                    Tinebase_Core::getLogger()->removeWriter($writer);
+                    unlink($tmpPath);
+                }
                 $aggResult = $aggResult && $result;
             }
         }
