@@ -649,17 +649,19 @@ class Tinebase_User implements Tinebase_Controller_Interface
         $currentUser = self::_getLdapUserController()->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser', true);
 
         if (self::_checkAndUpdateCurrentUser($currentUser, $user, $options)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . ' Record needs an update');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' Record needs an update');
+            }
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($currentUser, 'update');
             $syncedUser = self::_getLdapUserController()->updateUserInSqlBackend($currentUser);
         } else {
             $syncedUser = $currentUser;
         }
+
         if (! empty($user->container_id)) {
             $syncedUser->container_id = $user->container_id;
         }
-
         // Addressbook is registered as plugin and will take care of the update
         self::_getLdapUserController()->updatePluginUser($syncedUser, $user);
 
@@ -719,9 +721,13 @@ class Tinebase_User implements Tinebase_Controller_Interface
                 continue;
             }
             // SYNC NON-EMPTY OPTIONAL or REQUIRED fields
-            else if ($currentUser->{$field} !== $user->{$field}) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            else if ($currentUser->{$field} !== $user->{$field}
+                && (! empty($currentUser->{$field}) || ! empty($user->{$field})))
+            {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                     . ' Diff found in field ' . $field  . ' current: ' . $currentUser->{$field} . ' new: ' . $user->{$field});
+                }
                 $currentUser->{$field} = $user->{$field};
                 $recordNeedsUpdate = true;
             }

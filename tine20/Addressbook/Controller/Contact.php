@@ -1362,9 +1362,13 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             }
         }
 
-        $diff = $contact->diff($oldContact, $syncPhoto ? array('n_fn') : array('jpegphoto', 'n_fn'));
+        $omitFields = ['n_fn', 'n_fileas'];
+        if (! $syncPhoto) {
+            $omitFields[] = 'jpegphoto';
+        }
+        /** @var Tinebase_Model_Diff $diff */
+        $diff = $contact->diff($oldContact, $omitFields);
         if (! $diff->isEmpty() || ($oldContact->jpegphoto === 0 && !empty($contact->jpegphoto))) {
-
             $oldContext = $this->_requestContext;
             if (!is_array($this->_requestContext)) {
                 $this->_requestContext = array();
@@ -1373,10 +1377,17 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 $this->_requestContext[self::CONTEXT_NO_ACCOUNT_UPDATE] = true;
             }
 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . " Diff " . print_r($diff->toArray(), true));
+            }
+
             $this->update($contact, false);
 
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . " updated contact " . $contact->n_given);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(
+                    __METHOD__ . '::' . __LINE__ . " Updated contact " . $contact->n_fn);
+            }
 
             $this->_requestContext = $oldContext;
         }
