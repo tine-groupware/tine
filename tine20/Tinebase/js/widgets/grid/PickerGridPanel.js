@@ -165,6 +165,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     parentEditDialog: null,
 
+    itemRegistryCmpKey: 'PickerGrid',
+
     cls: 'x-wdgt-pickergrid',
     /**
      * @private
@@ -386,12 +388,16 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         var contextItems = [this.actionCreate, this.actionCopy, this.actionEdit, this.actionRemove];
         this.contextMenu = new Ext.menu.Menu({
-            plugins: [{
+            plugins: _.concat([{
                 ptype: 'ux.itemregistry',
                 key:   'Tinebase-MainContextMenu'
-            }],
+            }], this.recordClass?.getMeta ? {
+                ptype: 'ux.itemregistry',
+                key:   `${this.recordClass.getMeta('appName')}-${this.recordClass.getMeta('recordName')}-${this.itemRegistryCmpKey}-ContextMenu`
+            } : []),
             items: contextItems.concat(this.contextMenuItems || [])
         });
+        this.actionUpdater.addActions(this.contextMenu.items);
 
         // removes temporarily added items
         this.contextMenu.on('hide', function() {
@@ -405,12 +411,18 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         if (this.enableBbar) {
             this.bbar = new Ext.Toolbar({
+                plugins: _.concat([], this.recordClass?.getMeta ? {
+                    ptype: 'ux.itemregistry',
+                    key:   `${this.recordClass.getMeta('appName')}-${this.recordClass.getMeta('recordName')}-${this.itemRegistryCmpKey}-Bbar`
+                } : []),
                 items: [
                     this.actionCreate,
                     this.actionEdit,
                     this.actionRemove
                 ].concat(this.contextMenuItems || [])
             });
+            this.actionUpdater.addActions(this.bbar.items);
+
             if (_.isFunction(this.recordClass?.getModelConfiguration)) {
                 this.localizedLangPicker = getLocalizedLangPicker(this.recordClass)
                 if (this.localizedLangPicker) {
@@ -745,6 +757,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         (function() {
             me.highlightRowAfterAdd = highlightRowAfterAdd;
             me.selectRowAfterAdd = selectRowAfterAdd;
+
+            me.actionUpdater.updateActions([]);
         }).defer(300, me)
     },
 
