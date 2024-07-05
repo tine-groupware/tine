@@ -18,6 +18,7 @@ export default Ext.extend(Tine.widgets.grid.QuickaddGridPanel, {
     parentRecordField: 'tasks',
     quickaddMandatory: 'summary',
     allowCreateNew: true,
+
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Tasks');
         this.editDialogConfig = this.editDialogConfig || {};

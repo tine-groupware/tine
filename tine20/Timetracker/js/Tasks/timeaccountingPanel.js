@@ -35,6 +35,7 @@ Ext.ux.ItemRegistry.registerItem('Tasks-Task-EditDialog-TabPanel',  Ext.extend(E
                 defaults.timeaccount_id = me.timeAccountPicker.selectedRecord;
                 defaults.source_model = me.editDialog.recordClass.getPhpClassName();
                 defaults.source = me.record
+                defaults.description = me.record.get('summary')
 
                 return defaults;
             },

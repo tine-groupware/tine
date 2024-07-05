@@ -72,7 +72,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
      */
     clicksToEdit:'auto',
     frame: true,
-
+    itemRegistryCmpKey: 'QuickAddGridPanel',
     /**
      * @private
      */
@@ -244,6 +244,8 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             const record = Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass);
             this.store.addSorted(record);
         });
+
+        this.actionUpdater.updateActions(this.getSelectionModel());
     },
 
     /**
