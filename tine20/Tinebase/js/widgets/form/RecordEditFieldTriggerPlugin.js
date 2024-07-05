@@ -71,8 +71,7 @@ class RecordEditFieldTriggerPlugin extends FieldTriggerPlugin {
                             Ext.copyTo(record.json, this.field.selectedRecord.json, this.preserveJsonProps)
                         }
                         // here we loose record.json data from old record! -> update existing record? vs. have preserveJSON props? // not a problem?
-                        this.field.setValue(record);
-                        this.field.fireEvent('select', this.field, record);
+                        this.field.onSelect(record, 0);
                     },
                     'cancel': () => {
                         if (new Date().getTime() - 1000 < this.field.blurOnSelectLastRun) return;
