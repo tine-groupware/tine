@@ -832,6 +832,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 listeners: {
                     scope: this,
                     select: function() {
+                        if ( this.saveAndCloseActionUpdater ) return;
                         // enable or disable save button dependent to containers account grants
                         // on edit: check editGrant, on add: check addGrant
                         var grants = this.containerSelectCombo.selectedContainer
@@ -1092,7 +1093,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
 
     setReadOnly: function(readOnly) {
         this.readOnly = true;
-        this.action_saveAndClose.setHidden(readOnly);
+        if (! this.saveAndCloseActionUpdater) {
+            this.action_saveAndClose.setHidden(readOnly);
+        }
         if (! this.cancelButtonText) {
             this.action_cancel.setText(readOnly ? i18n._('Close') : i18n._('Cancel'));
         }
@@ -1112,6 +1115,8 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         if (this.record && this.record.hasOwnProperty('data') && Ext.isObject(this.record.data[this.recordClass.getMeta('containerProperty')])) {
             this.updateToolbars(this.record, this.recordClass.getMeta('containerProperty'));
         }
+
+        this.actionUpdater.updateActions([this.record]);
 
         // add current timestamp as id, if this is a dependent record
         if (this.modelConfig && this.modelConfig.isDependent == true && this.record.id == 0) {
