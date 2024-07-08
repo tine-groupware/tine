@@ -252,7 +252,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     /**
      * update message cache
      * 
-     * @param string|Felamimail_Model_Folder $_folder
+     * @param string $_folder
      * @param integer $_time in seconds
      * @param integer $_updateFlagFactor 1 = update flags every time, x = update flags roughly each xth run (10 by default)
      * @return Felamimail_Model_Folder folder status (in cache)
