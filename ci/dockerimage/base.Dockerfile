@@ -35,6 +35,7 @@ RUN apk add --no-cache --simulate \
                                   ${ALPINE_PHP_PACKAGE}-pcntl \
                                   ${ALPINE_PHP_PACKAGE}-pdo_mysql \
                                   ${ALPINE_PHP_PACKAGE}-pecl-igbinary \
+                                  ${ALPINE_PHP_PACKAGE}-pecl-mailparse \
                                   ${ALPINE_PHP_PACKAGE}-pecl-redis \
                                   ${ALPINE_PHP_PACKAGE}-pecl-yaml \
                                   ${ALPINE_PHP_PACKAGE}-phar \
@@ -89,6 +90,7 @@ RUN apk add --no-cache \
                                   ${ALPINE_PHP_PACKAGE}-pcntl \
                                   ${ALPINE_PHP_PACKAGE}-pdo_mysql \
                                   ${ALPINE_PHP_PACKAGE}-pecl-igbinary \
+                                  ${ALPINE_PHP_PACKAGE}-pecl-mailparse \
                                   ${ALPINE_PHP_PACKAGE}-pecl-redis \
                                   ${ALPINE_PHP_PACKAGE}-pecl-yaml \
                                   ${ALPINE_PHP_PACKAGE}-phar \
