@@ -190,7 +190,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
         try {
             $this->testPutContactFromThunderbird();
             self::fail('config not working: Addressbook_Config::CARDDAV_READONLY_POLICY_ALWAYS');
-        } catch (Sabre\DAV\Exception\Forbidden $sdef) {
+        } catch (Tine20\DAV\Exception\Forbidden $sdef) {
             self::assertStringContainsString('Update denied', $sdef->getMessage());
         } finally {
             Addressbook_Config::getInstance()->set(Addressbook_Config::CARDDAV_READONLY_POLICY,
