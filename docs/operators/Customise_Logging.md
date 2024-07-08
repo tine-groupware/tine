@@ -19,3 +19,18 @@ a customized logger config in your `conf.d` directory:
     const DEBUG   = 7;  // Debug: debug messages
     const TRACE   = 8;  // Trace: trace messages
 ```
+
+## Set Timezone for Logging
+
+see https://github.com/tine-groupware/tine/issues/44
+
+The logger timezone can be configured via the 'tz' option:
+
+~~~php
+'logger' => [
+  'tz' => 'America/Los_Angeles',
+  // [...]
+]
+~~~
+
+see https://www.php.net/manual/de/function.date-default-timezone-set.php for supported timezones.
