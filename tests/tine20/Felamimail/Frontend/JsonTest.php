@@ -517,6 +517,29 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
+     * test send message after moved
+     */
+    public function testSendMessageAfterMoved()
+    {
+        $message = $this->_sendMessage();
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $this->_account->drafts_folder);
+
+        // move
+        $testFolder = $this->_getFolder($this->_account->drafts_folder);
+        $this->_json->moveMessages(array(array(
+            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
+        )), $testFolder->getId());
+
+        $replyMessage = $this->_getReply($message);
+        $this->_json->saveMessage($replyMessage);
+        $result = $this->_getMessages();
+        
+        // check if replied message is in inbox
+        $message = $this->_searchForMessageBySubject($replyMessage['subject']);
+        $this->assertEquals($replyMessage['subject'], $message['subject']);
+    }
+
+    /**
      * test mail sanitize
      */
     public function testSanitizeMail()
