@@ -2,11 +2,10 @@
  * Tine 2.0
  *
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Sohan Deshar <sdeshar@metaways.de>
+ * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
-
 
 import {Personas} from "../../../../ux/vue/PersonaContainer";
 
@@ -15,7 +14,7 @@ Ext.ns('Tine', 'Tine.Tinebase', 'Tine.widgets.dialog');
 /**
  * @namespace  Tine.Tinebase
  * @class      Tine.Tinebase.PasswordChangeDialog
- * @extends    Ext.Window
+ * @extends    Tine.widgets.dialog.ModalDialog
  */
 Tine.Tinebase.PasswordChangeDialog = Ext.extend(Tine.widgets.dialog.ModalDialog, {
 
@@ -63,69 +62,54 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Tine.widgets.dialog.ModalDialog,
     onOk: function(values){
         this.showMask(String.format(i18n._('Changing {0}'), this.passwordLabel));
         const me = this
-        if (true) {
-            if (values.newPassword === values.newPasswordSecondTime) {
-                Ext.Ajax.request({
-                    params: {
-                        method: this.pwType === 'pin' ? 'Tinebase.changePin' : 'Tinebase.changePassword',
-                        oldPassword: values.oldPassword,
-                        newPassword: values.newPassword
-                    },
-                    success: function(_result, _request){
-                        me.hideMask()
-                        var response = Ext.util.JSON.decode(_result.responseText);
-                        if (response.success) {
-                            me.destroy()
-                            Ext.MessageBox.show({
-                                title: i18n._('Success'),
-                                msg: String.format(i18n._('Your {0} has been changed.'), me.passwordLabel),
-                                buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.INFO
+        // TODO: form validation
+        if (values.newPassword === values.newPasswordSecondTime) {
+            Ext.Ajax.request({
+                params: {
+                    method: this.pwType === 'pin' ? 'Tinebase.changePin' : 'Tinebase.changePassword',
+                    oldPassword: values.oldPassword,
+                    newPassword: values.newPassword
+                },
+                success: function(_result, _request){
+                    me.hideMask()
+                    var response = Ext.util.JSON.decode(_result.responseText);
+                    if (response.success) {
+                        me.destroy()
+                        Ext.MessageBox.show({
+                            title: i18n._('Success'),
+                            msg: String.format(i18n._('Your {0} has been changed.'), me.passwordLabel),
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.INFO
+                        });
+                        if (me.pwType === 'password') {
+                            Ext.Ajax.request({
+                                params: {
+                                    method: 'Tinebase.updateCredentialCache',
+                                    password: values.newPassword
+                                }
                             });
-                            if (me.pwType === 'password') {
-                                Ext.Ajax.request({
-                                    params: {
-                                        method: 'Tinebase.updateCredentialCache',
-                                        password: values.newPassword
-                                    }
-                                });
-                                Tine.Tinebase.registry.set('mustchangepw', '');
-                            }
-                        } else {
-                            Ext.MessageBox.show({
-                                title: i18n._('Failure'),
-                                msg: Ext.util.Format.nl2br(response.errorMessage),
-                                buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.ERROR
-                            });
+                            Tine.Tinebase.registry.set('mustchangepw', '');
                         }
-                    },
-                    scope: this
-                });
-            } else {
-                this.hideMask()
-                Ext.MessageBox.show({
-                    title: i18n._('Failure'),
-                    msg: String.format(i18n._('{0} mismatch, please correct.'), this.passwordLabel),
-                    buttons: Ext.MessageBox.OK,
-                    icon: Ext.MessageBox.ERROR
-                });
-            }
+                    } else {
+                        Ext.MessageBox.show({
+                            title: i18n._('Failure'),
+                            msg: Ext.util.Format.nl2br(response.errorMessage),
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR
+                        });
+                    }
+                },
+                scope: this
+            });
+        } else {
+            this.hideMask()
+            Ext.MessageBox.show({
+                title: i18n._('Failure'),
+                msg: String.format(i18n._('{0} mismatch, please correct.'), this.passwordLabel),
+                buttons: Ext.MessageBox.OK,
+                icon: Ext.MessageBox.ERROR
+            });
         }
 
     }
 });
-
-// eslint-disable-next-line
-const jsb2 =
-    {
-        "text": "index.js",
-        "path": "js/widgets/dialog/vue/PasswordChangeDialog/"
-    }
-
-// eslint-disable-next-line
-    const _jsb2 =
-           {
-               "text": "PasswordChangeDialog.js",
-               "path": "js/"
-           }
