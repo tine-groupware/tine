@@ -9,11 +9,11 @@
           :no-fade="true"
           :lazy="true"
           :noCloseOnBackdrop="true"
+          :noCloseOnEsc="true"
           @close="closeBox" :style="{'z-index': otherConfigs.zIndex}"
-          ref="modalRef"
   >
     <template #default>
-      <div class="container" ref="containerRef">
+      <div class="container">
         <div class="row">
           <div class="col-3" v-if="props.opt.icon">
             <PersonaContainer :iconName="opt.icon" :skinColor="opt?.skinColor"/>
@@ -57,6 +57,7 @@
 // NOTE: Ext.MessageBox.wait is currently not used with any waitConfig, so
 // the implementation is not given top priority
 import {computed, inject, nextTick, onBeforeMount, ref, watch} from "vue"
+import PersonaContainer from "../../../../../Tinebase/js/ux/vue/PersonaContainer/PersonaContainer.vue";
 
 import { createFocusTrap } from "focus-trap";
 
@@ -71,7 +72,6 @@ const progressBarVisibility = ref(false);
 const textAreaHeight = ref(0);
 const textElValue = ref("");
 
-const ft = ref(null)
 const init = async function () {
   if (props.opt.prompt) {
     if (props.opt.multiline) {
@@ -102,7 +102,7 @@ const props = defineProps({
 
 const closeBox = () => {
   if (props.opt.closable) {
-    ft.value.deactivate()
+    deactivateTrap()
     ExtEventBus.emit("close");
   }
 }
@@ -129,36 +129,48 @@ const buttonToShow = computed(() => {
 })
 
 const showModal = ref(false)
-const modalRef = ref(false)
-const containerRef = ref(false)
+let ft = null
 watch(() => props.otherConfigs.visible, newVal => {
   if (newVal) {
     init();
     showModal.value = newVal
     const isKeyForward = (event) => {
-      return !(['text', 'password'].includes(event.target?.type)) && ( event.key === 'ArrowDown' || event.key === 'ArrowRight' )
+      return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowDown' || event.key === 'ArrowRight' || (event.key === 'Tab' && !event.shiftKey))
     }
     const isKeyBackward = (event) => {
-      return !(['text', 'password'].includes(event.target?.type)) && ( event.key === 'ArrowUp' || event.key === 'ArrowLeft' )
+      return !(['text', 'password'].includes(event.target?.type)) && (event.key === 'ArrowUp' || event.key === 'ArrowLeft' || (event.key === 'Tab' && event.shiftKey))
     }
     nextTick(() => {
-      ft.value = createFocusTrap('.vue-message-box .modal-content', { trapStack: props.opt.focusTrapStack, isKeyForward, isKeyBackward })
+      ft = createFocusTrap(
+        '.vue-message-box .modal-content',
+        {
+          trapStack: props.opt.focusTrapStack,
+          isKeyForward, isKeyBackward,
+          escapeDeactivates: false,
+        }
+      )
       try{
-        ft.value.activate()
+        ft.activate()
       } catch (e) {
         // ignorable error
         const msg = "Your focus-trap must have at least one container with at least one tabbable node in it at all times"
         if(e.message !== msg){
           throw e
+        } else {
+          deactivateTrap()
         }
       }
     })
   } else {
-    console.debug(ft.value, props.opt.focusTrapStack)
-    ft.value.deactivate()
+    deactivateTrap()
     showModal.value = newVal
   }
 })
+
+const deactivateTrap = () => {
+  ft?.deactivate()
+  ft = null
+}
 
 onBeforeMount(async () => {
   await init();

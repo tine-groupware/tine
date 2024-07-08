@@ -247,7 +247,6 @@ Ext.Msg.show({
             synchronousVisibilityState = !__HIDDEN
             Ext.getBody().mask("Loading");
             const {MessageBoxApp, SymbolKeys} = await import(/* webpackChunkName: "Tinebase/js/VueMessageBox"*/'./VueMessageBox')
-            const {default: PersonaContainer } = await import(/* webpackChunkName: "Tinebase/js/PersonaContainer"*/'../../../../Tinebase/js/ux/vue/PersonaContainer/PersonaContainer.vue')
 
             // initializing vue stuff
             if(!initialized){
@@ -261,7 +260,7 @@ Ext.Msg.show({
 
                 Tine.Tinebase.vue = Tine.Tinebase.vue || {}
                 Tine.Tinebase.vue.focusTrapStack = Tine.Tinebase.vue.focusTrapStack || []
-                vueProps.opt.focusTrapStack = Tine.Tinebase.vue.focusTrapStack
+                vueProps.opt.focusTrapStack = window.vue.markRaw(Tine.Tinebase.vue.focusTrapStack)
 
                 // app initialization and mounting
                 vueHandle = createApp({
@@ -275,7 +274,6 @@ Ext.Msg.show({
 
                 vueHandle.config.globalProperties.ExtEventBus = vueEmitter;
                 vueHandle.provide(SymbolKeys.ExtEventBusInjectKey, vueEmitter);
-                vueHandle.component('PersonaContainer', PersonaContainer)
                 vueHandle.use(BootstrapVueNext)
 
                 const mp = document.createElement("div");

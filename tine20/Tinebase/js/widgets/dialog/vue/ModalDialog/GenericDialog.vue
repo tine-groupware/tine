@@ -7,6 +7,7 @@
  * @copyright   Copyright (c) 2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 -->
+
 <template>
   <BModal v-model="showModal"
           :title="modalProps.title"
@@ -87,6 +88,7 @@ const { eventBus: EventBus } = inject(props.modalProps.injectKey)
 
 const showModal = ref(false)
 const buttonRefs = ref()
+let ft = null
 watch(() => props.modalProps.visible, (newVal) => {
   if (newVal) {
     showModal.value = newVal
@@ -98,15 +100,21 @@ watch(() => props.modalProps.visible, (newVal) => {
     }
     nextTick(() => {
       const focusEl = contentCompRef.value?.initialFocus || buttonRefs?.value[buttonRefs.value.length - 1].$el
-      ft.value = createFocusTrap(
+      ft = createFocusTrap(
         `#${props.modalProps.injectKey} .modal-content`,
-        { trapStack: props.modalProps.focusTrapStack, initialFocus: focusEl, isKeyForward, isKeyBackward }
+        {
+          trapStack: props.modalProps.focusTrapStack,
+          initialFocus: focusEl,
+          isKeyForward,
+          isKeyBackward,
+          escapeDeactivates: false
+        }
       )
-      ft.value.activate()
+      ft.activate()
     })
   } else {
-    ft.value.deactivate()
-    ft.value = null
+    ft.deactivate()
+    ft = null
     showModal.value = newVal
   }
 })
@@ -146,19 +154,13 @@ const handleButtonClick = (eventName) => {
 }
 
 const handleModalClose = () => {
-  ft.value.deactivate()
+  ft.deactivate()
   showModal.value = false
   EventBus.emit('close')
 }
 
-const ft = ref(null)
-
-// onBeforeMount(() => {
-//   console.debug('Generic Dialog', props)
-// })
-
 onBeforeUnmount(() => {
-  ft.value?.deactivate()
+  ft?.deactivate()
 })
 </script>
 
