@@ -259,7 +259,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
 
         $this->_updateCurrentUser($user);
-
+        
         return $user;
     }
 

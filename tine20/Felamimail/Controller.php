@@ -110,6 +110,47 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                 /** @var Admin_Event_UpdateAccount $_eventObject */
                 Felamimail_Controller_Account::getInstance()->updateSystemAccount(
                     $_eventObject->account, $_eventObject->oldAccount, $_eventObject->pwd);
+                
+                $listToUpdate = [];
+                if ($_eventObject->account->accountStatus !== $_eventObject->oldAccount->accountStatus) {
+                    $lists = Addressbook_Controller_List::getInstance()->search(
+                        Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class, [
+                            ['field' => 'showHidden', 'operator' => 'equals', 'value' => TRUE],
+                            ['field' => 'showHidden', 'operator' => 'equals', 'value' => TRUE],
+                            ['field' => 'xprops', 'operator' => 'contains', 'value' => Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST],
+                        ]));
+                    
+                    foreach ($lists as $list) {
+                        $members = $list['members'];
+                        
+                        if (in_array($_eventObject->account->contact_id, $members)) {
+                            $listToUpdate[] = [$list['email'] => $list['id']];
+                            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+                            try {
+                                Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
+                                    try {
+                                        Felamimail_Sieve_AdbList::setScriptForList($list);
+                                    } catch (Tinebase_Exception_NotFound $tenf) {
+                                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' .
+                                            __LINE__ . ' ' . $tenf->getMessage());
+                                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' .
+                                            __LINE__ . ' List: ' . print_r($list->toArray(), true));
+                                    }
+                                }, [$list]);
+
+                                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                                $transactionId = null;
+                            } finally {
+                                if (null !== $transactionId) {
+                                    Tinebase_TransactionManager::getInstance()->rollBack();
+                                }
+                            }
+                        }
+                    }
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()
+                        ->debug(__METHOD__ . '::' . __LINE__ . ' Update sieve script for adb lists: ' . print_r($listToUpdate, true));
+                }
+
                 break;
             case Tinebase_Event_User_ChangePassword::class:
                 /** @var Tinebase_Event_User_ChangePassword $_eventObject */
