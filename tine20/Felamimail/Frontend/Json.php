@@ -414,6 +414,21 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'result'    => $affectedFolders,
         );
     }
+
+    /**
+     * cleanup auto saved draft messages
+     *
+     * @param $accountIds
+     * @return array
+     */
+    public function cleanupDrafts($accountIds): array
+    {
+        $records = Felamimail_Controller_Message::getInstance()->cleanupAutoSavedDrafts($accountIds);
+        return [
+            'status'    => 'success',
+            'result'    => $this->_multipleRecordsToJson($records),
+        ];
+    }
     
     /**
      * clear given flags from given messages

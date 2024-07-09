@@ -3038,6 +3038,26 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $this->_assertDraftNotFound($draft);
     }
 
+    public function testCleanupAutoSavedDrafts()
+    {
+        $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($this->_account, Felamimail_Model_Folder::FOLDER_DRAFTS);
+        $filter = [['field' => 'folder_id', 'operator' => 'equals', 'value' => $draftFolder->getId()]];
+        
+        $this->_saveDraft();
+        $result = $this->_json->searchMessages($filter, []);
+        self::assertEquals(1, count($result['results']), 'auto saved draft should be removed: ' . print_r($result, TRUE));
+
+        $messageToSave = $this->_getMessageData('', 'test2');
+        $this->_json->saveMessageInFolder($this->_account->drafts_folder, $messageToSave);
+        $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
+        $result = $this->_json->searchMessages($filter, []);
+        self::assertEquals(2, count($result['results']), 'auto saved draft should be removed: ' . print_r($result, TRUE));
+
+        Felamimail_Controller_Message::getInstance()->cleanupAutoSavedDrafts([$this->_account->getId()]);
+        $result = $this->_json->searchMessages($filter, []);
+        self::assertEquals(1, count($result['results']), 'auto saved draft should be removed: ' . print_r($result, TRUE));
+    }
+
     /**
      * @return array
      * @throws Tinebase_Exception_Record_DefinitionFailure
