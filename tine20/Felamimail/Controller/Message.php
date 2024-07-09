@@ -1545,10 +1545,46 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         // save draft in draft folder
+        $headers = $_message->headers;
+        $headers['X-Tine20-AutoSaved'] = true;
+        $_message->headers = $headers;
+        
         $draft = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($draftFolder, $_message, [Zend_Mail_Storage::FLAG_SEEN]);
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Saved draft with uid ' . $draft->messageuid);
         return $draft;
+    }
+
+    public function cleanupAutoSavedDrafts($accountIds)
+    {
+        if (!Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_AUTOSAVE_DRAFTS)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . 'FEATURE_AUTOSAVE_DRAFTS is disabled');
+            return [];
+        }
+        $draftFolderIds = [];
+        if (is_string($accountIds)) {
+            $accountIds = [$accountIds];
+        }
+        foreach ($accountIds as $accountId) {
+            $account = Felamimail_Controller_Account::getInstance()->get($accountId);
+            $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_DRAFTS);
+            $draftFolderIds[] = $draftFolder->getId();
+        }
+
+        try {
+            $messages = $this->_backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
+                ['field' => 'folder_id', 'operator' => 'in', 'value' => $draftFolderIds]
+            ]));
+            $messages = $messages->filter(function($record) {
+                $headers = $this->getMessageHeaders($record, null, true);
+                return isset($headers['x-tine20-autosaved']);
+            });
+            $this->_backend->delete($messages->getId());
+            return $messages;
+        }  catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
     }
 
     /**

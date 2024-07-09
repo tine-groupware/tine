@@ -126,6 +126,13 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     }
 
                     _.delay(_.bind(this.fillAttachmentCache, this), 15000);
+                    _.delay(async () => {
+                        const autoSave = Tine.Tinebase.appMgr.get('Felamimail').featureEnabled('autoSaveDrafts');
+                        if (autoSave) {
+                            const accountIds = _.map(_.get(this.getAccountStore(), 'data.items'), 'data.id');
+                            await Tine.Felamimail.cleanupDrafts(accountIds);
+                        }
+                    }, 5000);
                     this.showActiveVacation();
                     this.registerProtocolHandler();
                     this.registerQuickLookPanel();
