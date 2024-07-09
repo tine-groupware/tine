@@ -1773,6 +1773,8 @@ class Setup_Controller
             Tinebase_Application::getInstance()->omitModLog(true);
             Tinebase_Scheduler::getInstance()->modlogActive(false);
             Tinebase_Scheduler::getInstance()->useNotes(false);
+            // disable previews as license is might not be ready yet
+            Tinebase_FileSystem::getInstance()->setPreviewActive(false);
         } else {
             $setupUser = Setup_Update_Abstract::getSetupFromConfigOrCreateOnTheFly();
             if ($setupUser && ! Tinebase_Core::getUser() instanceof Tinebase_Model_User) {
@@ -2006,7 +2008,10 @@ class Setup_Controller
 
         $this->clearCache();
 
-        //sanitize input
+        // disable previews during uninstall
+        Tinebase_FileSystem::getInstance()->setPreviewActive(false);
+
+        // sanitize input
         $_applications = array_unique(array_filter($_applications));
 
         $installedApps = Tinebase_Application::getInstance()->getApplications();
