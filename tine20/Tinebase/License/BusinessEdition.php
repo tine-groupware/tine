@@ -194,8 +194,10 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
                 $fs->fclose($licenseFile);
                 $this->_license = $licenseString;
 
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(
                         __METHOD__ . '::' . __LINE__ . " Stored new license " . $licensePath);
+                }
             } else {
                 throw new Tinebase_Exception('Could not store file');
             }
@@ -225,7 +227,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             $this->_assertValidUser();
             $fs->mkdir($appPath);
         }
-        
+
         return $appPath . '/' . $filename;
     }
 

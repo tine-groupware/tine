@@ -2139,7 +2139,12 @@ class Tinebase_FileSystem implements
         }
         return $this->_previewActive;
     }
-    
+
+    public function setPreviewActive(?bool $status)
+    {
+        $this->_previewActive = $status;
+    }
+
     /**
      * delete file node
      *
