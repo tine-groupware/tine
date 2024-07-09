@@ -876,26 +876,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             // how to detect hash/string ids
             result = name;
         }
-
-        // add email address if available
-        // need to create a "dummy" app to call featureEnabled()
-        // TODO: should be improved
-        var tinebaseApp = new Tine.Tinebase.Application({
-            appName: 'Tinebase'
-        });
-        if (tinebaseApp.featureEnabled('featureShowAccountEmail')) {
-            if (typeof name.getPreferredEmail == 'function') {
-                email = name.getPreferredEmail().email;
-            } else if (name.email) {
-                email = name.email;
-            } else if (name.accountEmailAddress) {
-                email = name.accountEmailAddress;
-            }
-            if (email !== '') {
-                result += ' (' + email + ')';
-            }
-        }
-
+        
         if (result === '') {
             result = Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information')
         } else {

@@ -148,7 +148,7 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
                             <label>'. $translate->_('Display Name') . '</label>
                         </option>
                         <option>
-                            <value>{{ n_fileas }}{% if record.getPreferredEmail() %} ({{ record.getPreferredEmail() }}){% endif %}</value>
+                            <value>{{ n_fileas }}{% if record.getPreferredEmail().email %} ({{ record.getPreferredEmail().email }}){% endif %}</value>
                             <label>'. $translate->_('Display Name (email)') . '</label>
                         </option>
                         <option>

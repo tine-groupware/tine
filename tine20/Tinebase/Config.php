@@ -295,13 +295,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FEATURE_CREATE_PREVIEWS = 'featureCreatePreviews';
 
     /**
-     * FEATURE_SHOW_ACCOUNT_EMAIL
-     *
-     * @var string
-     */
-    const FEATURE_SHOW_ACCOUNT_EMAIL = 'featureShowAccountEmail';
-
-    /**
      * FEATURE_REMEMBER_POPUP_SIZE
      *
      * @var string
@@ -1757,14 +1750,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION                   =>
                         'Show toggle button to switch on or off the advanced search for the quickfilter',
                     //_('Show toggle button to switch on or off the advanced search for the quickfilter')
-                    self::TYPE                          => self::TYPE_BOOL,
-                    self::DEFAULT_STR                   => true,
-                ),
-                self::FEATURE_SHOW_ACCOUNT_EMAIL    => array(
-                    self::LABEL                         => 'Show Account Email Address',
-                    //_('Show Account Email Address')
-                    self::DESCRIPTION                   => 'Show email address in account picker and attendee grids',
-                    //_('Show email address in account picker and attendee grids')
                     self::TYPE                          => self::TYPE_BOOL,
                     self::DEFAULT_STR                   => true,
                 ),

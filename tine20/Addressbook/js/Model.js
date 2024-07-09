@@ -45,22 +45,6 @@ Tine.Addressbook.Model.ContactMixin = {
             type: preferredType
         };
     },
-    
-    getTitle: function(options) {
-        var result = Tine.Tinebase.data.Record.prototype.getTitle.call(this, options);
-
-        var tinebaseApp = new Tine.Tinebase.Application({
-            appName: 'Tinebase'
-        });
-        if (tinebaseApp.featureEnabled('featureShowAccountEmail')) {
-            var email = this.getPreferredEmail().email;
-            if (email) {
-                result += ' (' + email + ')';
-            }
-        }
-
-        return result;
-    },
 
     statics: {
     }
