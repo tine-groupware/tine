@@ -17,6 +17,8 @@ class Felamimail_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
 
     const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
+
 
     static protected $_allUpdates = [
         self::PRIO_NORMAL_APP_STRUCTURE => [
@@ -33,6 +35,10 @@ class Felamimail_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE017_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
 
@@ -65,5 +71,34 @@ class Felamimail_Setup_Update_17 extends Setup_Update_Abstract
 
         $this->addApplicationUpdate(Felamimail_Config::APP_NAME, '17.2', self::RELEASE017_UPDATE002);
     }
+    public function update003()
+    {
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+            Felamimail_Model_MessageFileLocation::class, [
+                ['field' => 'record_title', 'operator' => 'contains', 'value' =>'html-proxy'],
+            ]
+        );
+        $result = Felamimail_Controller_MessageFileLocation::getInstance()->search($filter);
+        foreach ($result as $location) {
+            try {
+                $pos = strpos($location->model, '_');
+                $appName = substr($location->model, 0, $pos);
+                $modelName = preg_replace('/^.+_Model_/', '', $location->model);
+                $controllerName = $appName . '_Controller_' . $modelName;
+                /** @var Tinebase_Controller_Record_Abstract $controllerName */
+                $controller = $controllerName::getInstance();
+                if ($controller) {
+                    $record = $controller->get($location->record_id);
+                    if ($record) {
+                        $location->record_title = $record->getTitle();
+                        Felamimail_Controller_MessageFileLocation::getInstance()->update($location);
+                    }
+                }
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        }
 
+        $this->addApplicationUpdate(Felamimail_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
+    }
 }
