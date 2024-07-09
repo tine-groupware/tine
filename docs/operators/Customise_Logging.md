@@ -3,10 +3,11 @@ Customise Logging
 You can customize logging in tine either by changing the `logger` section in your `config.inc.php` or by adding 
 a customized logger config in your `conf.d` directory:
 
-
-``` php title="./conf.d/sso.inc.php"
+``` php title="./conf.d/logger.inc.php"
 --8<-- "etc/tine20/conf.d/logger.inc.php.dist"
 ```
+
+## Logger Priorities
 
 ``` php title="Posible log priorities"
     const EMERG   = 0;  // Emergency: system is unusable
