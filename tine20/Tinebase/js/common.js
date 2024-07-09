@@ -493,23 +493,15 @@ Tine.Tinebase.common = {
         if (! accountObject) {
             return '';
         }
-        var _ = window.lodash,
-            type, iconCls, displayName, email;
+        let type, iconCls, displayName, email;
 
         if (accountObject.accountDisplayName) {
             type = _.get(record, 'data.account_type', 'user');
-            displayName = accountObject.accountDisplayName;
-
-            // need to create a "dummy" app to call featureEnabled()
-            // TODO: should be improved
-            var tinebaseApp = new Tine.Tinebase.Application({
-                appName: 'Tinebase'
-            });
-            if (tinebaseApp.featureEnabled('featureShowAccountEmail') && accountObject.accountEmailAddress) {
-                // add email address if available
-                email = accountObject.accountEmailAddress;
-                displayName += ' (' + email + ')';
-            }
+            const contactRecord = Tine.Tinebase.data.Record.setFromJson({
+                n_fileas: accountObject.accountDisplayName, 
+                email: accountObject?.accountEmailAddress
+            }, Tine.Addressbook.Model.Contact);
+            displayName = contactRecord.getTitle();
         } else if (accountObject.name && ! _.get(record, 'data.account_type')) {
             type = 'group';
             displayName = accountObject.name;
@@ -523,7 +515,7 @@ Tine.Tinebase.common = {
             displayName = _.get(record, 'data.account_name.name', record.data.account_name);
         }
 
-        if (displayName == 'Anyone') {
+        if (displayName === 'Anyone') {
             displayName = i18n._(displayName);
             type = 'group';
         }
