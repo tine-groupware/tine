@@ -645,10 +645,14 @@ class Setup_Controller
             'updates' => [],
         ];
         $iterationCount = 0;
+        $maxUsersChecked = false;
         do {
             $updatesByPrio = $this->_getUpdatesByPrio($result['updated']);
             if (empty($updatesByPrio) && $iterationCount > 0) {
                 break;
+            } else if (! $maxUsersChecked) {
+                $this->_checkMaxUsersDuringUpdate();
+                $maxUsersChecked = true;
             }
 
             if (!isset($updatesByPrio[Setup_Update_Abstract::PRIO_TINEBASE_AFTER_STRUCTURE])) {
@@ -727,6 +731,35 @@ class Setup_Controller
         $this->clearCache();
         
         return $result;
+    }
+
+    protected function _checkMaxUsersDuringUpdate(): void
+    {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::SETUP_SKIP_UPDATE_MAX_USER_CHECK}) {
+            return;
+        }
+
+        $license = Tinebase_License::getInstance();
+        $licenseType = $license->getLicenseType();
+        if ($licenseType === Tinebase_License::LICENSE_TYPE_LIMITED_TIME || $licenseType === Tinebase_License::LICENSE_TYPE_ON_DEMAND) {
+            // no user limit
+            return;
+        }
+
+        $maxUsers = $license->getMaxUsers();
+        $currentUserCount = Tinebase_User::getInstance()->countNonSystemUsers();
+        if ($currentUserCount > $maxUsers) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Maximum number of users reached:'
+                . ' max users: ' . $maxUsers . ' / current users: ' . $currentUserCount);
+            $translation = Tinebase_Translation::getTranslation('Setup');
+            $message = $translation->_('Maximum number of users reached. '
+                . 'You might not want to update to this version, as some of the users might no longer be able to log in.')
+                . ' '
+                . $translation->_('Please contact Metaways Infosystems GmbH to buy a license that supports a '
+                . 'higher number of users. To continue updating tine, you can skip this check by adding this to your '
+                . 'config: "setupSkipUpdateMaxUserCheck" => true');
+            throw new Tinebase_Exception_SystemGeneric($message);
+        }
     }
 
     protected function _removeUpdatesFromAppState(array $updates)
