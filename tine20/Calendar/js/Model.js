@@ -794,6 +794,9 @@ Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
                     return userData.list_id;
                 }
                 break;
+            case 'email':
+                return userData.user_email;
+                break;
             default:
                 return userData.id
                 break;
