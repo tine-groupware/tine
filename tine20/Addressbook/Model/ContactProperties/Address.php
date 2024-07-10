@@ -223,6 +223,7 @@ class Addressbook_Model_ContactProperties_Address extends Tinebase_Record_NewAbs
         foreach (self::$_facadeFields as $field) {
             $record->{$prefix . $field} = $this->{$field};
         }
+        $record->{$def[Tinebase_ModelConfiguration_Const::FIELD_NAME]} = null;
     }
 
     protected static array $_facadeFields = [
