@@ -1216,7 +1216,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param null $data
+     * @param null|array $data
      * @return Tinebase_Model_FullUser
      * @throws Admin_Exception
      * @throws Tinebase_Exception_SystemGeneric
@@ -1226,7 +1226,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         if ($data === null) {
             $data = $this->_getUserData();
         }
-        $pw = isset($data['password']) ? $data['password'] : Tinebase_Record_Abstract::generateUID(16);
+        $pw = $data['password'] ?? Tinebase_Record_Abstract::generateUID(16);
         $account = Admin_Controller_User::getInstance()->create(self::getTestUser($data), $pw, $pw);
         $this->_usernamesToDelete[] = $account->accountLoginName;
 

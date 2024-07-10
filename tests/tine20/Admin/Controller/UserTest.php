@@ -395,10 +395,9 @@ class Admin_Controller_UserTest extends TestCase
     public function testChangeUserType()
     {
         // try to set type for new user (without feature)
-        $pw = Tinebase_Record_Abstract::generateUID(16);
-        $userToCreate = TestCase::getTestUser();
-        $userToCreate->type = 'somethin';
-        $user = Admin_Controller_User::getInstance()->create($userToCreate, $pw, $pw);
+        $user = $this->_createTestUser([
+            'type' => 'somethin',
+        ]);
         self::assertNull($user->type);
 
         // try to set type for user (with feature)
