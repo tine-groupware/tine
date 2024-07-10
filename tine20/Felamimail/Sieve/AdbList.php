@@ -152,8 +152,16 @@ class Felamimail_Sieve_AdbList
         foreach ($receivers as $receiver) {
             /** @var Addressbook_Model_Contact $receiver */
             $email = $receiver->getPreferredEmailAddress();
+
             if ($email) {
-                $sieveRule->_receiverList[] = $email;
+                if ($receiver->type === Addressbook_Model_Contact::CONTACTTYPE_USER) {
+                    $accountStatus = Tinebase_User::getInstance()->getFullUserById($receiver->account_id)->accountStatus;
+                    if ($accountStatus === Tinebase_Model_User::ACCOUNT_STATUS_ENABLED) {
+                        $sieveRule->_receiverList[] = $email;
+                    }
+                } else {
+                    $sieveRule->_receiverList[] = $email;
+                }
             }
         }
 

@@ -116,15 +116,13 @@ class Felamimail_Controller extends Tinebase_Controller_Event
                     $lists = Addressbook_Controller_List::getInstance()->search(
                         Tinebase_Model_Filter_FilterGroup::getFilterForModel(Addressbook_Model_List::class, [
                             ['field' => 'showHidden', 'operator' => 'equals', 'value' => TRUE],
-                            ['field' => 'showHidden', 'operator' => 'equals', 'value' => TRUE],
                             ['field' => 'xprops', 'operator' => 'contains', 'value' => Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST],
                         ]));
                     
                     foreach ($lists as $list) {
                         $members = $list['members'];
-                        
+                        $listToUpdate[] = [$list['email'] => $list->toArray()];
                         if (in_array($_eventObject->account->contact_id, $members)) {
-                            $listToUpdate[] = [$list['email'] => $list['id']];
                             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
                             try {
                                 Tinebase_TransactionManager::getInstance()->registerAfterCommitCallback(function($list) {
@@ -140,6 +138,10 @@ class Felamimail_Controller extends Tinebase_Controller_Event
 
                                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                                 $transactionId = null;
+                            } catch (Exception $e) {
+                                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__
+                                    . ' Could not pdate sieve script for adb lists: ' . $e);
+                                throw new Tinebase_Exception_Backend($e->getMessage());
                             } finally {
                                 if (null !== $transactionId) {
                                     Tinebase_TransactionManager::getInstance()->rollBack();
