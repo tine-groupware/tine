@@ -173,7 +173,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 self::QUERY_FILTER              => true,
                 self::CONFIG                    => [
                     Tinebase_Numberable::STEPSIZE          => 1,
-                    //Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_NUMBER,
+//                    Tinebase_Numberable::BUCKETKEY         => self::class . '#' . self::FLD_DOCUMENT_NUMBER,
                     //Tinebase_Numberable_String::PREFIX     => 'XX-',
                     Tinebase_Numberable_String::ZEROFILL   => 7,
                     Tinebase_Model_NumberableConfig::NO_AUTOCREATE => true,
@@ -464,6 +464,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         $_definition[self::FIELDS][self::FLD_DOCUMENT_CATEGORY][self::VALIDATORS][Zend_Filter_Input::DEFAULT_VALUE] =
             Sales_Config::getInstance()->{Sales_Config::DOCUMENT_CATEGORY_DEFAULT};
 
+        $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable::BUCKETKEY] =
+            'Sales_Model_' . static::MODEL_NAME_PART . '#'. self::FLD_DOCUMENT_NUMBER;
         $_definition[self::FIELDS][self::FLD_DOCUMENT_NUMBER][self::CONFIG][Tinebase_Numberable_String::PREFIX] =
             Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
                 new Zend_Locale(Tinebase_Config::getInstance()->{Tinebase_Config::DEFAULT_LOCALE})

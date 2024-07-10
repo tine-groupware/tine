@@ -252,6 +252,7 @@ MyGridPanel = Ext.extend(Ext.grid.GridPanel, {
                     overrides = sp;
                     sp = sb;
                     sb = overrides.constructor != oc ? overrides.constructor : function(){sp.apply(this, arguments);};
+                    sb.statics = {};
                 }
                 var F = function(){},
                     sbp,
