@@ -201,3 +201,12 @@ msgstr ""
 
 msgid "Employee"
 msgstr "Mitarbeiter"
+
+msgid "Purchase Invoice"
+msgstr "Eingangsrechnung"
+
+msgid "Serial Number"
+msgstr "Seriennummer"
+
+msgid "Inventory Type"
+msgstr "Inventartyp"
