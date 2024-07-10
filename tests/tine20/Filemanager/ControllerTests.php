@@ -31,8 +31,6 @@ class Filemanager_ControllerTests extends TestCase
      */
     public function testCreatePersonalContainer()
     {
-        $this->_skipIfLDAPBackend('FIXME: existing tine20phpunituser needs to be removed before this test');
-
         // create user
         $pw = Tinebase_Record_Abstract::generateUID();
         $user = Admin_Controller_User::getInstance()->create($this->getTestUser(), $pw, $pw);
@@ -55,8 +53,6 @@ class Filemanager_ControllerTests extends TestCase
      */
     public function testDeletePersonalContainer()
     {
-        $this->_skipIfLDAPBackend('FIXME: existing tine20phpunituser needs to be removed before this test');
-
         Tinebase_Config::getInstance()->set(Tinebase_Config::ACCOUNT_DELETION_EVENTCONFIGURATION, new Tinebase_Config_Struct(array(
             Tinebase_Config::ACCOUNT_DELETION_DELETE_PERSONAL_FOLDERS => true,
         )));
