@@ -271,7 +271,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
     onEditComplete: function(ed, value, startValue) {
         var _ = window.lodash,
-            attendeeData = _.get(ed, 'field.selectedRecord.data.user_id'),
+            attendeeData = _.get(ed, 'field.selectedRecord.data.user_id', null),
             type = _.get(ed, 'field.selectedRecord.data.user_type'),
             fbInfo = _.get(ed, 'field.selectedRecord.data.fbInfo');
 
@@ -322,8 +322,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 const type = o.record.get('user_type');
 
                 // detect duplicate entry
-                // TODO detect duplicate emails, too 
                 var isDuplicate = false;
+
                 this.store.each(function(attender) {
                     if (o.record.getUserId() == attender.getUserId()
                             && o.record.get('user_type') == attender.get('user_type')
@@ -335,8 +335,14 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                         return false;
                     }
                 }, this);
-                
+
                 if (isDuplicate) {
+                    o.record.set('user_id', undefined);
+                    o.record.set('user_type', undefined);
+                    o.record.set('user_email', undefined);
+                    o.record.set('user_displayname', undefined);
+                    o.record.set('fbInfo', undefined);
+                    o.record.commit();
                     o.record.reject();
                     this.startEditing(o.row, o.column);
                 } else if (o.value || type === 'email') {
