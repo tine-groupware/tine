@@ -36,3 +36,6 @@ clear_env = no
 pm.status_path = /ADMIN/fpm-status
 ping.path = /ADMIN/fpm-ping
 ;ping.response = pong
+
+php_admin_value[display_errors] = {{ getenv "PHP_DISPLAY_ERRORS" "Off" }}
+php_admin_value[display_startup_errors] = {{ getenv "PHP_DISPLAY_ERRORS" "Off" }}
