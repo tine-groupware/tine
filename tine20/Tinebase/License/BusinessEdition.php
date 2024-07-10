@@ -260,6 +260,7 @@ class Tinebase_License_BusinessEdition extends Tinebase_License_Abstract impleme
             $fs->unlink($licensePath);
         }
         $this->reset();
+        Setup_Controller::getInstance()->clearCache(false);
     }
     
     /**
