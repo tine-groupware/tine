@@ -107,19 +107,4 @@ class Inventory_Controller extends Tinebase_Controller_Event implements Tinebase
                 break;
         }
     }
-
-    public function getCoreDataForApplication()
-    {
-        $result = parent::getCoreDataForApplication();
-        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-
-        $result->addRecord(new CoreData_Model_CoreData(array(
-            'id' => Inventory_Model_Type::class,
-            'application_id' => $application,
-            'model' => Inventory_Model_Type::class,
-            'label' => 'Types' // _('Types')
-        )));
-        
-        return $result;
-    }
 }

@@ -179,19 +179,20 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      * init an explicit filter row
      */
     initExplicit: function() {
-        this.foreignField = this.foreignRefIdField;
-        let i18n = new Locale.Gettext();
-        i18n.textdomain('Tinebase');
-        
-        if (this.foreignRecordClass) {
-            this.foreignField = this.foreignRecordClass.getMeta('idPropert<y');
-            const foreignApp = Tine.Tinebase.appMgr.get(this.foreignRecordClass.getMeta('appName'));
-            if (foreignApp) i18n = foreignApp.i18n;
-            this.itemName = this.foreignRecordClass.getMeta('recordName');
+        this.foreignField = this.foreignRefIdField || this.foreignRecordClass.getMeta('idProperty');
+
+        var foreignApp = Tine.Tinebase.appMgr.get(this.foreignRecordClass.getMeta('appName')),
+            i18n;
+        if (foreignApp) {
+            i18n = foreignApp.i18n;
+        } else {
+            i18n = new Locale.Gettext();
+            i18n.textdomain('Tinebase');
         }
 
+        this.itemName = this.foreignRecordClass.getMeta('recordName');
         if (! this.label) {
-            if (this.foreignRecordClass) this.label = i18n.n_(this.foreignRecordClass.getMeta('recordName'), this.foreignRecordClass.getMeta('recordsName'), 1);
+            this.label = i18n.n_(this.foreignRecordClass.getMeta('recordName'), this.foreignRecordClass.getMeta('recordsName'), 1);
         } else {
             this.label = i18n._(this.label);
         }
@@ -206,9 +207,10 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
         }
 
 
-        if (this.ownRecordClass && this.foreignRecordClass) {
+        if (this.ownRecordClass) {
             if (!this.independentRecords && _.get(this.ownRecordClass.getField(this.field), 'fieldDefinition.config.dependentRecords')) {
                 const dataFields = _.difference(this.foreignRecordClass.getDataFields(), [_.get(this.ownRecordClass.getField(this.field), 'fieldDefinition.config.refIdField')]);
+
                 if (dataFields.length === 1) {
                     // cross-records: skip cross-record level completely, have all operators
                     this.crossRecordClass = this.foreignRecordClass;
@@ -235,12 +237,12 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             // get operators from registry
             Ext.each(Tine.widgets.grid.ForeignRecordFilter.OperatorRegistry.get(this.ownRecordClass), function (def) {
                 // translate label
-                const foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(def.foreignRecordClass);
-                const appName = foreignRecordClass.getMeta('appName');
-                const app = Tine.Tinebase.appMgr.get(appName);
-                const label = app ? app.i18n._hidden(def.label) : def.label;
+                var foreignRecordClass = Tine.Tinebase.data.RecordMgr.get(def.foreignRecordClass),
+                    appName = foreignRecordClass.getMeta('appName'),
+                    app = Tine.Tinebase.appMgr.get(appName),
+                    label = app ? app.i18n._hidden(def.label) : def.label;
 
-                if (foreignRecordClass === this.foreignRecordClass) {
+                if (foreignRecordClass == this.foreignRecordClass) {
                     this.operators.push({
                         operator: Ext.apply(def, {
                             foreignRecordClass: foreignRecordClass

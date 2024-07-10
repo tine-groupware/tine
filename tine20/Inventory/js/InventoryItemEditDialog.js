@@ -30,7 +30,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     /**
      * @private
      */
-    windowHeight: 550,
+    windowHeight: 470,
     windowWidth: 800,
     displayNotes: true,
     defaultRelationCombo: ['Addressbook', 'Contact'],
@@ -58,16 +58,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
      * @private
      */
     getFormItems: function() {
-        if (Tine.Sales.Model?.PurchaseInvoice) {
-            const app = Tine.Tinebase.appMgr.get('Sales')
-            this.invoiceRecordPicker = Tine.widgets.form.RecordPickerManager.get('Sales', 'PurchaseInvoice', {
-                fieldLabel: app.i18n._('Purchase Invoice'),
-                name: 'invoice',
-                columnWidth: 0.5,
-                recordClass: Tine.Sales.Model.PurchaseInvoice,
-            })
-        }
-
         return {
             xtype: 'tabpanel',
             border: false,
@@ -101,6 +91,13 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         items: [
                             [{
                                 columnWidth: 1,
+                                xtype: 'tw-uidtriggerfield',
+                                fieldLabel: this.app.i18n._('ID'),
+                                name: 'inventory_id',
+                                maxLength: 100
+                            }],
+                            [{
+                                columnWidth: 1,
                                 xtype: 'tine.widget.field.AutoCompleteField',
                                 recordClass: this.recordClass,
                                 fieldLabel: this.app.i18n._('Name'),
@@ -109,17 +106,6 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 allowBlank: false
                             }],
                             [{
-                                xtype: 'textfield',
-                                fieldLabel: this.app.i18n._('Serial Number'),
-                                name: 'serial_number',
-                                columnWidth: 0.5,
-                            }, {
-                                xtype: 'tinerecordpickercombobox',
-                                fieldLabel: this.app.i18n._('Inventory Type'),
-                                recordClass: Tine.Inventory.Model.Type,
-                                name: 'type',
-                                columnWidth: 0.5,
-                            }, {
                                 columnWidth: 1,
                                 editDialog: this,
                                 xtype: 'tinerelationpickercombo',
@@ -129,8 +115,8 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                                 recordClass: Tine.HumanResources.Model.Employee,
                                 relationType: 'EMPLOYEE',
                                 relationDegree: 'sibling',
-                                modelUnique: true,
-                            }, ]
+                                modelUnique: true
+                            }]
                         ]
                     },
                     {
@@ -278,9 +264,12 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             name: 'price',
                             fieldLabel: this.app.i18n._('Price'),
                             columnWidth: 0.5
-                        }], [
-                            this.invoiceRecordPicker ?? '',
-                            {
+                        }], [{
+                            xtype: 'textfield',
+                            name: 'invoice',
+                            fieldLabel: this.app.i18n._('Invoice'),
+                            columnWidth: 0.5
+                        }, {
                             xtype: 'datefield',
                             name: 'invoice_date',
                             fieldLabel: this.app.i18n._('Invoice date'),

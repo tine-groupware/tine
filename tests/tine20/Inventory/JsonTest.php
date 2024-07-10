@@ -75,9 +75,11 @@ class Inventory_JsonTest extends Inventory_TestCase
         $searchDefaultFilter = $this->_getFilter();
         unset($searchDefaultFilter[2]);
         $mergedSearchFilter = array_merge($searchIDFilter, $searchDefaultFilter);
+        
         $returned = $this->_json->searchInventoryItems($searchDefaultFilter, $this->_getPaging());
+        
         $this->assertEquals($returned['totalcount'], 1);
-
+        
         $count = 0;
         foreach ($returned as $value => $key) {
             if (is_array($key)) {
@@ -91,20 +93,6 @@ class Inventory_JsonTest extends Inventory_TestCase
             }
         }
         $this->assertEquals($count, 1);
-        
-        //test search invoice record
-        $pit = new Sales_PurchaseInvoiceTest();
-        $pit->setUp();
-        $invoice = $pit->createPurchaseInvoice();
-        $this->assertNotEmpty($invoice['supplier']);
-        
-        $inventoryRecord['invoice'] = $invoice['id'];
-        $this->_json->saveInventoryItem($inventoryRecord);
-        $result = $this->_json->searchInventoryItems($searchDefaultFilter, $this->_getPaging());
-        
-        $this->assertEquals($result['totalcount'], 1);
-        $invoiceData = $result['results'][0]['invoice'];
-        $this->assertNotEmpty($invoiceData['supplier']);
     }
     
     /**
