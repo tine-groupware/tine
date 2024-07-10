@@ -57,7 +57,8 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
         self::RECORD_NAME        => 'Inventory item',
         self::RECORDS_NAME       => 'Inventory items', // ngettext('Inventory item', 'Inventory items', n)
         self::CONTAINER_PROPERTY => self::FLD_CONTAINER_ID,
-        self::TITLE_PROPERTY    => "{{ name }} {% if serial_number %} ({{ serial_number }}){% endif %}",
+        self::TITLE_PROPERTY     => "{{ name }} {% if serial_number %} ({{ serial_number }}){% endif %}",
+        self::DEFAULT_SORT_INFO  => [self::FIELD => self::FLD_NAME],
         self::CONTAINER_NAME     => 'Inventory item list',
         self::CONTAINERS_NAME    => 'Inventory item lists', // ngettext('Inventory item list', 'Inventory item lists', n)
         self::HAS_RELATIONS      => true,

@@ -271,7 +271,7 @@ class Tinebase_ApplicationTest extends TestCase
             }
 
             if (!empty($mc->table) && $mc->titleProperty && strpos($mc->titleProperty, '{{') !== false) {
-                $this->assertIsArray($mc->defaultSortInfo, $model);
+                $this->assertIsArray($mc->defaultSortInfo, 'default sort info missing: ' . $model);
                 $this->assertArrayHasKey('field', $mc->defaultSortInfo, $model);
             }
         }
