@@ -95,7 +95,7 @@ Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite = functi
     }
     // Check if favorite matches current model
     const defaultFavorite = Tine.widgets.persistentfilter.store.getPersistentFilterStore().getById(defaultFavoriteId);
-    return defaultFavorite.get('model').match(Tine.Tinebase.data.RecordMgr.get(appName, modelName).getPhpClassName()) ? defaultFavorite : null;
+    return defaultFavorite?.get('model').match(Tine.Tinebase.data.RecordMgr.get(appName, modelName).getPhpClassName()) ? defaultFavorite : null;
 };
 
 /**
