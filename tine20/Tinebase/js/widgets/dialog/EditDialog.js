@@ -255,12 +255,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
          * @param {Funciton} fn check state function
          */
         registerCheckStateProvider: function(field, fn) {
-            this.registerCheckStateProvider.__providers = this.registerCheckStateProvider.__providers || {}
-            this.registerCheckStateProvider.__providers[field] = this.registerCheckStateProvider.__providers[field] || []
-            this.registerCheckStateProvider.__providers[field].push(fn)
+            this.statics.checkStateProviders = this.statics.checkStateProviders || {}
+            this.statics.checkStateProviders[field] = this.statics.checkStateProviders[field] || []
+            this.statics.checkStateProviders[field].push(fn)
         },
         getCheckStateProviders(field) {
-            return _.get(this, `registerCheckStateProvider.__providers.${field}`, []);
+            return _.get(this, `statics.checkStateProviders.${field}`, []);
         }
     },
 

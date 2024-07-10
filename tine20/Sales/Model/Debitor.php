@@ -76,7 +76,6 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
         ],
 
         self::FIELDS                    => [
-            // after creating, the number can't be changed anymore!!!
             self::FLD_NUMBER                 => [
                 self::LABEL                     => 'Number', // _('Number')
                 self::TYPE                      => self::TYPE_NUMBERABLE_STRING,
@@ -88,10 +87,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                     Tinebase_Numberable_String::ZEROFILL   => 0,
                     Tinebase_Model_NumberableConfig::NO_AUTOCREATE => true,
                     Tinebase_Numberable::CONFIG_OVERRIDE   => Sales_Controller_Debitor::class . '::numberConfigOverride',
-                ],
-                self::UI_CONFIG                 => [
-                    self::READ_ONLY                         => true,
-                ],
+                ]
             ],
             self::FLD_NAME              => [
                 self::TYPE                  => self::TYPE_STRING,
