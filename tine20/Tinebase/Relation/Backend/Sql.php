@@ -86,11 +86,6 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $this->resolveRelationId($_relation);
 
-        if (!($relId = $_relation->getId())) {
-            $relId = $_relation->generateUID();
-            $_relation->setId($relId);
-        }
-
         // check if relation is already set (with is_deleted=1)
         if ($deletedRelId = $this->_checkExistance($_relation)) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing existing relation (rel_id): ' . $deletedRelId);
@@ -101,7 +96,7 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         } 
                 
         $data = $_relation->toArray();
-        $data['rel_id'] = $data['id'];
+        $data['rel_id'] = $_relation->generateUID();
         $data['id'] = $_relation->generateUID();
         unset($data['related_record']);
         
@@ -115,7 +110,7 @@ class Tinebase_Relation_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $swappedData['id'] = $_relation->generateUID();
         $this->_dbTable->insert($swappedData);
                 
-        return $this->getRelation($relId, $_relation['own_model'], $_relation['own_backend'], $_relation['own_id']);
+        return $this->getRelation($data['rel_id'], $data['own_model'], $data['own_backend'], $data['own_id']);
     }
     
     /**
