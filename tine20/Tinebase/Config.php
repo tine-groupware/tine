@@ -664,7 +664,9 @@ class Tinebase_Config extends Tinebase_Config_Abstract
      * @var string
      */
     const WARN_LOGIN_FAILURES = 'warnLoginFailures';
-     
+
+    public const SETUP_SKIP_UPDATE_MAX_USER_CHECK = 'setupSkipUpdateMaxUserCheck';
+
     /**
      * ANYONE_ACCOUNT_DISABLED
      *
@@ -1092,7 +1094,19 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ]]
             ],
         ),
-
+        /**
+         * for example: array('en', 'de')
+         */
+        self::AVAILABLE_LANGUAGES => array(
+            //_('Available Languages')
+            'label'                 => 'Available Languages',
+            //_('Whitelist available languages that can be chosen in the GUI')
+            'description'           => 'Whitelist available languages that can be chosen in the GUI',
+            'type'                  => 'array',
+            'clientRegistryInclude' => TRUE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ),
         /**
          * encourage MFA at login
          */
@@ -1109,20 +1123,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             // TODO add a checkbox/preference for users to allow to hide the dlg and switch to true again
             'default'               => false,
         ],
-
-        /**
-         * for example: array('en', 'de')
-         */
-        self::AVAILABLE_LANGUAGES => array(
-            //_('Available Languages')
-            'label'                 => 'Available Languages',
-            //_('Whitelist available languages that can be chosen in the GUI')
-            'description'           => 'Whitelist available languages that can be chosen in the GUI',
-            'type'                  => 'array',
-            'clientRegistryInclude' => TRUE,
-            'setByAdminModule'      => TRUE,
-            'setBySetupModule'      => TRUE,
-        ),
         /**
          * One of: AUTODETECT, DEBUG, DEVELOPMENT, RELEASE
          */
@@ -1322,6 +1322,15 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::DESCRIPTION           => 'Path for cached config file (defaults to tmpdir if empty)', // _('Path for cached config file (defaults to tmpdir if empty)')
             self::TYPE                  => self::TYPE_STRING,
             self::DEFAULT_STR           => null,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => false,
+            self::SETBYSETUPMODULE      => true,
+        ],
+        self::SETUP_SKIP_UPDATE_MAX_USER_CHECK => [
+            self::LABEL                 => 'Skip maximum license user check in setup',
+            self::DESCRIPTION           => 'Skip maximum license user check in setup', // _('Skip maximum license user check in setup')
+            self::TYPE                  => self::TYPE_BOOL,
+            self::DEFAULT_STR           => false,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => true,

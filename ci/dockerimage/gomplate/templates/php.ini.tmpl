@@ -20,7 +20,8 @@ max_input_nesting_level = {{ getenv "PHP_MAX_INPUT_NESTING_LEVEL" "64" }}
 max_input_vars = {{ getenv "PHP_MAX_INPUT_VARS" "1000" }}
 memory_limit = {{ getenv "PHP_MEMORY_LIMIT" "1024M" }}
 error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT
-display_errors = {{ getenv "PHP_DISPLAY_ERRORS" "Off" }}
+; Dose not have any effect tine reenables it. Disable via admin values
+display_errors = On
 display_startup_errors = Off
 log_errors = On
 log_errors_max_len = 1024
