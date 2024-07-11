@@ -139,6 +139,8 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 
     public function testAdbMailinglistSieveRuleForwardOnlyEnabledMembers()
     {
+        Addressbook_Config::getInstance()->set(Addressbook_Config::CONTACT_HIDDEN_CRITERIA, 'never');
+        
         $this->_setFeatureForTest(Addressbook_Config::getInstance(), Addressbook_Config::FEATURE_MAILINGLIST);
         $this->_testNeedsTransaction();
 
@@ -148,6 +150,7 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
 
         $sclever = Tinebase_User::getInstance()->getFullUserByLoginName('sclever');
         $raii = new Tinebase_RAII(function() use($sclever) {
+            Addressbook_Config::getInstance()->set(Addressbook_Config::CONTACT_HIDDEN_CRITERIA, 'disabled');
             $sclever->accountStatus = Tinebase_Model_FullUser::ACCOUNT_STATUS_ENABLED;
             Tinebase_User::getInstance()->updateUserInSqlBackend($sclever);
         });
@@ -161,7 +164,7 @@ redirect :copy "' . Tinebase_Core::getUser()->accountEmailAddress . '";
         $sieve = $script->getSieve();
         self::assertStringContainsString('if address :is :all "from" ["' . $this->_originalTestUser->accountEmailAddress . '"]', $sieve);
         self::assertStringContainsString('reject "Your email has been rejected"', $sieve);
-
+        
         unset($raii);
     }
 
