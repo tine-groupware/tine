@@ -113,6 +113,8 @@ class Tinebase_Fulltext_TextExtract
                     $flySystem->readStream($_fileObject->flypath),
                     ($tmpFh = fopen($blobFileName, 'w'))
                 );
+            } catch(\League\Flysystem\UnableToReadFile) {
+                return false;
             } finally {
                 if ($tmpFh) {
                     @fclose($tmpFh);
