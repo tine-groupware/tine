@@ -2,7 +2,7 @@ version: '2'
 services:
   db:
     image: {{ tinedockercompose_db_image }}
-    command: --max-allowed-packet=209715210
+    command: {{ tinedockercompose_db_command }}
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
