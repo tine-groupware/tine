@@ -3536,6 +3536,26 @@ class Tinebase_FileSystem implements
         return $result;
     }
 
+    public function syncFlySystems(): bool
+    {
+        $flySystems = Tinebase_Controller_Tree_FlySystem::getInstance()->getAll();
+
+        while (($count = $flySystems->count()) > 0) {
+            /** @var Tinebase_Model_Tree_FlySystem $flySystem */
+            $flySystem = $flySystems->getByIndex(rand(0, $count -1));
+            $flySystems->removeById($flySystem->getId());
+
+            $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->get($flySystem->getId());
+            if ($flySystem->{Tinebase_Model_Tree_FlySystem::FLD_MOUNT_POINT}) {
+                $this->syncFlySystem($flySystem->{Tinebase_Model_Tree_FlySystem::FLD_MOUNT_POINT});
+            }
+
+            $flySystems = new Tinebase_Record_RecordSet(Tinebase_Model_Tree_FlySystem::class, $flySystems->asArray());
+        }
+
+        return true;
+    }
+
     static public $syncFlySystemRecursionCache = [];
 
     public function syncFlySystem(Tinebase_Model_Tree_Node $node, int $depth = -1): void
