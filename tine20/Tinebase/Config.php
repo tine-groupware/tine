@@ -884,6 +884,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_AVSCAN_MAXFSIZE = 'maxFSize';
     const FILESYSTEM_AVSCAN_MODE = 'avscanMode';
     const FILESYSTEM_AVSCAN_URL = 'avscanURL';
+    const FILESYSTEM_AVSCAN_NOTIFICATION_ROLE = 'avscanNotificationRole';
     const FILESYSTEM_SHOW_CURRENT_USAGE = 'showCurrentUsage';
 
     const ACTIONQUEUE = 'actionqueue';
@@ -3100,6 +3101,16 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                     self::LABEL                 => 'Antivirus Scan URL',
                     //_('Antivirus Scan URL')
                     self::DESCRIPTION           => 'Antivirus Scan URL',
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE      => true,
+                    self::SETBYSETUPMODULE      => true,
+                ],
+                self::FILESYSTEM_AVSCAN_NOTIFICATION_ROLE => [
+                    //_('Antivirus Scan Notification Role')
+                    self::LABEL                 => 'Antivirus Scan Notification Role',
+                    //_('Antivirus Scan Notification Role')
+                    self::DESCRIPTION           => 'Antivirus Scan Notification Role',
                     self::TYPE                  => self::TYPE_STRING,
                     self::CLIENTREGISTRYINCLUDE => false,
                     self::SETBYADMINMODULE      => true,
