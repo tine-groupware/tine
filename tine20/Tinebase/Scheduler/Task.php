@@ -728,6 +728,17 @@ class Tinebase_Scheduler_Task
         );
     }
 
+    public static function addFlySystemSyncTask(Tinebase_Scheduler $scheduler): void
+    {
+        self::_addTaskIfItDoesNotExist(
+            Tinebase_FileSystem::class,
+            'syncFlySystems',
+            self::TASK_TYPE_HOURLY,
+            $scheduler,
+            'sync all fly system filesystems'
+        );
+    }
+
     /**
      * @param string $taskController
      * @param string $taskMethod

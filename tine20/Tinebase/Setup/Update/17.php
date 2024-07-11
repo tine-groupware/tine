@@ -29,6 +29,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE008 = __CLASS__ . '::update008';
     protected const RELEASE017_UPDATE009 = __CLASS__ . '::update009';
     protected const RELEASE017_UPDATE010 = __CLASS__ . '::update010';
+    protected const RELEASE017_UPDATE011 = __CLASS__ . '::update011';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -77,6 +78,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE007 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update007',
+            ],
+            self::RELEASE017_UPDATE011 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update011',
             ],
         ],
         (self::PRIO_NORMAL_APP_UPDATE + 1) => [
@@ -290,5 +295,12 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             Tinebase_Model_BankHoliday::class,
         ]);
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.10', self::RELEASE017_UPDATE010);
+    }
+
+    public function update011()
+    {
+        Tinebase_Scheduler_Task::addFlySystemSyncTask(Tinebase_Core::getScheduler());
+        
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.11', self::RELEASE017_UPDATE011);
     }
 }
