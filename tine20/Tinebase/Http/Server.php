@@ -91,7 +91,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
      * 
      * the called functions output the generated content directly themselves
      *
-     * @param array $request
+     * @param mixed $request
      */
     public function handle($request = false)
     {
@@ -154,10 +154,18 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
                     throw new Zend_Json_Server_Exception("Unknown Method '$this->_method'.", 400);
                 }
             } else {
-                throw new Zend_Json_Server_Exception("Unknown Method '$this->_method'.", 400);
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . " Unknown Method '$this->_method'.");
+                }
+                $this->fault(null, 400);
             }
         } else {
-            throw new Zend_Json_Server_Exception("No Method Specified.", 404);
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . " No Method Specified.");
+            }
+            $this->fault(null, 404);
         }
     }
 
@@ -181,8 +189,10 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
         }
 
         if (count($calling_args) < count($func_args)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' request: ' . print_r($request, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' request: ' . print_r($request, true));
+            }
 
             throw new Zend_Json_Server_Exception('Invalid Method Call to '
                 . $this->_method . '. Requires ' . count($func_args) . ' parameters, '
@@ -211,7 +221,7 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
     /**
      * Implement Zend_Server_Interface::fault()
      *
-     * @param mixed $fault Message
+     * @param mixed $exception Message
      * @param int $code Error Code
      */
     public function fault($exception = null, $code = null)
@@ -234,7 +244,6 @@ class Tinebase_Http_Server extends Zend_Server_Abstract implements Zend_Server_I
         if ($exception instanceof Exception) {
             $error['msg'] = $exception->getMessage();
             $error['code'] = $exception->getCode();
-            $error['trace'] = $exception->getTrace();
             Tinebase_Exception::log($exception);
         } elseif (!is_null($exception)) {
             $error['msg'] = $exception;

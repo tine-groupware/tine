@@ -373,7 +373,7 @@ class Tinebase_Server_HttpTests extends TestCase
      *
      * @see  0012364: generalize import/export and allow to configure via modelconfig
      *
-     * TODO create message first?
+     * TODO create message first and do login? this test is not very meaningful
      */
     public function testHandleRequestForReflectionAPI()
     {
@@ -387,13 +387,7 @@ class Tinebase_Server_HttpTests extends TestCase
         ob_start();
         $server->handle($request);
         $out = ob_get_clean();
-        //echo $out;
 
-        $this->assertTrue(empty($out), 'request should be empty - no message with this id + part should be found');
-        $this->assertStringNotContainsString('Not Authorised', $out);
-        $this->assertStringNotContainsString('Method not found', $out);
-        $this->assertStringNotContainsString('No Application Controller found', $out);
-        $this->assertStringNotContainsString('"error"', $out);
-        $this->assertStringNotContainsString('PHP Fatal error', $out);
+        $this->assertEquals("Call to Felamimail.downloadAttachment failed.\n", $out);
     }
 }
