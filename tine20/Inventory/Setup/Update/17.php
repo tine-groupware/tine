@@ -16,6 +16,7 @@ class Inventory_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE000 = __CLASS__ . '::update000';
     const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
+    const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -28,6 +29,10 @@ class Inventory_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+            self::RELEASE017_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -63,5 +68,32 @@ class Inventory_Setup_Update_17 extends Setup_Update_Abstract
                 . ' CHANGE costcenter eval_dim_cost_center varchar(255) DEFAULT NULL');
         }
         $this->addApplicationUpdate(Inventory_Config::APP_NAME, '17.2', self::RELEASE017_UPDATE002);
+    }
+
+    public function update003()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+
+        Setup_SchemaTool::updateSchema( [
+            Inventory_Model_InventoryItem::class,
+            Inventory_Model_Type::class
+        ] );
+
+        $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
+            Tinebase_Application::getInstance()->getApplicationByName(Inventory_Config::APP_NAME)->getId(),
+            Inventory_Model_InventoryItem::FLD_SERIAL_NUMBER, Inventory_Model_InventoryItem::class);
+        
+        if (null !== $cfc) {
+            $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . Inventory_Model_InventoryItem::TABLE_NAME . ' AS i JOIN '
+                . SQL_TABLE_PREFIX . 'customfield' . ' AS c '
+                . 'ON i.id' . ' = c.record_id'
+                . ' SET i.' . Inventory_Model_InventoryItem::FLD_SERIAL_NUMBER . ' = c.value'
+                . ' WHERE c.customfield_id = "' . $cfc->getId() . '"');
+
+            
+            Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
+        }
+
+        $this->addApplicationUpdate(Inventory_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
     }
 }

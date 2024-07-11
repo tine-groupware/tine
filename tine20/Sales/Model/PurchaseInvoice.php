@@ -63,6 +63,12 @@ class Sales_Model_PurchaseInvoice extends Tinebase_Record_Abstract
             ],
         ],
         
+        self::JSON_EXPANDER             => [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                'supplier'       => [],
+            ]
+        ],
+        
         'filterModel' => array(
             'supplier' => array(
                 'filter' => 'Tinebase_Model_Filter_ExplicitRelatedRecord',
