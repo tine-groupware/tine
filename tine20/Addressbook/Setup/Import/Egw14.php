@@ -326,8 +326,11 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
     protected function _getCustomFields(int $recordId): array
     {
         $config = $this->_getEgwCustomFieldConfig('addressbook');
+
+        // TODO get label from config.ini & make this optional
         $config['info_startdate'] = [
             'type' => 'date',
+            'label' => 'Wiedervorlage',
         ];
 
         $select = $this->_egwDb->select()
@@ -340,7 +343,7 @@ class Addressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstrac
         // TODO handle multiple occurrences?
         $infologs = $this->_fetchInfoLogs($recordId, 'addressbook');
         foreach ($infologs as $infolog) {
-            if (! empty($infolog['info_startdate']) && $infolog['status'] === 'ongoing') {
+            if (! empty($infolog['info_startdate']) && $infolog['info_status'] === 'ongoing') {
                 $egwCustomfieldData[] = [
                     'contact_name' => 'info_startdate',
                     'contact_value' => new Tinebase_DateTime('@' . $infolog['info_startdate']),
