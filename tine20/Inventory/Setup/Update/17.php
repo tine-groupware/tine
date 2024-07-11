@@ -74,6 +74,11 @@ class Inventory_Setup_Update_17 extends Setup_Update_Abstract
     {
         Tinebase_TransactionManager::getInstance()->rollBack();
 
+        Setup_SchemaTool::updateSchema( [
+            Inventory_Model_InventoryItem::class,
+            Inventory_Model_Type::class
+        ] );
+
         $cfc = Tinebase_CustomField::getInstance()->getCustomFieldByNameAndApplication(
             Tinebase_Application::getInstance()->getApplicationByName(Inventory_Config::APP_NAME)->getId(),
             Inventory_Model_InventoryItem::FLD_SERIAL_NUMBER, Inventory_Model_InventoryItem::class);
@@ -89,10 +94,6 @@ class Inventory_Setup_Update_17 extends Setup_Update_Abstract
             Tinebase_CustomField::getInstance()->deleteCustomField($cfc);
         }
 
-        Setup_SchemaTool::updateSchema( [
-            Inventory_Model_InventoryItem::class,
-            Inventory_Model_Type::class
-        ] );
         $this->addApplicationUpdate(Inventory_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
     }
 }
