@@ -272,13 +272,16 @@ Ext.grid.ColumnModel = Ext.extend(Ext.util.Observable, {
      * Moves a column from one position to another.
      * @param {Number} oldIndex The index of the column to move.
      * @param {Number} newIndex The position at which to reinsert the coolumn.
+     * @param suppressEvent
      */
-    moveColumn : function(oldIndex, newIndex){
+    moveColumn : function(oldIndex, newIndex, suppressEvent){
         var c = this.config[oldIndex];
         this.config.splice(oldIndex, 1);
         this.config.splice(newIndex, 0, c);
         this.dataMap = null;
-        this.fireEvent("columnmoved", this, oldIndex, newIndex);
+        if (!suppressEvent) {
+            this.fireEvent("columnmoved", this, oldIndex, newIndex);
+        }
     },
 
     /**

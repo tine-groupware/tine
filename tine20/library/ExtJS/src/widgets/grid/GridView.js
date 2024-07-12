@@ -1203,7 +1203,7 @@ viewConfig: {
             if (this.grid) {
                 this.grid.stateId = this.latestGridStateId;
                 if (currentGridState) {
-                    this.grid.applyState(currentGridState);
+                    this.grid.applyState(currentGridState, true);
                 }
             }
             const mode = this.getResponsiveMode();
