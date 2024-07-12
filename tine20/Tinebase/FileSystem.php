@@ -3575,8 +3575,10 @@ class Tinebase_FileSystem implements
             }
 
             $childNodes = $this->getTreeNodeChildren($node);
+            $flyChildren = $flySystem->listContents($node->flypath)->toArray();
+            shuffle($flyChildren);
             /** @var \League\Flysystem\StorageAttributes $listing */
-            foreach ($flySystem->listContents($node->flypath) as $listing) {
+            foreach ($flyChildren as $listing) {
                 $childName = basename(rtrim($listing->path(), '/'));
                 if ($childName === '.' || $childName === '..') continue;
 
