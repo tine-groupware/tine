@@ -206,9 +206,9 @@ Tine.widgets.grid.ColumnManager = function() {
                     const wkdayWidth = _.indexOf(format?.Date ?? format, 'wkday') >= 0 ? 15 : 0;
                     width += wkdayWidth;
                 }
-                config.minWidth = width;
-                config.defaultWidth = width;
-                config.maxWidth = width;
+                // config.minWidth = width;
+                // config.defaultWidth = width;
+                // config.maxWidth = width;
             }
             
             if (type === 'tag') {

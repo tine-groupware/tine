@@ -141,7 +141,7 @@ Tine.Tinebase.common = {
         const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
 
         return dateObj ? _.map(format, (key) => {
-            return key === 'wkday' ? dateObj.format('l').substr(0,2) :
+            return key === 'wkday' ? `<span class="wkday">${dateObj.format('l').substr(0,2)}</span>` :
                 Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key));
             }).join(' ') : '';
     },

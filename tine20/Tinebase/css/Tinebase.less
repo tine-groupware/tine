@@ -7,6 +7,17 @@ html, body {
     height:100%;
 }
 
+.tine-gird-cell-datetime div {
+    container-type: inline-size;
+}
+
+@container (width < 130px) {
+    .wkday {
+        font-size: 20px;
+        display: none;
+    }
+}
+
 /* see ace-tm styles */
 .string { color: rgb(3, 106, 7); }
 .number { color: rgb(0, 0, 205); }
