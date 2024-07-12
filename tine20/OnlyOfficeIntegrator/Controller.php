@@ -297,13 +297,21 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
                 case 2:
                     return $this->processStatus2($requestData, $token);
 
-                //case 3: document save error, treat like 4 -> invalidate token
+                //case 3: document save error, try force save once, then treat like 4 -> invalidate token
                 case 3:
+                    if ($this->processStatus3($token)) {
+                        $response = new \Zend\Diactoros\Response();
+                        $response->getBody()->write('{
+    "error": 0
+}');
+                        return $response;
+                    }
                     $e = new Tinebase_Exception_Backend('OnlyOffice send status 3: save error');
                     $e->setLogToSentry(true);
                     $e->setLogLevelMethod('warn');
                     Tinebase_Exception::log($e);
                     $this->sendSaveFailureEmail($token);
+
                 // case 4: document closed without changes -> invalidate token
                 case 4:
                     return $this->processStatus4($token);
@@ -435,6 +443,37 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
     "error": 0
 }');
         return $response;
+    }
+
+    protected function processStatus3(string $token): bool
+    {
+        $found = false;
+        $nowPlus5 = Tinebase_DateTime::now()->addMinute(5);
+        $accessTokenCtrl = OnlyOfficeIntegrator_Controller_AccessToken::getInstance();
+        $transaction = Tinebase_RAII::getTransactionManagerRAII();
+        /** @var Tinebase_Backend_Sql_Abstract $backend */
+        $backend = $accessTokenCtrl->getBackend();
+        $selectForUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII($backend);
+        $tokenRecords = $accessTokenCtrl->search(
+            Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
+                ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN, 'operator' => 'equals', 'value' => $token],
+                ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED, 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
+                ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE_FORCED, 'operator' => 'before', 'value' => Tinebase_DateTime::now()],
+            ]));
+        unset($selectForUpdateRaii);
+
+        $tokenRecord = null;
+        foreach ($tokenRecords as $tokenRecord) {
+            $found = true;
+            $tokenRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SAVE_FORCED} = $nowPlus5;
+            $tokenRecord = $accessTokenCtrl->update($tokenRecord);
+        }
+        $transaction->release();
+        if (!$found) {
+            return false;
+        }
+        /** @var OnlyOfficeIntegrator_Model_AccessToken $tokenRecord */
+        return $this->callCmdServiceForceSave($tokenRecord);
     }
 
     protected function processStatus4($token)
