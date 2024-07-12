@@ -643,7 +643,7 @@ function(grid, rowIndex, columnIndex, e) {
         this.mon(this.colModel, 'hiddenchange', this.saveState, this, {delay: 100});
     },
 
-    applyState : function(state){
+    applyState : function(state, suppressEvent = false){
         const cm = this.colModel;
         const cs = state.columns;
         const store = this.store;
@@ -672,10 +672,10 @@ function(grid, rowIndex, columnIndex, e) {
                 c = cm.getColumnById(s.id);
                 if (c) {
                     oldIndex = cm.getIndexById(s.id);
-                    cm.setHidden(oldIndex, !!s.hidden);
+                    cm.setHidden(oldIndex, !!s.hidden, suppressEvent);
                     c.hidden = !!s.hidden;
                     if (oldIndex !== i) {
-                        cm.moveColumn(oldIndex, i);
+                        cm.moveColumn(oldIndex, i, suppressEvent);
                     }
                     if (!cm.isResizable(i)) continue;
                     c.width = s.width;
