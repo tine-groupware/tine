@@ -994,11 +994,12 @@ var menu = new Ext.menu.Menu({
     },
 
     // private
-    onSelect : async function(record, index){
+    onSelect : async function(record, index, noCollapse){
         this.fireAsyncEvent('beforeselect', this, record, index).then(() => {
-        // if(this.fireEvent('beforeselect', this, record, index) !== false){
             this.setValue(record.data[this.valueField || this.displayField]);
-            this.collapse();
+            if (!noCollapse) {
+                this.collapse();
+            }
             this.fireEvent('select', this, record, index);
         }).catch(e => {});
     },
@@ -1096,9 +1097,11 @@ var menu = new Ext.menu.Menu({
     onViewClick : async function(doFocus){
         var index = this.view.getSelectedIndexes()[0],
             s = this.store,
-            r = s.getAt(index);
+            r = s.getAt(index),
+            e = arguments[3] || {}
+
         if(r){
-            await this.onSelect(r, index);
+            await this.onSelect(r, index, e.ctrlKey || e.altKey || e.shiftKey);
         }else {
             this.collapse();
         }

@@ -352,7 +352,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.ux.form.Clearab
      */
     onSelect: function (record, index) {
         this.selectedRecord = record;
-        return Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onSelect.call(this, record, index);
+        return Tine.Tinebase.widgets.form.RecordPickerComboBox.superclass.onSelect.apply(this, arguments);
     },
 
     /**
