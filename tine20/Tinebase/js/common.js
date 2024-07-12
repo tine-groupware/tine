@@ -110,16 +110,12 @@ Tine.Tinebase.common = {
      * Returns localised date and time string
      *
      * @param {mixed} $_iso8601
+     * @param metadata
      * @see Ext.util.Format.date
      * @return {String} localised date and time
      */
     dateTimeRenderer: function ($_iso8601, metadata) {
-        if (metadata) {
-            metadata.css = 'tine-gird-cell-datetime';
-        }
-
-        const dateObj = $_iso8601 instanceof Date ? $_iso8601 : Date.parseDate($_iso8601, Date.patterns.ISO8601Long);
-
+        if (metadata) metadata.css = 'tine-gird-cell-datetime';
         return Tine.Tinebase.common.dateRenderer.call(this, $_iso8601) + ' '
             + Tine.Tinebase.common.timeRenderer.call(this, $_iso8601);
     },
@@ -128,24 +124,22 @@ Tine.Tinebase.common = {
      * Returns localised date string
      *
      * @param {mixed} date
+     * @param metadata
      * @see Ext.util.Format.date
      * @return {String} localised date
      */
     dateRenderer: function (date, metadata) {
         const format = this?.format ? (this.format?.Date || this.format) : ['wkday', 'medium'];
-
-        if (_.isObject(metadata)) {
-            metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
-        }
-
         const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
-
+        
+        if (_.isObject(metadata)) metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
+        
         return dateObj ? _.map(format, (key) => {
-            return key === 'wkday' ? dateObj.format('l').substr(0,2) :
-                Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key));
-            }).join(' ') : '';
+            return `<span class="date-renderer-${key}">${key === 'wkday' ? dateObj.format('l').substr(0,2) :
+                Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key))}</span>`;
+        }).join(' ') : '';
     },
-
+  
     /**
      * Returns localised number string with two digits if no format is given
      *
@@ -196,20 +190,18 @@ Tine.Tinebase.common = {
      * Returns localised time string
      *
      * @param {mixed} date
+     * @param metadata
      * @see Ext.util.Format.date
      * @return {String} localised time
      */
     timeRenderer: function (date, metadata) {
         const format = this?.format ? (this.format?.Time || this.format) : ['medium'];
-
-        if (metadata) {
-            metadata.css = 'tine-gird-cell-time';
-        }
-
-        var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Time);
-
+        const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Time);
+        
+        if (metadata) metadata.css = 'tine-gird-cell-time';
+        
         return dateObj ? _.map(format, (key) => {
-            return Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', key));
+            return `<span class="time-renderer-${key}">${Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', key))}</span>`;
         }).join(' ') : '';
     },
 
