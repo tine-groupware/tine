@@ -7,14 +7,22 @@ html, body {
     height:100%;
 }
 
-.tine-gird-cell-datetime div {
+.tine-gird-cell-date div,
+.tine-gird-cell-time div,
+.tine-gird-cell-datetime div{
     container-type: inline-size;
+    container-name: datetime;
 }
 
-@container (width < 130px) {
-    .wkday {
-        font-size: 20px;
-        display: none;
+@container datetime (width < 80px) {
+    .time-renderer-medium {
+      display: none;
+    }
+}
+
+@container datetime (width < 120px) {
+    .date-renderer-wkday {
+      display: none;
     }
 }
 

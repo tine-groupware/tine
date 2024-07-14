@@ -199,16 +199,14 @@ Tine.widgets.grid.ColumnManager = function() {
             ].includes(type)) {
                 let width = 120;
                 
-                if (field?.dateFormat === "H:i:s") width = 60;
-                if (type === 'datetime_separated_date') width = 80;
                 if (field) {
                     const format = Tine.widgets.grid.RendererManager.getDateTimeFormat(field);
                     const wkdayWidth = _.indexOf(format?.Date ?? format, 'wkday') >= 0 ? 15 : 0;
                     width += wkdayWidth;
                 }
-                // config.minWidth = width;
-                // config.defaultWidth = width;
-                // config.maxWidth = width;
+                 config.minWidth = 65;
+                 config.defaultWidth = width;
+                 config.maxWidth = 135;
             }
             
             if (type === 'tag') {
