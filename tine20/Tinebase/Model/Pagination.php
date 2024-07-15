@@ -212,6 +212,9 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
                 if (isset($mappingDef['fieldCallback'])) {
                     $field = call_user_func($mappingDef['fieldCallback'], $field);
                 }
+                if ($mappingDef['noJoinRequired'] ?? false) {
+                    continue;
+                }
                 if (isset($joined[$mappingDef['table']])) {
                     continue;
                 }
