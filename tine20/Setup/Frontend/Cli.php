@@ -259,14 +259,18 @@ class Setup_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             $applications = array_diff($applications, $skipApps);
         }
 
-        $this->_promptRemainingOptions($applications, $options);
-        $appCount = $controller->installApplications($applications, $options);
+        if (! empty($applications)) {
+            $this->_promptRemainingOptions($applications, $options);
+            $appCount = $controller->installApplications($applications, $options);
 
-        if ((isset($options['acceptedTermsVersion']) || array_key_exists('acceptedTermsVersion', $options))) {
-            Setup_Controller::getInstance()->saveAcceptedTerms($options['acceptedTermsVersion']);
+            if ((isset($options['acceptedTermsVersion']) || array_key_exists('acceptedTermsVersion', $options))) {
+                Setup_Controller::getInstance()->saveAcceptedTerms($options['acceptedTermsVersion']);
+            }
+
+            echo "Successfully installed " . $appCount . " applications.\n";
+        } else {
+            echo "No applications found to install.\n";
         }
-
-        echo "Successfully installed " . $appCount . " applications.\n";
         return 0;
     }
 
