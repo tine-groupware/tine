@@ -84,6 +84,17 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
      */
     protected $_application = 'Tinebase';
 
+    protected static $_sortExternalMapping = [
+        'creation_time' => [
+            'fieldCallback' => [self::class, 'sortFieldManipulator'],
+            'noJoinRequired' => true,
+        ],
+        'last_modified_time' => [
+            'fieldCallback' => [self::class, 'sortFieldManipulator'],
+            'noJoinRequired' => true,
+        ],
+    ];
+
     /**
      * holds the configuration object (must be declared in the concrete class)
      *
@@ -691,5 +702,10 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             }
         }
         return $this->_notifyBC;
+    }
+
+    public static function sortFieldManipulator(string $field): string
+    {
+        return 'tree_fileobjects.' . $field;
     }
 }

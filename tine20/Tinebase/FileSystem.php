@@ -2603,8 +2603,7 @@ class Tinebase_FileSystem implements
      */
     public function searchNodes(Tinebase_Model_Tree_Node_Filter $_filter = null, Tinebase_Record_Interface $_pagination = null)
     {
-        $result = $this->_getTreeNodeBackend()->search($_filter, $_pagination);
-        return $result;
+        return $this->_getTreeNodeBackend()->search($_filter, $_pagination);
     }
 
     /**
@@ -2613,14 +2612,13 @@ class Tinebase_FileSystem implements
      * TODO replace searchNodes / or refactor this - tree objects has no search function yet / might be ambiguous...
      *
      * @param Tinebase_Model_Tree_Node_Filter $_filter
-     * @param Tinebase_Record_Interface $_pagination
+     * @param Tinebase_Model_Pagination $_pagination
      * @param boolean $_onlyIds
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
     public function search(Tinebase_Model_Tree_Node_Filter $_filter = null, Tinebase_Record_Interface $_pagination = null, $_onlyIds = false)
     {
-        $result = $this->_getTreeNodeBackend()->search($_filter, $_pagination, $_onlyIds);
-        return $result;
+        return $this->_getTreeNodeBackend()->search($_filter, $_pagination, $_onlyIds);
     }
 
     /**
@@ -2631,8 +2629,7 @@ class Tinebase_FileSystem implements
     */
     public function searchNodesCount(Tinebase_Model_Tree_Node_Filter $_filter = null)
     {
-        $result = $this->_getTreeNodeBackend()->searchCount($_filter);
-        return $result;
+        return $this->_getTreeNodeBackend()->searchCount($_filter);
     }
 
     /**

@@ -271,6 +271,47 @@ class Filemanager_Frontend_JsonTests extends TestCase
         $node = $this->_getNodeByNameFromResult('unittestdir_personal', $result);
         self::assertEquals($path . '/unittestdir_personal/', $node['path']);
     }
+
+    public function testSearchSharedNodesWithPaging()
+    {
+        $this->_setupTestPath(Tinebase_FileSystem::FOLDER_TYPE_SHARED);
+        $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
+
+        $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath(
+            $sharedContainerNode['path']
+        );
+
+        $fileNames = [
+            'afile1',
+            'afile2',
+            'bfile1',
+            'bfile2',
+        ];
+
+        $results = [];
+        foreach ($fileNames as $fileName) {
+            $path = $sharedContainerNode['path'] . $fileName;
+            sleep(1);
+            $result = $this->_getUit()->createNodes([$path], Tinebase_Model_Tree_FileObject::TYPE_FILE, [], false);
+            $results[$fileName] = $result[0]['creation_time'];
+        }
+
+        $filter = [['field' => 'path', 'operator' => 'equals', 'value' => '/shared/testcontainer']];
+        $paging = [
+            'dir' => 'DESC',
+            'sort' => 'creation_time',
+            'start' => 0,
+            'limit' => 2,
+        ];
+        $page1Result = $this->_getUit()->searchNodes($filter, $paging);
+        $paging['start'] = 2;
+        $page2Result = $this->_getUit()->searchNodes($filter, $paging);
+
+        self::assertEquals('bfile2', $page1Result['results'][0]['name'], print_r($results, true));
+        self::assertEquals('bfile1', $page1Result['results'][1]['name'], print_r($results, true));
+        self::assertEquals('afile2', $page2Result['results'][0]['name'], print_r($results, true));
+        self::assertEquals('afile1', $page2Result['results'][1]['name'], print_r($results, true));
+    }
     
     /**
      * search node helper
