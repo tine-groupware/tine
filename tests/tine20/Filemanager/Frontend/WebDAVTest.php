@@ -1278,7 +1278,12 @@ EOS
         $this->assertNotEquals($eTag, $updatedEtag, 'eTag did not changed');
         $this->assertTrue(preg_match('/"\w+"/', $updatedEtag) === 1);
 
-        $this->assertTrue(fread($node->get(), 10000) == file_get_contents($updateFile), 'content not updated');
+        $this->assertTrue(fread($node->get(), 10000) === file_get_contents($updateFile), 'content not updated');
+
+        // only relevant if av scan is active... probably not in the ci? but locally you can turn it on...
+        $putNote = Tinebase_Notes::getInstance()->getNotesOfRecord(Tinebase_Model_Tree_Node::class, $node->getId(), \Tinebase_Notes::DEFAULT_RECORD_BACKEND, false)->sort('seq')->getLastRecord();
+        $this->assertNotSame(Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN, $putNote->note_type_id);
+        $this->assertSame(Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $putNote->note_type_id);
     }
 
     public function _assertWebDAVTreeNodeTypes($path, $nodeName)

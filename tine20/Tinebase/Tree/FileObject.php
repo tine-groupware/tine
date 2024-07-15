@@ -417,7 +417,7 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 }
             }
             $this->addNotesToTreeNodes($newRecord->getId(),
-                isset($diff->diff['lastavscan_time']) && ! empty($diff->diff['lastavscan_time'])
+                isset($diff->diff['lastavscan_time']) && ! empty($diff->diff['lastavscan_time']) && count($diff->diff) <= 2
                     ? Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN
                     : Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED,
                 $currentMods
