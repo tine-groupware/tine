@@ -38,8 +38,6 @@ Tine.widgets.grid.GridPanel = function(config) {
         limit: 50
     };
     
-    this.layoutStyle = 'auto';
-
     // allow to initialize with string
     this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
 
@@ -1506,6 +1504,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (this.grid && !Ext.state.Manager.get(this.grid.stateId)) {
             await this.grid.saveState();
         }
+        this.grid.getView().setResponsiveMode(this.regionConfig[this.detailsPanelRegion]?.responsiveLevel ?? 'auto');
         this.grid.view.layout();
     },
     
@@ -1810,8 +1809,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     text: Ext.util.Format.capitalize(i18n._(text)),
                     dataIndex: level,
                     handler: (action) => {
-                        this.layoutStyle = action.dataIndex;
-                        this.grid.getView().setResponsiveMode(this.layoutStyle);
+                        this.grid.getView().setResponsiveMode(action.dataIndex);
+                        this.regionConfig[this.detailsPanelRegion].responsiveLevel = action.dataIndex;
+                        Ext.state.Manager.set(this.regionConfigStateId, this.regionConfig);
+
                         this.grid.view.layout();
                     }
                 });
@@ -1832,7 +1833,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                             item.container[isModeMatched ? "addClass" : "removeClass"]("x-menu-item-checked");
                             item[isModeMatched ? "addClass" : "removeClass"]('x-menu-check-item x-menu-group-item');
                         }
-                        action.setIconClass(action.initialConfig.dataIndex === this.layoutStyle ? 'action_enable' : '');
+                        const level = this.regionConfig[this.detailsPanelRegion]?.responsiveLevel;
+                        action.setIconClass(action.initialConfig.dataIndex === level ? 'action_enable' : '');
                     });
                 },
             });
@@ -1873,6 +1875,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             
             this.regionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
             this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
+            
+            this.regionConfigStateId = `${this.recordClass.prototype.appName}_region_config`;
+            this.regionConfig = Ext.state.Manager.get(this.regionConfigStateId, {
+                'south': {},
+                'east': {},
+            });
             const stateId = this.getResolvedGridStateId();
             let state = Ext.state.Manager.get(stateId);
             if (state) this.defaultSortInfo = state.sort;
@@ -2019,7 +2027,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         _.each(Tine.Tinebase.areaLocks.getLocks(this.areaLockSelector), (areaLock) => {
             Tine.Tinebase.areaLocks.manageMask(areaLock);
         });
-
+        
         if (this.initialLoadAfterRender) {
             this.initialLoad();
             this.afterIsRendered().then(() => {

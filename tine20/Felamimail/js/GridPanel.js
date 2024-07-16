@@ -1665,6 +1665,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (this.grid && !Ext.state.Manager.get(this.grid.stateId)) {
             await this.grid.saveState();
         }
+        
+        this.grid.getView().setResponsiveMode(this.regionConfig[this.detailsPanelRegion]?.responsiveLevel ?? 'auto');
         this.grid.view.layout();
     },
 
