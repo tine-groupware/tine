@@ -141,8 +141,8 @@ class Tinebase_Fulltext_TextExtract
         @exec('rm -Rf ' . escapeshellarg("$tempDir"));
         
         if ($result !== 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) {
-                Tinebase_Core::getLogger()->err(
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(
                     __METHOD__ . '::' . __LINE__
                     . " Tika did not return status 0.\n command: $cmd\n output:"
                     . $errMsg . print_r($output, true) . ' ' . print_r($result, true)
