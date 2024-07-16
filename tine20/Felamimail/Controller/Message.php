@@ -9,8 +9,6 @@
  * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-
-use Hfig\MAPI;
 use Hfig\MAPI\OLE\Pear;
 
 /**
@@ -1432,15 +1430,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         // @todo check if it's an email (.eml?)
         if ($node['contenttype'] === 'application/vnd.ms-outlook') {
-            // message parsing and file IO are kept separate
-            $messageFactory = new MAPI\MapiMessageFactory(new Felamimail_MAPI_Factory());
-            $documentFactory = new Pear\DocumentFactory();
-            
             $stream = Tinebase_FileSystem::getInstance()->fopen($nodePath, 'r');
             try {
+                $documentFactory = new Pear\DocumentFactory();
                 $ole = $documentFactory->createFromStream($stream);
-                $parsedMessage = $messageFactory->parseMessage($ole);
-                $content = $parsedMessage->toMimeString();
+                $mapiMessage = new Felamimail_MAPI_Message($ole);
+                $cacheId = sha1(self::class . $node['id']); 
+                $message = $mapiMessage->parseMessage($cacheId);
             } catch (Throwable $t) {
                 $message = 'Could not parse message: ' . $t->getMessage();
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
@@ -1451,21 +1447,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             } finally {
                 Tinebase_FileSystem::getInstance()->fclose($stream);
             }
-
-            // write it to cache
-            $cacheId = sha1(self::class . $node['name']);
-            Tinebase_Core::getCache()->save($content, $cacheId);
-            $message = Felamimail_Model_Message::createFromMime($content);
             
             if ($message['body_content_type'] === 'text/html') {
-                $body = $parsedMessage->getBodyHTML();
-                $encoding = mb_detect_encoding($body);
+                $encoding = mb_detect_encoding($message['body']);
                 if (! $encoding) {
-                    $body = utf8_encode($body);
+                    $message['body'] = mb_convert_encoding($message['body'], 'UTF-8', 'ISO-8859-1');
                 }
-                $message->body = str_replace("\r", '', $body);
+                $message->body = str_replace("\r", '', $message['body']);
                 $message->body = $this->_purifyBodyContent($message->body);
-                $message['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
             }
         } else {
             $content = Tinebase_FileSystem::getInstance()->getNodeContents($node);
