@@ -1590,8 +1590,17 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 }
                 
                 if (count($listMemberEmails) === 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                        . " list : " . $contact['name'] . " has no member emails found");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                            . " List : " . $contact['name'] . " has no member emails found");
+                    }
+                    if (empty($contact["email"])) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                                . " Skipping, no email addresses found in list ...");
+                        }
+                        continue;
+                    }
                 }
                 
                 $useAsMailinglist = isset($contact['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST])

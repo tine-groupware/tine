@@ -263,7 +263,7 @@ function make_image() {
 
     case "${php_version}" in
         7.4)
-            alpine_branch=3.15
+            alpine_branch=3.14
             alpine_php_package=php7
             ;;
         8.0)

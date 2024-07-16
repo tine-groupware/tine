@@ -426,7 +426,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $records = Felamimail_Controller_Message::getInstance()->cleanupAutoSavedDrafts($accountIds);
         return [
             'status'    => 'success',
-            'result'    => $this->_multipleRecordsToJson($records),
+            'result'    => $records ? $this->_multipleRecordsToJson($records) : [],
         ];
     }
     
