@@ -51,6 +51,8 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
 
         $_definition[self::DELEGATED_ACL_FIELD] = self::FLD_DOCUMENT_ID;
 
+        $_definition[self::HAS_RELATIONS] = false;
+
         unset($_definition[self::FIELDS][self::FLD_DEBITORS]);
         unset($_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTIES][self::FLD_DEBITORS]);
         $_definition[self::JSON_EXPANDER][Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES] = null;
@@ -95,4 +97,10 @@ class Sales_Model_Document_Customer extends Sales_Model_Customer
      * @var Tinebase_ModelConfiguration
      */
     protected static $_configurationObject = NULL;
+
+    public function setFromArray(array &$_data)
+    {
+        unset($_data['relations']);
+        parent::setFromArray($_data);
+    }
 }
