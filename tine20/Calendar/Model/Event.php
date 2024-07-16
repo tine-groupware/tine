@@ -1124,7 +1124,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             }
             return false;
         }
-        return null;
+        return parent::resolveConcurrencyUpdate($_property, $_diffValue, $_oldValue);
     }
 
     public function getTitle()
