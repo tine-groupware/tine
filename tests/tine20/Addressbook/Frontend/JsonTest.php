@@ -449,6 +449,7 @@ class Addressbook_Frontend_JsonTest extends TestCase
             'notes' => array($note),
             'tel_cell_private' => '+49TELCELLPRIVATE',
             'adr_one_countryname' => 'GB',
+            'email' => 'test@mail.com',
         );
     }
 
