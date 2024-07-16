@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Ldap
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -24,12 +24,6 @@ class Tinebase_Ldap extends Zend_Ldap
      */
     public function __construct(array $_options)
     {
-        if (Tinebase_Config::getInstance()->get(Tinebase_Config::LDAP_DISABLE_TLSREQCERT)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                . ' Disable TLS certificate check');
-            putenv('LDAPTLS_REQCERT=never');
-        }
-        
         // strip non Zend_Ldap options
         $options = array_intersect_key($_options, array(
             'host'                      => null,
@@ -55,6 +49,18 @@ class Tinebase_Ldap extends Zend_Ldap
         $returnValue = parent::__construct($options);
 
         return $returnValue;
+    }
+
+    public function connect($host = null, $port = null, $useSsl = null, $useStartTls = null)
+    {
+        parent::connect($host, $port, $useSsl, $useStartTls);
+        if (Tinebase_Config::getInstance()->get(Tinebase_Config::LDAP_DISABLE_TLSREQCERT)) {
+            if (!@ldap_set_option($this->_resource, LDAP_OPT_X_TLS_REQUIRE_CERT, LDAP_OPT_X_TLS_NEVER)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()
+                    ->warn(__METHOD__ . '::' . __LINE__ . ' ldap_set_option "tls require cert: never" failed!');
+            }
+        }
+        return $this;
     }
     
     /**
