@@ -174,6 +174,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $this->_rowNameMapping['accountEmailAddress'] = $_options['emailAttribute'];
         }
 
+        if (($groupName = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUP})) {
+            try {
+                $this->_writeGroup = Tinebase_Group::getInstance()->getGroupByName($groupName)->getId();
+            } catch (Tinebase_Exception_Record_NotDefined) {}
+        }
+
         $this->_options = $_options;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
