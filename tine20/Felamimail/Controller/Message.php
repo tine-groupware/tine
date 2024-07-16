@@ -1554,12 +1554,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $draft;
     }
 
-    public function cleanupAutoSavedDrafts($accountIds)
+    public function cleanupAutoSavedDrafts($accountIds): ?Tinebase_Record_RecordSet
     {
         if (!Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_AUTOSAVE_DRAFTS)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                 __METHOD__ . '::' . __LINE__ . 'FEATURE_AUTOSAVE_DRAFTS is disabled');
-            return [];
+            return null;
         }
         $draftFolderIds = [];
         if (is_string($accountIds)) {
@@ -1583,6 +1583,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             return $messages;
         }  catch (Exception $e) {
             Tinebase_Exception::log($e);
+            return null;
         }
     }
 
