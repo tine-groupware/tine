@@ -1,3 +1,9 @@
+# Traefik Reverse proxy
+
+Configuration of traefik with tine & docker.
+
+## Add traefik config
+
 docker-compose.yml:
 ~~~yml
   web:
@@ -33,6 +39,7 @@ docker-compose.yml:
       - external_network
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      # needed for custom certificates
       - "/srv/tine/traefik/certs/:/certs/:ro"
       - "/srv/tine/traefik/traefik.yml:/etc/traefik/dynamic_conf/conf.yml:ro"
 ~~~
@@ -51,3 +58,19 @@ tls:
         certFile: /certs/Server.ID-320917-x509chain.pem
         keyFile: /certs/key.pem
 ~~~
+
+## Redirect config/middleware (i.e. from /tine20)
+
+docker-compose.yml:
+~~~yml
+  web:
+    #[...]
+    labels:
+    - "traefik.enable=true"
+    - "traefik.http.routers.web.rule=Host(`tine.domain.de`)"
+    # pathreplace config -> needed to remove the /tine20 that users still have in the bookmarks / redirects
+    # see https://doc.traefik.io/traefik/middlewares/http/replacepathregex/
+    - "traefik.http.routers.web.middlewares=tine20pathreplace"
+    - "traefik.http.middlewares.tine20pathreplace.replacepathregex.regex=^/tine20(.*)"
+    - "traefik.http.middlewares.tine20pathreplace.replacepathregex.replacement=$$1"
+    #[...]

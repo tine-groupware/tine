@@ -49,3 +49,13 @@ $ tail -f /var/log/mysql/error.log
 On this stackoverflow question, you can find additional ways to activate error/slow.logs:
 
 (https://stackoverflow.com/questions/39708213/enable-logging-in-docker-mysql-container)
+
+## Docker cleanup unused volumes, images, vfs ...
+
+Make sure that all required containers are running, and then:
+
+~~~shell
+$ docker system prune -a --volumes
+~~~
+
+see (https://stackoverflow.com/questions/44901297/how-to-clean-up-var-lib-docker-vfs-directory)
