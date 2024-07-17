@@ -1,5 +1,9 @@
 # Migration Path
-As there are done breaking changes from time to time to the tine core or any applications, it is recommended (and supported) to only update from a given major version (latest minor release) to the next one (again the latest minor release). You can still find the tarball downloads of the last minor releases of older version (not older than 2017) in the github releases (see https://github.com/tine20/tine20/releases). Business Edition packages can be found here: https://packages.tine20.com/maintenance/source/
+As there are done breaking changes from time to time to the tine core or any applications, it is recommended
+(and supported) to only update from a given major version (latest minor release) to the next one
+(again the latest minor release). You can still find the tarball downloads of the last minor releases of older 
+version (not older than 2017) in the [github releases](https://github.com/tine20/tine20/releases).
+Business Edition packages can be found [here](https://packages.tine20.com/maintenance/source/)
 
 ## Community Edition
 
@@ -11,11 +15,9 @@ So currently (July 2024) we have the following (possible) update path (beginning
 You could also update to the corresponding Business Edition (XXXX.11)
 
 Another possible way (for example if you have a very old version) is to download/checkout the source 
-(from the repo/release tag in github https://github.com/tine20/tine20) and do the following:
+(from the repo/release tag in the [old github repo](https://github.com/tine20/tine20) and do the following:
 
 run "composer install" (see development setup for more information)
 run "php setup.php --update"
 
-Johannes also has written an article about the Community Edition migration path:
-https://www.nohl.eu/tine-20/legacy-migration-path/
-
+Johannes also has written an [article about the Community Edition migration path](https://www.nohl.eu/tine-20/legacy-migration-path/)
