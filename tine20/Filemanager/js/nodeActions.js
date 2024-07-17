@@ -67,7 +67,12 @@ Tine.Filemanager.nodeActionsMgr = new (Ext.extend(Tine.widgets.ActionManager, {
                 return allowed && node.id !== targetNode.id && parentId !== targetNode.id;
             }, true);
         }
-        
+
+        if (action === 'create') {
+            // add grant required
+            isAllowed = isAllowed && _.get(targetNode, 'data.account_grants.addGrant', false);
+        }
+
         if (action === 'delete') {
             // delete grant required
             isAllowed = isAllowed && _.get(targetNode, 'data.account_grants.deleteGrant', false);
