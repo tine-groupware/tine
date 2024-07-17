@@ -1070,7 +1070,7 @@
       version_check_update_file () {
           path=$1
           
-          release_time="$(date "+%Y-%m-%d %H:%M:%S")"
+          release_time="$(date "+%Y-%m-%d 00:00:00")"
           version="{\\\"codeName\\\":\\\"${CODE_NAME}\\\",\\\"packageString\\\":\\\"${PACKAGE_STRING}\\\",\\\"releaseTime\\\":\\\"${release_time}\\\",\\\"critical\\\":\\\"false\\\",\\\"build\\\":\\\"${BUILD}\\\"}"
       
           curl --request PUT --header "PRIVATE-TOKEN: ${VERSION_CHECK_UPDATE_TOKEN}" \
@@ -2150,7 +2150,7 @@
         version_check_update_file () {
             path=$1
             
-            release_time="$(date "+%Y-%m-%d %H:%M:%S")"
+            release_time="$(date "+%Y-%m-%d 00:00:00")"
             version="{\\\"codeName\\\":\\\"${CODE_NAME}\\\",\\\"packageString\\\":\\\"${PACKAGE_STRING}\\\",\\\"releaseTime\\\":\\\"${release_time}\\\",\\\"critical\\\":\\\"false\\\",\\\"build\\\":\\\"${BUILD}\\\"}"
         
             curl --request PUT --header "PRIVATE-TOKEN: ${VERSION_CHECK_UPDATE_TOKEN}" \
