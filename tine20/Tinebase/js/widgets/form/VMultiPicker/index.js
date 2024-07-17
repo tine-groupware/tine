@@ -217,9 +217,11 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
 
     validate: function() { return true; },
 
+    isValid: function() { return true },
+
     reset: function() {
-        this.props.records = []
-        this.records = []
+        this.props.records = new Map()
+        this.records = new Map()
     }
 })
 
