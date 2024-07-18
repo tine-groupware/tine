@@ -1247,6 +1247,38 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertFalse(!$node->is_quarantined, 'expect is_quarantined to be true');
     }
 
+    public function testAVScanUnittestFound()
+    {
+        $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();
+        if (empty($imapConfig)) {
+            static::markTestSkipped('no mail configuration');
+        }
+        
+        $this->flushMailer();
+        
+        Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE} =
+            'unittest';
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_NOTIFICATION_ROLE} = 
+            'admin role';
+        Tinebase_FileSystem_AVScan_Factory::registerScanner('unittest', Tinebase_FileSystem_TestAVScanner::class);
+        Tinebase_FileSystem_TestAVScanner::$desiredResult = new Tinebase_FileSystem_AVScan_Result(
+            Tinebase_FileSystem_AVScan_Result::RESULT_FOUND, 'unittest virus');
+        
+        $now = Tinebase_DateTime::now();
+        $node = Tinebase_FileSystem::getInstance()->stat($this->testCreateFile('avModeUnittestFound.txt',
+            'shubidubidulala'));
+        Tinebase_FileSystem::getInstance()->avScan();
+
+        $messages = $this->getMessages();
+
+        static::assertEquals(1, count($messages), 'should have received 1 notification emails');
+        /** @var Tinebase_Mail $message */
+        $message = $messages[0];
+        static::assertEquals('Filemanager avscan Result notification', $message->getSubject());
+        static::assertStringContainsString($this->_controller->getPathOfNode($node, true) , $message->getBodyText()
+            ->getRawContent());
+    }
+
     public function testAVModeQuahogWithClamAVTestFiles()
     {
         if (!is_dir('/usr/share/clamav-testfiles/')) {

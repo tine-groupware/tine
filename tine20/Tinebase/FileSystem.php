@@ -4824,6 +4824,15 @@ class Tinebase_FileSystem implements
             closedir($fileDir);
         }
         closedir($baseDir);
+        
+        $quarantinedFileHashes = $this->_fileObjectBackend->getQuarantinedFileHashes();
+        if (count($quarantinedFileHashes) > 0) {
+            try {
+                $this->_sendAvScanNotification($quarantinedFileHashes);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                
+            }
+        }
 
         // only for unused variable check
         unset($raii);
@@ -5031,10 +5040,47 @@ class Tinebase_FileSystem implements
                 $subject = 'filemanager ' . ($softQuota ? 'soft ' : '') . 'quota notification';
                 $translatedSubject = $translate->_($subject);
                 $messagePlain = $path . ' exceeded ' . ($softQuota ? 'soft ' : '') . 'quota';
-
+                
                 $recipients = $this->getQuotaNotificationRecipients($sender, $softQuota);
                 Tinebase_Notification::getInstance()->send($sender, $recipients, $translatedSubject, $messagePlain, null, null, true);
             }
+        } catch (Exception $e) {
+            Tinebase_Exception::log($e);
+        }
+    }
+
+    protected function _sendAvScanNotification($hashes)
+    {
+        $nodes = $this->_getTreeNodeBackend()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_Tree_FileObject::class,
+            [[ 'field' => 'hash', 'operator' => 'in', 'value' => $hashes]]
+        ));
+            
+        try {
+            $paths = [];
+            foreach ($nodes as $node) {
+                $paths[] = $this->getPathOfNode($node, true);
+            }
+
+            $roleName = Tinebase_Config::getInstance()
+                ->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_NOTIFICATION_ROLE};
+            if (!$roleName) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' Admin role is not configured , skip sending AVScan notification.' . PHP_EOL);
+
+            }
+            $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName($roleName);
+            $recipientIds = Tinebase_Role::getInstance()->getRoleMembersAccounts($adminRole->getId());
+            $recipients = Tinebase_User::getInstance()->getMultiple(array_unique($recipientIds), Tinebase_Model_FullUser::class)
+                ->contact_id;
+            
+            $locale = Tinebase_Translation::getLocale(Tinebase_Core::getPreference()->getValueForUser(Tinebase_Preference::LOCALE,
+                Tinebase_Core::getUser()->accountId));
+            $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
+            $subject = 'Filemanager avscan Result notification';
+            $translatedSubject = $translate->_($subject);
+            $messagePlain = 'Found virus in file : ' . print_r($paths, true);
+            
+            Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients, $translatedSubject, $messagePlain, null, null, true);
         } catch (Exception $e) {
             Tinebase_Exception::log($e);
         }
@@ -5082,6 +5128,7 @@ class Tinebase_FileSystem implements
         $accountIds = array_unique($accountIds);
         return Tinebase_User::getInstance()->getMultiple($accountIds) ?? [];
     }
+
 
     public function getQuotaNotificationRecipients(Tinebase_Model_User $sender = null, $softQuota = true): ?array
     {

@@ -717,6 +717,19 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
     }
 
     /**
+     * @return array
+     */
+    public function getQuarantinedFileHashes()
+    {
+        $result = $this->_db->select()->from(SQL_TABLE_PREFIX . $this->_revisionsTableName, ['hash'])
+            ->where($this->_db->quoteIdentifier(SQL_TABLE_PREFIX . $this->_revisionsTableName . '.is_quarantined') . ' = 1')
+            ->group('hash')
+            ->query()
+            ->fetchAll(Zend_Db::FETCH_COLUMN);
+        return $result;
+    }
+
+    /**
      * @param Tinebase_Model_ModificationLog $_modification
      * @throws Tinebase_Exception_UnexpectedValue
      */
