@@ -1272,4 +1272,36 @@ class OnlyOfficeIntegrator_JsonTests extends TestCase
 
         return $editorConfigArray;
     }
+
+    public function testGetEditorConfigForNodeIdNoDownloadRight()
+    {
+        // allow test user to sign in as sclever
+        Tinebase_Config::getInstance()->set(Tinebase_Config::ROLE_CHANGE_ALLOWED, new Tinebase_Config_Struct(array(
+            Tinebase_Core::getUser()->accountLoginName => array('sclever')
+        )));
+        
+        $editorCfg = $this->testGetEditorConfigForNodeId(false);
+        static::assertEquals(true, $editorCfg['document']['permissions']['download']);
+
+        $parentNode = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest');
+        Tinebase_Tree_NodeGrants::getInstance()->getGrantsForRecord($parentNode);
+        // set default grant for test sync user first
+        foreach ($parentNode->grants as $grant) {
+            if ($grant['account_type'] !== Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                $grant->{Tinebase_Model_Grants::GRANT_ADMIN} = false;
+                $grant->{Tinebase_Model_Grants::GRANT_DOWNLOAD} = false;
+            }
+        }
+        Tinebase_FileSystem::getInstance()->setGrantsForNode($parentNode, $parentNode->grants);
+
+        $tbFe = new Tinebase_Frontend_Json();
+        $tbFe->changeUserAccount('sclever');
+        $node = Tinebase_FileSystem::getInstance()->stat('/Tinebase/folders/shared/ootest/testü.txt');
+        $editorConfigArray = $this->_uit->getEditorConfigForNodeId($node->getId(), (string)$node->revision);
+        static::assertEquals(false, $editorConfigArray['document']['permissions']['download']);
+
+        // reset to original user
+        Tinebase_Controller::getInstance()->initUser($this->_originalTestUser, /* $fixCookieHeader = */ false);
+        Tinebase_Session::getSessionNamespace()->userAccountChanged = false;
+    }
 }
