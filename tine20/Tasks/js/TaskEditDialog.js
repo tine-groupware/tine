@@ -110,8 +110,9 @@ import './DependencyPanel'
         var statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Tasks', 'taskStatus'),
             status = this.getForm().findField('status').getValue(),
             statusRecord = statusStore.getById(status),
-            completedField = this.getForm().findField('completed');
-        
+            completedField = this.getForm().findField('completed'),
+            percentField = this.getForm().findField('percent');
+
         if (statusRecord) {
             if (statusRecord.get('is_open') !== 0) {
                 completedField.setValue(null);
@@ -120,6 +121,7 @@ import './DependencyPanel'
                 if (! Ext.isDate(completedField.getValue())){
                     completedField.setValue(new Date());
                 }
+                percentField.setValue(100);
                 completedField.setDisabled(false);
             }
         }
