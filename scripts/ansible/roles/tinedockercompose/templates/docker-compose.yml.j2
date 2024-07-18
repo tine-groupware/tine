@@ -1,5 +1,6 @@
 version: '2'
 services:
+{% if tinedockercompose_db_service is defined and tinedockercompose_db_service|bool %}
   db:
     image: {{ tinedockercompose_db_image }}
     command: {{ tinedockercompose_db_command }}
@@ -16,6 +17,7 @@ services:
     networks:
       - internal_network
 
+{% endif %}
   web:
     image: {{ tinedockercompose_tine_image }}
     restart: always
@@ -23,7 +25,7 @@ services:
       - db
       - cache
     environment:
-      TINE20_DATABASE_HOST: db
+      TINE20_DATABASE_HOST: {{ tinedockercompose_db_host }}
       TINE20_DATABASE_DBNAME: *MYSQL_DATABASE
       TINE20_DATABASE_USERNAME: *MYSQL_USER
       TINE20_DATABASE_PASSWORD: *MYSQL_PASSWORD
