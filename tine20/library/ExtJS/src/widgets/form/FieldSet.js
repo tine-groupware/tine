@@ -138,7 +138,7 @@ Ext.form.FieldSet = Ext.extend(Ext.Panel, {
         }
         const numValues = this.el.select('input').elements.reduce((num, input) => { return num + (Ext.getCmp(input.id)?.getValue?.() ? 1 : 0) }, 0);
         this.expandedTitle = this.title;
-        this.setTitle(`${this.expandedTitle} (${numValues})`);
+        this.setTitle(this.noCollapseCount ? this.expandedTitle : `${this.expandedTitle} (${numValues})`);
 
         Ext.form.FieldSet.superclass.onCollapse.call(this, doAnim, animArg);
     },
