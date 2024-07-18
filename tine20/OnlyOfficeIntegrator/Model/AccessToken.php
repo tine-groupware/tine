@@ -196,13 +196,24 @@ class OnlyOfficeIntegrator_Model_AccessToken extends Tinebase_Record_NewAbstract
         return $baseUrl;
     }
     
-    public function getEditorConfig()
+    public function getEditorConfig($userGrants = null)
     {
         $user = Tinebase_Core::getUser();
+        
         if ($user->getId() !== $this->{self::FLDS_USER_ID}) {
             $user = Tinebase_User::getInstance()->getFullUserById($this->{self::FLDS_USER_ID});
         }
 
+        if (!empty($this->{self::FLDS_NODE_ID}) && !$userGrants) {
+            try {
+                $fs = Tinebase_FileSystem::getInstance();
+                $node = $fs->get($this->{self::FLDS_NODE_ID}, false, $this->{self::FLDS_NODE_REVISION});
+                $userGrants = $fs->getGrantsOfAccount(Tinebase_Core::getUser(), $node);
+            } catch (Exception $e) {
+            }
+        }
+        $downloadGrant = $userGrants ? $userGrants?->{Tinebase_Model_Grants::GRANT_DOWNLOAD} : true;
+        
         return [
             'document'      => [
                 'fileType'      => $this->{self::FLDS_FILE_TYPE},
@@ -210,7 +221,7 @@ class OnlyOfficeIntegrator_Model_AccessToken extends Tinebase_Record_NewAbstract
                 'title'         => $this->{self::FLDS_TITLE},
                 'url'           => static::getBaseUrl() . '/getDocument/' . $this->{self::FLDS_TOKEN},
                 'permissions'   => [
-                    'download'      => true,
+                    'download'      => $downloadGrant,
                     'edit'          => $this->{self::FLDS_GRANTS} >= self::GRANT_WRITE,
                     'changeHistory' => $this->{self::FLDS_GRANTS} >= self::GRANT_WRITE,
                     'print'         => true,
