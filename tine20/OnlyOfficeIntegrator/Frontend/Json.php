@@ -1066,7 +1066,7 @@ class OnlyOfficeIntegrator_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $token = $this->getTokenForNodeId($nodeId, $userGrants, $revision, static::$_fileExtensions);
 
-        $editorConfig = $token->getEditorConfig();
+        $editorConfig = $token->getEditorConfig($userGrants);
 
         $editorConfig['token'] = JWT::encode($editorConfig, OnlyOfficeIntegrator_Config::getInstance()
             ->{OnlyOfficeIntegrator_Config::JWT_SECRET}, 'HS256');
