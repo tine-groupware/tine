@@ -130,7 +130,6 @@
     "sentry/sentry": "^3",
     "simplesamlphp/simplesamlphp": "v1.19.*",
     "spomky-labs/otphp": "^10.0",
-    "swiftmailer/swiftmailer": "^6.3",
     "symfony/cache": "^5.3",
     "symfony/config": "^4",
     "symfony/dependency-injection": "^4",
