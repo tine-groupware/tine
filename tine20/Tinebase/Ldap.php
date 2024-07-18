@@ -53,13 +53,19 @@ class Tinebase_Ldap extends Zend_Ldap
 
     public function connect($host = null, $port = null, $useSsl = null, $useStartTls = null)
     {
-        parent::connect($host, $port, $useSsl, $useStartTls);
         if (Tinebase_Config::getInstance()->get(Tinebase_Config::LDAP_DISABLE_TLSREQCERT)) {
-            if (!@ldap_set_option($this->_resource, LDAP_OPT_X_TLS_REQUIRE_CERT, LDAP_OPT_X_TLS_NEVER)) {
+            if (!@ldap_set_option(null, LDAP_OPT_X_TLS_REQUIRE_CERT, LDAP_OPT_X_TLS_NEVER)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()
                     ->warn(__METHOD__ . '::' . __LINE__ . ' ldap_set_option "tls require cert: never" failed!');
             }
+        } else {
+            if (!@ldap_set_option(null, LDAP_OPT_X_TLS_REQUIRE_CERT, LDAP_OPT_X_TLS_DEMAND)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()
+                    ->warn(__METHOD__ . '::' . __LINE__ . ' ldap_set_option "tls require cert: demand" failed!');
+            }
         }
+        parent::connect($host, $port, $useSsl, $useStartTls);
+
         return $this;
     }
     
