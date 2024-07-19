@@ -48,7 +48,7 @@ _.assign(app.config.globalProperties.formatMessage, FormatMessage)
 app.config.globalProperties.fmHidden = app.config.globalProperties.formatMessage
 
 
-
+app.config.globalProperties.window = window
 
 // // auto template selection with gettext
 // Vue.prototype.formatMessage = function (template) {

@@ -20,7 +20,7 @@
           </div>
           <div class="col-md-4 col-sm-12 text-end">
             <a :href="poll.config.brandingWeburl">
-              <img style="max-width: 300px; max-height: 80px" :src="poll.config.installLogo" :alt="poll.config.brandingTitle"/>
+              <img style="max-width: 300px; max-height: 80px" :src="`${window.location.origin}/${poll.config.installLogo}`" :alt="poll.config.brandingTitle"/>
             </a>
           </div>
         </div>
