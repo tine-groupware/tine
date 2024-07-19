@@ -11,7 +11,7 @@
     <!-- Excel5 writer only supports sum up to 15000 rows-->
     <writer>Excel2007</writer>
     <description>default xls lead export definition</description>
-    <headers></headers>
+    <header>true</header>
     <columns>
         <column>
             <identifier>lead_name</identifier>
