@@ -862,7 +862,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $visibility = $_user->visibility;
 
         if ($this instanceof Tinebase_User_Interface_SyncAble) {
-            $this->updateUserInSyncBackend($_user);
+            try {
+                $this->updateUserInSyncBackend($_user);
+            } catch (Tinebase_Exception_NotFound) {
+                $this->addUserToSyncBackend($_user);
+            }
         }
 
         $updatedUser = $this->updateUserInSqlBackend($_user);

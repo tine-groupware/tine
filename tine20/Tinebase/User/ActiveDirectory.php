@@ -125,6 +125,8 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         
         $ldapData = $this->_user2ldap($_user);
 
+        $ldapData = array_merge($ldapData, $this->getLdapPasswordData(Tinebase_Record_Abstract::generateUID(20)));
+
         // will be added later
         $primaryGroupId = $ldapData['primarygroupid'];
         unset($ldapData['primarygroupid']);
@@ -148,7 +150,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         
         // add user to primary group and set primary group
         /** @noinspection PhpUndefinedMethodInspection */
-        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend($_user->accountPrimaryGroup, $userId);
+        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend(Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP} ?: $_user->accountPrimaryGroup, $userId);
         
         // set primary group id
         $this->_ldap->updateProperty($dn, array('primarygroupid' => $primaryGroupId));
@@ -203,7 +205,18 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
 
         $this->_ldap->update($metaData['dn'], $ldapData);
     }
-    
+
+    protected function getLdapPasswordData(string $password): array
+    {
+        $ldapData = [
+            'unicodePwd' => $this->_encodePassword($password),
+        ];
+        if ($this->_options['useRfc2307'] ?? false) {
+            $ldapData['shadowlastchange'] = floor(Tinebase_DateTime::now()->getTimestamp() / 86400);
+        }
+        return $ldapData;
+    }
+
     /**
      * set the password for given account
      *
@@ -215,7 +228,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      * @return  void
      * @throws  Tinebase_Exception_InvalidArgument
      */
-    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false)
+    public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null, $ignorePwPolicy = false): void
     {
         if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_userId))) {
             return;
@@ -229,15 +242,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         
         $metaData = $this->_getMetaData($user);
 
-        $ldapData = array(
-            'unicodePwd' => $this->_encodePassword($_password),
-        );
-        
-        if ($this->_options['useRfc2307']) {
-            $ldapData = array_merge($ldapData, array(
-                'shadowlastchange' => floor(Tinebase_DateTime::now()->getTimestamp() / 86400)
-            ));
-        }
+        $ldapData = $this->getLdapPasswordData($_password);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
@@ -567,6 +572,9 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                     break;
                     
                 case 'accountPrimaryGroup':
+                    if ($deviateGroupId = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP}) {
+                        $value = $deviateGroupId;
+                    }
                     /** @noinspection PhpUndefinedMethodInspection */
                     $ldapData[$ldapProperty] = Tinebase_Group::getInstance()->resolveUUIdToGIdNumber($value);
                     if ($this->_options['useRfc2307']) {

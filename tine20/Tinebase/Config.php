@@ -449,7 +449,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
 
     const SYNC_USER_DISABLED = 'syncUserDisabled';
 
-    const SYNC_USER_OF_GROUP = 'syncUserOfGroup';
+    const SYNC_USER_OF_GROUPS = 'syncUserOfGroups';
+    const SYNC_DEVIATED_PRIMARY_GROUP = 'syncDeviatedPrimaryGroup';
 
     /**
      * configure if user contact data should be synced from sync backend, default yes
@@ -1731,11 +1732,22 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                             'setBySetupModule'      => false,
                             'default'               => false,
                         ],
-                        self::SYNC_USER_OF_GROUP => [
-                            //_('Sync user accounts to sync backend if member of this group')
-                            'label'                 => 'Sync user accounts to sync backend if member of this group',
-                            //_('Sync user accounts to sync backend if member of this group')
-                            'description'           => 'Sync user accounts to sync backend if member of this group',
+                        self::SYNC_USER_OF_GROUPS => [
+                            //_('Sync user accounts to sync backend if member of one of these groups')
+                            'label'                 => 'Sync user accounts to sync backend if member of one of these groups',
+                            //_('Sync user accounts to sync backend if member of one of these groups')
+                            'description'           => 'Sync user accounts to sync backend if member of one of these groups',
+                            'type'                  => self::TYPE_ARRAY,
+                            'clientRegistryInclude' => false,
+                            'setByAdminModule'      => false,
+                            'setBySetupModule'      => false,
+                            'default'               => [],
+                        ],
+                        self::SYNC_DEVIATED_PRIMARY_GROUP => [
+                            //_('Sync deviated user accounts default group')
+                            'label'                 => 'Sync deviated user accounts default group',
+                            //_('Sync deviated user accounts default group')
+                            'description'           => 'Sync deviated user accounts default group',
                             'type'                  => self::TYPE_STRING,
                             'clientRegistryInclude' => false,
                             'setByAdminModule'      => false,

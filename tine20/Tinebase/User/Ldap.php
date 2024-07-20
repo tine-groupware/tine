@@ -122,8 +122,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     
     protected $_isReadOnlyBackend = false;
 
-    protected ?string $_writeGroup = null;
-    protected ?array $_writeGroupMembers = null;
+    protected ?array $_writeGroupsIds = null;
+    protected ?array $_writeGroupsMembers = null;
     
     /**
      * used to save the last user properties from ldap backend
@@ -174,10 +174,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $this->_rowNameMapping['accountEmailAddress'] = $_options['emailAttribute'];
         }
 
-        if (($groupName = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUP})) {
-            try {
-                $this->_writeGroup = Tinebase_Group::getInstance()->getGroupByName($groupName)->getId();
-            } catch (Tinebase_Exception_Record_NotDefined) {}
+        if ($groupNames = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}) {
+            $this->_writeGroupsIds = [];
+            foreach ($groupNames as $groupName) {
+                try {
+                    $this->_writeGroupsIds[] = Tinebase_Group::getInstance()->getGroupByName($groupName)->getId();
+                } catch (Tinebase_Exception_Record_NotDefined) {}
+            }
         }
 
         $this->_options = $_options;
@@ -589,7 +592,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             
             // remove the user from current groups, because the dn/uid has changed
             foreach ($memberships as $groupId) {
-                $groupsBackend->removeGroupMemberInSyncBackend($groupId, $_account);
+                $groupsBackend->removeGroupMemberInSyncBackend($groupId, $_account, false);
             }
             
             $newDN = $this->generateDn($_account);
@@ -1141,6 +1144,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                         $ldapData = array_merge($ldapData, $this->_getUserStatusValues($value));
                         break;
                     case 'accountPrimaryGroup':
+                        if ($deviateGroupId = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP}) {
+                            $value = $deviateGroupId;
+                        }
                         /** @var Tinebase_Group_Ldap $groupController */
                         $groupController = Tinebase_Group::getInstance();
                         $ldapData[$ldapProperty] = $groupController->resolveUUIdToGIdNumber($value);
@@ -1226,11 +1232,15 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         if ($this->_isReadOnlyBackend) {
             return true;
         }
-        if (null !== $this->_writeGroup) {
-            if (null === $this->_writeGroupMembers) {
-                $this->_writeGroupMembers = array_fill_keys(Tinebase_Group::getInstance()->getGroupMembers($this->_writeGroup), false);
+        if (null !== $this->_writeGroupsIds) {
+            if (null === $this->_writeGroupsMembers) {
+                $members = [];
+                foreach ($this->_writeGroupsIds as $gid) {
+                    array_merge($members, Tinebase_Group::getInstance()->getGroupMembers($gid));
+                }
+                $this->_writeGroupsMembers = array_fill_keys(array_unique($members), false);
             }
-            return $this->_writeGroupMembers[$userId] ?? true;
+            return $this->_writeGroupsMembers[$userId] ?? true;
         }
         return false;
     }
