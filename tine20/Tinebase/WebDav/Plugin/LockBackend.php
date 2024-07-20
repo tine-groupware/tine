@@ -10,8 +10,8 @@
  *
  */
 
-use Tine20\DAV\Locks\LockInfo;
-use Tine20\DAV\Locks\Backend\AbstractBackend;
+use Sabre\DAV\Locks\LockInfo;
+use Sabre\DAV\Locks\Backend\AbstractBackend;
 
 /**
  * The Lock manager allows you to handle all file-locks centrally.
@@ -42,7 +42,7 @@ class Tinebase_WebDav_Plugin_LockBackend extends AbstractBackend
     }
 
     /**
-     * Returns a list of Tine20\DAV\Locks\LockInfo objects
+     * Returns a list of Sabre\DAV\Locks\LockInfo objects
      *
      * This method should return all the locks for a particular uri, including
      * locks that might be set on a parent uri.

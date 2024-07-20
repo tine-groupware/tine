@@ -10,7 +10,7 @@
  * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-use Tine20\VObject;
+use Sabre\VObject;
 
 /**
  * class to handle a single event
@@ -20,7 +20,7 @@ use Tine20\VObject;
  * @package     Calendar
  * @subpackage  Frontend
  */
-class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\CalDAV\ICalendarObject, Tine20\DAVACL\IACL
+class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\CalDAV\ICalendarObject, Sabre\DAVACL\IACL
 {
     /**
      * @var Tinebase_Model_Container
@@ -115,9 +115,9 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
             $vobjectData = stream_get_contents($vobjectData);
         }
         // Converting to UTF-8, if needed
-        $vobjectData = Tine20\DAV\StringUtil::ensureUTF8($vobjectData);
+        $vobjectData = Sabre\DAV\StringUtil::ensureUTF8($vobjectData);
         
-        #Tine20\CalDAV\ICalendarUtil::validateICalendarObject($vobjectData, array('VEVENT', 'VFREEBUSY'));
+        #Sabre\CalDAV\ICalendarUtil::validateICalendarObject($vobjectData, array('VEVENT', 'VFREEBUSY'));
         
         list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         $converter = Calendar_Convert_Event_VCalendar_Factory::factory($backend, $version);
@@ -129,7 +129,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
-            throw new Tine20\DAV\Exception\PreconditionFailed($e->getMessage());
+            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
         }
 
         if (true === $onlyCurrentUserOrganizer) {
@@ -191,7 +191,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
                 Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
-                throw new Tine20\DAV\Exception\PreconditionFailed($e->getMessage());
+                throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
             }
 
             if ($retry) {
@@ -205,7 +205,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e);
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $vobjectData);
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
-                    throw new Tine20\DAV\Exception\PreconditionFailed($e->getMessage());
+                    throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
                 }
             }
             unset($raii);
@@ -217,7 +217,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
 
             if ($existingEvent->hasExternalOrganizer() && is_numeric($existingEvent->external_seq) &&
                     (int)$event->external_seq < (int)$existingEvent->external_seq) {
-                throw new Tine20\DAV\Exception\PreconditionFailed('updating existing event with outdated external seq');
+                throw new Sabre\DAV\Exception\PreconditionFailed('updating existing event with outdated external seq');
             }
 
             if ($existingEvent->is_deleted) {
@@ -227,7 +227,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
                 if (!$existingEvent->hasExternalOrganizer() &&
                         (!$existingEvent->organizer instanceof Addressbook_Model_Contact ||
                             $existingEvent->organizer->account_id !== $container->getOwner())) {
-                    throw new Tine20\DAV\Exception\PreconditionFailed('only organizer may recover deleted events');
+                    throw new Sabre\DAV\Exception\PreconditionFailed('only organizer may recover deleted events');
                 }
 
                 // @TODO have a undelete/recover workflow beginning in controller
@@ -308,7 +308,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
 
     /**
      * @param Calendar_Convert_Event_VCalendar_Abstract $converter
-     * @throws \Tine20\DAV\Exception\Forbidden
+     * @throws \Sabre\DAV\Exception\Forbidden
      */
     public static function checkWriteAccess($converter)
     {
@@ -322,7 +322,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Update by '
                  . $converterClass . ' client not allowed. See Calendar_Convert_Event_VCalendar_Factory for supported clients.'
                  . ' User-Agent: ' . $useragent);
-            throw new Tine20\DAV\Exception\Forbidden('write access denied for unknown client');
+            throw new Sabre\DAV\Exception\Forbidden('write access denied for unknown client');
         }
     }
     
@@ -331,8 +331,8 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
      *
      * @todo improve handling
      * @return void
-     * @throws Tine20\DAV\Exception\NotFound
-     * @throws Tine20\DAV\Exception\PreconditionFailed
+     * @throws Sabre\DAV\Exception\NotFound
+     * @throws Sabre\DAV\Exception\PreconditionFailed
      */
     public function delete() 
     {
@@ -347,9 +347,9 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
         try {
             $event = Calendar_Controller_MSEventFacade::getInstance()->get($this->_event);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Tine20\DAV\Exception\NotFound("Event not found");
+            throw new Sabre\DAV\Exception\NotFound("Event not found");
         } catch (Tinebase_Exception_UnexpectedValue $teuv) {
-            throw new Tine20\DAV\Exception\PreconditionFailed($teuv->getMessage());
+            throw new Sabre\DAV\Exception\PreconditionFailed($teuv->getMessage());
         }
         
         // disallow event cleanup in the past
@@ -384,14 +384,14 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
      * Returns the VCard-formatted object 
      * 
      * @return resource
-     * @throws Tine20\DAV\Exception\PreconditionFailed
+     * @throws Sabre\DAV\Exception\PreconditionFailed
      */
     public function get() 
     {
         try {
             $event = $this->_getVEvent();
         } catch (Tinebase_Exception_Record_Validation $terv) {
-            throw new Tine20\DAV\Exception\PreconditionFailed($terv->getMessage());
+            throw new Sabre\DAV\Exception\PreconditionFailed($terv->getMessage());
         }
         $s = fopen('php://temp','r+');
         fwrite($s, $event);
@@ -452,8 +452,9 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
      */
     public function getACL() 
     {
-        return null;
-        
+        // TODO FIXME improve this!!! add event read acls for attendees
+        return (new Calendar_Frontend_WebDAV_Container($this->_container))->getACL();
+
         return array(
             array(
                 'privilege' => '{DAV:}read',
@@ -541,7 +542,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
             $cardData = stream_get_contents($cardData);
         }
         // Converting to UTF-8, if needed
-        $cardData = Tine20\DAV\StringUtil::ensureUTF8($cardData);
+        $cardData = Sabre\DAV\StringUtil::ensureUTF8($cardData);
         $vobject = Calendar_Convert_Event_VCalendar_Abstract::getVObject($cardData);
         $xTine20Container = null;
         foreach ($vobject->children() as $component) {
@@ -648,16 +649,16 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
         try {
             $this->_event = Calendar_Controller_MSEventFacade::getInstance()->update($event);
         } catch (Tinebase_Exception_ConcurrencyConflict $ttecc) {
-            throw new Tine20\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
+            throw new Sabre\DAV\Exception\PreconditionFailed('An If-Match header was specified, but none of the specified the ETags matched.','If-Match');
         } catch (Tinebase_Exception_AccessDenied $tead) {
-            throw new Tine20\DAV\Exception\Forbidden('forbidden update');
+            throw new Sabre\DAV\Exception\Forbidden('forbidden update');
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Tine20\DAV\Exception\PreconditionFailed('event not found');
+            throw new Sabre\DAV\Exception\PreconditionFailed('event not found');
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $e);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . $cardData);
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " " . print_r($event->toArray(), true));
-            throw new Tine20\DAV\Exception\PreconditionFailed($e->getMessage());
+            throw new Sabre\DAV\Exception\PreconditionFailed($e->getMessage());
         }
     }
     
@@ -697,7 +698,7 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
      */
     public function setACL(array $acl) 
     {
-        throw new Tine20\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
     
     /**
@@ -780,5 +781,10 @@ class Calendar_Frontend_WebDAV_Event extends Tine20\DAV\File implements Tine20\C
     public function getSupportedPrivilegeSet()
     {
         return null;
+    }
+
+    public function getId(): ?string
+    {
+        return $this->_event?->getId();
     }
 }

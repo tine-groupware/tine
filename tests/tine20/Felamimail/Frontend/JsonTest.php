@@ -4,11 +4,11 @@
  *
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
-use Tine20\DAV;
+use Sabre\DAV;
 
 /**
  * Test class for Felamimail_Frontend_Json
@@ -29,7 +29,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         // vfs cleanup
         foreach ($this->_pathsToDelete as $path) {
             try {
-                $webdavRoot = new DAV\ObjectTree(new Tinebase_WebDav_Root());
+                $webdavRoot = new DAV\Tree(new Tinebase_WebDav_Root());
                 $webdavRoot->delete($path);
             } catch (Exception $e) {
             }
@@ -2229,7 +2229,7 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
      */
     protected function _addVacationTemplateFile()
     {
-        $webdavRoot = new DAV\ObjectTree(new Tinebase_WebDav_Root());
+        $webdavRoot = new DAV\Tree(new Tinebase_WebDav_Root());
         $path = '/webdav/Felamimail/shared/Vacation Templates';
         $node = $webdavRoot->getNodeForPath($path);
         $this->_pathsToDelete[] = $path . '/' . $this->_sieveVacationTemplateFile;

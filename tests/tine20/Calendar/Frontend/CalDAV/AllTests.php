@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -15,18 +15,14 @@ require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR 
 
 class Calendar_Frontend_CalDAV_AllTests
 {
-    public static function main ()
-    {
-        PHPUnit_TextUI_TestRunner::run(self::suite());
-    }
-    
-    public static function suite ()
+    public static function suite()
     {
         $suite = new \PHPUnit\Framework\TestSuite('Tine 2.0 Calendar All Frontend CalDAV Tests');
-        $suite->addTestSuite('Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest');
-        $suite->addTestSuite('Calendar_Frontend_CalDAV_ProxyTest');
-        $suite->addTestSuite('Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest');
-        $suite->addTestSuite('Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest');
+        $suite->addTestSuite(Calendar_Frontend_CalDAV_FixMultiGet404PluginTest::class);
+        $suite->addTestSuite(Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest::class);
+        $suite->addTestSuite(Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest::class);
+        $suite->addTestSuite(Calendar_Frontend_CalDAV_ProxyTest::class);
+        $suite->addTestSuite(Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest::class);
         return $suite;
     }
 }

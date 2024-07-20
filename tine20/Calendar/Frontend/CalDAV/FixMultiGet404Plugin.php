@@ -4,11 +4,11 @@
  *
  * @package    Sabre
  * @subpackage CalDAV
- * @copyright  Copyright (c) 2015-2021 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright  Copyright (c) 2015-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author     Paul Mehrer <p.mehrer@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
+class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Sabre\CalDAV\Plugin
 {
     protected $_fakeEvent = null;
     protected $_calBackend = null;
@@ -19,49 +19,59 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
      * This report is used by the client to fetch the content of a series
      * of urls. Effectively avoiding a lot of redundant requests.
      *
-     * @param DOMNode $dom
+     * @param \Sabre\CalDAV\Xml\Request\CalendarMultiGetReport $dom
      * @return void
      */
-    public function calendarMultiGetReport($dom)
+    public function calendarMultiGetReport($report)
     {
-        $properties = array_keys(Tine20\DAV\XMLUtil::parseProperties($dom->firstChild));
-        $hrefElems = $dom->getElementsByTagNameNS('urn:DAV','href');
+        $needsJson = 'application/calendar+json' === $report->contentType;
 
-        $xpath = new \DOMXPath($dom);
-        $xpath->registerNameSpace('cal',self::NS_CALDAV);
-        $xpath->registerNameSpace('dav','urn:DAV');
-
-        $expand = $xpath->query('/cal:calendar-multiget/dav:prop/cal:calendar-data/cal:expand');
-        if ($expand->length>0) {
-            $expandElem = $expand->item(0);
-            $start = $expandElem->getAttribute('start');
-            $end = $expandElem->getAttribute('end');
-            if(!$start || !$end) {
-                throw new Tine20\DAV\Exception\BadRequest('The "start" and "end" attributes are required for the CALDAV:expand element');
-            }
-            $start = Tine20\VObject\DateTimeParser::parseDateTime($start);
-            $end = Tine20\VObject\DateTimeParser::parseDateTime($end);
-
-            if ($end <= $start) {
-                throw new Tine20\DAV\Exception\BadRequest('The end-date must be larger than the start-date in the expand element.');
-            }
-            $expand = true;
-        } else {
-            $expand = false;
-        }
-
+        $timeZones = [];
         $propertyList = [];
-        foreach ($hrefElems as $elem) {
-            $uri = $this->server->calculateUri($elem->nodeValue);
-            try {
-                list($objProps) = $this->server->getPropertiesForPath($uri, $properties);
 
-                if ($expand && isset($objProps[200]['{' . self::NS_CALDAV . '}calendar-data'])) {
-                    $vObject = Tine20\VObject\Reader::read($objProps[200]['{' . self::NS_CALDAV . '}calendar-data']);
-                    $vObject->expand($start, $end);
-                    $objProps[200]['{' . self::NS_CALDAV . '}calendar-data'] = $vObject->serialize();
+        $paths = array_map(
+            [$this->server, 'calculateUri'],
+            $report->hrefs
+        );
+
+        foreach ($paths as $uri) {
+            try {
+                $objProps = $this->server->getPropertiesForPath($uri, $report->properties)[0];
+                if (($needsJson || $report->expand) && isset($objProps[200]['{'.self::NS_CALDAV.'}calendar-data'])) {
+                    $vObject = \Sabre\VObject\Reader::read($objProps[200]['{'.self::NS_CALDAV.'}calendar-data']);
+
+                    if ($report->expand) {
+                        // We're expanding, and for that we need to figure out the
+                        // calendar's timezone.
+                        list($calendarPath) = \Sabre\Uri\split($uri);
+                        if (!isset($timeZones[$calendarPath])) {
+                            // Checking the calendar-timezone property.
+                            $tzProp = '{'.self::NS_CALDAV.'}calendar-timezone';
+                            $tzResult = $this->server->getProperties($calendarPath, [$tzProp]);
+                            if (isset($tzResult[$tzProp])) {
+                                // This property contains a VCALENDAR with a single
+                                // VTIMEZONE.
+                                $vtimezoneObj = \Sabre\VObject\Reader::read($tzResult[$tzProp]);
+                                $timeZone = $vtimezoneObj->VTIMEZONE->getTimeZone();
+                            } else {
+                                // Defaulting to UTC.
+                                $timeZone = new DateTimeZone('UTC');
+                            }
+                            $timeZones[$calendarPath] = $timeZone;
+                        }
+
+                        $vObject = $vObject->expand($report->expand['start'], $report->expand['end'], $timeZones[$calendarPath]);
+                    }
+                    if ($needsJson) {
+                        $objProps[200]['{'.self::NS_CALDAV.'}calendar-data'] = json_encode($vObject->jsonSerialize());
+                    } else {
+                        $objProps[200]['{'.self::NS_CALDAV.'}calendar-data'] = $vObject->serialize();
+                    }
+                    // Destroy circular references so PHP will garbage collect the
+                    // object.
+                    $vObject->destroy();
                 }
-            } catch (Tine20\DAV\Exception\NotFound $e) {
+            } catch (Sabre\DAV\Exception\NotFound) {
 
                 try {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
@@ -69,22 +79,58 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
 
                     // return fake events properties
                     $node = $this->_getFakeEventFacade($uri);
-                    $objProps = $this->_getFakeProperties($uri, $node, $properties);
+                    $objProps = $this->_getFakeProperties($uri, $node, $report->properties);
 
-                } catch (Tinebase_Exception_NotFound $tenf) {
-                    $objProps = array($uri => 404);
+                } catch (Tinebase_Exception_NotFound) {
+                    $objProps = ['href' => $uri];
                 }
             }
-
-            $propertyList[]=$objProps;
+            $propertyList[] = $objProps;
         }
 
-        $prefer = $this->server->getHTTPPRefer();
+        $prefer = $this->server->getHTTPPrefer();
 
-        $this->server->httpResponse->sendStatus(207);
-        $this->server->httpResponse->setHeader('Content-Type','application/xml; charset=utf-8');
-        $this->server->httpResponse->setHeader('Vary','Brief,Prefer');
-        $this->server->httpResponse->sendBody($this->generateMultiStatus($propertyList, $prefer['return-minimal']));
+        $this->server->httpResponse->setStatus(207);
+        $this->server->httpResponse->setHeader('Content-Type', 'application/xml; charset=utf-8');
+        $this->server->httpResponse->setHeader('Vary', 'Brief,Prefer');
+        $this->server->httpResponse->setBody($this->generateMultiStatus($propertyList, 'minimal' === $prefer['return']));
+    }
+
+    public function generateMultiStatus(array $fileProperties, bool $strip404s = false)
+    {
+        $w = $this->server->xml->getWriter();
+        $w->openMemory();
+        $this->writeMultiStatus($w, $fileProperties, $strip404s);
+
+        return $w->outputMemory();
+    }
+
+    private function writeMultiStatus(\Sabre\Xml\Writer $w, array $fileProperties, bool $strip404s)
+    {
+        $w->contextUri = $this->server->getBaseUri();
+        $w->startDocument();
+
+        $w->startElement('{DAV:}multistatus');
+
+        foreach ($fileProperties as $entry) {
+            $href = $entry['href'];
+            unset($entry['href']);
+            $status = empty($entry) ? 404 : null;
+            if ($strip404s) {
+                unset($entry[404]);
+            }
+            $response = new \Sabre\DAV\Xml\Element\Response(
+                ltrim($href, '/'),
+                $entry,
+                $status
+            );
+            $w->write([
+                'name' => '{DAV:}response',
+                'value' => $response,
+            ]);
+        }
+        $w->endElement();
+        $w->endDocument();
     }
 
     /**
@@ -95,8 +141,7 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
      */
     protected function _getFakeProperties($path, $node, $properties)
     {
-        $newProperties = array();
-        $newProperties['href'] = trim($path,'/');
+        $newProperties = ['href' => trim($path,'/')];
 
         if (count($properties) === 0) {
             // Default list of propertyNames, when all properties were requested.
@@ -116,11 +161,11 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
 
         foreach ($properties as $prop) {
             switch($prop) {
-                case '{DAV:}getetag'               : if ($node instanceof Tine20\DAV\IFile && $etag = $node->getETag())  $newProperties[200][$prop] = $etag; break;
-                case '{DAV:}getcontenttype'        : if ($node instanceof Tine20\DAV\IFile && $ct = $node->getContentType())  $newProperties[200][$prop] = $ct; break;
+                case '{DAV:}getetag'               : if ($node instanceof Sabre\DAV\IFile && $etag = $node->getETag())  $newProperties[200][$prop] = $etag; break;
+                case '{DAV:}getcontenttype'        : if ($node instanceof Sabre\DAV\IFile && $ct = $node->getContentType())  $newProperties[200][$prop] = $ct; break;
                 /** @noinspection PhpMissingBreakStatementInspection */
-                case '{' . Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-data':
-                                                     if ($node instanceof Tine20\CalDAV\ICalendarObject) {
+                case '{' . Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-data':
+                                                     if ($node instanceof Sabre\CalDAV\ICalendarObject) {
                                                          $val = $node->get();
                                                          if (is_resource($val))
                                                              $val = stream_get_contents($val);
@@ -157,6 +202,7 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
         }
 
         $parentPath = join('/', $parentPath);
+        /** @var Calendar_Frontend_WebDAV_Event $parentNode */
         $parentNode = $this->server->tree->getNodeForPath($parentPath);
 
         if (null === $this->_fakeEvent) {
@@ -179,52 +225,13 @@ class Calendar_Frontend_CalDAV_FixMultiGet404Plugin extends Tine20\CalDAV\Plugin
         return new Calendar_Frontend_WebDAV_Event($parentNode->getContainer(), $this->_fakeEvent);
     }
 
-    /**
-     * Generates a WebDAV propfind response body based on a list of nodes.
-     *
-     * If 'strip404s' is set to true, all 404 responses will be removed.
-     *
-     * @param array $fileProperties The list with nodes
-     * @param bool strip404s
-     * @return string
-     */
-    public function generateMultiStatus(array $fileProperties, $strip404s = false) {
-
-        $dom = new DOMDocument('1.0','utf-8');
-        //$dom->formatOutput = true;
-        $multiStatus = $dom->createElement('d:multistatus');
-        $dom->appendChild($multiStatus);
-
-        // Adding in default namespaces
-        foreach($this->server->xmlNamespaces as $namespace=>$prefix) {
-
-            $multiStatus->setAttribute('xmlns:' . $prefix,$namespace);
-
+    public function getCalendarHomeForPrincipal($principalUrl)
+    {
+        $parts = explode('/', trim($principalUrl, '/'));
+        if (($count = count($parts)) < 2 || 'principals' !== $parts[0]) {
+            return;
         }
 
-        foreach($fileProperties as $entry) {
-
-            if (isset($entry[200])) {
-                $href = $entry['href'];
-                unset($entry['href']);
-
-                if ($strip404s && isset($entry[404])) {
-                    unset($entry[404]);
-                }
-            } else {
-                if ($strip404s) {
-                    continue;
-                }
-                list($href) = array_keys($entry);
-            }
-
-            $response = new Calendar_Frontend_CalDAV_PropertyResponse($href,$entry);
-            $response->serialize($this->server,$multiStatus);
-
-        }
-
-        return $dom->saveXML();
-
+        return self::CALENDAR_ROOT . '/' . $parts[$count-1];
     }
-
 }

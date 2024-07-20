@@ -26,6 +26,10 @@ class Tinebase_WebDav_Plugin_ACLTest extends Tinebase_WebDav_Plugin_AbstractBase
 {
         parent::setUp();
 
+        $this->server->addPlugin(
+            new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
+        );
+
         $this->plugin = new Tinebase_WebDav_Plugin_ACL();
         $this->plugin->defaultUsernamePath = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
         $this->plugin->principalCollectionSet = [
@@ -34,9 +38,6 @@ class Tinebase_WebDav_Plugin_ACLTest extends Tinebase_WebDav_Plugin_AbstractBase
             Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
         ];
         $this->server->addPlugin($this->plugin);
-        $this->server->addPlugin(
-            new \Tine20\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
-        );
     }
 
 
@@ -52,17 +53,13 @@ class Tinebase_WebDav_Plugin_ACLTest extends Tinebase_WebDav_Plugin_AbstractBase
                      </A:prop>
                  </A:propfind>';
 
-        $request = new Tine20\HTTP\Request(array(
-            'REQUEST_METHOD' => 'OPTIONS',
-            'REQUEST_URI'    => '/webdav/Filemanager',
-        ));
+        $request = new Sabre\HTTP\Request('OPTIONS', '/webdav/Filemanager');
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
-        static::assertSame('HTTP/1.1 200 OK', $this->response->status);
-        static::assertTrue(isset($this->response->headers['Allow']), 'allow header not set');
-        static::assertStringContainsString('ACL', $this->response->headers['Allow']);
+        static::assertSame(200, $this->response->status);
+        static::assertTrue(isset($this->response->getHeaders()['Allow']), 'allow header not set');
+        static::assertStringContainsString('ACL', $this->response->getHeader('Allow'));
     }
-
 }

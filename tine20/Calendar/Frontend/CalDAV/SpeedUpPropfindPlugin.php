@@ -19,12 +19,12 @@
  * @subpackage  Frontend
  */
 
-class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Tine20\DAV\ServerPlugin
+class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends \Sabre\DAV\ServerPlugin
 {
     /**
      * Reference to server object
      *
-     * @var Tine20\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     private $server;
 
@@ -32,7 +32,7 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Tine20\DAV\ServerPl
      * Returns a plugin name.
      *
      * Using this name other plugins will be able to access other plugins
-     * using \Tine20\DAV\Server::getPlugin
+     * using \Sabre\DAV\Server::getPlugin
      *
      * @return string
      */
@@ -44,131 +44,92 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Tine20\DAV\ServerPl
     /**
      * Initializes the plugin
      *
-     * @param Tine20\DAV\Server $server
+     * @param \Sabre\DAV\Server $server
      * @return void
      */
-    public function initialize(Tine20\DAV\Server $server)
+    public function initialize(\Sabre\DAV\Server $server)
     {
         $this->server = $server;
 
-        $self = $this;
-        $server->subscribeEvent('beforeMethod', function($method, $uri) use ($self) {
-            if ('PROPFIND' === $method)
-                return $self->propfind($uri);
-            elseif ('REPORT' === $method)
-                return $self->report($uri);
-            else
-                return true;
-        });
+        $server->on('method:PROPFIND', [$this, 'propfind'], -100);
+        //$server->on('report', [$this, 'report'], -100);
     }
 
-    /**
-     * This functions handles REPORT requests specific to CalDAV
-     *
-     * @param string $uri
-     * @return bool
-     */
-    public function report($uri)
+    /*public function report(string $reportName, mixed $queryReport): ?bool
     {
-        if ($this->server->httpRequest->getHeader('Depth') !== '1') {
-            return true;
+        if ($this->server->httpRequest->getHeader('Depth') !== '1' ||
+                !$queryReport instanceof \Sabre\CalDAV\Xml\Request\CalendarQueryReport) {
+            return null;
         }
 
-        $body = $this->server->httpRequest->getBody(true);
-        rewind($this->server->httpRequest->getBody());
-        $dom = Tine20\DAV\XMLUtil::loadDOMDocument($body);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " in report speedup");
 
-        $reportName = Tine20\DAV\XMLUtil::toClarkNotation($dom->firstChild);
-
-        if(strpos($reportName, 'calendar-query') !== false) {
+        if (count($queryReport->properties) != 2 || !in_array('{DAV:}getetag', $queryReport->properties) || !in_array('{DAV:}getcontenttype',$queryReport->properties)) {
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . " in report speedup");
-
-            $properties = array_keys(\Tine20\DAV\XMLUtil::parseProperties($dom->firstChild));
-            if (count($properties) != 2 || !in_array('{DAV:}getetag', $properties) || !in_array('{DAV:}getcontenttype',$properties)) {
-
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " requested properties dont match speedup conditions, continuing");
-
-                return true;
-            }
-
-            $filter = $dom->getElementsByTagNameNS('urn:ietf:params:xml:ns:caldav','filter');
-            if ($filter->length != 1 || $filter->item(0)->childNodes->length != 1 ||
-                $filter->item(0)->childNodes->item(0)->getAttribute('name') !== 'VCALENDAR' ||
-                $filter->item(0)->childNodes->item(0)->childNodes->length != 1 ||
-                $filter->item(0)->childNodes->item(0)->childNodes->item(0)->getAttribute('name') !== 'VTODO' ||
-                $filter->item(0)->childNodes->item(0)->childNodes->item(0)->hasChildNodes()) {
-
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " requested properties dont match speedup conditions, continuing");
-
-                return true;
-            }
-
-
-            return $this->_speedUpRequest($uri);
-        }
-        return true;
-    }
-
-    /**
-     * This functions handles PROPFIND requests specific to CalDAV
-     * 
-     * @param string $uri
-     * @return bool
-     */
-    public function propfind($uri)
-    {
-        if ($this->server->httpRequest->getHeader('Depth') !== '1') {
-            return true;
+                . " requested properties dont match speedup conditions, continuing");
+            return null;
         }
 
-        $body = $this->server->httpRequest->getBody(true);
-        if (! $body) {
-            return true;
-        }
-        
-        rewind($this->server->httpRequest->getBody());
-        $dom = Tine20\DAV\XMLUtil::loadDOMDocument($body);
-
-        $reportName = Tine20\DAV\XMLUtil::toClarkNotation($dom->firstChild);
-
-        if($reportName === '{DAV:}propfind') {
+        if (($queryReport->filters['name'] ?? null) !== 'VCALENDAR' &&
+                ($queryReport->filters['name'] ?? null) !== 'VTODO') {
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                . " in propfind speedup");
-
-            $properties = array_keys(\Tine20\DAV\XMLUtil::parseProperties($dom->firstChild));
-            if (count($properties) != 2 || !in_array('{DAV:}getetag', $properties) || !in_array('{DAV:}getcontenttype',$properties)) {
-
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                    . " requested properties dont match speedup conditions, continuing");
-
-                return true;
-            }
-
-
-            return $this->_speedUpRequest($uri);
+                . " requested properties dont match speedup conditions, continuing");
+            return null;
         }
-        return true;
-    }
+        return $this->_speedUpRequest($path);
+    }*/
 
-    /**
-     * @param string $uri
-     * @return bool
-     */
-    protected function _speedUpRequest($uri)
+    public function propfind(\Sabre\HTTP\RequestInterface $request, \Sabre\HTTP\ResponseInterface $response): bool
     {
+        if ($request->getHeader('Depth') !== '1') {
+            return true;
+        }
+
         /**
          * @var Calendar_Frontend_WebDAV_Container
          */
-        $node = $this->server->tree->getNodeForPath($uri);
+        $node = $this->server->tree->getNodeForPath($request->getPath());
         if (!($node instanceof Calendar_Frontend_WebDAV_Container) ) {
             return true;
         }
 
+        $requestBody = $request->getBodyAsString();
+        if (is_resource($body = $request->getBody())) {
+            rewind($body);
+        };
+
+        if (strlen($requestBody)) {
+            try {
+                if (! ($propFindXml = $this->server->xml->expect('{DAV:}propfind', $requestBody)) instanceof \Sabre\DAV\Xml\Request\PropFind) {
+                    return true;
+                }
+            } catch (\Sabre\Xml\ParseException $e) {
+                throw new \Sabre\DAV\Exception\BadRequest($e->getMessage(), 0, $e);
+            }
+        } else {
+            return true;
+        }
+
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . " in propfind speedup");
+
+        if (count($propFindXml->properties) != 2 || !in_array('{DAV:}getetag', $propFindXml->properties) || !in_array('{DAV:}getcontenttype',$propFindXml->properties)) {
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                . " requested properties dont match speedup conditions, continuing");
+
+            return true;
+        }
+
+        return $this->_speedUpRequest($node, $request->getPath());
+    }
+
+    protected function _speedUpRequest(Calendar_Frontend_WebDAV_Container $node, string $uri): bool
+    {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " speedup sql start");
 
@@ -195,37 +156,20 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPlugin extends Tine20\DAV\ServerPl
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " speedup sql done");
 
-        $dom = new \DOMDocument('1.0', 'utf-8');
-
-        //$dom->formatOutput = true;
-        $multiStatus = $dom->createElement('d:multistatus');
-
-        // Adding in default namespaces
-        foreach ($this->server->xmlNamespaces as $namespace => $prefix) {
-            $multiStatus->setAttribute('xmlns:' . $prefix, $namespace);
-        }
-
-        /*$response = $dom->createElement('d:response');
-        $href = $dom->createElement('d:href', $uri);
-        $response->appendChild($href);
-        $multiStatus->appendChild($response);*/
-
+        $result = [];
         foreach ($baseEvents as $row) {
-            $a = array();
-            $a[200] = array(
-                '{DAV:}getetag' => '"' . sha1($row['id'] . $row['seq']) . '"',
-                '{DAV:}getcontenttype' => 'text/calendar',
-            );
-            $href = $uri . '/' . $row['id'] . '.ics';
-            $response = new Tine20\DAV\Property\Response($href, $a);
-            $response->serialize($this->server, $multiStatus);
+            $result[] = [
+                'href' => $uri . '/' . $row['id'] . '.ics',
+                200 => [
+                    '{DAV:}getetag' => '"' . sha1($row['id'] . $row['seq']) . '"',
+                    '{DAV:}getcontenttype' => 'text/calendar',
+                ],
+            ];
         }
 
-        $dom->appendChild($multiStatus);
-
-        $this->server->httpResponse->sendStatus(207);
+        $this->server->httpResponse->setStatus(207);
         $this->server->httpResponse->setHeader('Content-Type', 'application/xml; charset=utf-8');
-        $this->server->httpResponse->sendBody($dom->saveXML());
+        $this->server->httpResponse->setBody($this->server->generateMultiStatus($result));
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
             . " speedup successfully responded to request");

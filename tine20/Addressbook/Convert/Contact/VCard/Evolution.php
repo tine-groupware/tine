@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Christoph Elisabeth Hintermüller <christoph@out-world.com>
- * @copyright   Copyright (c) 2011-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -76,7 +76,7 @@ class Addressbook_Convert_Contact_VCard_Evolution extends Addressbook_Convert_Co
      * 
      * @todo return all supported fields in correct format see http://forge.tine20.org/mantisbt/view.php?id=5346
      * @param  Addressbook_Model_Contact  $_record
-     * @return \Tine20\VObject\Component\VCard
+     * @return \Sabre\VObject\Component\VCard
      */
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
@@ -145,7 +145,7 @@ class Addressbook_Convert_Contact_VCard_Evolution extends Addressbook_Convert_Co
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseOther()
      */
-    protected function _toTine20ModelParseOther(&$data, \Tine20\VObject\Property $property) {
+    protected function _toTine20ModelParseOther(&$data, \Sabre\VObject\Property $property) {
 
          $otherField = null;
 
@@ -192,23 +192,25 @@ class Addressbook_Convert_Contact_VCard_Evolution extends Addressbook_Convert_Co
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseTel()
      */
-    protected function _toTine20ModelParseTel(&$data, \Tine20\VObject\Property $property)
+    protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
     {
         $telField = null;
-        
-        if (isset($property['TYPE'])) {
+
+        /** @var \Sabre\VObject\Parameter $typeParameter */
+        $typeParameter = $property['TYPE'];
+        if ($typeParameter) {
             // CELL
-            if ($property['TYPE']->has('work') && $property['TYPE']->has('voice')) {
+            if ($typeParameter->has('work') && $typeParameter->has('voice')) {
                 $telField = 'tel_work';
-            } elseif ($property['TYPE']->has('home') && $property['TYPE']->has('voice')) {
+            } elseif ($typeParameter->has('home') && $typeParameter->has('voice')) {
                 $telField = 'tel_home';
-            } elseif (!$property['TYPE']->has('work') && !$property['TYPE']->has('home') && $property['TYPE']->has('voice') ) {
+            } elseif (!$typeParameter->has('work') && !$typeParameter->has('home') && $typeParameter->has('voice') ) {
                 $telField = 'tel_other';
-            } elseif ( $property['Type']->has('x-evolution-assistant') ) {
+            } elseif ( $typeParameter->has('x-evolution-assistant') ) {
                 $telField = 'tel_assistent';
-            } elseif ( $property['TYPE']->has('car') ) {
+            } elseif ( $typeParameter->has('car') ) {
                 $telField = 'tel_car';
-            } elseif ( $property['TYPE']->has('pref') ) {
+            } elseif ( $typeParameter->has('pref') ) {
                 $telField = 'tel_prefer';
             }
             

@@ -128,8 +128,8 @@ class Addressbook_Convert_Contact_VCard_SogoTest extends \PHPUnit\Framework\Test
         $this->assertStringContainsString('TEL;TYPE=PAGER:+49 PAGER', $vcard, $vcard);
         $this->assertStringContainsString('TEL;TYPE=WORK:+49 BUSINESS', $vcard, $vcard);
         $this->assertStringContainsString('TITLE:Titel', $vcard, $vcard);
-        $this->assertStringContainsString('URL;TYPE=WORK:http://www.tine20.com', $vcard, $vcard);
-        $this->assertStringContainsString('URL;TYPE=HOME:http://www.tine20.org', $vcard, $vcard);
+        $this->assertStringContainsString('URL;TYPE=WORK;VALUE=URI:http://www.tine20.com', $vcard, $vcard);
+        $this->assertStringContainsString('URL;TYPE=HOME;VALUE=URI:http://www.tine20.org', $vcard, $vcard);
         $this->assertStringContainsString('BDAY:1975-01-16', $vcard, $vcard);
     }
 }

@@ -19,7 +19,7 @@ class Calendar_Convert_Event_VCalendar_TineSyncClient extends Calendar_Convert_E
 {
     const HEADER_MATCH = '/Tine20SyncClient\/(?P<version>.+)/';
 
-    protected  function _fromVEvent_Organizer(Calendar_Model_Event $event, array &$newAttendees, \Tine20\VObject\Property $property): void
+    protected  function _fromVEvent_Organizer(Calendar_Model_Event $event, array &$newAttendees, \Sabre\VObject\Property $property): void
     {
         $email = null;
 
@@ -38,11 +38,11 @@ class Calendar_Convert_Event_VCalendar_TineSyncClient extends Calendar_Convert_E
                 $event->organizer = null;
                 $event->organizer_type = Calendar_Model_Event::ORGANIZER_TYPE_EMAIL;
                 $event->organizer_email = $email;
-                $event->organizer_displayname = isset($property['CN']) && $property['CN'] instanceof \Tine20\VObject\Property ? $property['CN']->getValue() : $email;
+                $event->organizer_displayname = isset($property['CN']) && $property['CN'] instanceof \Sabre\VObject\Property ? $property['CN']->getValue() : $email;
             }
 
             // Lightning attaches organizer ATTENDEE properties to ORGANIZER property and does not add an ATTENDEE for the organizer
-            if (isset($property['PARTSTAT']) && $property instanceof \Tine20\VObject\Property\ICalendar\CalAddress) {
+            if (isset($property['PARTSTAT']) && $property instanceof \Sabre\VObject\Property\ICalendar\CalAddress) {
                 $newAttendees[] = $this->_getAttendee($property);
             }
         }
@@ -51,10 +51,10 @@ class Calendar_Convert_Event_VCalendar_TineSyncClient extends Calendar_Convert_E
     /**
      * get attendee array for given contact
      *
-     * @param  \Tine20\VObject\Property\ICalendar\CalAddress  $calAddress  the attendee row from the vevent object
+     * @param  \Sabre\VObject\Property\ICalendar\CalAddress  $calAddress  the attendee row from the vevent object
      * @return array
      */
-    protected function _getAttendee(\Tine20\VObject\Property\ICalendar\CalAddress $calAddress)
+    protected function _getAttendee(\Sabre\VObject\Property\ICalendar\CalAddress $calAddress)
     {
         if (null !== ($attendee = parent::_getAttendee($calAddress))) {
             $attendee['userType'] = Calendar_Model_Attender::USERTYPE_EMAIL;

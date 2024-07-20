@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -172,15 +172,16 @@ class Calendar_Frontend_WebDAV_ContainerTest extends \PHPUnit\Framework\TestCase
         );
         
         $container = new Calendar_Frontend_WebDAV_Container($this->objects['initialContainer']);
-        
-        $result = $container->updateProperties($mutations);
+        $container->propPatch(($propPatch = new \Sabre\DAV\PropPatch($mutations)));
+        $this->assertTrue($propPatch->commit());
+        $result = $propPatch->getResult();
         
         $updatedContainer = Tinebase_Container::getInstance()->get($this->objects['initialContainer']);
         
-        $this->assertEquals($result[200]["{http://apple.com/ns/ical/}calendar-color"],      null);
-        $this->assertEquals($result[200]["{http://apple.com/ns/ical/}calendar-order"],      null);
-        $this->assertEquals($result[200]["{DAV:}displayname"],                              null);
-        $this->assertEquals($result[403]["{http://calendarserver.org/ns/}invalidProperty"], null);
+        $this->assertSame(200, $result["{http://apple.com/ns/ical/}calendar-color"]);
+        $this->assertSame(200, $result["{http://apple.com/ns/ical/}calendar-order"]);
+        $this->assertSame(200, $result["{DAV:}displayname"]);
+        $this->assertSame(204, $result["{http://calendarserver.org/ns/}invalidProperty"]);
         $this->assertEquals($updatedContainer->color, substr($mutations['{http://apple.com/ns/ical/}calendar-color'], 0, 7));
         $this->assertEquals($updatedContainer->order,  2);
         $this->assertEquals($updatedContainer->name,  $mutations['{DAV:}displayname']);

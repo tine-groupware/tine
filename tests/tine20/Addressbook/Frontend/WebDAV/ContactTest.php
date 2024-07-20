@@ -152,7 +152,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
         
         $backend = new Addressbook_Frontend_WebDAV_Contact($this->objects['initialContainer'], $contact->getName());
         
-        $vcard = \Tine20\VObject\Reader::read($backend->get());
+        $vcard = \Sabre\VObject\Reader::read($backend->get());
 
         $data = $vcard->serialize();
         $this->assertStringContainsString('TEL;TYPE=WORK:+49 BUSINESS', $data);
@@ -190,7 +190,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
         try {
             $this->testPutContactFromThunderbird();
             self::fail('config not working: Addressbook_Config::CARDDAV_READONLY_POLICY_ALWAYS');
-        } catch (Tine20\DAV\Exception\Forbidden $sdef) {
+        } catch (\Sabre\DAV\Exception\Forbidden $sdef) {
             self::assertStringContainsString('Update denied', $sdef->getMessage());
         } finally {
             Addressbook_Config::getInstance()->set(Addressbook_Config::CARDDAV_READONLY_POLICY,
@@ -229,7 +229,7 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
     
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/mac_os_x_addressbook.vcf', 'r');
     
-        $this->expectException('Tine20\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
         
         $contact->put($vcardStream);
     }

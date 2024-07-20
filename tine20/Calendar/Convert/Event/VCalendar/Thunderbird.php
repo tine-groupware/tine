@@ -27,7 +27,7 @@ class Calendar_Convert_Event_VCalendar_Thunderbird extends Calendar_Convert_Even
      * (non-PHPdoc)
      * @see Calendar_Convert_Event_VCalendar_Abstract::_addEventAttendee()
      */
-    protected function _addEventAttendee(\Tine20\VObject\Component\VEvent $vevent, Calendar_Model_Event $event)
+    protected function _addEventAttendee(\Sabre\VObject\Component\VEvent $vevent, Calendar_Model_Event $event)
     {
         if (!$this->_version || version_compare($this->_version, '1.0b2' , '>')) {
             parent::_addEventAttendee($vevent, $event);

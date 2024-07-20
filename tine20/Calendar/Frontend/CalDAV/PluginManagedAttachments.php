@@ -1,4 +1,8 @@
 <?php
+
+use Sabre\HTTP\RequestInterface;
+use Sabre\HTTP\ResponseInterface;
+
 /**
  * CalDAV plugin for draft-daboo-caldav-attachments-03
  * 
@@ -16,16 +20,16 @@
  *
  * @package    Sabre
  * @subpackage CalDAV
- * @copyright  Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright  Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author     Cornelius Weiss <c.weiss@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Tine20\DAV\ServerPlugin 
+class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Sabre\DAV\ServerPlugin 
 {
     /**
      * Reference to server object
      *
-     * @var \Tine20\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     protected $server;
 
@@ -43,7 +47,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Tine20\DAV\Serv
      * Returns a plugin name.
      * 
      * Using this name other plugins will be able to access other plugins
-     * using \Tine20\DAV\Server::getPlugin 
+     * using \Sabre\DAV\Server::getPlugin 
      * 
      * @return string 
      */
@@ -55,48 +59,27 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Tine20\DAV\Serv
     /**
      * Initializes the plugin 
      * 
-     * @param \Tine20\DAV\Server $server 
+     * @param \Sabre\DAV\Server $server 
      * @return void
      */
-    public function initialize(\Tine20\DAV\Server $server) 
+    public function initialize(\Sabre\DAV\Server $server) 
     {
         $this->server = $server;
-
-        $this->server->subscribeEvent('unknownMethod',array($this,'httpPOSTHandler'));
-        
-        $server->subscribeEvent('beforeGetProperties', array($this, 'beforeGetProperties'));
-        
-        $server->xmlNamespaces[\Tine20\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
-        
-        $server->resourceTypeMapping['\\Tine20\\CalDAV\\ICalendar'] = '{urn:ietf:params:xml:ns:caldav}calendar';
+        $server->on('method:POST', [$this, 'httpPOSTHandler']);
+        $server->on('propFind', [$this, 'propFind']);
+        $server->xml->namespaceMap[\Sabre\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
+        $server->resourceTypeMapping['\\Sabre\\CalDAV\\ICalendar'] = '{urn:ietf:params:xml:ns:caldav}calendar';
         
     }
-    
-    /**
-     * beforeGetProperties
-     *
-     * This method handler is invoked before any after properties for a
-     * resource are fetched. This allows us to add in any CalDAV specific
-     * properties.
-     *
-     * @param string $path
-     * @param \Tine20\DAV\INode $node
-     * @param array $requestedProperties
-     * @param array $returnedProperties
-     * @return void
-     */
-    public function beforeGetProperties($path, \Tine20\DAV\INode $node, &$requestedProperties, &$returnedProperties)
+
+    public function propFind(\Sabre\DAV\PropFind $propFind, \Sabre\DAV\INode $node)
     {
-        if ($node instanceof \Tine20\DAVACL\IPrincipal) {
+        if ($node instanceof \Sabre\DAVACL\IPrincipal) {
             // dropbox-home-URL property
-            $scheduleProp = '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}dropbox-home-URL';
-            if (in_array($scheduleProp,$requestedProperties)) {
+            $propFind->handle('{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}dropbox-home-URL', function() use($node) {
                 $principalId = $node->getName();
-                $dropboxPath = \Tine20\CalDAV\Plugin::CALENDAR_ROOT . '/' . $principalId . '/dropbox';
-                
-                unset($requestedProperties[array_search($scheduleProp, $requestedProperties)]);
-                $returnedProperties[200][$scheduleProp] = new \Tine20\DAV\Property\Href($dropboxPath);
-            }
+                return new \Sabre\DAV\Xml\Property\Href(\Sabre\CalDAV\Plugin::CALENDAR_ROOT . '/' . $principalId . '/dropbox');
+            });
         }
     }
     
@@ -107,14 +90,9 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Tine20\DAV\Serv
      * @param string $uri
      * @return bool
      */
-    public function httpPOSTHandler($method, $uri) 
+    public function httpPOSTHandler(RequestInterface $request, ResponseInterface $response)
     {
-        if ($method != 'POST') {
-            return;
-        }
-        
-        $getVars = array();
-        parse_str($this->server->httpRequest->getQueryString(), $getVars);
+        $getVars = $request->getQueryParameters();
         
         if (!isset($getVars['action']) || !in_array($getVars['action'], 
                 array('attachment-add', 'attachment-update', 'attachment-remove'))) {
@@ -122,8 +100,8 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Tine20\DAV\Serv
         }
         
         try {
-            $node = $this->server->tree->getNodeForPath($uri);
-        } catch (DAV\Exception\NotFound $e) {
+            $node = $this->server->tree->getNodeForPath($request->getPath());
+        } catch (\Sabre\DAV\Exception\NotFound $e) {
             // We're simply stopping when the file isn't found to not interfere
             // with other plugins.
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -151,7 +129,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Tine20\DAV\Serv
         
         $managedId = isset($getVars['managed-id']) ? $getVars['managed-id'] : NULL;
         $rid = $this->getRecurranceIds($getVars);
-        list($contentType) = explode(';', $contentType);
+        list($contentType) = explode(';', (string)$contentType);
         if (preg_match("/filename\*=utf-8''(.*)/", $disposition, $matches)) {
             // handle utf-8 dispositions (like this: filename=\"Reservierungsbesta?tigung _ OTTER.txt\";filename*=utf-8''Reservierungsbesta%CC%88tigung%20_%20OTTER.txt)
             $name = $matches[1];
@@ -159,10 +137,17 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Tine20\DAV\Serv
             $name = $matches[1];
         }
         $name = trim($name, " \t\n\r\0\x0B\"'");
-        
-        // NOTE inputstream can not be rewinded
-        $inputStream = fopen('php://temp','r+');
-        stream_copy_to_stream($this->server->httpRequest->getBody(), $inputStream);
+
+        if (is_resource($this->server->httpRequest->getBody())) {
+            $inputStream = $this->server->httpRequest->getBody();
+        } else {
+            $inputStream = fopen('php://temp','r+');
+            if (is_string($this->server->httpRequest->getBody())) {
+                fwrite($inputStream, $this->server->httpRequest->getBody());
+            } elseif (is_callable($this->server->httpRequest->getBody())) {
+                fwrite($inputStream, call_user_func($this->server->httpRequest->getBody()));
+            }
+        }
         rewind($inputStream);
         
         list ($attachmentId) = Tinebase_FileSystem::getInstance()->createFileBlob($inputStream);
@@ -205,7 +190,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Tine20\DAV\Serv
                 });
                 
                 if (! $eventsToUpdate) {
-                    throw new Tine20\DAV\Exception\PreconditionFailed("no attachment with id $managedId found");
+                    throw new \Sabre\DAV\Exception\PreconditionFailed("no attachment with id $managedId found");
                 }
                 
                 $node->update($node->getRecord());
@@ -222,7 +207,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Tine20\DAV\Serv
                 });
                 
                 if (! $eventsToUpdate) {
-                    throw new Tine20\DAV\Exception\PreconditionFailed("no attachment with id $managedId found");
+                    throw new \Sabre\DAV\Exception\PreconditionFailed("no attachment with id $managedId found");
                 }
                     
                 $node->update($node->getRecord());
@@ -238,8 +223,8 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachments extends \Tine20\DAV\Serv
         }
         
         // only at create!
-        $this->server->httpResponse->sendStatus(201);
-        $this->server->httpResponse->sendBody($node->get());
+        $this->server->httpResponse->setStatus(201);
+        $this->server->httpResponse->setBody($node->get());
         
         return false;
 

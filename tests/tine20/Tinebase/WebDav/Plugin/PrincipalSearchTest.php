@@ -5,14 +5,13 @@
  * @package     Tinebase
  * @subpackage  WebDav
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
  * Test helper
  */
-require_once 'vendor/tine20/sabredav/tests/Sabre/DAV/Auth/Backend/Mock.php';
 
 /**
  * Test class for Tinebase_WebDav_Plugin_OwnCloud
@@ -33,19 +32,20 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends Tinebase_WebDav_Plugin_
 
         parent::setUp();
         
-        $mockBackend = new Tine20\DAV\Auth\Backend\Mock();
-        $mockBackend->defaultUser = Tinebase_Core::getUser()->contact_id;
+        $mockBackend = new Tinebase_WebDav_Sabre_AuthBackendMock();
+        $mockBackend->principal = 'principals/users/' . Tinebase_Core::getUser()->contact_id;
         
-        $plugin = new Tine20\DAV\Auth\Plugin($mockBackend,'realm');
+        $plugin = new Sabre\DAV\Auth\Plugin($mockBackend,'realm');
         $this->server->addPlugin($plugin);
 
-        $aclPlugin = new \Tine20\DAVACL\Plugin();
+        $aclPlugin = new \Sabre\DAVACL\Plugin();
         $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
         $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS);
         $this->server->addPlugin($aclPlugin);
         
-        $this->server->addPlugin(new \Tine20\CalDAV\Plugin());
-        $this->server->addPlugin(new \Tine20\CalDAV\SharingPlugin());
+        $this->server->addPlugin(new \Sabre\CalDAV\Plugin());
+        $this->server->addPlugin(new \Sabre\DAV\Sharing\Plugin());
+        $this->server->addPlugin(new \Sabre\CalDAV\SharingPlugin());
         
         $this->plugin = new Tinebase_WebDav_Plugin_PrincipalSearch();
         $this->server->addPlugin($this->plugin);
@@ -81,31 +81,26 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends Tinebase_WebDav_Plugin_
                     </B:prop>
                 </A:calendarserver-principal-search>';
 
-        $request = new Tine20\HTTP\Request(array(
-            'REQUEST_METHOD' => 'REPORT',
-            'REQUEST_URI'    => '/principals'
-        ));
+        $request = new Sabre\HTTP\Request('REPORT', '/principals');
         $request->setBody($body);
 
         $this->server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin());
         $this->server->httpRequest = $request;
         $this->server->exec();
-        //var_dump($this->response->body);
-        $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+        $this->assertEquals(207, $this->response->status, $this->response->body);
         
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);
-        #$responseDoc->formatOutput = true; echo $responseDoc->saveXML();
         $xpath = new DomXPath($responseDoc);
         $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
         
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:calendar-user-address-set');
-        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals(1, $nodes->length, $this->response->body);
+        $this->assertNotEmpty($nodes->item(0)->nodeValue, $this->response->body);
         
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:calendar-user-type');
-        $this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        $this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
+        $this->assertEquals(1, $nodes->length, $this->response->body);
+        $this->assertNotEmpty($nodes->item(0)->nodeValue, $this->response->body);
         
         #$nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:default-alarm-vtodo-datetime');
         #$this->assertEquals(1, $nodes->length, $responseDoc->saveXML());

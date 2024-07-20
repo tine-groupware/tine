@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -16,7 +16,7 @@
  * @package     Calendar
  * @subpackage  Frontend
  */
-class Calendar_Frontend_CalDAV_ScheduleInbox extends \Tine20\DAV\Collection implements \Tine20\DAV\IProperties, \Tine20\DAVACL\IACL, \Tine20\CalDAV\ICalendar
+class Calendar_Frontend_CalDAV_ScheduleInbox extends \Sabre\DAV\Collection implements \Sabre\DAV\IProperties, \Sabre\DAVACL\IACL, \Sabre\CalDAV\ICalendar
 {
     /**
      * @var Tinebase_Model_FullUser
@@ -37,14 +37,14 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Tine20\DAV\Collection impl
     
     /**
      * (non-PHPdoc)
-     * @see Tine20\DAV\Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($_name)
     {
         try {
             $event = $_name instanceof Calendar_Model_Event ? $_name : $this->_getController()->get($this->_getIdFromName($_name));
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new \Tine20\DAV\Exception\NotFound('Object not found');
+            throw new \Sabre\DAV\Exception\NotFound('Object not found');
         }
         
         $ownAttendee = Calendar_Model_Attender::getOwnAttender($event->attendee);
@@ -63,7 +63,7 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Tine20\DAV\Collection impl
      *       invitations are directly stored in a display calendar.
      *       => to be on the safe side we don't use inbox yet
      * 
-     * @see Tine20\DAV\Collection::getChildren()
+     * @see Sabre\DAV\Collection::getChildren()
      */
     function getChildren()
     {
@@ -164,26 +164,26 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Tine20\DAV\Collection impl
             'id'                => 'schedule-inbox',
             'uri'               => 'schedule-inbox',
             '{DAV:}resource-id'    => 'urn:uuid:schedule-inbox',
-            '{DAV:}owner'       => new \Tine20\DAVACL\Property\Principal(Tine20\DAVACL\Property\Principal::HREF, 'principals/users/' . $this->_user->contact_id),
+            '{DAV:}owner'       => new \Sabre\DAVACL\Xml\Property\Principal(Sabre\DAVACL\Xml\Property\Principal::HREF, 'principals/users/' . $this->_user->contact_id),
             #'principaluri'      => $principalUri,
             '{DAV:}displayname' => 'Schedule Inbox',
             '{http://apple.com/ns/ical/}calendar-color' => '#666666',
             // static sync-token, only -1 works!
             '{DAV:}sync-token'  => Tinebase_WebDav_Plugin_SyncToken::SYNCTOKEN_PREFIX . '-1',
             
-            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new \Tine20\CalDAV\Property\SupportedCalendarComponentSet(array('VEVENT')),
-            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new \Tine20\CalDAV\Property\SupportedCalendarData(),
-            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-description'             => 'Calendar schedule inbox',
-            '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => Tinebase_WebDav_Container_Abstract::getCalendarVTimezone('Calendar')
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new \Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet(array('VEVENT')),
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}supported-calendar-data'          => new \Sabre\CalDAV\Xml\Property\SupportedCalendarData(),
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-description'             => 'Calendar schedule inbox',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-timezone'                => Tinebase_WebDav_Container_Abstract::getCalendarVTimezone('Calendar')
         );
     
         $defaultCalendarId = Tinebase_Core::getPreference('Calendar')->getValueForUser(Calendar_Preference::DEFAULTCALENDAR, $this->_user->getId());
         if (!empty($defaultCalendarId)) {
-            $properties['{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}schedule-default-calendar-URL'] = new \Tine20\DAV\Property\Href('calendars/' . $this->_user->contact_id . '/' . $defaultCalendarId);
+            $properties['{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}schedule-default-calendar-URL'] = new \Sabre\DAV\Xml\Property\Href('calendars/' . $this->_user->contact_id . '/' . $defaultCalendarId);
         }
         
         if (!empty(Tinebase_Core::getUser()->accountEmailAddress)) {
-            $properties['{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set'    ] = new \Tine20\DAV\Property\HrefList(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress), false);
+            $properties['{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set'    ] = new \Sabre\DAV\Xml\Property\Href(array('mailto:' . Tinebase_Core::getUser()->accountEmailAddress));
         }
     
         $response = array();
@@ -235,47 +235,12 @@ class Calendar_Frontend_CalDAV_ScheduleInbox extends \Tine20\DAV\Collection impl
      */
     public function setACL(array $acl) 
     {
-        throw new \Tine20\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
+        throw new \Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
-    
-    /**
-     * Updates properties on this node,
-     *
-     * The properties array uses the propertyName in clark-notation as key,
-     * and the array value for the property value. In the case a property
-     * should be deleted, the property value will be null.
-     *
-     * This method must be atomic. If one property cannot be changed, the
-     * entire operation must fail.
-     *
-     * If the operation was successful, true can be returned.
-     * If the operation failed, false can be returned.
-     *
-     * Deletion of a non-existant property is always succesful.
-     *
-     * Lastly, it is optional to return detailed information about any
-     * failures. In this case an array should be returned with the following
-     * structure:
-     *
-     * array(
-     *   403 => array(
-     *      '{DAV:}displayname' => null,
-     *   ),
-     *   424 => array(
-     *      '{DAV:}owner' => null,
-     *   )
-     * )
-     *
-     * In this example it was forbidden to update {DAV:}displayname.
-     * (403 Forbidden), which in turn also caused {DAV:}owner to fail
-     * (424 Failed Dependency) because the request needs to be atomic.
-     *
-     * @param array $mutations
-     * @return bool|array
-     */
-    public function updateProperties($mutations)
+
+    public function propPatch(\Sabre\DAV\PropPatch $propPatch)
     {
-        return false;
+        // no write access, we don't do anything, the propPatch will fail with 403 automatically
     }
     
     /**

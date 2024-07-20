@@ -5,14 +5,13 @@
  * @package     Tinebase
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
  * Test helper
  */
-require_once __DIR__ . '/../../../../../tine20/vendor/tine20/sabredav/tests/Sabre/HTTP/ResponseMock.php';
 
 /**
  * Test class for Tinebase_WebDav_Plugin_OwnCloud
@@ -21,7 +20,7 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest extends TestCase
 {
     /**
      * 
-     * @var Tine20\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     protected $server;
     
@@ -35,14 +34,14 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest extends TestCase
 {
         parent::setUp();
         
-        $this->server = new Tine20\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new \Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()),
+            new Tinebase_WebDav_Sabre_SapiMock());
         
         $this->plugin = new Calendar_Frontend_CalDAV_PluginDefaultAlarms();
         
         $this->server->addPlugin($this->plugin);
-        
-        $this->response = new Tine20\HTTP\ResponseMock();
-        $this->server->httpResponse = $this->response;
+
+        $this->server->httpResponse = $this->response = new Tinebase_WebDav_Sabre_ResponseMock();
     }
 
     /**
@@ -70,17 +69,15 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest extends TestCase
                     </prop>
                  </propfind>';
 
-        $request = new Tine20\HTTP\Request(array(
-            'REQUEST_METHOD' => 'PROPFIND',
-            'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id,
-            'HTTP_DEPTH'     => '0',
-        ));
+        $request = new Sabre\HTTP\Request('PROPFIND', '/calendars/' . Tinebase_Core::getUser()->contact_id, [
+            'DEPTH'     => '0',
+        ]);
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
         $this->server->exec();
         //var_dump($this->response->body);
-        $this->assertEquals('HTTP/1.1 207 Multi-Status', $this->response->status);
+        $this->assertSame(207, $this->response->status);
         
         $responseDoc = new DOMDocument();
         $responseDoc->loadXML($this->response->body);

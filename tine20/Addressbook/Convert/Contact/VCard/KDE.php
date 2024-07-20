@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2011-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -82,7 +82,7 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
      * 
      * @todo return all supported fields in correct format see http://forge.tine20.org/mantisbt/view.php?id=5346
      * @param  Addressbook_Model_Contact  $_record
-     * @return \Tine20\VObject\Component\VCard
+     * @return \Sabre\VObject\Component\VCard
      */
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
@@ -135,12 +135,14 @@ class Addressbook_Convert_Contact_VCard_KDE extends Addressbook_Convert_Contact_
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseEmail()
      */
-    protected function _toTine20ModelParseEmail(&$data, \Tine20\VObject\Property $property, \Tine20\VObject\Component\VCard $vcard)
+    protected function _toTine20ModelParseEmail(&$data, \Sabre\VObject\Property $property, \Sabre\VObject\Component\VCard $vcard)
     {
         $type = null;
-        
-        if ($property['TYPE']) {
-            if ($property['TYPE']->has('pref')) {
+
+        /** @var \Sabre\VObject\Parameter $typeParameter */
+        $typeParameter = $property['TYPE'];
+        if ($typeParameter) {
+            if ($typeParameter->has('pref')) {
                 $type = 'work';
             }
         }
