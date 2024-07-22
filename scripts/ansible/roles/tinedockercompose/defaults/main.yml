@@ -16,6 +16,7 @@ tinedockercompose_file_log_debug: false
 tinedockercompose_ports: "80:80"
 tinedockercompose_auto_installupdate: false
 tinedockercompose_addtineuser: true
+tinedockercompose_createdirs: true
 
 tinedockercompose_db_service: true
 tinedockercompose_db_host: "db"
