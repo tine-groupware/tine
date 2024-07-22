@@ -10,6 +10,8 @@
   with_items:
     - "{{ tinedockercompose_file_log_dir }}"
   become: true
+  when:
+    - not ansible_check_mode
 
 - name: config logrotate for logs
   template:

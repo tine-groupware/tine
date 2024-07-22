@@ -22,13 +22,21 @@ services:
     image: {{ tinedockercompose_tine_image }}
     restart: always
     depends_on:
-      - db
       - cache
+{% if tinedockercompose_db_service is defined and tinedockercompose_db_service|bool %}
+      - db
+{% endif %}
     environment:
       TINE20_DATABASE_HOST: {{ tinedockercompose_db_host }}
+{% if tinedockercompose_db_service is defined and tinedockercompose_db_service|bool %}
       TINE20_DATABASE_DBNAME: *MYSQL_DATABASE
       TINE20_DATABASE_USERNAME: *MYSQL_USER
       TINE20_DATABASE_PASSWORD: *MYSQL_PASSWORD
+{% else %}
+      TINE20_DATABASE_DBNAME: {{ tinedockercompose_db_name }}
+      TINE20_DATABASE_USERNAME: {{ tinedockercompose_db_user }}
+      TINE20_DATABASE_PASSWORD: "{{ tinedockercompose_db_password }}"
+{% endif %}
       TINE20_DATABASE_TABLEPREFIX: {{ tinedockercompose_db_prefix }}
       TINE20_CACHING_BACKEND: Redis
       TINE20_CACHING_REDIS_HOST: cache
@@ -40,6 +48,9 @@ services:
       TINE20_SETUPUSER_PASSWORD: "{{ tinedockercompose_tinesetuppw }}"
       TINE20_SETUP_HTPASSWD: "{{ tinedockercompose_tinesetuphtpasswd }}"
       TINE20_LOGGER_PRIORITY: "{{ tinedockercompose_tineloggerprio }}"
+{% if tinedockercompose_tineurl is defined %}
+      TINE20_LICENSE_PATH: "{{ tinedockercompose_tine_licensepath }}"
+{% endif %}
 {% if tinedockercompose_tineurl is defined %}
       TINE20_URL: {{ tinedockercompose_tineurl }}
 {% endif %}

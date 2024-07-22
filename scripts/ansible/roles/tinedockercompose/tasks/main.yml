@@ -39,6 +39,7 @@
   become: true
   when:
     - not dbdir.stat.exists
+    - tinedockercompose_db_service|bool
 
 - name: create basic directories
   file:
