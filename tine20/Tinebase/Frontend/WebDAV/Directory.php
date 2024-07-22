@@ -208,11 +208,11 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
     static public function checkQuota(Tinebase_Model_Tree_Node $node): void
     {
         $length = 0;
-        if (!isset($_SERVER['HTTP_CONTENT_LENGTH'])) {
+        if ($this->_CONTENT_LENGTH === false) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
                 . ' CONTENT_LENGTH header missing - cannot check quota before PUT!');
         } else {
-            $length = $_SERVER['HTTP_CONTENT_LENGTH'];
+            $length = $this->_CONTENT_LENGTH;
         }
         if (($_SERVER['HTTP_OC_CHUNKED'] ?? false) && ($ocLen = $_SERVER['HTTP_OC_TOTAL_LENGTH'] ?? 0)
             && $ocLen > $length
@@ -330,7 +330,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      */
     public static function handleOwnCloudChunkedFileUpload($name, $data)
     {
-        if (!isset($_SERVER['CONTENT_LENGTH'])) {
+        if ($this->_CONTENT_LENGTH === false) {
             throw new \Tine20\DAV\Exception\BadRequest('CONTENT_LENGTH header missing!');
         }
 
@@ -354,8 +354,8 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         
         $stat = fstat($tempfileHandle);
         
-        if ($_SERVER['CONTENT_LENGTH'] != $stat['size']) {
-            throw new \Tine20\DAV\Exception\BadRequest('uploaded part incomplete! expected size of: ' . $_SERVER['CONTENT_LENGTH'] . ' got: ' . $stat['size']);
+        if ($this->_CONTENT_LENGTH != $stat['size']) {
+            throw new \Tine20\DAV\Exception\BadRequest('uploaded part incomplete! expected size of: ' . $this->_CONTENT_LENGTH . ' got: ' . $stat['size']);
         }
         
         fclose($tempfileHandle);

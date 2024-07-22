@@ -46,7 +46,10 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\INode, \Tine2
         
         if (! $this->_node) {
             throw new Tine20\DAV\Exception\NotFound('Filesystem path: ' . $_path . ' not found');
-        }
+	}
+
+	// You cannot rely on HTTP_* in some cases, see https://www.php.net/reserved.variables.server comment #15
+	$this->_CONTENT_LENGTH = $_SERVER['HTTP_CONTENT_LENGTH'] ?? $_SERVER['CONTENT_LENGTH'] ?? false;
     }
     
     public function getId()
