@@ -3,6 +3,7 @@
 - name: set group_vars_dir
   set_fact: "group_vars_dir='group_vars{{ inventory_file | replace(inventory_dir, \"\") }}'"
 
+# TODO add a single task for php, pem & crt
 - name: create conf.d files (php)
   copy:
     src: "{{ item }}"
@@ -23,6 +24,17 @@
     mode: 0640
   with_fileglob:
     - "{{ group_vars_dir }}/conf.d/*.pem"
+  become: true
+
+- name: create conf.d files (crt)
+  copy:
+    src: "{{ item }}"
+    dest: "{{ tinedockercompose_confd_path }}"
+    owner: tine20
+    group: root
+    mode: 0640
+  with_fileglob:
+    - "{{ group_vars_dir }}/conf.d/*.crt"
   become: true
 
 - name: create conf.d files (j2)

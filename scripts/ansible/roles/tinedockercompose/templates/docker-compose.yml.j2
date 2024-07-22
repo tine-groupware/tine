@@ -48,7 +48,7 @@ services:
       TINE20_SETUPUSER_PASSWORD: "{{ tinedockercompose_tinesetuppw }}"
       TINE20_SETUP_HTPASSWD: "{{ tinedockercompose_tinesetuphtpasswd }}"
       TINE20_LOGGER_PRIORITY: "{{ tinedockercompose_tineloggerprio }}"
-{% if tinedockercompose_tineurl is defined %}
+{% if tinedockercompose_tine_licensepath is defined %}
       TINE20_LICENSE_PATH: "{{ tinedockercompose_tine_licensepath }}"
 {% endif %}
 {% if tinedockercompose_tineurl is defined %}
