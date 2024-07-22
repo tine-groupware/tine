@@ -110,12 +110,16 @@ Tine.Tinebase.common = {
      * Returns localised date and time string
      *
      * @param {mixed} $_iso8601
-     * @param metadata
      * @see Ext.util.Format.date
      * @return {String} localised date and time
      */
     dateTimeRenderer: function ($_iso8601, metadata) {
-        if (metadata) metadata.css = 'tine-gird-cell-datetime';
+        if (metadata) {
+            metadata.css = 'tine-gird-cell-datetime';
+        }
+
+        const dateObj = $_iso8601 instanceof Date ? $_iso8601 : Date.parseDate($_iso8601, Date.patterns.ISO8601Long);
+
         return Tine.Tinebase.common.dateRenderer.call(this, $_iso8601) + ' '
             + Tine.Tinebase.common.timeRenderer.call(this, $_iso8601);
     },
@@ -124,58 +128,22 @@ Tine.Tinebase.common = {
      * Returns localised date string
      *
      * @param {mixed} date
-     * @param metadata
      * @see Ext.util.Format.date
      * @return {String} localised date
      */
     dateRenderer: function (date, metadata) {
         const format = this?.format ? (this.format?.Date || this.format) : ['wkday', 'medium'];
-        const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
-        
-        if (_.isObject(metadata)) metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
-        
-        return dateObj ? _.map(format, (key) => {
-            return `<span class="date-renderer-${key}">${key === 'wkday' ? dateObj.format('l').substr(0,2) :
-                Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key))}</span>`;
-        }).join(' ') : '';
-    },
-    
-    getDateTimeElement(date, items = ['date', 'time'], format) {
-        const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
-        const timeObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Time);
-        const block = document.createElement('span');
 
-        if (items.includes('date')) {
-            let dateFormat = format?.Date ? format.Date : _.isArray(format) ? format : ['wkday', 'medium'];
-            const wkdaydateIdx = dateFormat.indexOf('wkday');
-            
-            if (wkdaydateIdx > -1) {
-                dateFormat = dateFormat.splice(wkdaydateIdx, 1);
-                const wkDayEl = document.createElement('span');
-                wkDayEl.className = 'wkday';
-                wkDayEl.innerHTML = !dateObj ? '' : dateObj.format('l').substr(0, 2);
-                block.appendChild(wkDayEl);
-            }
-            
-            const dateEl = document.createElement('span');
-            dateEl.className = 'date';
-            dateEl.innerHTML = !dateObj ? '' : ' ' + Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', dateFormat[0]));
-            block.appendChild(dateEl);
+        if (_.isObject(metadata)) {
+            metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
         }
-        
-        if (items.includes('time')) {
-            let timeFormat = format?.Time ? format.Time : _.isArray(format) ? format : ['medium'];
-            const wkdayTimeIdx = timeFormat.indexOf('wkday');
-            if (wkdayTimeIdx > -1) {
-                timeFormat = timeFormat.splice(wkdayTimeIdx, 1);
-            }
-            const timeEl = document.createElement('span');
-            timeEl.className = 'time';
-            timeEl.innerHTML = !timeObj ? '' : ' ' + Ext.util.Format.date(timeObj, Locale.getTranslationData('Time', timeFormat[0]));
-            block.appendChild(timeEl);
-        }
-        
-        return block;
+
+        const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
+
+        return dateObj ? _.map(format, (key) => {
+            return key === 'wkday' ? dateObj.format('l').substr(0,2) :
+                Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key));
+            }).join(' ') : '';
     },
 
     /**
@@ -228,18 +196,20 @@ Tine.Tinebase.common = {
      * Returns localised time string
      *
      * @param {mixed} date
-     * @param metadata
      * @see Ext.util.Format.date
      * @return {String} localised time
      */
     timeRenderer: function (date, metadata) {
         const format = this?.format ? (this.format?.Time || this.format) : ['medium'];
-        const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Time);
-        
-        if (metadata) metadata.css = 'tine-gird-cell-time';
-        
+
+        if (metadata) {
+            metadata.css = 'tine-gird-cell-time';
+        }
+
+        var dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Time);
+
         return dateObj ? _.map(format, (key) => {
-            return `<span class="time-renderer-${key}">${Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', key))}</span>`;
+            return Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', key));
         }).join(' ') : '';
     },
 
