@@ -31,7 +31,7 @@
           </div>
         </div>
       </div>
-      <div class="x-tool-toggle embedded-icon dark-reverse"></div>
+      <div class="x-form-trigger x-form-arrow-trigger embedded-icon dark-reverse"></div>
     </div>
     <BPopover
       :target="popoverTarget"
@@ -61,20 +61,23 @@
 </template>
 
 <script setup>
-import { computed, inject, ref, watchEffect } from 'vue'
+import { computed, inject, ref, watchEffect, provide } from 'vue'
 import RecordTag from './RecordTag.vue'
 import { useElementSize } from '@vueuse/core'
 
 const props = defineProps({
   records: Object,
+  recordRenderer: Function,
   injectKey: String,
   emptyText: String
 })
 
-const eventBus = inject(props.injectKey)
+provide('recordRenderer', props.recordRenderer)
 
+const eventBus = inject(props.injectKey)
 const containerDiv = ref()
 const popoverEllipsis = ref()
+
 const popoverTarget = computed(() => {
   return popoverEllipsis.value ? popoverEllipsis.value.id : null
 })
@@ -172,5 +175,7 @@ const triggerCombo = () => {
 
 .embedded-icon {
   width: 16px;
+  height: 16px !important;
+  cursor: pointer;
 }
 </style>

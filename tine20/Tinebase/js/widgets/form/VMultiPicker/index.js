@@ -23,6 +23,8 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
 
     records: null,
 
+    recordRenderer: null,
+
     initComponent: function() {
         this.emptyText = this.emptyText || (this.readOnly || this.disabled ? '' : i18n._('Search for records ...'));
         this.recordClass = Tine.Tinebase.data.RecordMgr.get(this.recordClass);
@@ -34,6 +36,22 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             this.isMetadataModelFor = this.isMetadataModelFor || dataFields.length === 1 /* precisely this is a cross-record */ ? dataFields[0] : null;
             this.metaDataFields = _.difference(dataFields, [this.isMetadataModelFor]);
             this.mappingRecordClass = this.isMetadataModelFor ? this.recordClass.getField(this.isMetadataModelFor).getRecordClass() : null;
+            if (! this.recordRenderer) {
+                if(this.isMetadataModelFor) {
+                    if (Tine.widgets.grid.RendererManager.has(this.mappingRecordClass.getMeta('appName'), this.mappingRecordClass.getMeta('modelName'), this.isMetadataModelFor)) {
+                        this.recordRenderer = Tine.widgets.grid.RendererManager.get(this.mappingRecordClass.getMeta('appName'), this.mappingRecordClass.getMeta('modelName'), this.isMetadataModelFor)
+                    } else if (String(this.recordClass.getMeta('titleProperty')).match(/[{ ]/)) {
+                        // record.getTitle (see RecordTag)
+                    } else {
+                        this.recordRenderer = mr => {
+                            const data = mr.get(this.isMetadataModelFor)
+                            const record = data.get ? data.get : Tine.Tinebase.data.Record.setFromJson(data, this.mappingRecordClass)
+                            return record.getTitle()
+                        }
+                    }
+                }
+            }
+
         }
 
         const { reactive } = window.vue
@@ -42,7 +60,8 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         this.props = reactive({
             injectKey: this.injectKey,
             records: this.records,
-            emptyText: this.emptyText
+            emptyText: this.emptyText,
+            recordRenderer: this.recordRenderer
         })
         Tine.Tinebase.widgets.form.VMultiPicker.superclass.initComponent.call(this)
     },
@@ -222,7 +241,11 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
     reset: function() {
         this.props.records = new Map()
         this.records = new Map()
-    }
+    },
+
+    validateBlur: function(e) {
+        return !this.el.contains(e.target) && this.pickerCombo.validateBlur(e);
+    },
 })
 
 Ext.reg('tinerecordspickercombobox', Tine.Tinebase.widgets.form.VMultiPicker)

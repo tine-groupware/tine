@@ -195,7 +195,7 @@ const urlRenderer = function (url) {
 Tine.widgets.grid.RendererManager.register('Addressbook', 'Addressbook_Model_Contact', 'url', urlRenderer, Tine.widgets.grid.RendererManager.CATEGORY_DISPLAYPANEL);
 
 const avatarRenderer = function(n_short, metadata, record) {
-    const fullName = record ? record.get('n_fileas') : n_short;
+    let fullName = record ? record.get('n_fileas') : n_short;
     let shortName = record ? record.get('n_short') : n_short;
     if (! shortName && record) {
         let names = _.compact([record.get('n_family'), record.get('n_middle'), record.get('n_given')]);
@@ -204,11 +204,12 @@ const avatarRenderer = function(n_short, metadata, record) {
         }
         if (!names.length) {
             names = _.compact([record.get('accountLastName'), record.get('accountFirstName')]);
+            fullName = record.get('accountDisplayName');
         }
         if (names.length > 1) {
             shortName = _.map(names, (n) => { return n.substring(0, 1).toUpperCase() }).join('');
         } else {
-            shortName = String(names[0]).substring(0, 2);
+            shortName = String(names[0]).replaceAll(/[^A-Za-z0-9]/g, '').substring(0, 2).toUpperCase();
         }
     }
 

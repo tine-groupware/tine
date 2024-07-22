@@ -129,6 +129,15 @@ Tine.Tasks.TaskGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             header: this.app.i18n._("Depends on"),
             width: 150,
             renderer: Tine.widgets.grid.RendererManager.get('Tasks', 'Task', 'dependens_on', Tine.widgets.grid.RendererManager.CATEGORY_GRIDPANEL),
+            editor: {
+                xtype:'tinerecordspickercombobox',
+                name: 'dependens_on',
+                recordClass: 'Tasks.TaskDependency',
+                refIdField: 'task_id',
+                searchComboConfig: {useEditPlugin: false},
+                editDialogConfig: {mode:  'local'},
+                isMetadataModelFor: 'Tasks.Task'
+            }
         }, {
             id: 'percent',
             header: this.app.i18n._("Percent"),
