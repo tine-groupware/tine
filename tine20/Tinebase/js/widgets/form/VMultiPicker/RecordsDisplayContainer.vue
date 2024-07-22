@@ -61,20 +61,23 @@
 </template>
 
 <script setup>
-import { computed, inject, ref, watchEffect } from 'vue'
+import { computed, inject, ref, watchEffect, provide } from 'vue'
 import RecordTag from './RecordTag.vue'
 import { useElementSize } from '@vueuse/core'
 
 const props = defineProps({
   records: Object,
+  recordRenderer: Function,
   injectKey: String,
   emptyText: String
 })
 
-const eventBus = inject(props.injectKey)
+provide('recordRenderer', props.recordRenderer)
 
+const eventBus = inject(props.injectKey)
 const containerDiv = ref()
 const popoverEllipsis = ref()
+
 const popoverTarget = computed(() => {
   return popoverEllipsis.value ? popoverEllipsis.value.id : null
 })

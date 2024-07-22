@@ -9,7 +9,7 @@
 -->
 
 <script setup>
-import { computed, onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref, inject } from 'vue'
 import { useElementSize } from '@vueuse/core'
 
 const props = defineProps({
@@ -18,6 +18,8 @@ const props = defineProps({
   maxDisplayLength: { type: Number, default: 30 },
   minDisplayLength: { type: Number, default: 10 }
 })
+
+const recordRenderer = inject('recordRenderer')
 
 const emits = defineEmits(['remove'])
 
@@ -31,7 +33,7 @@ const displayTitle = computed(() => {
 const title = ref('')
 
 onBeforeMount(async () => {
-  let t = props.record?.getTitle()
+  let t = props.record ? (recordRenderer ? recordRenderer(props.record, {}) : props.record.getTitle()) : ''
   if (typeof t !== 'string') t = await t.asString()
   title.value = t
 })
