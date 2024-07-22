@@ -7,6 +7,25 @@ html, body {
     height:100%;
 }
 
+.tine-gird-cell-date div,
+.tine-gird-cell-time div,
+.tine-gird-cell-datetime div{
+    container-type: inline-size;
+    container-name: datetime;
+}
+
+@container datetime (width < 80px) {
+    .time-renderer-medium {
+      display: none;
+    }
+}
+
+@container datetime (width < 120px) {
+    .date-renderer-wkday {
+      display: none;
+    }
+}
+
 /* see ace-tm styles */
 .string { color: rgb(3, 106, 7); }
 .number { color: rgb(0, 0, 205); }
