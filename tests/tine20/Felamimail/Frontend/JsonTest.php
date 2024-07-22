@@ -711,6 +711,46 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
+     * try search for a message with globing filter
+     */
+    public function testSearchMessageWithGlobingFilter()
+    {
+        //https://toools.cloud/miscellaneous/glob-tester
+        $this->_moveMessageToFolder('INBOX', false, $this->_account);
+        $this->_moveMessageToFolder('1', false, $this->_account);
+        $this->_moveMessageToFolder('1.2', false, $this->_account);
+        $this->_moveMessageToFolder('1.2.3', false, $this->_account);
+        $this->_json->updateFolderCache($this->_account->getId(), '');
+        
+        $shareAccount = $this->_createSharedAccount();
+        $this->_moveMessageToFolder('1', false, $shareAccount);
+        $this->_json->updateFolderCache($shareAccount->getId(), '');
+        $systemFolders = ['INBOX', 'Trash', 'Drafts', 'Junk', 'Sent', 'Template'];
+        $allFolderPath = Felamimail_Model_MessageFilter::PATH_ALLFOLDERS;
+        $this->_assertMessageInFolderByGlobFilter($allFolderPath,    5, array_merge(['1', '1.2', '1.2.3'], $systemFolders));
+        $this->_assertMessageInFolderByGlobFilter('/20/**',     3, array_merge(['1', '1.2', '1.2.3'], $systemFolders));
+        $this->_assertMessageInFolderByGlobFilter('/*/*',       2, array_merge(['1'], $systemFolders));
+        $this->_assertMessageInFolderByGlobFilter('/20/*',      1, array_merge(['1'], $systemFolders));
+        $this->_assertMessageInFolderByGlobFilter('/*/1',       2, ['1']);
+        $this->_assertMessageInFolderByGlobFilter('/*/1/*',     1, ['1.2']);
+        $this->_assertMessageInFolderByGlobFilter('/20/1/*',    1, ['1.2']);
+        $this->_assertMessageInFolderByGlobFilter('/20/1/2',    1, ['1.2']);
+        $this->_assertMessageInFolderByGlobFilter('/20/1/2/*',  1, ['1.2.3']);
+        $this->_assertMessageInFolderByGlobFilter('/20/1/**',   2, ['1.2', '1.2.3']);
+        $this->_assertMessageInFolderByGlobFilter('/*/1/**',    2, ['1.2', '1.2.3']);
+    }
+    
+    protected function _assertMessageInFolderByGlobFilter($path, $count, $folderGlobalNames)
+    {
+        $result = $this->_json->searchMessages([['field' => 'path', 'operator' => 'in', 'value' => $path]], '');
+        $this->assertGreaterThanOrEqual($count, $result['totalcount']);
+        foreach ($result['results'] as $message) {
+            $folder = Felamimail_Controller_Folder::getInstance()->get($message['folder_id']);
+            $this->assertContains($folder['globalname'], $folderGlobalNames);
+        }
+    }
+
+    /**
      * try search for a message with all inboxes and flags filter
      */
     public function testSearchMessageWithAllInboxesFilter()
@@ -771,7 +811,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     }
 
     /**
-     * try search for a message with only query filter -> should switch to /allinboxes path filter
+     * try search for a message with only query filter -> should switch to all innbox path filter
      */
     public function testSearchMessageEmptyQueryFilter()
     {
@@ -792,7 +832,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
 
             $allinboxesFilterFound = false;
             foreach ($result['filter'] as $filter) {
-                if (isset($filter['field']) && $filter['field'] === 'path' && $filter['value'] === '/allinboxes') {
+                if (isset($filter['field']) && $filter['field'] === 'path' && $filter['value'] === '/*/INBOX') {
                     $allinboxesFilterFound = true;
                     break;
                 }
@@ -1164,8 +1204,8 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
     protected function _moveMessageToFolder($moveToFolderName, $keepOriginalMessages = false, $account = null)
     {
         $message = $this->_sendMessage();
-        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $moveToFolderName);
-
+        $this->_foldersToClear[] = $moveToFolderName;
+        $this->_foldersToClear = array_unique($this->_foldersToClear);
         // move
         $testFolder = $this->_getFolder($moveToFolderName, true, $account);
         $this->_json->moveMessages(array(array(

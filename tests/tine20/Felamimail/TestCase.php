@@ -328,14 +328,19 @@ abstract class Felamimail_TestCase extends TestCase
      * @param Felamimail_Model_Account $account
      * @return Felamimail_Model_Folder|NULL
      */
-    protected function _getFolder($name, $createFolder = TRUE, Felamimail_Model_Account $account = null)
+    protected function _getFolder($globalName, $createFolder = TRUE, Felamimail_Model_Account $account = null)
     {
         $account = $account ? $account : $this->_account;
         Felamimail_Controller_Cache_Folder::getInstance()->update($account->getId());
+        $paths = explode($account->delimiter, $globalName);
+        $folderName = array_pop($paths);
+        $parentFolder = implode($account->delimiter, $paths);
         try {
-            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account->getId(), $name);
+            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account->getId(), $globalName);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $folder = ($createFolder) ? Felamimail_Controller_Folder::getInstance()->create($account, $name) : NULL;
+            $folder = ($createFolder) ? Felamimail_Controller_Folder::getInstance()->create($account, $folderName, $parentFolder) : NULL;
+        } catch (Tinebase_Exception_SystemGeneric $tes) {
+            $folder = ($createFolder) ? Felamimail_Controller_Folder::getInstance()->create($account, $folderName, $parentFolder) : NULL;
         }
 
         return $folder;
@@ -402,7 +407,7 @@ abstract class Felamimail_TestCase extends TestCase
                 unlink($tempFile->path);
             }
         }
-        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
+        $this->_foldersToClear = array_merge($this->_foldersToClear, array('INBOX', $this->_account->sent_folder));
         return $this->_assertMessageInFolder($folderName, $messageToSend['subject']);
     }
 
