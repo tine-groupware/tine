@@ -1520,24 +1520,29 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param Felamimail_Model_Message $_message
      * @return Felamimail_Model_Message|null
+     * @throws Felamimail_Exception_IMAPInvalidCredentials
+     * @throws Tinebase_Exception_NotFound
+     * @throws Zend_Mail_Storage_Exception
      */
-    public function saveDraft($_message)
+    public function saveDraft(Felamimail_Model_Message $_message): ?Felamimail_Model_Message
     {
         // get account & folder
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
-        $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_DRAFTS);
+        $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account,
+            Felamimail_Model_Folder::FOLDER_DRAFTS);
 
         // remove old draft if uid given
         if ($_message->messageuid && $draftFolder) {
             $this->_deleteDraftByUid($_message->messageuid, $account, $draftFolder);
         }
 
-        // save draft in draft folder
-        $headers = $_message->headers;
+        // add custom header (for easy removal)
+        $headers = is_array($_message->headers) ? $_message->headers : [];
         $headers['X-Tine20-AutoSaved'] = true;
         $_message->headers = $headers;
         
-        $draft = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($draftFolder, $_message, [Zend_Mail_Storage::FLAG_SEEN]);
+        $draft = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($draftFolder, $_message,
+            [Zend_Mail_Storage::FLAG_SEEN]);
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
             __METHOD__ . '::' . __LINE__ . ' Saved draft with uid ' . $draft->messageuid);
         return $draft;
