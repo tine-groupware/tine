@@ -31,7 +31,7 @@
           </div>
         </div>
       </div>
-      <div class="x-tool-toggle embedded-icon dark-reverse"></div>
+      <div class="x-form-trigger x-form-arrow-trigger embedded-icon dark-reverse"></div>
     </div>
     <BPopover
       :target="popoverTarget"
@@ -175,5 +175,7 @@ const triggerCombo = () => {
 
 .embedded-icon {
   width: 16px;
+  height: 16px !important;
+  cursor: pointer;
 }
 </style>
