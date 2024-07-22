@@ -12,6 +12,7 @@
   become: true
   when:
     - not ansible_check_mode
+    - tinedockercompose_createdirs|bool
 
 - name: config logrotate for logs
   template:

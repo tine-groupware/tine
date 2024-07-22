@@ -40,6 +40,7 @@
   when:
     - not dbdir.stat.exists
     - tinedockercompose_db_service|bool
+    - tinedockercompose_createdirs|bool
 
 - name: create basic directories
   file:
@@ -52,6 +53,8 @@
     - "{{ tinedockercompose_path }}"
     - "{{ tinedockercompose_path }}/scripts"
   become: true
+  when:
+    - tinedockercompose_createdirs|bool
 
 - name: create basic tine directories (owned by tine20 user)
   file:
@@ -66,6 +69,7 @@
     - "{{ tinedockercompose_backup_path }}"
   become: true
   when:
+    - tinedockercompose_createdirs|bool
     - tinedockercompose_addtineuser is defined
     - tinedockercompose_addtineuser|bool
 
