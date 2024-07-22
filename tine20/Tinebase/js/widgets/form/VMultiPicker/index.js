@@ -222,7 +222,11 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
     reset: function() {
         this.props.records = new Map()
         this.records = new Map()
-    }
+    },
+
+    validateBlur: function(e) {
+        return !this.el.contains(e.target) && this.pickerCombo.validateBlur(e);
+    },
 })
 
 Ext.reg('tinerecordspickercombobox', Tine.Tinebase.widgets.form.VMultiPicker)

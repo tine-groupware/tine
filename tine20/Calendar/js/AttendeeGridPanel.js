@@ -147,8 +147,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
 
         this.initColumns();
         
-        this.mon(Ext.getBody(), 'click', this.stopEditingIf, this);
-
         this.viewConfig = _.assign(this.viewConfig || {},{
             getRowClass: this.getRowClass
         });
@@ -502,17 +500,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     getRowClass: function(record, index) {
         if (! record.get('user_id')) {
             return 'x-cal-add-attendee-row';
-        }
-    },
-    
-    /**
-     * stop editing if user clicks else where
-     * 
-     * FIXME this breaks the paging in search combos, maybe we should check if search combo paging buttons are clicked, too
-     */
-    stopEditingIf: function(e) {
-        if (! e.within(this.getGridEl())) {
-            //this.stopEditing();
         }
     },
 

@@ -268,7 +268,11 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             this.fireEvent('blur', this);
         }
     },
-    
+
+    validateBlur: function(e) {
+        return !this.el.contains(e.target) && this.dateField.validateBlur(e) && this.timeField.validateBlur(e);
+    },
+
     onDateChange: function () {
         var newValue = this.getValue();
         this.setValue(newValue);
