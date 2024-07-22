@@ -35,11 +35,17 @@ class Inventory_Convert_InventoryItem_Json extends Tinebase_Convert_Json
             if (empty($record['invoice'])) {
                 continue;
             }
-            $invoice = Sales_Controller_PurchaseInvoice::getInstance()->get($record['invoice']['id'])->toArray();
-            if (isset($invoice['supplier'][0])) {
-                $invoice['supplier'] = $invoice['supplier'][0];
-                $record['invoice'] = $invoice;
+            $invoiceId = $record['invoice']['id'] ?? $record['invoice'];
+            try {
+                $invoice = Sales_Controller_PurchaseInvoice::getInstance()->get($invoiceId)->toArray();
+                if (isset($invoice['supplier'][0])) {
+                    $invoice['supplier'] = $invoice['supplier'][0];
+                    $record['invoice'] = $invoice;
+                }
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
             }
+
         }
         return $multiple ? $result : $result[0];
     }

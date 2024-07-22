@@ -82,7 +82,11 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
             self::INDEXES => [
                 self::FLD_CONTAINER_ID => [
                     self::COLUMNS => [self::FLD_CONTAINER_ID]
-                ]
+                ],
+                self::FLD_DESCRIPTION => [
+                    self::COLUMNS       => [self::FLD_DESCRIPTION],
+                    self::FLAGS         => [self::TYPE_FULLTEXT],
+                ],
             ]
         ],
 
@@ -193,7 +197,6 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
                 ],
                 self::VALIDATORS => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL             => 'Inventory Type', // _('Inventory Type')
-                self::QUERY_FILTER      => true,
                 self::NULLABLE          => true,
             ],
             self::FLD_INVOICE => [
