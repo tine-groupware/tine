@@ -6,7 +6,7 @@
  * @subpackage  WebDAV
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2015-2015 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2015-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -15,7 +15,7 @@
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Tine20\DAV\IProperties, \Tine20\DAVACL\IACL
+class Sales_Frontend_WebDAV_Import extends \Sabre\DAV\Collection implements \Sabre\DAV\IProperties, \Sabre\DAVACL\IACL
 {
     /**
      * the current application object
@@ -65,7 +65,7 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
     
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\Collection::createFile()
+     * @see \Sabre\DAV\Collection::createFile()
      */
     public function createFile($name, $data = null)
     {
@@ -85,11 +85,11 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
     
     /**
      * (non-PHPdoc)
-     * @see Tine20\DAV\Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($name)
     {
-        throw new Tine20\DAV\Exception\NotFound("Directory $this->_path/$name not found");
+        throw new Sabre\DAV\Exception\NotFound("Directory $this->_path/$name not found");
     }
     
     /**
@@ -97,7 +97,7 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
      * 
      * the records subtree is not returned as child here. It's only available via getChild().
      *
-     * @return \Tine20\DAV\INode[]
+     * @return \Sabre\DAV\INode[]
      */
     function getChildren()
     {
@@ -114,10 +114,11 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
     public function getETag()
     {
         $etags = array();
-        
-        foreach ($this->getChildren() as $child) {
+
+        // get children is empty array...
+        /*foreach ($this->getChildren() as $child) {
             $etags[] = $child->getETag();
-        }
+        }*/
         
         return '"' . sha1(implode('', $etags)) . '"';
     }
@@ -136,7 +137,7 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
     
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\Node::getLastModified()
+     * @see \Sabre\DAV\Node::getLastModified()
      */
     public function getLastModified()
     {
@@ -187,7 +188,7 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
      */
     public function getName()
     {
-        list(,$name) = Tine20\DAV\URLUtil::splitPath($this->_path);
+        list(,$name) = Tinebase_WebDav_XMLUtil::splitPath($this->_path);
         
         return $name;
     }
@@ -231,8 +232,8 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
             switch ($property) {
                 case '{DAV:}owner':
                     if ($this->getOwner()) {
-                        $response[$property] = new \Tine20\DAVACL\Property\Principal(
-                            \Tine20\DAVACL\Property\Principal::HREF, $this->getOwner()
+                        $response[$property] = new \Sabre\DAVACL\Xml\Property\Principal(
+                            \Sabre\DAVACL\Xml\Property\Principal::HREF, $this->getOwner()
                         );
                     }
                     
@@ -261,70 +262,12 @@ class Sales_Frontend_WebDAV_Import extends \Tine20\DAV\Collection implements \Ti
      */
     public function setACL(array $acl)
     {
-        throw new Tine20\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
+        throw new Sabre\DAV\Exception\MethodNotAllowed('Changing ACL is not yet supported');
     }
-    
-    /**
-     * Updates properties on this node,
-     *
-     * The properties array uses the propertyName in clark-notation as key,
-     * and the array value for the property value. In the case a property
-     * should be deleted, the property value will be null.
-     *
-     * This method must be atomic. If one property cannot be changed, the
-     * entire operation must fail.
-     *
-     * If the operation was successful, true can be returned.
-     * If the operation failed, false can be returned.
-     *
-     * Deletion of a non-existant property is always succesful.
-     *
-     * Lastly, it is optional to return detailed information about any
-     * failures. In this case an array should be returned with the following
-     * structure:
-     *
-     * array(
-     *   403 => array(
-     *      '{DAV:}displayname' => null,
-     *   ),
-     *   424 => array(
-     *      '{DAV:}owner' => null,
-     *   )
-     * )
-     *
-     * In this example it was forbidden to update {DAV:}displayname. 
-     * (403 Forbidden), which in turn also caused {DAV:}owner to fail
-     * (424 Failed Dependency) because the request needs to be atomic.
-     *
-     * @param array $mutations 
-     * @return bool|array 
-     */
-    public function updateProperties($mutations) 
+
+    public function propPatch(\Sabre\DAV\PropPatch $propPatch)
     {
-        $result = array(
-            200 => array(),
-            403 => array()
-        );
-
-        foreach ($mutations as $key => $value) {
-            switch ($key) {
-                // once iCal tried to set default-alarm config with a negative feedback
-                // it doesn't send default-alarms to the server any longer. So we fake
-                // success here as workaround to let the client send its default alarms
-                case '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-datetime':
-                case '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-date':
-                case '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-datetime':
-                case '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-date':
-                    // fake success
-                    $result['200'][$key] = null;
-                    break;
-
-                default:
-                    $result['403'][$key] = null;
-            }
-        }
-
-        return $result;
+        // no write access, we don't do anything, the propPatch will fail with 403 automatically
     }
     
     /**

@@ -23,6 +23,8 @@ class Tinebase_Event_User_ChangePassword extends Tinebase_Event_Abstract
      */
     public $userId;
 
+    public ?Tinebase_Model_FullUser $user = null;
+
     /**
      * new password
      * 

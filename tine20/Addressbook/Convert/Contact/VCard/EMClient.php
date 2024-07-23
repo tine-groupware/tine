@@ -6,7 +6,7 @@
  * @subpackage  Convert
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Pawassarat <tomp@topanet.de>
- * @copyright   Copyright (c) 2013-2013 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -80,7 +80,7 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
      * converts Addressbook_Model_Contact to vcard
      * 
      * @param  Addressbook_Model_Contact  $_record
-     * @return \Tine20\VObject\Component\VCard
+     * @return \Sabre\VObject\Component\VCard
      */
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
@@ -137,12 +137,13 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseEmail()
      */
-    protected function _toTine20ModelParseEmail(&$data, \Tine20\VObject\Property $property, \Tine20\VObject\Component\VCard $vcard)
+    protected function _toTine20ModelParseEmail(&$data, \Sabre\VObject\Property $property, \Sabre\VObject\Component\VCard $vcard)
     {
         $type = null;
-        
-        if ($property['TYPE']) {
-            if ($property['TYPE']->has('pref')) {
+
+        /** @var \Sabre\VObject\Parameter $typeParameter */
+        if ($typeParameter = $property['TYPE']) {
+            if ($typeParameter->has('pref')) {
                 $type = 'work';
             }
         }
@@ -162,27 +163,29 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
      * (non-PHPdoc)
      * @see Addressbook_Convert_Contact_VCard_Abstract::_toTine20ModelParseTel()
      */
-    protected function _toTine20ModelParseTel(&$data, \Tine20\VObject\Property $property)
+    protected function _toTine20ModelParseTel(&$data, \Sabre\VObject\Property $property)
     {
         $telField = null;
 
-        if (isset($property['TYPE'])) {
+        /** @var \Sabre\VObject\Parameter $typeParameter */
+        $typeParameter = $property['TYPE'];
+        if ($typeParameter) {
             // CELL
-            if ($property['TYPE']->has('cell')) {
+            if ($typeParameter->has('cell')) {
                 $telField = 'tel_cell';
-            } elseif ($property['TYPE']->has('other')) {
+            } elseif ($typeParameter->has('other')) {
                 $telField = 'tel_cell_private';
      
             // TEL
-            } elseif ($property['TYPE']->has('work') && $property['TYPE']->has('voice')) {
+            } elseif ($typeParameter->has('work') && $typeParameter->has('voice')) {
                 $telField = 'tel_work';
-            } elseif ($property['TYPE']->has('home') && $property['TYPE']->has('voice')) {
+            } elseif ($typeParameter->has('home') && $typeParameter->has('voice')) {
                 $telField = 'tel_home';
 
             // FAX
-            } elseif ($property['TYPE']->has('work') && $property['TYPE']->has('fax')) {
+            } elseif ($typeParameter->has('work') && $typeParameter->has('fax')) {
                 $telField = 'tel_fax';
-            } elseif ($property['TYPE']->has('home') && $property['TYPE']->has('fax')) {
+            } elseif ($typeParameter->has('home') && $typeParameter->has('fax')) {
                 $telField = 'tel_fax_home';
             }
         }
@@ -199,9 +202,9 @@ class Addressbook_Convert_Contact_VCard_EMClient extends Addressbook_Convert_Con
      * parse birthday
      * 
      * @param array $data
-     * @param Tine20\VObject\Property $property
+     * @param Sabre\VObject\Property $property
      */
-    protected function _toTine20ModelParseBday(&$_data, \Tine20\VObject\Property $_property)
+    protected function _toTine20ModelParseBday(&$_data, \Sabre\VObject\Property $_property)
     {
         $tzone = new DateTimeZone(Tinebase_Core::getUserTimezone());
         $_data['bday'] = new Tinebase_DateTime($_property->getValue(), $tzone);

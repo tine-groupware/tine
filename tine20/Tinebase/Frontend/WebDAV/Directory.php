@@ -14,7 +14,7 @@
  * 
  * @package     Tinebase
  */
-class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\ICollection
+class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\ICollection
 {
     /**
     * webdav file class
@@ -50,7 +50,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
                 }
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Tine20\DAV\Exception\NotFound('path not found: ' . $this->_path);
+            throw new Sabre\DAV\Exception\NotFound('path not found: ' . $this->_path);
         }
         
         return $children;
@@ -60,7 +60,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      * get child by name
      * 
      * @param  string $name
-     * @throws Tine20\DAV\Exception\NotFound
+     * @throws Sabre\DAV\Exception\NotFound
      * @return Tinebase_Frontend_WebDAV_Directory|Tinebase_Frontend_WebDAV_File
      */
     public function getChild($name) 
@@ -81,7 +81,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         try {
             $childNode = Tinebase_FileSystem::getInstance()->stat($this->_path . '/' . $name);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Tine20\DAV\Exception\NotFound('file not found: ' . $this->_path . '/' . $name);
+            throw new Sabre\DAV\Exception\NotFound('file not found: ' . $this->_path . '/' . $name);
         }
         
         if ($childNode->type == Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
@@ -106,10 +106,10 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      * 
      * @param string $name Name of the file 
      * @param resource $data Initial payload, passed as a readable stream resource. 
-     * @throws Tine20\DAV\Exception\Forbidden
-     * @throws Tine20\DAV\Exception\NotFound
-     * @throws Tine20\DAV\Exception\InsufficientStorage
-     * @throws Tine20\DAV\Exception
+     * @throws Sabre\DAV\Exception\Forbidden
+     * @throws Sabre\DAV\Exception\NotFound
+     * @throws Sabre\DAV\Exception\InsufficientStorage
+     * @throws Sabre\DAV\Exception
      * @return string
      */
     public function createFile($name, $data = null) 
@@ -122,7 +122,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             'add',
             true, false
         )) {
-            throw new Tine20\DAV\Exception\Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to create file: ' . $this->_path . '/' . $name);
         }
 
         $quotaChecked = false;
@@ -140,7 +140,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
             $name = $completeFile->name;
             if (false === ($data = fopen($completeFile->path, 'r'))) {
-                throw new Tine20\DAV\Exception('fopen on temp file path failed ' . $completeFile->path);
+                throw new Sabre\DAV\Exception('fopen on temp file path failed ' . $completeFile->path);
             }
             $_SERVER['HTTP_OC_CHUNKED'] = false;
         }
@@ -149,7 +149,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             try {
                 return $this->getChild($name)->put($data);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                throw new Tine20\DAV\Exception\NotFound($tenf->getMessage());
+                throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
             }
         }
 
@@ -170,14 +170,14 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
             if (is_resource($data)) {
                 if (false === stream_copy_to_stream($data, $handle)) {
-                    throw new Tine20\DAV\Exception('stream_copy_to_stream failed');
+                    throw new Sabre\DAV\Exception('stream_copy_to_stream failed');
                 }
             } else {
-                throw new Tine20\DAV\Exception('data should be a resource');
+                throw new Sabre\DAV\Exception('data should be a resource');
             }
 
             if (true !== Tinebase_FileSystem::getInstance()->fclose($handle)) {
-                throw new Tine20\DAV\Exception('Tinebase_FileSystem::fclose failed for path ' . $path);
+                throw new Sabre\DAV\Exception('Tinebase_FileSystem::fclose failed for path ' . $path);
             }
 
             $etag = Tinebase_FileSystem::getInstance()->getETag($path);
@@ -186,11 +186,11 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             Tinebase_FileSystem::getInstance()->unlink($path);
             $translation = Tinebase_Translation::getTranslation('Tinebase');
             if ($e instanceof Tinebase_Exception_QuotaExceeded) {
-                throw new Tine20\DAV\Exception\InsufficientStorage($e->getMessage());
+                throw new Sabre\DAV\Exception\InsufficientStorage($e->getMessage());
             } else if ($e instanceof Tinebase_Exception_NotFound) {
-                throw new Tine20\DAV\Exception\NotFound($e->getMessage());
+                throw new Sabre\DAV\Exception\NotFound($e->getMessage());
             } else {
-                throw new Tine20\DAV\Exception($e->getMessage());
+                throw new Sabre\DAV\Exception($e->getMessage());
             }
         }
 
@@ -203,7 +203,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      *
      * @param Tinebase_Model_Tree_Node $node
      * @return void
-     * @throws \Tine20\DAV\Exception\InsufficientStorage
+     * @throws \Sabre\DAV\Exception\InsufficientStorage
      */
     static public function checkQuota(Tinebase_Model_Tree_Node $node): void
     {
@@ -222,7 +222,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
         if ($length > 0) {
             $quotas = Tinebase_FileSystem::getInstance()->getEffectiveAndLocalQuota($node);
             if ($quotas['effectiveQuota'] > 0 && $quotas['effectiveFree'] < $length) {
-                throw new Tine20\DAV\Exception\InsufficientStorage();
+                throw new Sabre\DAV\Exception\InsufficientStorage();
             }
         }
     }
@@ -231,7 +231,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      * Creates a new subdirectory 
      * 
      * @param string $name 
-     * @throws Tine20\DAV\Exception\Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @return void
      */
     public function createDirectory($name) 
@@ -244,7 +244,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             'add',
             true, false
         )) {
-            throw new Tine20\DAV\Exception\Forbidden('Forbidden to create folder: ' . $name);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to create folder: ' . $name);
         }
         
         $path = $this->_path . '/' . $name;
@@ -261,10 +261,10 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             } catch (Tinebase_Exception_Record_Validation $terv) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE))
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $terv->getMessage());
-                throw new Tine20\DAV\Exception\Forbidden('Forbidden to create directory: ' . $path);
+                throw new Sabre\DAV\Exception\Forbidden('Forbidden to create directory: ' . $path);
             }  catch (Zend_Db_Statement_Exception $zdse) {
                 if (Tinebase_Exception::isDbDuplicate($zdse)) {
-                    throw new Tine20\DAV\Exception\Forbidden('Directory already exists: ' . $path);
+                    throw new Sabre\DAV\Exception\Forbidden('Directory already exists: ' . $path);
                 } else {
                     throw $zdse;
                 }
@@ -276,7 +276,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      * Deleted the current node
      * 
      * @todo   use filesystem controller to delete directories recursive
-     * @throws Tine20\DAV\Exception\Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @return void 
      */
     public function delete() 
@@ -287,7 +287,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
             'delete',
             true, false, $pathRecord
         )) {
-            throw new Tine20\DAV\Exception\Forbidden('Forbidden to delete directory: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to delete directory: ' . $this->_path);
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
@@ -304,14 +304,14 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
         try {
             if (!Tinebase_FileSystem::getInstance()->rmdir($this->_path)) {
-                throw new Tine20\DAV\Exception\Forbidden('Permission denied to delete node');
+                throw new Sabre\DAV\Exception\Forbidden('Permission denied to delete node');
             }
         } catch (Tinebase_Exception_InvalidArgument $teia) {
             // directory not empty ...
-            throw new Tine20\DAV\Exception\Forbidden($teia->getMessage());
+            throw new Sabre\DAV\Exception\Forbidden($teia->getMessage());
         } catch (Tinebase_Exception_NotFound $tenf) {
             // directory not found ...
-            throw new Tine20\DAV\Exception\NotFound($tenf->getMessage());
+            throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
         }
     }
 
@@ -325,7 +325,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
      * 
      * @param string $name Name of the file
      * @param resource $data payload, passed as a readable stream resource.
-     * @throws \Tine20\DAV\Exception\BadRequest
+     * @throws \Sabre\DAV\Exception\BadRequest
      * @return boolean|Tinebase_Model_TempFile
      */
     public static function handleOwnCloudChunkedFileUpload($name, $data)
@@ -336,7 +336,7 @@ class Tinebase_Frontend_WebDAV_Directory extends Tinebase_Frontend_WebDAV_Node i
 
         $chunkInfo = [];
         if (!static::getOwnCloudChunkInfo($name, $chunkInfo)) {
-            throw new \Tine20\DAV\Exception\BadRequest('bad filename provided: ' . $name);
+            throw new \Sabre\DAV\Exception\BadRequest('bad filename provided: ' . $name);
         }
         
         // copy chunk to temp file

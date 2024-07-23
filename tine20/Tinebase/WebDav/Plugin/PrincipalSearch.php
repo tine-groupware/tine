@@ -13,12 +13,12 @@
  * @author     Lars Kneschke <l.kneschke@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Tinebase_WebDav_Plugin_PrincipalSearch extends \Tine20\DAV\ServerPlugin {
+class Tinebase_WebDav_Plugin_PrincipalSearch extends \Sabre\DAV\ServerPlugin {
 
     /**
      * Reference to server object
      *
-     * @var \Tine20\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     protected $server;
 
@@ -34,7 +34,7 @@ class Tinebase_WebDav_Plugin_PrincipalSearch extends \Tine20\DAV\ServerPlugin {
 
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\ServerPlugin::getPluginName()
+     * @see \Sabre\DAV\ServerPlugin::getPluginName()
      */
     public function getPluginName() 
     {
@@ -43,103 +43,81 @@ class Tinebase_WebDav_Plugin_PrincipalSearch extends \Tine20\DAV\ServerPlugin {
     
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\ServerPlugin::getSupportedReportSet()
+     * @see \Sabre\DAV\ServerPlugin::getSupportedReportSet()
      */
     public function getSupportedReportSet($uri) 
     {
         return array(
-            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}calendarserver-principal-search'
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}calendarserver-principal-search'
         );
 
     }
     /**
      * Initializes the plugin 
      * 
-     * @param \Tine20\DAV\Server $server 
+     * @param \Sabre\DAV\Server $server 
      * @return void
      */
-    public function initialize(\Tine20\DAV\Server $server) 
+    public function initialize(\Sabre\DAV\Server $server) 
     {
         $this->server = $server;
 
-        $server->xmlNamespaces[\Tine20\CalDAV\Plugin::NS_CALDAV] = 'cal';
-        $server->xmlNamespaces[\Tine20\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
+        $server->xml->namespaceMap[\Sabre\CalDAV\Plugin::NS_CALDAV] = 'cal';
+        $server->xml->namespaceMap[\Sabre\CalDAV\Plugin::NS_CALENDARSERVER] = 'cs';
 
-        #$server->subscribeEvent('beforeGetProperties',array($this,'beforeGetProperties'));
-        $server->subscribeEvent('report',array($this,'report'));
+        $server->on('report',array($this,'report'));
         
         array_push($server->protectedProperties,
             // CalendarServer extensions
-            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type',
-            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name',
-            '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}record-type',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name',
+            '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name'
         );
     }
-    
-    /**
-     * beforeGetProperties
-     *
-     * This method handler is invoked before any after properties for a
-     * resource are fetched. This allows us to add in any CalDAV specific
-     * properties.
-     *
-     * @param string $path
-     * @param DAV\INode $node
-     * @param array $requestedProperties
-     * @param array $returnedProperties
-     * @return void
-     */
-    #public function beforeGetProperties($path, \Tine20\DAV\INode $node, &$requestedProperties, &$returnedProperties) 
-    #{
-    #    if ($node instanceof \Tine20\DAVACL\IPrincipal) {var_dump($path);
-    #        // schedule-outbox-URL property
-    #        #'{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type'        => 'GROUP',
-    #        $property = '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type';
-    #        if (in_array($property,$requestedProperties)) {
-    #            list($prefix, $nodeId) = Tine20\DAV\URLUtil::splitPath($path);
-    #            
-    #            unset($requestedProperties[array_search($property, $requestedProperties)]);
-    #            $returnedProperties[200][$property] = ($prefix == Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS) ? 'GROUP' : 'INDIVIDUAL';
 
-    #        }
-    #    }
-    #}
-    
-    /**
-     * This method handles HTTP REPORT requests
-     *
-     * @param string $reportName
-     * @param \DOMNode $dom
-     * @return bool
-     */
-    public function report($reportName, $dom) 
+    public function report($reportName, $data)
     {
         switch($reportName) {
-            case '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}calendarserver-principal-search':
-                $this->_principalSearchReport($dom);
+            case '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}calendarserver-principal-search':
+                $this->_principalSearchReport($data);
                 return false;
         }
     }
     
-    protected function _principalSearchReport(\DOMDocument $dom) 
+    protected function _principalSearchReport(array $searchData)
     {
-        $requestedProperties = array_keys(\Tine20\DAV\XMLUtil::parseProperties($dom->firstChild));
-        
-        $searchTokens = $dom->firstChild->getElementsByTagName('search-token');
+        $requestedProperties = [];
+        $searchToken = null;
 
-        $searchProperties = array();
-        
-        if ($searchTokens->length > 0) {
-            $searchProperties['{http://calendarserver.org/ns/}search-token'] = $searchTokens->item(0)->nodeValue;
+        foreach ($searchData as $elem) {
+            switch ($elem['name'] ?? '') {
+                case '{http://calendarserver.org/ns/}search-token':
+                    $searchToken = $elem['value'] ?? null;
+                    break;
+                //case '{http://calendarserver.org/ns/}limit': break;
+                case '{DAV:}prop':
+                    foreach ($elem['value'] ?? [] as $subElem) {
+                        if ($subElem['name'] ?? false) {
+                            $requestedProperties[] = $subElem['name'];
+                        }
+                    }
+                    break;
+            }
         }
         
-        $result = $this->server->getPlugin('acl')->principalSearch($searchProperties, $requestedProperties);
+        if ($searchToken) {
+            $searchToken = ['{http://calendarserver.org/ns/}search-token' => $searchToken];
+        }
+
+        /** @var \Sabre\DAVACL\Plugin $aclPlugin */
+        $aclPlugin = $this->server->getPlugin('acl');
+        $result = $aclPlugin->principalSearch($searchToken, $requestedProperties);
 
         $prefer = $this->server->getHTTPPRefer();
 
-        $this->server->httpResponse->sendStatus(207);
+        $this->server->httpResponse->setStatus(207);
         $this->server->httpResponse->setHeader('Content-Type','application/xml; charset=utf-8');
         $this->server->httpResponse->setHeader('Vary','Brief,Prefer');
-        $this->server->httpResponse->sendBody($this->server->generateMultiStatus($result, $prefer['return-minimal']));
+        $this->server->httpResponse->setBody($this->server->generateMultiStatus($result, $prefer['return'] === 'minimal'));
     }
 }

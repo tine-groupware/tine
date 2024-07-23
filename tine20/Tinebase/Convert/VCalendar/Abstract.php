@@ -45,11 +45,11 @@ abstract class Tinebase_Convert_VCalendar_Abstract
      * returns VObject of input data
      * 
      * @param   mixed  $blob
-     * @return  \Tine20\VObject\Component\VCalendar
+     * @return  \Sabre\VObject\Component\VCalendar
      */
     public static function getVObject($blob)
     {
-        if ($blob instanceof \Tine20\VObject\Component\VCalendar) {
+        if ($blob instanceof \Sabre\VObject\Component\VCalendar) {
             return $blob;
         }
         
@@ -61,7 +61,7 @@ abstract class Tinebase_Convert_VCalendar_Abstract
 
         try {
             $vcalendar = self::readVCalBlob($blob);
-        } catch (Tine20\VObject\ParseException $svpe) {
+        } catch (Sabre\VObject\ParseException $svpe) {
             // try again with utf8_encoded blob
             $utf8_blob = Tinebase_Helper::mbConvertTo($blob);
             // alse replace some linebreaks and \x00's
@@ -82,8 +82,8 @@ abstract class Tinebase_Convert_VCalendar_Abstract
      * @param integer $spacecount
      * @param integer $lastBrokenLineNumber
      * @param array $lastLines
-     * @throws Tine20\VObject\ParseException
-     * @return Tine20\VObject\Component\VCalendar
+     * @throws Sabre\VObject\ParseException
+     * @return Sabre\VObject\Component\VCalendar
      *
      * @see 0006110: handle iMIP messages from outlook
      *
@@ -98,9 +98,9 @@ abstract class Tinebase_Convert_VCalendar_Abstract
                 ' ' . $blob);
     
         try {
-            $vcalendar = \Tine20\VObject\Reader::read($blob);
-        } catch (Tine20\VObject\ParseException $svpe) {
-            // NOTE: we try to repair\Tine20\VObject\Reader as it fails to detect followup lines that do not begin with a space or tab
+            $vcalendar = \Sabre\VObject\Reader::read($blob);
+        } catch (Sabre\VObject\ParseException $svpe) {
+            // NOTE: we try to repair\Sabre\VObject\Reader as it fails to detect followup lines that do not begin with a space or tab
             if ($failcount < 10 && preg_match(
                     '/Invalid VObject, line ([0-9]+) did not follow the icalendar\/vcard format/', $svpe->getMessage(), $matches
             )) {
@@ -134,7 +134,7 @@ abstract class Tinebase_Convert_VCalendar_Abstract
                 $vcalendar = self::readVCalBlob(implode("\n", $lines), $failcount + 1, $spacecount, $brokenLineNumber, $lastLines);
             } else if ($failcount < 10 && preg_match('/%0A/', $blob)) {
                 // maybe the input file is urlencoded
-                $vcalendar = \Tine20\VObject\Reader::read(urldecode($blob));
+                $vcalendar = \Sabre\VObject\Reader::read(urldecode($blob));
             } else {
                 throw $svpe;
             }
@@ -146,9 +146,9 @@ abstract class Tinebase_Convert_VCalendar_Abstract
     /**
      * to be overwriten in extended classes to modify/cleanup $_vcalendar
      *
-     * @param \Tine20\VObject\Component\VCalendar $vcalendar
+     * @param \Sabre\VObject\Component\VCalendar $vcalendar
      */
-    protected function _afterFromTine20Model(\Tine20\VObject\Component\VCalendar $vcalendar)
+    protected function _afterFromTine20Model(\Sabre\VObject\Component\VCalendar $vcalendar)
     {
     }
     
@@ -157,9 +157,9 @@ abstract class Tinebase_Convert_VCalendar_Abstract
      * 
      * @param Tinebase_Record_Interface $record
      * @param Traversable $valarms
-     * @param \Tine20\VObject\Component $vcomponent
+     * @param \Sabre\VObject\Component $vcomponent
      */
-    protected function _parseAlarm(Tinebase_Record_Interface $record, $valarms, \Tine20\VObject\Component $vcomponent)
+    protected function _parseAlarm(Tinebase_Record_Interface $record, $valarms, \Sabre\VObject\Component $vcomponent)
     {
         foreach ($valarms as $valarm) {
             
@@ -176,7 +176,7 @@ abstract class Tinebase_Convert_VCalendar_Abstract
             }
             
             # TRIGGER:-PT15M
-            if (is_string($valarm->TRIGGER->getValue()) && $valarm->TRIGGER instanceof Tine20\VObject\Property\ICalendar\Duration) {
+            if (is_string($valarm->TRIGGER->getValue()) && $valarm->TRIGGER instanceof Sabre\VObject\Property\ICalendar\Duration) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                 . ' Adding DURATION trigger value for ' . $valarm->TRIGGER->getValue());
                 $valarm->TRIGGER->add('VALUE', 'DURATION');
@@ -245,18 +245,18 @@ abstract class Tinebase_Convert_VCalendar_Abstract
     /**
      * get datetime from sabredav datetime property (user TZ is fallback)
      * 
-     * @param  Tine20\VObject\Property  $dateTimeProperty
+     * @param  Sabre\VObject\Property  $dateTimeProperty
      * @param  boolean                 $_useUserTZ
      * @return Tinebase_DateTime
      * 
      * @todo try to guess some common timezones
      */
-    protected function _convertToTinebaseDateTime(\Tine20\VObject\Property $dateTimeProperty, $_useUserTZ = FALSE)
+    protected function _convertToTinebaseDateTime(\Sabre\VObject\Property $dateTimeProperty, $_useUserTZ = FALSE)
     {
         $defaultTimezone = date_default_timezone_get();
         date_default_timezone_set((string) Tinebase_Core::getUserTimezone());
         
-        if ($dateTimeProperty instanceof Tine20\VObject\Property\ICalendar\DateTime) {
+        if ($dateTimeProperty instanceof Sabre\VObject\Property\ICalendar\DateTime) {
             $dateTime = $dateTimeProperty->getDateTime();
 
             $isFloatingTime = !$dateTimeProperty['TZID'] && !preg_match('/Z$/i', $dateTimeProperty->getValue());

@@ -19,7 +19,7 @@
  * @deprecated
  * 
  */
-class Tinebase_Import_CalDav_Client extends \Tine20\DAV\Client
+class Tinebase_Import_CalDav_Client extends \Sabre\DAV\Client
 {
     /**
      * used to overwrite default retry behavior (if != null)
@@ -34,6 +34,9 @@ class Tinebase_Import_CalDav_Client extends \Tine20\DAV\Client
     protected $principalGroups = array();
     
     protected $requestLogFH;
+
+    protected $userName;
+    protected $password;
     
     const findCurrentUserPrincipalRequest = 
 '<?xml version="1.0"?>
@@ -63,11 +66,13 @@ class Tinebase_Import_CalDav_Client extends \Tine20\DAV\Client
     public function __construct(array $settings)
     {
         parent::__construct($settings);
+        $this->password = $settings['password'] ?? null;
+        $this->userName = $settings['userName'] ?? null;
         
         //$this->requestLogFH = fopen('/var/log/tine20/requestLog', 'w');
         
-        $this->propertyMap['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] = 'Tine20\CalDAV\Property\SupportedCalendarComponentSet';
-        $this->propertyMap['{DAV:}acl'] = 'Tine20\DAVACL\Property\Acl';
+        $this->propertyMap['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'] = 'Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet';
+        $this->propertyMap['{DAV:}acl'] = 'Sabre\DAVACL\Xml\Property\Acl';
         $this->propertyMap['{DAV:}group-member-set'] = 'Tinebase_Import_CalDav_GroupMemberSet';
     }
     

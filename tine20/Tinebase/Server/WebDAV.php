@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2011-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -20,7 +20,7 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
     const REQUEST_TYPE = 'WebDAV';
     
    /**
-    * @var \Tine20\DAV\Server
+    * @var \Sabre\DAV\Server
     */
     protected static $_server;
 
@@ -202,9 +202,8 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
                     . ' PID: ' . getmypid() . ')'
                 );
             }
-            self::$_server = new \Tine20\DAV\Server(new Tinebase_WebDav_ObjectTree(new Filemanager_Frontend_WebDAV('',
-                [Filemanager_Frontend_WebDAV::FM_REAL_WEBDAV_ROOT => new Tinebase_WebDav_Root()])));
-            \Tine20\DAV\Server::$exposeVersion = false;
+            self::getServer();
+            \Sabre\DAV\Server::$exposeVersion = false;
             self::$_server->httpResponse = new Tinebase_WebDav_HTTP_LogResponse();
 
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
@@ -239,44 +238,46 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
 
             if (Tinebase_Core::isFilesystemAvailable()) {
                 self::$_server->addPlugin(
-                    new \Tine20\DAV\Locks\Plugin(new Tinebase_WebDav_Plugin_LockBackend())
+                    new \Sabre\DAV\Locks\Plugin(new Tinebase_WebDav_Plugin_LockBackend())
                 );
             }
 
             self::$_server->addPlugin(
-                new \Tine20\DAV\Auth\Plugin(new Tinebase_WebDav_Auth(), null)
+                new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth())
             );
 
             $aclPlugin = new Tinebase_WebDav_Plugin_ACL();
-            $aclPlugin->defaultUsernamePath = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
-            $aclPlugin->principalCollectionSet = array(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
-            );
+            $aclPlugin->principalCollectionSet = [
+                Tinebase_WebDav_PrincipalBackend::PREFIX_USERS,
+                Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS,
+                Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
+            ];
             $aclPlugin->principalSearchPropertySet = array(
                 '{DAV:}displayname' => 'Display name',
-                '{' . \Tine20\DAV\Server::NS_SABREDAV . '}email-address' => 'Email address',
-                '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set' => 'Email addresses',
-                '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => 'First name',
-                '{' . \Tine20\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name' => 'Last name',
-                '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set' => 'Calendar user address set',
-                '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type' => 'Calendar user type'
+                '{' . \Sabre\DAV\Server::NS_SABREDAV . '}email-address' => 'Email address',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}email-address-set' => 'Email addresses',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}first-name' => 'First name',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALENDARSERVER . '}last-name' => 'Last name',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-address-set' => 'Calendar user address set',
+                '{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}calendar-user-type' => 'Calendar user type'
             );
 
             self::$_server->addPlugin($aclPlugin);
 
-            self::$_server->addPlugin(new \Tine20\CardDAV\Plugin());
+            self::$_server->addPlugin(new \Sabre\CardDAV\Plugin());
             self::$_server->addPlugin(new Calendar_Frontend_CalDAV_SpeedUpPlugin); // this plugin must be loaded before CalDAV plugin
-            self::$_server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin()); // replacement for new \Tine20\CalDAV\Plugin());
-            self::$_server->addPlugin(new \Tine20\CalDAV\SharingPlugin());
+            self::$_server->addPlugin(new Calendar_Frontend_CalDAV_FixMultiGet404Plugin()); // extends \Sabre\CalDAV\Plugin;
+            self::$_server->addPlugin(new \Sabre\DAV\Sharing\Plugin());
+            self::$_server->addPlugin(new \Sabre\CalDAV\SharingPlugin());
             self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginAutoSchedule());
             self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginDefaultAlarms());
             self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginManagedAttachments());
             self::$_server->addPlugin(new Calendar_Frontend_CalDAV_PluginPrivateEvents());
-            self::$_server->addPlugin(new Tinebase_WebDav_Plugin_Inverse());
             self::$_server->addPlugin(new Tinebase_WebDav_Plugin_OwnCloud());
             self::$_server->addPlugin(new Tinebase_WebDav_Plugin_PrincipalSearch());
             self::$_server->addPlugin(new Tinebase_WebDav_Plugin_ExpandedPropertiesReport());
-            self::$_server->addPlugin(new \Tine20\DAV\Browser\Plugin());
-            self::$_server->addPlugin(new \Tine20\CalDAV\ICSExportPlugin());
+            self::$_server->addPlugin(new \Sabre\DAV\Browser\Plugin());
+            self::$_server->addPlugin(new \Sabre\CalDAV\ICSExportPlugin());
             if (Tinebase_Config::getInstance()->get(Tinebase_Config::WEBDAV_SYNCTOKEN_ENABLED)) {
                 $userA = null;
                 if (isset($_SERVER['HTTP_USER_AGENT'])) {
@@ -360,22 +361,33 @@ class Tinebase_Server_WebDAV extends Tinebase_Server_Abstract implements Tinebas
    /**
     * helper to return request
     *
-    * @return Tine20\HTTP\Request
+    * @return ?Sabre\HTTP\Request
     */
     public static function getRequest()
     {
-        return self::$_server ? self::$_server->httpRequest : new Tine20\HTTP\Request();
+        return (self::$_server ?: self::getServer())->httpRequest;
     }
 
     /**
      * helper to return response
      *
-     * @return Tine20\HTTP\Response
+     * @return ?Sabre\HTTP\Response
      */
     public static function getResponse()
     {
-        return self::$_server ? self::$_server->httpResponse : new Tinebase_WebDav_HTTP_LogResponse();
+        return self::$_server?->httpResponse;
     }
+
+    public static $_recreateServer = true;
+    public static function getServer()
+    {
+        if (!self::$_server || self::$_recreateServer) {
+            self::$_server = new \Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Filemanager_Frontend_WebDAV('',
+                [Filemanager_Frontend_WebDAV::FM_REAL_WEBDAV_ROOT => new Tinebase_WebDav_Root()])));
+        }
+        return self::$_server;
+    }
+
 
     /**
     * returns request method

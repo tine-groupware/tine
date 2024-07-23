@@ -406,7 +406,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     {
         if ($this->isReadOnlyUser(Tinebase_Model_User::convertId($_userId))) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . ' Read only LDAP- skipping.');
+                __METHOD__ . '::' . __LINE__ . ' Read only LDAP - let sql parent handle it');
+            parent::setPassword($_userId, $_password, $_encrypt, $_mustChange, $ignorePwPolicy);
             return;
         }
         
@@ -454,6 +455,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             }
         }
         $this->_setPluginsPassword($user, $_password, $_encrypt);
+
+        $this->firePasswordEvent($user, $_password);
+
+        $accountData['id'] = $user->getId();
+        $oldPassword = new Tinebase_Model_UserPassword(array('id' => $user->getId()), true);
+        $newPassword = new Tinebase_Model_UserPassword($accountData, true);
+        $this->_writeModLog($newPassword, $oldPassword);
     }
 
     /**

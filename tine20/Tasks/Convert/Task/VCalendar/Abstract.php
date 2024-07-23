@@ -23,10 +23,10 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
     protected $_modelName = 'Tasks_Model_Task';
     
     /**
-     * convert Tasks_Model_Task to \Tine20\VObject\Component
+     * convert Tasks_Model_Task to \Sabre\VObject\Component
      *
      * @param  Tasks_Model_Task  $_record
-     * @return \Tine20\VObject\Component
+     * @return \Sabre\VObject\Component
      */
     public function fromTine20Model(Tinebase_Record_Interface $_record)
     {
@@ -34,7 +34,7 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' event '
                 . print_r($_record->toArray(), true));
         
-        $vcalendar = new \Tine20\VObject\Component\VCalendar();
+        $vcalendar = new \Sabre\VObject\Component\VCalendar();
         
         $vcalendar->PRODID = $this->_getProdId('Tasks');
         $vcalendar->VERSION = '2.0';
@@ -61,13 +61,9 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
     }
     
     /**
-     * convert calendar event to \Tine20\VObject\Component
-     * 
-     * @param Tasks_Model_Task $_vtodo
-     * @param Tasks_Model_Task $mainTask
-     * @return \Tine20\VObject\Component
+     * convert calendar event to \Sabre\VObject\Component
      */
-    protected function _convertTasksModelTask(Tine20\VObject\Component\VCalendar $vcalendar, Tasks_Model_Task $task, Tasks_Model_Task $mainTask = null)
+    protected function _convertTasksModelTask(Sabre\VObject\Component\VCalendar $vcalendar, Tasks_Model_Task $task, Tasks_Model_Task $mainTask = null)
     {
         // clone the event and change the timezone
         $task = clone $task;
@@ -202,9 +198,9 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
      * converts vcalendar to Tasks_Model_Task
      * 
      * @param  mixed                 $_blob   the vcalendar to parse
-     * @param  Calendar_Model_Event  $_record  update existing event
+     * @param  Tasks_Model_Task  $_record  update existing event
      * @param  array                 $options
-     * @return Calendar_Model_Event
+     * @return Tasks_Model_Task
      */
     public function toTine20Model($_blob, Tinebase_Record_Interface $_record = null, $options = array())
     {
@@ -249,11 +245,8 @@ class Tasks_Convert_Task_VCalendar_Abstract extends Tinebase_Convert_VCalendar_A
 
     /**
      * parse VTODO part of VCALENDAR
-     * 
-     * @param  \Tine20\VObject\Component\VTodo  $_vevent  the VTODO to parse
-     * @param  Tasks_Model_Task     $_vtodo   the Tine 2.0 event to update
      */
-    protected function _convertVtodo(\Tine20\VObject\Component\VTodo $_vtodo, Tasks_Model_Task $_task, $options)
+    protected function _convertVtodo(\Sabre\VObject\Component\VTodo $_vtodo, Tasks_Model_Task $_task, $options)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' vtodo ' . $_vtodo->serialize());  
         
