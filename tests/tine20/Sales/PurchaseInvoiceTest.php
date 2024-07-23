@@ -344,6 +344,12 @@ class Sales_PurchaseInvoiceTest extends TestCase
         $search = $this->_json->searchPurchaseInvoices($this->_getFilter(), $paging);
         $this->assertEquals($purchase['number'], $search['results'][0]['number']);
         $this->assertEquals(2, $search['totalcount']);
+
+        // test id filter
+        $search = $this->_json->searchPurchaseInvoices(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => [$purchase['id']]),
+        ), $paging);
+        $this->assertEquals(1, $search['totalcount']);
     }
 
     /**
