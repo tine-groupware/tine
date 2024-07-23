@@ -496,6 +496,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         return $select;
     }
 
+    protected function firePasswordEvent(Tinebase_Model_FullUser $user, string $password): void
+    {
+        // fire needed events
+        $event = new Tinebase_Event_User_ChangePassword();
+        $event->userId = $user->getId();
+        $event->user = $user;
+        $event->password = $password;
+        Tinebase_Event::fireEvent($event);
+    }
+
     /**
      * set the password for given account
      *
@@ -517,11 +527,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = $this->_updatePasswordProperties($userId, $_password, $_encrypt, $_mustChange);
         $this->_setPluginsPassword($user, $_password, $_encrypt);
 
-        // fire needed events
-        $event = new Tinebase_Event_User_ChangePassword();
-        $event->userId = $userId;
-        $event->password = $_password;
-        Tinebase_Event::fireEvent($event);
+        $this->firePasswordEvent($user, $_password);
 
         $accountData['id'] = $userId;
         $oldPassword = new Tinebase_Model_UserPassword(array('id' => $userId), true);
