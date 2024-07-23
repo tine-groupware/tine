@@ -32,7 +32,9 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\INode, \Tine2
      * @var array list of forbidden file names
      */
     protected static $_forbiddenNames = array('.DS_Store', 'Thumbs.db');
-    
+
+    protected static $_CONTENT_LENGTH;
+
     public function __construct($_path) 
     {
         $this->_path      = $_path;
@@ -49,7 +51,7 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\INode, \Tine2
 	}
 
 	// You cannot rely on HTTP_* in some cases, see https://www.php.net/reserved.variables.server comment #15
-	$this->_CONTENT_LENGTH = $_SERVER['HTTP_CONTENT_LENGTH'] ?? $_SERVER['CONTENT_LENGTH'] ?? false;
+	self::$_CONTENT_LENGTH = $_SERVER['HTTP_CONTENT_LENGTH'] ?? $_SERVER['CONTENT_LENGTH'] ?? false;
     }
     
     public function getId()
