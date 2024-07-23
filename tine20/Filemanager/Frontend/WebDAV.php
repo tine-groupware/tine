@@ -80,14 +80,14 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
     /**
      * @param string $name
      * @return Tinebase_WebDav_Container_Abstract|Tinebase_WebDav_Collection_AbstractContainerTree|Tinebase_Frontend_WebDAV_RecordCollection
-     * @see Tine20\DAV\Collection::getChild()
+     * @see Sabre\DAV\Collection::getChild()
      */
     public function getChild($name)
     {
         if (null !== $this->_root) {
             try {
                 return $this->_root->getChild($name);
-            } catch (\Tine20\DAV\Exception\NotFound $e) {}
+            } catch (\Sabre\DAV\Exception\NotFound $e) {}
         }
         if (2 === count($this->_getPathParts())) {
             return new Filemanager_Frontend_WebDAV_Directory($this->getPath() . '/' . $name);
@@ -111,7 +111,7 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
                     $message = "Directory $this->_path not found";
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(
                         __METHOD__ . '::' . __LINE__ . ' ' . $message);
-                    throw new \Tine20\DAV\Exception\NotFound($message);
+                    throw new \Sabre\DAV\Exception\NotFound($message);
                 }
             }
             $node = Filemanager_Controller::getInstance()->createPersonalFolder($user)->getFirstRecord();
@@ -120,18 +120,18 @@ class Filemanager_Frontend_WebDAV extends Tinebase_Frontend_WebDAV_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' User ' . Tinebase_Core::getUser()->getId()
                     . ' has either not READ or SYNC grants for container ' . $node->getId());
-                throw new \Tine20\DAV\Exception\NotFound("Directory $this->_path not found");
+                throw new \Sabre\DAV\Exception\NotFound("Directory $this->_path not found");
             }
 
             return (new Filemanager_Frontend_WebDAV_Container($node, $this->_useIdAsName))->createFile($name, $data);
         } else {
-            throw new \Tine20\DAV\Exception\Forbidden('Permission denied to create file (filename ' . $this->_path . '/' . $name . ')');
+            throw new \Sabre\DAV\Exception\Forbidden('Permission denied to create file (filename ' . $this->_path . '/' . $name . ')');
         }
     }
 
     /**
      * @return array
-     * @throws \Tine20\DAV\Exception\NotFound
+     * @throws \Sabre\DAV\Exception\NotFound
      */
     protected function _getOtherUsersChildren()
     {

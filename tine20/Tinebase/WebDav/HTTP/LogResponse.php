@@ -15,7 +15,7 @@
  *
  * NOTE: we can't decide logging before content-type header is set
  */
-class Tinebase_WebDav_HTTP_LogResponse extends Tine20\HTTP\Response
+class Tinebase_WebDav_HTTP_LogResponse extends Sabre\HTTP\Response
 {
     protected $_bodyLog = false;
 
@@ -54,10 +54,8 @@ class Tinebase_WebDav_HTTP_LogResponse extends Tine20\HTTP\Response
      *
      * @param string $name
      * @param string $value
-     * @param bool $replace
-     * @return bool
      */
-    public function setHeader($name, $value, $replace = true)
+    public function setHeader($name, $value)
     {
         if (strtolower($name) == 'content-type'
             && stripos($value,'text') === 0 || stripos($value, '/xml') !== false
@@ -67,6 +65,6 @@ class Tinebase_WebDav_HTTP_LogResponse extends Tine20\HTTP\Response
             $this->_obActive = true;
         }
 
-        return parent::setHeader($name, $value, $replace);
+        parent::setHeader($name, $value);
     }
 }

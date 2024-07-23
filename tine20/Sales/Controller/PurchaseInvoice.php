@@ -67,7 +67,7 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
      * 
      * @param string $name  name of the invoice
      * @param resource $data  binary data of the invoice (aka a pdf)
-     * @throws Tine20\DAV\Exception\Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @return Sales_Model_PurchaseInvoice
      */
     public function importPurchaseInvoice($name, $data)
@@ -99,7 +99,7 @@ class Sales_Controller_PurchaseInvoice extends Sales_Controller_NumberableAbstra
             $handle = Tinebase_FileSystem::getInstance()->fopen($attachmentPath . '/' . $name, 'w');
 
             if (!is_resource($handle)) {
-                throw new Tine20\DAV\Exception\Forbidden('Permission denied to create file:' . $attachmentPath . '/' . $name );
+                throw new Sabre\DAV\Exception\Forbidden('Permission denied to create file:' . $attachmentPath . '/' . $name );
             }
 
             if (is_resource($data)) {

@@ -18,16 +18,16 @@
  *       
  * @package    Sabre
  * @subpackage CalDAV
- * @copyright  Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright  Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author     Lars Kneschke <l.kneschke@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Tine20\DAV\ServerPlugin
+class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Sabre\DAV\ServerPlugin
 {
     /**
      * Reference to server object
      *
-     * @var \Tine20\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     protected $server;
 
@@ -45,7 +45,7 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Tine20\DAV\ServerPlu
      * Returns a plugin name.
      * 
      * Using this name other plugins will be able to access other plugins
-     * using \Tine20\DAV\Server::getPlugin
+     * using \Sabre\DAV\Server::getPlugin
      * 
      * @return string 
      */
@@ -57,93 +57,68 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarms extends \Tine20\DAV\ServerPlu
     /**
      * Initializes the plugin 
      * 
-     * @param \Tine20\DAV\Server $server
+     * @param \Sabre\DAV\Server $server
      * @return void
      */
-    public function initialize(\Tine20\DAV\Server $server)
+    public function initialize(\Sabre\DAV\Server $server)
     {
         $this->server = $server;
-
-        $server->subscribeEvent('beforeGetProperties', array($this, 'beforeGetProperties'));
-
-        $server->xmlNamespaces[\Tine20\CalDAV\Plugin::NS_CALDAV] = 'cal';
+        $server->on('propFind', [$this, 'propFind']);
+        $server->xml->namespaceMap[\Sabre\CalDAV\Plugin::NS_CALDAV] = 'cal';
     }
-    
-    /**
-     * beforeGetProperties
-     *
-     * This method handler is invoked before any after properties for a
-     * resource are fetched. This allows us to add in any CalDAV specific
-     * properties.
-     *
-     * @param string $path
-     * @param \Tine20\DAV\INode $node
-     * @param array $requestedProperties
-     * @param array $returnedProperties
-     * @return void
-     */
-    public function beforeGetProperties($path, \Tine20\DAV\INode $node, &$requestedProperties, &$returnedProperties)
+
+    public function propFind(\Sabre\DAV\PropFind $propFind, \Sabre\DAV\INode $node)
     {
-        if ($node instanceof \Tine20\CalDAV\ICalendar || $node instanceof Calendar_Frontend_WebDAV) {
-            $vcalendar = new \Tine20\VObject\Component\VCalendar();
-            
-            $property = '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-datetime';
-            if (in_array($property, $requestedProperties)) {
-                unset($requestedProperties[array_search($property, $requestedProperties)]);
-                
-                $valarm = $vcalendar->create('VALARM');
+        if ($node instanceof \Sabre\CalDAV\ICalendar || $node instanceof Calendar_Frontend_WebDAV) {
+            $vcalendar = new \Sabre\VObject\Component\VCalendar();
+
+            $propFind->handle('{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-datetime', function() {
+
+                // ?!? what is this?
+                $valarm = (new \Sabre\VObject\Component\VCalendar())->create('VALARM');
                 $valarm->add('ACTION',  'NONE');
                 $valarm->add('TRIGGER', '19760401T005545Z', array('VALUE' => 'DATE-TIME'));
                 $valarm->add('UID',     'E35C3EB2-4DC1-4223-AA5D-B4B491F2C111');
                 
                 // Taking out \r to not screw up the xml output
-                $returnedProperties[200][$property] = str_replace("\r","", $valarm->serialize()); 
-            }
-            
-            $property = '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-date';
-            if (in_array($property, $requestedProperties)) {
-                unset($requestedProperties[array_search($property, $requestedProperties)]);
-                
-                $valarm = $vcalendar->create('VALARM');
-//                 $valarm->add('ACTION',  'AUDIO');
-//                 $valarm->add('ATTACH',  'Basso', array('VALUE' => 'URI'));
-//                 $valarm->add('TRIGGER', '-PT15H');
+                return str_replace("\r","", $valarm->serialize());
+            });
+
+            $propFind->handle('{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vevent-date', function() {
+
+                // ?!? what is this?
+                $valarm = (new \Sabre\VObject\Component\VCalendar())->create('VALARM');
                 $valarm->add('ACTION',  'NONE');
                 $valarm->add('TRIGGER', '19760401T005545Z', array('VALUE' => 'DATE-TIME'));
                 $valarm->add('UID',     '17DC9682-230E-47D6-A035-EEAB602B1229');
                 
                 // Taking out \r to not screw up the xml output
-                $returnedProperties[200][$property] = str_replace("\r","", $valarm->serialize()); 
-            }
-            
-            $property = '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-datetime';
-            if (in_array($property, $requestedProperties)) {
-                unset($requestedProperties[array_search($property, $requestedProperties)]);
-                
-                $valarm = $vcalendar->create('VALARM');
+                return str_replace("\r","", $valarm->serialize());
+            });
+
+            $propFind->handle('{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-datetime', function() {
+
+                // ?!? what is this?
+                $valarm = (new \Sabre\VObject\Component\VCalendar())->create('VALARM');
                 $valarm->add('ACTION',  'NONE');
                 $valarm->add('TRIGGER', '19760401T005545Z', array('VALUE' => 'DATE-TIME'));
                 $valarm->add('UID',     'D35C3EB2-4DC1-4223-AA5D-B4B491F2C111');
                 
                 // Taking out \r to not screw up the xml output
-                $returnedProperties[200][$property] = str_replace("\r","", $valarm->serialize()); 
-            }
-            
-            $property = '{' . \Tine20\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-date';
-            if (in_array($property, $requestedProperties)) {
-                unset($requestedProperties[array_search($property, $requestedProperties)]);
-                
-                $valarm = $vcalendar->create('VALARM');
-//                 $valarm->add('ACTION',  'AUDIO');
-//                 $valarm->add('ATTACH',  'Basso', array('VALUE' => 'URI'));
-//                 $valarm->add('TRIGGER', '-PT15H');
+                return str_replace("\r","", $valarm->serialize());
+            });
+
+            $propFind->handle('{' . \Sabre\CalDAV\Plugin::NS_CALDAV . '}default-alarm-vtodo-date', function() {
+
+                // ?!? what is this?
+                $valarm = (new \Sabre\VObject\Component\VCalendar())->create('VALARM');
                 $valarm->add('ACTION',  'NONE');
                 $valarm->add('TRIGGER', '19760401T005545Z', array('VALUE' => 'DATE-TIME'));
                 $valarm->add('UID',     '27DC9682-230E-47D6-A035-EEAB602B1229');
                 
                 // Taking out \r to not screw up the xml output
-                $returnedProperties[200][$property] = str_replace("\r","", $valarm->serialize()); 
-            }
+                return str_replace("\r","", $valarm->serialize());
+            });
         }
     }
 }

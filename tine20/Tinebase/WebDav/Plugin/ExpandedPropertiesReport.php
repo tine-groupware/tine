@@ -1,4 +1,8 @@
 <?php
+
+use Sabre\DAV\Xml\Property\Href;
+use Sabre\DAVACL\IPrincipal;
+
 /**
  * CalDAV plugin for expanded-group-member-set
  *
@@ -13,12 +17,12 @@
  * @author     Cornelius Weiß <c.weiss@metaways.de>
  * @license    http://www.gnu.org/licenses/agpl.html
  */
-class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Tine20\DAV\ServerPlugin {
+class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Sabre\DAV\ServerPlugin {
 
     /**
      * Reference to server object
      *
-     * @var \Tine20\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     protected $server;
 
@@ -34,7 +38,7 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Tine20\DAV\Server
 
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\ServerPlugin::getPluginName()
+     * @see \Sabre\DAV\ServerPlugin::getPluginName()
      */
     public function getPluginName() 
     {
@@ -43,7 +47,7 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Tine20\DAV\Server
     
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\ServerPlugin::getSupportedReportSet()
+     * @see \Sabre\DAV\ServerPlugin::getSupportedReportSet()
      */
     public function getSupportedReportSet($uri) 
     {
@@ -55,47 +59,35 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReport extends \Tine20\DAV\Server
     /**
      * Initializes the plugin 
      * 
-     * @param \Tine20\DAV\Server $server 
+     * @param \Sabre\DAV\Server $server 
      * @return void
      */
-    public function initialize(\Tine20\DAV\Server $server) 
+    public function initialize(\Sabre\DAV\Server $server) 
     {
         $this->server = $server;
 
-        $server->subscribeEvent('beforeGetProperties',array($this,'beforeGetProperties'));
+        $server->on('propFind',array($this,'propFind'));
     }
-    
-    /**
-     * beforeGetProperties
-     *
-     * This method handler is invoked before any after properties for a
-     * resource are fetched. This allows us to add in any CalDAV specific
-     * properties.
-     *
-     * @param string $path
-     * @param DAV\INode $node
-     * @param array $requestedProperties
-     * @param array $returnedProperties
-     * @return void
-     */
-    public function beforeGetProperties($path, \Tine20\DAV\INode $node, &$requestedProperties, &$returnedProperties)
+
+    public function propFind(\Sabre\DAV\PropFind $propFind, \Sabre\DAV\INode $node)
     {
-        if (in_array('{http://calendarserver.org/ns/}expanded-group-member-set', $requestedProperties)) {
-            $parentNode = $this->server->tree->getNodeForPath($path);
-            $groupMemberSet = $parentNode->getGroupMemberSet();
+        /* Adding principal properties */
+        if ($node instanceof IPrincipal) {
+            $propFind->handle('{http://calendarserver.org/ns/}expanded-group-member-set', function () use ($node, $propFind) {
+                $groupMemberSet = $node->getGroupMemberSet();
 
-            // iCal want's to have the group itself in the response set
-            $groupMemberSet[] = $path;
+                // iCal want's to have the group itself in the response set
+                $groupMemberSet[] = $propFind->getPath();
 
-            // have record for group itself
-            $groupMemberSet[] = str_replace(
-                Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS,
-                Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS,
-                $path
-            );
+                // have record for group itself
+                $groupMemberSet[] = str_replace(
+                    Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS,
+                    Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS,
+                    $propFind->getPath()
+                );
 
-            $returnedProperties[200]['{http://calendarserver.org/ns/}expanded-group-member-set'] = new Tine20\DAV\Property\HrefList($groupMemberSet);
+                return new Sabre\DAV\Xml\Property\Href($groupMemberSet);
+            });
         }
     }
-
 }

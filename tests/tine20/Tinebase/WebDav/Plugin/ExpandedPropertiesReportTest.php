@@ -36,10 +36,7 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReportTest extends Tinebase_WebDa
                   </A:property>
                 </A:expand-property>';
 
-        $request = new Tine20\HTTP\Request(array(
-            'REQUEST_METHOD' => 'REPORT',
-            'REQUEST_URI'    => '/principals/groups/' . $list->list_id . '/'
-        ));
+        $request = new Sabre\HTTP\Request('REPORT', '/principals/groups/' . $list->list_id . '/');
         $request->setBody($body);
 
         $this->server->httpRequest = $request;
@@ -53,7 +50,7 @@ class Tinebase_WebDav_Plugin_ExpandedPropertiesReportTest extends Tinebase_WebDa
         $xpath->registerNamespace('cs', 'http://calendarserver.org/ns/');
 
         $nodes = $xpath->query('///cs:expanded-group-member-set/d:response/d:href[text()="/principals/groups/' . $list->list_id . '/"]');
-        $this->assertEquals(1, $nodes->length, 'group itself (not shown by client) is missing');
+        $this->assertEquals(1, $nodes->length, 'group itself (not shown by client) is missing: ' . $this->response->body);
 
         $nodes = $xpath->query('///cs:expanded-group-member-set/d:response/d:href[text()="/principals/intelligroups/' . $list->list_id . '/"]');
         $this->assertEquals(1, $nodes->length, 'intelligroup (to keep group itself) is missing');
