@@ -549,6 +549,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = array();
         $accountData['password'] = ($_encrypt) ? Hash_Password::generate('SSHA256', $_password) : $_password;
         $accountData['password_must_change'] = $_mustChange ? 1 : 0;
+        $now = new Tinebase_DateTime();
+        $accountData['last_password_change'] = $now->toString();
         if (Tinebase_Auth_NtlmV2::isEnabled()) {
             $accountData['ntlmv2hash'] = Tinebase_Auth_CredentialCache::encryptData(
                 Tinebase_Auth_NtlmV2::getPwdHash($_password),
