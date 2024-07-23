@@ -3,38 +3,23 @@
 - name: set group_vars_dir
   set_fact: "group_vars_dir='group_vars{{ inventory_file | replace(inventory_dir, \"\") }}'"
 
-# TODO add a single task for php, pem & crt
-- name: create conf.d files (php)
-  copy:
-    src: "{{ item }}"
-    dest: "{{ tinedockercompose_confd_path }}"
-    owner: tine20
-    group: root
-    mode: 0640
-  with_fileglob:
-    - "{{ group_vars_dir }}/conf.d/*.php"
-  become: true
+- set_fact:
+    confdincludes: "{{ group_vars_dir }}/conf.d/*"
 
-- name: create conf.d files (pem)
-  copy:
-    src: "{{ item }}"
-    dest: "{{ tinedockercompose_confd_path }}"
-    owner: tine20
-    group: root
-    mode: 0640
-  with_fileglob:
-    - "{{ group_vars_dir }}/conf.d/*.pem"
-  become: true
+- set_fact:
+    confdfiles: "{{ lookup('fileglob',confdincludes,wantlist=true) | reject('search','.j2') | list }}"
 
-- name: create conf.d files (crt)
+#- name: "found confdfiles"
+#  debug: var=confdfiles
+
+- name: create conf.d files (without *.j2)
   copy:
     src: "{{ item }}"
     dest: "{{ tinedockercompose_confd_path }}"
     owner: tine20
     group: root
     mode: 0640
-  with_fileglob:
-    - "{{ group_vars_dir }}/conf.d/*.crt"
+  with_items: "{{ confdfiles }}"
   become: true
 
 - name: create conf.d files (j2)
@@ -71,6 +56,17 @@
     mode: 0740
   with_fileglob:
     - "{{ group_vars_dir }}/scripts/*.sh"
+  become: true
+
+- name: create script (j2)
+  template:
+    src: "{{ item }}"
+    dest: "{{ tinedockercompose_path }}/scripts/{{ item | basename | regex_replace('\\.j2$', '') }}"
+    owner: root
+    group: root
+    mode: 0740
+  with_fileglob:
+    - "{{ group_vars_dir }}/scripts/*.j2"
   become: true
 
 - name: configure OOI/documentserver
