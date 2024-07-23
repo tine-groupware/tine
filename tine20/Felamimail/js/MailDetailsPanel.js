@@ -606,6 +606,9 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                 }
             }
             resolvedAttachmentData.messageId = this.record.id;
+            if (!resolvedAttachmentData?.path) {
+                resolvedAttachmentData.path = [...new Set(cachePromises.map(obj => obj?.cache?.data?.path).filter(path => path))][0] || null;
+            }
             this.record = Tine.Tinebase.data.Record.setFromJson(resolvedAttachmentData, Tine.Tinebase.Model.Tree_Node);
             this.record.isAttachmentCache = true;
         })
