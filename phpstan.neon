@@ -42,7 +42,6 @@ parameters:
         - 'tine20/Tinebase/User/Typo3.php'
         - 'tine20/Setup/Backend/Oracle.php'
         - 'tine20/Setup/Backend/Pgsql.php'
-        - 'tine20/Voipmanager/Setup/Update/Release10.php'
     parallel:
       maximumNumberOfProcesses: 32
     tmpDir:

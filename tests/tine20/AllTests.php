@@ -37,8 +37,6 @@ class AllTests
             'ActiveSync',
             'Admin',
             'Courses',
-            'Voipmanager',
-            'Phone',
             'Timetracker',
             'Filemanager',
             'Projects',

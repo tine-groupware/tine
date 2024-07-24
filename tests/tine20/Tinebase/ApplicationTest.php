@@ -404,10 +404,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Inventory_Model_Status::class,
                 Inventory_Model_Type::class,
             ),
-            'Phone' => array(
-                Phone_Model_Call::class,
-                Phone_Model_MyPhone::class,
-            ),
             'Projects' => array(
                 Projects_Model_AttendeeRole::class,
                 Projects_Model_Project::class,
@@ -559,20 +555,6 @@ class Tinebase_ApplicationTest extends TestCase
                 Tinebase_Model_WebauthnPublicKey::class,
                 Tinebase_Model_WebDavLock::class,
                 Tinebase_Model_BankAccount::class,
-            ),
-            'Voipmanager' => array(
-                Voipmanager_Model_Asterisk_Context::class,
-                Voipmanager_Model_Asterisk_Meetme::class,
-                Voipmanager_Model_Asterisk_SipPeer::class,
-                Voipmanager_Model_Asterisk_Voicemail::class,
-                Voipmanager_Model_Snom_Line::class,
-                Voipmanager_Model_Snom_Location::class,
-                Voipmanager_Model_Snom_Phone::class,
-                Voipmanager_Model_Snom_PhoneRight::class,
-                Voipmanager_Model_Snom_PhoneSettings::class,
-                Voipmanager_Model_Snom_Setting::class,
-                Voipmanager_Model_Snom_Software::class,
-                Voipmanager_Model_Snom_Template::class,
             ),
         );
 
