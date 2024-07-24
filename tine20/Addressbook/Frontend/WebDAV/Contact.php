@@ -76,12 +76,14 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         list($backend, $version) = Addressbook_Convert_Contact_VCard_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
         
         $converter = Addressbook_Convert_Contact_VCard_Factory::factory($backend, $version);
-        
+
+        self::checkWritePermission($converter);
+
         $contact = $converter->toTine20Model($vcardData);
         $contact->container_id = $container->getId();
         
         $id = ($pos = strpos($name, '.')) === false ? $name : substr($name, 0, $pos);
-        $id = strlen((string)$id) > 40 ? sha1($id) : $id;
+        $id = strlen($id) > 40 ? sha1($id) : $id;
         $contact->setId($id);
         
         try {
@@ -106,6 +108,8 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
      */
     public function delete() 
     {
+        self::checkWritePermission($this->_converter);
+
         // when a move occurs, thunderbird first sends to delete command and immediately a put command
         // we must delay the delete command, otherwise the put command fails
         sleep(1);
@@ -260,7 +264,8 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
      */
     public function put($cardData)
     {
-        $this->_checkPutPermission();
+        self::checkWritePermission($this->_converter);
+
         $contact = $this->_converter->toTine20Model($cardData, $this->getRecord(), array(
             Addressbook_Convert_Contact_VCard_Abstract::OPTION_USE_SERVER_MODLOG => true,
         ));
@@ -285,25 +290,25 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         return $this->getETag();
     }
 
-    protected function _checkPutPermission(): void
+    public static function checkWritePermission(Addressbook_Convert_Contact_VCard_Abstract $converter): void
     {
         $configReadonlyPolicy = Addressbook_Config::getInstance()->get(Addressbook_Config::CARDDAV_READONLY_POLICY);
         if ($configReadonlyPolicy === Addressbook_Config::CARDDAV_READONLY_POLICY_UNKNOWN
-            && get_class($this->_converter) === Addressbook_Convert_Contact_VCard_Generic::class)
+            && get_class($converter) === Addressbook_Convert_Contact_VCard_Generic::class)
         {
             if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                    . ' Update by generic client not allowed.'
+                    . ' Write access by generic client not allowed.'
                     . ' See Addressbook_Convert_Contact_VCard_Factory for supported clients.');
             }
-            throw new DAV\Exception\Forbidden('Update denied for unknown client');
+            throw new DAV\Exception\Forbidden('Write access denied for unknown client');
         } else if ($configReadonlyPolicy === Addressbook_Config::CARDDAV_READONLY_POLICY_ALWAYS) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                    . ' Update not allowed.'
+                    . ' Write access not allowed.'
                     . ' See Addressbook_Config::CARDDAV_READONLY_POLICY');
             }
-            throw new DAV\Exception\Forbidden('Update denied');
+            throw new DAV\Exception\Forbidden('Write access denied');
         }
     }
 
