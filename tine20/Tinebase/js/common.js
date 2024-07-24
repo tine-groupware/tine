@@ -125,11 +125,12 @@ Tine.Tinebase.common = {
      *
      * @param {mixed} date
      * @param metadata
+     * @param formatArray
      * @see Ext.util.Format.date
      * @return {String} localised date
      */
-    dateRenderer: function (date, metadata) {
-        const format = this?.format ? (this.format?.Date || this.format) : ['wkday', 'medium'];
+    dateRenderer: function (date, metadata, formatArray = null) {
+        const format = formatArray ? formatArray : this?.format ? (this.format?.Date || this.format) : ['wkday', 'medium'];
         const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
         
         if (_.isObject(metadata)) metadata.css = (metadata.css || '') + ' tine-gird-cell-date';

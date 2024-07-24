@@ -520,13 +520,11 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
 };
 
 Tine.Calendar.Model.Event.datetimeRenderer = function(dt) {
-    var app = Tine.Tinebase.appMgr.get('Calendar');
-
-    if (! dt) {
-        return app.i18n._('Unknown date');
-    }
-
-    return String.format(app.i18n._("{0} {1} o'clock"), dt.format('l') + ', ' + Tine.Tinebase.common.dateRenderer(dt), dt.format('H:i'));
+    const app = Tine.Tinebase.appMgr.get('Calendar');
+    if (! dt) return app.i18n._('Unknown date');
+    //TODO: return html element and get the format ?
+    const dateObj = dt instanceof Date ? dt : Date.parseDate(dt, Date.patterns.ISO8601Long);
+    return String.format(app.i18n._("{0} {1} o'clock"), dt.format('l') + ', ' + Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', 'medium')), dt.format('H:i'));
 };
 
 // register calendar filters in addressbook
