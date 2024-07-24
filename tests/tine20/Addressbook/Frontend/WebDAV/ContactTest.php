@@ -4,19 +4,14 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2011-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
 /**
- * Test helper
- */
-require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-/**
  * Test class for Addressbook_Frontend_WebDAV_Contact
  */
-class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCase
+class Addressbook_Frontend_WebDAV_ContactTest extends TestCase
 {
     /**
      * @var array test objects
@@ -191,10 +186,10 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
             $this->testPutContactFromThunderbird();
             self::fail('config not working: Addressbook_Config::CARDDAV_READONLY_POLICY_ALWAYS');
         } catch (Sabre\DAV\Exception\Forbidden $sdef) {
-            self::assertStringContainsString('Update denied', $sdef->getMessage());
+            self::assertStringContainsString('Write access denied', $sdef->getMessage());
         } finally {
             Addressbook_Config::getInstance()->set(Addressbook_Config::CARDDAV_READONLY_POLICY,
-                Addressbook_Config::CARDDAV_READONLY_POLICY_UNKNOWN);
+                Addressbook_Config::CARDDAV_READONLY_POLICY_NEVER);
         }
     }
 
@@ -226,12 +221,19 @@ class Addressbook_Frontend_WebDAV_ContactTest extends \PHPUnit\Framework\TestCas
     public function testPutContactFromGenericClient()
     {
         $contact = $this->testCreateContact();
-    
         $vcardStream = fopen(dirname(__FILE__) . '/../../Import/files/mac_os_x_addressbook.vcf', 'r');
     
         $this->expectException('Sabre\DAV\Exception\Forbidden');
-        
-        $contact->put($vcardStream);
+
+        Addressbook_Config::getInstance()->set(Addressbook_Config::CARDDAV_READONLY_POLICY,
+            Addressbook_Config::CARDDAV_READONLY_POLICY_UNKNOWN);
+
+        try {
+            $contact->put($vcardStream);
+        } finally {
+            Addressbook_Config::getInstance()->set(Addressbook_Config::CARDDAV_READONLY_POLICY,
+                Addressbook_Config::CARDDAV_READONLY_POLICY_NEVER);
+        }
     }
     
     /**
