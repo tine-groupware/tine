@@ -993,7 +993,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Configure what should happen to data of deleted users')
             self::DESCRIPTION => 'Configure what should happen to data of deleted users',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => TRUE,
             self::SETBYSETUPMODULE => TRUE,
@@ -1182,7 +1182,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::LABEL => 'DB logger configuration',
             self::DESCRIPTION => 'DB logger configuration',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE => false,
             self::SETBYSETUPMODULE => true,
@@ -1264,7 +1264,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('System IMAP server configuration.')
             self::DESCRIPTION => 'System IMAP server configuration.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => TRUE,
@@ -1291,7 +1291,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('System SMTP server configuration.')
             self::DESCRIPTION => 'System SMTP server configuration.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => TRUE,
@@ -1302,7 +1302,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('System SIEVE server configuration.')
             self::DESCRIPTION => 'System SIEVE server configuration.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => TRUE,
@@ -1346,7 +1346,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('Authentication backend configuration.')
             self::DESCRIPTION => 'Authentication backend configuration.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => TRUE,
@@ -1394,7 +1394,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Replication master configuration.')
             self::DESCRIPTION => 'Replication master configuration.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => TRUE,
@@ -1413,7 +1413,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Replication slave configuration.')
             self::DESCRIPTION => 'Replication slave configuration.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => TRUE,
@@ -1438,7 +1438,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Full text configuration.')
             self::DESCRIPTION => 'Full text configuration.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => TRUE,
@@ -1468,7 +1468,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Action queue configuration.')
             self::DESCRIPTION => 'Action queue configuration.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => TRUE,
@@ -1578,7 +1578,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                    //_('User backend configuration.')
             self::DESCRIPTION => 'User backend configuration.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => FALSE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => TRUE,
@@ -1692,7 +1692,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
                 self::SYNCOPTIONS           => array(
                     self::TYPE => 'object',
-                    self::CLASSNAME => 'Tinebase_Config_Struct',
+                    self::CLASSNAME => Tinebase_Config_Struct::class,
                     self::CONTENT => array(
                         self::SYNC_USER_CONTACT_DATA => array(
                             //_('Sync contact data from sync backend')
@@ -2307,7 +2307,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('User password policy settings.')
             self::DESCRIPTION => 'User password policy settings.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => TRUE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => true,
@@ -2438,7 +2438,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Download password policy settings.')
             self::DESCRIPTION => 'Download password policy settings.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => TRUE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => true,
@@ -2624,7 +2624,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::LABEL => 'Role change allowed',
                                    //_('Allows to configure which user is allowed to switch to another users account')
             self::DESCRIPTION => 'Allows to configure which user is allowed to switch to another users account',
-            self::TYPE => 'Tinebase_Config_Struct',
+            self::TYPE => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => TRUE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => TRUE,
@@ -2888,7 +2888,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Filesystem settings.')
             self::DESCRIPTION => 'Filesystem settings.',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => TRUE,
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
@@ -3221,7 +3221,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Quota settings')
             self::DESCRIPTION => 'Quota settings',
             self::TYPE => 'object',
-            self::CLASSNAME => 'Tinebase_Config_Struct',
+            self::CLASSNAME => Tinebase_Config_Struct::class,
             self::CLIENTREGISTRYINCLUDE => true,
             self::SETBYADMINMODULE => false,
             self::SETBYSETUPMODULE => false,
@@ -3621,7 +3621,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                                     'definition' => new Tinebase_Config_Struct($definition),
                                 ), null, null, array(
                                     'value' => array(self::TYPE => $definition['type']),
-                                    'definition' => array(self::TYPE => Tinebase_Config_Abstract::TYPE_ARRAY, self::CLASSNAME => 'Tinebase_Config_Struct')
+                                    'definition' => array(self::TYPE => Tinebase_Config_Abstract::TYPE_ARRAY, self::CLASSNAME => Tinebase_Config_Struct::class)
                                 ));
                                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__
                                     . ' ' . print_r($configRegistryItem->toArray(), true));
