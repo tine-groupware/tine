@@ -1871,19 +1871,36 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         //we need the state configs before initial Grid
         if (this.stateful) {
             this.gridConfig.stateful = true;
-            this.gridConfig.stateId = this.stateId + '-Grid' + this.stateIdSuffix;
+            this.gridConfig.stateId = this.stateId + '-Grid';
+            const gridStateId = this.getResolvedGridStateId();
+            let gridState = Ext.state.Manager.get(gridStateId);
+            if (gridState) this.defaultSortInfo = gridState.sort;
             
-            this.regionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
+            const stateId = `${this.recordClass.prototype.appName}-${this.recordClass.prototype.modelName}`;
+            this.regionStateId = `${stateId}_detailspanelregion`;
             this.detailsPanelRegion = Ext.state.Manager.get(this.regionStateId, this.detailsPanelRegion);
             
-            this.regionConfigStateId = `${this.recordClass.prototype.appName}_region_config`;
+            this.regionConfigStateId = `${stateId}_region_config`;
             this.regionConfig = Ext.state.Manager.get(this.regionConfigStateId, {
                 'south': {},
                 'east': {},
             });
-            const stateId = this.getResolvedGridStateId();
-            let state = Ext.state.Manager.get(stateId);
-            if (state) this.defaultSortInfo = state.sort;
+            
+            //update script , it should be removed after we make sure customer has the updateed state
+            const oldRegionStateId = `${this.recordClass.prototype.appName}_detailspanelregion`;
+            const oldDetailsPanelRegion = Ext.state.Manager.get(oldRegionStateId);
+            if (oldDetailsPanelRegion) {
+                this.detailsPanelRegion = oldDetailsPanelRegion;
+                Ext.state.Manager.set(this.regionStateId, this.detailsPanelRegion);
+                Ext.state.Manager.clear(oldRegionStateId);
+            }
+            const oldRegionConfigStateId = `${this.recordClass.prototype.appName}_region_config`;
+            const oldRegionConfig = Ext.state.Manager.get(oldRegionConfigStateId);
+            if (oldRegionConfig) {
+                this.regionConfig = oldRegionConfig;
+                Ext.state.Manager.set(this.regionConfigStateId, this.regionConfig);
+                Ext.state.Manager.clear(oldRegionConfigStateId);
+            }
         }
         
         this.gridConfig.store = this.store;
