@@ -35,6 +35,11 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
      * @var array
      */
     protected $_specialFields = array('timeaccount');
+
+    /**
+     * Summarize records with a certain tag
+     */
+    const TAG_SUM = 'Bereitschaft';
     
     /**
      * the constructor
@@ -58,10 +63,32 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
      */
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
+        // @todo we need a more generic way of resolving tags! thats quite obscure for modelconfig applications! -> TRA->getTags() maybe?
+        Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         parent::_resolveRecords($_records);
+        $showStartDate = true;
         
+        foreach ($this->_config->columns->column as $field) {
+            if ($field->identifier === 'start_time' && isset($field->clearValueIfTagNotSet) && $field->clearValueIfTagNotSet === static::TAG_SUM) {
+                $showStartDate = false;
+            }
+        }
+
+        foreach ($_records as $record) {
+            if (!$showStartDate || !$record->tags || ($record->tags->filter('name', static::TAG_SUM)->count() === 0)) {
+                $record->start_time = null;
+                $record->end_time = null;
+            }
+            if (!empty($record->start_time)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . 'timesheet has start time : ' . print_r($record, true));
+            }
+        }
         $timeaccountIds = $_records->timeaccount_id;
         $this->_resolvedRecords['timeaccounts'] = Timetracker_Controller_Timeaccount::getInstance()->getMultiple(array_unique(array_values($timeaccountIds)));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+            . ' resolve records from Timetracker_Export_Ods_Timesheet');
     }
 
     /**

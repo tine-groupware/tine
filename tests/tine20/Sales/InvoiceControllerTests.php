@@ -1872,4 +1872,155 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
             @unlink($xlsx);
         }
     }
+
+    public function testExportInvoicePositionsOds()
+    {
+        $fsConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::FILESYSTEM);
+        if (!$fsConfig || !$fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS}) {
+            $this->markTestSkipped('PreviewService not configured.');
+        }
+
+        if ($this->_addressRecords === null) {
+            $this->_createCustomers(1);
+        }
+
+        $bereitschaftTag = new Tinebase_Model_Tag(array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => 'Bereitschaft',
+            'description' => 'Bereitschaft für Admins',
+            'color' => '#009B31',
+        ));
+        $bereitschaftTag = Tinebase_Tags::getInstance()->createTag($bereitschaftTag);
+
+        $right = new Tinebase_Model_TagRight([
+            'tag_id'        => $bereitschaftTag->getId(),
+            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'view_right'    => true,
+            'use_right'     => true
+        ]);
+        Tinebase_Tags::getInstance()->setRights($right);
+
+        $costcenter = new Tinebase_Model_EvaluationDimensionItem([], true);
+        $costcenter->number = 1337;
+        $costcenter->name = 'Foobar Costcenter';
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_EvaluationDimension::class, [
+            ['field' => Tinebase_Model_EvaluationDimension::FLD_NAME, 'operator' => 'equals', 'value' => Tinebase_Model_EvaluationDimension::COST_CENTER],
+        ]), null, new Tinebase_Record_Expander(Tinebase_Model_EvaluationDimension::class, Tinebase_Model_EvaluationDimension::getConfiguration()->jsonExpander))->getFirstRecord();
+        $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->addRecord($costcenter);
+        $cc = Tinebase_Controller_EvaluationDimension::getInstance()->update($cc);
+        $costcenter = $cc->{Tinebase_Model_EvaluationDimension::FLD_ITEMS}->find(Tinebase_Model_EvaluationDimensionItem::FLD_NUMBER, $costcenter->number);
+
+        $invoice = new Sales_Model_Invoice();
+        $invoice->description = 'Foobar Rechnung';
+        $invoice->start_date = (new Tinebase_DateTime())->subMonth(1);
+        $invoice->end_date = new Tinebase_DateTime();
+        $invoice->{Sales_Model_Invoice::FLD_DEBITOR_ID} =  $costcenter->getId();
+        $invoice->address_id = $this->_addressRecords->getFirstRecord()->getId();
+
+        /* @var $invoice Sales_Model_Invoice */
+        $invoice = Sales_Controller_Invoice::getInstance()->create($invoice);
+
+        $customer = new Sales_Model_Customer(['name' => 'Test Customer',
+            Sales_Model_Customer::FLD_DEBITORS => [[
+                Sales_Model_Debitor::FLD_DIVISION_ID => Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId(),
+            ]],
+        ]);
+        $customer = Sales_Controller_Customer::getInstance()->create($customer);
+
+        Tinebase_Relations::getInstance()->setRelations(
+            Sales_Model_Invoice::class,
+            'Sql',
+            $invoice->getId(),
+            [
+                [
+                    'related_degree' => 'sibling',
+                    'related_model' => Sales_Model_Customer::class,
+                    'related_backend' => 'Sql',
+                    'related_id' => $customer->getId(),
+                    'type' => 'CUSTOMER'
+                ]
+            ]
+        );
+
+        $timeaccount1 = new Timetracker_Model_Timeaccount();
+        $timeaccount1->title = 'Foobar 1';
+        $timeaccount1->is_billable = true;
+        $timeaccount1 = Timetracker_Controller_Timeaccount::getInstance()->create($timeaccount1);
+
+        $bereitschaftTag = new Tinebase_Model_Tag(array(
+            'type'  => Tinebase_Model_Tag::TYPE_SHARED,
+            'name'  => 'Bereitschaft',
+            'description' => 'Bereitschaft für Admins',
+            'color' => '#009B31',
+        ));
+        $bereitschaftTag = Tinebase_Tags::getInstance()->createTag($bereitschaftTag);
+
+        $right = new Tinebase_Model_TagRight([
+            'tag_id'        => $bereitschaftTag->getId(),
+            'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+            'account_id'    => Tinebase_Core::getUser()->getId(),
+            'view_right'    => true,
+            'use_right'     => true
+        ]);
+        Tinebase_Tags::getInstance()->setRights($right);
+        
+        $timesheet = new Timetracker_Model_Timesheet();
+        $timesheet->timeaccount_id = $timeaccount1->getId();
+        $timesheet->is_billable = true;
+        $timesheet->description = 'ts without tag';
+        $timesheet->account_id = Tinebase_Core::getUser()->getId();
+        $timesheet->start_date = (clone $invoice->start_date)->addDay(0);
+        $timesheet->start_time = '05:00:00';
+        $timesheet->duration = 30;
+
+        // @FIXME: not sure about this one??? when is it filled in real world data
+        $timesheet->invoice_id = $invoice->getId();
+        
+        $timesheet1 = Timetracker_Controller_Timesheet::getInstance()->create(clone($timesheet));
+        
+        $timesheet->description = 'ts with tag';
+        $timesheet->start_time = '06:00:00';
+        $timesheet2 = Timetracker_Controller_Timesheet::getInstance()->create($timesheet);
+
+        $filter = new Timetracker_Model_TimesheetFilter([
+            ['field' => 'id', 'operator' => 'in', 'value' => [$timesheet2->getId()]]
+        ]);
+        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $bereitschaftTag);
+
+        $productAggregateTimeaccount1 = new Sales_Model_InvoicePosition();
+        $productAggregateTimeaccount1->model = Timetracker_Model_Timeaccount::class;
+        $productAggregateTimeaccount1->invoice_id = $invoice->getId();
+        $productAggregateTimeaccount1->accountable_id = $timeaccount1->getId();
+        $productAggregateTimeaccount1->title = $timeaccount1->title;
+        $productAggregateTimeaccount1->unit = 'hour';
+        $productAggregateTimeaccount1->month = '';
+        $productAggregateTimeaccount1 = Sales_Controller_InvoicePosition::getInstance()->create($productAggregateTimeaccount1);
+        
+        $filter = new Timetracker_Model_TimesheetFilter(array(
+            array('field' => 'timeaccount_id', 'operator' => 'AND', 'value' => array(
+                array('condition' => 'OR', 'filters' => array(
+                    array('field' => 'budget', 'operator' => 'equals', 'value' => 0),
+                    array('field' => 'budget', 'operator' => 'equals', 'value' => NULL),
+                )),
+                array('field' => 'is_billable', 'operator' => 'equals', 'value' => TRUE),
+            )),
+        ));
+        $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId())));
+
+        // test default template
+        Tinebase_Core::getPreference('Timetracker')->setValue(Timetracker_Preference::TSODSEXPORTCONFIG, 'ts_default_ods');
+        $export = Tinebase_Export::factory($filter, ['format' => 'ods',], Timetracker_Controller_Timesheet::getInstance());
+        $result = $export->generate();
+        $xmlBody = $export->getDocument()->asXML();
+        $this->assertTrue(file_exists($result));
+
+        $this->assertStringContainsString('ts without tag', $xmlBody, 'timesheet name is not found');
+        $this->assertStringNotContainsString('05:00:00', $xmlBody, 'timesheet start time should not be set');
+
+        $this->assertStringContainsString('ts with tag', $xmlBody, 'timesheet name is not found');
+        $this->assertStringContainsString('06:00:00', $xmlBody, 'start time with tag should be set');
+        // cleanup / delete file
+        unlink($result);
+    }
 }
