@@ -56,6 +56,11 @@ legal fraught from other parties.
 
 see [tine LICENSE file](https://github.com/tine-groupware/tine/blob/main/LICENSE.md)
 
+## user limitation
+
+Please note! When using the current tine releases (from version 2023.11 or the weekly releases),
+ only five user accounts are available without a licence key.
+
 ## beta program
 You can run tine business edition with up to five users permanently without any costs and support. If you are an active
 developers' community member you can apply for our _beta program_ to get a license file for more users and addons.
