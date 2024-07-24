@@ -1000,6 +1000,10 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
 
     protected $_languagesAvailable;
 
+    protected $_uiconfig;
+
+    protected $_document_id;
+
     protected static $createdModels = [];
 
     protected static $deNormalizationCache = [];
