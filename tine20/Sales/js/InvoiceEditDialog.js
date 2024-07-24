@@ -81,47 +81,10 @@ Tine.Sales.InvoiceEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (!this.app) {
             this.app = Tine.Tinebase.appMgr.get('Sales');
         }
-
-        this.createTimesheetAction = new Ext.Action({
-            requiredGrant: 'exportGrant',
-            text: this.app.i18n._('Create timesheet'),
-            minWidth: 70,
-            scope: this,
-            handler: this.onCreateTimesheet,
-            actionUpdater: function (action, grants, records, isFilterSelect) {
-                if (action.initialConfig.requiredGrant) {
-                    if (grants[action.initialConfig.requiredGrant] === false) {
-                        action.setDisabled(true);
-                        return;
-                    }
-                }
-
-                // only persistent records can do this
-                action.setDisabled(!this.record.id);
-            },
-            iconCls: 'action_next'
-        });
-
+        
         this.tbarItems = this.tbarItems || [];
-        this.tbarItems.push(this.createTimesheetAction);
 
         Tine.Sales.InvoiceEditDialog.superclass.initComponent.call(this);
-    },
-
-    onCreateTimesheet: function () {
-        var me = this;
-
-        me.loadMask.show();
-
-        Tine.Sales.createTimesheetForInvoice(me.record.id).then(function (res) {
-            me.recordFromJson = true;
-            me.record = JSON.stringify(res);
-            me.initRecord();
-        }).then(function () {
-            me.hideLoadMask();
-        }).catch(function () {
-            me.hideLoadMask();
-        });
     },
 
     /**
