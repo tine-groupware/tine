@@ -67,6 +67,7 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
                     
                     const isAppNode = nodeData.virtualPath.split('/').length === 2;
                     nodeData.i18n_name = isAppNode ? app.getTitle() : nodeData.name;
+                    nodeData.text = nodeData.i18n_name;
                     nodeData.path = `${attr.path === '/' ? '' : attr.path}/${nodeData.i18n_name}`;
                 });
                 
@@ -86,12 +87,12 @@ Tine.Admin.QuotaManagement = Ext.extend(Ext.ux.tree.TreeGrid, {
         };
 
         this.columns = [{
-            id: 'i18n_name',
+            dataIndex: 'i18n_name',
             header: this.app.i18n._("Name"),
             width: 400,
             sortable: true,
         },{
-            id: 'i18n_name',
+            id: 'quota',
             header: this.app.i18n._("Quota"),
             width: 400,
             sortable: true,
