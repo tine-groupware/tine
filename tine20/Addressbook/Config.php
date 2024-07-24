@@ -161,7 +161,7 @@ class Addressbook_Config extends Tinebase_Config_Abstract
             //_('Possible values: always, unknown, never')
             self::DESCRIPTION           => 'Possible values: always, unknown, never',
             self::TYPE                  => self::TYPE_STRING,
-            self::DEFAULT_STR           => self::CARDDAV_READONLY_POLICY_UNKNOWN,
+            self::DEFAULT_STR           => self::CARDDAV_READONLY_POLICY_NEVER,
             self::CLIENTREGISTRYINCLUDE => false,
             self::SETBYADMINMODULE      => false,
             self::SETBYSETUPMODULE      => false,
