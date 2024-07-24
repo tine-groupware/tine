@@ -304,6 +304,8 @@ Ext.extend(Tine.Felamimail.MessageFileAction, Ext.Action, {
                         text: Ext.util.Format.htmlEncode(fileTarget.record_title),
                         handler: this.selectionHandler,
                         hideOnClick: false,
+                        //TODO: we need a generic solution to handle async renderer(lie html proxy), otherwise the default height is 0
+                        style: 'height: 16px;',
                     });
                     suggestionIds.push(suggestionId);
                 }
