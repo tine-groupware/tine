@@ -68,31 +68,7 @@ class Tinebase_CoreTest extends TestCase
         
         $this->assertInstanceOf('Tinebase_Server_Json', $server);
     }
-    
-    public function testGetDispatchServerSnom()
-    {
-        $request = Tinebase_Http_Request::fromString(
-            "POST /index.php HTTP/1.1\r\n".
-            "User-Agent: Mozilla/4.0 (compatible; snom300-SIP 8.4.35 1.1.3-u)"
-        );
-        
-        $server = Tinebase_Core::getDispatchServer($request);
-        
-        $this->assertInstanceOf('Voipmanager_Server_Snom', $server);
-    }
-    
-    public function testGetDispatchServerAsterisk()
-    {
-        $request = Tinebase_Http_Request::fromString(
-            "POST /index.php HTTP/1.1\r\n".
-            "User-Agent: asterisk-libcurl-agent/1.0"
-        );
-        
-        $server = Tinebase_Core::getDispatchServer($request);
-        
-        $this->assertInstanceOf('Voipmanager_Server_Asterisk', $server);
-    }
-    
+
     public function testGetDispatchServerActiveSync()
     {
         $request = Tinebase_Http_Request::fromString(
@@ -244,12 +220,6 @@ class Tinebase_CoreTest extends TestCase
                 'modified_attribute',
                 'record_type',
                 'record_id',
-            ],
-            SQL_TABLE_PREFIX . 'snom_phones' => [
-                'http_client_user',
-            ],
-            SQL_TABLE_PREFIX . 'snom_lines' => [
-                'linenumber',
             ],
             SQL_TABLE_PREFIX . 'record_observer' => [
                 'observable_identifier',

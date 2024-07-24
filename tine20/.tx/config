@@ -47,11 +47,6 @@ file_filter = Filemanager/translations/<lang>.po
 source_file = Filemanager/translations/template.pot
 source_lang = en
 
-[tine20.Phone]
-file_filter = Phone/translations/<lang>.po
-source_file = Phone/translations/template.pot
-source_lang = en
-
 [tine20.Projects]
 file_filter = Projects/translations/<lang>.po
 source_file = Projects/translations/template.pot
@@ -72,11 +67,6 @@ file_filter = SimpleFAQ/translations/<lang>.po
 source_file = SimpleFAQ/translations/template.pot
 source_lang = en
 
-[tine20.Sipgate]
-file_filter = Sipgate/translations/<lang>.po
-source_file = Sipgate/translations/template.pot
-source_lang = en
-
 [tine20.Tasks]
 file_filter = Tasks/translations/<lang>.po
 source_file = Tasks/translations/template.pot
@@ -85,11 +75,6 @@ source_lang = en
 [tine20.Timetracker]
 file_filter = Timetracker/translations/<lang>.po
 source_file = Timetracker/translations/template.pot
-source_lang = en
-
-[tine20.Voipmanager]
-file_filter = Voipmanager/translations/<lang>.po
-source_file = Voipmanager/translations/template.pot
 source_lang = en
 
 [tine20.HumanResources]
