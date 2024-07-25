@@ -1576,7 +1576,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $this->_backend->delete($messages->getId());
             return $messages;
         }  catch (Exception $e) {
-            Tinebase_Exception::log($e);
+            if (! $e instanceof Felamimail_Exception_IMAPMessageNotFound) {
+                Tinebase_Exception::log($e);
+            }
             return null;
         }
     }
