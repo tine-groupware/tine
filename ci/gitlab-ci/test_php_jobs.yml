@@ -336,16 +336,17 @@ php-unit-update-tests:
       git checkout ${TINE_VERSION_BE}
       test_composer_install
       log update
-      su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --setLicense -- file=${TINE20ROOT}/tests/tine20/Tinebase/License/license_contract_MW-TEST-3.0.0.pem"
-      su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
-      su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --install UserManual"
+      su tine20 -c "php setup.php --config=/etc/tine20 --setLicense -- file=${TINE20ROOT}/tests/tine20/Tinebase/License/license_contract_MW-TEST-3.0.0.pem"
+      su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
+      su tine20 -c "php setup.php --config=/etc/tine20 --install UserManual"
+      su tine20 -c "php setup.php --config=/etc/tine20 --uninstall Voipmanager,Phone"
     - |
       if [ "${TINE_VERSION_BETA}" != "" ];then
         log "updating to ${TINE_VERSION_BETA}"
         git checkout ${TINE_VERSION_BETA}
         test_composer_install
         log update
-        su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
+        su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
 
       else
         log skipping update to TINE_VERSION_BETA: ${TINE_VERSION_BETA}
@@ -355,7 +356,7 @@ php-unit-update-tests:
       git checkout ${TINE_VERSION_NEXT}
       test_composer_install
       log update
-      su tine20 -c "php setup.php --config=/etc/tine20/config.inc.php --update -- strict=1"
+      su tine20 -c "php setup.php --config=/etc/tine20 --update -- strict=1"
     - |
       log "testing"
       test_phpunit
