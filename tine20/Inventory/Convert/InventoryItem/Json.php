@@ -42,10 +42,14 @@ class Inventory_Convert_InventoryItem_Json extends Tinebase_Convert_Json
                     $invoice['supplier'] = $invoice['supplier'][0];
                     $record['invoice'] = $invoice;
                 }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' .
+                        __LINE__ . ' ' . $tenf->getMessage());
+                }
             } catch (Exception $e) {
                 Tinebase_Exception::log($e);
             }
-
         }
         return $multiple ? $result : $result[0];
     }
