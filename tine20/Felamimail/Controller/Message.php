@@ -1560,11 +1560,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return $draft;
     }
 
+    /**
+     * @param array|string $accountIds
+     * @return Tinebase_Record_RecordSet|null
+     * @throws Setup_Exception
+     * @throws Tinebase_Exception_InvalidArgument
+     */
     public function cleanupAutoSavedDrafts($accountIds): ?Tinebase_Record_RecordSet
     {
         if (!Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_AUTOSAVE_DRAFTS)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-                __METHOD__ . '::' . __LINE__ . 'FEATURE_AUTOSAVE_DRAFTS is disabled');
+                __METHOD__ . '::' . __LINE__ . ' FEATURE_AUTOSAVE_DRAFTS is disabled');
             return null;
         }
         $draftFolderIds = [];
@@ -1572,13 +1578,28 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $accountIds = [$accountIds];
         }
         foreach ($accountIds as $accountId) {
-            $account = Felamimail_Controller_Account::getInstance()->get($accountId);
-            $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account, Felamimail_Model_Folder::FOLDER_DRAFTS);
-            $draftFolderIds[] = $draftFolder->getId();
+            try {
+                $account = Felamimail_Controller_Account::getInstance()->get($accountId);
+                $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account,
+                    Felamimail_Model_Folder::FOLDER_DRAFTS);
+                $draftFolderIds[] = $draftFolder->getId();
+            } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                    Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
+                }
+            }  catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        }
+
+        if (empty($draftFolderIds)) {
+            return null;
         }
 
         try {
-            $messages = $this->_backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Message::class, [
+            $messages = $this->_backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
+                Felamimail_Model_Message::class, [
                 ['field' => 'folder_id', 'operator' => 'in', 'value' => $draftFolderIds]
             ]));
             $messages = $messages->filter(function($record) {
@@ -1588,7 +1609,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $this->_backend->delete($messages->getId());
             return $messages;
         }  catch (Exception $e) {
-            Tinebase_Exception::log($e);
+            if (! $e instanceof Felamimail_Exception_IMAPMessageNotFound) {
+                Tinebase_Exception::log($e);
+            }
             return null;
         }
     }
