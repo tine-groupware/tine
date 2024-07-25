@@ -1236,7 +1236,7 @@ viewConfig: {
             });
             // handle sorting too
             const sortInfo = currentGridState?.sort;
-            if (sortInfo && this.grid.store.sortInfo !== sortInfo) {
+            if (sortInfo && JSON.stringify(this.grid.store.sortInfo) !== JSON.stringify(sortInfo)) {
                 this.grid.store.sort(sortInfo.field, sortInfo.direction);
             }
             this.fitColumns(preventRefresh, onlyExpand, omitColumn);
