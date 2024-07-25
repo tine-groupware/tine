@@ -400,7 +400,7 @@ class Tinebase_FileSystem implements
                 $node->grants = $grants;
             }
 
-            $this->_nodeAclController->setGrants($node);
+            $this->_nodeAclController->setGrants(record: $node, isCreate: true);
             $node->acl_node = $node->getId();
             $this->update($node);
 
