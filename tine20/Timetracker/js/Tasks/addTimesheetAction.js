@@ -10,7 +10,7 @@ Promise.all([
         handler: function () {
             const task = this.baseAction.task;
 
-            const defaults = Tine.Timetracker.TimesheetGridPanel.prototype.getRecordDefaults.call(this)
+            const defaults = Tine.Timetracker.Model.Timesheet.getDefaultData()
             defaults.timeaccount_id = task.get('timeaccount');
             defaults.source_model = task.constructor.getPhpClassName();
             defaults.source = task
@@ -22,7 +22,18 @@ Promise.all([
 
             Tine.widgets.dialog.EditDialog.getConstructor('Timetracker.Timesheet').openWindow({
                 record: Ext.encode(record.getData()),
-                recordId: record.getId()
+                recordId: record.getId(),
+                contentPanelConstructorInterceptor: async (config) => {
+                    const record = Tine.Tinebase.data.Record.setFromJson(config.record, 'Timetracker.Timesheet');
+
+                    const timeaccount_id = record.get('timeaccount_id')
+                    if (_.isString(timeaccount_id)) {
+                        // resolve timeaccount to fix title
+                        record.set('timeaccount_id', await Tine.Timetracker.getTimeaccount(timeaccount_id));
+                    }
+
+                    config.record = record.getData();
+                }
             });
         },
         actionUpdater: function(action, grants, records, isFilterSelect, filteredContainers) {

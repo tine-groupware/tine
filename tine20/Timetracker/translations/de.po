@@ -276,6 +276,9 @@ msgstr[1] ""
 msgid "Book Own"
 msgstr "Eigene buchen"
 
+msgid "Add Timesheet"
+msgstr "Stundenzettel hinzufügen"
+
 #: js/Models.js:39
 msgid "The grant to add Timesheets to this Timeaccount"
 msgstr "Das Recht, Stundenzettel auf dieses Zeitkonto zu buchen"
