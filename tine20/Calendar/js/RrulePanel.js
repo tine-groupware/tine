@@ -418,7 +418,7 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
                     '<div style="position: relative;">' +
                         '<table><tr>' +
                             '<td width="65" id="' + this.limitId + 'countRadio"></td>' +
-                            '<td width="40" id="' + this.limitId + 'count"></td>' +
+                            '<td class="x-column-inner .x-form-field" width="40" id="' + this.limitId + 'count"></td>' +
                             '<td width="40" style="padding-left: 5px" >' + countAfterString + '</td>' +
                          '</tr></table>' +
                     '</div>' +
