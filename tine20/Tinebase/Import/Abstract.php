@@ -952,7 +952,12 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 'name' => $name,
             );
             /** @var Tinebase_Model_Tag $tag */
-            $tag = Tinebase_Tags::getInstance()->createSharedTags([$tagData])->getFirstRecord();
+            try {
+                $tag = Tinebase_Tags::getInstance()->createSharedTags([$tagData])->getFirstRecord();
+            } catch (Tinebase_Exception_AccessDenied $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . ' User has no grants to create Tags: ' . $e);
+            }
         }
         
         return $tag;
