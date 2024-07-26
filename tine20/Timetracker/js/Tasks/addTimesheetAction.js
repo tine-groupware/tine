@@ -29,7 +29,7 @@ Promise.all([
                     const timeaccount_id = record.get('timeaccount_id')
                     if (_.isString(timeaccount_id)) {
                         // resolve timeaccount to fix title
-                        record.set('timeaccount_id', await Tine.Timetracker.getTimeaccount(timeaccount_id));
+                        record.set('timeaccount_id', _.get(await Tine.Timetracker.searchTimeaccounts([{field: 'id', operator: 'equals', value: timeaccount_id}]), 'results[0]', timeaccount_id));
                     }
 
                     config.record = record.getData();
