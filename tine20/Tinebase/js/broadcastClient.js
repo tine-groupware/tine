@@ -84,7 +84,14 @@ const init = async () => {
             const topicPrefix = String(data.model).replace('_Model_', '.');
             const topics = [`${topicPrefix}.*`, `${topicPrefix}.${data.recordId}`];
 
-            if (topics.filter(value => postal.subscriptions.recordchange.hasOwnProperty(value)).length) {
+            // NOTE: postal.subscriptions are per window, we run in main window only!
+            let subscriptions = Object.keys(postal.subscriptions.recordchange) || [];
+            Ext.ux.PopupWindowMgr.each((win) => {
+                if (_.isObject(_.get(win, 'popup.postal.subscriptions.recordchange'))) {
+                    subscriptions = _.uniq(subscriptions.concat(Object.keys(win.popup.postal.subscriptions.recordchange) || []))
+                }
+            });
+            if (topics.filter(value => subscriptions.indexOf(value) >= 0)) {
                 if (! await isOwnEvent(data)) {
                     handleEvent(data);
                 }
