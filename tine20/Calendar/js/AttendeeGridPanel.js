@@ -668,13 +668,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             this.ctxMenu.showAt(e.getXY());
         }
     },
-    
+
     /**
      * init phone grid panel hook if Phone app is available
      */
     initPhoneGridPanelHook: function() {
         var phoneApp = Tine.Tinebase.appMgr.get('Phone');
-        if (phoneApp) {
+        if (phoneApp && _.get(Tine, 'Phone.AddressbookGridPanelHook')) {
             Tine.log.debug('Adding Phone call hook');
             this.phoneHook = new Tine.Phone.AddressbookGridPanelHook({
                 app: phoneApp,
