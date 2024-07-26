@@ -203,21 +203,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 ]
             }, {
                 xtype: 'columnform',
-                items: [[
-                    !Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry') ?
-                        {
+                items: [[{
                             columnWidth: 0.64,
                             xtype: 'textfield',
                             fieldLabel: this.app.i18n._('Display Name'),
                             name: 'n_fileas'
-                        } :
-                        (
-                            new Tine.Addressbook.IndustrySearchCombo({
-                                fieldLabel: this.app.i18n._('Industry'),
-                                columnWidth: 0.64,
-                                name: 'industry'
-                            })
-                        ), {
+                        }, {
                         columnWidth: 0.36,
                         fieldLabel: this.app.i18n._('Job Title'),
                         name: 'title',
@@ -231,7 +222,12 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                         name: 'bday',
                         requiredGrant: 'privateDataGrant'
                     }
-                ]]
+                ]].concat(Tine.Tinebase.appMgr.get('Addressbook').featureEnabled('featureIndustry') ? [[
+                    new Tine.Addressbook.IndustrySearchCombo({
+                        fieldLabel: this.app.i18n._('Industry'),
+                        name: 'industry'
+                    })
+                ]] : [])
             }]
         };
 
