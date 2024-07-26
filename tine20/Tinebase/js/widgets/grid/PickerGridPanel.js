@@ -797,7 +797,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             updateFn = me.onEditDialogRecordUpdate;
 
         // in case of metadataFor / simple cross tables we might edit the metadataFor / referenced record
-        if(this.isMetadataModelFor && this.isMetadataModelFor === this.colModel.getColumnAt(col).dataIndex) {
+        if(this.isMetadataModelFor && this.isMetadataModelFor === this.colModel.getColumnAt(col)?.dataIndex) {
             const recordClass = this.recordClass.getField(this.isMetadataModelFor).getRecordClass();
             editDialogClass = Tine.widgets.dialog.EditDialog.getConstructor(recordClass);
             record = Tine.Tinebase.data.Record.setFromJson(record.get(this.isMetadataModelFor), recordClass);
