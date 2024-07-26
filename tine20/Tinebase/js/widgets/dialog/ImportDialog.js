@@ -413,7 +413,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.WizardPanel, {
                 show: function() {
                    var options = this.getImportPluginOptions();
                 
-                    if (options.autotags) {
+                    if (options.autotags && Tine.Tinebase.common.hasRight('manage_shared_tags', 'Admin')) {
                         var tags = options.autotags;
                         
                         Ext.each([].concat(tags), function(tag) {
