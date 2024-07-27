@@ -8,7 +8,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2014-2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,7 +17,7 @@
  * @package     Calendar
  * @subpackage  Import
  */
-class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
+class Calendar_Import_CalDav_Client extends \Sabre\DAV\Client
 {
     /**
      * used to overwrite default retry behavior (if != null)
@@ -48,6 +48,8 @@ class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
     protected $_uuidPrefix = '';
 
     protected $_allowDuplicateEvents = false;
+
+    protected $userName;
     
     /**
      * record backend
@@ -59,6 +61,8 @@ class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
     public function __construct(array $settings, $flavor)
     {
         parent::__construct($settings);
+
+        $this->userName = $settings['userName'] ?? null;
         
         if (isset($settings['allowDuplicateEvents'])) {
             $this->_allowDuplicateEvents = $settings['allowDuplicateEvents'];
@@ -67,6 +71,12 @@ class Calendar_Import_CalDav_Client extends \Tine20\DAV\Client
         $flavor = 'Calendar_Import_CalDav_Decorator_' . $flavor;
         $this->decorator = new $flavor($this);
         $this->_recordBackend = Calendar_Controller_Event::getInstance()->getBackend();
+    }
+
+    public function setVerifyPeer(bool $verify): void
+    {
+        $this->addCurlSetting(CURLOPT_PROXY_SSL_VERIFYPEER, $verify);
+        $this->addCurlSetting(CURLOPT_PROXY_SSL_VERIFYHOST, $verify ? 2 : 0);
     }
 
     /**

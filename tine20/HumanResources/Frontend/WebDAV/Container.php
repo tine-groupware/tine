@@ -1,5 +1,5 @@
 <?php
-use Tine20\DAV;
+use Sabre\DAV;
 
 /**
  * Tine 2.0
@@ -40,7 +40,7 @@ class HumanResources_Frontend_WebDAV_Container extends Tinebase_Frontend_WebDAV_
     * Creates a new subdirectory
     *
     * @param string $name
-    * @throws Tine20\DAV\Exception\Forbidden
+    * @throws Sabre\DAV\Exception\Forbidden
     * @return void
     */
     public function createDirectory($name)

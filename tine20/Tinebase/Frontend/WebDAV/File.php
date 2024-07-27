@@ -14,14 +14,14 @@
  * 
  * @package     Tinebase
  */
-class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implements Tine20\DAV\IFile
+class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\IFile
 {
     /**
      * @return bool|false|mixed|resource|null
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_InvalidArgument
-     * @throws \Tine20\DAV\Exception\Forbidden
-     * @throws \Tine20\DAV\Exception\NotFound
+     * @throws \Sabre\DAV\Exception\Forbidden
+     * @throws \Sabre\DAV\Exception\NotFound
      */
     public function get() 
     {
@@ -32,16 +32,16 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
                 true, false
             )
         ) {
-            throw new Tine20\DAV\Exception\Forbidden('Forbidden to download file: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to download file: ' . $this->_path);
         }
 
         try {
             $node = $pathRecord->getNode();
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Tine20\DAV\Exception\NotFound($tenf->getMessage());
+            throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
         }
         if ($node->is_quarantined) {
-            throw new Tine20\DAV\Exception\Forbidden('File is quarantined: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('File is quarantined: ' . $this->_path);
         }
 
         if (false === ($handle = Tinebase_FileSystem::getInstance()->fopen($this->_path, 'r'))) {
@@ -50,7 +50,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
                 return fopen('php://memory', 'r');
             }
             // possible race condition
-            throw new Tine20\DAV\Exception\NotFound('could not open ' . $this->_path);
+            throw new Sabre\DAV\Exception\NotFound('could not open ' . $this->_path);
         }
          
         return $handle;
@@ -69,7 +69,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
     /**
      * Deleted the current node
      *
-     * @throws Tine20\DAV\Exception\Forbidden
+     * @throws Sabre\DAV\Exception\Forbidden
      * @return void 
      */
     public function delete() 
@@ -81,7 +81,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
                 true, false
             )
         ) {
-            throw new Tine20\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
         }
         
         Tinebase_FileSystem::getInstance()->unlink($this->_path);
@@ -93,8 +93,8 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
      * @throws Tinebase_Exception_AccessDenied
      * @throws Tinebase_Exception_Backend
      * @throws Tinebase_Exception_NotFound
-     * @throws \Tine20\DAV\Exception\Forbidden
-     * @throws \Tine20\DAV\Exception\NotFound
+     * @throws \Sabre\DAV\Exception\Forbidden
+     * @throws \Sabre\DAV\Exception\NotFound
      */
     public function put($data)
     {
@@ -104,7 +104,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
                 'update',
                 true, false
             )) {
-            throw new Tine20\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
+            throw new Sabre\DAV\Exception\Forbidden('Forbidden to edit file: ' . $this->_path);
         }
 
         Tinebase_Frontend_WebDAV_Directory::checkQuota($pathRecord->getNode());
@@ -118,7 +118,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
             }
 
             if (false === ($data = fopen($completeFile->path, 'r'))) {
-                throw new Tine20\DAV\Exception('fopen on temp file path failed ' . $completeFile->path);
+                throw new Sabre\DAV\Exception('fopen on temp file path failed ' . $completeFile->path);
             }
         }
 
@@ -140,7 +140,7 @@ class Tinebase_Frontend_WebDAV_File extends Tinebase_Frontend_WebDAV_Node implem
                 throw new Tinebase_Exception_Backend('Tinebase_FileSystem::fclose failed for path ' . $this->_path);
             }
         } catch (Tinebase_Exception_NotFound $tenf) {
-            throw new Tine20\DAV\Exception\NotFound($tenf->getMessage());
+            throw new Sabre\DAV\Exception\NotFound($tenf->getMessage());
         }
 
         // refetch data

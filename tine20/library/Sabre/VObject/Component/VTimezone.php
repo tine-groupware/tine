@@ -11,7 +11,7 @@
  * @author     Lars Kneschke <l.kneschke@metaways.de>
  * @license    http://code.google.com/p/sabredav/wiki/License Modified BSD License
  */
-class Sabre_VObject_Component_VTimezone extends Tine20\VObject\Component {
+class Sabre_VObject_Component_VTimezone extends Sabre\VObject\Component {
 
     /**
      * Name, for example VEVENT 
@@ -34,7 +34,7 @@ class Sabre_VObject_Component_VTimezone extends Tine20\VObject\Component {
      * @param string|DateTimeZone $timezone
      * @param Sabre_VObject_ElementList $iterator
      */
-    public function __construct($timezone, Tine20\VObject\ElementList $iterator = null) 
+    public function __construct($timezone, Sabre\VObject\ElementList $iterator = null)
     {
         if (!is_null($iterator)) $this->iterator = $iterator;
         

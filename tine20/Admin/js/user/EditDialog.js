@@ -85,7 +85,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             responseText: Ext.util.JSON.encode(this.record.get('emailUser'))
         };
         this.emailRecord = Tine.Admin.emailUserBackend.recordReader(emailResponse);
-        
+
+        if (this.record.get('accountLastPasswordChange')) {
+            this.record.set('accountLastPasswordChangeRaw', this.record.get('accountLastPasswordChange'))
+        }
+
         // format dates
         var dateTimeDisplayFields = ['accountLastLogin', 'accountLastPasswordChange', 'logonTime', 'logoffTime', 'pwdLastSet'];
         for (var i = 0; i < dateTimeDisplayFields.length; i += 1) {
@@ -182,7 +186,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('groups', newGroups);
         this.record.set('accountRoles', newRoles);
         
-        this.unsetLocalizedDateTimeFields(this.record, ['accountLastLogin', 'accountLastPasswordChange']);
+        this.unsetLocalizedDateTimeFields(this.record, ['accountLastLogin']);
+        if (this.record.get('accountLastPasswordChangeRaw')) {
+            this.record.set('accountLastPasswordChange', this.record.get('accountLastPasswordChangeRaw'))
+        }
 
         var xprops = this.record.get('xprops');
         xprops = Ext.isObject(xprops) ? xprops : {};

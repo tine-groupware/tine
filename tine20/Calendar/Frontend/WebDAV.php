@@ -6,8 +6,10 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2014-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
+
+use Sabre\DAV\MkCol;
 
 /**
  * class to handle container tree
@@ -21,28 +23,29 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
 
     /**
      * (non-PHPdoc)
-     * @see \Tine20\DAV\IExtendedCollection::createExtendedCollection()
-     * @throws \Tine20\DAV\Exception\Forbidden
+     * @see \Sabre\DAV\IExtendedCollection::createExtendedCollection()
+     * @throws \Sabre\DAV\Exception\Forbidden
      */
-    public function createExtendedCollection($name, array $resourceType, array $properties)
+    public function createExtendedCollection($name, MkCol $mkCol)
     {
+        $properties = $mkCol->getMutations();
         if (count($this->_getPathParts()) === 2 && isset($properties['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'])) {
             $componentSet = $properties['{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set'];
 
-            if ($componentSet instanceof \Tine20\CalDAV\Property\SupportedCalendarComponentSet &&
+            if ($componentSet instanceof \Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet &&
                 in_array('VTODO', $componentSet->getValue())) {
 
                 if (Tinebase_Core::getUser()->hasRight('Tasks', Tinebase_Acl_Rights::RUN)) {
                     $tasks = new Tasks_Frontend_WebDAV('tasks/' . $this->getName(), $this->_useIdAsName);
                 } else {
-                    throw new  \Tine20\DAV\Exception\Forbidden('Tasks not allowed for user');
+                    throw new  \Sabre\DAV\Exception\Forbidden('Tasks not allowed for user');
                 }
                 
-                return $tasks->createExtendedCollection($name, $resourceType, $properties);
+                return $tasks->createExtendedCollection($name, $mkCol);
             }
         }
         
-        return parent::createExtendedCollection($name, $resourceType, $properties);
+        return parent::createExtendedCollection($name, $mkCol);
     }
     
     /**
@@ -67,7 +70,7 @@ class Calendar_Frontend_WebDAV extends Tinebase_WebDav_Collection_AbstractContai
                     break;
                     
                 case 'outbox':
-                    $child = new \Tine20\CalDAV\Schedule\Outbox('principals/users/' . Tinebase_Core::getUser()->contact_id);
+                    $child = new \Sabre\CalDAV\Schedule\Outbox('principals/users/' . Tinebase_Core::getUser()->contact_id);
                     break;
                     
                 case 'dropbox':

@@ -20,7 +20,7 @@ class Tinebase_WebDav_RootTest extends TestCase
     /**
      * Tree
      *
-     * @var Tine20\DAV\ObjectTree
+     * @var Sabre\DAV\ObjectTree
      */
     protected $_webdavTree;
     
@@ -137,12 +137,12 @@ class Tinebase_WebDav_RootTest extends TestCase
     
     /**
      * 
-     * @return \Tine20\DAV\ObjectTree
+     * @return \Sabre\DAV\Tree
      */
     protected function _getWebDAVTree()
     {
-        if (! $this->_webdavTree instanceof \Tine20\DAV\ObjectTree) {
-            $this->_webdavTree = new \Tine20\DAV\ObjectTree(new Tinebase_WebDav_Root());
+        if (! $this->_webdavTree instanceof \Sabre\DAV\Tree) {
+            $this->_webdavTree = new \Sabre\DAV\Tree(new Tinebase_WebDav_Root());
         }
         
         return $this->_webdavTree;
@@ -153,7 +153,7 @@ class Tinebase_WebDav_RootTest extends TestCase
      */
     public function testCalendarRoot()
     {
-        $calendarRoot = new Calendar_Frontend_WebDAV(\Tine20\CalDAV\Plugin::CALENDAR_ROOT, true);
+        $calendarRoot = new Calendar_Frontend_WebDAV(\Sabre\CalDAV\Plugin::CALENDAR_ROOT, true);
         $children = $calendarRoot->getChildren();
         $this->assertTrue(count($children) > 0 && $children[0] instanceof Calendar_Frontend_WebDAV);
     }

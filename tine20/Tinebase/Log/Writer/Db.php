@@ -5,13 +5,18 @@
  * @package     Tinebase
  * @subpackage  Log
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2020 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  *
  */
 
 class Tinebase_Log_Writer_Db extends Zend_Log_Writer_Db
 {
+    /**
+     * @var Tinebase_Log_Formatter_Db $_formatter
+     */
+    protected $_formatter;
+
     /**
      * Write a message to the log.
      *

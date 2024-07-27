@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use League\Flysystem\WebDAV\WebDAVAdapter;
@@ -16,7 +16,7 @@ class Tinebase_FileSystem_FlySystem_CachingSabreDavClient extends Client
 {
     protected array $propFindCache = [];
 
-    public function propFind($url, array $properties, $depth = 0)
+    public function propFind($url, array $properties, $depth = 0): array
     {
         if (empty(array_diff($properties, WebDAVAdapter::FIND_PROPERTIES))) {
             if ($this->propFindCache[$depth][$url] ?? false) {

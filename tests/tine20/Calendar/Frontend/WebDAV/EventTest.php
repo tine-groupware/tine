@@ -149,7 +149,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $vcalendar = $converter->fromTine20Model($event);
 
 
-        $this->expectException(Tine20\DAV\Exception\PreconditionFailed::class);
+        $this->expectException(Sabre\DAV\Exception\PreconditionFailed::class);
         $this->expectExceptionMessage('only organizer may recover deleted events');
         
         Calendar_Frontend_WebDAV_Event::create($this->_getPersonasDefaultCals('sclever'), $event->getId() . '.ics',
@@ -360,7 +360,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
             $cId = Calendar_Controller_Event::getDefaultDisplayContainerId($this->_personas['sclever']->getId());
             Calendar_Frontend_WebDAV_Event::create(Tinebase_Container::getInstance()->get($cId), "$id.ics", $vcalendar);
             static::fail('external seq out of order, we should not reach this point');
-        } catch(Tine20\DAV\Exception\PreconditionFailed $sdepf) {
+        } catch(Sabre\DAV\Exception\PreconditionFailed $sdepf) {
             static::assertSame('updating existing event with outdated external seq', $sdepf->getMessage());
         }
         static::assertEquals(0, count(self::getMessages()));
@@ -966,7 +966,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
     {
         $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
 
-        $this->expectException('Tine20\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
 
         $event = $this->testCreateEventWithInternalOrganizer();
     }
@@ -979,7 +979,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
         $event = $this->testCreateEventWithInternalOrganizer();
 
-        $this->expectException('Tine20\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
 
         $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "{$event->getRecord()->getId()}.ics");
@@ -996,7 +996,7 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
         $_SERVER['HTTP_USER_AGENT'] = 'CalendarStore/5.0 (1127); iCal/5.0 (1535); Mac OS X/10.7.1 (11B26)';
         $event = $this->testCreateEventWithInternalOrganizer();
 
-        $this->expectException('Tine20\DAV\Exception\Forbidden');
+        $this->expectException('Sabre\DAV\Exception\Forbidden');
 
         $_SERVER['HTTP_USER_AGENT'] = 'FooBar User Agent';
         $loadedEvent = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer'], "{$event->getRecord()->getId()}.ics");

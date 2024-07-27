@@ -76,7 +76,7 @@ class Calendar_Export_VCalendar extends Tinebase_Export_VObject
         if ($this->_exportFileHandle === null) {
             $this->_createExportFilehandle();
             fwrite($this->_exportFileHandle, $document->serialize());
-        } else if ($document instanceof \Tine20\VObject\Component\VCalendar) {
+        } else if ($document instanceof \Sabre\VObject\Component\VCalendar) {
             $objects = $document->select('VEVENT');
             foreach ($objects as $object) {
                 $this->_addComponentToEndOfFile($object);
@@ -94,7 +94,7 @@ class Calendar_Export_VCalendar extends Tinebase_Export_VObject
         $this->_converter->addEventToVCalendar($this->_document, $_record);
     }
 
-    protected function _addComponentToEndOfFile(Tine20\VObject\Component $component)
+    protected function _addComponentToEndOfFile(Sabre\VObject\Component $component)
     {
         // rewind to just before END:VCALENDAR
         fseek($this->_exportFileHandle, ftell($this->_exportFileHandle) - strlen("END:VCALENDAR") - 2);

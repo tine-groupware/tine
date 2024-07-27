@@ -34,6 +34,20 @@ class Tinebase_Record_Expander_VirtualRelation extends Tinebase_Record_Expander_
     protected function _setData(Tinebase_Record_RecordSet $_data)
     {
         foreach ($_data as $record) {
+            if (!isset($record['relations'])) {
+                try {
+                    $controller = Tinebase_Core::getApplicationInstance($_data->getRecordClassName());
+                    if (method_exists($controller, 'get')) {
+                        $record = $controller->get($record['id']);
+                    } else {
+                        continue;
+                    }
+                } catch (Exception $e) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(
+                        __METHOD__ . '::' . __LINE__ . " " . $e);
+                    continue;
+                }
+            } 
             $record->{$this->_property} = new Tinebase_Record_RecordSet($this->_model, $record->relations
                 ->filter('related_model', $this->_cfg[MCC::RECORD_CLASS_NAME])->filter('type', $this->_cfg[MCC::TYPE])
                 ->related_record);

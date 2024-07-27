@@ -5,14 +5,13 @@
  * @package     Calendar
  * @subpackage  CalDAV
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2013-2014 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2013-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
 /**
  * Test helper
  */
-require_once __DIR__ . '/../../../../../tine20/vendor/tine20/sabredav/tests/Sabre/HTTP/ResponseMock.php';
 
 /**
  * Test class for Calendar_Frontend_CalDAV_PluginManagedAttachments
@@ -21,7 +20,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
 {
     /**
      * 
-     * @var Tine20\DAV\Server
+     * @var \Sabre\DAV\Server
      */
     protected $server;
     
@@ -42,15 +41,13 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $this->originalHostname = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
         $_SERVER['HTTP_HOST'] = $this->hostname;
         
-        $this->server = new Tine20\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()));
+        $this->server = new \Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()), new Tinebase_WebDav_Sabre_SapiMock());
         
         $this->plugin = new Calendar_Frontend_CalDAV_PluginManagedAttachments();
         
         $this->server->addPlugin($this->plugin);
-        
-        
-        $this->response = new Tine20\HTTP\ResponseMock();
-        $this->server->httpResponse = $this->response;
+
+        $this->server->httpResponse = $this->response = new Tinebase_WebDav_Sabre_ResponseMock();
     }
 
     public function tearDown(): void
@@ -80,10 +77,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
                </A:prop>
              </A:propfind>';
     
-        $request = new Tine20\HTTP\Request(array(
-                'REQUEST_METHOD' => 'PROPFIND',
-                'REQUEST_URI'    => '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id
-        ));
+        $request = new Sabre\HTTP\Request('PROPFIND', '/' . Tinebase_WebDav_PrincipalBackend::PREFIX_USERS . '/' . Tinebase_Core::getUser()->contact_id);
         $request->setBody($body);
     
         $this->server->httpRequest = $request;
@@ -108,17 +102,14 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     {
         $event = $this->calDAVTests->testCreateRepeatingEventAndPutExdate();
         
-        $request = new Tine20\HTTP\Request(array(
-            'HTTP_CONTENT_TYPE' => 'text/plain',
-            'HTTP_CONTENT_DISPOSITION' => $disposition,
-            'REQUEST_METHOD' => 'POST',
-            'REQUEST_URI'    => '/calendars/' . 
-                Tinebase_Core::getUser()->contact_id . '/'. 
-                $event->getRecord()->container_id . '/' .
-                $event->getRecord()->uid . '.ics?action=attachment-add',
-            'QUERY_STRING'   => 'action=attachment-add',
-            'HTTP_DEPTH'     => '0',
-        ));
+        $request = new Sabre\HTTP\Request('POST', '/calendars/' .
+            Tinebase_Core::getUser()->contact_id . '/'.
+            $event->getRecord()->container_id . '/' .
+            $event->getRecord()->uid . '.ics?action=attachment-add', [
+                'CONTENT-TYPE' => 'text/plain',
+                'CONTENT-DISPOSITION' => $disposition,
+                'DEPTH'     => '0',
+            ]);
         
         $agenda = 'HELLO WORLD';
         $request->setBody($agenda);
@@ -130,7 +121,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $exdateAttachments = Tinebase_FileSystem_RecordAttachments::getInstance()
             ->getRecordAttachments($event->getRecord()->exdate[0]);
         
-        $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
+        $this->assertSame(201, $this->response->status);
         $this->assertStringContainsString('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
         $this->assertEquals(1, $baseAttachments->count());
         $this->assertEquals($filename, $baseAttachments[0]->name);
@@ -161,17 +152,14 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
 
         $event = $this->calDAVTests->createEventWithAttachment();
         
-        $request = new Tine20\HTTP\Request(array(
-                'HTTP_CONTENT_TYPE' => 'text/plain',
-                'HTTP_CONTENT_DISPOSITION' => 'attachment;filename="agenda.html"',
-                'REQUEST_METHOD' => 'POST',
-                'REQUEST_URI'    => '/calendars/' .
-                Tinebase_Core::getUser()->contact_id . '/'.
-                $event->getRecord()->container_id . '/' .
-                $event->getRecord()->uid . '.ics?action=attachment-add',
-                'QUERY_STRING'   => 'action=attachment-add',
-                'HTTP_DEPTH'     => '0',
-        ));
+        $request = new Sabre\HTTP\Request('POST', '/calendars/' .
+            Tinebase_Core::getUser()->contact_id . '/'.
+            $event->getRecord()->container_id . '/' .
+            $event->getRecord()->uid . '.ics?action=attachment-add', [
+                'CONTENT-TYPE' => 'text/plain',
+                'CONTENT-DISPOSITION' => 'attachment;filename="agenda.html"',
+                'DEPTH'     => '0',
+        ]);
         
         $agenda = 'GODDBYE WORLD';
         $request->setBody($agenda);
@@ -181,7 +169,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $attachments = Tinebase_FileSystem_RecordAttachments::getInstance()
         ->getRecordAttachments($event->getRecord());
         
-        $this->assertEquals('HTTP/1.1 201 Created', $this->response->status);
+        $this->assertSame(201, $this->response->status);
         $this->assertStringContainsString('ATTACH;MANAGED-ID='. sha1($agenda), $vcalendar, $vcalendar);
         $this->assertEquals(1, $attachments->count());
         $this->assertEquals('agenda.html', $attachments[0]->name);
@@ -194,17 +182,14 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $event = $this->calDAVTests->createEventWithAttachment();
         $attachmentNode = $event->getRecord()->attachments->getFirstRecord();
         
-        $request = new Tine20\HTTP\Request(array(
-            'HTTP_CONTENT_TYPE' => 'text/plain',
-            'HTTP_CONTENT_DISPOSITION' => 'attachment;filename=agenda.txt',
-            'REQUEST_METHOD' => 'POST',
-            'REQUEST_URI'    => '/calendars/' .
+        $request = new Sabre\HTTP\Request('POST', '/calendars/' .
             Tinebase_Core::getUser()->contact_id . '/'.
             $event->getRecord()->container_id . '/' .
-            $event->getRecord()->uid . '.ics?action=attachment-update&managed-id='.$attachmentNode->hash,
-            'QUERY_STRING'   => 'action=attachment-update&managed-id='.$attachmentNode->hash,
-            'HTTP_DEPTH'     => '0',
-        ));
+            $event->getRecord()->uid . '.ics?action=attachment-update&managed-id='.$attachmentNode->hash, [
+            'CONTENT-TYPE' => 'text/plain',
+            'CONTENT-DISPOSITION' => 'attachment;filename=agenda.txt',
+            'DEPTH'     => '0',
+        ]);
         
         $agenda = 'GODDBYE WORLD';
         $request->setBody($agenda);
@@ -223,17 +208,14 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $event = $this->calDAVTests->createEventWithAttachment();
         $attachmentNode = $event->getRecord()->attachments->getFirstRecord();
         
-        $request = new Tine20\HTTP\Request(array(
-                'HTTP_CONTENT_TYPE' => 'text/plain',
-                'HTTP_CONTENT_DISPOSITION' => 'attachment;filename=agenda.txt',
-                'REQUEST_METHOD' => 'POST',
-                'REQUEST_URI'    => '/calendars/' .
-                Tinebase_Core::getUser()->contact_id . '/'.
-                $event->getRecord()->container_id . '/' .
-                $event->getRecord()->uid . '.ics?action=attachment-remove&managed-id='.$attachmentNode->hash,
-                'QUERY_STRING'   => 'action=attachment-remove&managed-id='.$attachmentNode->hash,
-                'HTTP_DEPTH'     => '0',
-        ));
+        $request = new Sabre\HTTP\Request('POST', '/calendars/' .
+            Tinebase_Core::getUser()->contact_id . '/'.
+            $event->getRecord()->container_id . '/' .
+            $event->getRecord()->uid . '.ics?action=attachment-remove&managed-id='.$attachmentNode->hash, [
+                'CONTENT-TYPE' => 'text/plain',
+                'CONTENT-DISPOSITION' => 'attachment;filename=agenda.txt',
+                'DEPTH'     => '0',
+        ]);
         
         $vcalendar = $this->_execAndGetVCalendarFromRequest($request);
         $this->assertStringNotContainsString('ATTACH;MANAGED-ID=', $vcalendar, $vcalendar);
@@ -245,7 +227,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     /**
      * exec request and get vcalendar
      *
-     * @param Tine20\HTTP\Request $request
+     * @param Sabre\HTTP\Request $request
      * @return string
      */
     protected function _execAndGetVCalendarFromRequest($request)
@@ -294,29 +276,25 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $event = $this->calDAVTests->testCreateEventWithInternalOrganizer();
         
         $body = '';
-        $request = new Tine20\HTTP\Request(array(
-                'REQUEST_METHOD' => 'MKCOL',
-                'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/dropbox/' . 
+        $request = new Sabre\HTTP\Request('MKCOL', '/calendars/' . Tinebase_Core::getUser()->contact_id . '/dropbox/' .
                     $event->getRecord()->getId() . '.dropbox'
-        ));
+        );
         $request->setBody($body);
         
         $this->server->httpRequest = $request;
         $this->server->exec();
         
         // attachment folder is managed by tine20 itself
-        $this->assertEquals('HTTP/1.1 405 Method Not Allowed', $this->response->status);
+        $this->assertSame(405, $this->response->status);
     }
     
     public function testDropBoxPut()
     {
         $event = $this->calDAVTests->testCreateEventWithInternalOrganizer();
     
-        $request = new Tine20\HTTP\Request(array(
-                'REQUEST_METHOD' => 'PUT',
-                'REQUEST_URI'    => '/calendars/' . Tinebase_Core::getUser()->contact_id . '/dropbox/' .
+        $request = new Sabre\HTTP\Request('PUT', '/calendars/' . Tinebase_Core::getUser()->contact_id . '/dropbox/' .
                 $event->getRecord()->getId() . '.dropbox/agenda.txt'
-        ));
+        );
         
         $agenda = 'HELLO WORLD';
         $request->setBody($agenda);

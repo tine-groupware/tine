@@ -351,16 +351,18 @@ class Tinebase_Log_Formatter extends Zend_Log_Formatter_Simple
         $logruntime = $this->_getLogRunTime(false);
         $logdifftime = $this->_getLogDiffTime(false);
         return [
-            'message' => isset($event['message']) ? str_replace($this->_search, $this->_replace, $event['message']) : '',
-            'timestamp' => isset($event['timestamp']) ? $event['timestamp'] : '',
-            'priority' => isset($event['priority']) ? $event['priority'] : '',
-            'priorityName' => isset($event['priorityName']) ? $event['priorityName'] : '',
+            'message' => isset($event['message']) ? Tinebase_Helper::mbConvertTo(
+                str_replace($this->_search, $this->_replace, $event['message'])
+            ) : '',
+            'timestamp' => $event['timestamp'] ?? '',
+            'priority' => $event['priority'] ?? '',
+            'priorityName' => $event['priorityName'] ?? '',
             'user' => self::getUsername(),
-            'transaction_id' => (string) self::$_transactionId,
-            'request_id' => (string) self::$_requestId,
+            'transaction_id' => self::$_transactionId,
+            'request_id' => self::$_requestId,
             'logdifftime' => $logdifftime,
             'logruntime' => $logruntime,
-            // TODO add method
+            // TODO add method?
             // 'method' => self::$_method
         ];
     }

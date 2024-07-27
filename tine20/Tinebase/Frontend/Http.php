@@ -130,8 +130,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         }
 
-        $request = new Tine20\HTTP\Request();
-        $redirectUrl = str_replace('index.php', '', $request->getAbsoluteUri());
+        $redirectUrl = str_replace('index.php', '', Tinebase_Core::getUrl());
 
         // authentication failed
         if ($success !== TRUE) {
