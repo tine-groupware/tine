@@ -25,6 +25,7 @@ DirectoryIndex index.php
 
 <IfModule mod_rewrite.c>
     RewriteEngine on
+    #SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1   # OwnCloud compatibility layer if wrong username/password (Tine ocs needs PHP_AUTH env)
 
     # ActiveSync
     RewriteRule ^Microsoft-Server-ActiveSync index.php?frontend=activesync         [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]

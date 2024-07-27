@@ -184,7 +184,9 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Tine20\DAV\ServerPlugin
      * @return mixed|null
      */
     protected function getOwnCloudVersion() {
-        // Mozilla/5.0 (Macintosh) mirall/2.2.4 (build 3709)
+        // Windows: Mozilla/5.0 (Macintosh) mirall/2.2.4 (build 3709)
+	// Android: Mozilla/5.0 (Android) ownCloud-android/3.0.4
+	// iOS: Mozilla/5.0 (iOS) Owncloud iOs Client/3.2.0 (xxxxx)
         /* @var $request \Zend\Http\PhpEnvironment\Request */
         $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
 
@@ -205,7 +207,7 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Tine20\DAV\ServerPlugin
 
         $match = [];
 
-        if (!preg_match('/mirall\/(\d+\.\d+\.\d+)/', $useragent, $match)) {
+        if (!preg_match('/(mirall|ownCloud-android|Owncloud\sOs\sClient)\/(\d+\.\d+\.\d+)/', $useragent, $match)) {
             return null;
         }
 
