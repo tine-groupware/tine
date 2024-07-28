@@ -10,9 +10,6 @@
  *
  */
 
-use Sabre\DAV\INode;
-use Sabre\DAV\PropFind;
-
 /**
  * ownCloud Integrator plugin
  *
@@ -21,7 +18,7 @@ use Sabre\DAV\PropFind;
  * @package     Tinebase
  * @subpackage  WebDAV
  */
-class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
+class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
 {
 
     const NS_OWNCLOUD = 'http://owncloud.org/ns';
@@ -38,27 +35,32 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
      */
     const OWNCLOUD_MAX_VERSION = '100.0.0';
 
+    private $_clientVersion = false;
+    private $_clientPlatform = 'mirall';
+
     /**
      * Reference to server object
      *
-     * @var \Sabre\DAV\Server
+     * @var Sabre\DAV\Server
      */
     private $server;
 
     /**
      * Initializes the plugin
      *
-     * @param \Sabre\DAV\Server $server
+     * @param Sabre\DAV\Server $server
      * @return void
      */
-    public function initialize(\Sabre\DAV\Server $server)
+    public function initialize(Sabre\DAV\Server $server)
     {
         $this->server = $server;
 
-        $server->on('propFind', array($this, 'propFind'));
+        $server->subscribeEvent('beforeGetProperties', array($this, 'beforeGetProperties'));
+
+        $this->getOwnCloudVersion(); // get/set client version and platform
 
         /* Namespaces */
-        $server->xml->namespaceMap[self::NS_OWNCLOUD] = 'owncloud';
+        $server->xmlNamespaces[self::NS_OWNCLOUD] = ($this->_clientPlatform == 'iOS') ? 'oc' : 'owncloud';
 
         array_push($server->protectedProperties,
             '{' . self::NS_OWNCLOUD . '}id'
@@ -71,10 +73,23 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
         );
     }
 
-    public function propFind(PropFind $propFind, INode $node)
-    {
-        $version = $this->getOwnCloudVersion();
-        if ($version !== null && !$this->isValidOwnCloudVersion()) {
+    /**
+     * Adds ownCloud specific properties
+     *
+     * @param string $path
+     * @param \Sabre\DAV\INode $node
+     * @param array $requestedProperties
+     * @param array $returnedProperties
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    public function beforeGetProperties(
+        $path,
+        Sabre\DAV\INode $node,
+        array &$requestedProperties,
+        array &$returnedProperties
+    ) {
+        if ($this->_clientVersion !== null && !$this->isValidOwnCloudVersion()) {
             $message = sprintf(
                 '%s::%s OwnCloud client min version is "%s"!',
                 __METHOD__,
@@ -84,46 +99,64 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
 
             Tinebase_Core::getLogger()->debug($message);
             throw new InvalidArgumentException($message);
-        } elseif (!$version) {
+        } elseif (!$this->_clientVersion) {
             // If it's not even an owncloud version, don't add any owncloud specific features here.
             return;
         }
 
-        $propFind->handle('{' . self::NS_OWNCLOUD . '}id',
-            $node instanceof Tinebase_Frontend_WebDAV_Node ? $node->getId() :
-                // the path does not change for the other nodes => hence the id is "static"
-                sha1($propFind->getPath()));
+        $id = '{' . self::NS_OWNCLOUD . '}id';
 
-        $propFind->handle('{' . self::NS_OWNCLOUD . '}permissions', function() use($node) {
-            $permission = 'S';
+        if (in_array($id, $requestedProperties)) {
+            unset($requestedProperties[array_search($id, $requestedProperties)]);
+            if ($node instanceof Tinebase_Frontend_WebDAV_Node) {
+                $returnedProperties[200][$id] = $node->getId();
+            } else {
+                // the path does not change for the other nodes => hence the id is "static"
+                $returnedProperties[200][$id] = sha1($path);
+            }
+        }
+
+        $permission = '{' . self::NS_OWNCLOUD . '}permissions';
+        if (in_array($permission, $requestedProperties)) {
+            unset($requestedProperties[array_search($permission, $requestedProperties)]);
+            $returnedProperties[200][$permission] = 'S';
             if ($node instanceof Tinebase_Frontend_WebDAV_Node && ($fNode = $node->getNode())) {
                 $grants = Tinebase_FileSystem::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $fNode);
                 if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN}) {
-                    $permission .= 'WCKDR';
+                    $returnedProperties[200][$permission] .= 'WCKDR';
                 } else {
                     if ($grants->{Tinebase_Model_Grants::GRANT_DELETE}) {
-                        $permission .= 'D';
+                        $returnedProperties[200][$permission] .= 'D';
                     }
                     if ($grants->{Tinebase_Model_Grants::GRANT_EDIT}) {
-                        $permission .= 'W';
+                        $returnedProperties[200][$permission] .= 'W';
                     }
                     if ($grants->{Tinebase_Model_Grants::GRANT_ADD}) {
-                        $permission .= 'CK';
+                        $returnedProperties[200][$permission] .= 'CK';
                     }
                     if ($grants->{Tinebase_Model_Grants::GRANT_PUBLISH}) {
-                        $permission .= 'R';
+                        $returnedProperties[200][$permission] .= 'R';
                     }
                 }
             }
-            return $permission;
-        });
+        }
 
-        $propFind->handle('{' . self::NS_OWNCLOUD . '}data-fingerprint', '');
-        $propFind->handle('{' . self::NS_OWNCLOUD . '}share-types', '');
+        $fingerPrint = '{' . self::NS_OWNCLOUD . '}data-fingerprint';
+        if (in_array($fingerPrint, $requestedProperties)) {
+            unset($requestedProperties[array_search($fingerPrint, $requestedProperties)]);
+            $returnedProperties[200][$fingerPrint] = '';
+        }
 
-
-        if ($node instanceof Tinebase_Frontend_WebDAV_Node || $node instanceof Filemanager_Frontend_WebDAV) {
-            $propFind->handle('{' . self::NS_OWNCLOUD . '}privatelink', function() use ($node) {
+        $shareTypes = '{' . self::NS_OWNCLOUD . '}share-types';
+        if (in_array($shareTypes, $requestedProperties)) {
+            unset($requestedProperties[array_search($shareTypes, $requestedProperties)]);
+            $returnedProperties[200][$shareTypes] = '';
+        }
+        
+        $privateLink = '{' . self::NS_OWNCLOUD . '}privatelink';
+        if (in_array($privateLink, $requestedProperties)) {
+            if ($node instanceof Tinebase_Frontend_WebDAV_Node || $node instanceof Filemanager_Frontend_WebDAV) {
+                unset($requestedProperties[array_search($shareTypes, $requestedProperties)]);
                 $paths = $node->getPath();
                 $splitPath = explode('/', trim($paths, '/'));
                 $paths = array_slice($splitPath, 2);
@@ -132,9 +165,10 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
                     $paths[1] = $account->accountLoginName;
                 }
                 $path = join('/', $paths);
-                return Tinebase_Core::getUrl() . '/#/Filemanager/' . $path;
-            });
+                $returnedProperties[200][$privateLink] = Tinebase_Core::getUrl() . '/#/Filemanager/' . $path;
+            }
         }
+
     }
 
     /**
@@ -143,10 +177,8 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
      */
     protected function isValidOwnCloudVersion()
     {
-        $version  = $this->getOwnCloudVersion();
-
-        return version_compare($version, static::OWNCLOUD_MIN_VERSION, 'ge')
-            && version_compare($version, static::OWNCLOUD_MAX_VERSION, 'le');
+        return version_compare($this->_clientVersion, static::OWNCLOUD_MIN_VERSION, 'ge')
+            && version_compare($this->_clientVersion, static::OWNCLOUD_MAX_VERSION, 'le');
     }
 
     /**
@@ -156,8 +188,8 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
      */
     protected function getOwnCloudVersion() {
         // Windows: Mozilla/5.0 (Macintosh) mirall/2.2.4 (build 3709)
-	// Android: Mozilla/5.0 (Android) ownCloud-android/3.0.4
-	// iOS: Mozilla/5.0 (iOS) Owncloud iOs Client/3.2.0 (xxxxx)
+        // Android: Mozilla/5.0 (Android) ownCloud-android/3.0.4 
+        // iOs: ownCloudApp/12.2.1 (App/291; iOS/17.5.1; iPhone)
         /* @var $request \Zend\Http\PhpEnvironment\Request */
         $request = Tinebase_Core::get(Tinebase_Core::REQUEST);
 
@@ -178,7 +210,7 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
 
         $match = [];
 
-        if (!preg_match('/(mirall|ownCloud-android|Owncloud\sOs\sClient)\/(\d+\.\d+\.\d+)/', $useragent, $match)) {
+        if (!preg_match('/(mirall|ownCloud-android|ownCloudApp)\/(\d+\.\d+\.\d+)/', $useragent, $match)) {
             return null;
         }
 
@@ -187,6 +219,17 @@ class Tinebase_WebDav_Plugin_OwnCloud extends \Sabre\DAV\ServerPlugin
         if ($version === '') {
             $version = null;
         }
+
+        $this->_clientVersion = $version;
+
+        $platform = 'mirall';
+        if ($match[1] == 'ownCloud-android') {
+            $platform = 'Android';
+        }
+        else if (($match[1] == 'ownCloudApp') && ((strpos($useragent, 'iPad') > 0) || (strpos($useragent, 'iPhone') > 0))) {
+             $platform = 'iOS';
+        }
+        $this->_clientPlatform = $platform;
 
         return $version;
     }
