@@ -35,7 +35,7 @@ class Tinebase_WebDav_Plugin_OwnCloud extends Sabre\DAV\ServerPlugin
      */
     const OWNCLOUD_MAX_VERSION = '100.0.0';
 
-    private $_clientVersion = false;
+    private $_clientVersion = null;
     private $_clientPlatform = 'mirall';
 
     /**
