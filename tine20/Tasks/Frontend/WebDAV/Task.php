@@ -47,18 +47,20 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
      * Constructor 
      *
      * @param Tinebase_Model_Container $_container
-     * @param string|Tasks_Model_Task  $_task  the id of a event or the event itself
+     * @param null|string|Tasks_Model_Task  $_task  the id of a event or the event itself
      */
     public function __construct(Tinebase_Model_Container $_container, $_task = null) 
     {
         $this->_container = $_container;
         $this->_task      = $_task;
-        
-        if (! $this->_task instanceof Tasks_Model_Task) {
-            $this->_task = ($pos = strpos($this->_task, '.')) === false ? $this->_task : substr($this->_task, 0, $pos);
-        } else {
-            // resolve alarms
-            Tasks_Controller_Task::getInstance()->getAlarms($this->_task);
+
+        if ($_task) {
+            if (!$this->_task instanceof Tasks_Model_Task) {
+                $this->_task = ($pos = strpos($this->_task, '.')) === false ? $this->_task : substr($this->_task, 0, $pos);
+            } else {
+                // resolve alarms
+                Tasks_Controller_Task::getInstance()->getAlarms($this->_task);
+            }
         }
         
         list($backend, $version) = Tasks_Convert_Task_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
@@ -255,26 +257,11 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
      *   * 'protected' (optional), indicating that this ACE is not allowed to 
      *      be updated. 
      * 
-     * @todo add the real logic
-     * @return array 
+     * @return array
      */
     public function getACL() 
     {
-        return null;
-        
-        return array(
-            array(
-                'privilege' => '{DAV:}read',
-                'principal' => $this->addressBookInfo['principaluri'],
-                'protected' => true,
-            ),
-            array(
-                'privilege' => '{DAV:}write',
-                'principal' => $this->addressBookInfo['principaluri'],
-                'protected' => true,
-            ),
-        );
-
+        return (new Tasks_Frontend_WebDAV_Container($this->_container))->getACL();
     }
     
     /**

@@ -47,27 +47,21 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
     /**
      * Constructor 
      * 
-     * @param  string|Calendar_Model_Event  $_event  the id of a event or the event itself 
+     * @param Tinebase_Model_Container $_container
+     * @param null|string|Calendar_Model_Event  $_event  the id of a event or the event itself
      */
     public function __construct(Tinebase_Model_Container $_container, $_event = null) 
     {
         $this->_container = $_container;
         $this->_event     = $_event;
         
-        if (! $this->_event instanceof Calendar_Model_Event) {
+        if ($_event && ! $this->_event instanceof Calendar_Model_Event) {
             $this->_event = ($pos = strpos($this->_event, '.')) === false ? $this->_event : substr($this->_event, 0, $pos);
         }
-        
-        if (isset($_SERVER['HTTP_USER_AGENT'])) {
-            list($backend, $version) = Calendar_Convert_Event_VCalendar_Factory::parseUserAgent($_SERVER['HTTP_USER_AGENT']);
-        } else {
-            $backend = Calendar_Convert_Event_VCalendar_Factory::CLIENT_GENERIC;
-            $version = null;
-        }
-        
+
         Calendar_Controller_MSEventFacade::getInstance()->assertEventFacadeParams($this->_container);
     }
-    
+
     /**
      * add attachment to event
      * 

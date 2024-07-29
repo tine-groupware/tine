@@ -1411,8 +1411,13 @@ class Calendar_Frontend_WebDAV_EventTest extends Calendar_TestCase
             $attachmentNode = $attachmentController->addRecordAttachment($event->getRecord(), "agenda{$suffix}.html", $agenda);
         }
     
-        $event = new Calendar_Frontend_WebDAV_Event($event->getContainer(), $event->getRecord()->getId());
-    
-        return $event;
+        return new Calendar_Frontend_WebDAV_Event($event->getContainer(), $event->getRecord()->getId());
+    }
+
+    public function testGetAcl()
+    {
+        $frontend = new Calendar_Frontend_WebDAV_Event($this->objects['initialContainer']);
+        $acl = $frontend->getAcl();
+        self::assertNotEmpty($acl);
     }
 }

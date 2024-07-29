@@ -248,4 +248,11 @@ class Addressbook_Frontend_WebDAV_ContactTest extends TestCase
         
         $this->assertEquals($contact->getName(), $record->getId() . '.vcf');
     }
+
+    public function testGetAcl()
+    {
+        $frontend = new Addressbook_Frontend_WebDAV_Contact($this->objects['initialContainer']);
+        $acl = $frontend->getAcl();
+        self::assertNotEmpty($acl);
+    }
 }
