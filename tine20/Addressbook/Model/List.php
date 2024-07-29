@@ -372,4 +372,54 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
     {
         return true;
     }
+
+    /**
+     * get lists recipient token
+     *
+     * @return array
+     */
+    public function getRecipientTokens(): array
+    {
+        $listMemberEmails = [];
+
+        // always get member contacts
+        if (isset($this->members) && count($this->members) > 0) {
+            try {
+                $contacts = Addressbook_Controller_Contact::getInstance()->getMultiple($this->members);
+                foreach ($contacts as $contact) {
+                    $listMemberEmails = array_merge($listMemberEmails, $contact->getRecipientTokens(true));
+                }
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' get members failed : ' . $e->getMessage());
+            }
+        }
+
+        if (count($listMemberEmails) === 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                    . " List : " . $this->name . " has no member emails found");
+            }
+            if (empty($this->email)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+                    Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
+                        . " Skipping, no email addresses found in list ...");
+                }
+                return [];
+            }
+        }
+
+        $useAsMailinglist = isset($this['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST])
+            && $this['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] == 1;
+
+        return  [[
+            "n_fileas" => $this->name ?? '',
+            "name" => $this->name ?? '',
+            "type" =>  $useAsMailinglist ? 'mailingList' : $this->type,
+            "email" => $this->email ?? '',
+            "email_type_field" =>  '',
+            "contact_record" => $this->toArray(),
+            "emails" => $listMemberEmails
+        ]];
+    }
 }

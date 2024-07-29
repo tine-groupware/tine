@@ -12,22 +12,27 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
         this.recipientGrid = this.editDialog.recipientGrid;
         if (!this.recipientGrid) return;
         if (this.editDialog.massMailingPlugins.includes('poll')) return;
-        
+        this.selectedDataIntendedPurpose = '';
+
         this.record = this.editDialog.record;
         this.manageConsentRecordPicker = new Tine.Tinebase.widgets.form.RecordPickerComboBox({
             fieldLabel: this.app.i18n.gettext('Data Intended purpose of this mass mailing'),
             name: 'dataIntendedPurposes',
             width: 300,
-            blurOnSelect: true,
             allowBlank: true,
             recordClass: Tine.GDPR.Model.DataIntendedPurpose,
             recordProxy: Tine.GDPR.dataintendedpurposeBackend,
             listeners: {
                 scope: this,
                 'select': (combo, record, index) => {
-                    //TODO: load template from twig config?
+                    //reset the search combo
+                    this.recipientGrid.searchCombo.store.load({
+                        params: this.recipientGrid.searchCombo.getParams('')
+                    });
                     this.selectedDataIntendedPurpose = record;
-                    this.recipientGrid.updateMassMailingRecipients();
+                    if (this.selectedDataIntendedPurpose) {
+                        this.showDipSelectPicker(this.selectedDataIntendedPurpose);
+                    }
                 }
             }
         });
@@ -37,12 +42,13 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
     },
     
     switchMassMailingMode(active) {
+        if (active) this.showDipSelectPicker();
+
         this.editDialog.massMailingMode = active;
         if (this.recipientGrid) this.recipientGrid.massMailingMode = active;
         this.editDialog.massMailingInfoText.setVisible(active);
         this.manageConsentRecordPicker.setVisible(active);
         this.updateMessageBody(active);
-        if (active) this.showDipSelectPicker();
         
         this.recipientGrid.view.refresh();
         this.editDialog.doLayout();
@@ -143,29 +149,53 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
         return {isValid: true, tip: 'valid token'};
     },
     
-    showDipSelectPicker() {
-        const dialog = new Tine.Tinebase.dialog.Dialog({
+    showDipSelectPicker: function(defaultDataIntendedPurpose = '') {
+        const isMassMailingMode = this.editDialog.massMailingMode;
+        this.dipSelectPicker = new Tine.Tinebase.dialog.Dialog({
             windowTitle: this.app.i18n._('Please select a data intended purpose'),
             listeners: {
-                apply: (record) => {
-                    this.manageConsentRecordPicker.setValue(record);
-                    this.selectedDataIntendedPurpose = record;
+                beforeapply: (data) => {
+                    if (this.selectedDataIntendedPurpose?.id && !data.recipientMode) {
+                        Ext.MessageBox.alert(i18n._('Errors'), i18n._('You need to select an option!'));
+                        return false;
+                    }
+                },
+                apply: async (data) => {
+                    this.manageConsentRecordPicker.setValue(this.selectedDataIntendedPurpose);
+                    if (this.selectedDataIntendedPurpose?.id && data.recipientMode === 'withRecipients') {
+                        const { results: tokens } = await Tine.GDPR.getRecipientTokensByIntendedPurpose(this.selectedDataIntendedPurpose?.id)
+                        await this.recipientGrid.updateRecipientsToken(null, tokens);
+                    }
                     this.recipientGrid.updateMassMailingRecipients();
+                    //reset the search combo
+                    this.recipientGrid.searchCombo.store.load({
+                        params: this.recipientGrid.searchCombo.getParams('')
+                    });
                 },
                 cancel: ()  => {
-                    this.editDialog.onToggleMassMailing();
+                    this.selectedDataIntendedPurpose = '';
+                    this.manageConsentRecordPicker.setValue(this.selectedDataIntendedPurpose);
+
+                    if (!isMassMailingMode) {
+                        this.editDialog.onToggleMassMailing();
+                    }
                 }
             },
             getEventData: function (eventName) {
-                if (eventName === 'apply') return this.getForm().findField('dataIntendedPurpose').selectedRecord;
+                const option = this.getForm().findField('optionGroup').getValue();
+                if (eventName === 'apply') return {
+                    recipientMode: option ? option.getGroupValue() : '',
+                }
             },
             items: [{
                 layout: 'form',
                 frame: true,
                 width: '100%',
-                labelWidth: 300,
                 labelAlign: 'top',
                 padding: '10px',
+                defaults: {
+                    columnWidth: 1,
+                },
                 items: [
                     {
                         xtype: 'label',
@@ -173,17 +203,53 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
                             + "2. " + this.app.i18n._("The recipients with 'Must not be contacted' will be removed when no intended purpose is selected."),
                     },
                     Tine.widgets.form.RecordPickerManager.get('GDPR', 'DataIntendedPurpose',
-                        { name: 'dataIntendedPurpose'})
+                        { 
+                            name: 'dataIntendedPurpose',
+                            anchor: '100%',
+                            value: defaultDataIntendedPurpose,
+                            listeners: {
+                                scope: this,
+                                select: (combo, invoiceRecord, index) => {
+                                    this.selectedDataIntendedPurpose = invoiceRecord;
+                                    this.dipSelectPicker.ownerCt.optionGroup.setDisabled(!this.selectedDataIntendedPurpose);
+                                },
+                            }
+                        }),
+                    {
+                        border: false,
+                        layout: 'fit',
+                        flex: 1,
+                        autoScroll: true,
+                        items: [{
+                            xtype: 'radiogroup',
+                            columns: 1,
+                            name: 'optionGroup',
+                            ref: '../../../optionGroup',
+                            disabled: this.selectedDataIntendedPurpose === '',
+                            items: [
+                                {
+                                    boxLabel: this.app.i18n._('Add all contacts having agreed to this purpose'),
+                                    name: 'rb-dipr',
+                                    inputValue: 'withRecipients'
+                                }, {
+                                    boxLabel: this.app.i18n._('Compose mass mail without recipients'),
+                                    name: 'rb-dipr',
+                                    inputValue: 'withoutRecipients'
+                                },
+                            ]
+                        }]
+                    }
                 ]
-            }],
+            }
+            ],
             openWindow: function (config) {
                 if (!this.window) {
                     this.window = Tine.WindowFactory.getWindow(Ext.apply({
                         title: this.windowTitle,
                         closeAction: 'close',
                         modal: true,
-                        width: 400,
-                        height: 200,
+                        width: 500,
+                        height: 250,
                         layout: 'fit',
                         items: [ this]
                     }, config || {}));
@@ -191,7 +257,7 @@ Tine.GDPR.Felamimail.MessageEditDialogPlugin.prototype = {
                 return this.window;
             }
         });
-        dialog.openWindow();
+        this.dipSelectPicker.openWindow();
     }
 }
 Ext.preg('Tine.GDPR.Felamimail.MessageEditDialogPlugin', Tine.GDPR.Felamimail.MessageEditDialogPlugin);

@@ -2957,19 +2957,14 @@ Steuernummer 33/111/32212";
      * test Search Contacts By Recipient data
      *
      */
-    public function testSearchContactsByRecipientsToken()
+    public function testSearchRecipientTokensByEmailArrays()
     {
         Addressbook_Controller_List::destroyInstance();
-        $recipientData = [
-            [
-                "n_fileas" => '',
-                "name" => Tinebase_Core::getUser()->accountFullName,
-                "type" =>  '',
-                "email" => Tinebase_Core::getUser()->accountEmailAddress,
-                "email_type_field" =>  '',
-            ]
-        ];
-        $result = $this->_uit->searchContactsByRecipientsToken($recipientData);
+
+        $result = $this->_uit->searchRecipientTokensByEmailArrays(
+            [Tinebase_Core::getUser()->accountEmailAddress],
+            [Tinebase_Core::getUser()->accountFullName]
+        );
 
         static::assertEquals(1, $result['totalcount']);
     }

@@ -509,7 +509,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     index ++;
                     break;
                 default :
-                    const {results : tokens} = await Tine.Addressbook.searchContactsByRecipientsToken([existingToken]);
+                    const {results : tokens} = await Tine.Addressbook.searchRecipientTokensByEmailArrays([existingToken.email], [existingToken.name]);
                     const options = [];
                     const emailFields = Tine.Addressbook.Model.EmailAddress.prototype.getEmailFields();
                     _.each(tokens, (token) => {
@@ -985,7 +985,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 contactsToResolve.push({result: result, token: token, record: record});
             }
         })
-        
+
         const result = await this.showInvalidContactDialog(contactsToResolve);
         if (result && contactsToResolve.length > 0) {
             const records = _.map(contactsToResolve, 'record');

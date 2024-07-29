@@ -126,7 +126,7 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
             $names = array_map(function($address)  {return $address['name'];},  $addressList);
             
             if (count($addressList) > 0) {
-                $contacts = Addressbook_Controller_Contact::getInstance()->searchContactsByEmailArrays($emails, $names);
+                $tokens = Addressbook_Controller_Contact::getInstance()->searchRecipientTokensByEmailArrays($emails, $names);
                 // add parsed address data to addressList
                 foreach ($addressList as $parsedEmail) {
                     $address = [
@@ -137,14 +137,13 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
                         "email_type_field" =>  '',
                         "contact_record" => ''
                     ];
-                    
-                    $possibleAddresses = Addressbook_Controller_Contact::getInstance()->getContactsRecipientToken($contacts);
-                    foreach ($possibleAddresses as $possibleAddress) {
-                        if ($parsedEmail['address'] === $possibleAddress['email'] && $parsedEmail['name'] === $possibleAddress['n_fileas']) {
-                            $address = $possibleAddress;
-                        }
+
+                    $existingToken = array_filter($tokens, fn($token) =>
+                       $parsedEmail['address'] === $token['email'] && $parsedEmail['name'] === $token['n_fileas']
+                    );
+                    if ($existingToken) {
+                        $address = $existingToken;
                     }
-                    
                     $resolvedAddressList[] = $address;
                 }
             }
