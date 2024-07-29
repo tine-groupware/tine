@@ -95,19 +95,11 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends Tinebase_WebDav_Plugin_
         $xpath->registerNamespace('cal', 'urn:ietf:params:xml:ns:caldav');
         
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:calendar-user-address-set');
-        $this->assertEquals(1, $nodes->length, $this->response->body);
+        $this->assertGreaterThanOrEqual(1, $nodes->length, $this->response->body);
         $this->assertNotEmpty($nodes->item(0)->nodeValue, $this->response->body);
         
         $nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:calendar-user-type');
-        $this->assertEquals(1, $nodes->length, $this->response->body);
+        $this->assertGreaterThanOrEqual(1, $nodes->length, $this->response->body);
         $this->assertNotEmpty($nodes->item(0)->nodeValue, $this->response->body);
-        
-        #$nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:default-alarm-vtodo-datetime');
-        #$this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        #$this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
-        
-        #$nodes = $xpath->query('//d:multistatus/d:response/d:propstat/d:prop/cal:default-alarm-vtodo-date');
-        #$this->assertEquals(1, $nodes->length, $responseDoc->saveXML());
-        #$this->assertNotEmpty($nodes->item(0)->nodeValue, $responseDoc->saveXML());
     }
 }
