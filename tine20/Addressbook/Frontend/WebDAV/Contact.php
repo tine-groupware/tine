@@ -189,26 +189,11 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
      *   * 'protected' (optional), indicating that this ACE is not allowed to 
      *      be updated. 
      * 
-     * @todo add the real logic
      * @return array|null
      */
     public function getACL() 
     {
-        return null;
-        
-        /*return array(
-            array(
-                'privilege' => '{DAV:}read',
-                'principal' => $this->addressBookInfo['principaluri'],
-                'protected' => true,
-            ),
-            array(
-                'privilege' => '{DAV:}write',
-                'principal' => $this->addressBookInfo['principaluri'],
-                'protected' => true,
-            ),
-        );*/
-
+        return (new Addressbook_Frontend_WebDAV_Container($this->_container))->getACL();
     }
     
     /**
@@ -216,10 +201,9 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
      *
      * @return string
      */
-    public function getContentType() {
-    
+    public function getContentType()
+    {
         return 'text/vcard';
-    
     }
     
     /**
