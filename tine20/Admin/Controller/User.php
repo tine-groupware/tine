@@ -226,6 +226,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $currentGroups = ! isset($_user->groups)
                 ? Admin_Controller_Group::getInstance()->getGroupMemberships($user->getId())
                 : $_user->groups;
+            $currentGroups = $currentGroups === '' ? [] : $currentGroups;
             $groups = array_unique(array_merge(array($user->accountPrimaryGroup), $currentGroups));
             Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
 
