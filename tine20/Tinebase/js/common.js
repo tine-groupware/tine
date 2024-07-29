@@ -115,9 +115,10 @@ Tine.Tinebase.common = {
      * @return {String} localised date and time
      */
     dateTimeRenderer: function ($_iso8601, metadata) {
+        const data = Tine.Tinebase.common.dateRenderer.call(this, $_iso8601, metadata) + ' '
+            + Tine.Tinebase.common.timeRenderer.call(this, $_iso8601, metadata);
         if (metadata) metadata.css = 'tine-gird-cell-datetime';
-        return Tine.Tinebase.common.dateRenderer.call(this, $_iso8601) + ' '
-            + Tine.Tinebase.common.timeRenderer.call(this, $_iso8601);
+        return data;
     },
 
     /**
@@ -132,12 +133,16 @@ Tine.Tinebase.common = {
     dateRenderer: function (date, metadata) {
         const format = this?.format ? (this.format?.Date || this.format) : ['wkday', 'medium'];
         const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Long);
+        const formatDate = (key) => key === 'wkday'
+            ? dateObj.format('l').substr(0, 2)
+            : Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key));
         
-        if (_.isObject(metadata)) metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
+        if (_.isObject(metadata)) {
+            metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
+        }
         
         return dateObj ? _.map(format, (key) => {
-            return `<span class="date-renderer-${key}">${key === 'wkday' ? dateObj.format('l').substr(0,2) :
-                Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key))}</span>`;
+            return metadata ? `<span class="date-renderer-${key}">${formatDate(key)}</span>` : formatDate(key);
         }).join(' ') : '';
     },
   
@@ -198,11 +203,14 @@ Tine.Tinebase.common = {
     timeRenderer: function (date, metadata) {
         const format = this?.format ? (this.format?.Time || this.format) : ['medium'];
         const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Time);
+        const formatTime = (key) => Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', key));
         
-        if (metadata) metadata.css = 'tine-gird-cell-time';
+        if (metadata) {
+            metadata.css = 'tine-gird-cell-time';
+        }
         
         return dateObj ? _.map(format, (key) => {
-            return `<span class="time-renderer-${key}">${Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', key))}</span>`;
+            return metadata ? `<span class="time-renderer-${key}">${formatTime(key)}</span>` : formatTime(key);
         }).join(' ') : '';
     },
 
