@@ -58,9 +58,7 @@
           MAX_AGE_USED_CACHE=31
           MAX_AGE_CACHE=7
       
-          cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}
-      
-          dirs=$(find . -type d -path './*' -prune -print)
+          dirs=$(find ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE} -type d -path ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/'*' -prune -print)
           for dir in $dirs; do
               if ! [ -d $dir/phpstan-cache/v2/ ]; then
                   continue
@@ -1138,9 +1136,7 @@
             MAX_AGE_USED_CACHE=31
             MAX_AGE_CACHE=7
         
-            cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}
-        
-            dirs=$(find . -type d -path './*' -prune -print)
+            dirs=$(find ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE} -type d -path ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/'*' -prune -print)
             for dir in $dirs; do
                 if ! [ -d $dir/phpstan-cache/v2/ ]; then
                     continue
