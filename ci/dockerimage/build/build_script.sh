@@ -14,7 +14,7 @@ function activateReleaseMode()
 
     echo "RELEASE: $RELEASE REVISION: $REVISION CODENAME: $CODENAME BUILDTYPE: $BUILDTYPE";
  
-    sed -i -e "s/'default' *=> *'DEVELOPMENT',/'default' => '$BUILDTYPE',/" ${TINE20ROOT}/tine20/Tinebase/Config.php
+    sed -i -e "s/self::DEFAULT_STR *=> *'DEVELOPMENT',/self::DEFAULT_STR => '$BUILDTYPE',/" ${TINE20ROOT}/tine20/Tinebase/Config.php
 
     sed -i -e "s#'TINE20_CODENAME', *Tinebase_Helper::getDevelopmentRevision()#'TINE20_CODENAME',      '$CODENAME'#" ${TINE20ROOT}/tine20/Tinebase/Core.php
     sed -i -e "s#'TINE20SETUP_CODENAME', *Tinebase_Helper::getDevelopmentRevision()#'TINE20SETUP_CODENAME',      '$CODENAME'#" ${TINE20ROOT}/tine20/Setup/Core.php
