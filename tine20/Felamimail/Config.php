@@ -338,7 +338,7 @@ class Felamimail_Config extends Tinebase_Config_Abstract
                     self::DESCRIPTION           => 'Move notifications to a subfolder via sieve',
                     //_('Move notifications to a subfolder via sieve')
                     self::TYPE                  => self::TYPE_BOOL,
-                    self::DEFAULT_STR           => false,
+                    self::DEFAULT_STR           => true,
                 ],
                 self::FEATURE_AUTOSAVE_DRAFTS   => [
                     self::LABEL                 => 'Auto-Save Drafts',

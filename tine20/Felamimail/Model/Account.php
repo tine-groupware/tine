@@ -31,6 +31,7 @@
  * @property  string $sieve_notification_move
  * @property  string $sieve_notification_move_folder
  * @property  string $sieve_hostname
+ * @property  string $sieve_forwardings
  * @property  string $migration_approved
  * @property  string $message_sent_copy_behavior
  * @property  Tinebase_Record_Abstract $contact_id
@@ -517,6 +518,25 @@ class Felamimail_Model_Account extends Tinebase_EmailUser_Model_Account
                 self::IS_VIRTUAL => true,
                 self::VALIDATORS => [
                     Zend_Filter_Input::ALLOW_EMPTY => true,
+                ],
+            ],
+            'sieve_forwardings' => [
+                self::LABEL                     => 'Sieve forwarding email addresses', // _('Sieve forwarding email addresses')
+                self::TYPE => self::TYPE_RECORDS,
+                self::VALIDATORS                => [
+                    Zend_Filter_Input::ALLOW_EMPTY      => true,
+                ],
+                self::OMIT_MOD_LOG              => true,
+                self::SYSTEM                    => true,
+                self::NULLABLE => true,
+                self::DEFAULT_VAL => null,
+                self::CONFIG => [
+                    self::APP_NAME          => 'Felamimail',
+                    self::MODEL_NAME        => Felamimail_Model_Sieve_Forward::MODEL_NAME_PART,
+                    self::REF_ID_FIELD      => 'account_id',
+                    self::RECORD_CLASS_NAME => Felamimail_Model_Sieve_Forward::class,
+                    self::CONTROLLER_CLASS_NAME => Felamimail_Controller_Sieve_Forward::class,
+                    self::DEPENDENT_RECORDS => true,
                 ],
             ],
             'sieve_hostname' => [

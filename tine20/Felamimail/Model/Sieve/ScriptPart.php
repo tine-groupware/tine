@@ -37,6 +37,9 @@ class Felamimail_Model_Sieve_ScriptPart extends Tinebase_Record_Abstract
 
     /** @var string  */
     const TYPE_CUSTOM = 'custom';
+    
+    /** @var string  */
+    const TYPE_FORWARD = 'forward';
 
     /**
      * key in $_validators/$_properties array for the field which

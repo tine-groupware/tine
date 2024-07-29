@@ -359,20 +359,62 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.saveInAdbFields = [];
         this.emailImapUser = [];
         this.aliasesGrid = [];
-        this.forwardsGrid = [];
+        this.smtpForwardsGrid = [];
+        this.sieveForwardsGrid = [];
         
         const additionConfig = {
             scope: this,
             record: this.record,
+            columnWidth: 0.5,
         };
         
         if (this.asAdminModule) {
             this.saveInAdbFields = Tine.Admin.UserEditDialog.prototype.getSaveInAddessbookFields(this, this.record.get('type') === 'system');
             this.emailImapUser = this.record.data?.email_imap_user || [];
             this.aliasesGrid = Tine.Admin.UserEditDialog.prototype.initAliasesGrid(additionConfig);
-            this.forwardsGrid = Tine.Admin.UserEditDialog.prototype.initForwardsGrid(additionConfig);
+            this.smtpForwardsGrid = Tine.Admin.UserEditDialog.prototype.initForwardsGrid(additionConfig);
+            const app = Tine.Tinebase.appMgr.get('Admin');
+            this.sieveForwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
+                Ext.apply({
+                    autoExpandColumn: 'email',
+                    quickaddMandatory: 'email',
+                    useBBar: true,
+                    frame: false,
+                    height: 200,
+                    recordClass: Tine.Felamimail.Model.Sieve_Forward,
+                    store: new Ext.data.JsonStore({
+                        fields: ['id', 'email'],
+                        id: 'id'
+                    }),
+                    onNewentry: function(value) {
+                        if (value.email === this.record.get('accountEmailAddress')) {
+                            Ext.MessageBox.show({
+                                buttons: Ext.Msg.OK,
+                                icon: Ext.MessageBox.WARNING,
+                                title: app.i18n._('Forwarding to self'),
+                                msg: app.i18n._('You are not allowed to set a forwarding e-mail address that is identical to the users primary e-mail or one of his aliases.')
+                            });
+                            return false;
+                        } else {
+                            Tine.widgets.grid.QuickaddGridPanel.prototype.onNewentry.call(this, value);
+                        }
+                    },
+                    cm: new Ext.grid.ColumnModel([{
+                        id: 'email',
+                        header: app.i18n.gettext('E-mail Forward'),
+                        width: 300,
+                        hideable: false,
+                        sortable: true,
+                        quickaddField: new Ext.form.TextField({
+                            emptyText: app.i18n.gettext('Add a forwarding address...'),
+                            vtype: 'email'
+                        }),
+                        editor: new Ext.form.TextField({allowBlank: false})
+                    }])
+                }, additionConfig))
+            ;
             const adb = Tine.Tinebase.appMgr.get('Addressbook');
-            
+
             if (Tine.Tinebase.registry.get('manageImapEmailUser') && Tine.Tinebase.registry.get('manageSmtpEmailUser')
                 && adb.featureEnabled('featureMailinglist') && this.record.get('type') === 'adblist'
             ) {
@@ -729,7 +771,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             this.testConnection('SMTP', true, true);
                         },
                         disabled: true
-                    })], [this.aliasesGrid, this.forwardsGrid]
+                    })], [this.aliasesGrid, this.smtpForwardsGrid]
                 ]
             }, {
                 title: this.app.i18n._('Sieve'),
@@ -772,6 +814,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         this.setDisabled(me.isSystemAccount());
                     }
                 }], [
+                    this.sieveForwardsGrid,
                     this.sieveNotifyGrid
                 ], [{
                     fieldLabel: this.app.i18n._('Auto-move notifications'),
@@ -1266,6 +1309,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // load sieve notification emails
         const data = this.record.data.sieve_notification_email.split(',');
         this.sieveNotifyGrid.setStoreFromArray(data.map((e) => {return {'email': e}}));
+        this.sieveForwardsGrid.store.loadData( this.record.data.sieve_forwardings);
     },
 
     /**
@@ -1292,7 +1336,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 this.aliasesGrid.setStoreFromArray(this.record.data.email_smtp_user.emailAliases);
             }
             if (this.record.data?.email_smtp_user?.emailForwards) {
-                this.forwardsGrid.setStoreFromArray(this.record.data.email_smtp_user.emailForwards);
+                this.smtpForwardsGrid.setStoreFromArray(this.record.data.email_smtp_user.emailForwards);
             }
         }
     },
@@ -1302,13 +1346,13 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (this.asAdminModule && Tine.Tinebase.registry.get('manageSmtpEmailUser')) {
             // forcing blur of quickadd grids
             this.aliasesGrid.doBlur();
-            this.forwardsGrid.doBlur();
+            this.smtpForwardsGrid.doBlur();
             if (this.record.data?.email_smtp_user?.emailAliases) {
                 this.record.data.email_smtp_user.emailAliases = this.aliasesGrid.getFromStoreAsArray();
             }
     
             if (this.record.data?.email_smtp_user?.emailForwards) {
-                this.record.data.email_smtp_user.emailForwards = this.forwardsGrid.getFromStoreAsArray();
+                this.record.data.email_smtp_user.emailForwards = this.smtpForwardsGrid.getFromStoreAsArray();
             }
             Tine.log.debug('Tine.Felamimail.AccountEditDialog::onRecordUpdate() -> setting aliases and forwards in e-mail record');
             Tine.log.debug(this.record);
@@ -1356,6 +1400,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.record.set('sieve_rules', rules);
         this.record.set('sieve_vacation', this.vacationRecord);
+        this.record.set('sieve_forwardings', this.sieveForwardsGrid.getFromStoreAsArray());
 
         // update sieve notification emails
         const notifyEmails = this.sieveNotifyGrid.getFromStoreAsArray();
