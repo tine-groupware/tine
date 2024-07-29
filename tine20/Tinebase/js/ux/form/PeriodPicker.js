@@ -73,11 +73,10 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
 
         this.getRangeCombo().setValue(this.range);
         let dateString;
-        let dateHtml = null;
 
         switch(this.range) {
             case 'day':
-                dateHtml = Tine.Tinebase.common.dateRenderer(this.startDate);
+                dateString = Tine.Tinebase.common.dateRenderer(this.startDate);
                 break;
             case 'week':
                 // NOTE: '+1' is to ensure we display the ISO8601 based week where weeks always start on monday!
@@ -94,7 +93,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
                 dateString = this.startDate.format('Y');
                 break;
         }
-        this.setPeriodText(dateHtml ?? Ext.util.Format.htmlEncode(dateString), new Date().between(this.value.from, this.value.until));
+        this.setPeriodText(dateString, new Date().between(this.value.from, this.value.until));
 
         if (JSON.stringify(this.value) !== JSON.stringify(this.startValue)) {
             this.fireEvent('change', this, this.value, this.startValue);
@@ -116,7 +115,7 @@ Ext.ux.form.PeriodPicker = Ext.extend(Ext.form.Field, {
 
     setPeriodText: function(text, isThis) {
         this.el[(isThis ? 'add' : 'remove') + 'Class']('ux-pp-this');
-        this.el.child('.ux-pp-period').update(text);
+        this.el.child('.ux-pp-period').update(Ext.util.Format.htmlEncode(text));
     },
 
     // private
