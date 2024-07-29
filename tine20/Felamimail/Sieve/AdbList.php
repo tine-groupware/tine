@@ -228,16 +228,17 @@ class Felamimail_Sieve_AdbList
                 Felamimail_Model_Sieve_ScriptPart::createFromString(
                     Felamimail_Model_Sieve_ScriptPart::TYPE_ADB_LIST, $list->getId(), $sieveRule));
         } catch (Felamimail_Exception_SieveInvalidCredentials $fesic) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' .
-                __LINE__ . ' ' . $fesic);
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $fesic);
+            }
             self::$adbListSieveAuthFailure = true;
             throw $fesic;
+        } finally {
+            if ($sieveAdminAccessActivated) {
+                Tinebase_EmailUser::removeAdminAccess();
+            }
+            unset($raii);
         }
-
-        if ($sieveAdminAccessActivated) {
-            Tinebase_EmailUser::removeAdminAccess();
-        }
-        unset($raii);
 
         return true;
     }
