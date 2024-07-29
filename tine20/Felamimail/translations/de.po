@@ -2188,7 +2188,7 @@ msgid ""
 "The recipients of this email distribution list are maintained in the "
 "list: {locationsHtml}"
 msgstr ""
-"Die Empfänger dieses Email-Verteilers werden in folgnder Liste verwaltet: "
+"Die Empfänger dieses Email-Verteilers werden in folgender Liste verwaltet: "
 "{locationsHtml}"
 
 #: Controller/MessageExpectedAnswer.php:74

@@ -50,6 +50,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Grants
      */
     protected $_backend;
 
+    /**
+     * @var bool accounts can have empty grants
+     */
+    protected bool $_allowEmptyGrants = true;
+
     const ACCOUNT_CAPABILITIES_CACHEID = 'Felamimail_Account_Capabilities';
 
     /**
