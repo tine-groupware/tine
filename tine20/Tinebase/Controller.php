@@ -2122,6 +2122,8 @@ class Tinebase_Controller extends Tinebase_Controller_Event
 
         $this->_purgeTables($beforeDate, $orderedTables);
 
+        Tinebase_Container::getInstance()->clearContainerContent();
+
         if ($doEverything) {
             // TODO optimize & activate again
             // TODO maybe add time limit (1-2 hours) save time of note when time limit is reached

@@ -5,14 +5,9 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-/**
- * Test helper
- */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Tinebase_Group
@@ -849,5 +844,34 @@ class Tinebase_ContainerTest extends TestCase
 //        );
 //        $createdContainerInResult = $result->getById($sharedContainer->getId());
 //        self::assertNotFalse($createdContainerInResult, 'container not in result!');
+    }
+
+    public function testClearContainerContent()
+    {
+        // create record in container
+        $adbContainer = $this->_getTestContainer(Addressbook_Config::APP_NAME,
+            Addressbook_Model_Contact::class);
+        $contact = Addressbook_Controller_Contact::getInstance()->create(
+            new Addressbook_Model_Contact([
+                'n_family' => 'test',
+                'container_id' => $adbContainer->getId(),
+            ]));
+
+        $containerContent = Tinebase_Container::getInstance()->getContentHistory($adbContainer);
+        self::assertCount(1, $containerContent);
+
+        // delete & purge record
+        Addressbook_Controller_Contact::getInstance()->purgeRecords(true);
+        Addressbook_Controller_Contact::getInstance()->delete([$contact->getId()]);
+        Addressbook_Controller_Contact::getInstance()->purgeRecords(false);
+
+        Tinebase_Container::getInstance()->clearContainerContent();
+
+        // records should be removed
+        self::assertCount(0, Tinebase_Container::getInstance()->getContentHistory($adbContainer));
+
+        // internal contact records should not be removed
+        self::assertGreaterThan(0, count(Tinebase_Container::getInstance()->getContentHistory(
+            Addressbook_Controller::getDefaultInternalAddressbook())));
     }
 }

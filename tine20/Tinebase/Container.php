@@ -2498,4 +2498,45 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     {
         return Tinebase_Model_Container::class;
     }
+
+    public function clearContainerContent()
+    {
+        /* @var Tinebase_Model_Container $container */
+        foreach ($this->getAll() as $container) {
+            try {
+                $appController = Tinebase_Core::getApplicationInstance($container->model);
+                if ($appController instanceof Tinebase_Controller_Record_Abstract) {
+                    $this->_clearSingleContainerContent($container, $appController);
+                }
+            } catch (Exception $e) {
+            }
+        }
+    }
+
+    protected function _clearSingleContainerContent(
+        Tinebase_Model_Container $container,
+        Tinebase_Controller_Record_Abstract $controller
+    ) {
+        // remove all content records that no longer exist in record table
+        $select = $this->getAdapter()->select()
+            ->from(['content' => $this->getContentBackend()->getTablePrefix()
+                . $this->getContentBackend()->getTableName()], ['id'])
+            ->joinLeft(
+                ['records' => $controller->getBackend()->getTablePrefix()
+                    . $controller->getBackend()->getTableName()],
+                "{$this->_db->quoteIdentifier('records.id')}" .
+                    "= {$this->_db->quoteIdentifier('content.record_id')}"
+            )
+            ->where("{$this->_db->quoteIdentifier('content.container_id')} = ?", $container->getId())
+            ->where("{$this->_db->quoteIdentifier('records.id')} is NULL");
+        $stmt = $this->_db->query('/*' . __FUNCTION__ . '*/' . $select);
+        $ids = $stmt->fetchAll(Zend_Db::FETCH_COLUMN);
+        if (count($ids) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . ' Found ' . count($ids) . ' content records for removal');
+            }
+            $this->getContentBackend()->delete($ids);
+        }
+    }
 }
