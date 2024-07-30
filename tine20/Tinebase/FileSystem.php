@@ -5066,7 +5066,7 @@ class Tinebase_FileSystem implements
             if (!$roleName) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
                     __METHOD__ . '::' . __LINE__ . ' Admin role is not configured , skip sending AVScan notification.' . PHP_EOL);
-
+                return;
             }
             $adminRole = Tinebase_Acl_Roles::getInstance()->getRoleByName($roleName);
             $recipientIds = Tinebase_Role::getInstance()->getRoleMembersAccounts($adminRole->getId());
