@@ -97,4 +97,6 @@ interface Tinebase_User_Interface_SyncAble
      * @param Addressbook_Model_Contact $_contact
      */
     public function updateContactInSyncBackend($_contact);
+
+    public function setUserAsWriteGroupMember(string $userId, bool $value = true): void;
 }

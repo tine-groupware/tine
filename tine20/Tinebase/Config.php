@@ -464,7 +464,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const SYNC_USER_DISABLED = 'syncUserDisabled';
 
     const SYNC_USER_OF_GROUPS = 'syncUserOfGroups';
-    const SYNC_DEVIATED_PRIMARY_GROUP = 'syncDeviatedPrimaryGroup';
+    const SYNC_DEVIATED_PRIMARY_GROUP_UUID = 'syncDeviatedPrimaryGroupUUID';
 
     /**
      * configure if user contact data should be synced from sync backend, default yes
@@ -1767,7 +1767,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                             self::SETBYSETUPMODULE => false,
                             self::DEFAULT_STR => [],
                         ],
-                        self::SYNC_DEVIATED_PRIMARY_GROUP => [
+                        self::SYNC_DEVIATED_PRIMARY_GROUP_UUID => [
                             //_('Sync deviated user accounts default group')
                             self::LABEL => 'Sync deviated user accounts default group',
                             //_('Sync deviated user accounts default group')

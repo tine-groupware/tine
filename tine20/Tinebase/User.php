@@ -492,6 +492,10 @@ class Tinebase_User implements Tinebase_Controller_Interface
      */
     public static function syncUser($username, $options = array())
     {
+        if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_DISABLED}) {
+            return null;
+        }
+
         if ($username instanceof Tinebase_Model_FullUser) {
             $username = $username->accountLoginName;
         }
