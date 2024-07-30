@@ -149,7 +149,25 @@ class Tinebase_TranslationTest extends TestCase
         
         $this->assertEquals('Fehler melden', $translation->_('Report bugs'));
     }
-    
+
+    public function testAutoPreferenceInstanceLang()
+    {
+        //  set instance lang
+        //  -> 'auto' locale should use instance lang
+
+        $oldLocale = Tinebase_Config::getInstance()->get(Tinebase_Config::DEFAULT_LOCALE);
+        $testLocale = 'de';
+        Tinebase_Config::getInstance()->set(Tinebase_Config::DEFAULT_LOCALE, $testLocale);
+
+        $loc = Tinebase_Translation::getLocale();
+
+        try {
+            self::assertEquals($testLocale, $loc->toString(), '"auto" should default to DEFAULT_LOCALE');
+        } finally {
+            Tinebase_Config::getInstance()->set(Tinebase_Config::DEFAULT_LOCALE, $oldLocale);
+        }
+    }
+
     /**
     * test SingularExistence
     */

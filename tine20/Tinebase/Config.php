@@ -131,6 +131,13 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const DEFAULT_LOCALE = 'defaultLocale';
 
     /**
+     * DEFAULT_LOCALE_AUTO
+     *
+     * @var string
+     */
+    const DEFAULT_LOCALE_AUTO = 'auto';
+
+    /**
      * default user role
      */
     const DEFAULT_USER_ROLE_NAME = 'defaultUserRoleName';
@@ -1209,7 +1216,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYSETUPMODULE => TRUE,
         ),
         /**
-         * for example: 'de'
+         * for example: 'de' / 'auto' uses fallback from Zend_Locale
          */
         self::DEFAULT_LOCALE => array(
             //_('Default Locale')
@@ -1217,10 +1224,10 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             //_('Default locale for this installation.')
             self::DESCRIPTION => 'Default locale for this installation.',
             self::TYPE => 'string',
-            self::DEFAULT_STR => 'en',
-            self::CLIENTREGISTRYINCLUDE => TRUE,
-            self::SETBYADMINMODULE => FALSE,
-            self::SETBYSETUPMODULE => TRUE,
+            self::DEFAULT_STR => self::DEFAULT_LOCALE_AUTO,
+            self::CLIENTREGISTRYINCLUDE => true,
+            self::SETBYADMINMODULE => false,
+            self::SETBYSETUPMODULE => true,
         ),
         /**
          * config keys (see Zend_Http_Client_Adapter_Proxy):
