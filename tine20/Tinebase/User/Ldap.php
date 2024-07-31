@@ -364,6 +364,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             throw new Tinebase_Exception_NotFound("can't get user by property $_property. property not supported by ldap backend.");
         }
 
+        if ('accountId' === $_property && ! $_accountId instanceof Tinebase_Model_FullUser) {
+            $_accountId = $this->getFullUserById($_accountId);
+        }
         $ldapEntry = $this->_getLdapEntry($_property, $_accountId);
         
         $user = $this->_ldap2User($ldapEntry, $_accountClass);
@@ -634,6 +637,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
         
         $ldapData = $this->_user2ldap($user);
+        unset($ldapData[$this->_userUUIDAttribute]);
 
         $ldapData['uidnumber'] = $this->_generateUidNumber();
         $ldapData['objectclass'] = $this->_requiredObjectClass;
@@ -653,7 +657,10 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         $userId = $userId[$this->_userUUIDAttribute][0];
 
-        $user = $this->getUserByPropertyFromSyncBackend('accountId', $userId, 'Tinebase_Model_FullUser');
+        $user = clone $user;
+        $user->setId($userId);
+        unset($user->xprops()[static::class]['syncId']);
+        $user = $this->getUserByPropertyFromSyncBackend('accountId', $user, 'Tinebase_Model_FullUser');
 
         return $user;
     }
@@ -721,14 +728,18 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     {
         switch($_property) {
             case 'accountId':
-                $value = $this->_encodeAccountId(Tinebase_Model_User::convertUserIdToInt($_userId));
+                if ($_userId instanceof Tinebase_Model_User && ($_userId->xprops()[static::class]['syncId'] ?? false)) {
+                    $value = $this->_encodeAccountId($_userId->xprops()[static::class]['syncId']);
+                } else {
+                    $value = $this->_encodeAccountId(Tinebase_Model_User::convertUserIdToInt($_userId));
+                }
                 break;
             default:
                 /** @noinspection PhpDeprecationInspection */
                 $value = Zend_Ldap::filterEscape($_userId);
                 break;
         }
-        
+
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_userBaseFilter),
             Zend_Ldap_Filter::equals($this->_rowNameMapping[$_property], $value)
@@ -772,7 +783,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     protected function _getMetaData($_userId)
     {
-        $userId = $this->_encodeAccountId(Tinebase_Model_User::convertUserIdToInt($_userId));
+
+        if (!$_userId instanceof Tinebase_Model_User) {
+            $_userId = $this->getFullUserById($_userId);
+        }
+
+        $userId = $this->_encodeAccountId($_userId->xprops()[static::class]['syncId'] ?? Tinebase_Model_User::convertUserIdToInt($_userId));
 
         $filter = Zend_Ldap_Filter::equals(
             $this->_rowNameMapping['accountId'], $userId
@@ -1152,7 +1168,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                         $ldapData = array_merge($ldapData, $this->_getUserStatusValues($value));
                         break;
                     case 'accountPrimaryGroup':
-                        if ($deviateGroupId = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP}) {
+                        if ($deviateGroupId = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP_UUID}) {
                             $value = $deviateGroupId;
                         }
                         /** @var Tinebase_Group_Ldap $groupController */
@@ -1251,5 +1267,12 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             return $this->_writeGroupsMembers[$userId] ?? true;
         }
         return false;
+    }
+
+    public function setUserAsWriteGroupMember(string $userId, bool $value = true): void
+    {
+        // to make sure that the cache is initialized
+        $this->isReadOnlyUser($userId);
+        $this->_writeGroupsMembers[$userId] = !$value;
     }
 }

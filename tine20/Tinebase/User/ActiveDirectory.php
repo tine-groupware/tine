@@ -124,6 +124,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         }
         
         $ldapData = $this->_user2ldap($_user);
+        unset($ldapData[$this->_userUUIDAttribute]);
 
         $ldapData = array_merge($ldapData, $this->getLdapPasswordData(Tinebase_Record_Abstract::generateUID(20)));
 
@@ -150,13 +151,15 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         
         // add user to primary group and set primary group
         /** @noinspection PhpUndefinedMethodInspection */
-        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend(Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP} ?: $_user->accountPrimaryGroup, $userId);
+        Tinebase_Group::getInstance()->addGroupMemberInSyncBackend(Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP_UUID} ?: $_user->accountPrimaryGroup, $userId);
         
         // set primary group id
         $this->_ldap->updateProperty($dn, array('primarygroupid' => $primaryGroupId));
-        
 
-        $user = $this->getUserByPropertyFromSyncBackend('accountId', $userId, 'Tinebase_Model_FullUser');
+        $user = clone $_user;
+        $user->setId($userId);
+        unset($user->xprops()[static::class]['syncId']);
+        $user = $this->getUserByPropertyFromSyncBackend('accountId', $user, 'Tinebase_Model_FullUser');
 
         return $user;
     }
@@ -253,19 +256,18 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
             Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
 
         $this->_ldap->updateProperty($metaData['dn'], $ldapData);
-        
-        // update last modify timestamp in sql backend too
-        $values = array(
-            'last_password_change' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-            'password_must_change' => 0,
-        );
-        
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId())
-        );
-        
-        $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $values, $where);
-        
+
+        if ($this->_options[Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL]) {
+            $this->_updatePasswordProperties($user->getId(), $_password, $_encrypt, $_mustChange);
+        } else {
+            try {
+                // update last modify timestamp in sql backend too
+                $this->_setAccountPasswordProperties($user->getId());
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $tenf);
+            }
+        }
         $this->_setPluginsPassword($user, $_password, $_encrypt);
 
         $this->firePasswordEvent($user, $_password);
@@ -582,7 +584,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                     break;
                     
                 case 'accountPrimaryGroup':
-                    if ($deviateGroupId = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP}) {
+                    if ($deviateGroupId = Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_DEVIATED_PRIMARY_GROUP_UUID}) {
                         $value = $deviateGroupId;
                     }
                     /** @noinspection PhpUndefinedMethodInspection */
