@@ -379,16 +379,34 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         return $user;
     }
 
-    /**
-     * set the password for given account
-     *
-     * @param   string  $_userId
-     * @param   string  $_password
-     * @param   bool    $_encrypt encrypt password
-     * @param   bool    $_mustChange
-     * @return  void
-     * @throws  Tinebase_Exception_InvalidArgument
-     */
+    public function setPasswordInSyncBackend(Tinebase_Model_FullUser $user, string $_password, bool $_encrypt = true, bool $_mustChange = false): void
+    {
+        $metaData = $this->_getMetaData($user);
+
+        $encryptionType = $this->_options['pwEncType'] ?? Tinebase_User_Abstract::ENCRYPT_SSHA;
+        $userpassword = ($_encrypt && $encryptionType !== Tinebase_User_Abstract::ENCRYPT_PLAIN)
+            ? Hash_Password::generate($encryptionType, $_password)
+            : $_password;
+
+        $ldapData = array(
+            'userpassword'     => $userpassword,
+        );
+
+        if (! in_array('sambaSamAccount', $metaData['objectclass'])) {
+            $ldapData['shadowlastchange'] = floor(Tinebase_DateTime::now()->getTimestamp() / 86400);
+        }
+
+        foreach ($this->_ldapPlugins as $plugin) {
+            $plugin->inspectSetPassword($user, $_password, $_encrypt, $_mustChange, $ldapData);
+        }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+            __METHOD__ . '::' . __LINE__ . ' $dn: ' . $metaData['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
+            __METHOD__ . '::' . __LINE__ . ' $ldapData: ' . print_r($ldapData, true));
+
+        $this->_ldap->update($metaData['dn'], $ldapData);
+    }
 
     /**
      * set the password for given account
@@ -419,32 +437,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         if (! $ignorePwPolicy) {
             Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
         }
-        
-        $metaData = $this->_getMetaData($user);
 
-        $encryptionType = $this->_options['pwEncType'] ?? Tinebase_User_Abstract::ENCRYPT_SSHA;
-        $userpassword = ($_encrypt && $encryptionType !== Tinebase_User_Abstract::ENCRYPT_PLAIN)
-            ? Hash_Password::generate($encryptionType, $_password)
-            : $_password;
-        
-        $ldapData = array(
-            'userpassword'     => $userpassword,
-        );
-
-        if (! in_array('sambaSamAccount', $metaData['objectclass'])) {
-            $ldapData['shadowlastchange'] = floor(Tinebase_DateTime::now()->getTimestamp() / 86400);
-        }
-
-        foreach ($this->_ldapPlugins as $plugin) {
-            $plugin->inspectSetPassword($user, $_password, $_encrypt, $_mustChange, $ldapData);
-        }
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__ . ' $dn: ' . $metaData['dn']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-            __METHOD__ . '::' . __LINE__ . ' $ldapData: ' . print_r($ldapData, true));
-
-        $this->_ldap->update($metaData['dn'], $ldapData);
+        $this->setPasswordInSyncBackend($user, $_password, $_encrypt, (bool)$_mustChange);
         
         if ($this->_options[Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL]) {
             $this->_updatePasswordProperties($user->getId(), $_password, $_encrypt, $_mustChange);
@@ -1251,7 +1245,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         return $groupId['uidnumber'][0];
     }
 
-    protected function isReadOnlyUser(string|int|null $userId): bool
+    public function isReadOnlyUser(string|int|null $userId): bool
     {
         if ($this->_isReadOnlyBackend) {
             return true;

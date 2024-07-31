@@ -220,6 +220,20 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         return $ldapData;
     }
 
+    public function setPasswordInSyncBackend(Tinebase_Model_FullUser $user, string $_password, bool $_encrypt = true, bool $_mustChange = false): void
+    {
+        $metaData = $this->_getMetaData($user);
+
+        $ldapData = $this->getLdapPasswordData($_password);
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG))
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE))
+            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+
+        $this->_ldap->updateProperty($metaData['dn'], $ldapData);
+    }
+
     /**
      * set the password for given account
      *
@@ -245,17 +259,8 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         if (! $ignorePwPolicy) {
             Tinebase_User_PasswordPolicy::checkPasswordPolicy($_password, $user);
         }
-        
-        $metaData = $this->_getMetaData($user);
 
-        $ldapData = $this->getLdapPasswordData($_password);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) 
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) 
-            Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-
-        $this->_ldap->updateProperty($metaData['dn'], $ldapData);
+        $this->setPasswordInSyncBackend($user, $_password, $_encrypt, (bool)$_mustChange);
 
         if ($this->_options[Tinebase_Config::USERBACKEND_WRITE_PW_TO_SQL]) {
             $this->_updatePasswordProperties($user->getId(), $_password, $_encrypt, $_mustChange);
