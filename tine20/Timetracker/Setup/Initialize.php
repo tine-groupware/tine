@@ -192,6 +192,10 @@ class Timetracker_Setup_Initialize extends Setup_Initialize
      */
     protected function _initializeSystemCFs()
     {
+        if (Tinebase_Core::isReplica()) {
+            return;
+        }
+
         $taskAppId = Tinebase_Application::getInstance()->getApplicationByName(
             Tasks_Config::APP_NAME
         )->getId();
