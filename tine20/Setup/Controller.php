@@ -2242,37 +2242,8 @@ class Setup_Controller
             }
 
             if (Tinebase_Config::APP_NAME !== $application->name) {
-
-                // create personal folders for all users to replicate them to the replicas
                 if (Tinebase_Core::isReplicationPrimary()) {
-                    $allUsers = null;
-                    $createdModels = [];
-                    $appCtrl = Tinebase_Core::getApplicationInstance($application->name, '', true);
-                    if ($appCtrl instanceof  Tinebase_Application_Container_Interface) {
-                        $allUsers = Tinebase_User::getInstance()->getFullUsers();
-                        foreach ($allUsers as $user) {
-                            /** @var Tinebase_Model_Container $container */
-                            foreach($appCtrl->createPersonalFolder($user) as $container) {
-                                $createdModels[$container->model] = true;
-                            }
-                        }
-                    }
-                    foreach ($appCtrl->getModels() as $model) {
-                        if (isset($createdModels[$model])) {
-                            continue;
-                        }
-                        /** @var Tinebase_Record_Interface $model */
-                        $modelCtrl = Tinebase_Core::getApplicationInstance($application->name, $model, true);
-                        if ($modelCtrl instanceof Tinebase_Controller_Record_Interface)
-                        if (($mc = $model::getConfiguration()) && $mc->hasPersonalContainer) {
-                            if (null === $allUsers) {
-                                $allUsers = Tinebase_User::getInstance()->getFullUsers();
-                            }
-                            foreach ($allUsers as $user) {
-                                Tinebase_Container::getInstance()->createDefaultContainer($model, $application->name, $user);
-                            }
-                        }
-                    }
+                    $this->_createPersonalFoldersOnPrimary($application);
                 }
 
                 foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
@@ -2288,6 +2259,64 @@ class Setup_Controller
         } catch (Exception $e) {
             Tinebase_Exception::log($e, /* suppress trace */ false);
             throw $e;
+        }
+    }
+
+    /**
+     * create personal folders for all users to replicate them to the replicas
+     *
+     * @param Tinebase_Model_Application $application
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _createPersonalFoldersOnPrimary(Tinebase_Model_Application $application): void
+    {
+        $allUsers = null;
+        $createdModels = [];
+        try {
+            $appCtrl = Tinebase_Core::getApplicationInstance($application->name, '', true);
+        } catch (Tinebase_Exception $te) {
+            if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Setup_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+            }
+            return;
+        }
+        if ($appCtrl instanceof  Tinebase_Application_Container_Interface) {
+            $allUsers = Tinebase_User::getInstance()->getFullUsers();
+            foreach ($allUsers as $user) {
+                /** @var Tinebase_Model_Container $container */
+                foreach($appCtrl->createPersonalFolder($user) as $container) {
+                    $createdModels[$container->model] = true;
+                }
+            }
+        }
+        foreach ($appCtrl->getModels() as $model) {
+            if (isset($createdModels[$model])) {
+                continue;
+            }
+            /** @var Tinebase_Record_Interface $model */
+            try {
+                $modelCtrl = Tinebase_Core::getApplicationInstance($application->name, $model, true);
+            } catch (Tinebase_Exception $te) {
+                if (Setup_Core::isLogLevel(Zend_Log::NOTICE)) {
+                    Setup_Core::getLogger()->notice(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+                }
+                $modelCtrl = null;
+            }
+            if ($modelCtrl instanceof Tinebase_Controller_Record_Interface) {
+                if (($mc = $model::getConfiguration()) && $mc->hasPersonalContainer) {
+                    if (null === $allUsers) {
+                        $allUsers = Tinebase_User::getInstance()->getFullUsers();
+                    }
+                    foreach ($allUsers as $user) {
+                        Tinebase_Container::getInstance()->createDefaultContainer($model, $application->name, $user);
+                    }
+                }
+            }
         }
     }
 
