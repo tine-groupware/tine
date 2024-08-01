@@ -215,16 +215,11 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
     {
         return '"' . md5($this->getRecord()->getId() . $this->getLastModified()) . '"';
     }
-    
-    /**
-     * Returns the last modification date as a unix timestamp
-     *
-     * @return string
-     */
+
     public function getLastModified() 
     {
-        return ($this->getRecord()->last_modified_time instanceof Tinebase_DateTime) ? $this->getRecord()->last_modified_time->toString() :
-               (($this->getRecord()->creation_time instanceof Tinebase_DateTime) ? $this->getRecord()->creation_time->toString() : '');
+        return ($this->getRecord()->last_modified_time instanceof Tinebase_DateTime) ? $this->getRecord()->last_modified_time->getTimestamp() :
+               (($this->getRecord()->creation_time instanceof Tinebase_DateTime) ? $this->getRecord()->creation_time->getTimestamp() : null);
     }
     
     /**
