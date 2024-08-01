@@ -150,6 +150,11 @@ class Tinebase_Controller extends Tinebase_Controller_Event
             Tinebase_Controller::getInstance()->changeUserAccount($roleChangeUserName);
         }
 
+        $loginEvent = new Tinebase_Event_User_Login();
+        $loginEvent->password = $password;
+        $loginEvent->user = $user;
+        Tinebase_Event::fireEvent($loginEvent);
+
         return true;
     }
 
@@ -747,7 +752,7 @@ class Tinebase_Controller extends Tinebase_Controller_Event
     protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
         switch (get_class($_eventObject)) {
-            case 'Admin_Event_DeleteGroup':
+            case Admin_Event_DeleteGroup::class:
                 foreach ($_eventObject->groupIds as $groupId) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
                         . ' Removing role memberships of group ' .$groupId );
@@ -759,6 +764,14 @@ class Tinebase_Controller extends Tinebase_Controller_Event
                             'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
                         ));
                     }
+                }
+                break;
+
+            case Tinebase_Event_User_Login::class:
+                if (($userCtrl = Tinebase_User::getInstance()) instanceof Tinebase_User_Interface_SyncAble
+                        && Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}
+                        && !$userCtrl->isReadOnlyUser($_eventObject->user->getId())) {
+                    $userCtrl->setPasswordInSyncBackend($_eventObject->user, $_eventObject->password);
                 }
                 break;
         }
