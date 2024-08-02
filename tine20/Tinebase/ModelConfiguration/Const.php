@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  ModelConfiguration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -269,6 +269,8 @@ class Tinebase_ModelConfiguration_Const {
     public const TYPE_NUMBERABLE_INT = 'numberableInt';
     public const TYPE_NUMBERABLE_STRING = 'numberableStr';
     public const TYPE_PASSWORD = 'password';
+
+    public const TYPE_PRE_EXPANDED = 'preExpanded';
     public const TYPE_RECORD = 'record';
     public const TYPE_RECORDS = 'records';
     public const TYPE_RELATION = 'relation';

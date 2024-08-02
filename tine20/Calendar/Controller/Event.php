@@ -2819,6 +2819,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $attenderDisplayContainerId = $_attender->displaycontainer_id instanceof Tinebase_Model_Container ? 
                 $_attender->displaycontainer_id->getId() : 
                 $_attender->displaycontainer_id;
+
+            Calendar_Controller_Attender::getInstance()->handleSetDependentRecords($updatedAttender, $_attender, $currentAttender, false);
             
             // check if something what can be set as user has changed
             if ($currentAttender->status == $_attender->status &&
@@ -3150,8 +3152,11 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
 
         Tinebase_Timemachine_ModificationLog::getInstance()->setRecordMetaData($attender, 'update', $currentAttender);
+
+        $updatedAttender = $this->_backend->updateAttendee($attender);
+        Calendar_Controller_Attender::getInstance()->handleSetDependentRecords($updatedAttender, $attender, $currentAttender, false);
+
         Tinebase_Timemachine_ModificationLog::getInstance()->writeModLog($attender, $currentAttender, get_class($attender), $this->_getBackendType(), $attender->getId());
-        $this->_backend->updateAttendee($attender);
         
         if ($attender->displaycontainer_id !== $currentAttender->displaycontainer_id) {
             $this->_increaseDisplayContainerContentSequence($currentAttender, $event, Tinebase_Model_ContainerContent::ACTION_DELETE);

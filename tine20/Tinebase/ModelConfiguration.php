@@ -1932,6 +1932,7 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
                 case self::TYPE_VIRTUAL:
                     if (isset($this->_fields[$field][self::CONFIG][self::TYPE]) && (self::TYPE_RELATION ===
                             $this->_fields[$field][self::CONFIG][self::TYPE] || self::TYPE_RELATIONS ===
+                            $this->_fields[$field][self::CONFIG][self::TYPE] || self::TYPE_PRE_EXPANDED ===
                             $this->_fields[$field][self::CONFIG][self::TYPE])) {
                         return $this->_fields[$field][self::CONFIG][self::CONFIG][self::RECORD_CLASS_NAME];
                     }

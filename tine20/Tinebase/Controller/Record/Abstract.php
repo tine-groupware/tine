@@ -1534,6 +1534,33 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_Notes::getInstance()->setNotesOfRecord($updatedRecord);
             }
         }
+
+        $this->handleSetDependentRecords($updatedRecord, $record, $currentRecord, $isCreate);
+        
+        if ($returnUpdatedRelatedData) {
+            $this->_getRelatedData($updatedRecord);
+        }
+
+        // rebuild paths
+        if ($this->_isRecordPathFeatureEnabled() && ($updatedRecord::generatesPaths() ||
+                ($record->has('relations') &&
+                    $this->_checkRelationsForPathGeneratingModels($record, $currentRecord)))) {
+            Tinebase_Record_Path::getInstance()->rebuildPaths($updatedRecord, $currentRecord);
+        }
+
+        if (null !== ($mc = $updatedRecord::getConfiguration())) {
+            foreach (array_keys($mc->getVirtualFields()) as $virtualField) {
+                if (!isset($updatedRecord[$virtualField])) {
+                    $updatedRecord->{$virtualField} = $record->{$virtualField};
+                }
+            }
+        }
+
+        return $updatedRecord;
+    }
+
+    public function handleSetDependentRecords($updatedRecord, $record, $currentRecord, $isCreate): void
+    {
         if ($this->_handleDependentRecords && ($config = $updatedRecord::getConfiguration())) {
             if (is_array($config->recordsFields)) {
                 foreach ($config->recordsFields as $property => $fieldDef) {
@@ -1568,27 +1595,6 @@ abstract class Tinebase_Controller_Record_Abstract
                 $ctrl->executeDelayedDependentRecords();
             }
         }
-        
-        if ($returnUpdatedRelatedData) {
-            $this->_getRelatedData($updatedRecord);
-        }
-
-        // rebuild paths
-        if ($this->_isRecordPathFeatureEnabled() && ($updatedRecord::generatesPaths() ||
-                ($record->has('relations') &&
-                    $this->_checkRelationsForPathGeneratingModels($record, $currentRecord)))) {
-            Tinebase_Record_Path::getInstance()->rebuildPaths($updatedRecord, $currentRecord);
-        }
-
-        if (null !== ($mc = $updatedRecord::getConfiguration())) {
-            foreach (array_keys($mc->getVirtualFields()) as $virtualField) {
-                if (!isset($updatedRecord[$virtualField])) {
-                    $updatedRecord->{$virtualField} = $record->{$virtualField};
-                }
-            }
-        }
-
-        return $updatedRecord;
     }
 
     /**
@@ -2383,6 +2389,12 @@ abstract class Tinebase_Controller_Record_Abstract
         if ($_record->has('alarms')) {
             $this->_deleteAlarmsForIds(array($_record->getId()));
         }
+
+        $this->handleDeleteDependentRecords($_record);
+    }
+
+    public function handleDeleteDependentRecords(Tinebase_Record_Interface $_record): void
+    {
         if ($this->_handleDependentRecords && ($config = $_record::getConfiguration())) {
             if (is_array($config->recordsFields)) {
                 foreach ($config->recordsFields as $property => $fieldDef) {

@@ -101,6 +101,8 @@ class Tinebase_Record_Expander_Factory
                     case MCC::TYPE_RELATION:
                         return new Tinebase_Record_Expander_VirtualRelation($fieldDef[MCC::CONFIG][MCC::CONFIG],
                             $propModel, $_property, $_definition, $_rootExpander);
+                    case MCC::TYPE_PRE_EXPANDED:
+                        return new Tinebase_Record_Expander_VirtualPreExpanded($propModel, $_property, $_definition, $_rootExpander);
                 }
         }
 
