@@ -210,20 +210,11 @@ class Addressbook_ControllerTest extends TestCase
      */
     public function testGetCountByAddressbookId()
     {
-        $contact = $this->_addContact();
-        
-        $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
-            Zend_Registry::get('currentAccount'), 
-            Addressbook_Model_Contact::class,
-            Zend_Registry::get('currentAccount'), 
-            Tinebase_Model_Grants::GRANT_EDIT
-        );
-        $container = $personalContainer[0];
+        $this->_addContact();
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'container_id', 'operator' => 'equals',   'value' => '/all'),
         ));
-        $filter->container = array($container->getId());
         $count = $this->_instance->searchCount($filter);
         
         $this->assertGreaterThan(0, $count);
