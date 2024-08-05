@@ -322,6 +322,12 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             'attendee'   => [
                 self::TYPE          => self::TYPE_VIRTUAL, // RecordSet of Calendar_Model_Attender
                 self::OMIT_MOD_LOG  => false,
+                self::CONFIG        => [
+                    self::TYPE          => self::TYPE_PRE_EXPANDED,
+                    self::CONFIG        => [
+                        self::RECORD_CLASS_NAME => Calendar_Model_Attender::class,
+                    ],
+                ],
             ],
             'alarms'   => [
                 self::TYPE          => self::TYPE_VIRTUAL, // RecordSet of Tinebase_Model_Alarm

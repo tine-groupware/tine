@@ -811,8 +811,11 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         if ($_attendee->displaycontainer_id instanceof Tinebase_Model_Container) {
             $_attendee->displaycontainer_id = $_attendee->displaycontainer_id->getId();
         }
-        
-        return $this->_attendeeBackend->create($_attendee);
+
+        /** @var Calendar_Model_Attender $createdAttendee */
+        $createdAttendee = $this->_attendeeBackend->create($_attendee);
+        Calendar_Controller_Attender::getInstance()->handleSetDependentRecords($createdAttendee, $_attendee, null, true);
+        return $createdAttendee;
     }
     
     /**
@@ -844,6 +847,13 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function deleteAttendee(array $_ids)
     {
+        foreach ($_ids as $id) {
+            try {
+                Calendar_Controller_Attender::getInstance()->handleDeleteDependentRecords($this->_attendeeBackend->get($id));
+            } catch (Exception $e) {
+                Tinebase_Exception::log($e);
+            }
+        }
         return $this->_attendeeBackend->delete($_ids);
     }
 
