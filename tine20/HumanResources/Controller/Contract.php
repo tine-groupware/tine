@@ -176,9 +176,6 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             array('field' => 'employee_id', 'operator' => 'equals', 'value' => $contract->employee_id)
         ));
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(
-            __METHOD__ . '::' . __LINE__ . " FreeTime filter:" . print_r($freeTimeFilter->toArray(), true));
-        
         return HumanResources_Controller_FreeTime::getInstance()->search($freeTimeFilter);
     }
 
@@ -487,15 +484,14 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
         $feastDays = $this->getFeastDays($contracts, $firstDate, $lastDate);
         $freeDayStrings = array();
         
-        
-        foreach($feastDays as $feastDay) {
+        foreach ($feastDays as $feastDay) {
             $freeDayStrings[] = $feastDay->format('Y-m-d');
         }
         
         if ($respectTakenVacationDays) {
             $vacationTimes = new Tinebase_Record_RecordSet('HumanResources_Model_FreeTime');
             
-            foreach($contracts as $contract) {
+            foreach ($contracts as $contract) {
                 $vacationTimes = $vacationTimes->merge($this->getFreeTimes($contract));
             }
             
@@ -509,35 +505,39 @@ class HumanResources_Controller_Contract extends Tinebase_Controller_Record_Abst
             }
         }
         
-        $hoursToWorkOn = 0;
         $results = array();
         $sumHours = 0;
-        
-        foreach($contracts as $contract) {
-        
+
+        /** @var HumanResources_Model_Contract $contract */
+        foreach ($contracts as $contract) {
             $firstDate = $this->_getFirstDate($contract, $firstDate);
             $lastDate = $this->_getLastDate($contract, $lastDate);
             
             $date = clone $firstDate;
             $json = $contract->getWorkingTimeJson();
             $weekdays = $json['days'];
-            
-            // datetime format w uses day 0 as sunday
-            $monday = array_pop($weekdays);
-            array_unshift($weekdays, $monday);
-            
-            while ($date->isEarlier($lastDate)) {
-                // if calculated working day is not a feast day, add to days to work on
-                $ds = $date->format('Y-m-d');
-                $weekday = $date->format('w');
-                $hrs = $weekdays[$weekday];
-                
-                if (! in_array($ds, $freeDayStrings) && $hrs > 0) {
-                    $results[] = clone $date;
-                    $sumHours += $hrs;
+
+            if ($weekdays) {
+                // datetime format w uses day 0 as sunday
+                $monday = array_pop($weekdays);
+                array_unshift($weekdays, $monday);
+                while ($date->isEarlier($lastDate)) {
+                    // if calculated working day is not a feast day, add to days to work on
+                    $ds = $date->format('Y-m-d');
+                    $weekday = $date->format('w');
+                    $hrs = $weekdays[$weekday];
+                    if (!in_array($ds, $freeDayStrings) && $hrs > 0) {
+                        $results[] = clone $date;
+                        $sumHours += $hrs;
+                    }
+                    $date->addDay(1);
                 }
-                
-                $date->addDay(1);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                    Tinebase_Core::getLogger()->warn(
+                        __METHOD__ . '::' . __LINE__ . ' Contract ' . $contract->getId()
+                        . ' has no weekdays config');
+                }
             }
         }
         
