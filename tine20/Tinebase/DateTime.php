@@ -88,11 +88,11 @@ class Tinebase_DateTime extends DateTime
     public function __construct($_time = "now", $_timezone = null)
     {
         // allow to pass instanceof DateTime
-        if ($_time instanceof DateTime) {
+        if ($_time instanceof DateTimeInterface) {
             if (! $_timezone) {
                 $_timezone = $_time->getTimezone();
             } else {
-                $_time = clone $_time;
+                $_time = DateTime::createFromInterface($_time);
                 $_time->setTimezone($_timezone);
             }
             
