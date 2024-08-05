@@ -26,7 +26,7 @@ class Tasks_JsonTest extends TestCase
      * 
      * @var array
      */
-    protected $_smtpConfig = array();
+    protected $_smtpConfig = [];
 
     /**
      * smtp config changed

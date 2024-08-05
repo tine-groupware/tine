@@ -23,6 +23,10 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
      * @var \Sabre\DAV\Server
      */
     protected $server;
+
+    protected $calDAVTests;
+
+    protected $response;
     
     /**
      * Sets up the fixture.

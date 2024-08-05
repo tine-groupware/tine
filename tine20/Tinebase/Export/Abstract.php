@@ -914,7 +914,7 @@ abstract class Tinebase_Export_Abstract implements Tinebase_Record_IteratableInt
             '_twigTemplate'         => $this->_twigTemplate,
             '_twigMapping'          => $this->_twigMapping,
             '_keyFields'            => $this->_keyFields,
-            '_virtualField'         => $this->_virtualFields,
+            '_virtualFields'        => $this->_virtualFields,
         );
     }
 

@@ -23,6 +23,8 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest extends TestCase
      * @var \Sabre\DAV\Server
      */
     protected $server;
+
+    protected $plugin;
     
     /**
      * Sets up the fixture.

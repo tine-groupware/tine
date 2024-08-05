@@ -119,6 +119,8 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
 
     protected $_containerToDelete = [];
 
+    protected $_smtpConfig = [];
+
     /**
      * set up tests
      */

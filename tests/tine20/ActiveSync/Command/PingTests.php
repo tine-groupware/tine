@@ -39,6 +39,8 @@ class ActiveSync_Command_PingTests extends TestCase
      * @var Syncroton_Backend_IContent
      */
     protected $_contentStateBackend;
+
+    protected $_setGeoData;
     
     /**
      * Runs the test methods of this class.

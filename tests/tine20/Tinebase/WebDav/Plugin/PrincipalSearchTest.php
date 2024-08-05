@@ -39,7 +39,6 @@ class Tinebase_WebDav_Plugin_PrincipalSearchTest extends Tinebase_WebDav_Plugin_
         $this->server->addPlugin($plugin);
 
         $aclPlugin = new \Sabre\DAVACL\Plugin();
-        $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
         $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS);
         $this->server->addPlugin($aclPlugin);
         

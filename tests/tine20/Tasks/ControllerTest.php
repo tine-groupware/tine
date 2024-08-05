@@ -37,6 +37,8 @@ class Tasks_ControllerTest extends TestCase
      * @var array
      */
     protected $_modelNames = array('Tasks_Model_Task' => 'Task');
+
+    protected Tasks_Controller_Task $_controller;
     
     /**
      * Sets up the fixture, for example, opens a network connection.

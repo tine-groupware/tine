@@ -35,7 +35,8 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
      * @var boolean
      */
     protected $_isResolved = FALSE;
-    
+
+    protected array $_validTimeaccounts = [];
     /**
      * set options
      *
