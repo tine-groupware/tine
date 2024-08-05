@@ -59,3 +59,24 @@ $ docker system prune -a --volumes
 ~~~
 
 see (https://stackoverflow.com/questions/44901297/how-to-clean-up-var-lib-docker-vfs-directory)
+
+## Change DB User
+
+- change pw in docker-compose.yml:
+
+~~~yaml
+  db:
+    # [...]
+    environment:
+      MYSQL_USER: &MYSQL_USER tine
+      MYSQL_PASSWORD: &MYSQL_PASSWORD MYNEWPW!
+~~~
+
+- change pw in mysql/mariadb
+
+~~~shell
+docker compose exec db sh -c "mysql -proot -u root mysql"
+MariaDB [mysql]> ALTER USER 'tine'@'%' IDENTIFIED BY 'MYNEWPW!';
+~~~
+
+- restart (tine "web") container
