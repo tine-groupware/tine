@@ -268,6 +268,14 @@ class Tinebase_Scheduler_Task
             }
         }
 
+        if (! is_bool($result)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                    . ' Task method did not return a boolean: ' . print_r($classMethod, true));
+            };
+            return false;
+        }
+
         return $result;
     }
 
