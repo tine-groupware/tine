@@ -107,8 +107,9 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
 
     protected function _customFieldConfigTableExists()
     {
-        $backend = new Setup_Backend_Mysql();
-        return $backend->tableExists('customfield_config');
+        // during install table might not be available, we only check this until it succeeds for all pagination models alike
+        static $cache = false;
+        return $cache || ($cache = (new Setup_Backend_Mysql())->tableExists('customfield_config'));
     }
 
     protected function _readModelConfig()
