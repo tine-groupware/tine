@@ -20,6 +20,8 @@ abstract class Admin_Frontend_TestCase extends TestCase
      */
     protected $_json;
 
+    protected $objects = [];
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.

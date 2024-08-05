@@ -20,6 +20,8 @@ class Sales_PurchaseInvoiceTest extends TestCase
     protected $_json;
 
     protected $_recordsToDelete = array();
+
+    protected $_contactController = null;
     
     /**
      * get paging
