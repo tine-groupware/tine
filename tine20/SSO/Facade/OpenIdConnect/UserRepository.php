@@ -26,7 +26,7 @@ class SSO_Facade_OpenIdConnect_UserRepository implements \Idaas\OpenID\Repositor
         foreach ($claims as $claim) {
             switch ($claim) {
                 case 'sub':
-                    $result['sub'] = $userEntity->getTineUser()->accountEmailAddress;
+                    $result['sub'] = $userEntity->getTineUser()->getId();
                     break;
                 case 'preferred_username':
                     $result['preferred_username'] = $userEntity->getTineUser()->accountLoginName;
