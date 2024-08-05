@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9f35ef0fe05c36f94d3f79c2cbfaca7",
+    "content-hash": "bcc39bd76f72e735c1aeb339644650da",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4269,11 +4269,11 @@
         },
         {
             "name": "metaways/opendocument",
-            "version": "1.3.1",
+            "version": "1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/OpenDocument.git",
-                "reference": "5aa7d7b6d73b557464b72b9f3d4b4a9ece8572dd"
+                "reference": "17bfe8fb40c4ef18823a0e248c005d5130d42d72"
             },
             "require": {
                 "php": "7.4 - 8.1"
@@ -4308,7 +4308,7 @@
                 "OpenDocument",
                 "Template"
             ],
-            "time": "2023-03-31T13:51:46+00:00"
+            "time": "2024-08-05T12:47:05+00:00"
         },
         {
             "name": "metaways/timezoneconvert",
@@ -6008,11 +6008,11 @@
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.2pl6",
+            "version": "1.8.2pl7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/PHPExcel.git",
-                "reference": "7ed7cbce7365f34e43c236808492614ea28dea9b"
+                "reference": "973a47db471b71cb1297b0223364be21c35b330c"
             },
             "require": {
                 "ext-mbstring": "*",
@@ -6059,7 +6059,7 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2024-01-23T16:59:46+00:00"
+            "time": "2024-08-05T12:54:15+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
@@ -12619,11 +12619,11 @@
         },
         {
             "name": "syncroton/syncroton",
-            "version": "1.5.7",
+            "version": "1.5.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tine20/syncroton.git",
-                "reference": "3008df192a91123f4ce900df2112d60d4e8f18cb"
+                "reference": "c4ec2c7eb1d2382c41fd6d2cb820feae5a002249"
             },
             "require": {
                 "ext-ctype": "*",
@@ -12659,7 +12659,7 @@
             ],
             "description": "Library to sync mobile devices",
             "homepage": "http://www.syncroton.org",
-            "time": "2023-05-03T15:08:01+00:00"
+            "time": "2024-08-05T13:01:38+00:00"
         },
         {
             "name": "thecodingmachine/safe",
@@ -15447,7 +15447,7 @@
         },
         {
             "package": "phpoffice/phpexcel",
-            "version": "1.8.2.0-patch6",
+            "version": "1.8.2.0-patch7",
             "alias": "1.8.2",
             "alias_normalized": "1.8.2.0"
         },

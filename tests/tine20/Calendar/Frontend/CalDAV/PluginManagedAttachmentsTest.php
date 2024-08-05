@@ -28,6 +28,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
 
     protected $response;
     protected $originalHostname;
+    protected $plugin;
     
     /**
      * Sets up the fixture.
