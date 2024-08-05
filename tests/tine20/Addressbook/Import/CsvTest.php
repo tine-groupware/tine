@@ -483,7 +483,6 @@ class Addressbook_Import_CsvTest extends ImportTestCase
         $definition = $this->_getDefinitionFromFile('adb_import_csv_split.xml');
 
         $this->_filename = dirname(__FILE__) . '/files/import_split_duplicate.csv';
-        $this->_deletePersonalContacts = TRUE;
         $this->_deleteImportFile = false;
 
         $result = $this->_doImport(array('dryrun' => false), $definition);
