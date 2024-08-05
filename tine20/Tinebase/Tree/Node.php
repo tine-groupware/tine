@@ -730,38 +730,48 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $parentIds = array();
         $transactionManager = Tinebase_TransactionManager::getInstance();
 
+        $dataSelect = $this->_db->select()
+            ->from(['n' => $this->_tablePrefix . $this->_tableName], ['parent_id', 'object_id'])
+            ->join(['o' => $this->_tablePrefix . 'tree_fileobjects'], 'n.object_id = o.id', ['revision_size'])
+            ->join(['r' => $this->_tablePrefix . 'tree_filerevisions'], 'o.id = r.id AND o.revision = r.revision', ['size']);
+
+        $sizeSelect = $this->_db->select()
+            ->from(['n' => $this->_tablePrefix . $this->_tableName], [new Zend_Db_Expr('SUM(r.size)')])
+            ->join(['o' => $this->_tablePrefix . 'tree_fileobjects'], 'n.object_id = o.id AND n.is_deleted = 0 AND o.is_deleted = 0', [])
+            ->join(['r' => $this->_tablePrefix . 'tree_filerevisions'], 'o.id = r.id AND o.revision = r.revision', []);
+
+        $revisionSizeSelect = $this->_db->select()
+            ->from(['n' => $this->_tablePrefix . $this->_tableName], [new Zend_Db_Expr('SUM(o.revision_size)')])
+            ->join(['o' => $this->_tablePrefix . 'tree_fileobjects'], 'n.object_id = o.id', []);
+
         foreach($_folderIds as $id) {
             $transactionId = $transactionManager->startTransaction($this->_db);
 
             try {
-                try {
-                    /** @var Tinebase_Model_Tree_Node $record */
-                    $record = $this->get($id, true);
-                } catch (Tinebase_Exception_NotFound $tenf) {
+                $dataSelect->reset(Zend_Db_Select::WHERE);
+                $dataSelect->where('n.id = ?', $id);
+                if (!($data = $dataSelect->query()->fetch(Zend_Db::FETCH_ASSOC))) {
                     $transactionManager->commitTransaction($transactionId);
                     continue;
                 }
 
-                if (!empty($record->parent_id) && !isset($parentIds[$record->parent_id])) {
-                    $parentIds[$record->parent_id] = $record->parent_id;
+                if (!empty($data['parent_id']) && !isset($parentIds[$data['parent_id']])) {
+                    $parentIds[$data['parent_id']] = $data['parent_id'];
                 }
 
-                $childrenNodes = $this->getChildren($id, true, true);
-                $size = 0;
-                $revision_size = 0;
+                $revisionSizeSelect->reset(Zend_Db_Select::WHERE);
+                $revisionSizeSelect->where('n.parent_id = ?', $id);
+                $revision_size = intval($revisionSizeSelect->query()->fetchColumn(0));
 
-                /** @var Tinebase_Model_Tree_Node $child */
-                foreach($childrenNodes as $child) {
-                    if (!$child->is_deleted) {
-                        $size += ((int)$child->size);
-                    }
-                    $revision_size += ((int)$child->revision_size);
-                }
+                $sizeSelect->reset(Zend_Db_Select::WHERE);
+                $sizeSelect->where('n.parent_id = ?', $id);
+                $size = intval($sizeSelect->query()->fetchColumn(0));
 
-                if ($size !== ((int)$record->size) || $revision_size !== ((int)$record->revision_size)) {
+
+                if ($size !== (int)$data['size'] || $revision_size !== (int)$data['revision_size']) {
                     /** @var Tinebase_Model_Tree_FileObject $fileObject */
                     try {
-                        $fileObject = $_fileObjectBackend->get($record->object_id, true);
+                        $fileObject = $_fileObjectBackend->get($data['object_id'], true);
                     } catch (Tinebase_Exception_NotFound $tenf) {
                         $transactionManager->commitTransaction($transactionId);
                         continue;
