@@ -23,6 +23,10 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
      * @var \Sabre\DAV\Server
      */
     protected $server;
+
+    protected $sharedContainer;
+    protected $otherUsersContainer;
+    protected $response;
     
     /**
      * Sets up the fixture.
@@ -31,7 +35,7 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         parent::setUp();
 
         // create shared folder and other users folder
@@ -68,7 +72,6 @@ class Calendar_Frontend_CalDAV_ProxyTest extends TestCase
 
         $this->server->addPlugin(new \Sabre\DAV\Auth\Plugin(new Tinebase_WebDav_Auth()));
         $aclPlugin = new \Sabre\DAVACL\Plugin();
-        $aclPlugin->defaultUsernamePath    = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
         $aclPlugin->principalCollectionSet = array (Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS);
         $this->server->addPlugin($aclPlugin);
 

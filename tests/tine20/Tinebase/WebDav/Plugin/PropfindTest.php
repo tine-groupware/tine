@@ -39,7 +39,6 @@ class Tinebase_WebDav_Plugin_PropfindTest extends Tinebase_WebDav_Plugin_Abstrac
         $this->server->addPlugin($plugin);
 
         $aclPlugin = new Tinebase_WebDav_Plugin_ACL();
-        $aclPlugin->defaultUsernamePath = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
         $aclPlugin->principalCollectionSet = array(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS, Tinebase_WebDav_PrincipalBackend::PREFIX_INTELLIGROUPS
         );
         $aclPlugin->principalSearchPropertySet = array(

@@ -31,7 +31,6 @@ class Tinebase_WebDav_Plugin_ACLTest extends Tinebase_WebDav_Plugin_AbstractBase
         );
 
         $this->plugin = new Tinebase_WebDav_Plugin_ACL();
-        $this->plugin->defaultUsernamePath = Tinebase_WebDav_PrincipalBackend::PREFIX_USERS;
         $this->plugin->principalCollectionSet = [
             Tinebase_WebDav_PrincipalBackend::PREFIX_USERS,
             Tinebase_WebDav_PrincipalBackend::PREFIX_GROUPS,

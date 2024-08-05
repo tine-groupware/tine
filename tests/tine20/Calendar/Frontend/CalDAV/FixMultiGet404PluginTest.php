@@ -34,6 +34,8 @@ class Calendar_Frontend_CalDAV_FixMultiGet404PluginTest extends Calendar_TestCas
      */
     protected $plugin;
 
+    protected $response;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.

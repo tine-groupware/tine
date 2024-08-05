@@ -20,6 +20,8 @@ class DFCom_HTTPAPIv1Test extends TestCase
      * @var Tinebase_Server_UnittestEmitter
      */
     public $emitter;
+    protected $server;
+    protected $container;
 
     /**
      * set up tests
