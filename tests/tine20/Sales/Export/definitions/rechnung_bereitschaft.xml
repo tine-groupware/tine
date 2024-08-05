@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <model>Timetracker_Model_Timesheet</model>
+    <name>ts_rechnung_ods</name>
+    <type>export</type>
+    <plugin>Timetracker_Export_Ods_Timesheet</plugin>
+    <description>standard rechnungs export</description>
+    <customFields>1</customFields>
+    <header>1</header>
+    <headers>
+        <header>{date}</header>
+        <header>{user}</header>
+    </headers>
+    <columns>
+        <column>
+            <identifier>start_date</identifier>
+            <header>Datum</header>
+            <type>date</type>
+        </column>
+        <column>
+            <identifier>description</identifier>
+            <header>Bemerkungen / Art der Arbeit</header>
+            <type>string</type>
+            <maxcharacters>250</maxcharacters>
+            <maxlines>30</maxlines>
+            <removeEmptyLines>1</removeEmptyLines>
+        </column>
+        <column>
+            <identifier>asp</identifier>
+            <header>Ansprechpartner</header>
+            <type>string</type>
+            <custom>1</custom>
+        </column>
+        <column>
+            <identifier>account_id</identifier>
+            <header>Mitarbeiter</header>
+            <type>account_id</type>
+            <field>accountDisplayName</field>
+        </column>
+        <column>
+            <identifier>accounting_time</identifier>
+            <header>Std.</header>
+            <type>float</type>
+            <divisor>60</divisor>
+            <number>1</number>
+        </column>
+        <column>
+            <identifier>ticket</identifier>
+            <header>T#</header>
+            <type>string</type>
+            <custom>1</custom>
+        </column>
+        <column>
+            <identifier>start_time</identifier>
+            <header>Startzeit</header>
+            <type>string</type>
+            <clearValueIfTagNotSet>Bereitschaft</clearValueIfTagNotSet>
+        </column>
+        <column>
+            <identifier>tags</identifier>
+            <header>Tags</header>
+            <type>tags</type>
+        </column>
+    </columns>
+</config>

@@ -1879,7 +1879,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         if (!$fsConfig || !$fsConfig->{Tinebase_Config::FILESYSTEM_CREATE_PREVIEWS}) {
             $this->markTestSkipped('PreviewService not configured.');
         }
-
+        
         if ($this->_addressRecords === null) {
             $this->_createCustomers(1);
         }
@@ -2008,9 +2008,20 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         ));
         $filter->addFilter(new Tinebase_Model_Filter_Text(array('field' => 'invoice_id', 'operator' => 'equals', 'value' => $invoice->getId())));
 
-        // test default template
-        Tinebase_Core::getPreference('Timetracker')->setValue(Timetracker_Preference::TSODSEXPORTCONFIG, 'ts_default_ods');
-        $export = Tinebase_Export::factory($filter, ['format' => 'ods',], Timetracker_Controller_Timesheet::getInstance());
+        // test export with test template
+        $config = [
+            'definition' => __DIR__ . '/Export/definitions/rechnung_bereitschaft.xml',
+            'app' => 'Timetracker'
+        ];
+        $app = Tinebase_Application::getInstance()->getApplicationByName($config['app']);
+        $definition = Tinebase_ImportExportDefinition::getInstance()
+            ->updateOrCreateFromFilename($config['definition'], $app);
+        
+        $export = Tinebase_Export::factory($filter, [
+            'format' => 'ods',
+            'definitionId' => $definition,
+            ], Timetracker_Controller_Timesheet::getInstance());
+        
         $result = $export->generate();
         $xmlBody = $export->getDocument()->asXML();
         $this->assertTrue(file_exists($result));

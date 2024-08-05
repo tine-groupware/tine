@@ -37,11 +37,6 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
     protected $_specialFields = array('timeaccount');
 
     /**
-     * Summarize records with a certain tag
-     */
-    const TAG_SUM = 'Bereitschaft';
-    
-    /**
      * the constructor
      *
      * @param Tinebase_Model_Filter_FilterGroup $_filter
@@ -66,16 +61,16 @@ class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
         // @todo we need a more generic way of resolving tags! thats quite obscure for modelconfig applications! -> TRA->getTags() maybe?
         Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         parent::_resolveRecords($_records);
-        $showStartDate = true;
-        
+
+        $tag = null;
         foreach ($this->_config->columns->column as $field) {
-            if ($field->identifier === 'start_time' && isset($field->clearValueIfTagNotSet) && $field->clearValueIfTagNotSet === static::TAG_SUM) {
-                $showStartDate = false;
+            if ($field->identifier === 'start_time' && !empty($field->clearValueIfTagNotSet)) {
+                $tag = $field->clearValueIfTagNotSet;
             }
         }
 
         foreach ($_records as $record) {
-            if (!$showStartDate || !$record->tags || ($record->tags->filter('name', static::TAG_SUM)->count() === 0)) {
+            if ($tag && (!$record->tags || ($record->tags->filter('name', $tag)->count() === 0))) {
                 $record->start_time = null;
                 $record->end_time = null;
             }
