@@ -27,6 +27,7 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
     protected $calDAVTests;
 
     protected $response;
+    protected $originalHostname;
     
     /**
      * Sets up the fixture.
@@ -40,10 +41,9 @@ class Calendar_Frontend_CalDAV_PluginManagedAttachmentsTest extends TestCase
         $this->calDAVTests->setup();
         
         parent::setUp();
-        
-        $this->hostname = 'tine.example.com';
+
         $this->originalHostname = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null;
-        $_SERVER['HTTP_HOST'] = $this->hostname;
+        $_SERVER['HTTP_HOST'] = 'tine.example.com';
         
         $this->server = new \Sabre\DAV\Server(new Tinebase_WebDav_ObjectTree(new Tinebase_WebDav_Root()), new Tinebase_WebDav_Sabre_SapiMock());
         

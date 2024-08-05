@@ -25,6 +25,7 @@ class Calendar_Frontend_CalDAV_PluginDefaultAlarmsTest extends TestCase
     protected $server;
 
     protected $plugin;
+    protected $response;
     
     /**
      * Sets up the fixture.

@@ -34,6 +34,8 @@ class Calendar_Frontend_CalDAV_SpeedUpPropfindPluginTest extends Calendar_TestCa
      */
     protected $plugin;
 
+    protected $response;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.

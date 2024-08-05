@@ -18,7 +18,7 @@ class Tasks_ControllerTest extends TestCase
      * @var array test Task 1 data
      */
     protected $_testTask1;
-    
+
     /**
      * @var Tasks_Model_Task persistant (readout from db after persistant creation) test Task 1
      */
@@ -39,6 +39,8 @@ class Tasks_ControllerTest extends TestCase
     protected $_modelNames = array('Tasks_Model_Task' => 'Task');
 
     protected Tasks_Controller_Task $_controller;
+
+    protected $_minimalDatas = [];
     
     /**
      * Sets up the fixture, for example, opens a network connection.
