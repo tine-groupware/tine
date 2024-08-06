@@ -137,7 +137,7 @@ Tine.Tinebase.common = {
             ? dateObj.format('l').substr(0, 2)
             : Ext.util.Format.date(dateObj, Locale.getTranslationData('Date', key));
         
-        if (_.isObject(metadata)) {
+        if (_.isObject(metadata) && metadata.hasOwnProperty('cellAttr')) {
             metadata.css = (metadata.css || '') + ' tine-gird-cell-date';
         }
         
@@ -205,8 +205,8 @@ Tine.Tinebase.common = {
         const dateObj = date instanceof Date ? date : Date.parseDate(date, Date.patterns.ISO8601Time);
         const formatTime = (key) => Ext.util.Format.date(dateObj, Locale.getTranslationData('Time', key));
         
-        if (metadata) {
-            metadata.css = 'tine-gird-cell-time';
+        if (_.isObject(metadata) && metadata.hasOwnProperty('cellAttr')) {
+            metadata.css = (metadata.css || '') + 'tine-gird-cell-time';
         }
         
         return dateObj ? _.map(format, (key) => {
