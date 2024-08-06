@@ -91,7 +91,10 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends TestCase
         // also delete from smtp
         $smtpBackend = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
         foreach ($this->_objects['emailUserIds'] as $userId) {
-            $smtpBackend->deleteUserById($userId);
+            try {
+                $smtpBackend->deleteUserById($userId);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+            }
         }
 
         if ($this->_oldImapConf) {

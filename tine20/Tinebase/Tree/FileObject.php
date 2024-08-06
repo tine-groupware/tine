@@ -395,6 +395,17 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         $oldRecord = $this->get($_record->getId(), true);
         $newRecord = parent::update($_record);
 
+        if ($this->modlogActive()) {
+            $this->_writeModLogAndNotes($newRecord, $oldRecord);
+        }
+
+        Tinebase_Model_Tree_FileObject::setReplicable($oldIsReplicable);
+
+        return $newRecord;
+    }
+
+    protected function _writeModLogAndNotes($newRecord, $oldRecord): void
+    {
         Tinebase_Timemachine_ModificationLog::getInstance()
             ->setRecordMetaData($newRecord, (bool)$newRecord->is_deleted === (bool)$oldRecord->is_deleted ?
                 Tinebase_Controller_Record_Abstract::ACTION_UPDATE : ($newRecord->is_deleted ?
@@ -417,16 +428,12 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
                 }
             }
             $this->addNotesToTreeNodes($newRecord->getId(),
-                isset($diff->diff['lastavscan_time']) && ! empty($diff->diff['lastavscan_time'])
+                isset($diff->diff['lastavscan_time']) && !empty($diff->diff['lastavscan_time'])
                     ? Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN
                     : Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED,
                 $currentMods
             );
         }
-
-        Tinebase_Model_Tree_FileObject::setReplicable($oldIsReplicable);
-
-        return $newRecord;
     }
 
     public function addNotesToTreeNodes($fileObjectId, $noteType = Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, $mods = null)
