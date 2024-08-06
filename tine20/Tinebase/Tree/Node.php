@@ -729,6 +729,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
         $success = true;
         $parentIds = array();
         $transactionManager = Tinebase_TransactionManager::getInstance();
+        $modlogFileObjects = $_fileObjectBackend->modlogActive(false);
 
         $dataSelect = $this->_db->select()
             ->from(['n' => $this->_tablePrefix . $this->_tableName], ['parent_id', 'object_id'])
@@ -792,6 +793,8 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
 
             Tinebase_Lock::keepLocksAlive();
         }
+
+        $_fileObjectBackend->modlogActive($modlogFileObjects);
 
         if (!empty($parentIds)) {
             $success = $this->_recalculateFolderSize($_fileObjectBackend, $parentIds) && $success;
