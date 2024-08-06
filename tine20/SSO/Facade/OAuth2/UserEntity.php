@@ -13,7 +13,7 @@
 
 class SSO_Facade_OAuth2_UserEntity implements \League\OAuth2\Server\Entities\UserEntityInterface
 {
-    protected $user;
+    protected Tinebase_Model_User $user;
 
     public function __construct(Tinebase_Model_User $user)
     {
