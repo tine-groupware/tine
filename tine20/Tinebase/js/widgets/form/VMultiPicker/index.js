@@ -82,7 +82,7 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             this.pickerCombo.render(this.el)
         } else {
             this.initCombo(true)
-            if (!this.vueHandle){
+            if (!this.vueHandle && this.el && this.el.dom){
                 this.createVueApp()
                 this.vueHandle.mount(this.el.dom)
             }
