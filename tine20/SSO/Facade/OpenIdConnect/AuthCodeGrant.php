@@ -18,6 +18,11 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class SSO_Facade_OpenIdConnect_AuthCodeGrant extends AuthCodeGrant
 {
+    protected function makeIdTokenInstance()
+    {
+        return new SSO_Facade_OpenIdConnect_IdToken();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -25,7 +30,7 @@ class SSO_Facade_OpenIdConnect_AuthCodeGrant extends AuthCodeGrant
         ServerRequestInterface $request,
         ResponseTypeInterface $responseType,
         \DateInterval $accessTokenTTL
-    ) {
+    ): ResponseTypeInterface {
         /**
          * @var BearerTokenResponse $result
          */

@@ -67,7 +67,7 @@ class Calendar_Model_EventTypes extends Tinebase_Record_NewAbstract
         self::ASSOCIATIONS => [
             \Doctrine\ORM\Mapping\ClassMetadataInfo::MANY_TO_ONE => [
                 'group_fk' => [
-                    'targetEntity' => Addressbook_Model_List::class,
+                    'targetEntity' => Calendar_Model_EventType::class,
                     'fieldName' => self::FLD_EVENT_TYPE,
                     'joinColumns' => [[
                         'name' => self::FLD_EVENT_TYPE,

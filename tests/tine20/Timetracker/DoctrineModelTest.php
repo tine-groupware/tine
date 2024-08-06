@@ -35,10 +35,12 @@ class Timetracker_DoctrineModelTest extends TestCase
         $classes = Setup_SchemaTool::getMetadata(array('Timetracker_Model_Timeaccount', 'Timetracker_Model_Timesheet'));
         $schema = $tool->getSchemaFromMetadata($classes);
         $sql = $schema->toSql($em->getConnection()->getDatabasePlatform());
-        self::assertEquals(3, count($sql));
+        self::assertEquals(4, count($sql), print_r($sql, true));
         self::assertStringContainsString('CREATE TABLE tine20_timetracker_timeaccount', $sql[0], print_r($sql, true));
         self::assertStringContainsString('CREATE TABLE tine20_timetracker_timesheet', $sql[1], print_r($sql, true));
-        self::assertStringContainsString('ALTER TABLE tine20_timetracker_timesheet ADD CONSTRAINT', $sql[2], print_r($sql, true));
-        self::assertStringContainsString('FOREIGN KEY (timeaccount_id) REFERENCES tine20_timetracker_timeaccount (id)', $sql[2], print_r($sql, true));
+        self::assertStringContainsString('ALTER TABLE tine20_timetracker_timeaccount ADD CONSTRAINT', $sql[2], print_r($sql, true));
+        self::assertStringContainsString('FOREIGN KEY (eval_dim_cost_center) REFERENCES tine20_evaluation_dimension_item (id)', $sql[2], print_r($sql, true));
+        self::assertStringContainsString('ALTER TABLE tine20_timetracker_timesheet ADD CONSTRAINT', $sql[3], print_r($sql, true));
+        self::assertStringContainsString('FOREIGN KEY (timeaccount_id) REFERENCES tine20_timetracker_timeaccount (id)', $sql[3], print_r($sql, true));
     }
 }

@@ -58,10 +58,6 @@
     },
     {
       "type": "git",
-      "url": "https://github.com/tine20/oauth2-server.git"
-    },
-    {
-      "type": "git",
       "url": "https://github.com/tine-groupware/zendframework1.git"
     },
     {
@@ -74,7 +70,7 @@
     }
   ],
   "require": {
-    "php": "8.0.2 - 8.2",
+    "php": "8.1 - 8.2",
     "ext-SPL": "*",
     "ext-SimpleXML": "*",
     "ext-bcmath": "*",
@@ -91,6 +87,8 @@
     "ext-mbstring": "*",
     "ext-openssl": "*",
     "ext-xml": "*",
+    "ext-xmlreader": "*",
+    "ext-xmlwriter": "*",
     "ext-zip": "*",
     "benmorel/gsm-charset-converter": "^0.2",
     "clean/phpdoc-md": "^0.19.3",
@@ -111,7 +109,6 @@
     "laminas/laminas-zendframework-bridge": "^1.6",
     "league/flysystem": "^3.0",
     "league/flysystem-webdav": "^3.16",
-    "league/oauth2-server": "8.3.5pl1 as 8.3.5",
     "metaways/opendocument": "1.*",
     "metaways/timezoneconvert": "1.*",
     "mlocati/ip-lib": "^1.18",
@@ -179,14 +176,33 @@
   "config": {
     "secure-http": false,
     "platform": {
-      "php": "8.0.2",
-      "ext-filter": "8.0"
+      "php": "8.1",
+      "ext-spl": "8.1",
+      "ext-simplexml": "8.1",
+      "ext-bcmath": "8.1",
+      "ext-ctype": "8.1",
+      "ext-curl": "8.1",
+      "ext-date": "8.1",
+      "ext-dom": "8.1",
+      "ext-gd": "8.1",
+      "ext-hash": "8.1",
+      "ext-iconv": "8.1",
+      "ext-intl": "8.1",
+      "ext-json": "8.1",
+      "ext-libxml": "8.1",
+      "ext-mbstring": "8.1",
+      "ext-openssl": "8.1",
+      "ext-xml": "8.1",
+      "ext-xmlreader": "8.1",
+      "ext-xmlwriter": "8.1",
+      "ext-zip": "8.1"
     },
     "sort-packages": true,
     "allow-plugins": {
       "tine20/composerapploader": true,
-      "simplesamlphp/composer-module-installer": true,
-      "digitalrevolution/php-codesniffer-baseline": true
+      "simplesamlphp/composer-module-installer": false,
+      "digitalrevolution/php-codesniffer-baseline": false,
+      "php-http/discovery": false
     },
     "autoloader-suffix": "stable"
   },

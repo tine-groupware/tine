@@ -96,11 +96,6 @@ parameters:
 			path: tine20/Addressbook/Controller/Contact.php
 
 		-
-			message: "#^Call to an undefined method Sabre\\\\VObject\\\\Node\\:\\:has\\(\\)\\.$#"
-			count: 1
-			path: tine20/Addressbook/Convert/Contact/VCard/EMClient.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$data$#"
 			count: 1
 			path: tine20/Addressbook/Convert/Contact/VCard/EMClient.php
@@ -369,11 +364,6 @@ parameters:
 			message: "#^PHPDoc tag @param has invalid value \\(array array of record identifiers\\)\\: Unexpected token \"array\", expected variable at offset 147$#"
 			count: 1
 			path: tine20/Admin/Controller/EmailAccount.php
-
-		-
-			message: "#^Access to an undefined property Admin_Controller_ImportExportDefinition\\:\\:\\$_doImportExportDefinitionACLChecks\\.$#"
-			count: 1
-			path: tine20/Admin/Controller/ImportExportDefinition.php
 
 		-
 			message: "#^Method Tinebase_Backend_Interface\\:\\:search\\(\\) invoked with 5 parameters, 0\\-3 required\\.$#"
@@ -702,7 +692,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Tinebase_Backend_Sql_Interface\\:\\:deleteAttendee\\(\\)\\.$#"
-			count: 1
+			count: 2
 			path: tine20/Calendar/Controller/Event.php
 
 		-
@@ -728,6 +718,21 @@ parameters:
 		-
 			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:setRecurId\\(\\)\\.$#"
 			count: 1
+			path: tine20/Calendar/Controller/Event.php
+
+		-
+			message: "#^Cannot access property \\$busy_type on string\\.$#"
+			count: 1
+			path: tine20/Calendar/Controller/Event.php
+
+		-
+			message: "#^Cannot access property \\$email on string\\.$#"
+			count: 1
+			path: tine20/Calendar/Controller/Event.php
+
+		-
+			message: "#^Cannot call method getId\\(\\) on string\\.$#"
+			count: 2
 			path: tine20/Calendar/Controller/Event.php
 
 		-
@@ -766,6 +771,11 @@ parameters:
 			path: tine20/Calendar/Controller/Event.php
 
 		-
+			message: "#^Variable \\$exdates in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Calendar/Controller/Event.php
+
+		-
 			message: "#^Variable \\$idx might not be defined\\.$#"
 			count: 1
 			path: tine20/Calendar/Controller/Event.php
@@ -784,6 +794,16 @@ parameters:
 			message: "#^Variable \\$sendNotifications might not be defined\\.$#"
 			count: 1
 			path: tine20/Calendar/Controller/Event.php
+
+		-
+			message: "#^Cannot access property \\$id on string\\.$#"
+			count: 1
+			path: tine20/Calendar/Controller/EventNotifications.php
+
+		-
+			message: "#^Variable \\$attendeeMigration in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: tine20/Calendar/Controller/EventNotifications.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:assertAttendee\\(\\)\\.$#"
@@ -906,6 +926,11 @@ parameters:
 			path: tine20/Calendar/Export/VCalendar.php
 
 		-
+			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:getOriginalDtStart\\(\\)\\.$#"
+			count: 1
+			path: tine20/Calendar/Frontend/ActiveSync.php
+
+		-
 			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Document\\:\\:\\$VTIMEZONE\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/FixMultiGet404Plugin.php
@@ -939,11 +964,6 @@ parameters:
 			message: "#^Call to an undefined method Tinebase_User_Abstract\\:\\:get\\(\\)\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/CalDAV/ScheduleInbox.php
-
-		-
-			message: "#^Call to an undefined method Sabre\\\\DAV\\\\INode\\:\\:calendarQuery\\(\\)\\.$#"
-			count: 1
-			path: tine20/Calendar/Frontend/CalDAV/SpeedUpPlugin.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:setOption\\(\\)\\.$#"
@@ -1006,7 +1026,7 @@ parameters:
 			path: tine20/Calendar/Frontend/WebDAV/Event.php
 
 		-
-			message: "#^Method Calendar_Frontend_WebDAV_Event\\:\\:getLastModified\\(\\) has invalid return type time\\.$#"
+			message: "#^Cannot access property \\$adminGrant on string\\.$#"
 			count: 1
 			path: tine20/Calendar/Frontend/WebDAV/Event.php
 
@@ -1111,6 +1131,21 @@ parameters:
 			path: tine20/Calendar/Model/Attender.php
 
 		-
+			message: "#^Cannot access property \\$email on string\\.$#"
+			count: 1
+			path: tine20/Calendar/Model/Attender.php
+
+		-
+			message: "#^Cannot access property \\$n_fileas on string\\.$#"
+			count: 1
+			path: tine20/Calendar/Model/Attender.php
+
+		-
+			message: "#^Cannot access property \\$n_fn on string\\.$#"
+			count: 1
+			path: tine20/Calendar/Model/Attender.php
+
+		-
 			message: "#^Cannot call method hasExternalOrganizer\\(\\) on Tinebase_Record_Interface\\|true\\.$#"
 			count: 1
 			path: tine20/Calendar/Model/Attender.php
@@ -1146,18 +1181,18 @@ parameters:
 			path: tine20/Calendar/Model/Resource.php
 
 		-
-			message: "#^Call to an undefined method DateTime\\:\\:isEarlier\\(\\)\\.$#"
+			message: "#^Binary operation \"\\-\" between string and string results in an error\\.$#"
 			count: 2
-			path: tine20/Calendar/Model/Rrule.php
-
-		-
-			message: "#^Call to an undefined method DateTime\\:\\:isLater\\(\\)\\.$#"
-			count: 1
 			path: tine20/Calendar/Model/Rrule.php
 
 		-
 			message: "#^Call to an undefined method DateTime\\:\\:toString\\(\\)\\.$#"
-			count: 2
+			count: 1
+			path: tine20/Calendar/Model/Rrule.php
+
+		-
+			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:toString\\(\\)\\.$#"
+			count: 1
 			path: tine20/Calendar/Model/Rrule.php
 
 		-
@@ -1172,11 +1207,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method getUntil\\(\\) on array\\|Tinebase_Model_Filter_Abstract\\.$#"
-			count: 1
-			path: tine20/Calendar/Model/Rrule.php
-
-		-
-			message: "#^Method DateTime\\:\\:add\\(\\) invoked with 2 parameters, 1 required\\.$#"
 			count: 1
 			path: tine20/Calendar/Model/Rrule.php
 
@@ -1244,16 +1274,6 @@ parameters:
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$default$#"
 			count: 1
 			path: tine20/Calendar/Preference.php
-
-		-
-			message: "#^Access to an undefined property Calendar_Setup_DemoData\\:\\:\\$_ressources\\.$#"
-			count: 1
-			path: tine20/Calendar/Setup/DemoData.php
-
-		-
-			message: "#^Access to an undefined property Calendar_Setup_DemoData\\:\\:\\$sharedEventsData\\.$#"
-			count: 1
-			path: tine20/Calendar/Setup/DemoData.php
 
 		-
 			message: "#^Access to an undefined property Calendar_Setup_Import_Egw14\\:\\:\\$_tineRecordBackend\\.$#"
@@ -1431,7 +1451,7 @@ parameters:
 			path: tine20/Crm/Export/Pdf.php
 
 		-
-			message: "#^Cannot call method toArray\\(\\) on void\\.$#"
+			message: "#^Cannot call method toArray\\(\\) on null\\.$#"
 			count: 1
 			path: tine20/Crm/Frontend/Json.php
 
@@ -1656,11 +1676,6 @@ parameters:
 			path: tine20/EFile/Controller.php
 
 		-
-			message: "#^Variable \\$counter in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: tine20/EFile/Setup/Update/1.php
-
-		-
 			message: "#^Cannot access property \\$exampleRecordsDb on array\\<string, mixed\\>\\.$#"
 			count: 1
 			path: tine20/ExampleApplication/Controller/ExternalDbRecord.php
@@ -1851,11 +1866,6 @@ parameters:
 			path: tine20/Felamimail/Controller/Message/Send.php
 
 		-
-			message: "#^Call to an undefined method object\\:\\:getAliasesAsEmails\\(\\)\\.$#"
-			count: 1
-			path: tine20/Felamimail/Controller/Sieve.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:resolveCredentials\\(\\)\\.$#"
 			count: 2
 			path: tine20/Felamimail/Convert/Account/Json.php
@@ -1962,7 +1972,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$foundParts might not be defined\\.$#"
-			count: 2
+			count: 9
 			path: tine20/Felamimail/Model/Message.php
 
 		-
@@ -1974,6 +1984,11 @@ parameters:
 			message: "#^PHPDoc tag @property has invalid value \\(string                                                         classname\\)\\: Unexpected token \"classname\", expected variable at offset 183$#"
 			count: 1
 			path: tine20/Felamimail/Model/MessagePipeConfig.php
+
+		-
+			message: "#^Cannot unset offset 'Felamimail_Model_Sieve_Rule' on array\\<mixed, mixed\\>\\.$#"
+			count: 1
+			path: tine20/Felamimail/Model/Sieve/Rule.php
 
 		-
 			message: "#^PHPDoc tag @property has invalid value \\(array   requires\\)\\: Unexpected token \"requires\", expected variable at offset 212$#"
@@ -2292,11 +2307,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Tinebase_BL_DataInterface\\:\\:\\$timeSlots\\.$#"
-			count: 1
-			path: tine20/HumanResources/BL/DailyWTReport/BreakTime.php
-
-		-
-			message: "#^Access to an undefined property Tinebase_BL_ElementInterface\\:\\:\\$_config\\.$#"
 			count: 1
 			path: tine20/HumanResources/BL/DailyWTReport/BreakTime.php
 
@@ -2641,6 +2651,11 @@ parameters:
 			path: tine20/OnlyOfficeIntegrator/Setup/Update/1.php
 
 		-
+			message: "#^Variable \\$logoutRequests in empty\\(\\) is never defined\\.$#"
+			count: 1
+			path: tine20/SSO/Controller.php
+
+		-
 			message: "#^Method SSO_Facade_OpenIdConnect_ClaimRepository\\:\\:getClaimEntityByIdentifier\\(\\) should return Idaas\\\\OpenID\\\\Entities\\\\ClaimEntityInterface\\|null but return statement is missing\\.$#"
 			count: 1
 			path: tine20/SSO/Facade/OpenIdConnect/ClaimRepository.php
@@ -2752,7 +2767,7 @@ parameters:
 
 		-
 			message: "#^Variable \\$forTrace might not be defined\\.$#"
-			count: 4
+			count: 2
 			path: tine20/Sales/Controller/Invoice.php
 
 		-
@@ -2996,6 +3011,11 @@ parameters:
 			path: tine20/Setup/Backend/Mysql.php
 
 		-
+			message: "#^Binary operation \"\\.\" between 'restore command…' and array\\<int, string\\> results in an error\\.$#"
+			count: 1
+			path: tine20/Setup/Backend/Mysql.php
+
+		-
 			message: "#^Constructor of class Setup_Backend_Schema_Abstract has an unused parameter \\$_declaration\\.$#"
 			count: 1
 			path: tine20/Setup/Backend/Schema/Abstract.php
@@ -3073,11 +3093,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Setup_Backend_Interface\\:\\:execInsertStatement\\(\\)\\.$#"
 			count: 1
-			path: tine20/Setup/Controller.php
-
-		-
-			message: "#^Call to an undefined method Setup_Backend_Interface\\:\\:setForeignKeyChecks\\(\\)\\.$#"
-			count: 2
 			path: tine20/Setup/Controller.php
 
 		-
@@ -3221,6 +3236,11 @@ parameters:
 			path: tine20/Tasks/Controller/Task.php
 
 		-
+			message: "#^Variable \\$notes on left side of \\?\\? always exists and is not nullable\\.$#"
+			count: 1
+			path: tine20/Tasks/Controller/Task.php
+
+		-
 			message: "#^Access to an undefined property Sabre\\\\VObject\\\\Component\\\\VCalendar\\:\\:\\$CALSCALE\\.$#"
 			count: 1
 			path: tine20/Tasks/Convert/Task/VCalendar/Abstract.php
@@ -3341,6 +3361,21 @@ parameters:
 			path: tine20/Timetracker/Controller/Timesheet.php
 
 		-
+			message: "#^Variable \\$duration in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 2
+			path: tine20/Timetracker/Controller/Timesheet.php
+
+		-
+			message: "#^Variable \\$end in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 2
+			path: tine20/Timetracker/Controller/Timesheet.php
+
+		-
+			message: "#^Variable \\$start in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 2
+			path: tine20/Timetracker/Controller/Timesheet.php
+
+		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$TimeaccountGrantsArray$#"
 			count: 1
 			path: tine20/Timetracker/Frontend/Json.php
@@ -3356,19 +3391,9 @@ parameters:
 			path: tine20/Timetracker/Model/TimeaccountFavoriteFilter.php
 
 		-
-			message: "#^Access to an undefined property Timetracker_Model_TimeaccountFilter\\:\\:\\$_validTimeaccounts\\.$#"
-			count: 1
-			path: tine20/Timetracker/Model/TimeaccountFilter.php
-
-		-
 			message: "#^Call to an undefined method Tinebase_Log\\:\\:INFO\\(\\)\\.$#"
 			count: 1
 			path: tine20/Timetracker/Model/TimeaccountFilter.php
-
-		-
-			message: "#^Access to an undefined property Timetracker_Model_TimesheetFilter\\:\\:\\$_validTimeaccounts\\.$#"
-			count: 1
-			path: tine20/Timetracker/Model/TimesheetFilter.php
 
 		-
 			message: "#^Access to an undefined property Zend_Db_Adapter_Abstract\\:\\:\\$table_prefix\\.$#"
@@ -3397,6 +3422,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\$_text of method Timetracker_Setup_Import_Egw14\\:\\:_encode\\(\\) has invalid type unknown_type\\.$#"
+			count: 1
+			path: tine20/Timetracker/Setup/Import/Egw14.php
+
+		-
+			message: "#^Undefined variable\\: \\$_parentData$#"
 			count: 1
 			path: tine20/Timetracker/Setup/Import/Egw14.php
 
@@ -3516,6 +3546,11 @@ parameters:
 			path: tine20/Tinebase/ActionQueue/Worker.php
 
 		-
+			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:getBackend\\(\\)\\.$#"
+			count: 3
+			path: tine20/Tinebase/AreaLock.php
+
+		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$_getConfiguredBackend$#"
 			count: 1
 			path: tine20/Tinebase/Auth.php
@@ -3626,7 +3661,7 @@ parameters:
 			path: tine20/Tinebase/Config.php
 
 		-
-			message: "#^Binary operation \"\\.\" between non\\-empty\\-string and array results in an error\\.$#"
+			message: "#^Binary operation \"\\.\" between non\\-falsy\\-string and array results in an error\\.$#"
 			count: 1
 			path: tine20/Tinebase/Container.php
 
@@ -3656,7 +3691,7 @@ parameters:
 			path: tine20/Tinebase/Container.php
 
 		-
-			message: "#^Binary operation \"\\.\" between non\\-empty\\-string and array results in an error\\.$#"
+			message: "#^Binary operation \"\\.\" between non\\-falsy\\-string and array results in an error\\.$#"
 			count: 1
 			path: tine20/Tinebase/Controller.php
 
@@ -3731,6 +3766,11 @@ parameters:
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
 		-
+			message: "#^Call to an undefined method Tinebase_Record_RecordSet\\:\\:setMinutesBefore\\(\\)\\.$#"
+			count: 1
+			path: tine20/Tinebase/Controller/Record/Abstract.php
+
+		-
 			message: "#^Call to an undefined method object\\:\\:has\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Abstract.php
@@ -3747,11 +3787,6 @@ parameters:
 
 		-
 			message: "#^Variable \\$createdRecord might not be defined\\.$#"
-			count: 1
-			path: tine20/Tinebase/Controller/Record/Abstract.php
-
-		-
-			message: "#^Variable \\$currentAccountId might not be defined\\.$#"
 			count: 1
 			path: tine20/Tinebase/Controller/Record/Abstract.php
 
@@ -3827,6 +3862,11 @@ parameters:
 
 		-
 			message: "#^Binary operation \"\\+\" between \\(float\\|int\\) and string results in an error\\.$#"
+			count: 1
+			path: tine20/Tinebase/Convert/VCalendar/Abstract.php
+
+		-
+			message: "#^Binary operation \"\\-\" between string and 1 results in an error\\.$#"
 			count: 1
 			path: tine20/Tinebase/Convert/VCalendar/Abstract.php
 
@@ -3934,6 +3974,11 @@ parameters:
 			message: "#^PHPDoc tag @throws with type Tinebas_Exception_SystemGeneric\\|Tinebase_Exception_EmailInAddionalDomains is not subtype of Throwable$#"
 			count: 1
 			path: tine20/Tinebase/EmailUser.php
+
+		-
+			message: "#^Binary operation \"/\" between string and 1024 results in an error\\.$#"
+			count: 1
+			path: tine20/Tinebase/EmailUser/Imap/Cyrus.php
 
 		-
 			message: "#^Constructor of class Tinebase_EmailUser_Imap_Cyrus has an unused parameter \\$_options\\.$#"
@@ -4166,11 +4211,6 @@ parameters:
 			path: tine20/Tinebase/Export/Csv.php
 
 		-
-			message: "#^Method PhpOffice\\\\PhpWord\\\\PhpWord\\:\\:save\\(\\) invoked with 0 parameters, 1\\-3 required\\.$#"
-			count: 2
-			path: tine20/Tinebase/Export/Doc.php
-
-		-
 			message: "#^Call to an undefined method Twig\\\\Extension\\\\ExtensionInterface\\:\\:setDefaultStrategy\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/Export/Doc2.php
@@ -4217,11 +4257,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property object\\:\\:\\$replacement\\.$#"
-			count: 2
-			path: tine20/Tinebase/Export/Richtext/Doc.php
-
-		-
-			message: "#^Method PhpOffice\\\\PhpWord\\\\PhpWord\\:\\:save\\(\\) invoked with 0 parameters, 1\\-3 required\\.$#"
 			count: 2
 			path: tine20/Tinebase/Export/Richtext/Doc.php
 
@@ -4306,6 +4341,11 @@ parameters:
 			path: tine20/Tinebase/Expressive/Middleware/RoutePipeInject.php
 
 		-
+			message: "#^Binary operation \"\\*\" between string and 0\\.99 results in an error\\.$#"
+			count: 1
+			path: tine20/Tinebase/FileSystem.php
+
+		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:get\\(\\)\\.$#"
 			count: 1
 			path: tine20/Tinebase/FileSystem.php
@@ -4374,6 +4414,11 @@ parameters:
 			message: "#^Binary operation \"\\-\" between string and int\\<1, max\\> results in an error\\.$#"
 			count: 1
 			path: tine20/Tinebase/FilterSyncToken/Backend/Sql.php
+
+		-
+			message: "#^Binary operation \"\\+\" between array\\|int and 1 results in an error\\.$#"
+			count: 1
+			path: tine20/Tinebase/Frontend/Cli.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Controller_Abstract\\:\\:doContainerACLChecks\\(\\)\\.$#"
@@ -4826,16 +4871,6 @@ parameters:
 			path: tine20/Tinebase/Http/Server.php
 
 		-
-			message: "#^Default value of the parameter \\#1 \\$request \\(false\\) of method Tinebase_Http_Server\\:\\:handle\\(\\) is incompatible with type array\\.$#"
-			count: 1
-			path: tine20/Tinebase/Http/Server.php
-
-		-
-			message: "#^PHPDoc tag @param references unknown parameter\\: \\$fault$#"
-			count: 1
-			path: tine20/Tinebase/Http/Server.php
-
-		-
 			message: "#^PHPDoc tag @param references unknown parameter\\: \\$string$#"
 			count: 1
 			path: tine20/Tinebase/Http/Server.php
@@ -4862,6 +4897,11 @@ parameters:
 
 		-
 			message: "#^PHPDoc tag @return has invalid value \\(@see\\{Tinebase_Import_Interface\\:\\:import\\}\\)\\: Unexpected token \"@see\", expected type at offset 127$#"
+			count: 1
+			path: tine20/Tinebase/Import/Abstract.php
+
+		-
+			message: "#^Undefined variable\\: \\$filterValueToAdd$#"
 			count: 1
 			path: tine20/Tinebase/Import/Abstract.php
 
@@ -5421,7 +5461,7 @@ parameters:
 			path: tine20/Tinebase/Model/FilterSyncToken.php
 
 		-
-			message: "#^Binary operation \"\\.\" between non\\-empty\\-string and DateTime results in an error\\.$#"
+			message: "#^Binary operation \"\\.\" between non\\-falsy\\-string and DateTime results in an error\\.$#"
 			count: 2
 			path: tine20/Tinebase/Model/FullUser.php
 
@@ -6171,17 +6211,17 @@ parameters:
 			path: tine20/Tinebase/RAII.php
 
 		-
-			message: "#^Instantiated class Tinebase_Record_Abstract is abstract\\.$#"
-			count: 1
-			path: tine20/Tinebase/Record/Abstract.php
-
-		-
 			message: "#^PHPDoc tag @param has invalid value \\(string Tinebase_DateTime\\:\\:ISO8601 representation of a datetime filed\\)\\: Unexpected token \"Tinebase_DateTime\", expected variable at offset 320$#"
 			count: 1
 			path: tine20/Tinebase/Record/Abstract.php
 
 		-
 			message: "#^PHPDoc tag @return has invalid value \\(&array\\)\\: Unexpected token \"&\", expected type at offset 102$#"
+			count: 1
+			path: tine20/Tinebase/Record/Abstract.php
+
+		-
+			message: "#^Variable \\$_record in empty\\(\\) is never defined\\.$#"
 			count: 1
 			path: tine20/Tinebase/Record/Abstract.php
 
@@ -6286,12 +6326,12 @@ parameters:
 			path: tine20/Tinebase/Record/NewAbstract.php
 
 		-
-			message: "#^Method Tinebase_Record_Interface\\:\\:setTimezone\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			message: "#^PHPDoc tag @return has invalid value \\(&array\\)\\: Unexpected token \"&\", expected type at offset 176$#"
 			count: 1
 			path: tine20/Tinebase/Record/NewAbstract.php
 
 		-
-			message: "#^PHPDoc tag @return has invalid value \\(&array\\)\\: Unexpected token \"&\", expected type at offset 176$#"
+			message: "#^Variable \\$_record in empty\\(\\) is never defined\\.$#"
 			count: 1
 			path: tine20/Tinebase/Record/NewAbstract.php
 
@@ -6519,16 +6559,6 @@ parameters:
 			message: "#^Method Tinebase_Server_Plugin_WebDAV\\:\\:getServer\\(\\) should return Tinebase_Server_Interface but return statement is missing\\.$#"
 			count: 1
 			path: tine20/Tinebase/Server/Plugin/WebDAV.php
-
-		-
-			message: "#^Variable \\$loginName might not be defined\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/WebDAV.php
-
-		-
-			message: "#^Variable \\$password might not be defined\\.$#"
-			count: 1
-			path: tine20/Tinebase/Server/WebDAV.php
 
 		-
 			message: "#^Variable \\$tbVersion might not be defined\\.$#"
@@ -6839,21 +6869,6 @@ parameters:
 			message: "#^Parameter \\$_filter of method Tinebase_Timemachine_Interface\\:\\:getModified\\(\\) has invalid type Tinebase_Record_Filter\\.$#"
 			count: 1
 			path: tine20/Tinebase/Timemachine/Interface.php
-
-		-
-			message: "#^Binary operation \"\\.\" between 'Tinebase…' and DateTime results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Timemachine/ModificationLog.php
-
-		-
-			message: "#^Binary operation \"\\.\" between non\\-empty\\-string and DateTime results in an error\\.$#"
-			count: 1
-			path: tine20/Tinebase/Timemachine/ModificationLog.php
-
-		-
-			message: "#^Call to an undefined method DateTime\\:\\:equals\\(\\)\\.$#"
-			count: 1
-			path: tine20/Tinebase/Timemachine/ModificationLog.php
 
 		-
 			message: "#^Call to an undefined method Tinebase_Record_Interface\\:\\:_convertISO8601ToDateTime\\(\\)\\.$#"
