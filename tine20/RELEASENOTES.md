@@ -9,6 +9,9 @@ TINE RELEASENOTES
 
 ## PHP 8.2 Support
 
+- PHP 8.2 is now fully supported
+- PHP 8.0 support has been dropped
+
 # GENERAL CHANGES (User Interface)
 
 # ADMIN / OPERATION
