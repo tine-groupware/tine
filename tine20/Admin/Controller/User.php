@@ -247,19 +247,20 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             Tinebase_User::getInstance()->sendDeactivationNotification($user);
         }
 
+        // do this before throwing event because we might have to create email systemaccount/folders for mail accounts
+        if (!empty($_password) && !empty($_passwordRepeat)) {
+            $this->setAccountPassword($user, $_password, $_passwordRepeat, (bool)$_user->password_must_change);
+        }
+
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
         $event->account = $user;
         $event->oldAccount = $oldUser;
         $event->pwd = $_password;
         Tinebase_Event::fireEvent($event);
-        
-        if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->setAccountPassword($_user, $_password, $_passwordRepeat, (bool)$_user->password_must_change);
-        }
 
         $this->_updateCurrentUser($user);
-        
+
         return $user;
     }
 
