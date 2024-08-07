@@ -421,6 +421,8 @@ class Tinebase_ModelConfiguration extends Tinebase_ModelConfiguration_Const
 
     protected $_runConvertToRecordFromJson = false;
 
+    protected $_hasdepeneAttachments = false;
+
     /**
      * inspectBeforeUpdateHooks to be called by \Tinebase_Controller_Record_Abstract::_inspectBeforeUpdate
      *
