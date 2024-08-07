@@ -174,16 +174,18 @@ Tine.widgets.grid.FilterToolbarQuickFilterPlugin.prototype = {
             this.quickFilter.on('change', this.syncField, this);
         }
         
-        this.criteriaText = new Ext.Panel({
-            border: 0,
-            html: '',
-            bodyStyle: {
+        if (!this.criteriaText) {
+            this.criteriaText = new Ext.Panel({
                 border: 0,
-                background: 'none', 
-                'text-align': 'left', 
-                'line-height': '11px'
-            }
-        });
+                html: '',
+                bodyStyle: {
+                    border: 0,
+                    background: 'none',
+                    'text-align': 'left',
+                    'line-height': '11px'
+                }
+            });
+        }
         
         var stateful = !! this.ftb.recordClass;
         // autogenerate stateId
