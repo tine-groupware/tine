@@ -21,6 +21,8 @@ class Setup_CliTest extends TestCase
 {
     protected $_oldConfigs = array();
 
+    protected $_cli;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
