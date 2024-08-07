@@ -32,7 +32,9 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
      * @var array list of forbidden file names
      */
     protected static $_forbiddenNames = array('.DS_Store', 'Thumbs.db');
-    
+
+    protected static $_CONTENT_LENGTH;
+
     public function __construct($_path) 
     {
         $this->_path      = $_path;
@@ -45,8 +47,11 @@ abstract class Tinebase_Frontend_WebDAV_Node implements Sabre\DAV\INode, \Sabre\
         } catch (Tinebase_Exception_NotFound $tenf) {}
         
         if (! $this->_node) {
-            throw new Sabre\DAV\Exception\NotFound('Filesystem path: ' . $_path . ' not found');
+            throw new Tine20\DAV\Exception\NotFound('Filesystem path: ' . $_path . ' not found');
         }
+
+        // You cannot rely on HTTP_* in some cases, see https://www.php.net/reserved.variables.server comment #15
+        self::$_CONTENT_LENGTH = $_SERVER['HTTP_CONTENT_LENGTH'] ?? $_SERVER['CONTENT_LENGTH'] ?? false;
     }
     
     public function getId()
