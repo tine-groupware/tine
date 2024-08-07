@@ -362,9 +362,11 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
-            __METHOD__ . '::' . __LINE__
-            . ' Deleting custom field config ' . $cfId . ' and values.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
+            Tinebase_Core::getLogger()->info(
+                __METHOD__ . '::' . __LINE__
+                . ' Deleting custom field config ' . $cfId . ' and values.');
+        }
         
         $this->_clearCache();
         $this->_backendValue->deleteByProperty($cfId, 'customfield_id');
@@ -376,10 +378,16 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         if ($_customField->is_system) {
             /** @var Tinebase_Record_Interface $model */
             $model = $_customField->model;
-            $model::resetConfiguration();
+            if (class_exists($model)) {
+                $model::resetConfiguration();
 
-            if ((new Tinebase_Record_DoctrineMappingDriver())->isTransient($model)) {
-                Setup_SchemaTool::updateSchema([$model]);
+                if ((new Tinebase_Record_DoctrineMappingDriver())->isTransient($model)) {
+                    Setup_SchemaTool::updateSchema([$model]);
+                }
+            } else if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
+                Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__
+                    . ' Customfield class does not exist: ' . $model);
             }
         }
     }
