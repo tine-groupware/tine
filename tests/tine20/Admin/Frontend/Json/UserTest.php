@@ -25,7 +25,7 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
         $this->assertTrue(is_array($account));
         $this->assertEquals('PHPUnitup', $account['accountFirstName'], print_r($account, true));
-        $this->assertEquals(Tinebase_Group::getInstance()->getGroupByName('tine20phpunitgroup')->getId(), $account['accountPrimaryGroup']['id']);
+        $this->assertEquals(Tinebase_Group::getInstance()->getDefaultGroup()->getId(), $account['accountPrimaryGroup']['id']);
         $this->assertTrue(! empty($account['accountId']), 'no account id');
 
         // FIXME make auth check work for ldap backends!
@@ -60,9 +60,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
     public function _getUserArrayWithPw($pwdMustChange = false)
     {
-        $group = $this->_createGroup();
         $accountData = $this->_getUserData();
-        $accountData['accountPrimaryGroup'] = $group['id'];
+        $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getDefaultGroup()->getId();
         $accountData['accountFirstName'] = 'PHPUnitup';
         $accountData['accountLastName'] = 'PHPUnitlast';
         $accountData['xprops'][Tinebase_Model_FullUser::XPROP_PERSONAL_FS_QUOTA] = 100;
@@ -170,8 +169,10 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
     public function testSaveAccountWithAndWithoutEmail()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
+        $this->_testNeedsTransaction();
 
         $accountData = $this->_getUserArrayWithPw();
+        $this->_usernamesToDelete[] = $accountData['accountLoginName'];
         $emailUser = array (
             'emailMailQuota' => 0,
             'emailMailSize' => 0,
@@ -194,24 +195,38 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         self::assertEmpty($account['accountEmailAddress']);
 
         if (Tinebase_Application::getInstance()->isInstalled('Felamimail')) {
-            $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
-                ['field' => 'user_id', 'operator' => 'equals', 'value' => $account['accountId']]
-            ]);
-            $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
-            // remove instance to prevent acl pollution
-            Admin_Controller_EmailAccount::destroyInstance();
-            self::assertCount(0, $emailAccounts, 'empty mail account created: ' . print_r($emailAccounts->toArray(), true));
+            $this->_assertFelamimailAccount($account);
+        }
+    }
 
-            // add email address -> accounts should be created
-            $account['accountEmailAddress'] = $account['accountLoginName'] . '@' . TestServer::getPrimaryMailDomain();
-            $account['accountPassword'] = Tinebase_Record_Abstract::generateUID('20');
-            $account = $this->_json->saveUser($account);
-            self::assertTrue(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP]), 'imap user not found!');
-            self::assertTrue(isset($account['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP]), 'smtp user not found!');
-            $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
-            // remove instance to prevent acl pollution
-            Admin_Controller_EmailAccount::destroyInstance();
-            self::assertCount(1, $emailAccounts);
+    protected function _assertFelamimailAccount(array $user)
+    {
+        $filter = Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Account::class, [
+            ['field' => 'user_id', 'operator' => 'equals', 'value' => $user['accountId']]
+        ]);
+        $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
+        // remove instance to prevent acl pollution
+        Admin_Controller_EmailAccount::destroyInstance();
+        self::assertCount(0, $emailAccounts, 'empty mail account created: ' . print_r($emailAccounts->toArray(), true));
+
+        // add email address -> accounts should be created
+        $user['accountEmailAddress'] = $user['accountLoginName'] . '@' . TestServer::getPrimaryMailDomain();
+        $user['accountPassword'] = Tinebase_Record_Abstract::generateUID('20');
+        $user = $this->_json->saveUser($user);
+        self::assertTrue(isset($user['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_IMAP]), 'imap user not found!');
+        self::assertTrue(isset($user['xprops'][Tinebase_Model_FullUser::XPROP_EMAIL_USERID_SMTP]), 'smtp user not found!');
+        $emailAccounts = Admin_Controller_EmailAccount::getInstance()->search($filter);
+        // remove instance to prevent acl pollution
+        Admin_Controller_EmailAccount::destroyInstance();
+        self::assertCount(1, $emailAccounts);
+
+        if (Felamimail_Config::getInstance()->featureEnabled(Felamimail_Config::FEATURE_SYSTEM_ACCOUNT_AUTOCREATE_FOLDERS)) {
+            // check if folders exist
+            $backend = new Felamimail_Backend_Folder();
+            $result = $backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Felamimail_Model_Folder::class, [
+                ['field' => 'account_id', 'operator' => 'equals', 'value' => $emailAccounts->getFirstRecord()->getId()]
+            ]));
+            self::assertGreaterThanOrEqual(4, count($result));
         }
     }
 
