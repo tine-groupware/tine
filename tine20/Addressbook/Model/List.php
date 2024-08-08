@@ -18,7 +18,7 @@
  * @property    string      $name
  * @property    string      $description
  * @property    array       $members
- * @property    array       $memberroles
+ * @property    array|Tinebase_Record_RecordSet $memberroles
  * @property    string      $email
  * @property    string      $type                 type of list
  * @property    string      $list_type
