@@ -306,6 +306,7 @@ php-unit-update-tests:
   variables:
     NODE_TOTAL: 1
     NODE_INDEX: 1
+    PHP_VERSION: "8.1"
     TINE_VERSION_LTS: "2022.11"
     TINE_VERSION_BE: "2023.11"
     TINE_VERSION_BETA: ""
