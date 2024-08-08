@@ -809,25 +809,34 @@ abstract class Tinebase_Controller_Record_Abstract
         }
     }
 
+    protected function _getRecordAutoincrementFields(Tinebase_Record_Interface $_record): ?array
+    {
+        $configuration = $_record->getConfiguration();
+        if (null === $configuration) {
+            return null;
+        }
+
+        if (! method_exists($configuration, 'getAutoincrementFields')) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                . ' CLass has no getAutoincrementFields(): ' . get_class($configuration));
+            return null;
+        }
+
+        return $configuration->getAutoincrementFields();
+    }
+
     /**
      * @param Tinebase_Record_Interface $_record
      * @param Tinebase_Record_Interface|null $_oldRecord
      */
     protected function _setAutoincrementValues(Tinebase_Record_Interface $_record, Tinebase_Record_Interface $_oldRecord = null)
     {
+        $autoincrementFields = $this->_getRecordAutoincrementFields($_record);
+        if (empty($autoincrementFields)) {
+            return;
+        }
         $className = get_class($_record);
-        $configuration = $_record->getConfiguration();
-        if (null === $configuration) {
-            return;
-        }
-
-        if (! method_exists($configuration, 'getAutoincrementFields')) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
-                . ' CLass has no getAutoincrementFields(): ' . get_class($configuration));
-            return;
-        }
-
-        foreach ($configuration->getAutoincrementFields() as $fieldDef) {
+        foreach ($autoincrementFields as $fieldDef) {
             $createNewValue = false;
             $checkValue = false;
             $freeOldValue = false;
@@ -891,6 +900,21 @@ abstract class Tinebase_Controller_Record_Abstract
 
             if (true === $freeOldValue) {
                 $numberable->free($_oldRecord->{$fieldDef['fieldName']});
+            }
+        }
+    }
+
+    protected function _freeAutoincrements(Tinebase_Record_Interface $record): void
+    {
+        $autoincrementFields = $this->_getRecordAutoincrementFields($record);
+        if (empty($autoincrementFields)) {
+            return;
+        }
+        $className = get_class($record);
+        foreach ($autoincrementFields as $fieldDef) {
+            $numberable = Tinebase_Numberable::getNumberable($record, $className, $fieldDef['fieldName'], $fieldDef);
+            if ($numberable && !empty($record->{$fieldDef['fieldName']})) {
+                $numberable->free($record->{$fieldDef['fieldName']});
             }
         }
     }
@@ -1536,7 +1560,7 @@ abstract class Tinebase_Controller_Record_Abstract
         }
 
         $this->handleSetDependentRecords($updatedRecord, $record, $currentRecord, $isCreate);
-        
+
         if ($returnUpdatedRelatedData) {
             $this->_getRelatedData($updatedRecord);
         }
@@ -2363,7 +2387,7 @@ abstract class Tinebase_Controller_Record_Abstract
             $this->_backend->delete($_record);
             $this->_writeModLog(null, $_record);
         }
-
+        $this->_freeAutoincrements($_record);
         $this->_increaseContainerContentSequence($_record, Tinebase_Model_ContainerContent::ACTION_DELETE);
     }
 
