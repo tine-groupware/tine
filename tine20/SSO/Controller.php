@@ -737,9 +737,8 @@ class SSO_Controller extends Tinebase_Controller_Event
 
     protected static function initSAMLServer()
     {
-        $sessionReflection = new ReflectionProperty(\SimpleSAML\Session::class, 'instance');
-        $sessionReflection->setAccessible(true);
-        $sessionReflection->setValue(new SSO_Facade_SAML_Session());
+        (new ReflectionProperty(\SimpleSAML\Session::class, 'instance'))->setAccessible(true);
+        (new ReflectionClass(\SimpleSAML\Session::class))->setStaticPropertyValue('instance', new SSO_Facade_SAML_Session());
 
         $saml2Config = SSO_Config::getInstance()->{SSO_Config::SAML2};
 
