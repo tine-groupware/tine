@@ -1274,9 +1274,10 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertEquals(1, count($messages), 'should have received 1 notification emails');
         /** @var Tinebase_Mail $message */
         $message = $messages[0];
+        $body =  $message->getBodyText();
         static::assertEquals('Filemanager avscan Result notification', $message->getSubject());
-        static::assertStringContainsString($this->_controller->getPathOfNode($node, true) , $message->getBodyText()
-            ->getRawContent());
+        static::assertStringContainsString($this->_controller->getPathOfNode($node, true) , $body->getRawContent());
+        static::assertStringContainsString(Tinebase_Core::getUrl(), $body->getRawContent());
     }
 
     public function testAVModeQuahogWithClamAVTestFiles()
