@@ -111,20 +111,21 @@ class Felamimail_Sieve_AdbList
         }
 
         if ($this->_replyTo === 'mailingList' && !empty($this->_listEmail)) {
-            $result .= 'if true {
-    addheader "Reply-To" "' . $this->_listEmail . '";
-}';
-        }
-        if ($this->_replyTo === 'sender') {
+            $result .= 'deleteheader "Reply-To";
+    addheader "Reply-To" "' . $this->_listEmail . '";';
+        } elseif ($this->_replyTo === 'sender') {
             $result .= 'if address :matches "from" "*" {
+    deleteheader "Reply-To";
     addheader "Reply-To" "${1}";
 }';
-        }
-        if ($this->_replyTo === 'both') {
+        } elseif ($this->_replyTo === 'both') {
             $mailingList = $this->_listEmail ? ', ' . $this->_listEmail : '';
             $result .= 'if address :matches "from" "*" {
+    deleteheader "Reply-To";
     addheader "Reply-To" "${1}' . $mailingList. '";
 }';
+        } else {
+            return;
         }
         $result .= PHP_EOL . PHP_EOL;
     }
