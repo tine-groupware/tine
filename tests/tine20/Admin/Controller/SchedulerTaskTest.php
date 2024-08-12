@@ -54,4 +54,31 @@ class Admin_Controller_SchedulerTaskTest extends TestCase
         ]), new Tinebase_Model_Pagination(['sort' => 'name', 'dir' => 'desc']));
         $this->assertNotNull($result);
     }
+
+    public function testUpdateSchedulerTask()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        $task = new Tinebase_Model_SchedulerTask([
+            'name'      => 'test',
+            'config'    => new Tinebase_Scheduler_Task([
+                'cron'      => Tinebase_Scheduler_Task::TASK_TYPE_MINUTELY,
+                'callables' => [
+                    [
+                        Tinebase_Scheduler_Task::CLASS_NAME     => Scheduler_Mock::class,
+                        Tinebase_Scheduler_Task::METHOD_NAME    => 'run'
+                    ], [
+                        Tinebase_Scheduler_Task::CONTROLLER     => Tinebase_Scheduler::class,
+                        Tinebase_Scheduler_Task::METHOD_NAME    => 'doContainerACLChecks',
+                        Tinebase_Scheduler_Task::ARGS           => [true]
+                    ]
+                ]
+            ]),
+            'next_run'  => Tinebase_DateTime::now()->subDay(100)
+        ]);
+        $createdTask = $scheduler->create($task);
+        $createdTask['next_run'] = Tinebase_DateTime::now();
+
+        $this->expectException(Tinebase_Exception_AccessDenied::class);
+        $updatedTask = Admin_Controller_SchedulerTask::getInstance()->update($createdTask);
+    }
 }
