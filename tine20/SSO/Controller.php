@@ -275,10 +275,18 @@ class SSO_Controller extends Tinebase_Controller_Event
             ->getFullUserByLoginName(Tinebase_User::SYSTEM_USER_ANONYMOUS));
         $server = static::getOpenIdConnectServer();
 
-        $response = $server->respondToAccessTokenRequest(
-            Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class),
-            new \Laminas\Diactoros\Response()
-        );
+        try {
+            $response = $server->respondToAccessTokenRequest(
+                Tinebase_Core::getContainer()->get(\Psr\Http\Message\RequestInterface::class),
+                new \Laminas\Diactoros\Response()
+            );
+        } catch (\League\OAuth2\Server\Exception\OAuthServerException $e) {
+            $response = (new \Laminas\Diactoros\Response())->withStatus($e->getHttpStatusCode());
+            if ($e->getPayload()) {
+                $response->getBody()->write(json_encode($e->getPayload()));
+            }
+            return $response;
+        }
 
         return $response;
     }
