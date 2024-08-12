@@ -57,7 +57,6 @@ php-unit-all-tests-source-matrix:
           - "mariadb:10.9"
           - "dockerregistry.metaways.net/tine20/tine20/mysql:8"
       - PHP_VERSION:
-          - "8.0"
           - "8.1"
           - "8.2"
           - "8.3"
