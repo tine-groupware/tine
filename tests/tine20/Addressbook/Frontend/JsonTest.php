@@ -711,6 +711,15 @@ class Addressbook_Frontend_JsonTest extends TestCase
         }
     }
 
+    public function testTelNormalized()
+    {
+        $contact = $this->_addContact();
+        $contact['tel_work'] = '+49 (0)911 1234567';
+        $contact = $this->_uit->saveContact($contact);
+
+        $this->assertSame('+499111234567', $contact['tel_work_normalized']);
+    }
+
     /**
      * test tags modlog
      *
