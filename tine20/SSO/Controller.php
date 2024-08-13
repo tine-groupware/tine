@@ -587,7 +587,11 @@ class SSO_Controller extends Tinebase_Controller_Event
             throw new Tinebase_Exception('simple samle auth source config failure ');
         }
 
-        $binding = Binding::getCurrentBinding();
+        try {
+            $binding = Binding::getCurrentBinding();
+        } catch (\SAML2\Exception\Protocol\UnsupportedBindingException $e) {
+            return (new \Laminas\Diactoros\Response())->withStatus(405); // Method not allowed
+        }
         $authnRequest = $binding->receive();
 
         if ($authnRequest instanceof AuthnRequest && ($issuer = $authnRequest->getIssuer()) instanceof Issuer &&
