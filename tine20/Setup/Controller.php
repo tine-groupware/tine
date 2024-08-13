@@ -2089,7 +2089,7 @@ class Setup_Controller
         
         // deactivate foreign key check if all installed apps should be uninstalled
         $deactivatedForeignKeyCheck = false;
-        if (in_array('Tinebase', $_applications) && get_class($this->_backend) === 'Setup_Backend_Mysql') {
+        if (in_array(Tinebase_Config::APP_NAME, $_applications) && get_class($this->_backend) === 'Setup_Backend_Mysql') {
             $this->_backend->setForeignKeyChecks(0);
             $deactivatedForeignKeyCheck = true;
         }
@@ -2114,9 +2114,10 @@ class Setup_Controller
             Setup_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Some applications could not be uninstalled (check dependencies).');
         }
 
+        $uninstallAll = in_array(Tinebase_Config::APP_NAME, array_keys($applications));
         foreach ($applications as $name => $xml) {
             $app = Tinebase_Application::getInstance()->getApplicationByName($name);
-            $this->_uninstallApplication($app, false, isset($_options[self::INSTALL_NO_REPLICA_CHECK]) ?
+            $this->_uninstallApplication($app, $uninstallAll, isset($_options[self::INSTALL_NO_REPLICA_CHECK]) ?
                 $_options[self::INSTALL_NO_REPLICA_CHECK] : false);
         }
 
@@ -2573,7 +2574,7 @@ class Setup_Controller
             }
         } while (count($applicationTables) > 0);
 
-        if ($_application->name == 'Tinebase') {
+        if ($_application->name === Tinebase_Config::APP_NAME) {
             $db->query('DROP TABLE ' . SQL_TABLE_PREFIX . 'applications');
             $db->query('DROP TABLE ' . SQL_TABLE_PREFIX . 'application_states');
             $db->query('DROP TABLE ' . SQL_TABLE_PREFIX . 'application_tables');
