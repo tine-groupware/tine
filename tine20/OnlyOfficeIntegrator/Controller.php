@@ -6,7 +6,7 @@
  * @subpackage   Controller
  * @license      http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author       Cornelius Weiß <c.weiss@metaways.de>
- * @copyright    Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright    Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -485,12 +485,16 @@ class OnlyOfficeIntegrator_Controller extends Tinebase_Controller_Event
 
     protected function processStatus4($token)
     {
+        $forUpdateRaii = Tinebase_Backend_Sql_SelectForUpdateHook::getRAII(
+            OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->getBackend()
+        );
         $raii = Tinebase_RAII::getTransactionManagerRAII();
         $allTokens = OnlyOfficeIntegrator_Controller_AccessToken::getInstance()->search(
             Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
                 ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_TOKEN, 'operator' => 'equals', 'value' => $token],
                 ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED, 'operator' => 'equals', 'value' => Tinebase_Model_Filter_Bool::VALUE_NOTSET],
             ]));
+        unset($forUpdateRaii);
 
         foreach ($allTokens as $tokenRecord) {
             $tokenRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_INVALIDATED} = 1;

@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2019-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2019-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -290,10 +290,15 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
     {
         parent::_inspectAfterCreate($_createdRecord, $_record);
 
+        static $bhCache = [];
         if ($_createdRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} != OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION &&
                 Tinebase_BroadcastHub::getInstance()->isActive()) {
-            $node = Tinebase_FileSystem::getInstance()->get($_createdRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
-            Tinebase_BroadcastHub::getInstance()->pushAfterCommit('update', get_class($node), $node->getId(), $node->getContainerId());
+            $nodeId = $_createdRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID};
+            if (!isset($bhCache[$nodeId])) {
+                $bhCache[$nodeId] = true;
+                $node = Tinebase_FileSystem::getInstance()->get($nodeId);
+                Tinebase_BroadcastHub::getInstance()->pushAfterCommit('update', get_class($node), $node->getId(), $node->getContainerId());
+            }
         }
     }
 
@@ -301,11 +306,16 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
     {
         parent::_inspectAfterUpdate($updatedRecord, $record, $currentRecord);
 
+        static $bhCache = [];
         if ($updatedRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_REVISION} != OnlyOfficeIntegrator_Model_AccessToken::TEMP_FILE_REVISION &&
                 Tinebase_BroadcastHub::getInstance()->isActive()) {
             try {
-                $node = Tinebase_FileSystem::getInstance()->get($updatedRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID});
-                Tinebase_BroadcastHub::getInstance()->pushAfterCommit('update', get_class($node), $node->getId(), $node->getContainerId());
+                $nodeId = $updatedRecord->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID};
+                if (!isset($bhCache[$nodeId])) {
+                    $bhCache[$nodeId] = true;
+                    $node = Tinebase_FileSystem::getInstance()->get($nodeId);
+                    Tinebase_BroadcastHub::getInstance()->pushAfterCommit('update', get_class($node), $node->getId(), $node->getContainerId());
+                }
             // file might have been deleted -> ignore tenf
             } catch (Tinebase_Exception_NotFound $tenf) {}
         }
