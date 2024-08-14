@@ -824,6 +824,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $this->rowNameMapping['accountFirstName']    => $_contact->n_given,
             $this->rowNameMapping['accountLastName']     => $_contact->n_family,
             $this->rowNameMapping['accountEmailAddress'] => $_contact->email,
+            'last_modified_time' => new Zend_Db_Expr('NOW()'),
             'seq' => $oldUser->seq + 1,
         );
         
