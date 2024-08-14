@@ -997,6 +997,25 @@ class Tinebase_Frontend_JsonTest extends TestCase
         $updatedProfileData = $updatedProfile['userProfile'];
         $this->assertNotEquals('mustnotchange', $updatedProfileData['tel_home']);
         $this->assertEquals('email@userprofile.set', $updatedProfileData['email_home']);
+
+
+        $user = Tinebase_User::getInstance()->getUserById(Tinebase_Core::getUser()->getId());
+        $user->seq = $user->seq - 1;
+        $userModLog = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(Tinebase_Core::getTinebaseId(),
+            $user, $user->seq + 2);
+        $this->assertSame(1, $userModLog->count());
+        $userModLog = $userModLog->getFirstRecord();
+        /** @var Tinebase_Model_ModificationLog $userModLog */
+
+        $contact = Addressbook_Controller_Contact::getInstance()->get($user->contact_id);
+        $contact->seq = $contact->seq - 1;
+        $contactModLog = Tinebase_Timemachine_ModificationLog::getInstance()->getModificationsBySeq(Tinebase_Application::getInstance()->getApplicationByName(Addressbook_Config::APP_NAME)->getId(),
+            $contact, $contact->seq + 2);
+
+        $this->assertSame(1, $contactModLog->count());
+        $contactModLog = $contactModLog->getFirstRecord();
+        /** @var Tinebase_Model_ModificationLog $contactModLog */
+        $this->assertLessThan(3, abs($contactModLog->modification_time->getTimestamp() - $userModLog->modification_time->getTimestamp()));
     }
     
     /**
