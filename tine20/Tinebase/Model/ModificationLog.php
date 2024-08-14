@@ -6,7 +6,7 @@
  * @subpackage  Timemachine 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2017 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -21,20 +21,20 @@
  * @package Tinebase
  * @subpackage Timemachine
  *
- * @property string id
- * @property string instance_id
- * @property int    instance_seq
- * @property string change_type
- * @property string application_id
- * @property string record_id
- * @property string record_type
- * @property string record_backend
- * @property string modification_time
- * @property string modification_account
- * @property string modified_attribute
- * @property string old_value
- * @property string new_value
- * @property string seq
+ * @property string $id
+ * @property string $instance_id
+ * @property int    $instance_seq
+ * @property string $change_type
+ * @property string $application_id
+ * @property string $record_id
+ * @property string $record_type
+ * @property string $record_backend
+ * @property Tinebase_DateTime $modification_time
+ * @property string $modification_account
+ * @property string $modified_attribute
+ * @property string $old_value
+ * @property string $new_value
+ * @property string $seq
  */
 class Tinebase_Model_ModificationLog extends Tinebase_Record_Abstract
 {
