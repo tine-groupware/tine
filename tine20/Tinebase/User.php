@@ -248,35 +248,43 @@ class Tinebase_User implements Tinebase_Controller_Interface
                     . ' Could not add SMTP EmailUser plugin: ' . $e);
             }
         }
-        
-        switch ($backendType) {
-            case self::ACTIVEDIRECTORY:
-                $result  = new Tinebase_User_ActiveDirectory($options);
-                
-                break;
-                
-            case self::LDAP:
-                // manage samba sam?
-                if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
-                    $options['plugins'][] = new Tinebase_User_Plugin_Samba(Tinebase_Core::getConfig()->samba->toArray());
-                }
-                
-                $result  = new Tinebase_User_Ldap($options);
-                
-                break;
-                
-            case self::SQL:
-                $result = new Tinebase_User_Sql($options);
-                
-                break;
-            
-            case self::TYPO3:
-                $result = new Tinebase_User_Typo3();
-                
-                break;
-                
-            default:
-                throw new Tinebase_Exception_InvalidArgument("User backend type $backendType not implemented.");
+
+        try {
+            switch ($backendType) {
+                case self::ACTIVEDIRECTORY:
+                    $result = new Tinebase_User_ActiveDirectory($options);
+
+                    break;
+
+                case self::LDAP:
+                    // manage samba sam?
+                    if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
+                        $options['plugins'][] = new Tinebase_User_Plugin_Samba(Tinebase_Core::getConfig()->samba->toArray());
+                    }
+
+                    $result = new Tinebase_User_Ldap($options);
+
+                    break;
+
+                case self::SQL:
+                    $result = new Tinebase_User_Sql($options);
+
+                    break;
+
+                case self::TYPO3:
+                    $result = new Tinebase_User_Typo3();
+
+                    break;
+
+                default:
+                    throw new Tinebase_Exception_InvalidArgument("User backend type $backendType not implemented.");
+            }
+        } catch (Tinebase_Exception_Backend_Ldap $e) {
+            if (Tinebase_Config::getInstance()->{Tinebase_Config::USERBACKEND}->{Tinebase_Config::SYNCOPTIONS}->{Tinebase_Config::SYNC_USER_OF_GROUPS}) {
+                return self::factory(self::SQL);
+            } else {
+                throw $e;
+            }
         }
 
         if ($result instanceof Tinebase_User_Interface_SyncAble) {
