@@ -32,9 +32,11 @@ cache-cleanup:
   script:
     - !reference [.lib, script]
     - set -x
+    - test -f /custom-cache/metrics.sh && /custom-cache/metrics.sh || echo "no metrics script"
     - cache_cleanup_vendor_dir_cache
     - cache_cleanup_npm_dir_cache
     - cache_cleanup_phpstan_cache
+    - test -f /custom-cache/metrics.sh && /custom-cache/metrics.sh || echo "no metrics script"
   interruptible: false
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /cache-cleanup/
