@@ -1389,6 +1389,10 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
     protected function _setFromJson(array &$_data)
     {
         $this->_setContactImage($_data);
+
+        foreach (static::$_telFields as $field) {
+            unset($_data[$field . '_normalized']);
+        }
     }
 
     /**

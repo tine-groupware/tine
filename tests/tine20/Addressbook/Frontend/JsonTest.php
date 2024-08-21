@@ -837,6 +837,13 @@ class Addressbook_Frontend_JsonTest extends TestCase
         $this->assertEquals('PHPUNIT', $contact['n_family'], 'getting contact failed');
     }
 
+    public function testTelNormalizedNotWriteable()
+    {
+        $contact = $this->_uit->saveContact(['n_fn' => 'some person', 'tel_work' => '+49911782342', 'tel_work_normalized' => '+4955555']);
+        $this->assertSame('+49911782342', $contact['tel_work']);
+        $this->assertSame('+49911782342', $contact['tel_work_normalized']);
+    }
+
     /**
      * @see 0012280: Add Industries to Contact
      */
