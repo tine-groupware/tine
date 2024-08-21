@@ -286,8 +286,9 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 Tinebase_Exception::log($e);
             }
         }
-            
-        if ($this instanceof Tinebase_User_Interface_SyncAble) {
+
+        /** @phpstan-ignore-next-line  */
+        if ($this instanceof Tinebase_User_Interface_SyncAble && (null === $this->_writeGroupsIds || !$this->isReadOnlyUser(Tinebase_Model_User::convertId($user)))) {
             try {
                 $syncUser = $this->getUserByPropertyFromSyncBackend('accountId', $user, $_accountClass);
                 
