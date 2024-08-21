@@ -181,17 +181,20 @@ class Addressbook_Model_List extends Tinebase_Record_Abstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                     array('InArray', array(self::LISTTYPE_LIST, self::LISTTYPE_GROUP)),
                 ),
+                self::COPY_OMIT => true
             ),
             'list_type'         => array(
                 'label'             => 'List type', //_('List type')
                 'type'              => 'keyfield',
                 'name'              => Addressbook_Config::LIST_TYPE,
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                self::COPY_OMIT => true
             ),
             'group_id'          => array(
                 'label'             => null, // TODO fill this?
                 'type'              => 'string',
                 'validators'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+                self::COPY_OMIT => true
             ),
             'account_only'          => array(
                 'label'             => null, // TODO fill this?
