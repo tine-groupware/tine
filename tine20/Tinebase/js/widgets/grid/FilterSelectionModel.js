@@ -110,23 +110,7 @@ Tine.widgets.grid.FilterSelectionModel = Ext.extend(Ext.grid.RowSelectionModel, 
         
         Tine.widgets.grid.FilterSelectionModel.superclass.selectAll.call(this);
     },
-    
-    /**
-     * @private
-     */
-    onRefresh : function(){
-        this.clearSelections(true);
-        Tine.widgets.grid.FilterSelectionModel.superclass.onRefresh.call(this);
-    },
-    
-    /**
-     * @private
-     */
-    onRemove : function(v, index, r){
-        this.clearSelections(true);
-        Tine.widgets.grid.FilterSelectionModel.superclass.onRemove.call(this, v, index, r);
-    },
-    
+
     /**
      * Deselects a row.
      * @param {Number} row The index of the row to deselect

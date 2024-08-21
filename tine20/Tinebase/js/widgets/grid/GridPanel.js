@@ -519,6 +519,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         });
     },
     
+    onClick: function(e, target) {
+        debugger
+    },
+    
     getRecordByData(data) {
         const idProperty = this.recordClass.getMeta('idProperty');
         return this.store.getById(_.get(data, idProperty));
@@ -1361,22 +1365,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.pagingToolbar.refresh.disable();
             this.store.remove(localRecord);
             this.store.addSorted(localRecord);
-            this.grid.getSelectionModel().selectRow(this.store.indexOf(localRecord));
+            const selectedIdx = this.store.indexOf(localRecord);
+            
             await proxyFn(localRecord)
                 .then((result) => {
-                    if (result?.data) {
-                        window.postal.publish({
-                            channel: "recordchange",
-                            topic: 'Filemanager.Node.delete',
-                            data: localRecord.data
-                        });
-    
-                        window.postal.publish({
-                            channel: "recordchange",
-                            topic: (result.data.path === 'tempFile' ? 'Tinebase.TempFile' : 'Filemanager.Node') + '.create',
-                            data: result.data
-                        });
-                    }
+                    this.grid.getSelectionModel().selectRow(selectedIdx);
                 })
                 .catch((e) => {
                     window.postal.publish({

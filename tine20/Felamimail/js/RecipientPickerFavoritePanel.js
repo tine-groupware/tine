@@ -100,7 +100,7 @@ Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persisten
         const filterValue = [];
         const emailRegExp = /<([^>]*)/; 
         let filter = [{field: 'container_id', operator: 'in', value: []}];
-        debugger
+        
         Ext.each(emailRecipients, function(email) {
             emailRegExp.exec(email);
             if (RegExp.$1 !== '') {

@@ -177,9 +177,10 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onRecordChanges: function(data, e) {
         const existingRecord = this.getRecordByData(data);
-
-        if (!existingRecord && e.topic.match(/\.create/)) {
-            this.onUpdateGridPanel(data);
+        if (e.topic.match(/\.create/)) {
+            if (!existingRecord || !existingRecord.data?.id) {
+                this.onUpdateGridPanel(data);
+            }
         } else if (e.topic.match(/\.update/)) {
             this.onUpdateGridPanel(data);
         } else if (existingRecord && e.topic.match(/\.delete/)) {
@@ -201,17 +202,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {String} mode
      */
     onUpdateGridPanel: function (record, mode) {
-        if (!this.rendered) {
-            return;
-        }
-
-        const store = this.getStore();
+        if (!this.rendered) return;
         
         if (record.status === 'failed' || record.status === 'cancelled') {
             this.bufferedLoadGridData({
                 removeStrategy: 'keepBuffered'
             });
-    
             return;
         }
 
@@ -221,30 +217,25 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.log.debug('Tine.Filemanager.NodeGridPanel::onUpdateRecord() -> record:');
         Tine.log.debug(record, mode);
         
-        let isSelected = false;
-        this.selection = this.getGrid().getSelectionModel().getSelections()[0];
-
+        const store = this.getStore();
+        
         if (record && Ext.isFunction(record.copy)) {
             if (this.isInCurrentGrid(record.get('path'))) {
                 if (existingRecord) {
                     const idx = store.indexOf(existingRecord);
-                    isSelected = this.getGrid().getSelectionModel().isSelected(idx);
-                    if (isSelected) {
-                        this.selection = existingRecord;
-                    }
+                    const isSelected = this.getGrid().getSelectionModel().isSelected(idx);
+                    
                     store.removeAt(idx);
                     store.insert(idx, [record]);
+                    
+                    if (isSelected) {
+                        this.getGrid().getSelectionModel().selectRow(idx);
+                    }
                 } else {
                     store.add([record]);
                     this.localSort();
                 }
-            } else {
-                return;
             }
-        }
-
-        if (this.selection?.data?.path) {
-            this.getGrid().getSelectionModel().selectRow(store.find('path', this.selection.data.path), true);
         }
     },
     
@@ -257,10 +248,6 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             _.get(store, 'sortInfo.direction', this.defaultSortInfo.direction)
         );
         store.remoteSort = this.storeRemoteSort;
-    
-        if (this.selection?.data?.path) {
-            this.getGrid().getSelectionModel().selectRow(store.find('path', this.selection.data.path), true);
-        }
     },
    
     /**
@@ -901,6 +888,12 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 className += ' x-type-data-failed'
             }
         }
+        const selections = this.getGrid().getSelectionModel().getSelections();
+        selections.forEach((item) => {
+            if (record.id === item.id) {
+                className += ' x-grid3-row-selected';
+            }
+        })
 
         return className;
     },

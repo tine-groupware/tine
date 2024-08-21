@@ -7,6 +7,7 @@
 import {getLayoutClassByWidth, getLayoutClassByMode} from "../../../../../Tinebase/js/util/responsiveLayout";
 
 /**
+/**
  * @class Ext.grid.GridView
  * @extends Ext.util.Observable
  * <p>This class encapsulates the user interface of an {@link Ext.grid.GridPanel}.

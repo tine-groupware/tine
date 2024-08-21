@@ -218,6 +218,10 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         // removed
         store.on('beforeload', this.storeOnBeforeload, this);
         store.load({persistentFilter : persistentFilter});
+        
+        if (this.getGrid()?.grid) {
+            this.getGrid().grid.getSelectionModel().clearSelections();
+        }
     },
 
     /**
