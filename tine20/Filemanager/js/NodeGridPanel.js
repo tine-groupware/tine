@@ -818,6 +818,8 @@ Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
 
     applyDataSafeState: function(data, e) {
+        if (e?.topic && e.topic.includes('ttl')) return;
+        
         const isLocked = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;
         // if state change -> reload
         if (this.action_dataSafe.items.length && isLocked === this.action_dataSafe.items[0].pressed) {
