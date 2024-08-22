@@ -163,7 +163,9 @@ Tine.Filemanager.NodeTreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         } catch (e) {}
     },
     
-    applyDataSafeState: function() {
+    applyDataSafeState: function(data, e) {
+        if (e?.topic && e.topic.includes('ttl')) return;
+        
         const wasLocked = this.dataSafeIsLocked;
         this.dataSafeIsLocked = !! Tine.Tinebase.areaLocks.getLocks(Tine.Tinebase.areaLocks.dataSafeAreaName, true).length;
         
