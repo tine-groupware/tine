@@ -169,8 +169,9 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         }
         const newValue = JSON.stringify(this.getValue())
         if (newValue !== oldValue){
-            this.fireEvent('change', this, newValue, oldValue)
-            this.fireEvent('select', this, newValue, oldValue)
+            // NOTE: with stringify and parse we get rid of the proxies
+            this.fireEvent('change', this, JSON.parse(newValue), JSON.parse(oldValue))
+            this.fireEvent('select', this, JSON.parse(newValue), JSON.parse(oldValue))
         }
         this.renderUI()
     },
@@ -200,8 +201,8 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         // _.delete(this.props.records, rec => rec.getId() === id)
         this.renderUI()
         const newValue = JSON.stringify(this.getValue())
-        this.fireEvent('change', this, newValue)
-        this.fireEvent('select', this, newValue)
+        this.fireEvent('change', this, JSON.parse(newValue))
+        this.fireEvent('select', this, JSON.parse(newValue))
     },
 
     onTriggerClick: function() {
@@ -222,10 +223,13 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
             : []
     },
 
-    setValue: function(value, editDialog){
+    setValue: function(value, editDialog) {
+        this.reset()
+        this.suspendEvents()
         _.forEach(value, (recordData) => {
             this.addRecord(Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass))
         })
+        this.resumeEvents()
     },
 
     /* needed for isFormField cycle */
