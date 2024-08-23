@@ -44,7 +44,7 @@ class Tinebase_Model_Converter_JsonRecordSet implements Tinebase_Model_Converter
             $blob = json_decode($blob, true);
         }
         if (is_array($blob)) {
-            if ($this->refId) {
+            if ($this->refId && (empty($blob) || !($blob[key($blob)]['id'] ?? false))) {
                 return $blob;
             }
             $rs = new Tinebase_Record_RecordSet($record::getConfiguration()
@@ -61,6 +61,25 @@ class Tinebase_Model_Converter_JsonRecordSet implements Tinebase_Model_Converter
      */
     public function convertToData($record, $key, $fieldValue)
     {
+        if ($this->refId) {
+            if ($fieldValue instanceof Tinebase_Record_RecordSet) {
+                return json_encode($fieldValue->getArrayOfIds());
+            } elseif (is_array($fieldValue)) {
+                if ($fieldValue[key($fieldValue)]['id'] ?? false) {
+                    $ids = [];
+                    foreach ($fieldValue as $record) {
+                        if ($record['id'] ?? false) {
+                            $ids[] = $record['id'];
+                        }
+                    }
+                    $fieldValue = $ids;
+                }
+                return json_encode($fieldValue);
+            } else {
+                return null;
+            }
+        }
+
         if (! $fieldValue instanceof Tinebase_Record_RecordSet) {
             if (empty($fieldValue)) {
                 return null;
@@ -70,9 +89,7 @@ class Tinebase_Model_Converter_JsonRecordSet implements Tinebase_Model_Converter
                 return $fieldValue;
             }
         }
-        if ($this->refId) {
-            return json_encode($fieldValue->getArrayOfIds());
-        }
+
         $fieldValue->runConvertToData();
         return json_encode($fieldValue->toArray());
     }
