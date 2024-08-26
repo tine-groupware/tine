@@ -1234,10 +1234,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             // store is already initialized
             return;
         }
-
-        if (this.editDialog) {
-            this.storeRemoteSort = false;
-        }
         
         if (this.recordProxy) {
             if (! this.defaultSortInfo.field) {
