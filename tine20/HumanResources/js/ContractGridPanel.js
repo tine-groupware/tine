@@ -34,7 +34,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     editDialog: null,
     usePagingToolbar: false,
-    
+
     /**
      * initializes the component
      */
@@ -42,6 +42,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         this.title = this.app.i18n.ngettext('Contract', 'Contracts', 2);
         if (this.editDialog) {
             this.bbar = [];
+            this.storeRemoteSort = false;
         }
 
         this.initDetailsPanel();
