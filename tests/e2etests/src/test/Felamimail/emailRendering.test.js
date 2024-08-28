@@ -45,10 +45,11 @@ describe('test email rendering', () => {
   }
 
   test('switch to dark mode', async () => {
-    await page.waitForSelector('.x-btn-image.color-scheme-light')
-    expect(page).toClick('.x-btn-image.color-scheme-light')
-    await page.waitForSelector('.x-menu-item-text', {text: "Dunkler Modus"})
-    expect(page).toClick('.x-menu-item-text', {text: "Dunkler Modus"})
+    await page.waitForSelector('.tine-bar-item.color-scheme-selector')
+    expect(page).toClick('.tine-bar-item.color-scheme-selector')
+    await page.waitForSelector('.color-scheme-selector__menu')
+    await page.waitForSelector('.color-scheme-selector__menu span', {text: "Dunkler Modus"})
+    expect(page).toClick('span', {text: "Dunkler Modus"})
     await page.waitForSelector('body.dark-mode')
   })
 

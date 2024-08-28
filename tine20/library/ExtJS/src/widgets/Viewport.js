@@ -121,18 +121,22 @@ Ext.Viewport = Ext.extend(Ext.Container, {
                 text: 'Follow System', // _('Follow System')
                 checked: (['dark', 'light'].indexOf(Ext.util.Cookies.get('color-scheme')) < 0),
                 group: 'color-scheme',
-                checkHandler: this.setColorScheme.createDelegate(this, ['auto'])
+                checkHandler: this.setColorScheme.createDelegate(this, ['auto']),
+                _name: 'auto'
             }, {
                 text: 'Dark Mode', // _('Dark Mode')
                 checked: Ext.util.Cookies.get('color-scheme') === 'dark',
                 group: 'color-scheme',
-                checkHandler: this.setColorScheme.createDelegate(this, ['dark'])
+                checkHandler: this.setColorScheme.createDelegate(this, ['dark']),
+                _name: 'dark'
             }, {
                 text: 'Light Mode', // _('Light Mode')
                 checked: Ext.util.Cookies.get('color-scheme') === 'light',
                 group: 'color-scheme',
-                checkHandler: this.setColorScheme.createDelegate(this, ['light'])
+                checkHandler: this.setColorScheme.createDelegate(this, ['light']),
+                _name: 'light'
             }],
+            getActiveColorScheme: () => Ext.util.Cookies.get('color-scheme') || 'auto',
             listeners: {
                 afterrender: () => {
                     this.colorSchemeAction.items[0].menu.items.each((item) => {
