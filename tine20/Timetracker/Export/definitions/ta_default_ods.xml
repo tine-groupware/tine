@@ -6,7 +6,7 @@
     <plugin>Timetracker_Export_Ods_Timeaccount</plugin>
     <description>default ods timeaccount export definition</description>
     <scope>multi</scope>
-    <!--header>1</header-->
+    <header>1</header>
     <headers>
         <header>{date}</header>
         <header>{user}</header>
@@ -39,7 +39,7 @@
         </column>
         <column>
             <identifier>creation_time</identifier>
-            <header>Creation Date</header>
+            <header>Creation Time</header>
             <type>datetime</type>
             <width>2,5cm</width>
         </column>
@@ -64,7 +64,7 @@
         </column>
         <column>
             <identifier>is_open</identifier>
-            <header>Open</header>
+            <header>open</header>
             <type>float</type>
             <width>3cm</width>
         </column>
