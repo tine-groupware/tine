@@ -32,18 +32,13 @@
             <type>int(11)</type>
         </column>
         <column>
-            <identifier>is_billable</identifier>
-            <header>is_billable</header>
-            <type>int(11)</type>
-        </column>
-        <column>
             <identifier>billed_in</identifier>
-            <header>billed_in</header>
+            <header>Project time cleared in</header>
             <type>varchar(255)</type>
         </column>
         <column>
             <identifier>is_cleared</identifier>
-            <header>is_cleared</header>
+            <header>Project time is cleared</header>
             <type>int(11)</type>
         </column>
         <column>
@@ -53,7 +48,12 @@
         </column>
         <column>
             <identifier>start_time</identifier>
-            <header>start_time</header>
+            <header>Start time</header>
+            <type>time</type>
+        </column>
+        <column>
+            <identifier>end_time</identifier>
+            <header>End time</header>
             <type>time</type>
         </column>
         <column>
@@ -72,64 +72,27 @@
             <type>longtext</type>
         </column>
         <column>
-            <identifier>created_by</identifier>
-            <header>created_by</header>
-            <type>varchar(40)</type>
-        </column>
-        <column>
-            <identifier>creation_time</identifier>
-            <header>creation_time</header>
-            <type>datetime</type>
-        </column>
-        <column>
-            <identifier>last_modified_by</identifier>
-            <header>last_modified_by</header>
-            <type>varchar(40)</type>
-        </column>
-        <column>
-            <identifier>last_modified_time</identifier>
-            <header>last_modified_time</header>
-            <type>datetime</type>
-        </column>
-        <column>
-            <identifier>is_deleted</identifier>
-            <header>is_deleted</header>
-            <type>int(11)</type>
-        </column>
-        <column>
-            <identifier>deleted_by</identifier>
-            <header>deleted_by</header>
-            <type>varchar(40)</type>
-        </column>
-        <column>
-            <identifier>deleted_time</identifier>
-            <header>deleted_time</header>
-            <type>datetime</type>
-        </column>
-        <column>
-            <identifier>seq</identifier>
-            <header>seq</header>
-            <type>int(11)</type>
-        </column>
-        <column>
             <identifier>invoice_id</identifier>
             <header>invoice_id</header>
             <type>varchar(255)</type>
         </column>
         <column>
-            <identifier>end_time</identifier>
-            <header>end_time</header>
-            <type>time</type>
-        </column>
-        <column>
             <identifier>need_for_clarification</identifier>
-            <header>need_for_clarification</header>
+            <header>Need for Clarification</header>
             <type>int(11)</type>
         </column>
         <column>
-            <identifier>type</identifier>
-            <header>type</header>
-            <type>varchar(40)</type>
+            <identifier>created_by</identifier>
+            <header>Created By</header>
+            <type>created_by</type>
+            <width>4cm</width>
+            <field>accountDisplayName</field>
+        </column>
+        <column>
+            <identifier>creation_time</identifier>
+            <header>Creation Time</header>
+            <type>datetime</type>
+            <width>2,5cm</width>
         </column>
     </columns>
 </config>
