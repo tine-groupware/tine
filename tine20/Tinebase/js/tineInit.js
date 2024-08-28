@@ -1091,11 +1091,12 @@ Tine.Tinebase.tineInit = {
 
         Tine.Tinebase.tineInit.initLoginPanel();
 
-        // we don't want iOS/Andorid to place stuff to some other cloud
+        // we don't want iOS/Android to place stuff to some other cloud
         // we might need to add a real config for this
         // it's not clear how to detect devices w.o. local storage or clients which place
         // downloads in a cloud :-(
-        Tine.Tinebase.configManager.set('downloadsAllowed', !Ext.isIOS && !Ext.isAndroid);
+        // but we allow download on mobile devices for now
+        Tine.Tinebase.configManager.set('downloadsAllowed', true);
 
         var AreaLocks = require('./AreaLocks');
         Tine.Tinebase.areaLocks = new AreaLocks.AreaLocks();
