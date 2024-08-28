@@ -91,27 +91,43 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
             border: false,
             html: '<div class="tine-mainscreen-topbox-left"></div><div class="tine-mainscreen-topbox-middle"></div><div class="tine-mainscreen-topbox-right"></div>'
         }, {
-            cls: 'tine-mainscreen-mainmenu',
-            height: 20,
-            layout: 'fit',
+            height: 40,
+                layout: 'fit',
             border: false,
-            items: this.getMainMenu()
+            items: this.getTineBar()
         }, {
-            ref: 'appTabs',
-            cls: 'tine-mainscreen-apptabs',
-            hidden: this.hideAppTabs,
+            ref: 'mainPanel',
             border: false,
-            height: 30,
-            items: new Tine.Tinebase.AppTabsPanel({
-                plain: true
-            })
-        }, {
-            ref: 'centerPanel',
-            cls: 'tine-mainscreen-centerpanel',
             flex: 1,
-            border: false,
-            layout: 'card'
+            layout: {
+                type: 'hbox',
+                align: 'stretch',
+            },
+            items: [{
+                ref: 'dock',
+                border: false,
+                height: '100%',
+                items: this.getDock()
+            }, {
+                ref: 'centerPanel',
+                cls: 'tine-mainscreen-centerpanel',
+                flex: 1,
+                width: '100%',
+                height: '100%',
+                border: false,
+                layout: 'card'
+            }]
         }];
+    },
+
+    getDock: function() {
+        this.dock = this.dock || new Tine.Tinebase.TineDock();
+        return this.dock
+    },
+
+    getTineBar: function() {
+        this.tineBar = this.tineBar || new Tine.Tinebase.TineBar()
+        return this.tineBar;
     },
     
     /**
@@ -120,13 +136,7 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
      * @return {Ext.Menu}
      */
     getMainMenu: function() {
-        if (! this.mainMenu) {
-            this.mainMenu = new Tine.Tinebase.MainMenu({
-                showMainMenu: false
-            });
-        }
-        
-        return this.mainMenu;
+        return this.getTineBar()
     },
 
     /**
@@ -135,7 +145,7 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
      * @returns {Ext.Panel}
      */
     getCenterPanel: function() {
-        return this.centerPanel;
+        return this.mainPanel.centerPanel;
     },
 
     /**

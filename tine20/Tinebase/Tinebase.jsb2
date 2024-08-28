@@ -1026,6 +1026,14 @@
           "path": "js/"
         },
         {
+          "text": "index.js",
+          "path": "js/TineBar/"
+        },
+        {
+          "text": "index.js",
+          "path": "js/TineDock/"
+        },
+        {
           "text": "AppTabsPanel.js",
           "path": "js/"
         },

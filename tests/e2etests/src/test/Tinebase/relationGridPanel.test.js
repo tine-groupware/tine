@@ -33,7 +33,7 @@ describe('Mainpage', () => {
         await popupWindow.waitForSelector('.x-menu-list', {visible: true});
         await popupWindow.waitForSelector('span' , {text: 'Im Dateimanager anzeigen', visible: true});
         await expect(popupWindow).toClick('span' , {text: 'Im Dateimanager anzeigen', visible: true});
-        await page.waitForSelector('.x-tab-with-icon.x-tab-strip-active .ApplicationIconCls.FilemanagerIconCls');
+        await page.waitForSelector('.tine-dock .dock-item .ApplicationIconCls.FilemanagerIconCls');
 
     });
 });
