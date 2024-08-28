@@ -22,8 +22,8 @@ class Tinebase_Model_Tree_RefLog extends Tinebase_Record_NewAbstract
     const MODEL_NAME_PART = 'Tree_RefLog';
 
     const FLD_FOLDER_ID = 'folder_id';
-    const FLD_SIZE_DELTA = 'sizedelta';
-    const FLD_REVISION_SIZE_DELTA = 'revisionsizedelta';
+    const FLD_SIZE_DELTA = 'sizeDelta';
+    const FLD_REVISION_SIZE_DELTA = 'revisionSizeDelta';
 
     /**
      * holds the configuration object (must be declared in the concrete class)
@@ -69,6 +69,7 @@ class Tinebase_Model_Tree_RefLog extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::ALLOW_CAMEL_CASE => true,
             ],
             self::FLD_REVISION_SIZE_DELTA   => [
                 self::TYPE                      => self::TYPE_BIGINT,
@@ -76,6 +77,7 @@ class Tinebase_Model_Tree_RefLog extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::ALLOW_CAMEL_CASE => true,
             ],
         ],
     ];
