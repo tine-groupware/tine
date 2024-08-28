@@ -139,7 +139,7 @@ Tine.widgets.grid.ColumnManager = function() {
             
             if (['string', 'localizedString', 'text', 'numberablestr', 'fulltext'].includes(type)) {
                 if (fieldDefinition) {
-                    const length = fieldDefinition.length ?? 40;
+                    const length = fieldDefinition?.length ?? 40;
                     config.minWidth = 100;
                     config.defaultWidth = 100;
                     
@@ -154,8 +154,10 @@ Tine.widgets.grid.ColumnManager = function() {
                         config.defaultWidth = 150;
                         config.maxWidth = 1000;
                     }
+                    if (fieldDefinition?.label) {
+                        type = fieldDefinition.label;
+                    }
                 }
-                type = fieldDefinition?.label;
             }
             type = type.toLowerCase();
             
