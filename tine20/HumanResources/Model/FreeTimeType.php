@@ -188,6 +188,7 @@ class HumanResources_Model_FreeTimeType extends Tinebase_Record_Abstract
                     self::PERSISTENT        => true,
                     self::MODEL_NAME        => HumanResources_Model_WTCalcStrategy::class,
                 ],
+                self::ALLOW_CAMEL_CASE => true,
             ],
         ]
     ];

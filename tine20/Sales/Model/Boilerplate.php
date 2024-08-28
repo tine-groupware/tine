@@ -141,6 +141,7 @@ class Sales_Model_Boilerplate extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::NULLABLE              => true,
+                self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_CUSTOMER => [
                 self::TYPE => self::TYPE_RECORD,

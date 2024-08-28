@@ -119,6 +119,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Data intended purpose', // _('Data intended purpose')
                 self::QUERY_FILTER      => true,
+                self::ALLOW_CAMEL_CASE  => true,
             ],
             'record'                => [
                 self::TYPE              => self::TYPE_STRING,
@@ -130,6 +131,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::TYPE              => self::TYPE_DATETIME,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Agreement date', // _('Agreement date')
+                self::ALLOW_CAMEL_CASE  => true,
             ],
             'agreeComment' => [
                 self::TYPE              => self::TYPE_STRING,
@@ -137,6 +139,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL             => 'Agreement comment', // _('Agreement comment')
+                self::ALLOW_CAMEL_CASE  => true,
             ],
             'withdrawDate' => [
                 self::TYPE              => self::TYPE_DATETIME,
@@ -150,6 +153,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                         Tinebase_Model_Filter_Date::AFTER_OR_IS_NULL  => true,
                     ]
                 ],
+                self::ALLOW_CAMEL_CASE  => true,
             ],
             'withdrawComment' => [
                 self::TYPE              => self::TYPE_STRING,
@@ -157,6 +161,7 @@ class GDPR_Model_DataIntendedPurposeRecord extends Tinebase_Record_Abstract
                 self::NULLABLE          => true,
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 self::LABEL             => 'Withdraw comment', // _('Withdraw comment')
+                self::ALLOW_CAMEL_CASE  => true,
             ],
         ]
     ];

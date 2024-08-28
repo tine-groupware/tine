@@ -87,7 +87,8 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                 self::CONFIG                => [
                     self::APP_NAME              => EventManager_Config::APP_NAME,
                     self::MODEL_NAME            => EventManager_Model_Event::MODEL_NAME_PART,
-                ]
+                ],
+                self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_NAME => [
                 self::TYPE => self::TYPE_RECORD,
@@ -130,6 +131,7 @@ class EventManager_Model_Registration extends Tinebase_Record_NewAbstract
                 self::DEFAULT_VAL => 1,
                 self::NAME => EventManager_Config::REGISTRATION_MEMBER_STATUS,
                 self::NULLABLE => true,
+                self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_OPTIONS => [
                 self::TYPE => self::TYPE_RECORDS,

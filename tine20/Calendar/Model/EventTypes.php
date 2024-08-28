@@ -95,6 +95,7 @@ class Calendar_Model_EventTypes extends Tinebase_Record_NewAbstract
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Event Type', // _('Event Type')
                 self::QUERY_FILTER      => true,
+                self::ALLOW_CAMEL_CASE  => true,
             ],
             self::FLD_RECORD            => [
                 self::TYPE              => self::TYPE_RECORD,

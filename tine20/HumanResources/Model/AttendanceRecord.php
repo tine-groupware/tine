@@ -172,6 +172,7 @@ class HumanResources_Model_AttendanceRecord extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY  => false,
                     Zend_Filter_Input::PRESENCE     => Zend_Filter_Input::PRESENCE_REQUIRED,
                 ],
+                self::ALLOW_CAMEL_CASE => true,
             ],
         ],
     ];

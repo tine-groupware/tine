@@ -241,11 +241,13 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'type'                          => self::TYPE_JSON,
                 self::NULLABLE                  => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::ALLOW_CAMEL_CASE          => true,
             ],
             'notificationProps'             => [
                 'type'                          => self::TYPE_JSON,
                 self::NULLABLE                  => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::ALLOW_CAMEL_CASE          => true,
             ],
             'is_deleted'                    => [
                 'type'                          => self::TYPE_BOOLEAN,
@@ -360,6 +362,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 'modlogOmit'                    => true,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
                 'inputFilters'                  => [Zend_Filter_StringTrim::class => null],
+                self::ALLOW_CAMEL_CASE          => true,
             ],
             'size'                          => [
                 self::LABEL                     => 'Size', // _('Size')
@@ -459,6 +462,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 self::DOCTRINE_IGNORE           => true,
                 //'type'                          => 'string',
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::ALLOW_CAMEL_CASE          => true,
             ],
             'stream'                        => [
                 self::DOCTRINE_IGNORE           => true,
@@ -476,6 +480,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
                 self::DOCTRINE_IGNORE           => true,
                 self::TYPE                      => self::TYPE_VIRTUAL,
                 'validators'                    => [Zend_Filter_Input::ALLOW_EMPTY => true],
+                self::ALLOW_CAMEL_CASE          => true,
             ],
         ],
     ];

@@ -142,6 +142,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                self::ALLOW_CAMEL_CASE => true,
             ],
             self::FLD_LOCATION => [
                 self::TYPE => self::TYPE_RECORD,
@@ -187,6 +188,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_BOOKED_PLACES => [
                 self::TYPE => self::TYPE_INTEGER,
@@ -197,6 +199,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_AVAILABLE_PLACES => [
                 self::TYPE => self::TYPE_INTEGER,
@@ -207,6 +210,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_DOUBLE_OPT_IN => [
                 self::TYPE => self::TYPE_STRING,
@@ -218,6 +222,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
                 self::LABEL => 'Double Opt in', // _('Double Opt in')
+                self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_OPTIONS => [
                 self::TYPE => self::TYPE_RECORDS,
@@ -286,6 +291,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                self::ALLOW_CAMEL_CASE => true,
             ],
             self::FLD_REQUIRED_CONTACT_FIELDS => [
                 self::TYPE => self::TYPE_JSON,
@@ -295,6 +301,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                self::ALLOW_CAMEL_CASE => true,
             ],
             self::FLD_AUTO_TAG => [
                 self::TYPE => self::TYPE_JSON,
@@ -304,6 +311,7 @@ class EventManager_Model_Event extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                self::ALLOW_CAMEL_CASE => true,
             ],
         ]
     ];

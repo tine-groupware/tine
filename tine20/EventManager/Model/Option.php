@@ -83,7 +83,8 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                 self::CONFIG                => [
                     self::APP_NAME              => EventManager_Config::APP_NAME,
                     self::MODEL_NAME            => EventManager_Model_Event::MODEL_NAME_PART,
-                ]
+                ],
+                self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_NAME => [
                 self::TYPE => self::TYPE_LOCALIZED_STRING,
@@ -114,6 +115,7 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_AVAILABLE_PLACES => [
                 self::TYPE => self::TYPE_INTEGER,
@@ -123,6 +125,7 @@ class EventManager_Model_Option extends Tinebase_Record_NewAbstract
                     Zend_Filter_Input::ALLOW_EMPTY => true,
                 ],
                 self::INPUT_FILTERS => [Zend_Filter_Empty::class => null],
+                self::ALLOW_CAMEL_CASE      => true,
             ],
             self::FLD_DESCRIPTION        => [
                 self::LABEL             => 'Description', //_('Description')

@@ -803,6 +803,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
                 self::INPUT_FILTERS             => [],
                 self::SYSTEM                    => true,
                 self::DISABLED                  => true,
+                self::ALLOW_CAMEL_CASE          => true,
             ],
             'tel_assistent'                 => [ // not in UI atm.
                 self::TYPE                      => self::TYPE_STRING,

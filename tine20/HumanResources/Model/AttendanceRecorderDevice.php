@@ -97,10 +97,12 @@ class HumanResources_Model_AttendanceRecorderDevice extends Tinebase_Record_NewA
             self::FLD_ALLOW_MULTI_START     => [
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL               => false,
+                self::ALLOW_CAMEL_CASE          => true,
             ],
             self::FLD_ALLOW_PAUSE           => [
                 self::TYPE                      => self::TYPE_BOOLEAN,
                 self::DEFAULT_VAL               => true,
+                self::ALLOW_CAMEL_CASE          => true,
             ],
             self::FLD_STOPS                 => [
                 self::TYPE                      => self::TYPE_RECORDS,

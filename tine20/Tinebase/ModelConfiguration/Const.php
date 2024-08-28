@@ -18,6 +18,7 @@
 
 class Tinebase_ModelConfiguration_Const {
     public const ADD_FILTERS = 'addFilters';
+    public const ALLOW_CAMEL_CASE = 'allowCamelCase';
     public const APPLICATION = 'application';
     public const APP_NAME = 'appName';
     public const ASSOCIATIONS = 'associations';
