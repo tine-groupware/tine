@@ -658,3 +658,9 @@ msgstr "Stundenzettel aktualisieren?"
 
 msgid "Attention: There are timesheets that have not yet been accounted. If you continue, they will be set to accounted. This action cannot be undone. Continue anyway?"
 msgstr "Achtung: Es gibt Stundenzettel, die noch nicht abgerechnet worden sind. Wenn Sie fortfahren, werden sie auf abgerechnet gesetzt. Diese Aktion kann nicht rückgängig gemacht werden. Wollen Sie trotzdem fortfahren?"
+
+msgid "Staff Member"
+msgstr "Mitarbeiter"
+
+msgid "Timeaccount Number"
+msgstr "Zeitkonto Nummer"
