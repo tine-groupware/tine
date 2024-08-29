@@ -6,7 +6,7 @@
  * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
- * @copyright   Copyright (c) 2012-2019 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2012-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -347,8 +347,7 @@ class HumanResources_Model_Employee extends Tinebase_Record_Abstract
                 )
             ),
             'division_id' => array(
-                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => TRUE, Zend_Filter_Input::DEFAULT_VALUE => NULL),
-                'nullable' => true,
+                'validators' => array(Zend_Filter_Input::ALLOW_EMPTY => false, Zend_Filter_Input::PRESENCE_REQUIRED => true),
                 'label' => 'Division', //_('Division')
                 'type'  => 'record',
                 'config' => array(
