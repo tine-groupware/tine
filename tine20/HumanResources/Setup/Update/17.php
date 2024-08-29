@@ -17,12 +17,23 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE001 = __CLASS__ . '::update001';
     const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
+    const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
             self::RELEASE017_UPDATE001          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update001',
+            ],
+        ],
+        self::PRIO_TINEBASE_STRUCTURE       => [
+            self::RELEASE017_UPDATE003          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update003',
+            ],
+            self::RELEASE017_UPDATE004          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update004',
             ],
         ],
         self::PRIO_NORMAL_APP_STRUCTURE     => [
@@ -35,10 +46,6 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE000          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update000',
-            ],
-            self::RELEASE017_UPDATE003          => [
-                self::CLASS_CONST                   => self::class,
-                self::FUNCTION_CONST                => 'update003',
             ],
         ],
     ];
@@ -74,14 +81,34 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update003()
     {
-
-        $division = HumanResources_Controller_Division::getInstance()->search()->getFirstRecord();
-        if($division) {
-            $this->_db->update(
-                SQL_TABLE_PREFIX . HumanResources_Model_Employee::TABLE_NAME,
-                ['division_id' => $division->getId()],
-                'division_id is NULL');
-        }
+        $this->_fixDivisionOfEmployees();
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '17.3', self::RELEASE017_UPDATE003);
+    }
+
+    protected function _fixDivisionOfEmployees()
+    {
+        $division = HumanResources_Controller_Division::getInstance()->getAll()->getFirstRecord();
+        if(!$division) {
+            $division = HumanResources_Controller_Division::getInstance()->create(new HumanResources_Model_Division([
+                'title' => 'auto generated',
+            ]));
+        }
+
+        $this->_db->update(
+            SQL_TABLE_PREFIX . HumanResources_Model_Employee::TABLE_NAME,
+            ['division_id' => $division->getId()],
+            'division_id is NULL');
+    }
+
+    public function update004()
+    {
+        Tinebase_TransactionManager::getInstance()->rollBack();
+        
+        $this->_fixDivisionOfEmployees();
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_Employee::class,
+        ]);
+
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '17.4', self::RELEASE017_UPDATE004);
     }
 }
