@@ -834,8 +834,9 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         var idx = this.store.indexOfId(updatedRecord.id),
             isSelected = this.getSelectionModel().isSelected(idx);
 
-        this.getStore().removeAt(idx);
         if (idx >= 0) {
+            if(this.fireEvent("beforeupdaterecord", updatedRecord, this) === false) return;
+            this.getStore().removeAt(idx);
             this.getStore().insert(idx, [updatedRecord]);
         } else {
             if (this.fireEvent('beforeaddrecord', updatedRecord, this) === false) return;
