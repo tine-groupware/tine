@@ -50,7 +50,7 @@ watch(() => props.visible, newVal => {
 
 const emits = defineEmits(['hide'])
 const menuItemClicked = (action, e) => {
-  action.handler.call()
+  action.handler.call(action?.scope)
   emits('hide', e)
 }
 </script>
