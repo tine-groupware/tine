@@ -16,7 +16,7 @@
     <li
       v-for="action in userActionsInternal"
       :key="action.text"
-      class="main-menu-item px-3 py-1 d-flex align-items-center pe-4"
+      class="main-menu-item px-3 py-1 d-flex align-items-center pe-5"
       @click="menuItemClicked(action, $event)"
     >
       <div class="main-menu-item__icon" :class="action.iconCls"></div>
@@ -58,9 +58,9 @@ const menuItemClicked = (action, e) => {
 <style scoped lang="scss">
 
 .main-menu-item{
-  font-size: 12px;
+  font-size: 15px;
   /*height: 22px;*/
-  width: 240px;
+  width: 320px;
   cursor: pointer;
 
   &__icon{

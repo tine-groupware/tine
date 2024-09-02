@@ -25,7 +25,7 @@
           :placement="'bottom-end'"
         />
         <div class="tine-favicon mx-2"/>
-        <span class="tine-bar__active-app">{{activeApp}}</span>
+        <span class="tine-bar__active-app ms-3">{{activeApp}}</span>
       </div>
       <div class="me-3 d-flex">
         <Component
@@ -134,18 +134,23 @@ const avatarId = computed(() => `tine-avatar-main-menu-popover-trigger-${props.p
 .tine-bar{
   box-sizing: border-box;
   background-color: var(--focus-color) !important;
-  border-bottom: 1px solid var(--selection-color);
+  //border-bottom: 1px solid var(--selection-color);
 
   .dark-mode &{
-    background-color: #ddd !important;
+    //background-color: #ddd !important;
+    background-color: var(--selection-color) !important;
     border-bottom: 1px solid var(--selection-color);
+  }
+
+  .action_menu{
+    background-repeat: no-repeat;
+    background-position: center !important;
+    background-size: 30px 30px !important;
   }
 
   .application-menu-btn{
     width: 60px;
-    height: 30px;
-    background-repeat: no-repeat;
-    background-position: center !important;
+    height: 40px;
   }
 
   .tine-favicon {

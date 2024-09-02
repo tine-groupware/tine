@@ -33,12 +33,12 @@
         <li
           v-for="action in config.menu"
           :key="action.text"
-          class="action-menu-item px-3 d-flex align-items-center pe-4"
+          class="action-menu-item px-3 d-flex align-items-center pe-5"
           @click="menuItemClicked(action, $event)"
-          :class="{ 'action-menu-item__active': action._name === config.getActiveColorScheme()}"
         >
-          <div v-if="action._name === config.getActiveColorScheme()" class="action-menu-item__check-box-checked"/>
-          <div v-else class="action-menu-item__check-box-unchecked"/>
+          <div class="action-menu-item__icon d-flex align-items-center">
+            <div v-if="action._name === config.getActiveColorScheme()" class="action-menu-item__icon__selected"/>
+          </div>
           <span class="ms-1">
             {{window.i18n._(action.text)}}
           </span>
@@ -79,28 +79,32 @@ const hideMenu = (e) => {
 
 <style>
 .color-scheme-selector__menu .popover-body{
-  padding: 0
+  /*padding: 0*/
 }
 </style>
 
 <style scoped lang="scss">
 .action-menu-item{
   cursor: pointer;
-  height: 22px;
-  width: 150px;
+  font-size: 15px;
+  //height: 22px;
+  width: 170px;
 
   &:hover, &__active{
     background-color: #d9d9d9;
     border-left: #a6a6a6 solid 2px;
   }
 
-  &__check-box-checked{
+  &__icon{
     width: 14px;
     height: 14px;
-    background-image: url('../../../../images/icon-set/icon_check-box-check.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 14px 14px;
+
+    &__selected{
+      width: 9px !important;
+      height: 9px !important;
+      border-radius: 50%;
+      background-color: #1A4D8F;
+    }
   }
 
   &__check-box-unchecked{
