@@ -5051,14 +5051,35 @@ class Tinebase_FileSystem implements
 
     protected function _sendAvScanNotification($hashes)
     {
-        $nodes = $this->_getTreeNodeBackend()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_Tree_FileObject::class,
-            [[ 'field' => 'hash', 'operator' => 'in', 'value' => $hashes]]
-        ));
-            
         try {
+            $fileObjects = $this->_getTreeNodeBackend()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_Tree_FileObject::class,
+                [[ 'field' => 'hash', 'operator' => 'in', 'value' => $hashes]]
+            ));
+            $expander = new Tinebase_Record_Expander(Tinebase_Model_Tree_FileObject::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
+                    Tinebase_Record_Expander::PROPERTY_CLASS_USER => [
+                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                            'created_by' => [],
+                        ],
+                    ],
+                ],
+            ]);
+            $expander->expand($fileObjects);
+            
             $paths = [];
-            foreach ($nodes as $node) {
-                $paths[] = $this->getPathOfNode($node, true);
+            foreach ($fileObjects as $fileObject) {
+                $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(Tinebase_FileSystem::getInstance()->getPathOfNode($fileObject, true));
+                $filePath = $pathRecord->flatpath;
+                $pathParts = explode('/', trim($filePath, '/'));
+                if ($app = Tinebase_Application::getInstance()->getApplicationById($pathParts[0])) {
+                    $filePath = preg_replace('/'. $pathParts[0] . '/', $app->name, $filePath);
+                }
+                $createdBy = $fileObject->created_by;
+                $paths[] = [
+                    'path' => $filePath,
+                    'statpath' => $pathRecord->statpath,
+                    'created_by' => $createdBy['accountEmailAddress'],
+                ];
             }
 
             $roleName = Tinebase_Config::getInstance()
@@ -5078,7 +5099,7 @@ class Tinebase_FileSystem implements
             $translate = Tinebase_Translation::getTranslation('Filemanager', $locale);
             $subject = 'Filemanager avscan Result notification';
             $translatedSubject = $translate->_($subject);
-            $messagePlain = 'Found virus in file : ' . print_r($paths, true);
+            $messagePlain = 'Found virus-infected files on instnace: ' . Tinebase_Core::getUrl() . PHP_EOL . print_r($paths, true);
             
             Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), $recipients, $translatedSubject, $messagePlain, null, null, true);
         } catch (Exception $e) {
