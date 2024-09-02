@@ -208,7 +208,7 @@ Tine.Tinebase.common = {
         
         const isGridCell = _.isObject(metadata) && metadata.hasOwnProperty('cellAttr');
         if (isGridCell) {
-            metadata.css = (metadata.css || '') + 'tine-gird-cell-time';
+            metadata.css = (metadata.css || '') + ' tine-gird-cell-time';
         }
         
         return dateObj ? _.map(format, (key) => {
