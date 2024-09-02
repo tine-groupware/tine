@@ -406,81 +406,6 @@ menu:[Ordner umbenennen]:: öffnet ein kleines Fenster, in dem Sie dem betreffen
 
 menu:[Ordner löschen]:: löscht nur selbst angelegte Unterordner von Standardordnern. Dazu erhalten Sie eine Sicherheitsabfrage. Beachten Sie, dass die hier gespeicherten E-Mails nach dem Löschen des Ordners unwiederbringlich verloren sind.
 
-
-[[sec.email.spam]]
-===== SPAM-Erkennung =====
-Sofern der E-Mailserver entsprechend eingerichtet ist, kann die SPAM-Funktion aktiviert werden.(Der Mailserver muss über die Fähigkeit verfügen, Spam zu markieren, d.h. das Hinzufügen von speziellem Text ins Subjekt, z.b. "SPAM?". Das kann beispielsweise durch das Programm "rspamd" gewährleistet werden.)
-
-Dann haben Sie im Kontextmenü einer E-Mail die Unterpunkte menu:[Es ist SPAM] und menu:[kein SPAM]. 
-
-
-//////////////////
-        SCREENSHOT
-        path: </Felamimail/>
-        demodata: E-Mail-Konto, Demo-Mails,
-        actions:
-        image: Kontextmenü 
-        comment: <neue Funktion!>
-        status: <fail>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Manuelles Markieren von SPAM, kein SPAM
-image::EMail/20_email_kontextmenue_spam_ham.png[id="fig_emailkontextspam",width="100%"] 
-
-
-Hiermit können Sie E-Mails als SPAM oder umgekehrt SPAM-markierte Mails als kein SPAM markieren. Neben dieser händischen Möglichkeit der SPAM- und HAM- (HAM sind als SPAM markierte E-Mails, die aber kein SPAM sind) Markierung hat {branch} auch eine automatische Erkennung.
-
-Beim erstmaligen Markieren von SPAM oder HAM, legt {branch} entsprechende Ordner unterhalb des Posteingangs automatisch an.
-
-Jede eingehende E-Mail wird auf SPAM-auffällige Eigenschaften untersucht und dann entsprechend mit einem Score bewertet. Je höher der Score, desto mehr SPAM-Merkmale liegen vor. Wenn ausreichend Merkmale gefunden wurden, markiert {branch} die Mail im Betreff als SPAM und gibt den Score mit an. Ab einem Wert von 15 weist {branch} die E-Mail ab.
-
-//////////////////
-        SCREENSHOT
-        path: </Felamimail/>
-        demodata: E-Mail-Konto, Demo-SPAM-Mails,
-        actions:
-        image: Betreff mit SPAM Meldung 
-        comment: <neue Funktion!>
-        status: <fail>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Manuelles markieren von SPAM, kein SPAM
-image::EMail/21_email_spam_message.png[id="fig_emailspammessage",width="100%"] 
-
-
-Auf der rechten Seite der SPAM-markierten E-Mail haben Sie die Möglichkeit, diese Einschätzung von {branch} zu bestätigen oder zu verneinen. Bei der Klassifizierung der Mail als „kein SPAM“ bereinigt {branch} den Betreff, so dass die Spam-Meldung verschwindet.
-
-
-//////////////////
-        SCREENSHOT
-        path: </Felamimail/>
-        demodata: E-Mail-Konto, Demo-SPAM-Mails,
-        actions:
-        image: Spam, kein Spam knöpf an der Mail 
-        comment: <neue Funktion!>
-        status: <fail>
-        domain: <Business Edition: Metaways>
-//////////////////
-.Manuelles Markieren von SPAM, kein SPAM
-image::EMail/22_email_kein_spam.png[id="fig_emailnospam",width="100%"] 
-
-
-{branch} lernt über die Zeit, was wirklich Spam ist und was fälschlicherweise markiert wurde und passt Ihren Algorithmus entsprechend an. Je mehr „Futter“ {branch} bekommt, desto besser wird {branch} mit der SPAM-Einschätzung und desto unwahrscheinlicher wird es, dass fälschlicherweise eine Mail abgewiesen wird, da diese als SPAM klassifiziert wurde.
-
-Falls die E-MaIls nicht direkt in {branch} verwaltet werden, z.B. via Outlook oder Thunderbird, kann man alternativ folgendermaßen vorgehen:
-
-* Die Ordner SPAM und HAM unterhalb der INBOX (auf Deutsch "Posteingang") anlegen.
-* SPAM-Mails in den Ordner SPAM verschieben.
-* HAM-Mails in den Ordner HAM kopieren. Auf das "Bereinigen" des Betreffs muss man dann allerdings verzichten.
-
-[NOTE]
-===============
-In dem Fall, dass die Ordner SPAM/HAM bereits von {branch} angelegt wurden, kann es unter Umständen dazu kommen, dass sie in einem externen E-Mail-Programm (z.B. Thunderbird oder Outlook) nicht angezeigt werden. Hier müsste man die Ordner dann erst subscriben/abonnieren.
-===============
-
-
-
-
 [[sec.email.verfassen]]
 === Eine E-Mail verfassen ===
 
@@ -649,3 +574,73 @@ Kommen wir zu menu:[(Un)gelesen markieren]. Dieser Button schaltet eine markiert
 ==== Markierung an/aus ====
 
 Mit diesem Button erhält eine ausgewählte E-Mail eine Markierung. Diese Markierung soll die E-Mail für den Empfänger als besonders wichtig hervorheben. In {branch} erscheint die Betreffzeile der E-Mail daraufhin in der Tabellenzeile als roter Text; andere E-Mail-Clients arbeiten mit anderen Markierungen.
+
+=== {branch} und der Spam ===
+
+==== Ordner ====
+
+Alle Mitarbeiter haben unterhalb des Posteingangs einen SPAM und HAM Ordner (HAM sind als SPAM markierte E-Mails, die aber kein SPAM sind). Sofern diese dort nicht angezeigt werden, liegt das daran, dass bisher keine E-Mail als SPAM bzw. HAM gekennzeichnet wurde. Beim erstmaligen Markieren von SPAM oder HAM legt {branch} diese Ordner automatisch an. Diese Ordner sind speziell für das Training des Filters gedacht, deshalb werden alle Mails, die in diese Ordner verschoben wurden, anschließend unwiederruflich gelöscht. Das gilt sowohl für SPAM als auch für HAM. {branch} untersucht jede E-Mail auf SPAM-auffällige Eigenschaften und bewertet diese entsprechend mit einem Score. Je höher der Score, desto mehr SPAM-Merkmale liegen vor. Wenn ausreichend Merkmale gefunden wurden, markiert {branch} die Mail als SPAM und gibt den Score mit an. Ab einem Wert von 15 weist {branch} die E-Mail ab.
+
+==== Kein Spam ====
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/>
+        demodata: E-Mail-Konto, Demo-SPAM-Mails,
+        actions:
+        image: Kontextmenu Spam
+        comment: <neue Funktion!>
+        status: <not implement in e2etests>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Manuelles markieren von SPAM, kein SPAM
+image::EMail/20_email_kontextmenue_spam_ham.png[id="fig_emailspamkontextmenu",width="50%"]
+
+Im Kontextmenü sollten Sie die Unterpunkte [Es ist SPAM] und [Kein SPAM] finden. Hiermit können Sie E-Mails als SPAM markieren oder umgekehrt SPAM markierte Mails als „kein SPAM“ markieren. Beim Klassifizieren sollten Sie ein wenig Vorsicht walten lassen. So verlockend es auch ist, jede uninteressante Mail automatisch ausfiltern zu lassen, kann das auch unliebsame Konsequenzen haben, wenn Sie dem Filter falsche Parameter „beibringen“. Dann landen schnell auch legitime Mails im Spam-Ordner oder werden im schlimmsten Fall direkt abgewiesen. Ein Tipp: Oft kann man ungewünschte Mail-Fluten eindämmen, indem man sich von Newsletter-Diensten abmeldet. Dafür gibt es am Ende der Mail einen Link mit „unsubscribe“, „abmelden“ oder ähnlich. Nutzen Sie besser diese Möglichkeit, anstatt den Spam-Filter falsch zu trainieren.
+
+==== Automatische Erkennung ====
+
+Neben dieser manuellen Möglichkeit der SPAM/HAM-Markierung hat {branch} auch eine automatische Erkennung.
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/>
+        demodata: E-Mail-Konto, Demo-SPAM-Mails,
+        actions:
+        image: Spam auto detection
+        comment: <neue Funktion!>
+        status: <not implement in e2etests>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Automatische Erkennung von SPAM
+image::EMail/21_email_spam_message.png[id="fig_emailspamauto",width="100%"]
+
+Auf der rechten Seite der SPAM markierten E-Mail haben Sie die Möglichkeit diese Einschätzung von {branch} zu bestätigen oder zu verneinen. Bei der Klassifizierung der Mail als „kein SPAM“, bereinigt {branch} den Betreff, sodass die Spam-Meldung verschwindet.
+
+//////////////////
+        SCREENSHOT
+        path: </Felamimail/>
+        demodata: E-Mail-Konto, Demo-SPAM-Mails,
+        actions:
+        image: Spam notification
+        comment: <neue Funktion!>
+        status: <not implement in e2etests>
+        domain: <Business Edition: Metaways>
+//////////////////
+.Automatische SPAM Einschätzung bestätigen oder verneinen
+image::EMail/22_email_kein_spam.png[id="fig_emailspammeldung",width="100%"]
+
+==== {branch} lernt ====
+
+{branch} lernt über die Zeit, was wirklich Spam ist und was fälschlicherweise markiert wurde und passt den Algorithmus entsprechend an. So ist es von Vorteil, die SPAM-Vorschläge zu bestätigen oder zu verneinen, insbesondere bei den fälschlich identifizierten. Denn je mehr „Futter“ {branch} bekommt, desto besser wird {branch} mit der SPAM-Einschätzung und desto unwahrscheinlicher wird es, dass fälschlicherweise eine Mail abgewiesen wird, da diese als SPAM klassifiziert wurde.
+
+==== Externe Mailprogramme ====
+
+Falls die E-Mails nicht direkt in {branch} verwaltet werden, z.B. via Outlook oder Thunderbird, kann man alternativ folgendermaßen vorgehen:
+
+* Die Ordner SPAM und HAM unterhalb der INBOX (auf Deutsch „Posteingang“)
+anlegen.
+* SPAM-Mails in den Ordner SPAM verschieben.
+* HAM-Mails in den Ordner HAM kopieren. Auf das „Säubern“ des Betreffs muss man dann allerdings verzichten.
+
+In dem Fall, dass die Ordner SPAM/HAM bereits von {branch} angelegt wurden, kann es unter Umständen dazu kommen, dass sie in einem externen E-MailProgramm (z.B. Thunderbird oder Outlook) nicht angezeigt werden. Hier müsste man die Ordner dann erst subscriben/abonnieren.
