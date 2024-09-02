@@ -2550,6 +2550,27 @@ fi';
         $translations = new Tinebase_Translation();
         $translations->generateTranslationLists($locale, $path);
     }
+
+    public function removeAllAvScanNotes($opts)
+    {
+        $this->_checkAdminRight();
+        $db = Tinebase_Core::getDb();
+        $args = $this->_parseArgs($opts);
+        $start = isset($args['start']) ? (int)$args['start'] : 0;
+        $limit = 10000;
+
+        echo 'starting at ' . $start . PHP_EOL;
+
+        do {
+            $run = false;
+            foreach ($db->query('select id from ' . SQL_TABLE_PREFIX . 'tree_nodes ORDER BY id ASC LIMIT ' . $start . ', ' . $limit)->fetchAll(PDO::FETCH_COLUMN) as $id) {
+                $run = true;
+                $db->query('DELETE FROM ' . SQL_TABLE_PREFIX . 'notes where record_id = ' . $db->quote($id) . ' AND note_type_id = "avscan"');
+            }
+            $start += $limit;
+            echo 'finished ' . $start . PHP_EOL;
+        } while ($run);
+    }
 }
 
 
