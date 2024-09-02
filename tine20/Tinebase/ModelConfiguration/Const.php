@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  ModelConfiguration
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2018-2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2018-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -18,6 +18,7 @@
 
 class Tinebase_ModelConfiguration_Const {
     public const ADD_FILTERS = 'addFilters';
+    public const ALLOW_CAMEL_CASE = 'allowCamelCase';
     public const APPLICATION = 'application';
     public const APP_NAME = 'appName';
     public const ASSOCIATIONS = 'associations';
