@@ -58,6 +58,10 @@ onBeforeMount(async () => {
     border-radius: 50%;
   }
 
+  .dark-mode &__image{
+    filter: invert(1) hue-rotate(180deg);
+  }
+
   &__image_alt{
     filter: invert(1);
     width: 100%;

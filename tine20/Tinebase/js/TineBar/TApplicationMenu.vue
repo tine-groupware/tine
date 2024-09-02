@@ -111,6 +111,9 @@ const hide = (e) => {
     &__icon{
       width: 40px;
       height: 40px;
+      background-repeat: no-repeat !important;
+      background-position: center !important;
+      background-size: 40px 40px !important;
     }
 
     &__active{

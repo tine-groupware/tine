@@ -228,7 +228,14 @@ const { y, arrivedState } = useScroll(tineDockRef, { behavior: 'smooth' })
   overflow-y: scroll;
 
   .dark-mode &{
-    background-color: #ddd;
+    //background-color: #ffffff;
+    //filter: brightness(0.8);
+    //border-right: 1px #d9d9d9 solid !important;
+    ////background-color: #d5d5d5;
+    //background-color: #d5d5d5;
+    //border-right: 1px #d9d9d9 solid !important;
+    background-color: #cccccc;
+    border-right: 2px #e3e3e3 solid !important;
   }
 
   .arrow{

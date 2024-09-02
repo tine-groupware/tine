@@ -92,7 +92,7 @@ Ext.extend(Tine.Tinebase.MainScreenPanel, Ext.Container, {
             html: '<div class="tine-mainscreen-topbox-left"></div><div class="tine-mainscreen-topbox-middle"></div><div class="tine-mainscreen-topbox-right"></div>'
         }, {
             height: 40,
-                layout: 'fit',
+            layout: 'fit',
             border: false,
             items: this.getTineBar()
         }, {
