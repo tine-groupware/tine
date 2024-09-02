@@ -160,17 +160,7 @@ class Tinebase_Twig
             return str_replace(' ', '', (string)$str);
         }));
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('transliterate', function($str) {
-            return Tinebase_Helper::replaceSpecialChars($str, false);
-            // much better would be iconv or transliterator
-            // iconv('UTF-8', 'ASCII//TRANSLIT', iconv(mb_detect_encoding($str), 'UTF-8//IGNORE', $str));
-            // this iconv works very well on the glibc implementation, sadly docker php versions may come with
-            // a different iconv implementation: Interactive shell
-            // php > echo ICONV_IMPL;
-            // unknown
-            // => that implementation transliterates ö to "o instead of oe
-            // transliterator_transliterate('de-ASCII', $str); does not transliterate € sign, also I have trouble with
-            // that 'de' in there... probably the transliterator would be the best option, but we would need to find
-            // the right way to use it, feel free to improve
+            return iconv('UTF-8', 'ASCII//TRANSLIT', transliterator_transliterate('de-ASCII', $str));
         }));
 
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('preg_replace', function($subject, $pattern, $replacement, int $limit=-1, int $count=null) {
