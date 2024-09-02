@@ -271,7 +271,11 @@ class Courses_Import_DivisCourses extends Tinebase_Import_Abstract
                         $this->resultMsg[] = $msg;
                         continue 2;
                     }
-                    $line[2] = str_replace('+', '', $line[2]);
+                    $line[2] = str_replace(['*', '+'], '', trim($line[2]));
+                    if ('' === $line[2]) {
+                        $line[2] = mb_substr(trim($line[1]), 0, 1);
+                    }
+
                     $this->rawStudents[$uid] = $line;
                     if (!isset($this->coursesToUid[$line[8]])) {
                         $this->coursesToUid[$line[8]] = [];

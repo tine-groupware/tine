@@ -275,7 +275,8 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         }
         $twig = new Tinebase_Twig($locale, Tinebase_Translation::getTranslation(), [
             Tinebase_Twig::TWIG_LOADER =>
-                new Tinebase_Twig_CallBackLoader(__METHOD__ . $name, time() - 1, function() use($twig) { return $twig; })
+                new Tinebase_Twig_CallBackLoader(__METHOD__ . $name, time() - 1, function() use($twig) { return $twig; }),
+            Tinebase_Twig::TWIG_AUTOESCAPE => false,
         ]);
         return $twig->load(__METHOD__ . $name)->render(array_merge(['email' => Tinebase_EmailUser::getConfig(Tinebase_Config::SMTP, true)], static::$twigContext, ['account' => $this]));
     }
