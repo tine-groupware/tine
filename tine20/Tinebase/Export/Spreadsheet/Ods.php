@@ -71,7 +71,7 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1"/><number:text>%</number:text></number:percentage-style>',
         '<number:date-style style:name="N27"
             xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" 
-            xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><number:day number:style="long"/><number:text>.</number:text><number:month number:style="long"/><number:text>.</number:text><number:year/><number:text> </number:text><number:hours number:style="long"/><number:text>:</number:text><number:minutes number:style="long"/><number:text>:</number:text><number:seconds number:style="long"/></number:date-style>',
+            xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><number:day number:style="long"/><number:text>.</number:text><number:month number:style="long"/><number:text>.</number:text><number:year number:style="long"/><number:text> </number:text><number:hours number:style="long"/><number:text>:</number:text><number:minutes number:style="long"/><number:text>:</number:text><number:seconds number:style="long"/></number:date-style>',
         '<number:text-style style:name="N30"
             xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" 
             xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><number:text-content/></number:text-style>',
@@ -392,9 +392,17 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
                     case OpenDocument_SpreadSheet_Cell::TYPE_DATE:
                         if ('datetime' === $field->type) {
                             $style = 'dateTimeDMYCell';
+                            $val = ($record->{$field->identifier} instanceof DateTime) ? $record->{$field->identifier}->format('d.m.Y H:i:s') : $record->{$field->identifier};
                         } else {
                             $style = 'dateDMYCell';
+                            $val = ($record->{$field->identifier} instanceof DateTime) ? $record->{$field->identifier}->format('d.m.Y') : $record->{$field->identifier};
                         }
+                        if (null === $cellValue || !$val) {
+                            break;
+                        }
+                        $cellElement = $cell->getBody();
+                        unset($cellElement->children(OpenDocument_Document::NS_TEXT)[0]);
+                        $cellElement->addChild('p', OpenDocument_SpreadSheet_Cell::encodeValue($val), OpenDocument_Document::NS_TEXT);
                         break;
                     case OpenDocument_SpreadSheet_Cell::TYPE_CURRENCY:
                         $style = 'currencyEURCell';

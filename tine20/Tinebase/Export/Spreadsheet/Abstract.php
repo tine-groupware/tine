@@ -143,14 +143,8 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
         
         switch($_field->type) {
             case 'datetime':
-                $result = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_record->{$_field->identifier});
-                // empty date cells, get displayed as 30.12.1899
-                if(empty($result)) {
-                    $result = NULL;
-                }
-                break;
             case 'date':
-                $result = ($_record->{$_field->identifier} instanceof DateTime) ? $_record->{$_field->identifier}->toString('Y-m-d') : $_record->{$_field->identifier};
+                $result = ($_record->{$_field->identifier} instanceof DateTime) ? $_record->{$_field->identifier}->toString('Y-m-d\TH:i:s') : $_record->{$_field->identifier};
                 // empty date cells, get displayed as 30.12.1899
                 if (empty($result)) {
                     $result = NULL;
