@@ -120,7 +120,7 @@ Tine.Felamimail.nodeActions.actionUpdater = function(action, grants, records, is
     } else {
         const isTrashFolder = (folder.get('globalname') === account.get('trash_folder') || folder.get('localname').match(/^junk$/i)) ?? false;
         const isFolderSelectable = folder.get('is_selectable');
-        const isSystemFolder = folder.get('system_folder');
+        const isSystemFolder = folder.isSystemFolder();
         
         action.baseAction.setHidden(!folderActions.includes(action.itemId) && !isFolderSelectable);
         
@@ -130,7 +130,7 @@ Tine.Felamimail.nodeActions.actionUpdater = function(action, grants, records, is
             case 'RefreshFolderAction':
                 break;
             case 'EmptyFolderAction':
-                action.baseAction.setHidden(!isTrashFolder);
+                action.baseAction.setHidden((isSystemFolder && !isTrashFolder));
                 break;
             case 'MoveFolderAction':
             case 'rename':
@@ -152,17 +152,31 @@ Tine.Felamimail.nodeActions.EmptyFolderAction = {
     scope: this,
     handler: async function (action) {
         const app = action.app;
+        const account = action.account;
         const folder = action.folder;
         const selectedNode = action.node;
         
         try {
             if (selectedNode) {
-                selectedNode.getUI().addClass("x-tree-node-loading");
-                const result = await Tine.Felamimail.emptyFolder(folder.id);
-                const folderRecord = Tine.Felamimail.folderBackend.recordReader({responseText: result});
-                app.getFolderStore().updateFolder(folderRecord);
-                selectedNode.removeAll();
-                selectedNode.getUI().removeClass("x-tree-node-loading");
+                const isTrashFolder = (folder.get('globalname') === account.get('trash_folder') || folder.get('localname').match(/^junk$/i)) ?? false;
+                if (!isTrashFolder) {
+                    Ext.MessageBox.confirm(
+                        i18n._('Empty folder?'),
+                        i18n._('Do you really want to delete all the messages in this folder?'),
+                        async function (button) {
+                            if (button === 'yes') {
+                                selectedNode.getUI().addClass("x-tree-node-loading");
+                                const result = await Tine.Felamimail.emptyFolder(folder.id);
+                                const folderRecord = Tine.Felamimail.folderBackend.recordReader({responseText: result});
+                                app.getFolderStore().updateFolder(folderRecord);
+                                selectedNode.removeAll();
+                                selectedNode.getUI().removeClass("x-tree-node-loading");
+                            }
+                        },
+                        this
+                    );
+                }
+
             } else {
                 folder.set('cache_unreadcount', 0);
             }
