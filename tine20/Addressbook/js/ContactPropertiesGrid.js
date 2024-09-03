@@ -53,7 +53,7 @@ export default (config) => {
             if (isPreferredField(field.fieldName)) {
                 result = `<div class="tinebase-property-field">
                     <div>${result}</div>
-                    <div class="tine-combo-icon renderer_PreferredIcon" ext:qtip="${app.i18n._('Preferred')}"></div>
+                    <div class="tine-textfield-icon renderer_PreferredIcon" ext:qtip="${app.i18n._('Preferred')}"></div>
                 </div>`
             }
 
@@ -121,7 +121,11 @@ export default (config) => {
         });
         editDialog.on('load', onRecordLoad);
         editDialog.on('recordUpdate', onRecordUpdate);
-        propertyGrid.on('cellclick', onClick);
+        propertyGrid.on('cellclick', showCtxMenu);
+        propertyGrid.on('rowcontextmenu', function(grid, row, e) {
+            e.stopEvent();
+            showCtxMenu(grid, row, 0, e);
+        }, this);
 
         editDialog.on('multipleRecordUpdate', onMultipleRecordUpdate);
 
@@ -162,17 +166,16 @@ export default (config) => {
         });
     };
 
-    const onClick = (e, row, c, d) => {
+    const showCtxMenu = (e, row, c, d) => {
         const record = propertyGrid.store.getAt(row);
         const fieldName = record.data.name.replace(/^\d{3}_/, '');
         const value = record.data.value;
-        const isPreferred = isPreferredField(fieldName);
         const emailFields = Tine.Addressbook.Model.EmailAddress.prototype.getEmailFields().map((f) => f.fieldName);
         if (value && c === 0 && emailFields.includes(fieldName)) {
             const ctxMenu = new Ext.menu.Menu({
                 items: [new Ext.Action({
                     text: app.i18n._('Set as preferred E-Mail'),
-                    iconCls: isPreferred ? 'action_enable' : '',
+                    iconCls: 'renderer_PreferredIcon',
                     handler: async (item) => {
                         const editDialog = propertyGrid.findParentBy(function (c) {
                             return c instanceof Tine.widgets.dialog.EditDialog
