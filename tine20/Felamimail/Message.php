@@ -104,7 +104,8 @@ class Felamimail_Message extends Zend_Mail_Message
             }
             
             if (! $date) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Date $_dateString could  not be converted to DateTime -> using 1970-01-01 00:00:00.");
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
+                    . " Date $_dateString could  not be converted to DateTime -> using 1970-01-01 00:00:00.");
                 $date = new Tinebase_DateTime('@0');
             }
         }
@@ -118,14 +119,20 @@ class Felamimail_Message extends Zend_Mail_Message
      * @param string|array $_addresses
      * @return array
      */
-    public static function convertAddresses($_addresses)
+    public static function convertAddresses($_addresses): array
     {
-        $result = array();
+        $result = [];
         if (! empty($_addresses)) {
             $addresses = is_string($_addresses) ? Tinebase_Mail::parseAdresslist($_addresses) : $_addresses;
             if (is_array($addresses)) {
                 foreach ($addresses as $address) {
-                    if (preg_match('/@xn--/', $address['address'])) {
+                    if (! isset($address['address'])) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' Array missing "address" key: ' . print_r($address, true));
+                        continue;
+                    }
+
+                    if (str_contains($address['address'], '@xn--')) {
                         $email = Tinebase_Helper::convertDomainToUnicode($address['address']);
                     } else {
                         $email = $address['address'];
