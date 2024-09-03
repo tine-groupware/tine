@@ -421,6 +421,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             fieldLabel: this.app.i18n._('Type'),
                             name: 'type',
                             hidden: !this.asAdminModule,
+                            allowBlank: false,
                             listeners: {
                                 scope: this,
                                 select: this.onSelectType,
