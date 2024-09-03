@@ -8,7 +8,7 @@ pcre_jit on;
 
 error_log /dev/stderr warn;
 
-include /etc/nginx/modules/*.conf;
+include /etc/nginx/modules-enabled/*.conf;
 
 events {
 	worker_connections 1024;
@@ -29,6 +29,6 @@ http {
 
 	tcp_nopush off;
 
-	include /etc/nginx/conf.d/*;
-	include /etc/nginx/http.d/*;
+	include /etc/nginx/conf.d/*.conf;
+	include /etc/nginx/http.d/*.conf;
 }

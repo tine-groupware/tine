@@ -9,8 +9,6 @@ function make() {
 
     docker build ${DOCKER_ADDITIONAL_BUILD_ARGS} \
     --tag ${image} \
-    --build-arg AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID} \
-    --build-arg AWS_REGION=${AWS_REGION} \
     --file Dockerfile ../../..
 
     if [[ $push == true ]]; then
