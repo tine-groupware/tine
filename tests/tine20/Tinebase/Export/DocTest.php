@@ -166,6 +166,12 @@ class Tinebase_Export_DocTest extends TestCase
         static::assertStringContainsString('test, Name', $refProp->getValue($export->getDocument()));
     }
 
+    /**
+     * @group nogitlabci
+     * gitlabci: Failed asserting that 9547 matches expected 9483.
+     * the size is not consistent: ci ubuntu 81 = 9547, dev ubuntu 81 = 9499, dev alpine 9499
+     * todo: do not use the files size - take a look at testDocTwigFunctions
+     */
     public function testDocTwigFunctions2()
     {
         $export = new Tinebase_Export_Doc2(new Addressbook_Model_ContactFilter(), null, [

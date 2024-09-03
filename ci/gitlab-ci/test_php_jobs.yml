@@ -322,7 +322,7 @@ php-unit-update-tests:
     - test_prepare_global_configs
     - tine20_await_db
     - test_prepare_mail_db
-    - supervisord
+    - /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
   script:
     - !reference [.lib, script]
     - |

@@ -39,4 +39,4 @@ if test "$TINE20_INSTALL" == "true"; then
     fi
 fi
 
-/usr/bin/supervisord -c /etc/supervisord.conf --nodaemon
+/usr/bin/supervisord -c /etc/supervisor/supervisord.conf --nodaemon

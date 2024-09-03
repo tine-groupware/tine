@@ -85,7 +85,8 @@ class Admin_Import_UserTest extends ImportTestCase
         $this->_filename = __DIR__ . DIRECTORY_SEPARATOR . 'files' . DIRECTORY_SEPARATOR . 'user_import_macCentralEurope.csv';
         $this->_deleteImportFile = false;
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
-        $definition->plugin_options = str_replace('</config>', '<encoding>MACCENTRALEUROPE</encoding></config>', $definition->plugin_options);
+        # note: the encoding has different names on different distributions! ubunut: MAC-CENTRALEUROPE alpine: MACCENTRALEUROPE
+        $definition->plugin_options = str_replace('</config>', '<encoding>MAC-CENTRALEUROPE</encoding></config>', $definition->plugin_options);
         try {
             $result = $this->_doImport([], $definition);
         } finally {

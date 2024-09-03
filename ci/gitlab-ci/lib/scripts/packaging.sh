@@ -4,25 +4,12 @@ packaging_build_packages() {
 
     echo "packaging_build_packages() version: $version release: $release"
 
-    CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
-    MAJOR_COMMIT_REF_NAME_ESCAPED=$(echo ${MAJOR_COMMIT_REF_NAME} | sed sI/I-Ig)
-
-    CACHE_IMAGE="${REGISTRY}/packages:${CI_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}"
-    MAJOR_CACHE_IMAGE="${REGISTRY}/packages:${MAJOR_COMMIT_REF_NAME_ESCAPED}-${PHP_VERSION}${IMAGE_TAG_PLATFORM_POSTFIX}"
-
     if echo "$CI_COMMIT_TAG" | grep '/'; then
         echo "Error: CI_COMMIT_TAG must not contain a /"
         exit 1
     fi
 
     # config via env
-    export PHP_VERSION=${PHP_VERSION}
-    export BASE_IMAGE="${REGISTRY}/base-commit:${IMAGE_TAG}"
-    export DEPENDENCY_IMAGE="${REGISTRY}/dependency-commit:${IMAGE_TAG}"
-    export SOURCE_IMAGE="${REGISTRY}/source-commit:${IMAGE_TAG}"
-    export JSDEPENDENCY_IMAGE="${REGISTRY}/jsdependency-commit:${IMAGE_TAG}"
-    export JSBUILD_IMAGE="${REGISTRY}/jsbuild-commit:${IMAGE_TAG}"
-    export BUILD_IMAGE="${REGISTRY}/build-commit:${IMAGE_TAG}"
     export BUILT_IMAGE="${REGISTRY}/built-commit:${IMAGE_TAG}"
     export REVISION=0
     export CODENAME="${CODENAME}"
@@ -31,7 +18,7 @@ packaging_build_packages() {
 
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
     # create archives
-    if ! ./ci/dockerimage/make.sh -o "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar" -c "${CACHE_IMAGE}" -c "${MAJOR_CACHE_IMAGE}" packages; then
+    if ! docker_build_image_packages "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/packages.tar"; then
         return 1
     fi
 }

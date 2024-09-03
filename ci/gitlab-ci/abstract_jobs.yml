@@ -77,6 +77,7 @@
     KUBERNETES_SERVICE_MEMORY_REQUEST: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_SERVICE_MEMORY_REQUEST
     KUBERNETES_SERVICE_MEMORY_LIMIT: $ABSTRACT_JOBS_PHP_UNIT_KUBERNETES_SERVICE_MEMORY_LIMIT
     WAIT_FOR_DB_TIMEOUT: '120'
+    LANG: en_US.UTF-8
   services:
     - !reference [.lib-services, db_service]
     - !reference [.lib-services, redis_service]
@@ -104,7 +105,7 @@
     - tine20_await_db
     - test_prepare_mail_db
     - tine20_install
-    - supervisord
+    - /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
   script:
     - !reference [.lib, script]
     - test_phpunit
@@ -154,7 +155,7 @@
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "dovecot" < /config/sql/dovecot_tables.sql
     - mysql -h$MAIL_DB_HOST -uroot -p"$MYSQL_ROOT_PASSWORD" "postfix" < $ARG_POSTFIX_INIT_SQL_PATH
     - tine20_install
-    - supervisord
+    - /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
   script:
     - test -f ${TINE20ROOT}/scripts/postInstallGitlab.sh && ${TINE20ROOT}/scripts/postInstallGitlab.sh
     - echo cd ${TINE20ROOT}/${ARG_TEST_PATH_FROM_TINE20ROOT}
@@ -210,15 +211,6 @@
     - !reference [.lib-services, mail_service]
     - !reference [.lib-services, ldap_service]
 
-.abstract_jobs.copy_source:
-  extends: .abstract_jobs.php_unit
-  before_script:
-    - if test "${CI_PROJECT_NAME}" != "tine20"; then git clone -b $TINE20_BRANCH --single-branch --depth 1 $TINE20_REPO_URL ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20; fi
-    - if test "${ARG_COPY_SOURCE}" == "true"; then ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/ci/scripts/copy_source.sh; fi
-  script: []
-  services: []
-  artifacts:
-
 # basic docker setup.
 .abstract_jobs.docker:
   variables:
@@ -238,11 +230,11 @@
     KUBERNETES_SERVICE_MEMORY_REQUEST: $ABSTRACT_JOBS_DOCKER_KUBERNETES_SERVICE_MEMORY_REQUEST
     KUBERNETES_SERVICE_MEMORY_LIMIT: $ABSTRACT_JOBS_DOCKER_KUBERNETES_SERVICE_MEMORY_LIMIT
   services:
-    - name: ${UTIL_REGISTRY}/docker:19.03.1-dind-r2
+    - name: ${UTIL_REGISTRY}/docker:27.0.3-dind
       alias: docker
-  image: ${UTIL_REGISTRY}/docker:19.03.1-r3
+  image: ${UTIL_REGISTRY}/docker:27.0.3-r1
   before_script:
-    - export DOCKER_BUILDKIT=0
+    - export DOCKER_BUILDKIT=1
     - export PROGRESS_NO_TRUNC=1 # stop docker from truncating aws image names
     - !reference [.lib, script]
     - docker_registry_login ${REGISTRY} ${REGISTRY_USER} ${REGISTRY_PASSWORD}
