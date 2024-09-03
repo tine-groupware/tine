@@ -1994,8 +1994,8 @@ msgstr "Sie müssen einen Zielordner für die Nachrichten auswählen."
 msgid "Wrong File Type"
 msgstr "Falscher Dateityp"
 
-msgid "Files of type eml allowed only."
-msgstr "Nur Dateien vom Typ eml sind erlaubt."
+msgid "Files of type eml and msg allowed only."
+msgstr "Nur Dateien vom Typ eml und msg sind erlaubt."
 
 msgid "Importing Messages..."
 msgstr "Importiere Nachrichten..."

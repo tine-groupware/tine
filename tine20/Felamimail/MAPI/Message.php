@@ -27,7 +27,7 @@ class Felamimail_MAPI_Message extends BaseMessage
     public function parseMessage($cacheId)
     {
         $data = null;
-        
+
         if (Tinebase_Core::getCache()->test($cacheId) && ($messageData = Tinebase_Core::getCache()->load($cacheId) ?: null)) {
             $data = $messageData;
         }
@@ -53,11 +53,24 @@ class Felamimail_MAPI_Message extends BaseMessage
                         }
                         break;
                     case 'from':
-                        $data['from_email'] = $this->properties['sender_email_address'];
-                        $data['from_name'] = $this->properties['sender_name'];
+                        $senderName = $this->properties['sender_name'];
+                        $senderAddr = $this->properties['sender_email_address'];
+                        $senderType = $this->properties['sender_addrtype'];
+
+                        $from = $senderAddr;
+                        if ($senderType !== 'SMTP') {
+                            $from = $this->properties['sender_smtp_address'] ??
+                                $this->properties['sender_representing_smtp_address'] ??
+                                sprintf('%s:%s', $senderType, $senderAddr);
+                        }
+                        $data['from_email'] = $from;
+                        $data['from_name'] = $senderName ?? '';
+
                         break;
                     //unset invalid fields for model message creation
                     case 'received':
+                        $received = explode(';', $headerValue[0]);
+                        $data['received'] = isset($received[1]) ? date("d-M-Y H:i:s O", strtotime($received[1])) : $headerValue[0];
                         break;
                     default:
                         $data[$headerKey] = $headerValue;
@@ -67,7 +80,7 @@ class Felamimail_MAPI_Message extends BaseMessage
 
             $plainBody = $this->getBody();
             $htmlBody = $this->getBodyHTML();
-            
+
             if ($plainBody) {
                 $data['body'] = $plainBody;
                 $data['body_content_type'] = Zend_Mime::TYPE_TEXT;
@@ -78,37 +91,40 @@ class Felamimail_MAPI_Message extends BaseMessage
                 $data['body_content_type'] = Zend_Mime::TYPE_HTML;
                 $data['body_content_type_of_body_property_of_this_record'] = Zend_Mime::TYPE_HTML;
             }
-            
-            $data['attachments'] = [];
-
-            foreach ($this->getAttachments() as $id => $attachment) {
-                $data['attachments'][$id] = [
-                    'content-type'  => $attachment->getMimeType(),
-                    'filename'      => $attachment->getFilename(),
-                    'partId'        => $id,
-                    'data'          => $attachment->getData(),
-                ];
-            }
         }
-        
-        //attachment can not be fetched from cache , so we always create attachment from attachment data;
-        if (count($data['attachments']) > 0) {
-            $msg = new ZBateson\MailMimeParser\Message();
-            
-            foreach ($data['attachments'] as $id => $attachment) {
-                $msg->addAttachmentPart($attachment['data'], $attachment['content-type'], $attachment['filename']);
-            }
-            foreach ($msg->getAllAttachmentParts() as $id => $attachment) {
-                /** @var GuzzleHttp\Psr7\Stream $partStream */
-                $partStream = $attachment->getStream();
-                $data['attachments'][$id]['size']           = $partStream->getSize();
-                $data['attachments'][$id]['contentstream']  = $attachment->getContentStream();
-                $data['attachments'][$id]['stream']         = $attachment->getBinaryContentResourceHandle();
+        $data['content_type'] = Zend_Mime::TYPE_HTML;
+        $data['attachments'] = [];
+        $data['id'] = Tinebase_Record_Abstract::generateUID();
+        $attachments = $this->getAttachments();
+        if (count($attachments) > 0) {
+            foreach ($attachments as $id => $attachment) {
+                $stream = fopen("php://temp", 'r+');
+                $attachment->copyToStream($stream);
+                $data['attachments'][$id] = [
+                    'content-type' => $attachment->getMimeType(),
+                    'filename' => $attachment->getFilename(),
+                    'partId' => $id,
+                    'stream' => $stream
+                ];
             }
             $data['has_attachment'] = true;
         }
-        // write message data to cache
+
         Tinebase_Core::getCache()->save($data, $cacheId);
+
+        if (count($attachments) > 0) {
+            $msg = new ZBateson\MailMimeParser\Message();
+            foreach ($data['attachments'] as $id => &$attachmentData) {
+                $msg->addAttachmentPart($attachmentData['stream'], $attachmentData['content-type'],$attachmentData['filename']);
+                $result = $msg->getAttachmentPart($id);
+                /** @var GuzzleHttp\Psr7\Stream $partStream */
+                $partStream = $result->getStream();
+                $attachmentData['size']           = $partStream->getSize();
+                $attachmentData['contentstream']  = $result->getContentStream();
+                $attachmentData['stream']         = $result->getBinaryContentResourceHandle();
+            }
+        }
+
         return new Felamimail_Model_Message($data);
     }
 
@@ -136,30 +152,19 @@ class Felamimail_MAPI_Message extends BaseMessage
         foreach ($transport as $header) {
             $rawHeaders->add($header);
         }
-        
-        // sender        
-        $senderType = $this->properties['sender_addrtype'];
-        if ($senderType == 'SMTP') {
-            $rawHeaders->set('From', $this->getSender());
-        }
-        elseif (!$rawHeaders->has('From')) {
-            if ($from = $this->getSender()) {
-                $rawHeaders->set('From', $from);
-            }
-        }
-        
+
         // recipients
         $recipients = $this->getRecipients();
-        
+
         // fix duplicated content
         foreach (['to', 'cc', 'bcc'] as $type) {
             $rawHeaders->unset($type);
         }
-        
+
         foreach ($recipients as $r) {
             $rawHeaders->add($r->getType(), (string)$r);
         }
-        
+
         // subject - preference to msg properties
         if ($this->properties['subject']) {
             $rawHeaders->set('Subject', $this->properties['subject']);

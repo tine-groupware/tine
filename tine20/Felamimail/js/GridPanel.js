@@ -505,8 +505,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         const exts = _.uniq(_.map(fileSelector.files, file => {return file.name.split('.').pop()}));
-        if (exts.length !== 1 || exts[0] !== 'eml') {
-            return Ext.Msg.alert(this.app.i18n._('Wrong File Type'), this.app.i18n._('Files of type eml allowed only.'));
+        if (exts.length !== 1 || !['eml', 'msg'].includes(exts[0])) {
+            return Ext.Msg.alert(this.app.i18n._('Wrong File Type'), this.app.i18n._('Files of type eml and msg allowed only.'));
         }
         
         this.importMask = new Ext.LoadMask(this.grid.getEl(), { msg: i18n._('Importing Messages...') });
