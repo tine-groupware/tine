@@ -1822,8 +1822,8 @@ class Tinebase_FileSystem implements
                 // if modlog is not active, we want to hard delete a soft deleted node
                 $node = $this->stat($path, null, !$this->_modLogActive);
             } catch (Tinebase_Exception_NotFound $tenf) {
-                // we don't want a roll back here, we didn't do anything, nothing went really wrong
-                // if the TENF is catched outside gracefully, a roll back in here would kill it!
+                // we don't want a rollback here, we didn't do anything, nothing went really wrong
+                // if the TENF is catched outside gracefully, a rollback in here would kill it!
                 Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
                 $transactionId = null;
                 throw $tenf;
@@ -3566,7 +3566,19 @@ class Tinebase_FileSystem implements
         $raii = new Tinebase_RAII(fn() => Tinebase_Timemachine_ModificationLog::setCurrentAccountId($oldModLogCurrentAccount));
 
         if (Tinebase_Model_Tree_FileObject::TYPE_FOLDER === $node->type) {
-            if (!$flySystem->directoryExists($node->flypath)) {
+            try {
+                $dirExists = $flySystem->directoryExists($node->flypath);
+            } catch (Sabre\HTTP\ClientHttpException $shche) {
+                if ($shche->getMessage() === 'Gateway Timeout') {
+                    // just log and try again later
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__
+                        . ' Flysystem error on path "' . $node->flypath . '" : ' . $shche->getMessage());
+                    return;
+                }
+                throw $shche;
+            }
+
+            if (!$dirExists) {
                 $this->_syncFlySystemDeleteNode($node);
                 return;
             }
