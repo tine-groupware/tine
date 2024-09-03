@@ -66,6 +66,18 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
              <number:text>.</number:text>
              <number:year number:style="long"/>
           </number:date-style>',
+        '<number:percentage-style style:name="N14"
+            xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"
+            xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><number:number number:decimal-places="2" number:min-decimal-places="2" number:min-integer-digits="1"/><number:text>%</number:text></number:percentage-style>',
+        '<number:date-style style:name="N27"
+            xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" 
+            xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><number:day number:style="long"/><number:text>.</number:text><number:month number:style="long"/><number:text>.</number:text><number:year number:style="long"/><number:text> </number:text><number:hours number:style="long"/><number:text>:</number:text><number:minutes number:style="long"/><number:text>:</number:text><number:seconds number:style="long"/></number:date-style>',
+        '<number:text-style style:name="N30"
+            xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" 
+            xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><number:text-content/></number:text-style>',
+        '<number:time-style style:name="N36" number:language="de" number:country="DE"
+            xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" 
+            xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><number:hours number:style="long"/><number:text>:</number:text><number:minutes number:style="long"/><number:text>:</number:text><number:seconds number:style="long"/></number:time-style>',
         '<style:style style:name="ceHeader" style:family="table-cell" 
                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
@@ -108,7 +120,15 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         '<style:style style:name="currencyEURCell" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="currencyEUR"
                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"/>',
         '<style:style style:name="dateDMYCell" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="dateDMY"
-                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"/>'
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"/>',
+        '<style:style style:name="dateTimeDMYCell" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N27"
+                xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"/>',
+        '<style:style style:name="cellPercentage" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N14"
+            xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"/>',
+        '<style:style style:name="cellText" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N30"
+            xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"/>',
+        '<style:style style:name="cellTime" style:family="table-cell" style:parent-style-name="Default" style:data-style-name="N36"
+            xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"/>',
     );
     
     /**
@@ -367,6 +387,40 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             
             if ($field->columnStyle) {
                 $cell->setStyle((string) $field->columnStyle);
+            } else {
+                switch ($cellType) {
+                    case OpenDocument_SpreadSheet_Cell::TYPE_DATE:
+                        if ('datetime' === $field->type) {
+                            $style = 'dateTimeDMYCell';
+                            $val = ($record->{$field->identifier} instanceof DateTime) ? $record->{$field->identifier}->format('d.m.Y H:i:s') : $record->{$field->identifier};
+                        } else {
+                            $style = 'dateDMYCell';
+                            $val = ($record->{$field->identifier} instanceof DateTime) ? $record->{$field->identifier}->format('d.m.Y') : $record->{$field->identifier};
+                        }
+                        if (null === $cellValue || !$val) {
+                            break;
+                        }
+                        $cellElement = $cell->getBody();
+                        unset($cellElement->children(OpenDocument_Document::NS_TEXT)[0]);
+                        $cellElement->addChild('p', OpenDocument_SpreadSheet_Cell::encodeValue($val), OpenDocument_Document::NS_TEXT);
+                        break;
+                    case OpenDocument_SpreadSheet_Cell::TYPE_CURRENCY:
+                        $style = 'currencyEURCell';
+                        break;
+                    case OpenDocument_SpreadSheet_Cell::TYPE_FLOAT:
+                        $style = 'numberStyle';
+                        break;
+                    case OpenDocument_SpreadSheet_Cell::TYPE_PERCENTAGE:
+                        $style = 'cellPercentage';
+                        break;
+                    case OpenDocument_SpreadSheet_Cell::TYPE_TIME:
+                        $style = 'cellTime';
+                        break;
+                    default:
+                        $style = 'cellText';
+                        break;
+                }
+                $cell->setStyle($style);
             }
             
             // add formula
@@ -413,6 +467,9 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
      */
     protected function _getCellType($_fieldType)
     {
+        if (is_string($_fieldType) && str_starts_with($_fieldType, 'int')) {
+            $_fieldType = 'number';
+        }
         switch($_fieldType) {
             case 'date':
             case 'datetime':
