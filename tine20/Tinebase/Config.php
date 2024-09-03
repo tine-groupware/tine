@@ -1570,7 +1570,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 ],
                 self::ACCOUNT_TWIG_LOGIN           => [
                     self::TYPE                      => self::TYPE_STRING,
-                    self::DEFAULT_STR               => '{{ account.accountFirstName|transliterate|removeSpace|trim[0:1]|lower }}{{ account.accountLastName|transliterate|removeSpace|lower }}',
+                    self::DEFAULT_STR               => '{{ account.accountFirstName|transliterate|removeSpace|accountLoginChars|trim[0:1]|lower }}{{ account.accountLastName|transliterate|removeSpace|accountLoginChars|lower }}',
                 ],
                 self::ACCOUNT_TWIG_EMAIL           => [
                     self::TYPE                      => self::TYPE_STRING,

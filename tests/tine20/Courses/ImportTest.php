@@ -58,7 +58,7 @@ scheanna4;Schemschura;Anna;;;Lehrer;5928;idi;va21;752468;11bcd568-c6f5-103c-9855
 moerjoha;Mörke;Johanna;;;Lehrer;5928;idi;meg22, meg12, meg02;752500;f9e387ea-c6fc-103c-99f9-bf4c10cc00cf;01.01.2037;01.04.2037;20.04.1990
 5928biss;Bissinger-Admin;Thomas;;;Schuladministrator;5928;;ohne Zuordnung;699036;15985208-b25e-103c-8e34-bf4c10cc00cf;;;
 5928rjab;Rjabenko-Admin;Maxim;;;Schuladministrator;5928;;ohne Zuordnung;699063;1c210e26-b25e-103c-8f28-bf4c10cc00cf;;;
-kornmaja;Korndörfer;Maja;;;Schüler;5928;idi;sc11;626900;26b77cf0-abef-103c-8852-35ab3c0c1620;01.08.2023;;27.10.2004
+kornmaja;K'Orndörfer;Maja;;;Schüler;5928;idi;sc11;626900;26b77cf0-abef-103c-8852-35ab3c0c1620;01.08.2023;;27.10.2004
 sprejona;Spreemann;Jonas;;;Schüler;5928;idi;av02;626967;534f1ae8-abef-103c-8bb4-35ab3c0c1620;01.08.2023;;18.12.2001
 owusstep;Owusu-Sekyere;Stephen;;;Schüler;5928;idi;mwp12;626970;54ff098e-abef-103c-8bd7-35ab3c0c1620;01.08.2023;;05.09.1997
 habtmilk;Habtom Kiflay;Milkyas;;;Schüler;5928;idi;avm22;627038;849a3092-abef-103c-8f83-35ab3c0c1620;01.08.2024;;21.06.2004
@@ -116,7 +116,7 @@ CSV
             'create student account: mhabtomkiflay' . PHP_EOL .
             'create student account: vgoertzen' . PHP_EOL .
             'create student account: mmagnus' . PHP_EOL .
-            'create student account: asmaakhalfibrahimnoureldin' . PHP_EOL .
+            'create student account: aasmaakhalfibrahimnoureldin' . PHP_EOL .
             'create student account: dkobzak' . PHP_EOL .
             'create student account: pwinterhalter' . PHP_EOL .
             'create student account: ilababidi' . PHP_EOL .
@@ -142,6 +142,9 @@ CSV
         $studentPwdExport = $this->getPlainTextFromDocx(Tinebase_FileSystem::getInstance()->getRealPathForHash($attachments->getFirstRecord()->hash));
         $this->assertSame(1, preg_match('/HannahBraunBenutzer: hbraunPasswort: (.*)E-Mail:hbraun/', $studentPwdExport, $m));
         $hbraunPwd = $m[1];
+
+        $student = Tinebase_User::getInstance()->getUserByLoginName('mkorndoerfer');
+        $this->assertSame('K\'Orndörfer, Maja', $student->accountDisplayName);
 
         $student = Tinebase_User::getInstance()->getUserByLoginName('hbraun');
         file_put_contents('tine20://' . $path . '/import.csv',

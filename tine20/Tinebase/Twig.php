@@ -162,6 +162,9 @@ class Tinebase_Twig
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('transliterate', function($str) {
             return iconv('UTF-8', 'ASCII//TRANSLIT', transliterator_transliterate('de-ASCII', $str));
         }));
+        $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('accountLoginChars', function($str) {
+            return preg_replace('/[^\w\-_.@\d+]/u', '', $str);
+        }));
 
         $this->_twigEnvironment->addFilter(new Twig_SimpleFilter('preg_replace', function($subject, $pattern, $replacement, int $limit=-1, int $count=null) {
             return preg_replace($pattern, $replacement, $subject, $limit, $count);
