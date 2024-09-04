@@ -1588,7 +1588,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     Tinebase_Core::getLogger()->info(
                         __METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
                 }
-            }  catch (Exception $e) {
+            } catch (Exception $e) {
                 Tinebase_Exception::log($e);
             }
         }
@@ -1597,6 +1597,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             return null;
         }
 
+        $messages = null;
         try {
             $messages = $this->_backend->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(
                 Felamimail_Model_Message::class, [
@@ -1607,13 +1608,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 return isset($headers['x-tine20-autosaved']);
             });
             $this->_backend->delete($messages->getId());
-            return $messages;
-        }  catch (Exception $e) {
-            if (! $e instanceof Felamimail_Exception_IMAPMessageNotFound) {
+        } catch (Exception $e) {
+            if (!$e instanceof Felamimail_Exception_IMAPMessageNotFound &&
+                !$e instanceof Felamimail_Exception_IMAPInvalidCredentials
+            ) {
                 Tinebase_Exception::log($e);
             }
-            return null;
         }
+
+        return $messages;
     }
 
     /**
