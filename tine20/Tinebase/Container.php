@@ -2555,14 +2555,21 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract implements Tineba
     protected function _clearSingleContainerContent(
         Tinebase_Model_Container $container,
         Tinebase_Controller_Record_Abstract $controller
-    ) {
+    ): void
+    {
+        $controllerBackend = $controller->getBackend();
+        if (!$controllerBackend instanceof Tinebase_Backend_Sql_Interface) {
+            // skip - no sql backend
+            return;
+        }
+
         // remove all content records that no longer exist in record table
         $select = $this->getAdapter()->select()
             ->from(['content' => $this->getContentBackend()->getTablePrefix()
                 . $this->getContentBackend()->getTableName()], ['id'])
             ->joinLeft(
-                ['records' => $controller->getBackend()->getTablePrefix()
-                    . $controller->getBackend()->getTableName()],
+                ['records' => $controllerBackend->getTablePrefix()
+                    . $controllerBackend->getTableName()],
                 "{$this->_db->quoteIdentifier('records.id')}" .
                     "= {$this->_db->quoteIdentifier('content.record_id')}"
             )
