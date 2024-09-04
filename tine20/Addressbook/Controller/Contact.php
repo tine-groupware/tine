@@ -1463,15 +1463,17 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @throws Tinebase_Exception_Record_DefinitionFailure
      * @throws Tinebase_Exception_Record_Validation
      */
-    public function searchContactsByEmailArrays(array $emails, array $names, array $types = []): array
+    public function searchRecipientTokensByEmailArrays(array $emails = [], array $names = [], array $types = []): array
     {
-        $result = [];
+        $tokens = [];
         $contactFilters = [];
         $listFilters = [];
         $emails = array_filter($emails);
         $names = array_filter($names);
-        $types = array_filter($types);
-        
+        $types = array_filter($types, function ($type) {
+            return !empty($type) && !str_contains($type, 'Member') && $type !== 'mailingList';
+        });
+
         if (count($emails) > 0) {
             $queryFilters = array_map(function($email) {return ['field' => 'email_query', 'operator' => 'contains', 'value' => $email];}, $emails);
             $contactFilters[] = [
@@ -1500,136 +1502,25 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 ]
             ];
         }
-        
+
         if (count($contactFilters) > 0) {
-            $contactResult = Addressbook_Controller_Contact::getInstance()->search(
+            $contacts = Addressbook_Controller_Contact::getInstance()->search(
                 new Addressbook_Model_ContactFilter($contactFilters),
                 new Tinebase_Model_Pagination(['sort' => 'type', 'dir' => 'DESC']),// prefer user to contact
             );
-            $result = array_merge($result, $contactResult->toArray());
-        }
-        
-        if (count($listFilters) > 0) {
-            $listResult = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter($listFilters));
-            $result = array_merge($result, $listResult->toArray());
-        }
-
-        return $result;
-    }
-
-    /**
-     * get contacts recipient token
-     * 
-     * - get recipient token recursively
-     * - mailTypes is also the token fetching priority
-     * 
-     * @param array $contacts
-     * @return array
-     */
-    public function getContactsRecipientToken(array $contacts): array
-    {
-        $contacts = isset($contacts['id']) ? [$contacts] : $contacts;
-        $possibleAddresses = [];
-
-        if (class_exists('GDPR_Controller_DataIntendedPurposeRecord')
-            && Tinebase_Application::getInstance()->isInstalled('GDPR', checkEnabled: true)
-        ) {
-            $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, [
-                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                    GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME => [
-                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                            GDPR_Model_DataIntendedPurposeRecord::FLD_INTENDEDPURPOSE => [
-                                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                                    GDPR_Model_DataIntendedPurpose::FLD_NAME => [],
-                                    GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION => [],
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]);
-            $expander->expand(new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, $contacts));
-        } else {
-            $expander = null;
-        }
-        
-        foreach ($contacts as $contact) {
-            if (in_array($contact['type'], ['group', 'list', 'mailingList'])) {
-                $listMemberEmails = [];
-                // always get member contacts
-                if (isset($contact['members']) && count($contact['members']) > 0) {
-                    try {
-                        $memberContacts = Addressbook_Controller_Contact::getInstance()->getMultiple($contact['members'], false, $expander);
-                        foreach ($memberContacts as $memberContact) {
-                            $memberPossibleAddresses = $this->getContactsRecipientToken([$memberContact->toArray()]);
-                            if (count($memberPossibleAddresses) === 0) {
-                                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                    . " list member : " . $memberContact->n_fileas . " has no contact emails, skip.");
-                                continue;
-                            }
-                            //we only get the first match email
-                            $preferredEmail = $memberContact->getPreferredEmailAddress();
-                            foreach ($memberPossibleAddresses as $memberPossibleAddress) {
-                                if ($preferredEmail === $memberPossibleAddress['email']) {
-                                    $listMemberEmails[]  = $memberPossibleAddress;
-                                    break;
-                                }
-                            }
-                        }
-                    } catch (Exception $e) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
-                            . ' get members failed : ' . $e->getMessage());
-                    }
-                }
-                
-                if (count($listMemberEmails) === 0) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                            . " List : " . $contact['name'] . " has no member emails found");
-                    }
-                    if (empty($contact["email"])) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
-                            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
-                                . " Skipping, no email addresses found in list ...");
-                        }
-                        continue;
-                    }
-                }
-                
-                $useAsMailinglist = isset($contact['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST])
-                    && $contact['xprops'][Addressbook_Model_List::XPROP_USE_AS_MAILINGLIST] == 1;
-                
-                $possibleAddresses[] = [
-                    "n_fileas" => $contact["name"] ?? '',
-                    "name" => $contact["name"] ?? '',
-                    "type" =>  $useAsMailinglist ? 'mailingList' : $contact["type"],
-                    "email" => $contact['email'] ?? '',
-                    "email_type_field" =>  '',
-                    "contact_record" => $contact,
-                    "emails" => $listMemberEmails
-                ];
-            } else {
-                $propDefs = Addressbook_Controller_ContactProperties_Definition::getInstance()->getAll();
-                $emailDefs = $propDefs->filter(AMCPD::FLD_MODEL, Addressbook_Model_ContactProperties_Email::class);
-                foreach ($emailDefs as $emailDef) {
-                    $emailType = $emailDef[Addressbook_Model_ContactProperties_Definition::FLD_NAME];
-                    if (empty($contact[$emailType])) {
-                        continue;
-                    }
-
-                    $possibleAddresses[] = [
-                        "n_fileas" => $contact["n_fileas"] ?? '',
-                        "name" => $contact["n_fn"] ?? '',
-                        "type" =>  $contact["type"] ?? '',
-                        "email" => $contact[$emailType],
-                        "email_type_field" => $emailType,
-                        "contact_record" => $contact
-                    ];
-                }
+            foreach ($contacts as $contact) {
+                $tokens = array_merge($tokens, $contact->getRecipientTokens());
             }
         }
-        
-        return  $possibleAddresses;
+
+        if (count($listFilters) > 0) {
+            $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter($listFilters));
+            foreach ($lists as $list) {
+                $tokens = array_merge($tokens, $list->getRecipientTokens());
+            }
+        }
+
+        return $tokens;
     }
 
     /**

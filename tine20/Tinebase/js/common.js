@@ -898,8 +898,22 @@ Tine.Tinebase.common = {
             if (address) parsedList.push(address);
         })
 
-        let emailArray = _.map(parsedList, (parsed) => {
-            let contact = {
+        const emails = _.map(parsedList, (parsed) => {
+            return parsed.address ?? '';
+        });
+        const names = _.map(parsedList, (parsed) => {
+            return parsed?.name ?? '';
+        });
+
+        const {results: tokens} = await Tine.Addressbook.searchRecipientTokensByEmailArrays(emails, names);
+
+        _.each(parsedList, (parsed) => {
+            if (!parsed.address) return;
+            const existingToken = _.find(tokens, function (token) {
+                return parsed.address === token['email'];
+            });
+
+            const token = existingToken ?? {
                 'email': parsed.address ?? '',
                 'email_type_field': '',
                 'type': '',
@@ -908,23 +922,7 @@ Tine.Tinebase.common = {
                 'contact_record': ''
             };
 
-            if (contact['email'] !== '') {
-                return contact;
-            }
-        });
-        emailArray = _.filter(emailArray);
-
-        const {results: contacts} = await Tine.Addressbook.searchContactsByRecipientsToken(emailArray);
-
-        _.each(emailArray, (address) => {
-            const existingAddress = _.find(contacts, function (contact) {
-                return address.email === contact['email'];
-            });
-
-            address = existingAddress ?? address;
-            if (address) {
-                result.push(address);
-            }
+            result.push(token);
         });
 
         return result;

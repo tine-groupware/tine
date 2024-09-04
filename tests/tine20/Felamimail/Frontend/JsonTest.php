@@ -446,14 +446,7 @@ class Felamimail_Frontend_JsonTest extends Felamimail_TestCase
         $testEmail = $this->_getEmailAddress();
 
         $adbJsonFE = new Addressbook_Frontend_Json();
-        $address = [
-            'email' => $testEmail,
-            'n_fileas' => '',
-            'name' => '',
-            'type' => 'user',
-            'email_type_field' => ''
-        ];
-        $result = $adbJsonFE->searchContactsByRecipientsToken([$address]);
+        $result = $adbJsonFE->searchRecipientTokensByEmailArrays([$testEmail]);
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
         $messageToSend['to'] =$result['results'];
 

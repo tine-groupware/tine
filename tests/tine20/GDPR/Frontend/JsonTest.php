@@ -23,7 +23,9 @@ class GDPR_Frontend_JsonTest extends TestCase
      * set up tests
      */
     protected function setUp(): void
-{
+    {
+        $this->_uit = new GDPR_Frontend_Json();
+
         parent::setUp();
 
         $this->_dataIntendedPurpose1 = GDPR_Controller_DataIntendedPurpose::getInstance()->create(
@@ -164,6 +166,7 @@ class GDPR_Frontend_JsonTest extends TestCase
             ->search(new GDPR_Model_DataIntendedPurposeRecordFilter(['record' =>  $updatedContact['id']], '',
                 [GDPR_Model_DataIntendedPurposeRecordFilter::OPTIONS_SHOW_WITHDRAWN => true]));
         static::assertSame(2, $createdDipr->count(), 'expect to find 2 data intended purpose records for this contact');
+        return $contact;
     }
     
     function testAdbFilter()
@@ -297,6 +300,7 @@ class GDPR_Frontend_JsonTest extends TestCase
         $contact = new Addressbook_Model_Contact([
             'n_given' => 'unittest',
             'email' => Tinebase_Record_Abstract::generateUID() . '@unittest.de',
+            'email_home' => Tinebase_Record_Abstract::generateUID() . '@unittest.de',
             GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME => [
                 new GDPR_Model_DataIntendedPurposeRecord([
                     'intendedPurpose' => $this->_dataIntendedPurpose1->getId(),
@@ -325,5 +329,22 @@ class GDPR_Frontend_JsonTest extends TestCase
         static::assertCount(1, $result['results']);
         $decodedFilter = $result['filter'][0]['filters'][0]['value'][0]['value'];
         static::assertEquals('unittest1', $decodedFilter['name'][0]['text']);
+    }
+
+    public function testGetRecipientTokensByIntendedPurpose()
+    {
+        $createdContact = $this->testCreateByAdbContact(Tinebase_DateTime::now()->subDay(5));
+        $createdDipr = GDPR_Controller_DataIntendedPurposeRecord::getInstance()
+            ->search(new GDPR_Model_DataIntendedPurposeRecordFilter(['record' => $createdContact->getId()]))->getFirstRecord();
+        $diprId = $createdDipr->intendedPurpose;
+
+        $result = $this->_uit->getRecipientTokensByIntendedPurpose($diprId);
+        $this->assertSame(1, count($result['results']));
+
+        // expired DataIntendedPurposeRecord should not be returned
+        $createdDipr->withdrawDate = Tinebase_DateTime::now()->subDay(1);
+        $createdDipr = GDPR_Controller_DataIntendedPurposeRecord::getInstance()->update($createdDipr);
+        $result = $this->_uit->getRecipientTokensByIntendedPurpose($diprId);
+        $this->assertSame(0, count($result['results']));
     }
 }

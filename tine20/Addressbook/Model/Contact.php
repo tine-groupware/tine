@@ -1565,4 +1565,53 @@ class Addressbook_Model_Contact extends Tinebase_Record_NewAbstract
 
         unset($this->jpegphoto);
     }
+
+
+    /**
+     * get contacts recipient token
+     **
+     * @param bool $preferredEmailOnly
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function getRecipientTokens(bool $preferredEmailOnly = false): array
+    {
+        $possibleAddresses = [];
+
+        if (class_exists('GDPR_Controller_DataIntendedPurposeRecord')
+            && Tinebase_Application::getInstance()->isInstalled('GDPR', checkEnabled: true)
+        ) {
+            $expander = new Tinebase_Record_Expander(Addressbook_Model_Contact::class, [
+                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                    GDPR_Controller_DataIntendedPurposeRecord::ADB_CONTACT_CUSTOM_FIELD_NAME => [
+                        Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                            GDPR_Model_DataIntendedPurposeRecord::FLD_INTENDEDPURPOSE => [
+                                Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                                    GDPR_Model_DataIntendedPurpose::FLD_NAME => [],
+                                    GDPR_Model_DataIntendedPurpose::FLD_DESCRIPTION => [],
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+            $expander->expand(new Tinebase_Record_RecordSet(Addressbook_Model_Contact::class, [$this]));
+        }
+        $emailFields = array_keys(self::getEmailFields());
+        foreach ($emailFields as $emailField) {
+            if (empty($this[$emailField]) || ($preferredEmailOnly && $emailField !== $this->preferred_email)) {
+                continue;
+            }
+            $possibleAddresses[] = [
+                "n_fileas" => $this->n_fileas ?? '',
+                "name" => $this->n_fn ?? '',
+                "type" =>  $this->type ?? '',
+                "email" => $this[$emailField],
+                "email_type_field" => $emailField,
+                "contact_record" => $this->toArray()
+            ];
+        }
+
+        return  $possibleAddresses;
+    }
 }
