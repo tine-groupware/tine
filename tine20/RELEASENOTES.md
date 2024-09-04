@@ -12,6 +12,10 @@ TINE RELEASENOTES
 - PHP 8.2 is now fully supported
 - PHP 8.0 support has been dropped
 
+## Docker Image
+
+- The docker image is now based on ubuntu noble instead of alpine.
+
 # GENERAL CHANGES (User Interface)
 
 # ADMIN / OPERATION
