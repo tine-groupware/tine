@@ -191,7 +191,7 @@ class Tasks_Frontend_WebDAV_Task extends Sabre\DAV\File implements Sabre\CalDAV\
         }
         
         // allow delete only if deleted in origin calendar
-        if ($task->container_id == $this->_container->getId()) {
+        if ($task->getIdFromProperty('container_id') === $this->_container->getId()) {
             Tasks_Controller_Task::getInstance()->delete($task->getId());
         }
     }
