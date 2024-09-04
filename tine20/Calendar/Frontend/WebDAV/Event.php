@@ -348,7 +348,7 @@ class Calendar_Frontend_WebDAV_Event extends Sabre\DAV\File implements Sabre\Cal
         }
 
         // allow delete only if deleted in origin calendar
-        if ($event->container_id == $this->_container->getId()) {
+        if ($event->getIdFromProperty('container_id') === $this->_container->getId()) {
             if (strpos($_SERVER['REQUEST_URI'], Calendar_Frontend_CalDAV_ScheduleInbox::NAME) === false) {
                 Calendar_Controller_MSEventFacade::getInstance()->delete($event->getId());
             }
