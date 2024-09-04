@@ -1,8 +1,5 @@
 packaging_build_packages() {
-    version=$1
-    release=$2
-
-    echo "packaging_build_packages() version: $version release: $release"
+    echo "packaging_build_packages()"
 
     if echo "$CI_COMMIT_TAG" | grep '/'; then
         echo "Error: CI_COMMIT_TAG must not contain a /"
@@ -11,10 +8,7 @@ packaging_build_packages() {
 
     # config via env
     export BUILT_IMAGE="${REGISTRY}/built-commit:${IMAGE_TAG}"
-    export REVISION=0
-    export CODENAME="${CODENAME}"
-    export VERSION=$version
-    export RELEASE=$release
+    # RELEASE is set during packageing to $(packaing_version)
 
     cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
     # create archives
@@ -30,7 +24,6 @@ packaging_extract_all_package_tar() {
 
 packaging_push_packages_to_gitlab() {
     version=$1
-    release=$2
 
     customer=$(release_determin_customer)
 
@@ -41,7 +34,7 @@ packaging_push_packages_to_gitlab() {
 
     echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
 
-    cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${release}/"
+    cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${version}/"
 
     for f in *; do
         curl -S -s \
@@ -82,12 +75,17 @@ packaging_gitlab_get_version_for_pipeline_id() {
     fi
 }
 
-packaging() {
+packaging_version() {
     CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
     version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
-    release=${version}
 
-    echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version: $version release: $release MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+    echo $version
+}
+
+packaging() {
+    version=$(packaging_version)
+
+    echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
 
     if ! release_determin_customer; then
         echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
@@ -95,7 +93,7 @@ packaging() {
     fi
 
     echo "building packages ..."
-    if ! packaging_build_packages $version $release; then
+    if ! packaging_build_packages; then
         echo "Failed to build packages."
         return 1
     fi
@@ -106,7 +104,7 @@ packaging() {
     fi
 
     echo "pushing packages to gitlab ..."
-    if ! packaging_push_packages_to_gitlab $version $release; then
+    if ! packaging_push_packages_to_gitlab $version; then
         echo "Failed to push to gitlab."
         return 1
     fi

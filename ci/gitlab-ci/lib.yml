@@ -117,9 +117,9 @@
               --build-arg CUSTOM_APP_NAME \
               --build-arg CUSTOM_APP_GIT_URL \
               --build-arg CUSTOM_APP_VERSION \
-              --build-arg RELEASE \
+              --build-arg RELEASE=$(packaging_version) \
               --build-arg CODENAME \
-              --build-arg REVISION \
+              --build-arg REVISION=0 \
               .
       
           log built image: pushing ...
@@ -142,9 +142,9 @@
               --build-arg CUSTOM_APP_NAME \
               --build-arg CUSTOM_APP_GIT_URL \
               --build-arg CUSTOM_APP_VERSION \
-              --build-arg RELEASE \
+              --build-arg RELEASE=$(packaging_version) \
               --build-arg CODENAME \
-              --build-arg REVISION \
+              --build-arg REVISION=0 \
               .
       
           log test-built image: pushing ...
@@ -161,9 +161,9 @@
               --file ./ci/dockerimage/Dockerfile \
               --build-arg BUILT_IMAGE \
               --build-arg ZIP_PACKAGES \
-              --build-arg RELEASE \
+              --build-arg RELEASE=$(packaging_version) \
               --build-arg CODENAME \
-              --build-arg REVISION \
+              --build-arg REVISION=0 \
               -o type=tar,dest=${outputPath} \
               .
       }
@@ -419,10 +419,7 @@
 
       # lib/scripts/packaging.sh
       packaging_build_packages() {
-          version=$1
-          release=$2
-      
-          echo "packaging_build_packages() version: $version release: $release"
+          echo "packaging_build_packages()"
       
           if echo "$CI_COMMIT_TAG" | grep '/'; then
               echo "Error: CI_COMMIT_TAG must not contain a /"
@@ -431,10 +428,7 @@
       
           # config via env
           export BUILT_IMAGE="${REGISTRY}/built-commit:${IMAGE_TAG}"
-          export REVISION=0
-          export CODENAME="${CODENAME}"
-          export VERSION=$version
-          export RELEASE=$release
+          # RELEASE is set during packageing to $(packaing_version)
       
           cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
           # create archives
@@ -450,7 +444,6 @@
       
       packaging_push_packages_to_gitlab() {
           version=$1
-          release=$2
       
           customer=$(release_determin_customer)
       
@@ -461,7 +454,7 @@
       
           echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
       
-          cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${release}/"
+          cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${version}/"
       
           for f in *; do
               curl -S -s \
@@ -502,12 +495,17 @@
           fi
       }
       
-      packaging() {
+      packaging_version() {
           CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
           version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
-          release=${version}
       
-          echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version: $version release: $release MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+          echo $version
+      }
+      
+      packaging() {
+          version=$(packaging_version)
+      
+          echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
       
           if ! release_determin_customer; then
               echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
@@ -515,7 +513,7 @@
           fi
       
           echo "building packages ..."
-          if ! packaging_build_packages $version $release; then
+          if ! packaging_build_packages; then
               echo "Failed to build packages."
               return 1
           fi
@@ -526,7 +524,7 @@
           fi
       
           echo "pushing packages to gitlab ..."
-          if ! packaging_push_packages_to_gitlab $version $release; then
+          if ! packaging_push_packages_to_gitlab $version; then
               echo "Failed to push to gitlab."
               return 1
           fi
@@ -1082,9 +1080,9 @@
                 --build-arg CUSTOM_APP_NAME \
                 --build-arg CUSTOM_APP_GIT_URL \
                 --build-arg CUSTOM_APP_VERSION \
-                --build-arg RELEASE \
+                --build-arg RELEASE=$(packaging_version) \
                 --build-arg CODENAME \
-                --build-arg REVISION \
+                --build-arg REVISION=0 \
                 .
         
             log built image: pushing ...
@@ -1107,9 +1105,9 @@
                 --build-arg CUSTOM_APP_NAME \
                 --build-arg CUSTOM_APP_GIT_URL \
                 --build-arg CUSTOM_APP_VERSION \
-                --build-arg RELEASE \
+                --build-arg RELEASE=$(packaging_version) \
                 --build-arg CODENAME \
-                --build-arg REVISION \
+                --build-arg REVISION=0 \
                 .
         
             log test-built image: pushing ...
@@ -1126,9 +1124,9 @@
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg BUILT_IMAGE \
                 --build-arg ZIP_PACKAGES \
-                --build-arg RELEASE \
+                --build-arg RELEASE=$(packaging_version) \
                 --build-arg CODENAME \
-                --build-arg REVISION \
+                --build-arg REVISION=0 \
                 -o type=tar,dest=${outputPath} \
                 .
         }
@@ -1384,10 +1382,7 @@
 
         # lib/scripts/packaging.sh
         packaging_build_packages() {
-            version=$1
-            release=$2
-        
-            echo "packaging_build_packages() version: $version release: $release"
+            echo "packaging_build_packages()"
         
             if echo "$CI_COMMIT_TAG" | grep '/'; then
                 echo "Error: CI_COMMIT_TAG must not contain a /"
@@ -1396,10 +1391,7 @@
         
             # config via env
             export BUILT_IMAGE="${REGISTRY}/built-commit:${IMAGE_TAG}"
-            export REVISION=0
-            export CODENAME="${CODENAME}"
-            export VERSION=$version
-            export RELEASE=$release
+            # RELEASE is set during packageing to $(packaing_version)
         
             cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
             # create archives
@@ -1415,7 +1407,6 @@
         
         packaging_push_packages_to_gitlab() {
             version=$1
-            release=$2
         
             customer=$(release_determin_customer)
         
@@ -1426,7 +1417,7 @@
         
             echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
         
-            cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${release}/"
+            cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${version}/"
         
             for f in *; do
                 curl -S -s \
@@ -1467,12 +1458,17 @@
             fi
         }
         
-        packaging() {
+        packaging_version() {
             CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
             version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
-            release=${version}
         
-            echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version: $version release: $release MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+            echo $version
+        }
+        
+        packaging() {
+            version=$(packaging_version)
+        
+            echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
         
             if ! release_determin_customer; then
                 echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
@@ -1480,7 +1476,7 @@
             fi
         
             echo "building packages ..."
-            if ! packaging_build_packages $version $release; then
+            if ! packaging_build_packages; then
                 echo "Failed to build packages."
                 return 1
             fi
@@ -1491,7 +1487,7 @@
             fi
         
             echo "pushing packages to gitlab ..."
-            if ! packaging_push_packages_to_gitlab $version $release; then
+            if ! packaging_push_packages_to_gitlab $version; then
                 echo "Failed to push to gitlab."
                 return 1
             fi
@@ -2093,9 +2089,9 @@
                 --build-arg CUSTOM_APP_NAME \
                 --build-arg CUSTOM_APP_GIT_URL \
                 --build-arg CUSTOM_APP_VERSION \
-                --build-arg RELEASE \
+                --build-arg RELEASE=$(packaging_version) \
                 --build-arg CODENAME \
-                --build-arg REVISION \
+                --build-arg REVISION=0 \
                 .
         
             log built image: pushing ...
@@ -2118,9 +2114,9 @@
                 --build-arg CUSTOM_APP_NAME \
                 --build-arg CUSTOM_APP_GIT_URL \
                 --build-arg CUSTOM_APP_VERSION \
-                --build-arg RELEASE \
+                --build-arg RELEASE=$(packaging_version) \
                 --build-arg CODENAME \
-                --build-arg REVISION \
+                --build-arg REVISION=0 \
                 .
         
             log test-built image: pushing ...
@@ -2137,9 +2133,9 @@
                 --file ./ci/dockerimage/Dockerfile \
                 --build-arg BUILT_IMAGE \
                 --build-arg ZIP_PACKAGES \
-                --build-arg RELEASE \
+                --build-arg RELEASE=$(packaging_version) \
                 --build-arg CODENAME \
-                --build-arg REVISION \
+                --build-arg REVISION=0 \
                 -o type=tar,dest=${outputPath} \
                 .
         }
@@ -2395,10 +2391,7 @@
 
         # lib/scripts/packaging.sh
         packaging_build_packages() {
-            version=$1
-            release=$2
-        
-            echo "packaging_build_packages() version: $version release: $release"
+            echo "packaging_build_packages()"
         
             if echo "$CI_COMMIT_TAG" | grep '/'; then
                 echo "Error: CI_COMMIT_TAG must not contain a /"
@@ -2407,10 +2400,7 @@
         
             # config via env
             export BUILT_IMAGE="${REGISTRY}/built-commit:${IMAGE_TAG}"
-            export REVISION=0
-            export CODENAME="${CODENAME}"
-            export VERSION=$version
-            export RELEASE=$release
+            # RELEASE is set during packageing to $(packaing_version)
         
             cd ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20
             # create archives
@@ -2426,7 +2416,6 @@
         
         packaging_push_packages_to_gitlab() {
             version=$1
-            release=$2
         
             customer=$(release_determin_customer)
         
@@ -2437,7 +2426,7 @@
         
             echo "published packages to ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/${customer}/${version}/all.tar"
         
-            cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${release}/"
+            cd "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/${version}/"
         
             for f in *; do
                 curl -S -s \
@@ -2478,12 +2467,17 @@
             fi
         }
         
-        packaging() {
+        packaging_version() {
             CI_COMMIT_REF_NAME_ESCAPED=$(echo ${CI_COMMIT_REF_NAME} | sed sI/I-Ig)
             version=${CI_COMMIT_TAG:-"nightly-${CI_COMMIT_REF_NAME_ESCAPED}-$(date '+%Y.%m.%d')-${CI_COMMIT_SHORT_SHA}"}
-            release=${version}
         
-            echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version: $version release: $release MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
+            echo $version
+        }
+        
+        packaging() {
+            version=$(packaging_version)
+        
+            echo "packaging() CI_COMMIT_TAG: $CI_COMMIT_TAG CI_COMMIT_REF_NAME_ESCAPED: $CI_COMMIT_REF_NAME_ESCAPED version/release: $version MAJOR_COMMIT_REF_NAME: $MAJOR_COMMIT_REF_NAME"
         
             if ! release_determin_customer; then
                 echo "No packages are build for major_commit_ref: $MAJOR_COMMIT_REF_NAME for version: $version"
@@ -2491,7 +2485,7 @@
             fi
         
             echo "building packages ..."
-            if ! packaging_build_packages $version $release; then
+            if ! packaging_build_packages; then
                 echo "Failed to build packages."
                 return 1
             fi
@@ -2502,7 +2496,7 @@
             fi
         
             echo "pushing packages to gitlab ..."
-            if ! packaging_push_packages_to_gitlab $version $release; then
+            if ! packaging_push_packages_to_gitlab $version; then
                 echo "Failed to push to gitlab."
                 return 1
             fi
