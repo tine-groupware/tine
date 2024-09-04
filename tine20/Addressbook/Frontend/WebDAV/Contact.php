@@ -118,7 +118,7 @@ class Addressbook_Frontend_WebDAV_Contact extends Sabre\DAV\File implements Sabr
         // check if we are still in the same container, if not -> it is a MOVE
         try {
             $contact = Addressbook_Controller_Contact::getInstance()->get($this->_contact);
-            if ($contact->container_id == $this->_container->getId()) {
+            if ($contact->getIdFromProperty('container_id') === $this->_container->getId()) {
                 Addressbook_Controller_Contact::getInstance()->delete($contact);
             }
         } catch (Tinebase_Exception_AccessDenied $tead) {
