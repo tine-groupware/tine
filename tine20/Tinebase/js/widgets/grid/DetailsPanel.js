@@ -236,7 +236,7 @@ Tine.widgets.grid.DetailsPanel = Ext.extend(Ext.Panel, {
     
     onDestroy: function() {
         _.each(this.postalSubscriptions, (subscription) => {subscription.unsubscribe()});
-        return this.supr().onDestroy.call(this);
+        return Tine.widgets.grid.DetailsPanel.superclass.onDestroy.call(this);
     },
     
     initMessageBus: function() {
