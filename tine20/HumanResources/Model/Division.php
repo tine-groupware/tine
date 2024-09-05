@@ -13,7 +13,7 @@
  *
  * @package     Sales
  */
-class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
+class HumanResources_Model_Division extends Tinebase_Record_NewAbstract implements Tinebase_Container_NotReplicable
 {
     public const MODEL_NAME_PART    = 'Division';
     public const TABLE_NAME         = 'humanresources_division';
@@ -21,7 +21,6 @@ class HumanResources_Model_Division extends Tinebase_Record_NewAbstract
     public const FLD_FREE_TIME_CAL  = 'free_time_cal';
     public const FLD_TITLE          = 'title';
     public const FLD_WORKING_TIME_TIMEACCOUNT_ID = 'wt_ta_id';
-
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
