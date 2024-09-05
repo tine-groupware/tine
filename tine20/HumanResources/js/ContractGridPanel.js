@@ -43,6 +43,7 @@ Tine.HumanResources.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
         if (this.editDialog) {
             this.bbar = [];
             this.storeRemoteSort = false;
+            this.listenMessageBus = false;
         }
 
         this.initDetailsPanel();
