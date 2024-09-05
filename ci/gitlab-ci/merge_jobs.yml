@@ -47,7 +47,7 @@ merge:
   rules:
     - if: $AUTO_MERGE == "never"
       when: never
-    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_REF_NAME == "2022.11" || $CI_COMMIT_REF_NAME == "2023.11" || $CI_COMMIT_REF_NAME == "2024.11" ||  $CI_COMMIT_REF_NAME == "tine20.com/2022.11-custom")
+    - if: $CI_PIPELINE_SOURCE == "push" && ($CI_COMMIT_REF_NAME == "2022.11" || $CI_COMMIT_REF_NAME == "2023.11" || $CI_COMMIT_REF_NAME == "2024.11" || $CI_COMMIT_REF_NAME == "main" ||  $CI_COMMIT_REF_NAME == "tine20.com/2022.11-custom")
       variables:
         AUTO_MERGE_VAR: "true"
     - if: $AUTO_MERGE == "true"
