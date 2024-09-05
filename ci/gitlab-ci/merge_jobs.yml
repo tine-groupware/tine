@@ -40,8 +40,9 @@ merge:
     # BE changes < 2023.11 (TODO remove that when 2022.11 is obsolete)
     - merge_merge_upwards tine20.com/2022.11-custom 2023.11
     - merge_merge_upwards 2023.11 2024.11
-    - merge_merge_mirror customers 2024.11 github main
-    - merge_merge_mirror github main customers 2024.11
+    - merge_merge_upwards 2024.11 main
+    - merge_merge_mirror customers main github main
+    - merge_merge_mirror github main customers main
     - merge_trigger_next
   rules:
     - if: $AUTO_MERGE == "never"
