@@ -139,8 +139,9 @@ Tine.HumanResources.EmployeeEditDialogFreeTimeGridPanel = Ext.extend(Tine.widget
         
         this.store.remove(record);
         record.set('type', 'vacation');
-        record.set('status', 'ACCEPTED');
-        
+        record.set('process_status', 'ACCEPTED');
+        record.set('type_status', null);
+
         Tine.HumanResources.saveFreeTime(record.data).then((response) => {
             this.editDialog.vacationGridPanel.getStore().reload();
         });
@@ -157,7 +158,7 @@ Tine.HumanResources.EmployeeEditDialogFreeTimeGridPanel = Ext.extend(Tine.widget
         var selModel = grid.getSelectionModel();
         this.action_bookSicknessAsVacation.setHidden(true);
         if (selModel.getSelections().length == 1) {
-            if (selModel.getSelections()[0].data.status == 'UNEXCUSED') {
+            if (selModel.getSelections()[0].data.type_status == 'UNEXCUSED') {
                 this.action_bookSicknessAsVacation.setHidden(false);
             }
         }
