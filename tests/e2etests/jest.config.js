@@ -19,5 +19,5 @@ module.exports = {
     verbose: true,
     maxWorkers: process.env.TEST_WORKER,
     testTimeout: 60000,
-    setupFilesAfterEnv: ["<rootDir>/setupTests.js"]
+    setupFilesAfterEnv: ["<rootDir>/setupTests.js"],
 };

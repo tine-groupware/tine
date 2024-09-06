@@ -91,7 +91,7 @@ class HumanResources_Setup_DemoData extends Tinebase_Setup_DemoData_Abstract
     {
         // set start date to start date of june 1st before last year
         $date = Tinebase_DateTime::now();
-        $this->_startDate = $date->setDate($date->format('Y') - 2, 6, 1);
+        $this->_startDate = $date->setDate($date->format('Y'), $date->format('m') - 3, 1);
         
         $this->_loadCostCentersAndDivisions();
     }
