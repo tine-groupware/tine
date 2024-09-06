@@ -399,6 +399,7 @@ Tine.Felamimail.nodeActions.MoveFolderAction = {
         
         treePanel.getSelectionModel().clearSelections();
         const selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
+            sourceType: 'folder',
             account: account,
             listeners: {
                 scope: this,
