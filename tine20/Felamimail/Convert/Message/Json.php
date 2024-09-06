@@ -141,8 +141,8 @@ class Felamimail_Convert_Message_Json extends Tinebase_Convert_Json
                     $existingToken = array_filter($tokens, fn($token) =>
                        $parsedEmail['address'] === $token['email'] && $parsedEmail['name'] === $token['n_fileas']
                     );
-                    if ($existingToken) {
-                        $address = $existingToken;
+                    if (count($existingToken) > 0) {
+                        $address = array_pop($existingToken);
                     }
                     $resolvedAddressList[] = $address;
                 }
