@@ -155,13 +155,13 @@ const priorities = {
 
         expect.setDefaultOptions({timeout: 5000});
 
-        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'];
+        let args = ['--lang=de-DE,de', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', `--window-size=1366,768`];
 
         try {
             const opts = {
                 headless: process.env.TEST_MODE != 'debug', //ignoreDefaultArgs: ['--enable-automation'],
                 //slowMo: 250,
-                //defaultViewport: {width: 1366, height: 768},
+                defaultViewport: {width: 1366, height: 768},
                 args: args
             };
 
@@ -185,6 +185,15 @@ const priorities = {
             width: 1366,
             height: 768,
         });
+
+        console.log(await page.evaluate(() => {
+            return {
+                innerWidth: window.innerWidth,
+                innerHeight: window.innerHeight,
+                screenWidth: window.screen.width,
+                screenHeight: window.screen.height,
+            }
+        }))
         await page.goto(process.env.TEST_URL, {waitUntil: 'domcontentloaded', timeout: 30000});
         await expect(page).toMatchElement('title', {text: process.env.TEST_BRANDING_TITLE});
 
