@@ -979,11 +979,13 @@ class Tinebase_Frontend_JsonTest extends TestCase
      */
     public function testUpdateUserProfile()
     {
+        \Tinebase_Frontend_JsonTest::testSetUserProfileConfig();
         $profile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
         $profileData = $profile['userProfile'];
         
         $this->assertFalse(array_search('n_prefix', $profileData));
-        
+
+        $profileData['n_family'] = $profileData['n_family'] . '_ut';
         $profileData['tel_home'] = 'mustnotchange';
         $profileData['email_home'] = 'email@userprofile.set';
 
@@ -995,8 +997,9 @@ class Tinebase_Frontend_JsonTest extends TestCase
         
         $updatedProfile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
         $updatedProfileData = $updatedProfile['userProfile'];
-        $this->assertNotEquals('mustnotchange', $updatedProfileData['tel_home']);
-        $this->assertEquals('email@userprofile.set', $updatedProfileData['email_home']);
+        $this->assertNotSame('mustnotchange', $updatedProfileData['tel_home']);
+        $this->assertSame('email@userprofile.set', $updatedProfileData['email_home']);
+        $this->assertSame($profileData['n_family'] , $updatedProfileData['n_family']);
 
 
         $user = Tinebase_User::getInstance()->getUserById(Tinebase_Core::getUser()->getId());
