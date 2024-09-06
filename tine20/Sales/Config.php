@@ -57,6 +57,9 @@ class Sales_Config extends Tinebase_Config_Abstract
     public const PRODUCT_NUMBER_GENERATION_AUTO = 'auto';
     public const PRODUCT_NUMBER_GENERATION_MANUAL = 'manual';
 
+    public const EDOCUMENT = 'edocument';
+    public const VALIDATION_SVC = 'validation_svc';
+
     /**
      * How should the contract number be validated
      * 
@@ -552,6 +555,27 @@ class Sales_Config extends Tinebase_Config_Abstract
                 ],
                 self::DEFAULT_STR => Sales_Model_Document_Delivery::STATUS_CREATED,
             ],
+        ],
+        self::EDOCUMENT    => [
+            //_('EDocument')
+            self::LABEL                 => 'EDocument',
+            //_('EDocument')
+            self::DESCRIPTION           => 'EDocument',
+            self::TYPE                  => self::TYPE_OBJECT,
+            self::CLASSNAME             => Tinebase_Config_Struct::class,
+            self::CLIENTREGISTRYINCLUDE => false,
+            self::SETBYADMINMODULE      => true,
+            self::CONTENT               => [
+                self::VALIDATION_SVC => [
+                    self::LABEL                 => 'Validation Service URL',
+                    //_('Validation Service URL')
+                    self::DESCRIPTION           => 'Validation Service URL',
+                    //_('Validation Service URL')
+                    self::TYPE                  => self::TYPE_STRING,
+                    self::DEFAULT_STR           => '',
+                ],
+            ],
+            self::DEFAULT_STR           => [],
         ],
         self::DOCUMENT_DELIVERY_STATUS_TRANSITIONS => [
             //_('Delivery Status Transitions')

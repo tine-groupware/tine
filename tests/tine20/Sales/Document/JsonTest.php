@@ -496,9 +496,9 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
                 [
                     Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'ipsum',
                     Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $product->toArray(),
-                    Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX_RATE => 19,
-                    Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX => 100 * 19 / 100,
-                    Sales_Model_DocumentPosition_Offer::FLD_NET_PRICE => 100,
+                    Sales_Model_DocumentPosition_Offer::FLD_TYPE => Sales_Model_DocumentPosition_Offer::POS_TYPE_PRODUCT,
+                    Sales_Model_DocumentPosition_Offer::FLD_UNIT_PRICE => 100,
+                    Sales_Model_DocumentPosition_Offer::FLD_QUANTITY => 1,
                 ]
             ],
             SMDOffer::FLD_OFFER_STATUS => SMDOffer::STATUS_DRAFT,
@@ -509,13 +509,15 @@ class Sales_Document_JsonTest extends Sales_Document_Abstract
         $savedDocument = $this->_instance->saveDocument_Offer($document->toArray(true));
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $savedDocument[SMDOffer::FLD_FOLLOWUP_ORDER_CREATED_STATUS]);
         $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $savedDocument[SMDOffer::FLD_FOLLOWUP_ORDER_BOOKED_STATUS]);
+        $this->assertSame((int)$savedDocument[SMDOffer::FLD_POSITIONS][0][Sales_Model_DocumentPosition_Offer::FLD_NET_PRICE], (int)$document->{SMDOffer::FLD_POSITIONS}[0][Sales_Model_DocumentPosition_Offer::FLD_UNIT_PRICE]);
+        $this->assertIsNumeric($savedDocument[SMDOffer::FLD_POSITIONS][0][Sales_Model_DocumentPosition_Offer::FLD_GROSS_PRICE]);
         $savedDocument[SMDOffer::FLD_POSITIONS][] = [
             Sales_Model_DocumentPosition_Offer::FLD_TITLE => 'ipsum sub',
             Sales_Model_DocumentPosition_Offer::FLD_PARENT_ID => $savedDocument[SMDOffer::FLD_POSITIONS][0]['id'],
             Sales_Model_DocumentPosition_Offer::FLD_PRODUCT_ID => $subProduct->toArray(),
-            Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX_RATE => 19,
-            Sales_Model_DocumentPosition_Offer::FLD_SALES_TAX => 100 * 19 / 100,
-            Sales_Model_DocumentPosition_Offer::FLD_NET_PRICE => 100,
+            Sales_Model_DocumentPosition_Offer::FLD_TYPE => Sales_Model_DocumentPosition_Offer::POS_TYPE_PRODUCT,
+            Sales_Model_DocumentPosition_Offer::FLD_UNIT_PRICE => 100,
+            Sales_Model_DocumentPosition_Offer::FLD_QUANTITY => 1,
         ];
         $savedDocument[SMDOffer::FLD_OFFER_STATUS] = SMDOffer::STATUS_RELEASED;
         $savedDocument = $this->_instance->saveDocument_Offer($savedDocument);

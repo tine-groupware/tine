@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Paul Mehrer <p.mehrer@metaways.de>
- * @copyright   Copyright (c) 2023 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2023-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 use Tinebase_Model_Filter_Abstract as TMFA;
@@ -26,6 +26,8 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
     public const FLD_DIVISION_ID    = 'division_id';
     public const FLD_NUMBER         = 'number';
     public const FLD_NAME           = 'name';
+    public const FLD_EINVOICE_TYPE  = 'einvoice_type';
+    public const FLD_EINVOICE_CONFIG= 'einvoice_config';
 
     /**
      * Holds the model configuration (must be assigned in the concrete class)
@@ -33,7 +35,7 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
      * @var array
      */
     protected static $_modelConfiguration = [
-        self::VERSION                   => 1,
+        self::VERSION                   => 2,
         self::APP_NAME                  => Sales_Config::APP_NAME,
         self::MODEL_NAME                => self::MODEL_NAME_PART,
         self::RECORD_NAME               => 'Debitor', // gettext('GENDER_Debitor')
@@ -173,6 +175,37 @@ class Sales_Model_Debitor extends Tinebase_Record_NewAbstract
                             Sales_Model_Address::FLD_TYPE   => Sales_Model_Address::TYPE_BILLING,
                         ]
                     ],
+                ],
+            ],
+            self::FLD_EINVOICE_TYPE         => [
+                self::TYPE                      => self::TYPE_MODEL,
+                self::DEFAULT_VAL               => Sales_Model_Einvoice_XRechnung::class,
+                self::CONFIG                    => [
+                    self::AVAILABLE_MODELS          => [
+                        Sales_Model_Einvoice_XRechnung::class,
+                    ],
+                ],
+                self::VALIDATORS => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Empty::class => Sales_Model_Einvoice_XRechnung::class,
+                    Zend_Filter_Input::DEFAULT_VALUE => Sales_Model_Einvoice_XRechnung::class,
+                    [Zend_Validate_InArray::class, [
+                        Sales_Model_Einvoice_XRechnung::class,
+                    ]],
+                ],
+            ],
+            self::FLD_EINVOICE_CONFIG       => [
+                self::TYPE                      => self::TYPE_DYNAMIC_RECORD,
+                self::DEFAULT_VAL               => '[]',
+                self::CONFIG                    => [
+                    self::REF_MODEL_FIELD           => self::FLD_EINVOICE_TYPE,
+                    self::PERSISTENT                => true,
+                ],
+                self::VALIDATORS            => [
+                    Zend_Filter_Input::ALLOW_EMPTY => true,
+                    Zend_Filter_Empty::class => [],
+                    Zend_Filter_Input::DEFAULT_VALUE => [0 => []], // zend anybody?!
+                    [Tinebase_Record_Validator_SubValidate::class, [Tinebase_Record_Validator_SubValidate::IGNORE_VALUE => []]],
                 ],
             ],
         ],

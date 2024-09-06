@@ -399,7 +399,7 @@ class Sales_CustomersTest extends TestCase
 
     public function testMultiDivisionNoGrants()
     {
-        $div = Sales_Controller_Division::getInstance()->create(new Sales_Model_Division([
+        $div = Sales_Controller_Division::getInstance()->create($this->getDivision([
             Sales_Model_Division::FLD_TITLE => 'unittest',
             Sales_Model_Division::FLD_GRANTS => [[
                 'account_id'      => Tinebase_Core::getUser()->getId(),

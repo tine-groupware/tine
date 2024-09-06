@@ -114,4 +114,49 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
                 $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER};
         }
     }
+
+    /**
+     * @param Sales_Model_Document_Invoice $updatedRecord
+     * @param Sales_Model_Document_Invoice $record
+     * @param Sales_Model_Document_Invoice $currentRecord
+     * @return void
+     * @throws Tinebase_Exception
+     * @throws Tinebase_Exception_Backend
+     * @throws Tinebase_Exception_Duplicate
+     * @throws Tinebase_Exception_SystemGeneric
+     */
+    protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
+    {
+        parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
+
+        if ($updatedRecord->isBooked() && !$currentRecord->isBooked()) {
+            if (!($stream = fopen('php://temp', 'r+'))) {
+                throw new Tinebase_Exception('cant create temp stream');
+            }
+            fwrite($stream, (new \Einvoicing\Writers\UblWriter)->export($updatedRecord->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
+            rewind($stream);
+
+            if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
+                try {
+                    (new Sales_EDocument_Service_Validate())->validateXRechnung($stream);
+                } catch (Tinebase_Exception_Record_Validation $e) {
+                    throw new Tinebase_Exception_SystemGeneric('XRechnung Validierung fehlgeschlagen: ' . PHP_EOL . $e->getMessage());
+                }
+                rewind($stream); // redundant, but cheap and good for readability
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
+            }
+
+            $baseName = 'xrechnung';
+            $extention = '.xml';
+            $attachmentName = $baseName . $extention;
+            $count = 0;
+            while (null !== $updatedRecord->attachments->find('name', $attachmentName)) {
+                $attachmentName = $baseName . ' (' . (++$count) . ')' . $extention;
+            }
+            Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($updatedRecord, $attachmentName, $stream);
+            Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($updatedRecord);
+        }
+    }
 }

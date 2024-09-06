@@ -37,6 +37,7 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE017 = __CLASS__ . '::update017';
     const RELEASE017_UPDATE018 = __CLASS__ . '::update018';
     const RELEASE017_UPDATE019 = __CLASS__ . '::update019';
+    const RELEASE017_UPDATE020 = __CLASS__ . '::update020';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT => [
@@ -109,6 +110,10 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE019 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update019',
+            ],
+            self::RELEASE017_UPDATE020 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update020',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE => [
@@ -594,5 +599,37 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.19', self::RELEASE017_UPDATE019);
+    }
+
+    public function update020()
+    {
+        $mc = Sales_Model_Division::getConfiguration();
+        $fieldsProp = new ReflectionProperty(Tinebase_ModelConfiguration::class, '_fields');
+        $fieldsProp->setAccessible(true);
+        $fields = $fieldsProp->getValue($mc);
+        $fields[Sales_Model_Division::FLD_NAME][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
+        $fields[Sales_Model_Division::FLD_ADDR_PREFIX1][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
+        $fields[Sales_Model_Division::FLD_ADDR_POSTAL][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
+        $fields[Sales_Model_Division::FLD_ADDR_LOCALITY][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
+        $fields[Sales_Model_Division::FLD_ADDR_COUNTRY][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
+        $fields[Sales_Model_Division::FLD_CONTACT_NAME][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
+        $fields[Sales_Model_Division::FLD_CONTACT_EMAIL][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
+        $fields[Sales_Model_Division::FLD_CONTACT_PHONE][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
+        $fields[Sales_Model_Division::FLD_VAT_NUMBER][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
+        $fieldsProp->setValue($mc, $fields);
+        
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Debitor::class,
+            Sales_Model_Division::class,
+            Sales_Model_DivisionBankAccount::class,
+            Sales_Model_Document_Debitor::class,
+        ]);
+
+        Sales_Model_Division::resetConfiguration();
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Division::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.20', self::RELEASE017_UPDATE020);
     }
 }

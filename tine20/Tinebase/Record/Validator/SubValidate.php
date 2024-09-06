@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2022 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2022-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Paul Mehrer <p.mehrer@metaways.de>
  */
 
@@ -17,7 +17,17 @@
  */
 class Tinebase_Record_Validator_SubValidate implements Zend_Validate_Interface
 {
-    protected $_messages = [];
+    public const IGNORE_VALUE = 'ignoreValue';
+
+    protected array $_messages = [];
+    protected bool $_doIgnoreValue;
+    protected $_ignoreValue;
+
+    public function __construct(?array $options = null)
+    {
+        $this->_doIgnoreValue = is_array($options) && array_key_exists(self::IGNORE_VALUE, $options);
+        $this->_ignoreValue = $options[self::IGNORE_VALUE] ?? null;
+    }
 
     /**
      * Returns true if and only if $value meets the validation requirements
@@ -35,8 +45,10 @@ class Tinebase_Record_Validator_SubValidate implements Zend_Validate_Interface
         if ($value instanceof Tinebase_Record_Interface) {
             $value = [$value];
         } elseif (!$value instanceof Tinebase_Record_RecordSet) {
-            $this->_messages[] = 'value not a record(set)';
-            return false;
+            if (!$this->_doIgnoreValue || $value !== $this->_ignoreValue) {
+                $this->_messages[] = 'value not a record(set)';
+                return false;
+            }
         }
 
         /** @var Tinebase_Record_Interface $val */
