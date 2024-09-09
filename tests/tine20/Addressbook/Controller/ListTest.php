@@ -567,6 +567,9 @@ class Addressbook_Controller_ListTest extends TestCase
         return $list;
     }
 
+    /**
+     * @group nogitlabciad
+     */
     public function testAddNonSystemContactAndUpdategroupCheckModlog()
     {
         // create system list

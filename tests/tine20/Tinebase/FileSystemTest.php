@@ -1247,6 +1247,9 @@ class Tinebase_FileSystemTest extends TestCase
         static::assertFalse(!$node->is_quarantined, 'expect is_quarantined to be true');
     }
 
+    /**
+     * @group nogitlabciad
+     */
     public function testAVScanUnittestFound()
     {
         $imapConfig = Tinebase_Config::getInstance()->get(Tinebase_Config::IMAP, new Tinebase_Config_Struct())->toArray();

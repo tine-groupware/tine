@@ -28,6 +28,8 @@ class Filemanager_ControllerTests extends TestCase
     /**
      * @throws Admin_Exception
      * @throws Exception
+     * 
+     * @group nogitlabciad
      */
     public function testCreatePersonalContainer()
     {
@@ -46,6 +48,8 @@ class Filemanager_ControllerTests extends TestCase
     /**
      * @throws Admin_Exception
      * @throws Exception
+     * 
+     * @group nogitlabciad
      */
     public function testDeletePersonalContainer()
     {

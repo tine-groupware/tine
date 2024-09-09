@@ -2367,6 +2367,9 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         $this->assertStringContainsString($sieveScriptRules, $sieveScriptVacation, 'rule order changed');
     }
 
+    /**
+     * @group nogitlabciad
+     */
     public function testSieveEmailNotification()
     {
         $this->_setTestScriptname();
@@ -2398,6 +2401,9 @@ sich gerne an XXX unter <font color="#0000ff">mail@mail.de</font>&nbsp;oder 000<
         }
     }
 
+    /**
+     * @group nogitlabciad
+     */
     public function testSieveEmailNotificationMultiple()
     {
         $this->_setTestScriptname();

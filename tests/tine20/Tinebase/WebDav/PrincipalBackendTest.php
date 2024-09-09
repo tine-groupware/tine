@@ -217,6 +217,9 @@ class Tinebase_WebDav_PrincipalBackendTest extends TestCase
         $this->assertContains('principals/users/' . Tinebase_Core::getUser()->contact_id, $uris);
     }
     
+    /**
+     * @group nogitlabciad
+     */
     public function testSearchPrincipalsByLastName()
     {
         $uris = $this->_backend->searchPrincipals(Tinebase_WebDav_PrincipalBackend::PREFIX_USERS, array(
