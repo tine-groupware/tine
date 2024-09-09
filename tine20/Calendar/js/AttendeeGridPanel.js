@@ -665,7 +665,9 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             actionUpdater.addAction(exportAction);
             actionUpdater.updateActions([resource]);
 
-            this.ctxMenu.showAt(e.getXY());
+            if (this.fireEvent('beforeshowctxmenu', this, row, this.ctxMenu, e) !== false) {
+                this.ctxMenu.showAt(e.getXY());
+            }
         }
     },
 

@@ -198,11 +198,11 @@ grid.on('validateedit', function(e) {
     },
 
     // private
-    onCellDblClick : function(g, row, col){
+    onCellDblClick : function(g, row, col, e){
         if(this.clicksToEdit === 'auto') {
             this.denyEdit();
         } else {
-            this.startEditing(row, col);
+            this.startEditing(row, col, e);
         }
     },
 
@@ -290,7 +290,7 @@ grid.on('validateedit', function(e) {
      * @param {Number} rowIndex
      * @param {Number} colIndex
      */
-    startEditing : function(row, col){
+    startEditing : function(row, col, e){
         this.stopEditing();
         if(this.colModel.isCellEditable(col, row)){
             this.view.ensureVisible(row, col, true);
@@ -303,7 +303,8 @@ grid.on('validateedit', function(e) {
                     value: r.data[field],
                     row: row,
                     column: col,
-                    cancel:false
+                    cancel:false,
+                    e: e
                 };
             if(this.fireEvent("beforeedit", e) !== false && !e.cancel){
                 this.editing = true;
