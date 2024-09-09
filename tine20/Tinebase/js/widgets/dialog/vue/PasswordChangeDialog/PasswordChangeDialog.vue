@@ -26,7 +26,7 @@
     <PasswordField
       id="newPasswordSecondTime"
       name="newPasswordSecondTime"
-      :label="String.format(window.i18n._('Repeat New {0}'), passwordLabel)"
+      :label="String.format(window.i18n._('Repeat new {0}'), passwordLabel)"
       ref="newPasswordSecondTimeField"
     />
   </BForm>
