@@ -40,6 +40,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
     autoScroll: true,
     bodyStyle: 'background-color:white',
     selectedNode: null,
+    sourceType: 'file',
     
     /**
      * init
@@ -200,7 +201,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
     onTreeNodeClick: function(node) {
         this.selectedNode = node;
         const isFolderNode = this.selectedNode.attributes?.folderNode;
-        this.action_ok.setDisabled(!isFolderNode);
+        this.action_ok.setDisabled(this.sourceType === 'file' && !isFolderNode);
     },
     
     /**
