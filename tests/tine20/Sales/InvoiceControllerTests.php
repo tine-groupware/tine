@@ -4,7 +4,7 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2014-2016 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2014-2024 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Alexander Stintzing <a.stintzing@metaways.de>
  * 
  */
@@ -18,6 +18,8 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
 {
     protected $_testUser = NULL;
 
+    protected $sharedTimesheet = null;
+
     /**
      * Sets up the fixture.
      * This method is called before a test is executed.
@@ -25,7 +27,7 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
      * @access protected
      */
     protected function setUp(): void
-{
+    {
         if ($this->_dbIsPgsql() || ! Sales_Config::getInstance()->featureEnabled(Sales_Config::FEATURE_INVOICES_MODULE)) {
             $this->markTestSkipped('0011670: fix Sales_Invoices Tests with postgresql backend');
         }
@@ -257,6 +259,53 @@ class Sales_InvoiceControllerTests extends Sales_InvoiceTestCase
         $this->expectException('Sales_Exception_InvoiceAlreadyClearedEdit');
         
         $this->_invoiceController->update($invoice);
+    }
+
+    public function testXRechnungAttachment()
+    {
+        $this->_createFullFixtures();
+
+        $this->_invoiceController->createAutoInvoices($this->_referenceDate);
+
+        $allInvoices = $this->_invoiceController->getAll('start_date', 'DESC');
+        echo $allInvoices->count() . PHP_EOL;
+
+        /** @var Sales_Model_Invoice $invoice */
+        $invoice = $allInvoices->getFirstRecord();
+        $invoice->cleared = 'CLEARED';
+
+//        $invoice->relations = Tinebase_Relations::getInstance()->getRelations(Sales_Model_Invoice::class, 'Sql', $invoice->getId());
+        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+        if ($division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->count() === 0) {
+            $bankAccounts = Tinebase_Controller_BankAccount::getInstance()->getAll();
+            if ($bankAccounts->count() === 0) {
+                $bankAccounts->addRecord(Tinebase_Controller_BankAccount::getInstance()->create(new Tinebase_Model_BankAccount([
+                    Tinebase_Model_BankAccount::FLD_NAME => 'unittest',
+                    Tinebase_Model_BankAccount::FLD_BIC => 'unittest',
+                    Tinebase_Model_BankAccount::FLD_IBAN => 'unittest',
+                ])));
+            }
+            $division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->addRecord(new Sales_Model_DivisionBankAccount([
+                Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT => $bankAccounts->getFirstRecord(),
+            ], true));
+            Sales_Controller_Division::getInstance()->update($division);
+        }
+
+        //Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC} = 'http://172.118.0.1:3000/ubl';
+        Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC} = 'http://unittest:3000/ubl';
+
+        Sales_EDocument_Service_Validate::$zendHttpClientAdapter = new Zend_Http_Client_Adapter_Test();
+        Sales_EDocument_Service_Validate::$zendHttpClientAdapter->setResponse(new Zend_Http_Response(200, [],
+            '<?xml version="1.0" encoding="UTF-8"?>
+<svrl:schematron-output xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cn="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:error="https://doi.org/10.5281/zenodo.1495494#error" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:schxslt-api="https://doi.org/10.5281/zenodo.1495494#api" xmlns:schxslt="https://doi.org/10.5281/zenodo.1495494" xmlns:svrl="http://purl.oclc.org/dsdl/svrl" xmlns:ubl-creditnote="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:ubl-invoice="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:xs="http://www.w3.org/2001/XMLSchema" title="Schematron Version @xr-schematron.version.full@ - XRechnung @xrechnung.version@ compatible - UBL - Invoice / Creditnote">
+   <svrl:ns-prefix-in-attribute-values prefix="cbc" uri="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"/>
+</svrl:schematron-output>'));
+
+        try {
+            $this->_invoiceController->update($invoice);
+        } finally {
+            Sales_EDocument_Service_Validate::$zendHttpClientAdapter = null;
+        }
     }
 
     public function testTimeAccountBudget()
