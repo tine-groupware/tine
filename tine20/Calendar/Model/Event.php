@@ -173,7 +173,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
                 'event_types'      => [
                     Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
-                        'eventType' => [],
+                        Calendar_Model_EventTypes::FLD_EVENT_TYPE => [],
                     ],
                 ],
             ],
