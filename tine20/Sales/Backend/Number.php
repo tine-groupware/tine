@@ -50,6 +50,7 @@ class Sales_Backend_Number extends Tinebase_Backend_Sql_Abstract
         // get number for model
         $select = $this->_getSelect();
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('model') . ' = ? ', $modelName));
+        $select->forUpdate();
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
