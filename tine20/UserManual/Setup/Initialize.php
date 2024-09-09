@@ -16,9 +16,9 @@
  */
 class UserManual_Setup_Initialize extends Setup_Initialize
 {
-    protected const CONTENT_URL = 'https://packages.tine20.com/maintenance/manual/tine20-handbook_html_chunked_build-1071705_commit-91af5aa9edabc31757e77fcd821ae2f71b5da4f1.zip';
+    protected const CONTENT_URL = 'https://packages.tine20.com/maintenance/manual/tine20-handbook_html_chunked_2023-11_commit-9c3b2a239ad28dcaae97c429f0ffa0b3f48d920f.zip';
     protected const CONTENT_RELEASE = 'BE';
-    protected const CONTENT_VERSION = '2022.11.1071705';
+    protected const CONTENT_VERSION = '2023.11.14';
     public const USERMANUAL_STATE = 'usermanual_content_import';
     protected const MIN_MAX_ALLOWED_PACKET = 200 * 1024 * 1024; // 200 MB
 
