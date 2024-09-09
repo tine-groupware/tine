@@ -302,7 +302,9 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $registry = $tfj->getRegistryData();
         $this->assertEquals(Tinebase_License::STATUS_NO_LICENSE_AVAILABLE, $registry['licenseStatus']);
     }
-
+    /**
+     * @group nogitlabciad
+     */
     public function testFirstUserCreationTime()
     {
         $userCreationTime = Tinebase_Core::getUser()->creation_time;
@@ -316,6 +318,9 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         return $creationTime;
     }
 
+    /**
+     * @group nogitlabciad
+     */
     public function testNoLicenseValidTimestamps()
     {
         $firstUserCreationTime = $this->testFirstUserCreationTime();
@@ -340,6 +345,9 @@ class Tinebase_License_BusinessEditionTest extends TestCase
         $this->assertEquals($diff->days, $expiredSinceDays);
     }
 
+    /**
+     * @group nogitlabciad
+     */
     public function testLicenseExpiredEstimate()
     {
         $creationTime = $this->testFirstUserCreationTime();

@@ -137,6 +137,9 @@ class SSO_PublicAPITest extends TestCase
         );
     }
 
+    /**
+     * @group nogitlabciad
+     */
     public function testSaml2RedirectRequestAlreadyLoggedIn()
     {
         $this->_createSAML2Config();

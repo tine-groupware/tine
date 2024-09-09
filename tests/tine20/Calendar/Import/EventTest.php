@@ -14,6 +14,9 @@ class Calendar_Import_EventTest extends TestCase
      */
     protected $_importContainer = null;
 
+    /**
+     * @group nogitlabciad
+     */
     public function testImportDemoData()
     {
         $container = $this->_getTestContainer('Calendar', Calendar_Model_Event::class);

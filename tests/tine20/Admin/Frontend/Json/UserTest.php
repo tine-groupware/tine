@@ -166,6 +166,9 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         }
     }
 
+    /**
+     * @group nogitlabciad
+     */
     public function testSaveAccountWithAndWithoutEmail()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
@@ -232,6 +235,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
 
     /**
      * try to save a hidden account
+     * 
+     * @group nogitlabciad
      */
     public function testSaveHiddenAccount()
     {
@@ -322,6 +327,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      * testUpdateUserRemovedPrimaryGroup
      *
      * @see 0006710: save user fails if primary group no longer exists
+     * 
+     * @group nogitlabciad
      */
     public function testUpdateUserRemovedPrimaryGroup()
     {
@@ -489,6 +496,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
      * @param string $localPart
      * @throws Admin_Exception
      * @throws Tinebase_Exception_SystemGeneric
+     * 
+     * @group nogitlabciad
      */
     public function testAdditionalDomainInUserAccount($domain = 'anotherdomain.com', $localPart = 'somemail')
     {
@@ -531,6 +540,9 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         self::assertFalse(isset($updatedUser['xprops']['emailUserIdImap']), print_r($updatedUser['xprops'], true));
     }
 
+    /**
+     * @group nogitlabciad
+     */
     public function testExternalDomainInUserAccountUpdate()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
@@ -551,7 +563,10 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         $updatedUser = $this->_json->saveUser($userArray);
         self::assertEquals($userArray['accountEmailAddress'], $updatedUser['accountEmailAddress']);
     }
-
+    
+    /**
+     * @group nogitlabciad
+     */
     public function testUmlautsInDomainAndEmailAddress()
     {
         $umlautDomain = 'myümläutdomain.de';
@@ -564,6 +579,9 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
         self::assertEquals($umlautDomain, $registry['additionaldomains']);
     }
 
+    /**
+     * @group nogitlabciad
+     */
     public function testUmlautDomainInAliases()
     {
         $this->_skipWithoutEmailSystemAccountConfig();
@@ -619,6 +637,8 @@ class Admin_Frontend_Json_UserTest extends Admin_Frontend_TestCase
     
     /**
      * test set expired status
+     * 
+     * @group nogitlabciad
      */
     public function testSetUserExpiredStatus()
     {

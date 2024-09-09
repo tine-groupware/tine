@@ -2907,6 +2907,8 @@ Steuernummer 33/111/32212";
      * test Addressbook.searchEmailAddresss and check for "emails" property
      *
      * {"jsonrpc":"2.0","method":"Addressbook.searchEmailAddresss","params":{"filter":[{"condition":"OR","filters":[{"condition":"AND","filters":[{"field":"query","operator":"contains","value":""},{"field":"email_query","operator":"contains","value":"@"}]},{"field":"path","operator":"contains","value":""}]}],"paging":{"sort":"name","dir":"ASC","start":0,"limit":50}},"id":4}
+     * 
+     * @group nogitlabciad
      */
     public function testSearchEmailAddresss()
     {
