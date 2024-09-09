@@ -150,7 +150,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @return int
      * @throws Exception
      */
-    public function clean(): int
+    public function clean(?array $additionalFilter = null): int
     {
         $filter = new Tinebase_Model_Filter_FilterGroup();
         $pagination = new Tinebase_Model_Pagination();
@@ -159,8 +159,20 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
 
         $totalCount = 0;
 
+        if ($additionalFilter) {
+            $refProp = new ReflectionProperty(Tinebase_Model_Filter_FilterGroup::class, '_filterModel');
+            $refProp->setAccessible(true);
+            $refProp->setValue($filter, [
+                'application_id' => ['filter' => Tinebase_Model_Filter_Text::class],
+                'record_type' => ['filter' => Tinebase_Model_Filter_Text::class],
+                'change_type' => ['filter' => Tinebase_Model_Filter_Text::class],
+            ]);
+            foreach($additionalFilter as $column => $value) {
+                $filter->addFilter($filter->createFilter($column, 'equals', $value));
+            }
+        }
+
         while ( ($recordSet = $this->_backend->search($filter, $pagination)) && $recordSet->count() > 0 ) {
-            $filter = new Tinebase_Model_Filter_FilterGroup();
             $pagination->start += $pagination->limit;
             $models = [];
             $deleteCount = 0;
@@ -309,7 +321,7 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
      * @throws Tinebase_Exception_Backend_Database
      * @throws Tinebase_Exception_InvalidArgument
      */
-    public function clearTable(?Tinebase_DateTime $date = null, ?int $instanceseq = null): int
+    public function clearTable(?Tinebase_DateTime $date = null, ?int $instanceseq = null, ?array $additionalFilter = null): int
     {
         if (empty($date) && empty($instanceseq)) {
             throw new Tinebase_Exception_InvalidArgument("Needs date or instanceseq param");
@@ -337,9 +349,15 @@ class Tinebase_Timemachine_ModificationLog implements Tinebase_Controller_Interf
             $where[] = $db->quoteInto($db->quoteIdentifier('instance_seq') . ' <= ?', $instanceseq);
         }
 
+        if ($additionalFilter) {
+            foreach($additionalFilter as $column => $value) {
+                $where[] = $db->quoteInto($db->quoteIdentifier($column) . ' = ?', $value);
+            }
+        }
+
         do {
             $result = $db->query('DELETE FROM ' . $table. ' WHERE ' . implode(' AND' , $where)
-                . ' ORDER BY instance_seq LIMIT 50000;');
+                . ' ORDER BY instance_seq ASC LIMIT 50000;');
             $deleted = $result->rowCount();
             $sumDeletedRows += $deleted;
         } while ($deleted > 0);
