@@ -30,6 +30,7 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
     protected const RELEASE017_UPDATE009 = __CLASS__ . '::update009';
     protected const RELEASE017_UPDATE010 = __CLASS__ . '::update010';
     protected const RELEASE017_UPDATE011 = __CLASS__ . '::update011';
+    protected const RELEASE017_UPDATE012 = __CLASS__ . '::update012';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_EVERYTHING => [
@@ -68,6 +69,10 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE010 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update010',
+            ],
+            self::RELEASE017_UPDATE012 => [
+                self::CLASS_CONST => self::class,
+                self::FUNCTION_CONST => 'update012',
             ],
         ],
         self::PRIO_TINEBASE_UPDATE => [
@@ -302,5 +307,28 @@ class Tinebase_Setup_Update_17 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addFlySystemSyncTask(Tinebase_Core::getScheduler());
         
         $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.11', self::RELEASE017_UPDATE011);
+    }
+
+    public function update012()
+    {
+        $notesTable = $this->_backend->getExistingSchema('notes');
+        if (!isset($notesTable->indicesByName['deleted_time'])) {
+            $this->_backend->addIndex('notes', new Setup_Backend_Schema_Index_Xml('<index>
+                    <name>deleted_time</name>
+                    <field>
+                        <name>deleted_time</name>
+                    </field>
+                </index>'));
+        }
+
+        if (isset($notesTable->indicesByName['record_backend'])) {
+            $this->_backend->dropIndex('notes', 'record_backend');
+        }
+
+        if ($this->getTableVersion('notes') < 4) {
+            $this->setTableVersion('notes', 4);
+        }
+
+        $this->addApplicationUpdate(Tinebase_Config::APP_NAME, '17.12', self::RELEASE017_UPDATE012);
     }
 }

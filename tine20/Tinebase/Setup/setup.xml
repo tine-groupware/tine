@@ -2161,7 +2161,7 @@
         </table>
         <table>
             <name>notes</name>
-            <version>3</version>
+            <version>4</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2257,9 +2257,9 @@
                     </field>
                 </index>
                 <index>
-                    <name>record_backend</name>
+                    <name>deleted_time</name>
                     <field>
-                        <name>record_backend</name>
+                        <name>deleted_time</name>
                     </field>
                 </index>
             </declaration>
