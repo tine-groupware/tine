@@ -22,6 +22,7 @@ abstract class Tinebase_Import_Db_Abstract
     protected array $_descriptionFields = [];
     protected ?string $_importFilter = null;
     protected ?string $_importOrder = null;
+    protected int $_initialPageNumber = 0;
 
     public function __construct(?Zend_Db_Adapter_Abstract $db = null)
     {
@@ -36,7 +37,7 @@ abstract class Tinebase_Import_Db_Abstract
         $count = 0;
         $skipcount = 0;
         $failcount = 0;
-        $pageNumber = 0;
+        $pageNumber = $this->_initialPageNumber;
         $pageCount = 100;
         $importedIds = [];
         do {
