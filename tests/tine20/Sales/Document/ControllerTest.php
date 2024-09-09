@@ -86,8 +86,11 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
         $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
         $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
 
+        $this->assertNotNull($invoice->attachments->find('name', 'xrechnung.xml'));
+
         Tinebase_Record_Expander_DataRequest::clearCache();
 
+        /** @var Sales_Model_Document_Invoice $storno */
         $storno = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
             Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
             Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
@@ -100,6 +103,8 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ]),
             ]
         ]));
+
+        $this->assertNull($storno->attachments->find('name', 'xrechnung.xml'));
 
         Tinebase_Record_Expander::expandRecord($storno);
         $this->assertSame(-2, (int)$storno->{Sales_Model_Document_Invoice::FLD_NET_SUM});
@@ -121,6 +126,10 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ]]
             ]));
         $this->assertSame(4, $result->count());
+
+        $storno->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        $storno = Sales_Controller_Document_Invoice::getInstance()->update($storno);
+        $this->assertNotNull($storno->attachments->find('name', 'xrechnung.xml'));
     }
 
     public function testCategoryEvalDimensionCopy()

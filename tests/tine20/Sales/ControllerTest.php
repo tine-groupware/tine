@@ -358,7 +358,7 @@ class Sales_ControllerTest extends TestCase
     public function testCustomerBillingAddressSearch()
     {
         $division1 = Sales_Controller_Division::getInstance()->getAll()->getFirstRecord()->getId();
-        $division2 = Sales_Controller_Division::getInstance()->create(new Sales_Model_Division([
+        $division2 = Sales_Controller_Division::getInstance()->create($this->getDivision([
             Sales_Model_Division::FLD_TITLE => 'test',
         ]))->getId();
         Sales_Controller_Customer::getInstance()->create(new Sales_Model_Customer(array(

@@ -342,6 +342,15 @@ class Sales_Setup_Initialize extends Setup_Initialize
         $t = Tinebase_Translation::getTranslation('Sales');
         $division = Sales_Controller_Division::getInstance()->create(new Sales_Model_Division([
             Sales_Model_Division::FLD_TITLE => $t->_('Default Division'),
+            Sales_Model_Division::FLD_NAME => $t->_('Fill with name'),
+            Sales_Model_Division::FLD_ADDR_PREFIX1 => $t->_('Fill with address'),
+            Sales_Model_Division::FLD_ADDR_POSTAL => $t->_('Fill with postal'),
+            Sales_Model_Division::FLD_ADDR_LOCALITY => $t->_('Fill with locality'),
+            Sales_Model_Division::FLD_ADDR_COUNTRY => $t->_('Fill with country'),
+            Sales_Model_Division::FLD_CONTACT_NAME => $t->_('Fill with contact name'),
+            Sales_Model_Division::FLD_CONTACT_EMAIL => $t->_('Fill with contact email'),
+            Sales_Model_Division::FLD_CONTACT_PHONE => $t->_('Fill with contact phone'),
+            Sales_Model_Division::FLD_VAT_NUMBER => $t->_('Fill with vat number'),
         ]));
         Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION} = $division->getId();
         Tinebase_Container::getInstance()->setGrants($division->container_id,

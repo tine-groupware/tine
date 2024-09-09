@@ -856,6 +856,22 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
         return ($db instanceof Zend_Db_Adapter_Pdo_Pgsql);
     }
 
+    protected function getDivision(array $data): Sales_Model_Division
+    {
+        return new Sales_Model_Division(array_merge([
+            Sales_Model_Division::FLD_TITLE         => 'unittest',
+            Sales_Model_Division::FLD_NAME          => 'unittest',
+            Sales_Model_Division::FLD_ADDR_PREFIX1  => 'unittest',
+            Sales_Model_Division::FLD_ADDR_POSTAL   => 'unittest',
+            Sales_Model_Division::FLD_ADDR_LOCALITY => 'unittest',
+            Sales_Model_Division::FLD_ADDR_COUNTRY  => 'unittest',
+            Sales_Model_Division::FLD_CONTACT_NAME  => 'unittest',
+            Sales_Model_Division::FLD_CONTACT_EMAIL => 'unittest',
+            Sales_Model_Division::FLD_CONTACT_PHONE => 'unittest',
+            Sales_Model_Division::FLD_VAT_NUMBER    => 'unittest',
+        ], $data));
+    }
+
     /**
      * get custom field record
      *

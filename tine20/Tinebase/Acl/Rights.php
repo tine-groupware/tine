@@ -45,6 +45,8 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_OWN_PROFILE = 'manage_own_profile';
+
+    const MANAGE_BANK_ACCOUNTS = 'manage_bank_accounts';
     
     /**
      * the right to manage the own (client) state
@@ -149,6 +151,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             $addRights = array(
                 self::REPORT_BUGS,
                 self::CHECK_VERSION,
+                self::MANAGE_BANK_ACCOUNTS,
                 self::MANAGE_NUMBERABLES,
                 self::MANAGE_OWN_PROFILE,
                 self::MANAGE_OWN_STATE,
@@ -190,6 +193,10 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::CHECK_VERSION      => array(
                 'text'                  => $translate->_('Check version'),
                 'description'           => $translate->_('Check for new versions of this software.'),
+            ),
+            self::MANAGE_BANK_ACCOUNTS => array(
+                'text'                  => $translate->_('Manage bank accounts'),
+                'description'           => $translate->_('The right to manage bank accounts.'),
             ),
             self::MANAGE_OWN_PROFILE => array(
                 'text'                  => $translate->_('Manage own profile'),

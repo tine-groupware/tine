@@ -36,4 +36,21 @@ class Tinebase_Controller_BankAccount extends Tinebase_Controller_Record_Abstrac
             Tinebase_Backend_Sql::MODLOG_ACTIVE     => true,
         ]);
     }
+
+    protected function _checkRight($_action)
+    {
+        if (!$this->_doRightChecks) {
+            return;
+        }
+
+        parent::_checkRight($_action);
+
+        if (self::ACTION_GET === $_action) {
+            return;
+        }
+
+        if (!Tinebase_Core::getUser()->hasRight(Tinebase_Core::getTinebaseId(), Tinebase_Acl_Rights::MANAGE_BANK_ACCOUNTS)) {
+            throw new Tinebase_Exception_AccessDenied('no right to manage bank accounts');
+        }
+    }
 }
