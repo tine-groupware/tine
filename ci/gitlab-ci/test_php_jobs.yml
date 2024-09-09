@@ -192,6 +192,73 @@ php-unit-all-tests-ldap-source-parallel:
       when: never
     - !reference [.php-unit-all-tests-ldap-source, rules]
 
+
+.php-unit-all-tests-ad-source:
+  extends: .abstract_jobs.php_unit_cache
+  variables:
+    SAMBA_DOMAIN: SAMBA
+    SAMBA_REALM: SAMBA.TEST
+    ROOT_PASSWORD: sambaPassword!
+    SAMBA_ADMIN_PASSWORD: sambaPassword!
+    LDAP_ALLOW_INSECURE: "true"
+    OMIT_EXPORT_KEY_TAB: "true"
+    TINE20_ACCOUNTS: "backend:ActiveDirectory,host:samba,useStartTls:1,username:cn=Administrator\\,cn=Users\\,dc=samba\\,dc=test,password:sambaPassword!,userDn:cn=Users\\,dc=samba\\,dc=test,userFilter:objectClass=user,groupsDn:cn=Users\\,dc=samba\\,dc=test,groupFilter:objectclass=group,defaultUserGroupName:Domain Users,defaultAdminGroupName:Domain Admins"
+    TINE20_AUTHENTICATION: "bindRequiresDn:1,backend:ldap,host:samba,port:389,useStartTls:1,username:cn=Administrator\\,cn=Users\\,dc=samba\\,dc=test,password:sambaPassword!,baseDn:cn=Users\\,dc=samba\\,dc=test,accountFilterFormat:(&(objectClass=user)(sAMAccountName=%s)),accountCanonicalForm:2"
+    ARG_IMAGE: test-source
+    ARG_COPY_SOURCE: "true"
+    ARG_EXCLUDE_GROUP: longrunning,needsbuild,nogitlabci,nogitlabciad
+  services:
+    - !reference [.lib-services, db_service]
+    - !reference [.lib-services, redis_service]
+    - !reference [.lib-services, mail_service]
+    - !reference [.lib-services, samba_service]
+  timeout: 2h
+  interruptible: true
+  before_script:
+    - cp ${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/etc/tine20/dev.samba.inc.php /etc/tine20/conf.d/samba.inc.php
+    # samba needs more time to start
+    - sleep 60
+    - !reference [.abstract_jobs.php_unit_cache, before_script]
+  rules:
+    - if: $RUN_NO_TESTS == "true"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_AS_SOURCE == "false"
+      when: never
+    - if: $PHP_UNIT_ALL_TESTS_AS_SOURCE== "true"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $PHP_UNIT_ALL_TESTS_AD_SOURCE_MERGE_REQUEST == "true"
+      changes:
+        paths:
+          - "tests/tine20/Tinebase/UserTest.php"
+          - "tests/tine20/Tinebase/User/*.php"
+          - "tests/tine20/Tinebase/Group/*.php"
+          - "tests/tine20/Admin/Import/UserTest.php"
+          - "tests/tine20/Admin/Import/GroupTest.php"
+          - "tine20/Tinebase/User.php"
+          - "tine20/Tinebase/User/*.php"
+          - "tine20/Tinebase/User/LdapPlugin/*.php"
+          - "tine20/Tinebase/Group/*.php"
+          - "tine20/Tinebase/Group/LdapPlugin/*.php"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /php-unit-all-tests-ad-source/
+    - if: $PIPELINE_TYPE =~ /ad-tests/
+phpunit-all-tests-ad-source-sequential:
+  extends: .php-unit-all-tests-ad-source
+  variables:
+    NODE_TOTAL: 1
+    NODE_INDEX: 1
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_AD_SOURCE_TYPE != "sequential"
+      when: never
+    - !reference [.php-unit-all-tests-ad-source, rules]
+php-unit-all-tests-ad-source-parallel:
+  extends: .php-unit-all-tests-ad-source
+  timeout: 45m
+  parallel: 5
+  rules:
+    - if: $PHP_UNIT_ALL_TESTS_AD_SOURCE_TYPE != "parallel"
+      when: never
+    - !reference [.php-unit-all-tests-ad-source, rules]
+
+
 .php-unit-all-tests-built:
   extends: .abstract_jobs.php_unit
   variables:

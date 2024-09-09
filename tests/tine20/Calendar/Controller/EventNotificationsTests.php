@@ -1594,6 +1594,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     
     /**
      * testGroupInvitation
+     * 
+     * @group nogitlabciad
      */
     public function testGroupInvitation()
     {

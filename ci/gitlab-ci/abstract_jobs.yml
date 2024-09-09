@@ -21,6 +21,10 @@
     - name: ${UTIL_REGISTRY}/ldap:1.2.5-r0
       alias: ldap
       entrypoint: ["/container/tool/run", "--copy-service"]
+  samba_service:
+    - name: "${UTIL_REGISTRY}/samba-ad:1.0.0-r0"
+      alias: samba
+
 
 .abstract_jobs.test:
   image: ${CI_REGISTRY}/${CI_PROJECT_NAMESPACE}/tine20/test:${BASE_MAJOR_COMMIT_REF_NAME}-${PHP_VERSION}-${TEST_IMAGE_VERSION}
