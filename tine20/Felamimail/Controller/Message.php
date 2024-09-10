@@ -717,10 +717,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string|Felamimail_Model_Message $_message
      * @param string $_partId
      * @param string $_contentType
-     * @param Felamimail_Model_Account $_account
+     * @param ?Felamimail_Model_Account $_account
      * @return string
      */
-    protected function _getMessageBodyCacheId($_message, $_partId, $_contentType, $_account)
+    protected function _getMessageBodyCacheId($_message, $_partId, $_contentType, $_account): string
     {
         $cacheId = 'getMessageBody_'
             . $_message->getId()
@@ -728,7 +728,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             . substr((string)$_contentType, -4)
             . (($_account !== NULL) ? 'acc' : '');
 
-        return $cacheId;
+        return Tinebase_Helper::convertCacheId($cacheId);
     }
 
     /**
