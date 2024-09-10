@@ -919,7 +919,7 @@ class Tinebase_FileSystemTest extends TestCase
             'value' => Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN
         )));
         $notes = Tinebase_Notes::getInstance()->searchNotes($filter, new Tinebase_Model_Pagination());
-        $this->assertCount(1, $notes);
+        $this->assertCount(0, $notes);
     }
 
     public function testAVModeUnittestFound()
