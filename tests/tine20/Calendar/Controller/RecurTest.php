@@ -38,8 +38,8 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             'container_id'  => $this->_getTestCalendar()->getId(),
         ));
         
-        $this->expectException('Tinebase_Exception_Record_Validation');
-        $persistentEvent = $this->_controller->create($event);
+        $this->expectException(Tinebase_Exception_SystemGeneric::class);
+        $this->_controller->create($event);
     }
     
     /**
