@@ -33,7 +33,7 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
     windowHeight: 550,
     windowWidth: 800,
     displayNotes: true,
-    defaultRelationCombo: ['Addressbook', 'Contact'],
+    defaultRelationCombo: ['Inventory', 'InventoryItem'],
     
     /**
      * check validity of activ number field
@@ -321,7 +321,19 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         if (! this.hideRelationsPanel && this.recordClass && this.recordClass.hasField('relations')) {
             // init relations panel before onRecordLoad
             if (! this.relationsPanel) {
-                this.relationsPanel = new Tine.widgets.relation.GenericPickerGridPanel({ anchor: '100% 100%', editDialog: this, defaultCombo: this.defaultRelationCombo });
+                this.relationsPanel = new Tine.widgets.relation.GenericPickerGridPanel({
+                    anchor: '100% 100%',
+                    editDialog: this,
+                    defaultCombo: this.defaultRelationCombo,
+                    getLineTitle:  (record) => {
+                        if (record.store.appName === 'Inventory' && record.store.modelName === 'InventoryItem') {
+                            return _.get(record, 'data.name', '') +
+                              ' (' + _.get(record, 'data.serial_number', '') + ')' +
+                              ': ' + _.get(record, 'data.description', '')
+                        }
+                        return false
+                    }
+                });
                 this.items.items.push(this.relationsPanel);
             }
         }
