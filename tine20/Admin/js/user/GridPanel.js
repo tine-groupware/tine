@@ -197,15 +197,57 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('Last login at'), id: 'accountLastLogin', hidden: this.isLdapBackend, renderer: Tine.Tinebase.common.dateTimeRenderer},
             { header: this.app.i18n._('Last login from'), id: 'accountLastLoginfrom', width: 120, hidden: this.isLdapBackend},
             { header: this.app.i18n._('MFA Configured'), id: 'mfa_configs', renderer: this.mfaRenderer.createDelegate(this), hidden: false},
-            { header: this.app.i18n._('Password Must Change'), id: 'password_must_change', renderer: Tine.Tinebase.common.booleanRenderer, hidden: false},
-            { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false},
+            { header: this.app.i18n._('Password Must Change'), id: 'password_must_change', renderer: this.mustChangeRenderer, hidden: false},
+            { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', renderer: this.dateTimeRenderer, hidden: false},
             { header: this.app.i18n._('Expires'), id: 'accountExpires', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false},
             { header: this.app.i18n._('Full Name'), id: 'accountFullName'}
         ];
         
         return columns.concat(this.getModlogColumns());
     },
-    
+
+    dateTimeRenderer: function ($_iso8601, metadata, _cellObject, _record, _rowIndex, _colIndex, _dataStore) {
+        let rendered = Tine.Tinebase.common.dateTimeRenderer($_iso8601, metadata)
+        let hoverText = i18n._('Password is expired in accordance with the password policy and needs to be changed')
+
+        if (!$_iso8601) {
+            metadata.css += ' tinebase-warning'
+            metadata.cellAttr = 'title="'+hoverText+'"'
+            return rendered
+        }
+
+        let changeAfter = Tine.Tinebase.configManager.get('userPwPolicy.pwPolicyChangeAfter', 'Tinebase')
+        if (!changeAfter || changeAfter === 0) return rendered
+
+        let maxDate = new Date($_iso8601).add('d', changeAfter)
+        if (maxDate < new Date()) {
+            metadata.css += ' tinebase-warning'
+            metadata.cellAttr = 'title="'+hoverText+'"'
+        }
+        return rendered
+    },
+
+    mustChangeRenderer: function (_value, metadata, _record) {
+        let changeAfter = Tine.Tinebase.configManager.get('userPwPolicy.pwPolicyChangeAfter', 'Tinebase')
+        if (!changeAfter || changeAfter === 0) return Tine.Tinebase.common.booleanRenderer(_value)
+
+        let hoverText = i18n._('Password is expired in accordance with the password policy and needs to be changed')
+
+        let lastChangeDate = _record.get('accountLastPasswordChange')
+        if (!lastChangeDate) {
+            metadata.cellAttr = 'title="'+hoverText+'"'
+            return Tine.Tinebase.common.booleanRenderer('yes')
+        }
+
+        let maxDate = new Date(lastChangeDate).add('d', changeAfter)
+        if (maxDate < new Date()) {
+            metadata.cellAttr = 'title="'+hoverText+'"'
+            return Tine.Tinebase.common.booleanRenderer('yes')
+        }
+
+        return Tine.Tinebase.common.booleanRenderer(_value)
+    },
+
     enableDisableButtonHandler: function(status) {
         var accountIds = new Array();
         var selectedRows = this.grid.getSelectionModel().getSelections();
