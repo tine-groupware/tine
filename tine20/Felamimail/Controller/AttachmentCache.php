@@ -204,8 +204,9 @@ class Felamimail_Controller_AttachmentCache extends Tinebase_Controller_Record_A
 
     protected function _handleRecordCreateOrUpdateException(Exception $e)
     {
-        // email attachment encoding failure
-        if ($e instanceof ErrorException && strpos($e->getMessage(), 'invalid byte sequence')) {
+        // email attachment encoding failure or invalid temp file
+        if ($e instanceof ErrorException && strpos($e->getMessage(), 'invalid byte sequence') ||
+            $e instanceof Tinebase_Exception_UnexpectedValue) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
