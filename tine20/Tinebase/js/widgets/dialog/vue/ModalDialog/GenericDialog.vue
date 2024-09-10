@@ -149,7 +149,7 @@ const buttonToShow = computed(() => {
 
 const handleButtonClick = (eventName) => {
   const val = contentCompRef.value.getValue()
-  if (val) EventBus.emit(eventName, val)
+  if (val || val === 0) EventBus.emit(eventName, val)
   else EventBus.emit(eventName)
 }
 
