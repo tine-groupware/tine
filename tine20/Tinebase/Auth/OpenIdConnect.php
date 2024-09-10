@@ -85,7 +85,7 @@ class Tinebase_Auth_OpenIdConnect extends Tinebase_Auth_Adapter_Abstract
             . ' Set provider redirect url: ' . $redirectUrl);
         $oidc->setRedirectURL($redirectUrl);
 
-        $oidc->addScope('openid email');
+        $oidc->addScope(['openid','email']);
         $oidc->setResponseTypes(array('code'));
         $oidc->setAllowImplicitFlow(true);
 
