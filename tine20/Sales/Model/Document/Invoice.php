@@ -267,12 +267,17 @@ class Sales_Model_Document_Invoice extends Sales_Model_Document_Abstract
             if (Sales_Model_DocumentPosition_Invoice::POS_TYPE_PRODUCT !== $position->{Sales_Model_DocumentPosition_Invoice::FLD_TYPE}) {
                 continue;
             }
-            $ublInvoice->addLine((new \Einvoicing\InvoiceLine())
-                ->setName($position->{Sales_Model_DocumentPosition_Invoice::FLD_TITLE})
-                ->setPrice($position->{Sales_Model_DocumentPosition_Invoice::FLD_GROSS_PRICE})
+            $ublInvoice->addLine(($line = new \Einvoicing\InvoiceLine())
+                ->setPrice($position->{Sales_Model_DocumentPosition_Invoice::FLD_GROSS_PRICE} ?: 0)
                 ->setVatRate($position->{Sales_Model_DocumentPosition_Invoice::FLD_SALES_TAX_RATE})
                 ->setQuantity($position->{Sales_Model_DocumentPosition_Invoice::FLD_QUANTITY})
             );
+            if ($position->{Sales_Model_DocumentPosition_Invoice::FLD_TITLE}) {
+                $line->setName($position->{Sales_Model_DocumentPosition_Invoice::FLD_TITLE});
+            }
+            if ($position->{Sales_Model_DocumentPosition_Invoice::FLD_DESCRIPTION}) {
+                $line->setDescription($position->{Sales_Model_DocumentPosition_Invoice::FLD_DESCRIPTION});
+            }
         }
 
         /** @var Tinebase_Model_BankAccount $bankAccount */
