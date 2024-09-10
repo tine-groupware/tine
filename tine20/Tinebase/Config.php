@@ -3441,8 +3441,6 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                         'icon' => 'images/icon-set/icon_star_out.svg', 'icon_class' => 'notes_createdIcon', 'system' => true], // _('Created')
                     ['id' => Tinebase_Model_Note::SYSTEM_NOTE_NAME_CHANGED, 'value' => 'Changed', 'is_user_type' => 0,
                         'icon' => 'images/icon-set/icon_file.svg', 'icon_class' => 'notes_changedIcon', 'system' => true], // _('Changed')
-                    ['id' => Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN, 'value' => 'Avscan', 'is_user_type' => 0,
-                        'icon' => 'images/icon-set/icon_virus.svg', 'icon_class' => 'notes_avscanIcon', 'system' => true], // _('Avscan')
                     ['id' => Tinebase_Model_Note::SYSTEM_NOTE_REVEAL_PASSWORD, 'value' => 'Reveal Password', 'is_user_type' => 0,
                         'icon' => 'images/icon-set/icon_preview.svg', 'icon_class' => 'notes_revealPasswordIcon', 'system' => true], // _('Reveal password')
                 ],
