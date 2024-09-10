@@ -460,9 +460,11 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         switch(radio.inputValue) {
             case 'UNTIL':
                 this.count.setDisabled(checked);
+                if (checked) this.count.setValue(null);
                 break;
             case 'COUNT':
                 this.until.setDisabled(checked);
+                if (checked) this.until.setValue(null);
                 break;
         }
     },
