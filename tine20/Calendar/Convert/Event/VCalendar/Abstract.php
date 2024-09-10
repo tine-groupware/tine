@@ -879,8 +879,11 @@ class Calendar_Convert_Event_VCalendar_Abstract extends Tinebase_Convert_VCalend
                 if (preg_match(Tinebase_Mail::EMAIL_ADDRESS_REGEXP, $calAddress->getValue())) {
                     $email = $calAddress->getValue();
                 } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) 
-                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid attendee provided: ' . $calAddress->getValue());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                            . ' Invalid attendee provided: ' . $calAddress->getValue()
+                            . ' / Attendee data: ' . $calAddress->serialize());
+                    }
                     return null;
                 }
             } else {
