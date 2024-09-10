@@ -149,7 +149,7 @@ Tine.widgets.container.SelectionDialog = Ext.extend(Ext.Component, {
         );
 
         (function() {
-            if (this.requiredGrants) {
+            if (Array.isArray(this.requiredGrants) ? this.requiredGrants[0] !== false : this.requiredGrants) {
                 var selectedContainer = this.tree.getSelectedContainer(this.requiredGrants, false, true);
                 disable = !selectedContainer;
             }
