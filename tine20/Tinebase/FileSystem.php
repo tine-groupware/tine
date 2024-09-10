@@ -4471,17 +4471,6 @@ class Tinebase_FileSystem implements
             'is_quarantined' =>
                 Tinebase_FileSystem_AVScan_Result::RESULT_FOUND === $scanResult ? 1 : 0,
         ]);
-
-        foreach ($this->_fileObjectBackend->search(
-            Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_Tree_FileObject::class,
-            [[
-                'field' => 'hash',
-                'operator' => 'equals',
-                'value' => $hash
-            ]]
-            ))->getArrayOfIds() as $fileObjectId) {
-            $this->_fileObjectBackend->addNotesToTreeNodes($fileObjectId, Tinebase_Model_Note::SYSTEM_NOTE_AVSCAN);
-        }
     }
 
     /**

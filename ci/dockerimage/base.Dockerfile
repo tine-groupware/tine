@@ -62,7 +62,7 @@ ARG TINE20ROOT=/usr/share
 ENV TINE20ROOT=$TINE20ROOT
 
 # todo version vars | move tika to lib
-RUN wget -O /usr/local/bin/tika.jar https://packages.tine20.org/tika/tika-app-2.6.0.jar
+RUN wget -O /usr/local/bin/tika.jar https://packages.tine20.com/maintenance/tika/tika-app-2.6.0.jar
 
 # todo check if copy or add craetes folder
 RUN mkdir /usr/local/lib/container
