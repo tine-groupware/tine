@@ -182,7 +182,8 @@
     "allow-plugins": {
       "tine20/composerapploader": true,
       "simplesamlphp/composer-module-installer": true,
-      "digitalrevolution/php-codesniffer-baseline": true
+      "digitalrevolution/php-codesniffer-baseline": true,
+      "php-http/discovery": true
     },
     "autoloader-suffix": "stable"
   },
