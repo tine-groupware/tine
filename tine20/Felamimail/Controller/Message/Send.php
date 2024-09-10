@@ -1129,6 +1129,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             case 'tempfile':
                 $part = $this->_getTempFileAttachment($attachment);
                 break;
+            case 'stream':
+                $part = $this->_getStreamAttachment($attachment);
+                break;
             case 'messagepart':
             default:
                 $part = $this->_getMessagePartAttachment($attachment);
@@ -1165,6 +1168,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         } elseif ($attachment instanceof Tinebase_Model_TempFile || isset($attachment['tempFile'])) {
             // tempfile last because we other attachment_types also have a tempfile
             return 'tempfile';
+        } elseif (isset($attachment['stream'])) {
+            return 'stream';
         }
 
         return null;
@@ -1380,6 +1385,28 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         if (! empty($tempFile->size)) {
             $attachment['size'] = $tempFile->size;
         }
+
+        return $part;
+    }
+
+    protected function _getStreamAttachment(&$attachment)
+    {
+        $part = new Zend_Mime_Part($attachment['stream']);
+        $encoding = Zend_Mime::ENCODING_BASE64;
+        if ($attachment['content-type']) {
+            $attachment['type'] = $attachment['content-type'];
+            $attachment['name'] = $attachment['filename'];
+
+            if ($attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+                $encoding = Zend_Mime::ENCODING_8BIT;
+            }
+            if ($attachment['type'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_OUTLOOK) {
+                $attachment['name'] = $attachment['name'] . '.msg';
+            }
+            // not relevant?
+            $part->type = $attachment['content-type'];
+        }
+        $part->encoding = $encoding;
 
         return $part;
     }

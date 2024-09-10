@@ -382,7 +382,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function importMessage($targetFolderId, $tempFileId)
     {
         $tempFile = Tinebase_TempFile::getInstance()->get($tempFileId);
-        Felamimail_Controller_Message::getInstance()->appendMessage($targetFolderId, file_get_contents($tempFile->path));
+        Felamimail_Controller_Message::getInstance()->appendMessage($targetFolderId, $tempFile, null, $tempFile->name);
     }
     
     /**

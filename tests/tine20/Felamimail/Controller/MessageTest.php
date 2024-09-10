@@ -642,6 +642,38 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
             }
         }
     }
+
+    /**
+     * validate fetching a complete message in 'other' dir and check its body
+     *
+     * howto:
+     * - copy mails to tests/tine20/Felamimail/files/other
+     * - add following header:
+     *      X-Tine20TestMessage: _filename_
+     * - run the test!
+     */
+    public function testCheckMsgMails()
+    {
+        $otherFilesDir = dirname(dirname(__FILE__)) . '/files';
+        if (file_exists($otherFilesDir)) {
+            foreach (new DirectoryIterator($otherFilesDir) as $item) {
+                $filename = $item->getFileName();
+                if ($item->isFile() && preg_match('/msg$/i', $filename)) {
+                    $fileName = '/' . $filename;
+                    echo "\nchecking message: " . $fileName . "\n";
+
+                    $this->_appendMessage($fileName, $this->_folder, []);
+                    $cachedMessage = $this->searchAndCacheMessage('l.kneschke@metaways.de', $this->_folder, true, 'To');
+                    $message = $this->_getController()->getCompleteMessage($cachedMessage);
+                    $plainMessage = $this->_getController()->getCompleteMessage($message, null, Zend_Mime::TYPE_TEXT);
+
+                    $this->assertTrue(! empty($message->body));
+                    $this->assertEquals(1, count($message->attachments));
+                    $this->assertEquals('moz-screenshot-83.png', $message->attachments[0]['filename']);
+                }
+            }
+        }
+    }
     
     /**
      * validate fetching a complete message
@@ -1770,7 +1802,7 @@ class Felamimail_Controller_MessageTest extends Felamimail_TestCase
         } else {
             $message = fopen($filename, 'r');
         }
-        $this->_getController()->appendMessage($_folder, $message);
+        $this->_getController()->appendMessage($_folder, $message, null, $_filename);
     }
     
     /**

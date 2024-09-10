@@ -47,6 +47,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract implements Tineb
      */
     const CONTENT_TYPE_MESSAGE_RFC822 = 'message/rfc822';
 
+    const CONTENT_TYPE_MESSAGE_OUTLOOK = 'Microsoft Office Outlook Message';
+
     /**
      * content type html
      *

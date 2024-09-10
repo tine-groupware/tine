@@ -115,13 +115,63 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * append a new message to given folder
      *
      * @param string|Felamimail_Model_Folder $_folder id of target folder
-     * @param string|resource $_message full message content
+     * @param string|resource|Tinebase_Model_TempFile $_message full message content
      * @param array $_flags flags for new message
      */
-    public function appendMessage($_folder, $_message, $_flags = null)
+    public function appendMessage($_folder, $_message, $_flags = null, $_fileName = '')
     {
         $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
-        $message = (is_resource($_message)) ? stream_get_contents($_message) : $_message;
+
+        if (str_contains($_fileName, '.msg')) {
+            $stream = $_message;
+            if ($_message instanceof Tinebase_Model_TempFile) {
+                $stream = fopen($_message->path, 'r');
+            }
+            try {
+                $documentFactory = new Pear\DocumentFactory();
+                $ole = $documentFactory->createFromStream($stream);
+                $mapiMessage = new Felamimail_MAPI_Message($ole);
+                $cacheId = sha1(self::class . $_fileName);
+                $message = $mapiMessage->parseMessage($cacheId);
+            } catch (Throwable $t) {
+                $message = 'Could not parse message: ' . $t->getMessage();
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $message);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                    __METHOD__ . '::' . __LINE__ . ' ' . $t->getTraceAsString());
+                throw new Tinebase_Exception_SystemGeneric($message);
+            } finally {
+                fclose($stream);
+            }
+            if ($message['body_content_type'] === 'text/html') {
+                $encoding = mb_detect_encoding($message['body']);
+                if (! $encoding) {
+                    $message['body'] = mb_convert_encoding($message['body'], 'UTF-8', 'ISO-8859-1');
+                }
+                $message->body = str_replace("\r", '', $message['body']);
+            }
+            $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
+            $message->account_id = $folder->account_id;
+
+            $mail = Felamimail_Controller_Message_Send::getInstance()->createMailForSending($message, $account);
+
+            if ($message->sent instanceof Tinebase_DateTime) {
+                $dateTime  = new Zend_Date($message->sent);
+                $mail->setDate($dateTime);
+            }
+
+            $transport = new Felamimail_Transport();
+            $message = $transport->getRawMessage($mail);
+        } else {
+            $message = (is_resource($_message)) ? stream_get_contents($_message) : $_message;
+
+            if (!$_fileName || str_contains($_fileName, '.eml')) {
+                if ($_message instanceof Tinebase_Model_TempFile) {
+                    $message = file_get_contents($_message->path);
+                }
+            }
+        }
+
         $flags = ($_flags !== null) ? (array)$_flags : null;
 
         $imapBackend = $this->_getBackendAndSelectFolder(NULL, $folder);
