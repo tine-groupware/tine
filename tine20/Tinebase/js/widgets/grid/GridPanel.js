@@ -1392,7 +1392,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 
         Ext.apply(this.store.lastOptions, {
             preserveCursor:     true,
-            preserveSelection:  true, 
+            preserveSelection:  true,
             preserveScroller:   true, 
             removeStrategy:     'default'
         });
@@ -1539,6 +1539,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 }
             }, this);
         }
+        if (!options.preserveSelection) {
+            this.grid.getSelectionModel().clearSelections(true)
+        }
+
         this.actionUpdater.updateActions(this.grid.getSelectionModel(), this.getFilteredContainers());
 
         // restore scroller
