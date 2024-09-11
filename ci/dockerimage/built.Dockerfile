@@ -22,4 +22,6 @@ FROM ${BASE_IMAGE} as built
 COPY --from=build-copy ${TINE20ROOT}/tine20 ${TINE20ROOT}/tine20
 COPY etc/crontabs/tine20 /etc/crontabs/tine20
 
+RUN apk add vim 
+
 HEALTHCHECK --timeout=120s CMD curl --silent --fail http://127.0.0.1:80/health
