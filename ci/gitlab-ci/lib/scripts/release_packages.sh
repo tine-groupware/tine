@@ -16,16 +16,20 @@ release_packages_github_create_release() {
     echo "customer: $customer version: $version release_json: $release_json"
 
     github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
+}
+
+release_packages_notify_matrix() {
+    version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
 
     matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
 
-    if [ "${MAJOR_COMMIT_REF_NAME}" == "2023.11" ]; then
-        matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version "${CODENAME}" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
+    if [ "${RELEASE_TYPE}" == "be" ]; then
+        matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version \"${CODENAME}\" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
     fi
 }
 
 release_push_release_tag_to_github() {
-    if test "$CI_COMMIT_TAG"; then
+    if ! test "$CI_COMMIT_TAG"; then
         echo "no tag to push: '$CI_COMMIT_TAG'"
         return
     fi

@@ -3,13 +3,19 @@ github_create_release() {
     user=$2
     token=$3
 
-    if ! echo "$version" | grep "nightly" > /dev/null; then
+    if [ "${RELEASE_TYPE}" != "nightly" ]; then
         body="$(repo_release_notes "$tag" | jq -Rs .)"
         draft="false"
     else
         echo "only publshing as draft: nigtly release detected" > /dev/stderr
         body="$(repo_release_notes "HEAD" | jq -Rs .)"
         draft="true"
+    fi
+
+    if [ "${RELEASE_TYPE}" != "weekly" ]; then
+        prerelease="false"
+    else
+        prerelease="true"
     fi
 
     curl -s \
