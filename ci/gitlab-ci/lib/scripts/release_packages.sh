@@ -29,7 +29,7 @@ release_packages_notify_matrix() {
 }
 
 release_push_release_tag_to_github() {
-    if test "$CI_COMMIT_TAG"; then
+    if ! test "$CI_COMMIT_TAG"; then
         echo "no tag to push: '$CI_COMMIT_TAG'"
         return
     fi
