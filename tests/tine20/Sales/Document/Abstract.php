@@ -26,21 +26,7 @@ class Sales_Document_Abstract extends TestCase
 
     protected function _createCustomer(): Sales_Model_Customer
     {
-        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
-        if ($division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->count() === 0) {
-            $bankAccounts = Tinebase_Controller_BankAccount::getInstance()->getAll();
-            if ($bankAccounts->count() === 0) {
-                $bankAccounts->addRecord(Tinebase_Controller_BankAccount::getInstance()->create(new Tinebase_Model_BankAccount([
-                    Tinebase_Model_BankAccount::FLD_NAME => 'unittest',
-                    Tinebase_Model_BankAccount::FLD_BIC => 'unittest',
-                    Tinebase_Model_BankAccount::FLD_IBAN => 'unittest',
-                ])));
-            }
-            $division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->addRecord(new Sales_Model_DivisionBankAccount([
-                Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT => $bankAccounts->getFirstRecord(),
-            ], true));
-            Sales_Controller_Division::getInstance()->update($division);
-        }
+        $division = self::addBankAccountToDefaultDivison();
 
         $name = Tinebase_Record_Abstract::generateUID();
         /** @var Sales_Model_Customer $customer */
@@ -69,5 +55,26 @@ class Sales_Document_Abstract extends TestCase
 
         Tinebase_Record_Expander::expandRecord($customer);
         return $customer;
+    }
+
+    public function addBankAccountToDefaultDivison()
+    {
+        $division = Sales_Controller_Division::getInstance()->get(Sales_Config::getInstance()->{Sales_Config::DEFAULT_DIVISION});
+        if ($division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->count() === 0) {
+            $bankAccounts = Tinebase_Controller_BankAccount::getInstance()->getAll();
+            if ($bankAccounts->count() === 0) {
+                $bankAccounts->addRecord(Tinebase_Controller_BankAccount::getInstance()->create(new Tinebase_Model_BankAccount([
+                    Tinebase_Model_BankAccount::FLD_NAME => 'unittest',
+                    Tinebase_Model_BankAccount::FLD_BIC => 'unittest',
+                    Tinebase_Model_BankAccount::FLD_IBAN => 'unittest',
+                ])));
+            }
+            $division->{Sales_Model_Division::FLD_BANK_ACCOUNTS}->addRecord(new Sales_Model_DivisionBankAccount([
+                Sales_Model_DivisionBankAccount::FLD_BANK_ACCOUNT => $bankAccounts->getFirstRecord(),
+            ], true));
+            Sales_Controller_Division::getInstance()->update($division);
+        }
+
+        return $division;
     }
 }

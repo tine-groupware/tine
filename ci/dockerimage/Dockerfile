@@ -32,9 +32,10 @@ RUN apt-get update \
     php-xml \
     php-yaml \
     php-zip \
- && rm -rf /var/lib/apt/lists/*
-RUN ln -s /etc/php/8.1 /etc/php/default
-RUN ln -s /usr/sbin/php-fpm8.1 /usr/sbin/php-fpm
+ && rm -rf /var/lib/apt/lists/* \
+ && ln -s /etc/php/8.1 /etc/php/default \
+ && ln -s /usr/sbin/php-fpm8.1 /usr/sbin/php-fpm \
+ && echo "php" > /etc/php/container-php-package-name
 
 
 
@@ -62,9 +63,10 @@ RUN apt-get update \
     php8.2-xml \
     php8.2-yaml \
     php8.2-zip \
- && rm -rf /var/lib/apt/lists/*
-RUN ln -s /etc/php/8.2 /etc/php/default
-RUN ln -s /usr/sbin/php-fpm8.2 /usr/sbin/php-fpm
+ && rm -rf /var/lib/apt/lists/* \
+ && ln -s /etc/php/8.2 /etc/php/default \
+ && ln -s /usr/sbin/php-fpm8.2 /usr/sbin/php-fpm \
+ && echo "php8.2" > /etc/php/container-php-package-name
 
 
 
@@ -90,9 +92,10 @@ RUN apt-get update \
     php-xml \
     php-yaml \
     php-zip \
- && rm -rf /var/lib/apt/lists/*
-RUN ln -s /etc/php/8.3 /etc/php/default
-RUN ln -s /usr/sbin/php-fpm8.3 /usr/sbin/php-fpm
+ && rm -rf /var/lib/apt/lists/* \
+ && ln -s /etc/php/8.3 /etc/php/default \
+ && ln -s /usr/sbin/php-fpm8.3 /usr/sbin/php-fpm \
+ && echo "php" > /etc/php/container-php-package-name
 
 
 
@@ -193,7 +196,7 @@ FROM ${BASE_IMAGE} as dev
 RUN apt-get update \
  && apt-get install -y \
     composer \
-    php-xdebug \
+    $(cat /etc/php/container-php-package-name)-xdebug \
  && rm -rf /var/lib/apt/lists/*
 
 
@@ -288,6 +291,10 @@ FROM ${BUILD_IMAGE} as build-copy
 FROM ${BASE_IMAGE} as built
 COPY --from=build-copy ${TINE20ROOT}/tine20 ${TINE20ROOT}/tine20
 COPY etc/crontabs/tine20 /etc/crontabs/tine20
+RUN apt-get update \
+ && apt-get install -y \
+    vim \
+ && rm -rf /var/lib/apt/lists/*
 HEALTHCHECK --timeout=120s CMD curl --silent --fail http://127.0.0.1:80/health
 
 

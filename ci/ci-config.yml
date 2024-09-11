@@ -52,15 +52,15 @@ variables:
   COMPOSER_LOCK_REWRITE: "true"
 
   # Test Jobs
-  # Variable are swiched on with the string "true" and off with the string "false".
+  # Variable are switched on with the string "true" and off with the string "false".
   # No test job must run if RUN_NO_TESTS is true.
   #
-  # Every test job has an variable (uppercase(name)) which determents if it should run. These Should not be set in the ci config or project variables. 
-  # They should strictly be used for pipeline triggert manualy or by api. Or for customising schedules.
+  # Every test job has an variable (uppercase(name)) which determent's if it should run. These Should not be set in the ci config or project variables.
+  # They should strictly be used for pipeline triggert manually or by api. Or for customising schedules.
   # For these vars applies true = always run, false = never run and "" = if some other rule matches
   #
-  # Test Jobs also have variables uppercase(name)_MERGE_REQUEST and uppercase(name)_SCHEDULE which determit if it is run during the corospoding pipelines. 
-  # They should only be set in the project variables, to temporaraly enable disable Jobs. If the job config should be changed permanantly the rules if should 
+  # Test Jobs also have variables uppercase(name)_MERGE_REQUEST and uppercase(name)_SCHEDULE which determines if it is run during the corresponding pipelines.
+  # They should only be set in the project variables, to temporarily enable disable Jobs. If the job config should be changed permanently the rules if should
   # be switched: eg: $VAR == "false" => $VAR != "true"
   # For these vars applies true = run on eg. mr, false = dont run for eg. mr and "" = use default
   #

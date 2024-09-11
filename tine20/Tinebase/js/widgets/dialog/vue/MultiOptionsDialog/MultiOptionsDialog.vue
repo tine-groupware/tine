@@ -53,7 +53,7 @@ const _options = computed(() => {
 // onBeforeMount(() => {
 //   console.debug('MultiOptionsDialog: Props:', props)
 // })
-const disableok = computed(() => !props.allowEmpty && (props.allowMultiple ? !selectedOption?.value?.length : !selectedOption.value))
+const disableok = computed(() => !props.allowEmpty && (props.allowMultiple ? !selectedOption?.value?.length : !(selectedOption.value || selectedOption.value === 0)))
 
 const getValue = () => {
   let option = null
@@ -65,10 +65,10 @@ const getValue = () => {
       : null
     option = _.map(option, 'originalOptObj')
   } else {
-    option = selectedOption.value ? selectedOption.value : null
-    option = _.find(props.options, { originalOptObj: { name: option } })?.value || option
+    option = selectedOption.value ?? null
+    option = _.find(props.options, { originalOptObj: { name: option } })?.value ?? option
   }
-  option = option ? JSON.parse(JSON.stringify(option)) : null
+  option = option || option === 0 ? JSON.parse(JSON.stringify(option)) : null
   return option
 }
 
