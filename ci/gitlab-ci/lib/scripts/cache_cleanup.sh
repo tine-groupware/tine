@@ -5,8 +5,8 @@ function cache_cleanup_atomic_dir_cache () {
 
     dirs=$(find . -type d -path './*' -prune -print)
 
-    threshold_used=$(( $(date +%s) -  60 * 60 * 24 * $MAX_AGE_USED_CACHE ))
-    threshold=$(( $(date +%s) -  60 * 60 * 24 * $MAX_AGE_CACHE ))
+    threshold_used=$(( $(date +%s) -  60 * 60  * $MAX_AGE_USED_CACHE ))
+    threshold=$(( $(date +%s) -  60 * 60 * $MAX_AGE_CACHE ))
 
     for dir in $dirs; do
         if [ -f $dir-lastused ]; then
@@ -29,8 +29,8 @@ function cache_cleanup_atomic_dir_cache () {
 }
 
 function cache_cleanup_vendor_dir_cache () {
-    MAX_AGE_USED_CACHE=14
-    MAX_AGE_CACHE=2
+    MAX_AGE_USED_CACHE=48
+    MAX_AGE_CACHE=10
 
     cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/composer-cache/v1/
 
@@ -38,8 +38,8 @@ function cache_cleanup_vendor_dir_cache () {
 }
 
 function cache_cleanup_npm_dir_cache () {
-    MAX_AGE_USED_CACHE=14
-    MAX_AGE_CACHE=2
+    MAX_AGE_USED_CACHE=336
+    MAX_AGE_CACHE=48
 
     cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/npm-cache/v1/
 
@@ -47,8 +47,8 @@ function cache_cleanup_npm_dir_cache () {
 }
 
 function cache_cleanup_phpstan_cache () {
-    MAX_AGE_USED_CACHE=31
-    MAX_AGE_CACHE=7
+    MAX_AGE_USED_CACHE=744
+    MAX_AGE_CACHE=168
 
     dirs=$(find ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE} -type d -path ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/'*' -prune -print)
     for dir in $dirs; do
