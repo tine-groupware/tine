@@ -7,6 +7,7 @@
  */
 import BootstrapVueNext from 'bootstrap-vue-next'
 import RecordsDisplayContainer from "./RecordsDisplayContainer.vue";
+import * as async from 'async'
 Ext.ns('Tine.Tinebase.widgets.form')
 
 Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
@@ -153,27 +154,33 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
         return defaults
     },
 
-    addRecord: function(record) {
+    addRecord: async function(record) {
         if ( record === "" ) return
         const oldValue = JSON.stringify(this.getValue())
+
+        let records;
         if ( this.props ) {
             if ( this.props.records === null ) this.props.records = new Map()
-            this.props.records.set(record.getId(), record)
-            // if ( this.props.records === null ) this.props.records = []
-            // this.props.records.push(record)
+            records = this.props.records
         } else {
             if (this.records === null ) this.records = new Map()
-            this.records.set(record.getId(), record)
-            // if (this.records === null ) this.records = []
-            // this.records.push(record)
+            records = this.records
         }
-        const newValue = JSON.stringify(this.getValue())
-        if (newValue !== oldValue){
-            // NOTE: with stringify and parse we get rid of the proxies
-            this.fireEvent('change', this, JSON.parse(newValue), JSON.parse(oldValue))
-            this.fireEvent('select', this, JSON.parse(newValue), JSON.parse(oldValue))
-        }
-        this.renderUI()
+        if (records.get(record.getId())) return;
+
+        // @TODO beforeselect with an other vue VM in it crashes this picker
+        this.fireAsyncEvent('beforeselect', this, record).then(() => {
+            records.set(record.getId(), record)
+
+            const newValue = JSON.stringify(this.getValue())
+            if (newValue !== oldValue) {
+                // NOTE: with stringify and parse we get rid of the proxies
+                this.fireEvent('select', this, record)
+                this.fireEvent('change', this, JSON.parse(newValue), JSON.parse(oldValue))
+            }
+            // @TODO: don't rerender / reinit all stuff here?!
+            this.renderUI()
+        }).catch(e => {});
     },
 
     setRawValue: function(ri) {
@@ -226,10 +233,11 @@ Tine.Tinebase.widgets.form.VMultiPicker = Ext.extend(Ext.BoxComponent, {
     setValue: function(value, editDialog) {
         this.reset()
         this.suspendEvents()
-        _.forEach(value, (recordData) => {
-            this.addRecord(Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass))
+        async.forEach(value, async (recordData) => {
+            await this.addRecord(Tine.Tinebase.data.Record.setFromJson(recordData, this.recordClass))
+        }).then (() => {
+            this.resumeEvents()
         })
-        this.resumeEvents()
     },
 
     /* needed for isFormField cycle */
