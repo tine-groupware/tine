@@ -392,6 +392,17 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             maxLength: 256,
             columnWidth: 1
         };
+
+        if (!this.mailingListPanel) {
+            this.userAccountPicker = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
+                userOnly: true,
+                fieldLabel: this.app.i18n._('User'),
+                useAccountRecord: true,
+                name: 'user_id',
+                allowBlank: true,
+                // TODO user selection for system accounts should fill in the values!
+            })
+        }
         
         return {
             xtype: 'tabpanel',
@@ -460,14 +471,9 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 const disabled = me.record.get('type') === 'shared' || me.record.get('type') === 'adblist';
                                 this.setDisabled(disabled);
                             }
-                        }], [this.userAccountPicker = Tine.widgets.form.RecordPickerManager.get('Addressbook', 'Contact', {
-                            userOnly: true,
-                            fieldLabel: this.app.i18n._('User'),
-                            useAccountRecord: true,
-                            name: 'user_id',
-                            allowBlank: true
-                            // TODO user selection for system accounts should fill in the values!
-                        })], [{
+                        }], [
+                            this.userAccountPicker
+                        ], [{
                             fieldLabel: this.app.i18n._('User Email'),
                             name: 'email',
                             allowBlank: this.asAdminModule,
