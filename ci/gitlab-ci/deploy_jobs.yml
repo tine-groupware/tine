@@ -161,11 +161,18 @@ release-packages-to-github:
     - !reference [.lib, script]
     - release_push_release_tag_to_github
     - release_packages_github_create_release
+    - release_packages_notify_matrix
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_LABELS =~ /release-packages-to-github/
       when: manual
+      variables:
+        RELEASE_TYPE: nightly
     - if: $PIPELINE_TYPE =~ /release-be/
+      variables:
+        RELEASE_TYPE: be
     - if: $PIPELINE_TYPE =~ /release-weekly/ # should/is only be pushed as pre release
+      variables:
+        RELEASE_TYPE: weekly
   timeout: 20m
   interruptible: false
 
