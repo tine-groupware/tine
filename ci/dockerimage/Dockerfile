@@ -288,6 +288,10 @@ FROM ${BUILD_IMAGE} as build-copy
 FROM ${BASE_IMAGE} as built
 COPY --from=build-copy ${TINE20ROOT}/tine20 ${TINE20ROOT}/tine20
 COPY etc/crontabs/tine20 /etc/crontabs/tine20
+RUN apt-get update \
+ && apt-get install -y \
+    vim \
+ && rm -rf /var/lib/apt/lists/*
 HEALTHCHECK --timeout=120s CMD curl --silent --fail http://127.0.0.1:80/health
 
 
