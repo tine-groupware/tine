@@ -65,6 +65,14 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
+        if (!$_record->isBooked() && $_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet) {
+            /** @var Sales_Model_DocumentPosition_Abstract $position */
+            foreach($_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $position) {
+                if ($position->{Sales_Model_DocumentPosition_Abstract::FLD_REVERSAL}) {
+                    throw new Tinebase_Exception_Record_Validation('reversals need to be booked');
+                }
+            }
+        }
         $this->_validateTransitionState($this->_documentStatusField,
             Sales_Config::getInstance()->{$this->_documentStatusTransitionConfig}, $_record);
 
@@ -225,6 +233,15 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             if (in_array($field, $this->_oldRecordBookWriteableFields)) {
                 continue;
             }
+            if (Sales_Model_Document_Abstract::FLD_POSITIONS === $field && $_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet) {
+                foreach ($_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} as $position) {
+                    if ($oldPosition = $_oldRecord->{Sales_Model_Document_Abstract::FLD_POSITIONS}->getById($position->getId())) {
+                        $oldPosition->{Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED} = $position->{Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED};
+                    }
+                }
+                $_record->{Sales_Model_Document_Abstract::FLD_POSITIONS} = $_oldRecord->{Sales_Model_Document_Abstract::FLD_POSITIONS};
+                continue;
+            }
             $_record->{$field} = $_oldRecord->{$field};
         }
     }
@@ -284,8 +301,10 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
      */
     protected function _inspectFollowUpStati(Sales_Model_Document_Abstract $_record, ?Sales_Model_Document_Abstract $_oldRecord = null): void
     {
-        if ($_oldRecord && $_oldRecord->isBooked()) {
-            // nothing to do if we were already booked, nothing is allowed to change -> no change -> nothing to do
+        if ($_oldRecord && $_oldRecord->isBooked() &&
+                (Sales_Config::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED !== $_oldRecord->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} ||
+                Sales_Config::DOCUMENT_REVERSAL_STATUS_NOT_REVERSED === $_record->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS})) {
+            // nothing to do if we were already booked, not much is allowed to change -> no change -> nothing to do
             return;
         }
 
@@ -299,7 +318,7 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
             ]
         ]))->expand(new Tinebase_Record_RecordSet($this->_modelName, [$_record]));
 
-        $booked = $_record->isBooked();
+        $booked = $_record->isBooked() || $_oldRecord?->isBooked();
         /** @var Tinebase_Model_DynamicRecordWrapper $precursorDocument */
         foreach ($_record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} ?? [] as $precursorDocument) {
             Tinebase_Record_Expander::expandRecord($precursorDocument->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD});
@@ -318,6 +337,27 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         }
 
         return parent::_inspectDelete($_ids);
+    }
+
+    protected function _inspectAfterDelete(Tinebase_Record_Interface $record)
+    {
+        parent::_inspectAfterDelete($record);
+
+        (new Tinebase_Record_Expander($this->_modelName, [
+            Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS => [
+                    Tinebase_Record_Expander::EXPANDER_PROPERTIES => [
+                        Tinebase_Model_DynamicRecordWrapper::FLD_RECORD => [],
+                    ],
+                ],
+            ]
+        ]))->expand(new Tinebase_Record_RecordSet($this->_modelName, [$record]));
+
+        /** @var Tinebase_Model_DynamicRecordWrapper $precursorDocument */
+        foreach ($record->{Sales_Model_Document_Abstract::FLD_PRECURSOR_DOCUMENTS} ?? [] as $precursorDocument) {
+            Tinebase_Record_Expander::expandRecord($precursorDocument->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD});
+            $precursorDocument->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}->updateFollowupStati(true);
+        }
     }
 
     /**
@@ -452,11 +492,8 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
         $targetDocument = new $transition->{Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE}([], true);
         $targetDocument->transitionFrom($transition);
 
-        // save result in db
-        /** @var Tinebase_Controller_Record_Abstract $ctrl */
-        $ctrl = Tinebase_Core::getApplicationInstance(get_class($targetDocument));
-        /** @var Sales_Model_Document_Abstract $result */
-        $result = $ctrl->create($targetDocument);
+        // we need to clear the expander cache here to prevent the precursor document expanding below to taint our data here...
+        Tinebase_Record_Expander_DataRequest::clearCache();
 
         foreach ($transition->{Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS} as $sourceDocument) {
             if ($sourceDocument->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->isDirty()) {
@@ -466,6 +503,12 @@ abstract class Sales_Controller_Document_Abstract extends Tinebase_Controller_Re
                 $ctrl->update($sourceDocument->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT});
             }
         }
+
+        // save result in db
+        /** @var Tinebase_Controller_Record_Abstract $ctrl */
+        $ctrl = Tinebase_Core::getApplicationInstance(get_class($targetDocument));
+        /** @var Sales_Model_Document_Abstract $result */
+        $result = $ctrl->create($targetDocument);
 
         $transactionRAII->release();
 

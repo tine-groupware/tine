@@ -23,6 +23,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'Document_Abstract'; // als konkrete document_types gibt es Offer, Order, Delivery, Invoice (keine Gutschrift!)
 
+    public const STATUS_REVERSAL = 'reversal';
+
     public const FLD_ID = 'id';
     public const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
     public const FLD_DOCUMENT_LANGUAGE = 'document_language';
@@ -519,8 +521,8 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
             // if the positions for this document are not specified, we take all of them
             if (empty($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}) ||
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS}->count() === 0) {
-                $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} =
-                    new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_TransitionSource::class, []);
+                //$record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} = // why? remove those two lines?
+                    //new Tinebase_Record_RecordSet(Sales_Model_DocumentPosition_TransitionSource::class, []);
 
                 if ($record->{Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL}) {
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
@@ -548,18 +550,17 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                         ++$addedPositions;
                     } catch (Tinebase_Exception_Record_Validation $e) {
                     }
-                    $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}
-                        ->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
                 }
 
             } else {
                 foreach ($record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS} as $sourcePosition) {
 
-                    if (!$record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
+                    if (!($sPosition = $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}
                             ->{Sales_Model_Document_Abstract::FLD_POSITIONS}->getById($sourcePosition
-                            ->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}->getID())) {
+                            ->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}->getID()))) {
                         throw new Tinebase_Exception_UnexpectedValue('sourcePosition in transition not found in source document!');
                     }
+                    $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION} = $sPosition;
 
                     /** now this is important! we need to reference the same object here, so it gets dirty and we can update it if required */
                     $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}
@@ -571,8 +572,6 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     $position->transitionFrom($sourcePosition);
                     $this->{self::FLD_POSITIONS}->addRecord($position);
                     $position->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
-                    $sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}
-                        ->{Sales_Model_DocumentPosition_Abstract::FLD_DOCUMENT_ID} = null;
                     ++$addedPositions;
                     $isReversal = $isReversal || (bool)$sourcePosition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL};
 
@@ -592,7 +591,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                 Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME =>
                     $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL},
                 Tinebase_Model_DynamicRecordWrapper::FLD_RECORD =>
-                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT},
+                    $record->{Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT}->getId(),
             ]));
         }
 
@@ -647,9 +646,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
                     throw new Tinebase_Exception_UnexpectedValue('reversal transitions need to to have same source and target document class');
                 }
             }
+            $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->records->find(Sales_Model_Document_Status::FLD_REVERSAL, true)->getId();
+        } else {
+            $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->default;
         }
 
-        $this->{static::$_statusField} = Sales_Config::getInstance()->{static::$_statusConfigKey}->default;
         $this->{self::FLD_DOCUMENT_DATE} = Tinebase_DateTime::today(Tinebase_Core::getUserTimezone());
 
         $this->calculatePrices();
@@ -662,8 +663,11 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
         }
 
         foreach ($this->{self::FLD_PRECURSOR_DOCUMENTS} as $preDoc) {
+            /** @var Tinebase_Controller_Record_Abstract $ctrl */
+            $ctrl = Tinebase_Core::getApplicationInstance($preDoc->{Tinebase_Model_DynamicRecordWrapper::FLD_MODEL_NAME});
+            $preDoc = $ctrl->get($preDoc->getIdFromProperty(Tinebase_Model_DynamicRecordWrapper::FLD_RECORD));
             /** @var Sales_Model_DocumentPosition_Abstract $position */
-            foreach ($preDoc->{Tinebase_Model_DynamicRecordWrapper::FLD_RECORD}->{self::FLD_POSITIONS} as $position) {
+            foreach ($preDoc->{self::FLD_POSITIONS} as $position) {
                 if (!$position->isProduct()) continue;
                 if (null === ($pos = $this->{self::FLD_POSITIONS}->find(
                     function(Sales_Model_DocumentPosition_Abstract $val) use($position) {
