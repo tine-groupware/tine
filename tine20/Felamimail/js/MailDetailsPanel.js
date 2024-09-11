@@ -446,7 +446,7 @@ Ext.extend(Tine.Felamimail.MailDetailsPanel, Ext.Panel, {
                     evalGrants: false,
                     actions: menu
                 });
-                actionUpdater.updateActions(attachments.map((attachmentData) => {
+                actionUpdater.updateActions(selectedAttachments.map((attachmentData) => {
                     const record = Tine.Tinebase.data.Record.setFromJson(Object.assign(attachmentData, {
                         id: `${messageId}:${attachmentData.partId}`,
                         messageId,
