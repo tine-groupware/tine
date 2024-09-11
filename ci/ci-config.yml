@@ -3,7 +3,7 @@ variables:
   # The major commit ref name is mainly used for ci caching. Non feature branches should be there own major. The major of feature branches should be the branch the will be merged into.
   # The major commit ref name is configures in to parts, the base and and the customer specific part.
   BASE_MAJOR_COMMIT_REF_NAME: "2023.11"
-  # The customer part must end with an /. eg "ecclesias/" (This is a limitation of templateing and is required to allow branches with out a customer. 
+  # The customer part must end with an /. eg "ecclesias/" (This is a limitation of templating and is required to allow branches with out a customer.
   CUSTOMER_MAJOR_COMMIT_REF_NAME: ""
 
   # DO NOT CHANGE MANUAL: needs to be, in the main variables section CUSTOMER_MAJOR_COMMIT_REF_NAME and BASE_MAJOR_COMMIT_REF_NAME are not set jet
@@ -52,15 +52,15 @@ variables:
   COMPOSER_LOCK_REWRITE: "true"
 
   # Test Jobs
-  # Variable are swiched on with the string "true" and off with the string "false".
+  # Variable are switched on with the string "true" and off with the string "false".
   # No test job must run if RUN_NO_TESTS is true.
   #
-  # Every test job has an variable (uppercase(name)) which determents if it should run. These Should not be set in the ci config or project variables. 
-  # They should strictly be used for pipeline triggert manualy or by api. Or for customising schedules.
+  # Every test job has an variable (uppercase(name)) which determent's if it should run. These Should not be set in the ci config or project variables.
+  # They should strictly be used for pipeline triggert manually or by api. Or for customising schedules.
   # For these vars applies true = always run, false = never run and "" = if some other rule matches
   #
-  # Test Jobs also have variables uppercase(name)_MERGE_REQUEST and uppercase(name)_SCHEDULE which determit if it is run during the corospoding pipelines. 
-  # They should only be set in the project variables, to temporaraly enable disable Jobs. If the job config should be changed permanantly the rules if should 
+  # Test Jobs also have variables uppercase(name)_MERGE_REQUEST and uppercase(name)_SCHEDULE which determines if it is run during the corresponding pipelines.
+  # They should only be set in the project variables, to temporarily enable disable Jobs. If the job config should be changed permanently the rules if should
   # be switched: eg: $VAR == "false" => $VAR != "true"
   # For these vars applies true = run on eg. mr, false = dont run for eg. mr and "" = use default
   #
