@@ -13,8 +13,8 @@
       
           dirs=$(find . -type d -path './*' -prune -print)
       
-          threshold_used=$(( $(date +%s) -  60 * 60 * 24 * $MAX_AGE_USED_CACHE ))
-          threshold=$(( $(date +%s) -  60 * 60 * 24 * $MAX_AGE_CACHE ))
+          threshold_used=$(( $(date +%s) -  60 * 60  * $MAX_AGE_USED_CACHE ))
+          threshold=$(( $(date +%s) -  60 * 60 * $MAX_AGE_CACHE ))
       
           for dir in $dirs; do
               if [ -f $dir-lastused ]; then
@@ -37,8 +37,8 @@
       }
       
       function cache_cleanup_vendor_dir_cache () {
-          MAX_AGE_USED_CACHE=14
-          MAX_AGE_CACHE=2
+          MAX_AGE_USED_CACHE=48
+          MAX_AGE_CACHE=10
       
           cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/composer-cache/v1/
       
@@ -46,8 +46,8 @@
       }
       
       function cache_cleanup_npm_dir_cache () {
-          MAX_AGE_USED_CACHE=14
-          MAX_AGE_CACHE=2
+          MAX_AGE_USED_CACHE=336
+          MAX_AGE_CACHE=48
       
           cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/npm-cache/v1/
       
@@ -55,8 +55,8 @@
       }
       
       function cache_cleanup_phpstan_cache () {
-          MAX_AGE_USED_CACHE=31
-          MAX_AGE_CACHE=7
+          MAX_AGE_USED_CACHE=744
+          MAX_AGE_CACHE=168
       
           dirs=$(find ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE} -type d -path ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/'*' -prune -print)
           for dir in $dirs; do
@@ -362,13 +362,19 @@
           user=$2
           token=$3
       
-          if ! echo "$version" | grep "nightly" > /dev/null; then
+          if [ "${RELEASE_TYPE}" != "nightly" ]; then
               body="$(repo_release_notes "$tag" | jq -Rs .)"
               draft="false"
           else
               echo "only publshing as draft: nigtly release detected" > /dev/stderr
               body="$(repo_release_notes "HEAD" | jq -Rs .)"
               draft="true"
+          fi
+      
+          if [ "${RELEASE_TYPE}" != "weekly" ]; then
+              prerelease="false"
+          else
+              prerelease="true"
           fi
       
           curl -s \
@@ -759,16 +765,20 @@
           echo "customer: $customer version: $version release_json: $release_json"
       
           github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
+      }
+      
+      release_packages_notify_matrix() {
+          version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
       
           matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
       
-          if [ "${MAJOR_COMMIT_REF_NAME}" == "2023.11" ]; then
-              matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version "${CODENAME}" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
+          if [ "${RELEASE_TYPE}" == "be" ]; then
+              matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version \"${CODENAME}\" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
           fi
       }
       
       release_push_release_tag_to_github() {
-          if test "$CI_COMMIT_TAG"; then
+          if ! test "$CI_COMMIT_TAG"; then
               echo "no tag to push: '$CI_COMMIT_TAG'"
               return
           fi
@@ -1049,8 +1059,8 @@
         
             dirs=$(find . -type d -path './*' -prune -print)
         
-            threshold_used=$(( $(date +%s) -  60 * 60 * 24 * $MAX_AGE_USED_CACHE ))
-            threshold=$(( $(date +%s) -  60 * 60 * 24 * $MAX_AGE_CACHE ))
+            threshold_used=$(( $(date +%s) -  60 * 60  * $MAX_AGE_USED_CACHE ))
+            threshold=$(( $(date +%s) -  60 * 60 * $MAX_AGE_CACHE ))
         
             for dir in $dirs; do
                 if [ -f $dir-lastused ]; then
@@ -1073,8 +1083,8 @@
         }
         
         function cache_cleanup_vendor_dir_cache () {
-            MAX_AGE_USED_CACHE=14
-            MAX_AGE_CACHE=2
+            MAX_AGE_USED_CACHE=48
+            MAX_AGE_CACHE=10
         
             cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/composer-cache/v1/
         
@@ -1082,8 +1092,8 @@
         }
         
         function cache_cleanup_npm_dir_cache () {
-            MAX_AGE_USED_CACHE=14
-            MAX_AGE_CACHE=2
+            MAX_AGE_USED_CACHE=336
+            MAX_AGE_CACHE=48
         
             cd ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/tine20/npm-cache/v1/
         
@@ -1091,8 +1101,8 @@
         }
         
         function cache_cleanup_phpstan_cache () {
-            MAX_AGE_USED_CACHE=31
-            MAX_AGE_CACHE=7
+            MAX_AGE_USED_CACHE=744
+            MAX_AGE_CACHE=168
         
             dirs=$(find ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE} -type d -path ${CI_CUSTOM_CACHE_DIR}/${CI_PROJECT_NAMESPACE}/'*' -prune -print)
             for dir in $dirs; do
@@ -1398,13 +1408,19 @@
             user=$2
             token=$3
         
-            if ! echo "$version" | grep "nightly" > /dev/null; then
+            if [ "${RELEASE_TYPE}" != "nightly" ]; then
                 body="$(repo_release_notes "$tag" | jq -Rs .)"
                 draft="false"
             else
                 echo "only publshing as draft: nigtly release detected" > /dev/stderr
                 body="$(repo_release_notes "HEAD" | jq -Rs .)"
                 draft="true"
+            fi
+        
+            if [ "${RELEASE_TYPE}" != "weekly" ]; then
+                prerelease="false"
+            else
+                prerelease="true"
             fi
         
             curl -s \
@@ -1795,16 +1811,20 @@
             echo "customer: $customer version: $version release_json: $release_json"
         
             github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
+        }
+        
+        release_packages_notify_matrix() {
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
         
             matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
         
-            if [ "${MAJOR_COMMIT_REF_NAME}" == "2023.11" ]; then
-                matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version "${CODENAME}" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
+            if [ "${RELEASE_TYPE}" == "be" ]; then
+                matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version \"${CODENAME}\" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
             fi
         }
         
         release_push_release_tag_to_github() {
-            if test "$CI_COMMIT_TAG"; then
+            if ! test "$CI_COMMIT_TAG"; then
                 echo "no tag to push: '$CI_COMMIT_TAG'"
                 return
             fi
@@ -2480,13 +2500,19 @@
             user=$2
             token=$3
         
-            if ! echo "$version" | grep "nightly" > /dev/null; then
+            if [ "${RELEASE_TYPE}" != "nightly" ]; then
                 body="$(repo_release_notes "$tag" | jq -Rs .)"
                 draft="false"
             else
                 echo "only publshing as draft: nigtly release detected" > /dev/stderr
                 body="$(repo_release_notes "HEAD" | jq -Rs .)"
                 draft="true"
+            fi
+        
+            if [ "${RELEASE_TYPE}" != "weekly" ]; then
+                prerelease="false"
+            else
+                prerelease="true"
             fi
         
             curl -s \
@@ -2877,16 +2903,20 @@
             echo "customer: $customer version: $version release_json: $release_json"
         
             github_release_add_asset "$release_json" "$version" "${CI_BUILDS_DIR}/${CI_PROJECT_NAMESPACE}/tine20/tine20-allinone_${version}.tar.bz2" "$GITHUB_RELEASE_USER" "$GITHUB_RELEASE_TOKEN"
+        }
+        
+        release_packages_notify_matrix() {
+            version=${CI_COMMIT_TAG:-$(packaging_gitlab_get_version_for_pipeline_id ${customer})}
         
             matrix_send_message $MATRIX_ROOM "🟢 Packages for ${version} have been released to github."
         
-            if [ "${MAJOR_COMMIT_REF_NAME}" == "2023.11" ]; then
-                matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version "${CODENAME}" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
+            if [ "${RELEASE_TYPE}" == "be" ]; then
+                matrix_send_message "!gGPNgDOyMWwSPjFFXa:matrix.org" 'We just released the new version \"${CODENAME}\" ${version} 🎉\nCheck https://www.tine-groupware.de/ and https://github.com/tine-groupware/tine/releases for more information and the downloads.\nYou can also pull the image from dockerhub: https://hub.docker.com/r/tinegroupware/tine'
             fi
         }
         
         release_push_release_tag_to_github() {
-            if test "$CI_COMMIT_TAG"; then
+            if ! test "$CI_COMMIT_TAG"; then
                 echo "no tag to push: '$CI_COMMIT_TAG'"
                 return
             fi
