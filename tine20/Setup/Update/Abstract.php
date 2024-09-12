@@ -522,9 +522,17 @@ class Setup_Update_Abstract
         return $setupUser;
     }
 
-    static public function assertContactId(Tinebase_Model_FullUser $_user)
+    static public function assertContactId(Tinebase_Model_FullUser $_user): void
     {
         if (!empty($_user->contact_id)) {
+            return;
+        }
+        if (!$_user->has('contact_id')) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
+                    ' Something strange happened, user no longer has contact_id property. Maybe some testing issue?'
+                    . ' user object: ' . print_r($_user, true));
+            }
             return;
         }
         $contact = Addressbook_Controller_Contact::getInstance()->getBackend()
