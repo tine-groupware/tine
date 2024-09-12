@@ -48,6 +48,7 @@ Tine.Tinebase.UserProfilePanel = Ext.extend(Ext.Panel, {
         const userProfile  = userProfileInfo.userProfile;
         const readableFields   = userProfileInfo.readableFields;
         const updateableFields = userProfileInfo.updateableFields;
+        const shouldNotBeBlankFields = ['n_given', 'n_family'];
             
         const adbI18n = new Locale.Gettext();
         adbI18n.textdomain('Addressbook');
@@ -67,8 +68,9 @@ Tine.Tinebase.UserProfilePanel = Ext.extend(Ext.Panel, {
                         name: fieldName,
                         value: userProfile[fieldName],
                         fieldLabel: adbI18n._hidden(fieldDefinition.label),
-                        readOnly: updateableFields.indexOf(fieldName) < 0
-                    })
+                        readOnly: updateableFields.indexOf(fieldName) < 0,
+                        allowBlank: shouldNotBeBlankFields.indexOf(fieldName) < 0
+                    });
     
                     const idx = this.items.findIndex('name',fieldName);
                     if (idx > -1) {
