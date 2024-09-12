@@ -1269,13 +1269,12 @@ class Tinebase_FileSystemTest extends TestCase
         
         Tinebase_Core::getConfig()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_MODE} =
             'unittest';
-        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_NOTIFICATION_ROLE} = 
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_AVSCAN_NOTIFICATION_ROLE} =
             'admin role';
         Tinebase_FileSystem_AVScan_Factory::registerScanner('unittest', Tinebase_FileSystem_TestAVScanner::class);
         Tinebase_FileSystem_TestAVScanner::$desiredResult = new Tinebase_FileSystem_AVScan_Result(
             Tinebase_FileSystem_AVScan_Result::RESULT_FOUND, 'unittest virus');
         
-        $now = Tinebase_DateTime::now();
         $node = Tinebase_FileSystem::getInstance()->stat($this->testCreateFile('avModeUnittestFound.txt',
             'shubidubidulala'));
         Tinebase_FileSystem::getInstance()->avScan();

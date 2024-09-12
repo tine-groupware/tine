@@ -4836,11 +4836,11 @@ class Tinebase_FileSystem implements
             closedir($fileDir);
         }
         closedir($baseDir);
-        
-        $quarantinedFileHashes = $this->_fileObjectBackend->getQuarantinedFileHashes();
-        if (count($quarantinedFileHashes) > 0) {
+
+        $fileObjectIds = $this->_fileObjectBackend->getQuarantinedFileObjectIds();
+        if (count($fileObjectIds) > 0) {
             try {
-                $this->_sendAvScanNotification($quarantinedFileHashes);
+                $this->_sendAvScanNotification($fileObjectIds);
             } catch (Tinebase_Exception_NotFound $tenf) {
                 
             }
@@ -5050,12 +5050,24 @@ class Tinebase_FileSystem implements
         }
     }
 
-    protected function _sendAvScanNotification($hashes)
+    protected function _sendAvScanNotification($fileObjectIds)
     {
         try {
-            $fileObjects = $this->_getTreeNodeBackend()->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(Tinebase_Model_Tree_FileObject::class,
-                [[ 'field' => 'hash', 'operator' => 'in', 'value' => $hashes]]
-            ));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Found ' . count($fileObjectIds) . ' file objects.' );
+
+            $nodes = $this->_getTreeNodeBackend()->search(
+                new Tinebase_Model_Tree_Node_Filter(array(array(
+                    'field'     => 'object_id',
+                    'operator'  => 'in',
+                    'value'     => $fileObjectIds
+                )), /* $_condition = */ '',
+                    /* $_options */ array(
+                        'ignoreAcl' => true,
+                    )
+                ),
+            );
+
             $expander = new Tinebase_Record_Expander(Tinebase_Model_Tree_FileObject::class, [
                 Tinebase_Record_Expander::EXPANDER_PROPERTY_CLASSES => [
                     Tinebase_Record_Expander::PROPERTY_CLASS_USER => [
@@ -5065,17 +5077,20 @@ class Tinebase_FileSystem implements
                     ],
                 ],
             ]);
-            $expander->expand($fileObjects);
-            
+            $expander->expand($nodes);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(
+                __METHOD__ . '::' . __LINE__ . ' Found ' . count($nodes) . ' nodes.' );
+
             $paths = [];
-            foreach ($fileObjects as $fileObject) {
-                $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(Tinebase_FileSystem::getInstance()->getPathOfNode($fileObject, true));
+            foreach ($nodes as $node) {
+                $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(Tinebase_FileSystem::getInstance()->getPathOfNode($node, true));
                 $filePath = $pathRecord->flatpath;
                 $pathParts = explode('/', trim($filePath, '/'));
                 if ($app = Tinebase_Application::getInstance()->getApplicationById($pathParts[0])) {
                     $filePath = preg_replace('/'. $pathParts[0] . '/', $app->name, $filePath);
                 }
-                $createdBy = $fileObject->created_by;
+                $createdBy = $node->created_by;
                 $paths[] = [
                     'path' => $filePath,
                     'statpath' => $pathRecord->statpath,
