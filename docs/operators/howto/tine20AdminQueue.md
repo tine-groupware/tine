@@ -47,6 +47,10 @@ You can just set this ENV variable (for example in docker-compose.yml) to deacti
 
     TINE20_ACTIONQUEUE: "false"
 
+### Stop worker.php process via supervisord
+
+    supervisorctl stop worker
+
 ## Monitoring
 
     php tine20.php --method Tinebase.monitoringCheckQueue
