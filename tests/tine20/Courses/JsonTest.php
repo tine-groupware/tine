@@ -83,7 +83,7 @@ class Courses_JsonTest extends TestCase
     {
         $twigConf = Tinebase_Config::getInstance()->{Tinebase_Config::ACCOUNT_TWIG};
         if ($twigConf->{Tinebase_Config::ACCOUNT_TWIG_LOGIN} !==
-            '{{ account.accountFirstName|transliterate|removeSpace|trim[0:1]|lower }}{{ account.accountLastName|transliterate|removeSpace|lower }}'
+            '{{ account.accountFirstName|transliterate|removeSpace|accountLoginChars|trim[0:1]|lower }}{{ account.accountLastName|transliterate|removeSpace|accountLoginChars|lower }}'
         ) {
             self::markTestSkipped('test only works with a certain ACCOUNT_TWIG_LOGIN config');
         }
@@ -416,10 +416,6 @@ class Courses_JsonTest extends TestCase
      * test for import of members (4) / json import
      * 
      * @see 0006672: allow to import (csv) files with only CR linebreaks
-     * 
-     * fixme: fails to import member with ö on ubuntu docker. (course member import seems to not work at all, via the ui) 
-     * @group nogitlabci
-     * gitlabci: fails to import member with ö
      */
     public function testImportMembersIntoCourse4()
     {
