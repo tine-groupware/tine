@@ -26,7 +26,7 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
                 self::FUNCTION_CONST                => 'update001',
             ],
         ],
-        self::PRIO_TINEBASE_STRUCTURE       => [
+        (self::PRIO_NORMAL_APP_STRUCTURE - 1) => [
             self::RELEASE017_UPDATE003          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update003',
