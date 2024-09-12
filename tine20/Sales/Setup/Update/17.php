@@ -50,13 +50,13 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
                 self::FUNCTION_CONST => 'update012',
             ],
         ],
-        (self::PRIO_NORMAL_APP_STRUCTURE - 2) => [
+        (self::PRIO_NORMAL_APP_STRUCTURE - 3) => [
             self::RELEASE017_UPDATE008 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update008',
             ],
         ],
-        (self::PRIO_NORMAL_APP_STRUCTURE - 1) => [
+        (self::PRIO_NORMAL_APP_STRUCTURE - 2) => [
             self::RELEASE017_UPDATE001 => [
                 self::CLASS_CONST => self::class,
                 self::FUNCTION_CONST => 'update001',
@@ -153,6 +153,8 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
         $this->_db->delete(SQL_TABLE_PREFIX . Sales_Model_Document_Address::TABLE_NAME, Sales_Model_Document_Address::FLD_DOCUMENT_ID . ' IS NULL');
 
+        $this->divisionUpdate();
+
         Setup_SchemaTool::updateSchema([
             Sales_Model_Address::class,
             Sales_Model_Customer::class,
@@ -175,6 +177,8 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update002()
     {
+        $this->divisionUpdate();
+        
         $division = Sales_Setup_Initialize::createDefaultDivision();
         $category = Sales_Setup_Initialize::createDefaultCategory($division);
         $debitorCtrl = Sales_Controller_Debitor::getInstance();
@@ -603,6 +607,25 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
 
     public function update020()
     {
+        $this->divisionUpdate();
+        
+        Setup_SchemaTool::updateSchema([
+            Sales_Model_Debitor::class,
+            Sales_Model_Division::class,
+            Sales_Model_DivisionBankAccount::class,
+            Sales_Model_Document_Debitor::class,
+        ]);
+
+        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.20', self::RELEASE017_UPDATE020);
+    }
+
+    protected function divisionUpdate()
+    {
+        if ($this->_backend->tableExists(Sales_Model_Division::TABLE_NAME)
+                && $this->_backend->columnExists(Sales_Model_Division::FLD_NAME, Sales_Model_Division::TABLE_NAME)) {
+            return;
+        }
+
         $mc = Sales_Model_Division::getConfiguration();
         $fieldsProp = new ReflectionProperty(Tinebase_ModelConfiguration::class, '_fields');
         $fieldsProp->setAccessible(true);
@@ -617,19 +640,12 @@ class Sales_Setup_Update_17 extends Setup_Update_Abstract
         $fields[Sales_Model_Division::FLD_CONTACT_PHONE][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
         $fields[Sales_Model_Division::FLD_VAT_NUMBER][Tinebase_ModelConfiguration_Const::DEFAULT_VAL] = '';
         $fieldsProp->setValue($mc, $fields);
-        
+
         Setup_SchemaTool::updateSchema([
-            Sales_Model_Debitor::class,
             Sales_Model_Division::class,
             Sales_Model_DivisionBankAccount::class,
-            Sales_Model_Document_Debitor::class,
         ]);
 
         Sales_Model_Division::resetConfiguration();
-        Setup_SchemaTool::updateSchema([
-            Sales_Model_Division::class,
-        ]);
-
-        $this->addApplicationUpdate(Sales_Config::APP_NAME, '17.20', self::RELEASE017_UPDATE020);
     }
 }
