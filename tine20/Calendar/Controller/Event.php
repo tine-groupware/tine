@@ -2980,10 +2980,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
 
         if (!$this->_keepAttenderStatus && !$preserveStatus) {
             if ($attender->displaycontainer_id) {
-                if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE && !Tinebase_Core::getUser()->hasGrant(
+                if ($attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+                    if (!Tinebase_Core::getUser()->hasGrant(
                         $attender->displaycontainer_id, Calendar_Model_ResourceGrants::RESOURCE_STATUS)) {
-                    //If resource has a default status use this
-                    $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
+                        //If resource has a default status use this
+                        $attender->status = isset($resource->status) ? $resource->status : Calendar_Model_Attender::STATUS_NEEDSACTION;
+                    }
                 } else {
                     if (!Tinebase_Core::getUser()->hasGrant($attender->displaycontainer_id, Tinebase_Model_Grants::GRANT_EDIT)) {
                         $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;

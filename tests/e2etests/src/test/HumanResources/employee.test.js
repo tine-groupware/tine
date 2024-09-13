@@ -267,6 +267,7 @@ describe('employee', () => {
     describe('edit contract', () => {
         let employeeEditDialog, contractEditDialog
         test('edit dialog', async () => {
+            await page.waitForTimeout(1000);
             await expectPuppeteer(page).toClick('.x-grid3-col-account_id', {text: 'Wulf, Paul'});
             employeeEditDialog = await lib.getEditDialog('Mitarbeiter bearbeiten');
             await expectPuppeteer(employeeEditDialog).toClick('.x-tab-strip-text', {text: 'Verträge', visible:true});
