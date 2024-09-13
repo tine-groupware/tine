@@ -261,6 +261,9 @@ msgid_plural "Contracts"
 msgstr[0] "Vertrag"
 msgstr[1] "Verträge"
 
+msgid "Additional Parameters"
+msgstr "Weitere Parameter"
+
 #: Model/Contract.php:43
 msgid "GENDER_Contract"
 msgstr "male"
@@ -281,6 +284,9 @@ msgstr "Anfang"
 #: Model/Contract.php:106 js/ContractEditDialog.js:258
 msgid "End Date"
 msgstr "Ende"
+
+msgid "Yearly turnover goal"
+msgstr "Jährliches Umsatzziel"
 
 #: Model/Contract.php:112 js/EmployeeEditDialogFreeTimeGridPanel.js:70
 #: js/EmployeeEditDialogFreeTimeGridPanel.js:71
