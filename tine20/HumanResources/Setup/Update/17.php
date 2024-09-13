@@ -18,6 +18,7 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
     const RELEASE017_UPDATE002 = __CLASS__ . '::update002';
     const RELEASE017_UPDATE003 = __CLASS__ . '::update003';
     const RELEASE017_UPDATE004 = __CLASS__ . '::update004';
+    const RELEASE017_UPDATE005 = __CLASS__ . '::update005';
 
     static protected $_allUpdates = [
         self::PRIO_TINEBASE_BEFORE_STRUCT   => [
@@ -40,6 +41,10 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
             self::RELEASE017_UPDATE002          => [
                 self::CLASS_CONST                   => self::class,
                 self::FUNCTION_CONST                => 'update002',
+            ],
+            self::RELEASE017_UPDATE005          => [
+                self::CLASS_CONST                   => self::class,
+                self::FUNCTION_CONST                => 'update005',
             ],
         ],
         self::PRIO_NORMAL_APP_UPDATE        => [
@@ -110,5 +115,13 @@ class HumanResources_Setup_Update_17 extends Setup_Update_Abstract
         ]);
 
         $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '17.4', self::RELEASE017_UPDATE004);
+    }
+
+    public function update005()
+    {
+        Setup_SchemaTool::updateSchema([
+            HumanResources_Model_Contract::class,
+        ]);
+        $this->addApplicationUpdate(HumanResources_Config::APP_NAME, '17.5', self::RELEASE017_UPDATE005);
     }
 }

@@ -26,6 +26,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
     public const MODEL_NAME_PART = 'Contract';
     public const TABLE_NAME = 'humanresources_contract';
 
+    public const FLD_YEARLY_TURNOVER_GOAL = 'yearly_turnover_goal';
     public const FLD_WORKING_TIME_SCHEME = 'working_time_scheme';
     public const FLD_VACATION_ENTITLEMENT_DAYS = 'vacation_entitlement_days';
     public const FLD_VACATION_ENTITLEMENT_BASE =  'vacation_entitlement_base';
@@ -43,7 +44,7 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
      * @var array
      */
     protected static $_modelConfiguration = array(
-        'version'         => 6,
+        'version'         => 7,
         'recordName'      => 'Contract', // ngettext('Contract', 'Contracts', n)
         'recordsName'     => 'Contracts', // gettext('GENDER_Contract')
         'hasRelations'    => FALSE,
@@ -161,6 +162,11 @@ class HumanResources_Model_Contract extends Tinebase_Record_Abstract
                 ],
                 self::VALIDATORS        => [Zend_Filter_Input::ALLOW_EMPTY => false, 'presence' => 'required'],
                 self::LABEL             => 'Working time scheme', // _('Working time scheme')
+            ],
+            self::FLD_YEARLY_TURNOVER_GOAL => [
+                self::TYPE              => self::TYPE_MONEY,
+                self::LABEL             => 'Yearly turnover goal', // _('Yearly turnover goal')
+                self::DEFAULT_VAL       => 0,
             ],
         )
     );
