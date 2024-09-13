@@ -81,7 +81,9 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
     {
         parent::_inspectBeforeCreate($_record);
 
-        if ($_record->isBooked()) {
+        if ($_record->isBooked() &&
+                (!$_record->{Sales_Model_Document_Invoice::FLD_POSITIONS} instanceof Tinebase_Record_RecordSet ||
+                null === $_record->{Sales_Model_Document_Invoice::FLD_POSITIONS}->find(Sales_Model_DocumentPosition_Invoice::FLD_REVERSAL, true))) {
             throw new Tinebase_Exception_Record_Validation('document must not be booked');
         }
     }
@@ -112,67 +114,71 @@ class Sales_Controller_Document_Invoice extends Sales_Controller_Document_Abstra
         if (!$_record->isBooked()) {
             $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER} =
                 $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER};
+        } elseif (null === $_oldRecord) {
+            $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_PROFORMA_NUMBER} =
+                $_record->{Sales_Model_Document_Invoice::FLD_DOCUMENT_NUMBER};
         }
     }
 
-    /**
-     * @param Sales_Model_Document_Invoice $updatedRecord
-     * @param Sales_Model_Document_Invoice $record
-     * @param Sales_Model_Document_Invoice $currentRecord
-     * @return void
-     * @throws Tinebase_Exception
-     * @throws Tinebase_Exception_Backend
-     * @throws Tinebase_Exception_Duplicate
-     * @throws Tinebase_Exception_SystemGeneric
-     */
+    public function _inspectAfterSetRelatedDataCreate($createdRecord, $record)
+    {
+        parent::_inspectAfterSetRelatedDataCreate($createdRecord, $record);
+        $this->createEInvoiceAttachment($createdRecord);
+    }
+
     protected function _inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord)
     {
         parent::_inspectAfterSetRelatedDataUpdate($updatedRecord, $record, $currentRecord);
+        $this->createEInvoiceAttachment($updatedRecord, $currentRecord);
+    }
 
-        while ($updatedRecord->isBooked() && !$currentRecord->isBooked()) {
-            $stream = null;
-            try {
-                if (!($stream = fopen('php://temp', 'r+'))) {
-                    throw new Tinebase_Exception('cant create temp stream');
-                }
-                try {
-                    fwrite($stream, (new \Einvoicing\Writers\UblWriter)->export($updatedRecord->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
-                } catch (Throwable $t) {
-                    Tinebase_Exception::log($t);
-                    if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
-                        throw $t;
-                    }
-                    break;
-                }
-                rewind($stream);
+    protected function createEInvoiceAttachment(Sales_Model_Document_Invoice $record, ?Sales_Model_Document_Invoice $oldRecord = null): void
+    {
+        if (!$record->isBooked() || ($oldRecord && $oldRecord->isBooked())) {
+            return;
+        }
 
-                if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
-                    try {
-                        (new Sales_EDocument_Service_Validate())->validateXRechnung($stream);
-                    } catch (Tinebase_Exception_Record_Validation $e) {
-                        throw new Tinebase_Exception_SystemGeneric('XRechnung Validierung fehlgeschlagen: ' . PHP_EOL . $e->getMessage());
-                    }
-                    rewind($stream); // redundant, but cheap and good for readability
-                } else {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
-                        . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
-                }
-
-                $baseName = 'xrechnung';
-                $extention = '.xml';
-                $attachmentName = $baseName . $extention;
-                $count = 0;
-                while (null !== $updatedRecord->attachments->find('name', $attachmentName)) {
-                    $attachmentName = $baseName . ' (' . (++$count) . ')' . $extention;
-                }
-                Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($updatedRecord, $attachmentName, $stream);
-                Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($updatedRecord);
-            } finally {
-                if ($stream) {
-                    @fclose($stream);
-                }
+        $stream = null;
+        try {
+            if (!($stream = fopen('php://temp', 'r+'))) {
+                throw new Tinebase_Exception('cant create temp stream');
             }
-            break;
+            try {
+                fwrite($stream, (new \Einvoicing\Writers\UblWriter)->export($record->toEinvoice(new Sales_Model_Einvoice_XRechnung())));
+            } catch (Throwable $t) {
+                Tinebase_Exception::log($t);
+                if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
+                    throw $t;
+                }
+                return;
+            }
+            rewind($stream);
+
+            if (Sales_Config::getInstance()->{Sales_Config::EDOCUMENT}->{Sales_Config::VALIDATION_SVC}) {
+                try {
+                    (new Sales_EDocument_Service_Validate())->validateXRechnung($stream);
+                } catch (Tinebase_Exception_Record_Validation $e) {
+                    throw new Tinebase_Exception_SystemGeneric('XRechnung Validierung fehlgeschlagen: ' . PHP_EOL . $e->getMessage());
+                }
+                rewind($stream); // redundant, but cheap and good for readability
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__
+                    . ' edocument validation service not configured, skipping! created xrechnung is not validated!');
+            }
+
+            $baseName = 'xrechnung';
+            $extention = '.xml';
+            $attachmentName = $baseName . $extention;
+            $count = 0;
+            while (null !== $record->attachments->find('name', $attachmentName)) {
+                $attachmentName = $baseName . ' (' . (++$count) . ')' . $extention;
+            }
+            Tinebase_FileSystem_RecordAttachments::getInstance()->addRecordAttachment($record, $attachmentName, $stream);
+            Tinebase_FileSystem_RecordAttachments::getInstance()->getRecordAttachments($record);
+        } finally {
+            if ($stream) {
+                @fclose($stream);
+            }
         }
     }
 }

@@ -15,6 +15,203 @@ use Tinebase_Model_Filter_Abstract as TMFA;
  */
 class Sales_Document_ControllerTest extends Sales_Document_Abstract
 {
+    public function testReInvoiceAfterDelete()
+    {
+        $customer = $this->_createCustomer();
+        $product1 = $this->_createProduct();
+
+        $order1 = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_ACCEPTED,
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
+            Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
+            Sales_Model_Document_Order::FLD_SHARED_INVOICE => true,
+            Sales_Model_Document_Order::FLD_POSITIONS => [
+                new Sales_Model_DocumentPosition_Order([
+                    Sales_Model_DocumentPosition_Order::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
+                    Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                ], true)
+            ],
+        ]));
+
+        $order2 = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_ACCEPTED,
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
+            Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
+            Sales_Model_Document_Order::FLD_SHARED_INVOICE => true,
+            Sales_Model_Document_Order::FLD_POSITIONS => [
+                new Sales_Model_DocumentPosition_Order([
+                    Sales_Model_DocumentPosition_Order::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
+                    Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                ], true)
+            ],
+        ]));
+
+        $invoice = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
+            Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
+                new Sales_Model_Document_TransitionSource([
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL =>
+                        Sales_Model_Document_Order::class,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $order1,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => null,
+                ]),
+                new Sales_Model_Document_TransitionSource([
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL =>
+                        Sales_Model_Document_Order::class,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $order2,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => null,
+                ]),
+            ]
+        ]));
+
+        $oldSkip = Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        try {
+            Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
+                Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
+                Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
+                    new Sales_Model_Document_TransitionSource([
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL =>
+                            Sales_Model_Document_Order::class,
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $order1,
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => null,
+                    ]),
+                    new Sales_Model_Document_TransitionSource([
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL =>
+                            Sales_Model_Document_Order::class,
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $order2,
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => null,
+                    ]),
+                ]
+            ]));
+            $this->fail('creating invoice on already invoiced order should not be possible');
+        } catch (Tinebase_Exception_SystemGeneric) {
+        } finally {
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack($oldSkip);
+        }
+
+        Sales_Controller_Document_Invoice::getInstance()->delete($invoice);
+        Tinebase_Record_Expander_DataRequest::clearCache();
+
+        $order1 = Sales_Controller_Document_Order::getInstance()->get($order1->getId());
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order1->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS});
+        $order2 = Sales_Controller_Document_Order::getInstance()->get($order2->getId());
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order2->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS});
+
+        $transition = new Sales_Model_Document_Transition([], true);
+        $transitionData = (new Sales_Frontend_Json)->getMatchingSharedOrderDocumentTransition($order1->getId(), Sales_Model_Document_Invoice::class);
+        $transition->setFromJsonInUsersTimezone($transitionData);
+        Sales_Controller_Document_Abstract::executeTransition($transition);
+    }
+
+    public function testReInvoiceAfterStorno()
+    {
+        $customer = $this->_createCustomer();
+        $product1 = $this->_createProduct();
+
+        $order = Sales_Controller_Document_Order::getInstance()->create(new Sales_Model_Document_Order([
+            Sales_Model_Document_Order::FLD_CUSTOMER_ID => $customer,
+            Sales_Model_Document_Order::FLD_ORDER_STATUS => Sales_Model_Document_Order::STATUS_ACCEPTED,
+            Sales_Model_Document_Order::FLD_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
+            Sales_Model_Document_Order::FLD_INVOICE_RECIPIENT_ID => $customer->{Sales_Model_Customer::FLD_DEBITORS}->getFirstRecord()->{Sales_Model_Debitor::FLD_BILLING}->getFirstRecord(),
+            Sales_Model_Document_Order::FLD_POSITIONS => [
+                new Sales_Model_DocumentPosition_Order([
+                    Sales_Model_DocumentPosition_Order::FLD_TITLE => 'pos 1',
+                    Sales_Model_DocumentPosition_Order::FLD_PRODUCT_ID => $product1->getId(),
+                    Sales_Model_DocumentPosition_Order::FLD_QUANTITY => 1,
+                    Sales_Model_DocumentPosition_Order::FLD_UNIT_PRICE => 1,
+                ], true)
+            ],
+        ]));
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS});
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS});
+
+        $invoice = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
+            Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
+                new Sales_Model_Document_TransitionSource([
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL =>
+                        Sales_Model_Document_Order::class,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $order,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => null,
+                ]),
+            ]
+        ]));
+
+        $order = Sales_Controller_Document_Order::getInstance()->get($order->getId());
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS});
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS});
+
+        $oldSkip = Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack(true);
+        try {
+            Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
+                Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
+                Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
+                    new Sales_Model_Document_TransitionSource([
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL =>
+                            Sales_Model_Document_Order::class,
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $order,
+                        Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => null,
+                    ]),
+                ]
+            ]));
+            $this->fail('creating invoice on already invoiced order should not be possible');
+        } catch (Tinebase_Exception_SystemGeneric) {
+        } finally {
+            Tinebase_TransactionManager::getInstance()->unitTestForceSkipRollBack($oldSkip);
+        }
+
+        $invoice->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->update($invoice);
+
+        $order = Sales_Controller_Document_Order::getInstance()->get($order->getId());
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS});
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS});
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $storno = Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
+            Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
+                new Sales_Model_Document_TransitionSource([
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL =>
+                        Sales_Model_Document_Invoice::class,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $invoice,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => null,
+                    Sales_Model_Document_TransitionSource::FLD_IS_REVERSAL => true,
+                ]),
+            ]
+        ]));
+
+        Tinebase_Record_Expander_DataRequest::clearCache();
+        $invoice = Sales_Controller_Document_Invoice::getInstance()->get($invoice->getId());
+        $this->assertSame(Sales_Config::DOCUMENT_REVERSAL_STATUS_REVERSED, $invoice->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS});
+
+        $order = Sales_Controller_Document_Order::getInstance()->get($order->getId());
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS});
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS});
+
+        Sales_Controller_Document_Abstract::executeTransition(new Sales_Model_Document_Transition([
+            Sales_Model_Document_Transition::FLD_TARGET_DOCUMENT_TYPE => Sales_Model_Document_Invoice::class,
+            Sales_Model_Document_Transition::FLD_SOURCE_DOCUMENTS => [
+                new Sales_Model_Document_TransitionSource([
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT_MODEL =>
+                        Sales_Model_Document_Order::class,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_DOCUMENT => $order,
+                    Sales_Model_Document_TransitionSource::FLD_SOURCE_POSITIONS => null,
+                ]),
+            ]
+        ]));
+
+        $order = Sales_Controller_Document_Order::getInstance()->get($order->getId());
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_NONE, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_BOOKED_STATUS});
+        $this->assertSame(Sales_Config::DOCUMENT_FOLLOWUP_STATUS_COMPLETED, $order->{Sales_Model_Document_Order::FLD_FOLLOWUP_INVOICE_CREATED_STATUS});
+    }
+
     public function testInvoiceStorno()
     {
         $customer = $this->_createCustomer();
@@ -104,7 +301,7 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
             ]
         ]));
 
-        $this->assertNull($storno->attachments->find('name', 'xrechnung.xml'));
+        $this->assertNotNull($storno->attachments->find('name', 'xrechnung.xml'));
 
         Tinebase_Record_Expander::expandRecord($storno);
         $this->assertSame(-2, (int)$storno->{Sales_Model_Document_Invoice::FLD_NET_SUM});
@@ -126,10 +323,6 @@ class Sales_Document_ControllerTest extends Sales_Document_Abstract
                 ]]
             ]));
         $this->assertSame(4, $result->count());
-
-        $storno->{Sales_Model_Document_Invoice::FLD_INVOICE_STATUS} = Sales_Model_Document_Invoice::STATUS_BOOKED;
-        $storno = Sales_Controller_Document_Invoice::getInstance()->update($storno);
-        $this->assertNotNull($storno->attachments->find('name', 'xrechnung.xml'));
     }
 
     public function testCategoryEvalDimensionCopy()
