@@ -205,6 +205,7 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
         // blpipes is of type records with subrecord hr.blconfig
         this.blConfigPanel = new Tine.Tinebase.BL.BLConfigPanel({
             app: this.app,
+            height: 150,
             editDialog: this,
             owningRecordClass: Tine.HumanResources.Model.WorkingTimeScheme,
             dataPath: 'data.working_time_scheme.blpipe',
@@ -241,12 +242,9 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             autoScroll: true,
             border: false,
             frame: true,
-            layout: 'border',
+            layout: 'fit',
             items: [{
-                region: 'north',
                 layout: 'hfit',
-                height: 220,
-                border: false,
                 items: [{
                     xtype: 'fieldset',
                     layout: 'hfit',
@@ -254,7 +252,6 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     title: this.app.i18n._('Contract'),
                     items: [{
                         xtype: 'columnform',
-                        labelAlign: 'top',
                         defaults: {columnWidth: 1/2},
                         items: [[
                                 {xtype: 'datefield', name: 'start_date', fieldLabel: this.app.i18n._('Start Date'), allowBlank: false, columnWidth: 1/2 },
@@ -314,18 +311,22 @@ Tine.HumanResources.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                             }, weekdayFieldDefaults), Ext.apply({
                                 fieldLabel: this.app.i18n._('Sun.'),
                                 name: 'weekdays_6'
-                            }, weekdayFieldDefaults)]
+                            }, weekdayFieldDefaults)],
+                            [this.blConfigPanel]
+                        ]
+                    }]
+                }, {
+                    xtype: 'fieldset',
+                    layout: 'hfit',
+                    autoHeight: true,
+                    title: this.app.i18n._('Additional Parameters'),
+                    items: [{
+                        xtype: 'columnform',
+                        items: [
+                            [fieldManager('yearly_turnover_goal', {columnWidth: 1/2})]
                         ]
                     }]
                 }]
-            }, {
-                region: 'center',
-                layout: 'fit',
-                flex: 1,
-                border: false,
-                items: [
-                    this.blConfigPanel
-                ]
             }]
         }]
         };
