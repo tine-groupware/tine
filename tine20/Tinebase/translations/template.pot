@@ -5931,5 +5931,8 @@ msgstr ""
 msgid "Image size"
 msgstr ""
 
+msgid "renaming is currently only possible if no models are assigned"
+msgstr ""
+
 msgid "Password is expired in accordance with the password policy and needs to be changed"
 msgstr ""
