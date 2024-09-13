@@ -488,12 +488,13 @@ class Sales_Config extends Tinebase_Config_Abstract
                     ],
                     [
                         'id' => Sales_Model_Document_Abstract::STATUS_REVERSAL,
-                        //_('Reversal (booked, open)')
-                        'value' => 'Reversal (booked, open)',
+                        //_('Reversal (booked, closed)')
+                        'value' => 'Reversal (booked, closed)',
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
-                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
                         Sales_Model_Document_Status::FLD_REVERSAL => true,
+                        Sales_Model_Document_Status::FLD_IS_USER_TYPE => false,
                         'system' => true
                     ],
                 ],
@@ -575,12 +576,13 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Abstract::STATUS_REVERSAL,
-                        //_('Reversal (booked, open)')
-                        'value' => 'Reversal (booked, open)',
+                        //_('Reversal (booked, closed)')
+                        'value' => 'Reversal (booked, closed)',
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
-                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
                         Sales_Model_Document_Status::FLD_REVERSAL => true,
+                        Sales_Model_Document_Status::FLD_IS_USER_TYPE => false,
                         'system' => true
                     ],
                 ],
@@ -693,12 +695,13 @@ class Sales_Config extends Tinebase_Config_Abstract
                         'system' => true
                     ], [
                         'id' => Sales_Model_Document_Abstract::STATUS_REVERSAL,
-                        //_('Reversal (booked, open)')
-                        'value' => 'Reversal (booked, open)',
+                        //_('Reversal (booked, closed)')
+                        'value' => 'Reversal (booked, closed)',
                         'icon' => null,
                         Sales_Model_Document_Status::FLD_BOOKED => true,
-                        Sales_Model_Document_Status::FLD_CLOSED => false,
+                        Sales_Model_Document_Status::FLD_CLOSED => true,
                         Sales_Model_Document_Status::FLD_REVERSAL => true,
+                        Sales_Model_Document_Status::FLD_IS_USER_TYPE => false,
                         'system' => true
                     ],
                 ],

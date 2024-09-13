@@ -21,10 +21,12 @@ class Sales_Model_Document_Status extends Tinebase_Config_KeyFieldRecord
     public const FLD_BOOKED = 'booked';
     public const FLD_CLOSED = 'closed';
     public const FLD_REVERSAL = 'reversal';
+    public const FLD_IS_USER_TYPE = 'is_user_type';
 
     protected $_additionalValidators = [
         self::FLD_BOOKED => ['allowEmpty' => true ],
         self::FLD_CLOSED => ['allowEmpty' => true ],
         self::FLD_REVERSAL => ['allowEmpty' => true ],
+        self::FLD_IS_USER_TYPE => ['allowEmpty' => true ],
     ];
 }

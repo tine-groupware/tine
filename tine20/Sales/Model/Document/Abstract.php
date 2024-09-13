@@ -23,7 +23,7 @@ abstract class Sales_Model_Document_Abstract extends Tinebase_Record_NewAbstract
 {
     public const MODEL_NAME_PART = 'Document_Abstract'; // als konkrete document_types gibt es Offer, Order, Delivery, Invoice (keine Gutschrift!)
 
-    public const STATUS_REVERSAL = 'reversal';
+    public const STATUS_REVERSAL = 'REVERSAL';
 
     public const FLD_ID = 'id';
     public const FLD_DOCUMENT_NUMBER = 'document_number'; // kommt aus incrementable, in config einstellen welches incrementable fuer dieses model da ist!
