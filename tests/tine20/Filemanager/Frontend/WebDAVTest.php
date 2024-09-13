@@ -589,14 +589,13 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $fs = Tinebase_FileSystem::getInstance();
         $node = $fs->createAclNode('Filemanager/folders/shared/flysystem1');
 
-        if (is_dir(Tinebase_Config::getInstance()->filesdir . '/flysystem')) {
-            exec('rm -rf ' . Tinebase_Config::getInstance()->filesdir . '/flysystem');
-        }
+        $basePath = Tinebase_FileSystemTest::setupFlySystemLocal();
+
         $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
             Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest',
             Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG_CLASS => Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
             Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_Local([
-                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => Tinebase_Config::getInstance()->filesdir . '/flysystem/',
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => $basePath . '/flysystem/',
             ]),
             Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_originalTestUser->getId(),
         ]));
@@ -610,7 +609,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $fs->mkdir('Filemanager/folders/shared/flysystem1/test');
         $fs->mkdir('Filemanager/folders/shared/flysystem1/test1');
 
-        $path = Tinebase_Config::getInstance()->filesdir . '/flysystem/';
+        $path = $basePath . '/flysystem/';
         $this->assertTrue(is_dir($path . 'test'));
         $this->assertTrue(is_dir($path . 'test1'));
 
@@ -650,7 +649,8 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
 
         $this->assertFalse(is_file($path . 'aTestFile.test'));
         $this->assertTrue(is_file($path . 'test1/aTestFile.test'));
-        $this->assertSame('/test1/aTestFile.test', $fs->stat('Filemanager/folders/shared/flysystem1/test1/aTestFile.test')->flypath);
+        $this->assertSame('/test1/aTestFile.test',
+            $fs->stat('Filemanager/folders/shared/flysystem1/test1/aTestFile.test')->flypath);
 
         // move file from flysystem to tine fs
         $fs->createAclNode('Filemanager/folders/shared/tinesystem');
@@ -673,19 +673,19 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->server->exec();
 
         $this->assertFalse($fs->isFile('Filemanager/folders/shared/tinesystem/aTestFile.test'));
-        $this->assertSame('unittesting',
-            file_get_contents($path . '/aTestFile.test'));
+        $this->assertSame('unittesting', file_get_contents($path . '/aTestFile.test'));
         $this->assertSame('/aTestFile.test', $fs->stat('Filemanager/folders/shared/flysystem1/aTestFile.test')->flypath);
 
         $node = $fs->createAclNode('Filemanager/folders/shared/flysystem2');
-        if (is_dir(Tinebase_Config::getInstance()->filesdir . '/flysystem1')) {
-            exec('rm -rf ' . Tinebase_Config::getInstance()->filesdir . '/flysystem1');
+        if (is_dir($basePath . '/flysystem1')) {
+            exec('rm -rf ' . $basePath . '/flysystem1');
         }
+        exec('mkdir ' . $basePath . '/flysystem1');
         $flySystem1 = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
             Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest1',
             Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG_CLASS => Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
             Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_Local([
-                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => Tinebase_Config::getInstance()->filesdir . '/flysystem1/',
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => $basePath . '/flysystem1/',
             ]),
             Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_originalTestUser->getId(),
         ]));
@@ -704,8 +704,7 @@ class Filemanager_Frontend_WebDAVTest extends TestCase
         $this->server->exec();
 
         $this->assertFalse(is_file($path . '/aTestFile.test'));
-        $this->assertSame('unittesting',
-            file_get_contents(Tinebase_Config::getInstance()->filesdir . '/flysystem1/aTestFil.test'));
+        $this->assertSame('unittesting', file_get_contents($basePath. '/flysystem1/aTestFil.test'));
         $this->assertSame('/aTestFil.test', $fs->stat('Filemanager/folders/shared/flysystem2/aTestFil.test')->flypath);
     }
 
