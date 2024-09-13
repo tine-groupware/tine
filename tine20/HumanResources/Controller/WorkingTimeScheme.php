@@ -91,6 +91,7 @@ class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Re
             $divisionCtrl = HumanResources_Controller_Division::getInstance();
             $oldValue = $divisionCtrl->doContainerACLChecks(false);
             try {
+                /** @phpstan-ignore-next-line */
                 if (0 < $divisionCtrl->searchCount($filter)) {
                     return true;
                 }
@@ -100,6 +101,7 @@ class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Re
         }
 
         // if we see a contract with this working time scheme, we do see the working time scheme
+        /** @phpstan-ignore-next-line */
         if (0 < HumanResources_Controller_Contract::getInstance()->searchCount(
                 Tinebase_Model_Filter_FilterGroup::getFilterForModel(HumanResources_Model_Contract::class, [
                     ['field' => HumanResources_Model_Contract::FLD_WORKING_TIME_SCHEME, 'operator' => 'equals', 'value' => $_record->getId()],
@@ -150,6 +152,7 @@ class HumanResources_Controller_WorkingTimeScheme extends Tinebase_Controller_Re
         $divisionCtrl = HumanResources_Controller_Division::getInstance();
         $oldValue = $divisionCtrl->doContainerACLChecks(false);
         try {
+            /** @phpstan-ignore-next-line */
             if (0 < $divisionCtrl->searchCount($filter)) {
                 // add where type !== individual
                 $orWrapper->addFilter(

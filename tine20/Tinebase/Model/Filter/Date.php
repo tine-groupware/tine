@@ -360,10 +360,12 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      */
     protected function _getStartAndEndOfPeriod()
     {
-        if ($this->_operator !== 'within') {
-            throw new Tinebase_Exception_UnexpectedValue('only within operator supported');
+        if (!in_array($this->_operator, ['within', 'inweek', Tinebase_Model_Filter_Abstract::OP_EQUALS])) {
+            throw new Tinebase_Exception_UnexpectedValue('only within, inweek, equals operator supported');
         }
-        $value = $this->_getDateValues($this->_operator, $this->_value);
+        if (is_string($value = $this->_getDateValues($this->_operator, $this->_value))) {
+            $value = ['from' => $value, 'until' => $value];
+        }
         return $value;
     }
 

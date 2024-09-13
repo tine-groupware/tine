@@ -147,6 +147,7 @@ class OnlyOfficeIntegrator_Controller_AccessToken extends Tinebase_Controller_Re
                 continue;
             }
             if ($timeLimit->isLater($token->{OnlyOfficeIntegrator_Model_AccessToken::FLDS_LAST_SEEN}) ||
+                /** @phpstan-ignore-next-line */
                 $this->searchCount(
                     Tinebase_Model_Filter_FilterGroup::getFilterForModel(OnlyOfficeIntegrator_Model_AccessToken::class, [
                         ['field' => OnlyOfficeIntegrator_Model_AccessToken::FLDS_NODE_ID, 'operator' => 'equals',
