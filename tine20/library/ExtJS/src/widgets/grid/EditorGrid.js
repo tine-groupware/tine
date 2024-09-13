@@ -374,7 +374,7 @@ grid.on('validateedit', function(e) {
     },
 
     stopEditingIf : function(e, el, opt, cancel){
-        if(this.editing && this.activeEditor){
+        if(this.editing && this.activeEditor && !this.activeEditor.field.preventStopEditing){
             if(!this.activeEditor.el.contains(e.target) && this.activeEditor.field.validateBlur && this.activeEditor.field.validateBlur(e,el,opt)) {
                 this.stopEditing(cancel)
             }
