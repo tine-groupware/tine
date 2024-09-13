@@ -281,17 +281,29 @@ class Tinebase_FileSystemTest extends TestCase
         unset($raii);
     }
 
+    public static function setupFlySystemLocal(): string
+    {
+        Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_FLYSYSTEM_LOCAL_BASE_PATHS} = [
+            $basePath = realpath(Tinebase_Config::getInstance()->filesdir),
+        ];
+
+        if (is_dir($basePath . '/flysystem')) {
+            exec('rm -rf ' . $basePath. '/flysystem');
+        }
+        exec('mkdir ' . $basePath. '/flysystem');
+
+        return $basePath;
+    }
+
     public function testCreateFlysystemDir()
     {
-        if (is_dir(Tinebase_Config::getInstance()->filesdir . '/flysystem')) {
-            exec('rm -rf ' . Tinebase_Config::getInstance()->filesdir . '/flysystem');
-        }
+        $basePath = static::setupFlySystemLocal();
         
         $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
             Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest',
             Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG_CLASS => Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
             Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_Local([
-                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => Tinebase_Config::getInstance()->filesdir . '/flysystem/',
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => $basePath . '/flysystem/',
             ]),
             Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_originalTestUser->getId(),
         ]));
@@ -324,7 +336,7 @@ class Tinebase_FileSystemTest extends TestCase
 
         $data = 'lorem ipsum';
         file_put_contents('tine20://' . $this->_basePath . '/flysystem/test.txt', $data);
-        $this->assertSame($data, file_get_contents(Tinebase_Config::getInstance()->filesdir . '/flysystem/test.txt'));
+        $this->assertSame($data, file_get_contents($basePath. '/flysystem/test.txt'));
         $node = $this->_controller->get($node->getId());
         $this->assertSame(1, (int)$node->revision);
         $this->assertSame(['1'], $node->available_revisions);
@@ -332,12 +344,12 @@ class Tinebase_FileSystemTest extends TestCase
 
         file_put_contents('tine20://' . $this->_basePath . '/flysystem/subdir/test.txt', $data);
 
-        $path = Tinebase_Config::getInstance()->filesdir . '/flysystem/subdir/test.txt';
+        $path = $basePath . '/flysystem/subdir/test.txt';
         $this->assertTrue(file_exists($path));
         $this->assertSame($data, file_get_contents($path));
 
         $this->assertTrue($this->_controller->rmdir($this->_basePath . '/flysystem/subdir', true));
-        $this->assertFalse(file_exists(Tinebase_Config::getInstance()->filesdir . '/flysystem/subdir'));
+        $this->assertFalse(file_exists($basePath . '/flysystem/subdir'));
         $this->assertFalse(file_exists($path));
 
         $this->assertSame(0, $this->_controller->clearDeletedFilesFromDatabase());
@@ -345,15 +357,13 @@ class Tinebase_FileSystemTest extends TestCase
 
     public function testFlySystemSyncOtherUser()
     {
-        if (is_dir(Tinebase_Config::getInstance()->filesdir . '/flysystem')) {
-            exec('rm -rf ' . Tinebase_Config::getInstance()->filesdir . '/flysystem');
-        }
+        $basePath = static::setupFlySystemLocal();
 
         $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
             Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest',
             Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG_CLASS => Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
             Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_Local([
-                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => Tinebase_Config::getInstance()->filesdir . '/flysystem/',
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => $basePath . '/flysystem/',
             ]),
             Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_personas['sclever']->getId(),
         ]));
@@ -369,8 +379,7 @@ class Tinebase_FileSystemTest extends TestCase
         $this->assertSame($flySystem->getId(), $node->flysystem);
         $this->assertSame('/', $node->flypath);
 
-        $path = Tinebase_Config::getInstance()->filesdir . '/flysystem/';
-        mkdir($path);
+        $path = $basePath . '/flysystem/';
         mkdir($path . 'a');
         file_put_contents($path .'a/b', 'unittest');
 
@@ -396,15 +405,13 @@ class Tinebase_FileSystemTest extends TestCase
 
     public function testFlySystemSync()
     {
-        if (is_dir(Tinebase_Config::getInstance()->filesdir . '/flysystem')) {
-            exec('rm -rf ' . Tinebase_Config::getInstance()->filesdir . '/flysystem');
-        }
+        $basePath = static::setupFlySystemLocal();
 
         $flySystem = Tinebase_Controller_Tree_FlySystem::getInstance()->create(new Tinebase_Model_Tree_FlySystem([
             Tinebase_Model_Tree_FlySystem::FLD_NAME => 'unittest',
             Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG_CLASS => Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::class,
             Tinebase_Model_Tree_FlySystem::FLD_ADAPTER_CONFIG => new Tinebase_Model_Tree_FlySystem_AdapterConfig_Local([
-                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => Tinebase_Config::getInstance()->filesdir . '/flysystem/',
+                Tinebase_Model_Tree_FlySystem_AdapterConfig_Local::FLD_BASE_PATH => $basePath. '/flysystem/',
             ]),
             Tinebase_Model_Tree_FlySystem::FLD_SYNC_ACCOUNT => $this->_personas['sclever']->getId(),
         ]));
@@ -418,8 +425,7 @@ class Tinebase_FileSystemTest extends TestCase
         $this->_controller->mkdir($this->_basePath . '/flysystem/a/c/e');
         $this->_controller->createFileTreeNode($this->_controller->stat($this->_basePath . '/flysystem/a/c/e'), 'f');
 
-        $path = Tinebase_Config::getInstance()->filesdir . '/flysystem/';
-        mkdir($path);
+        $path = $basePath . '/flysystem/';
         mkdir($path . 'a');
         file_put_contents($path .'a/b', 'unittest');
         mkdir($path . 'z');

@@ -901,6 +901,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const FILESYSTEM_AVSCAN_URL = 'avscanURL';
     const FILESYSTEM_AVSCAN_NOTIFICATION_ROLE = 'avscanNotificationRole';
     const FILESYSTEM_SHOW_CURRENT_USAGE = 'showCurrentUsage';
+    const FILESYSTEM_FLYSYSTEM_LOCAL_BASE_PATHS = 'flySystemLocalBasePaths';
 
     const ACTIONQUEUE = 'actionqueue';
     const ACTIONQUEUE_ACTIVE = 'active';
@@ -2900,6 +2901,17 @@ class Tinebase_Config extends Tinebase_Config_Abstract
             self::SETBYADMINMODULE => FALSE,
             self::SETBYSETUPMODULE => FALSE,
             self::CONTENT => array(
+                self::FILESYSTEM_FLYSYSTEM_LOCAL_BASE_PATHS => [
+                    //_('FlySystems Local Adapter Base Paths')
+                    self::LABEL => 'FlySystems Local Adapter Base Paths',
+                    //_('FlySystems Local Adapter Base Paths')
+                    self::DESCRIPTION => 'FlySystems Local Adapter Base Paths',
+                    self::TYPE => self::TYPE_ARRAY,
+                    self::CLIENTREGISTRYINCLUDE => false,
+                    self::SETBYADMINMODULE => true,
+                    self::SETBYSETUPMODULE => true,
+                    self::DEFAULT_STR => [],
+                ],
                 self::FILESYSTEM_MODLOGACTIVE => array(
                     //_('Filesystem history')
                     self::LABEL => 'Filesystem history',

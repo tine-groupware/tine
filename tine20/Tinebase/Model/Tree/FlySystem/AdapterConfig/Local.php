@@ -50,7 +50,21 @@ class Tinebase_Model_Tree_FlySystem_AdapterConfig_Local extends Tinebase_Record_
 
     public function getFlySystemAdapter(): \League\Flysystem\FilesystemAdapter
     {
-        $adapter = new \League\Flysystem\Local\LocalFilesystemAdapter($this->{self::FLD_BASE_PATH});
+        $basePaths = (array)Tinebase_Config::getInstance()->{Tinebase_Config::FILESYSTEM}->{Tinebase_Config::FILESYSTEM_FLYSYSTEM_LOCAL_BASE_PATHS};
+        $validBasePath = false;
+        if ($basePath = realpath($this->{self::FLD_BASE_PATH})) {
+            $basePath = rtrim($basePath, '/') . '/';
+            foreach ($basePaths as $bp) {
+                if (str_starts_with($basePath, rtrim($bp, '/') . '/')) {
+                    $validBasePath = true;
+                    break;
+                }
+            }
+        }
+        if (!$validBasePath) {
+            throw new Tinebase_Exception_Record_Validation('FlySystem Local Adapter does not have a valid base path "' . $basePath . '"');
+        }
+        $adapter = new \League\Flysystem\Local\LocalFilesystemAdapter($basePath);
         if ($this->{self::FLD_NEVER_EMPTY}) {
             $success = false;
             if ($adapter->directoryExists('/')) {
