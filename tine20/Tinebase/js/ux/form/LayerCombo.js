@@ -112,6 +112,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
             this.layer.hide();
             Ext.getDoc().un('mousewheel', this.collapseIf, this);
             Ext.getDoc().un('mousedown', this.collapseIf, this);
+            this.preventStopEditing = false;
             this.fireEvent('collapse', this);
         }
     },
@@ -156,6 +157,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
             mousewheel: this.collapseIf,
             mousedown: this.collapseIf
         });
+        this.preventStopEditing = true;
         this.fireEvent('expand', this);
     },
 
