@@ -41,13 +41,7 @@ abstract class Tinebase_Import_Db_Abstract
         $pageCount = 100;
         $importedIds = [];
         do {
-            $select = $this->_importDb->select()->from($this->_mainTableName)->limitPage(++$pageNumber, $pageCount);
-            if ($this->_importFilter) {
-                $select->where($this->_importFilter);
-            }
-            if ($this->_importOrder) {
-                $select->order($this->_importOrder);
-            }
+            $select = $this->_getSelect($pageNumber, $pageCount);
             $stmt = $select->query();
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__
@@ -78,6 +72,18 @@ abstract class Tinebase_Import_Db_Abstract
         $this->_onAfterImport();
 
         return $importedIds;
+    }
+
+    protected function _getSelect(int $pageNumber, int $pageCount): Zend_Db_Select
+    {
+        $select = $this->_importDb->select()->from($this->_mainTableName)->limitPage(++$pageNumber, $pageCount);
+        if ($this->_importFilter) {
+            $select->where($this->_importFilter);
+        }
+        if ($this->_importOrder) {
+            $select->order($this->_importOrder);
+        }
+        return $select;
     }
 
     protected function _importRecord($row)
