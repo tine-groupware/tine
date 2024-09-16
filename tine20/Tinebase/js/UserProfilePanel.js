@@ -83,5 +83,21 @@ Tine.Tinebase.UserProfilePanel = Ext.extend(Ext.Panel, {
         }, this);
         
         this.doLayout();
+    },
+
+    /**
+     * check validity for all panel items
+     *
+     * @return {Boolean}
+     */
+    isValid: function() {
+        if (this.items?.items) {
+            return this.items.items.every(field => {
+                const valid = field.isValid();
+                if (!valid) field.markInvalid();
+                return valid;
+            });
+        }
+        return true;
     }
 });
