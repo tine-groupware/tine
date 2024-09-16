@@ -1583,13 +1583,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $draftFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($account,
                     Felamimail_Model_Folder::FOLDER_DRAFTS);
                 $draftFolderIds[] = $draftFolder->getId();
-            } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) {
-                    Tinebase_Core::getLogger()->info(
-                        __METHOD__ . '::' . __LINE__ . ' ' . $feiic->getMessage());
-                }
             } catch (Exception $e) {
-                Tinebase_Exception::log($e);
+                if (($e instanceof Felamimail_Exception_IMAPServiceUnavailable
+                        || $e instanceof Felamimail_Exception_IMAPInvalidCredentials)
+                    && Tinebase_Core::isLogLevel(Zend_Log::INFO)
+                ) {
+                    Tinebase_Core::getLogger()->info(
+                        __METHOD__ . '::' . __LINE__ . ' ' . $e
+                    );
+                } else {
+                    Tinebase_Exception::log($e);
+                }
             }
         }
 
