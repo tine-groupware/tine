@@ -82,7 +82,8 @@ class Tinebase_Controller_EvaluationDimension extends Tinebase_Controller_Record
 
         if (!empty($_record->xprops(Tinebase_Model_EvaluationDimension::FLD_MODELS)) &&
                 $_record->{Tinebase_Model_EvaluationDimension::FLD_NAME} !== $_oldRecord->{Tinebase_Model_EvaluationDimension::FLD_NAME}) {
-            throw new Tinebase_Exception_SystemGeneric('renaming is currently only possible if no models are assigned');
+            $t = Tinebase_Translation::getTranslation();
+            throw new Tinebase_Exception_SystemGeneric($t->_('renaming is currently only possible if no models are assigned'));
         }
     }
 

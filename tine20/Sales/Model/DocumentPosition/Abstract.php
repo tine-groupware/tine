@@ -539,22 +539,22 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
             }
         }
 
+        $this->{self::FLD_IS_REVERSED} = false;
         $this->{self::FLD_REVERSAL} =
             (bool)$transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_IS_REVERSAL};
         $this->{self::FLD_PRECURSOR_POSITION_MODEL} =
             $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION_MODEL};
         $this->{self::FLD_PRECURSOR_POSITION} =
-            $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION};
+            $transition->{Sales_Model_DocumentPosition_TransitionSource::FLD_SOURCE_DOCUMENT_POSITION}->getId();
 
         if ($this->{self::FLD_REVERSAL}) {
             $translation = Tinebase_Translation::getTranslation(Sales_Config::APP_NAME,
                 new Zend_Locale($this->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_DOCUMENT_LANGUAGE}));
             $this->{self::FLD_TITLE} = $translation->_('Reversal') . ': ' . $this->{self::FLD_TITLE};
-            $positions = $this->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_POSITIONS};
-            $positions->getById($this->getId())->{Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED} = true;
+            $source->{Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED} = true;
 
             // make document_id dirty
-            $this->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_POSITIONS} = $positions;
+            $source->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS} = $source->{self::FLD_DOCUMENT_ID}->{Sales_Model_Document_Abstract::FLD_REVERSAL_STATUS};
         }
 
         $this->__unset($this->getIdProperty());
@@ -576,9 +576,10 @@ class Sales_Model_DocumentPosition_Abstract extends Tinebase_Record_NewAbstract
         $ctrl = Tinebase_Core::getApplicationInstance(static::class);
         foreach ($ctrl->search(Tinebase_Model_Filter_FilterGroup::getFilterForModel(static::class, [
                     ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION,
-                        'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION}->getId()],
+                        'operator' => 'equals', 'value' => $this->getIdFromProperty(self::FLD_PRECURSOR_POSITION)],
                     ['field' => Sales_Model_DocumentPosition_Abstract::FLD_PRECURSOR_POSITION_MODEL,
                         'operator' => 'equals', 'value' => $this->{self::FLD_PRECURSOR_POSITION_MODEL}],
+                    ['field' => Sales_Model_DocumentPosition_Abstract::FLD_IS_REVERSED, 'operator' => 'equals', 'value' => false],
                 ])) as $existingFollowUp) {
             $existingQuantities += $existingFollowUp->{self::FLD_QUANTITY};
         }

@@ -6560,5 +6560,9 @@ msgstr "Sortierung"
 msgid "Configured Models"
 msgstr "Konfigurierte Models"
 
+msgid "renaming is currently only possible if no models are assigned"
+msgstr "Umbenennen ist derzeit nur möglich, wenn keine Models zugewiesen sind"
+
 msgid "Password is expired in accordance with the password policy and needs to be changed"
 msgstr "Passwort ist gemäß Passwort Policy abgelaufen und muss geändert werden"
+
