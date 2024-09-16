@@ -170,6 +170,7 @@ class Timetracker_Model_Timeaccount extends Sales_Model_Accountable_Abstract
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
             ),
             'budget'            => array(
+                'label'                 => 'Budget in hours', // _('Budget in hours')
                 'type'                  => 'float',
                 'inputFilters'          => array('Zend_Filter_Empty' => NULL),
                 'validators'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
