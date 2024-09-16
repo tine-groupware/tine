@@ -116,6 +116,12 @@ Tine.widgets.container.SelectionDialog = Ext.extend(Ext.Component, {
     initTree: function() {
         this.treePanelClass = this.treePanelClass || Tine.widgets.container.TreePanel;
 
+        const appName = this.recordClass.getMeta('appName');
+
+        if (Tine[appName].hasOwnProperty('TreePanel')) {
+            this.treePanelClass = Tine[appName].TreePanel;
+        }
+
         this.tree = new this.treePanelClass({
             recordClass: this.recordClass,
             allowMultiSelection: false,
@@ -133,28 +139,15 @@ Tine.widgets.container.SelectionDialog = Ext.extend(Ext.Component, {
      * @private
      */
     onTreeNodeClick: function(node) {
-
-        var disable = ! (node.leaf
-            || (this.allowNodeSelect
-                    // TODO create isTopLevelNode() in Tine.Tinebase.container
-                && (this.allowToplevelNodeSelect
-                    || node.attributes
-                    && (
-                        (node.attributes.path.match(/^\/personal/) && node.attributes.path.split("/").length > 3)
-                        || (node.attributes.path.match(/^\/other/) && node.attributes.path.split("/").length > 3)
-                        || (node.attributes.path.match(/^\/shared/) && node.attributes.path.split("/").length > 2)
-                    )
-                )
-            )
-        );
+        let disable = ! (node.leaf
+            || (this.allowNodeSelect && this.allowToplevelNodeSelect && this.tree.isTopLevelNode(node)));
 
         (function() {
             if (Array.isArray(this.requiredGrants) ? this.requiredGrants[0] !== false : this.requiredGrants) {
-                var selectedContainer = this.tree.getSelectedContainer(this.requiredGrants, false, true);
+                const selectedContainer = this.tree.getSelectedContainer(this.requiredGrants, false, true);
                 disable = !selectedContainer;
             }
             this.okAction.setDisabled(disable);
-
         }).defer(100, this);
 
         if (! node.leaf ) {

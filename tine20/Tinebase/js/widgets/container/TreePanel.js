@@ -261,18 +261,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     onVirtualNodesSelected: function (nodes) {
         this.suspendEvents();
 
-        if (0 === nodes.length) {
-            return;
-        }
+        if (0 === nodes.length) return;
 
-
-        var sm = this.getSelectionModel();
+        const sm = this.getSelectionModel();
 
         if (sm && sm.selNodes) {
             sm.clearSelections(true);
 
-            for (var i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
+            for (let i = 0; i < nodes.length; i++) {
+                const node = nodes[i];
 
                 if (sm.isSelected(node)) {
                     sm.lastSelNode = node;
@@ -286,7 +283,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             }
         }
 
-        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
+        if (this.filterMode === 'filterToolbar' && this.filterPlugin) {
             this.onFilterChange();
         }
         
@@ -462,14 +459,14 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * checkes if user has requested grant for given container represented by a tree node
      *
      * @param {Ext.tree.TreeNode} node
-     * @param {Array} grant
+     * @param grants
      * @return {}
      */
     hasGrant: function(node, grants) {
-        var attr = node.attributes,
+        let attr = node.attributes,
             condition = false;
 
-        if (this.nodeAcceptsContents(attr)) {
+        if (this.nodeAcceptsContents(attr) && attr.container?.account_grants) {
             condition = true;
             Ext.each(grants, function(grant) {
                 condition = condition && attr.container.account_grants[grant];
@@ -877,5 +874,12 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         var container = Tine[this.appName].registry.get(registryKey);
 
         return this.getSelectedContainer('addGrant', container, true);
-    }
+    },
+
+    isTopLevelNode: function(node) {
+        return node.attributes &&
+            (node.attributes.path.match(/^\/personal/) && node.attributes.path.split("/").length > 3)
+            || (node.attributes.path.match(/^\/other/) && node.attributes.path.split("/").length > 3)
+            || (node.attributes.path.match(/^\/shared/) && node.attributes.path.split("/").length > 2);
+    },
 });
