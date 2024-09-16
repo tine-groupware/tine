@@ -202,13 +202,20 @@ class Tinebase_TranslationTest extends TestCase
         }
 
         $tineRoot = dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'tine20';
-        
+
         $cmd = 'for i in `ls ' . $tineRoot
             . '/*/translations/*.po`; do msgfmt -o - --strict $i 2>&1 1>/dev/null || echo "file: $i"; done';
         exec($cmd, $output);
-        
+
         $this->assertEquals(0, count($output),
             "Found invalid translation file(s):\n command: $cmd ->" . print_r($output, true));
+
+        // check all files if last line is EOL
+        $cmd = 'for i in `ls ' . $tineRoot
+            . '/*/translations/*.po`; do last_line=$(tail -c 1 "$i") && if [[ "$last_line" == "\"" ]]; then echo $i; fi; done';
+        exec($cmd, $output);
+        $this->assertEquals(0, count($output),
+            "Found invalid translation file(s):\n with non-empty last line: " . print_r($output, true));
     }
 
     /**
