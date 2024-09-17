@@ -325,4 +325,9 @@ Tine.Calendar.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         
         return treePath;
     },
+
+    isTopLevelNode: function(node) {
+        let isTopLevelNode = this.supr().isTopLevelNode.call(this, node);
+        return isTopLevelNode || (node.attributes.path.match(/^\/shared/) && node.attributes.id === 'resources');
+    }
 });
